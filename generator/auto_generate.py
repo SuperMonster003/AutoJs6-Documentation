@@ -4,10 +4,13 @@ import os.path
 in_dir = '../api'
 out_dir = '../'
 template = '../template.html'
+version = '2.0.16'
 
 
 def process(in_file, out_file):
-    os.system("node generate.js --template={0} --out={1} {2}".format(template, out_file, in_file))
+    os.system(
+        "node generate.js --template={0} --out={1} --node-version={2} {3}".format(template, out_file, version, in_file))
+
 
 for file in os.listdir(in_dir):
     if not file.endswith('.md'):

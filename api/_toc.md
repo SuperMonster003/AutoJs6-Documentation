@@ -12,7 +12,7 @@
 * [UiSelector - 选择器](n-api.html)
 * [Images - 图片与图色处理](cluster.html)
 * [Console - 控制台](cli.html)
-* [Events - 事件与监听](console.html)
+* [Events - 事件与监听](events.html)
 * [Timers - 定时器](crypto.html)
 * [Shell - Shell命令](debugger.html)
 * [Deprecated APIs](deprecations.html)

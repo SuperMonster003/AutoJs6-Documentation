@@ -2,330 +2,263 @@
 
 > Stability: 2 - Stable
 
-<!--type=module-->
+events模块提供了监听手机通知、按键、触摸的接口。您可以用他配合自动操作函数完成自动化工作。
 
-Much of the Node.js core API is built around an idiomatic asynchronous
-event-driven architecture in which certain kinds of objects (called "emitters")
-periodically emit named events that cause Function objects ("listeners") to be
-called.
+events本身是一个[EventEmiiter](#events_eventemitter), 但内置了一些事件、包括按键事件、通知事件、Toast事件等。
 
-For instance: a [`net.Server`][] object emits an event each time a peer
-connects to it; a [`fs.ReadStream`][] emits an event when the file is opened;
-a [stream][] emits an event whenever data is available to be read.
+## events.emitter()
 
-All objects that emit events are instances of the `EventEmitter` class. These
-objects expose an `eventEmitter.on()` function that allows one or more
-functions to be attached to named events emitted by the object. Typically,
-event names are camel-cased strings but any valid JavaScript property key
-can be used.
+返回一个新的[EventEmitter][]。这个EventEmitter没有内置任何事件。
 
-When the `EventEmitter` object emits an event, all of the functions attached
-to that specific event are called _synchronously_. Any values returned by the
-called listeners are _ignored_ and will be discarded.
+## events.observeKey()
 
-The following example shows a simple `EventEmitter` instance with a single
-listener. The `eventEmitter.on()` method is used to register listeners, while
-the `eventEmitter.emit()` method is used to trigger the event.
+启用按键监听，例如音量键、Home键。此函数使用无障碍服务实现，因此此函数会调用auto()确保无障碍服务启用。
 
-```js
-const EventEmitter = require('events');
+只有这个函数成功执行后, [onKeyDown][], [onKeyUp][]等按键事件的监听才有效。
 
-class MyEmitter extends EventEmitter {}
+该函数在安卓4.3以上才能使用。
 
-const myEmitter = new MyEmitter();
-myEmitter.on('event', () => {
-  console.log('an event occurred!');
+## events.onKeyDown(keyName, listener)
+* `keyName` {string} 要监听的按键名称
+* `listener` {Function} 按键监听器。参数为一个[KeyEvent](#events_keyevent)。
+
+注册一个按键监听函数，当有keyName对应的按键被按下会调用该函数。可用的按键名称参见[Keys][]。
+
+例如:
+```
+//启用按键监听
+events.observeKey();
+//监听音量上键按下
+events.onKeyDown("volume_up", function(event){
+    toast("音量上键被按下了");
 });
-myEmitter.emit('event');
-```
-
-## Passing arguments and `this` to listeners
-
-The `eventEmitter.emit()` method allows an arbitrary set of arguments to be
-passed to the listener functions. It is important to keep in mind that when an
-ordinary listener function is called by the `EventEmitter`, the standard `this`
-keyword is intentionally set to reference the `EventEmitter` to which the
-listener is attached.
-
-```js
-const myEmitter = new MyEmitter();
-myEmitter.on('event', function(a, b) {
-  console.log(a, b, this);
-  // Prints:
-  //   a b MyEmitter {
-  //     domain: null,
-  //     _events: { event: [Function] },
-  //     _eventsCount: 1,
-  //     _maxListeners: undefined }
+//监听菜单键按下
+events.onKeyDown("menu", function(event){
+    toast("菜单键被按下了");
+    exit();
 });
-myEmitter.emit('event', 'a', 'b');
 ```
 
-It is possible to use ES6 Arrow Functions as listeners, however, when doing so,
-the `this` keyword will no longer reference the `EventEmitter` instance:
+## events.onKeyUp(keyName, listener)
+* `keyName` {string} 要监听的按键名称
+* `listener` {Function} 按键监听器。参数为一个[KeyEvent](#events_keyevent)。
 
-```js
-const myEmitter = new MyEmitter();
-myEmitter.on('event', (a, b) => {
-  console.log(a, b, this);
-  // Prints: a b {}
+注册一个按键监听函数，当有keyName对应的按键弹起会调用该函数。可用的按键名称参见[Keys](#events_keys)。
+
+一次完整的按键动作包括了按键按下和弹起。按下事件会在手指按下一个按键的"瞬间"触发, 弹起事件则在手指放开这个按键时触发。
+
+例如:
+```
+//启用按键监听
+events.observeKey();
+//监听音量下键弹起
+events.onKeyDown("volume_down", function(event){
+    toast("音量上键弹起");
 });
-myEmitter.emit('event', 'a', 'b');
-```
-
-## Asynchronous vs. Synchronous
-
-The `EventListener` calls all listeners synchronously in the order in which
-they were registered. This is important to ensure the proper sequencing of
-events and to avoid race conditions or logic errors. When appropriate,
-listener functions can switch to an asynchronous mode of operation using
-the `setImmediate()` or `process.nextTick()` methods:
-
-```js
-const myEmitter = new MyEmitter();
-myEmitter.on('event', (a, b) => {
-  setImmediate(() => {
-    console.log('this happens asynchronously');
-  });
+//监听Home键弹起
+events.onKeyDown("home", function(event){
+    toast("Home键弹起");
+    exit();
 });
-myEmitter.emit('event', 'a', 'b');
 ```
 
-## Handling events only once
+## events.onceKeyDown(keyName, listener)
+* `keyName` {string} 要监听的按键名称
+* `listener` {Function} 按键监听器。参数为一个[KeyEvent](#events_keyevent)
 
-When a listener is registered using the `eventEmitter.on()` method, that
-listener will be invoked _every time_ the named event is emitted.
+注册一个按键监听函数，当有keyName对应的按键被按下时会调用该函数，之后会注销该按键监听器。
 
-```js
-const myEmitter = new MyEmitter();
-let m = 0;
-myEmitter.on('event', () => {
-  console.log(++m);
+也就是listener只有在onceKeyDown调用后的第一次按键事件被调用一次。
+
+## events.onceKeyUp(keyName, listener)
+* `keyName` {string} 要监听的按键名称
+* `listener` {Function} 按键监听器。参数为一个[KeyEvent](#events_keyevent)
+
+注册一个按键监听函数，当有keyName对应的按键弹起时会调用该函数，之后会注销该按键监听器。
+
+也就是listener只有在onceKeyUp调用后的第一次按键事件被调用一次。
+
+## events.removeAllKeyDownListeners(keyName)
+* `keyName` {string} 按键名称
+
+删除该按键的KeyDown(按下)事件的所有监听。
+
+## events.removeAllKeyUpListeners(keyName)
+* `keyName` {string} 按键名称
+
+删除该按键的KeyUp(弹起)事件的所有监听。
+
+## events.observeTouch()
+
+启用屏幕触摸监听。（需要root权限）
+
+只有这个函数被成功执行后, 触摸事件的监听才有效。
+
+没有root权限调用该函数则什么也不会发生。(**注意**: 这个行为未来可能会更改为抛出异常)
+
+## events.setTouchEventTimeout(timeout)
+* `timeout` {number} 两个触摸事件的最小间隔。单位毫秒。默认为10毫秒。如果number小于0，视为0处理。
+
+设置两个触摸事件分发的最小时间间隔。
+
+例如间隔为10毫秒的话，前一个触摸事件发生并被注册的监听器处理后，至少要过10毫秒才能分发和处理下一个触摸事件，这10毫秒之间的触摸将会被忽略。
+
+建议在满足需要的情况下尽量提高这个间隔。一个简单滑动动作可能会连续触发上百个触摸事件，如果timeout设置过低可能造成事件拥堵。强烈建议不要设置timeout为0。
+
+## events.getTouchEventTimeout()
+
+返回触摸事件的最小时间间隔。
+
+## events.onTouch(listener)
+* `listener` {Function} 参数为[Point][]的函数
+
+注册一个触摸监听函数。相当于`on("touch", listener)`。
+
+例如:
+```
+//启用触摸监听
+events.observeTouch();
+//注册触摸监听器
+events.onTouch(function(p){
+    //触摸事件发生时, 打印出触摸的点的坐标
+    log(p.x + ", " + p.y);
 });
-myEmitter.emit('event');
-// Prints: 1
-myEmitter.emit('event');
-// Prints: 2
 ```
 
-Using the `eventEmitter.once()` method, it is possible to register a listener
-that is called at most once for a particular event. Once the event is emitted,
-the listener is unregistered and *then* called.
+## events.removeAllTouchListeners()
 
-```js
-const myEmitter = new MyEmitter();
-let m = 0;
-myEmitter.once('event', () => {
-  console.log(++m);
+删除所有事件监听函数。
+
+## 事件: 'key'
+* `keyCode` {number} 键值
+* `event` {KeyEvent} 事件
+
+当有按键被按下或弹起时会触发该事件。
+例如：
+```
+auto();
+events.observeKey();
+events.on("key", function(keyCode, event){
+    //处理按键事件
 });
-myEmitter.emit('event');
-// Prints: 1
-myEmitter.emit('event');
-// Ignored
+```
+其中监听器的参数KeyCode包括：
+* `KeyEvent.KEYCODE_HOME` 主页键
+* `KeyEvent.KEYCODE_BACK` 返回键
+* `KeyEvent.KEYCODE_MENU` 菜单键
+* `KeyEvent.KEYCODE_VOLUMEUP` 音量上键
+* `KeyEvent.KEYCODE_VOLUMEDOWN` 音量下键
+
+## 事件: 'key_down'
+* `keyCode` {number} 键值
+* `event` {KeyEvent} 事件
+
+当有按键被按下时会触发该事件。
+```
+auto();
+events.observeKey();
+events.on("key_down", function(keyCode, event){
+    //处理按键按下事件
+});
 ```
 
-## Error events
+## 事件: 'key_up'
+* `keyCode` {number} 键值
+* `event` {KeyEvent} 事件
 
-When an error occurs within an `EventEmitter` instance, the typical action is
-for an `'error'` event to be emitted. These are treated as special cases
-within Node.js.
-
-If an `EventEmitter` does _not_ have at least one listener registered for the
-`'error'` event, and an `'error'` event is emitted, the error is thrown, a
-stack trace is printed, and the Node.js process exits.
-
-```js
-const myEmitter = new MyEmitter();
-myEmitter.emit('error', new Error('whoops!'));
-// Throws and crashes Node.js
+当有按键弹起时会触发该事件。
+```
+auto();
+events.observeKey();
+events.on("key_up", function(keyCode, event){
+    //处理按键弹起事件
+});
 ```
 
-To guard against crashing the Node.js process, a listener can be registered
-on the [`process` object's `uncaughtException` event][] or the [`domain`][] module
-can be used. (Note, however, that the `domain` module has been deprecated.)
 
-```js
-const myEmitter = new MyEmitter();
+## obverseNotification()
+开启通知(包括Toast)监听。
 
-process.on('uncaughtException', (err) => {
-  console.error('whoops! there was an error');
+通知与Toast监听依赖于无障碍服务，因此这个函数会调用`auto()`来确保无障碍服务启用。
+
+例如：
+```
+events.obverseNotification();
+events.onNotification(function(notification){
+    log(notification.getText());
+});
+events.onToast(function(toast){
+    log(toast.getText());
+});
+```
+
+## 事件: 'toast'
+* `toast` {Object}
+    * `getText()` 获取Toast的文本内容
+    * `getPackageName()` 获取发出Toast的应用包名
+
+当有应用发出toast(气泡消息)时会触发该事件。但Auto.js软件本身的toast除外。
+例如，要记录发出所有toast的应用：
+```
+events.obverseNotification();
+events.onToast(function(toast){
+    log("Toast内容: " + toast.getText() + " 包名: " + toast.getPackageName());
+});
+```
+
+## 事件: 'notification'
+* `notification` {Object} 通知
+
+当有应用发出通知时会触发该事件。
+
+例如：
+```
+events.observeNotification();
+events.on("notification", function(notification){
+    log(notification);
 });
 
-myEmitter.emit('error', new Error('whoops!'));
-// Prints: whoops! there was an error
 ```
 
-As a best practice, listeners should always be added for the `'error'` events.
+**注意**: 这是一个实验性功能。实测只有某些情况下的通知才能被正确捕捉。
 
-```js
-const myEmitter = new MyEmitter();
-myEmitter.on('error', (err) => {
-  console.error('whoops! there was an error');
-});
-myEmitter.emit('error', new Error('whoops!'));
-// Prints: whoops! there was an error
+# EventEmitter
+
+> Stability: 2 - Stable
+
+## EventEmitter.defaultMaxListeners
+
+每个事件默认可以注册最多 10 个监听器。 单个 EventEmitter 实例的限制可以使用 emitter.setMaxListeners(n) 方法改变。 所有 EventEmitter 实例的默认值可以使用 EventEmitter.defaultMaxListeners 属性改变。 
+
+设置 EventEmitter.defaultMaxListeners 要谨慎，因为会影响所有 EventEmitter 实例，包括之前创建的。 因而，调用 emitter.setMaxListeners(n) 优先于 EventEmitter.defaultMaxListeners。
+
+注意，与Node.js不同，**这是一个硬性限制**。 EventEmitter 实例不允许添加更多的监听器，监听器超过最大数量时会抛出TooManyListenersException。
 ```
-
-## Class: EventEmitter
-<!-- YAML
-added: v0.1.26
--->
-
-The `EventEmitter` class is defined and exposed by the `events` module:
-
-```js
-const EventEmitter = require('events');
-```
-
-All EventEmitters emit the event `'newListener'` when new listeners are
-added and `'removeListener'` when existing listeners are removed.
-
-### Event: 'newListener'
-<!-- YAML
-added: v0.1.26
--->
-
-* `eventName` {any} The name of the event being listened for
-* `listener` {Function} The event handler function
-
-The `EventEmitter` instance will emit its own `'newListener'` event *before*
-a listener is added to its internal array of listeners.
-
-Listeners registered for the `'newListener'` event will be passed the event
-name and a reference to the listener being added.
-
-The fact that the event is triggered before adding the listener has a subtle
-but important side effect: any *additional* listeners registered to the same
-`name` *within* the `'newListener'` callback will be inserted *before* the
-listener that is in the process of being added.
-
-```js
-const myEmitter = new MyEmitter();
-// Only do this once so we don't loop forever
-myEmitter.once('newListener', (event, listener) => {
-  if (event === 'event') {
-    // Insert a new listener in front
-    myEmitter.on('event', () => {
-      console.log('B');
-    });
-  }
-});
-myEmitter.on('event', () => {
-  console.log('A');
-});
-myEmitter.emit('event');
-// Prints:
-//   B
-//   A
-```
-
-### Event: 'removeListener'
-<!-- YAML
-added: v0.9.3
-changes:
-  - version: v6.1.0, v4.7.0
-    pr-url: https://github.com/nodejs/node/pull/6394
-    description: For listeners attached using `.once()`, the `listener` argument
-                 now yields the original listener function.
--->
-
-* `eventName` {any} The event name
-* `listener` {Function} The event handler function
-
-The `'removeListener'` event is emitted *after* the `listener` is removed.
-
-### EventEmitter.listenerCount(emitter, eventName)
-<!-- YAML
-added: v0.9.12
-deprecated: v4.0.0
--->
-
-> Stability: 0 - Deprecated: Use [`emitter.listenerCount()`][] instead.
-
-A class method that returns the number of listeners for the given `eventName`
-registered on the given `emitter`.
-
-```js
-const myEmitter = new MyEmitter();
-myEmitter.on('event', () => {});
-myEmitter.on('event', () => {});
-console.log(EventEmitter.listenerCount(myEmitter, 'event'));
-// Prints: 2
-```
-
-### EventEmitter.defaultMaxListeners
-<!-- YAML
-added: v0.11.2
--->
-
-By default, a maximum of `10` listeners can be registered for any single
-event. This limit can be changed for individual `EventEmitter` instances
-using the [`emitter.setMaxListeners(n)`][] method. To change the default
-for *all* `EventEmitter` instances, the `EventEmitter.defaultMaxListeners`
-property can be used. If this value is not a positive number, a `TypeError`
-will be thrown.
-
-Take caution when setting the `EventEmitter.defaultMaxListeners` because the
-change effects *all* `EventEmitter` instances, including those created before
-the change is made. However, calling [`emitter.setMaxListeners(n)`][] still has
-precedence over `EventEmitter.defaultMaxListeners`.
-
-Note that this is not a hard limit. The `EventEmitter` instance will allow
-more listeners to be added but will output a trace warning to stderr indicating
-that a "possible EventEmitter memory leak" has been detected. For any single
-`EventEmitter`, the `emitter.getMaxListeners()` and `emitter.setMaxListeners()`
-methods can be used to temporarily avoid this warning:
-
-```js
 emitter.setMaxListeners(emitter.getMaxListeners() + 1);
 emitter.once('event', () => {
-  // do stuff
+  // 做些操作
   emitter.setMaxListeners(Math.max(emitter.getMaxListeners() - 1, 0));
 });
 ```
+## EventEmitter.addListener(eventName, listener)
+* `eventName` {any}
+* `listener` {Function}
 
-The [`--trace-warnings`][] command line flag can be used to display the
-stack trace for such warnings.
+emitter.on(eventName, listener) 的别名。
 
-The emitted warning can be inspected with [`process.on('warning')`][] and will
-have the additional `emitter`, `type` and `count` properties, referring to
-the event emitter instance, the event’s name and the number of attached
-listeners, respectively.
-Its `name` property is set to `'MaxListenersExceededWarning'`.
+## EventEmitter.emit(eventName[, ...args])
+* `eventName` {any}
+* `args` {any}
 
-### emitter.addListener(eventName, listener)
-<!-- YAML
-added: v0.1.26
--->
-- `eventName` {any}
-- `listener` {Function}
+按监听器的注册顺序，同步地调用每个注册到名为 eventName 事件的监听器，并传入提供的参数。
 
-Alias for `emitter.on(eventName, listener)`.
+如果事件有监听器，则返回 true ，否则返回 false。
 
-### emitter.emit(eventName[, ...args])
-<!-- YAML
-added: v0.1.26
--->
-- `eventName` {any}
-- `...args` {any}
+## EventEmitter.eventNames()
 
-Synchronously calls each of the listeners registered for the event named
-`eventName`, in the order they were registered, passing the supplied arguments
-to each.
-
-Returns `true` if the event had listeners, `false` otherwise.
-
-### emitter.eventNames()
-<!-- YAML
-added: v6.0.0
--->
-
-Returns an array listing the events for which the emitter has registered
-listeners. The values in the array will be strings or Symbols.
-
-```js
-const EventEmitter = require('events');
-const myEE = new EventEmitter();
+返回一个列出触发器已注册监听器的事件的数组。 数组中的值为字符串或符号。
+```
+const myEE = events.emitter();
 myEE.on('foo', () => {});
 myEE.on('bar', () => {});
 
@@ -333,205 +266,128 @@ const sym = Symbol('symbol');
 myEE.on(sym, () => {});
 
 console.log(myEE.eventNames());
-// Prints: [ 'foo', 'bar', Symbol(symbol) ]
+// 打印: [ 'foo', 'bar', Symbol(symbol) ]
 ```
+## EventEmitter.getMaxListeners()
 
-### emitter.getMaxListeners()
-<!-- YAML
-added: v1.0.0
--->
+返回 EventEmitter 当前的最大监听器限制值，该值可以通过 emitter.setMaxListeners(n) 设置或默认为 EventEmitter.defaultMaxListeners。
 
-Returns the current max listener value for the `EventEmitter` which is either
-set by [`emitter.setMaxListeners(n)`][] or defaults to
-[`EventEmitter.defaultMaxListeners`][].
+## EventEmitter.listenerCount(eventName)
+* `eventName` {string} 正在被监听的事件名
 
-### emitter.listenerCount(eventName)
-<!-- YAML
-added: v3.2.0
--->
+返回正在监听名为 eventName 的事件的监听器的数量。
 
-* `eventName` {any} The name of the event being listened for
+## EventEmitter.listeners(eventName)
+* `eventName` {string}
 
-Returns the number of listeners listening to the event named `eventName`.
-
-### emitter.listeners(eventName)
-<!-- YAML
-added: v0.1.26
-changes:
-  - version: v7.0.0
-    pr-url: https://github.com/nodejs/node/pull/6881
-    description: For listeners attached using `.once()` this returns the
-                 original listeners instead of wrapper functions now.
--->
-- `eventName` {any}
-
-Returns a copy of the array of listeners for the event named `eventName`.
-
-```js
+返回名为 eventName 的事件的监听器数组的副本。
+```
 server.on('connection', (stream) => {
   console.log('someone connected!');
 });
 console.log(util.inspect(server.listeners('connection')));
-// Prints: [ [Function] ]
+// 打印: [ [Function] ]
 ```
 
-### emitter.on(eventName, listener)
-<!-- YAML
-added: v0.1.101
--->
+## EventEmitter.on(eventName, listener)
+* `eventName` {any} 事件名
+* `listener` {Function} 回调函数
 
-* `eventName` {any} The name of the event.
-* `listener` {Function} The callback function
-
-Adds the `listener` function to the end of the listeners array for the
-event named `eventName`. No checks are made to see if the `listener` has
-already been added. Multiple calls passing the same combination of `eventName`
-and `listener` will result in the `listener` being added, and called, multiple
-times.
-
-```js
+添加 listener 函数到名为 eventName 的事件的监听器数组的末尾。 不会检查 listener 是否已被添加。 多次调用并传入相同的 eventName 和 listener 会导致 listener 被添加与调用多次。
+```
 server.on('connection', (stream) => {
-  console.log('someone connected!');
+  console.log('有连接！');
 });
 ```
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
-
-By default, event listeners are invoked in the order they are added. The
-`emitter.prependListener()` method can be used as an alternative to add the
-event listener to the beginning of the listeners array.
-
-```js
-const myEE = new EventEmitter();
+默认情况下，事件监听器会按照添加的顺序依次调用。 emitter.prependListener() 方法可用于将事件监听器添加到监听器数组的开头。
+```
+const myEE = events.emitter();
 myEE.on('foo', () => console.log('a'));
 myEE.prependListener('foo', () => console.log('b'));
 myEE.emit('foo');
-// Prints:
+// 打印:
 //   b
 //   a
 ```
 
-### emitter.once(eventName, listener)
-<!-- YAML
-added: v0.3.0
--->
 
-* `eventName` {any} The name of the event.
-* `listener` {Function} The callback function
+## EventEmitter.once(eventName, listener)#
+* `eventName` {any} 事件名
+* `listener` {Function} 回调函数
 
-Adds a **one time** `listener` function for the event named `eventName`. The
-next time `eventName` is triggered, this listener is removed and then invoked.
-
-```js
+添加一个单次 listener 函数到名为 eventName 的事件。 下次触发 eventName 事件时，监听器会被移除，然后调用。
+```
 server.once('connection', (stream) => {
-  console.log('Ah, we have our first user!');
+  console.log('首次调用！');
 });
 ```
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
-
-By default, event listeners are invoked in the order they are added. The
-`emitter.prependOnceListener()` method can be used as an alternative to add the
-event listener to the beginning of the listeners array.
-
-```js
-const myEE = new EventEmitter();
+默认情况下，事件监听器会按照添加的顺序依次调用。 emitter.prependOnceListener() 方法可用于将事件监听器添加到监听器数组的开头。
+```
+const myEE = events.emitter();
 myEE.once('foo', () => console.log('a'));
 myEE.prependOnceListener('foo', () => console.log('b'));
 myEE.emit('foo');
-// Prints:
+// 打印:
 //   b
 //   a
 ```
 
-### emitter.prependListener(eventName, listener)
-<!-- YAML
-added: v6.0.0
--->
+## EventEmitter.prependListener(eventName, listener)
+* `eventName` {any} 事件名
+* `listener` {Function} 回调函数
 
-* `eventName` {any} The name of the event.
-* `listener` {Function} The callback function
-
-Adds the `listener` function to the *beginning* of the listeners array for the
-event named `eventName`. No checks are made to see if the `listener` has
-already been added. Multiple calls passing the same combination of `eventName`
-and `listener` will result in the `listener` being added, and called, multiple
-times.
-
-```js
+添加 listener 函数到名为 eventName 的事件的监听器数组的开头。 不会检查 listener 是否已被添加。 多次调用并传入相同的 eventName 和 listener 会导致 listener 被添加与调用多次。
+```
 server.prependListener('connection', (stream) => {
-  console.log('someone connected!');
+  console.log('有连接！');
 });
 ```
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
+## EventEmitter.prependOnceListener(eventName, listener)
+* `eventName` {any} 事件名
+* `listener` {Function} 回调函数
 
-### emitter.prependOnceListener(eventName, listener)
-<!-- YAML
-added: v6.0.0
--->
-
-* `eventName` {any} The name of the event.
-* `listener` {Function} The callback function
-
-Adds a **one time** `listener` function for the event named `eventName` to the
-*beginning* of the listeners array. The next time `eventName` is triggered, this
-listener is removed, and then invoked.
-
-```js
+添加一个单次 listener 函数到名为 eventName 的事件的监听器数组的开头。 下次触发 eventName 事件时，监听器会被移除，然后调用。
+```
 server.prependOnceListener('connection', (stream) => {
-  console.log('Ah, we have our first user!');
+  console.log('首次调用！');
 });
 ```
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
+## EventEmitter.removeAllListeners(\[eventName\])
+* `eventName` {any}
 
-### emitter.removeAllListeners([eventName])
-<!-- YAML
-added: v0.1.26
--->
-- `eventName` {any}
+移除全部或指定 eventName 的监听器。
 
-Removes all listeners, or those of the specified `eventName`.
+注意，在代码中移除其他地方添加的监听器是一个不好的做法，尤其是当 EventEmitter 实例是其他组件或模块创建的。
 
-Note that it is bad practice to remove listeners added elsewhere in the code,
-particularly when the `EventEmitter` instance was created by some other
-component or module (e.g. sockets or file streams).
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
+## EventEmitter.removeListener(eventName, listener)
+* `eventName` {any}
+* `listener` {Function}
 
-### emitter.removeListener(eventName, listener)
-<!-- YAML
-added: v0.1.26
--->
-- `eventName` {any}
-- `listener` {Function}
-
-Removes the specified `listener` from the listener array for the event named
-`eventName`.
-
-```js
+从名为 eventName 的事件的监听器数组中移除指定的 listener。
+```
 const callback = (stream) => {
-  console.log('someone connected!');
+  console.log('有连接！');
 };
 server.on('connection', callback);
 // ...
 server.removeListener('connection', callback);
 ```
+removeListener 最多只会从监听器数组里移除一个监听器实例。 如果任何单一的监听器被多次添加到指定 eventName 的监听器数组中，则必须多次调用 removeListener 才能移除每个实例。
 
-`removeListener` will remove, at most, one instance of a listener from the
-listener array. If any single listener has been added multiple times to the
-listener array for the specified `eventName`, then `removeListener` must be
-called multiple times to remove each instance.
 
-Note that once an event has been emitted, all listeners attached to it at the
-time of emitting will be called in order. This implies that any `removeListener()`
-or `removeAllListeners()` calls *after* emitting and *before* the last listener
-finishes execution will not remove them from `emit()` in progress. Subsequent
-events will behave as expected.
-
-```js
-const myEmitter = new MyEmitter();
+注意，一旦一个事件被触发，所有绑定到它的监听器都会按顺序依次触发。 这意味着，在事件触发后、最后一个监听器完成执行前，任何 removeListener() 或 removeAllListeners() 调用都不会从 emit() 中移除它们。 随后的事件会像预期的那样发生。
+```
+const myEmitter = events.emitter();
 
 const callbackA = () => {
   console.log('A');
@@ -546,51 +402,68 @@ myEmitter.on('event', callbackA);
 
 myEmitter.on('event', callbackB);
 
-// callbackA removes listener callbackB but it will still be called.
-// Internal listener array at time of emit [callbackA, callbackB]
+// callbackA 移除了监听器 callbackB，但它依然会被调用。
+// 触发是内部的监听器数组为 [callbackA, callbackB]
 myEmitter.emit('event');
-// Prints:
+// 打印:
 //   A
 //   B
 
-// callbackB is now removed.
-// Internal listener array [callbackA]
+// callbackB 被移除了。
+// 内部监听器数组为 [callbackA]
 myEmitter.emit('event');
-// Prints:
+// 打印:
 //   A
-
 ```
+因为监听器是使用内部数组进行管理的，所以调用它会改变在监听器被移除后注册的任何监听器的位置索引。 虽然这不会影响监听器的调用顺序，但意味着由 emitter.listeners() 方法返回的监听器数组副本需要被重新创建。
 
-Because listeners are managed using an internal array, calling this will
-change the position indices of any listener registered *after* the listener
-being removed. This will not impact the order in which listeners are called,
-but it means that any copies of the listener array as returned by
-the `emitter.listeners()` method will need to be recreated.
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
+## EventEmitter.setMaxListeners(n)
+* `n` {number}
 
-### emitter.setMaxListeners(n)
-<!-- YAML
-added: v0.3.5
--->
-- `n` {integer}
+默认情况下，如果为特定事件添加了超过 10 个监听器，则 EventEmitter 会打印一个警告。 此限制有助于寻找内存泄露。 但是，并不是所有的事件都要被限为 10 个。 emitter.setMaxListeners() 方法允许修改指定的 EventEmitter 实例的限制。 值设为 Infinity（或 0）表明不限制监听器的数量。
 
-By default EventEmitters will print a warning if more than `10` listeners are
-added for a particular event. This is a useful default that helps finding
-memory leaks. Obviously, not all events should be limited to just 10 listeners.
-The `emitter.setMaxListeners()` method allows the limit to be modified for this
-specific `EventEmitter` instance. The value can be set to `Infinity` (or `0`)
-to indicate an unlimited number of listeners.
+返回一个 EventEmitter 引用，可以链式调用。
 
-Returns a reference to the `EventEmitter`, so that calls can be chained.
+# KeyEvent
 
-[`--trace-warnings`]: cli.html#cli_trace_warnings
-[`EventEmitter.defaultMaxListeners`]: #events_eventemitter_defaultmaxlisteners
-[`domain`]: domain.html
-[`emitter.listenerCount()`]: #events_emitter_listenercount_eventname
-[`emitter.setMaxListeners(n)`]: #events_emitter_setmaxlisteners_n
-[`fs.ReadStream`]: fs.html#fs_class_fs_readstream
-[`net.Server`]: net.html#net_class_net_server
-[`process.on('warning')`]: process.html#process_event_warning
-[`process` object's `uncaughtException` event]: process.html#process_event_uncaughtexception
-[stream]: stream.html
+> Stability: 2 - Stable
+
+## KeyEvent.getAction()
+
+返回事件的动作。包括：
+* `KeyEvent.ACTION_DOWN` 按下事件
+* `KeyEvent.ACTION_UP` 弹起事件
+
+## KeyEvent.getKeyCode()
+
+返回按键的键值。包括：
+* `KeyEvent.KEYCODE_HOME` 主页键
+* `KeyEvent.KEYCODE_BACK` 返回键
+* `KeyEvent.KEYCODE_MENU` 菜单键
+* `KeyEvent.KEYCODE_VOLUME_UP` 音量上键
+* `KeyEvent.KEYCODE_VOLUME_DOWN` 音量下键
+
+## KeyEvent.getEventTime()
+
+返回事件发生的时间戳。返回值的类型是number。
+
+## KeyEvent.getDownTime()
+
+返回最近一次按下事件的时间戳。如果本身是按下事件，则与getEventTime()相同。
+
+## KeyEvent.keyCodeToString(keyCode)
+
+把键值转换为字符串。例如KEYCODE_HOME转换为"KEYCODE_HOME"。
+
+# Keys
+
+> Stability: 2 - Stable
+
+按键事件中所有可用的按键名称为：
+* `volume_up`  音量上键
+* `volume_down` 音量下键
+* `home` 主屏幕键
+* `back` 返回键
+* `menu` 菜单键

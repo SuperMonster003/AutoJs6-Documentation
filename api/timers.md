@@ -2,208 +2,52 @@
 
 > Stability: 2 - Stable
 
-The `timer` module exposes a global API for scheduling functions to
-be called at some future period of time. Because the timer functions are
-globals, there is no need to call `require('timers')` to use the API.
+timers 模块暴露了一个全局的 API，用于在某个未来时间段调用调度函数。 因为定时器函数是全局的，所以使用该 API 无需调用 timers.***
 
-The timer functions within Node.js implement a similar API as the timers API
-provided by Web Browsers but use a different internal implementation that is
-built around [the Node.js Event Loop][].
+Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API，除了它使用了一个不同的内部实现，它是基于 Android Looper-Handler消息循环机制构建的。其实现机制与Node.js比较相似。
 
-## Class: Immediate
+## setImmediate(callback[, ...args])
+* `callback` {Function} 在Looper循环的当前回合结束时要调用的函数。
+* `...args` {any} 当调用 callback 时要传入的可选参数。
 
-This object is created internally and is returned from [`setImmediate()`][]. It
-can be passed to [`clearImmediate()`][] in order to cancel the scheduled
-actions.
+预定立即执行的 callback，它是在 I/O 事件的回调之后被触发。 返回一个用于 clearImmediate() 的 id。
 
-## Class: Timeout
+当多次调用 setImmediate() 时，callback 函数会按照它们被创建的顺序依次执行。 每次事件循环迭代都会处理整个回调队列。 如果一个立即定时器是被一个正在执行的回调排入队列的，则该定时器直到下一次事件循环迭代才会被触发。
 
-This object is created internally and is returned from [`setTimeout()`][] and
-[`setInterval()`][]. It can be passed to [`clearTimeout()`][] or
-[`clearInterval()`][] (respectively) in order to cancel the scheduled actions.
+## setInterval(callback, delay\[, ...args\])
+* `callback` {Function} 当定时器到点时要调用的函数。
+* `delay` {number} 调用 callback 之前要等待的毫秒数。
+* `...args` {any} 当调用 callback 时要传入的可选参数。
 
-By default, when a timer is scheduled using either [`setTimeout()`][] or
-[`setInterval()`][], the Node.js event loop will continue running as long as the
-timer is active. Each of the `Timeout` objects returned by these functions
-export both `timeout.ref()` and `timeout.unref()` functions that can be used to
-control this default behavior.
+预定每隔 delay 毫秒重复执行的 callback。 返回一个用于 clearInterval() 的 id。
 
-### timeout.ref()
-<!-- YAML
-added: v0.9.1
--->
+当 delay 小于 0 时，delay 会被设为 0。
 
-When called, requests that the Node.js event loop *not* exit so long as the
-`Timeout` is active. Calling `timeout.ref()` multiple times will have no effect.
+## setTimeout(callback, delay\[, ...args\])
+* `callback` {Function} 当定时器到点时要调用的函数。
+* `delay` {number} 调用 callback 之前要等待的毫秒数。
+* `...args` {any} 当调用 callback 时要传入的可选参数。
 
-*Note*: By default, all `Timeout` objects are "ref'd", making it normally
-unnecessary to call `timeout.ref()` unless `timeout.unref()` had been called
-previously.
+预定在 delay 毫秒之后执行的单次 callback。 返回一个用于 clearTimeout() 的 id。
 
-Returns a reference to the `Timeout`.
+callback 可能不会精确地在 delay 毫秒被调用。 Auto.js 不能保证回调被触发的确切时间，也不能保证它们的顺序。 回调会在尽可能接近所指定的时间上调用。
 
-### timeout.unref()
-<!-- YAML
-added: v0.9.1
--->
+当 delay 小于 0 时，delay 会被设为 0。
 
-When called, the active `Timeout` object will not require the Node.js event loop
-to remain active. If there is no other activity keeping the event loop running,
-the process may exit before the `Timeout` object's callback is invoked. Calling
-`timeout.unref()` multiple times will have no effect.
-
-*Note*: Calling `timeout.unref()` creates an internal timer that will wake the
-Node.js event loop. Creating too many of these can adversely impact performance
-of the Node.js application.
-
-Returns a reference to the `Timeout`.
-
-## Scheduling Timers
-
-A timer in Node.js is an internal construct that calls a given function after
-a certain period of time. When a timer's function is called varies depending on
-which method was used to create the timer and what other work the Node.js
-event loop is doing.
-
-### setImmediate(callback[, ...args])
-<!-- YAML
-added: v0.9.1
--->
-
-* `callback` {Function} The function to call at the end of this turn of
-  [the Node.js Event Loop]
-* `...args` {any} Optional arguments to pass when the `callback` is called.
-
-Schedules the "immediate" execution of the `callback` after I/O events'
-callbacks. Returns an `Immediate` for use with [`clearImmediate()`][].
-
-When multiple calls to `setImmediate()` are made, the `callback` functions are
-queued for execution in the order in which they are created. The entire callback
-queue is processed every event loop iteration. If an immediate timer is queued
-from inside an executing callback, that timer will not be triggered until the
-next event loop iteration.
-
-If `callback` is not a function, a [`TypeError`][] will be thrown.
-
-*Note*: This method has a custom variant for promises that is available using
-[`util.promisify()`][]:
-
-```js
-const util = require('util');
-const setImmediatePromise = util.promisify(setImmediate);
-
-setImmediatePromise('foobar').then((value) => {
-  // value === 'foobar' (passing values is optional)
-  // This is executed after all I/O callbacks.
-});
-
-// or with async function
-async function timerExample() {
-  console.log('Before I/O callbacks');
-  await setImmediatePromise();
-  console.log('After I/O callbacks');
-}
-timerExample();
-```
-
-### setInterval(callback, delay[, ...args])
-<!-- YAML
-added: v0.0.1
--->
-
-* `callback` {Function} The function to call when the timer elapses.
-* `delay` {number} The number of milliseconds to wait before calling the
-  `callback`.
-* `...args` {any} Optional arguments to pass when the `callback` is called.
-
-Schedules repeated execution of `callback` every `delay` milliseconds.
-Returns a `Timeout` for use with [`clearInterval()`][].
-
-When `delay` is larger than `2147483647` or less than `1`, the `delay` will be
-set to `1`.
-
-If `callback` is not a function, a [`TypeError`][] will be thrown.
-
-### setTimeout(callback, delay[, ...args])
-<!-- YAML
-added: v0.0.1
--->
-
-* `callback` {Function} The function to call when the timer elapses.
-* `delay` {number} The number of milliseconds to wait before calling the
-  `callback`.
-* `...args` {any} Optional arguments to pass when the `callback` is called.
-
-Schedules execution of a one-time `callback` after `delay` milliseconds.
-Returns a `Timeout` for use with [`clearTimeout()`][].
-
-The `callback` will likely not be invoked in precisely `delay` milliseconds.
-Node.js makes no guarantees about the exact timing of when callbacks will fire,
-nor of their ordering. The callback will be called as close as possible to the
-time specified.
-
-*Note*: When `delay` is larger than `2147483647` or less than `1`, the `delay`
-will be set to `1`.
-
-If `callback` is not a function, a [`TypeError`][] will be thrown.
-
-*Note*: This method has a custom variant for promises that is available using
-[`util.promisify()`][]:
-
-```js
-const util = require('util');
-const setTimeoutPromise = util.promisify(setTimeout);
-
-setTimeoutPromise(40, 'foobar').then((value) => {
-  // value === 'foobar' (passing values is optional)
-  // This is executed after about 40 milliseconds.
-});
-```
-
-## Cancelling Timers
-
-The [`setImmediate()`][], [`setInterval()`][], and [`setTimeout()`][] methods
-each return objects that represent the scheduled timers. These can be used to
-cancel the timer and prevent it from triggering.
-
-It is not possible to cancel timers that were created using the promisified
-variants of [`setImmediate()`][], [`setTimeout()`][].
-
-### clearImmediate(immediate)
-<!-- YAML
-added: v0.9.1
--->
-
-* `immediate` {Immediate} An `Immediate` object as returned by
-  [`setImmediate()`][].
-
-Cancels an `Immediate` object created by [`setImmediate()`][].
-
-### clearInterval(timeout)
-<!-- YAML
-added: v0.0.1
--->
-
-* `timeout` {Timeout} A `Timeout` object as returned by [`setInterval()`][].
-
-Cancels a `Timeout` object created by [`setInterval()`][].
-
-### clearTimeout(timeout)
-<!-- YAML
-added: v0.0.1
--->
-
-* `timeout` {Timeout} A `Timeout` object as returned by [`setTimeout()`][].
-
-Cancels a `Timeout` object created by [`setTimeout()`][].
+setImmediate()、setInterval() 和 setTimeout() 方法每次都会返回表示预定的计时器的id。 它们可用于取消定时器并防止触发。
 
 
-[`TypeError`]: errors.html#errors_class_typeerror
-[`clearImmediate()`]: timers.html#timers_clearimmediate_immediate
-[`clearInterval()`]: timers.html#timers_clearinterval_timeout
-[`clearTimeout()`]: timers.html#timers_cleartimeout_timeout
-[`setImmediate()`]: timers.html#timers_setimmediate_callback_args
-[`setInterval()`]: timers.html#timers_setinterval_callback_delay_args
-[`setTimeout()`]: timers.html#timers_settimeout_callback_delay_args
-[`util.promisify()`]: util.html#util_util_promisify_original
-[the Node.js Event Loop]: https://nodejs.org/en/docs/guides/event-loop-timers-and-nexttick
+## clearImmediate(id)
+* `id` {number} 一个 setImmediate() 返回的 id。
+
+取消一个由 setImmediate() 创建的 Immediate 对象。
+
+## clearInterval(id)
+* `id` {number} 一个 setInterval() 返回的 id。
+
+取消一个由 setInterval() 创建的 Timeout 对象。
+
+## clearTimeout(id)
+* `id` {number} 一个 setTimeout() 返回的 id。
+
+取消一个由 setTimeout() 创建的 Timeout 对象。

@@ -1,156 +1,133 @@
-# Global Objects
+# 全局变量与函数
 
-<!-- type=misc -->
+全局变量和函数在所有模块中均可使用。 但以下变量的作用域只在模块内，详见 module文档：
+* exports
+* module
+* require()
+以下的对象是特定于 Auto.js 的。 有些内置对象是 JavaScript 语言本身的一部分，它们也是全局的。
 
-These objects are available in all modules. The following variables may appear
-to be global but are not. They exist only in the scope of modules, see the
-[module system documentation][]:
+一些模块中的函数为了使用方便也可以直接全局使用，这些函数在此不再赘述。例如timers模块的setInterval等函数。
 
-- [`__dirname`][]
-- [`__filename`][]
-- [`exports`][]
-- [`module`][]
-- [`require()`][]
+## sleep([n])
+* `n` {number} 毫秒数
 
-The objects listed here are specific to Node.js. There are a number of
-[built-in objects][] that are part of the JavaScript language itself, which are
-also globally accessible.
+暂停运行n**毫秒**的时间。1秒等于1000毫秒。
 
-## Class: Buffer
-<!-- YAML
-added: v0.1.103
--->
+## launchPackage(packageName)
+* `packageName` {string} 应用包名
 
-<!-- type=global -->
+运行包名为packageName的应用主界面(Launcher)。例如，打开微信为：
+```
+launchPackage("com.tencent.mm");
+```
+如果存在多个应用包名相同的情况（如双开应用），如何处理取决于操作系统。在MIUI中会弹出多开应用的选择界面。
 
-* {Function}
+## launchApp(appName)
+* `appName` {String} 应用名称
 
-Used to handle binary data. See the [buffer section][].
+运行应用名称为appName的应用主界面。当有应用名称相同时只运行其中某一个。  
+例如，打开微信为：
+```
+launchApp("微信");
+```
 
-## \_\_dirname
+## currentPackage()
+返回最近一次监测到的正在运行的应用的包名，一般可以认为就是当前正在运行的应用的包名。
 
-This variable may appear to be global but is not. See [`__dirname`].
+## currentActivity()
+返回最近一次监测到的正在运行的Activity的名称，一般可以认为就是当前正在运行的Activity的名称。
 
-## \_\_filename
+## getPackageName(appName)
+* `appName` {string} 应用名称
 
-This variable may appear to be global but is not. See [`__filename`].
+获取应用的包名。例如getPackageName("QQ")为"com.tencent.mobileqq"。如果有相同名称的应用，只返回其中某一个的包名。如果不存在这个名称的应用，会返回null。
 
-## clearImmediate(immediateObject)
-<!-- YAML
-added: v0.9.1
--->
+## getAppName(packageName)
+* `packageName` {string} 应用包名
 
-<!--type=global-->
+返回对应包名的应用的名称。如果应用不存在，返回null。
 
-[`clearImmediate`] is described in the [timers][] section.
+## openAppSetting(packageName)
+* `packageName` {string} 应用包名
 
-## clearInterval(intervalObject)
-<!-- YAML
-added: v0.0.1
--->
+打开某个应用的应用详情页，也就是管理应用权限和可以停止其运行的页面。如果应用包名不存在，则返回false；否则返回true。
 
-<!--type=global-->
+## setClip(text)
+* `text` {string} 文本
 
-[`clearInterval`] is described in the [timers][] section.
+设置剪贴板内容。此剪贴板即系统剪贴板，在一般应用的输入框中"粘贴"既可使用。
 
-## clearTimeout(timeoutObject)
-<!-- YAML
-added: v0.0.1
--->
+## getClip()
 
-<!--type=global-->
+返回系统剪贴板的内容。
 
-[`clearTimeout`] is described in the [timers][] section.
 
-## console
-<!-- YAML
-added: v0.1.100
--->
+## toast(message)
+* message {string\> | {Object} 要显示的信息
 
-<!-- type=global -->
+以气泡显示信息message几秒。(具体时间取决于安卓系统，一般都是2秒)
 
-* {Object}
+注意，信息的显示是"异步"执行的(不属于Looper循环)，并且，不会等待信息消失程序才继续执行。如果在循环中执行该命令，可能出现脚本停止运行后仍然有不断的气泡信息出现的情况。
+例如:
+```
+for(var i = 0; i < 100; i++){
+  toast(i);
+}
+```
+运行这段程序以后，会很快执行完成，且不断弹出消息，在任务管理中关闭所有脚本也无法停止。
+要保证气泡消息才继续执行可以用：
+```
+for(var i = 0; i < 100; i++){
+  toast(i);
+  sleep(2000);
+}
+```
+或者修改toast函数：
+```
+var _toast_ = toast;
+toast = function(message){
+  _toast_(message);
+  sleep(2000);
+}
+for(var i = 0; i < 100; i++){
+  toast(i);
+  sleep(2000);
+}
+```
 
-Used to print to stdout and stderr. See the [`console`][] section.
+## toastLog(message)
+* message \<String\> | \<Object\> 要显示的信息
 
-## exports
+相当于`toast(message);log(message)`。显示信息message并在控制台中输出。参见console.log。
 
-This variable may appear to be global but is not. See [`exports`].
+## waitForActivity(activity[, period = 200])
+* `activity` Activity名称
+* `period` 轮询等待间隔（毫秒）
 
-## global
-<!-- YAML
-added: v0.1.27
--->
+等待指定的Activity出现，period为检查Activity的间隔。
 
-<!-- type=global -->
 
-* {Object} The global namespace object.
+## waitForPackage(package\[, period = 200\])
+* `package` 包名
+* `period` 轮询等待间隔（毫秒）
 
-In browsers, the top-level scope is the global scope. This means that
-within the browser `var something` will define a new global variable. In
-Node.js this is different. The top-level scope is not the global scope;
-`var something` inside a Node.js module will be local to that module.
+等待指定的应用出现。例如`waitForPackage("com.tencent.mm")`为等待当前界面为微信。
 
-## module
+## exit()
+立即停止脚本运行。
 
-This variable may appear to be global but is not. See [`module`].
+## random(min, max)
+* `min` {number} 随机数产生的区间下界
+* `max` {number} 随机数产生的区间上界
 
-## process
-<!-- YAML
-added: v0.1.7
--->
+返回一个在\[min...max\]之间的随机数。例如random(0, 2)可能产生0, 1, 2.
 
-<!-- type=global -->
+## random()
 
-* {Object}
+返回在[0, 1)的随机浮点数。
 
-The process object. See the [`process` object][] section.
+## context
 
-## require()
+全局变量。一个android.content.Context对象。
 
-This variable may appear to be global but is not. See [`require()`].
-
-## setImmediate(callback[, ...args])
-<!-- YAML
-added: v0.9.1
--->
-
-<!-- type=global -->
-
-[`setImmediate`] is described in the [timers][] section.
-
-## setInterval(callback, delay[, ...args])
-<!-- YAML
-added: v0.0.1
--->
-
-<!-- type=global -->
-
-[`setInterval`] is described in the [timers][] section.
-
-## setTimeout(callback, delay[, ...args])
-<!-- YAML
-added: v0.0.1
--->
-
-<!-- type=global -->
-
-[`setTimeout`] is described in the [timers][] section.
-
-[`__dirname`]: modules.html#modules_dirname
-[`__filename`]: modules.html#modules_filename
-[`clearImmediate`]: timers.html#timers_clearimmediate_immediate
-[`clearInterval`]: timers.html#timers_clearinterval_timeout
-[`clearTimeout`]: timers.html#timers_cleartimeout_timeout
-[`console`]: console.html
-[`exports`]: modules.html#modules_exports
-[`module`]: modules.html#modules_module
-[`process` object]: process.html#process_process
-[`require()`]: modules.html#modules_require
-[`setImmediate`]: timers.html#timers_setimmediate_callback_args
-[`setInterval`]: timers.html#timers_setinterval_callback_delay_args
-[`setTimeout`]: timers.html#timers_settimeout_callback_delay_args
-[buffer section]: buffer.html
-[built-in objects]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
-[module system documentation]: modules.html
-[timers]: timers.html
+注意该对象为ApplicationContext，因此不能用于界面、对话框等的创建。

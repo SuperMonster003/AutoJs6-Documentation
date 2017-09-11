@@ -1,5 +1,7 @@
 # AutoJs-Docs
 
-AutoJs文档。完善中。可在 https://hyb1996.github.io/AutoJs-Docs 浏览。
+Auto.js文档。可在 https://hyb1996.github.io/AutoJs-Docs 浏览。
 
-模板、样式、generator来自Node.js开源项目。
+文档尚在完善中，可能有文档描述和代码实际行为有出入的情况。
+
+模板、样式、generator来自[Node.js](https://github.com/nodejs/node/tree/master/doc)。

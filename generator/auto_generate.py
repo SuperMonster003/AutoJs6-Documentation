@@ -2,7 +2,7 @@ import os
 import os.path
 
 in_dir = r'..\api'
-out_dir = r'..\pages'
+out_dir = r'..\docs'
 template = r'..\template.html'
 version = '2.0.16'
 

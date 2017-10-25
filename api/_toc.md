@@ -17,6 +17,7 @@
 * [Shell - Shell命令](shell.html)
 * [UI - 用户界面](ui.html)
 * [Files - 文件系统](files.html)
+* [Dialogs - 对话框](dialogs.html)
 * [App - 应用](app.html)
 * [Engines - 脚本引擎](engines.html)
 * [Modules - 模块](modules.html)

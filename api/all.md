@@ -11,6 +11,8 @@
 @include ui
 @include files
 @include app
+@include http
+@include dialogs
 @include engines
 @include modules
 @include work-with-java

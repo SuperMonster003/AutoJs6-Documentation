@@ -36,6 +36,7 @@
 <li><a class="nav-ui" href="ui.html">UI - 用户界面</a></li>
 <li><a class="nav-files" href="files.html">Files - 文件系统</a></li>
 <li><a class="nav-dialogs" href="dialogs.html">Dialogs - 对话框</a></li>
+<li><a class="nav-http" href="http.html">Http - HTTP</a></li>
 <li><a class="nav-app" href="app.html">App - 应用</a></li>
 <li><a class="nav-engines" href="engines.html">Engines - 脚本引擎</a></li>
 <li><a class="nav-modules" href="modules.html">Modules - 模块</a></li>
@@ -466,6 +467,34 @@
 <li><span class="stability_undefined"><a href="#app_app_intent_intent">app.intent(intent)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_startactivity_intent">app.startActivity(intent)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_sendbroadcast_intent">app.sendBroadcast(intent)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_2"><a href="#http_http">HTTP</a></span><ul>
+<li><span class="stability_undefined"><a href="#http_http_get_url_options_callback">http.get(url[, options, callback])</a></span></li>
+<li><span class="stability_undefined"><a href="#http_http_post_url_data_options_callback">http.post(url, data[, options, callback])</a></span></li>
+<li><span class="stability_undefined"><a href="#http_http_postjson_url_data_options_callback">http.postJson(url[, data, options, callback])</a></span></li>
+<li><span class="stability_undefined"><a href="#http_http_request_url_options_callback">http.request(url[, options, callback])</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#http_response">Response</a></span><ul>
+<li><span class="stability_undefined"><a href="#http_response_statuscode">Response.statusCode</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_statusmessage">Response.statusMessage</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_headers">Response.headers</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_body">Response.body</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_request">Response.request</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_url">Response.url</a></span></li>
+<li><span class="stability_undefined"><a href="#http_response_method">Response.method</a></span></li>
+</ul>
+</li>
+<li><span class="stability_2"><a href="#dialogs_dialogs">Dialogs</a></span><ul>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_rawinput_title_default">dialogs.rawInput(title[, default])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_input_title_default">dialogs.input(title[, default])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_prompt_title_default">dialogs.prompt(title[, default])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_alert_title_content">dialogs.alert(title[, content])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_confirm_title_content">dialogs.confirm(title[, content])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_select_title_items">dialogs.select(title, items)</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_singlechoice_title_items_index">dialogs.singleChoice(title, items[, index])</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_dialogs_multichoice_title_items_indexes">dialogs.multiChoice(title, items[, indexes])</a></span></li>
 </ul>
 </li>
 <li><span class="stability_2"><a href="#engines_engines">Engines</a></span><ul>
@@ -2506,6 +2535,218 @@ sh.exit();
 </ul>
 </div><p>相当于context.sendBroadcast(intent)。</p>
 <!-- [end-include:app.md] -->
+<!-- [start-include:http.md] -->
+<h1>HTTP<span><a class="mark" href="#http_http" id="http_http">#</a></span></h1>
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>http模块提供一些进行http请求的函数。</p>
+<h2>http.get(url[, options, callback])<span><a class="mark" href="#http_http_get_url_options_callback" id="http_http_get_url_options_callback">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。参见[http.request()][]。</li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数，可选，其参数是一个[Response][]对象。如果不加回调函数，则该请求将阻塞、同步地执行。</li>
+</ul>
+</div><p>对地址url进行一次HTTP GET 请求。如果没有回调函数，则在请求完成或失败时返回此次请求的响应(参见[Response][])。</p>
+<p>最简单GET请求如下:</p>
+<pre><code>console.show();
+var r = http.get(&quot;www.baidu.com&quot;);
+log(&quot;code = &quot; + r.statusCode);
+log(&quot;html = &quot; + r.body.string());
+</code></pre><p>采用回调形式的GET请求如下：</p>
+<pre><code>console.show();
+http.get(&quot;www.baidu.com&quot;, {}, function(res, err){
+    if(err){
+        console.error(err);
+        return;
+    }
+    log(&quot;code = &quot; + r.statusCode);
+    log(&quot;html = &quot; + r.body.string());
+});
+</code></pre><p>如果要增加HTTP头部信息，则在options参数中添加，例如：</p>
+<pre><code>console.show();
+var r = http.get(&quot;www.baidu.com&quot;, {
+    headers: {
+        &quot;Accept-Language&quot;: &quot;zh-cn,zh;q=0.5&quot;,
+        &quot;User-Agent: &quot;Mozilla/5.0 (Macintosh; Intel Mac OS X
+10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56
+Safari/535.11&quot;
+    }
+});
+log(&quot;code = &quot; + r.statusCode);
+log(&quot;html = &quot; + r.body.string());
+</code></pre><p>一个请求天气并解析返回的天气JSON结果的例子如下：</p>
+<pre><code>var city = &quot;广州&quot;;
+var res = http.get(&quot;http://www.sojson.com/open/api/weather/json.shtml?city=&quot; + city);
+if(res.statusCode != 200){
+    toast(&quot;请求失败: &quot; + res.statusCode + &quot; &quot; + res.statusMessage);
+}else{
+    var weather = res.body.json();
+    log(weather);
+    toast(util.format(&quot;温度: %s 湿度: %s 空气质量: %s&quot;, weather.data.wendu,
+        weather.data.shidu, weather.quality));
+}
+</code></pre><h2>http.post(url, data[, options, callback])<span><a class="mark" href="#http_http_post_url_data_options_callback" id="http_http_post_url_data_options_callback">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> POST数据。</li>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。</li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
+</ul>
+</div><p>对地址url进行一次HTTP POST 请求。如果没有回调函数，则在请求完成或失败时返回此次请求的响应(参见[Response][])。</p>
+<p>其中POST数据可以是字符串或键值对。具体含义取决于options.contentType的值。默认为&quot;application/x-www-form-urlencoded&quot;(表单提交), 这种方式是JQuery的ajax函数的默认方式。</p>
+<p>一个模拟表单提交登录淘宝的例子如下:</p>
+<pre><code>var url = &quot;https://login.taobao.com/member/login.jhtml&quot;;
+var username = &quot;你的用户名&quot;;
+var password = &quot;你的密码&quot;;
+var res = http.post(url, {
+    &quot;TPL_username&quot;: username,
+    &quot;TPL_password&quot;: password
+});
+var html = res.body.string();
+if(html.contains(&quot;页面跳转中&quot;)){
+    toast(&quot;登录成功&quot;);
+}else{
+    toast(&quot;登录失败&quot;);
+}
+</code></pre><h2>http.postJson(url[, data, options, callback])<span><a class="mark" href="#http_http_postjson_url_data_options_callback" id="http_http_postjson_url_data_options_callback">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> POST数据。</li>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。</li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
+</ul>
+</div><p>以JSON格式向目标Url发起POST请求。如果没有回调函数，则在请求完成或失败时返回此次请求的响应(参见[Response][])。</p>
+<p>JSON格式指的是，将会调用<code>JSON.stringify()</code>把data对象转换为JSON字符串，并在HTTP头部信息中把&quot;Content-Type&quot;属性置为&quot;application/json&quot;。这种方式是AngularJS的ajax函数的默认方式。</p>
+<p>一个调用图灵机器人接口的例子如下：</p>
+<h2>http.request(url[, options, callback])<span><a class="mark" href="#http_http_request_url_options_callback" id="http_http_request_url_options_callback">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。参见[http.buildRequest()][]。</li>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
+</ul>
+</div><p>对目标地址url发起一次HTTP请求。如果没有回调函数，则在请求完成或失败时返回此次请求的响应(参见[Response][])。</p>
+<p>选项options可以包含以下属性：</p>
+<ul>
+<li><code>headers</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 键值对形式的HTTP头部信息。有关HTTP头部信息，参见<a href="http://www.runoob.com/http/http-header-fields.html">菜鸟教程：HTTP响应头信息</a>。</li>
+<li><code>method</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> HTTP请求方法。包括&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELET&quot;, &quot;PATCH&quot;。</li>
+<li><code>contentType</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> HTTP头部信息中的&quot;Content-Type&quot;, 表示HTTP请求的内容类型。例如&quot;text/plain&quot;, &quot;application/json&quot;。更多信息参见<a href="http://www.runoob.com/http/http-content-type.html">菜鸟教程：HTTP contentType</a>。</li>
+<li><code>body</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> HTTP请求的内容。可以是一个字符串，也可以是一个字节数组；或者是一个以<a href="https://github.com/square/okio/blob/master/okio/src/main/java/okio/BufferedSink.java">BufferedSink</a>为参数的函数。</li>
+</ul>
+<p>该函数是get, post, postJson等函数的基础函数。因此除非是PUT, DELET等请求，或者需要更高定制的HTTP请求，否则直接使用get, post, postJson等函数会更加方便。</p>
+<h1>Response<span><a class="mark" href="#http_response" id="http_response">#</a></span></h1>
+<p>HTTP请求的响应。</p>
+<h2>Response.statusCode<span><a class="mark" href="#http_response_statuscode" id="http_response_statuscode">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a></li>
+</ul>
+</div><p>当前响应的HTTP状态码。例如200(OK), 404(Not Found)等。</p>
+<p>有关HTTP状态码的信息，参见<a href="http://www.runoob.com/http/http-status-codes.html">菜鸟教程：HTTP状态码</a>。</p>
+<h2>Response.statusMessage<span><a class="mark" href="#http_response_statusmessage" id="http_response_statusmessage">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> </li>
+</ul>
+</div><p>当前响应的HTTP状态信息。例如&quot;OK&quot;, &quot;Bad Request&quot;, &quot;Forbidden&quot;。</p>
+<p>有关HTTP状态码的信息，参见<a href="http://www.runoob.com/http/http-status-codes.html">菜鸟教程：HTTP状态码</a>。</p>
+<p>例子：</p>
+<pre><code>var res = http.get(&quot;www.baidu.com&quot;);
+if(res.statusCode &gt;= 200 &amp;&amp; res.statusCode &lt; 300){
+    toast(&quot;页面获取成功!&quot;);
+}else if(res.statusCode == 404){
+    toast(&quot;页面没找到哦...&quot;);
+}else{
+    toast(&quot;错误: &quot; + res.statusCode + &quot; &quot; + res.statusMessage);
+}
+</code></pre><h2>Response.headers<span><a class="mark" href="#http_response_headers" id="http_response_headers">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a></li>
+</ul>
+</div><p>当前响应的HTTP头部信息。该对象的键是响应头名称，值是各自的响应头值。 所有响应头名称都是小写的(吗)。</p>
+<p>有关HTTP头部信息，参见<a href="http://www.runoob.com/http/http-header-fields.html">菜鸟教程：HTTP响应头信息</a>。</p>
+<p>例子:</p>
+<pre><code>console.show();
+var res = http.get(&quot;www.qq.com&quot;);
+console.log(&quot;HTTP Headers:&quot;)
+for(var headerName in res.headers){
+    console.log(&quot;%s: %s&quot;, headerName, res.headers[headerName]);
+}
+</code></pre><h2>Response.body<span><a class="mark" href="#http_response_body" id="http_response_body">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a></li>
+</ul>
+</div><p>当前响应的内容。他有以下属性和函数：</p>
+<ul>
+<li>bytes() <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> 以字节数组形式返回响应内容</li>
+<li>string() <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 以字符串形式返回响应内容</li>
+<li>json() <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 把响应内容作为JSON格式的数据并调用JSON.parse，返回解析后的对象</li>
+<li>contentType <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 当前响应的内容类型</li>
+</ul>
+<h2>Response.request<span><a class="mark" href="#http_response_request" id="http_response_request">#</a></span></h2>
+<div class="signature"><ul>
+<li><span class="type">&lt;Request&gt;</span>
+当前响应所对应的请求。参见[Request][]。</li>
+</ul>
+</div><h2>Response.url<span><a class="mark" href="#http_response_url" id="http_response_url">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a>
+当前响应所对应的请求URL。</li>
+</ul>
+</div><h2>Response.method<span><a class="mark" href="#http_response_method" id="http_response_method">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a>
+当前响应所对应的HTTP请求的方法。例如&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;等。</li>
+</ul>
+</div><!-- [end-include:http.md] -->
+<!-- [start-include:dialogs.md] -->
+<h1>Dialogs<span><a class="mark" href="#dialogs_dialogs" id="dialogs_dialogs">#</a></span></h1>
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>dialogs 模块允许用户通过对话框与脚本进行交互。</p>
+<h2>dialogs.rawInput(title[, default])<span><a class="mark" href="#dialogs_dialogs_rawinput_title_default" id="dialogs_dialogs_rawinput_title_default">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>default</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 可选，对话框内输入框的初始内容。默认为 <code>&quot;&quot;</code> 。</li>
+</ul>
+</div><p>显示一个包含输入框的对话框。如果指定了 <code>default</code> ，那么对话框显示时输入框的内容就为该值。</p>
+<p>该函数也可通过 <code>rawInput(title[, default])</code> 、 <code>prompt(title[, default])</code> 或者 <code>dialogs.prompt(title[, default])</code> 来调用。调用时脚本将阻塞直至对话框被关闭。如果用户输入内容并点击确定，函数将返回输入的内容；否则返回 <code>null</code> 。</p>
+<h2>dialogs.input(title[, default])<span><a class="mark" href="#dialogs_dialogs_input_title_default" id="dialogs_dialogs_input_title_default">#</a></span></h2>
+<p>等效于 <code>eval(dialogs.rawInput(title, default))</code> </p>
+<h2>dialogs.prompt(title[, default])<span><a class="mark" href="#dialogs_dialogs_prompt_title_default" id="dialogs_dialogs_prompt_title_default">#</a></span></h2>
+<p>见 dialogs.rawInput</p>
+<h2>dialogs.alert(title[, content])<span><a class="mark" href="#dialogs_dialogs_alert_title_content" id="dialogs_dialogs_alert_title_content">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>content</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 可选，对话框的内容。默认为空。</li>
+</ul>
+</div><p>显示一个只包含“确定”按钮的提示对话框。</p>
+<p>该函数也可通过 <code>alert(title[, content])</code> 来调用。调用时脚本将阻塞直至对话框被关闭。该函数无返回值。</p>
+<h2>dialogs.confirm(title[, content])<span><a class="mark" href="#dialogs_dialogs_confirm_title_content" id="dialogs_dialogs_confirm_title_content">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>content</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 可选，对话框的内容。默认为空。</li>
+</ul>
+</div><p>显示一个包含“确定”和“取消”按钮的提示对话框。</p>
+<p>该函数也可通过 <code>confirm(title[, content])</code> 来调用。调用时脚本将阻塞直至对话框被关闭。如果用户点击“确定”则返回 <code>true</code> ，否则返回 <code>false</code> 。</p>
+<h2>dialogs.select(title, items)<span><a class="mark" href="#dialogs_dialogs_select_title_items" id="dialogs_dialogs_select_title_items">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>items</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> 对话框的选项列表，是一个字符串数组。</li>
+</ul>
+</div><p>显示一个带有选项列表的对话框。</p>
+<p>该函数也可通过 <code>dialogs.select(title, ...items)</code> 来调用。<br>例如： <code>dialogs.select(&quot;标题&quot;, [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;])</code> 可以用  <code>dialogs.select(&quot;标题&quot;, &quot;A&quot;, &quot;B&quot;, &quot;C&quot;)</code> 替代。</p>
+<p>调用时脚本将阻塞直至对话框被关闭。如果用户点击了对话框中的某个选项，该函数会返回该选项的位置（选中第一个选项返回0，第二个选项返回1，以此类推），否则返回-1。</p>
+<h2>dialogs.singleChoice(title, items[, index])<span><a class="mark" href="#dialogs_dialogs_singlechoice_title_items_index" id="dialogs_dialogs_singlechoice_title_items_index">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>items</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> 对话框的选项列表，是一个字符串数组。</li>
+<li><code>index</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 可选，对话框的默认选项的位置。默认为0。</li>
+</ul>
+</div><p>显示一个带有单选框选项列表的对话框。</p>
+<p>调用时脚本将阻塞直至对话框被关闭。如果用户选中了对话框中的某个选项并点击“确定”，该函数会返回该选项的位置（选中第一个选项返回0，第二个选项返回1，以此类推），否则返回-1。</p>
+<h2>dialogs.multiChoice(title, items[, indexes])<span><a class="mark" href="#dialogs_dialogs_multichoice_title_items_indexes" id="dialogs_dialogs_multichoice_title_items_indexes">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>title</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 对话框的标题。</li>
+<li><code>items</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> 对话框的选项列表，是一个字符串数组。</li>
+<li><code>indexes</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" class="type">&lt;Array&gt;</a> 可选，对话框的默认选项的位置数组。默认为空数组。</li>
+</ul>
+</div><p>显示一个带有多选框选项列表的对话框。</p>
+<p>调用时脚本将阻塞直至对话框被关闭。如果用户点击“确定”按钮，该函数会返回所有已选选项的位置组成的数组，否则返回空数组。
+<!-- [end-include:dialogs.md] --></p>
 <!-- [start-include:engines.md] -->
 <h1>Engines<span><a class="mark" href="#engines_engines" id="engines_engines">#</a></span></h1>
 <div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>engines模块包含了一些与脚本引擎有关的函数，包括运行其他脚本，关闭脚本等。</p>

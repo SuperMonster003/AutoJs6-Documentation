@@ -4,7 +4,7 @@ import os.path
 in_dir = r'..\api'
 out_dir = r'..\docs'
 template = r'..\template.html'
-version = '2.0.16'
+version = '3.0.0'
 
 
 def process(in_file, out_file):

@@ -16,12 +16,14 @@
 * [Timers - 定时器](timers.html)
 * [Shell - Shell命令](shell.html)
 * [UI - 用户界面](ui.html)
-* [Files - 文件系统](files.html)
 * [Dialogs - 对话框](dialogs.html)
+* [Files - 文件系统](files.html)
+* [Storages - 本地存储](storages.html)
 * [Http - HTTP](http.html)
 * [App - 应用](app.html)
 * [Engines - 脚本引擎](engines.html)
 * [Modules - 模块](modules.html)
+* [Threads - 多线程](threads.html)
 * [Work with Java - 调用Java API](work-with-java.html)
 
 <div class="line"></div>

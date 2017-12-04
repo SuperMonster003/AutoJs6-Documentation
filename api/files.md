@@ -51,7 +51,14 @@ files模块提供了一些常见的文件处理，包括文件读写、移动、
 * `path` {string} 路径
 * `encoding` {string} 字符编码
 
-读取文件path的所有内容并返回。
+读取文本文件path的所有内容并返回一个字符串。
+
+## files.readBytes(path)
+* `path` {string} 路径
+
+读取文件path的所有内容并返回一个字节数组。
+
+注意，该数组是Java的数组，不具有JavaScript数组的函数。
 
 ## files.write(path, text[, encoding = "utf-8"])
 * `path` {string} 路径
@@ -59,6 +66,25 @@ files模块提供了一些常见的文件处理，包括文件读写、移动、
 * `encoding` {string} 字符编码
 
 把text写入到文件path中。如果文件存在则覆盖，不存在则创建。
+
+## files.writeBytes(path, bytes)
+* `path` {string} 路径
+* `bytes` {byte[]} 字节数组，要写入的二进制数据
+
+把bytes写入到文件path中。如果文件存在则覆盖，不存在则创建。
+
+## files.append(path, text[, encoding = 'utf-8'])
+* `path` {string} 路径
+* `text` {string} 要写入的文本内容
+* `encoding` {string} 字符编码
+
+把text追加到文件path的末尾。如果文件不存在则创建。
+
+## files.appendBytes(path, text[, encoding = 'utf-8'])
+* `path` {string} 路径
+* `bytes` {byte[]} 字节数组，要写入的二进制数据
+
+把bytes追加到文件path的末尾。如果文件不存在则创建。
 
 ## files.copy(fromPath, toPath)
 * `fromPath` {string} 要复制的原文件路径

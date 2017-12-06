@@ -104,6 +104,48 @@ JSON格式指的是，将会调用`JSON.stringify()`把data对象转换为JSON�
 
 一个调用图灵机器人接口的例子如下：
 
+## http.postMultipart(url, files[, options, callback])
+* `url` {string} 请求的URL地址，需要以"http://"或"https://"开头。如果url没有以"http://"开头，则默认为"http://"。
+* `files` {Object} POST数据。
+* `options` {Object} 请求选项。
+* `callback` {Function} 回调，其参数是一个`Response`对象。如果不加回调参数，则该请求将阻塞、同步地执行。
+
+向目标地址发起类型为multipart/form-data的请求（通常用于文件上传等), 其中files参数是{name1: value1, name2: value2, ...}的键值对，value的格式可以是以下几种情况：
+1. `string`
+2. 文件类型，即open()返回的类型
+3. [fileName, filePath]
+4. [fileName, mimeType, filePath]
+
+其中1属于非文件参数，2、3、4为文件参数。举个例子，最简单的文件上传的请求为：
+```
+var res = http.postMultipart(url, {
+	file: open("/sdcard/1.txt")
+});
+log(res.body.string());
+```
+
+如果使用格式2，则代码为
+```
+var res = http.postMultipart(url, {
+	file: ["1.txt", "/sdcard/1.txt"]
+});
+log(res.body.string());
+```
+如果使用格式3，则代码为
+```
+var res = http.postMultipart(url, {
+	file: ["1.txt", "text/plain", "/sdcard/1.txt"]
+});
+log(res.body.string());
+```
+如果使用格式2的同时要附带非文件参数"appId=abcdefghijk"，则为:
+```
+var res = http.postMultipart(url, {
+	appId: "adcdefghijk",
+	file: open("/sdcard/1.txt")
+});
+log(res.body.string());
+```
 
 ## http.request(url[, options, callback])
 

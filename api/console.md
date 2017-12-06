@@ -9,6 +9,10 @@ console模块中的一些函数也可以直接作为全局函数使用，例如l
 
 显示控制台。这会显示一个控制台的悬浮窗(需要悬浮窗权限)。
 
+## console.hide()
+
+隐藏控制台悬浮窗。
+
 ## console.clear()
 
 清空控制台。
@@ -90,6 +94,18 @@ var n = console.input("请输入一个数字:");
 toast(n + 1);
 //显示1231
 ```
+
+## console.setSize(w, h)
+* `w` {number} 宽度
+* `h` {number} 高度
+
+设置控制台的大小，单位像素。
+
+## console.setPosition(x, y)
+* `x` {number} 横坐标
+* `y` {number} 纵坐标
+
+设置控制台的位置，单位像素。
 
 ## print(text)
 * text {string} | {Object} 要打印到控制台的信息

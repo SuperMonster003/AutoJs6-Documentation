@@ -7,17 +7,21 @@ Auto.js 有一个简单的模块加载系统。 在 Auto.js 中，文件和模�
 例子，假设有一个名为 foo.js 的文件：
 ```
 const circle = require('./circle.js');
-console.log(`半径为 4 的圆的面积是 ${circle.area(4)}`);
+console.log("半径为 4 的圆的面积是 %d", circle.area(4));
 ```
 在第一行中，foo.js 加载了同一目录下的 circle.js 模块。
 
 circle.js 文件的内容为：
 ```
-const { PI } = Math;
+const PI = Math.PI;
 
-exports.area = (r) => PI * r ** 2;
+var circle = {};
 
-exports.circumference = (r) => 2 * PI * r;
+circle.area = (r) => PI * r ** 2;
+
+circle.circumference = (r) => 2 * PI * r;
+
+module.exports = circle;
 ```
 circle.js 模块导出了 area() 和 circumference() 两个函数。 通过在特殊的 exports 对象上指定额外的属性，函数和对象可以被添加到模块的根部。
 

@@ -81,7 +81,7 @@ toast(colors.toString(color));
 
 坐标系以图片左上角为原点。以图片左侧边为y轴，上侧边为x轴。
 
-## images.saveImage(image, path)
+## images.save(image, path)
 
 * `image` {image} 图片
 * `path` {string} 路劲

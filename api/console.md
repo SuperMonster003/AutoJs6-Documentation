@@ -33,6 +33,8 @@ console.log('count:', count);
 
 详见 util.format()。
 
+该函数也可以作为全局函数使用。
+
 ## console.verbose([data][, ...args])
 * `data` <any>
 * `...args` <any>
@@ -63,13 +65,18 @@ console.log('count:', count);
 
 断言。如果value为false则输出错误信息message并停止脚本运行。
 
+```
+var a = 1 + 1;
+console.assert(a == 2, "加法出错啦");
+```
+
 ## console.input(data[, ...args])
 * `data` <any>
 * `...args` <any>
 
 与console.log一样输出信息，并在控制台显示输入框等待输入。按控制台的确认按钮后会将输入的字符串用eval计算后返回。
 
-部分机型可能会有控制台不显示输入框的情况，属于bug。
+**部分机型可能会有控制台不显示输入框的情况，属于bug。**
 
 例如：
 ```
@@ -89,7 +96,7 @@ toast(n + 1);
 
 例如：
 ```
-var n = console.input("请输入一个数字:"); 
+var n = console.rawInput("请输入一个数字:"); 
 //输入123之后：
 toast(n + 1);
 //显示1231
@@ -100,6 +107,11 @@ toast(n + 1);
 * `h` {number} 高度
 
 设置控制台的大小，单位像素。
+```
+console.show();
+//设置控制台大小为屏幕的四分之一
+console.setSize(device.width / 2, device.height / 2);
+```
 
 ## console.setPosition(x, y)
 * `x` {number} 横坐标
@@ -107,9 +119,14 @@ toast(n + 1);
 
 设置控制台的位置，单位像素。
 
+```
+console.show();
+console.setPosition(100, 100);
+```
+
 ## print(text)
 * text {string} | {Object} 要打印到控制台的信息
 
-在控制台中输出文本text。不会自动换行。
+相当于`log(text)`。
 
 

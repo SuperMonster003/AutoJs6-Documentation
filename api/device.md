@@ -218,5 +218,23 @@ Android ID为一个用16进制字符串表示的64位整数，在设备第一次
 
 此函数需要"修改系统设置"的权限。如果没有该权限，会抛出SecurityException并跳转到权限设置界面。
 
+## device.getBattery()
+* {number} 0.0~100.0的浮点数
 
+返回当前电量百分比。
+
+## device.isCharging()
+* {boolean}
+
+返回设备是否正在充电。
+
+## device.getTotalMem()
+* {number}
+
+返回设备内存总量，单位字节(B)。1MB = 1024 * 1024B。
+
+## device.getAvailMem()
+* {number}
+
+返回设备当前可用的内存，单位字节(B)。
 

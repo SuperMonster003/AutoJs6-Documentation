@@ -2,38 +2,93 @@
 
 > Stability: 2 - Stable
 
-engines模块包含了一些与脚本引擎有关的函数，包括运行其他脚本，关闭脚本等。
+engines模块包含了一些与脚本环境、脚本运行、脚本引擎有关的函数，包括运行其他脚本，关闭脚本等。
+
+例如，获取脚本所在目录：
+```
+toast(engines.myEngine().cwd());
+```
 
 ## engines.execScript(name, script[, config])
 * `name` {string} 要运行的脚本名称。这个名称和文件名称无关，只是在任务管理中显示的名称。
 * `script` {string} 要运行的脚本内容。
-* `config` \<Object\> 运行配置项
+* `config` {Object} 运行配置项
     * `delay` {number} 延迟执行的毫秒数，默认为0
-    * `loopTimes` {number} 循环运行次数，默认为1
+    * `loopTimes` {number} 循环运行次数，默认为1。0为无限循环。
     * `interval` {number} 循环运行时两次运行之间的时间间隔，默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录。这个路径会用于require时寻找模块文件。
+    * `path` {Array} | {string} 指定脚本运行的目录。这些路径会用于require时寻找模块文件。
 
-在新线程中运行脚本script。返回一个[ScriptExectuion](#engines_scriptexecution)对象。
+在新的脚本环境中运行脚本script。返回一个[ScriptExectuion](#engines_scriptexecution)对象。
+
+所谓新的脚本环境，指定是，脚本中的变量和原脚本的变量是不共享的，并且，脚本会在新的线程中运行。
+
+最简单的例子如下：
+```
+engines.execScript("hello world", "toast('hello world')");
+```
+
+如果要循环运行，则：
+```
+//每隔3秒运行一次脚本，循环10次
+engines.execScript("hello world", "toast('hello world')", {
+    loopTimes: 10,
+    interval: 3000
+});
+```
+
+用字符串来编写脚本非常不方便，可以结合 `Function.toString()`的方法来执行特定函数:
+
+```
+function helloWorld(){
+    //注意，这里的变量和脚本主体的变量并不共享
+    toast("hello world");
+}
+engines.execScript("hello world", "helloWorld();\n" + helloWorld.toString());
+```
+
+如果要传递变量，则可以把这些封装成一个函数：
+```
+function exec(action, args){
+    args = args || {};
+    engines.execScript(action.name, action + "(" + JSON.stringify(args) + ");\n" + action.toString());
+}
+
+//要执行的函数，是一个简单的加法
+function add(args){
+    toast(args.a + args.b);
+}
+
+//在新的脚本环境中执行 1 + 2
+exec(add, {a: 1, b:2});
+```
 
 ## engines.execScriptFile(path[, config])
 * `path` {string} 要运行的脚本路径。
-* `config` \<Object\> 运行配置项
+* `config` {Object} 运行配置项
     * `delay` {number} 延迟执行的毫秒数，默认为0
-    * `loopTimes` {number} 循环运行次数，默认为1
+    * `loopTimes` {number} 循环运行次数，默认为1。0为无限循环。
     * `interval` {number} 循环运行时两次运行之间的时间间隔，默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录。这个路径会用于require时寻找模块文件。
+    * `path` {Array} | {string} 指定脚本运行的目录。这些路径会用于require时寻找模块文件。
 
-在新线程中运行脚本文件path。返回一个[ScriptExecution](#ScriptExecution)对象。
+在新的脚本环境中运行脚本文件path。返回一个[ScriptExecution](#ScriptExecution)对象。
+
+```
+engines.execScriptFile("/sdcard/脚本/1.js");
+```
 
 ## engines.execAutoFile(path[, config])
 * `path` {string} 要运行的录制文件路径。
-* `config` \<Object\> 运行配置项
+* `config` {Object} 运行配置项
     * `delay` {number} 延迟执行的毫秒数，默认为0
-    * `loopTimes` {number} 循环运行次数，默认为1
+    * `loopTimes` {number} 循环运行次数，默认为1。0为无限循环。
     * `interval` {number} 循环运行时两次运行之间的时间间隔，默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录。这个路径会用于require时寻找模块文件。
+    * `path` {Array} | {string} 指定脚本运行的目录。这些路径会用于require时寻找模块文件。
 
-在新线程中运行录制文件path。返回一个[ScriptExecution](#ScriptExecution)对象。
+在新的脚本环境中运行录制文件path。返回一个[ScriptExecution](#ScriptExecution)对象。
+
+```
+engines.execAutoFile("/sdcard/脚本/1.auto");
+```
 
 ## engines.stopAll()
 
@@ -49,7 +104,9 @@ engines模块包含了一些与脚本引擎有关的函数，包括运行其他�
 
 # ScriptExecution
 
-执行脚本时返回的对象，可以通过他获取执行的引擎、配置、源码等。
+执行脚本时返回的对象，可以通过他获取执行的引擎、配置等，也可以停止这个执行。
+
+要停止这个脚本的执行，使用`exectuion.getEngine().forceStop()`.
 
 ## ScriptExecution.getEngine()
 
@@ -59,55 +116,41 @@ engines模块包含了一些与脚本引擎有关的函数，包括运行其他�
 
 返回该脚本的运行配置([ScriptConfig](#engines_scriptconfig))
 
-## ScriptExecution.getSource()
-
-返回该脚本的源码对象([ScriptSource](#engines_scriptsource))
-
 # ScriptEngine
+
+脚本引擎对象。
 
 ## ScriptEngine.forceStop()
 
 停止脚本引擎的执行。
 
-## ScriptEngine.getTag(tagName)
-* `tagName` {string} 名称
+## ScriptEngine.cwd()
+* 返回 {string}
 
-返回对应于tagName的附加在该脚本引擎上的额外信息。tagName包括：
-* `source` 该脚本引擎当前正在执行的源码([ScriptSource](#engines_scriptsource))
-* `execute_path` 该脚本引擎当前执行的路径
-
-停止脚本引擎的执行。
+返回脚本执行的路径。对于一个脚本文件而言为这个脚本所在的文件夹；对于其他脚本，例如字符串脚本，则为`null`或者执行时的设置值。
 
 # ScriptConfig
 脚本执行时的配置。
 
 ## delay
+* {number}
 
 延迟执行的毫秒数
 
 ## interval
+* {number}
 
 循环运行时两次运行之间的时间间隔
 
 ## loopTimes
+* {number}
 
 循环运行次数
 
 ## getPath()
+* 返回 {Array}
 
 返回一个字符串数组表示脚本运行时模块寻找的路径。
 
-# ScriptSource
-脚本执行时的源码对象。可以是字符串源码、文件源码等。
-
-如果该源码是文件脚本，则可以通过`toString()`得到该文件的路径。
-
-## getName()
-
-返回该源码的名称。
-
-## getEngineName()
-
-返回执行该源码的脚本引擎的名称。
 
 

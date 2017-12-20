@@ -6,15 +6,28 @@ events模块提供了监听手机通知、按键、触摸的接口。您可以�
 
 events本身是一个[EventEmiiter](#events_eventemitter), 但内置了一些事件、包括按键事件、通知事件、Toast事件等。
 
+需要注意的是，事件的处理是单线程的，并且仍然在原线程执行，如果脚本主体或者其他事件处理中有耗时操作、轮询等，则事件将无法得到及时处理（会进入事件队列等待脚本主体或其他事件处理完成才执行）。例如:
+```
+auto();
+events.observeNotification();
+events.on('toast', function(t){
+    //这段代码将得不到执行
+    log(t);
+});
+while(true){
+    //死循环
+}
+```
+
 ## events.emitter()
 
-返回一个新的[EventEmitter][]。这个EventEmitter没有内置任何事件。
+返回一个新的[EventEmitter](#events_eventemitter)。这个EventEmitter没有内置任何事件。
 
 ## events.observeKey()
 
-启用按键监听，例如音量键、Home键。此函数使用无障碍服务实现，因此此函数会调用auto()确保无障碍服务启用。
+启用按键监听，例如音量键、Home键。按键监听使用无障碍服务实现，如果无障碍服务未启用会抛出异常并提示开启。
 
-只有这个函数成功执行后, [onKeyDown][], [onKeyUp][]等按键事件的监听才有效。
+只有这个函数成功执行后, `onKeyDown`, `onKeyUp`等按键事件的监听才有效。
 
 该函数在安卓4.3以上才能使用。
 
@@ -22,7 +35,7 @@ events本身是一个[EventEmiiter](#events_eventemitter), 但内置了一些事
 * `keyName` {string} 要监听的按键名称
 * `listener` {Function} 按键监听器。参数为一个[KeyEvent](#events_keyevent)。
 
-注册一个按键监听函数，当有keyName对应的按键被按下会调用该函数。可用的按键名称参见[Keys][]。
+注册一个按键监听函数，当有keyName对应的按键被按下会调用该函数。可用的按键名称参见[Keys](#events_keys)。
 
 例如:
 ```
@@ -94,7 +107,7 @@ events.onKeyDown("home", function(event){
 
 只有这个函数被成功执行后, 触摸事件的监听才有效。
 
-没有root权限调用该函数则什么也不会发生。(**注意**: 这个行为未来可能会更改为抛出异常)
+没有root权限调用该函数则什么也不会发生。
 
 ## events.setTouchEventTimeout(timeout)
 * `timeout` {number} 两个触摸事件的最小间隔。单位毫秒。默认为10毫秒。如果number小于0，视为0处理。
@@ -110,7 +123,7 @@ events.onKeyDown("home", function(event){
 返回触摸事件的最小时间间隔。
 
 ## events.onTouch(listener)
-* `listener` {Function} 参数为[Point][]的函数
+* `listener` {Function} 参数为[Point](images.html#images_point)的函数
 
 注册一个触摸监听函数。相当于`on("touch", listener)`。
 
@@ -143,11 +156,23 @@ events.on("key", function(keyCode, event){
 });
 ```
 其中监听器的参数KeyCode包括：
-* `KeyEvent.KEYCODE_HOME` 主页键
-* `KeyEvent.KEYCODE_BACK` 返回键
-* `KeyEvent.KEYCODE_MENU` 菜单键
-* `KeyEvent.KEYCODE_VOLUMEUP` 音量上键
-* `KeyEvent.KEYCODE_VOLUMEDOWN` 音量下键
+* `keys.home` 主页键
+* `keys.back` 返回键
+* `keys.menu` 菜单键
+* `keys.volume_up` 音量上键
+* `keys.volume_down` 音量下键
+
+例如：
+```
+auto();
+events.observeKey();
+events.on("key", function(keyCode, event){
+    if(keyCode == keys.menu && event.getAction() == event.ACTION_UP){
+        toast("菜单键按下");
+    }
+});
+```
+
 
 ## 事件: 'key_down'
 * `keyCode` {number} 键值
@@ -189,10 +214,10 @@ events.on("exit", function(){
 log("即将结束运行");
 ```
 
-## obverseNotification()
-开启通知(包括Toast)监听。
+## events.observeNotification()
+开启通知监听。例如QQ消息、微信消息、推送等通知。
 
-通知与Toast监听依赖于无障碍服务，因此这个函数会调用`auto()`来确保无障碍服务启用。
+通知监听依赖于通知服务，如果通知服务没有运行，会抛出异常并跳转到通知权限开启界面。（有时即使通知权限已经开启通知服务也没有运行，这时需要关闭权限再重新开启一次）
 
 例如：
 ```
@@ -200,10 +225,12 @@ events.obverseNotification();
 events.onNotification(function(notification){
     log(notification.getText());
 });
-events.onToast(function(toast){
-    log(toast.getText());
-});
 ```
+
+## events.observeToast()
+开启Toast监听。
+
+Toast监听依赖于无障碍服务，因此此函数会确保无障碍服务运行。
 
 ## 事件: 'toast'
 * `toast` {Object}
@@ -211,29 +238,115 @@ events.onToast(function(toast){
     * `getPackageName()` 获取发出Toast的应用包名
 
 当有应用发出toast(气泡消息)时会触发该事件。但Auto.js软件本身的toast除外。
+
 例如，要记录发出所有toast的应用：
 ```
-events.obverseNotification();
+events.observeToast();
 events.onToast(function(toast){
     log("Toast内容: " + toast.getText() + " 包名: " + toast.getPackageName());
 });
 ```
 
 ## 事件: 'notification'
-* `notification` {Object} 通知
+* `notification` [Notification](#events_notification) 通知对象
 
-当有应用发出通知时会触发该事件。
+当有应用发出通知时会触发该事件，参数为[Notification](#events_notification)。
 
 例如：
 ```
 events.observeNotification();
-events.on("notification", function(notification){
-    log(notification);
+events.on("notification", function(n){
+    log("收到新通知:\n 标题: %s, 内容: %s, \n包名: %s", n.getTitle(), n.getText(), n.getPackageName());
 });
-
 ```
 
-**注意**: 这是一个实验性功能。实测只有某些情况下的通知才能被正确捕捉。
+# Notification
+
+通知对象，可以获取通知详情，包括通知标题、内容、发出通知的包名、时间等，也可以对通知进行操作，比如点击、删除。
+
+## Notification.number
+* {number}
+
+通知数量。例如QQ连续收到两条消息时number为2。
+
+## Notification.when 
+* {number}
+
+通知发出时间的时间戳，可以用于构造`Date`对象。例如：
+```
+events.observeNotification();
+events.on("notification", function(n){
+    log("通知时间为}" + new Date(n.when));
+});
+```
+
+## Notification.getPackageName()
+* 返回 {string}
+
+获取发出通知的应用包名。
+
+## Notification.getTitle()
+* 返回 {string}
+
+获取通知的标题。
+
+## Notification.getText()
+* 返回 {string}
+
+获取通知的内容。
+
+## Notification.click()
+
+点击该通知。例如对于一条QQ消息，点击会进入具体的聊天界面。
+
+## Notification.delete()
+
+删除该通知。该通知将从通知栏中消失。
+
+
+# KeyEvent
+
+> Stability: 2 - Stable
+
+## KeyEvent.getAction()
+
+返回事件的动作。包括：
+* `KeyEvent.ACTION_DOWN` 按下事件
+* `KeyEvent.ACTION_UP` 弹起事件
+
+## KeyEvent.getKeyCode()
+
+返回按键的键值。包括：
+* `KeyEvent.KEYCODE_HOME` 主页键
+* `KeyEvent.KEYCODE_BACK` 返回键
+* `KeyEvent.KEYCODE_MENU` 菜单键
+* `KeyEvent.KEYCODE_VOLUME_UP` 音量上键
+* `KeyEvent.KEYCODE_VOLUME_DOWN` 音量下键
+
+## KeyEvent.getEventTime()
+* 返回 {number}
+
+返回事件发生的时间戳。
+
+## KeyEvent.getDownTime()
+
+返回最近一次按下事件的时间戳。如果本身是按下事件，则与`getEventTime()`相同。
+
+## KeyEvent.keyCodeToString(keyCode)
+
+把键值转换为字符串。例如KEYCODE_HOME转换为"KEYCODE_HOME"。
+
+# keys
+
+> Stability: 2 - Stable
+
+按键事件中所有可用的按键名称为：
+* `volume_up`  音量上键
+* `volume_down` 音量下键
+* `home` 主屏幕键
+* `back` 返回键
+* `menu` 菜单键
+
 
 # EventEmitter
 
@@ -438,45 +551,3 @@ myEmitter.emit('event');
 默认情况下，如果为特定事件添加了超过 10 个监听器，则 EventEmitter 会打印一个警告。 此限制有助于寻找内存泄露。 但是，并不是所有的事件都要被限为 10 个。 emitter.setMaxListeners() 方法允许修改指定的 EventEmitter 实例的限制。 值设为 Infinity（或 0）表明不限制监听器的数量。
 
 返回一个 EventEmitter 引用，可以链式调用。
-
-# KeyEvent
-
-> Stability: 2 - Stable
-
-## KeyEvent.getAction()
-
-返回事件的动作。包括：
-* `KeyEvent.ACTION_DOWN` 按下事件
-* `KeyEvent.ACTION_UP` 弹起事件
-
-## KeyEvent.getKeyCode()
-
-返回按键的键值。包括：
-* `KeyEvent.KEYCODE_HOME` 主页键
-* `KeyEvent.KEYCODE_BACK` 返回键
-* `KeyEvent.KEYCODE_MENU` 菜单键
-* `KeyEvent.KEYCODE_VOLUME_UP` 音量上键
-* `KeyEvent.KEYCODE_VOLUME_DOWN` 音量下键
-
-## KeyEvent.getEventTime()
-
-返回事件发生的时间戳。返回值的类型是number。
-
-## KeyEvent.getDownTime()
-
-返回最近一次按下事件的时间戳。如果本身是按下事件，则与getEventTime()相同。
-
-## KeyEvent.keyCodeToString(keyCode)
-
-把键值转换为字符串。例如KEYCODE_HOME转换为"KEYCODE_HOME"。
-
-# Keys
-
-> Stability: 2 - Stable
-
-按键事件中所有可用的按键名称为：
-* `volume_up`  音量上键
-* `volume_down` 音量下键
-* `home` 主屏幕键
-* `back` 返回键
-* `menu` 菜单键

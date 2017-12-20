@@ -9,12 +9,12 @@ device模块提供了与设备有关的信息与操作，例如获取设备宽�
 ## device.width 
 * {number}
 
-设备宽度。例如1080。
+设备屏幕分辨率宽度。例如1080。
 
 ## device.height 
 * {number}
 
-设备高度。例如1920。
+设备屏幕分辨率高度。例如1920。
 
 ## device.buildId
 * {string}

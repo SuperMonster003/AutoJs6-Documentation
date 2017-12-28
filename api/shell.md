@@ -15,10 +15,10 @@ shell即Unix Shell，在类Unix系统提供与操作系统交互的一系列命�
 * cmd {string} 要执行的命令
 * root {Boolean} 是否以root权限运行，默认为false。
 
-返回运行一个对象表示命令的执行结果。其属性如下:
+一次性执行命令cmd, 并返回命令的执行结果。返回对象的其属性如下:
 * code {number} 返回码。执行成功时为0，失败时为非0的数字。
 * result {string} 运行结果(stdout输出结果)
-* error \<String\> 运行的错误信息(stderr输出结果)。例如执行需要root权限的命令但没有授予root权限会返回错误信息"Permission denied"。
+* error {string} 运行的错误信息(stderr输出结果)。例如执行需要root权限的命令但没有授予root权限会返回错误信息"Permission denied"。
     
 示例(强制停止微信) ： 
 ```
@@ -44,6 +44,7 @@ shell函数通过用来一次性执行单条命令并获取结果。如果有多
 Shell对象的"构造函数"。
 ```
 var sh = new Shell(true);
+//强制停止微信
 sh.exec("am force-stop com.tencent.mm");
 sh.exit();
 ```
@@ -59,7 +60,7 @@ sh.exit();
 
 ## Shell.exit()
 
-直接退出shell。这意味着正在执行的命令会被强制退出。
+直接退出shell。正在执行的命令会被强制退出。
 
 ## Shell.exitAndWaitFor()
 
@@ -71,22 +72,25 @@ sh.exit();
 * callback {Object} 回调函数
 
 设置该Shell的回调函数，以便监听Shell的输出。可以包括以下属性：
-* onOutput {function} 每当shell有新的输出时便会调用该函数。其参数是一个字符串。
-* onNewLine {function} 每当shell有新的一行输出时便会调用该函数。其参数是一个字符串(不包括最后的换行符)。
+* onOutput {Function} 每当shell有新的输出时便会调用该函数。其参数是一个字符串。
+* onNewLine {Function} 每当shell有新的一行输出时便会调用该函数。其参数是一个字符串(不包括最后的换行符)。
 
 例如:
 ```
 var sh = new Shell();
 sh.setCallback({
 	onNewLine: function(line){
+		//有新的一行输出时打印到控制台
 		log(line);
 	}
 })
 while(true){
+	//循环输入命令
 	var cmd = dialogs.rawInput("请输入要执行的命令，输入exit退出");
 	if(cmd == "exit"){
 		break;
 	}
+	//执行命令
 	sh.exec(cmd);
 }
 sh.exit();
@@ -100,7 +104,7 @@ sh.exit();
 
 am命令即Activity Manager命令，用于管理应用程序活动、服务等。
 
-**以下命令均以"am "开头，例如"shell(\"am start -p com.tencent.mm\");"(启动微信)**
+**以下命令均以"am "开头，例如`shell('am start -p com.tencent.mm');`(启动微信)**
 
 ### start [options] intent  
 启动 intent 指定的 Activity(应用程序活动)。  

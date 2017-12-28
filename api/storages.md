@@ -25,7 +25,7 @@ var storage = storages.create("ABC");
 log("a = " + storage.get("a"));
 ```
 
-因此，本地存储的名称比较重要，尽量使用含有域名、作者邮箱等信息的名称来避免冲突，例如：
+因此，本地存储的名称比较重要，尽量使用含有域名、作者邮箱等唯一信息的名称来避免冲突，例如：
 ```
 var storage = storages.create("2732014414@qq.com:ABC");
 ```

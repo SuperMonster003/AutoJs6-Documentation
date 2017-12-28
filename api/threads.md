@@ -8,6 +8,8 @@ threads模块提供了多线程支持，可以启动新线程来运行脚本。
 
 通过`threads.start()`启动的所有线程会在脚本被强制停止时自动停止。
 
+由于JavaScript自身没有多线程的支持，因此您可能会遇到意料之外的问题。
+
 ## threads.start(action)
 * `action` {Function} 要在新线程执行的函数
 * 返回 [Thread](#threads_thread)
@@ -198,7 +200,24 @@ thread.setTimeout(function(){
 
 Rhino和Auto.js提供了一些简单的设施来解决简单的线程安全问题，如锁`threads.lock()`, 函数同步锁`sync()`, 整数原子变量`threads.atomic()`等。
 
-例如，对于多线程共享下的整数的自增操作(自增操作会导致问题，是因为自增操作实际上为`i = i + 1`，也就是先读取i的值, 把他加1, 再赋值给i, 如果两个线程同时进行自增操作，可能出现i的值只增加了1的情况)，应该使用`threads.atomic()`函数来新建一个整数原子变量，或者使用锁`threads.lock()`来保证操作的原子性，或者用`sync()`来增加同步锁。例如:
+例如，对于多线程共享下的整数的自增操作(自增操作会导致问题，是因为自增操作实际上为`i = i + 1`，也就是先读取i的值, 把他加1, 再赋值给i, 如果两个线程同时进行自增操作，可能出现i的值只增加了1的情况)，应该使用`threads.atomic()`函数来新建一个整数原子变量，或者使用锁`threads.lock()`来保证操作的原子性，或者用`sync()`来增加同步锁。
+
+线程不安全的代码如下：
+```
+var i = 0;
+threads.start(function(){
+    while(true){
+        log(i++);
+    }
+});
+while(true){
+    log(i++);
+}
+```
+
+此段代码运行后打开日志，可以看到日志中有重复的值出现。
+
+使用`threads.atomic()`的线程安全的代码如下:
 
 ```
 //atomic返回的对象保证了自增的原子性
@@ -273,7 +292,7 @@ threads.start(function(){
 threads.start(function(){
     //向数组添加元素456
     numsLock.lock();
-    nums.add(456);
+    nums.push(456);
     log("线程: %s, 数组: %s", threads.currentThread(), nums);
     numsLock.unlock();
 });
@@ -283,6 +302,23 @@ numsLock.lock();
 nums.pop();
 log("线程: %s, 数组: %s", threads.currentThread(), nums);
 numsLock.unlock();
+```
+
+## sync(func)
+* `func` {Function} 函数
+* 返回 {Function}
+
+给函数func加上同步锁并作为一个新函数返回。
+
+```
+var i = 0;
+function add(x){
+    i += x;
+}
+
+var syncAdd = sync(add);
+syncAdd(10);
+toast(i);
 ```
 
 # 线程通信
@@ -345,7 +381,7 @@ threads.start(function(){
     sum.emit('result', s);
 });
 sum.on('result', function(s){
-    toast("sum = " + s);
+    toastLog("sum = " + s + ", 当前线程: " + threads.currentThread());
 });
 ```
 

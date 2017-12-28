@@ -93,7 +93,10 @@
 <li><span class="stability_undefined"><a href="#threads_thread_clearimmediate_id">Thread.clearImmediate(id)</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#threads">线程安全</a></span></li>
+<li><span class="stability_undefined"><a href="#threads">线程安全</a></span><ul>
+<li><span class="stability_undefined"><a href="#threads_sync_func">sync(func)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#threads_1">线程通信</a></span></li>
 </ul>
 
@@ -104,6 +107,7 @@
 <div class="api_stability api_stability_1"><a href="documentation.html#documentation_stability_index">Stability: 1</a> - Experiment</div><p>threads模块提供了多线程支持，可以启动新线程来运行脚本。</p>
 <p>脚本主线程会等待所有子线程执行完成后才停止执行，因此如果子线程中有死循环，请在必要的时候调用<code>exit()</code>来直接停止脚本或<code>threads.shutDownAll()</code>来停止所有子线程。</p>
 <p>通过<code>threads.start()</code>启动的所有线程会在脚本被强制停止时自动停止。</p>
+<p>由于JavaScript自身没有多线程的支持，因此您可能会遇到意料之外的问题。</p>
 <h2>threads.start(action)<span><a class="mark" href="#threads_threads_start_action" id="threads_threads_start_action">#</a></span></h2>
 <div class="signature"><ul>
 <li><code>action</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 要在新线程执行的函数</li>
@@ -244,7 +248,19 @@ thread.setTimeout(function(){
 </blockquote>
 <p>在Auto.js中，线程间变量在符合JavaScript变量作用域规则的前提下是共享的，例如全局变量在所有线程都能访问，并且保证他们在所有线程的可见性。但是，不保证任何操作的原子性。例如经典的自增&quot;i++&quot;将不是原子性操作。</p>
 <p>Rhino和Auto.js提供了一些简单的设施来解决简单的线程安全问题，如锁<code>threads.lock()</code>, 函数同步锁<code>sync()</code>, 整数原子变量<code>threads.atomic()</code>等。</p>
-<p>例如，对于多线程共享下的整数的自增操作(自增操作会导致问题，是因为自增操作实际上为<code>i = i + 1</code>，也就是先读取i的值, 把他加1, 再赋值给i, 如果两个线程同时进行自增操作，可能出现i的值只增加了1的情况)，应该使用<code>threads.atomic()</code>函数来新建一个整数原子变量，或者使用锁<code>threads.lock()</code>来保证操作的原子性，或者用<code>sync()</code>来增加同步锁。例如:</p>
+<p>例如，对于多线程共享下的整数的自增操作(自增操作会导致问题，是因为自增操作实际上为<code>i = i + 1</code>，也就是先读取i的值, 把他加1, 再赋值给i, 如果两个线程同时进行自增操作，可能出现i的值只增加了1的情况)，应该使用<code>threads.atomic()</code>函数来新建一个整数原子变量，或者使用锁<code>threads.lock()</code>来保证操作的原子性，或者用<code>sync()</code>来增加同步锁。</p>
+<p>线程不安全的代码如下：</p>
+<pre><code>var i = 0;
+threads.start(function(){
+    while(true){
+        log(i++);
+    }
+});
+while(true){
+    log(i++);
+}
+</code></pre><p>此段代码运行后打开日志，可以看到日志中有重复的值出现。</p>
+<p>使用<code>threads.atomic()</code>的线程安全的代码如下:</p>
 <pre><code>//atomic返回的对象保证了自增的原子性
 var i = threads.atomic();
 threads.start(function(){
@@ -305,7 +321,7 @@ threads.start(function(){
 threads.start(function(){
     //向数组添加元素456
     numsLock.lock();
-    nums.add(456);
+    nums.push(456);
     log(&quot;线程: %s, 数组: %s&quot;, threads.currentThread(), nums);
     numsLock.unlock();
 });
@@ -315,6 +331,20 @@ numsLock.lock();
 nums.pop();
 log(&quot;线程: %s, 数组: %s&quot;, threads.currentThread(), nums);
 numsLock.unlock();
+</code></pre><h2>sync(func)<span><a class="mark" href="#threads_sync_func" id="threads_sync_func">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>func</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 函数</li>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a></li>
+</ul>
+</div><p>给函数func加上同步锁并作为一个新函数返回。</p>
+<pre><code>var i = 0;
+function add(x){
+    i += x;
+}
+
+var syncAdd = sync(add);
+syncAdd(10);
+toast(i);
 </code></pre><h1>线程通信<span><a class="mark" href="#threads_1" id="threads_1">#</a></span></h1>
 <p>Auto.js提供了一些简单的设施来支持简单的线程通信。<code>threads.disposable()</code>用于一个线程等待另一个线程的(一次性)结果，同时<code>Lock.newCondition()</code>提供了Condition对象用于一般的线程通信(await, signal)。另外，<code>events</code>模块也可以用于线程通信，通过指定<code>EventEmiiter</code>的回调执行的线程来实现。</p>
 <p>使用<code>threads.disposable()</code>可以简单地等待和获取某个线程的执行结果。例如要等待某个线程计算&quot;1+.....+10000&quot;:</p>
@@ -366,7 +396,7 @@ threads.start(function(){
     sum.emit(&#39;result&#39;, s);
 });
 sum.on(&#39;result&#39;, function(s){
-    toast(&quot;sum = &quot; + s);
+    toastLog(&quot;sum = &quot; + s + &quot;, 当前线程: &quot; + threads.currentThread());
 });
 </code></pre><p>有关线程的其他问题，例如生产者消费者等问题，请用Java相关方法解决，例如<code>java.util.concurrent.BlockingQueue</code>。</p>
 

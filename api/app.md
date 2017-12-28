@@ -163,7 +163,7 @@ var i = app.intent({
     type: "image/png",
     data: "file:///sdcard/1.png"
 });
-app.startAcvitity(i);
+app.startActivity(i);
 ```
 
 更多信息，请百度[安卓Intent](https://www.baidu.com/s?wd=android%20Intent)或参考[Android指南: Intent](https://developer.android.com/guide/components/intents-filters.html#Types)。

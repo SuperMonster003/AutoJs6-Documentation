@@ -238,3 +238,58 @@ Android ID为一个用16进制字符串表示的64位整数，在设备第一次
 
 返回设备当前可用的内存，单位字节(B)。
 
+## device.isScreenOn()
+* 返回 {boolean}
+
+返回设备屏幕是否是亮着的。如果屏幕亮着，返回`true`; 否则返回`false`。
+
+需要注意的是，类似于vivo xplay系列的息屏时钟不属于"屏幕亮着"的情况，虽然屏幕确实亮着但只能显示时钟而且不可交互，此时`isScreenOn()`也会返回`false`。
+
+## device.wakeUp()
+
+唤醒设备。包括唤醒设备CPU、屏幕等。可以用来点亮屏幕。
+
+## device.wakeUpIfNeeded()
+
+如果屏幕没有点亮，则唤醒设备。
+
+## device.keepScreenOn([timeout])
+* `timeout` {number} 屏幕保持常亮的时间, 单位毫秒。如果不加此参数，则一直保持屏幕常亮。
+
+保持屏幕常亮。
+
+此函数无法阻止用户使用锁屏键等正常关闭屏幕，只能使得设备在无人操作的情况下保持屏幕常亮；同时，如果此函数调用时屏幕没有点亮，则会唤醒屏幕。
+
+可以使用`device.cancelKeepingAwake()`来取消屏幕常亮。
+
+```
+//一直保持屏幕常亮
+device.keepScreenOn()
+```
+
+## device.keepScreenDim([timeout])
+* `timeout` {number} 屏幕保持常亮的时间, 单位毫秒。如果不加此参数，则一直保持屏幕常亮。
+
+保持屏幕常亮，但允许屏幕变暗来节省电量。此函数可以用于定时脚本唤醒屏幕操作，不需要用户观看屏幕，可以让屏幕变暗来节省电量。
+
+此函数无法阻止用户使用锁屏键等正常关闭屏幕，只能使得设备在无人操作的情况下保持屏幕常亮；同时，如果此函数调用时屏幕没有点亮，则会唤醒屏幕。
+
+可以使用`device.cancelKeepingAwake()`来取消屏幕常亮。
+
+## device.cancelKeepingAwake()
+
+取消设备保持唤醒状态。用于取消`device.keepScreenOn()`, `device.keepScreenDim()`等函数设置的屏幕常亮。
+
+## device.vibrate(millis)
+* `millis` {number} 震动时间，单位毫秒
+
+使设备震动一段时间。
+
+```
+//震动两秒
+device.vibrate(2000);
+```
+
+## device.cancelVibration()
+
+如果设备处于震动状态，则取消震动。

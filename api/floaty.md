@@ -34,41 +34,6 @@ ui.run(function(){
 });
 ```
 
-## floaty.expandableWindow(collapsedLayout, expandedLayout)
-* `collapsedLayout` {xml} | {View} 悬浮窗折叠时的界面XML或者View
-* `expandedLayout` {xml} | {View} 悬浮窗展开时的界面的XML或者View
-
-指定悬浮窗的布局，创建并**显示**一个可展开悬浮窗，返回一个`ExpandableFloatyWindow`对象。
-
-所谓可展开的悬浮窗，以Auto.js的控制台悬浮窗为例，点击右上角的最小化即为悬浮窗折叠状态，再点击悬浮窗则为展开状态。
-
-其中layout参数可以是xml布局或者一个View，更多信息参见ui模块的说明。
-
-例子：
-```
-var w = floaty.expandableWindow(
-    <img id="logo" src="file:///sdcard/logo.png" w="100" h="100" circle="true"/>
-    ,
-    <vertical>
-        <radiogroup bg="#ffffff">
-            <radio text="选项1">
-            <radio text="选项2">
-            <radio text="选项3">
-        </radiogroup>
-        <button id="minimize" text="折叠"/>
-        <button id="exit" text="关闭悬浮窗"/>
-    </vertical>
-    
-);
-
-
-w.logo.click(()=> w.expand());
-w.minimize.click(()=> w.collapse());
-w.exit.click(()=> w.close());
-```
-
-这个例子运行后将会显示一个图片的图标，点击后显示三个选项和折叠、关闭按键。
-
 ## floaty.closeAll()
 
 关闭所有本脚本的悬浮窗。
@@ -117,22 +82,6 @@ w.exit.click(()=> w.close());
 
 被关闭后的悬浮窗不能再显示。
 
-# ExpandableFloatyWindow
+## FloatyWindow.exitOnClose()
 
-可展开悬浮窗。ExpandableFloatyWindow拥有FloatyWindow的所有函数，同时还有以下函数。
-
-## ExpandableFloatyWindow.expand();
-
-展开悬浮窗。
-
-## ExpandableFloatyWindow.collapse();
-
-折叠悬浮窗。
-
-## ExpandableFloatyWindow.toggle();
-
-如果悬浮窗是折叠状态，则展开悬浮窗；如果是展开状态，则折叠悬浮窗。
-
-## ExpandableFloatyWindow.isExpanded();
-
-返回悬浮窗是否是展开状态。
+使悬浮窗被关闭时自动结束脚本运行。

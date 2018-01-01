@@ -16,7 +16,10 @@ for file in os.listdir(in_dir):
     if not file.endswith('.md'):
         continue
     name = os.path.splitext(file)[0]
-    process(os.path.join(in_dir, file), os.path.join(out_dir, name + ".html"))
+    if name != 'all':
+        process(os.path.join(in_dir, file), os.path.join(out_dir, name + ".html"))
+
+process(os.path.join(in_dir, "all.md"), os.path.join(out_dir, "all.html"))
 
 index = os.path.join(out_dir, "index.html")
 if os.path.exists(index):

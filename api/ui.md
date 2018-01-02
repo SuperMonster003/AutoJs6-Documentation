@@ -58,7 +58,8 @@ ui.layout(
 ```
 
 第三行`bg="#ff0000"`指定了垂直布局的背景色(bg)为"#ff0000"，这是一个RGB颜色，表示红色(有关RGB的相关知识参见[RGB颜色对照表](http://tool.oschina.net/commons?type=3))。第四行的`textSize="20sp"`则指定了按钮控件的字体大小(textSize)为"20sp"，sp是一个字体单位，暂时不用深入理会。上述代码的效果如图：
-![ex1-properties](images/ex1-properties.png)
+
+![ex-properties](images/ex1-properties.png)
 
 一个界面便由一些布局和控件组成。为了便于文档阅读，我们再说明一下以下术语：
 * 子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图。实际上布局里面不仅仅只能有控件，还可以是嵌套的布局。因此用子视图(Child View)更准确一些。在上面的例子中，按钮便是垂直布局的子控件。
@@ -332,3 +333,5 @@ View的变换中心坐标y。用于View的旋转、放缩等变换的中心坐�
 
 有关该属性的单位，参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension)。
 
+# 尺寸的单位: Dimension
+# drawables

@@ -93,8 +93,10 @@
 <li><span class="stability_undefined"><a href="#ui_foreground">foreground</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_minheight">minHeight</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_minwidth">minWidth</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_rotation">rotation</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_visbility">visbility</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_rotation">rotation</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_transformpivotx">transformPivotX</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_transformpivoty">transformPivotY</a></span></li>
 </ul>
 </li>
 </ul>
@@ -128,8 +130,8 @@ ui.layout(
         &lt;button text=&quot;第二个按钮&quot;/&gt;
     &lt;/horizontal&gt;
 );
-</code></pre><p>则这两个按钮会横向排列，效果如图：
-<img src="images/ex1-horizontal.png" alt="ex1-horizontal"></p>
+</code></pre><p>则这两个按钮会横向排列，效果如图：</p>
+<p><img src="images/ex1-horizontal.png" alt="ex1-horizontal"></p>
 <p>一个控件可以指定多个属性(甚至可以不指定任何属性)，用空格隔开即可；布局同样也可以指定属性，例如:</p>
 <pre><code>&quot;ui&quot;;
 ui.layout(
@@ -156,8 +158,8 @@ ui.layout(
         &lt;button w=&quot;*&quot; text=&quot;填满父布局&quot;/&gt;
     &lt;/horizontal&gt;
 );
-</code></pre><p>在这个例子中，第一个按钮为自适应宽度，第二个按钮为填满父布局，显示效果为：
-<img src="images/ex-view-w.png" alt="ex-view-w"></p>
+</code></pre><p>在这个例子中，第一个按钮为自适应宽度，第二个按钮为填满父布局，显示效果为：</p>
+<p><img src="images/ex-w.png" alt="ex-w"></p>
 <p>如果不设置该属性，则不同的控件和布局有不同的默认宽度，大多数为<code>auto</code>。</p>
 <p>宽度属性也可以指定一个具体数值。例如<code>w=&quot;20&quot;</code>，<code>w=&quot;20px&quot;</code>等。不加单位的情况下默认单位为dp，其他单位包括px(像素), mm(毫米), in(英寸)。有关尺寸单位的更多内容，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
 <pre><code>&quot;ui&quot;;
@@ -198,23 +200,23 @@ toast(ui.ok.getText());
 <pre><code>&quot;ui&quot;;
 ui.layout(
     &lt;frame&gt;
-        &lt;button w=&quot;*&quot; text=&quot;靠右的文字&quot;/&gt;
+        &lt;button gravity=&quot;right&quot; w=&quot;*&quot; h=&quot;auto&quot; text=&quot;靠右的文字&quot;/&gt;
     &lt;/frame&gt;
 );
-</code></pre><p>显示效果为:
-<img src="images/ex-gravity.png" alt="ex-gravity"></p>
+</code></pre><p>显示效果为:</p>
+<p><img src="images/ex-gravity.png" alt="ex-gravity"></p>
 <p>这些属性是可以组合的，例如<code>gravity=&quot;right|bottom&quot;</code>的View他的内容会在右下角。</p>
 <h2>layout_gravity<span><a class="mark" href="#ui_layout_gravity" id="ui_layout_gravity">#</a></span></h2>
 <p>View在布局中的&quot;重力&quot;，用于决定View本身在他的<strong>父布局</strong>的位置，可以设置的值和gravity属性相同。注意把这个属性和gravity属性区分开来。</p>
 <pre><code>&quot;ui&quot;;
 ui.layout(
     &lt;frame w=&quot;*&quot; h=&quot;*&quot;&gt;
-        &lt;button layout_gravity=&quot;center&quot; text=&quot;居中的按钮&quot;/&gt;
-        &lt;button layout_gravity=&quot;center&quot; text=&quot;居中的按钮&quot;/&gt;
+        &lt;button layout_gravity=&quot;center&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;居中的按钮&quot;/&gt;
+        &lt;button layout_gravity=&quot;right|bottom&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;右下角的按钮&quot;/&gt;
     &lt;/frame&gt;
 );
-</code></pre><p>在这个例子中，我们让帧布局(frame)的大小占满整个屏幕，通过给第一个按钮设置属性<code>layout_gravity=&quot;center&quot;</code>来使得按钮在帧布局中居中，通过给第二个按钮设置属性<code>gravity=&quot;right|bottom&quot;</code>使得他在帧布局中位于右下角。效果如图：
-<img src="images/ex-layout-gravity.png" alt="ex-layout-gravity"></p>
+</code></pre><p>在这个例子中，我们让帧布局(frame)的大小占满整个屏幕，通过给第一个按钮设置属性<code>layout_gravity=&quot;center&quot;</code>来使得按钮在帧布局中居中，通过给第二个按钮设置属性<code>layout_gravity=&quot;right|bottom&quot;</code>使得他在帧布局中位于右下角。效果如图：</p>
+<p><img src="images/ex-layout-gravity.png" alt="ex-layout-gravity"></p>
 <p>要注意的是，layout_gravity的属性不一定总是生效的，具体取决于布局的类别。例如不能让水平布局中的第一个子控件靠底部显示(否则和水平布局本身相违背)。</p>
 <h2>margin<span><a class="mark" href="#ui_margin" id="ui_margin">#</a></span></h2>
 <p>margin为View和其他View的间距，即外边距。margin属性包括四个值:</p>
@@ -234,26 +236,26 @@ ui.layout(
 <pre><code>&quot;ui&quot;;
 ui.layout(
     &lt;horizontal&gt;
-        &lt;button margin=&quot;30&quot; text=&quot;宽度200dp&quot;/&gt;
-        &lt;button text=&quot;宽度100dp&quot;/&gt;
+        &lt;button margin=&quot;30&quot; text=&quot;距离四周30&quot;/&gt;
+        &lt;button text=&quot;普通的按钮&quot;/&gt;
     &lt;/horizontal&gt;
 );
-</code></pre><p>第一个按钮的margin属性指定了他的边距为30dp, 也就是他与水平布局以及第二个按钮的间距都是30dp, 其显示效果如图:
-<img src="images/ex1-margin.png" alt="ex1-margin"></p>
-<p>如果把<code>margin=&quot;30&quot;</code>改成<code>margin=&quot;10 40&quot;</code>那么第一个按钮的左右间距为10dp, 上下间距为40dp, 效果如图:
-<img src="images/ex2-margin.png" alt="ex2-margin"></p>
+</code></pre><p>第一个按钮的margin属性指定了他的边距为30dp, 也就是他与水平布局以及第二个按钮的间距都是30dp, 其显示效果如图:</p>
+<p><img src="images/ex1-margin.png" alt="ex1-margin"></p>
+<p>如果把<code>margin=&quot;30&quot;</code>改成<code>margin=&quot;10 40&quot;</code>那么第一个按钮的左右间距为10dp, 上下间距为40dp, 效果如图:</p>
+<p><img src="images/ex2-margin.png" alt="ex2-margin"></p>
 <p>有关margin属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
 <h2>marginLeft<span><a class="mark" href="#ui_marginleft" id="ui_marginleft">#</a></span></h2>
 <p>View的左外边距。如果该属性和margin属性指定的值冲突，则在后面的属性生效，前面的属性无效，例如<code>margin=&quot;20&quot; marginLeft=&quot;10&quot;</code>的左外边距为10dp，其他外边距为20dp。</p>
 <pre><code>&quot;ui&quot;;
 ui.layout(
     &lt;horizontal&gt;
-        &lt;button marginLeft=&quot;50&quot; text=&quot;宽度200dp&quot;/&gt;
-        &lt;button text=&quot;宽度100dp&quot;/&gt;
+        &lt;button marginLeft=&quot;50&quot; text=&quot;距离左边50&quot;/&gt;
+        &lt;button text=&quot;普通的按钮&quot;/&gt;
     &lt;/horizontal&gt;
 );
-</code></pre><p>第一个按钮指定了左外边距为50dp，则他和他的父布局水平布局(horizontal)的左边的间距为50dp, 效果如图：
-<img src="images/ex-marginLeft.png" alt="ex-marginLeft"></p>
+</code></pre><p>第一个按钮指定了左外边距为50dp，则他和他的父布局水平布局(horizontal)的左边的间距为50dp, 效果如图：</p>
+<p><img src="images/ex-marginLeft.png" alt="ex-marginLeft"></p>
 <h2>marginRight<span><a class="mark" href="#ui_marginright" id="ui_marginright">#</a></span></h2>
 <p>View的右外边距。如果该属性和margin属性指定的值冲突，则在后面的属性生效，前面的属性无效。</p>
 <h2>marginTop<span><a class="mark" href="#ui_margintop" id="ui_margintop">#</a></span></h2>
@@ -272,11 +274,11 @@ ui.layout(
 <pre><code>&quot;ui&quot;;
 ui.layout(
     &lt;frame w=&quot;*&quot; h=&quot;*&quot; gravity=&quot;center&quot;&gt;
-        &lt;text padding=&quot;10 20 30 40&quot; bg=&quot;#ff0000&quot; text=&quot;HelloWorld&quot;/&gt;
+        &lt;text padding=&quot;10 20 30 40&quot; bg=&quot;#ff0000&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;HelloWorld&quot;/&gt;
     &lt;/frame&gt;
 );
-</code></pre><p>这个例子是一个居中的按钮(通过父布局的<code>gravity=&quot;center&quot;</code>属性设置)，背景色为红色(<code>bg=&quot;#ff0000&quot;</code>)，文本内容为&quot;HelloWorld&quot;，左边距为10dp，上边距为20dp，下边距为30dp，右边距为40dp，其显示效果如图：
-<img src="images/ex-padding.png" alt="ex-padding"></p>
+</code></pre><p>这个例子是一个居中的按钮(通过父布局的<code>gravity=&quot;center&quot;</code>属性设置)，背景色为红色(<code>bg=&quot;#ff0000&quot;</code>)，文本内容为&quot;HelloWorld&quot;，左边距为10dp，上边距为20dp，下边距为30dp，右边距为40dp，其显示效果如图：</p>
+<p><img src="images/ex-padding.png" alt="ex-padding"></p>
 <h2>paddingLeft<span><a class="mark" href="#ui_paddingleft" id="ui_paddingleft">#</a></span></h2>
 <p>View的左内边距。如果该属性和padding属性指定的值冲突，则在后面的属性生效，前面的属性无效。</p>
 <h2>paddingRight<span><a class="mark" href="#ui_paddingright" id="ui_paddingright">#</a></span></h2>
@@ -293,17 +295,31 @@ ui.layout(
 <h2>foreground<span><a class="mark" href="#ui_foreground" id="ui_foreground">#</a></span></h2>
 <p>View的前景。前景即在一个View的内容上显示的内容，可能会覆盖掉View本身的内容。其值和属性bg的值类似。</p>
 <h2>minHeight<span><a class="mark" href="#ui_minheight" id="ui_minheight">#</a></span></h2>
-<p>View的最小高度。</p>
+<p>View的最小高度。该值不总是生效的，取决于其父布局是否有足够的空间容纳。</p>
+<p>例：<code>&lt;text height=&quot;auto&quot; minHeight=&quot;50&quot;/&gt;</code></p>
+<p>有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
 <h2>minWidth<span><a class="mark" href="#ui_minwidth" id="ui_minwidth">#</a></span></h2>
-<p>View的最小宽度。</p>
-<h2>rotation<span><a class="mark" href="#ui_rotation" id="ui_rotation">#</a></span></h2>
+<p>View的最小宽度。该值不总是生效的，取决于其父布局是否有足够的空间容纳。</p>
+<p>例：<code>&lt;input width=&quot;auto&quot; minWidth=&quot;50&quot;/&gt;</code></p>
+<p>有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
 <h2>visbility<span><a class="mark" href="#ui_visbility" id="ui_visbility">#</a></span></h2>
-<p>View的可见性。其值可以为：</p>
+<p>View的可见性，该属性可以决定View是否显示出来。其值可以为：</p>
 <ul>
 <li><code>gone</code> 不可见。</li>
 <li><code>visible</code> 可见。默认情况下View都是可见的。</li>
 <li><code>invisible</code> 不可见，但仍然占用位置。</li>
 </ul>
+<h2>rotation<span><a class="mark" href="#ui_rotation" id="ui_rotation">#</a></span></h2>
+<p>View的旋转角度。通过该属性可以让这个View顺时针旋转一定的角度。例如<code>rotation=&quot;90&quot;</code>可以让他顺时针旋转90度。</p>
+<p>如果要设置旋转中心，可以通过<code>transformPivotX</code>, <code>transformPivotY</code>属性设置。默认的旋转中心为View的中心。</p>
+<h2>transformPivotX<span><a class="mark" href="#ui_transformpivotx" id="ui_transformpivotx">#</a></span></h2>
+<p>View的变换中心坐标x。用于View的旋转、放缩等变换的中心坐标。例如<code>transformPivotX=&quot;10&quot;</code>。</p>
+<p>该坐标的坐标系以View的左上角为原点。也就是x值为变换中心到View的左边的距离。</p>
+<p>有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>transformPivotY<span><a class="mark" href="#ui_transformpivoty" id="ui_transformpivoty">#</a></span></h2>
+<p>View的变换中心坐标y。用于View的旋转、放缩等变换的中心坐标。例如<code>transformPivotY=&quot;10&quot;</code>。</p>
+<p>该坐标的坐标系以View的左上角为原点。也就是y值为变换中心到View的上边的距离。</p>
+<p>有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
 
       </div>
     </div>

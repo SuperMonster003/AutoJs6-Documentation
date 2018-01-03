@@ -1,4 +1,4 @@
-# UI
+# 用户界面: UI
 
 ui模块提供了编写用户界面的支持。
 
@@ -71,7 +71,7 @@ ui.layout(
 
 ## w
 
-View的宽度。可以设置的值为`*`, `auto`和具体数值。其中`*`表示宽度**尽量**填满父布局，而`auto`表示宽度将根据View的内容自动调整(自适应宽度)。例如：
+View的宽度，是属性`width`的缩写形式。可以设置的值为`*`, `auto`和具体数值。其中`*`表示宽度**尽量**填满父布局，而`auto`表示宽度将根据View的内容自动调整(自适应宽度)。例如：
 ```
 "ui";
 ui.layout(
@@ -101,7 +101,7 @@ ui.layout(
 
 ## h
 
-View的高度。可以设置的值为`*`, `auto`和具体数值。其中`*`表示宽度**尽量**填满父布局，而`auto`表示宽度将根据View的内容自动调整(自适应宽度)。
+View的高度，是属性`height`的缩写形式。可以设置的值为`*`, `auto`和具体数值。其中`*`表示宽度**尽量**填满父布局，而`auto`表示宽度将根据View的内容自动调整(自适应宽度)。
 
 如果不设置该属性，则不同的控件和布局有不同的默认高度，大多数为`auto`。
 
@@ -333,5 +333,304 @@ View的变换中心坐标y。用于View的旋转、放缩等变换的中心坐�
 
 有关该属性的单位，参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension)。
 
+## style
+
+设置View的样式。不同控件有不同的可选的内置样式。具体参见各个控件的说明。
+
+需要注意的是，style属性只支持安卓5.1及其以上。
+
+# 文本控件: text
+
+文本控件用于显示文本，可以控制文本的字体大小，字体颜色，字体等。
+
+以下介绍该控件的主要属性和方法，如果要查看他的所有属性和方法，请阅读[TextView](http://www.zhdoc.net/android/reference/android/widget/TextView.html)。
+
+## text 
+
+设置文本的内容。例如`text="一段文本"`。
+
+## textColor
+
+设置字体的颜色，可以是RGB格式的颜色(例如#ff00ff)，或者颜色名称(例如red, green等)，具体参见[颜色](#ui_颜色)。
+
+示例, 红色字体：`<text text="红色字体" textColor="red"/>`
+
+## textSize
+
+设置字体的大小，单位一般是sp。按照Material Design的规范，正文字体大小为14sp，标题字体大小为18sp，次标题为16sp。
+
+示例，超大字体: `<text text="超大字体" textSize="40sp"/>`
+
+## textStyle
+
+设置字体的样式，比如斜体、粗体等。可选的值为：
+* bold  加粗字体
+* italic  斜体	
+* normal  正常字体
+
+可以用或("|")把他们组合起来，比如粗斜体为"bold|italic"。
+
+例如，粗体：`<text textStyle="bold" textSize="18sp" text="这是粗体"/>
+
+## lines
+
+设置文本控件的行数。即使文本内容没有达到设置的行数，控件也会留出相应的宽度来显示空白行；如果文本内容超出了设置的行数，则超出的部分不会显示。
+
+另外在xml中是不能设置多行文本的，要在代码中设置。例如:
+
+```
+"ui";
+ui.layout(
+    <vertical>
+        <text id="myText" line="3">
+    </vertical>
+)
+//通过\n换行
+ui.myText.setText("第一行\n第二行\n第三行\n第四行");
+```
+
+## maxLines
+
+设置文本控件的最大行数。
+
+## typeface
+
+设置字体。可选的值为：
+* `normal` 正常字体
+* `sans` 衬线字体
+* `serif` 非衬线字体
+* `monospace` 等宽字体
+
+示例，等宽字体: `<text text="等宽字体" typeface="monospace"/>`
+
+## ellipsize
+
+设置文本的省略号位置。文本的省略号会在文本内容超出文本控件时显示。可选的值为：
+* `end`   在文本末尾显示省略号
+* `marquee`   跑马灯效果，文本将滚动显示
+* `middle`	在文本中间显示省略号
+* `none`	不显示省略号
+* `start`	在文本开头显示省略号
+
+## ems
+
+当设置该属性后,TextView显示的字符长度（单位是em）,超出的部分将不显示，或者根据ellipsize属性的设置显示省略号。
+
+例如，限制文本最长为5em: `<text ems="5" ellipsize="end" text="很长很长很长很长很长很长很长的文本"/>
+
+## autoLink
+
+控制是否自动找到url和电子邮件地址等链接，并转换为可点击的链接。默认值为“none”。
+
+设置该值可以让文本中的链接、电话等变成可点击状态。
+
+可选的值为以下的值以其通过或("|")的组合：
+
+* `all`    匹配所有连接、邮件、地址、电话
+* `email`    匹配电子邮件地址
+* `map`    匹配地图地址
+* `none`    不匹配 (默认)
+* `phone`    匹配电话号码
+* `web`    匹配URL地址
+
+示例：`<text autoLink="web|phone" text="百度: http://www.baidu.com 电信电话: 10000"/>`
+
+# 按钮控件: button
+
+按钮控件是一个特殊的文本控件，因此所有文本控件的函数的属性都适用于按钮控件。
+
+除此之外，按钮控件有一些内置的样式，通过`style`属性设置，包括：
+* Widget.AppCompat.Button.Colored 带颜色的按钮
+* Widget.AppCompat.Button.Borderless 无边框按钮
+* Widget.AppCompat.Button.Borderless.Colored 带颜色的无边框按钮
+
+这些样式的具体效果参见"示例/界面控件/按钮控件.js"。
+
+例如：`<button style="Widget.AppCompat.Button.Colored" text="漂亮的按钮"/>`
+
+# 输入框控件: input
+
+输入框控件也是一个特殊的文本控件，因此所有文本控件的函数的属性都适用于按钮控件。
+
+对于一个输入框控件，我们可以通过text属性设置他的内容，通过lines属性指定输入框的行数；在代码中通过`getText()`函数获取输入的内容。例如：
+```
+"ui";
+ui.layout(
+    <vertical padding="16">
+        <text textSize="16sp" textColor="black" text="请输入姓名"/>
+        <input id="name" text="小明"/>
+        <button id="ok" text="确定"/>
+    </vertical>
+);
+//指定确定按钮点击时要执行的动作
+ui.ok.click(function(){
+    //通过getText()获取输入的内容
+    var name = ui.name.getText();
+    toast(name + "您好!");
+});
+```
+
+效果如图：
+
+![ex-input](ex-input.png)
+
+除此之外，输入框控件有另外一些主要属性(虽然这些属性对于文本控件也是可用的但一般只用于输入框控件)：
+
+## hint
+
+输入提示。这个提示会在输入框为空的时候显示出来。如图所示:
+
+![ex-hint](images/ex-hint.png)
+
+上面图片效果的代码为：
+```
+"ui";
+ui.layout(
+    <vertical>
+        <input hint="请输入姓名"/>
+    </vertical>
+)
+```
+
+## textColorHint
+
+指定输入提示的字体颜色。
+
+## textSizeHint
+
+指定输入提示的字体大小。
+
+## inputType
+
+指定输入框可以输入的文本类型。可选的值为以下值及其用"|"的组合:
+* `date`    用于输入日期。
+* `datetime`    用于输入日期和时间。
+* `none`    没有内容类型。此输入框不可编辑。
+* `number`    仅可输入数字。
+* `numberDecimal`    可以与number和它的其他选项组合，以允许输入十进制数(包括小数)。
+* `numberPassword`    仅可输入数字密码。
+* `numberSigned`    可以与number和它的其他选项组合，以允许输入有符号的数。
+* `phone`    用于输入一个电话号码。
+* `text`    只是普通文本。
+* `textAutoComplete`    可以与text和它的其他选项结合, 以指定此字段将做自己的自动完成, 并适当地与输入法交互。
+* `textAutoCorrect`    可以与text和它的其他选项结合, 以请求自动文本输入纠错。
+* `textCapCharacters`    可以与text和它的其他选项结合, 以请求大写所有字符。
+* `textCapSentences`    可以与text和它的其他选项结合, 以请求大写每个句子里面的第一个字符。
+* `textCapWords`    可以与text和它的其他选项结合, 以请求大写每个单词里面的第一个字符。
+* `textEmailAddress`    用于输入一个电子邮件地址。
+* `textEmailSubject`    用于输入电子邮件的主题。
+* `textImeMultiLine`    可以与text和它的其他选项结合，以指示虽然常规文本视图不应为多行, 但如果可以, 则IME应提供多行支持。
+* `textLongMessage`    用于输入长消息的内容。
+* `textMultiLine`    可以与text和它的其他选项结合, 以便在该字段中允许多行文本。如果未设置此标志, 则文本字段将被限制为单行。
+* `textNoSuggestions`    可以与text及它的其他选项结合, 以指示输入法不应显示任何基于字典的单词建议。
+* `textPassword`    用于输入密码。
+* `textPersonName`    用于输入人名。
+* `textPhonetic`    用于输入拼音发音的文本, 如联系人条目中的拼音名称字段。
+* `textPostalAddress`    用于输入邮寄地址。
+* `textShortMessage`    用于输入短的消息内容。
+* `textUri`    用于输入一个URI。
+* `textVisiblePassword`    用于输入可见的密码。
+* `textWebEditText`    用于输入在web表单中的文本。
+* `textWebEmailAddress`    用于在web表单里输入一个电子邮件地址。
+* `textWebPassword`    用于在web表单里输入一个密码。
+* `time`    用于输入时间。
+
+例如，想指定一个输入框的输入类型为小数数字，为: `<input inputType="number|numberDecimal"/>`
+
+## password
+
+指定输入框输入框是否为密码输入框。默认为`false`。
+
+例如：`<input password="true"/>`
+
+## numeric
+
+指定输入框输入框是否为数字输入框。默认为`false`。
+
+例如：`<input numeric="true"/>`
+
+## phoneNumber
+
+指定输入框输入框是否为电话号码输入框。默认为`false`。
+
+例如：`<input phoneNumber="true"/>`
+
+## digits
+
+指定输入框可以输入的字符。例如，要指定输入框只能输入"1234567890+-"，为`<input digits="1234567890+-"/>`。
+
+## singleLine
+
+指定输入框是否为单行输入框。默认为`false`。您也可以通过`lines="1"`来指定单行输入框。
+
+例如：`<input singleLine="true"/>`
+
+# 图片控件: img
+
+# 线性布局: linear
+
+# 垂直布局: vertical
+
+# 水平布局: horizontal
+
+# 帧布局: frame
+
+# 相对布局: relative
+
+# 勾选框控件: checkbox
+
+# 选择框控件: radio
+
+# 选择框布局: radiogroup
+
+# 开关控件: switch
+
+# 进度条控件: progressbar
+
+# 拖动条控件: seekbar
+
+# 下来菜单控件: spinner
+
+# 时间选择控件: timepicker
+
+# 日期选择控件: datepicker
+
+# 浮动按钮控件: fab
+
+# 标题栏控件: toolbar
+
+# 卡片: card
+
+# 抽屉布局: drawer
+
+# 列表: list
+
+# Tab: tab 
+
+# ui
+
+## ui.layout(xml)
+
+## ui.inflate(xml[, parent])
+
+## ui.findView(id)
+
+## ui.finish()
+
+## ui.setContentView(view)
+
+## ui.run(callback)
+
+## ui.post(callback[, daley])
+
+## ui.statusBarColor(color)
+
+## ui.showPopupMenu(view, menu)
+
 # 尺寸的单位: Dimension
-# drawables
+
+# Drawables
+
+# 颜色
+
+**(完善中...)**

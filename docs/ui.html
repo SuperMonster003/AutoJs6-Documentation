@@ -126,10 +126,23 @@
 <li><span class="stability_undefined"><a href="#ui_singleline">singleLine</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_img">图片控件: img</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_linear">线性布局: linear</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_img">图片控件: img</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_src">src</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_tint">tint</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_scaletype">scaleType</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_radius">radius</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_radiustopleft">radiusTopLeft</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_radiustopright">radiusTopRight</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_radiusbottomleft">radiusBottomLeft</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_radiusbottomright">radiusBottomRight</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_borderwidth">borderWidth</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_bordercolor">borderColor</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_circle">circle</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ui_vertical">垂直布局: vertical</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_horizontal">水平布局: horizontal</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_linear">线性布局: linear</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_frame">帧布局: frame</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_relative">相对布局: relative</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_checkbox">勾选框控件: checkbox</a></span></li>
@@ -464,7 +477,7 @@ ui.myText.setText(&quot;第一行\n第二行\n第三行\n第四行&quot;);
 <p>这些样式的具体效果参见&quot;示例/界面控件/按钮控件.js&quot;。</p>
 <p>例如：<code>&lt;button style=&quot;Widget.AppCompat.Button.Colored&quot; text=&quot;漂亮的按钮&quot;/&gt;</code></p>
 <h1>输入框控件: input<span><a class="mark" href="#ui_input" id="ui_input">#</a></span></h1>
-<p>输入框控件也是一个特殊的文本控件，因此所有文本控件的函数的属性都适用于按钮控件。</p>
+<p>输入框控件也是一个特殊的文本控件，因此所有文本控件的函数的属性和函数都适用于按钮控件。输入框控件有自己的属性和函数，要查看所有这些内容，阅读<a href="http://www.zhdoc.net/android/reference/android/widget/EditText.html">EditText</a>。</p>
 <p>对于一个输入框控件，我们可以通过text属性设置他的内容，通过lines属性指定输入框的行数；在代码中通过<code>getText()</code>函数获取输入的内容。例如：</p>
 <pre><code>&quot;ui&quot;;
 ui.layout(
@@ -548,9 +561,68 @@ ui.layout(
 <p>指定输入框是否为单行输入框。默认为<code>false</code>。您也可以通过<code>lines=&quot;1&quot;</code>来指定单行输入框。</p>
 <p>例如：<code>&lt;input singleLine=&quot;true&quot;/&gt;</code></p>
 <h1>图片控件: img<span><a class="mark" href="#ui_img" id="ui_img">#</a></span></h1>
-<h1>线性布局: linear<span><a class="mark" href="#ui_linear" id="ui_linear">#</a></span></h1>
+<p>图片控件用于显示来自网络、本地或者内嵌数据的图片，并可以指定图片以圆角矩形、圆形等显示。但是不能用于显示gif动态图。</p>
+<p>这里只介绍他的主要方法和属性，如果要查看他的所有方法和属性，阅读<a href="http://www.zhdoc.net/android/reference/android/widget/ImageView.html">ImageView</a>。</p>
+<h2>src<span><a class="mark" href="#ui_src" id="ui_src">#</a></span></h2>
+<p>使用一个Uri指定图片的来源。可以是图片的地址(<a href="http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。">http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</a></p>
+<p>如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。</p>
+<p>例如，显示百度的logo:</p>
+<pre><code>&quot;ui&quot;;
+ui.layout(
+    &lt;frame&gt;
+        &lt;img src=&quot;https://www.baidu.com/img/bd_logo1.png&quot;/&gt;
+    &lt;/frame&gt;
+);
+</code></pre><p>再例如，显示文件/sdcard/1.png的图片为 <code>&lt;img src=&quot;file:///sdcard/1.png&quot;/&gt;</code>。
+再例如，使base64显示一张钱包小图片为：</p>
+<pre><code>&quot;ui&quot;;
+ui.layout(
+    &lt;frame&gt;
+        &lt;img w=&quot;40&quot; h=&quot;40&quot; src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEu0lEQVRoge3bW4iVVRQH8N+ZnDKxvJUGCSWUlXYle/ChiKAkIiu7UXQjonwNIopM8cHoAhkRGQXdfIiE0Ep8KalQoptRTiFFZiRlOo6TPuSk4zk97G9w5vidc77LPjNi84f1MN+391rrf9a+rL32N4xiFMcUjouo5zyciYPYH0FnBadiNiZiD2oR9JbGRdgiOFPDIXRhCWYU0Dcj6duV6BrQuyWxNaLowBcOO1Uv+7EKc4WINUIlabMq6dNI35eJzRHDWOzS2MEB6cd6XI/OQf07k2frkzat9HQnNkcUG7R2dECq2I53EtmePMvaf+MwcWqKu+RzuqhUcfcwcWqKTvmiXFQ2GDodRhQz0aN9ZHsSG0cVrkGf+GT7MG8YeeTCHeKS7sOdMR1stjcWxY2YH0nXh1gdSdf/E+2I8KVYigkl9ewVUsxNpT1qMzaKN4ejJxrtyEt7IuraE1EX2jOkp+JBnFxSzz68KuTqoyiK2BHuxDO4NpK+j/GoOAWF6BiH98Q/SHyCycPIIxMm4FPZCPTj30SynIFr+A7ThotMK4wXopA1Ym9gSiKv5Oj3bdKnFMpuS514E1fm6NMnbF098s3NS4QS0Ik5+hyBsoSXYkGO9jvxy6C/t+IPIYJZcBWW57AXFfMNrSo2kqqw2l4hvSzcIRTw1sm24FVxb5s4NcR0/JXBuUNYJttI6sDjsi1kvTgrGpsMjq3O4FQNa+SbNhWsyKj7I4wpzSYDbpFtKB/EOSn9ZwpRfx5Xp7yfhN0Z9FdxXxxKjTEe2zI4U8NnKf3PNrT2VcWTKe1eyGjjT+Eapm14IqMjNTyd0n9JSrsDwhmaEN2H8GMOO8viUjyMSfJVJh9O0bGoQdt1eFm2oVwve7UpC1ssX568KEXH6fghp54s8lRkrk7CjpxOrGqg6wQ8IKSKWXPpVtIt8ly+v4ATf2t+yqlgDl5SbCjXy8JIXFXweQEHqngxo43JeEw54l+JVLKaJeypRZzoFxavrIWG6cKPW2SO9+PCMkQHsLiA8fpIv5/DmUn4qaCtpWWIEiLzdUHj9XJA2H5uFRbBZriuoI1NSpatpio+nJtFvFvYd2c1sDsGvxfQ3a/knrwgMtm0qD8rPSprCuq8uRmhVqvanBbvm+EQfsNKIcnvTmnTiUdwQcq73oJ2L2v2stXx6vyCRr8RDuk/C8OMUK24J6VtBaekPG81zxuh0TTJhC7FhtUOHF+n61whGalvu8uRWVJFvgPEYOkqQzhLVSPPXLoYa4Xh3Stcls1NaTdb8Xx7ZxnCvSUIfy/kzWno0Pyzx3dL2C0695Hto7NGUhXy5Lzp3kLZKiqNpNTl2+YShgdIvyXbVck44TB/oKTNzWUIv13S+IDsFmpY84QvZAcwTbh4e04o18SwtbIM4dsiOTFYVgzSv7wN+m9vRqjV/PrA0JuCox1bhYNKQ7Qi3CcU1fpiedRG9AkLXhRfbxCnKlET0s21ifwaSWcPbopBdDDOwGtClTD2vCsq+/C68K8HmVDk7DhFyIsvFzKnGThN+689+oU9dptwQb5B+LB8dx4lMb7xqAhkJwo/xljhFFSfSdUc3mPrcbwj15P+pP0/QiR7hYSkGsHnUYziWMF/mXV4JVcZ8G0AAAAASUVORK5CYII=&quot;/&gt;
+    &lt;/frame&gt;
+);
+</code></pre><h2>tint<span><a class="mark" href="#ui_tint" id="ui_tint">#</a></span></h2>
+<p>图片着色，其值是一个颜色名称或RGB颜色值。使用该属性会将图片中的非透明区域都涂上同一颜色。可以用于改变图片的颜色。</p>
+<p>例如，对于上面的base64的图片: <code>&lt;img w=&quot;40&quot; h=&quot;40&quot; tint=&quot;red&quot; src=&quot;data:image/png;base64,...&quot;/&gt;</code>，则钱包图标颜色会变成红色。</p>
+<h2>scaleType<span><a class="mark" href="#ui_scaletype" id="ui_scaletype">#</a></span></h2>
+<p>控制图片根据图片控件的宽高放缩时的模式。可选的值为：</p>
+<ul>
+<li><code>center</code>    在控件中居中显示图像, 但不执行缩放。</li>
+<li><code>centerCrop</code>    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 等于或大于控件的相应尺寸 (不包括内边距padding)并且使图像在控件中居中显示。</li>
+<li><code>centerInside</code>    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 小于视图的相应尺寸 (不包括内边距padding)并且图像在控件中居中显示。</li>
+<li><code>fitCenter</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件中居中显示</li>
+<li><code>fitEnd</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件中靠右下角显示</li>
+<li><code>fitStart</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件靠左上角显示</li>
+<li><code>fitXY</code>    使图片和宽高和控件的宽高完全匹配，但图片的长宽比可能不能保持一致</li>
+<li><code>matrix</code>    绘制时使用图像矩阵进行缩放。需要在代码中使用<code>setImageMatrix(Matrix)</code>函数才能生效。</li>
+</ul>
+<p>默认的scaleType为<code>fitCenter</code>；除此之外最常用的是<code>fitXY</code>， 他能使图片放缩到控件一样的大小，但图片可能会变形。</p>
+<h2>radius<span><a class="mark" href="#ui_radius" id="ui_radius">#</a></span></h2>
+<p>图片控件的半径。如果设置为控件宽高的一半并且控件的宽高相同则图片将剪切为圆形显示；否则图片为圆角矩形显示，半径即为四个圆角的半径，也可以通过<code>radiusTopLeft</code>, <code>radiusTopRight</code>, <code>radiusBottomLeft</code>, <code>radiusBottomRight</code>等属性分别设置四个圆角的半径。</p>
+<p>例如，圆角矩形的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; radius=&quot;20&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>
+<p>有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>radiusTopLeft<span><a class="mark" href="#ui_radiustopleft" id="ui_radiustopleft">#</a></span></h2>
+<p>图片控件的左上角圆角的半径。有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>radiusTopRight<span><a class="mark" href="#ui_radiustopright" id="ui_radiustopright">#</a></span></h2>
+<p>图片控件的右上角圆角的半径。有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>radiusBottomLeft<span><a class="mark" href="#ui_radiusbottomleft" id="ui_radiusbottomleft">#</a></span></h2>
+<p>图片控件的左下角圆角的半径。有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>radiusBottomRight<span><a class="mark" href="#ui_radiusbottomright" id="ui_radiusbottomright">#</a></span></h2>
+<p>图片控件的右下角圆角的半径。有关该属性的单位，参见<a href="#ui_尺寸的单位_Dimension">尺寸的单位: Dimension</a>。</p>
+<h2>borderWidth<span><a class="mark" href="#ui_borderwidth" id="ui_borderwidth">#</a></span></h2>
+<p>图片控件的边框宽度。用于在图片外面显示一个边框，边框会随着图片控件的外形(圆角等)改变而相应变化。
+例如, 圆角矩形带灰色边框的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; radius=&quot;20&quot; borderWidth=&quot;5&quot; borderColor=&quot;gray&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>
+<h2>borderColor<span><a class="mark" href="#ui_bordercolor" id="ui_bordercolor">#</a></span></h2>
+<p>图片控件的边框颜色。</p>
+<h2>circle<span><a class="mark" href="#ui_circle" id="ui_circle">#</a></span></h2>
+<p>指定该图片控件的图片是否剪切为圆形显示。如果为<code>true</code>，则图片控件会使其宽高保持一致(如果宽高不一致，则保持高度等于宽度)并使圆形的半径为宽度的一半。</p>
+<p>例如，圆形的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; circle=&quot;true&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>
 <h1>垂直布局: vertical<span><a class="mark" href="#ui_vertical" id="ui_vertical">#</a></span></h1>
 <h1>水平布局: horizontal<span><a class="mark" href="#ui_horizontal" id="ui_horizontal">#</a></span></h1>
+<h1>线性布局: linear<span><a class="mark" href="#ui_linear" id="ui_linear">#</a></span></h1>
+<p>实际上，垂直布局和水平布局都属于线性布局。线性布局有一个orientation的属性，用于指定布局的方向，可选的值为<code>vertical</code>和<code>horizontal</code>。</p>
+<p>例如<code>&lt;linear orientation=&quot;vertical&quot;&gt;&lt;/linear&gt;</code>相当于<code>&lt;vertical&gt;&lt;/vertical&gt;</code>。</p>
+<p>线性布局的默认方向是横向的，因此，一个没有指定orientation属性的线性布局就是横向布局。</p>
 <h1>帧布局: frame<span><a class="mark" href="#ui_frame" id="ui_frame">#</a></span></h1>
 <h1>相对布局: relative<span><a class="mark" href="#ui_relative" id="ui_relative">#</a></span></h1>
 <h1>勾选框控件: checkbox<span><a class="mark" href="#ui_checkbox" id="ui_checkbox">#</a></span></h1>

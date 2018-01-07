@@ -104,6 +104,16 @@ JSON格式指的是，将会调用`JSON.stringify()`把data对象转换为JSON�
 
 一个调用图灵机器人接口的例子如下：
 
+```
+var url = "http://www.tuling123.com/openapi/api";
+r = http.postJson(url, {
+    key: "65458a5df537443b89b31f1c03202a80",
+    info: "你好啊",
+    userid: "1",
+});
+toastLog(r.body.string());
+```
+
 ## http.postMultipart(url, files[, options, callback])
 * `url` {string} 请求的URL地址，需要以"http://"或"https://"开头。如果url没有以"http://"开头，则默认为"http://"。
 * `files` {Object} POST数据。

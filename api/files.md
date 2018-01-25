@@ -215,6 +215,12 @@ app.viewFile("/sdcard/1.txt");
 
 例如，对于脚本文件"/sdcard/脚本/1.js"运行`files.cwd()`返回"/sdcard/脚本/"。
 
+## files.path(relativePath)
+* `relativePath` {string} 相对路径
+* 返回 {string}
+
+返回相对路径对应的绝对路径。例如`files.path("./1.png")`，如果运行这个语句的脚本位于文件夹"/sdcard/脚本/"中，则返回`"/sdcard/脚本/1.png"`。
+
 ## files.listDir(path[, filter])
 * `path` {string} 路径
 * `filter` {Function} 过滤函数，可选。接收一个`string`参数（文件名），返回一个`boolean`值。

@@ -98,6 +98,22 @@ toast(colors.toString(color));
 
 加载在地址URL的网络图片并返回一个Image对象。如果地址不存在或者图片无法解码则返回null。
 
+## images.clip(img, x, y, w, h)
+* `img` {Image} 图片
+* `x` {number} 剪切区域的左上角横坐标
+* `y` {number} 剪切区域的左上角纵坐标
+* `w` {number} 剪切区域的宽度
+* `h` {number} 剪切区域的高度
+* 返回 {Image}
+
+从图片img的位置(x, y)处剪切大小为w * h的区域，并返回该剪切区域的新图片。
+
+```
+var src = images.read("/sdcard/1.png");
+var clip = images.clip(src, 100, 100, 400, 400);
+images.save(clip, "/sdcard/clip.png");
+```
+
 ## images.findColor(image, color, options)
 * `image` {Image} 图片
 * `color` {number} | {string} 要寻找的颜色的RGB值。如果是一个整数，则以0xRRGGBB的形式代表RGB值（A通道会被忽略）；如果是字符串，则以"#RRGGBB"代表其RGB值。

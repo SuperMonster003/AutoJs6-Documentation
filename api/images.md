@@ -178,16 +178,17 @@ images.findColor(img, color, {
 该函数也可以作为全局函数使用。
 
 ## images.findColorEquals(img, color[, x, y, width, height])
+* `img` {Image} 图片
+* `color` {number} | {string} 要寻找的颜色
+* `x` {number} 找色区域的左上角横坐标
+* `y` {number} 找色区域的左上角纵坐标
+* `width` {number} 找色区域的宽度
+* `height` {number} 找色区域的高度
+* 返回 {Point}
 
-严格找色的简便方法。找色时要求颜色完全相等才匹配。
+在图片img指定区域中找到颜色和color完全相等的某个点，并返回该点的左边；如果没有找到，则返回`null`。
 
-相当于
-```
-images.findColor(img, color, {
-   region: [x, y, width, height],
-   threshold: 0
-});
-```
+找色区域通过`x`, `y`, `width`, `height`指定，如果不指定找色区域，则在整张图片中寻找。
 
 该函数也可以作为全局函数使用。
 
@@ -215,6 +216,7 @@ if(p){
     * "equal": 相等匹配，只有与给定颜色color完全相等时才匹配。
     * "diff": 差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。
     * "rgb": rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。
+ 
     * "rgb+": 加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。
     * "hs": hs欧拉距离匹配。hs为HSV空间的色调值。
 

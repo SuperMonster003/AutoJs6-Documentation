@@ -1,97 +1,69 @@
-# About this Documentation
+# 关于本文档
 
 <!-- type=misc -->
 
-The goal of this documentation is to comprehensively explain the Node.js
-API, both from a reference as well as a conceptual point of view. Each
-section describes a built-in module or high-level concept.
+本文档为Auto.js的文档，解释了Auto.js各个模块的API的使用方法、作用和例子。
 
-Where appropriate, property types, method arguments, and the arguments
-provided to event handlers are detailed in a list underneath the topic
-heading.
+文档借助Node.js的文档构建工具生成，并在github上开源(https://github.com/hyb1996/AutoJs-Docs)，目前由开发者维护。
 
-Every `.html` document has a corresponding `.json` document presenting
-the same information in a structured manner. This feature is
-experimental, and added for the benefit of IDEs and other utilities that
-wish to do programmatic things with the documentation.
+## API稳定性
 
-Every `.html` and `.json` file is generated based on the corresponding
-`.md` file in the `doc/api/` folder in Node.js's source tree. The
-documentation is generated using the `tools/doc/generate.js` program.
-The HTML template is located at `doc/template.html`.
-
-
-If errors are found in this documentation, please [submit an issue][]
-or see [the contributing guide][] for directions on how to submit a patch.
-
-## Stability Index
-
-<!--type=misc-->
-
-Throughout the documentation are indications of a section's
-stability. The Node.js API is still somewhat changing, and as it
-matures, certain parts are more reliable than others. Some are so
-proven, and so relied upon, that they are unlikely to ever change at
-all. Others are brand new and experimental, or known to be hazardous
-and in the process of being redesigned.
-
-The stability indices are as follows:
+由于Auto.js处于活跃的更新和开发状态，API可能随时有变动，我们用Stability来标记模块、函数的稳定性。这些标记包括：
 
 ```txt
 Stability: 0 - Deprecated
-This feature is known to be problematic, and changes may be planned. Do
-not rely on it. Use of the feature may cause warnings to be emitted.
-Backwards compatibility across major versions should not be expected.
+
+弃用的函数、模块或特性，在未来的更新中将很快会被移除或更改。应该在脚本中移除对这些函数的使用，以免后续出现意料之外的问题。
 ```
 
 ```txt
 Stability: 1 - Experimental
-This feature is still under active development and subject to non-backwards
-compatible changes, or even removal, in any future version. Use of the feature
-is not recommended in production environments. Experimental features are not
-subject to the Node.js Semantic Versioning model.
-```
 
-*Note*: Caution must be used when making use of `Experimental` features,
-particularly within modules that may be used as dependencies (or dependencies
-of dependencies) within a Node.js application. End users may not be aware that
-experimental features are being used, and therefore may experience unexpected
-failures or behavioral changes when changes occur. To help avoid such surprises,
-`Experimental` features may require a command-line flag to explicitly enable
-them, or may cause a process warning to be emitted. By default, such warnings
-are printed to `stderr` and may be handled by attaching a listener to the
-`process.on('warning')` event.
+实验性的函数、模块或特性，在未来的更新中可能会更改或移除。应该谨慎使用这些函数或模块，或者仅用作临时或试验用途。
+```
 
 ```txt
 Stability: 2 - Stable
-The API has proven satisfactory. Compatibility with the npm ecosystem
-is a high priority, and will not be broken unless absolutely necessary.
+
+稳定的函数、模块或特性，在未来的更新中这些模块已有的函数一般不会被更改，会保证后向兼容性。
 ```
 
-## JSON Output
+## 如何阅读本文档
 
-> Stability: 1 - Experimental
+先看一个例子，下面是[基于控件的操作模拟](coordinates-based-automation.html)的章节中input函数的部分说明。
 
-Every HTML file in the markdown has a corresponding JSON file with the
-same data.
+## input([i, ]text)
+* `i` {number} 表示要输入的为第i + 1个输入框
+* `text` {string} 要输入的文本
 
-This feature was added in Node.js v0.6.12. It is experimental.
 
-## Syscalls and man pages
+input表示函数名，括号内的`[i, ]text`为函数的参数。下面是参数列表，"number"表示参数i的类型为数值，"string"表示参数text的类型为字符串。
 
-System calls like open(2) and read(2) define the interface between user programs
-and the underlying operating system. Node functions which simply wrap a syscall,
-like `fs.open()`, will document that. The docs link to the corresponding man
-pages (short for manual pages) which describe how the syscalls work.
+例如input(1, "啦啦啦")，执行这个语句会在屏幕上的第2个输入框处输入"啦啦啦"。
 
-**Note:** some syscalls, like lchown(2), are BSD-specific. That means, for
-example, that `fs.lchown()` only works on macOS and other BSD-derived systems,
-and is not available on Linux.
+方括号[ ]表示参数为可选参数。也就是说，可以省略i直接调用input。例如input("嘿嘿嘿")，按照文档，这个语句会在屏幕上所有输入框输入"嘿嘿嘿"。
 
-Most Unix syscalls have Windows equivalents, but behavior may differ on Windows
-relative to Linux and macOS. For an example of the subtle ways in which it's
-sometimes impossible to replace Unix syscall semantics on Windows, see [Node
-issue 4760](https://github.com/nodejs/node/issues/4760).
+调用有可选参数的函数时请不要写上方括号。
 
-[submit an issue]: https://github.com/nodejs/node/issues/new
-[the contributing guide]: https://github.com/nodejs/node/blob/master/CONTRIBUTING.md
+我们再看第二个例子。图片和图色处理中detectsColor函数的部分说明。
+
+## images.detectsColor(image, color, x, y[, threshold = 16, algorithm = "diff"])
+* `image` {Image} 图片
+* `color` {number} | {string} 要检测的颜色
+* `x` {number} 要检测的位置横坐标
+* `y` {number} 要检测的位置纵坐标
+* `threshold` {number} 颜色相似度临界值，默认为16。取值范围为0~255。
+* `algorithm` {string} 颜色匹配算法，包括:
+    * "equal": 相等匹配，只有与给定颜色color完全相等时才匹配。
+    * "diff": 差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。
+    * "rgb": rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。
+ 
+    * "rgb+": 加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。
+    * "hs": hs欧拉距离匹配。hs为HSV空间的色调值。
+
+同样地，`[, threshold = 16, algorithm = "rgb"]`为可选参数，并且，等于号=后面的值为参数的默认值。也就是如果不指定该参数，则该参数将会为这个值。
+
+例如 `images.detectsColor(captureScreen(), "#112233", 100, 200)` 相当于 `images.detectsColor(captureScreen(), "#112233", 100, 200, 16, "rgb")`，
+而`images.detectsColor(captureScreen(), "#112233", 100, 200, 64)` 相当于`images.detectsColor(captureScreen(), "#112233", 100, 200, 64, "rgb")`。
+
+调用有可选参数及默认值的函数时请不要写上方括号和等于号。

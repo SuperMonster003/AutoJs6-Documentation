@@ -2,7 +2,7 @@
 @// point at the new location.
 * [关于本文档](documentation.html)
 * [W3CSchool - ECMAScript教程](http://www.w3school.com.cn/js/pro_js_syntax.asp)
-* [阮一峰 - ECMAScript教程](http://es6.ruanyifeng.com/#README)
+* [阮一峰 - ECMAScript 6教程](http://es6.ruanyifeng.com/#README)
 
 <div class="line"></div>
 

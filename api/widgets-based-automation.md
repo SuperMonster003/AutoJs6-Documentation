@@ -1,3 +1,7 @@
+# 基于控件的操作
+
+本章节主要分为两部分，SimpleActionAutomator部分提供了简单操作模拟的函数；而选择器UiSelctor部分则提供了进阶的
+
 # SimpleActionAutomator
 
 > Stability: 2 - Stable

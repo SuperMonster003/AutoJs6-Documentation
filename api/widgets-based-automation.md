@@ -238,7 +238,7 @@ id("recent_chat_list").className("AbsListView").findOne().scrollForward();
 
 有关正则表达式，可以查看[正则表达式 - 菜鸟教程](http://www.runoob.com/Stringp/Stringp-example.html)。
 
-需要注意的是，如果正则表达式是字符串，则需要使用`\\`来表达`\`，例如`textMatches("\\d+")`匹配多位数字；但如果使用JavaScript语法的正则表达式则不需要，例如`textMatches(/\d+/)`。
+需要注意的是，如果正则表达式是字符串，则需要使用`\\`来表达`\`(也即Java正则表达式的形式)，例如`textMatches("\\d+")`匹配多位数字；但如果使用JavaScript语法的正则表达式则不需要，例如`textMatches(/\d+/)`。但如果使用字符串的正则表达式则该字符串不能以"/"同时以"/"结束，也即不能写诸如`textMatches("/\\d+/")`的表达式，否则会被开头的"/"和结尾的"/"会被忽略。
 
 ## UiSelector.desc(str)
 * `str` {string} 控件文本
@@ -272,6 +272,9 @@ desc属性同样是定位控件的利器。
 
 有关正则表达式，可以查看[正则表达式 - 菜鸟教程](http://www.runoob.com/Stringp/Stringp-example.html)。
 
+需要注意的是，如果正则表达式是字符串，则需要使用`\\`来表达`\`(也即Java正则表达式的形式)，例如`textMatches("\\d+")`匹配多位数字；但如果使用JavaScript语法的正则表达式则不需要，例如`textMatches(/\d+/)`。但如果使用字符串的正则表达式则该字符串不能以"/"同时以"/"结束，也即不能写诸如`textMatches("/\\d+/")`的表达式，否则会被开头的"/"和结尾的"/"会被忽略。
+
+
 ## UiSelector.id(resId)
 * `resId` {string} 控件的id，以"包名:id/"开头，例如"com.tencent.mm:id/send_btn"。**也可以不指定包名**，这时会以当前正在运行的应用的包名来补全id。例如id("send_btn"),在QQ界面想当于id("com.tencent.mobileqq:id/send_btn")。
 
@@ -301,7 +304,8 @@ desc属性同样是定位控件的利器。
 
 附加id需要满足正则表达式。
 
-这里的正则表达式是Java的正则表达式，不能直接使用JavaScript的正则表达式。
+需要注意的是，如果正则表达式是字符串，则需要使用`\\`来表达`\`(也即Java正则表达式的形式)，例如`textMatches("\\d+")`匹配多位数字；但如果使用JavaScript语法的正则表达式则不需要，例如`textMatches(/\d+/)`。但如果使用字符串的正则表达式则该字符串不能以"/"同时以"/"结束，也即不能写诸如`textMatches("/\\d+/")`的表达式，否则会被开头的"/"和结尾的"/"会被忽略。
+
 ```
 idMatches("[a-zA-Z]+")
 ```
@@ -349,6 +353,10 @@ idMatches("[a-zA-Z]+")
 为当前选择器附加控件"className需要满足正则表达式reg"的条件。
 
 有关正则表达式，可以查看[正则表达式 - 菜鸟教程](http://www.runoob.com/Stringp/Stringp-example.html)。
+
+
+需要注意的是，如果正则表达式是字符串，则需要使用`\\`来表达`\`(也即Java正则表达式的形式)，例如`textMatches("\\d+")`匹配多位数字；但如果使用JavaScript语法的正则表达式则不需要，例如`textMatches(/\d+/)`。但如果使用字符串的正则表达式则该字符串不能以"/"同时以"/"结束，也即不能写诸如`textMatches("/\\d+/")`的表达式，否则会被开头的"/"和结尾的"/"会被忽略。
+
 
 ## UiSelector.packageName(str)
 * `str` {string} 控件文本

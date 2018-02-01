@@ -17,6 +17,30 @@
 
 目前Auto.js还不支持项目的图形化管理，后续会加入。
 
+## 如何使打包的应用不显示主界面
+
+需要使用项目打包功能。
+
+1. 新建一个文件夹，命名为项目名称。
+2. 在该文件夹下新建脚本，或者移动脚本到该文件夹，命名为main.js，表示主脚本。脚本打包后将会从该脚本开始运行。
+3. 在该文件夹下新建一个project.json的文件，其内容如下：
+```
+{
+  "name": "项目名称",
+  "versionName": "1.0.0",
+  "versionCode": 1,
+  "packageName": "org.autojs.example",
+  "main": "main.js",
+  "launchConfig": {
+      "hideLogs": true
+  }
+}
+```
+其中，项目名称改为自己的项目名称，"org.autojs.example"改成自己的包名，下面的"launchConfig"表示启动配置，"hideLogs"表示隐藏日志。
+4. 通过文件夹菜单的"打包"功能来打包该项目
+
+有关项目打包和配置的更多信息，参见项目与项目配置(待补)。
+
 ## Auto.js自带的模块和函数中没有的功能如何实现
 
 由于Auto.js支持直接调用Android的API，对于Auto.js没有内置的函数，可以直接通过修改Android代码为JavaScript代码实现。例如旋转图片的Android代码为：

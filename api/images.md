@@ -123,7 +123,7 @@ images.save(clip, "/sdcard/clip.png");
 
 选项包括：
 * `region` {Array} 找色区域。是一个两个或四个元素的数组。(region[0], region[1])表示找色区域的左上角；region[2]*region[3]表示找色区域的宽高。如果只有region只有两个元素，则找色区域为(region[0], region[1])到屏幕右下角。如果不指定region选项，则找色区域为整张图片。
-* `threshold` {number} 找色时颜色相似度的临界值，范围为0~255（越小越相似，0为颜色相等，255为任何颜色都能匹配）。默认为16。threshold和浮点数相似度(0.0~1.0)的换算为 similarity = (255 - threshold) / 255.
+* `threshold` {number} 找色时颜色相似度的临界值，范围为0~255（越小越相似，0为颜色相等，255为任何颜色都能匹配）。默认为4。threshold和浮点数相似度(0.0~1.0)的换算为 similarity = (255 - threshold) / 255.
 
 该函数也可以作为全局函数使用。
 
@@ -204,6 +204,29 @@ if(p){
 }else{
     toast("没有未读消息");
 }
+```
+
+## images.findMultiColors(img, firstColor, colors[, options])
+* `img` {Image} 要找色的图片
+* `firstColor` {number} | {string} 第一个点的颜色
+* `colors` {Array} 表示剩下的点相对于第一个点的位置和颜色的数组，数组的每个元素为[x, y, color]
+* `options` {Object} 选项，包括：
+    * `region` {Array} 找色区域。是一个两个或四个元素的数组。(region[0], region[1])表示找色区域的左上角；region[2]*region[3]表示找色区域的宽高。如果只有region只有两个元素，则找色区域为(region[0], region[1])到屏幕右下角。如果不指定region选项，则找色区域为整张图片。
+    * `threshold` {number} 找色时颜色相似度的临界值，范围为0~255（越小越相似，0为颜色相等，255为任何颜色都能匹配）。默认为4。threshold和浮点数相似度(0.0~1.0)的换算为 similarity = (255 - threshold) / 255.
+
+
+多点找色，类似于按键精灵的多点找色，其过程如下：
+1. 在图片img中找到颜色firstColor的位置(x0, y0)
+2. 对于数组colors的每个元素[x, y, color]，检查图片img在位置(x + x0, y + y0)上的像素是否是颜色color，是的话返回(x0, y0)，否则继续寻找firstColor的位置，重新执行第1步
+3. 整张图片都找不到时返回`null`
+
+例如，对于代码`images.findMultiColors(img, "#123456", [[10, 20, "#ffffff"], [30, 40, "#000000"]])`，假设图片在(100, 200)的位置的颜色为#123456, 这时如果(110, 220)的位置的颜色为#fffff且(130, 240)的位置的颜色为#000000，则函数返回点(100, 200)。
+
+如果要指定找色区域，则在options中指定，例如:
+```
+var p = images.findMultiColors(img, "#123456", [[10, 20, "#ffffff"], [30, 40, "#000000"]], {
+    region: [0, 960, 1080, 960]
+});
 ```
 
 ## images.detectsColor(image, color, x, y[, threshold = 16, algorithm = "diff"])

@@ -21,6 +21,7 @@
 * [Http - HTTP](http.html)
 * [Images - 图片与图色处理](images.html)
 * [Keys - 按键模拟](keys.html)
+* [Media - 多媒体](media.html)
 * [Modules - 模块](modules.html)
 * [WidgetsBasedAutomation - 基于控件的操作](widgets-based-automation.html)
 * [Shell - Shell命令](shell.html)

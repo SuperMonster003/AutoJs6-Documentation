@@ -13,6 +13,7 @@
 @include http
 @include images
 @include keys
+@include media
 @include modules
 @include widgets-based-automation
 @include shell

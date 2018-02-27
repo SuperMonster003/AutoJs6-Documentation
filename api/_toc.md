@@ -24,6 +24,7 @@
 * [Media - 多媒体](media.html)
 * [Modules - 模块](modules.html)
 * [WidgetsBasedAutomation - 基于控件的操作](widgets-based-automation.html)
+* [Sensors - 传感器](sensors.html)
 * [Shell - Shell命令](shell.html)
 * [Storages - 本地存储](storages.html)
 * [Threads - 多线程](threads.html)

@@ -92,11 +92,13 @@ sensors.register("light").on("change", (event, light)=>{
 例如:
 ```
 console.show();
+//注册传感器监听
 var sensor = sensors.register("gravity");
 if(sensor == null){
     toast("不支持重力传感器");
     exit();
 }
+//监听数据
 sensor.on("change", (gx, gy, gz)=>{
     log("重力加速度: %d, %d, %d", gx, gy, gz);
 });
@@ -123,7 +125,7 @@ sensors.register("gravity").on("change", (gx, gy, gz)=>{
 ## sensors.unregister(emitter)
 * `emiiter` [SensorEventEmitter](#sensors_sensoreventemitter)
 
-注销该传感器监听器。
+注销该传感器监听器。被注销的监听器将不再能监听传感器数据。
 
 ```
 //注册一个传感器监听器
@@ -137,5 +139,87 @@ setTimeout(()=> {
 }, 2000);
 ```
 
-## 
+## sensors.unregisterAll()
 
+注销所有传感器监听器。
+
+## sensors.ignoresUnsupportedSensor
+* {boolean}
+
+表示是否忽略不支持的传感器。如果该值被设置为`true`，则函数`sensors.register()`即使对不支持的传感器也会返回一个无任何数据的虚拟传感器监听，也就是`sensors.register()`不会返回`null`从而避免非空判断，并且此时会触发`sensors`的"unsupported_sensor"事件。
+
+```
+//忽略不支持的传感器
+sensors.ignoresUnsupportedSensor = true;
+//监听有不支持的传感器时的事件
+sensors.on("unsupported_sensor", function(sensorName){
+    toastLog("不支持的传感器: " + sensorName);
+});
+//随便注册一个不存在的传感器。
+log(sensors.register("aaabbb"));
+```
+
+## 事件: 'unsupported_sensor'
+* `sensorName` {string} 不支持的传感器名称
+
+当`sensors.ignoresUnsupportedSensor`被设置为`true`并且有不支持的传感器被注册时触发该事件。事件参数的传感器名称。
+
+# SensorEventEmitter
+
+注册传感器返回的对象，其本身是一个EventEmmiter，用于监听传感器事件。
+## 事件: 'change'
+* `..args` {Any} 传感器参数
+
+当传感器数据改变时触发该事件；该事件触发的最高频繁由`sensors.register()`指定的delay参数决定。
+
+事件参数根据传感器类型不同而不同，具体参见本章最前面的列表。
+
+一个监听光线传感器和加速度传感器并且每0.5秒获取一个数据并最终写入一个csv表格文件的例子如下：
+
+```
+//csv文件路径
+cosnt csvPath = "/sdcard/sensors_data.csv";
+//记录光线传感器的数据
+var light = 0;
+//记录加速度传感器的数据
+var ax = 0;
+var ay = 0;
+var az = 0;
+//监听光线传感器
+sensors.register("light", sensors.delay.fastest)
+    .on("change", l => {
+        light = l;
+    });
+//监听加速度传感器
+sensors.register("accelerometer", sensors.delay.fastest)
+    .on("change", (ax0, ay0, az0) => {
+        ax = ax0;
+        ay = ay0;
+        az = az0;
+    });
+
+var file = open(csvPath, "w");
+//写csv表格头
+file.writeline("light,ax,ay,az")
+//每0.5秒获取一次数据并写入文件
+setInterval(()=>{
+    file.writeline(util.format("%d,%d,%d,%d", light, ax, ay, az));
+}, 500);
+//10秒后退出并打开文件
+setTimeout(()=>{
+    file.close();
+    sensors.unregsiterAll();
+    app.viewFile(csvPath);
+}, 10 * 1000);
+
+```
+
+## 事件: 'accuracy_change'
+* `accuracy` {number} 表示传感器精度。为以下值之一:
+    * -1 传感器未连接
+    * 0 传感器不可读
+    * 1 低精度
+    * 2 中精度
+    * 3 高精度
+
+当传感器精度改变时会触发的事件。比较少用。

@@ -16,6 +16,7 @@
 @include media
 @include modules
 @include widgets-based-automation
+@include sensors
 @include shell
 @include storages
 @include threads

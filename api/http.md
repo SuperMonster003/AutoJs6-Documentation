@@ -30,8 +30,8 @@ http.get("www.baidu.com", {}, function(res, err){
 		console.error(err);
 		return;
 	}
-	log("code = " + r.statusCode);
-	log("html = " + r.body.string());
+	log("code = " + res.statusCode);
+	log("html = " + res.body.string());
 });
 ```
 

@@ -101,6 +101,27 @@ events.onKeyDown("home", function(event){
 
 删除该按键的KeyUp(弹起)事件的所有监听。
 
+## events.setKeyInterceptionEnabled([key, ]enabled)
+* `enabled` {boolean}
+* `key` {string} 要屏蔽的按键
+
+设置按键屏蔽是否启用。所谓按键屏蔽指的是，屏蔽原有按键的功能，例如使得音量键不再能调节音量，但此时仍然能通过按键事件监听按键。
+
+如果不加参数key则会屏蔽所有按键。
+
+例如，调用`events.setKeyInterceptionEnabled(true)`会使系统的音量、Home、返回等键不再具有调节音量、回到主页、返回的作用，但此时仍然能通过按键事件监听按键。
+
+该函数通常于按键监听结合，例如想监听音量键并使音量键按下时不弹出音量调节框则为：
+```
+events.setKeyInterceptionEnabled("volume_up", true);
+events.observeKey();
+events.onKeyDown("volume_up", ()=>{
+    log("音量上键被按下");
+});
+```
+
+只要有一个脚本屏蔽了某个按键，该按键便会被屏蔽；当脚本退出时，会自动解除所有按键屏蔽。
+
 ## events.observeTouch()
 
 启用屏幕触摸监听。（需要root权限）

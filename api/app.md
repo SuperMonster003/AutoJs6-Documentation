@@ -123,6 +123,17 @@ app.sendEmail({
 });
 ```
 
+## app.startActivity(name)
+* `name` {string} 活动名称，可选的值为:
+    * `console` 日志界面
+    * `settings` 设置界面
+
+启动Auto.js的特定界面。该函数在Auto.js内运行则会打开Auto.js内的界面，在打包应用中运行则会打开打包应用的相应界面。
+
+```
+app.startActivity("console");
+```
+
 # 进阶: 意图Intent
 
 Intent(意图) 是一个消息传递对象，您可以使用它从其他应用组件请求操作。尽管 Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下三个：

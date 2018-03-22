@@ -171,12 +171,23 @@ toast(colors.toString(color));
 
 坐标系以图片左上角为原点。以图片左侧边为y轴，上侧边为x轴。
 
-## images.save(image, path)
-
+## images.save(image, path[, format = "png", quality = 100])
 * `image` {image} 图片
-* `path` {string} 路劲
+* `path` {string} 路径
+* `format` {string} 图片格式，可选的值为:
+    * `png`
+    * `jpeg`/`jpg`
+    * `webp`
+* `quality` {number} 图片质量，为0~100的整数值
 
 把图片image以PNG格式保存到path中。如果文件不存在会被创建；文件存在会被覆盖。
+
+```
+//把图片压缩为原来的一半质量并保存
+var img = images.read("/sdcard/1.png");
+images.save(img, "/sdcard/1.jpg", "jpg", 50);
+app.viewFile("/sdcard/1.jpg");
+```
 
 ## images.read(path)
 * `path` {string} 图片路径
@@ -187,6 +198,39 @@ toast(colors.toString(color));
 * `url` {string} 图片URL地址
 
 加载在地址URL的网络图片并返回一个Image对象。如果地址不存在或者图片无法解码则返回null。
+
+## images.fromBase64(base64)
+* `base64` {string} 图片的Base64数据
+* 返回 {Image}
+
+解码Base64数据并返回解码后的图片Image对象。如果base64无法解码则返回`null`。
+
+## images.toBase64(img[, format = "png", quality = 100])
+* `image` {image} 图片
+* `format` {string} 图片格式，可选的值为:
+    * `png`
+    * `jpeg`/`jpg`
+    * `webp`
+* `quality` {number} 图片质量，为0~100的整数值
+* 返回 {string}
+
+把图片编码为base64数据并返回。
+
+## images.fromBytes(bytes)
+* `bytes` {byte[]} 字节数组
+
+解码字节数组bytes并返回解码后的图片Image对象。如果bytes无法解码则返回`null`。
+
+## images.toBytes(img[, format = "png", quality = 100])
+* `image` {image} 图片
+* `format` {string} 图片格式，可选的值为:
+    * `png`
+    * `jpeg`/`jpg`
+    * `webp`
+* `quality` {number} 图片质量，为0~100的整数值
+* 返回 {byte[]}
+
+把图片编码为字节数组并返回。
 
 ## images.clip(img, x, y, w, h)
 * `img` {Image} 图片

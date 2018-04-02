@@ -102,6 +102,15 @@ engines.execAutoFile("/sdcard/脚本/1.auto");
 
 返回当前脚本的脚本引擎对象([ScriptEngine](#engines_scriptengine))
 
+## engines.all()
+* 返回 {Array}
+
+返回当前所有正在运行的脚本的脚本引擎[ScriptEngine](#engines_scriptengine)的数组。
+
+```
+log(engines.all());
+```
+
 # ScriptExecution
 
 执行脚本时返回的对象，可以通过他获取执行的引擎、配置等，也可以停止这个执行。
@@ -128,6 +137,42 @@ engines.execAutoFile("/sdcard/脚本/1.auto");
 * 返回 {string}
 
 返回脚本执行的路径。对于一个脚本文件而言为这个脚本所在的文件夹；对于其他脚本，例如字符串脚本，则为`null`或者执行时的设置值。
+
+## ScriptEngine.getSource()
+* 返回 [ScriptSource](#engines_scriptsource)
+
+返回当前脚本引擎正在执行的脚本对象。
+
+```
+log(engines.myEngine().getSource());
+```
+
+## ScriptEngine.emit(eventName[, ...args])
+* `eventName` {string} 事件名称
+* `...args` {any} 事件参数
+
+向该脚本引擎发送一个事件，该事件可以在该脚本引擎对应的脚本的events模块监听到并在脚本主线程执行事件处理。
+
+例如脚本receiver.js的内容如下：
+
+```
+//监听say事件
+events.on("say", function(words){
+    toastLog(words);
+});
+//保持脚本运行
+setInterval(()=>{}, 1000);
+```
+
+同一目录另一脚本可以启动他并发送该事件：
+```
+//运行脚本
+var e = engines.execScriptFile("./receiver.js");
+//等待脚本启动
+sleep(2000);
+//向该脚本发送事件
+e.getEngine().emit("say", "你好");
+```
 
 # ScriptConfig
 脚本执行时的配置。

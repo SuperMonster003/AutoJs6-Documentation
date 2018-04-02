@@ -116,6 +116,43 @@ for(var i = 0; i < 100; i++){
 
 返回在[0, 1)的随机浮点数。
 
+## requiresApi(api)
+* `api` Android版本号
+
+表示此脚本需要Android API版本达到指定版本才能运行。例如`requiresApi(19)`表示脚本需要在Android 4.4以及以上运行。
+
+调用该函数时会判断运行脚本的设备系统的版本号，如果没有达到要求则抛出异常。
+
+可以参考以下Android API和版本的对照表:
+
+
+ 平台版本：     API级别
+
+ Android 7.0：  24
+
+ Android 6.0：  23
+
+ Android 5.1：  22
+
+ Android 5.0：  21
+
+ Android 4.4W：  20
+
+ Android 4.4：  19
+
+ Android 4.3：  18
+
+## requiresAutojsVersion(version)
+* `version` {string} | {number} Auto.js的版本或版本号
+
+表示此脚本需要Auto.js版本达到指定版本才能运行。例如`requiresAutojsVersion("3.0.0 Beta")`表示脚本需要在Auto.js 3.0.0 Beta以及以上运行。
+
+调用该函数时会判断运行脚本的Auto.js的版本号，如果没有达到要求则抛出异常。
+
+version参数可以是整数表示版本号，例如`requiresAutojsVersion(250)`；也可以是字符串格式表示的版本，例如"3.0.0 Beta", "3.1.0 Alpha4", "3.2.0"等。
+
+可以通过`app.autojs.versionCode`和`app.autojs.versionName`获取当前的Auto.js版本号和版本。
+
 ## context
 
 全局变量。一个android.content.Context对象。

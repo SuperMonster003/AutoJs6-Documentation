@@ -572,3 +572,23 @@ myEmitter.emit('event');
 默认情况下，如果为特定事件添加了超过 10 个监听器，则 EventEmitter 会打印一个警告。 此限制有助于寻找内存泄露。 但是，并不是所有的事件都要被限为 10 个。 emitter.setMaxListeners() 方法允许修改指定的 EventEmitter 实例的限制。 值设为 Infinity（或 0）表明不限制监听器的数量。
 
 返回一个 EventEmitter 引用，可以链式调用。
+
+# events.broadcast: 脚本间广播
+
+脚本间通信除了使用engines模块提供的`ScriptEngine.emit()`方法以外，也可以使用events模块提供的broadcast广播。
+
+events.broadcast本身是一个EventEmitter，但它的事件是在脚本间共享的，所有脚本都能发送和监听这些事件；事件处理会在脚本主线程执行（后续可能加入函数`onThisThread(eventName, ...args)`来提供在其他线程执行的能力）。
+
+例如在一个脚本发送一个广播hello:
+```
+events.broadcast.emit("hello", "小明");
+```
+
+在其他脚本中监听并处理：
+```
+events.broadcast.on("hello", function(name){
+    toast("你好, " + name);
+});
+//保持脚本运行
+setInterval(()=>{}, 1000);
+```

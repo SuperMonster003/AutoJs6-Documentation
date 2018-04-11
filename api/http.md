@@ -40,10 +40,8 @@ http.get("www.baidu.com", {}, function(res, err){
 console.show();
 var r = http.get("www.baidu.com", {
 	headers: {
-		"Accept-Language": "zh-cn,zh;q=0.5",
-		"User-Agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X
-10_7_0) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56
-Safari/535.11"
+		'Accept-Language': 'zh-cn,zh;q=0.5',
+		'User-Agent': 'Mozilla/5.0(Macintosh;IntelMacOSX10_7_0)AppleWebKit/535.11(KHTML,likeGecko)Chrome/17.0.963.56Safari/535.11'
 	}
 });
 log("code = " + r.statusCode);

@@ -16,7 +16,7 @@ storages无法像Web开发中LocalStorage一样提供根据域名独立的存储
 
 例如在一个脚本中，创建名称为ABC的存储并存入a=123:
 ```
-var storage = stroages.create("ABC");
+var storage = storages.create("ABC");
 storage.put("a", 123);
 ```
 而在另一个脚本中是可以获取到ABC以及a的值的：

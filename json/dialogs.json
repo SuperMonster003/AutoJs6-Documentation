@@ -1,0 +1,358 @@
+{
+  "source": "..\\api\\dialogs.md",
+  "modules": [
+    {
+      "textRaw": "Dialogs",
+      "name": "dialogs",
+      "stability": 2,
+      "stabilityText": "Stable",
+      "desc": "<p>dialogs 模块提供了简单的对话框支持，可以通过对话框和用户进行交互。最简单的例子如下：</p>\n<pre><code>alert(&quot;您好&quot;);\n</code></pre><p>这段代码会弹出一个消息提示框显示&quot;您好&quot;，并在用户点击&quot;确定&quot;后继续运行。稍微复杂一点的例子如下：</p>\n<pre><code>var clear = confirm(&quot;要清除所有缓存吗?&quot;);\nif(clear){\n    alert(&quot;清除成功!&quot;);\n}\n</code></pre><p><code>confirm()</code>会弹出一个对话框并让用户选择&quot;是&quot;或&quot;否&quot;，如果选择&quot;是&quot;则返回true。</p>\n<p>需要特别注意的是，对话框在ui模式下不能像通常那样使用，应该使用回调函数或者<a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>的形式。理解这一点可能稍有困难。举个例子:</p>\n<pre><code>&quot;ui&quot;;\n//回调形式\n confirm(&quot;要清除所有缓存吗?&quot;, function(clear){\n     if(clear){\n          alert(&quot;清除成功!&quot;);\n     }\n });\n//Promise形式\nconfirm(&quot;要清除所有缓存吗?&quot;)\n    .then(clear =&gt; {\n        if(clear){\n          alert(&quot;清除成功!&quot;);\n        }\n    });\n</code></pre>",
+      "methods": [
+        {
+          "textRaw": "dialogs.alert(title[, content, callback])",
+          "type": "method",
+          "name": "alert",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`content` {string} 可选，对话框的内容。默认为空。 ",
+                  "name": "content",
+                  "type": "string",
+                  "desc": "可选，对话框的内容。默认为空。",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "content",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个只包含“确定”按钮的提示对话框。直至用户点击确定脚本才继续运行。</p>\n<p>该函数也可以作为全局函数使用。</p>\n<pre><code>alert(&quot;出现错误~&quot;, &quot;出现未知错误，请联系脚本作者”);\n</code></pre><p>在ui模式下该函数返回一个<code>Promise</code>。例如:</p>\n<pre><code>&quot;ui&quot;;\nalert(&quot;嘿嘿嘿&quot;).then(()=&gt;{\n    //当点击确定后会执行这里\n});\n</code></pre>"
+        },
+        {
+          "textRaw": "dialogs.confirm(title[, content, callback])",
+          "type": "method",
+          "name": "confirm",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`content` {string} 可选，对话框的内容。默认为空。 ",
+                  "name": "content",
+                  "type": "string",
+                  "desc": "可选，对话框的内容。默认为空。",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "content",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个包含“确定”和“取消”按钮的提示对话框。如果用户点击“确定”则返回 <code>true</code> ，否则返回 <code>false</code> 。</p>\n<p>该函数也可以作为全局函数使用。</p>\n<p>在ui模式下该函数返回一个<code>Promise</code>。例如:</p>\n<pre><code>&quot;ui&quot;;\nconfirm(&quot;确定吗&quot;).then(value=&gt;{\n    //当点击确定后会执行这里, value为true或false, 表示点击&quot;确定&quot;或&quot;取消&quot;\n});\n</code></pre>"
+        },
+        {
+          "textRaw": "dialogs.rawInput(title[, prefill, callback])",
+          "type": "method",
+          "name": "rawInput",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`prefill` {string} 输入框的初始内容，可选，默认为空。 ",
+                  "name": "prefill",
+                  "type": "string",
+                  "desc": "输入框的初始内容，可选，默认为空。",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "prefill",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个包含输入框的对话框，等待用户输入内容，并在用户点击确定时将输入的字符串返回。如果用户取消了输入，返回null。</p>\n<p>该函数也可以作为全局函数使用。</p>\n<pre><code>var name = rawInput(&quot;请输入您的名字&quot;, &quot;小明&quot;);\nalert(&quot;您的名字是&quot; + name);\n</code></pre><p>在ui模式下该函数返回一个<code>Promise</code>。例如:</p>\n<pre><code>&quot;ui&quot;;\nrawInput(&quot;请输入您的名字&quot;, &quot;小明&quot;).then(name =&gt; {\n    alert(&quot;您的名字是&quot; + name);\n});\n</code></pre><p>当然也可以使用回调函数，例如:</p>\n<pre><code>rawInput(&quot;请输入您的名字&quot;, &quot;小明&quot;, name =&gt; {\n     alert(&quot;您的名字是&quot; + name);\n});\n</code></pre>"
+        },
+        {
+          "textRaw": "dialogs.input(title[, prefill, callback])",
+          "type": "method",
+          "name": "input",
+          "desc": "<p>等效于 <code>eval(dialogs.rawInput(title, prefill, callback))</code>, 该函数和rawInput的区别在于，会把输入的字符串用eval计算一遍再返回，返回的可能不是字符串。</p>\n<p>可以用该函数输入数字、数组等。例如：</p>\n<pre><code>var age = dialogs.input(&quot;请输入您的年龄&quot;, &quot;18&quot;);\n// new Date().getYear() + 1900 可获取当前年份\nvar year = new Date().getYear() + 1900 - age;\nalert(&quot;您的出生年份是&quot; + year);\n</code></pre><p>在ui模式下该函数返回一个<code>Promise</code>。例如:</p>\n<pre><code>&quot;ui&quot;;\ndialogs.input(&quot;请输入您的年龄&quot;, &quot;18&quot;).then(age =&gt; {\n    var year = new Date().getYear() + 1900 - age;\n    alert(&quot;您的出生年份是&quot; + year);\n});\n</code></pre>",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "prefill",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "dialogs.prompt(title[, prefill, callback])",
+          "type": "method",
+          "name": "prompt",
+          "desc": "<p>相当于 <code>dialogs.rawInput()</code>;</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "prefill",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "dialogs.select(title, items, callback)",
+          "type": "method",
+          "name": "select",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`items` {Array} 对话框的选项列表，是一个字符串数组。 ",
+                  "name": "items",
+                  "type": "Array",
+                  "desc": "对话框的选项列表，是一个字符串数组。"
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "items"
+                },
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个带有选项列表的对话框，等待用户选择，返回用户选择的选项索引(0 ~ item.length - 1)。如果用户取消了选择，返回-1。</p>\n<pre><code>var options = [&quot;选项A&quot;, &quot;选项B&quot;, &quot;选项C&quot;, &quot;选项D&quot;]\nvar i = dialogs.select(&quot;请选择一个选项&quot;, options);\nif(i &gt;= 0){\n    toast(&quot;您选择的是&quot; + options[i]);\n}else{\n    toast(&quot;您取消了选择&quot;);\n}\n</code></pre><p>在ui模式下该函数返回一个<code>Promise</code>。例如:</p>\n<pre><code>&quot;ui&quot;;\ndialogs.select(&quot;请选择一个选项&quot;, [&quot;选项A&quot;, &quot;选项B&quot;, &quot;选项C&quot;, &quot;选项D&quot;])\n    .then(i =&gt; {\n        toast(i);\n    });\n</code></pre>"
+        },
+        {
+          "textRaw": "dialogs.singleChoice(title, items[, index, callback])",
+          "type": "method",
+          "name": "singleChoice",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`items` {Array} 对话框的选项列表，是一个字符串数组。 ",
+                  "name": "items",
+                  "type": "Array",
+                  "desc": "对话框的选项列表，是一个字符串数组。"
+                },
+                {
+                  "textRaw": "`index` {number} 对话框的初始选项的位置，默认为0。 ",
+                  "name": "index",
+                  "type": "number",
+                  "desc": "对话框的初始选项的位置，默认为0。",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "items"
+                },
+                {
+                  "name": "index",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个单选列表对话框，等待用户选择，返回用户选择的选项索引(0 ~ item.length - 1)。如果用户取消了选择，返回-1。</p>\n<p>在ui模式下该函数返回一个<code>Promise</code>。</p>\n"
+        },
+        {
+          "textRaw": "dialogs.multiChoice(title, items[, indices, callback])",
+          "type": "method",
+          "name": "multiChoice",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`title` {string} 对话框的标题。 ",
+                  "name": "title",
+                  "type": "string",
+                  "desc": "对话框的标题。"
+                },
+                {
+                  "textRaw": "`items` {Array} 对话框的选项列表，是一个字符串数组。 ",
+                  "name": "items",
+                  "type": "Array",
+                  "desc": "对话框的选项列表，是一个字符串数组。"
+                },
+                {
+                  "textRaw": "`indices` {Array} 选项列表中初始选中的项目索引的数组，默认为空数组。 ",
+                  "name": "indices",
+                  "type": "Array",
+                  "desc": "选项列表中初始选中的项目索引的数组，默认为空数组。",
+                  "optional": true
+                },
+                {
+                  "textRaw": "`callback` {Function} 回调函数，可选。当用户点击确定时被调用,一般用于ui模式。 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数，可选。当用户点击确定时被调用,一般用于ui模式。",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "title"
+                },
+                {
+                  "name": "items"
+                },
+                {
+                  "name": "indices",
+                  "optional": true
+                },
+                {
+                  "name": "callback",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>显示一个多选列表对话框，等待用户选择，返回用户选择的选项索引的数组。如果用户取消了选择，返回<code>[]</code>。</p>\n<p>在ui模式下该函数返回一个<code>Promise</code>。</p>\n"
+        }
+      ],
+      "type": "module",
+      "displayName": "Dialogs"
+    }
+  ]
+}

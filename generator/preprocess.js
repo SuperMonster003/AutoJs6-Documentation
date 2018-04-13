@@ -12,7 +12,6 @@ function preprocess(inputFile, input, cb) {
   input = stripComments(input);
   processIncludes(inputFile, input, function(err, data) {
     if (err) return cb(err);
-
     cb(null, data);
   });
 }
@@ -25,7 +24,6 @@ function processIncludes(inputFile, input, cb) {
   const includes = input.match(includeExpr);
   if (includes === null) return cb(null, input);
   var errState = null;
-  console.error(includes);
   var incCount = includes.length;
   if (incCount === 0) cb(null, input);
   includes.forEach(function(include) {
@@ -53,7 +51,7 @@ function processIncludes(inputFile, input, cb) {
         // headings should look like.
         includeData[fname] = `<!-- [start-include:${fname}] -->\n` +
                              inc + `\n<!-- [end-include:${fname}] -->\n`;
-        input = input.split(include + '\n').join(includeData[fname] + '\n');
+        input = input.split(include).join(includeData[fname] + '\n');
         if (incCount === 0) {
           return cb(null, input);
         }

@@ -30,7 +30,7 @@ def processAll():
 
 def processModule(module):
     process(os.path.join(in_dir, module + ".md"), os.path.join(out_dir, module + ".html"))
-    # process(os.path.join(in_dir, module + ".md"), os.path.join(json_out_dir, module + ".json"), "json")
+    process(os.path.join(in_dir, module + ".md"), os.path.join(json_out_dir, module + ".json"), "json")
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:

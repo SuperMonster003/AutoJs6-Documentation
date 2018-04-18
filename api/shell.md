@@ -11,7 +11,7 @@ shell即Unix Shell，在类Unix系统提供与操作系统交互的一系列命�
 
 > Stability: 2 - Stable
 
-## shell(cmd[, root = false])
+## shell(cmd[, root])
 * cmd {string} 要执行的命令
 * root {Boolean} 是否以root权限运行，默认为false。
 
@@ -38,8 +38,8 @@ if(result.code == 0){
 
 shell函数通过用来一次性执行单条命令并获取结果。如果有多条命令需要执行，用Shell对象的效率更高。这是因为，每次运行shell函数都会打开一个单独的shell进程并在运行结束后关闭他，这个过程需要一定的时间；而Shell对象自始至终使用同一个shell进程。
 
-## Shell(root = false)
-* root {Boolean} 是否以root权限运行一个shell进程。这将会影响其后使用该Shell对象执行的命令的权限
+## new Shell(root)
+* root {Boolean} 是否以root权限运行一个shell进程，默认为false。这将会影响其后使用该Shell对象执行的命令的权限
 
 Shell对象的"构造函数"。
 ```

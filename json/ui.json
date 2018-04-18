@@ -437,11 +437,36 @@
       "displayName": "图片控件: img"
     },
     {
-      "textRaw": "水平布局: horizontal",
-      "name": "水平布局: horizontal",
-      "desc": "<p>实际上，垂直布局和水平布局都属于线性布局。线性布局有一个orientation的属性，用于指定布局的方向，可选的值为<code>vertical</code>和<code>horizontal</code>。</p>\n<p>例如<code>&lt;linear orientation=&quot;vertical&quot;&gt;&lt;/linear&gt;</code>相当于<code>&lt;vertical&gt;&lt;/vertical&gt;</code>。</p>\n<p>线性布局的默认方向是横向的，因此，一个没有指定orientation属性的线性布局就是横向布局。</p>\n",
+      "textRaw": "垂直布局: vertical",
+      "name": "垂直布局:_vertical",
+      "desc": "<p>垂直布局是一种比较简单的布局，会把在它里面的控件按照垂直方向依次摆放，如下图所示：</p>\n<p>垂直布局:</p>\n<p> —————</p>\n<p>| 控件1 |</p>\n<p>| 控件2 |</p>\n<p>| 控件3 |</p>\n<p>| ............ |</p>\n<p> ——————</p>\n",
+      "modules": [
+        {
+          "textRaw": "layout_weight",
+          "name": "layout_weight",
+          "desc": "<p>垂直布局中的控件可以通过<code>layout_weight</code>属性来控制控件高度占垂直布局高度的比例。如果为一个控件指定<code>layout_weight</code>, 则这个控件的高度=垂直布局剩余高度 * layout_weight / weightSum；如果不指定weightSum, 则weightSum为所有子控件的layout_weight之和。所谓&quot;剩余高度&quot;，指的是垂直布局中减去没有指定layout_weight的控件的剩余高度。\n例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中，三个控件的layout_weight都是1，也就是他们的高度都会占垂直布局高度的1/3，都是33.3dp.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中，第一个控件高度为1/4, 第二个控件为2/4, 第三个控件为1/4.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot; weightSum=&quot;5&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中，因为指定了weightSum为5, 因此第一个控件高度为1/5, 第二个控件为2/5, 第三个控件为1/5.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中，第一个控件并没有指定layout_weight, 而是指定高度为40dp, 因此不加入比例计算，此时布局剩余高度为60dp。第二个控件高度为剩余高度的2/3，也就是40dp，第三个控件高度为剩余高度的1/3，也就是20dp。</p>\n<p>垂直布局的layout_weight属性还可以用于控制他的子控件高度占满剩余空间，例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中，第三个控件的高度会占满除去控件1和控件2的剩余空间。</p>\n",
+          "type": "module",
+          "displayName": "layout_weight"
+        }
+      ],
       "type": "module",
-      "displayName": "线性布局: linear"
+      "displayName": "垂直布局: vertical"
+    },
+    {
+      "textRaw": "水平布局: horizontal",
+      "name": "水平布局:_horizontal",
+      "desc": "<p>水平布局是一种比较简单的布局，会把在它里面的控件按照水平方向依次摆放，如下图所示：\n水平布局:\n ————————————————————————————</p>\n<p>| 控件1 | 控件2 | 控件3 | ... |</p>\n<p> ————————————————————————————</p>\n",
+      "modules": [
+        {
+          "textRaw": "layout_weight",
+          "name": "layout_weight",
+          "desc": "<p>水平布局中也可以使用layout_weight属性来控制子控件的<strong>宽度</strong>占父布局的比例。和垂直布局中类似，不再赘述。</p>\n",
+          "type": "module",
+          "displayName": "layout_weight"
+        }
+      ],
+      "type": "module",
+      "displayName": "水平布局: horizontal"
     },
     {
       "textRaw": "线性布局: linear",
@@ -449,6 +474,13 @@
       "desc": "<p>实际上，垂直布局和水平布局都属于线性布局。线性布局有一个orientation的属性，用于指定布局的方向，可选的值为<code>vertical</code>和<code>horizontal</code>。</p>\n<p>例如<code>&lt;linear orientation=&quot;vertical&quot;&gt;&lt;/linear&gt;</code>相当于<code>&lt;vertical&gt;&lt;/vertical&gt;</code>。</p>\n<p>线性布局的默认方向是横向的，因此，一个没有指定orientation属性的线性布局就是横向布局。</p>\n",
       "type": "module",
       "displayName": "线性布局: linear"
+    },
+    {
+      "textRaw": "帧布局: frame",
+      "name": "帧布局:_frame",
+      "desc": "<p>帧布局</p>\n",
+      "type": "module",
+      "displayName": "帧布局: frame"
     },
     {
       "textRaw": "Tab: tab",

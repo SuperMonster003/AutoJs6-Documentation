@@ -349,10 +349,133 @@
             }
           ],
           "desc": "<p>显示一个多选列表对话框，等待用户选择，返回用户选择的选项索引的数组。如果用户取消了选择，返回<code>[]</code>。</p>\n<p>在ui模式下该函数返回一个<code>Promise</code>。</p>\n"
+        },
+        {
+          "textRaw": "dialogs.build(properties)",
+          "type": "method",
+          "name": "build",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`properties` {Object} 对话框属性，用于配置对话框。 ",
+                  "name": "properties",
+                  "type": "Object",
+                  "desc": "对话框属性，用于配置对话框。"
+                },
+                {
+                  "textRaw": "返回 {Dialog} ",
+                  "name": "返回",
+                  "type": "Dialog"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "properties"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>创建一个可自定义的对话框，例如：</p>\n<pre><code>dialogs.build({\n    //对话框标题\n    title: &quot;发现新版本&quot;,\n    //对话框内容\n    content: &quot;更新日志: 新增了若干了BUG&quot;,\n    //确定键内容\n    positive: &quot;下载&quot;,\n    //取消键内容\n    negative: &quot;取消&quot;,\n    //中性键内容\n    neutral: &quot;到浏览器下载&quot;,\n    //勾选框内容\n    checkBoxPrompt: &quot;不再提示&quot;\n}).on(&quot;positive&quot;, ()=&gt;{\n    //监听确定键\n    toast(&quot;开始下载....&quot;);\n}).on(&quot;neutral&quot;, ()=&gt;{\n    //监听中性键\n    app.openUrl(&quot;https://www.autojs.org&quot;);\n}).on(&quot;check&quot;, (checked)=&gt;{\n    //监听勾选框\n    log(checked);\n}).show();\n</code></pre><p>选项properties可供配置的项目为:</p>\n<ul>\n<li><code>title</code> {string} 对话框标题</li>\n<li><code>titleColor</code> {string} | {number} 对话框标题的颜色</li>\n<li><code>buttonRippleColor</code> {string} | {number} 对话框按钮的波纹效果颜色</li>\n<li><code>icon</code> {string} | {Image} 对话框的图标，是一个URL或者图片对象 </li>\n<li><code>content</code> {string} 对话框文字内容 </li>\n<li><code>contentColor</code>{string} | {number} 对话框文字内容的颜色</li>\n<li><code>contentLineSpacing</code>{number} 对话框文字内容的行高倍数，1.0为一倍行高</li>\n<li><code>items</code> {Array} 对话框列表的选项</li>\n<li><code>itemsColor</code> {string} | {number} 对话框列表的选项的文字颜色</li>\n<li><code>itemsSelectMode</code> {string} 对话框列表的选项选择模式，可以为:<ul>\n<li><code>select</code> 普通选择模式</li>\n<li><code>singleChoice</code> 单选模式</li>\n<li><code>multiChoice</code> 多选模式</li>\n</ul>\n</li>\n<li><code>itemsSelectedIndex</code> {number} | {Array} 对话框列表中？？？</li>\n<li><code>positive</code> {string} 对话框确定按钮的文字内容(最右边按钮)</li>\n<li><code>positiveColor</code> {string} | {number} 对话框确定按钮的文字颜色(最右边按钮)</li>\n<li><code>neutral</code> {string} 对话框中立按钮的文字内容(最左边按钮)</li>\n<li><code>neutralColor</code> {string} | {number} 对话框中立按钮的文字颜色(最左边按钮)</li>\n<li><code>negative</code> {string} 对话框取消按钮的文字内容(确定按钮左边的按钮)</li>\n<li><code>negativeColor</code> {string} | {number} 对话框取消按钮的文字颜色(确定按钮左边的按钮)</li>\n<li><code>checkBoxPrompt</code> {string} 勾选框文字内容</li>\n<li><code>checkBoxChecked</code> {boolean} 勾选框是否勾选 </li>\n<li><code>progress</code> {Object} 配置对话框进度条的对象：<ul>\n<li><code>max</code> {number} 进度条的最大值，如果为-1则为无限循环的进度条</li>\n<li><code>horizontal</code> {boolean} 如果为true, 则对话框无限循环的进度条为水平进度条</li>\n<li><code>showMinMax</code> {boolean} 是否显示进度条的最大值和最小值</li>\n</ul>\n</li>\n<li><code>cancelable</code> {boolean} 对话框是否可取消，如果为false，则对话框只能用代码手动取消</li>\n<li><code>canceledOnTouchOutside</code> {boolean} 对话框是否在点击对话框以外区域时自动取消，默认为true</li>\n<li><code>inputHint</code> {string} 对话框的输入框的输入提示</li>\n<li><code>inputPrefill</code> {string} 对话框输入框的默认输入内容</li>\n</ul>\n<p>通过这些选项可以自定义一个对话框，并通过监听返回的Dialog对象的按键、输入事件来实现交互。下面是一些例子。</p>\n<p>模拟alert对话框：</p>\n<pre><code>dialogs.build({\n    title: &quot;你好&quot;,\n    content: &quot;今天也要元气满满哦&quot;,\n    positive: &quot;好的&quot;\n}).show();\n</code></pre><p>模拟confirm对话框:</p>\n<pre><code>dialogs.build({\n    title: &quot;你好&quot;,\n    content: &quot;请问你是笨蛋吗?&quot;,\n    positive: &quot;是的&quot;,\n    negative: &quot;我是大笨蛋&quot;\n}).on(&quot;positive&quot;, ()=&gt;{\n    alert(&quot;哈哈哈笨蛋&quot;);\n}).on(&quot;negative&quot;, ()=&gt;{\n    alert(&quot;哈哈哈大笨蛋&quot;);\n}).show();\n</code></pre><p>模拟单选框:</p>\n<pre><code>dialogs.build({\n    title: &quot;单选&quot;,\n    items: [&quot;选项1&quot;, &quot;选项2&quot;, &quot;选项3&quot;, &quot;选项4&quot;],\n    itemsSelectMode: &quot;singleChoice&quot;,\n    itemsSelectedIndex: 3\n}).on(&quot;item_select&quot;, (index, item)-&gt;{\n    toast(&quot;您选择的是&quot; + item);\n}).show();\n</code></pre><p>&quot;处理中&quot;对话框:</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;下载中...&quot;,\n    progress: {\n        max: -1\n    },\n    cancelable: false\n}).show();\n\nsetTimeout(()=&gt;{\n    d.dismiss();\n}, 3000);\n</code></pre><p>输入对话框:</p>\n<pre><code>dialogs.build({\n    title: &quot;请输入您的年龄&quot;,\n    inputPrefill: &quot;18&quot;\n}).on(&quot;input&quot;, (input)=&gt;{\n    var age = parseInt(input);\n    toastLog(age);\n}).show();\n</code></pre><p>使用这个函数来构造对话框，一个明显的不同是需要使用回调函数而不能像dialogs其他函数一样同步地返回结果；但也可以通过threads模块的方法来实现。例如显示一个输入框并获取输入结果为：</p>\n<pre><code>var input = threads.disposable();\ndialogas.build({\n    title: &quot;请输入您的年龄&quot;,\n    inputPrefill: &quot;18&quot;\n}).on(&quot;input&quot;, text =&gt; {\n    input.setAndNotify(text);\n}).show();\nvar age = parseInt(input.blockedGet());\ntosatLog(age);\n</code></pre>"
         }
       ],
       "type": "module",
       "displayName": "Dialogs"
+    },
+    {
+      "textRaw": "Dialog",
+      "name": "dialog",
+      "desc": "<p><code>dialogs.build()</code>返回的对话框对象，内置一些事件用于响应用户的交互，也可以获取对话框的状态和信息。</p>\n",
+      "modules": [
+        {
+          "textRaw": "事件: `show`",
+          "name": "事件:_`show`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框显示时会触发的事件。例如：</p>\n<pre><code>dialogs.build({\n    title: &quot;标题&quot;\n}).on(&quot;show&quot;, (dialog)=&gt;{\n    toast(&quot;对话框显示了&quot;);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `show`"
+        },
+        {
+          "textRaw": "事件: `cancel`",
+          "name": "事件:_`cancel`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框被取消时会触发的事件。一个对话框可能按取消按钮、返回键取消或者点击对话框以外区域取消。例如：</p>\n<pre><code>dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;\n}).on(&quot;cancel&quot;, (dialog)=&gt;{\n    toast(&quot;对话框取消了&quot;);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `cancel`"
+        },
+        {
+          "textRaw": "事件: `dismiss`",
+          "name": "事件:_`dismiss`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框消失时会触发的事件。对话框被取消或者手动调用<code>dialog.dismiss()</code>函数都会触发该事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;\n}).on(&quot;dismiss&quot;, (dialog)=&gt;{\n    toast(&quot;对话框消失了&quot;);\n}).show();\n\nsetTimeout(()=&gt;{\n    d.dismiss();\n}, 5000);\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `dismiss`"
+        },
+        {
+          "textRaw": "事件: `positive`",
+          "name": "事件:_`positive`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>确定按钮按下时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;\n}).on(&quot;positive&quot;, (dialog)=&gt;{\n    toast(&quot;你点击了确定&quot;);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `positive`"
+        },
+        {
+          "textRaw": "事件: `negative`",
+          "name": "事件:_`negative`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>取消按钮按下时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;\n}).on(&quot;negative&quot;, (dialog)=&gt;{\n    toast(&quot;你点击了取消&quot;);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `negative`"
+        },
+        {
+          "textRaw": "事件: `neutral`",
+          "name": "事件:_`neutral`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>中性按钮按下时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    neutral: &quot;稍后提示&quot;\n}).on(&quot;positive&quot;, (dialog)=&gt;{\n    toast(&quot;你点击了稍后提示&quot;);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `neutral`"
+        },
+        {
+          "textRaw": "事件: `any`",
+          "name": "事件:_`any`",
+          "desc": "<ul>\n<li><code>dialog</code> {Dialog} 对话框</li>\n<li><code>action</code> {string} 被点击的按钮，可能的值为:<ul>\n<li><code>positive</code> 确定按钮 </li>\n<li><code>negative</code> 取消按钮</li>\n<li><code>neutral</code> 中性按钮</li>\n</ul>\n</li>\n</ul>\n<p>任意按钮按下时触发的事件。例如:</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;标题&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    neutral: &quot;稍后提示&quot;\n}).on(&quot;any&quot;, (action, dialog)=&gt;{\n    if(action == &quot;positive&quot;){\n        toast(&quot;你点击了确定&quot;);\n    }else if(action == &quot;negative&quot;){\n        toast(&quot;你点击了取消&quot;);\n    }\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `any`"
+        },
+        {
+          "textRaw": "事件: `item_select`",
+          "name": "事件:_`item_select`",
+          "desc": "<ul>\n<li><code>index</code> {number} 被选中的项目索引，从0开始</li>\n<li><code>item</code> {Object} 被选中的项目</li>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框列表(itemsSelectMode为&quot;select&quot;)的项目被点击选中时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;请选择&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    items: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;],\n    itemsSelectMode: &quot;select&quot;\n}).on(&quot;item_select&quot;, (index, item, dialog)=&gt;{\n    toast(&quot;您选择的是第&quot; + (index + 1) + &quot;项, 选项为&quot; + item);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `item_select`"
+        },
+        {
+          "textRaw": "事件: `single_choice`",
+          "name": "事件:_`single_choice`",
+          "desc": "<ul>\n<li><code>index</code> {number} 被选中的项目索引，从0开始</li>\n<li><code>item</code> {Object} 被选中的项目</li>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框单选列表(itemsSelectMode为&quot;singleChoice&quot;)的项目被选中并点击确定时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;请选择&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    items: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;],\n    itemsSelectMode: &quot;singleChoice&quot;\n}).on(&quot;item_select&quot;, (index, item, dialog)=&gt;{\n    toast(&quot;您选择的是第&quot; + (index + 1) + &quot;项, 选项为&quot; + item);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `single_choice`"
+        },
+        {
+          "textRaw": "事件: `multi_choice`",
+          "name": "事件:_`multi_choice`",
+          "desc": "<ul>\n<li><code>indices</code> {Array} 被选中的项目的索引的数组</li>\n<li><code>items</code> {Array} 被选中的项目的数组</li>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框多选列表(itemsSelectMode为&quot;multiChoice&quot;)的项目被选中并点击确定时触发的事件。例如：</p>\n<pre><code>var d = dialogs.build({\n    title: &quot;请选择&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    items: [&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;],\n    itemsSelectMode: &quot;multiChoice&quot;\n}).on(&quot;item_select&quot;, (indices, items, dialog)=&gt;{\n    toast(util.format(&quot;您选择的项目为%o, 选项为%o&quot;, indices, items);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `multi_choice`"
+        },
+        {
+          "textRaw": "事件: `input`",
+          "name": "事件:_`input`",
+          "desc": "<ul>\n<li><code>text</code> {string} 输入框的内容</li>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>带有输入框的对话框当点击确定时会触发的事件。例如：</p>\n<pre><code>dialogs.build({\n    title: &quot;请输入&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    inputPrefill: &quot;&quot;\n}).on(&quot;input&quot;, (text, dialog)=&gt;{\n    toast(&quot;你输入的是&quot; + text);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `input`"
+        },
+        {
+          "textRaw": "事件: `input_change`",
+          "name": "事件:_`input_change`",
+          "desc": "<ul>\n<li><code>text</code> {string} 输入框的内容</li>\n<li><code>dialog</code> {Dialog} 对话框</li>\n</ul>\n<p>对话框的输入框的文本发生变化时会触发的事件。例如：</p>\n<pre><code>dialogs.build({\n    title: &quot;请输入&quot;,\n    positive: &quot;确定&quot;,\n    negative: &quot;取消&quot;,\n    inputPrefill: &quot;&quot;\n}).on(&quot;input_change&quot;, (text, dialog)=&gt;{\n    toast(&quot;你输入的是&quot; + text);\n}).show();\n</code></pre>",
+          "type": "module",
+          "displayName": "事件: `input_change`"
+        }
+      ],
+      "type": "module",
+      "displayName": "Dialog"
     }
   ]
 }

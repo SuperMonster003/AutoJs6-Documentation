@@ -88,6 +88,54 @@ log(colors.equals("#112233", "#112234"));
 log(colors.equals(0xFF112233, 0xFF223344));
 ```
 
+# colors.BLACK
+
+黑色，颜色值 #FF000000
+
+# colors.DKGRAY  
+
+深灰色，颜色值 #FF444444
+
+# colors.GRAY  
+
+灰色，颜色值 #FF888888
+
+# colors.LTGRAY  
+
+亮灰色，颜色值 #FFCCCCCC
+
+# colors.WHITE  
+
+白色，颜色值 #FFFFFFFF
+
+# colors.RED  
+
+红色，颜色值 #FFFF0000
+
+# colors.GREEN  
+
+绿色，颜色值 #FF00FF00
+
+# colors.BLUE  
+
+蓝色，颜色值 #FF0000FF
+
+# colors.YELLOW  
+
+黄色，颜色值 #FFFFFF00
+
+# colors.CYAN  
+
+青色，颜色值 #FF00FFFF
+
+# colors.MAGENTA  
+
+品红色，颜色值 #FFFF00FF
+
+# colors.TRANSPARENT  
+
+透明，颜色值 #00000000
+
 # Images
 
 > Stability: 2 - Stable

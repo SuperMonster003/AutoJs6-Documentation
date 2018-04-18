@@ -30,3 +30,9 @@ paint.setColor(colors.RED);
 canvas.drawRect(0, 0, 100, 100, paint);
 ```
 
+结合画笔canvas可以绘制基本图形、图片等。
+
+## canvas.drawARGB(a, r, g, b)
+
+## canvas.draw
+ 

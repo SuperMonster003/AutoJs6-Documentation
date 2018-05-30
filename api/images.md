@@ -219,8 +219,14 @@ toast(colors.toString(color));
 
 坐标系以图片左上角为原点。以图片左侧边为y轴，上侧边为x轴。
 
+## images.copy(img)
+* `img` {Image} 图片
+* 返回 {Image}
+
+复制一张图片并返回新的副本。该函数会完全复制img对象的数据。
+
 ## images.save(image, path[, format = "png", quality = 100])
-* `image` {image} 图片
+* `image` {Image} 图片
 * `path` {string} 路径
 * `format` {string} 图片格式，可选的值为:
     * `png`

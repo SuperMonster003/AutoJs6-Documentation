@@ -159,7 +159,7 @@ version参数可以是整数表示版本号，例如`requiresAutojsVersion(250)`
 动态申请安卓的权限。例如：
 ```
 //请求GPS权限
-runtime.requestPermission(["access_fine_location"]);
+runtime.requestPermissions(["access_fine_location"]);
 ```
 
 尽管安卓有很多权限，但必须写入Manifest才能动态申请，为了防止权限的滥用，目前Auto.js只能额外申请两个权限：

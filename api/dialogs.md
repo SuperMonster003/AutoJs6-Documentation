@@ -207,9 +207,9 @@ dialogs.build({
 * `itemsColor` {string} | {number} 对话框列表的选项的文字颜色
 * `itemsSelectMode` {string} 对话框列表的选项选择模式，可以为:
     * `select` 普通选择模式
-    * `singleChoice` 单选模式
-    * `multiChoice` 多选模式
-* `itemsSelectedIndex` {number} | {Array} 对话框列表中？？？
+    * `single` 单选模式
+    * `multi` 多选模式
+* `itemsSelectedIndex` {number} | {Array} 对话框列表中预先选中的项目索引，如果是单选模式为一个索引；多选模式则为数组
 * `positive` {string} 对话框确定按钮的文字内容(最右边按钮)
 * `positiveColor` {string} | {number} 对话框确定按钮的文字颜色(最右边按钮)
 * `neutral` {string} 对话框中立按钮的文字内容(最左边按钮)
@@ -258,9 +258,9 @@ dialogs.build({
 dialogs.build({
     title: "单选",
     items: ["选项1", "选项2", "选项3", "选项4"],
-    itemsSelectMode: "singleChoice",
+    itemsSelectMode: "single",
     itemsSelectedIndex: 3
-}).on("item_select", (index, item)->{
+}).on("single_choice", (index, item)=>{
     toast("您选择的是" + item);
 }).show();
 ```
@@ -503,3 +503,19 @@ dialogs.build({
     toast("你输入的是" + text);
 }).show();
 ```
+
+## dialog.getProgress()
+* 返回 {number}
+
+获取当前进度条的进度值，是一个整数
+
+## dialog.getMaxProgress()
+* 返回 {number}
+
+获取当前进度条的最大进度值，是一个整数
+
+## dialog.getActionButton(action)
+* `action` {string} 动作，包括:
+    * `positive` 
+    * `negative`
+    * `neutral`

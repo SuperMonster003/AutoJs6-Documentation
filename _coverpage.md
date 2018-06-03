@@ -6,3 +6,4 @@
 
 [GitHub](https://github.com/hyb1996/Auto.js)
 [Get Started](#综述)
+[GitHub](https://github.com/hyb1996/Auto.js)

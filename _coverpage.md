@@ -2,7 +2,8 @@
 
 # Auto.js
 
-> **不需要Root权限**的自动操作软件
+> **不需要Root权限**的JavaScript自动化软件
 
 [GitHub](https://github.com/hyb1996/Auto.js)
-[Get Started](#综述)
+[软件下载](https://www.coolapk.com/apk/129872)
+[阅读文档](#综述)

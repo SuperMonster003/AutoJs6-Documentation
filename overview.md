@@ -25,4 +25,4 @@ Auto.js使用[JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScrip
 * threads: 多线程支持。
 * ui: UI界面。用于显示自定义的UI界面，和用户交互。
 
-除此之外，Auto.js内置了对[Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)的支持。
+除此之外，Auto.js内置了对[Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)。

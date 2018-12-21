@@ -6,7 +6,7 @@ Auto.js 有一个简单的模块加载系统。 在 Auto.js 中，文件和模�
 
 例子，假设有一个名为 foo.js 的文件：
 ```
-const circle = require('circle.js');
+var circle = require('circle.js');
 console.log("半径为 4 的圆的面积是 %d", circle.area(4));
 ```
 在第一行中，foo.js 加载了同一目录下的 circle.js 模块。
@@ -17,7 +17,9 @@ const PI = Math.PI;
 
 var circle = {};
 
-circle.area = (r) => PI * r ** 2;
+circle.area = function (r) {
+  return PI * r * r;
+};
 
 circle.circumference = (r) => 2 * PI * r;
 

@@ -102,6 +102,14 @@ engines.execAutoFile("/sdcard/脚本/1.auto");
 
 返回当前脚本的脚本引擎对象([ScriptEngine](#engines_scriptengine))
 
+**[v4.1.0新增]**
+特别的，该对象可以通过`execArgv`来获取他的运行参数，包括外部参数、intent等。例如：
+```
+log(engines.myEngine().execArgv);
+```
+
+普通脚本的运行参数通常为空，通过定时任务的广播启动的则可以获取到启动的intent。
+
 ## engines.all()
 * 返回 {Array}
 

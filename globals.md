@@ -170,6 +170,27 @@ runtime.requestPermissions(["access_fine_location"]);
 
 安卓所有的权限列表参见[Permissions Overview](https://developer.android.com/guide/topics/permissions/overview)。（并没有用）
 
+## runtime.loadJar(path)
+* `path` {string} jar文件路径
+
+加载目标jar文件，加载成功后将可以使用该Jar文件的类。
+```
+// 加载jsoup.jar
+runtime.loadJar("./jsoup.jar");
+// 使用jsoup解析html
+importClass(org.jsoup.Jsoup);
+log(Jsoup.parse(files.read("./test.html")));
+```
+
+(jsoup是一个Java实现的解析Html DOM的库，可以在[Jsoup](https://jsoup.org/download)下载)
+
+## runtime.loadDex(path)
+* `path` {string} dex文件路径
+
+加载目标dex文件，加载成功后将可以使用该dex文件的类。
+
+因为加载jar实际上是把jar转换为dex再加载的，因此加载dex文件会比jar文件快得多。可以使用Android SDK的build tools的dx工具把jar转换为dex。
+
 ## context
 
 全局变量。一个android.content.Context对象。

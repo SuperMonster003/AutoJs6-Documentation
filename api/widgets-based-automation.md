@@ -30,12 +30,96 @@ auto();
 
 检查无障碍服务是否已经启用，如果没有启用则跳转到无障碍服务启用界面，并等待无障碍服务启动；当无障碍服务启动后脚本会继续运行。
 
+因为该函数是阻塞的，因此除非是有协程特性，否则不能在ui模式下运行该函数，建议在ui模式下使用`auto()`函数。
+
 ## auto.setMode(mode)
 * `mode` {string} 模式
 
 设置无障碍模式为mode。mode的可选值为：
 * `fast` 快速模式。该模式下会启用控件缓存，从而选择器获取屏幕控件更快。对于需要快速的控件查看和操作的脚本可以使用该模式，一般脚本则没有必要使用该函数。
 * `normal` 正常模式，默认。
+
+## auto.setFlags(flags)
+**[v4.1.0新增]**
+* `flags` {string} | {Array} 一些标志，来启用和禁用某些特性，包括：
+    * `findOnUiThread` 使用该特性后，选择器搜索时会在主进程进行。该特性用于解决线程安全问题导致的次生问题，不过目前貌似已知问题并不是线程安全问题。
+    * `useUsageStats` 使用该特性后，将会以"使用情况统计"服务的结果来检测当前正在运行的应用包名（需要授予"查看使用情况统计"权限)。如果觉得currentPackage()返回的结果不太准确，可以尝试该特性。
+    * `useShell` 使用该特性后，将使用shell命令获取当前正在运行的应用的包名、活动名称，但是需要root权限。
+
+启用有关automator的一些特性。例如：
+
+```
+auto.setFlags(["findOnUiThread", "useShell"]);
+```
+
+## auto.serivce
+**[v4.1.0新增]**
+* [AccessibilityService](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService)
+
+获取无障碍服务。如果无障碍服务没有启动，则返回`null`。
+
+参见[AccessibilityService](https://developer.android.com/reference/android/accessibilityservice/AccessibilityService)。
+
+## auto.windows
+**[v4.1.0新增]**
+* {Array}
+
+当前所有窗口([AccessibilityWindowInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo))的数组，可能包括状态栏、输入法、当前应用窗口，弹出窗口、悬浮窗、分屏应用窗口等。可以分别获取每个窗口的布局信息。
+
+该函数需要Android 5.0以上才能运行。
+
+## auto.root
+**[v4.1.0新增]**
+* {UiObject}
+
+当前窗口的布局根元素。如果无障碍服务未启动或者WindowFilter均返回false，则会返回`null`。
+
+如果不设置windowFilter，则当前窗口即为活跃的窗口（获取到焦点、正在触摸的窗口）；如果设置了windowFilter，则获取的是过滤的窗口中的第一个窗口。
+
+如果系统是Android5.0以下，则始终返回当前活跃的窗口的布局根元素。
+
+## auto.rootInActiveWindow
+**[v4.1.0新增]**
+* {UiObject}
+
+当前活跃的窗口（获取到焦点、正在触摸的窗口）的布局根元素。如果无障碍服务未启动则为`null`。
+
+## auto.setWindowFilter(filter)
+**[v4.1.0新增]**
+* `filter` {Function} 参数为窗口([AccessibilityWindowInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo))，返回值为Boolean的函数。
+
+设置窗口过滤器。这个过滤器可以决定哪些窗口是目标窗口，并影响选择器的搜索。例如，如果想要选择器在所有窗口（包括状态栏、输入法等）中搜索，只需要使用以下代码：
+```
+auto.setWindowFilter(function(window){
+    //不管是如何窗口，都返回true，表示在该窗口中搜索
+    return true;
+});
+```
+
+又例如，当前使用了分屏功能，屏幕上有Auto.js和QQ两个应用，但我们只想选择器对QQ界面进行搜索，则：
+```
+auto.setWindowFilter(function(window){
+    // 对于应用窗口，他的title属性就是应用的名称，因此可以通过title属性来判断一个应用
+    return window.title == "QQ";
+});
+```
+
+选择器默认是在当前活跃的窗口中搜索，不会搜索诸如悬浮窗、状态栏之类的，使用WindowFilter则可以控制搜索的窗口。
+
+需要注意的是， 如果WindowFilter返回的结果均为false，则选择器的搜索结果将为空。
+
+另外setWindowFilter函数也会影响`auto.windowRoots`的结果。
+
+该函数需要Android 5.0以上才有效。
+
+## auto.windowRoots
+**[v4.1.0新增]**
+* {Array}
+
+返回当前被WindowFilter过滤的窗口的布局根元素组成的数组。
+
+如果系统是Android5.0以下，则始终返回当前活跃的窗口的布局根元素的数组。
+
 
 # SimpleActionAutomator
 
@@ -216,6 +300,19 @@ id("recent_chat_list").className("AbsListView").findOne().scrollForward();
 由于历史遗留原因，本不应该这样设计(不应该让`id()`, `text()`等作为全局函数，而是应该用`By.id()`, `By.text()`)，但为了后向兼容性只能保留这个设计。
 
 这样的API设计会污染全局变量，后续可能会支持"去掉这些全局函数而使用By.***"的选项。
+
+## UiSelector.algorithm(algorithm)
+**[v4.1.0新增]**
+* `algorithm` {string} 搜索算法，可选的值有：
+    * `DFS` 深度优先算法，选择器的默认算法
+    * `BFS` 广度优先算法
+
+指定选择器的搜索算法。例如：
+```
+log(selector().text("文本").algorithm("BFS").find());
+```
+
+广度优先在控件所在层次较低时，或者布局的层次不多时，通常能更快找到控件。
 
 ## UiSelector.text(str)
 * `str` {string} 控件文本

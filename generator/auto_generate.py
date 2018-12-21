@@ -6,7 +6,7 @@ in_dir = r'..\api'
 out_dir = r'..\docs'
 json_out_dir = r'..\json'
 template = r'..\template.html'
-version = '3.0.0'
+version = '4.1.0'
 
 
 def process(in_file, out_file, format="html"):

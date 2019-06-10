@@ -306,7 +306,7 @@ View的最小宽度。该值不总是生效的，取决于其父布局是否有�
 
 有关该属性的单位，参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension)。
 
-## visbility
+## visibility
 
 View的可见性，该属性可以决定View是否显示出来。其值可以为：
 * `gone` 不可见。

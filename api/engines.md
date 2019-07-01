@@ -50,7 +50,7 @@ engines.execScript("hello world", "helloWorld();\n" + helloWorld.toString());
 ```
 function exec(action, args){
     args = args || {};
-    engines.execScript(action.name, action + "(" + JSON.stringify(args) + ");\n" + action.toString());
+    engines.execScript(action.name, action.name + "(" + JSON.stringify(args) + ");\n" + action.toString());
 }
 
 //要执行的函数，是一个简单的加法

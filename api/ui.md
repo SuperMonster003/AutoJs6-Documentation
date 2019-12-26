@@ -781,7 +781,19 @@ ui.layout(
 
 # 选择框布局: radiogroup
 
-# 开关控件: switch
+# 开关控件: Switch
+
+开关控件用于表示一个选项是否被选中。
+
+## checked
+
+表示开关是否被选中。可选的值为：
+* `true` 打开开关
+* `false` 关闭开关
+
+## text
+
+对开关进行描述的文字。
 
 # 进度条控件: progressbar
 

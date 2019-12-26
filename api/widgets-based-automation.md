@@ -537,7 +537,7 @@ log(w.text());
 
 这个条件用于限制控件的范围必须包含所给定的范围。例如给定一个点(500, 300), 寻找在这个点上的可点击控件的代码为:
 ```
-var w = boundsContains(500, 300, device.width - 500, device.height - 300).clickable().findOne();
+var w = boundsContains(500, 300, 500, 300).clickable().findOne();
 w.click();
 ```
 

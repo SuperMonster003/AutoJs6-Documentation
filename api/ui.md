@@ -2,7 +2,11 @@
 
 ui模块提供了编写用户界面的支持。
 
-带有ui的脚本的的最前面必须使用`"ui";`指定ui模式，否则脚本将不会以ui模式运行。正确示范:
+    给Android开发者或者高阶用户的提醒，Auto.js的UI系统来自于Android，所有属性和方法都能在Android源码中找到。如果某些代码或属性没有出现在Auto.js的文档中，可以参考Android的文档。
+    View: https://developer.android.google.cn/reference/android/view/View?hl=cn
+    Widget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn
+
+带有ui的脚本的的最前面必须使用`"ui";`指定ui模式，否则脚本将不会以ui模式运行。正确示范:s
 
 ```
 "ui";
@@ -18,7 +22,7 @@ ui模块提供了编写用户界面的支持。
 
 ```
 "ui";
-ui.layout(
+$ui.layout(
     <vertical>
         <button text="第一个按钮"/>
         <button text="第二个按钮"/>
@@ -70,6 +74,66 @@ ui.layout(
 # 视图: View
 
 控件和布局都属于视图(View)。在这个章节中将介绍所有控件和布局的共有的属性和函数。例如属性背景，宽高等(所有控件和布局都能设置背景和宽高)，函数`click()`设置视图(View)被点击时执行的动作。
+
+## attr(name, value)
+* `name` {string} 属性名称
+* `value` {string} 属性的值
+
+设置属性的值。属性指定是View在xml中的属性。例如可以通过语句`attr("text", "文本")`来设置文本控件的文本值。
+
+```javascript
+"ui";
+
+$ui.layout(
+    <frame>
+        <text id="example" text="Hello"/>
+    </frame>
+);
+
+// 5秒后执行
+$ui.post(() => {
+    // 修改文本
+    $ui.example.attr("text", "Hello, Auto.js UI");
+    // 修改背景
+    $ui.example.attr("bg", "#ff00ff");
+    // 修改高度
+    $ui.example.attr("h", "500dp");
+}, 5000);
+```
+
+**注意：**并不是所有属性都能在js代码设置，有一些属性只能在布局创建时设置，例如style属性；还有一些属性虽然能在代码中设置，但是还没支持；对于这些情况，在Auto.js Pro 8.1.0+会抛出异常，其他版本则不会抛出异常。
+
+## attr(name)
+* `name` {string} 属性名称
+* 返回 {string}
+
+获取属性的值。
+
+```javascript
+"ui";
+
+$ui.layout(
+    <frame>
+        <text id="example" text="1"/>
+    </frame>
+);
+
+plusOne();
+
+function plusOne() {
+    // 获取文本
+    let text = $ui.example.attr("text");
+    // 解析为数字
+    let num = parseInt(text);
+    // 数字加1
+    num++;
+    // 设置文本
+    $ui.example.attr("text", String(num));
+    // 1秒后继续
+    $ui.post(plusOne, 1000);
+}
+
+```
 
 ## w
 
@@ -846,22 +910,154 @@ ui.layout(
 # ui
 
 ## ui.layout(xml)
+* `xml` {XML} | {string} 布局XML或者XML字符串
 
-## ui.inflate(xml[, parent])
+将布局XML渲染为视图（View）对象， 并设置为当前视图。
+
+## ui.layoutFile(xmlFile)
+* `xml` {string} 布局XML文件的路径
+
+此函数和`ui.layout`相似，只不过允许传入一个xml文件路径来渲染布局。
+
+## ui.inflate(xml[, parent = null, attachToParent = false])
+* `xml` {string} | {XML} 布局XML或者XML字符串
+* `parent` {View} 父视图
+* `attachToParent` {boolean} 是否渲染的View加到父视图中，默认为false
+* 返回 {View}
+
+将布局XML渲染为视图（View）对象。如果该View将作为某个View的子View，我们建议传入`parent`参数，这样在渲染时依赖于父视图的一些布局属性能够正确应用。
+
+此函数用于动态创建、显示View。
+
+```javascript
+"ui";
+
+$ui.layout(
+    <linear id="container">
+    </linear>
+);
+
+// 动态创建3个文本控件，并加到container容器中
+// 这里仅为实例，实际上并不推荐这种做法，如果要展示列表，
+// 使用list组件；动态创建十几个、几十个View会让界面卡顿
+for (let i = 0; i < 3; i++) {
+    let textView = $ui.inflate(
+        <text textColor="#000000" textSize="14sp"/>
+    , $ui.container);
+    textView.attr("text", "文本控件" + i);
+    $ui.container.addView(textView);
+}
+```
+# ui.registerWidget(name, widget)
+* `name` {string} 组件名称
+* `widget` {Function} 组件
+
+注册一个自定义组件。参考示例->界面控件->自定义控件。
+
+# ui.isUiThread()
+* 返回 {boolean}
+
+返回当前线程是否是UI线程。
+
+```javascript
+"ui";
+
+log($ui.isUiThread()); // => true
+
+$threads.start(function () {
+    log($ui.isUiThread()); // => false
+});
+
+```
 
 ## ui.findView(id)
+* `id` {string} View的ID
+* 返回 {View}
+
+在当前视图中根据ID查找相应的视图对象并返回。如果当前未设置视图或找不到此ID的视图时返回`null`。
+
+一般我们都是通过`ui.xxx`来获取id为xxx的控件，如果xxx是一个ui已经有的属性，就可以通过`$ui.findView()`来获取这个控件。
 
 ## ui.finish()
 
+结束当前活动并销毁界面。
+
 ## ui.setContentView(view)
+* `view` {View} 
+
+将视图对象设置为当前视图。
+
+## ui.post(callback[, delay = 0])
+* `callback` {Function} 回调函数
+* `delay` {number} 延迟，单位毫秒
+
+将`callback`加到UI线程的消息循环中，并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）。
+
+此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用），也可以用于子线程中更新UI。
+
+```javascript
+"ui";
+
+ui.layout(
+    <frame>
+        <text id="result"/>
+    </frame>
+);
+
+ui.result.attr("text", "计算中");
+// 在子线程中计算1+ ... + 10000000
+threads.start({
+    let sum = 0;
+    for (let i = 0; i < 1000000; i++) {
+        sum += i;
+    }
+    // 由于不能在子线程操作UI，所以要抛到UI线程执行
+    ui.post(() => {
+        ui.result.attr("text", String(sum));
+    });
+});
+```
 
 ## ui.run(callback)
+* `callback` {Function} 回调函数
+* 返回 callback的执行结果
 
-## ui.post(callback[, daley])
+将`callback`在UI线程中执行。如果当前已经在UI线程中，则直接执行`callback`；否则将`callback`抛到UI线程中执行（加到UI线程的消息循环的末尾），**并等待callback执行结束(阻塞当前线程)**。
 
 ## ui.statusBarColor(color)
+* color {string} | {number} 颜色
 
-## ui.showPopupMenu(view, menu)
+设置当前界面的状态栏颜色。
+
+```javascript
+"ui";
+ui.statusBarColor("#000000");
+```
+
+## ui.useAndroidResources()
+
+启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性。启用该特性后，在project.json中进行以下配置，就可以像写Android原生一样写界面：
+```json
+{
+    // ...
+    androidResources: {
+        "resDir": "res",  // 资源文件夹
+        "manifest": "AndroidManifest.xml" // AndroidManifest文件路径
+    }
+}
+```
+
+res文件夹通常为以下结构：
+
+```
+- res
+    - layout  // 布局资源
+    - drawable // 图片、形状等资源
+    - menu // 菜单资源
+    - values // 样式、字符串等资源
+    // ...
+```
+可参考示例->复杂界面->Android原生界面。
 
 # 尺寸的单位: Dimension
 

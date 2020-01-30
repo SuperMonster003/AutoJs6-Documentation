@@ -318,3 +318,46 @@ shell("am start " + app.intentToShell({
 * 返回 {Uri} 一个指向该文件的Uri的对象，参见[android.net.Uri](https://developer.android.com/reference/android/net/Uri)。
 
 从一个文件路径创建一个uri对象。需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此返回的Uri会是诸如`content://...`的形式。
+
+## app.getInstalledApps([options])
+** [[Pro 8.0.0新增](https://pro.autojs.org/)] **
+* `options` {Object} 选项，包括：
+    * `get`: 指定返回的应用信息中包含的信息
+        * `"activities"` 应用的Activity组件信息
+        * `"configurations"` 应用的硬件配置
+        * `"gids"` 应用的group id
+        * `"instrumentation"` 应用的Instrumentation信息
+        * `"intent_filters"` 应用的意图过滤
+        * `"meta_data"` 应用的元信息（默认）
+        * `"permissions"` 应用的权限信息
+        * `"providers"` 应用的ContentProvider组件信息
+        * `"receivers"` 应用的BroadcastReceiver组件信息
+        * `"services"` 应用的Service组件信息
+        * `"shared_library_files"` 应用的动态链接库文件信息
+        * `"signatures"` 应用的签名信息（已弃用
+        * `"signing_certificates"` 应用的签名信息
+        * `"uri_permission_patterns"`
+        * `"disabled_components"` 被卸载的但保留了数据的应用
+        * `"disabled_until_used_components"` 禁用直到被使用的组件
+        * `"uninstalled_packages"` 被卸载的但保留了数据的应用
+    * `match`: 指定要匹配的应用列表
+        * `"uninstalled_packages"` 被卸载的但保留了数据的应用
+        * `"disabled_components"` 被禁用的组件
+        * `"disabled_until_used_components"` 禁用直到被使用的组件
+        * `"system_only"` 只匹配系统应用
+        * `"factory_only"` 只匹配预装应用
+        * `"apex"` APEX应用
+* 返回 {Array\<ApplicationInfo\>}
+
+返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 `uninstalled_packages`，则包括被删除但保留了数据的应用程序。
+获取安装的应用列表。
+
+返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。 
+
+选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。
+
+```
+let apps = $app.getInstalledApps({
+    matcg
+})
+```

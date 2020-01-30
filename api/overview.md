@@ -3,8 +3,8 @@
 Auto.js使用[JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)作为脚本语言，目前使用[Rhino 1.7.7.2](https://developer.mozilla.org/zh-CN/docs/Mozilla/Projects/Rhino)作为脚本引擎，支持ES5与部分ES6特性。
 
 * 因为Auto.js是基于JavaScript的，学习Auto.js的API之前建议先学习JavaScript的基本语法和内置对象，可以使用教程前面的两个JavaScript教程链接来学习。
-* 如果您想要使用TypeScript来开发，目前已经有开发者公布了一个可以使用TypeScript进行Auto.js开发的工具，参见[Auto.js DevTools](https://github.com/pboymt/autojs-dev)。
-* 如果想要在电脑而不是手机上开发Auto.js，可以使用VS Code以及相应的Auto.js插件使得在电脑上编辑的脚本能推送到手机运行，参见[Auto.js-VSCode-Extension](https://github.com/hyb1996/Auto.js-VSCode-Extension)。
+* 如果您想要使用TypeScript来开发，目前已经有开发者公布了一个可以把使用TypeScript进行Auto.js开发的工具，参见[Auto.js DevTools](https://github.com/pboymt/autojs-dev)。
+* 如果想要在电脑而不是手机上开发Auto.js，可以使用VS Code以及相应的Auto.js插件使得在电脑上编辑的脚本能推送到手机运行，参见[Auto.js-VSCode-Extension](https://github.com/hyb1996/Auto.js-VSCode-Extension)，Auto.js Pro用户则需要使用[Auto.js-Pro-Ext](https://marketplace.visualstudio.com/items?itemName=hyb1996.auto-js-pro-ext)。
 
 本文档的章节大致上是以模块来分的，总体上可以分成"自动操作"类模块(控件操作、触摸模拟、按键模拟等)和其他类模块(设备、应用、界面等)。
 

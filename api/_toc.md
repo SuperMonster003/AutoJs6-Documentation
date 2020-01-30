@@ -11,6 +11,7 @@
 * [App - 应用](app.html)
 * [Console - 控制台](console.html)
 * [CoordinatesBasedAutomation - 基于坐标的操作](coordinates-based-automation.html)
+* [Crypto - 加解密与消息摘要](crypto.html)
 * [Device - 设备](device.html)
 * [Dialogs - 对话框](dialogs.html)
 * [Engines - 脚本引擎](engines.html)

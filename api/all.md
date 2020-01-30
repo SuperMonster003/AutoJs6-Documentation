@@ -3,6 +3,7 @@
 @include app
 @include console
 @include coordinates-based-automation
+@include crypto
 @include device
 @include dialogs
 @include engines

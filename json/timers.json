@@ -1,12 +1,12 @@
 {
-  "source": "..\\api\\timers.md",
+  "source": "../api/timers.md",
   "modules": [
     {
       "textRaw": "Timers",
       "name": "timers",
       "stability": 2,
       "stabilityText": "Stable",
-      "desc": "<p>timers 模块暴露了一个全局的 API，用于在某个未来时间段调用调度函数。 因为定时器函数是全局的，所以使用该 API 无需调用 timers.<em>*</em></p>\n<p>Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API，除了它使用了一个不同的内部实现，它是基于 Android Looper-Handler消息循环机制构建的。其实现机制与Node.js比较相似。</p>\n<p>例如，要在5秒后发出消息&quot;hello&quot;:</p>\n<pre><code>setTimeout(function(){\n    toast(&quot;hello&quot;)\n}, 5000);\n</code></pre><p>需要注意的是，这些定时器仍然是单线程的。如果脚本主体有耗时操作或死循环，则设定的定时器不能被及时执行，例如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句会在15秒后执行而不是5秒后\n    toast(&quot;hello&quot;)\n}, 5000);\n//暂停10秒\nsleep(10000);\n</code></pre><p>再如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句永远不会被执行\n    toast(&quot;hello&quot;)\n}, 5000);\n//死循环\nwhile(true);\n</code></pre>",
+      "desc": "<p>timers 模块暴露了一个全局的 API，用于在某个未来时间段调用调度函数。 因为定时器函数是全局的，所以使用该 API 无需调用 timers.***</p>\n<p>Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API，除了它使用了一个不同的内部实现，它是基于 Android Looper-Handler消息循环机制构建的。其实现机制与Node.js比较相似。</p>\n<p>例如，要在5秒后发出消息&quot;hello&quot;:</p>\n<pre><code>setTimeout(function(){\n    toast(&quot;hello&quot;)\n}, 5000);\n</code></pre><p>需要注意的是，这些定时器仍然是单线程的。如果脚本主体有耗时操作或死循环，则设定的定时器不能被及时执行，例如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句会在15秒后执行而不是5秒后\n    toast(&quot;hello&quot;)\n}, 5000);\n//暂停10秒\nsleep(10000);\n</code></pre><p>再如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句永远不会被执行\n    toast(&quot;hello&quot;)\n}, 5000);\n//死循环\nwhile(true);\n</code></pre>",
       "methods": [
         {
           "textRaw": "setInterval(callback, delay\\[, ...args\\])",

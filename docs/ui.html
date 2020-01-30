@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>用户界面: UI | Auto.js 4.1.0 文档</title>
+  <title>用户界面: UI | Auto.js Pro-8.1.0 文档</title>
   <link rel="stylesheet" href="assets/fonts.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -29,6 +29,7 @@
 <li><a class="nav-app" href="app.html">App - 应用</a></li>
 <li><a class="nav-console" href="console.html">Console - 控制台</a></li>
 <li><a class="nav-coordinates-based-automation" href="coordinates-based-automation.html">CoordinatesBasedAutomation - 基于坐标的操作</a></li>
+<li><a class="nav-crypto" href="crypto.html">Crypto - 加解密与消息摘要</a></li>
 <li><a class="nav-device" href="device.html">Device - 设备</a></li>
 <li><a class="nav-dialogs" href="dialogs.html">Dialogs - 对话框</a></li>
 <li><a class="nav-engines" href="engines.html">Engines - 脚本引擎</a></li>
@@ -61,7 +62,7 @@
 
     <div id="column1" data-id="ui" class="interior">
       <header>
-        <h1>Auto.js 4.1.0 文档</h1>
+        <h1>Auto.js Pro-8.1.0 文档</h1>
         <div id="gtoc">
           <p>
             <a href="index.html" name="toc">索引</a> |
@@ -76,6 +77,8 @@
         <ul>
 <li><span class="stability_undefined"><a href="#ui_ui">用户界面: UI</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_view">视图: View</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_attr_name_value">attr(name, value)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_w">w</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_h">h</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_id">id</a></span></li>
@@ -157,7 +160,11 @@
 <li><span class="stability_undefined"><a href="#ui_checkbox">勾选框控件: checkbox</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_radio">选择框控件: radio</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_radiogroup">选择框布局: radiogroup</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_switch">开关控件: switch</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_switch">开关控件: Switch</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_checked">checked</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_text_2">text</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ui_progressbar">进度条控件: progressbar</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_seekbar">拖动条控件: seekbar</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_spinner">下来菜单控件: spinner</a></span></li>
@@ -165,20 +172,32 @@
 <li><span class="stability_undefined"><a href="#ui_datepicker">日期选择控件: datepicker</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_fab">浮动按钮控件: fab</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_toolbar">标题栏控件: toolbar</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_card">卡片: card</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_card">卡片: card</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_cardbackgroundcolor">cardBackgroundColor</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_cardcornerradius">cardCornerRadius</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_cardelevation">cardElevation</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_contentpadding">contentPadding</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_foreground_1">foreground</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ui_drawer">抽屉布局: drawer</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_list">列表: list</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_tab_tab">Tab: tab</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_1">ui</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_ui_layout_xml">ui.layout(xml)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_inflate_xml_parent">ui.inflate(xml[, parent])</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_layoutfile_xmlfile">ui.layoutFile(xmlFile)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_inflate_xml_parent_null_attachtoparent_false">ui.inflate(xml[, parent = null, attachToParent = false])</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#ui_ui_registerwidget_name_widget">ui.registerWidget(name, widget)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_isuithread">ui.isUiThread()</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_ui_findview_id">ui.findView(id)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_finish">ui.finish()</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_setcontentview_view">ui.setContentView(view)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_post_callback_delay_0">ui.post(callback[, delay = 0])</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_run_callback">ui.run(callback)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_post_callback_daley">ui.post(callback[, daley])</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_statusbarcolor_color">ui.statusBarColor(color)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_showpopupmenu_view_menu">ui.showPopupMenu(view, menu)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_useandroidresources">ui.useAndroidResources()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#ui_dimension">尺寸的单位: Dimension</a></span></li>
@@ -191,7 +210,10 @@
       <div id="apicontent">
         <h1>用户界面: UI<span><a class="mark" href="#ui_ui" id="ui_ui">#</a></span></h1>
 <p>ui模块提供了编写用户界面的支持。</p>
-<p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:</p>
+<pre><code>给Android开发者或者高阶用户的提醒，Auto.js的UI系统来自于Android，所有属性和方法都能在Android源码中找到。如果某些代码或属性没有出现在Auto.js的文档中，可以参考Android的文档。
+View: https://developer.android.google.cn/reference/android/view/View?hl=cn
+Widget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn
+</code></pre><p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:s</p>
 <pre><code>&quot;ui&quot;;
 
 //脚本的其他代码
@@ -199,7 +221,7 @@
 <p>界面是由视图(View)组成的。View分成两种，控件(Widget)和布局(Layout)。控件(Widget)用来具体显示文字、图片、网页等，比如文本控件(text)用来显示文字，按钮控件(button)则可以显示一个按钮并提供点击效果，图片控件(img)则用来显示来自网络或者文件的图片，除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的&quot;容器&quot;，用于控制在他里面的控件的位置，比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列)，水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列)，以及帧布局(frame)，他会把他里面的控件直接在左上角显示，如果有多个控件，后面的控件会重叠在前面的控件上。</p>
 <p>我们使用xml来编写界面，并通过<code>ui.layout()</code>函数指定界面的布局xml。举个例子：</p>
 <pre><code>&quot;ui&quot;;
-ui.layout(
+$ui.layout(
     &lt;vertical&gt;
         &lt;button text=&quot;第一个按钮&quot;/&gt;
         &lt;button text=&quot;第二个按钮&quot;/&gt;
@@ -235,6 +257,61 @@ ui.layout(
 </ul>
 <h1>视图: View<span><a class="mark" href="#ui_view" id="ui_view">#</a></span></h1>
 <p>控件和布局都属于视图(View)。在这个章节中将介绍所有控件和布局的共有的属性和函数。例如属性背景，宽高等(所有控件和布局都能设置背景和宽高)，函数<code>click()</code>设置视图(View)被点击时执行的动作。</p>
+<h2>attr(name, value)<span><a class="mark" href="#ui_attr_name_value" id="ui_attr_name_value">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性名称</li>
+<li><code>value</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性的值</li>
+</ul>
+</div><p>设置属性的值。属性指定是View在xml中的属性。例如可以通过语句<code>attr(&quot;text&quot;, &quot;文本&quot;)</code>来设置文本控件的文本值。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;example&quot; text=&quot;Hello&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+// 5秒后执行
+$ui.post(() =&gt; {
+    // 修改文本
+    $ui.example.attr(&quot;text&quot;, &quot;Hello, Auto.js UI&quot;);
+    // 修改背景
+    $ui.example.attr(&quot;bg&quot;, &quot;#ff00ff&quot;);
+    // 修改高度
+    $ui.example.attr(&quot;h&quot;, &quot;500dp&quot;);
+}, 5000);
+</code></pre>
+<p><strong>注意：</strong>并不是所有属性都能在js代码设置，有一些属性只能在布局创建时设置，例如style属性；还有一些属性虽然能在代码中设置，但是还没支持；对于这些情况，在Auto.js Pro 8.1.0+会抛出异常，其他版本则不会抛出异常。</p>
+<h2>attr(name)<span><a class="mark" href="#ui_attr_name" id="ui_attr_name">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性名称</li>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
+</ul>
+</div><p>获取属性的值。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;example&quot; text=&quot;1&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+plusOne();
+
+function plusOne() {
+    // 获取文本
+    let text = $ui.example.attr(&quot;text&quot;);
+    // 解析为数字
+    let num = parseInt(text);
+    // 数字加1
+    num++;
+    // 设置文本
+    $ui.example.attr(&quot;text&quot;, String(num));
+    // 1秒后继续
+    $ui.post(plusOne, 1000);
+}
+
+</code></pre>
 <h2>w<span><a class="mark" href="#ui_w" id="ui_w">#</a></span></h2>
 <p>View的宽度，是属性<code>width</code>的缩写形式。可以设置的值为<code>*</code>, <code>auto</code>和具体数值。其中<code>*</code>表示宽度<strong>尽量</strong>填满父布局，而<code>auto</code>表示宽度将根据View的内容自动调整(自适应宽度)。例如：</p>
 <pre><code>&quot;ui&quot;;
@@ -574,7 +651,7 @@ ui.layout(
 <p>图片控件用于显示来自网络、本地或者内嵌数据的图片，并可以指定图片以圆角矩形、圆形等显示。但是不能用于显示gif动态图。</p>
 <p>这里只介绍他的主要方法和属性，如果要查看他的所有方法和属性，阅读<a href="http://www.zhdoc.net/android/reference/android/widget/ImageView.html">ImageView</a>。</p>
 <h2>src<span><a class="mark" href="#ui_src" id="ui_src">#</a></span></h2>
-<p>使用一个Uri指定图片的来源。可以是图片的地址(<a href="http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。">http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</a></p>
+<p>使用一个Uri指定图片的来源。可以是图片的地址(http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</p>
 <p>如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。</p>
 <p>例如，显示百度的logo:</p>
 <pre><code>&quot;ui&quot;;
@@ -706,7 +783,16 @@ ui.layout(
 <h1>勾选框控件: checkbox<span><a class="mark" href="#ui_checkbox" id="ui_checkbox">#</a></span></h1>
 <h1>选择框控件: radio<span><a class="mark" href="#ui_radio" id="ui_radio">#</a></span></h1>
 <h1>选择框布局: radiogroup<span><a class="mark" href="#ui_radiogroup" id="ui_radiogroup">#</a></span></h1>
-<h1>开关控件: switch<span><a class="mark" href="#ui_switch" id="ui_switch">#</a></span></h1>
+<h1>开关控件: Switch<span><a class="mark" href="#ui_switch" id="ui_switch">#</a></span></h1>
+<p>开关控件用于表示一个选项是否被选中。</p>
+<h2>checked<span><a class="mark" href="#ui_checked" id="ui_checked">#</a></span></h2>
+<p>表示开关是否被选中。可选的值为：</p>
+<ul>
+<li><code>true</code> 打开开关</li>
+<li><code>false</code> 关闭开关</li>
+</ul>
+<h2>text<span><a class="mark" href="#ui_text_2" id="ui_text_2">#</a></span></h2>
+<p>对开关进行描述的文字。</p>
 <h1>进度条控件: progressbar<span><a class="mark" href="#ui_progressbar" id="ui_progressbar">#</a></span></h1>
 <h1>拖动条控件: seekbar<span><a class="mark" href="#ui_seekbar" id="ui_seekbar">#</a></span></h1>
 <h1>下来菜单控件: spinner<span><a class="mark" href="#ui_spinner" id="ui_spinner">#</a></span></h1>
@@ -715,19 +801,158 @@ ui.layout(
 <h1>浮动按钮控件: fab<span><a class="mark" href="#ui_fab" id="ui_fab">#</a></span></h1>
 <h1>标题栏控件: toolbar<span><a class="mark" href="#ui_toolbar" id="ui_toolbar">#</a></span></h1>
 <h1>卡片: card<span><a class="mark" href="#ui_card" id="ui_card">#</a></span></h1>
+<p>卡片控件是一个拥有圆角、阴影的控件。</p>
+<h2>cardBackgroundColor<span><a class="mark" href="#ui_cardbackgroundcolor" id="ui_cardbackgroundcolor">#</a></span></h2>
+<p>卡片的背景颜色。</p>
+<h2>cardCornerRadius<span><a class="mark" href="#ui_cardcornerradius" id="ui_cardcornerradius">#</a></span></h2>
+<p>卡片的圆角半径。</p>
+<h2>cardElevation<span><a class="mark" href="#ui_cardelevation" id="ui_cardelevation">#</a></span></h2>
+<p>设置卡片在z轴上的高度，来控制阴影的大小。</p>
+<h2>contentPadding<span><a class="mark" href="#ui_contentpadding" id="ui_contentpadding">#</a></span></h2>
+<p>设置卡片的内边距。该属性包括四个值：</p>
+<ul>
+<li><code>contentPaddingLeft</code> 左内边距</li>
+<li><code>contentPaddingRight</code> 右内边距</li>
+<li><code>contentPaddingTop</code> 上内边距</li>
+<li><code>contentPaddingBottom</code> 下内边距</li>
+</ul>
+<h2>foreground<span><a class="mark" href="#ui_foreground_1" id="ui_foreground_1">#</a></span></h2>
+<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果。</p>
 <h1>抽屉布局: drawer<span><a class="mark" href="#ui_drawer" id="ui_drawer">#</a></span></h1>
 <h1>列表: list<span><a class="mark" href="#ui_list" id="ui_list">#</a></span></h1>
 <h1>Tab: tab<span><a class="mark" href="#ui_tab_tab" id="ui_tab_tab">#</a></span></h1>
 <h1>ui<span><a class="mark" href="#ui_ui_1" id="ui_ui_1">#</a></span></h1>
 <h2>ui.layout(xml)<span><a class="mark" href="#ui_ui_layout_xml" id="ui_ui_layout_xml">#</a></span></h2>
-<h2>ui.inflate(xml[, parent])<span><a class="mark" href="#ui_ui_inflate_xml_parent" id="ui_ui_inflate_xml_parent">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <span class="type">&lt;XML&gt;</span> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 布局XML或者XML字符串</li>
+</ul>
+</div><p>将布局XML渲染为视图（View）对象， 并设置为当前视图。</p>
+<h2>ui.layoutFile(xmlFile)<span><a class="mark" href="#ui_ui_layoutfile_xmlfile" id="ui_ui_layoutfile_xmlfile">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 布局XML文件的路径</li>
+</ul>
+</div><p>此函数和<code>ui.layout</code>相似，只不过允许传入一个xml文件路径来渲染布局。</p>
+<h2>ui.inflate(xml[, parent = null, attachToParent = false])<span><a class="mark" href="#ui_ui_inflate_xml_parent_null_attachtoparent_false" id="ui_ui_inflate_xml_parent_null_attachtoparent_false">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <span class="type">&lt;XML&gt;</span> 布局XML或者XML字符串</li>
+<li><code>parent</code> <span class="type">&lt;View&gt;</span> 父视图</li>
+<li><code>attachToParent</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a> 是否渲染的View加到父视图中，默认为false</li>
+<li>返回 <span class="type">&lt;View&gt;</span></li>
+</ul>
+</div><p>将布局XML渲染为视图（View）对象。如果该View将作为某个View的子View，我们建议传入<code>parent</code>参数，这样在渲染时依赖于父视图的一些布局属性能够正确应用。</p>
+<p>此函数用于动态创建、显示View。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;linear id=&quot;container&quot;&gt;
+    &lt;/linear&gt;
+);
+
+// 动态创建3个文本控件，并加到container容器中
+// 这里仅为实例，实际上并不推荐这种做法，如果要展示列表，
+// 使用list组件；动态创建十几个、几十个View会让界面卡顿
+for (let i = 0; i &lt; 3; i++) {
+    let textView = $ui.inflate(
+        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;
+    , $ui.container);
+    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);
+    $ui.container.addView(textView);
+}
+</code></pre>
+<h1>ui.registerWidget(name, widget)<span><a class="mark" href="#ui_ui_registerwidget_name_widget" id="ui_ui_registerwidget_name_widget">#</a></span></h1>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 组件名称</li>
+<li><code>widget</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 组件</li>
+</ul>
+</div><p>注册一个自定义组件。参考示例-&gt;界面控件-&gt;自定义控件。</p>
+<h1>ui.isUiThread()<span><a class="mark" href="#ui_ui_isuithread" id="ui_ui_isuithread">#</a></span></h1>
+<div class="signature"><ul>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a></li>
+</ul>
+</div><p>返回当前线程是否是UI线程。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+log($ui.isUiThread()); // =&gt; true
+
+$threads.start(function () {
+    log($ui.isUiThread()); // =&gt; false
+});
+
+</code></pre>
 <h2>ui.findView(id)<span><a class="mark" href="#ui_ui_findview_id" id="ui_ui_findview_id">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>id</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> View的ID</li>
+<li>返回 <span class="type">&lt;View&gt;</span></li>
+</ul>
+</div><p>在当前视图中根据ID查找相应的视图对象并返回。如果当前未设置视图或找不到此ID的视图时返回<code>null</code>。</p>
+<p>一般我们都是通过<code>ui.xxx</code>来获取id为xxx的控件，如果xxx是一个ui已经有的属性，就可以通过<code>$ui.findView()</code>来获取这个控件。</p>
 <h2>ui.finish()<span><a class="mark" href="#ui_ui_finish" id="ui_ui_finish">#</a></span></h2>
+<p>结束当前活动并销毁界面。</p>
 <h2>ui.setContentView(view)<span><a class="mark" href="#ui_ui_setcontentview_view" id="ui_ui_setcontentview_view">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>view</code> <span class="type">&lt;View&gt;</span> </li>
+</ul>
+</div><p>将视图对象设置为当前视图。</p>
+<h2>ui.post(callback[, delay = 0])<span><a class="mark" href="#ui_ui_post_callback_delay_0" id="ui_ui_post_callback_delay_0">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数</li>
+<li><code>delay</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 延迟，单位毫秒</li>
+</ul>
+</div><p>将<code>callback</code>加到UI线程的消息循环中，并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）。</p>
+<p>此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用），也可以用于子线程中更新UI。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;result&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+ui.result.attr(&quot;text&quot;, &quot;计算中&quot;);
+// 在子线程中计算1+ ... + 10000000
+threads.start({
+    let sum = 0;
+    for (let i = 0; i &lt; 1000000; i++) {
+        sum += i;
+    }
+    // 由于不能在子线程操作UI，所以要抛到UI线程执行
+    ui.post(() =&gt; {
+        ui.result.attr(&quot;text&quot;, String(sum));
+    });
+});
+</code></pre>
 <h2>ui.run(callback)<span><a class="mark" href="#ui_ui_run_callback" id="ui_ui_run_callback">#</a></span></h2>
-<h2>ui.post(callback[, daley])<span><a class="mark" href="#ui_ui_post_callback_daley" id="ui_ui_post_callback_daley">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数</li>
+<li>返回 callback的执行结果</li>
+</ul>
+</div><p>将<code>callback</code>在UI线程中执行。如果当前已经在UI线程中，则直接执行<code>callback</code>；否则将<code>callback</code>抛到UI线程中执行（加到UI线程的消息循环的末尾），<strong>并等待callback执行结束(阻塞当前线程)</strong>。</p>
 <h2>ui.statusBarColor(color)<span><a class="mark" href="#ui_ui_statusbarcolor_color" id="ui_ui_statusbarcolor_color">#</a></span></h2>
-<h2>ui.showPopupMenu(view, menu)<span><a class="mark" href="#ui_ui_showpopupmenu_view_menu" id="ui_ui_showpopupmenu_view_menu">#</a></span></h2>
+<div class="signature"><ul>
+<li>color <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 颜色</li>
+</ul>
+</div><p>设置当前界面的状态栏颜色。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+ui.statusBarColor(&quot;#000000&quot;);
+</code></pre>
+<h2>ui.useAndroidResources()<span><a class="mark" href="#ui_ui_useandroidresources" id="ui_ui_useandroidresources">#</a></span></h2>
+<p>启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性。启用该特性后，在project.json中进行以下配置，就可以像写Android原生一样写界面：</p>
+<pre><code class="lang-json">{
+    // ...
+    androidResources: {
+        &quot;resDir&quot;: &quot;res&quot;,  // 资源文件夹
+        &quot;manifest&quot;: &quot;AndroidManifest.xml&quot; // AndroidManifest文件路径
+    }
+}
+</code></pre>
+<p>res文件夹通常为以下结构：</p>
+<pre><code>- res
+    - layout  // 布局资源
+    - drawable // 图片、形状等资源
+    - menu // 菜单资源
+    - values // 样式、字符串等资源
+    // ...
+</code></pre><p>可参考示例-&gt;复杂界面-&gt;Android原生界面。</p>
 <h1>尺寸的单位: Dimension<span><a class="mark" href="#ui_dimension" id="ui_dimension">#</a></span></h1>
 <h1>Drawables<span><a class="mark" href="#ui_drawables" id="ui_drawables">#</a></span></h1>
 <h1>颜色<span><a class="mark" href="#ui" id="ui">#</a></span></h1>

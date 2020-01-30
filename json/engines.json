@@ -1,5 +1,5 @@
 {
-  "source": "..\\api\\engines.md",
+  "source": "../api/engines.md",
   "modules": [
     {
       "textRaw": "Engines",
@@ -77,7 +77,7 @@
               ]
             }
           ],
-          "desc": "<p>在新的脚本环境中运行脚本script。返回一个<a href=\"#engines_scriptexecution\">ScriptExectuion</a>对象。</p>\n<p>所谓新的脚本环境，指定是，脚本中的变量和原脚本的变量是不共享的，并且，脚本会在新的线程中运行。</p>\n<p>最简单的例子如下：</p>\n<pre><code>engines.execScript(&quot;hello world&quot;, &quot;toast(&#39;hello world&#39;)&quot;);\n</code></pre><p>如果要循环运行，则：</p>\n<pre><code>//每隔3秒运行一次脚本，循环10次\nengines.execScript(&quot;hello world&quot;, &quot;toast(&#39;hello world&#39;)&quot;, {\n    loopTimes: 10,\n    interval: 3000\n});\n</code></pre><p>用字符串来编写脚本非常不方便，可以结合 <code>Function.toString()</code>的方法来执行特定函数:</p>\n<pre><code>function helloWorld(){\n    //注意，这里的变量和脚本主体的变量并不共享\n    toast(&quot;hello world&quot;);\n}\nengines.execScript(&quot;hello world&quot;, &quot;helloWorld();\\n&quot; + helloWorld.toString());\n</code></pre><p>如果要传递变量，则可以把这些封装成一个函数：</p>\n<pre><code>function exec(action, args){\n    args = args || {};\n    engines.execScript(action.name, action + &quot;(&quot; + JSON.stringify(args) + &quot;);\\n&quot; + action.toString());\n}\n\n//要执行的函数，是一个简单的加法\nfunction add(args){\n    toast(args.a + args.b);\n}\n\n//在新的脚本环境中执行 1 + 2\nexec(add, {a: 1, b:2});\n</code></pre>"
+          "desc": "<p>在新的脚本环境中运行脚本script。返回一个<a href=\"#engines_scriptexecution\">ScriptExectuion</a>对象。</p>\n<p>所谓新的脚本环境，指定是，脚本中的变量和原脚本的变量是不共享的，并且，脚本会在新的线程中运行。</p>\n<p>最简单的例子如下：</p>\n<pre><code>engines.execScript(&quot;hello world&quot;, &quot;toast(&#39;hello world&#39;)&quot;);\n</code></pre><p>如果要循环运行，则：</p>\n<pre><code>//每隔3秒运行一次脚本，循环10次\nengines.execScript(&quot;hello world&quot;, &quot;toast(&#39;hello world&#39;)&quot;, {\n    loopTimes: 10,\n    interval: 3000\n});\n</code></pre><p>用字符串来编写脚本非常不方便，可以结合 <code>Function.toString()</code>的方法来执行特定函数:</p>\n<pre><code>function helloWorld(){\n    //注意，这里的变量和脚本主体的变量并不共享\n    toast(&quot;hello world&quot;);\n}\nengines.execScript(&quot;hello world&quot;, &quot;helloWorld();\\n&quot; + helloWorld.toString());\n</code></pre><p>如果要传递变量，则可以把这些封装成一个函数：</p>\n<pre><code>function exec(action, args){\n    args = args || {};\n    engines.execScript(action.name, action.name + &quot;(&quot; + JSON.stringify(args) + &quot;);\\n&quot; + action.toString());\n}\n\n//要执行的函数，是一个简单的加法\nfunction add(args){\n    toast(args.a + args.b);\n}\n\n//在新的脚本环境中执行 1 + 2\nexec(add, {a: 1, b:2});\n</code></pre>"
         },
         {
           "textRaw": "engines.execScriptFile(path[, config])",

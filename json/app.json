@@ -1,5 +1,5 @@
 {
-  "source": "..\\api\\app.md",
+  "source": "../api/app.md",
   "modules": [
     {
       "textRaw": "App",
@@ -393,7 +393,7 @@
     {
       "textRaw": "进阶: 意图Intent",
       "name": "进阶:_意图intent",
-      "desc": "<p>Intent(意图) 是一个消息传递对象，您可以使用它从其他应用组件请求操作。尽管 Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下三个：</p>\n<ul>\n<li><p>启动活动(Activity)：\n  Activity 表示应用中的一个&quot;屏幕&quot;。例如应用主入口都是一个Activity，应用的功能通常也以Activity的形式独立，例如微信的主界面、朋友圈、聊天窗口都是不同的Activity。通过将 Intent 传递给 startActivity()，您可以启动新的 Activity 实例。Intent 描述了要启动的 Activity，并携带了任何必要的数据。</p>\n</li>\n<li><p>启动服务(Service)：\n  Service 是一个不使用用户界面而在后台执行操作的组件。通过将 Intent 传递给 startService()，您可以启动服务执行一次性操作（例如，下载文件）。Intent 描述了要启动的服务，并携带了任何必要的数据。</p>\n</li>\n<li><p>传递广播：\n  广播是任何应用均可接收的消息。系统将针对系统事件（例如：系统启动或设备开始充电时）传递各种广播。通过将 Intent 传递给 sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast()，您可以将广播传递给其他应用。</p>\n</li>\n</ul>\n<p>本模块提供了构建Intent的函数(<code>app.intent()</code>), 启动Activity的函数<code>app.startActivity()</code>, 发送广播的函数<code>app.sendBroadcast()</code>。</p>\n<p>使用这些方法可以用来方便的调用其他应用。例如直接打开某个QQ号的个人卡片页，打开某个QQ号的聊天窗口等。</p>\n<pre><code>var qq = &quot;2732014414&quot;;\napp.startActivity({ \n    action: &quot;android.intent.action.VIEW&quot;, \n    data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, \n    packageName: &quot;com.tencent.mobileqq&quot;, \n});\n</code></pre>",
+      "desc": "<p>Intent(意图) 是一个消息传递对象，您可以使用它从其他应用组件请求操作。尽管 Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下三个：</p>\n<ul>\n<li><p>启动活动(Activity)：\n  Activity 表示应用中的一个&quot;屏幕&quot;。例如应用主入口都是一个Activity，应用的功能通常也以Activity的形式独立，例如微信的主界面、朋友圈、聊天窗口都是不同的Activity。通过将 Intent 传递给 startActivity()，您可以启动新的 Activity 实例。Intent 描述了要启动的 Activity，并携带了任何必要的数据。</p>\n</li>\n<li><p>启动服务(Service)：\n  Service 是一个不使用用户界面而在后台执行操作的组件。通过将 Intent 传递给 startService()，您可以启动服务执行一次性操作（例如，下载文件）。Intent 描述了要启动的服务，并携带了任何必要的数据。</p>\n</li>\n<li><p>传递广播：\n  广播是任何应用均可接收的消息。系统将针对系统事件（例如：系统启动或设备开始充电时）传递各种广播。通过将 Intent 传递给 sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast()，您可以将广播传递给其他应用。</p>\n</li>\n</ul>\n<p>本模块提供了构建Intent的函数(<code>app.intent()</code>), 启动Activity的函数<code>app.startActivity()</code>, 发送广播的函数<code>app.sendBroadcast()</code>。</p>\n<p>使用这些方法可以用来方便的调用其他应用。例如直接打开某个QQ号的个人卡片页，打开某个QQ号的聊天窗口等。</p>\n<pre><code>var qq = &quot;2732014414&quot;;\napp.startActivity({ \n    action: &quot;android.intent.action.VIEW&quot;, \n    data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, \n    packageName: &quot;com.tencent.mobileqq&quot;, \n});\n\n</code></pre>",
       "methods": [
         {
           "textRaw": "app.intent(options)",
@@ -585,7 +585,7 @@
           "textRaw": "app.parseUri(uri)",
           "type": "method",
           "name": "parseUri",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>uri</code> {string} 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href=\"https://www.autojs.org\">https://www.autojs.org</a>&quot;</li>\n<li>返回 {Uri} 一个代表Uri的对象，参见<a href=\"https://developer.android.com/reference/android/net/Uri\">android.net.Uri</a>。</li>\n</ul>\n<p>解析uri字符串并返回相应的Uri对象。即使Uri格式错误，该函数也会返回一个Uri对象，但之后如果访问该对象的scheme, path等值可能因解析失败而返回<code>null</code>。</p>\n<p>需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此如果uri字符串是文件<code>file://...</code>，返回的Uri会是诸如<code>content://...</code>的形式。</p>\n",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>uri</code> {string} 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href=\"https://www.autojs.org&quot;\">https://www.autojs.org&quot;</a></li>\n<li>返回 {Uri} 一个代表Uri的对象，参见<a href=\"https://developer.android.com/reference/android/net/Uri\">android.net.Uri</a>。</li>\n</ul>\n<p>解析uri字符串并返回相应的Uri对象。即使Uri格式错误，该函数也会返回一个Uri对象，但之后如果访问该对象的scheme, path等值可能因解析失败而返回<code>null</code>。</p>\n<p>需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此如果uri字符串是文件<code>file://...</code>，返回的Uri会是诸如<code>content://...</code>的形式。</p>\n",
           "signatures": [
             {
               "params": [
@@ -606,6 +606,22 @@
               "params": [
                 {
                   "name": "path"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "app.getInstalledApps([options])",
+          "type": "method",
+          "name": "getInstalledApps",
+          "desc": "<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<ul>\n<li><code>options</code> {Object} 选项，包括：<ul>\n<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>\n<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>\n<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>\n<li><code>&quot;gids&quot;</code> 应用的group id</li>\n<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>\n<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>\n<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>\n<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>\n<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>\n<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>\n<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>\n<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>\n<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>\n<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>\n<li><code>&quot;uri_permission_patterns&quot;</code></li>\n<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n</ul>\n</li>\n<li><code>match</code>: 指定要匹配的应用列表<ul>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>\n<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>\n<li><code>&quot;apex&quot;</code> APEX应用</li>\n</ul>\n</li>\n</ul>\n</li>\n<li>返回 {Array\\&lt;ApplicationInfo>}</li>\n</ul>\n<p>返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 <code>uninstalled_packages</code>，则包括被删除但保留了数据的应用程序。\n获取安装的应用列表。</p>\n<p>返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。 </p>\n<p>选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。</p>\n<pre><code>let apps = $app.getInstalledApps({\n    matcg\n})\n</code></pre>",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "options",
+                  "optional": true
                 }
               ]
             }

@@ -1,0 +1,198 @@
+{
+  "source": "../api/crypto.md",
+  "modules": [
+    {
+      "textRaw": "Crypto",
+      "name": "crypto",
+      "desc": "<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<p>$crypto模块提供了对称加密(例如AES)、非对称加密(例如RSA)、消息摘要(例如MD5, SHA)等支持。</p>\n",
+      "methods": [
+        {
+          "textRaw": "$crypto.digest(message, algorithm[, options])",
+          "type": "method",
+          "name": "digest",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`message` {any} ",
+                  "name": "message",
+                  "type": "any"
+                },
+                {
+                  "textRaw": "`algorithm` {string} 消息摘要算法，包括： ",
+                  "options": [
+                    {
+                      "textRaw": "MD5 ",
+                      "name": "MD5"
+                    },
+                    {
+                      "textRaw": "SHA-1 ",
+                      "name": "SHA-1"
+                    },
+                    {
+                      "textRaw": "SHA-256 ",
+                      "name": "SHA-256"
+                    },
+                    {
+                      "textRaw": "SHA-384 ",
+                      "name": "SHA-384"
+                    },
+                    {
+                      "textRaw": "SHA-512 ",
+                      "name": "SHA-512"
+                    }
+                  ],
+                  "name": "algorithm",
+                  "type": "string",
+                  "desc": "消息摘要算法，包括："
+                },
+                {
+                  "textRaw": "`options` {any} ",
+                  "name": "options",
+                  "type": "any",
+                  "optional": true
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "message"
+                },
+                {
+                  "name": "algorithm"
+                },
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ],
+          "desc": "<p>对信息message使用消息摘要算法<code>algorithm</code>进行摘要并返回结果，默认的输出格式为hex。</p>\n<p>参数message的类型默认为字符串，返回值默认为hex；可以通过options来指定参数message的类型和返回值的类型、格式，比如文件、base64、字节数组、hex等。参见《输入和输出的类型和格式》。</p>\n<pre><code class=\"lang-javascript\">// 计算字符串abc的md5\ntoastLog($crypto.digest(&quot;abc&quot;, &quot;MD5&quot;));\n// 计算字符串abc的sha-256\ntoastLog($crypto.digest(&quot;abc&quot;, &quot;SHA-256&quot;));\n// 计算文件/sdcard/1.txt的md5\ntoastLog($crypto.digest(&quot;/sdcard/1.txt&quot;, &quot;MD5&quot;, {\n    input: &quot;file&quot;\n}));\n</code></pre>\n"
+        },
+        {
+          "textRaw": "$crypto.encrypt(data, key, algorithm, options)",
+          "type": "method",
+          "name": "encrypt",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`data` {any} 明文消息 ",
+                  "name": "data",
+                  "type": "any",
+                  "desc": "明文消息"
+                },
+                {
+                  "textRaw": "`key` {Key} 密钥 ",
+                  "name": "key",
+                  "type": "Key",
+                  "desc": "密钥"
+                },
+                {
+                  "textRaw": "`algorithm` {string} 加密算法，包括： ",
+                  "options": [
+                    {
+                      "textRaw": "AES ",
+                      "name": "AES"
+                    },
+                    {
+                      "textRaw": "AES/ECB/NoPadding ",
+                      "name": "AES/ECB/NoPadding"
+                    },
+                    {
+                      "textRaw": "AES/ECB/PKCS5Padding ",
+                      "name": "AES/ECB/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "AES/CBC/NoPadding ",
+                      "name": "AES/CBC/NoPadding"
+                    },
+                    {
+                      "textRaw": "AES/CBC/PKCS5Padding ",
+                      "name": "AES/CBC/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "AES/CFB/NoPadding ",
+                      "name": "AES/CFB/NoPadding"
+                    },
+                    {
+                      "textRaw": "AES/CFB/PKCS5Padding ",
+                      "name": "AES/CFB/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "AES/CTR/NoPadding ",
+                      "name": "AES/CTR/NoPadding"
+                    },
+                    {
+                      "textRaw": "AES/CTR/PKCS5Padding ",
+                      "name": "AES/CTR/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "AES/OFB/PKCS5Padding ",
+                      "name": "AES/OFB/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "AES/OFB/PKCS5Padding ",
+                      "name": "AES/OFB/PKCS5Padding"
+                    },
+                    {
+                      "textRaw": "RSA/ECB/PKCS1Padding ",
+                      "name": "RSA/ECB/PKCS1Padding"
+                    },
+                    {
+                      "textRaw": "RSA/ECB/NoPadding ",
+                      "name": "RSA/ECB/NoPadding"
+                    },
+                    {
+                      "textRaw": "... 具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher) ",
+                      "name": "...",
+                      "desc": "具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher)"
+                    }
+                  ],
+                  "name": "algorithm",
+                  "type": "string",
+                  "desc": "加密算法，包括："
+                },
+                {
+                  "textRaw": "`options` {Object} 加密选项 ",
+                  "name": "options",
+                  "type": "Object",
+                  "desc": "加密选项"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "data"
+                },
+                {
+                  "name": "key"
+                },
+                {
+                  "name": "algorithm"
+                },
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ],
+          "displayName": "输入和输出的类型和格式"
+        }
+      ],
+      "modules": [
+        {
+          "textRaw": "输入和输出的类型和格式",
+          "name": "输入和输出的类型和格式",
+          "type": "module",
+          "displayName": "输入和输出的类型和格式"
+        }
+      ],
+      "type": "module",
+      "displayName": "Crypto"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>App | Auto.js 4.1.0 文档</title>
+  <title>App | Auto.js Pro-8.1.0 文档</title>
   <link rel="stylesheet" href="assets/fonts.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -29,6 +29,7 @@
 <li><a class="nav-app active" href="app.html">App - 应用</a></li>
 <li><a class="nav-console" href="console.html">Console - 控制台</a></li>
 <li><a class="nav-coordinates-based-automation" href="coordinates-based-automation.html">CoordinatesBasedAutomation - 基于坐标的操作</a></li>
+<li><a class="nav-crypto" href="crypto.html">Crypto - 加解密与消息摘要</a></li>
 <li><a class="nav-device" href="device.html">Device - 设备</a></li>
 <li><a class="nav-dialogs" href="dialogs.html">Dialogs - 对话框</a></li>
 <li><a class="nav-engines" href="engines.html">Engines - 脚本引擎</a></li>
@@ -61,7 +62,7 @@
 
     <div id="column1" data-id="app" class="interior">
       <header>
-        <h1>Auto.js 4.1.0 文档</h1>
+        <h1>Auto.js Pro-8.1.0 文档</h1>
         <div id="gtoc">
           <p>
             <a href="index.html" name="toc">索引</a> |
@@ -102,6 +103,7 @@
 <li><span class="stability_undefined"><a href="#app_app_intenttoshell_options">app.intentToShell(options)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_parseuri_uri">app.parseUri(uri)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_geturiforfile_path">app.getUriForFile(path)</a></span></li>
+<li><span class="stability_undefined"><a href="#app_app_getinstalledapps_options">app.getInstalledApps([options])</a></span></li>
 </ul>
 </li>
 </ul>
@@ -201,7 +203,7 @@ app.editFile(&quot;/sdcard/1.txt/);
 app.uninstall(&quot;com.tencent.mobileqq&quot;);
 </code></pre><h2>app.openUrl(url)<span><a class="mark" href="#app_app_openurl_url" id="app_app_openurl_url">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 网站的Url，如果不以&quot;<a href="http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 网站的Url，如果不以&quot;http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。</li>
 </ul>
 </div><p>用浏览器打开网站url。</p>
 <p>如果没有安装浏览器应用，则抛出<code>ActivityNotException</code>。</p>
@@ -256,6 +258,7 @@ app.startActivity({
     data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, 
     packageName: &quot;com.tencent.mobileqq&quot;, 
 });
+
 </code></pre><h2>app.intent(options)<span><a class="mark" href="#app_app_intent_options" id="app_app_intent_options">#</a></span></h2>
 <div class="signature"><ul>
 <li><p><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 选项，包括：</p>
@@ -347,7 +350,7 @@ context.startActivity(i);
 <h2>app.parseUri(uri)<span><a class="mark" href="#app_app_parseuri_uri" id="app_app_parseuri_uri">#</a></span></h2>
 <p><strong>[v4.1.0新增]</strong></p>
 <ul>
-<li><code>uri</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href="https://www.autojs.org">https://www.autojs.org</a>&quot;</li>
+<li><code>uri</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href="https://www.autojs.org&quot;">https://www.autojs.org&quot;</a></li>
 <li>返回 <span class="type">&lt;Uri&gt;</span> 一个代表Uri的对象，参见<a href="https://developer.android.com/reference/android/net/Uri">android.net.Uri</a>。</li>
 </ul>
 <p>解析uri字符串并返回相应的Uri对象。即使Uri格式错误，该函数也会返回一个Uri对象，但之后如果访问该对象的scheme, path等值可能因解析失败而返回<code>null</code>。</p>
@@ -359,7 +362,51 @@ context.startActivity(i);
 <li>返回 <span class="type">&lt;Uri&gt;</span> 一个指向该文件的Uri的对象，参见<a href="https://developer.android.com/reference/android/net/Uri">android.net.Uri</a>。</li>
 </ul>
 <p>从一个文件路径创建一个uri对象。需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此返回的Uri会是诸如<code>content://...</code>的形式。</p>
-
+<h2>app.getInstalledApps([options])<span><a class="mark" href="#app_app_getinstalledapps_options" id="app_app_getinstalledapps_options">#</a></span></h2>
+<p><strong> [<a href="https://pro.autojs.org/">Pro 8.0.0新增</a>] </strong></p>
+<ul>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 选项，包括：<ul>
+<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>
+<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>
+<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>
+<li><code>&quot;gids&quot;</code> 应用的group id</li>
+<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>
+<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>
+<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>
+<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>
+<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>
+<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>
+<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>
+<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>
+<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>
+<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>
+<li><code>&quot;uri_permission_patterns&quot;</code></li>
+<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>
+<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>
+<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>
+</ul>
+</li>
+<li><code>match</code>: 指定要匹配的应用列表<ul>
+<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>
+<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>
+<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>
+<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>
+<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>
+<li><code>&quot;apex&quot;</code> APEX应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回 <span class="type">&lt;Array\&lt;ApplicationInfo>&gt;</span></li>
+</ul>
+<p>返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 <code>uninstalled_packages</code>，则包括被删除但保留了数据的应用程序。
+获取安装的应用列表。</p>
+<p>返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。 </p>
+<p>选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。</p>
+<pre><code>let apps = $app.getInstalledApps({
+    matcg
+})
+</code></pre>
       </div>
     </div>
   </div>

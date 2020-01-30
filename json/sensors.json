@@ -1,5 +1,5 @@
 {
-  "source": "..\\api\\sensors.md",
+  "source": "../api/sensors.md",
   "modules": [
     {
       "textRaw": "Sensors",
@@ -135,7 +135,7 @@
         {
           "textRaw": "事件: 'change'",
           "name": "事件:_'change'",
-          "desc": "<ul>\n<li><code>..args</code> {Any} 传感器参数</li>\n</ul>\n<p>当传感器数据改变时触发该事件；该事件触发的最高频繁由<code>sensors.register()</code>指定的delay参数决定。</p>\n<p>事件参数根据传感器类型不同而不同，具体参见本章最前面的列表。</p>\n<p>一个监听光线传感器和加速度传感器并且每0.5秒获取一个数据并最终写入一个csv表格文件的例子如下：</p>\n<pre><code>//csv文件路径\ncosnt csvPath = &quot;/sdcard/sensors_data.csv&quot;;\n//记录光线传感器的数据\nvar light = 0;\n//记录加速度传感器的数据\nvar ax = 0;\nvar ay = 0;\nvar az = 0;\n//监听光线传感器\nsensors.register(&quot;light&quot;, sensors.delay.fastest)\n    .on(&quot;change&quot;, l =&gt; {\n        light = l;\n    });\n//监听加速度传感器\nsensors.register(&quot;accelerometer&quot;, sensors.delay.fastest)\n    .on(&quot;change&quot;, (ax0, ay0, az0) =&gt; {\n        ax = ax0;\n        ay = ay0;\n        az = az0;\n    });\n\nvar file = open(csvPath, &quot;w&quot;);\n//写csv表格头\nfile.writeline(&quot;light,ax,ay,az&quot;)\n//每0.5秒获取一次数据并写入文件\nsetInterval(()=&gt;{\n    file.writeline(util.format(&quot;%d,%d,%d,%d&quot;, light, ax, ay, az));\n}, 500);\n//10秒后退出并打开文件\nsetTimeout(()=&gt;{\n    file.close();\n    sensors.unregsiterAll();\n    app.viewFile(csvPath);\n}, 10 * 1000);\n</code></pre>",
+          "desc": "<ul>\n<li><code>..args</code> {Any} 传感器参数</li>\n</ul>\n<p>当传感器数据改变时触发该事件；该事件触发的最高频繁由<code>sensors.register()</code>指定的delay参数决定。</p>\n<p>事件参数根据传感器类型不同而不同，具体参见本章最前面的列表。</p>\n<p>一个监听光线传感器和加速度传感器并且每0.5秒获取一个数据并最终写入一个csv表格文件的例子如下：</p>\n<pre><code>//csv文件路径\ncosnt csvPath = &quot;/sdcard/sensors_data.csv&quot;;\n//记录光线传感器的数据\nvar light = 0;\n//记录加速度传感器的数据\nvar ax = 0;\nvar ay = 0;\nvar az = 0;\n//监听光线传感器\nsensors.register(&quot;light&quot;, sensors.delay.fastest)\n    .on(&quot;change&quot;, l =&gt; {\n        light = l;\n    });\n//监听加速度传感器\nsensors.register(&quot;accelerometer&quot;, sensors.delay.fastest)\n    .on(&quot;change&quot;, (ax0, ay0, az0) =&gt; {\n        ax = ax0;\n        ay = ay0;\n        az = az0;\n    });\n\nvar file = open(csvPath, &quot;w&quot;);\n//写csv表格头\nfile.writeline(&quot;light,ax,ay,az&quot;)\n//每0.5秒获取一次数据并写入文件\nsetInterval(()=&gt;{\n    file.writeline(util.format(&quot;%d,%d,%d,%d&quot;, light, ax, ay, az));\n}, 500);\n//10秒后退出并打开文件\nsetTimeout(()=&gt;{\n    file.close();\n    sensors.unregsiterAll();\n    app.viewFile(csvPath);\n}, 10 * 1000);\n\n</code></pre>",
           "type": "module",
           "displayName": "事件: 'change'"
         },

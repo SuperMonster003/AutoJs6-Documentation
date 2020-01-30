@@ -70,7 +70,7 @@ function next(er, input) {
     case 'json':
       require('./json.js')(input, inputFile, function(er, obj) {
         if(out){
-          fs.writeFile(out, JSON.stringify(obj, null, 2));
+          fs.writeFileSync(out, JSON.stringify(obj, null, 2));
         }else{
           console.log(JSON.stringify(obj, null, 2));
         }
@@ -91,7 +91,7 @@ function next(er, input) {
         function(er, html) {
           if (er) throw er;
           if(out){
-          	fs.writeFile(out, html);
+          	fs.writeFileSync(out, html);
           }else{
 	          console.log(html);
           }

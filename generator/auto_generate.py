@@ -2,11 +2,11 @@ import os
 import os.path
 import sys
 
-in_dir = r'..\api'
-out_dir = r'..\docs'
-json_out_dir = r'..\json'
-template = r'..\template.html'
-version = '4.1.0'
+in_dir = os.path.join('..', 'api')
+out_dir = os.path.join('..', 'docs')
+json_out_dir = os.path.join('..', 'json')
+template = os.path.join('..', 'template.html')
+version = 'Pro-8.1.0'
 
 
 def process(in_file, out_file, format="html"):

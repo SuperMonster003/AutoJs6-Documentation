@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>综述 | Auto.js 4.1.0 文档</title>
+  <title>综述 | Auto.js Pro-8.1.0 文档</title>
   <link rel="stylesheet" href="assets/fonts.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -29,6 +29,7 @@
 <li><a class="nav-app" href="app.html">App - 应用</a></li>
 <li><a class="nav-console" href="console.html">Console - 控制台</a></li>
 <li><a class="nav-coordinates-based-automation" href="coordinates-based-automation.html">CoordinatesBasedAutomation - 基于坐标的操作</a></li>
+<li><a class="nav-crypto" href="crypto.html">Crypto - 加解密与消息摘要</a></li>
 <li><a class="nav-device" href="device.html">Device - 设备</a></li>
 <li><a class="nav-dialogs" href="dialogs.html">Dialogs - 对话框</a></li>
 <li><a class="nav-engines" href="engines.html">Engines - 脚本引擎</a></li>
@@ -61,7 +62,7 @@
 
     <div id="column1" data-id="all" class="interior">
       <header>
-        <h1>Auto.js 4.1.0 文档</h1>
+        <h1>Auto.js Pro-8.1.0 文档</h1>
         <div id="gtoc">
           <p>
             <a href="index.html" name="toc">索引</a> |
@@ -111,6 +112,7 @@
 <li><span class="stability_undefined"><a href="#app_app_intenttoshell_options">app.intentToShell(options)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_parseuri_uri">app.parseUri(uri)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_geturiforfile_path">app.getUriForFile(path)</a></span></li>
+<li><span class="stability_undefined"><a href="#app_app_getinstalledapps_options">app.getInstalledApps([options])</a></span></li>
 </ul>
 </li>
 <li><span class="stability_2"><a href="#console_console">Console</a></span><ul>
@@ -160,6 +162,12 @@
 <li><span class="stability_1"><a href="#coordinates_based_automation_root">使用root权限点击和滑动的简单命令</a></span><ul>
 <li><span class="stability_undefined"><a href="#coordinates_based_automation_tap_x_y">Tap(x, y)</a></span></li>
 <li><span class="stability_undefined"><a href="#coordinates_based_automation_swipe_x1_y1_x2_y2_duration_1">Swipe(x1, y1, x2, y2, [duration])</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#crypto_crypto">Crypto</a></span><ul>
+<li><span class="stability_undefined"><a href="#crypto_crypto_digest_message_algorithm_options">$crypto.digest(message, algorithm[, options])</a></span></li>
+<li><span class="stability_undefined"><a href="#crypto_crypto_encrypt_data_key_algorithm_options">$crypto.encrypt(data, key, algorithm, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#crypto">输入和输出的类型和格式</a></span></li>
 </ul>
 </li>
 <li><span class="stability_2"><a href="#device_device">Device</a></span><ul>
@@ -839,6 +847,8 @@
 </li>
 <li><span class="stability_undefined"><a href="#ui_ui">用户界面: UI</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_view">视图: View</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_attr_name_value">attr(name, value)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_w">w</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_h">h</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_id">id</a></span></li>
@@ -920,7 +930,11 @@
 <li><span class="stability_undefined"><a href="#ui_checkbox">勾选框控件: checkbox</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_radio">选择框控件: radio</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_radiogroup">选择框布局: radiogroup</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_switch">开关控件: switch</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_switch">开关控件: Switch</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_checked">checked</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_text_2">text</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ui_progressbar">进度条控件: progressbar</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_seekbar">拖动条控件: seekbar</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_spinner">下来菜单控件: spinner</a></span></li>
@@ -928,20 +942,32 @@
 <li><span class="stability_undefined"><a href="#ui_datepicker">日期选择控件: datepicker</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_fab">浮动按钮控件: fab</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_toolbar">标题栏控件: toolbar</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_card">卡片: card</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_card">卡片: card</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_cardbackgroundcolor">cardBackgroundColor</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_cardcornerradius">cardCornerRadius</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_cardelevation">cardElevation</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_contentpadding">contentPadding</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_foreground_1">foreground</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ui_drawer">抽屉布局: drawer</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_list">列表: list</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_tab_tab">Tab: tab</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_1">ui</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_ui_layout_xml">ui.layout(xml)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_inflate_xml_parent">ui.inflate(xml[, parent])</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_layoutfile_xmlfile">ui.layoutFile(xmlFile)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_inflate_xml_parent_null_attachtoparent_false">ui.inflate(xml[, parent = null, attachToParent = false])</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#ui_ui_registerwidget_name_widget">ui.registerWidget(name, widget)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_isuithread">ui.isUiThread()</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_ui_findview_id">ui.findView(id)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_finish">ui.finish()</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_setcontentview_view">ui.setContentView(view)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_post_callback_delay_0">ui.post(callback[, delay = 0])</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_run_callback">ui.run(callback)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_post_callback_daley">ui.post(callback[, daley])</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_ui_statusbarcolor_color">ui.statusBarColor(color)</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_ui_showpopupmenu_view_menu">ui.showPopupMenu(view, menu)</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_useandroidresources">ui.useAndroidResources()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#ui_dimension">尺寸的单位: Dimension</a></span></li>
@@ -957,8 +983,8 @@
 <p>Auto.js使用<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript">JavaScript</a>作为脚本语言，目前使用<a href="https://developer.mozilla.org/zh-CN/docs/Mozilla/Projects/Rhino">Rhino 1.7.7.2</a>作为脚本引擎，支持ES5与部分ES6特性。</p>
 <ul>
 <li>因为Auto.js是基于JavaScript的，学习Auto.js的API之前建议先学习JavaScript的基本语法和内置对象，可以使用教程前面的两个JavaScript教程链接来学习。</li>
-<li>如果您想要使用TypeScript来开发，目前已经有开发者公布了一个可以使用TypeScript进行Auto.js开发的工具，参见<a href="https://github.com/pboymt/autojs-dev">Auto.js DevTools</a>。</li>
-<li>如果想要在电脑而不是手机上开发Auto.js，可以使用VS Code以及相应的Auto.js插件使得在电脑上编辑的脚本能推送到手机运行，参见<a href="https://github.com/hyb1996/Auto.js-VSCode-Extension">Auto.js-VSCode-Extension</a>。</li>
+<li>如果您想要使用TypeScript来开发，目前已经有开发者公布了一个可以把使用TypeScript进行Auto.js开发的工具，参见<a href="https://github.com/pboymt/autojs-dev">Auto.js DevTools</a>。</li>
+<li>如果想要在电脑而不是手机上开发Auto.js，可以使用VS Code以及相应的Auto.js插件使得在电脑上编辑的脚本能推送到手机运行，参见<a href="https://github.com/hyb1996/Auto.js-VSCode-Extension">Auto.js-VSCode-Extension</a>，Auto.js Pro用户则需要使用<a href="https://marketplace.visualstudio.com/items?itemName=hyb1996.auto-js-pro-ext">Auto.js-Pro-Ext</a>。</li>
 </ul>
 <p>本文档的章节大致上是以模块来分的，总体上可以分成&quot;自动操作&quot;类模块(控件操作、触摸模拟、按键模拟等)和其他类模块(设备、应用、界面等)。</p>
 <p>&quot;自动操作&quot;的部分又可以大致分为基于控件和基于坐标的操作。基于坐标的操作是传统按键精灵、触摸精灵等脚本软件采用的方式，通过屏幕坐标来点击、长按指定位置模拟操作，从而到达目的。例如<code>click(100, 200)</code>, <code>press(100, 200, 500)</code>等。这种方式在游戏类脚本中比较有可行性，结合找图找色、坐标放缩功能也能达到较好的兼容性。但是，这种方式对一般软件脚本却难以达到想要的效果，而且这种方式需要安卓7.0版本以上或者root权限才能执行。所以对于一般软件脚本(例如批量添加联系人、自动提取短信验证码等等)，我们采用基于控件的模拟操作方式，结合通知事情、按键事情等达成更好的工作流。这些部分的文档参见<a href="widgets-based-automation.html">基于控件的操作</a>和<a href="coordinates-based-automation.html">基于坐标的操作</a>。</p>
@@ -1129,7 +1155,7 @@ app.editFile(&quot;/sdcard/1.txt/);
 app.uninstall(&quot;com.tencent.mobileqq&quot;);
 </code></pre><h2>app.openUrl(url)<span><a class="mark" href="#app_app_openurl_url" id="app_app_openurl_url">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 网站的Url，如果不以&quot;<a href="http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 网站的Url，如果不以&quot;http://&quot;或&quot;https://&quot;开头则默认是&quot;http://&quot;。</li>
 </ul>
 </div><p>用浏览器打开网站url。</p>
 <p>如果没有安装浏览器应用，则抛出<code>ActivityNotException</code>。</p>
@@ -1184,6 +1210,7 @@ app.startActivity({
     data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, 
     packageName: &quot;com.tencent.mobileqq&quot;, 
 });
+
 </code></pre><h2>app.intent(options)<span><a class="mark" href="#app_app_intent_options" id="app_app_intent_options">#</a></span></h2>
 <div class="signature"><ul>
 <li><p><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 选项，包括：</p>
@@ -1275,7 +1302,7 @@ context.startActivity(i);
 <h2>app.parseUri(uri)<span><a class="mark" href="#app_app_parseuri_uri" id="app_app_parseuri_uri">#</a></span></h2>
 <p><strong>[v4.1.0新增]</strong></p>
 <ul>
-<li><code>uri</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href="https://www.autojs.org">https://www.autojs.org</a>&quot;</li>
+<li><code>uri</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 一个代表Uri的字符串，例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href="https://www.autojs.org&quot;">https://www.autojs.org&quot;</a></li>
 <li>返回 <span class="type">&lt;Uri&gt;</span> 一个代表Uri的对象，参见<a href="https://developer.android.com/reference/android/net/Uri">android.net.Uri</a>。</li>
 </ul>
 <p>解析uri字符串并返回相应的Uri对象。即使Uri格式错误，该函数也会返回一个Uri对象，但之后如果访问该对象的scheme, path等值可能因解析失败而返回<code>null</code>。</p>
@@ -1286,8 +1313,52 @@ context.startActivity(i);
 <li><code>path</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 文件路径，例如&quot;/sdcard/1.txt&quot;</li>
 <li>返回 <span class="type">&lt;Uri&gt;</span> 一个指向该文件的Uri的对象，参见<a href="https://developer.android.com/reference/android/net/Uri">android.net.Uri</a>。</li>
 </ul>
-<p>从一个文件路径创建一个uri对象。需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此返回的Uri会是诸如<code>content://...</code>的形式。
-<!-- [end-include:app.md] --></p>
+<p>从一个文件路径创建一个uri对象。需要注意的是，在高版本Android上，由于系统限制直接在Uri暴露文件的绝对路径，因此返回的Uri会是诸如<code>content://...</code>的形式。</p>
+<h2>app.getInstalledApps([options])<span><a class="mark" href="#app_app_getinstalledapps_options" id="app_app_getinstalledapps_options">#</a></span></h2>
+<p><strong> [<a href="https://pro.autojs.org/">Pro 8.0.0新增</a>] </strong></p>
+<ul>
+<li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 选项，包括：<ul>
+<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>
+<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>
+<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>
+<li><code>&quot;gids&quot;</code> 应用的group id</li>
+<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>
+<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>
+<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>
+<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>
+<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>
+<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>
+<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>
+<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>
+<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>
+<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>
+<li><code>&quot;uri_permission_patterns&quot;</code></li>
+<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>
+<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>
+<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>
+</ul>
+</li>
+<li><code>match</code>: 指定要匹配的应用列表<ul>
+<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>
+<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>
+<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>
+<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>
+<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>
+<li><code>&quot;apex&quot;</code> APEX应用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>返回 <span class="type">&lt;Array\&lt;ApplicationInfo>&gt;</span></li>
+</ul>
+<p>返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 <code>uninstalled_packages</code>，则包括被删除但保留了数据的应用程序。
+获取安装的应用列表。</p>
+<p>返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。 </p>
+<p>选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。</p>
+<pre><code>let apps = $app.getInstalledApps({
+    matcg
+})
+</code></pre><!-- [end-include:app.md] -->
 <!-- [start-include:console.md] -->
 <h1>Console<span><a class="mark" href="#console_console" id="console_console">#</a></span></h1>
 <div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>控制台模块提供了一个和Web浏览器中相似的用于调试的控制台。用于输出一些调试信息、中间结果等。
@@ -1527,6 +1598,7 @@ events.on(&#39;exit&#39;, function(){
 });
 //执行一些点击操作
 ...
+
 </code></pre><p><strong>注意以下命令需要root权限</strong></p>
 <h2>RootAutomator.tap(x, y[, id])<span><a class="mark" href="#coordinates_based_automation_rootautomator_tap_x_y_id" id="coordinates_based_automation_rootautomator_tap_x_y_id">#</a></span></h2>
 <div class="signature"><ul>
@@ -1624,6 +1696,62 @@ sleep(500);
 </ul>
 </div><p>滑动。从(x1, y1)位置滑动到(x2, y2)位置。
 <!-- [end-include:coordinates-based-automation.md] --></p>
+<!-- [start-include:crypto.md] -->
+<h1>Crypto<span><a class="mark" href="#crypto_crypto" id="crypto_crypto">#</a></span></h1>
+<p><strong> [<a href="https://pro.autojs.org/">Pro 8.0.0新增</a>] </strong></p>
+<p>$crypto模块提供了对称加密(例如AES)、非对称加密(例如RSA)、消息摘要(例如MD5, SHA)等支持。</p>
+<h2>$crypto.digest(message, algorithm[, options])<span><a class="mark" href="#crypto_crypto_digest_message_algorithm_options" id="crypto_crypto_digest_message_algorithm_options">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>message</code> <span class="type">&lt;any&gt;</span></li>
+<li><code>algorithm</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 消息摘要算法，包括：<ul>
+<li>MD5</li>
+<li>SHA-1</li>
+<li>SHA-256</li>
+<li>SHA-384</li>
+<li>SHA-512</li>
+</ul>
+</li>
+<li><code>options</code> <span class="type">&lt;any&gt;</span></li>
+</ul>
+</div><p>对信息message使用消息摘要算法<code>algorithm</code>进行摘要并返回结果，默认的输出格式为hex。</p>
+<p>参数message的类型默认为字符串，返回值默认为hex；可以通过options来指定参数message的类型和返回值的类型、格式，比如文件、base64、字节数组、hex等。参见《输入和输出的类型和格式》。</p>
+<pre><code class="lang-javascript">// 计算字符串abc的md5
+toastLog($crypto.digest(&quot;abc&quot;, &quot;MD5&quot;));
+// 计算字符串abc的sha-256
+toastLog($crypto.digest(&quot;abc&quot;, &quot;SHA-256&quot;));
+// 计算文件/sdcard/1.txt的md5
+toastLog($crypto.digest(&quot;/sdcard/1.txt&quot;, &quot;MD5&quot;, {
+    input: &quot;file&quot;
+}));
+</code></pre>
+<h2>$crypto.encrypt(data, key, algorithm, options)<span><a class="mark" href="#crypto_crypto_encrypt_data_key_algorithm_options" id="crypto_crypto_encrypt_data_key_algorithm_options">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>data</code> <span class="type">&lt;any&gt;</span> 明文消息</li>
+<li><code>key</code> <span class="type">&lt;Key&gt;</span> 密钥</li>
+<li><p><code>algorithm</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 加密算法，包括：</p>
+<ul>
+<li>AES</li>
+<li>AES/ECB/NoPadding</li>
+<li>AES/ECB/PKCS5Padding</li>
+<li>AES/CBC/NoPadding</li>
+<li>AES/CBC/PKCS5Padding</li>
+<li>AES/CFB/NoPadding</li>
+<li>AES/CFB/PKCS5Padding</li>
+<li>AES/CTR/NoPadding</li>
+<li>AES/CTR/PKCS5Padding</li>
+<li>AES/OFB/PKCS5Padding</li>
+<li>AES/OFB/PKCS5Padding</li>
+<li>RSA/ECB/PKCS1Padding</li>
+<li>RSA/ECB/NoPadding</li>
+<li>...
+具体可参阅 <a href="https://developer.android.com/reference/javax/crypto/Cipher">javax.crypto.Cipher</a></li>
+</ul>
+</li>
+<li><p><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 加密选项</p>
+</li>
+</ul>
+</div><h2>输入和输出的类型和格式<span><a class="mark" href="#crypto" id="crypto">#</a></span></h2>
+<!-- [end-include:crypto.md] -->
 <!-- [start-include:device.md] -->
 <h1>Device<span><a class="mark" href="#device_device" id="device_device">#</a></span></h1>
 <div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>device模块提供了与设备有关的信息与操作，例如获取设备宽高，内存使用率，IMEI，调整设备亮度、音量等。</p>
@@ -2357,7 +2485,7 @@ engines.execScript(&quot;hello world&quot;, &quot;helloWorld();\n&quot; + helloW
 </code></pre><p>如果要传递变量，则可以把这些封装成一个函数：</p>
 <pre><code>function exec(action, args){
     args = args || {};
-    engines.execScript(action.name, action + &quot;(&quot; + JSON.stringify(args) + &quot;);\n&quot; + action.toString());
+    engines.execScript(action.name, action.name + &quot;(&quot; + JSON.stringify(args) + &quot;);\n&quot; + action.toString());
 }
 
 //要执行的函数，是一个简单的加法
@@ -3036,6 +3164,7 @@ w.setTouchable(false);
 setTimeout(()=&gt;{
     w.close();
 }, 4000);
+
 </code></pre><h2>window.setPosition(x, y)<span><a class="mark" href="#floaty_window_setposition_x_y_1" id="floaty_window_setposition_x_y_1">#</a></span></h2>
 <div class="signature"><ul>
 <li><code>x</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> x</li>
@@ -3064,6 +3193,7 @@ w.setSize(-1, -1);
 setTimeout(()=&gt;{
     w.close();
 }, 2000);
+
 </code></pre><h2>window.getWidht()<span><a class="mark" href="#floaty_window_getwidht_1" id="floaty_window_getwidht_1">#</a></span></h2>
 <p>返回悬浮窗宽度。</p>
 <h2>window.getHeight()<span><a class="mark" href="#floaty_window_getheight_1" id="floaty_window_getheight_1">#</a></span></h2>
@@ -3501,7 +3631,7 @@ log(Jsoup.parse(files.read(&quot;./test.html&quot;)));
 <div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>http模块提供一些进行http请求的函数。</p>
 <h2>http.get(url[, options, callback])<span><a class="mark" href="#http_http_get_url_options_callback" id="http_http_get_url_options_callback">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。参见[http.request()][]。</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数，可选，其参数是一个[Response][]对象。如果不加回调函数，则该请求将阻塞、同步地执行。</li>
 </ul>
@@ -3544,7 +3674,7 @@ if(res.statusCode != 200){
 }
 </code></pre><h2>http.post(url, data[, options, callback])<span><a class="mark" href="#http_http_post_url_data_options_callback" id="http_http_post_url_data_options_callback">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</li>
 <li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> POST数据。</li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
@@ -3567,7 +3697,7 @@ if(html.contains(&quot;页面跳转中&quot;)){
 }
 </code></pre><h2>http.postJson(url[, data, options, callback])<span><a class="mark" href="#http_http_postjson_url_data_options_callback" id="http_http_postjson_url_data_options_callback">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</li>
 <li><code>data</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> POST数据。</li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
@@ -3584,7 +3714,7 @@ r = http.postJson(url, {
 toastLog(r.body.string());
 </code></pre><h2>http.postMultipart(url, files[, options, callback])<span><a class="mark" href="#http_http_postmultipart_url_files_options_callback" id="http_http_postmultipart_url_files_options_callback">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</li>
 <li><code>files</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> POST数据。</li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个<code>Response</code>对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
@@ -3619,7 +3749,7 @@ log(res.body.string());
 log(res.body.string());
 </code></pre><h2>http.request(url[, options, callback])<span><a class="mark" href="#http_http_request_url_options_callback" id="http_http_request_url_options_callback">#</a></span></h2>
 <div class="signature"><ul>
-<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;<a href="http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。">http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</a></li>
+<li><code>url</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 请求的URL地址，需要以&quot;http://&quot;或&quot;https://&quot;开头。如果url没有以&quot;http://&quot;开头，则默认为&quot;http://&quot;。</li>
 <li><code>options</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object" class="type">&lt;Object&gt;</a> 请求选项。参见[http.buildRequest()][]。</li>
 <li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调，其参数是一个[Response][]对象。如果不加回调参数，则该请求将阻塞、同步地执行。</li>
 </ul>
@@ -3775,7 +3905,7 @@ for(var headerName in res.headers){
 <li><code>color1</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 颜色值2</li>
 <li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;Boolean&gt;</a></li>
 </ul>
-</div><p>返回两个颜色是否相等。<em>*注意该函数会忽略Alpha通道的值进行比较</em>。</p>
+</div><p>返回两个颜色是否相等。*<em>注意该函数会忽略Alpha通道的值进行比较</em>。</p>
 <pre><code>log(colors.equals(&quot;#112233&quot;, &quot;#112234&quot;));
 log(colors.equals(0xFF112233, 0xFF223344));
 </code></pre><h1>colors.BLACK<span><a class="mark" href="#images_colors_black" id="images_colors_black">#</a></span></h1>
@@ -4022,7 +4152,7 @@ images.save(clip, &quot;/sdcard/clip.png&quot;);
 <li><code>code</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 颜色空间转换的类型，可选的值有一共有205个（参见<a href="https://docs.opencv.org/3.4.4/d8/d01/group__imgproc__color__conversions.html#ga4e0972be5de079fed4e3a10e24ef5ef0">ColorConversionCodes</a>），这里只列出几个：<ul>
 <li><code>BGR2GRAY</code> BGR转换为灰度</li>
 <li><code>BGR2HSV</code> BGR转换为HSV </li>
-<li>``</li>
+<li><code></code></li>
 </ul>
 </li>
 <li><code>dstCn</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 目标图像的颜色通道数量，如果不填写则根据其他参数自动决定。</li>
@@ -4122,6 +4252,7 @@ for(var i = 0; i &lt; 10; i++){
     captureScreen(&quot;/sdcard/screencapture&quot; + i + &quot;.png&quot;);
     sleep(1000);
 }
+
 </code></pre><p>该函数也可以作为全局函数使用。</p>
 <h2>images.captureScreen()<span><a class="mark" href="#images_images_capturescreen" id="images_images_capturescreen">#</a></span></h2>
 <p>截取当前屏幕并返回一个Image对象。</p>
@@ -4178,6 +4309,7 @@ while(true){
         toast(&quot;找到红色，坐标为(&quot; + point.x + &quot;, &quot; + point.y + &quot;)&quot;);
     }
 }
+
 </code></pre><p>一个区域找色的例子如下：</p>
 <pre><code>//读取本地图片/sdcard/1.png
 var img = images.read(&quot;/sdcard/1.png&quot;);
@@ -4624,7 +4756,7 @@ log(result.sortBy(&quot;top-right&quot;));
 <li>KEYCODE_MENU 82  </li>
 <li>KEYCODE_NOTIFICATION 83  </li>
 <li>KEYCODE_SEARCH 84  </li>
-<li>TAG<em>LAST</em> KEYCODE 85  </li>
+<li>TAG_LAST_ KEYCODE 85  </li>
 </ul>
 <!-- [end-include:keys.md] -->
 <!-- [start-include:media.md] -->
@@ -4967,7 +5099,7 @@ sendButton.click();
 </ul>
 </div><p>创建一个新的选择器。但一般情况不需要使用该函数，因为可以直接用相应条件的语句创建选择器。</p>
 <p>由于历史遗留原因，本不应该这样设计(不应该让<code>id()</code>, <code>text()</code>等作为全局函数，而是应该用<code>By.id()</code>, <code>By.text()</code>)，但为了后向兼容性只能保留这个设计。</p>
-<p>这样的API设计会污染全局变量，后续可能会支持&quot;去掉这些全局函数而使用By.<em>*</em>&quot;的选项。</p>
+<p>这样的API设计会污染全局变量，后续可能会支持&quot;去掉这些全局函数而使用By.***&quot;的选项。</p>
 <h2>UiSelector.algorithm(algorithm)<span><a class="mark" href="#widgets_based_automation_uiselector_algorithm_algorithm" id="widgets_based_automation_uiselector_algorithm_algorithm">#</a></span></h2>
 <p><strong>[v4.1.0新增]</strong></p>
 <ul>
@@ -5828,6 +5960,7 @@ setTimeout(()=&gt;{
     sensors.unregsiterAll();
     app.viewFile(csvPath);
 }, 10 * 1000);
+
 </code></pre><h2>事件: &#39;accuracy_change&#39;<span><a class="mark" href="#sensors_accuracy_change" id="sensors_accuracy_change">#</a></span></h2>
 <div class="signature"><ul>
 <li><code>accuracy</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 表示传感器精度。为以下值之一:<ul>
@@ -5994,6 +6127,7 @@ sh.exit();
 <h3>display-size [reset|widthxheight]<span><a class="mark" href="#shell_display_size_reset_widthxheight" id="shell_display_size_reset_widthxheight">#</a></span></h3>
 <p>替换模拟器/设备显示尺寸。此命令对于在不同尺寸的屏幕上测试您的应用非常有用，它支持使用大屏设备模仿小屏幕分辨率（反之亦然）。<br>示例：</p>
 <pre><code>shell(&quot;am display-size 1280x800&quot;, true);
+
 </code></pre><h3>display-density dpi<span><a class="mark" href="#shell_display_density_dpi" id="shell_display_density_dpi">#</a></span></h3>
 <p>替换模拟器/设备显示密度。此命令对于在不同密度的屏幕上测试您的应用非常有用，它支持使用低密度屏幕在高密度环境环境上进行测试（反之亦然）。<br>示例：</p>
 <pre><code>shell(&quot;am display-density 480&quot;, true);
@@ -6510,7 +6644,7 @@ sum.on(&#39;result&#39;, function(s){
 <!-- [end-include:threads.md] --></p>
 <!-- [start-include:timers.md] -->
 <h1>Timers<span><a class="mark" href="#timers_timers" id="timers_timers">#</a></span></h1>
-<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>timers 模块暴露了一个全局的 API，用于在某个未来时间段调用调度函数。 因为定时器函数是全局的，所以使用该 API 无需调用 timers.<em>*</em></p>
+<div class="api_stability api_stability_2"><a href="documentation.html#documentation_stability_index">Stability: 2</a> - Stable</div><p>timers 模块暴露了一个全局的 API，用于在某个未来时间段调用调度函数。 因为定时器函数是全局的，所以使用该 API 无需调用 timers.***</p>
 <p>Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API，除了它使用了一个不同的内部实现，它是基于 Android Looper-Handler消息循环机制构建的。其实现机制与Node.js比较相似。</p>
 <p>例如，要在5秒后发出消息&quot;hello&quot;:</p>
 <pre><code>setTimeout(function(){
@@ -6583,7 +6717,10 @@ setTimeout(function(){
 <!-- [start-include:ui.md] -->
 <h1>用户界面: UI<span><a class="mark" href="#ui_ui" id="ui_ui">#</a></span></h1>
 <p>ui模块提供了编写用户界面的支持。</p>
-<p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:</p>
+<pre><code>给Android开发者或者高阶用户的提醒，Auto.js的UI系统来自于Android，所有属性和方法都能在Android源码中找到。如果某些代码或属性没有出现在Auto.js的文档中，可以参考Android的文档。
+View: https://developer.android.google.cn/reference/android/view/View?hl=cn
+Widget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn
+</code></pre><p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:s</p>
 <pre><code>&quot;ui&quot;;
 
 //脚本的其他代码
@@ -6591,7 +6728,7 @@ setTimeout(function(){
 <p>界面是由视图(View)组成的。View分成两种，控件(Widget)和布局(Layout)。控件(Widget)用来具体显示文字、图片、网页等，比如文本控件(text)用来显示文字，按钮控件(button)则可以显示一个按钮并提供点击效果，图片控件(img)则用来显示来自网络或者文件的图片，除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的&quot;容器&quot;，用于控制在他里面的控件的位置，比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列)，水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列)，以及帧布局(frame)，他会把他里面的控件直接在左上角显示，如果有多个控件，后面的控件会重叠在前面的控件上。</p>
 <p>我们使用xml来编写界面，并通过<code>ui.layout()</code>函数指定界面的布局xml。举个例子：</p>
 <pre><code>&quot;ui&quot;;
-ui.layout(
+$ui.layout(
     &lt;vertical&gt;
         &lt;button text=&quot;第一个按钮&quot;/&gt;
         &lt;button text=&quot;第二个按钮&quot;/&gt;
@@ -6627,6 +6764,61 @@ ui.layout(
 </ul>
 <h1>视图: View<span><a class="mark" href="#ui_view" id="ui_view">#</a></span></h1>
 <p>控件和布局都属于视图(View)。在这个章节中将介绍所有控件和布局的共有的属性和函数。例如属性背景，宽高等(所有控件和布局都能设置背景和宽高)，函数<code>click()</code>设置视图(View)被点击时执行的动作。</p>
+<h2>attr(name, value)<span><a class="mark" href="#ui_attr_name_value" id="ui_attr_name_value">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性名称</li>
+<li><code>value</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性的值</li>
+</ul>
+</div><p>设置属性的值。属性指定是View在xml中的属性。例如可以通过语句<code>attr(&quot;text&quot;, &quot;文本&quot;)</code>来设置文本控件的文本值。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;example&quot; text=&quot;Hello&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+// 5秒后执行
+$ui.post(() =&gt; {
+    // 修改文本
+    $ui.example.attr(&quot;text&quot;, &quot;Hello, Auto.js UI&quot;);
+    // 修改背景
+    $ui.example.attr(&quot;bg&quot;, &quot;#ff00ff&quot;);
+    // 修改高度
+    $ui.example.attr(&quot;h&quot;, &quot;500dp&quot;);
+}, 5000);
+</code></pre>
+<p><strong>注意：</strong>并不是所有属性都能在js代码设置，有一些属性只能在布局创建时设置，例如style属性；还有一些属性虽然能在代码中设置，但是还没支持；对于这些情况，在Auto.js Pro 8.1.0+会抛出异常，其他版本则不会抛出异常。</p>
+<h2>attr(name)<span><a class="mark" href="#ui_attr_name" id="ui_attr_name">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 属性名称</li>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a></li>
+</ul>
+</div><p>获取属性的值。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;example&quot; text=&quot;1&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+plusOne();
+
+function plusOne() {
+    // 获取文本
+    let text = $ui.example.attr(&quot;text&quot;);
+    // 解析为数字
+    let num = parseInt(text);
+    // 数字加1
+    num++;
+    // 设置文本
+    $ui.example.attr(&quot;text&quot;, String(num));
+    // 1秒后继续
+    $ui.post(plusOne, 1000);
+}
+
+</code></pre>
 <h2>w<span><a class="mark" href="#ui_w" id="ui_w">#</a></span></h2>
 <p>View的宽度，是属性<code>width</code>的缩写形式。可以设置的值为<code>*</code>, <code>auto</code>和具体数值。其中<code>*</code>表示宽度<strong>尽量</strong>填满父布局，而<code>auto</code>表示宽度将根据View的内容自动调整(自适应宽度)。例如：</p>
 <pre><code>&quot;ui&quot;;
@@ -6966,7 +7158,7 @@ ui.layout(
 <p>图片控件用于显示来自网络、本地或者内嵌数据的图片，并可以指定图片以圆角矩形、圆形等显示。但是不能用于显示gif动态图。</p>
 <p>这里只介绍他的主要方法和属性，如果要查看他的所有方法和属性，阅读<a href="http://www.zhdoc.net/android/reference/android/widget/ImageView.html">ImageView</a>。</p>
 <h2>src<span><a class="mark" href="#ui_src" id="ui_src">#</a></span></h2>
-<p>使用一个Uri指定图片的来源。可以是图片的地址(<a href="http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。">http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</a></p>
+<p>使用一个Uri指定图片的来源。可以是图片的地址(http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</p>
 <p>如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。</p>
 <p>例如，显示百度的logo:</p>
 <pre><code>&quot;ui&quot;;
@@ -7098,7 +7290,16 @@ ui.layout(
 <h1>勾选框控件: checkbox<span><a class="mark" href="#ui_checkbox" id="ui_checkbox">#</a></span></h1>
 <h1>选择框控件: radio<span><a class="mark" href="#ui_radio" id="ui_radio">#</a></span></h1>
 <h1>选择框布局: radiogroup<span><a class="mark" href="#ui_radiogroup" id="ui_radiogroup">#</a></span></h1>
-<h1>开关控件: switch<span><a class="mark" href="#ui_switch" id="ui_switch">#</a></span></h1>
+<h1>开关控件: Switch<span><a class="mark" href="#ui_switch" id="ui_switch">#</a></span></h1>
+<p>开关控件用于表示一个选项是否被选中。</p>
+<h2>checked<span><a class="mark" href="#ui_checked" id="ui_checked">#</a></span></h2>
+<p>表示开关是否被选中。可选的值为：</p>
+<ul>
+<li><code>true</code> 打开开关</li>
+<li><code>false</code> 关闭开关</li>
+</ul>
+<h2>text<span><a class="mark" href="#ui_text_2" id="ui_text_2">#</a></span></h2>
+<p>对开关进行描述的文字。</p>
 <h1>进度条控件: progressbar<span><a class="mark" href="#ui_progressbar" id="ui_progressbar">#</a></span></h1>
 <h1>拖动条控件: seekbar<span><a class="mark" href="#ui_seekbar" id="ui_seekbar">#</a></span></h1>
 <h1>下来菜单控件: spinner<span><a class="mark" href="#ui_spinner" id="ui_spinner">#</a></span></h1>
@@ -7107,24 +7308,163 @@ ui.layout(
 <h1>浮动按钮控件: fab<span><a class="mark" href="#ui_fab" id="ui_fab">#</a></span></h1>
 <h1>标题栏控件: toolbar<span><a class="mark" href="#ui_toolbar" id="ui_toolbar">#</a></span></h1>
 <h1>卡片: card<span><a class="mark" href="#ui_card" id="ui_card">#</a></span></h1>
+<p>卡片控件是一个拥有圆角、阴影的控件。</p>
+<h2>cardBackgroundColor<span><a class="mark" href="#ui_cardbackgroundcolor" id="ui_cardbackgroundcolor">#</a></span></h2>
+<p>卡片的背景颜色。</p>
+<h2>cardCornerRadius<span><a class="mark" href="#ui_cardcornerradius" id="ui_cardcornerradius">#</a></span></h2>
+<p>卡片的圆角半径。</p>
+<h2>cardElevation<span><a class="mark" href="#ui_cardelevation" id="ui_cardelevation">#</a></span></h2>
+<p>设置卡片在z轴上的高度，来控制阴影的大小。</p>
+<h2>contentPadding<span><a class="mark" href="#ui_contentpadding" id="ui_contentpadding">#</a></span></h2>
+<p>设置卡片的内边距。该属性包括四个值：</p>
+<ul>
+<li><code>contentPaddingLeft</code> 左内边距</li>
+<li><code>contentPaddingRight</code> 右内边距</li>
+<li><code>contentPaddingTop</code> 上内边距</li>
+<li><code>contentPaddingBottom</code> 下内边距</li>
+</ul>
+<h2>foreground<span><a class="mark" href="#ui_foreground_1" id="ui_foreground_1">#</a></span></h2>
+<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果。</p>
 <h1>抽屉布局: drawer<span><a class="mark" href="#ui_drawer" id="ui_drawer">#</a></span></h1>
 <h1>列表: list<span><a class="mark" href="#ui_list" id="ui_list">#</a></span></h1>
 <h1>Tab: tab<span><a class="mark" href="#ui_tab_tab" id="ui_tab_tab">#</a></span></h1>
 <h1>ui<span><a class="mark" href="#ui_ui_1" id="ui_ui_1">#</a></span></h1>
 <h2>ui.layout(xml)<span><a class="mark" href="#ui_ui_layout_xml" id="ui_ui_layout_xml">#</a></span></h2>
-<h2>ui.inflate(xml[, parent])<span><a class="mark" href="#ui_ui_inflate_xml_parent" id="ui_ui_inflate_xml_parent">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <span class="type">&lt;XML&gt;</span> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 布局XML或者XML字符串</li>
+</ul>
+</div><p>将布局XML渲染为视图（View）对象， 并设置为当前视图。</p>
+<h2>ui.layoutFile(xmlFile)<span><a class="mark" href="#ui_ui_layoutfile_xmlfile" id="ui_ui_layoutfile_xmlfile">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 布局XML文件的路径</li>
+</ul>
+</div><p>此函数和<code>ui.layout</code>相似，只不过允许传入一个xml文件路径来渲染布局。</p>
+<h2>ui.inflate(xml[, parent = null, attachToParent = false])<span><a class="mark" href="#ui_ui_inflate_xml_parent_null_attachtoparent_false" id="ui_ui_inflate_xml_parent_null_attachtoparent_false">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>xml</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <span class="type">&lt;XML&gt;</span> 布局XML或者XML字符串</li>
+<li><code>parent</code> <span class="type">&lt;View&gt;</span> 父视图</li>
+<li><code>attachToParent</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a> 是否渲染的View加到父视图中，默认为false</li>
+<li>返回 <span class="type">&lt;View&gt;</span></li>
+</ul>
+</div><p>将布局XML渲染为视图（View）对象。如果该View将作为某个View的子View，我们建议传入<code>parent</code>参数，这样在渲染时依赖于父视图的一些布局属性能够正确应用。</p>
+<p>此函数用于动态创建、显示View。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+$ui.layout(
+    &lt;linear id=&quot;container&quot;&gt;
+    &lt;/linear&gt;
+);
+
+// 动态创建3个文本控件，并加到container容器中
+// 这里仅为实例，实际上并不推荐这种做法，如果要展示列表，
+// 使用list组件；动态创建十几个、几十个View会让界面卡顿
+for (let i = 0; i &lt; 3; i++) {
+    let textView = $ui.inflate(
+        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;
+    , $ui.container);
+    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);
+    $ui.container.addView(textView);
+}
+</code></pre>
+<h1>ui.registerWidget(name, widget)<span><a class="mark" href="#ui_ui_registerwidget_name_widget" id="ui_ui_registerwidget_name_widget">#</a></span></h1>
+<div class="signature"><ul>
+<li><code>name</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> 组件名称</li>
+<li><code>widget</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 组件</li>
+</ul>
+</div><p>注册一个自定义组件。参考示例-&gt;界面控件-&gt;自定义控件。</p>
+<h1>ui.isUiThread()<span><a class="mark" href="#ui_ui_isuithread" id="ui_ui_isuithread">#</a></span></h1>
+<div class="signature"><ul>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Boolean_type" class="type">&lt;boolean&gt;</a></li>
+</ul>
+</div><p>返回当前线程是否是UI线程。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+log($ui.isUiThread()); // =&gt; true
+
+$threads.start(function () {
+    log($ui.isUiThread()); // =&gt; false
+});
+
+</code></pre>
 <h2>ui.findView(id)<span><a class="mark" href="#ui_ui_findview_id" id="ui_ui_findview_id">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>id</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> View的ID</li>
+<li>返回 <span class="type">&lt;View&gt;</span></li>
+</ul>
+</div><p>在当前视图中根据ID查找相应的视图对象并返回。如果当前未设置视图或找不到此ID的视图时返回<code>null</code>。</p>
+<p>一般我们都是通过<code>ui.xxx</code>来获取id为xxx的控件，如果xxx是一个ui已经有的属性，就可以通过<code>$ui.findView()</code>来获取这个控件。</p>
 <h2>ui.finish()<span><a class="mark" href="#ui_ui_finish" id="ui_ui_finish">#</a></span></h2>
+<p>结束当前活动并销毁界面。</p>
 <h2>ui.setContentView(view)<span><a class="mark" href="#ui_ui_setcontentview_view" id="ui_ui_setcontentview_view">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>view</code> <span class="type">&lt;View&gt;</span> </li>
+</ul>
+</div><p>将视图对象设置为当前视图。</p>
+<h2>ui.post(callback[, delay = 0])<span><a class="mark" href="#ui_ui_post_callback_delay_0" id="ui_ui_post_callback_delay_0">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数</li>
+<li><code>delay</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 延迟，单位毫秒</li>
+</ul>
+</div><p>将<code>callback</code>加到UI线程的消息循环中，并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）。</p>
+<p>此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用），也可以用于子线程中更新UI。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+
+ui.layout(
+    &lt;frame&gt;
+        &lt;text id=&quot;result&quot;/&gt;
+    &lt;/frame&gt;
+);
+
+ui.result.attr(&quot;text&quot;, &quot;计算中&quot;);
+// 在子线程中计算1+ ... + 10000000
+threads.start({
+    let sum = 0;
+    for (let i = 0; i &lt; 1000000; i++) {
+        sum += i;
+    }
+    // 由于不能在子线程操作UI，所以要抛到UI线程执行
+    ui.post(() =&gt; {
+        ui.result.attr(&quot;text&quot;, String(sum));
+    });
+});
+</code></pre>
 <h2>ui.run(callback)<span><a class="mark" href="#ui_ui_run_callback" id="ui_ui_run_callback">#</a></span></h2>
-<h2>ui.post(callback[, daley])<span><a class="mark" href="#ui_ui_post_callback_daley" id="ui_ui_post_callback_daley">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>callback</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function" class="type">&lt;Function&gt;</a> 回调函数</li>
+<li>返回 callback的执行结果</li>
+</ul>
+</div><p>将<code>callback</code>在UI线程中执行。如果当前已经在UI线程中，则直接执行<code>callback</code>；否则将<code>callback</code>抛到UI线程中执行（加到UI线程的消息循环的末尾），<strong>并等待callback执行结束(阻塞当前线程)</strong>。</p>
 <h2>ui.statusBarColor(color)<span><a class="mark" href="#ui_ui_statusbarcolor_color" id="ui_ui_statusbarcolor_color">#</a></span></h2>
-<h2>ui.showPopupMenu(view, menu)<span><a class="mark" href="#ui_ui_showpopupmenu_view_menu" id="ui_ui_showpopupmenu_view_menu">#</a></span></h2>
+<div class="signature"><ul>
+<li>color <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">&lt;string&gt;</a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 颜色</li>
+</ul>
+</div><p>设置当前界面的状态栏颜色。</p>
+<pre><code class="lang-javascript">&quot;ui&quot;;
+ui.statusBarColor(&quot;#000000&quot;);
+</code></pre>
+<h2>ui.useAndroidResources()<span><a class="mark" href="#ui_ui_useandroidresources" id="ui_ui_useandroidresources">#</a></span></h2>
+<p>启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性。启用该特性后，在project.json中进行以下配置，就可以像写Android原生一样写界面：</p>
+<pre><code class="lang-json">{
+    // ...
+    androidResources: {
+        &quot;resDir&quot;: &quot;res&quot;,  // 资源文件夹
+        &quot;manifest&quot;: &quot;AndroidManifest.xml&quot; // AndroidManifest文件路径
+    }
+}
+</code></pre>
+<p>res文件夹通常为以下结构：</p>
+<pre><code>- res
+    - layout  // 布局资源
+    - drawable // 图片、形状等资源
+    - menu // 菜单资源
+    - values // 样式、字符串等资源
+    // ...
+</code></pre><p>可参考示例-&gt;复杂界面-&gt;Android原生界面。</p>
 <h1>尺寸的单位: Dimension<span><a class="mark" href="#ui_dimension" id="ui_dimension">#</a></span></h1>
 <h1>Drawables<span><a class="mark" href="#ui_drawables" id="ui_drawables">#</a></span></h1>
 <h1>颜色<span><a class="mark" href="#ui" id="ui">#</a></span></h1>
-<p><strong>(完善中...)</strong>
-<!-- [end-include:ui.md] --></p>
+<p><strong>(完善中...)</strong></p>
+<!-- [end-include:ui.md] -->
 
       </div>
     </div>

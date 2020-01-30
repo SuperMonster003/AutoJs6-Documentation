@@ -1,10 +1,10 @@
 {
-  "source": "..\\api\\ui.md",
+  "source": "../api/ui.md",
   "modules": [
     {
       "textRaw": "用户界面: UI",
       "name": "用户界面:_ui",
-      "desc": "<p>ui模块提供了编写用户界面的支持。</p>\n<p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:</p>\n<pre><code>&quot;ui&quot;;\n\n//脚本的其他代码\n</code></pre><p>字符串&quot;ui&quot;的前面可以有注释、空行和空格<strong>[v4.1.0新增]</strong>，但是不能有其他代码。</p>\n<p>界面是由视图(View)组成的。View分成两种，控件(Widget)和布局(Layout)。控件(Widget)用来具体显示文字、图片、网页等，比如文本控件(text)用来显示文字，按钮控件(button)则可以显示一个按钮并提供点击效果，图片控件(img)则用来显示来自网络或者文件的图片，除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的&quot;容器&quot;，用于控制在他里面的控件的位置，比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列)，水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列)，以及帧布局(frame)，他会把他里面的控件直接在左上角显示，如果有多个控件，后面的控件会重叠在前面的控件上。</p>\n<p>我们使用xml来编写界面，并通过<code>ui.layout()</code>函数指定界面的布局xml。举个例子：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个例子中，第3~6行的部分就是xml，指定了界面的具体内容。代码的第3行的标签<code>&lt;vertical&gt; ... &lt;/vertical&gt;</code>表示垂直布局，布局的标签通常以<code>&lt;...&gt;</code>开始，以<code>&lt;/...&gt;</code>结束，两个标签之间的内容就是布局里面的内容，例如<code>&lt;frame&gt; ... &lt;/frame&gt;</code>。在这个例子中第4, 5行的内容就是垂直布局(vertical)里面的内容。代码的第4行是一个按钮控件(button)，控件的标签通常以<code>&lt;...</code>开始，以<code>/&gt;</code>结束，他们之间是控件的具体属性，例如<code>&lt;text ... /&gt;</code>。在这个例子中<code>text=&quot;第一个按钮&quot;</code>的部分就是按钮控件(button)的属性，这个属性指定了这个按钮控件的文本内容(text)为&quot;第一个按钮&quot;。</p>\n<p>代码的第5行和第4行一样，也是一个按钮控件，只不过他的文本内容为&quot;第二个按钮&quot;。这两个控件在垂直布局中，因此会纵向排列，效果如图：</p>\n<p><img src=\"images/ex1.png\" alt=\"ex1\"></p>\n<p>如果我们把这个例子的垂直布局(vertical)改成水平布局(horizontal)，也即：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>则这两个按钮会横向排列，效果如图：</p>\n<p><img src=\"images/ex1-horizontal.png\" alt=\"ex1-horizontal\"></p>\n<p>一个控件可以指定多个属性(甚至可以不指定任何属性)，用空格隔开即可；布局同样也可以指定属性，例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical bg=&quot;#ff0000&quot;&gt;\n        &lt;button text=&quot;第一个按钮&quot; textSize=&quot;20sp&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>第三行<code>bg=&quot;#ff0000&quot;</code>指定了垂直布局的背景色(bg)为&quot;#ff0000&quot;，这是一个RGB颜色，表示红色(有关RGB的相关知识参见<a href=\"http://tool.oschina.net/commons?type=3\">RGB颜色对照表</a>)。第四行的<code>textSize=&quot;20sp&quot;</code>则指定了按钮控件的字体大小(textSize)为&quot;20sp&quot;，sp是一个字体单位，暂时不用深入理会。上述代码的效果如图：</p>\n<p><img src=\"images/ex1-properties.png\" alt=\"ex-properties\"></p>\n<p>一个界面便由一些布局和控件组成。为了便于文档阅读，我们再说明一下以下术语：</p>\n<ul>\n<li>子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图。实际上布局里面不仅仅只能有控件，还可以是嵌套的布局。因此用子视图(Child View)更准确一些。在上面的例子中，按钮便是垂直布局的子控件。</li>\n<li>父视图，父布局：直接包含一个控件的布局是这个控件的父布局/父视图(Parent View)。在上面的例子中，垂直布局便是按钮的父布局。</li>\n</ul>\n",
+      "desc": "<p>ui模块提供了编写用户界面的支持。</p>\n<pre><code>给Android开发者或者高阶用户的提醒，Auto.js的UI系统来自于Android，所有属性和方法都能在Android源码中找到。如果某些代码或属性没有出现在Auto.js的文档中，可以参考Android的文档。\nView: https://developer.android.google.cn/reference/android/view/View?hl=cn\nWidget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn\n</code></pre><p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式，否则脚本将不会以ui模式运行。正确示范:s</p>\n<pre><code>&quot;ui&quot;;\n\n//脚本的其他代码\n</code></pre><p>字符串&quot;ui&quot;的前面可以有注释、空行和空格<strong>[v4.1.0新增]</strong>，但是不能有其他代码。</p>\n<p>界面是由视图(View)组成的。View分成两种，控件(Widget)和布局(Layout)。控件(Widget)用来具体显示文字、图片、网页等，比如文本控件(text)用来显示文字，按钮控件(button)则可以显示一个按钮并提供点击效果，图片控件(img)则用来显示来自网络或者文件的图片，除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的&quot;容器&quot;，用于控制在他里面的控件的位置，比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列)，水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列)，以及帧布局(frame)，他会把他里面的控件直接在左上角显示，如果有多个控件，后面的控件会重叠在前面的控件上。</p>\n<p>我们使用xml来编写界面，并通过<code>ui.layout()</code>函数指定界面的布局xml。举个例子：</p>\n<pre><code>&quot;ui&quot;;\n$ui.layout(\n    &lt;vertical&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个例子中，第3~6行的部分就是xml，指定了界面的具体内容。代码的第3行的标签<code>&lt;vertical&gt; ... &lt;/vertical&gt;</code>表示垂直布局，布局的标签通常以<code>&lt;...&gt;</code>开始，以<code>&lt;/...&gt;</code>结束，两个标签之间的内容就是布局里面的内容，例如<code>&lt;frame&gt; ... &lt;/frame&gt;</code>。在这个例子中第4, 5行的内容就是垂直布局(vertical)里面的内容。代码的第4行是一个按钮控件(button)，控件的标签通常以<code>&lt;...</code>开始，以<code>/&gt;</code>结束，他们之间是控件的具体属性，例如<code>&lt;text ... /&gt;</code>。在这个例子中<code>text=&quot;第一个按钮&quot;</code>的部分就是按钮控件(button)的属性，这个属性指定了这个按钮控件的文本内容(text)为&quot;第一个按钮&quot;。</p>\n<p>代码的第5行和第4行一样，也是一个按钮控件，只不过他的文本内容为&quot;第二个按钮&quot;。这两个控件在垂直布局中，因此会纵向排列，效果如图：</p>\n<p><img src=\"images/ex1.png\" alt=\"ex1\"></p>\n<p>如果我们把这个例子的垂直布局(vertical)改成水平布局(horizontal)，也即：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>则这两个按钮会横向排列，效果如图：</p>\n<p><img src=\"images/ex1-horizontal.png\" alt=\"ex1-horizontal\"></p>\n<p>一个控件可以指定多个属性(甚至可以不指定任何属性)，用空格隔开即可；布局同样也可以指定属性，例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical bg=&quot;#ff0000&quot;&gt;\n        &lt;button text=&quot;第一个按钮&quot; textSize=&quot;20sp&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>第三行<code>bg=&quot;#ff0000&quot;</code>指定了垂直布局的背景色(bg)为&quot;#ff0000&quot;，这是一个RGB颜色，表示红色(有关RGB的相关知识参见<a href=\"http://tool.oschina.net/commons?type=3\">RGB颜色对照表</a>)。第四行的<code>textSize=&quot;20sp&quot;</code>则指定了按钮控件的字体大小(textSize)为&quot;20sp&quot;，sp是一个字体单位，暂时不用深入理会。上述代码的效果如图：</p>\n<p><img src=\"images/ex1-properties.png\" alt=\"ex-properties\"></p>\n<p>一个界面便由一些布局和控件组成。为了便于文档阅读，我们再说明一下以下术语：</p>\n<ul>\n<li>子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图。实际上布局里面不仅仅只能有控件，还可以是嵌套的布局。因此用子视图(Child View)更准确一些。在上面的例子中，按钮便是垂直布局的子控件。</li>\n<li>父视图，父布局：直接包含一个控件的布局是这个控件的父布局/父视图(Parent View)。在上面的例子中，垂直布局便是按钮的父布局。</li>\n</ul>\n",
       "type": "module",
       "displayName": "用户界面: UI"
     },
@@ -12,6 +12,72 @@
       "textRaw": "视图: View",
       "name": "视图:_view",
       "desc": "<p>控件和布局都属于视图(View)。在这个章节中将介绍所有控件和布局的共有的属性和函数。例如属性背景，宽高等(所有控件和布局都能设置背景和宽高)，函数<code>click()</code>设置视图(View)被点击时执行的动作。</p>\n",
+      "methods": [
+        {
+          "textRaw": "attr(name, value)",
+          "type": "method",
+          "name": "attr",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`name` {string} 属性名称 ",
+                  "name": "name",
+                  "type": "string",
+                  "desc": "属性名称"
+                },
+                {
+                  "textRaw": "`value` {string} 属性的值 ",
+                  "name": "value",
+                  "type": "string",
+                  "desc": "属性的值"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "name"
+                },
+                {
+                  "name": "value"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>设置属性的值。属性指定是View在xml中的属性。例如可以通过语句<code>attr(&quot;text&quot;, &quot;文本&quot;)</code>来设置文本控件的文本值。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;example&quot; text=&quot;Hello&quot;/&gt;\n    &lt;/frame&gt;\n);\n\n// 5秒后执行\n$ui.post(() =&gt; {\n    // 修改文本\n    $ui.example.attr(&quot;text&quot;, &quot;Hello, Auto.js UI&quot;);\n    // 修改背景\n    $ui.example.attr(&quot;bg&quot;, &quot;#ff00ff&quot;);\n    // 修改高度\n    $ui.example.attr(&quot;h&quot;, &quot;500dp&quot;);\n}, 5000);\n</code></pre>\n<p><strong>注意：</strong>并不是所有属性都能在js代码设置，有一些属性只能在布局创建时设置，例如style属性；还有一些属性虽然能在代码中设置，但是还没支持；对于这些情况，在Auto.js Pro 8.1.0+会抛出异常，其他版本则不会抛出异常。</p>\n"
+        },
+        {
+          "textRaw": "attr(name)",
+          "type": "method",
+          "name": "attr",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`name` {string} 属性名称 ",
+                  "name": "name",
+                  "type": "string",
+                  "desc": "属性名称"
+                },
+                {
+                  "textRaw": "返回 {string} ",
+                  "name": "返回",
+                  "type": "string"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "name"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>获取属性的值。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;example&quot; text=&quot;1&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nplusOne();\n\nfunction plusOne() {\n    // 获取文本\n    let text = $ui.example.attr(&quot;text&quot;);\n    // 解析为数字\n    let num = parseInt(text);\n    // 数字加1\n    num++;\n    // 设置文本\n    $ui.example.attr(&quot;text&quot;, String(num));\n    // 1秒后继续\n    $ui.post(plusOne, 1000);\n}\n\n</code></pre>\n"
+        }
+      ],
       "modules": [
         {
           "textRaw": "w",
@@ -358,7 +424,7 @@
         {
           "textRaw": "src",
           "name": "src",
-          "desc": "<p>使用一个Uri指定图片的来源。可以是图片的地址(<a href=\"http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。\">http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</a></p>\n<p>如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。</p>\n<p>例如，显示百度的logo:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img src=&quot;https://www.baidu.com/img/bd_logo1.png&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>再例如，显示文件/sdcard/1.png的图片为 <code>&lt;img src=&quot;file:///sdcard/1.png&quot;/&gt;</code>。\n再例如，使base64显示一张钱包小图片为：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img w=&quot;40&quot; h=&quot;40&quot; src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEu0lEQVRoge3bW4iVVRQH8N+ZnDKxvJUGCSWUlXYle/ChiKAkIiu7UXQjonwNIopM8cHoAhkRGQXdfIiE0Ep8KalQoptRTiFFZiRlOo6TPuSk4zk97G9w5vidc77LPjNi84f1MN+391rrf9a+rL32N4xiFMcUjouo5zyciYPYH0FnBadiNiZiD2oR9JbGRdgiOFPDIXRhCWYU0Dcj6duV6BrQuyWxNaLowBcOO1Uv+7EKc4WINUIlabMq6dNI35eJzRHDWOzS2MEB6cd6XI/OQf07k2frkzat9HQnNkcUG7R2dECq2I53EtmePMvaf+MwcWqKu+RzuqhUcfcwcWqKTvmiXFQ2GDodRhQz0aN9ZHsSG0cVrkGf+GT7MG8YeeTCHeKS7sOdMR1stjcWxY2YH0nXh1gdSdf/E+2I8KVYigkl9ewVUsxNpT1qMzaKN4ejJxrtyEt7IuraE1EX2jOkp+JBnFxSzz68KuTqoyiK2BHuxDO4NpK+j/GoOAWF6BiH98Q/SHyCycPIIxMm4FPZCPTj30SynIFr+A7ThotMK4wXopA1Ym9gSiKv5Oj3bdKnFMpuS514E1fm6NMnbF098s3NS4QS0Ik5+hyBsoSXYkGO9jvxy6C/t+IPIYJZcBWW57AXFfMNrSo2kqqw2l4hvSzcIRTw1sm24FVxb5s4NcR0/JXBuUNYJttI6sDjsi1kvTgrGpsMjq3O4FQNa+SbNhWsyKj7I4wpzSYDbpFtKB/EOSn9ZwpRfx5Xp7yfhN0Z9FdxXxxKjTEe2zI4U8NnKf3PNrT2VcWTKe1eyGjjT+Eapm14IqMjNTyd0n9JSrsDwhmaEN2H8GMOO8viUjyMSfJVJh9O0bGoQdt1eFm2oVwve7UpC1ssX568KEXH6fghp54s8lRkrk7CjpxOrGqg6wQ8IKSKWXPpVtIt8ly+v4ATf2t+yqlgDl5SbCjXy8JIXFXweQEHqngxo43JeEw54l+JVLKaJeypRZzoFxavrIWG6cKPW2SO9+PCMkQHsLiA8fpIv5/DmUn4qaCtpWWIEiLzdUHj9XJA2H5uFRbBZriuoI1NSpatpio+nJtFvFvYd2c1sDsGvxfQ3a/knrwgMtm0qD8rPSprCuq8uRmhVqvanBbvm+EQfsNKIcnvTmnTiUdwQcq73oJ2L2v2stXx6vyCRr8RDuk/C8OMUK24J6VtBaekPG81zxuh0TTJhC7FhtUOHF+n61whGalvu8uRWVJFvgPEYOkqQzhLVSPPXLoYa4Xh3Stcls1NaTdb8Xx7ZxnCvSUIfy/kzWno0Pyzx3dL2C0695Hto7NGUhXy5Lzp3kLZKiqNpNTl2+YShgdIvyXbVck44TB/oKTNzWUIv13S+IDsFmpY84QvZAcwTbh4e04o18SwtbIM4dsiOTFYVgzSv7wN+m9vRqjV/PrA0JuCox1bhYNKQ7Qi3CcU1fpiedRG9AkLXhRfbxCnKlET0s21ifwaSWcPbopBdDDOwGtClTD2vCsq+/C68K8HmVDk7DhFyIsvFzKnGThN+689+oU9dptwQb5B+LB8dx4lMb7xqAhkJwo/xljhFFSfSdUc3mPrcbwj15P+pP0/QiR7hYSkGsHnUYziWMF/mXV4JVcZ8G0AAAAASUVORK5CYII=&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre>",
+          "desc": "<p>使用一个Uri指定图片的来源。可以是图片的地址(http://....)，本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;)。</p>\n<p>如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。</p>\n<p>例如，显示百度的logo:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img src=&quot;https://www.baidu.com/img/bd_logo1.png&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>再例如，显示文件/sdcard/1.png的图片为 <code>&lt;img src=&quot;file:///sdcard/1.png&quot;/&gt;</code>。\n再例如，使base64显示一张钱包小图片为：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img w=&quot;40&quot; h=&quot;40&quot; src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEu0lEQVRoge3bW4iVVRQH8N+ZnDKxvJUGCSWUlXYle/ChiKAkIiu7UXQjonwNIopM8cHoAhkRGQXdfIiE0Ep8KalQoptRTiFFZiRlOo6TPuSk4zk97G9w5vidc77LPjNi84f1MN+391rrf9a+rL32N4xiFMcUjouo5zyciYPYH0FnBadiNiZiD2oR9JbGRdgiOFPDIXRhCWYU0Dcj6duV6BrQuyWxNaLowBcOO1Uv+7EKc4WINUIlabMq6dNI35eJzRHDWOzS2MEB6cd6XI/OQf07k2frkzat9HQnNkcUG7R2dECq2I53EtmePMvaf+MwcWqKu+RzuqhUcfcwcWqKTvmiXFQ2GDodRhQz0aN9ZHsSG0cVrkGf+GT7MG8YeeTCHeKS7sOdMR1stjcWxY2YH0nXh1gdSdf/E+2I8KVYigkl9ewVUsxNpT1qMzaKN4ejJxrtyEt7IuraE1EX2jOkp+JBnFxSzz68KuTqoyiK2BHuxDO4NpK+j/GoOAWF6BiH98Q/SHyCycPIIxMm4FPZCPTj30SynIFr+A7ThotMK4wXopA1Ym9gSiKv5Oj3bdKnFMpuS514E1fm6NMnbF098s3NS4QS0Ik5+hyBsoSXYkGO9jvxy6C/t+IPIYJZcBWW57AXFfMNrSo2kqqw2l4hvSzcIRTw1sm24FVxb5s4NcR0/JXBuUNYJttI6sDjsi1kvTgrGpsMjq3O4FQNa+SbNhWsyKj7I4wpzSYDbpFtKB/EOSn9ZwpRfx5Xp7yfhN0Z9FdxXxxKjTEe2zI4U8NnKf3PNrT2VcWTKe1eyGjjT+Eapm14IqMjNTyd0n9JSrsDwhmaEN2H8GMOO8viUjyMSfJVJh9O0bGoQdt1eFm2oVwve7UpC1ssX568KEXH6fghp54s8lRkrk7CjpxOrGqg6wQ8IKSKWXPpVtIt8ly+v4ATf2t+yqlgDl5SbCjXy8JIXFXweQEHqngxo43JeEw54l+JVLKaJeypRZzoFxavrIWG6cKPW2SO9+PCMkQHsLiA8fpIv5/DmUn4qaCtpWWIEiLzdUHj9XJA2H5uFRbBZriuoI1NSpatpio+nJtFvFvYd2c1sDsGvxfQ3a/knrwgMtm0qD8rPSprCuq8uRmhVqvanBbvm+EQfsNKIcnvTmnTiUdwQcq73oJ2L2v2stXx6vyCRr8RDuk/C8OMUK24J6VtBaekPG81zxuh0TTJhC7FhtUOHF+n61whGalvu8uRWVJFvgPEYOkqQzhLVSPPXLoYa4Xh3Stcls1NaTdb8Xx7ZxnCvSUIfy/kzWno0Pyzx3dL2C0695Hto7NGUhXy5Lzp3kLZKiqNpNTl2+YShgdIvyXbVck44TB/oKTNzWUIv13S+IDsFmpY84QvZAcwTbh4e04o18SwtbIM4dsiOTFYVgzSv7wN+m9vRqjV/PrA0JuCox1bhYNKQ7Qi3CcU1fpiedRG9AkLXhRfbxCnKlET0s21ifwaSWcPbopBdDDOwGtClTD2vCsq+/C68K8HmVDk7DhFyIsvFzKnGThN+689+oU9dptwQb5B+LB8dx4lMb7xqAhkJwo/xljhFFSfSdUc3mPrcbwj15P+pP0/QiR7hYSkGsHnUYziWMF/mXV4JVcZ8G0AAAAASUVORK5CYII=&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre>",
           "type": "module",
           "displayName": "src"
         },
@@ -483,49 +549,248 @@
       "displayName": "帧布局: frame"
     },
     {
+      "textRaw": "选择框布局: radiogroup",
+      "name": "选择框布局: radiogroup",
+      "desc": "<p>开关控件用于表示一个选项是否被选中。</p>\n",
+      "modules": [
+        {
+          "textRaw": "checked",
+          "name": "checked",
+          "desc": "<p>表示开关是否被选中。可选的值为：</p>\n<ul>\n<li><code>true</code> 打开开关</li>\n<li><code>false</code> 关闭开关</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "checked"
+        },
+        {
+          "textRaw": "text",
+          "name": "text",
+          "desc": "<p>对开关进行描述的文字。</p>\n",
+          "type": "module",
+          "displayName": "text"
+        }
+      ],
+      "type": "module",
+      "displayName": "开关控件: Switch"
+    },
+    {
+      "textRaw": "开关控件: Switch",
+      "name": "开关控件:_switch",
+      "desc": "<p>开关控件用于表示一个选项是否被选中。</p>\n",
+      "modules": [
+        {
+          "textRaw": "checked",
+          "name": "checked",
+          "desc": "<p>表示开关是否被选中。可选的值为：</p>\n<ul>\n<li><code>true</code> 打开开关</li>\n<li><code>false</code> 关闭开关</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "checked"
+        },
+        {
+          "textRaw": "text",
+          "name": "text",
+          "desc": "<p>对开关进行描述的文字。</p>\n",
+          "type": "module",
+          "displayName": "text"
+        }
+      ],
+      "type": "module",
+      "displayName": "开关控件: Switch"
+    },
+    {
+      "textRaw": "标题栏控件: toolbar",
+      "name": "标题栏控件: toolbar",
+      "desc": "<p>卡片控件是一个拥有圆角、阴影的控件。</p>\n",
+      "modules": [
+        {
+          "textRaw": "cardBackgroundColor",
+          "name": "cardbackgroundcolor",
+          "desc": "<p>卡片的背景颜色。</p>\n",
+          "type": "module",
+          "displayName": "cardBackgroundColor"
+        },
+        {
+          "textRaw": "cardCornerRadius",
+          "name": "cardcornerradius",
+          "desc": "<p>卡片的圆角半径。</p>\n",
+          "type": "module",
+          "displayName": "cardCornerRadius"
+        },
+        {
+          "textRaw": "cardElevation",
+          "name": "cardelevation",
+          "desc": "<p>设置卡片在z轴上的高度，来控制阴影的大小。</p>\n",
+          "type": "module",
+          "displayName": "cardElevation"
+        },
+        {
+          "textRaw": "contentPadding",
+          "name": "contentpadding",
+          "desc": "<p>设置卡片的内边距。该属性包括四个值：</p>\n<ul>\n<li><code>contentPaddingLeft</code> 左内边距</li>\n<li><code>contentPaddingRight</code> 右内边距</li>\n<li><code>contentPaddingTop</code> 上内边距</li>\n<li><code>contentPaddingBottom</code> 下内边距</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "contentPadding"
+        },
+        {
+          "textRaw": "foreground",
+          "name": "foreground",
+          "desc": "<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果。</p>\n",
+          "type": "module",
+          "displayName": "foreground"
+        }
+      ],
+      "type": "module",
+      "displayName": "卡片: card"
+    },
+    {
+      "textRaw": "卡片: card",
+      "name": "卡片:_card",
+      "desc": "<p>卡片控件是一个拥有圆角、阴影的控件。</p>\n",
+      "modules": [
+        {
+          "textRaw": "cardBackgroundColor",
+          "name": "cardbackgroundcolor",
+          "desc": "<p>卡片的背景颜色。</p>\n",
+          "type": "module",
+          "displayName": "cardBackgroundColor"
+        },
+        {
+          "textRaw": "cardCornerRadius",
+          "name": "cardcornerradius",
+          "desc": "<p>卡片的圆角半径。</p>\n",
+          "type": "module",
+          "displayName": "cardCornerRadius"
+        },
+        {
+          "textRaw": "cardElevation",
+          "name": "cardelevation",
+          "desc": "<p>设置卡片在z轴上的高度，来控制阴影的大小。</p>\n",
+          "type": "module",
+          "displayName": "cardElevation"
+        },
+        {
+          "textRaw": "contentPadding",
+          "name": "contentpadding",
+          "desc": "<p>设置卡片的内边距。该属性包括四个值：</p>\n<ul>\n<li><code>contentPaddingLeft</code> 左内边距</li>\n<li><code>contentPaddingRight</code> 右内边距</li>\n<li><code>contentPaddingTop</code> 上内边距</li>\n<li><code>contentPaddingBottom</code> 下内边距</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "contentPadding"
+        },
+        {
+          "textRaw": "foreground",
+          "name": "foreground",
+          "desc": "<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果。</p>\n",
+          "type": "module",
+          "displayName": "foreground"
+        }
+      ],
+      "type": "module",
+      "displayName": "卡片: card"
+    },
+    {
       "textRaw": "Tab: tab",
       "name": "Tab: tab",
       "methods": [
         {
-          "textRaw": "ui.statusBarColor(color)",
+          "textRaw": "ui.layout(xml)",
           "type": "method",
-          "name": "statusBarColor",
+          "name": "layout",
           "signatures": [
             {
               "params": [
                 {
-                  "name": "view"
-                },
-                {
-                  "name": "menu"
+                  "textRaw": "`xml` {XML} | {string} 布局XML或者XML字符串 ",
+                  "name": "xml",
+                  "type": "XML",
+                  "desc": "| {string} 布局XML或者XML字符串"
                 }
               ]
             },
             {
               "params": [
                 {
-                  "name": "color"
+                  "name": "xml"
                 }
               ]
             }
-          ]
+          ],
+          "desc": "<p>将布局XML渲染为视图（View）对象， 并设置为当前视图。</p>\n"
         },
         {
-          "textRaw": "ui.showPopupMenu(view, menu)",
+          "textRaw": "ui.layoutFile(xmlFile)",
           "type": "method",
-          "name": "showPopupMenu",
+          "name": "layoutFile",
           "signatures": [
             {
               "params": [
                 {
-                  "name": "view"
-                },
+                  "textRaw": "`xml` {string} 布局XML文件的路径 ",
+                  "name": "xml",
+                  "type": "string",
+                  "desc": "布局XML文件的路径"
+                }
+              ]
+            },
+            {
+              "params": [
                 {
-                  "name": "menu"
+                  "name": "xmlFile"
                 }
               ]
             }
-          ]
+          ],
+          "desc": "<p>此函数和<code>ui.layout</code>相似，只不过允许传入一个xml文件路径来渲染布局。</p>\n"
+        },
+        {
+          "textRaw": "ui.inflate(xml[, parent = null, attachToParent = false])",
+          "type": "method",
+          "name": "inflate",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`xml` {string} | {XML} 布局XML或者XML字符串 ",
+                  "name": "xml",
+                  "type": "string",
+                  "desc": "| {XML} 布局XML或者XML字符串"
+                },
+                {
+                  "textRaw": "`parent` {View} 父视图 ",
+                  "name": "parent",
+                  "type": "View",
+                  "desc": "父视图",
+                  "optional": true,
+                  "default": " null"
+                },
+                {
+                  "textRaw": "`attachToParent` {boolean} 是否渲染的View加到父视图中，默认为false ",
+                  "name": "attachToParent",
+                  "type": "boolean",
+                  "desc": "是否渲染的View加到父视图中，默认为false",
+                  "optional": true,
+                  "default": " false"
+                },
+                {
+                  "textRaw": "返回 {View} ",
+                  "name": "返回",
+                  "type": "View"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "xml"
+                },
+                {
+                  "name": "parent ",
+                  "optional": true,
+                  "default": " null"
+                },
+                {
+                  "name": "attachToParent ",
+                  "optional": true,
+                  "default": " false"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将布局XML渲染为视图（View）对象。如果该View将作为某个View的子View，我们建议传入<code>parent</code>参数，这样在渲染时依赖于父视图的一些布局属性能够正确应用。</p>\n<p>此函数用于动态创建、显示View。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;linear id=&quot;container&quot;&gt;\n    &lt;/linear&gt;\n);\n\n// 动态创建3个文本控件，并加到container容器中\n// 这里仅为实例，实际上并不推荐这种做法，如果要展示列表，\n// 使用list组件；动态创建十几个、几十个View会让界面卡顿\nfor (let i = 0; i &lt; 3; i++) {\n    let textView = $ui.inflate(\n        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;\n    , $ui.container);\n    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);\n    $ui.container.addView(textView);\n}\n</code></pre>\n"
         }
       ],
       "type": "module",
@@ -536,45 +801,110 @@
       "name": "ui",
       "methods": [
         {
-          "textRaw": "ui.statusBarColor(color)",
+          "textRaw": "ui.layout(xml)",
           "type": "method",
-          "name": "statusBarColor",
+          "name": "layout",
           "signatures": [
             {
               "params": [
                 {
-                  "name": "view"
-                },
-                {
-                  "name": "menu"
+                  "textRaw": "`xml` {XML} | {string} 布局XML或者XML字符串 ",
+                  "name": "xml",
+                  "type": "XML",
+                  "desc": "| {string} 布局XML或者XML字符串"
                 }
               ]
             },
             {
               "params": [
                 {
-                  "name": "color"
+                  "name": "xml"
                 }
               ]
             }
-          ]
+          ],
+          "desc": "<p>将布局XML渲染为视图（View）对象， 并设置为当前视图。</p>\n"
         },
         {
-          "textRaw": "ui.showPopupMenu(view, menu)",
+          "textRaw": "ui.layoutFile(xmlFile)",
           "type": "method",
-          "name": "showPopupMenu",
+          "name": "layoutFile",
           "signatures": [
             {
               "params": [
                 {
-                  "name": "view"
-                },
+                  "textRaw": "`xml` {string} 布局XML文件的路径 ",
+                  "name": "xml",
+                  "type": "string",
+                  "desc": "布局XML文件的路径"
+                }
+              ]
+            },
+            {
+              "params": [
                 {
-                  "name": "menu"
+                  "name": "xmlFile"
                 }
               ]
             }
-          ]
+          ],
+          "desc": "<p>此函数和<code>ui.layout</code>相似，只不过允许传入一个xml文件路径来渲染布局。</p>\n"
+        },
+        {
+          "textRaw": "ui.inflate(xml[, parent = null, attachToParent = false])",
+          "type": "method",
+          "name": "inflate",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`xml` {string} | {XML} 布局XML或者XML字符串 ",
+                  "name": "xml",
+                  "type": "string",
+                  "desc": "| {XML} 布局XML或者XML字符串"
+                },
+                {
+                  "textRaw": "`parent` {View} 父视图 ",
+                  "name": "parent",
+                  "type": "View",
+                  "desc": "父视图",
+                  "optional": true,
+                  "default": " null"
+                },
+                {
+                  "textRaw": "`attachToParent` {boolean} 是否渲染的View加到父视图中，默认为false ",
+                  "name": "attachToParent",
+                  "type": "boolean",
+                  "desc": "是否渲染的View加到父视图中，默认为false",
+                  "optional": true,
+                  "default": " false"
+                },
+                {
+                  "textRaw": "返回 {View} ",
+                  "name": "返回",
+                  "type": "View"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "xml"
+                },
+                {
+                  "name": "parent ",
+                  "optional": true,
+                  "default": " null"
+                },
+                {
+                  "name": "attachToParent ",
+                  "optional": true,
+                  "default": " false"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将布局XML渲染为视图（View）对象。如果该View将作为某个View的子View，我们建议传入<code>parent</code>参数，这样在渲染时依赖于父视图的一些布局属性能够正确应用。</p>\n<p>此函数用于动态创建、显示View。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;linear id=&quot;container&quot;&gt;\n    &lt;/linear&gt;\n);\n\n// 动态创建3个文本控件，并加到container容器中\n// 这里仅为实例，实际上并不推荐这种做法，如果要展示列表，\n// 使用list组件；动态创建十几个、几十个View会让界面卡顿\nfor (let i = 0; i &lt; 3; i++) {\n    let textView = $ui.inflate(\n        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;\n    , $ui.container);\n    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);\n    $ui.container.addView(textView);\n}\n</code></pre>\n"
         }
       ],
       "type": "module",
@@ -593,6 +923,233 @@
       "desc": "<p><strong>(完善中...)</strong></p>\n",
       "type": "module",
       "displayName": "颜色"
+    }
+  ],
+  "methods": [
+    {
+      "textRaw": "ui.registerWidget(name, widget)",
+      "type": "method",
+      "name": "registerWidget",
+      "signatures": [
+        {
+          "params": [
+            {
+              "textRaw": "`name` {string} 组件名称 ",
+              "name": "name",
+              "type": "string",
+              "desc": "组件名称"
+            },
+            {
+              "textRaw": "`widget` {Function} 组件 ",
+              "name": "widget",
+              "type": "Function",
+              "desc": "组件"
+            }
+          ]
+        },
+        {
+          "params": [
+            {
+              "name": "name"
+            },
+            {
+              "name": "widget"
+            }
+          ]
+        }
+      ],
+      "desc": "<p>注册一个自定义组件。参考示例-&gt;界面控件-&gt;自定义控件。</p>\n"
+    },
+    {
+      "textRaw": "ui.isUiThread()",
+      "type": "method",
+      "name": "isUiThread",
+      "signatures": [
+        {
+          "params": [
+            {
+              "textRaw": "返回 {boolean} ",
+              "name": "返回",
+              "type": "boolean"
+            }
+          ]
+        },
+        {
+          "params": []
+        }
+      ],
+      "desc": "<p>返回当前线程是否是UI线程。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\nlog($ui.isUiThread()); // =&gt; true\n\n$threads.start(function () {\n    log($ui.isUiThread()); // =&gt; false\n});\n\n</code></pre>\n",
+      "methods": [
+        {
+          "textRaw": "ui.findView(id)",
+          "type": "method",
+          "name": "findView",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`id` {string} View的ID ",
+                  "name": "id",
+                  "type": "string",
+                  "desc": "View的ID"
+                },
+                {
+                  "textRaw": "返回 {View} ",
+                  "name": "返回",
+                  "type": "View"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "id"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在当前视图中根据ID查找相应的视图对象并返回。如果当前未设置视图或找不到此ID的视图时返回<code>null</code>。</p>\n<p>一般我们都是通过<code>ui.xxx</code>来获取id为xxx的控件，如果xxx是一个ui已经有的属性，就可以通过<code>$ui.findView()</code>来获取这个控件。</p>\n"
+        },
+        {
+          "textRaw": "ui.finish()",
+          "type": "method",
+          "name": "finish",
+          "desc": "<p>结束当前活动并销毁界面。</p>\n",
+          "signatures": [
+            {
+              "params": []
+            }
+          ]
+        },
+        {
+          "textRaw": "ui.setContentView(view)",
+          "type": "method",
+          "name": "setContentView",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`view` {View}  ",
+                  "name": "view",
+                  "type": "View"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "view"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将视图对象设置为当前视图。</p>\n"
+        },
+        {
+          "textRaw": "ui.post(callback[, delay = 0])",
+          "type": "method",
+          "name": "post",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`callback` {Function} 回调函数 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数"
+                },
+                {
+                  "textRaw": "`delay` {number} 延迟，单位毫秒 ",
+                  "name": "delay",
+                  "type": "number",
+                  "desc": "延迟，单位毫秒",
+                  "optional": true,
+                  "default": " 0"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "callback"
+                },
+                {
+                  "name": "delay ",
+                  "optional": true,
+                  "default": " 0"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将<code>callback</code>加到UI线程的消息循环中，并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）。</p>\n<p>此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用），也可以用于子线程中更新UI。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\nui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;result&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nui.result.attr(&quot;text&quot;, &quot;计算中&quot;);\n// 在子线程中计算1+ ... + 10000000\nthreads.start({\n    let sum = 0;\n    for (let i = 0; i &lt; 1000000; i++) {\n        sum += i;\n    }\n    // 由于不能在子线程操作UI，所以要抛到UI线程执行\n    ui.post(() =&gt; {\n        ui.result.attr(&quot;text&quot;, String(sum));\n    });\n});\n</code></pre>\n"
+        },
+        {
+          "textRaw": "ui.run(callback)",
+          "type": "method",
+          "name": "run",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`callback` {Function} 回调函数 ",
+                  "name": "callback",
+                  "type": "Function",
+                  "desc": "回调函数"
+                },
+                {
+                  "textRaw": "返回 callback的执行结果 ",
+                  "name": "返回",
+                  "desc": "callback的执行结果"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "callback"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将<code>callback</code>在UI线程中执行。如果当前已经在UI线程中，则直接执行<code>callback</code>\b\b；否则将<code>callback</code>抛到UI线程中执行（加到UI线程的消息循环的末尾），<strong>并等待callback执行结束(阻塞当前线程)</strong>。</p>\n"
+        },
+        {
+          "textRaw": "ui.statusBarColor(color)",
+          "type": "method",
+          "name": "statusBarColor",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "color {string} | {number} 颜色 ",
+                  "name": "color",
+                  "type": "string",
+                  "desc": "| {number} 颜色"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "color"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>设置当前界面的状态栏颜色。</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\nui.statusBarColor(&quot;#000000&quot;);\n</code></pre>\n"
+        },
+        {
+          "textRaw": "ui.useAndroidResources()",
+          "type": "method",
+          "name": "useAndroidResources",
+          "desc": "<p>启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性。启用该特性后，在project.json中进行以下配置，就可以像写Android原生一样写界面：</p>\n<pre><code class=\"lang-json\">{\n    // ...\n    androidResources: {\n        &quot;resDir&quot;: &quot;res&quot;,  // 资源文件夹\n        &quot;manifest&quot;: &quot;AndroidManifest.xml&quot; // AndroidManifest文件路径\n    }\n}\n</code></pre>\n<p>res文件夹通常为以下结构：</p>\n<pre><code>- res\n    - layout  // 布局资源\n    - drawable // 图片、形状等资源\n    - menu // 菜单资源\n    - values // 样式、字符串等资源\n    // ...\n</code></pre><p>可参考示例-&gt;复杂界面-&gt;Android原生界面。</p>\n",
+          "signatures": [
+            {
+              "params": []
+            }
+          ]
+        }
+      ]
     }
   ]
 }

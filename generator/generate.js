@@ -27,13 +27,15 @@ const fs = require('fs');
 // parse the args.
 // Don't use nopt or whatever for this.  It's simple enough.
 
+const path = require('path');
+
 const args = process.argv.slice(2);
 let format = 'html';
-let template = '..\\template.html';
-let inputFile = '..\\api\\all.md';
+let template = path.join('..', 'template.html');
+let inputFile = path.join('..', 'api', 'all.md');
 let nodeVersion = null;
 let analytics = null;
-let out = '..\\docs\\all.html';
+let out = path.join('..', 'docs', 'all.html');
 
 args.forEach(function(arg) {
   if (!arg.startsWith('--')) {

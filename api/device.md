@@ -44,7 +44,7 @@ The name of the industrial design.
 
 设备在工业设计中的名称。
 
-## deivce.model
+## device.model
 * {string}
 
 The end-user-visible name for the end product.

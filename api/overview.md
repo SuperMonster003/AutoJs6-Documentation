@@ -5,6 +5,7 @@ Auto.js使用[JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScrip
 * 因为Auto.js是基于JavaScript的，学习Auto.js的API之前建议先学习JavaScript的基本语法和内置对象，可以使用教程前面的两个JavaScript教程链接来学习。
 * 如果您想要使用TypeScript来开发，目前已经有开发者公布了一个可以把使用TypeScript进行Auto.js开发的工具，参见[Auto.js DevTools](https://github.com/pboymt/autojs-dev)。
 * 如果想要在电脑而不是手机上开发Auto.js，可以使用VS Code以及相应的Auto.js插件使得在电脑上编辑的脚本能推送到手机运行，参见[Auto.js-VSCode-Extension](https://github.com/hyb1996/Auto.js-VSCode-Extension)，Auto.js Pro用户则需要使用[Auto.js-Pro-Ext](https://marketplace.visualstudio.com/items?itemName=hyb1996.auto-js-pro-ext)。
+* 支持Node.js已在计划中，预计2020年底在Auto.js Pro中支持
 
 本文档的章节大致上是以模块来分的，总体上可以分成"自动操作"类模块(控件操作、触摸模拟、按键模拟等)和其他类模块(设备、应用、界面等)。
 
@@ -26,3 +27,4 @@ Auto.js使用[JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScrip
 * ui: UI界面。用于显示自定义的UI界面，和用户交互。
 
 除此之外，Auto.js内置了对[Promise](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Promise)。
+

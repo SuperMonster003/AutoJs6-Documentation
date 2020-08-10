@@ -4,13 +4,124 @@
     {
       "textRaw": "Canvas",
       "name": "canvas",
-      "desc": "<p>canvas提供了使用画布进行2D画图的支持，可用于简单的小游戏开发或者图片编辑。使用canvas可以轻松地在一张图片或一个界面上绘制各种线与图形。</p>\n<p>canvas的坐标系为平面直角坐标系，以屏幕左上角为原点，屏幕上边为x轴正方向，屏幕左边为y轴正方向。例如分辨率为1920*1080的屏幕上，画一条从屏幕左上角到屏幕右下角的线段为:</p>\n<pre><code>canvas.drawLine(0, 0, 1080, 1920, paint);\n</code></pre><p>canvas的绘制依赖于画笔Paint, 通过设置画笔的粗细、颜色、填充等可以改变绘制出来的图形。例如绘制一个红色实心正方形为：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为填充，则绘制出来的图形都是实心的\npaint.setStyle(Paint.STYLE.FILL);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>如果要绘制正方形的边框，则通过设置画笔的Style来实现：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为描边，则绘制出来的图形都是轮廓\npaint.setStyle(Paint.STYLE.STROKE);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>结合画笔canvas可以绘制基本图形、图片等。</p>\n",
+      "desc": "<p>canvas提供了使用画布进行2D画图的支持，可用于简单的小游戏开发或者图片编辑。使用canvas可以轻松地在一张图片或一个界面上绘制各种线与图形。</p>\n<p>canvas的坐标系为平面直角坐标系，以控件左上角为原点，控件上边沿为x轴正方向，控件左边沿为y轴正方向。例如分辨率为1920*1080的屏幕上，canvas控件覆盖全屏，画一条从屏幕左上角到屏幕右下角的线段为:</p>\n<pre><code>canvas.drawLine(0, 0, 1080, 1920, paint);\n</code></pre><p>canvas的绘制依赖于画笔Paint, 通过设置画笔的粗细、颜色、填充等可以改变绘制出来的图形。例如绘制一个红色实心正方形为：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为填充，则绘制出来的图形都是实心的\npaint.setStyle(Paint.STYLE.FILL);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>如果要绘制正方形的边框，则通过设置画笔的Style来实现：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为描边，则绘制出来的图形都是轮廓\npaint.setStyle(Paint.STYLE.STROKE);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>结合画笔，canvas可以绘制基本图形、图片等。</p>\n",
       "methods": [
+        {
+          "textRaw": "canvas.getWidth()",
+          "type": "method",
+          "name": "getWidth",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "返回 {number} ",
+                  "name": "返回",
+                  "type": "number"
+                }
+              ]
+            },
+            {
+              "params": []
+            }
+          ],
+          "desc": "<p>返回画布当前图层的宽度。</p>\n"
+        },
+        {
+          "textRaw": "canvas.getHeight()",
+          "type": "method",
+          "name": "getHeight",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "返回 {number} ",
+                  "name": "返回",
+                  "type": "number"
+                }
+              ]
+            },
+            {
+              "params": []
+            }
+          ],
+          "desc": "<p>返回画布当前图层的高度。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawRGB(r, int g, int b)",
+          "type": "method",
+          "name": "drawRGB",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`r` {number} 红色通道值 ",
+                  "name": "r",
+                  "type": "number",
+                  "desc": "红色通道值"
+                },
+                {
+                  "textRaw": "`g` {number} 绿色通道值 ",
+                  "name": "g",
+                  "type": "number",
+                  "desc": "绿色通道值"
+                },
+                {
+                  "textRaw": "`b` {number} 蓝色通道值 ",
+                  "name": "b",
+                  "type": "number",
+                  "desc": "蓝色通道值"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "r"
+                },
+                {
+                  "name": "int g"
+                },
+                {
+                  "name": "int b"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将整个可绘制区域填充为r、g、b指定的颜色。相当于 <code>canvas.drawColor(colors.rgb(r, g, b))</code>。</p>\n"
+        },
         {
           "textRaw": "canvas.drawARGB(a, r, g, b)",
           "type": "method",
           "name": "drawARGB",
           "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`a` {number} 透明通道值 ",
+                  "name": "a",
+                  "type": "number",
+                  "desc": "透明通道值"
+                },
+                {
+                  "textRaw": "`r` {number} 红色通道值 ",
+                  "name": "r",
+                  "type": "number",
+                  "desc": "红色通道值"
+                },
+                {
+                  "textRaw": "`g` {number} 绿色通道值 ",
+                  "name": "g",
+                  "type": "number",
+                  "desc": "绿色通道值"
+                },
+                {
+                  "textRaw": "`b` {number} 蓝色通道值 ",
+                  "name": "b",
+                  "type": "number",
+                  "desc": "蓝色通道值"
+                }
+              ]
+            },
             {
               "params": [
                 {
@@ -27,17 +138,509 @@
                 }
               ]
             }
-          ]
-        }
-      ],
-      "properties": [
+          ],
+          "desc": "<p>将整个可绘制区域填充为a、r、g、b指定的颜色。相当于 <code>canvas.drawColor(colors.argb(a, r, g, b))</code>。</p>\n"
+        },
         {
-          "textRaw": "canvas.draw",
-          "name": "draw"
+          "textRaw": "canvas.drawColor(color)",
+          "type": "method",
+          "name": "drawColor",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`color` {number} 颜色值 ",
+                  "name": "color",
+                  "type": "number",
+                  "desc": "颜色值"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "color"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将整个可绘制区域填充为color指定的颜色。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawColor(color, mode)",
+          "type": "method",
+          "name": "drawColor",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`color` {number} 颜色值 ",
+                  "name": "color",
+                  "type": "number",
+                  "desc": "颜色值"
+                },
+                {
+                  "textRaw": "`mode` {PorterDuff.Mode} Porter-Duff操作 ",
+                  "name": "mode",
+                  "type": "PorterDuff.Mode",
+                  "desc": "Porter-Duff操作"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "color"
+                },
+                {
+                  "name": "mode"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将整个可绘制区域填充为color指定的颜色。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawPaint(paint)",
+          "type": "method",
+          "name": "drawPaint",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>将整个可绘制区域用paint指定的画笔填充。相当于绘制一个无限大的矩形，但是更快。\n通过该方法可以绘制一个指定的着色器的图案。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawPoint(x, y, paint)",
+          "type": "method",
+          "name": "drawPoint",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`x` {number} x坐标 ",
+                  "name": "x",
+                  "type": "number",
+                  "desc": "x坐标"
+                },
+                {
+                  "textRaw": "`y` {number} y坐标 ",
+                  "name": "y",
+                  "type": "number",
+                  "desc": "y坐标"
+                },
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "x"
+                },
+                {
+                  "name": "y"
+                },
+                {
+                  "name": "paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在可绘制区域绘制由坐标(x, y)指定的点。\n点的形状由画笔的线帽决定（参见paint.setStrokeCap(cap)）。\n点的大小由画笔的宽度决定（参见paint.setStrokeWidth(width)）。</p>\n<blockquote>\n<p>如果画笔宽度为0，则也会绘制1个像素至4个（若抗锯齿启用）。</p>\n</blockquote>\n<p>相当于 <code>canvas.drawPoints([x, y], paint)</code>。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawPoints(pts, paint)",
+          "type": "method",
+          "name": "drawPoints",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`pts` {Array<number>} 点坐标数组 [x0, y0, x1, y1, x2, y2, ...] ",
+                  "name": "pts",
+                  "type": "Array<number>",
+                  "desc": "点坐标数组 [x0, y0, x1, y1, x2, y2, ...]"
+                },
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "pts"
+                },
+                {
+                  "name": "paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在可绘制区域绘制由坐标数组指定的多个点。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawLine(startX, startY, stopX, stopY, paint)",
+          "type": "method",
+          "name": "drawLine",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`startX` {number} 起点x坐标 ",
+                  "name": "startX",
+                  "type": "number",
+                  "desc": "起点x坐标"
+                },
+                {
+                  "textRaw": "`startY` {number} 起点y坐标 ",
+                  "name": "startY",
+                  "type": "number",
+                  "desc": "起点y坐标"
+                },
+                {
+                  "textRaw": "`endX` {number} 终点x坐标 ",
+                  "name": "endX",
+                  "type": "number",
+                  "desc": "终点x坐标"
+                },
+                {
+                  "textRaw": "`endY` {number} 终点y坐标 ",
+                  "name": "endY",
+                  "type": "number",
+                  "desc": "终点y坐标"
+                },
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "startX"
+                },
+                {
+                  "name": "startY"
+                },
+                {
+                  "name": "stopX"
+                },
+                {
+                  "name": "stopY"
+                },
+                {
+                  "name": "paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在可绘制区域绘制由起点坐标(startX, startY)和终点坐标(endX, endY)指定的线。\n绘制时会忽略画笔的样式(Style)。也就是说，即使样式设为“仅填充(FILL)”也会绘制。\n退化为点的线（长度为0）不会被绘制。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawRect(r, paint)",
+          "type": "method",
+          "name": "drawRect",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`r` {Rect} 矩形边界 ",
+                  "name": "r",
+                  "type": "Rect",
+                  "desc": "矩形边界"
+                },
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "r"
+                },
+                {
+                  "name": "paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在可绘制区域绘制由矩形边界r指定的矩形。\n绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawRect(left, top, right, bottom, android.graphics.Paint paint)",
+          "type": "method",
+          "name": "drawRect",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`left` {number} 矩形左边界x坐标 ",
+                  "name": "left",
+                  "type": "number",
+                  "desc": "矩形左边界x坐标"
+                },
+                {
+                  "textRaw": "`top` {number} 矩形上边界y坐标 ",
+                  "name": "top",
+                  "type": "number",
+                  "desc": "矩形上边界y坐标"
+                },
+                {
+                  "textRaw": "`right` {number} 矩形右边界x坐标 ",
+                  "name": "right",
+                  "type": "number",
+                  "desc": "矩形右边界x坐标"
+                },
+                {
+                  "textRaw": "`bottom` {number} 矩形下边界y坐标 ",
+                  "name": "bottom",
+                  "type": "number",
+                  "desc": "矩形下边界y坐标"
+                },
+                {
+                  "textRaw": "`paint` {Paint} 画笔 ",
+                  "name": "paint",
+                  "type": "Paint",
+                  "desc": "画笔"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "left"
+                },
+                {
+                  "name": "top"
+                },
+                {
+                  "name": "right"
+                },
+                {
+                  "name": "bottom"
+                },
+                {
+                  "name": "android.graphics.Paint paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>在可绘制区域绘制由矩形边界(left, top, right, bottom)指定的矩形。\n绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形。</p>\n"
+        },
+        {
+          "textRaw": "canvas.drawTextOnPath(java.lang.String text, android.graphics.Path path, float hOffset, float vOffset, android.graphics.Paint paint)",
+          "type": "method",
+          "name": "drawTextOnPath",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`dx` {number} 向x轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "dx",
+                  "type": "number",
+                  "desc": "向x轴正方向平移的距离，负数表示反方向平移"
+                },
+                {
+                  "textRaw": "`dy` {number} 向y轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "dy",
+                  "type": "number",
+                  "desc": "向y轴正方向平移的距离，负数表示反方向平移"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "dx"
+                },
+                {
+                  "name": "dy"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "java.lang.String text"
+                },
+                {
+                  "name": "android.graphics.Path path"
+                },
+                {
+                  "name": "float hOffset"
+                },
+                {
+                  "name": "float vOffset"
+                },
+                {
+                  "name": "android.graphics.Paint paint"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>平移指定距离。</p>\n"
+        },
+        {
+          "textRaw": "canvas.translate(dx, dy)",
+          "type": "method",
+          "name": "translate",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`dx` {number} 向x轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "dx",
+                  "type": "number",
+                  "desc": "向x轴正方向平移的距离，负数表示反方向平移"
+                },
+                {
+                  "textRaw": "`dy` {number} 向y轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "dy",
+                  "type": "number",
+                  "desc": "向y轴正方向平移的距离，负数表示反方向平移"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "dx"
+                },
+                {
+                  "name": "dy"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>平移指定距离。</p>\n"
+        },
+        {
+          "textRaw": "canvas.scale(sx, sy)",
+          "type": "method",
+          "name": "scale",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`sx` {number} 向x轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "sx",
+                  "type": "number",
+                  "desc": "向x轴正方向平移的距离，负数表示反方向平移"
+                },
+                {
+                  "textRaw": "`sy` {number} 向y轴正方向平移的距离，负数表示反方向平移 ",
+                  "name": "sy",
+                  "type": "number",
+                  "desc": "向y轴正方向平移的距离，负数表示反方向平移"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "sx"
+                },
+                {
+                  "name": "sy"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>以原点为中心，将坐标系平移缩放指定倍数。</p>\n"
+        },
+        {
+          "textRaw": "canvas.rotate(float degrees, float px, float py)",
+          "type": "method",
+          "name": "rotate",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "float sx"
+                },
+                {
+                  "name": "float sy"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "float degrees"
+                },
+                {
+                  "name": "float px"
+                },
+                {
+                  "name": "float py"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "canvas.skew(float sx, float sy)",
+          "type": "method",
+          "name": "skew",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "float sx"
+                },
+                {
+                  "name": "float sy"
+                }
+              ]
+            }
+          ]
         }
       ],
       "type": "module",
       "displayName": "Canvas"
+    },
+    {
+      "textRaw": "路径特效",
+      "name": "路径特效",
+      "type": "module",
+      "displayName": "区域"
+    },
+    {
+      "textRaw": "区域",
+      "name": "区域",
+      "type": "module",
+      "displayName": "区域"
     }
   ]
 }

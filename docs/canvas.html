@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Canvas | Auto.js Pro-8.1.0 文档</title>
+  <title>Canvas | Auto.js Pro-8.2.0 文档</title>
   <link rel="stylesheet" href="assets/fonts.css">
   <link rel="stylesheet" href="assets/style.css">
   <link rel="stylesheet" href="assets/sh.css">
@@ -27,6 +27,7 @@
 <li><a class="nav-overview" href="overview.html">Overview - 综述</a></li>
 <li><a class="nav-qa" href="qa.html">Q&amp;A - 常见问题</a></li>
 <li><a class="nav-app" href="app.html">App - 应用</a></li>
+<li><a class="nav-canvas active" href="canvas.html">Canvas - 画布</a></li>
 <li><a class="nav-console" href="console.html">Console - 控制台</a></li>
 <li><a class="nav-coordinatesBasedAutomation" href="coordinatesBasedAutomation.html">CoordinatesBasedAutomation - 基于坐标的操作</a></li>
 <li><a class="nav-crypto" href="crypto.html">Crypto - 加解密与消息摘要</a></li>
@@ -42,13 +43,13 @@
 <li><a class="nav-keys" href="keys.html">Keys - 按键模拟</a></li>
 <li><a class="nav-media" href="media.html">Media - 多媒体</a></li>
 <li><a class="nav-modules" href="modules.html">Modules - 模块</a></li>
-<li><a class="nav-widgetsBasedAutomation" href="widgetsBasedAutomation.html">WidgetsBasedAutomation - 基于控件的操作</a></li>
 <li><a class="nav-sensors" href="sensors.html">Sensors - 传感器</a></li>
 <li><a class="nav-shell" href="shell.html">Shell - Shell命令</a></li>
 <li><a class="nav-storages" href="storages.html">Storages - 本地存储</a></li>
 <li><a class="nav-threads" href="threads.html">Threads - 多线程</a></li>
 <li><a class="nav-timers" href="timers.html">Timers - 定时器</a></li>
 <li><a class="nav-ui" href="ui.html">UI - 用户界面</a></li>
+<li><a class="nav-widgetsBasedAutomation" href="widgetsBasedAutomation.html">WidgetsBasedAutomation - 基于控件的操作</a></li>
 <li><a class="nav-https-developer-mozilla-org-zh-CN-docs-Mozilla-Projects-Rhino-Scripting_Java" href="https://developer.mozilla.org/zh-CN/docs/Mozilla/Projects/Rhino/Scripting_Java">Work with Java - 调用Java API</a></li>
 </ul>
 <div class="line"></div>
@@ -62,7 +63,7 @@
 
     <div id="column1" data-id="canvas" class="interior">
       <header>
-        <h1>Auto.js Pro-8.1.0 文档</h1>
+        <h1>Auto.js Pro-8.2.0 文档</h1>
         <div id="gtoc">
           <p>
             <a href="index.html" name="toc">索引</a> |
@@ -76,10 +77,46 @@
         <h2>目录</h2>
         <ul>
 <li><span class="stability_undefined"><a href="#canvas_canvas">Canvas</a></span><ul>
+<li><span class="stability_undefined"><a href="#canvas_canvas_getwidth">canvas.getWidth()</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_getheight">canvas.getHeight()</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawrgb_r_int_g_int_b">canvas.drawRGB(r, int g, int b)</a></span></li>
 <li><span class="stability_undefined"><a href="#canvas_canvas_drawargb_a_r_g_b">canvas.drawARGB(a, r, g, b)</a></span></li>
-<li><span class="stability_undefined"><a href="#canvas_canvas_draw">canvas.draw</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawcolor_color">canvas.drawColor(color)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawcolor_color_mode">canvas.drawColor(color, mode)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawpaint_paint">canvas.drawPaint(paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawpoint_x_y_paint">canvas.drawPoint(x, y, paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawpoints_pts_paint">canvas.drawPoints(pts, paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawline_startx_starty_stopx_stopy_paint">canvas.drawLine(startX, startY, stopX, stopY, paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawrect_r_paint">canvas.drawRect(r, paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawrect_left_top_right_bottom_android_graphics_paint_paint">canvas.drawRect(left, top, right, bottom, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawoval_android_graphics_rectf_oval_android_graphics_paint_paint">canvas.drawOval(android.graphics.RectF oval, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawoval_float_left_float_top_float_right_float_bottom_android_graphics_paint_paint">canvas.drawOval(float left, float top, float right, float bottom, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawcircle_float_cx_float_cy_float_radius_android_graphics_paint_paint">canvas.drawCircle(float cx, float cy, float radius, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawarc_android_graphics_rectf_oval_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint">canvas.drawArc(android.graphics.RectF oval, float startAngle, float sweepAngle, boolean useCenter, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawarc_float_left_float_top_float_right_float_bottom_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint">canvas.drawArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean useCenter, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawroundrect_android_graphics_rectf_rect_float_rx_float_ry_android_graphics_paint_paint">canvas.drawRoundRect(android.graphics.RectF rect, float rx, float ry, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawroundrect_float_left_float_top_float_right_float_bottom_float_rx_float_ry_android_graphics_paint_paint">canvas.drawRoundRect(float left, float top, float right, float bottom, float rx, float ry, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawpath_android_graphics_path_path_android_graphics_paint_paint">canvas.drawPath(android.graphics.Path path, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawbitmap_android_graphics_bitmap_bitmap_float_left_float_top_android_graphics_paint_paint">canvas.drawBitmap(android.graphics.Bitmap bitmap, float left, float top, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawtext_java_lang_string_text_float_x_float_y_android_graphics_paint_paint">canvas.drawText(java.lang.String text, float x, float y, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_drawtextonpath_java_lang_string_text_android_graphics_path_path_float_hoffset_float_voffset_android_graphics_paint_paint">canvas.drawTextOnPath(java.lang.String text, android.graphics.Path path, float hOffset, float vOffset, android.graphics.Paint paint)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_translate_dx_dy">canvas.translate(dx, dy)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_scale_sx_sy">canvas.scale(sx, sy)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_scale_float_sx_float_sy_float_px_float_py">canvas.scale(float sx, float sy, float px, float py)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_rotate_float_degrees">canvas.rotate(float degrees)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_rotate_float_degrees_float_px_float_py">canvas.rotate(float degrees, float px, float py)</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_canvas_skew_float_sx_float_sy">canvas.skew(float sx, float sy)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#canvas">画笔</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_1">变换矩阵</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_2">路径</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_porter_duff">Porter-Duff操作</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_3">着色器</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_4">遮罩过滤器</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_5">颜色过滤器</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_6">路径特效</a></span></li>
+<li><span class="stability_undefined"><a href="#canvas_7">区域</a></span></li>
 </ul>
 
       </div>
@@ -87,7 +124,7 @@
       <div id="apicontent">
         <h1>Canvas<span><a class="mark" href="#canvas_canvas" id="canvas_canvas">#</a></span></h1>
 <p>canvas提供了使用画布进行2D画图的支持，可用于简单的小游戏开发或者图片编辑。使用canvas可以轻松地在一张图片或一个界面上绘制各种线与图形。</p>
-<p>canvas的坐标系为平面直角坐标系，以屏幕左上角为原点，屏幕上边为x轴正方向，屏幕左边为y轴正方向。例如分辨率为1920*1080的屏幕上，画一条从屏幕左上角到屏幕右下角的线段为:</p>
+<p>canvas的坐标系为平面直角坐标系，以控件左上角为原点，控件上边沿为x轴正方向，控件左边沿为y轴正方向。例如分辨率为1920*1080的屏幕上，canvas控件覆盖全屏，画一条从屏幕左上角到屏幕右下角的线段为:</p>
 <pre><code>canvas.drawLine(0, 0, 1080, 1920, paint);
 </code></pre><p>canvas的绘制依赖于画笔Paint, 通过设置画笔的粗细、颜色、填充等可以改变绘制出来的图形。例如绘制一个红色实心正方形为：</p>
 <pre><code>var paint = new Paint();
@@ -105,9 +142,132 @@ paint.setStyle(Paint.STYLE.STROKE);
 paint.setColor(colors.RED);
 //绘制一个从坐标(0, 0)到坐标(100, 100)的正方形
 canvas.drawRect(0, 0, 100, 100, paint);
-</code></pre><p>结合画笔canvas可以绘制基本图形、图片等。</p>
+</code></pre><p>结合画笔，canvas可以绘制基本图形、图片等。</p>
+<h2>canvas.getWidth()<span><a class="mark" href="#canvas_canvas_getwidth" id="canvas_canvas_getwidth">#</a></span></h2>
+<div class="signature"><ul>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a></li>
+</ul>
+</div><p>返回画布当前图层的宽度。</p>
+<h2>canvas.getHeight()<span><a class="mark" href="#canvas_canvas_getheight" id="canvas_canvas_getheight">#</a></span></h2>
+<div class="signature"><ul>
+<li>返回 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a></li>
+</ul>
+</div><p>返回画布当前图层的高度。</p>
+<h2>canvas.drawRGB(r, int g, int b)<span><a class="mark" href="#canvas_canvas_drawrgb_r_int_g_int_b" id="canvas_canvas_drawrgb_r_int_g_int_b">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>r</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 红色通道值</li>
+<li><code>g</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 绿色通道值</li>
+<li><code>b</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 蓝色通道值</li>
+</ul>
+</div><p>将整个可绘制区域填充为r、g、b指定的颜色。相当于 <code>canvas.drawColor(colors.rgb(r, g, b))</code>。</p>
 <h2>canvas.drawARGB(a, r, g, b)<span><a class="mark" href="#canvas_canvas_drawargb_a_r_g_b" id="canvas_canvas_drawargb_a_r_g_b">#</a></span></h2>
-<h2>canvas.draw<span><a class="mark" href="#canvas_canvas_draw" id="canvas_canvas_draw">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>a</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 透明通道值</li>
+<li><code>r</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 红色通道值</li>
+<li><code>g</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 绿色通道值</li>
+<li><code>b</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 蓝色通道值</li>
+</ul>
+</div><p>将整个可绘制区域填充为a、r、g、b指定的颜色。相当于 <code>canvas.drawColor(colors.argb(a, r, g, b))</code>。</p>
+<h2>canvas.drawColor(color)<span><a class="mark" href="#canvas_canvas_drawcolor_color" id="canvas_canvas_drawcolor_color">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>color</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 颜色值</li>
+</ul>
+</div><p>将整个可绘制区域填充为color指定的颜色。</p>
+<h2>canvas.drawColor(color, mode)<span><a class="mark" href="#canvas_canvas_drawcolor_color_mode" id="canvas_canvas_drawcolor_color_mode">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>color</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 颜色值</li>
+<li><code>mode</code> <span class="type">&lt;PorterDuff.Mode&gt;</span> Porter-Duff操作</li>
+</ul>
+</div><p>将整个可绘制区域填充为color指定的颜色。</p>
+<h2>canvas.drawPaint(paint)<span><a class="mark" href="#canvas_canvas_drawpaint_paint" id="canvas_canvas_drawpaint_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>将整个可绘制区域用paint指定的画笔填充。相当于绘制一个无限大的矩形，但是更快。
+通过该方法可以绘制一个指定的着色器的图案。</p>
+<h2>canvas.drawPoint(x, y, paint)<span><a class="mark" href="#canvas_canvas_drawpoint_x_y_paint" id="canvas_canvas_drawpoint_x_y_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>x</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> x坐标</li>
+<li><code>y</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> y坐标</li>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>在可绘制区域绘制由坐标(x, y)指定的点。
+点的形状由画笔的线帽决定（参见paint.setStrokeCap(cap)）。
+点的大小由画笔的宽度决定（参见paint.setStrokeWidth(width)）。</p>
+<blockquote>
+<p>如果画笔宽度为0，则也会绘制1个像素至4个（若抗锯齿启用）。</p>
+</blockquote>
+<p>相当于 <code>canvas.drawPoints([x, y], paint)</code>。</p>
+<h2>canvas.drawPoints(pts, paint)<span><a class="mark" href="#canvas_canvas_drawpoints_pts_paint" id="canvas_canvas_drawpoints_pts_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>pts</code> <span class="type">&lt;Array<number>&gt;</span> 点坐标数组 [x0, y0, x1, y1, x2, y2, ...]</li>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>在可绘制区域绘制由坐标数组指定的多个点。</p>
+<h2>canvas.drawLine(startX, startY, stopX, stopY, paint)<span><a class="mark" href="#canvas_canvas_drawline_startx_starty_stopx_stopy_paint" id="canvas_canvas_drawline_startx_starty_stopx_stopy_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>startX</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 起点x坐标</li>
+<li><code>startY</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 起点y坐标</li>
+<li><code>endX</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 终点x坐标</li>
+<li><code>endY</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 终点y坐标</li>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>在可绘制区域绘制由起点坐标(startX, startY)和终点坐标(endX, endY)指定的线。
+绘制时会忽略画笔的样式(Style)。也就是说，即使样式设为“仅填充(FILL)”也会绘制。
+退化为点的线（长度为0）不会被绘制。</p>
+<h2>canvas.drawRect(r, paint)<span><a class="mark" href="#canvas_canvas_drawrect_r_paint" id="canvas_canvas_drawrect_r_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>r</code> <span class="type">&lt;Rect&gt;</span> 矩形边界</li>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>在可绘制区域绘制由矩形边界r指定的矩形。
+绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形。</p>
+<h2>canvas.drawRect(left, top, right, bottom, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawrect_left_top_right_bottom_android_graphics_paint_paint" id="canvas_canvas_drawrect_left_top_right_bottom_android_graphics_paint_paint">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>left</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 矩形左边界x坐标</li>
+<li><code>top</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 矩形上边界y坐标</li>
+<li><code>right</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 矩形右边界x坐标</li>
+<li><code>bottom</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 矩形下边界y坐标</li>
+<li><code>paint</code> <span class="type">&lt;Paint&gt;</span> 画笔</li>
+</ul>
+</div><p>在可绘制区域绘制由矩形边界(left, top, right, bottom)指定的矩形。
+绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形。</p>
+<h2>canvas.drawOval(android.graphics.RectF oval, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawoval_android_graphics_rectf_oval_android_graphics_paint_paint" id="canvas_canvas_drawoval_android_graphics_rectf_oval_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawOval(float left, float top, float right, float bottom, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawoval_float_left_float_top_float_right_float_bottom_android_graphics_paint_paint" id="canvas_canvas_drawoval_float_left_float_top_float_right_float_bottom_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawCircle(float cx, float cy, float radius, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawcircle_float_cx_float_cy_float_radius_android_graphics_paint_paint" id="canvas_canvas_drawcircle_float_cx_float_cy_float_radius_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawArc(android.graphics.RectF oval, float startAngle, float sweepAngle, boolean useCenter, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawarc_android_graphics_rectf_oval_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint" id="canvas_canvas_drawarc_android_graphics_rectf_oval_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean useCenter, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawarc_float_left_float_top_float_right_float_bottom_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint" id="canvas_canvas_drawarc_float_left_float_top_float_right_float_bottom_float_startangle_float_sweepangle_boolean_usecenter_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawRoundRect(android.graphics.RectF rect, float rx, float ry, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawroundrect_android_graphics_rectf_rect_float_rx_float_ry_android_graphics_paint_paint" id="canvas_canvas_drawroundrect_android_graphics_rectf_rect_float_rx_float_ry_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawRoundRect(float left, float top, float right, float bottom, float rx, float ry, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawroundrect_float_left_float_top_float_right_float_bottom_float_rx_float_ry_android_graphics_paint_paint" id="canvas_canvas_drawroundrect_float_left_float_top_float_right_float_bottom_float_rx_float_ry_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawPath(android.graphics.Path path, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawpath_android_graphics_path_path_android_graphics_paint_paint" id="canvas_canvas_drawpath_android_graphics_path_path_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawBitmap(android.graphics.Bitmap bitmap, float left, float top, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawbitmap_android_graphics_bitmap_bitmap_float_left_float_top_android_graphics_paint_paint" id="canvas_canvas_drawbitmap_android_graphics_bitmap_bitmap_float_left_float_top_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawText(java.lang.String text, float x, float y, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawtext_java_lang_string_text_float_x_float_y_android_graphics_paint_paint" id="canvas_canvas_drawtext_java_lang_string_text_float_x_float_y_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.drawTextOnPath(java.lang.String text, android.graphics.Path path, float hOffset, float vOffset, android.graphics.Paint paint)<span><a class="mark" href="#canvas_canvas_drawtextonpath_java_lang_string_text_android_graphics_path_path_float_hoffset_float_voffset_android_graphics_paint_paint" id="canvas_canvas_drawtextonpath_java_lang_string_text_android_graphics_path_path_float_hoffset_float_voffset_android_graphics_paint_paint">#</a></span></h2>
+<h2>canvas.translate(dx, dy)<span><a class="mark" href="#canvas_canvas_translate_dx_dy" id="canvas_canvas_translate_dx_dy">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>dx</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 向x轴正方向平移的距离，负数表示反方向平移</li>
+<li><code>dy</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 向y轴正方向平移的距离，负数表示反方向平移</li>
+</ul>
+</div><p>平移指定距离。</p>
+<h2>canvas.scale(sx, sy)<span><a class="mark" href="#canvas_canvas_scale_sx_sy" id="canvas_canvas_scale_sx_sy">#</a></span></h2>
+<div class="signature"><ul>
+<li><code>sx</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 向x轴正方向平移的距离，负数表示反方向平移</li>
+<li><code>sy</code> <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Number_type" class="type">&lt;number&gt;</a> 向y轴正方向平移的距离，负数表示反方向平移</li>
+</ul>
+</div><p>以原点为中心，将坐标系平移缩放指定倍数。</p>
+<h2>canvas.scale(float sx, float sy, float px, float py)<span><a class="mark" href="#canvas_canvas_scale_float_sx_float_sy_float_px_float_py" id="canvas_canvas_scale_float_sx_float_sy_float_px_float_py">#</a></span></h2>
+<h2>canvas.rotate(float degrees)<span><a class="mark" href="#canvas_canvas_rotate_float_degrees" id="canvas_canvas_rotate_float_degrees">#</a></span></h2>
+<h2>canvas.rotate(float degrees, float px, float py)<span><a class="mark" href="#canvas_canvas_rotate_float_degrees_float_px_float_py" id="canvas_canvas_rotate_float_degrees_float_px_float_py">#</a></span></h2>
+<h2>canvas.skew(float sx, float sy)<span><a class="mark" href="#canvas_canvas_skew_float_sx_float_sy" id="canvas_canvas_skew_float_sx_float_sy">#</a></span></h2>
+<h1>画笔<span><a class="mark" href="#canvas" id="canvas">#</a></span></h1>
+<h1>变换矩阵<span><a class="mark" href="#canvas_1" id="canvas_1">#</a></span></h1>
+<h1>路径<span><a class="mark" href="#canvas_2" id="canvas_2">#</a></span></h1>
+<h1>Porter-Duff操作<span><a class="mark" href="#canvas_porter_duff" id="canvas_porter_duff">#</a></span></h1>
+<h1>着色器<span><a class="mark" href="#canvas_3" id="canvas_3">#</a></span></h1>
+<h1>遮罩过滤器<span><a class="mark" href="#canvas_4" id="canvas_4">#</a></span></h1>
+<h1>颜色过滤器<span><a class="mark" href="#canvas_5" id="canvas_5">#</a></span></h1>
+<h1>路径特效<span><a class="mark" href="#canvas_6" id="canvas_6">#</a></span></h1>
+<h1>区域<span><a class="mark" href="#canvas_7" id="canvas_7">#</a></span></h1>
 
       </div>
     </div>

@@ -6,7 +6,7 @@ in_dir = os.path.join('..', 'api')
 out_dir = os.path.join('..', 'docs')
 json_out_dir = os.path.join('..', 'json')
 template = os.path.join('..', 'template.html')
-version = 'Pro-8.1.0'
+version = 'Pro-8.2.0'
 
 
 def process(in_file, out_file, format="html"):

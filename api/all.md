@@ -1,8 +1,9 @@
 @include overview
 @include qa
 @include app
+@include canvas
 @include console
-@include coordinates-based-automation
+@include coordinatesBasedAutomation
 @include crypto
 @include device
 @include dialogs
@@ -16,10 +17,10 @@
 @include keys
 @include media
 @include modules
-@include widgets-based-automation
 @include sensors
 @include shell
 @include storages
 @include threads
 @include timers
 @include ui
+@include widgetsBasedAutomation

@@ -1,5 +1,7 @@
 # 综述
 
+**Auto.js 开源版本已不再维护(原因参见[Auto.js Pro FAQ](https://pro.autojs.org/faq))，后续将只维护[Auto.js Pro专业版](https://pro.autojs.org)，更多信息查看[Auto.js Pro文档](https://pro.autojs.org/docs)和[Auto.js Pro特性](https://pro.autojs.org/features)。**
+
 Auto.js使用[JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript)作为脚本语言，目前使用[Rhino 1.7.7.2](https://developer.mozilla.org/zh-CN/docs/Mozilla/Projects/Rhino)作为脚本引擎，支持ES5与部分ES6特性。
 
 * 因为Auto.js是基于JavaScript的，学习Auto.js的API之前建议先学习JavaScript的基本语法和内置对象，可以使用教程前面的两个JavaScript教程链接来学习。

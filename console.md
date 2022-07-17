@@ -18,6 +18,7 @@ console模块中的一些函数也可以直接作为全局函数使用，例如l
 清空控制台。
 
 ## console.log([data][, ...args])#
+
 * `data` {any}
 * `...args` {any}
 
@@ -36,30 +37,35 @@ console.log('count:', count);
 该函数也可以作为全局函数使用。
 
 ## console.verbose([data][, ...args])
+
 * `data` {any}
 * `...args` {any}
 
 与console.log类似，但输出结果以灰色字体显示。输出优先级低于log，用于输出观察性质的信息。
 
 ## console.info([data][, ...args])
+
 * `data` {any}
 * `...args` {any}
 
 与console.log类似，但输出结果以绿色字体显示。输出优先级高于log, 用于输出重要信息。
 
 ## console.warn([data][, ...args])
+
 * `data` {any}
 * `...args` {any}
 
 与console.log类似，但输出结果以蓝色字体显示。输出优先级高于info, 用于输出警告信息。
 
 ## console.error([data][, ...args])
+
 * `data` {any}
 * `...args` {any}
 
 与console.log类似，但输出结果以红色字体显示。输出优先级高于warn, 用于输出错误信息。
 
 ## console.assert(value, message)
+
 * value {any} 要断言的布尔值
 * message {string} value为false时要输出的信息
 
@@ -69,8 +75,11 @@ console.log('count:', count);
 var a = 1 + 1;
 console.assert(a == 2, "加法出错啦");
 ```
+
 ## console.time([label])
+
 **[v4.1.0新增]**
+
 * `label` {String} 计时器标签，可省略
 
 启动一个定时器，用以计算一个操作的持续时间。
@@ -79,11 +88,14 @@ console.assert(a == 2, "加法出错啦");
 重复启动同一个标签的定时器会覆盖之前启动同一标签的定时器。
 
 ## console.timeEnd(label)
+
 **[v4.1.0新增]**
+
 * `label` {String} 计时器标签
 
 停止之前通过调用 `console.time()` 启动的定时器，并打印结果到控制台。
 调用 `console.timeEnd()` 后定时器会被删除。如果不存在标签指定的定时器则会打印 `NaNms`。
+
 ```js
 console.time('求和');
 var sum = 0;
@@ -95,7 +107,9 @@ console.timeEnd('求和');
 ```
 
 ## console.trace([data][, ...args])
+
 **[v4.1.0新增]**
+
 * `data` {any}
 * `...args` {any}
 
@@ -109,6 +123,7 @@ console.trace('Show me');
 ```
 
 ## console.input(data[, ...args])
+
 * `data` {any}
 * `...args` {any}
 
@@ -117,6 +132,7 @@ console.trace('Show me');
 **部分机型可能会有控制台不显示输入框的情况，属于bug。**
 
 例如：
+
 ```
 var n = console.input("请输入一个数字:"); 
 //输入123之后：
@@ -125,6 +141,7 @@ toast(n + 1);
 ```
 
 ## console.rawInput(data[, ...args])
+
 * `data` {any}
 * `...args` {any}
 
@@ -133,6 +150,7 @@ toast(n + 1);
 部分机型可能会有控制台不显示输入框的情况，属于bug。
 
 例如：
+
 ```
 var n = console.rawInput("请输入一个数字:"); 
 //输入123之后：
@@ -141,10 +159,12 @@ toast(n + 1);
 ```
 
 ## console.setSize(w, h)
+
 * `w` {number} 宽度
 * `h` {number} 高度
 
 设置控制台的大小，单位像素。
+
 ```
 console.show();
 //设置控制台大小为屏幕的四分之一
@@ -152,6 +172,7 @@ console.setSize(device.width / 2, device.height / 2);
 ```
 
 ## console.setPosition(x, y)
+
 * `x` {number} 横坐标
 * `y` {number} 纵坐标
 
@@ -163,7 +184,9 @@ console.setPosition(100, 100);
 ```
 
 ## console.setGlobalLogConfig(config)
+
 **[v4.1.0新增]**
+
 * `config` {Object} 日志配置，可选的项有：
     * `file` {string} 日志文件路径，将会把日志写入该文件中
     * `maxFileSize` {number} 最大文件大小，单位字节，默认为512 * 1024 (512KB)
@@ -182,6 +205,7 @@ console.setGlobalLogConfig({
 注意该函数会影响所有脚本的日志记录。
 
 ## print(text)
+
 * text {string} | {Object} 要打印到控制台的信息
 
 相当于`log(text)`。

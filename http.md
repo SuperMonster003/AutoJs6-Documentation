@@ -36,6 +36,7 @@ http.get("www.baidu.com", {}, function(res, err){
 ```
 
 如果要增加HTTP头部信息，则在options参数中添加，例如：
+
 ```
 console.show();
 var r = http.get("www.baidu.com", {
@@ -49,6 +50,7 @@ log("html = " + r.body.string());
 ```
 
 一个请求天气并解析返回的天气JSON结果的例子如下：
+
 ```
 var city = "广州";
 var res = http.get("http://www.sojson.com/open/api/weather/json.shtml?city=" + city);
@@ -90,7 +92,9 @@ if(html.contains("页面跳转中")){
 	toast("登录失败");
 }
 ```
+
 ## http.postJson(url[, data, options, callback])
+
 * `url` {string} 请求的URL地址，需要以"http://"或"https://"开头。如果url没有以"http://"开头，则默认为"http://"。
 * `data` {Object} POST数据。
 * `options` {Object} 请求选项。
@@ -113,18 +117,21 @@ toastLog(r.body.string());
 ```
 
 ## http.postMultipart(url, files[, options, callback])
+
 * `url` {string} 请求的URL地址，需要以"http://"或"https://"开头。如果url没有以"http://"开头，则默认为"http://"。
 * `files` {Object} POST数据。
 * `options` {Object} 请求选项。
 * `callback` {Function} 回调，其参数是一个`Response`对象。如果不加回调参数，则该请求将阻塞、同步地执行。
 
 向目标地址发起类型为multipart/form-data的请求（通常用于文件上传等), 其中files参数是{name1: value1, name2: value2, ...}的键值对，value的格式可以是以下几种情况：
+
 1. `string`
 2. 文件类型，即open()返回的类型
 3. [fileName, filePath]
 4. [fileName, mimeType, filePath]
 
 其中1属于非文件参数，2、3、4为文件参数。举个例子，最简单的文件上传的请求为：
+
 ```
 var res = http.postMultipart(url, {
 	file: open("/sdcard/1.txt")
@@ -133,20 +140,25 @@ log(res.body.string());
 ```
 
 如果使用格式2，则代码为
+
 ```
 var res = http.postMultipart(url, {
 	file: ["1.txt", "/sdcard/1.txt"]
 });
 log(res.body.string());
 ```
+
 如果使用格式3，则代码为
+
 ```
 var res = http.postMultipart(url, {
 	file: ["1.txt", "text/plain", "/sdcard/1.txt"]
 });
 log(res.body.string());
 ```
+
 如果使用格式2的同时要附带非文件参数"appId=abcdefghijk"，则为:
+
 ```
 var res = http.postMultipart(url, {
 	appId: "adcdefghijk",
@@ -164,6 +176,7 @@ log(res.body.string());
 对目标地址url发起一次HTTP请求。如果没有回调函数，则在请求完成或失败时返回此次请求的响应(参见[Response][])。
 
 选项options可以包含以下属性：
+
 * `headers` {Object} 键值对形式的HTTP头部信息。有关HTTP头部信息，参见[菜鸟教程：HTTP响应头信息](http://www.runoob.com/http/http-header-fields.html)。
 * `method` {string} HTTP请求方法。包括"GET", "POST", "PUT", "DELET", "PATCH"。
 * `contentType` {string} HTTP头部信息中的"Content-Type", 表示HTTP请求的内容类型。例如"text/plain", "application/json"。更多信息参见[菜鸟教程：HTTP contentType](http://www.runoob.com/http/http-content-type.html)。
@@ -176,6 +189,7 @@ log(res.body.string());
 HTTP请求的响应。
 
 ## Response.statusCode
+
 * {number}
 
 当前响应的HTTP状态码。例如200(OK), 404(Not Found)等。
@@ -183,13 +197,15 @@ HTTP请求的响应。
 有关HTTP状态码的信息，参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html)。
 
 ## Response.statusMessage
-* {string} 
+
+* {string}
 
 当前响应的HTTP状态信息。例如"OK", "Bad Request", "Forbidden"。
 
 有关HTTP状态码的信息，参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html)。
 
 例子：
+
 ```
 var res = http.get("www.baidu.com");
 if(res.statusCode >= 200 && res.statusCode < 300){
@@ -202,6 +218,7 @@ if(res.statusCode >= 200 && res.statusCode < 300){
 ```
 
 ## Response.headers
+
 * {Object}
 
 当前响应的HTTP头部信息。该对象的键是响应头名称，值是各自的响应头值。 所有响应头名称都是小写的(吗)。
@@ -209,6 +226,7 @@ if(res.statusCode >= 200 && res.statusCode < 300){
 有关HTTP头部信息，参见[菜鸟教程：HTTP响应头信息](http://www.runoob.com/http/http-header-fields.html)。
 
 例子:
+
 ```
 console.show();
 var res = http.get("www.qq.com");
@@ -219,22 +237,27 @@ for(var headerName in res.headers){
 ```
 
 ## Response.body
+
 * {Object}
 
 当前响应的内容。他有以下属性和函数：
+
 * bytes() {Array} 以字节数组形式返回响应内容
 * string() {string} 以字符串形式返回响应内容
 * json() {Object} 把响应内容作为JSON格式的数据并调用JSON.parse，返回解析后的对象
 * contentType {string} 当前响应的内容类型
 
 ## Response.request
+
 * {Request}
-当前响应所对应的请求。参见[Request][]。
+  当前响应所对应的请求。参见[Request][]。
 
 ## Response.url
+
 * {number}
-当前响应所对应的请求URL。
+  当前响应所对应的请求URL。
 
 ## Response.method
+
 * {string}
-当前响应所对应的HTTP请求的方法。例如"GET", "POST", "PUT"等。
+  当前响应所对应的HTTP请求的方法。例如"GET", "POST", "PUT"等。

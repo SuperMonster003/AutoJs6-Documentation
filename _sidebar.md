@@ -1,11 +1,13 @@
-* [首页](/)
-* [**Auto.js Pro文档**](https://pro.autojs.org/docs) 
+* [About - 关于文档](/documentation)
+* -------------
+* %MARKER%
+* -------------
 * [Q&A](/qa)
-* [如何阅读本文档 - Documentation](/documentation)
+* [Global - 全局对象](/globals)
 * [应用 - App](/app)
-* [一般全局函数 - Globals](/globals)
 * [控制台 - Console](/console)
 * [基于坐标的操作 - CoordinatesBasedAutomation](/coordinatesBasedAutomation)
+* [加解密与消息摘要 - Crypto](/crypto)
 * [设备 - Device](/device)
 * [对话框 - Dialogs](/dialogs)
 * [脚本引擎 - Engines](/engines)

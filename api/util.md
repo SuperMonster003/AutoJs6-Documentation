@@ -11,6 +11,7 @@ const util = require('util');
 ```
 
 ## util.callbackify(original)
+
 <!-- YAML
 added: v8.2.0
 -->
@@ -48,13 +49,13 @@ hello world
 *Note*:
 
 * The callback is executed asynchronously, and will have a limited stack trace.
-If the callback throws, the process will emit an [`'uncaughtException'`][]
-event, and if not handled will exit.
+  If the callback throws, the process will emit an [`'uncaughtException'`][]
+  event, and if not handled will exit.
 
 * Since `null` has a special meaning as the first argument to a callback, if a
-wrapped function rejects a `Promise` with a falsy value as a reason, the value
-is wrapped in an `Error` with the original value stored in a field named
-`reason`.
+  wrapped function rejects a `Promise` with a falsy value as a reason, the value
+  is wrapped in an `Error` with the original value stored in a field named
+  `reason`.
   ```js
   function fn() {
     return Promise.reject(null);
@@ -69,6 +70,7 @@ is wrapped in an `Error` with the original value stored in a field named
   ```
 
 ## util.debuglog(section)
+
 <!-- YAML
 added: v0.11.3
 -->
@@ -79,9 +81,9 @@ added: v0.11.3
 
 The `util.debuglog()` method is used to create a function that conditionally
 writes debug messages to `stderr` based on the existence of the `NODE_DEBUG`
-environment variable.  If the `section` name appears within the value of that
+environment variable. If the `section` name appears within the value of that
 environment variable, then the returned function operates similar to
-[`console.error()`][].  If not, then the returned function is a no-op.
+[`console.error()`][]. If not, then the returned function is a no-op.
 
 For example:
 
@@ -99,13 +101,14 @@ it will output something like:
 FOO 3245: hello from foo [123]
 ```
 
-where `3245` is the process id.  If it is not run with that
+where `3245` is the process id. If it is not run with that
 environment variable set, then it will not print anything.
 
 Multiple comma-separated `section` names may be specified in the `NODE_DEBUG`
 environment variable. For example: `NODE_DEBUG=fs,net,tls`.
 
 ## util.deprecate(function, string)
+
 <!-- YAML
 added: v0.8.0
 -->
@@ -114,6 +117,7 @@ The `util.deprecate()` method wraps the given `function` or class in such a way 
 it is marked as deprecated.
 
 <!-- eslint-disable prefer-rest-params -->
+
 ```js
 const util = require('util');
 
@@ -148,6 +152,7 @@ property take precedence over `--trace-deprecation` and
 `process.traceDeprecation`.
 
 ## util.format(format[, ...args])
+
 <!-- YAML
 added: v0.5.3
 changes:
@@ -169,8 +174,8 @@ corresponding argument. Supported placeholders are:
 * `%d` - Number (integer or floating point value).
 * `%i` - Integer.
 * `%f` - Floating point value.
-* `%j` - JSON.  Replaced with the string `'[Circular]'` if the argument
-contains circular references.
+* `%j` - JSON. Replaced with the string `'[Circular]'` if the argument
+  contains circular references.
 * `%o` - Object. A string representation of an object
   with generic JavaScript object formatting.
   Similar to `util.inspect()` with options `{ showHidden: true, depth: 4, showProxy: true }`.
@@ -215,6 +220,7 @@ util.format('%% %s'); // '%% %s'
 ```
 
 ## util.inherits(constructor, superConstructor)
+
 <!-- YAML
 added: v0.3.0
 changes:
@@ -230,7 +236,7 @@ that the two styles are [semantically incompatible][].
 * `constructor` {Function}
 * `superConstructor` {Function}
 
-Inherit the prototype methods from one [constructor][] into another.  The
+Inherit the prototype methods from one [constructor][] into another. The
 prototype of `constructor` will be set to a new object created from
 `superConstructor`.
 
@@ -283,6 +289,7 @@ stream.write('With ES6');
 ```
 
 ## util.inspect(object[, options])
+
 <!-- YAML
 added: v0.3.0
 changes:
@@ -303,27 +310,27 @@ changes:
 
 * `object` {any} Any JavaScript primitive or Object.
 * `options` {Object}
-  * `showHidden` {boolean} If `true`, the `object`'s non-enumerable symbols and
-    properties will be included in the formatted result. Defaults to `false`.
-  * `depth` {number} Specifies the number of times to recurse while formatting
-    the `object`. This is useful for inspecting large complicated objects.
-    Defaults to `2`. To make it recurse indefinitely pass `null`.
-  * `colors` {boolean} If `true`, the output will be styled with ANSI color
-    codes. Defaults to `false`. Colors are customizable, see
-    [Customizing `util.inspect` colors][].
-  * `customInspect` {boolean} If `false`, then custom `inspect(depth, opts)`
-    functions exported on the `object` being inspected will not be called.
-    Defaults to `true`.
-  * `showProxy` {boolean} If `true`, then objects and functions that are
-    `Proxy` objects will be introspected to show their `target` and `handler`
-    objects. Defaults to `false`.
-  * `maxArrayLength` {number} Specifies the maximum number of array and
-    `TypedArray` elements to include when formatting. Defaults to `100`. Set to
-    `null` to show all array elements. Set to `0` or negative to show no array
-    elements.
-  * `breakLength` {number} The length at which an object's keys are split
-    across multiple lines. Set to `Infinity` to format an object as a single
-    line. Defaults to 60 for legacy compatibility.
+    * `showHidden` {boolean} If `true`, the `object`'s non-enumerable symbols and
+      properties will be included in the formatted result. Defaults to `false`.
+    * `depth` {number} Specifies the number of times to recurse while formatting
+      the `object`. This is useful for inspecting large complicated objects.
+      Defaults to `2`. To make it recurse indefinitely pass `null`.
+    * `colors` {boolean} If `true`, the output will be styled with ANSI color
+      codes. Defaults to `false`. Colors are customizable, see
+      [Customizing `util.inspect` colors][].
+    * `customInspect` {boolean} If `false`, then custom `inspect(depth, opts)`
+      functions exported on the `object` being inspected will not be called.
+      Defaults to `true`.
+    * `showProxy` {boolean} If `true`, then objects and functions that are
+      `Proxy` objects will be introspected to show their `target` and `handler`
+      objects. Defaults to `false`.
+    * `maxArrayLength` {number} Specifies the maximum number of array and
+      `TypedArray` elements to include when formatting. Defaults to `100`. Set to
+      `null` to show all array elements. Set to `0` or negative to show no array
+      elements.
+    * `breakLength` {number} The length at which an object's keys are split
+      across multiple lines. Set to `Infinity` to format an object as a single
+      line. Defaults to 60 for legacy compatibility.
 
 The `util.inspect()` method returns a string representation of `object` that is
 primarily useful for debugging. Additional `options` may be passed that alter
@@ -353,15 +360,15 @@ via the `util.inspect.styles` and `util.inspect.colors` properties.
 
 The default styles and associated colors are:
 
- * `number` - `yellow`
- * `boolean` - `yellow`
- * `string` - `green`
- * `date` - `magenta`
- * `regexp` - `red`
- * `null` - `bold`
- * `undefined` - `grey`
- * `special` - `cyan` (only applied to functions at this time)
- * `name` - (no styling)
+* `number` - `yellow`
+* `boolean` - `yellow`
+* `string` - `green`
+* `date` - `magenta`
+* `regexp` - `red`
+* `null` - `bold`
+* `undefined` - `grey`
+* `special` - `cyan` (only applied to functions at this time)
+* `name` - (no styling)
 
 The predefined color codes are: `white`, `grey`, `black`, `blue`, `cyan`,
 `green`, `magenta`, `red` and `yellow`. There are also `bold`, `italic`,
@@ -441,6 +448,7 @@ util.inspect(obj);
 ```
 
 ### util.inspect.custom
+
 <!-- YAML
 added: v6.6.0
 -->
@@ -449,6 +457,7 @@ A Symbol that can be used to declare custom inspect functions, see
 [Custom inspection functions on Objects][].
 
 ### util.inspect.defaultOptions
+
 <!-- YAML
 added: v6.4.0
 -->
@@ -469,6 +478,7 @@ console.log(arr); // logs the full array
 ```
 
 ## util.promisify(original)
+
 <!-- YAML
 added: v8.0.0
 -->
@@ -539,6 +549,7 @@ This can be useful for cases where the original function does not follow the
 standard format of taking an error-first callback as the last argument.
 
 ### util.promisify.custom
+
 <!-- YAML
 added: v8.0.0
 -->
@@ -549,6 +560,7 @@ A Symbol that can be used to declare custom promisified variants of functions,
 see [Custom promisified functions][].
 
 ## Class: util.TextDecoder
+
 <!-- YAML
 added: v8.3.0
 -->
@@ -640,13 +652,13 @@ is not supported.
 * `encoding` {string} Identifies the `encoding` that this `TextDecoder` instance
   supports. Defaults to `'utf-8'`.
 * `options` {Object}
-  * `fatal` {boolean} `true` if decoding failures are fatal. Defaults to
-    `false`. This option is only supported when ICU is enabled (see
-    [Internationalization][]).
-  * `ignoreBOM` {boolean} When `true`, the `TextDecoder` will include the byte
-     order mark in the decoded result. When `false`, the byte order mark will
-     be removed from the output. This option is only used when `encoding` is
-     `'utf-8'`, `'utf-16be'` or `'utf-16le'`. Defaults to `false`.
+    * `fatal` {boolean} `true` if decoding failures are fatal. Defaults to
+      `false`. This option is only supported when ICU is enabled (see
+      [Internationalization][]).
+    * `ignoreBOM` {boolean} When `true`, the `TextDecoder` will include the byte
+      order mark in the decoded result. When `false`, the byte order mark will
+      be removed from the output. This option is only used when `encoding` is
+      `'utf-8'`, `'utf-16be'` or `'utf-16le'`. Defaults to `false`.
 
 Creates an new `TextDecoder` instance. The `encoding` may specify one of the
 supported encodings or an alias.
@@ -656,8 +668,8 @@ supported encodings or an alias.
 * `input` {ArrayBuffer|DataView|TypedArray} An `ArrayBuffer`, `DataView` or
   Typed Array instance containing the encoded data.
 * `options` {Object}
-  * `stream` {boolean} `true` if additional chunks of data are expected.
-    Defaults to `false`.
+    * `stream` {boolean} `true` if additional chunks of data are expected.
+      Defaults to `false`.
 * Returns: {string}
 
 Decodes the `input` and returns a string. If `options.stream` is `true`, any
@@ -688,6 +700,7 @@ The value will be `true` if the decoding result will include the byte order
 mark.
 
 ## Class: util.TextEncoder
+
 <!-- YAML
 added: v8.3.0
 -->
@@ -722,6 +735,7 @@ The following APIs have been deprecated and should no longer be used. Existing
 applications and modules should be updated to find alternative approaches.
 
 ### util.\_extend(target, source)
+
 <!-- YAML
 added: v0.7.5
 deprecated: v6.0.0
@@ -736,6 +750,7 @@ It is deprecated and should not be used in new code. JavaScript comes with very
 similar built-in functionality through [`Object.assign()`].
 
 ### util.debug(string)
+
 <!-- YAML
 added: v0.3.0
 deprecated: v0.11.3
@@ -748,6 +763,7 @@ deprecated: v0.11.3
 Deprecated predecessor of `console.error`.
 
 ### util.error([...strings])
+
 <!-- YAML
 added: v0.3.0
 deprecated: v0.11.3
@@ -760,6 +776,7 @@ deprecated: v0.11.3
 Deprecated predecessor of `console.error`.
 
 ### util.isArray(object)
+
 <!-- YAML
 added: v0.6.0
 deprecated: v4.0.0
@@ -785,6 +802,7 @@ util.isArray({});
 ```
 
 ### util.isBoolean(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -808,6 +826,7 @@ util.isBoolean(false);
 ```
 
 ### util.isBuffer(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -831,6 +850,7 @@ util.isBuffer(Buffer.from('hello world'));
 ```
 
 ### util.isDate(object)
+
 <!-- YAML
 added: v0.6.0
 deprecated: v4.0.0
@@ -854,6 +874,7 @@ util.isDate({});
 ```
 
 ### util.isError(object)
+
 <!-- YAML
 added: v0.6.0
 deprecated: v4.0.0
@@ -893,6 +914,7 @@ util.isError(obj);
 ```
 
 ### util.isFunction(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -920,6 +942,7 @@ util.isFunction(Bar);
 ```
 
 ### util.isNull(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -944,6 +967,7 @@ util.isNull(null);
 ```
 
 ### util.isNullOrUndefined(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -968,6 +992,7 @@ util.isNullOrUndefined(null);
 ```
 
 ### util.isNumber(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -993,6 +1018,7 @@ util.isNumber(NaN);
 ```
 
 ### util.isObject(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -1019,6 +1045,7 @@ util.isObject(function() {});
 ```
 
 ### util.isPrimitive(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -1055,6 +1082,7 @@ util.isPrimitive(new Date());
 ```
 
 ### util.isRegExp(object)
+
 <!-- YAML
 added: v0.6.0
 deprecated: v4.0.0
@@ -1078,6 +1106,7 @@ util.isRegExp({});
 ```
 
 ### util.isString(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -1103,6 +1132,7 @@ util.isString(5);
 ```
 
 ### util.isSymbol(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -1126,6 +1156,7 @@ util.isSymbol(Symbol('foo'));
 ```
 
 ### util.isUndefined(object)
+
 <!-- YAML
 added: v0.11.5
 deprecated: v4.0.0
@@ -1150,6 +1181,7 @@ util.isUndefined(null);
 ```
 
 ### util.log(string)
+
 <!-- YAML
 added: v0.3.0
 deprecated: v6.0.0
@@ -1169,6 +1201,7 @@ util.log('Timestamped message.');
 ```
 
 ### util.print([...strings])
+
 <!-- YAML
 added: v0.3.0
 deprecated: v0.11.3
@@ -1179,6 +1212,7 @@ deprecated: v0.11.3
 Deprecated predecessor of `console.log`.
 
 ### util.puts([...strings])
+
 <!-- YAML
 added: v0.3.0
 deprecated: v0.11.3
@@ -1189,18 +1223,33 @@ deprecated: v0.11.3
 Deprecated predecessor of `console.log`.
 
 [`'uncaughtException'`]: process.html#process_event_uncaughtexception
+
 [`Array.isArray`]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray
+
 [`Buffer.isBuffer()`]: buffer.html#buffer_class_method_buffer_isbuffer_obj
+
 [`Error`]: errors.html#errors_class_error
+
 [`Object.assign()`]: https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+
 [`console.error()`]: console.html#console_console_error_data_args
+
 [`console.log()`]: console.html#console_console_log_data_args
+
 [`util.inspect()`]: #util_util_inspect_object_options
+
 [`util.promisify()`]: #util_util_promisify_original
+
 [Custom inspection functions on Objects]: #util_custom_inspection_functions_on_objects
+
 [Custom promisified functions]: #util_custom_promisified_functions
+
 [Customizing `util.inspect` colors]: #util_customizing_util_inspect_colors
+
 [Internationalization]: intl.html
+
 [WHATWG Encoding Standard]: https://encoding.spec.whatwg.org/
+
 [constructor]: https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Object/constructor
+
 [semantically incompatible]: https://github.com/nodejs/node/issues/4179

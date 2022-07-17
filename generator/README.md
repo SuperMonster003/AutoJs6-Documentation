@@ -6,6 +6,7 @@ Each type of heading has a description block.
 
 ```md
 ## module
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -15,6 +16,7 @@ added: v0.10.0
 description and examples.
 
 ### module.property
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -24,6 +26,7 @@ added: v0.10.0
 description of the property.
 
 ### module.someFunction(x, y, [z=100])
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -35,6 +38,7 @@ added: v0.10.0
 A description of the function.
 
 ### module.someNewFunction(x)
+
 <!-- YAML
 added: REPLACEME
 -->
@@ -44,6 +48,7 @@ added: REPLACEME
 This feature is not in a release yet.
 
 ### Event: 'blerg'
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -54,6 +59,7 @@ Modules don't usually raise events on themselves.  `cluster` is the
 only exception.
 
 ## Class: SomeClass
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -61,25 +67,28 @@ added: v0.10.0
 description of the class.
 
 ### Class Method: SomeClass.classMethod(anArg)
+
 <!-- YAML
 added: v0.10.0
 -->
 
-* `anArg` {Object}  Just an argument
-  * `field` {String} anArg can have this field.
-  * `field2` {Boolean}  Another field.  Default: `false`.
+* `anArg` {Object} Just an argument
+    * `field` {String} anArg can have this field.
+    * `field2` {Boolean} Another field. Default: `false`.
 * Return: {Boolean} `true` if it worked.
 
 Description of the method for humans.
 
 ### someClass.nextSibling()
+
 <!-- YAML
 added: v0.10.0
 -->
 
-* Return: {SomeClass object | null}  The next someClass in line.
+* Return: {SomeClass object | null} The next someClass in line.
 
 ### someClass.someProperty
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -89,6 +98,7 @@ added: v0.10.0
 The indication of what someProperty is.
 
 ### Event: 'grelb'
+
 <!-- YAML
 added: v0.10.0
 -->
@@ -97,7 +107,6 @@ added: v0.10.0
 
 This event is emitted on instances of SomeClass, not on the module itself.
 ```
-
 
 * Classes have (description, Properties, Methods, Events)
 * Events have (list of arguments, description)

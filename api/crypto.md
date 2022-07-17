@@ -5,6 +5,7 @@
 $crypto模块提供了对称加密(例如AES)、非对称加密(例如RSA)、消息摘要(例如MD5, SHA)等支持。
 
 ## $crypto.digest(message, algorithm[, options])
+
 * `message` {any}
 * `algorithm` {string} 消息摘要算法，包括：
     * MD5
@@ -30,6 +31,7 @@ toastLog($crypto.digest("/sdcard/1.txt", "MD5", {
 ```
 
 ## $crypto.encrypt(data, key, algorithm, options)
+
 * `data` {any} 明文消息
 * `key` {Key} 密钥
 * `algorithm` {string} 加密算法，包括：
@@ -47,7 +49,7 @@ toastLog($crypto.digest("/sdcard/1.txt", "MD5", {
     * RSA/ECB/PKCS1Padding
     * RSA/ECB/NoPadding
     * ...
-    具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher)
+      具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher)
 
 * `options` {Object} 加密选项
 

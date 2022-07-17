@@ -1,5 +1,5 @@
 {
-  "source": "../api/app.md",
+  "source": "..\\api\\app.md",
   "modules": [
     {
       "textRaw": "App",
@@ -295,47 +295,45 @@
               "params": [
                 {
                   "textRaw": "`options` {Object} 发送邮件的参数。包括: ",
-                  "options": [
-                    {
-                      "textRaw": "`email` {string} | {Array} 收件人的邮件地址。如果有多个收件人，则用字符串数组表示 ",
-                      "name": "email",
-                      "type": "string",
-                      "desc": "| {Array} 收件人的邮件地址。如果有多个收件人，则用字符串数组表示"
-                    },
-                    {
-                      "textRaw": "`cc` {string} | {Array} 抄送收件人的邮件地址。如果有多个抄送收件人，则用字符串数组表示 ",
-                      "name": "cc",
-                      "type": "string",
-                      "desc": "| {Array} 抄送收件人的邮件地址。如果有多个抄送收件人，则用字符串数组表示"
-                    },
-                    {
-                      "textRaw": "`bcc` {string} | {Array} 密送收件人的邮件地址。如果有多个密送收件人，则用字符串数组表示 ",
-                      "name": "bcc",
-                      "type": "string",
-                      "desc": "| {Array} 密送收件人的邮件地址。如果有多个密送收件人，则用字符串数组表示"
-                    },
-                    {
-                      "textRaw": "`subject` {string}  邮件主题(标题) ",
-                      "name": "subject",
-                      "type": "string",
-                      "desc": "邮件主题(标题)"
-                    },
-                    {
-                      "textRaw": "`text` {string} 邮件正文 ",
-                      "name": "text",
-                      "type": "string",
-                      "desc": "邮件正文"
-                    },
-                    {
-                      "textRaw": "`attachment` {string} 附件的路径。 ",
-                      "name": "attachment",
-                      "type": "string",
-                      "desc": "附件的路径。"
-                    }
-                  ],
                   "name": "options",
                   "type": "Object",
                   "desc": "发送邮件的参数。包括:"
+                },
+                {
+                  "textRaw": "`email` {string} | {Array} 收件人的邮件地址。如果有多个收件人，则用字符串数组表示 ",
+                  "name": "email",
+                  "type": "string",
+                  "desc": "| {Array} 收件人的邮件地址。如果有多个收件人，则用字符串数组表示"
+                },
+                {
+                  "textRaw": "`cc` {string} | {Array} 抄送收件人的邮件地址。如果有多个抄送收件人，则用字符串数组表示 ",
+                  "name": "cc",
+                  "type": "string",
+                  "desc": "| {Array} 抄送收件人的邮件地址。如果有多个抄送收件人，则用字符串数组表示"
+                },
+                {
+                  "textRaw": "`bcc` {string} | {Array} 密送收件人的邮件地址。如果有多个密送收件人，则用字符串数组表示 ",
+                  "name": "bcc",
+                  "type": "string",
+                  "desc": "| {Array} 密送收件人的邮件地址。如果有多个密送收件人，则用字符串数组表示"
+                },
+                {
+                  "textRaw": "`subject` {string} 邮件主题(标题) ",
+                  "name": "subject",
+                  "type": "string",
+                  "desc": "邮件主题(标题)"
+                },
+                {
+                  "textRaw": "`text` {string} 邮件正文 ",
+                  "name": "text",
+                  "type": "string",
+                  "desc": "邮件正文"
+                },
+                {
+                  "textRaw": "`attachment` {string} 附件的路径。 ",
+                  "name": "attachment",
+                  "type": "string",
+                  "desc": "附件的路径。"
                 }
               ]
             },
@@ -393,7 +391,7 @@
     {
       "textRaw": "进阶: 意图Intent",
       "name": "进阶:_意图intent",
-      "desc": "<p>Intent(意图) 是一个消息传递对象，您可以使用它从其他应用组件请求操作。尽管 Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下三个：</p>\n<ul>\n<li><p>启动活动(Activity)：\n  Activity 表示应用中的一个&quot;屏幕&quot;。例如应用主入口都是一个Activity，应用的功能通常也以Activity的形式独立，例如微信的主界面、朋友圈、聊天窗口都是不同的Activity。通过将 Intent 传递给 startActivity()，您可以启动新的 Activity 实例。Intent 描述了要启动的 Activity，并携带了任何必要的数据。</p>\n</li>\n<li><p>启动服务(Service)：\n  Service 是一个不使用用户界面而在后台执行操作的组件。通过将 Intent 传递给 startService()，您可以启动服务执行一次性操作（例如，下载文件）。Intent 描述了要启动的服务，并携带了任何必要的数据。</p>\n</li>\n<li><p>传递广播：\n  广播是任何应用均可接收的消息。系统将针对系统事件（例如：系统启动或设备开始充电时）传递各种广播。通过将 Intent 传递给 sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast()，您可以将广播传递给其他应用。</p>\n</li>\n</ul>\n<p>本模块提供了构建Intent的函数(<code>app.intent()</code>), 启动Activity的函数<code>app.startActivity()</code>, 发送广播的函数<code>app.sendBroadcast()</code>。</p>\n<p>使用这些方法可以用来方便的调用其他应用。例如直接打开某个QQ号的个人卡片页，打开某个QQ号的聊天窗口等。</p>\n<pre><code>var qq = &quot;2732014414&quot;;\napp.startActivity({ \n    action: &quot;android.intent.action.VIEW&quot;, \n    data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, \n    packageName: &quot;com.tencent.mobileqq&quot;, \n});\n\n</code></pre>",
+      "desc": "<p>Intent(意图) 是一个消息传递对象，您可以使用它从其他应用组件请求操作。尽管 Intent 可以通过多种方式促进组件之间的通信，但其基本用例主要包括以下三个：</p>\n<ul>\n<li><p>启动活动(Activity)：\nActivity 表示应用中的一个&quot;屏幕&quot;。例如应用主入口都是一个Activity，应用的功能通常也以Activity的形式独立，例如微信的主界面、朋友圈、聊天窗口都是不同的Activity。通过将 Intent 传递给 startActivity()，您可以启动新的 Activity 实例。Intent 描述了要启动的 Activity，并携带了任何必要的数据。</p>\n</li>\n<li><p>启动服务(Service)：\nService 是一个不使用用户界面而在后台执行操作的组件。通过将 Intent 传递给 startService()，您可以启动服务执行一次性操作（例如，下载文件）。Intent 描述了要启动的服务，并携带了任何必要的数据。</p>\n</li>\n<li><p>传递广播：\n广播是任何应用均可接收的消息。系统将针对系统事件（例如：系统启动或设备开始充电时）传递各种广播。通过将 Intent 传递给 sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast()，您可以将广播传递给其他应用。</p>\n</li>\n</ul>\n<p>本模块提供了构建Intent的函数(<code>app.intent()</code>), 启动Activity的函数<code>app.startActivity()</code>, 发送广播的函数<code>app.sendBroadcast()</code>。</p>\n<p>使用这些方法可以用来方便的调用其他应用。例如直接打开某个QQ号的个人卡片页，打开某个QQ号的聊天窗口等。</p>\n<pre><code>var qq = &quot;2732014414&quot;;\napp.startActivity({ \n    action: &quot;android.intent.action.VIEW&quot;, \n    data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, \n    packageName: &quot;com.tencent.mobileqq&quot;, \n});\n\n</code></pre>",
       "methods": [
         {
           "textRaw": "app.intent(options)",
@@ -570,7 +568,7 @@
           "textRaw": "app.intentToShell(options)",
           "type": "method",
           "name": "intentToShell",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>options</code> {Object} 选项</li>\n</ul>\n<p>根据选项构造一个Intent，转换为对应的shell的intent命令的参数。</p>\n<p>例如: </p>\n<pre><code>shell(&quot;am start &quot; + app.intentToShell({\n    packageName: &quot;org.autojs.autojs&quot;,\n    className: &quot;org.autojs.autojs.ui.settings.SettingsActivity_&quot;\n}), true);\n</code></pre><p>参见<a href=\"https://developer.android.com/studio/command-line/adb#IntentSpec\">intent参数的规范</a>。</p>\n",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>options</code> {Object} 选项</li>\n</ul>\n<p>根据选项构造一个Intent，转换为对应的shell的intent命令的参数。</p>\n<p>例如:</p>\n<pre><code>shell(&quot;am start &quot; + app.intentToShell({\n    packageName: &quot;org.autojs.autojs&quot;,\n    className: &quot;org.autojs.autojs.ui.settings.SettingsActivity_&quot;\n}), true);\n</code></pre><p>参见<a href=\"https://developer.android.com/studio/command-line/adb#IntentSpec\">intent参数的规范</a>。</p>\n",
           "signatures": [
             {
               "params": [
@@ -615,7 +613,7 @@
           "textRaw": "app.getInstalledApps([options])",
           "type": "method",
           "name": "getInstalledApps",
-          "desc": "<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<ul>\n<li><code>options</code> {Object} 选项，包括：<ul>\n<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>\n<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>\n<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>\n<li><code>&quot;gids&quot;</code> 应用的group id</li>\n<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>\n<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>\n<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>\n<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>\n<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>\n<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>\n<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>\n<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>\n<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>\n<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>\n<li><code>&quot;uri_permission_patterns&quot;</code></li>\n<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n</ul>\n</li>\n<li><code>match</code>: 指定要匹配的应用列表<ul>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>\n<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>\n<li><code>&quot;apex&quot;</code> APEX应用</li>\n</ul>\n</li>\n</ul>\n</li>\n<li>返回 {Array\\&lt;ApplicationInfo>}</li>\n</ul>\n<p>返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 <code>uninstalled_packages</code>，则包括被删除但保留了数据的应用程序。\n获取安装的应用列表。</p>\n<p>返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。 </p>\n<p>选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。</p>\n<pre><code>let apps = $app.getInstalledApps({\n    matcg\n})\n</code></pre>",
+          "desc": "<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<ul>\n<li><code>options</code> {Object} 选项，包括：<ul>\n<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>\n<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>\n<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>\n<li><code>&quot;gids&quot;</code> 应用的group id</li>\n<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>\n<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>\n<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>\n<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>\n<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>\n<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>\n<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>\n<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>\n<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>\n<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>\n<li><code>&quot;uri_permission_patterns&quot;</code></li>\n<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n</ul>\n</li>\n<li><code>match</code>: 指定要匹配的应用列表<ul>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>\n<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>\n<li><code>&quot;apex&quot;</code> APEX应用</li>\n</ul>\n</li>\n</ul>\n</li>\n<li>返回 {Array\\&lt;ApplicationInfo>}</li>\n</ul>\n<p>返回为当前用户安装的所有应用程序包的列表。如果设置了match选项 <code>uninstalled_packages</code>，则包括被删除但保留了数据的应用程序。\n获取安装的应用列表。</p>\n<p>返回值是ApplicationInfo对象的数组。 如果没有安装任何应用，则返回一个空数组。</p>\n<p>选项options的match选项用于指定要返回哪些应用程序，get选项用于指定返回的应用程序携带哪些信息。</p>\n<pre><code>let apps = $app.getInstalledApps({\n    matcg\n})\n</code></pre>",
           "signatures": [
             {
               "params": [

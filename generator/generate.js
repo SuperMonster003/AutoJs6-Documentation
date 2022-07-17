@@ -29,7 +29,6 @@ const fs = require('fs');
 
 const path = require('path');
 
-const args = process.argv.slice(2);
 let format = 'html';
 let template = path.join('..', 'template.html');
 let inputFile = path.join('..', 'api', 'all.md');
@@ -37,71 +36,62 @@ let nodeVersion = null;
 let analytics = null;
 let out = path.join('..', 'docs', 'all.html');
 
-args.forEach(function(arg) {
-  if (!arg.startsWith('--')) {
-    inputFile = arg;
-  } else if (arg.startsWith('--format=')) {
-    format = arg.replace(/^--format=/, '');
-  } else if (arg.startsWith('--template=')) {
-    template = arg.replace(/^--template=/, '');
-  } else if (arg.startsWith('--node-version=')) {
-    nodeVersion = arg.replace(/^--node-version=/, '');
-  } else if (arg.startsWith('--analytics=')) {
-    analytics = arg.replace(/^--analytics=/, '');
-  } else if (arg.startsWith('--out=')) {
-    out = arg.replace(/^--out=/, '');
-  }
+process.argv.slice(2).forEach(function (arg) {
+    if (!arg.startsWith('--')) {
+        inputFile = arg;
+    } else if (arg.startsWith('--format=')) {
+        format = arg.replace(/^--format=/, '');
+    } else if (arg.startsWith('--template=')) {
+        template = arg.replace(/^--template=/, '');
+    } else if (arg.startsWith('--node-version=')) {
+        nodeVersion = arg.replace(/^--node-version=/, '');
+    } else if (arg.startsWith('--analytics=')) {
+        analytics = arg.replace(/^--analytics=/, '');
+    } else if (arg.startsWith('--out=')) {
+        out = arg.replace(/^--out=/, '');
+    }
 });
 
 nodeVersion = nodeVersion || process.version;
 
 if (!inputFile) {
-  throw new Error('No input file specified');
+    throw new Error('No input file specified');
 }
+console.info('Input file = %s', inputFile);
 
-console.error('Input file = %s', inputFile);
-fs.readFile(inputFile, 'utf8', function(er, input) {
-  if (er) throw er;
-  // process the input for @include lines
-  processIncludes(inputFile, input, next);
+fs.readFile(inputFile, 'utf8', function (er, input) {
+    if (er) throw er;
+    // process the input for @include lines
+    processIncludes(inputFile, input, next);
 });
 
 function next(er, input) {
-  if (er) throw er;
-  switch (format) {
-    case 'json':
-      require('./json.js')(input, inputFile, function(er, obj) {
-        if(out){
-          fs.writeFileSync(out, JSON.stringify(obj, null, 2));
-        }else{
-          console.log(JSON.stringify(obj, null, 2));
-        }
-        if (er) throw er;
-      });
-      break;
-
-    case 'html':
-      require('./html.js')(
-        {
-          input: input,
-          filename: inputFile,
-          template: template,
-          nodeVersion: nodeVersion,
-          analytics: analytics,
-        },
-
-        function(er, html) {
-          if (er) throw er;
-          if(out){
-          	fs.writeFileSync(out, html);
-          }else{
-	          console.log(html);
-          }
-        }
-      );
-      break;
-
-    default:
-      throw new Error('Invalid format: ' + format);
-  }
+    if (er) throw er;
+    switch (format) {
+        case 'json':
+            require('./json.js')(input, inputFile, function (er, obj) {
+                if (er) throw er;
+                let message = JSON.stringify(obj, null, 2);
+                if (out) {
+                    fs.writeFileSync(out, message);
+                } else {
+                    console.log(message);
+                }
+            });
+            break;
+        case 'html':
+            let o = { input, filename: inputFile, template, nodeVersion, analytics };
+            require('./html.js')(o, function (er, html) {
+                    if (er) throw er;
+                    if (out) {
+                        fs.writeFileSync(out, html);
+                    } else {
+                        console.log(html);
+                    }
+                },
+            );
+            break;
+        default:
+            throw new Error(`Invalid format: ${format}`);
+    }
 }

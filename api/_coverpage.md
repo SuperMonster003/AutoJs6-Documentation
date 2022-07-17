@@ -1,9 +1,8 @@
 ![logo](images/logo.png)
 
-# Auto.js
+# [AutoJs6](https://github.com/SuperMonster003/AutoJs6)
 
-> **不需要Root权限**的JavaScript自动化软件
+安卓平台 JavaScript 自动化工具
 
-[GitHub](https://github.com/hyb1996/Auto.js)
-[软件下载](https://www.coolapk.com/apk/129872)
+[下载应用](https://github.com/SuperMonster003/AutoJs6/releases)
 [阅读文档](#综述)

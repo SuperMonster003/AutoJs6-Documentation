@@ -29,6 +29,7 @@ $ui.layout(
     </vertical>
 );
 ```
+
 在这个例子中，第3~6行的部分就是xml，指定了界面的具体内容。代码的第3行的标签`<vertical> ... </vertical>`表示垂直布局，布局的标签通常以`<...>`开始，以`</...>`结束，两个标签之间的内容就是布局里面的内容，例如`<frame> ... </frame>`。在这个例子中第4, 5行的内容就是垂直布局(vertical)里面的内容。代码的第4行是一个按钮控件(button)，控件的标签通常以`<...`开始，以`/>`结束，他们之间是控件的具体属性，例如`<text ... />`。在这个例子中`text="第一个按钮"`的部分就是按钮控件(button)的属性，这个属性指定了这个按钮控件的文本内容(text)为"第一个按钮"。
 
 代码的第5行和第4行一样，也是一个按钮控件，只不过他的文本内容为"第二个按钮"。这两个控件在垂直布局中，因此会纵向排列，效果如图：
@@ -68,6 +69,7 @@ ui.layout(
 ![ex-properties](images/ex1-properties.png)
 
 一个界面便由一些布局和控件组成。为了便于文档阅读，我们再说明一下以下术语：
+
 * 子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图。实际上布局里面不仅仅只能有控件，还可以是嵌套的布局。因此用子视图(Child View)更准确一些。在上面的例子中，按钮便是垂直布局的子控件。
 * 父视图，父布局：直接包含一个控件的布局是这个控件的父布局/父视图(Parent View)。在上面的例子中，垂直布局便是按钮的父布局。
 
@@ -76,6 +78,7 @@ ui.layout(
 控件和布局都属于视图(View)。在这个章节中将介绍所有控件和布局的共有的属性和函数。例如属性背景，宽高等(所有控件和布局都能设置背景和宽高)，函数`click()`设置视图(View)被点击时执行的动作。
 
 ## attr(name, value)
+
 * `name` {string} 属性名称
 * `value` {string} 属性的值
 
@@ -104,6 +107,7 @@ $ui.post(() => {
 **注意：**并不是所有属性都能在js代码设置，有一些属性只能在布局创建时设置，例如style属性；还有一些属性虽然能在代码中设置，但是还没支持；对于这些情况，在Auto.js Pro 8.1.0+会抛出异常，其他版本则不会抛出异常。
 
 ## attr(name)
+
 * `name` {string} 属性名称
 * 返回 {string}
 
@@ -138,6 +142,7 @@ function plusOne() {
 ## w
 
 View的宽度，是属性`width`的缩写形式。可以设置的值为`*`, `auto`和具体数值。其中`*`表示宽度**尽量**填满父布局，而`auto`表示宽度将根据View的内容自动调整(自适应宽度)。例如：
+
 ```
 "ui";
 ui.layout(
@@ -147,6 +152,7 @@ ui.layout(
     </horizontal>
 );
 ```
+
 在这个例子中，第一个按钮为自适应宽度，第二个按钮为填满父布局，显示效果为：
 
 ![ex-w](images/ex-w.png)
@@ -176,6 +182,7 @@ View的高度，是属性`height`的缩写形式。可以设置的值为`*`, `au
 ## id
 
 View的id，用来区分一个界面下的不同控件和布局，一个界面的id在同一个界面下通常是唯一的，也就是一般不存在两个View有相同的id。id属性也是连接xml布局和JavaScript代码的桥梁，在代码中可以通过一个View的id来获取到这个View，并对他进行操作(设置点击动作、设置属性、获取属性等)。例如：
+
 ```
 "ui";
 ui.layout(
@@ -193,6 +200,7 @@ toast(ui.ok.getText());
 ## gravity
 
 View的"重力"。用于决定View的内容相对于View的位置，可以设置的值为:
+
 * `left` 靠左
 * `right` 靠右
 * `top` 靠顶部
@@ -211,6 +219,7 @@ ui.layout(
     </frame>
 );
 ```
+
 显示效果为:
 
 ![ex-gravity](images/ex-gravity.png)
@@ -236,20 +245,24 @@ ui.layout(
 ![ex-layout-gravity](images/ex-layout-gravity.png)
 
 要注意的是，layout_gravity的属性不一定总是生效的，具体取决于布局的类别。例如不能让水平布局中的第一个子控件靠底部显示(否则和水平布局本身相违背)。
+
 ## margin
 
 margin为View和其他View的间距，即外边距。margin属性包括四个值:
+
 * `marginLeft` 左外边距
 * `marginRight` 右外边距
 * `marginTop` 上外边距
 * `marginBottom` 下外边距
 
 而margin属性本身的值可以有三种格式:
+
 * `margin="marginAll"` 指定各个外边距都是该值。例如`margin="10"`表示左右上下边距都是10dp。
 * `margin="marginLeft marginTop marginRight marginBottom"` 分别指定各个外边距。例如`margin="10 20 30 40"`表示左边距为10dp, 上边距为20dp, 右边距为30dp, 下边距为40dp
 * `margin="marginHorizontal marginVertical"` 指定水平外边距和垂直外边距。例如`margin="10 20"`表示左右边距为10dp, 上下边距为20dp。
 
 用一个例子来具体理解外边距的含义：
+
 ```
 "ui";
 ui.layout(
@@ -259,6 +272,7 @@ ui.layout(
     </horizontal>
 );
 ```
+
 第一个按钮的margin属性指定了他的边距为30dp, 也就是他与水平布局以及第二个按钮的间距都是30dp, 其显示效果如图:
 
 ![ex1-margin](images/ex1-margin.png)
@@ -373,6 +387,7 @@ View的最小宽度。该值不总是生效的，取决于其父布局是否有�
 ## visibility
 
 View的可见性，该属性可以决定View是否显示出来。其值可以为：
+
 * `gone` 不可见。
 * `visible` 可见。默认情况下View都是可见的。
 * `invisible` 不可见，但仍然占用位置。
@@ -411,7 +426,7 @@ View的变换中心坐标y。用于View的旋转、放缩等变换的中心坐�
 
 以下介绍该控件的主要属性和方法，如果要查看他的所有属性和方法，请阅读[TextView](http://www.zhdoc.net/android/reference/android/widget/TextView.html)。
 
-## text 
+## text
 
 设置文本的内容。例如`text="一段文本"`。
 
@@ -430,9 +445,10 @@ View的变换中心坐标y。用于View的旋转、放缩等变换的中心坐�
 ## textStyle
 
 设置字体的样式，比如斜体、粗体等。可选的值为：
-* bold  加粗字体
-* italic  斜体	
-* normal  正常字体
+
+* bold 加粗字体
+* italic 斜体
+* normal 正常字体
 
 可以用或("|")把他们组合起来，比如粗斜体为"bold|italic"。
 
@@ -462,6 +478,7 @@ ui.myText.setText("第一行\n第二行\n第三行\n第四行");
 ## typeface
 
 设置字体。可选的值为：
+
 * `normal` 正常字体
 * `sans` 衬线字体
 * `serif` 非衬线字体
@@ -472,11 +489,12 @@ ui.myText.setText("第一行\n第二行\n第三行\n第四行");
 ## ellipsize
 
 设置文本的省略号位置。文本的省略号会在文本内容超出文本控件时显示。可选的值为：
+
 * `end`   在文本末尾显示省略号
 * `marquee`   跑马灯效果，文本将滚动显示
-* `middle`	在文本中间显示省略号
-* `none`	不显示省略号
-* `start`	在文本开头显示省略号
+* `middle`    在文本中间显示省略号
+* `none`    不显示省略号
+* `start`    在文本开头显示省略号
 
 ## ems
 
@@ -506,6 +524,7 @@ ui.myText.setText("第一行\n第二行\n第三行\n第四行");
 按钮控件是一个特殊的文本控件，因此所有文本控件的函数的属性都适用于按钮控件。
 
 除此之外，按钮控件有一些内置的样式，通过`style`属性设置，包括：
+
 * Widget.AppCompat.Button.Colored 带颜色的按钮
 * Widget.AppCompat.Button.Borderless 无边框按钮
 * Widget.AppCompat.Button.Borderless.Colored 带颜色的无边框按钮
@@ -519,6 +538,7 @@ ui.myText.setText("第一行\n第二行\n第三行\n第四行");
 输入框控件也是一个特殊的文本控件，因此所有文本控件的函数的属性和函数都适用于按钮控件。输入框控件有自己的属性和函数，要查看所有这些内容，阅读[EditText](http://www.zhdoc.net/android/reference/android/widget/EditText.html)。
 
 对于一个输入框控件，我们可以通过text属性设置他的内容，通过lines属性指定输入框的行数；在代码中通过`getText()`函数获取输入的内容。例如：
+
 ```
 "ui";
 ui.layout(
@@ -549,6 +569,7 @@ ui.ok.click(function(){
 ![ex-hint](images/ex-hint.png)
 
 上面图片效果的代码为：
+
 ```
 "ui";
 ui.layout(
@@ -569,6 +590,7 @@ ui.layout(
 ## inputType
 
 指定输入框可以输入的文本类型。可选的值为以下值及其用"|"的组合:
+
 * `date`    用于输入日期。
 * `datetime`    用于输入日期和时间。
 * `none`    没有内容类型。此输入框不可编辑。
@@ -644,6 +666,7 @@ ui.layout(
 如果使用图片地址或本地路径，Auto.js会自动使用适当的缓存来储存这些图片，减少下次加载的时间。
 
 例如，显示百度的logo:
+
 ```
 "ui";
 ui.layout(
@@ -655,6 +678,7 @@ ui.layout(
 
 再例如，显示文件/sdcard/1.png的图片为 `<img src="file:///sdcard/1.png"/>`。
 再例如，使base64显示一张钱包小图片为：
+
 ```
 "ui";
 ui.layout(
@@ -674,14 +698,14 @@ ui.layout(
 
 控制图片根据图片控件的宽高放缩时的模式。可选的值为：
 
-* `center`	在控件中居中显示图像, 但不执行缩放。
-* `centerCrop`	保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 等于或大于控件的相应尺寸 (不包括内边距padding)并且使图像在控件中居中显示。
-* `centerInside`	保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 小于视图的相应尺寸 (不包括内边距padding)并且图像在控件中居中显示。
-* `fitCenter`	保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中居中显示
-* `fitEnd`	保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中靠右下角显示
-* `fitStart`	保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件靠左上角显示
-* `fitXY`	使图片和宽高和控件的宽高完全匹配，但图片的长宽比可能不能保持一致
-* `matrix`	绘制时使用图像矩阵进行缩放。需要在代码中使用`setImageMatrix(Matrix)`函数才能生效。
+* `center`    在控件中居中显示图像, 但不执行缩放。
+* `centerCrop`    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 等于或大于控件的相应尺寸 (不包括内边距padding)并且使图像在控件中居中显示。
+* `centerInside`    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 小于视图的相应尺寸 (不包括内边距padding)并且图像在控件中居中显示。
+* `fitCenter`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中居中显示
+* `fitEnd`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中靠右下角显示
+* `fitStart`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件靠左上角显示
+* `fitXY`    使图片和宽高和控件的宽高完全匹配，但图片的长宽比可能不能保持一致
+* `matrix`    绘制时使用图像矩阵进行缩放。需要在代码中使用`setImageMatrix(Matrix)`函数才能生效。
 
 默认的scaleType为`fitCenter`；除此之外最常用的是`fitXY`， 他能使图片放缩到控件一样的大小，但图片可能会变形。
 
@@ -730,7 +754,7 @@ ui.layout(
 
 垂直布局:
 
- —————
+—————
 
 | 控件1 |
 
@@ -740,12 +764,13 @@ ui.layout(
 
 | ............ |
 
- ——————
+——————
 
 ## layout_weight
 
 垂直布局中的控件可以通过`layout_weight`属性来控制控件高度占垂直布局高度的比例。如果为一个控件指定`layout_weight`, 则这个控件的高度=垂直布局剩余高度 * layout_weight / weightSum；如果不指定weightSum, 则weightSum为所有子控件的layout_weight之和。所谓"剩余高度"，指的是垂直布局中减去没有指定layout_weight的控件的剩余高度。
 例如:
+
 ```
 "ui";
 ui.layout(
@@ -759,6 +784,7 @@ ui.layout(
 
 在这个布局中，三个控件的layout_weight都是1，也就是他们的高度都会占垂直布局高度的1/3，都是33.3dp.
 再例如：
+
 ```
 "ui";
 ui.layout(
@@ -772,6 +798,7 @@ ui.layout(
 
 在这个布局中，第一个控件高度为1/4, 第二个控件为2/4, 第三个控件为1/4.
 再例如：
+
 ```
 "ui";
 ui.layout(
@@ -782,8 +809,10 @@ ui.layout(
     </vertical>
 );
 ```
+
 在这个布局中，因为指定了weightSum为5, 因此第一个控件高度为1/5, 第二个控件为2/5, 第三个控件为1/5.
 再例如：
+
 ```
 "ui";
 ui.layout(
@@ -794,9 +823,11 @@ ui.layout(
     </vertical>
 );
 ```
+
 在这个布局中，第一个控件并没有指定layout_weight, 而是指定高度为40dp, 因此不加入比例计算，此时布局剩余高度为60dp。第二个控件高度为剩余高度的2/3，也就是40dp，第三个控件高度为剩余高度的1/3，也就是20dp。
 
 垂直布局的layout_weight属性还可以用于控制他的子控件高度占满剩余空间，例如：
+
 ```
 "ui";
 ui.layout(
@@ -807,18 +838,20 @@ ui.layout(
     </vertical>
 );
 ```
+
 在这个布局中，第三个控件的高度会占满除去控件1和控件2的剩余空间。
 
 # 水平布局: horizontal
+
 水平布局是一种比较简单的布局，会把在它里面的控件按照水平方向依次摆放，如下图所示：
 水平布局:
- ————————————————————————————
+————————————————————————————
 
 | 控件1 | 控件2 | 控件3 | ... |
 
- ————————————————————————————
+————————————————————————————
 
-## layout_weight 
+## layout_weight
 
 水平布局中也可以使用layout_weight属性来控制子控件的**宽度**占父布局的比例。和垂直布局中类似，不再赘述。
 
@@ -829,9 +862,6 @@ ui.layout(
 例如`<linear orientation="vertical"></linear>`相当于`<vertical></vertical>`。
 
 线性布局的默认方向是横向的，因此，一个没有指定orientation属性的线性布局就是横向布局。
-
-
-
 
 # 帧布局: frame
 
@@ -852,6 +882,7 @@ ui.layout(
 ## checked
 
 表示开关是否被选中。可选的值为：
+
 * `true` 打开开关
 * `false` 关闭开关
 
@@ -892,6 +923,7 @@ ui.layout(
 ## contentPadding
 
 设置卡片的内边距。该属性包括四个值：
+
 * `contentPaddingLeft` 左内边距
 * `contentPaddingRight` 右内边距
 * `contentPaddingTop` 上内边距
@@ -905,21 +937,24 @@ ui.layout(
 
 # 列表: list
 
-# Tab: tab 
+# Tab: tab
 
 # ui
 
 ## ui.layout(xml)
+
 * `xml` {XML} | {string} 布局XML或者XML字符串
 
 将布局XML渲染为视图（View）对象， 并设置为当前视图。
 
 ## ui.layoutFile(xmlFile)
+
 * `xml` {string} 布局XML文件的路径
 
 此函数和`ui.layout`相似，只不过允许传入一个xml文件路径来渲染布局。
 
 ## ui.inflate(xml[, parent = null, attachToParent = false])
+
 * `xml` {string} | {XML} 布局XML或者XML字符串
 * `parent` {View} 父视图
 * `attachToParent` {boolean} 是否渲染的View加到父视图中，默认为false
@@ -948,13 +983,16 @@ for (let i = 0; i < 3; i++) {
     $ui.container.addView(textView);
 }
 ```
+
 # ui.registerWidget(name, widget)
+
 * `name` {string} 组件名称
 * `widget` {Function} 组件
 
 注册一个自定义组件。参考示例->界面控件->自定义控件。
 
 # ui.isUiThread()
+
 * 返回 {boolean}
 
 返回当前线程是否是UI线程。
@@ -971,6 +1009,7 @@ $threads.start(function () {
 ```
 
 ## ui.findView(id)
+
 * `id` {string} View的ID
 * 返回 {View}
 
@@ -983,11 +1022,13 @@ $threads.start(function () {
 结束当前活动并销毁界面。
 
 ## ui.setContentView(view)
-* `view` {View} 
+
+* `view` {View}
 
 将视图对象设置为当前视图。
 
 ## ui.post(callback[, delay = 0])
+
 * `callback` {Function} 回调函数
 * `delay` {number} 延迟，单位毫秒
 
@@ -1019,12 +1060,14 @@ threads.start({
 ```
 
 ## ui.run(callback)
+
 * `callback` {Function} 回调函数
 * 返回 callback的执行结果
 
 将`callback`在UI线程中执行。如果当前已经在UI线程中，则直接执行`callback`；否则将`callback`抛到UI线程中执行（加到UI线程的消息循环的末尾），**并等待callback执行结束(阻塞当前线程)**。
 
 ## ui.statusBarColor(color)
+
 * color {string} | {number} 颜色
 
 设置当前界面的状态栏颜色。
@@ -1037,6 +1080,7 @@ ui.statusBarColor("#000000");
 ## ui.useAndroidResources()
 
 启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性。启用该特性后，在project.json中进行以下配置，就可以像写Android原生一样写界面：
+
 ```json
 {
     // ...
@@ -1057,6 +1101,7 @@ res文件夹通常为以下结构：
     - values // 样式、字符串等资源
     // ...
 ```
+
 可参考示例->复杂界面->Android原生界面。
 
 # 尺寸的单位: Dimension

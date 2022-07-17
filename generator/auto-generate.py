@@ -25,7 +25,7 @@ def process_all():
     index = os.path.join(out_dir, "index.html")
     if os.path.exists(index):
         os.remove(index)
-    os.rename(os.path.join(out_dir, "_toc.html"), index)
+    os.rename(os.path.join(out_dir, "toc.html"), index)
 
 
 def process_module(module_name):

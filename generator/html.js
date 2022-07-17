@@ -44,7 +44,7 @@ const gtocPath = path.resolve(path.join(
     __dirname,
     '..',
     'api',
-    '_toc.md',
+    'toc.md',
 ));
 var gtocLoading = null;
 var gtocData = null;

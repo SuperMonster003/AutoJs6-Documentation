@@ -1,0 +1,116 @@
+{
+  "source": "..\\api\\scriptingJava.md",
+  "modules": [
+    {
+      "textRaw": "脚本化 Java",
+      "name": "脚本化_java",
+      "desc": "<p>Rhino 引擎提供了脚本化 Java 的便捷性.</p>\n<blockquote>\n<p>注: 此章节参考并修改自 <a href=\"https://pro.autojs.org/\">Auto.js Pro</a> 及 <a href=\"http://udn.realityripple.com/docs/Mozilla/Projects/Rhino/Scripting_Java/\">Scripting Java</a>.</p>\n</blockquote>\n<blockquote>\n<p>注: ECMA 标准并未包含与 Java 的交互, 本章节所有功能均作为扩展功能而非语言标准使用.</p>\n</blockquote>\n",
+      "modules": [
+        {
+          "textRaw": "访问 Java 包和类",
+          "name": "访问_java_包和类",
+          "desc": "<p>Rhino 定义了顶层变量 <code>Packages</code>, 可用于访问顶层 Java 包 (如 [ java / com ] 等).</p>\n<pre><code class=\"lang-js\">typeof Packages === &#39;object&#39;; // true\ntypeof Packages.java === &#39;object&#39;; // true\n</code></pre>\n<p>为了便于访问, Rhino 提供了顶层包名前缀的快捷访问方式.</p>\n<pre><code class=\"lang-js\">Packages.java === java; // true\n</code></pre>\n<blockquote>\n<p>注: AutoJs6 顶层化的包名前缀包括 [ android / androidx / java / javax / org / com / net / de / ezy / kotlin / okhttp3 ].</p>\n</blockquote>\n<p>顶层方法 <code>importPackage</code> 及 <code>importClass</code> 可以像 <code>import</code> 语句一样导入包或类.</p>\n<pre><code class=\"lang-js\">importPackage(java.io);\ntypeof File === &#39;object&#39;; // true\n</code></pre>\n<p>上述示例相当于 Java 的导入声明语句 <code>import java.io.*;</code></p>\n<pre><code class=\"lang-js\">importClass(java.io.File);\ntypeof File === &#39;object&#39;; // true\n</code></pre>\n<p>上述示例相当于 Java 的导入声明语句 <code>import java.io.File;</code></p>\n<pre><code class=\"lang-js\">const File = java.io.File;\ntypeof File === &#39;object&#39;; // true\n</code></pre>\n<p>上述示例也可使用解构赋值方式导入 File 类: <code>const {File} = java.io;</code></p>\n<blockquote>\n<p>注: 配合 TypeScript Declarations 的 IDE 可能对解构赋值变量无法进行类型识别和代码智能提示.<br>因此建议使用原始变量声明方式导入需要使用的类.<br>对于 importClass 和 importPackage, 目前还未能实现类型识别和代码智能提示 (截至 2022 年 7 月).</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "访问 Java 包和类"
+        },
+        {
+          "textRaw": "访问扩展的包及类",
+          "name": "访问扩展的包及类",
+          "desc": "<p>AutoJs6 的项目扩展库及项目依赖包均可直接访问.</p>\n<pre><code class=\"lang-js\">/* 依赖包: implementation(&quot;joda-time:joda-time:2.10.14&quot;) */\ntypeof org.joda.time.LocalDateTime.now; // &quot;function&quot;\n\n/* 扩展库: implementation(project(&quot;:libs:org.opencv-4.5.5&quot;)) */\ntypeof org.opencv.core.Point; // &quot;function&quot;\n</code></pre>\n",
+          "type": "module",
+          "displayName": "访问扩展的包及类"
+        },
+        {
+          "textRaw": "与 Java 协作",
+          "name": "与_java_协作",
+          "desc": "<p>Rhino 提供了在 JavaScript 代码中 [ 创建 Java 类 / 调用 Java 方法 / 访问变量 ] 等能力.</p>\n",
+          "modules": [
+            {
+              "textRaw": "Java 类及方法",
+              "name": "java_类及方法",
+              "desc": "<pre><code class=\"lang-js\">let builder = new java.lang.StringBuilder();\nbuilder.append(&#39;foo&#39;);\nbuilder.append(&#39;bar&#39;);\nbuilder.toString(); // &quot;foobar&quot;\n</code></pre>\n",
+              "type": "module",
+              "displayName": "Java 类及方法"
+            },
+            {
+              "textRaw": "Java 类的静态方法及字段",
+              "name": "java_类的静态方法及字段",
+              "desc": "<pre><code class=\"lang-js\">java.lang.Math.PI; // 3.141592653589793\njava.lang.Math.cos(0); // 1\n</code></pre>\n",
+              "type": "module",
+              "displayName": "Java 类的静态方法及字段"
+            },
+            {
+              "textRaw": "Java 重载方法签名",
+              "name": "java_重载方法签名",
+              "desc": "<pre><code class=\"lang-js\">new java.io.File(&quot;foo&quot;).listFiles.toString();\n\n/* 代码结果 (共 5 行) */\n\n// function listFiles() {/*\n//     java.io.File[] listFiles(java.io.FileFilter)\n//     java.io.File[] listFiles(java.io.FilenameFilter)\n//     java.io.File[] listFiles()\n// */}\n</code></pre>\n",
+              "type": "module",
+              "displayName": "Java 重载方法签名"
+            },
+            {
+              "textRaw": "JavaBean 属性",
+              "name": "javabean_属性",
+              "desc": "<p>读写方法符合以下命名规范的类称为 JavaBean:</p>\n<pre><code class=\"lang-java\">/* 读方法 */\ngetXyz(): Type\n/* 写方法 */\nsetXyz(Type value): void\n</code></pre>\n<p>以下 JavaBean 示例 (Student) 定义了 age 和 sex 属性:</p>\n<pre><code class=\"lang-java\">public class Student {\n\n    private int mAge;  \n\n    public int getAge() { return mAge; }  \n    public void setAge(int anAge) { mAge = anAge; }\n\n    public String getSex() { return &quot;male&quot;; }\n\n};\n</code></pre>\n<p>其中 age 属性可读写, 而 sex 属性只读.</p>\n<p>在 JavaScript 代码中可通过实例成员访问属性及方法:</p>\n<pre><code class=\"lang-js\">let stu = new Student();\nstu.sex; // &quot;male&quot; - 相当于 stu.getSex();\nstu.age = 33; /* 相当于 stu.setAge(33); */\nstu.age; // 33\nstu.getAge(); // 33\n</code></pre>\n<p>同样地, 对于属性类型为 boolean 类型的 JavaBean:</p>\n<pre><code class=\"lang-java\">public class Student {\n\n    private boolean mMale;  \n\n    public boolean isMale() { return mMale; }  \n    public String setMale(boolean value) { mMale = value; }\n\n};\n</code></pre>\n<p>JavaScript 使用方式:</p>\n<pre><code class=\"lang-js\">let stu = new Student();\nstu.male; // false - 相当于 stu.isMale();\nstu.male = true; /* 相当于 stu.setMale(true); */\nstu.male; // true\nstu.isMale(); // true\n</code></pre>\n",
+              "type": "module",
+              "displayName": "JavaBean 属性"
+            }
+          ],
+          "type": "module",
+          "displayName": "与 Java 协作"
+        },
+        {
+          "textRaw": "实现 Java 接口",
+          "name": "实现_java_接口",
+          "modules": [
+            {
+              "textRaw": "函数转换",
+              "name": "函数转换",
+              "desc": "<pre><code class=\"lang-js\">&quot;ui&quot;;\n\nui.layout(\n    &lt;frame&gt;\n        &lt;button id=&quot;btn&quot; text=&quot;BUTTON&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nlet listener = new android.view.View.OnClickListener(function (view) {\n    toastLog(&quot;clicked&quot;);\n});\nui.btn.setOnClickListener(listener);\n</code></pre>\n<p>上述示例将 JavaScript 函数作为 Java 接口传入 <code>OnClickListener</code> 方法.<br>将函数作为接口使用的条件: 接口只有一个方法 (不可为 0 或多于 1 个) 且参数类型依次匹配.</p>\n",
+              "type": "module",
+              "displayName": "函数转换"
+            },
+            {
+              "textRaw": "对象转换",
+              "name": "对象转换",
+              "desc": "<p>若 Java 接口有多个方法, 则可传入一个 JavaScript 对象:</p>\n<pre><code class=\"lang-java\">public interface OnAttachStateChangeListener {\n    public void onViewAttachedToWindow(View v);\n    public void onViewDetachedFromWindow(View v);\n}\n</code></pre>\n<p>JavaScript 代码实现:</p>\n<pre><code class=\"lang-js\">new android.view.View.OnAttachStateChangeListener({\n    onViewAttachedToWindow(view) {\n        toastLog(&#39;attached&#39;);\n    },\n    onViewDetachedFromWindow(view) {\n        toastLog(&#39;detached&#39;);\n    },\n});\n</code></pre>\n",
+              "type": "module",
+              "displayName": "对象转换"
+            }
+          ],
+          "type": "module",
+          "displayName": "实现 Java 接口"
+        },
+        {
+          "textRaw": "JavaAdapter 构造器",
+          "name": "javaadapter_构造器",
+          "modules": [
+            {
+              "textRaw": "实现 Java 接口",
+              "name": "实现_java_接口",
+              "desc": "<pre><code class=\"lang-js\">new JavaAdapter(android.view.View.OnAttachStateChangeListener, {\n    onViewAttachedToWindow(view) {\n        toastLog(&#39;attached&#39;);\n    },\n    onViewDetachedFromWindow(view) {\n        toastLog(&#39;detached&#39;);\n    }\n});\n</code></pre>\n",
+              "type": "module",
+              "displayName": "实现 Java 接口"
+            },
+            {
+              "textRaw": "实现多个 Java 接口",
+              "name": "实现多个_java_接口",
+              "desc": "<pre><code class=\"lang-js\">/* 语法: new JavaAdapter(javaIntfOrClass, [javaIntf, ..., javaIntf,] javascriptObject) */\n\nnew JavaAdapter(android.view.View.OnAttachStateChangeListener, java.lang.Runnable, {\n    onViewAttachedToWindow(view) {\n        toastLog(&#39;attached&#39;);\n    },\n    onViewDetachedFromWindow(view) {\n        toastLog(&#39;detached&#39;);\n    },\n    run() {\n        toastLog(&#39;run&#39;);\n    }\n});\n</code></pre>\n",
+              "type": "module",
+              "displayName": "实现多个 Java 接口"
+            },
+            {
+              "textRaw": "继承 Java 类并重写方法",
+              "name": "继承_java_类并重写方法",
+              "desc": "<pre><code class=\"lang-js\">&quot;ui&quot;;\n\nui.layout(\n    &lt;vertical&gt;\n        &lt;frame id=&quot;container&quot;/&gt;\n    &lt;/vertical&gt;\n);\n\nlet paint = new Paint();\n/* android.view.View 构造器的参数. */\nlet viewParam = activity;\nlet view = new JavaAdapter(android.view.View, {\n    onDraw(canvas) {\n        /* 调用父类 View 的 onDraw 方法. */\n        this.super$onDraw(canvas);\n        canvas.drawRect(500, 500, 1000, 1000, paint);\n    },\n}, viewParam);\n\nui.container.addView(view);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "继承 Java 类并重写方法"
+            }
+          ],
+          "type": "module",
+          "displayName": "JavaAdapter 构造器"
+        }
+      ],
+      "type": "module",
+      "displayName": "脚本化 Java"
+    }
+  ]
+}

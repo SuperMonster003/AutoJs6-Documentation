@@ -1,0 +1,1069 @@
+{
+  "source": "..\\api\\global.md",
+  "modules": [
+    {
+      "textRaw": "全局对象 (Global)",
+      "name": "全局对象_(global)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Nov 20, 2022.</p>\n\n<hr>\n<p>在 JavaScript 中, <a href=\"https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object/\">几乎一切都是对象</a>.<br>此处的全局 &quot;对象&quot; 包括 [ 变量 / 方法 / 构造器 ] 等.<br>全局对象随处可用, 包括 ECMA 标准内置对象 (如 [ Number / RegExp / String ] 等).</p>\n<p>AutoJs6 的内置模块均支持全局使用, 如 <code>app</code>, <code>images</code>, <code>device</code> 等.</p>\n<p>为便于使用, 一些 AutoJs6 模块中的方法也被全局化,<br>如 <code>images.captureScreen()</code>, <code>dialogs.alert()</code>, <code>app.launch()</code> 等.<br>全局化方法均以 <code>Global</code> 标签标注.</p>\n<p>脚本文件可直接运行使用, 也可作为模块被导入使用 (<code>require</code> 方法).<br>当作为模块使用时, <code>exports</code> 和 <code>module</code> 可作为全局对象使用.<br>另在 UI 模式下也有一些专属全局对象, 如 <code>activity</code>.</p>\n",
+      "modules": [
+        {
+          "textRaw": "覆写保护",
+          "name": "覆写保护",
+          "desc": "<p>AutoJs6 对部分全局对象及内置模块增加了覆写保护.<br>以下全局声明或赋值将导致异常或非预期结果:</p>\n<pre><code class=\"lang-js\">/* 以全局对象 selector 为例. */\n\n/* 声明无效. */\nlet selector = 1; /* 异常: 变量 selector 重复声明. */\nconst selector = 1; /* 同上. */\nvar selector = 1; /* 同上. */\n\n/* 覆写无效 (非严格模式). */\nselector = 1;\ntypeof selector; // &quot;function&quot; - 静默失败, 覆写未生效.\n\n/* 覆写无效 (严格模式). */\n&quot;use strict&quot;;\nselector = 1; /* 异常: 无法修改只读属性: selector. */\n</code></pre>\n<p>局部作用域不受上述情况影响:</p>\n<pre><code class=\"lang-js\">(function () {\n    let selector = 1;\n    return typeof selector;\n})(); // &quot;number&quot;\n</code></pre>\n<p>截至目前 (2022/10) 受覆写保护的对象有:</p>\n<pre><code class=\"lang-text\">selector\ncontinuation\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">global</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "覆写保护"
+        },
+        {
+          "textRaw": "[@] global",
+          "name": "[@]_global",
+          "desc": "<p>global 为 AutoJs6 的默认顶级作用域对象, 可作为全局对象使用:</p>\n<pre><code class=\"lang-js\">typeof global; // &quot;object&quot;\ntypeof global.sleep; // &quot;function&quot;\n</code></pre>\n<p>另, 访问顶级作用域对象也可通过以下代码:</p>\n<pre><code class=\"lang-js\">runtime.topLevelScope;\n</code></pre>\n<p><code>runtime.topLevelScope</code> 本身有 <code>&quot;global&quot;</code> 属性, 因此全局对象 <code>global</code> 也一样拥有:</p>\n<pre><code class=\"lang-js\">typeof runtime.topLevelScope.global; // &quot;object&quot;\n\nglobal.global === global; // true\nglobal.global.global.global === global; // true\n</code></pre>\n<p>global 对象可以增加属性, 也可以覆写甚至删除属性 (部分被保护):</p>\n<pre><code class=\"lang-js\">global.hello = &quot;hello&quot;;\ndelete global.hello;\n</code></pre>\n<p>global 对象本身是可被覆写的:</p>\n<pre><code class=\"lang-js\">typeof global; // &quot;object&quot;\nglobal = 3;\ntypeof global; // &quot;number&quot;\n</code></pre>\n<p>如果 global 对象被意外重写 (虽然概率很低),<br>可通过 <code>runtime.topLevelScope</code> 访问或还原:</p>\n<pre><code class=\"lang-js\">global = 3; /* 覆写 global 对象. */\ntypeof global; // &quot;number&quot;\ntypeof global.sleep; // &quot;undefined&quot;\ntypeof runtime.topLevelScope.sleep; // &quot;function&quot;\n\nglobal = runtime.topLevelScope; /* 还原 global 对象. */\ntypeof global; // &quot;object&quot;\ntypeof global.sleep; // &quot;function&quot;\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[@] global"
+        },
+        {
+          "textRaw": "[m] sleep",
+          "name": "[m]_sleep",
+          "methods": [
+            {
+              "textRaw": "sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>Overload 1/3</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 休眠时间 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间.</p>\n<pre><code class=\"lang-js\">/* 休眠 9 秒钟. */\nsleep(9000);\n/* 休眠 9 秒钟 (使用科学计数法). */\nsleep(9e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sleep(millisMin, millisMax)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/3</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>millisMin</strong> { <a href=\"dataTypes#number\">number</a> } - 休眠时间下限 (毫秒)</li>\n<li><strong>millisMax</strong> { <a href=\"dataTypes#number\">number</a> } - 休眠时间上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间, 该时间随机落在 millisMin 和 millisMax 之间.</p>\n<pre><code class=\"lang-js\">/* 随机休眠 3 - 5 秒钟. */\nsleep(3e3, 5e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millisMin"
+                    },
+                    {
+                      "name": "millisMax"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sleep(millis, bounds)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 休眠时间 (毫秒)</li>\n<li><strong>bounds</strong> { <a href=\"dataTypes#NumberString\">NumberString</a> | <a href=\"dataTypes#string\">string</a> } - 浮动值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间, 该时间随机落在 millis ± bounds 之间.<br>bounds 参数为 <a href=\"dataTypes#NumberString\">数字字符串</a> 类型 (如 &quot;12&quot;), 或在字符串开头附加 &quot;±&quot; 明确参数含义 (如 &quot;±12&quot;).</p>\n<pre><code class=\"lang-js\">/* 随机休眠 3 - 5 秒钟 (即 4 ± 1 秒钟). */\nsleep(4e3, &quot;1e3&quot;);\nsleep(4e3, &quot;±1e3&quot;); /* 同上. */\n</code></pre>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    },
+                    {
+                      "name": "bounds"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sleep"
+        },
+        {
+          "textRaw": "[m] currentPackage",
+          "name": "[m]_currentpackage",
+          "methods": [
+            {
+              "textRaw": "currentPackage()",
+              "type": "method",
+              "name": "currentPackage",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取最近一次监测到的应用包名, 并视为当前正在运行的应用包名.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentPackage"
+        },
+        {
+          "textRaw": "[m] currentActivity",
+          "name": "[m]_currentactivity",
+          "methods": [
+            {
+              "textRaw": "currentActivity()",
+              "type": "method",
+              "name": "currentActivity",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取最近一次监测到的活动名称, 并视为当前正在运行的活动名称.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentActivity"
+        },
+        {
+          "textRaw": "[m] setClip",
+          "name": "[m]_setclip",
+          "methods": [
+            {
+              "textRaw": "setClip(text)",
+              "type": "method",
+              "name": "setClip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [string](dataTypes#string) } - 剪贴板内容 ",
+                      "name": "**text**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "剪贴板内容"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置系统剪贴板内容.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-getclip\">getClip</a> / <a href=\"uiObjectType#m-paste\">UiObject#paste</a></p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setClip"
+        },
+        {
+          "textRaw": "[m] getClip",
+          "name": "[m]_getclip",
+          "methods": [
+            {
+              "textRaw": "getClip()",
+              "type": "method",
+              "name": "getClip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 系统剪贴板内容 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "系统剪贴板内容"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>需额外留意, 自 <a href=\"apiLevel\">Android API 29 (10) [Q]</a> 起, 剪贴板数据的访问将受到限制:</p>\n<p>为更好地保护用户隐私权, 除默认输入法及当前获取焦点的前置应用外, 均无法访问剪贴板数据.</p>\n<pre><code class=\"lang-js\">setClip(&quot;test&quot;);\n\n/* 安卓 10 以下: 打印 &quot;test&quot;. */\n/* 安卓 10 及以上: 若 AutoJs6 前置, 打印 &quot;test&quot;, 否则打印空字符串. */\nconsole.log(getClip());\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"#m-setclip\">setClip</a> / <a href=\"uiObjectType#m-paste\">UiObject#paste</a></p>\n</blockquote>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/about/versions/10/privacy/changes#clipboard-data\">Android Docs</a></p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getClip"
+        },
+        {
+          "textRaw": "[m+] toast",
+          "name": "[m+]_toast",
+          "methods": [
+            {
+              "textRaw": "toast(text)",
+              "type": "method",
+              "name": "toast",
+              "desc": "<p><strong><code>Overload 1/4</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>显示一个 <a href=\"https://developer.android.com/guide/topics/ui/notifiers/toasts?hl=zh-cn\">消息浮动框</a>.</p>\n<p>消息框的显示默认是依次进行的:</p>\n<pre><code class=\"lang-js\">/* 显示消息框 2 秒钟. */\ntoast(&quot;hello&quot;);\n/* 显示消息框 2 秒钟, 且在前一个消息框消失后才显示. */\ntoast(&quot;world&quot;);\n/* 显示消息框 2 秒钟, 且在前一个消息框消失后才显示. */\ntoast(&quot;hello world&quot;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toast(text, isLong)",
+              "type": "method",
+              "name": "toast",
+              "desc": "<p><strong><code>Overload 2/4</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isLong = false</strong> { &quot;long&quot; | &quot;l&quot; | &quot;short&quot; | &quot;s&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否以较长时间显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>控制单个消息框显示时长:</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;, &#39;long&#39;); /* 显示消息框 3.5 秒钟. */\ntoast(&quot;hello&quot;, true); /* 同上. */\n</code></pre>\n<blockquote>\n<p>注: 仅有 [ 长 / 短 ] 两种时长, 此时长由安卓系统决定.<br>通常, 短时为 2 秒, 长时为 3.5 秒.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isLong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toast(text, isLong, isForcible)",
+              "type": "method",
+              "name": "toast",
+              "desc": "<p><strong><code>Overload 3/4</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isLong = false</strong> { &quot;long&quot; | &quot;l&quot; | &quot;short&quot; | &quot;s&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否以较长时间显示</li>\n<li><strong>isForcible = false</strong> { &quot;forcible&quot; | &quot;f&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否强制覆盖显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 &quot;强制覆盖显示&quot; 参数可立即显示消息框:</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\n/* 显示消息框 2 秒钟, 且立即显示, 前一个消息框 &quot;hello&quot; 被 &quot;覆盖&quot;. */\ntoast(&quot;world&quot;, &quot;short&quot;, &quot;forcible&quot;);\n</code></pre>\n<blockquote>\n<p>注: 强制覆盖仅对当前脚本有效, 对其他脚本及应用程序无效.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isLong"
+                    },
+                    {
+                      "name": "isForcible"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toast(text, isForcible)",
+              "type": "method",
+              "name": "toast",
+              "desc": "<p><strong><code>Overload 4/4</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isForcible</strong> { &quot;forcible&quot; | &quot;f&quot; } - 强制覆盖显示 (字符标识)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>此方法相当于忽略 isLong 参数:</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\n/* 显示消息框 2 秒钟, 且立即显示, 前一个消息框 &quot;hello&quot; 被 &quot;覆盖&quot;. */\ntoast(&quot;world&quot;, &quot;forcible&quot;);\n</code></pre>\n<blockquote>\n<p>注: 此方法的 isForcible 参数只能为具有明确意义的字符标识, 不能为 boolean 类型或其他类型, 否则 isForcible 将被视为 isLong.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isForcible"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toast.dismissAll()",
+              "type": "method",
+              "name": "dismissAll",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>强制取消显示所有消息框.</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\ntoast(&quot;world&quot;);\ntoast(&quot;of&quot;);\ntoast(&quot;JavaScript&quot;);\n\nsleep(1e3);\n\n/* &quot;hello&quot; 显示 1 秒后消失, &quot;world&quot; 及其他消息框均不再显示. */\n/* 若无 sleep 语句, 由于 toast 是异步的, 上述消息框均不会显示. */\ntoast.dismissAll();\n\n/* dismissAll 仅对已在队列中的消息框有效, 因此下述消息框正常显示. */\ntoast(&quot;forcibly dismissed&quot;);\n</code></pre>\n<blockquote>\n<p>注: 强制取消显示仅对当前脚本有效, 对其他脚本及应用程序无效.</p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m+] toast"
+        },
+        {
+          "textRaw": "[m] toastLog",
+          "name": "[m]_toastlog",
+          "desc": "<p>显示消息浮动框并在控制台打印消息.<br>相当于以下代码组合:</p>\n<pre><code class=\"lang-js\">toast(text, ...args);\nconsole.log(text);\n</code></pre>\n<p>因此, 方法重载与 <a href=\"#m-toast\">toast</a> 完全一致.</p>\n<blockquote>\n<p>注: 虽然 toast 方法异步, 但 console.log 方法同步, 因此 toastLog 方法也为同步.</p>\n</blockquote>\n",
+          "methods": [
+            {
+              "textRaw": "toastLog(text)",
+              "type": "method",
+              "name": "toastLog",
+              "desc": "<p><strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#toasttext\">toast(text)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toastLog(text, isLong)",
+              "type": "method",
+              "name": "toastLog",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isLong = false</strong> { &quot;long&quot; | &quot;l&quot; | &quot;short&quot; | &quot;s&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否以较长时间显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#toasttext-islong\">toast(text, isLong)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isLong"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toastLog(text, isLong, isForcible)",
+              "type": "method",
+              "name": "toastLog",
+              "desc": "<p><strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isLong = false</strong> { &quot;long&quot; | &quot;l&quot; | &quot;short&quot; | &quot;s&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否以较长时间显示</li>\n<li><strong>isForcible = false</strong> { &quot;forcible&quot; | &quot;f&quot; | <a href=\"dataTypes#boolean\">boolean</a> } - 是否强制覆盖显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#toasttext-islong-isforcible\">toast(text, isLong, isForcible)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isLong"
+                    },
+                    {
+                      "name": "isForcible"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toastLog(text, isForcible)",
+              "type": "method",
+              "name": "toastLog",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 消息内容</li>\n<li><strong>isForcible</strong> { &quot;forcible&quot; | &quot;f&quot; } - 强制覆盖显示 (字符标识)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#toasttext-isforcible\">toast(text, isForcible)</a></p>\n</blockquote>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isForcible"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toastLog"
+        },
+        {
+          "textRaw": "[m] wait",
+          "name": "[m]_wait",
+          "methods": [
+            {
+              "textRaw": "wait(condition)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; any)</a> | <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 结束等待条件</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>阻塞等待, 直到条件满足.<br>默认等待时间为 10 秒, 条件检查间隔为 200 毫秒.<br>若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).</p>\n<blockquote>\n<p>注: 不同于 while 和 for 等循环语句的 &quot;条件&quot;,<br>该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>而循环语句的条件, 是只要满足条件, 就一直循环.</p>\n</blockquote>\n<p>等待条件支持函数及选择器.</p>\n<p>函数示例, 等待设备屏幕关闭:</p>\n<pre><code class=\"lang-js\">wait(function () {\n    return device.isScreenOff();\n});\n\n/* 使用箭头函数. */\nwait(() =&gt; device.isScreenOff());\n\n/* 使用 bind. */\nwait(device.isScreenOff.bind(device));\n\n/* 对结果分支处理. */\nif (wait(() =&gt; device.isScreenOff())) {\n    console.log(&quot;等待屏幕关闭成功&quot;);\n} else {\n    console.log(&quot;等待屏幕关闭超时&quot;);\n}\n</code></pre>\n<p>选择器示例, 等待文本为 &quot;立即开始&quot; 的控件出现:</p>\n<pre><code class=\"lang-js\">/* 以下三种方式为 Pickup 选择器的不同格式, 效果相同. */\nwait(&quot;立即开始&quot;);\nwait(content(&quot;立即开始&quot;)); /* 同上. */\nwait({ content: &quot;立即开始&quot; }); /* 同上. */\n\n/* 对比上述函数方式. */\nwait(() =&gt; content(&quot;立即开始&quot;).exists());\nwait(() =&gt; pickup(&quot;立即开始&quot;, &quot;?&quot;)); /* 同上. */\n</code></pre>\n<p>等待条件的满足与否, 与函数返回值有关.<br>例如当函数返回 true 时, 等待条件即满足.</p>\n<p>下面列出不满足条件的几种返回值:<br>[ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ]<br>除此之外的返回值均视为满足条件 (包括空字符串和数字 0 等).</p>\n<p>一种常见的错误用例, 即函数条件缺少返回值:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n    }\n});\n</code></pre>\n<p>上述示例中, 等待条件永远无法满足, 因函数一直返回 undefined.</p>\n<p>添加合适的返回值即可修正:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n        return true;\n    }\n});\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"uiSelectorType#m-pickup\">pickup</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(condition, limit)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; any)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><a href=\"#waitcondition\">wait(condition)</a> 增加条件检测限制.<br>达到限制后, 表示等待超时, 并放弃等待.<br>限制分为 &quot;次数限制&quot; (limit &lt; 100) 和 &quot;时间限制&quot; (limit &gt;= 100).</p>\n<pre><code class=\"lang-js\">/* 等待屏幕关闭, 最多检测屏幕状态 20 次. */\nwait(() =&gt; device.isScreenOff(), 20); /* limit &lt; 100, 视为次数限制. */\n/* 等待屏幕关闭, 最多检测屏幕状态 5 秒钟. */\nwait(() =&gt; device.isScreenOff(), 5e3); /* limit &gt;= 100, 视为时间限制. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(condition, limit, interval)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; any)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><a href=\"#waitcondition-limit\">wait(condition, limit)</a> 增加条件检测间隔.<br>只要条件不满足, wait() 方法会持续检测, 直到条件满足或达到检测限制.<br>interval 参数用于设置条件检测之间的间歇时长, 默认为 200 毫秒.</p>\n<pre><code class=\"lang-text\">检查条件 (不满足) - 间歇 - 检查条件 (不满足) - 间歇 - 检查条件...\n</code></pre>\n<pre><code class=\"lang-js\">/* 等待屏幕关闭, 最多检测屏幕状态 20 次, 每次检查间歇 3 秒钟. */\nwait(() =&gt; device.isScreenOff(), 20, 3e3);\n/* 等待屏幕关闭, 最多检测屏幕状态 20 次, 并采用不间断检测 (无间歇). */\nwait(() =&gt; device.isScreenOff(), 20, 0);\n</code></pre>\n<blockquote>\n<p>注: 在最后一次条件检查之后, 将不再发生间歇.<br>包括条件满足或达到检测限制.</p>\n<p>例如在第三次检查时, 条件满足:<br>检查 (×) - 间歇 - 检查 (×) - 间歇 - 检查 (√) - 立即结束 wait()</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(condition, callback)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition\">wait(condition)</a> 增加回调对象.</p>\n<p>回调对象集合了两个方法, then 与 else 分别对应等待成功与等待失败的情况:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; device.isScreenOff(), {\n    then: () =&gt; console.log(&quot;等待屏幕关闭成功&quot;),\n    else: () =&gt; console.log(&quot;等待屏幕关闭超时&quot;),\n});\n</code></pre>\n<p>两种方法都将最后一次检查结果作为实参, 可在方法体内直接使用:</p>\n<pre><code class=\"lang-js\">/* 等待一个落在 99.99 到 100 区间的随机数. */\nwait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功, 数字是: ${o}`);\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n    },\n});\n</code></pre>\n<blockquote>\n<p>注: else 回调方法的参数只能是 [ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ],<br>因此 else 的参数几乎不会用到.</p>\n</blockquote>\n<p>需特别注意, 回调方法的返回值具有穿透性.<br>在回调方法内使用 return 语句, 将直接影响 wait() 的返回值 (undefined 除外).</p>\n<p>上述示例中, then 和 else 回调都没有返回值, 因此 wait() 返回值是 boolean 类型, 表示等待条件是否满足.<br>下述示例在回调函数中增加了返回值 (非 undefined), 则 wait() 也将返回这个值.</p>\n<pre><code class=\"lang-js\">let result = wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功`);\n        return o;\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n        return NaN;\n    },\n});\nresult; /* 一个数字 (如 99.99732126036437) 或 NaN. */\n</code></pre>\n<p>上述示例如果等待条件满足, 则返回 then 的返回值 (number 类型),<br>等待条件超时, 则返回 else 的返回值 (NaN, 也为 number 类型).</p>\n<p>如果去掉 else 的返回语句, 则等待条件超时后, wait() 将返回 false (boolean 类型).</p>\n<p>如需对 wait() 的返回值做进一步处理, 则建议两个回调方法的返回值类型一致:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        return [ o - 1, o, o + 1 ];\n    },\n    else() {\n        /* 即使等待条件超时, 也可调用 forEach 方法. */\n        return [];\n    },\n}).forEach(x =&gt; console.log(x));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(condition, limit, callback)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, callback)</a> 增加条件检测限制.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit\">wait(condition, limit)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(condition, limit, interval, callback)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, limit, callback)</a> 增加条件检测间隔.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval\">wait(condition, limit, interval)</a></p>\n</blockquote>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "condition"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] wait"
+        },
+        {
+          "textRaw": "[m] waitForActivity",
+          "name": "[m]_waitforactivity",
+          "desc": "<p>等待指定名称的 Activity 出现 (前置).<br>此方法相当于 <code>wait(() =&gt; currentActivity() === activityName, ...args)</code>,<br>因此其所有重载方法的结构与 wait 一致.<br>为节约篇幅, 将仅列出方法签名等重要信息.</p>\n",
+          "methods": [
+            {
+              "textRaw": "waitForActivity(activityName)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition\">wait(condition)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForActivity(activityName, limit)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition-limit\">wait(condition, limit)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForActivity(activityName, limit, interval)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition-limit-interval\">wait(condition, limit, interval)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForActivity(activityName, callback)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForActivity(activityName, limit, callback)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForActivity(activityName, limit, interval, callback)",
+              "type": "method",
+              "name": "waitForActivity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "activityName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForActivity"
+        },
+        {
+          "textRaw": "[m] waitForPackage",
+          "name": "[m]_waitforpackage",
+          "desc": "<p>等待指定包名的应用出现 (前置).<br>此方法相当于 <code>wait(() =&gt; currentPackage() === packageName, ...args)</code>,<br>因此其所有重载方法的结构与 wait 一致.<br>为节约篇幅, 将仅列出方法签名等重要信息.</p>\n",
+          "methods": [
+            {
+              "textRaw": "waitForPackage(packageName)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition\">wait(condition)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForPackage(packageName, limit)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition-limit\">wait(condition, limit)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForPackage(packageName, limit, interval)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:<a href=\"#waitcondition-limit-interval\">wait(condition, limit, interval)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForPackage(packageName, callback)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForPackage(packageName, limit, callback)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForPackage(packageName, limit, interval, callback)",
+              "type": "method",
+              "name": "waitForPackage",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "interval"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForPackage"
+        },
+        {
+          "textRaw": "[m] exit",
+          "name": "[m]_exit",
+          "methods": [
+            {
+              "textRaw": "exit()",
+              "type": "method",
+              "name": "exit",
+              "desc": "<p>停止脚本运行.</p>\n<p>通过抛出 <code>ScriptInterruptedException</code> 异常实现脚本停止.<br>因此用 <code>try</code> 包裹 <code>exit()</code> 语句将会使脚本继续运行片刻:</p>\n<pre><code class=\"lang-js\">try {\n    log(&#39;exit now&#39;);\n    exit();\n    log(&quot;after&quot;); /* 控制台不会打印 &quot;after&quot;. */\n} catch (e) {\n    e.javaException instanceof ScriptInterruptedException; // true\n}\nwhile (true) log(&quot;hello&quot;); /* 控制台将打印一定数量的 &quot;hello&quot;. */\n</code></pre>\n<p>如果编写的脚本对 &quot;是否停止&quot; 的状态十分敏感,<br>即要求 exit() 之后的代码一定不被执行,<br>则可通过附加状态判断实现上述需求:</p>\n<pre><code class=\"lang-js\">if (!isStopped()) {\n    // 其他代码...\n}\n</code></pre>\n<p>因此上述示例如果加上状态判断, &quot;hello&quot; 将不会被打印:</p>\n<pre><code class=\"lang-js\">try {\n    log(&#39;exit now&#39;);\n    exit();\n} catch (_) {\n    // Ignored.\n}\nif (!isStopped()) {\n    while (true) log(&quot;hello&quot;); /* 控制台不会打印 &quot;hello&quot;. */\n}\n</code></pre>\n<p>除了 <a href=\"#isstopped\">isStopped</a>, 还可通过 threads 或 engines 获取停止状态:</p>\n<pre><code class=\"lang-js\">/* threads. */\nif (!threads.currentThread().isInterrupted()) {\n    // 其他代码...\n}\n\n/* engines. */\nif (!engines.myEngine().isStopped()) {\n    // 其他代码...\n}\n</code></pre>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] exit"
+        },
+        {
+          "textRaw": "[m] random",
+          "name": "[m]_random",
+          "methods": [
+            {
+              "textRaw": "random()",
+              "type": "method",
+              "name": "random",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>与 Math.random() 相同, 返回落在 [0, 1) 区间的随机数字.</p>\n"
+            },
+            {
+              "textRaw": "random(min, max)",
+              "type": "method",
+              "name": "random",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**min** { [number](dataTypes#number) } - 随机数下限 ",
+                      "name": "**min**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "随机数下限"
+                    },
+                    {
+                      "textRaw": "**max** { [number](dataTypes#number) } - 随机数上限 ",
+                      "name": "**max**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "随机数上限"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "min"
+                    },
+                    {
+                      "name": "max"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>返回落在 [min, max] 区间的随机数字.</p>\n<blockquote>\n<p>注: random(min, max) 右边界闭合, 而 random() 右边界开放.</p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] random"
+        },
+        {
+          "textRaw": "[m] requiresApi",
+          "name": "[m]_requiresapi",
+          "methods": [
+            {
+              "textRaw": "requiresApi(api)",
+              "type": "method",
+              "name": "requiresApi",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**api** { [number](dataTypes#number) } - 安卓 API 级别 ",
+                      "name": "**api**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "安卓 API 级别"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "api"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>脚本运行的最低 API 级别要求.</p>\n<p>例如要求脚本运行不低于 <a href=\"apiLevel\">Android API 30 (11) [R]</a>:</p>\n<pre><code class=\"lang-js\">requiresApi(30);\nrequiresApi(util.versionCodes.R.apiLevel); /* 同上. */\nrequiresApi(android.os.Build.VERSION_CODES.R); /* 同上. */\n</code></pre>\n<p>若 API 级别不符合要求, 脚本抛出异常并停止继续执行.</p>\n<blockquote>\n<p>参阅:</p>\n<ul>\n<li><a href=\"apiLevel\">Android API Level - 安卓 API 级别</a></li>\n<li><a href=\"util#versioncodes\">util.versionCodes</a></li>\n</ul>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] requiresApi"
+        },
+        {
+          "textRaw": "[m] requiresAutojsVersion",
+          "name": "[m]_requiresautojsversion",
+          "methods": [
+            {
+              "textRaw": "requiresAutojsVersion(versionName)",
+              "type": "method",
+              "name": "requiresAutojsVersion",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**versionName** { [string](dataTypes#string) } - AutoJs6 版本名称 ",
+                      "name": "**versionName**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "AutoJs6 版本名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "versionName"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>脚本运行的最低 AutoJs6 版本要求 (版本名称).</p>\n<pre><code class=\"lang-js\">requiresAutojsVersion(&quot;6.2.0&quot;);\n</code></pre>\n<p>可通过 <code>autojs.versionName</code> 查看 AutoJs6 版本名称.</p>\n<blockquote>\n<p>参阅: <a href=\"autojs#versionname\">autojs.versionName</a></p>\n</blockquote>\n"
+            },
+            {
+              "textRaw": "requiresAutojsVersion(versionCode)",
+              "type": "method",
+              "name": "requiresAutojsVersion",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**versionCode** { [number](dataTypes#number) } - AutoJs6 版本号 ",
+                      "name": "**versionCode**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "AutoJs6 版本号"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "versionCode"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>脚本运行的最低 AutoJs6 版本要求 (版本号).</p>\n<pre><code class=\"lang-js\">requiresAutojsVersion(1024);\n</code></pre>\n<p>可通过 <code>autojs.versionCode</code> 查看 AutoJs6 版本号.</p>\n<blockquote>\n<p>参阅: <a href=\"autojs#versioncode\">autojs.versionCode</a></p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] requiresAutojsVersion"
+        },
+        {
+          "textRaw": "[m] importPackage",
+          "name": "[m]_importpackage",
+          "methods": [
+            {
+              "textRaw": "importPackage(...pkg)",
+              "type": "method",
+              "name": "importPackage",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**pkg** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 包 ",
+                      "name": "**pkg**",
+                      "type": " ...( [string](dataTypes#string) | [object](dataTypes#object) ) ",
+                      "desc": "需导入的 Java 包"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "...pkg"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<pre><code class=\"lang-js\">/* 导入一个 Java 包. */\n\nimportPackage(java.lang);\nimportPackage(&#39;java.lang&#39;); /* 同上. */\n\n/* 导入多个 Java 包. */\n\nimportPackage(java.io);\nimportPackage(java.lang);\nimportPackage(java.util);\n\nimportPackage(java.io, java.lang, java.util); /* 同上. */\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"scriptingJava#访问-Java-包和类\">访问 Java 包和类</a></p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] importPackage"
+        },
+        {
+          "textRaw": "[m] importClass",
+          "name": "[m]_importclass",
+          "methods": [
+            {
+              "textRaw": "importClass(...cls)",
+              "type": "method",
+              "name": "importClass",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**cls** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 类 ",
+                      "name": "**cls**",
+                      "type": " ...( [string](dataTypes#string) | [object](dataTypes#object) ) ",
+                      "desc": "需导入的 Java 类"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "...cls"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<pre><code class=\"lang-js\">/* 导入一个 Java 类. */\n\nimportClass(java.lang.Integer);\nimportClass(&#39;java.lang.Integer&#39;); /* 同上. */\n\n/* 导入多个 Java 类. */\n\nimportClass(java.io.File);\nimportClass(java.lang.Integer);\nimportClass(java.util.HashMap);\n\nimportClass(\n    java.io.File,\n    java.lang.Integer,\n    java.util.HashMap,\n); /* 同上. */\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"scriptingJava#访问-Java-包和类\">访问 Java 包和类</a></p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] importClass"
+        },
+        {
+          "textRaw": "[m] isStopped",
+          "name": "[m]_isstopped",
+          "methods": [
+            {
+              "textRaw": "isStopped()",
+              "type": "method",
+              "name": "isStopped",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>检测脚本当前线程是否已停止.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isStopped"
+        },
+        {
+          "textRaw": "[m] selector",
+          "name": "[m]_selector",
+          "methods": [
+            {
+              "textRaw": "selector()",
+              "type": "method",
+              "name": "selector",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [UiSelector](uiSelectorType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [UiSelector](uiSelectorType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>构建一个 &quot;空&quot; <a href=\"uiSelectorType\">选择器</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] selector"
+        }
+      ],
+      "type": "module",
+      "displayName": "全局对象 (Global)"
+    }
+  ]
+}

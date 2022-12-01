@@ -1,0 +1,2490 @@
+{
+  "source": "..\\api\\uiObjectType.md",
+  "modules": [
+    {
+      "textRaw": "控件节点 (UiObject)",
+      "name": "控件节点_(uiobject)",
+      "desc": "<p>UiObject 通常被称为 [ 控件 / 节点 / 控件节点 ], 可看做是一个通过安卓无障碍服务包装的 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo\">AccessibilityNodeInfo</a> 对象, 代表一个当前活动窗口中的节点, 通过此节点可收集控件信息或执行控件行为, 进而实现一系列自动化操作.</p>\n<p>应用界面通常由控件构成, 如 <a href=\"https://developer.android.com/reference/android/widget/ImageView\">ImageView</a> 构成图像控件, <a href=\"https://developer.android.com/reference/android/widget/TextView\">TextView</a> 构成文本控件. 通过不同的布局可决定不同控件的位置, 如 <a href=\"https://developer.android.com/reference/android/widget/LinearLayout\">LinearLayout (线性布局)</a> 按水平或垂直方式排布及显示控件, <a href=\"https://developer.android.com/reference/android/widget/AbsListView\">AbsListView (列表布局)</a> 按列表方式排布及显示控件.\n不同的布局方式形成了 <a href=\"glossaries#控件层级\">控件层级</a>.</p>\n<p>控件拥有特定的属性, 可分为两种类型, 状态型及行为型.<br>行为型属性可参阅章节 <a href=\"uiObjectActionsType\">控件节点行为 (UiObjectActions)</a>.<br>状态型属性访问均被封装为方法调用的形式, 如访问控件的类名, 需使用 <code>w.className()</code> 而非 <code>w.className</code>.</p>\n<blockquote>\n<p>注: 在 AutoJs6 中, 由 <a href=\"uiObjectType\">UiObject</a> 代表一个控件节点, 它继承自 <a href=\"https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat\">AccessibilityNodeInfoCompat</a>, 而并非一个 <a href=\"https://developer.android.com/reference/android/view/View\">View</a>.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiObject</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] UiObject",
+          "name": "[@]_uiobject",
+          "desc": "<p><strong><code>Global</code></strong></p>\n<p>如需获取一个 UiObject 对象, 通常使用 <a href=\"uiSelectorType\">选择器</a> 获取.</p>\n<pre><code class=\"lang-js\">/* 获取一个包含任意文本的 UiObject 对象. */\nlet w = pickup(/.+/);\n\n/* 当活动窗口中不存在符合筛选条件的控件时返回 null. */\nconsole.log(w === null);\n\n/* 使用 instanceof 操作符查看对象 w 是否为 UiObject &quot;类&quot; 的实例. */\nconsole.log(w instanceof UiObject);\n</code></pre>\n<p>多数 UiObject 的实例方法 (如 parent 和 child 等) 均返回自身类型, 因此可实现链式调用:</p>\n<pre><code class=\"lang-js\">let w = pickup(&#39;hello&#39;);\n/* 获取 w 控件的三级父控件的 2 号索引子控件. */\nw.parent().parent().parent().child(2);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[@] UiObject"
+        },
+        {
+          "textRaw": "[m#] parent",
+          "name": "[m#]_parent",
+          "methods": [
+            {
+              "textRaw": "parent()",
+              "type": "method",
+              "name": "parent",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其父控件.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.parent();\nw.compass(&#39;p&#39;); /* 同上. */\ndetect(w, &#39;p&#39;); /* 同上. */\n\nw.parent().parent().parent();\nw.compass(&#39;p3&#39;); /* 同上. */\ndetect(w, &#39;p3&#39;); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] parent"
+        },
+        {
+          "textRaw": "[m#] child",
+          "name": "[m#]_child",
+          "methods": [
+            {
+              "textRaw": "child(i)",
+              "type": "method",
+              "name": "child",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 i 的子控件.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.child(3);\nw.compass(&#39;c3&#39;); /* 同上. */\ndetect(w, &#39;c3&#39;); /* 同上. */\n\nw.child(3).child(1);\nw.compass(&#39;c3c1&#39;); /* 同上. */\ndetect(w, &#39;c3&gt;1&#39;); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "i"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] child"
+        },
+        {
+          "textRaw": "[m#] children",
+          "name": "[m#]_children",
+          "methods": [
+            {
+              "textRaw": "children()",
+              "type": "method",
+              "name": "children",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>返回当前节点的子控件集合.</p>\n<pre><code class=\"lang-js\">let cc = pickup({ filter: w =&gt; w.children().length &gt; 5 }, &#39;children&#39;);\n\nconsole.log(cc.length); /* e.g. 10 */\n\ncc.forEach((w) =&gt; {\n    let content = w.content();\n    content &amp;&amp; console.log(content);\n})\n</code></pre>\n<p>如需返回当前节点下的所有子孙控件集合, 可使用 <a href=\"#m-find\">UiObject#find()</a>.</p>\n<pre><code class=\"lang-js\">let w = pickup({ filter: w =&gt; w.children().length &gt; 5 });\nconsole.log(w.find().length); /* e.g. 20 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] children"
+        },
+        {
+          "textRaw": "[m#] childCount",
+          "name": "[m#]_childcount",
+          "methods": [
+            {
+              "textRaw": "childCount()",
+              "type": "method",
+              "name": "childCount",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回当前节点的子控件数量.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getChildCount</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] childCount"
+        },
+        {
+          "textRaw": "[m#] hasChildren",
+          "name": "[m#]_haschildren",
+          "methods": [
+            {
+              "textRaw": "hasChildren()",
+              "type": "method",
+              "name": "hasChildren",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回当前节点是否有子节点.</p>\n<p>相当于 <code>childCount() &gt; 0</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hasChildren"
+        },
+        {
+          "textRaw": "[m#] indexInParent",
+          "name": "[m#]_indexinparent",
+          "methods": [
+            {
+              "textRaw": "indexInParent()",
+              "type": "method",
+              "name": "indexInParent",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回当前节点在其父控件的索引值.</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\na.indexInParent(); // 0 \np.child(0); /* 对应 a. */\n\nconsole.log(c.indexInParent()); // 2\np.child(2); /* 对应 c. */\n</code></pre>\n<p>方法 <code>indexInParent</code> 通常用于访问临近或相对位置的兄弟节点:</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\n/* c 是 b 的相邻兄弟节点 (相对索引为 1). */\np.child(b.indexInParent() + 1); /* 对应 c. */\nb.compass(&#39;s&gt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 也是 b 的相邻兄弟节点 (相对索引为 -1). */\np.child(b.indexInParent() - 1); /* 对应 a. */\nb.compass(&#39;s&lt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 是 c 的兄弟节点 (相对索引为 -2). */\np.child(c.indexInParent() - 2); /* 对应 a. */\nb.compass(&#39;s&lt;2&#39;); /* 使用罗盘方法, 效果同上. */\n</code></pre>\n<p>有时也需要获取当前节点的父控件在其父控件的索引值:</p>\n<pre><code class=\"lang-js\">let p = pickup({ filter: w =&gt; w.depth() &gt; 0 &amp;&amp; w.parent().indexInParent() &gt; 0 });\nconsole.log(p.parent().indexInParent()); // e.g. 2\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] indexInParent"
+        },
+        {
+          "textRaw": "[m#] find",
+          "name": "[m#]_find",
+          "methods": [
+            {
+              "textRaw": "find()",
+              "type": "method",
+              "name": "find",
+              "desc": "<p><strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>以当前节点作为根节点, 返回其所有的子孙控件集合.</p>\n<p>与 <a href=\"#m-children\">children</a> 方法不同, <code>w.children()</code> 返回子控件集合, 而 <code>w.find()</code> 返回所有子孙控件集合.</p>\n<pre><code class=\"lang-js\">let root = depth(0).findOnce();\nconsole.log(root.find().length); // e.g. 500\nconsole.log(root.children().length); // e.g. 2\n</code></pre>\n<p>子孙控件集合中包含根节点本身:</p>\n<pre><code class=\"lang-js\">/* 找出一个没有任何子孙控件的节点. */\nlet w = pickup({ filter: w =&gt; w.childCount() === 0 });\n\n/* find() 返回的集合包含其自身, 而非空集合. */\nconsole.log(w.find().length); // 1\n</code></pre>\n<p>因此, <code>N 层级子孙控件集合数量</code> = <code>N + 1 层级子孙控件数量总和</code> + <code>1</code>:</p>\n<pre><code class=\"lang-js\">let root = depth(0).findOnce();\nlet sumA = root.find().length;\nlet sumB = root.children().reduce((sum, c) =&gt; sum + c.find().length, 0);\nconsole.log(sumA, sumB); /* sumA 和 sumB 相差 1. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "find(selector)",
+              "type": "method",
+              "name": "find",
+              "desc": "<p><strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">selector</a> } - 选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>以当前节点作为根节点, 返回其所有满足选择器筛选条件的子孙控件集合.</p>\n<pre><code class=\"lang-js\">/* 找出 w 控件下所有符合有效内容长度不小于 10 的子孙控件集合. */\nconsole.log(w.find(contentMatch(/\\s*.{10,}\\s*/)));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] find"
+        },
+        {
+          "textRaw": "[m#] findOne",
+          "name": "[m#]_findone",
+          "methods": [
+            {
+              "textRaw": "findOne(selector)",
+              "type": "method",
+              "name": "findOne",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">selector</a> } - 选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>以当前节点作为根节点, 在其所有子孙控件中找出一个满足选择器筛选条件的控件.</p>\n<pre><code class=\"lang-js\">/* 找出 w 子孙控件中符合有效内容长度不小于 10 的一个控件. */\nconsole.log(w.findOne(contentMatch(/\\s*.{10,}\\s*/)));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] findOne"
+        },
+        {
+          "textRaw": "[m#] bounds",
+          "name": "[m#]_bounds",
+          "methods": [
+            {
+              "textRaw": "bounds()",
+              "type": "method",
+              "name": "bounds",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#androidrect\">AndroidRect</a> }</li>\n</ul>\n<p>方法 <a href=\"#m-boundsinscreen\">boundsInScreen</a> 的别名.</p>\n<p>返回一个 <a href=\"dataTypes#androidrect\">控件矩形 (Rect)</a>, 表示控件在屏幕的相对位置及空间范围.</p>\n<pre><code class=\"lang-js\">let bounds = contentMatch(/.+/).findOnce().bounds();\nconsole.log(bounds); // e.g. Rect(0, 48 - 112, 160)\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-boundsinscreen\">boundsInScreen</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] bounds"
+        },
+        {
+          "textRaw": "[m#] boundsInScreen",
+          "name": "[m#]_boundsinscreen",
+          "methods": [
+            {
+              "textRaw": "boundsInScreen()",
+              "type": "method",
+              "name": "boundsInScreen",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#androidrect\">AndroidRect</a> }</li>\n</ul>\n<p>返回一个 <a href=\"dataTypes#androidrect\">控件矩形 (Rect)</a>, 表示控件在屏幕的相对位置及空间范围.</p>\n<pre><code class=\"lang-js\">let bounds = contentMatch(/.+/).findOnce().boundsInScreen();\nconsole.log(bounds); // e.g. Rect(0, 48 - 112, 160)\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-bounds\">bounds</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsInScreen"
+        },
+        {
+          "textRaw": "[m#] boundsInParent",
+          "name": "[m#]_boundsinparent",
+          "methods": [
+            {
+              "textRaw": "boundsInParent()",
+              "type": "method",
+              "name": "boundsInParent",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#androidrect\">AndroidRect</a> }</li>\n</ul>\n<p>返回一个 <a href=\"dataTypes#androidrect\">控件矩形 (Rect)</a>, 表示控件于其父控件的相对位置及空间范围.</p>\n<p>因其父控件实际上是 <code>View#getParentForAccessibility()</code> 的结果, 而非此控件的 <code>viewParent</code>, 所以得到的结果是不可靠的.</p>\n<pre><code class=\"lang-js\">let bounds = contentMatch(/.+/).findOnce().boundsInParent();\nconsole.log(bounds); // e.g. Rect(0, 0 - 112, 112)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsInParent"
+        },
+        {
+          "textRaw": "[m#] boundsLeft",
+          "name": "[m#]_boundsleft",
+          "methods": [
+            {
+              "textRaw": "boundsLeft()",
+              "type": "method",
+              "name": "boundsLeft",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形左边界距屏幕左边缘的像素距离.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().left); // e.g. 0\nconsole.log(w.boundsLeft()); // e.g. 0\nconsole.log(w.left()); // e.g. 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsLeft"
+        },
+        {
+          "textRaw": "[m#] boundsTop",
+          "name": "[m#]_boundstop",
+          "methods": [
+            {
+              "textRaw": "boundsTop()",
+              "type": "method",
+              "name": "boundsTop",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形上边界距屏幕上边缘的像素距离.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().top); // e.g. 48\nconsole.log(w.boundsTop()); // e.g. 48\nconsole.log(w.top()); // e.g. 48\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsTop"
+        },
+        {
+          "textRaw": "[m#] boundsRight",
+          "name": "[m#]_boundsright",
+          "methods": [
+            {
+              "textRaw": "boundsRight()",
+              "type": "method",
+              "name": "boundsRight",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形右边界距屏幕左边缘的像素距离.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().right); // e.g. 112\nconsole.log(w.right()); // e.g. 112\nconsole.log(w.boundsRight()); // e.g. 112\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsRight"
+        },
+        {
+          "textRaw": "[m#] boundsBottom",
+          "name": "[m#]_boundsbottom",
+          "methods": [
+            {
+              "textRaw": "boundsBottom()",
+              "type": "method",
+              "name": "boundsBottom",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形下边界距屏幕上边缘的像素距离.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().bottom); // e.g. 160\nconsole.log(w.bottom()); // e.g. 160\nconsole.log(w.boundsBottom()); // e.g. 160\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsBottom"
+        },
+        {
+          "textRaw": "[m#] boundsWidth",
+          "name": "[m#]_boundswidth",
+          "methods": [
+            {
+              "textRaw": "boundsWidth()",
+              "type": "method",
+              "name": "boundsWidth",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的宽度.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().width()); // e.g. 112\nconsole.log(w.boundsWidth()); // e.g. 112\nconsole.log(w.right() - w.left()); // e.g. 112\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsWidth"
+        },
+        {
+          "textRaw": "[m#] boundsHeight",
+          "name": "[m#]_boundsheight",
+          "methods": [
+            {
+              "textRaw": "boundsHeight()",
+              "type": "method",
+              "name": "boundsHeight",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的高度.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(w.bounds().height()); // e.g. 112\nconsole.log(w.boundsHeight()); // e.g. 112\nconsole.log(w.bottom() - w.top()); // e.g. 112\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsHeight"
+        },
+        {
+          "textRaw": "[m#] boundsCenterX",
+          "name": "[m#]_boundscenterx",
+          "methods": [
+            {
+              "textRaw": "boundsCenterX()",
+              "type": "method",
+              "name": "boundsCenterX",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcenterx\">boundsExactCenterX</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerX()); // e.g. 56\nconsole.log(wA.boundsCenterX()); // e.g. 56\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 20)\nconsole.log(wB.boundsCenterX()); // e.g. 5 (5.5 向下取整得 5)\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - -11, 20)\nconsole.log(wC.boundsCenterX()); // e.g. -6 (-5.5 向下取整得 -6)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsCenterX"
+        },
+        {
+          "textRaw": "[m#] boundsExactCenterX",
+          "name": "[m#]_boundsexactcenterx",
+          "methods": [
+            {
+              "textRaw": "boundsExactCenterX()",
+              "type": "method",
+              "name": "boundsExactCenterX",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p>该坐标将保留精度 (可能为非整数), 如需返回整数结果, 可使用 <a href=\"#m-boundscenterx\">boundsCenterX</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().exactCenterX()); // e.g. 56\nconsole.log(wA.boundsExactCenterX()); // e.g. 56\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 20)\nconsole.log(wB.boundsExactCenterX()); // e.g. 5.5\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - -11, 20)\nconsole.log(wC.boundsExactCenterX()); // e.g. -5.5\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsExactCenterX"
+        },
+        {
+          "textRaw": "[m#] boundsCenterY",
+          "name": "[m#]_boundscentery",
+          "methods": [
+            {
+              "textRaw": "boundsCenterY()",
+              "type": "method",
+              "name": "boundsCenterY",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcentery\">boundsExactCenterY</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerY()); // e.g. 104\nconsole.log(wA.boundsCenterY()); // e.g. 104\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 33)\nconsole.log(wB.boundsCenterY()); // e.g. 16 (16.5 向下取整得 16)\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - 11, -33)\nconsole.log(wC.boundsCenterY()); // e.g. -17 (-16.5 向下取整得 -17)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsCenterY"
+        },
+        {
+          "textRaw": "[m#] boundsExactCenterY",
+          "name": "[m#]_boundsexactcentery",
+          "methods": [
+            {
+              "textRaw": "boundsExactCenterY()",
+              "type": "method",
+              "name": "boundsExactCenterY",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p>该坐标将保留精度 (可能为非整数), 如需返回整数结果, 可使用 <a href=\"#m-boundscentery\">boundsCenterY</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().exactCenterY()); // e.g. 104\nconsole.log(wA.boundsExactCenterY()); // e.g. 104\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 33)\nconsole.log(wB.boundsExactCenterY()); // e.g. 16.5\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - 11, -33)\nconsole.log(wC.boundsExactCenterY()); // e.g. -16.5\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] boundsExactCenterY"
+        },
+        {
+          "textRaw": "[m#] left",
+          "name": "[m#]_left",
+          "methods": [
+            {
+              "textRaw": "left()",
+              "type": "method",
+              "name": "left",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形左边界距屏幕左边缘的像素距离.</p>\n<p><a href=\"#m-boundsleft\">UiObject#boundsLeft</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] left"
+        },
+        {
+          "textRaw": "[m#] top",
+          "name": "[m#]_top",
+          "methods": [
+            {
+              "textRaw": "top()",
+              "type": "method",
+              "name": "top",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形上边界距屏幕上边缘的像素距离.</p>\n<p><a href=\"#m-boundstop\">UiObject#boundsTop</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] top"
+        },
+        {
+          "textRaw": "[m#] right",
+          "name": "[m#]_right",
+          "methods": [
+            {
+              "textRaw": "right()",
+              "type": "method",
+              "name": "right",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形右边界距屏幕左边缘的像素距离.</p>\n<p><a href=\"#m-boundsright\">UiObject#boundsRight</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] right"
+        },
+        {
+          "textRaw": "[m#] bottom",
+          "name": "[m#]_bottom",
+          "methods": [
+            {
+              "textRaw": "bottom()",
+              "type": "method",
+              "name": "bottom",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形下边界距屏幕上边缘的像素距离.</p>\n<p><a href=\"#m-boundsbottom\">UiObject#boundsBottom</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] bottom"
+        },
+        {
+          "textRaw": "[m#] width",
+          "name": "[m#]_width",
+          "methods": [
+            {
+              "textRaw": "width()",
+              "type": "method",
+              "name": "width",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的宽度.</p>\n<p><a href=\"#m-boundswidth\">UiObject#boundsWidth</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] width"
+        },
+        {
+          "textRaw": "[m#] height",
+          "name": "[m#]_height",
+          "methods": [
+            {
+              "textRaw": "height()",
+              "type": "method",
+              "name": "height",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的高度.</p>\n<p><a href=\"#m-boundsheight\">UiObject#boundsHeight</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] height"
+        },
+        {
+          "textRaw": "[m#] centerX",
+          "name": "[m#]_centerx",
+          "methods": [
+            {
+              "textRaw": "centerX()",
+              "type": "method",
+              "name": "centerX",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p><a href=\"#m-boundscenterx\">UiObject#boundsCenterX</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] centerX"
+        },
+        {
+          "textRaw": "[m#] exactCenterX",
+          "name": "[m#]_exactcenterx",
+          "methods": [
+            {
+              "textRaw": "exactCenterX()",
+              "type": "method",
+              "name": "exactCenterX",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p><a href=\"#m-boundsexactcenterx\">UiObject#boundsExactCenterX</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exactCenterX"
+        },
+        {
+          "textRaw": "[m#] centerY",
+          "name": "[m#]_centery",
+          "methods": [
+            {
+              "textRaw": "centerY()",
+              "type": "method",
+              "name": "centerY",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p><a href=\"#m-boundscentery\">UiObject#boundsCenterY</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] centerY"
+        },
+        {
+          "textRaw": "[m#] exactCenterY",
+          "name": "[m#]_exactcentery",
+          "methods": [
+            {
+              "textRaw": "exactCenterY()",
+              "type": "method",
+              "name": "exactCenterY",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p><a href=\"#m-boundsexactcentery\">UiObject#boundsExactCenterY</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exactCenterY"
+        },
+        {
+          "textRaw": "[m#] point",
+          "name": "[m#]_point",
+          "methods": [
+            {
+              "textRaw": "point()",
+              "type": "method",
+              "name": "point",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#opencvpoint\">OpencvPoint</a> }</li>\n</ul>\n<p>返回控件矩形的中心点 (<a href=\"dataTypes#opencvpoint\">Point</a>).</p>\n<p>该中心点坐标由 <a href=\"#m-exactcenterx\">exactCenterX</a> 和 <a href=\"#m-exactcentery\">exactCenterY</a> 计算获得, 因此会保留精度.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 0 - 10, 12)\nconsole.log(wA.point()); // e.g. {5.0, 6.0}\nconsole.log(wA.point().x); // e.g. 5\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 13)\nconsole.log(wB.point()); // e.g. {5.5, 6.5}\nconsole.log(wB.point().y); // e.g. 6.5\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] point"
+        },
+        {
+          "textRaw": "[m#] size",
+          "name": "[m#]_size",
+          "methods": [
+            {
+              "textRaw": "size()",
+              "type": "method",
+              "name": "size",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#opencvsize\">OpencvSize</a> }</li>\n</ul>\n<p>返回控件矩形的尺寸 (<a href=\"dataTypes#opencvsize\">Size</a>).</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nconsole.log(w.bounds()); // e.g. Rect(0, 0 - 10, 12)\nconsole.log(w.size()); // e.g. 10x12\nconsole.log(w.size().width); // e.g. 10\nconsole.log(w.size().height); // e.g. 12\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] size"
+        },
+        {
+          "textRaw": "[m#] clickBounds",
+          "name": "[m#]_clickbounds",
+          "methods": [
+            {
+              "textRaw": "clickBounds(offsetX?, offsetY?)",
+              "type": "method",
+              "name": "clickBounds",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-3]/3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ offsetX = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - X 坐标偏移量 (支持负值及百分率)</li>\n<li><strong>[ offsetY = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标偏移量 (支持负值及百分率)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否点击行为已执行且执行过程中无异常</li>\n</ul>\n<p>点击控件矩形的中心点坐标.</p>\n<p>点击操作借助 <a href=\"automator#m-click\">automator.click(x, y)</a> 完成, 此操作需要启用无障碍服务.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\nconsole.log(w.bounds()); // e.g. Rect(0, 60 - 100, 200)\n\nw.clickBounds(); /* 相当于 click(50, 130) . */\nclick(w.centerX(), w.centerY()); /* 效果同上. */\n\nw.clickBounds(10); /* X 坐标偏移量为 10 像素, 相当于 click(50 + 10, 130) . */\nw.clickBounds(10, 15); /* X 与 Y 坐标偏移量分别为 10 和 15 像素, 相当于 click(50 + 10, 130 + 15) . */\nw.clickBounds(0, -15); /* Y 坐标偏移量为 -15 像素, 相当于 click(50, 130 - 15) . */\nw.clickBounds(0.2); /* X 坐标偏移量为 20% 屏幕宽度, 相当于 click(50 + 0.2 * device.width, 130) . */\nw.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5% 屏幕高度. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "offsetX?"
+                    },
+                    {
+                      "name": "offsetY?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clickBounds"
+        },
+        {
+          "textRaw": "[m#] id",
+          "name": "[m#]_id",
+          "methods": [
+            {
+              "textRaw": "id()",
+              "type": "method",
+              "name": "id",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源全称 (Fully-Qualified ID Resource Name).</p>\n<p>若 ID 不存在, 返回 null.</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>ID 资源全称的 <code>类型</code> 为 <code>id</code>.<br>一个有效的 ID 资源全称: <code>com.test:id/some_entry</code>.</p>\n<pre><code class=\"lang-js\">console.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\nconsole.log(idMatch(/.+/).findOnce().fullId()); /* 同上. */\nconsole.log(idMatch(/.+/).findOnce().getViewIdResourceName()); /* 同上. */\n</code></pre>\n<p>需额外留意, 部分应用的控件 ID 资源全称可能不符合标准:</p>\n<pre><code class=\"lang-js\">/* 标准 ID 全称. */\nlet canonicalId = &quot;com.test:id/hello_world&quot;;\n\n/* 可能出现的非标准 ID 全称. */\nlet peculiarId = &quot;hello_world&quot;; /* 仅含资源项, 无包名及类型标识. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getViewIdResourceName</li>\n<li><code>[m#]</code> <a href=\"#m-fullid\">fullId</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] id"
+        },
+        {
+          "textRaw": "[m#] fullId",
+          "name": "[m#]_fullid",
+          "methods": [
+            {
+              "textRaw": "fullId()",
+              "type": "method",
+              "name": "fullId",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源全称 (Fully-Qualified ID Resource Name).</p>\n<p>若 ID 不存在, 返回 null.</p>\n<p><a href=\"#m-id\">UiObject#id</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] fullId"
+        },
+        {
+          "textRaw": "[m#] idEntry",
+          "name": "[m#]_identry",
+          "methods": [
+            {
+              "textRaw": "idEntry()",
+              "type": "method",
+              "name": "idEntry",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源项名称 (ID Resource Entry Name).</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>例如对于 ID 资源全称 <code>com.test:id/some_entry</code>, 其 ID 资源项名称为 <code>some_entry</code>.</p>\n<pre><code class=\"lang-js\">/* ID 资源全称. */\nconsole.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\n\n/* ID 资源项名称. */\nconsole.log(idMatch(/.+/).findOnce().idEntry()); // action_bar_root\nconsole.log(idMatch(/.+/).findOnce().simpleId()); /* 同上. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-simpleid\">simpleId</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] idEntry"
+        },
+        {
+          "textRaw": "[m#] simpleId",
+          "name": "[m#]_simpleid",
+          "methods": [
+            {
+              "textRaw": "simpleId()",
+              "type": "method",
+              "name": "simpleId",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源项名称 (ID Resource Entry Name).</p>\n<p>若 ID 不存在, 返回 null.</p>\n<p><a href=\"#m-identry\">UiObject#idEntry</a> 的别名方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] simpleId"
+        },
+        {
+          "textRaw": "[m#] idHex",
+          "name": "[m#]_idhex",
+          "methods": [
+            {
+              "textRaw": "idHex()",
+              "type": "method",
+              "name": "idHex",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 <a href=\"#m-fullid\">ID 资源全称</a> 的 <a href=\"glossaries.md#资源-ID\">资源 ID</a> 十六进制字符串值, 简称 <code>ID 资源十六进制代表值</code>.</p>\n<ol>\n<li>获取 <code>ID 资源全称</code> 对应的 <code>资源 ID</code></li>\n<li>将 <code>资源 ID</code> 的十六进制值以 <code>0x</code> 作为前缀进行组合</li>\n<li>返回组合的字符串值</li>\n</ol>\n<p>若 ID 不存在, 返回 null.</p>\n<pre><code class=\"lang-js\">console.log(idMatch(/explorer_item_list/).findOnce().idHex()); /* e.g. 0x7f090117 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] idHex"
+        },
+        {
+          "textRaw": "[m#] text",
+          "name": "[m#]_text",
+          "methods": [
+            {
+              "textRaw": "text()",
+              "type": "method",
+              "name": "text",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>返回控件文本内容.</p>\n<p>若文本内容不存在, 返回空字符串.</p>\n<p>出于保护隐私目的, <code>isPassword()</code> 返回 <code>true</code> 的密码类型控件, <code>text()</code> 将返回空字符串.</p>\n<pre><code class=\"lang-js\">console.log(textMatch(/.+/).findOnce().text()); /* e.g. hello */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getText</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] text"
+        },
+        {
+          "textRaw": "[m#] desc",
+          "name": "[m#]_desc",
+          "methods": [
+            {
+              "textRaw": "desc()",
+              "type": "method",
+              "name": "desc",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回控件的内容描述标签.</p>\n<p>若内容描述标签容不存在, 返回 null.</p>\n<p>内容描述标签可以帮助需要无障碍服务的用户 (如视力障碍人群等) 理解当前控件的用途或说明.<br>如 <a href=\"https://support.google.com/accessibility/android/topic/10601570?hl=zh-Hans\">TalkBack</a> 开启后可以朗读控件的内容描述标签, 对于理解那些没有文本内容的控件尤其重要.</p>\n<pre><code class=\"lang-js\">console.log(descMatch(/.+/).findOnce().desc()); /* e.g. Restart icon */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getContentDescription</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] desc"
+        },
+        {
+          "textRaw": "[m#] content",
+          "name": "[m#]_content",
+          "methods": [
+            {
+              "textRaw": "content()",
+              "type": "method",
+              "name": "content",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>返回控件内容 (包括内容描述标签或本文内容).</p>\n<p>若无内容, 返回空字符串.</p>\n<p><code>content</code> 方法相当于 <code>w.desc() || w.text()</code>, 即优先获取 <a href=\"#m-desc\">desc</a> 返回的内容, 若为 null, 继续获取 <a href=\"#m-text\">text</a> 返回的内容.</p>\n<pre><code class=\"lang-js\">console.log(contentMatch(/.+/).findOnce().content()); /* e.g. Avatar */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] content"
+        },
+        {
+          "textRaw": "[m#] className",
+          "name": "[m#]_classname",
+          "methods": [
+            {
+              "textRaw": "className()",
+              "type": "method",
+              "name": "className",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回控件的类名.</p>\n<p>若如类名, 返回 null.</p>\n<pre><code class=\"lang-js\">console.log(classNameMatch(/.+/).findOnce().className()); /* e.g. android.widget.EditText */\n</code></pre>\n<p>常见类名:</p>\n<ul>\n<li>android.view.View</li>\n<li>android.view.ViewGroup</li>\n<li>android.widget.ImageView</li>\n<li>android.widget.ImageButton</li>\n<li>android.widget.Button</li>\n<li>android.widget.ScrollView</li>\n<li>android.widget.TextView</li>\n<li>android.widget.EditText</li>\n<li>android.widget.Switch</li>\n<li>android.widget.LinearLayout</li>\n<li>android.widget.FrameLayout</li>\n<li>android.widget.RelativeLayout</li>\n</ul>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getClassName</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] className"
+        },
+        {
+          "textRaw": "[m#] packageName",
+          "name": "[m#]_packagename",
+          "methods": [
+            {
+              "textRaw": "packageName()",
+              "type": "method",
+              "name": "packageName",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回控件的包名.</p>\n<p>若如包名, 返回 null.</p>\n<pre><code class=\"lang-js\">console.log(packageNameMatch(/.+/).findOnce().packageName()); /* e.g. org.autojs.autojs6 */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getPackageName</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] packageName"
+        },
+        {
+          "textRaw": "[m#] depth",
+          "name": "[m#]_depth",
+          "methods": [
+            {
+              "textRaw": "depth()",
+              "type": "method",
+              "name": "depth",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#控件层级\">控件层级</a> 深度.</p>\n<p>顶层控件 (只有一个) 的深度值为 0, 次级控件 (可能有多个) 的深度值全部为 1, 以此类推.</p>\n<pre><code class=\"lang-js\">console.log(findOnce().depth()); // 0\nconsole.log(contentMatch(/.+/).depth()); /* e.g. 5 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] depth"
+        },
+        {
+          "textRaw": "[m#] checkable",
+          "name": "[m#]_checkable",
+          "methods": [
+            {
+              "textRaw": "checkable()",
+              "type": "method",
+              "name": "checkable",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可勾选.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isCheckable</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-checked\">checked</a> (isChecked)</li>\n</ul>\n</li>\n<li>检查可用性<ul>\n<li><code>[m#]</code> <a href=\"#m-checkable\">checkable</a> (isCheckable)</li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] checkable"
+        },
+        {
+          "textRaw": "[m#] checked",
+          "name": "[m#]_checked",
+          "methods": [
+            {
+              "textRaw": "checked()",
+              "type": "method",
+              "name": "checked",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否已勾选.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isChecked</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-checked\">checked</a> (isChecked)</li>\n</ul>\n</li>\n<li>检查可用性<ul>\n<li><code>[m#]</code> <a href=\"#m-checkable\">checkable</a> (isCheckable)</li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] checked"
+        },
+        {
+          "textRaw": "[m#] focusable",
+          "name": "[m#]_focusable",
+          "methods": [
+            {
+              "textRaw": "focusable()",
+              "type": "method",
+              "name": "focusable",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可聚焦.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isFocusable</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-focused\">focused</a> (isFocused)</li>\n</ul>\n</li>\n<li>检查可用性<ul>\n<li><code>[m#]</code> <a href=\"#m-focusable\">focusable</a> (isFocusable)</li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] focusable"
+        },
+        {
+          "textRaw": "[m#] focused",
+          "name": "[m#]_focused",
+          "methods": [
+            {
+              "textRaw": "focused()",
+              "type": "method",
+              "name": "focused",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否已聚焦.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isFocused</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-focused\">focused</a> (isFocused)</li>\n</ul>\n</li>\n<li>检查可用性<ul>\n<li><code>[m#]</code> <a href=\"#m-focusable\">focusable</a> (isFocusable)</li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] focused"
+        },
+        {
+          "textRaw": "[m#] visibleToUser",
+          "name": "[m#]_visibletouser",
+          "methods": [
+            {
+              "textRaw": "visibleToUser()",
+              "type": "method",
+              "name": "visibleToUser",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否对用户可见.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isVisibleToUser</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] visibleToUser"
+        },
+        {
+          "textRaw": "[m#] accessibilityFocused",
+          "name": "[m#]_accessibilityfocused",
+          "methods": [
+            {
+              "textRaw": "accessibilityFocused()",
+              "type": "method",
+              "name": "accessibilityFocused",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否已获取无障碍焦点.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isAccessibilityFocused</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-accessibilityfocused\">accessibilityFocused</a> (isAccessibilityFocused)</li>\n</ul>\n</li>\n<li>执行行为<ul>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-accessibilityfocus\">accessibilityFocus</a></li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] accessibilityFocused"
+        },
+        {
+          "textRaw": "[m#] selected",
+          "name": "[m#]_selected",
+          "methods": [
+            {
+              "textRaw": "selected()",
+              "type": "method",
+              "name": "selected",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否已选中.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isSelected</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-selected\">selected</a> (isSelected)</li>\n</ul>\n</li>\n<li>执行行为<ul>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-select\">select</a></li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] selected"
+        },
+        {
+          "textRaw": "[m#] clickable",
+          "name": "[m#]_clickable",
+          "methods": [
+            {
+              "textRaw": "clickable()",
+              "type": "method",
+              "name": "clickable",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可点击.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isClickable</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-clickable\">clickable</a> (isClickable)</li>\n</ul>\n</li>\n<li>执行行为<ul>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-click\">click</a></li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clickable"
+        },
+        {
+          "textRaw": "[m#] longClickable",
+          "name": "[m#]_longclickable",
+          "methods": [
+            {
+              "textRaw": "longClickable()",
+              "type": "method",
+              "name": "longClickable",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可长按.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isLongClickable</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-longclickable\">longClickable</a> (isLongClickable)</li>\n</ul>\n</li>\n<li>执行行为<ul>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-longclick\">longClick</a></li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] longClickable"
+        },
+        {
+          "textRaw": "[m#] enabled",
+          "name": "[m#]_enabled",
+          "methods": [
+            {
+              "textRaw": "enabled()",
+              "type": "method",
+              "name": "enabled",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否启用 (未被禁用).</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isEnabled</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] enabled"
+        },
+        {
+          "textRaw": "[m#] password",
+          "name": "[m#]_password",
+          "methods": [
+            {
+              "textRaw": "password()",
+              "type": "method",
+              "name": "password",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否是密码型控件.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isPassword</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] password"
+        },
+        {
+          "textRaw": "[m#] scrollable",
+          "name": "[m#]_scrollable",
+          "methods": [
+            {
+              "textRaw": "scrollable()",
+              "type": "method",
+              "name": "scrollable",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可滚动.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isScrollable</li>\n</ul>\n<p>关联属性或方法:</p>\n<ul>\n<li>检查状态<ul>\n<li><code>[m#]</code> <a href=\"#m-scrollable\">scrollable</a> (isScrollable)</li>\n</ul>\n</li>\n<li>执行行为<ul>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollbackward\">scrollBackward</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrolldown\">scrollDown</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollforward\">scrollForward</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollleft\">scrollLeft</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollright\">scrollRight</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollto\">scrollTo</a></li>\n<li><code>[m#]</code> <a href=\"uiObjectActionsType#m-scrollup\">scrollUp</a></li>\n</ul>\n</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollable"
+        },
+        {
+          "textRaw": "[m#] editable",
+          "name": "[m#]_editable",
+          "methods": [
+            {
+              "textRaw": "editable()",
+              "type": "method",
+              "name": "editable",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可编辑.</p>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> isEditable</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] editable"
+        },
+        {
+          "textRaw": "[m#] rowCount",
+          "name": "[m#]_rowcount",
+          "methods": [
+            {
+              "textRaw": "rowCount()",
+              "type": "method",
+              "name": "rowCount",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#信息集控件\">信息集控件</a> 的行数.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] rowCount"
+        },
+        {
+          "textRaw": "[m#] columnCount",
+          "name": "[m#]_columncount",
+          "methods": [
+            {
+              "textRaw": "columnCount()",
+              "type": "method",
+              "name": "columnCount",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#信息集控件\">信息集控件</a> 的列数.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] columnCount"
+        },
+        {
+          "textRaw": "[m#] row",
+          "name": "[m#]_row",
+          "methods": [
+            {
+              "textRaw": "row()",
+              "type": "method",
+              "name": "row",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#子项信息集控件\">子项信息集控件</a> 所在行的索引值.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] row"
+        },
+        {
+          "textRaw": "[m#] column",
+          "name": "[m#]_column",
+          "methods": [
+            {
+              "textRaw": "column()",
+              "type": "method",
+              "name": "column",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#子项信息集控件\">子项信息集控件</a> 所在列的索引值.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] column"
+        },
+        {
+          "textRaw": "[m#] rowSpan",
+          "name": "[m#]_rowspan",
+          "methods": [
+            {
+              "textRaw": "rowSpan()",
+              "type": "method",
+              "name": "rowSpan",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#子项信息集控件\">子项信息集控件</a> 纵跨的行数.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] rowSpan"
+        },
+        {
+          "textRaw": "[m#] columnSpan",
+          "name": "[m#]_columnspan",
+          "methods": [
+            {
+              "textRaw": "columnSpan()",
+              "type": "method",
+              "name": "columnSpan",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 <a href=\"glossaries#子项信息集控件\">子项信息集控件</a> 横跨的列数.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] columnSpan"
+        },
+        {
+          "textRaw": "[m#] drawingOrder",
+          "name": "[m#]_drawingorder",
+          "methods": [
+            {
+              "textRaw": "drawingOrder()",
+              "type": "method",
+              "name": "drawingOrder",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回节点的视图绘制次序.</p>\n<p>此次序由其父节点决定, 是一个相对于其兄弟节点的索引值.<br>在某些情况下, 视图 (View) 绘制的过程本质上是同时发生的, 两个兄弟节点可能返回同一个索引值, 甚至此索引值可能被忽略 (返回默认值 0).</p>\n<pre><code class=\"lang-js\">console.log(pickup(/.+/).drawingOrder()); // e.g. 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawingOrder"
+        },
+        {
+          "textRaw": "[m#] actionNames",
+          "name": "[m#]_actionnames",
+          "methods": [
+            {
+              "textRaw": "actionNames()",
+              "type": "method",
+              "name": "actionNames",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回控件支持的 <a href=\"uiObjectActionsType\">控件行为</a> 数组.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\n/* e.g. [ ACTION_CLICK, ACTION_SET_SELECTION, ACTION_FOCUS ] */\nconsole.log(w.actionNames());\n</code></pre>\n<p>上述示例, 数组中的三个元素代表控件可以执行对应的行为, 即 <code>w.click()</code>, <code>w.setSelection(...)</code> 及 <code>w.focus()</code>.</p>\n<p>数组中的元素均为 &quot;ACTION_&quot; 开头的控件行为 ID 的字符串形式.<br>更多控件行为 ID 可参阅 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节的 <code>行为 ID</code> 表格.</p>\n<p>如需判断一个控件是否支持一个或多个行为, 可使用 <a href=\"#m-hasaction\">hasAction</a> 方法.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] actionNames"
+        },
+        {
+          "textRaw": "[m#] hasAction",
+          "name": "[m#]_hasaction",
+          "methods": [
+            {
+              "textRaw": "hasAction(...actions)",
+              "type": "method",
+              "name": "hasAction",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>actions</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#string\">string</a><a href=\"documentation#可变参数\">[]</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否 <strong>全部支持</strong> 指定的一个或多个 <a href=\"uiObjectActionsType\">控件行为</a>.</p>\n<p>参数 actions 是 <a href=\"documentation#可变参数\">可变参数</a>, 均满足 &quot;ACTION_&quot; 开头的控件行为 ID 的字符串形式 (&quot;ACTION_&quot; 可省略).</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\n/* 判断 w 是否可点击. */\nconsole.log(w.hasAction(&quot;ACTION_CLICK&quot;));\nconsole.log(w.hasAction(&quot;CLICK&quot;)); /* ACTION_ 前缀可省略. */\n\n/* 判断 w 是否可点击, 可聚焦, 可设置文本. */\nconsole.log(w.hasAction(&quot;ACTION_CLICK&quot;, &quot;ACTION_FOCUS&quot;, &quot;ACTION_SET_TEXT&quot;));\nconsole.log(w.hasAction(&quot;CLICK&quot;, &quot;FOCUS&quot;, &quot;SET_TEXT&quot;)); /* ACTION_ 前缀可省略. */\n</code></pre>\n<p>更多控件行为 ID 可参阅 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节的 <code>行为 ID</code> 表格.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...actions"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hasAction"
+        },
+        {
+          "textRaw": "[m#] performAction",
+          "name": "[m#]_performaction",
+          "desc": "<p>用于执行指定的控件行为.<br>在 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节已详细描述相关内容, 此处仅注明几个重载方法的签名, 相关内容将不再赘述.</p>\n",
+          "methods": [
+            {
+              "textRaw": "performAction(action, ...arguments)",
+              "type": "method",
+              "name": "performAction",
+              "desc": "<p><strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>action</strong> { <a href=\"dataTypes#number\">number</a> } - 行为的唯一标志符 (Action ID)</li>\n<li><strong>arguments</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"uiObjectActionsType#i-actionargument\">ActionArgument</a><a href=\"documentation#可变参数\">[]</a> } - 行为参数, 用于给行为传递参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "...arguments"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "performAction(action, bundle)",
+              "type": "method",
+              "name": "performAction",
+              "desc": "<p><strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>action</strong> { <a href=\"dataTypes#number\">number</a> } - 行为的唯一标志符 (Action ID)</li>\n<li><strong>bundle</strong> { <a href=\"uiObjectActionsType#i-actionargument\">AndroidBundle</a> } - 行为参数容器, 用于给行为传递参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "bundle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] performAction"
+        },
+        {
+          "textRaw": "[m#] click",
+          "name": "[m#]_click",
+          "methods": [
+            {
+              "textRaw": "click()",
+              "type": "method",
+              "name": "click",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-click\">[ 点击 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] click"
+        },
+        {
+          "textRaw": "[m#] longClick",
+          "name": "[m#]_longclick",
+          "methods": [
+            {
+              "textRaw": "longClick()",
+              "type": "method",
+              "name": "longClick",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-longclick\">[ 长按 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] longClick"
+        },
+        {
+          "textRaw": "[m#] accessibilityFocus",
+          "name": "[m#]_accessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "accessibilityFocus()",
+              "type": "method",
+              "name": "accessibilityFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-accessibilityfocus\">[ 获取无障碍焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] accessibilityFocus"
+        },
+        {
+          "textRaw": "[m#] clearAccessibilityFocus",
+          "name": "[m#]_clearaccessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "clearAccessibilityFocus()",
+              "type": "method",
+              "name": "clearAccessibilityFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-clearaccessibilityfocus\">[ 清除无障碍焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearAccessibilityFocus"
+        },
+        {
+          "textRaw": "[m#] focus",
+          "name": "[m#]_focus",
+          "methods": [
+            {
+              "textRaw": "focus()",
+              "type": "method",
+              "name": "focus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-focus\">[ 获取焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] focus"
+        },
+        {
+          "textRaw": "[m#] clearFocus",
+          "name": "[m#]_clearfocus",
+          "methods": [
+            {
+              "textRaw": "clearFocus()",
+              "type": "method",
+              "name": "clearFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-clearfocus\">[ 清除焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearFocus"
+        },
+        {
+          "textRaw": "[m#] dragStart",
+          "name": "[m#]_dragstart",
+          "methods": [
+            {
+              "textRaw": "dragStart()",
+              "type": "method",
+              "name": "dragStart",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-dragstart\">[ 拖放开始 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragStart"
+        },
+        {
+          "textRaw": "[m#] dragDrop",
+          "name": "[m#]_dragdrop",
+          "methods": [
+            {
+              "textRaw": "dragDrop()",
+              "type": "method",
+              "name": "dragDrop",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-dragdrop\">[ 拖放放下 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragDrop"
+        },
+        {
+          "textRaw": "[m#] dragCancel",
+          "name": "[m#]_dragcancel",
+          "methods": [
+            {
+              "textRaw": "dragCancel()",
+              "type": "method",
+              "name": "dragCancel",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-dragcancel\">[ 拖放取消 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragCancel"
+        },
+        {
+          "textRaw": "[m#] imeEnter",
+          "name": "[m#]_imeenter",
+          "methods": [
+            {
+              "textRaw": "imeEnter()",
+              "type": "method",
+              "name": "imeEnter",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=30</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-imeenter\">[ 输入法 ENTER 键 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] imeEnter"
+        },
+        {
+          "textRaw": "[m#] moveWindow",
+          "name": "[m#]_movewindow",
+          "methods": [
+            {
+              "textRaw": "moveWindow(x, y)",
+              "type": "method",
+              "name": "moveWindow",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=26</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-movewindow\">[ 移动窗口到新位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] moveWindow"
+        },
+        {
+          "textRaw": "[m#] nextAtMovementGranularity",
+          "name": "[m#]_nextatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "nextAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "nextAtMovementGranularity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>granularity</strong> { <a href=\"dataTypes#number\">number</a> } - 粒度</li>\n<li><strong>isExtendSelection</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否扩展选则文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-nextatmovementgranularity\">[ 按粒度移至下一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m#] nextHtmlElement",
+          "name": "[m#]_nexthtmlelement",
+          "methods": [
+            {
+              "textRaw": "nextHtmlElement(element)",
+              "type": "method",
+              "name": "nextHtmlElement",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>element</strong> { <a href=\"dataTypes#string\">string</a> } - 元素名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-nexthtmlelement\">[ 按元素移至下一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextHtmlElement"
+        },
+        {
+          "textRaw": "[m#] pageLeft",
+          "name": "[m#]_pageleft",
+          "methods": [
+            {
+              "textRaw": "pageLeft()",
+              "type": "method",
+              "name": "pageLeft",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-pageleft\">[ 使视窗左移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageLeft"
+        },
+        {
+          "textRaw": "[m#] pageUp",
+          "name": "[m#]_pageup",
+          "methods": [
+            {
+              "textRaw": "pageUp()",
+              "type": "method",
+              "name": "pageUp",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-pageup\">[ 使视窗上移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageUp"
+        },
+        {
+          "textRaw": "[m#] pageRight",
+          "name": "[m#]_pageright",
+          "methods": [
+            {
+              "textRaw": "pageRight()",
+              "type": "method",
+              "name": "pageRight",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-pageright\">[ 使视窗右移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageRight"
+        },
+        {
+          "textRaw": "[m#] pageDown",
+          "name": "[m#]_pagedown",
+          "methods": [
+            {
+              "textRaw": "pageDown()",
+              "type": "method",
+              "name": "pageDown",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-pagedown\">[ 使视窗下移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageDown"
+        },
+        {
+          "textRaw": "[m#] pressAndHold",
+          "name": "[m#]_pressandhold",
+          "methods": [
+            {
+              "textRaw": "pressAndHold()",
+              "type": "method",
+              "name": "pressAndHold",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=30</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-pressandhold\">[ 按住 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pressAndHold"
+        },
+        {
+          "textRaw": "[m#] previousAtMovementGranularity",
+          "name": "[m#]_previousatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "previousAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "previousAtMovementGranularity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>granularity</strong> { <a href=\"dataTypes#number\">number</a> } - 粒度</li>\n<li><strong>isExtendSelection</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否扩展选则文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-previousatmovementgranularity\">[ 按粒度移至上一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] previousAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m#] previousHtmlElement",
+          "name": "[m#]_previoushtmlelement",
+          "methods": [
+            {
+              "textRaw": "previousHtmlElement(element)",
+              "type": "method",
+              "name": "previousHtmlElement",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>element</strong> { <a href=\"dataTypes#string\">string</a> } - 元素名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-previoushtmlelement\">[ 按元素移至上一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] previousHtmlElement"
+        },
+        {
+          "textRaw": "[m#] showTextSuggestions",
+          "name": "[m#]_showtextsuggestions",
+          "methods": [
+            {
+              "textRaw": "showTextSuggestions()",
+              "type": "method",
+              "name": "showTextSuggestions",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=33</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-showtextsuggestions\">[ 显示文本建议 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] showTextSuggestions"
+        },
+        {
+          "textRaw": "[m#] showTooltip",
+          "name": "[m#]_showtooltip",
+          "methods": [
+            {
+              "textRaw": "showTooltip()",
+              "type": "method",
+              "name": "showTooltip",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=28</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-showtooltip\">[ 显示工具提示信息 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] showTooltip"
+        },
+        {
+          "textRaw": "[m#] hideTooltip",
+          "name": "[m#]_hidetooltip",
+          "methods": [
+            {
+              "textRaw": "hideTooltip()",
+              "type": "method",
+              "name": "hideTooltip",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=28</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-hidetooltip\">[ 隐藏工具提示信息 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hideTooltip"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "show()",
+              "type": "method",
+              "name": "show",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-show\">[ 显示在视窗内 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] dismiss",
+          "name": "[m#]_dismiss",
+          "methods": [
+            {
+              "textRaw": "dismiss()",
+              "type": "method",
+              "name": "dismiss",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-dismiss\">[ 消隐 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dismiss"
+        },
+        {
+          "textRaw": "[m#] copy",
+          "name": "[m#]_copy",
+          "methods": [
+            {
+              "textRaw": "copy()",
+              "type": "method",
+              "name": "copy",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-copy\">[ 复制文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] copy"
+        },
+        {
+          "textRaw": "[m#] cut",
+          "name": "[m#]_cut",
+          "methods": [
+            {
+              "textRaw": "cut()",
+              "type": "method",
+              "name": "cut",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-cut\">[ 剪切文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cut"
+        },
+        {
+          "textRaw": "[m#] paste",
+          "name": "[m#]_paste",
+          "methods": [
+            {
+              "textRaw": "paste()",
+              "type": "method",
+              "name": "paste",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-paste\">[ 粘贴文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] paste"
+        },
+        {
+          "textRaw": "[m#] select",
+          "name": "[m#]_select",
+          "methods": [
+            {
+              "textRaw": "select()",
+              "type": "method",
+              "name": "select",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-select\">[ 选中 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] select"
+        },
+        {
+          "textRaw": "[m#] expand",
+          "name": "[m#]_expand",
+          "methods": [
+            {
+              "textRaw": "expand()",
+              "type": "method",
+              "name": "expand",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-expand\">[ 展开 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] expand"
+        },
+        {
+          "textRaw": "[m#] collapse",
+          "name": "[m#]_collapse",
+          "methods": [
+            {
+              "textRaw": "collapse()",
+              "type": "method",
+              "name": "collapse",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-collapse\">[ 折叠 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] collapse"
+        },
+        {
+          "textRaw": "[m#] scrollLeft",
+          "name": "[m#]_scrollleft",
+          "methods": [
+            {
+              "textRaw": "scrollLeft()",
+              "type": "method",
+              "name": "scrollLeft",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollleft\">[ 使视窗左移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollLeft"
+        },
+        {
+          "textRaw": "[m#] scrollUp",
+          "name": "[m#]_scrollup",
+          "methods": [
+            {
+              "textRaw": "scrollUp()",
+              "type": "method",
+              "name": "scrollUp",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollup\">[ 使视窗上移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollUp"
+        },
+        {
+          "textRaw": "[m#] scrollRight",
+          "name": "[m#]_scrollright",
+          "methods": [
+            {
+              "textRaw": "scrollRight()",
+              "type": "method",
+              "name": "scrollRight",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollright\">[ 使视窗右移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollRight"
+        },
+        {
+          "textRaw": "[m#] scrollDown",
+          "name": "[m#]_scrolldown",
+          "methods": [
+            {
+              "textRaw": "scrollDown()",
+              "type": "method",
+              "name": "scrollDown",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrolldown\">[ 使视窗下移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollDown"
+        },
+        {
+          "textRaw": "[m#] scrollForward",
+          "name": "[m#]_scrollforward",
+          "methods": [
+            {
+              "textRaw": "scrollForward()",
+              "type": "method",
+              "name": "scrollForward",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollforward\">[ 使视窗前移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollForward"
+        },
+        {
+          "textRaw": "[m#] scrollBackward",
+          "name": "[m#]_scrollbackward",
+          "methods": [
+            {
+              "textRaw": "scrollBackward()",
+              "type": "method",
+              "name": "scrollBackward",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollbackward\">[ 使视窗后移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollBackward"
+        },
+        {
+          "textRaw": "[m#] scrollTo",
+          "name": "[m#]_scrollto",
+          "methods": [
+            {
+              "textRaw": "scrollTo(row, column)",
+              "type": "method",
+              "name": "scrollTo",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>row</strong> { <a href=\"dataTypes#number\">number</a> } - 行序数</li>\n<li><strong>column</strong> { <a href=\"dataTypes#number\">number</a> } - 列序数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-scrollto\">[ 将指定位置滚动至视窗内 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "row"
+                    },
+                    {
+                      "name": "column"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollTo"
+        },
+        {
+          "textRaw": "[m#] contextClick",
+          "name": "[m#]_contextclick",
+          "methods": [
+            {
+              "textRaw": "contextClick()",
+              "type": "method",
+              "name": "contextClick",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-contextclick\">[ 上下文点击 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] contextClick"
+        },
+        {
+          "textRaw": "[m#] setText",
+          "name": "[m#]_settext",
+          "methods": [
+            {
+              "textRaw": "setText(text)",
+              "type": "method",
+              "name": "setText",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-settext\">[ 设置文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setText"
+        },
+        {
+          "textRaw": "[m#] setSelection",
+          "name": "[m#]_setselection",
+          "methods": [
+            {
+              "textRaw": "setSelection(start, end)",
+              "type": "method",
+              "name": "setSelection",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 开始位置</li>\n<li><strong>end</strong> { <a href=\"dataTypes#number\">number</a> } - 结束位置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-setselection\">[ 选择文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setSelection"
+        },
+        {
+          "textRaw": "[m#] clearSelection",
+          "name": "[m#]_clearselection",
+          "methods": [
+            {
+              "textRaw": "clearSelection()",
+              "type": "method",
+              "name": "clearSelection",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-clearselection\">[ 取消选择文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearSelection"
+        },
+        {
+          "textRaw": "[m#] setProgress",
+          "name": "[m#]_setprogress",
+          "methods": [
+            {
+              "textRaw": "setProgress(progress)",
+              "type": "method",
+              "name": "setProgress",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>progress</strong> { <a href=\"dataTypes#number\">number</a> } - 进度值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已执行且执行过程中无异常</li>\n</ul>\n<p>控件节点执行 <a href=\"uiObjectActionsType#m-setprogress\">[ 设置进度值 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "progress"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setProgress"
+        },
+        {
+          "textRaw": "[m#] compass",
+          "name": "[m#]_compass",
+          "methods": [
+            {
+              "textRaw": "compass(compassArg)",
+              "type": "method",
+              "name": "compass",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>compassArg</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 罗盘参数, 用于控制罗盘定位</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 罗盘最终定位的控件节点</li>\n</ul>\n<p>返回罗盘最终定位的 <a href=\"uiObjectType\">控件节点</a>, 若定位失败, 返回 null.</p>\n<p>罗盘定位类似于在 <a href=\"glossaries#控件层级\">控件层级</a> 中自由移动, 最终定位在某个指定的控件节点上.</p>\n<pre><code class=\"lang-js\">let w = clickable().findOnce();\n\nconsole.log(w.parent()); /* 父控件. */\nconsole.log(w.parent().parent()); /* 二级父控件. */\nconsole.log(w.child(0)); /* 索引 0 (首个) 子控件. */\nconsole.log(w.child(2)); /* 索引 2 子控件. */\nconsole.log(w.child(w.childCount() - 1)); /* 末尾子控件. */\nconsole.log(w.parent().child(5)); /* 索引 5 兄弟控件. */\nconsole.log(w.parent().child(w.childCount() - 2)); /* 倒数第 2 兄弟控件. */\nconsole.log(w.parent().child(w.indexInParent() - 1)); /* 相邻左侧兄弟节点. */\nconsole.log(w.parent().child(w.indexInParent() + 1)); /* 相邻右侧兄弟节点. */\nconsole.log(w.parent().parent().parent().parent().child(0).child(1).child(1).child(0)); /* 多级访问. */\n\n/* 使用控件罗盘替代上述所有语句. */\n\nconsole.log(w.compass(&#39;p&#39;)); /* 父控件. */\nconsole.log(w.compass(&#39;p2&#39;)); /* 二级父控件. */\nconsole.log(w.compass(&#39;c0&#39;)); /* 索引 0 (首个) 子控件. */\nconsole.log(w.compass(&#39;c2&#39;)); /* 索引 2 子控件. */\nconsole.log(w.compass(&#39;c-1&#39;)); /* 末尾子控件. */\nconsole.log(w.compass(&#39;s5&#39;)); /* 索引 5 兄弟控件. */\nconsole.log(w.compass(&#39;s-2&#39;)); /* 倒数第 2 兄弟控件. */\nconsole.log(w.compass(&#39;s&lt;1&#39;)); /* 相邻左侧兄弟节点. */\nconsole.log(w.compass(&#39;s&gt;1&#39;)); /* 相邻右侧兄弟节点. */\nconsole.log(w.compass(&#39;p4c0&gt;1&gt;1&gt;0&#39;)); /* 多级访问. */\n</code></pre>\n<p>罗盘参数有以下几类:</p>\n<ul>\n<li>p: <a href=\"#parent-p\">parent (父控件)</a></li>\n<li>c: <a href=\"#child-c\">child (子控件)</a></li>\n<li>s: <a href=\"#sibling-s\">sibling (兄弟控件)</a></li>\n<li>k: <a href=\"#clickable-k\">clickable (可点击控件)</a></li>\n</ul>\n<p>不同种类的罗盘参数可以重复使用或组合使用.</p>\n",
+              "modules": [
+                {
+                  "textRaw": "parent (p)",
+                  "name": "parent_(p)",
+                  "desc": "<p>访问父控件.</p>\n<p>如 <code>w.parent()</code> 的两种罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;p&#39;); /* 较为常用. */\nw.compass(&#39;p1&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 可跟随一个数字, 表示层级跨度:</p>\n<pre><code class=\"lang-js\">/* 二级. */\nw.parent().parent(); /* 原始方式. */\nw.compass(&#39;pp&#39;);\nw.compass(&#39;p2&#39;); /* 较为常用. */\n\n/* 五级. */\nw.parent().parent().parent().parent().parent(); /* 原始方式. */\nw.compass(&#39;ppppp&#39;);\nw.compass(&#39;p5&#39;); /* 较为常用. */\nw.compass(&#39;p4p&#39;);\nw.compass(&#39;p3p2&#39;);\nw.compass(&#39;p2p1p2&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 每移动一次, 控件的 depth 将减少一级, 当 depth 为 0 时, 后续所有父级访问均返回 null:</p>\n<pre><code class=\"lang-js\">console.log(w.depth()); /* e.g. 23 */\nconsole.log(w.compass(&#39;p5&#39;).depth()); /* e.g. 18 */\nconsole.log(w.compass(&#39;p23&#39;).depth()); /* e.g. 0 */\nconsole.log(w.compass(&#39;p24&#39;)); // null\nconsole.log(w.compass(&#39;p40&#39;)); // null\n</code></pre>\n<p>罗盘 <code>p</code> 跟随负数时将抛出异常:</p>\n<pre><code class=\"lang-js\">/* e.g. java.lang.IllegalArgumentException: 无效的剩余罗盘参数: -2 */\nconsole.log(w.compass(&#39;p-2&#39;));\n</code></pre>\n<p><code>p0</code> 将返回控件本身:</p>\n<pre><code class=\"lang-js\">console.log(w.compass(&#39;p0&#39;) === w); // true\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "parent (p)"
+                },
+                {
+                  "textRaw": "child (c)",
+                  "name": "child_(c)",
+                  "desc": "<p>访问子控件.</p>\n<p>如 <code>w.child(0)</code> 的罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;c0&#39;);\n</code></pre>\n<p>罗盘 <code>c</code> 可跟随一个整数, 表示子控件索引:</p>\n<pre><code class=\"lang-js\">/* 索引 2 子控件 */\nw.child(2);\nw.compass(&#39;c2&#39;);\n\n/* 倒数第 2 子控件. */\nw.child(w.childCount() - 2);\nw.compass(&#39;c-2&#39;);\n</code></pre>\n<p>连续多级子控件访问, 可使用 <code>cXcYcZ</code> 或 <code>cX&gt;Y&gt;Z</code> 形式:</p>\n<pre><code class=\"lang-js\">w.child(1).child(1).child(0).child(5).child(2).child(3);\nw.compass(&#39;c1c1c0c5c2c3&#39;);\nw.compass(&#39;c1&gt;1&gt;0&gt;5&gt;2&gt;3&#39;); /* 同上. */\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "child (c)"
+                },
+                {
+                  "textRaw": "sibling (s)",
+                  "name": "sibling_(s)",
+                  "desc": "<p>访问兄弟控件.</p>\n<p>例如一个控件有 10 个子控件, 这些子控件互为兄弟控件, 它们拥有同一个父控件.<br>10 个子控件中, 索引为 n (n &gt; 0 且 n &lt; 9) 的子控件有两个相邻兄弟控件节点, 即索引为 n - 1 的左邻兄弟和索引为 n + 1 的右邻兄弟.</p>\n<pre><code class=\"lang-js\">/* 左邻兄弟节点. */\nw.parent().child(w.indexInParent() - 1);\nw.compass(&#39;s&lt;1&#39;);\n\n/* 右邻兄弟节点. */\nw.parent().child(w.indexInParent() + 1);\nw.compass(&#39;s&gt;1&#39;);\n\n/* 右侧第 2 个兄弟节点. */\nw.parent().child(w.indexInParent() + 2);\nw.compass(&#39;s&gt;2&#39;);\n\n/* 索引 5 的兄弟节点. */\nw.parent().child(5);\nw.compass(&#39;s5&#39;);\n\n/* 倒数第 2 个兄弟节点. */\nw.parent().child(w.childCount() - 2);\nw.compass(&#39;s-2&#39;);\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "sibling (s)"
+                },
+                {
+                  "textRaw": "clickable (k)",
+                  "name": "clickable_(k)",
+                  "desc": "<p>访问可点击控件.</p>\n<p>有些控件本身不可点击, 而是包含在一个可点击控件内部:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // true\n</code></pre>\n<p>对于上述情况的控件, 通常执行 &quot;父控件.click()&quot; 都会达到预期, 即虽然点击的是父控件, 但实际效果和点击这个控件本身是一样的.</p>\n<p>在某些情况下, 这样的可点击父控件可能需要两级甚至更多级:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // false\nconsole.log(w.parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().parent().clickable()); // true\n</code></pre>\n<p>上述示例直到 4 级父控件才是可点击的, 对于这种情况通常需要使用循环语句结合 <code>clickable</code> 的条件检测:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet max = 5;\nlet temp = w;\nwhile (max--) {\n    if (temp !== null &amp;&amp; temp.clickable()) {\n        temp.click();\n        break;\n    }\n    temp = temp.parent();\n}\n</code></pre>\n<p>上述示例的 <code>max</code> 变量表示最多尝试的层级数, 层级数过小, 可能导致错过真正可点击的父控件, 过大则可能会得到不相关的可点击控件 (这样的控件点击后将出现非预期结果), 通常这个 <code>max</code> 建议设置为 2.</p>\n<p>将上述示例用控件罗盘表示:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet temp = w.compass(&#39;k5&#39;); /* 5 表示尝试的最大层级数, 通常建议设置为 2. */\nif (temp !== null &amp;&amp; temp.clickable()) {\n    temp.click();\n}\n</code></pre>\n<p>将上述示例用 <a href=\"uiSelectorType#m-pickup\">拾取选择器</a> 表示:</p>\n<pre><code class=\"lang-js\">pickup(/.+/, &#39;k5&#39;, &#39;click&#39;);\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "clickable (k)"
+                }
+              ],
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "compassArg"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] compass"
+        },
+        {
+          "textRaw": "[m] isCompass",
+          "name": "[m]_iscompass",
+          "methods": [
+            {
+              "textRaw": "isCompass(s)",
+              "type": "method",
+              "name": "isCompass",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>s</strong> { <a href=\"dataTypes#string\">string</a> } - 罗盘参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>检测罗盘参数是否符合既定格式.</p>\n<pre><code class=\"lang-js\">console.log(UiObject.isCompass(&#39;p2c3&#39;)); // true\nconsole.log(UiObject.isCompass(&#39;p-2c3&#39;)); // true\nconsole.log(UiObject.isCompass(&#39;p2c-3&#39;)); // true\nconsole.log(UiObject.isCompass(&#39;hello&#39;)); // false\n</code></pre>\n<p>上述示例中的 <code>p-2c3</code> 罗盘参数, 在使用时会抛出异常, 但因符合既定格式, 故 <code>isCompass</code> 返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "s"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isCompass"
+        },
+        {
+          "textRaw": "[m] ensureCompass",
+          "name": "[m]_ensurecompass",
+          "methods": [
+            {
+              "textRaw": "ensureCompass(s)",
+              "type": "method",
+              "name": "ensureCompass",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>s</strong> { <a href=\"dataTypes#string\">string</a> } - 罗盘参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>确保罗盘参数符合既定格式, 若不符合则抛出异常.</p>\n<pre><code class=\"lang-js\">UiObject.ensureCompass(&#39;p2c3&#39;); /* 无异常. */\nUiObject.ensureCompass(&#39;world&#39;); /* 抛出异常. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "s"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureCompass"
+        },
+        {
+          "textRaw": "[m] detect",
+          "name": "[m]_detect",
+          "desc": "<p>控件探测.</p>\n<p>探测相当于对控件进行一系列组合操作 (罗盘定位, 结果筛选, 参化调用, 回调处理).</p>\n<p>部分特性:</p>\n<ul>\n<li><code>detect</code> 已全局化, 支持全局使用.</li>\n<li><code>detect</code> 的首个参数固定为 <a href=\"uiObjectType\">UiObject</a> 类型.</li>\n<li><a href=\"#m-compass\">compass</a> 是 <code>detect</code> 的衍生方法.</li>\n<li><a href=\"uiSelectorType#m-pickup\">pickup</a> 的内部实现引用了 <code>detect</code> 方法.</li>\n</ul>\n",
+          "methods": [
+            {
+              "textRaw": "detect(w, compass)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 罗盘参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测后的控件节点</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectcompass\">罗盘参数</a> 的控件探测.</p>\n<p>相当于 <a href=\"#m-compass\">w.compass(compass)</a>, 因此 <code>compass</code> 是 <code>detect</code> 的衍生方法.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "compass"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, result)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>result</strong> { <a href=\"dataTypes#detectresult\">DetectResult</a> } - 探测结果参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectresult\">探测结果参数</a> 的控件探测.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "result"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, compass, result)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 罗盘参数</li>\n<li><strong>result</strong> { <a href=\"dataTypes#detectresult\">DetectResult</a> } - 探测结果参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectcompass\">罗盘参数</a> 和 <a href=\"dataTypes#detectresult\">探测结果参数</a> 的控件探测.</p>\n<p>需特别留意 compass 和 result 的顺序, 两者均为字符串时, 前者会被解析为 <code>罗盘参数</code>.</p>\n<pre><code class=\"lang-js\">console.log(w.parent().parent().child(1).child(0).bounds()); /* 潜在的空指针异常. */\nconsole.log(detect(w, &#39;p2c1&gt;0&#39;, &#39;bounds&#39;)); /* 空指针安全. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "compass"
+                    },
+                    {
+                      "name": "result"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, callback)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#detectcallback\">DetectCallback</a> } - 探测回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测回调的结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectcallback\">探测回调</a> 的控件探测.</p>\n<pre><code class=\"lang-js\">detect(pickup(/^[A-Z][a-z]+ ?\\d*$/), (w) =&gt; {\n    w ? w.click() : console.warn(&#39;未找到指定控件&#39;);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, compass, callback)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 罗盘参数</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#detectcallback\">DetectCallback</a> } - 探测回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测回调的结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectcompass\">罗盘参数</a> 和 <a href=\"dataTypes#detectcallback\">探测回调</a> 的控件探测.</p>\n<pre><code class=\"lang-js\">detect(pickup(/^[A-Z][a-z]+ ?\\d*$/), &#39;k2&#39;, (w) =&gt; {\n    w ? w.click() : console.warn(&#39;未找到指定控件&#39;);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "compass"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, result, callback)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>result</strong> { <a href=\"dataTypes#detectresult\">DetectResult</a> } - 探测结果参数</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#detectcallback\">DetectCallback</a> } - 探测回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测回调的结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectresult\">探测结果参数</a> 和 <a href=\"dataTypes#detectcallback\">探测回调</a> 的控件探测.</p>\n<pre><code class=\"lang-js\">detect(pickup(/^[A-Z][a-z]+ ?\\d*$/), &#39;content&#39;, (content) =&gt; {\n    content ? console.log(content) : console.warn(&#39;无文本内容或未能定位指定控件&#39;);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "result"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(w, compass, result, callback)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 7/7</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>w</strong> { <a href=\"uiObjectType\">UiObject</a> } - 控件节点</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 罗盘参数</li>\n<li><strong>result</strong> { <a href=\"dataTypes#detectresult\">DetectResult</a> } - 探测结果参数</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#detectcallback\">DetectCallback</a> } - 探测回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> } - 探测回调的结果</li>\n</ul>\n<p>携带 <a href=\"dataTypes#detectcompass\">罗盘参数</a>, <a href=\"dataTypes#detectresult\">探测结果参数</a> 和 <a href=\"dataTypes#detectcallback\">探测回调</a> 的控件探测.</p>\n<p>需特别留意 compass 和 result 的顺序, 两者均为字符串时, 前者会被解析为 <code>罗盘参数</code>.</p>\n<pre><code class=\"lang-js\">detect(pickup({ clickable: true }), &#39;p2c1&#39;, &#39;content&#39;, (content) =&gt; {\n    content ? console.log(content) : console.warn(&#39;无文本内容或未能定位指定控件&#39;);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "w"
+                    },
+                    {
+                      "name": "compass"
+                    },
+                    {
+                      "name": "result"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] detect"
+        }
+      ],
+      "type": "module",
+      "displayName": "控件节点 (UiObject)"
+    }
+  ]
+}

@@ -1,311 +1,532 @@
 {
   "source": "..\\api\\documentation.md",
-  "methods": [
-    {
-      "textRaw": "input([i, ]text)",
-      "type": "method",
-      "name": "input",
-      "signatures": [
-        {
-          "params": [
-            {
-              "textRaw": "`i` {number} 表示要输入的为第i + 1个输入框 ",
-              "name": "i",
-              "type": "number",
-              "desc": "表示要输入的为第i + 1个输入框",
-              "optional": true
-            },
-            {
-              "textRaw": "`text` {string} 要输入的文本 ",
-              "name": "text",
-              "type": "string",
-              "desc": "要输入的文本"
-            }
-          ]
-        },
-        {
-          "params": [
-            {
-              "name": "i",
-              "optional": true
-            },
-            {
-              "name": "text"
-            }
-          ]
-        }
-      ],
-      "desc": "<p>input表示函数名，括号内的<code>[i, ]text</code>为函数的参数。下面是参数列表，&quot;number&quot;表示参数i的类型为数值，&quot;string&quot;表示参数text的类型为字符串。</p>\n<p>例如input(1, &quot;啦啦啦&quot;)，执行这个语句会在屏幕上的第2个输入框处输入&quot;啦啦啦&quot;。</p>\n<p>方括号[ ]表示参数为可选参数。也就是说，可以省略i直接调用input。例如input(&quot;嘿嘿嘿&quot;)，按照文档，这个语句会在屏幕上所有输入框输入&quot;嘿嘿嘿&quot;。</p>\n<p>调用有可选参数的函数时请不要写上方括号。</p>\n<p>我们再看第二个例子。图片和图色处理中detectsColor函数的部分说明。</p>\n"
-    },
-    {
-      "textRaw": "images.detectsColor(image, color, x, y[, threshold = 16, algorithm = \"diff\"])",
-      "type": "method",
-      "name": "detectsColor",
-      "signatures": [
-        {
-          "params": [
-            {
-              "textRaw": "`image` {Image} 图片 ",
-              "name": "image",
-              "type": "Image",
-              "desc": "图片"
-            },
-            {
-              "textRaw": "`color` {number} | {string} 要检测的颜色 ",
-              "name": "color",
-              "type": "number",
-              "desc": "| {string} 要检测的颜色"
-            },
-            {
-              "textRaw": "`x` {number} 要检测的位置横坐标 ",
-              "name": "x",
-              "type": "number",
-              "desc": "要检测的位置横坐标"
-            },
-            {
-              "textRaw": "`y` {number} 要检测的位置纵坐标 ",
-              "name": "y",
-              "type": "number",
-              "desc": "要检测的位置纵坐标"
-            },
-            {
-              "textRaw": "`threshold` {number} 颜色相似度临界值，默认为16。取值范围为0~255。 ",
-              "name": "threshold",
-              "type": "number",
-              "desc": "颜色相似度临界值，默认为16。取值范围为0~255。",
-              "optional": true,
-              "default": " 16"
-            },
-            {
-              "textRaw": "`algorithm` {string} 颜色匹配算法，包括: ",
-              "options": [
-                {
-                  "textRaw": "\"equal\": 相等匹配，只有与给定颜色color完全相等时才匹配。 ",
-                  "name": "equal",
-                  "desc": "相等匹配，只有与给定颜色color完全相等时才匹配。"
-                },
-                {
-                  "textRaw": "\"diff\": 差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。 ",
-                  "name": "diff",
-                  "desc": "差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。"
-                },
-                {
-                  "textRaw": "\"rgb\": rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。 ",
-                  "name": "rgb",
-                  "desc": "rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。"
-                },
-                {
-                  "textRaw": "\"rgb+\": 加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。 ",
-                  "name": "rgb+",
-                  "desc": "加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。"
-                },
-                {
-                  "textRaw": "\"hs\": hs欧拉距离匹配。hs为HSV空间的色调值。 ",
-                  "name": "hs",
-                  "desc": "hs欧拉距离匹配。hs为HSV空间的色调值。"
-                }
-              ],
-              "name": "algorithm",
-              "type": "string",
-              "desc": "颜色匹配算法，包括:",
-              "optional": true,
-              "default": " \"diff\""
-            }
-          ]
-        },
-        {
-          "params": [
-            {
-              "name": "image"
-            },
-            {
-              "name": "color"
-            },
-            {
-              "name": "x"
-            },
-            {
-              "name": "y"
-            },
-            {
-              "name": "threshold ",
-              "optional": true,
-              "default": " 16"
-            },
-            {
-              "name": "algorithm ",
-              "optional": true,
-              "default": " \"diff\""
-            }
-          ]
-        }
-      ],
-      "desc": "<p>同样地，<code>[, threshold = 16, algorithm = &quot;rgb&quot;]</code>为可选参数，并且，等于号=后面的值为参数的默认值。也就是如果不指定该参数，则该参数将会为这个值。</p>\n<p>例如 <code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200)</code> 相当于 <code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 16, &quot;rgb&quot;)</code>，\n而<code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 64)</code> 相当于<code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 64, &quot;rgb&quot;)</code>。</p>\n<p>调用有可选参数及默认值的函数时请不要写上方括号和等于号。</p>\n"
-    }
-  ],
   "miscs": [
     {
-      "textRaw": "关于本文档",
-      "name": "关于本文档",
+      "textRaw": "关于文档 (About)",
+      "name": "关于文档 (About)",
       "type": "misc",
-      "desc": "<p>本文档为Auto.js的文档，解释了Auto.js各个模块的API的使用方法、作用和例子。</p>\n<p>文档借助Node.js的文档构建工具生成，并在github上开源(<a href=\"https://github.com/hyb1996/AutoJs-Docs\">https://github.com/hyb1996/AutoJs-Docs</a> )，目前由开发者维护。</p>\n",
+      "desc": "<p>AutoJs6 文档, 包含模块 API 使用方法及用例.<br>项目复刻 (Fork) 自 <a href=\"https://github.com/hyb1996/AutoJs-Docs/\">hyb1996/AutoJs-Docs</a> (GitHub).<br>项目地址: <a href=\"https://github.com/SuperMonster003/AutoJs6-Documentation/\">SuperMonster003/AutoJs6-Documentation</a> (GitHub).</p>\n<hr>\n",
       "miscs": [
         {
-          "textRaw": "API稳定性",
-          "name": "api稳定性",
-          "desc": "<p>由于Auto.js处于活跃的更新和开发状态，API可能随时有变动，我们用Stability来标记模块、函数的稳定性。这些标记包括：</p>\n<pre><code class=\"lang-txt\">Stability: 0 - Deprecated\n\n弃用的函数、模块或特性，在未来的更新中将很快会被移除或更改。应该在脚本中移除对这些函数的使用，以免后续出现意料之外的问题。\n</code></pre>\n<pre><code class=\"lang-txt\">Stability: 1 - Experimental\n\n实验性的函数、模块或特性，在未来的更新中可能会更改或移除。应该谨慎使用这些函数或模块，或者仅用作临时或试验用途。\n</code></pre>\n<pre><code class=\"lang-txt\">Stability: 2 - Stable\n\n稳定的函数、模块或特性，在未来的更新中这些模块已有的函数一般不会被更改，会保证后向兼容性。\n</code></pre>\n",
-          "type": "misc",
-          "displayName": "API稳定性"
-        },
-        {
-          "textRaw": "如何阅读本文档",
-          "name": "如何阅读本文档",
-          "desc": "<p>先看一个例子，下面是<a href=\"coordinates-based-automation.html\">基于控件的操作模拟</a>的章节中input函数的部分说明。</p>\n",
-          "type": "misc",
-          "displayName": "如何阅读本文档"
-        }
-      ],
-      "methods": [
-        {
-          "textRaw": "input([i, ]text)",
-          "type": "method",
-          "name": "input",
-          "signatures": [
+          "textRaw": "文档阅读示例",
+          "name": "文档阅读示例",
+          "modules": [
             {
-              "params": [
+              "textRaw": "基础",
+              "name": "基础",
+              "properties": [
                 {
-                  "textRaw": "`i` {number} 表示要输入的为第i + 1个输入框 ",
-                  "name": "i",
-                  "type": "number",
-                  "desc": "表示要输入的为第i + 1个输入框",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`text` {string} 要输入的文本 ",
-                  "name": "text",
-                  "type": "string",
-                  "desc": "要输入的文本"
+                  "textRaw": "device.height",
+                  "name": "height",
+                  "desc": "<p>device 表示全局对象 (这里同时也是一个模块).<br>&quot;.height&quot; 表示访问 device 对象的 height 成员变量.<br>如 console.log(device.height) 表示在控制台打印当前设备的高度数值.</p>\n"
                 }
-              ]
+              ],
+              "methods": [
+                {
+                  "textRaw": "colors.rgb(red, green, blue)",
+                  "type": "method",
+                  "name": "rgb",
+                  "desc": "<p>colors 与 device 类似, 表示全局对象.<br>&quot;rgb&quot; 表示方法名称, &quot;.rgb()&quot; 表示调用 colors 的 rgb 方法, 括号内的 red 等表示方法参数.<br>如 console.log(colors.rgb(255, 128, 64)) 表示在控制台打印一个 RGB 分别为 255, 128 和 64 的颜色数值.</p>\n<blockquote>\n<p>注: 绝大多数情况, 文档不对 &quot;<a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Function/\">函数</a>&quot; 与 &quot;<a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Method/\">方法</a>&quot; 做明确区分.</p>\n</blockquote>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "red"
+                        },
+                        {
+                          "name": "green"
+                        },
+                        {
+                          "name": "blue"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "基础"
             },
             {
-              "params": [
-                {
-                  "name": "i",
-                  "optional": true
-                },
-                {
-                  "name": "text"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>input表示函数名，括号内的<code>[i, ]text</code>为函数的参数。下面是参数列表，&quot;number&quot;表示参数i的类型为数值，&quot;string&quot;表示参数text的类型为字符串。</p>\n<p>例如input(1, &quot;啦啦啦&quot;)，执行这个语句会在屏幕上的第2个输入框处输入&quot;啦啦啦&quot;。</p>\n<p>方括号[ ]表示参数为可选参数。也就是说，可以省略i直接调用input。例如input(&quot;嘿嘿嘿&quot;)，按照文档，这个语句会在屏幕上所有输入框输入&quot;嘿嘿嘿&quot;。</p>\n<p>调用有可选参数的函数时请不要写上方括号。</p>\n<p>我们再看第二个例子。图片和图色处理中detectsColor函数的部分说明。</p>\n"
-        },
-        {
-          "textRaw": "images.detectsColor(image, color, x, y[, threshold = 16, algorithm = \"diff\"])",
-          "type": "method",
-          "name": "detectsColor",
-          "signatures": [
+              "textRaw": "临时作用域对象",
+              "name": "临时作用域对象",
+              "desc": "<p>通常每个章节都以某个对象作为主题.</p>\n<p>例如上述 <code>colors.rgb(red, green, blue)</code> 位于 <a href=\"color\">Color - 颜色</a> 这个章节.<br>其中 colors 称为此章节的 &quot;临时作用域对象&quot;,<br>它可能是一个对象, 函数, 甚至 &quot;类&quot;, 在文档中使用 <strong><code>橙色粗体</code></strong> 表示.</p>\n<p>列举其后续的相关方法及属性时, 将不再重复书写对象本身:</p>\n<p style=\"font: bold 1em sans-serif; color: #FF7043\">colors</p>\n\n<p>[m] rgb</p>\n<p>rgb(red, green, blue)</p>\n<p>... ...</p>\n<p>上述 <code>rgb</code> 表示 <code>colors.rgb</code>.</p>\n",
+              "type": "module",
+              "displayName": "临时作用域对象"
+            },
             {
-              "params": [
+              "textRaw": "参数类型",
+              "name": "参数类型",
+              "methods": [
                 {
-                  "textRaw": "`image` {Image} 图片 ",
-                  "name": "image",
-                  "type": "Image",
-                  "desc": "图片"
-                },
-                {
-                  "textRaw": "`color` {number} | {string} 要检测的颜色 ",
-                  "name": "color",
-                  "type": "number",
-                  "desc": "| {string} 要检测的颜色"
-                },
-                {
-                  "textRaw": "`x` {number} 要检测的位置横坐标 ",
-                  "name": "x",
-                  "type": "number",
-                  "desc": "要检测的位置横坐标"
-                },
-                {
-                  "textRaw": "`y` {number} 要检测的位置纵坐标 ",
-                  "name": "y",
-                  "type": "number",
-                  "desc": "要检测的位置纵坐标"
-                },
-                {
-                  "textRaw": "`threshold` {number} 颜色相似度临界值，默认为16。取值范围为0~255。 ",
-                  "name": "threshold",
-                  "type": "number",
-                  "desc": "颜色相似度临界值，默认为16。取值范围为0~255。",
-                  "optional": true,
-                  "default": " 16"
-                },
-                {
-                  "textRaw": "`algorithm` {string} 颜色匹配算法，包括: ",
-                  "options": [
+                  "textRaw": "colors.rgb(red, green, blue)",
+                  "type": "method",
+                  "name": "rgb",
+                  "signatures": [
                     {
-                      "textRaw": "\"equal\": 相等匹配，只有与给定颜色color完全相等时才匹配。 ",
-                      "name": "equal",
-                      "desc": "相等匹配，只有与给定颜色color完全相等时才匹配。"
+                      "params": [
+                        {
+                          "textRaw": "**red** { [number](dataTypes#number) } ",
+                          "name": "**red**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "**green** { [number](dataTypes#number) } ",
+                          "name": "**green**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "**blue** { [number](dataTypes#number) } ",
+                          "name": "**blue**",
+                          "type": " [number](dataTypes#number) "
+                        }
+                      ]
                     },
                     {
-                      "textRaw": "\"diff\": 差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。 ",
-                      "name": "diff",
-                      "desc": "差值匹配。与给定颜色的R、G、B差的绝对值之和小于threshold时匹配。"
-                    },
-                    {
-                      "textRaw": "\"rgb\": rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。 ",
-                      "name": "rgb",
-                      "desc": "rgb欧拉距离相似度。与给定颜色color的rgb欧拉距离小于等于threshold时匹配。"
-                    },
-                    {
-                      "textRaw": "\"rgb+\": 加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。 ",
-                      "name": "rgb+",
-                      "desc": "加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference))。"
-                    },
-                    {
-                      "textRaw": "\"hs\": hs欧拉距离匹配。hs为HSV空间的色调值。 ",
-                      "name": "hs",
-                      "desc": "hs欧拉距离匹配。hs为HSV空间的色调值。"
+                      "params": [
+                        {
+                          "name": "red"
+                        },
+                        {
+                          "name": "green"
+                        },
+                        {
+                          "name": "blue"
+                        }
+                      ]
                     }
                   ],
-                  "name": "algorithm",
-                  "type": "string",
-                  "desc": "颜色匹配算法，包括:",
-                  "optional": true,
-                  "default": " \"diff\""
+                  "desc": "<p>参数后的 &quot;{}&quot; 内包含其类型.<br>上述示例表示需要传入三个 <a href=\"dataTypes#number\">number</a> 类型的参数.<br>如 colors.rgb(255, 128, 64) 合法, 而 colors.rgb(&quot;abc&quot;, 128, 64) 将可能导致非预期结果或出现异常.</p>\n<blockquote>\n<p>注: 点击类型对应的超链接 (如有) 可跳转至类型详情页面.</p>\n</blockquote>\n"
                 }
-              ]
+              ],
+              "type": "module",
+              "displayName": "参数类型"
             },
             {
-              "params": [
+              "textRaw": "返回值类型",
+              "name": "返回值类型",
+              "methods": [
                 {
-                  "name": "image"
-                },
-                {
-                  "name": "color"
-                },
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "threshold ",
-                  "optional": true,
-                  "default": " 16"
-                },
-                {
-                  "name": "algorithm ",
-                  "optional": true,
-                  "default": " \"diff\""
+                  "textRaw": "colors.rgb(red, green, blue)",
+                  "type": "method",
+                  "name": "rgb",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**red** { [number](dataTypes#number) } ",
+                          "name": "**red**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "**green** { [number](dataTypes#number) } ",
+                          "name": "**green**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "**blue** { [number](dataTypes#number) } ",
+                          "name": "**blue**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [number](dataTypes#number) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "red"
+                        },
+                        {
+                          "name": "green"
+                        },
+                        {
+                          "name": "blue"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>returns 后的 &quot;{}&quot; 内包含返回值类型.<br>上述示例表示 colors.rgb 方法调用后将返回 <a href=\"dataTypes#number\">number</a> 类型数据.</p>\n"
                 }
-              ]
+              ],
+              "type": "module",
+              "displayName": "返回值类型"
+            },
+            {
+              "textRaw": "属性类型",
+              "name": "属性类型",
+              "properties": [
+                {
+                  "textRaw": "`RED` { [number](dataTypes#number) } ",
+                  "type": " [number](dataTypes#number) ",
+                  "name": "RED",
+                  "desc": "<p>属性类型包裹在一对花括号中.<br>上述示例表示 colors 的 RED 属性是 <a href=\"dataTypes#number\">number</a> 类型数据.</p>\n<p>对象字面量形式的类型则用一对双花括号表示:</p>\n<ul>\n<li>{{ name: <a href=\"dataTypes#string\">string</a>; age: <a href=\"dataTypes#number\">number</a> }}</li>\n</ul>\n<p>多行形式:</p>\n<ul>\n<li>{{</li>\n<li>-- name: <a href=\"dataTypes#string\">string</a>;</li>\n<li>-- age: <a href=\"dataTypes#number\">number</a>;</li>\n<li>}}</li>\n</ul>\n<p>一个符合上述示例期望的变量:</p>\n<pre><code class=\"lang-js\">let o = { name: &quot;David&quot;, age: 13 };\n</code></pre>\n<p>可存取的属性在读取时如果有非 undefined 默认值, 则以一对方括号表示:</p>\n<ul>\n<li>[ 1200 ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>上述示例表示一个默认值为 1200 的可存取属性.</p>\n<p>以一对双方括号表示常量:</p>\n<ul>\n<li>[[ 0.5 ]] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>上述示例表示一个值为 0.5 的常量属性.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "属性类型"
+            },
+            {
+              "textRaw": "方法签名",
+              "name": "方法签名",
+              "desc": "<p>形如上述 <a href=\"#返回值类型\">返回值类型</a> 小节的示例,<br>包含 [ 方法名称 + 参数类型 + 返回值类型 ] 的标志符, 称为 &quot;方法签名&quot;.</p>\n<blockquote>\n<p>注: 上述 &quot;方法签名&quot; 定义只用于辅助读者对文档的理解, 并不保证名词解释的合理性.</p>\n</blockquote>\n",
+              "type": "module",
+              "displayName": "方法签名"
+            },
+            {
+              "textRaw": "方法描述",
+              "name": "方法描述",
+              "methods": [
+                {
+                  "textRaw": "colors.rgb(red, green, blue)",
+                  "type": "method",
+                  "name": "rgb",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "__red__ - R (红色) 通道数值  [ A ] ",
+                          "name": "__red__",
+                          "desc": "R (红色) 通道数值  [ A ]"
+                        },
+                        {
+                          "textRaw": "__green__ - G (绿色) 通道数值  [ A ] ",
+                          "name": "__green__",
+                          "desc": "G (绿色) 通道数值  [ A ]"
+                        },
+                        {
+                          "textRaw": "__blue__ - B (蓝色) 通道数值  [ A ] ",
+                          "name": "__blue__",
+                          "desc": "B (蓝色) 通道数值  [ A ]"
+                        },
+                        {
+                          "textRaw": "__@return__ - 颜色数值  [ B ] ",
+                          "name": "__@return__",
+                          "desc": "颜色数值  [ B ]"
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "red"
+                        },
+                        {
+                          "name": "green"
+                        },
+                        {
+                          "name": "blue"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>获取 R/G/B 通道组合后的颜色数值. [ C ]</p>\n<pre><code class=\"lang-js\">[ D ]\ncolors.rgb(255, 128, 64); // -32704\ncolors.rgb(255, 128, 64) === 0xFFFF8040 - Math.pow(2, 32); // true\ncolors.rgb(255, 128, 64) === colors.toInt(&quot;#FFFF8040&quot;); // true\ncolors.rgb(255, 128, 64) === colors.toInt(&quot;#FF8040&quot;); // true\n</code></pre>\n<p>上述示例包含的字母标注含义:</p>\n<ul>\n<li>[ A ] - 参数描述</li>\n<li>[ B ] - 方法返回值描述</li>\n<li>[ C ] - 方法描述</li>\n<li>[ D ] - 方法使用示例</li>\n</ul>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "方法描述"
+            },
+            {
+              "textRaw": "可变参数",
+              "name": "可变参数",
+              "methods": [
+                {
+                  "textRaw": "files.join(parent, ...child)",
+                  "type": "method",
+                  "name": "join",
+                  "desc": "<p>上述示例的 child 参数是 &quot;可变参数&quot;, 也称为 &quot;可变长参数&quot; 或 &quot;变长参数&quot;.<br>可变参数可传入任意个 (包括 0 个) 参数:</p>\n<pre><code class=\"lang-js\">let p = files.getSdcardPath();\nfiles.join(p); /* 0 个可变参数 */\nfiles.join(p, &#39;a&#39;); /* 1 个可变参数 */\nfiles.join(p, &#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;); /* 4 个可变参数 */\n</code></pre>\n<p>文档采用 JSDoc 标准标注可变参数, 需额外注意 JSDoc 的尾数组标识代表容器, 用于容纳展开后的参数:</p>\n<pre><code class=\"lang-js\">/**\n * @param {number} x\n * @param {number} y\n * @param {...number[]} others\n */\nfunction sum(x, y, others) {\n    /* ... */\n}\n</code></pre>\n<p>上述示例 others 参数为可变参数, 其中 &quot;...number[]&quot; 代表 others 期望的参数类型为 number, 而非 number[], 最后的 &quot;[]&quot; 代表 &quot;...&quot; 的容器, &quot;...&quot; 与 &quot;[]&quot; 是配对出现的.</p>\n<pre><code class=\"lang-js\">/**\n * @param {number} x\n * @param {number} y\n * @param {...number[][]} others\n */\nfunction sum(x, y, others) {\n    /* ... */\n}\n</code></pre>\n<p>上述示例 others 期望的参数类型为 number[], 而非 number[][], 同样最后的 &quot;[]&quot; 代表 &quot;...&quot; 的容器.</p>\n<pre><code class=\"lang-js\">/**\n * @param {number} x\n * @param {number} y\n * @param {...number} others\n */\nfunction sum(x, y, others) {\n    /* ... */\n}\n</code></pre>\n<p>上述示例 others 的参数类型标识方法 &quot;...number&quot; 也是合法的, 它其实是 &quot;...number[]&quot; 的省略形式.<br>文档为了避免歧义, 将全部采用完整写法.</p>\n<p>作为强调, &quot;...(SomeType)[]&quot; 这样的可变参数表示方法, 需要把 &quot;...&quot; 和 &quot;[]&quot; 视为一个整体, 中间部分才是期望的参数类型.</p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "parent"
+                        },
+                        {
+                          "name": "...child"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "可变参数"
+            },
+            {
+              "textRaw": "可选参数",
+              "name": "可选参数",
+              "methods": [
+                {
+                  "textRaw": "device.vibrate(text, delay?)",
+                  "type": "method",
+                  "name": "vibrate",
+                  "desc": "<p>上述示例的 delay 参数是可选的 (以 &quot;?&quot; 标注).<br>因此以下调用方式均被支持:</p>\n<pre><code class=\"lang-js\">device.vibrate(&quot;hello&quot;, 2e3); /* 两秒钟延迟. */\ndevice.vibrate(&quot;hello&quot;); /* 无延迟. */\n</code></pre>\n<p>可选参数描述时会以 &quot;[]&quot; 标注:</p>\n<ul>\n<li><strong>[ delay ]</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>如果可选参数包含默认值, 则会以 &quot;=&quot; 标注:</p>\n<ul>\n<li><strong>[ delay = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>详见下述 <a href=\"#参数默认值\">参数默认值</a></p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "text"
+                        },
+                        {
+                          "name": "delay?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "可选参数"
+            },
+            {
+              "textRaw": "参数默认值",
+              "name": "参数默认值",
+              "methods": [
+                {
+                  "textRaw": "device.vibrate(text, delay?)",
+                  "type": "method",
+                  "name": "vibrate",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**text** { [string](dataTypes#string) } - 需转换为摩斯码的文本 ",
+                          "name": "**text**",
+                          "type": " [string](dataTypes#string) ",
+                          "desc": "需转换为摩斯码的文本"
+                        },
+                        {
+                          "textRaw": "**[ delay = 0 ]** { [number](dataTypes#number) } - 震动延迟 ",
+                          "name": "**[",
+                          "desc": "delay = 0 ]** { [number](dataTypes#number) } - 震动延迟"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [void](dataTypes#void) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "text"
+                        },
+                        {
+                          "name": "delay?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>上述示例的 delay 参数是可选的 (以 &quot;?&quot; 标注) 且包含默认值 (以 &quot;=&quot; 标注).<br>因此以下两种调用方式等效:</p>\n<pre><code class=\"lang-js\">device.vibrate(&quot;hello&quot;);\ndevice.vibrate(&quot;hello&quot;, 0);\n</code></pre>\n<blockquote>\n<p>注: 上述示例的方法签名 (含默认值标注) 在 TypeScript 中并不合法, 此类签名仅限在文档中使用.</p>\n<p>注: 以 &quot;=&quot; 标注的参数一定是可选的, 此时参数的 &quot;?&quot; 标注可能被省略, 尤其在重载签名拆写的情况下.<br>详情参阅下文的 &quot;方法重载&quot;.</p>\n</blockquote>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "参数默认值"
+            },
+            {
+              "textRaw": "方法重载",
+              "name": "方法重载",
+              "desc": "<p><strong><code>Overload 1/17</code></strong></p>\n",
+              "methods": [
+                {
+                  "textRaw": "pickup(selector, compass, resultType)",
+                  "type": "method",
+                  "name": "pickup",
+                  "desc": "<p><strong><code>Overload 2/17</code></strong></p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "selector"
+                        },
+                        {
+                          "name": "compass"
+                        },
+                        {
+                          "name": "resultType"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "pickup(selector, compass)",
+                  "type": "method",
+                  "name": "pickup",
+                  "desc": "<p><strong><code>Overload 3/17</code></strong></p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "selector"
+                        },
+                        {
+                          "name": "compass"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "pickup(selector, resultType)",
+                  "type": "method",
+                  "name": "pickup",
+                  "desc": "<p>... ...</p>\n<p><strong><code>Overload 16/17</code></strong></p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "selector"
+                        },
+                        {
+                          "name": "resultType"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "pickup(root, selector)",
+                  "type": "method",
+                  "name": "pickup",
+                  "desc": "<p><strong><code>Overload 17/17</code></strong></p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "root"
+                        },
+                        {
+                          "name": "selector"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "pickup()",
+                  "type": "method",
+                  "name": "pickup",
+                  "desc": "<p>包含 &quot;Overload m/n&quot; 标签的方法, 表示重载方法的序数及总量.<br>如 &quot;Overload 2/3&quot; 表示当前方法签名描述第 2 个重载方法, 总计 3 个,<br>而 &quot;Overload 5-6/17&quot; 表示当前方法签名涵盖第 5 及 第 6 个重载方法, 总计 17 个.</p>\n<p>重载方法可被简化:</p>\n<pre><code class=\"lang-text\">/* 拆写. */\ndevice.vibrate(text)\ndevice.vibrate(text, delay)\n\n/* 合写 (简化). */\ndevice.vibrate(text, delay?)\n\n/* 可选参数通常会标注默认值. */\ndevice.vibrate(text, delay?)\n· [ delay = 0 ] { number }\n\n/* 即使没有 &quot;?&quot; 标注 (针对拆写). */\ndevice.vibrate(text, delay)\n· [ delay = 0 ] { number }\n</code></pre>\n<p>多数情况下, 文档采用拆写的方式描述重载方法.</p>\n",
+                  "signatures": [
+                    {
+                      "params": []
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "方法重载"
+            },
+            {
+              "textRaw": "方法全局化",
+              "name": "方法全局化",
+              "desc": "<p><strong><code>Global</code></strong></p>\n",
+              "methods": [
+                {
+                  "textRaw": "images.requestScreenCapture(landscape)",
+                  "type": "method",
+                  "name": "requestScreenCapture",
+                  "desc": "<p>包含 &quot;Global&quot; 标签的方法, 表示支持全局化使用, 可省略模块对象调用.<br>因此以下两种调用方式等效:</p>\n<pre><code class=\"lang-js\">images.requestScreenCapture(false);\nrequestScreenCapture(false);\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "landscape"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "方法全局化"
+            },
+            {
+              "textRaw": "方法标签",
+              "name": "方法标签",
+              "desc": "<p>用于简便表示方法的特性:</p>\n<ul>\n<li><code>Global</code>: <a href=\"#方法全局化\">方法全局化</a> (可省略模块对象直接调用).</li>\n<li><code>Overload 2/3</code>: <a href=\"#方法重载\">方法重载</a> [ 第 2 个, 共 3 个 ].</li>\n<li><code>Non-UI</code>: 方法不能在 UI 模式下调用.</li>\n<li><code>6.2.0</code>: 方法对 AutoJs6 的版本要求 [ 不低于 6.2.0 ].</li>\n<li><code>[6.2.0]</code>: 与原同名方法相比, 方法的功能, 结果, 签名或使用方式发生变更的起始版本.</li>\n<li><code>API&gt;=29</code>: 方法对 <a href=\"apiLevel\">API 级别</a> 的要求 [ 不低于 29 ], 当不满足时不抛出异常.</li>\n<li><code>API&gt;=29!</code>: 方法对 <a href=\"apiLevel\">API 级别</a> 的要求 [ 不低于 29 ], 当不满足时将抛出异常.</li>\n<li><code>A11Y</code>: 方法依赖无障碍服务.</li>\n<li><code>A11Y?</code>: 方法可能会依赖无障碍服务.</li>\n<li><code>Async</code>: 异步执行的方法.</li>\n<li><code>Async?</code>: 可能异步执行的方法 (通过参数控制).</li>\n<li><code>Enum</code>: 枚举类.</li>\n<li><code>CONSTANT</code>: 常量.</li>\n<li><code>DEPRECATED</code>: 已弃用的属性或方法.</li>\n<li><code>xProto</code>: 针对原型的内置对象扩展.</li>\n<li><code>xObject</code>: 针对对象的内置对象扩展.</li>\n<li><code>xAlias</code>: 内置对象扩展时使用不同的方法或属性名称 (别名).</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "方法标签"
+            },
+            {
+              "textRaw": "对象标签",
+              "name": "对象标签",
+              "desc": "<p>用于简便表示对象的属性:</p>\n<ul>\n<li>[m]: 普通对象方法或类静态成员方法.<ul>\n<li>例如在 <code>images</code> 作为 <a href=\"#临时作用域对象\">临时作用域对象</a> 时:</li>\n<li><code>[m] captureScreen</code> 代表 <code>images.captureScreen</code> 方法.</li>\n</ul>\n</li>\n<li>[m+]: 具有扩展属性的对象方法.<ul>\n<li>如 auto 本身是一个方法 (或称函数), waitFor 是 auto 的一个扩展方法.</li>\n<li>以下两种调用方式均可用: <code>auto()</code> 及 <code>auto.waitFor()</code>.</li>\n</ul>\n</li>\n<li>[p]: 属性.<ul>\n<li>例如在 <code>device</code> 作为 <a href=\"#临时作用域对象\">临时作用域对象</a> 时:</li>\n<li><code>[p] height</code> 代表 <code>device.height</code> 属性, 而非方法.</li>\n<li>此标签对 [ Getter / Setter / &quot;类&quot; 属性 / 对象属性 / 方法扩展属性 ] 等不作区分.</li>\n</ul>\n</li>\n<li>[I]: Java 接口.</li>\n<li>[C]: Java 类或 JavaScript 构造函数.</li>\n<li>[c]: Java 类的构造方法.</li>\n<li>[m!]: 抽象方法 (针对接口及抽象类).</li>\n<li>[m=]: 包含默认实现的抽象方法 (针对接口).</li>\n<li>[m#]: 类的实例成员方法.<ul>\n<li>类的静态成员方法用 [m] 标签标记.</li>\n<li>例如对于类 <code>B</code>, 它有一个实例 <code>b</code> (可能通过 <code>new B()</code> 等方式获得),</li>\n<li><code>[m#] foo</code> 和 <code>[m] bar</code> 的调用方式分别为</li>\n<li><code>b.foo()</code> 和 <code>B.bar()</code>.</li>\n</ul>\n</li>\n<li>[p#]: 类的实例成员属性.<ul>\n<li>类的静态成员属性依然用 [p] 标签标记.</li>\n<li>例如对于类 <code>F</code>, 它有一个实例 <code>f</code> (可能通过 <code>new F()</code> 等方式获得),</li>\n<li><code>[p#] foo</code> 和 <code>[p] bar</code> 的调用方式分别为</li>\n<li><code>f.foo</code> 和 <code>F.bar</code>.</li>\n</ul>\n</li>\n<li>[@]: 代表 <a href=\"#临时作用域对象\">临时作用域对象</a> 自身.<ul>\n<li>例如在同一个章节中<ul>\n<li><code>[@] apple</code> [1]</li>\n<li><code>apple(c)</code> [2]</li>\n<li><code>[m] getColor</code> [3]</li>\n<li><code>getColor()</code> [4]</li>\n<li><code>[@] banana</code> [5]</li>\n<li><code>[m] banana</code> [6]</li>\n<li><code>banana(x)</code> [7]</li>\n<li><code>banana(x, y)</code> [8]</li>\n</ul>\n</li>\n<li>这个章节有两个 <a href=\"#临时作用域对象\">临时作用域对象</a>, apple 和 banana, 对应 <code>[1]</code> 和 <code>[5]</code>.</li>\n<li><code>[2]</code> 代表 apple 自身可被调用, 且调用方式为 <code>apple(c)</code>, 其中 &quot;c&quot; 为参数.</li>\n<li><code>[3]</code> 代表 apple 的一个方法, 名称为 &quot;getColor&quot;,</li>\n<li>由 <code>[4]</code> 得知, 其调用方式为 <code>apple.getColor()</code>.</li>\n<li>注意 <code>[6]</code> 与 <code>[2]</code> 不同:</li>\n<li>[<code>6</code>] 代表 banana 的一个方法, 名称为 &quot;banana&quot;,</li>\n<li>由 <code>[7]</code> 和 <code>[8]</code> 得知, 其调用方式有两种,</li>\n<li><code>banana.banana(x)</code> 和 <code>banana.banana(x, y)</code>.</li>\n</ul>\n</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "对象标签"
+            },
+            {
+              "textRaw": "成员访问",
+              "name": "成员访问",
+              "desc": "<p>成员访问用 &quot;.&quot; 表示调用关系, 包括 &quot;类&quot; 静态成员访问, 对象成员访问等.<br>而实例成员访问则需要 &quot;类&quot; 的实例才能访问, 用 &quot;#&quot; 表示调用关系.<br>例如 JavaScript 的 Number 本身是一个 &quot;类&quot;, 可用的成员访问方式如下:</p>\n<pre><code class=\"lang-js\">Number(2); /* 作为普通函数使用, 无成员访问. */\nNumber.EPSILON; /* &quot;类&quot; 静态成员访问, 用 &quot;Number.EPSILON&quot; 标识, 标签为 &quot;[p]&quot;. */\nnew Number(2); /* 创建 &quot;类&quot; 实例, 无成员访问. */\nnew Number(2).toFixed(0); /* 实例成员访问, 用 &quot;Number#toFixed(number)&quot; 标识, 标签为 &quot;[m#]&quot;. */\n</code></pre>\n<p>实例成员访问示例:</p>\n<p style=\"font: bold 1em sans-serif; color: #FF7043\">UiObject</p>\n\n<p>[m#] bounds()</p>\n<pre><code class=\"lang-js\">/* 正确访问示例 */\n\nlet w = pickup(/.+/); /* w 是 UiObject 的实例. */\nif (w !== null) {\n    console.log(w.bounds()); /* 访问 UiObject 实例的 bounds 方法. */\n}\n\n/* 错误访问示例 */\n\nimportClass(org.autojs.autojs.core.automator.UiObject);\nconsole.log(UiObject.bounds()); /* 访问的是类 UiObject 的静态方法 bounds. */\n</code></pre>\n",
+              "type": "module",
+              "displayName": "成员访问"
+            },
+            {
+              "textRaw": "模板参数",
+              "name": "模板参数",
+              "methods": [
+                {
+                  "textRaw": "foo.bar(a, b)",
+                  "type": "method",
+                  "name": "bar",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**a** { [T](dataTypes#generic) } ",
+                          "name": "**a**",
+                          "type": " [T](dataTypes#generic) "
+                        },
+                        {
+                          "textRaw": "**b** { [number](dataTypes#number) } ",
+                          "name": "**b**",
+                          "type": " [number](dataTypes#number) "
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [T](dataTypes#generic) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [T](dataTypes#generic) "
+                        },
+                        {
+                          "textRaw": "<ins>**template**</ins> { [T](dataTypes#generic) } ",
+                          "name": "<ins>**template**</ins>",
+                          "type": " [T](dataTypes#generic) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "a"
+                        },
+                        {
+                          "name": "b"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>returns 后的 &quot;{}&quot; 内包含返回值类型.<br>上述示例表示 colors.rgb 方法调用后将返回 <a href=\"dataTypes#number\">number</a> 类型数据.</p>\n<blockquote>\n<p>参阅: <a href=\"dataTypes#generic\">泛型</a></p>\n</blockquote>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "模板参数"
             }
           ],
-          "desc": "<p>同样地，<code>[, threshold = 16, algorithm = &quot;rgb&quot;]</code>为可选参数，并且，等于号=后面的值为参数的默认值。也就是如果不指定该参数，则该参数将会为这个值。</p>\n<p>例如 <code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200)</code> 相当于 <code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 16, &quot;rgb&quot;)</code>，\n而<code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 64)</code> 相当于<code>images.detectsColor(captureScreen(), &quot;#112233&quot;, 100, 200, 64, &quot;rgb&quot;)</code>。</p>\n<p>调用有可选参数及默认值的函数时请不要写上方括号和等于号。</p>\n"
+          "type": "misc",
+          "displayName": "文档阅读示例"
+        },
+        {
+          "textRaw": "声明",
+          "name": "声明",
+          "desc": "<p>当前项目 (文档) 及 <a href=\"https://github.com/SuperMonster003/AutoJs6/\">AutoJs6</a> (App) 均为二次开发.<br>相对于 <a href=\"https://github.com/hyb1996/Auto.js/\">原始 App</a>, 二次开发的 App 中会增加或修改部分模块功能.<br>相对于 <a href=\"https://github.com/hyb1996/AutoJs-Docs/\">原始文档</a>, 二次开发的文档将进行部分增删或重新编写.<br>开发者无法保证对 API 的完全理解及文档的无纰漏撰写.<br>如有任何不当之处, 欢迎提交 <a href=\"https://github.com/SuperMonster003/AutoJs6-Documentation/issues/\">Issue</a> 或 <a href=\"https://github.com/SuperMonster003/AutoJs6-Documentation/pulls/\">PR</a>.  </p>\n",
+          "type": "misc",
+          "displayName": "声明"
         }
       ]
     }

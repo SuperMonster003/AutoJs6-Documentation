@@ -1,0 +1,223 @@
+{
+  "source": "..\\api\\glossaries.md",
+  "modules": [
+    {
+      "textRaw": "术语 (Glossaries)",
+      "name": "术语_(glossaries)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "内置模块",
+          "name": "内置模块",
+          "desc": "<p>AutoJs6 内置模块指脚本可全局使用的 JavaScript 模块.<br>这些模块多数已在文档中列出, 如 <code>app</code>, <code>images</code>, <code>device</code> 等.</p>\n",
+          "modules": [
+            {
+              "textRaw": "查看内置模块源代码",
+              "name": "查看内置模块源代码",
+              "desc": "<p>除 <a href=\"https://github.com/SuperMonster003/AutoJs6/tree/master/app/src/main/assets/modules\">直接查看开源代码</a> 外, 还可以将内置模块解压到本地存储后查看:<br>下载 <a href=\"https://github.com/SuperMonster003/AutoJs6/releases/latest\">AutoJs6 APK</a> 并使用压缩软件将 APK 内的 <code>\\assets\\modules</code> 文件夹解压到本地.<br>模块通常以 <code>__%name%__.js</code> 格式命名, 其中 <code>%name%</code> 对应模块名.<br>可使用文本编辑器等软件查看模块源代码.</p>\n",
+              "type": "module",
+              "displayName": "查看内置模块源代码"
+            },
+            {
+              "textRaw": "修改或增加内置模块",
+              "name": "修改或增加内置模块",
+              "desc": "<p>注: 此小节内容可能需要用户具备一定的编程基础及开发经验.</p>\n<p>注: 此操作需要重新打包生成 <code>新的 AutoJs6 APK</code> (下文作 <code>新生 APK</code>).<br>因 <code>新生 APK</code> 包名发生变化, 需卸载已安装的 <code>开源 AutoJs6 APK</code> (下文作 <code>开源 APK</code>) 后再安装 <code>新生 APK</code>.<br>当 <code>开源 APK</code> 出现新版本时, 同样需卸载 <code>新生 APK</code> 才能安装新版本的 <code>开源 APK</code>.<br>此时, 修改或增加的内置模块将失效.<br>如欲将自己的代码整合到 <code>开源 APK</code> 中, 可向开源项目提交 <a href=\"https://github.com/SuperMonster003/AutoJs6/pulls\">Pull Request (PR)</a>.</p>\n<p>克隆 (Clone) <a href=\"https://github.com/SuperMonster003/AutoJs6\">AutoJs6 源码</a>.<br>使用 <a href=\"https://developer.android.com/studio/archive\">Android Studio</a> 打开并完成项目构建 (Build).<br>定位 <code>\\app\\src\\main\\assets\\modules</code> 目录.</p>\n",
+              "modules": [
+                {
+                  "textRaw": "修改模块",
+                  "name": "修改模块",
+                  "desc": "<p>修改目录中的模块代码后直接打包生成新的 APK.</p>\n",
+                  "type": "module",
+                  "displayName": "修改模块"
+                },
+                {
+                  "textRaw": "增加模块",
+                  "name": "增加模块",
+                  "desc": "<p>以增加一个 date 模块为例, 该模块有一个 <code>date.toFullTimeString()</code> 方法.</p>\n<p>在 <code>\\app\\src\\main\\assets\\modules</code> 目录新建 <code>__date__.js</code> 文件, 此文件将作为增加的内置模块.</p>\n<p>供参考的文件内容:</p>\n<pre><code class=\"lang-js\">module.exports = function () {\n    return {\n        toFullTimeString() {\n            let now = new Date();\n            let pad = x =&gt; x.toString().padStart(2, &#39;0&#39;);\n            return [ now.getHours(), now.getMinutes(), now.getSeconds() ].map(pad).join(&#39;:&#39;);\n        },\n    };\n};\n</code></pre>\n<p>打开 &quot;初始化脚本&quot;, 即 <code>\\app\\src\\main\\assets\\init.js</code>.<br>将 date 模块添加到 &quot;初始化脚本&quot; 中:</p>\n<pre><code class=\"lang-js\">/* ... */\n\nlet $ = {\n    /* ... */\n    bindModules() {\n        _.bind([\n            /* ... */\n\n            [ &#39;date&#39;, &#39;RootAutomator&#39;, &#39;floaty&#39;, /* 其他模块... */ ],\n\n            /* ... */\n        ]);\n    },\n    /* ... */\n};\n\n/* ... */\n</code></pre>\n<p>添加完成后即可打包生成新的 APK.</p>\n",
+                  "type": "module",
+                  "displayName": "增加模块"
+                }
+              ],
+              "type": "module",
+              "displayName": "修改或增加内置模块"
+            }
+          ],
+          "type": "module",
+          "displayName": "内置模块"
+        },
+        {
+          "textRaw": "编译器",
+          "name": "编译器",
+          "desc": "<p>语法编译器是一个能够逐行读取代码的程序.<br>它了解代码如何匹配编程语言所定义的语法, 以及代码应该做什么.</p>\n",
+          "type": "module",
+          "displayName": "编译器"
+        },
+        {
+          "textRaw": "JavaScript 引擎",
+          "name": "javascript_引擎",
+          "desc": "<p>JavaScript 引擎是一个计算机程序.<br>它接收 JavaScript 源代码并将其编译成 CPU 可以理解的二进制指令 (机器码).</p>\n",
+          "modules": [
+            {
+              "textRaw": "引擎与运行环境",
+              "name": "引擎与运行环境",
+              "desc": "<p>运行环境也称为运行时环境, 引擎需要在运行环境中</p>\n<p>JavaScript 引擎通常由浏览器供应商开发, 主流浏览器通常有自己开发的引擎:</p>\n<ul>\n<li>Chrome - V8</li>\n<li>Firefox - SpiderMonkey</li>\n<li>IE - Chakra</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "引擎与运行环境"
+            }
+          ],
+          "type": "module",
+          "displayName": "JavaScript 引擎"
+        },
+        {
+          "textRaw": "运行时",
+          "name": "运行时",
+          "desc": "<p>即 <code>Runtime</code>.</p>\n<p>Runtime 是一个通用术语, 指代码运行所需的 [ 库 / 框架 / 平台 ].</p>\n<blockquote>\n<p>参阅: <a href=\"runtime\">runtime</a> (全局对象)</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "运行时"
+        },
+        {
+          "textRaw": "上下文",
+          "name": "上下文",
+          "desc": "<p>Context.</p>\n<blockquote>\n<p>参阅: <a href=\"context\">context</a> (全局对象)</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "上下文"
+        },
+        {
+          "textRaw": "字符串模式",
+          "name": "字符串模式",
+          "desc": "<p>表示需要匹配指定正则表达式的字符串.</p>\n<p>如字符串模式为 <code>/\\d/</code>, 则要求给定的字符串 <code>str</code> 满足以下语句:</p>\n<pre><code class=\"lang-js\">/\\d/.test(str) === true;\n</code></pre>\n<p>因此以下示例均满足要求:<br><code>&quot;1&quot;</code>, <code>&quot;1a&quot;</code>, <code>&quot;a1&quot;</code>, <code>&quot;hello 2011&quot;</code>.</p>\n<p>字符串模式支持正则表达式的 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2\">标记参数</a>, 如 <code>/hello/i</code>.</p>\n",
+          "type": "module",
+          "displayName": "字符串模式"
+        },
+        {
+          "textRaw": "NaN",
+          "name": "nan",
+          "desc": "<p>NaN 表示 &quot;不是一个数字&quot;, 即 <strong>N</strong>ot <strong>A</strong> <strong>N</strong>umber.</p>\n<p>NaN 是一个数值, 在 JavaScript 中可以使用 <code>isNaN</code> 或 <code>Number.isNaN</code> 检测:</p>\n<pre><code class=\"lang-js\">let n = 0 / 0;\nisNaN(n); // true\nNumber.isNaN(n); // true\n\nlet m = null;\nisNaN(m); // false\nNumber.isNaN(m); // false\n\nlet l = undefined;\nisNaN(l); // true\nNumber.isNaN(l); // false\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">MDN #术语</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/NaN/\">MDN #全局对象</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/isNaN\">isNaN</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/isNaN\">Number.isNaN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "NaN"
+        },
+        {
+          "textRaw": "正则表达式",
+          "name": "正则表达式",
+          "desc": "<p>也作 [ 正则 / Regular Expression / RegEx / REGEX / RegExp / REX (非正式) ] 等.</p>\n<p>正则表达式字面量在 JavaScript 中用一对 <code>/</code> 符号表示,<br>如 <code>/\\d/</code>, <code>/^[0-9a-f]{6}$/</code>, <code>/[bc]+?(?=y{2,})/i</code> 等.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions\">MDN #指南</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "正则表达式"
+        },
+        {
+          "textRaw": "Truthy",
+          "name": "truthy",
+          "desc": "<p>Truthy (真值) 指 <code>Boolean(truthy)</code> 返回 <code>true</code> 的值.<br>从另一个角度看, <a href=\"#falsy\">Falsy (假值)</a> 以外的任何值都为真值.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Truthy/\">MDN #术语</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "Truthy"
+        },
+        {
+          "textRaw": "Falsy",
+          "name": "falsy",
+          "desc": "<p>目前 (2022/08), JavaScript 共有 8 个 Falsy (假值):</p>\n<ol>\n<li>false (<a href=\"dataTypes#boolean\">boolean</a>)</li>\n<li>0 (<a href=\"dataTypes#number\">number</a>)</li>\n<li>-0 (<a href=\"dataTypes#number\">number</a>)</li>\n<li>0n (<a href=\"#bigint\">bigint</a>)</li>\n<li><a href=\"#空字符串\">空字符串</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#undefined\">undefined</a></li>\n<li><a href=\"#nan\">NaN</a></li>\n</ol>\n<p>需留意 <code>0</code> 与 <code>-0</code> 是不同的值:</p>\n<pre><code class=\"lang-js\">0 === -0; // true\nObject.is(0, -0); // false\nObject.is(0n, -0n); // true\n\nlet n = -0;\nn.toString(); // &quot;0&quot;\nObject.is(n, -0) ? `-${n}` : `${n}`; // &quot;-0&quot;\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Falsy/\">MDN #术语</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/is\">Object.is</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "Falsy"
+        },
+        {
+          "textRaw": "空字符串",
+          "name": "空字符串",
+          "desc": "<p>通常用 <code>&quot;&quot;</code> 表示空字符串, 它是一个长度为 0 的 string 类型数据.</p>\n<p>以下几种表示方式均可代表空字符串:</p>\n<pre><code class=\"lang-js\">[ &quot;&quot;, &#39;&#39;, ``, String() ];\n</code></pre>\n",
+          "type": "module",
+          "displayName": "空字符串"
+        },
+        {
+          "textRaw": "BigInt",
+          "name": "bigint",
+          "desc": "<p>一种可以表示任意精度格式整数的数字类型.</p>\n<p>如 <code>3n</code>, <code>16777216n</code>, <code>-1n</code> 均合法.<br>如 <code>3.1n</code>, <code>2ne5</code>, <code>2e5n</code> 均不合法.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/BigInt\">MDN #术语</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/BigInt\">MDN #全局对象</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "BigInt"
+        },
+        {
+          "textRaw": "枚举",
+          "name": "枚举",
+          "desc": "<p>枚举是组织收集有关联变量的一种方式, 许多程序语言如 [ C / C# / Java ] 等都有枚举数据类型.</p>\n",
+          "type": "module",
+          "displayName": "枚举"
+        },
+        {
+          "textRaw": "内置对象",
+          "name": "内置对象",
+          "desc": "<p>又称 [ 原生对象 / 标准内置对象 ], 内置对象与宿主无关, 是独立于宿主环境的 ECMAScript 实现提供的对象.<br>它们在 ECMAScript 程序开始执行前就存在, 本身就是实例化内置对象, 开发者无需再去实例化.<br>内置对象是原生对象的子集, 如常用的 [ Object / Function / Array / String / Boolean / Number / Date / RegExp / Error / Math / JSON ] 等都是内置对象.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "内置对象"
+        },
+        {
+          "textRaw": "内置对象扩展",
+          "name": "内置对象扩展",
+          "desc": "<p>对 <a href=\"#内置对象\">内置对象</a> 的扩展主要有两种类型, 属性扩展及原型扩展.</p>\n<p>属性扩展:</p>\n<pre><code class=\"lang-js\">Object.saySomething = function (content) {\n    console.log(content);\n};\n\nMath.sum = function (x, y) {\n    return +x + +y;\n};\n</code></pre>\n<p>调用时直接使用 <code>A.b</code> 形式:</p>\n<pre><code class=\"lang-js\">Object.saySomething(&quot;hello&quot;); /* print &quot;hello&quot;. */\nconsole.log(Math.sum(2, 3)); // 5\n</code></pre>\n<p>原型扩展:</p>\n<pre><code class=\"lang-js\">Array.prototype.sorted = function () {\n    return this.slice().sort();\n};\nNumber.prototype.toFixedNum = function (fraction) {\n    return +this.toFixed(fraction);\n};\n</code></pre>\n<p>调用时可在相应对象实例上使用:</p>\n<pre><code class=\"lang-js\">let arr = [ 1, 2, 9, 3 ];\nconsole.log(arr.sorted()); // [ 1, 2, 3, 9 ]\nconsole.log(arr); // [ 1, 2, 9, 3 ]\n\nlet num = 375.201;\nconsole.log(num.toFixed(2)); // &quot;375.20&quot;\nconsole.log(num.toFixedNum(2)); // 375.2\n</code></pre>\n<p>上述扩展均为自定义扩展, 它们实现了自定义的属性或方法, 往往是针对个人项目使用的.<br>而针对 ECMAScript 规范中的新功能的扩展, 则被称为 <a href=\"#polyfill\">填泥 (Polyfill)</a>.</p>\n<blockquote>\n<p>注: 扩展内置对象往往是 <strong>危险</strong> 的.</p>\n<p>扩展 JavaScript 原生对象意味着将属性或方法添加到其原型或内置对象上,<br>其潜在的危险包括但不限于以下几种情况:</p>\n<ol>\n<li>无意中修改或覆盖了 JavaScript 标准的内置方法</li>\n<li>自定义扩展方法被定义者或合作开发者修改后需修改大量依赖代码甚至出错</li>\n<li>导入库时可能存在与本地同名扩展方法冲突</li>\n<li>导入多个库时可能存在库之间的同名扩展方法冲突</li>\n<li>未来标准更新后可能与已有扩展方法冲突</li>\n</ol>\n<p>因此建议使用模块化编程替代对象扩展.<br>如确实有对象扩展需求, 建议新建一个与原生对象名称相似但不同的对象进行扩展, 如下文示例.</p>\n</blockquote>\n<p>上述扩展方式均可采用更安全 (但使用起来可能相对复杂) 的方式实现:</p>\n<pre><code class=\"lang-js\">let Objectx = {};\n\nObjectx.saySomething = function (content) {\n    console.log(content);\n};\n\nObjectx.saySomething(&quot;hello&quot;); /* print &quot;hello&quot;. */\n\nlet Mathx = {};\n\nMathx.sum = function (x, y) {\n    return +x + +y;\n};\n\nconsole.log(Mathx.sum(2, 3)); // 5\n\nlet Arrayx = {};\n\nArrayx.sorted = function (arr) {\n    return arr.slice().sort();\n};\n\nlet arr = [ 1, 2, 9, 3 ];\nconsole.log(Arrayx.sorted(arr)); // [ 1, 2, 3, 9 ]\n\nlet Numberx = {};\n\nNumberx.toFixedNum = function (num, fraction) {\n    return +num.toFixed(fraction);\n};\n\nlet num = 375.201;\nconsole.log(Numberx.toFixedNum(num, 2)); // 375.2\n</code></pre>\n<p>AutoJs6 默认提供了一些内置对象扩展, 如 [ <a href=\"arrayx\">Arrayx</a>, <a href=\"numberx\">Numberx</a>, <a href=\"mathx\">Mathx</a> ] 等.</p>\n<p>这些扩展默认是安全的, 统一为 <code>Ax.b</code> 的调用方式,<br>如 <code>Arrayx.intersect</code>, <code>Mathx.sum</code>, <code>Numberx.clamp</code>.</p>\n<pre><code class=\"lang-js\">console.log(Arrayx.intersect([ 1, 2, 3, 4 ], [ 1, 3, 5 ])); // [ 1, 3 ] \nconsole.log(Numberx.clamp(Math.random(), [ 0.3, 0.5 ])); // e.g. 0.4251169347959409 \n</code></pre>\n<p>而另一种不安全的扩展, 即直接扩展内置对象, 可实现更为便捷的调用:</p>\n<pre><code class=\"lang-js\">console.log([ 1, 2, 3, 4 ].intersect([ 1, 3, 5 ])); // [ 1, 3 ]\nconsole.log(Math.random().clamp([ 0.3, 0.5 ])); // e.g. 0.4251169347959409\n</code></pre>\n<p>如需默认进行直接扩展, 可选择以下任一方式:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>进行直接扩展后, 所有扩展属性和方法会按需附加到内置对象或其原型上, 详情参考每个扩展对象的小节内容.<br>直接扩展是不安全的, 需谨慎使用.</p>\n<blockquote>\n<p>参阅: <a href=\"https://stackoverflow.com/questions/14034180/why-is-extending-native-objects-a-bad-practice\">StackOverflow</a> / <a href=\"https://lucybain.com/blog/2014/js-extending-built-in-objects/\">lucybain.com</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "内置对象扩展"
+        },
+        {
+          "textRaw": "Polyfill",
+          "name": "polyfill",
+          "desc": "<p>又称 [ 代码填泥 / 填泥 / 腻子 / 泥子 ], 是一个完整的代码块, 用于为不支持原生 ECMAScript 新功能的环境提供功能支持.<br>详见 <a href=\"polyfill\">代码填泥</a> 章节.</p>\n",
+          "type": "module",
+          "displayName": "Polyfill"
+        },
+        {
+          "textRaw": "Shim",
+          "name": "shim",
+          "desc": "<p>又称 [ 代码垫片 / 垫片 / 填隙片 ], 是一种小型函数库, 可以用来截取 API 调用或修改传入参数, 最后自行处理对应操作或者将操作交由其它地方执行.<br>垫片可以在新环境中支持老 API, 也可以在老环境里支持新 API.<br>一些程序并没有针对某些平台开发, 也可以通过使用垫片来辅助运行.</p>\n<p>Shim 与 Polyfill 的不同, 可参阅 <a href=\"polyfill\">代码填泥</a> 章节.</p>\n",
+          "type": "module",
+          "displayName": "Shim"
+        },
+        {
+          "textRaw": "应用资源",
+          "name": "应用资源",
+          "desc": "<p>应用资源指代码使用的附加文件和静态内容, 如 [ 位图 / 布局定义 / 界面字符串 / 动画说明 ] 等.</p>\n<p>通常, 应用资源与代码是分离的, 以便于独立维护.<br>资源可进行分组并放入专门命名的资源目录中, 如 [ animator / color / drawable / layout / values / menu ] 等.<br>在运行时, Android 会根据当前配置使用合适的资源, 如根据屏幕尺寸提供不同的界面布局或根据语言设置提供不同的字符串.</p>\n<p>将应用资源分离之后, 可使用项目的 R 类中生成的 <a href=\"#资源-ID\">资源 ID</a> 对其进行访问.</p>\n<pre><code class=\"lang-js\">console.log(context.getString(R.string.text_app_name_powerpoint)); // PowerPoint\nconsole.log(R.id.explorer_item_list); /* e.g. 2131296535 */\nconsole.log(`0x${java.lang.Integer.toHexString(R.id.explorer_item_list)}`); /* e.g. 0x7f090117 */\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/guide/topics/resources/providing-resources?hl=zh-cn\">Android Docs</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "应用资源"
+        },
+        {
+          "textRaw": "资源 ID",
+          "name": "资源_id",
+          "desc": "<p>在代码中使用 R 类的子类中的静态整数可访问 <a href=\"#应用资源\">应用资源</a>:</p>\n<pre><code class=\"lang-js\">/* 资源 ID 是一个整数. */\nconsole.log(R.string.text_app_name_autojspro); /* e.g. 2131887020 */\n</code></pre>\n<p>根据资源类型获取类型值 (string):</p>\n<pre><code class=\"lang-js\">console.log(context.getString(R.string.text_app_name_autojspro)); /* e.g. AutoJsPro */\n</code></pre>\n<p>根据资源类型获取类型值 (drawable):</p>\n<pre><code class=\"lang-js\">/* 绘制一个淡绿色的铃铛图标. */\n\n&#39;ui&#39;;\n\nui.layout(&lt;vertical bg=&quot;#FFFFFF&quot;&gt;\n    &lt;img id=&quot;img&quot; tint=&quot;#9CCC65&quot;/&gt;\n&lt;/vertical&gt;);\n\nui.img.setImageResource(R.drawable.ic_ali_notification);\n</code></pre>\n<p>在 XML 中也可访问 <code>资源 ID</code>:</p>\n<pre><code class=\"lang-js\">/* 绘制一个淡绿色的铃铛图标. */\n\n&#39;ui&#39;;\n\nui.layout(&lt;vertical bg=&quot;#FFFFFF&quot;&gt;\n    &lt;img id=&quot;img&quot; tint=&quot;#9CCC65&quot; src=&quot;@drawable/ic_ali_notification&quot;/&gt;\n&lt;/vertical&gt;);\n</code></pre>\n<p>将 <code>资源 ID</code> 的十六进制值与 <code>0x</code> 前缀组合, 可作为控件的 <a href=\"uiObjectType#m-idhex\">idHex</a> 信息:</p>\n<pre><code class=\"lang-js\">/* 直接对资源 ID 值组合. */\nconsole.log(`0x${java.lang.Integer.toHexString(R.id.explorer_item_list)}`); /* e.g. 0x7f090117 */\n\n/* 在 AutoJs6 主页找到对应控件并获取其 idHex 值. */\nconsole.log(idMatch(/explorer_item_list/).findOnce().idHex()); /* e.g. 0x7f090117 */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "资源 ID"
+        },
+        {
+          "textRaw": "控件层级",
+          "name": "控件层级",
+          "desc": "<p>类似 HTML 的层级绘制, 安卓的视图 (View) 嵌套也会形成层级, 外部视图成为其内部视图的父控件 (Parent Node), 内部视图成为外部视图的子控件 (Child Node).</p>\n<p>在 AutoJs6 中, 控件由 <a href=\"uiObjectType\">UiObject</a> 表示.</p>\n<p>以下方式可获取当前窗口的控件层级:</p>\n<ul>\n<li><p>使用 AutoJs6 获取</p>\n<ul>\n<li>AutoJs6 主页侧拉抽屉 -&gt; 悬浮窗 [开启] -&gt; 悬浮图标 [点击]<ul>\n<li>方案 A: 蓝色按钮 [点击] -&gt; (布局范围分析) -&gt; 控件图示 [点击] -&gt; 在布局层次中查看</li>\n<li>方案 B: 蓝色按钮 [长按] -&gt; 布局层次分析 [点击]</li>\n</ul>\n</li>\n</ul>\n</li>\n<li><p>使用 uiautomatorviewer 工具获取</p>\n<ul>\n<li>位置 (以 Windows 为例): <code>&quot;%ANDROID_HOME%\\tools\\bin\\uiautomatorviewer.bat&quot;</code></li>\n</ul>\n</li>\n<li><p>使用 Android Studio 的 Layout Inspector 工具获取</p>\n<ul>\n<li>Android Studio -&gt; Tools -&gt; Layout Inspector</li>\n</ul>\n</li>\n<li><p>使用 ADB Shell 的 dumpsys 指令获取</p>\n<ul>\n<li>使用 AutoJs6 执行代码 <code>console.log(shell(&#39;dumpsys activity top&#39;).result);</code></li>\n</ul>\n</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "控件层级"
+        },
+        {
+          "textRaw": "信息集控件",
+          "name": "信息集控件",
+          "desc": "<p>信息集控件指拥有一个非 null 的 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.CollectionInfo\">无障碍节点信息集 (AccessibilityNodeInfo.CollectionInfo)</a> 实例的控件.</p>\n<pre><code class=\"lang-js\">let info = w.getCollectionInfo();\nconsole.log(info);\n</code></pre>\n<p>信息集控件包含一系列子控件, 它们类似 HTML 表格那样按行列方式分布.<br>例如垂直列表是一个信息集控件, 它有一列多行作为子控件; 表格也是一个信息集控件, 它有多列多行作为子控件.<br>这些子控件均拥有非 null 的 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.CollectionItemInfo\">无障碍节点子项信息集 (AccessibilityNodeInfo.CollectionItemInfo)</a>:</p>\n<pre><code class=\"lang-js\">/* 通常, 在 AutoJs6 主页即可获取到至少一个信息集控件. */\nscrollable().find().some((w) =&gt; {\n    let info = w.getCollectionInfo();\n    if (info !== null) {\n\n        /* 展示常用的信息集实例属性或方法. */\n\n        console.log(`rowCount: ${info.getRowCount()}`); /* 对应 w.rowCount() 封装方法. */\n        console.log(`columnCount: ${info.getColumnCount()}`); /* 对应 w.columnCount() 封装方法. */\n\n        w.children().forEach((c) =&gt; {\n            let itemInfo = c.getCollectionItemInfo();\n            if (itemInfo !== null) {\n\n                /* 展示常用的子项信息集实例属性或方法. */\n\n                console.log(c.bounds());\n                console.log(`rowIndex: ${itemInfo.getRowIndex()}`); /* 对应 w.row() 封装方法. */\n                console.log(`columnIndex: ${itemInfo.getColumnIndex()}`); /* 对应 w.column() 封装方法. */\n                console.log(`rowSpan: ${itemInfo.getRowSpan()}`); /* 对应 w.rowSpan() 封装方法. */\n                console.log(`columnSpan: ${itemInfo.getColumnSpan()}`); /* 对应 w.columnSpan() 封装方法. */\n                console.log(`selected: ${itemInfo.isSelected()}`);\n                console.log(`rowTitle: ${itemInfo.getRowTitle()}`);\n                console.log(`columnTitle: ${itemInfo.getColumnTitle()}`);\n                console.log(&#39;-&#39;.repeat(33));\n            }\n        });\n\n        return /* @some */ true;\n    }\n});\n</code></pre>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getRowCount / <code>[p#]</code> rowCount</li>\n<li><code>[m#]</code> getColumnCount / <code>[p#]</code> columnCount</li>\n</ul>\n<p>常见与信息集存在关联的类:</p>\n<ul>\n<li>android.widget.GridView</li>\n<li>android.widget.ListView</li>\n<li>android.widget.RadioGroup</li>\n<li>com.android.systemui.qs.TileLayout</li>\n<li>androidx.recyclerview.widget.RecyclerView</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "信息集控件"
+        },
+        {
+          "textRaw": "子项信息集控件",
+          "name": "子项信息集控件",
+          "desc": "<p>子项信息集控件指拥有 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.CollectionItemInfo\">无障碍节点子项信息集 (AccessibilityNodeInfo.CollectionItemInfo)</a> 实例的一组控件, 它们共同属于同一个 <a href=\"#信息集控件\">信息集控件</a>.</p>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getRowIndex / <code>[p#]</code> rowIndex</li>\n<li><code>[m#]</code> getColumnIndex / <code>[p#]</code> columnIndex</li>\n<li><code>[m#]</code> getRowSpan / <code>[p#]</code> rowSpan</li>\n<li><code>[m#]</code> getColumnSpan / <code>[p#]</code> columnSpan</li>\n<li><code>[m#]</code> isSelected / <code>[p#]</code> selected</li>\n<li><code>[m#]</code> getRowTitle / <code>[p#]</code> rowTitle</li>\n<li><code>[m#]</code> getColumnTitle / <code>[p#]</code> columnTitle</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "子项信息集控件"
+        },
+        {
+          "textRaw": "控件矩形外展",
+          "name": "控件矩形外展",
+          "desc": "<p><a href=\"dataTypes.md#androidrect\">控件矩形</a> 边界为非整数时, 外展将对各个边界做如下取整操作:</p>\n<ul>\n<li>left - 左边界左移, 即向下取整, 类似 JavaScript 语言的 Math.floor(left)</li>\n<li>top - 上边界上移, 即向下取整, 类似 JavaScript 语言的 Math.floor(top)</li>\n<li>right - 右边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(right)</li>\n<li>bottom - 下边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(bottom)</li>\n</ul>\n<p>例如:  </p>\n<p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 外展后得到<br><code>Rect(10, 12, 121, 1883)</code></p>\n<blockquote>\n<p>注: &quot;外展&quot; 源自健身术语</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "控件矩形外展"
+        },
+        {
+          "textRaw": "控件矩形内收",
+          "name": "控件矩形内收",
+          "desc": "<p><a href=\"dataTypes.md#androidrect\">控件矩形</a> 边界为非整数时, 外展将对各个边界做如下取整操作:</p>\n<ul>\n<li>left - 左边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(left)</li>\n<li>top - 上边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(top)</li>\n<li>right - 右边界左移, 即向下取整, 类似 JavaScript 语言的 Math.floor(right)</li>\n<li>bottom - 下边界上移, 即向下取整, 类似 JavaScript 语言的 Math.floor(bottom)</li>\n</ul>\n<p>例如:</p>\n<p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 内收后得到<br><code>Rect(11, 13, 120, 1882)</code></p>\n<blockquote>\n<p>注: &quot;内收&quot; 源自健身术语</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "控件矩形内收"
+        }
+      ],
+      "type": "module",
+      "displayName": "术语 (Glossaries)"
+    }
+  ]
+}

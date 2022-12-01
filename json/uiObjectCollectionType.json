@@ -1,0 +1,1188 @@
+{
+  "source": "..\\api\\uiObjectCollectionType.md",
+  "modules": [
+    {
+      "textRaw": "控件集合 (UiObjectCollection)",
+      "name": "控件集合_(uiobjectcollection)",
+      "desc": "<p>UiObjectCollection 代表 <a href=\"uiObjectType\">控件节点 (UiObject)</a> 的对象集合.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiObjectCollection</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] UiObjectCollection",
+          "name": "[@]_uiobjectcollection",
+          "desc": "<p><strong><code>Global</code></strong></p>\n<p>AutoJs6 中几乎所有 UiObjectCollection 实例均已借助 Rhino 引擎将其包装为了 NativeArray 类型.<br>因此 JavaScript 的 Array 原型方法在 UiObjectCollection 实例上可以直接使用:</p>\n<pre><code class=\"lang-js\">let wc = contentMatch(/.+/).find();\nwc.toArray().forEach(w =&gt; console.log(w.content()));\nwc.forEach(w =&gt; console.log(w.content())); /* 效果同上. */\n\n/* 包装后的对象 &quot;是&quot; 一个 JavaScript 数组. */\nconsole.log(Array.isArray(wc)); // true\n\n/* Array 的原型方法 slice. */\nconsole.log(typeof wc.slice); // &#39;function&#39;\nconsole.log(wc.slice === Array.prototype.slice); // true\n\n/* UiObjectCollection &quot;类&quot; 的实例方法依然全部可用 (如 size, click, each 等). */\nconsole.log(typeof wc.size); // &#39;function&#39;\nconsole.log(typeof wc.click); // &#39;function&#39;\nconsole.log(typeof wc.each); // &#39;function&#39;\n</code></pre>\n<p>经过包装的 UiObjectCollection 将不能通过 instanceof 判断其类型, 但仍可通过 getClass 方法判断:</p>\n<pre><code class=\"lang-js\">let wc = contentMatch(/.+/).find();\nconsole.log(wc instanceof UiObjectCollection); // false\nconsole.log(wc.getClass() === UiObjectCollection); // true\n</code></pre>\n<p>除上述 find 方法, children, untilFind, findOf 以及附带集合类结果筛选器的 pickup, 返回的也都是一个经过包装的 UiObjectCollection:</p>\n<pre><code class=\"lang-js\">let s = contentMatch(/.+/);\nlet w = pickup(s);\nlet wcList = [\n    s.find(),\n    s.untilFind(),\n    s.findOf(w &amp;&amp; w.compass(&#39;p2&#39;) || pickup()),\n    pickup(s, &#39;{}&#39;),\n];\nconsole.log(wcList.every(o =&gt; o.getClass() === UiObjectCollection)); // true\n</code></pre>\n<p>UiObjectCollection 可能为空集合:</p>\n<pre><code class=\"lang-js\">/* 空集合. */\nlet wc = contentMatch(/[^\\s\\S]/).find();\n\nconsole.log(wc.length); // 0\n\n/* 即使是空集合, 依然是 UiObjectCollection 类型. */\nconsole.log(wc === null); // false\nconsole.log(wc.getClass() === UiObjectCollection); // true\n</code></pre>\n<p>集合的遍历即可用 UiObjectCollection 的实例方法 (如 each), 或使用 JavaScript 的数组遍历方法 (如 forEach), 或使用 [ for / for...in (不推荐) / for...of ] 循环:</p>\n<pre><code class=\"lang-js\">/**\n * @type {UiObjectCollection | Array&lt;UiObject&gt;}\n */\nlet wc = pickup(/.+/, &#39;wc&#39;);\n\nwc.each(w =&gt; console.log(detect(w, &#39;txt&#39;)));\n\nwc.forEach(w =&gt; console.log(detect(w, &#39;txt&#39;)));\n\nfor (let i = 0; i &lt; wc.length; i += 1) {\n    console.log(detect(wc[i], &#39;txt&#39;));\n}\n\nfor (let i in wc) {\n    if (wc.hasOwnProperty(i) &amp;&amp; /^\\d+$/.test(i)) {\n        console.log(detect(wc[i], &#39;txt&#39;));\n    }\n}\n\nfor (let w of wc) {\n    console.log(detect(w, &#39;txt&#39;));\n}\n</code></pre>\n<p>控件集合支持 <a href=\"uiObjectActionsType\">控件行为 (UiObject Action)</a>.<br>如 [ click / longClick / imeEnter / setText / focus ] 等.</p>\n<p>performAction 源码摘要:</p>\n<pre><code class=\"lang-kotlin\">/* Updated as of Nov 2, 2022. */\n\noverride fun performAction(action: Int, vararg arguments: ActionArgument): Boolean {\n    var success = true\n    nodes.filterNotNull().forEach { node -&gt;\n        when (arguments.isEmpty()) {\n            true -&gt; node.performAction(action)\n            else -&gt; node.performAction(action, *arguments)\n        }.also { success = success and it }\n    }\n    return success\n}\n</code></pre>\n<p>由源码摘要可知, 控件集合执行控件行为, 相当于使集合中所有控件依次执行一次控件行为:</p>\n<pre><code class=\"lang-js\">let wc = contentMatch(/[^\\s\\S]/).find();\n\n/* 对控件集合执行 click 控件行为. */\nwc.click();\n\n/* 相当于对集合中每个控件元素执行控件行为. */\nwc.forEach(w =&gt; {\n    if (w !== null) {\n        w.click();\n    }\n});\n</code></pre>\n<p>执行控件行为后, 返回结果是 <a href=\"dataTypes#boolean\">boolean</a> 类型, 表示集合中所有控件在执行行为过程中未出现失败或异常.</p>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"uiObjectType#m-find\">UiObject#find</a></li>\n<li><a href=\"uiObjectType#m-children\">UiObject#children</a></li>\n<li><a href=\"uiSelectorType#m-find\">UiSelector#find</a></li>\n<li><a href=\"uiSelectorType#m-untilfind\">UiSelector#untilFind</a></li>\n<li><a href=\"uiSelectorType#m-pickup\">UiSelector.pickup</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[@] UiObjectCollection"
+        },
+        {
+          "textRaw": "[m#] isEmpty",
+          "name": "[m#]_isempty",
+          "methods": [
+            {
+              "textRaw": "isEmpty()",
+              "type": "method",
+              "name": "isEmpty",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回集合是否为空.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isEmpty"
+        },
+        {
+          "textRaw": "[m#] isNotEmpty",
+          "name": "[m#]_isnotempty",
+          "methods": [
+            {
+              "textRaw": "isNotEmpty()",
+              "type": "method",
+              "name": "isNotEmpty",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回集合是否非空.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isNotEmpty"
+        },
+        {
+          "textRaw": "[m#] empty",
+          "name": "[m#]_empty",
+          "methods": [
+            {
+              "textRaw": "empty()",
+              "type": "method",
+              "name": "empty",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回集合是否为空.</p>\n<p>已弃用, 建议使用 <a href=\"#m-isempty\">isEmpty</a> 替代.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] empty"
+        },
+        {
+          "textRaw": "[m#] nonEmpty",
+          "name": "[m#]_nonempty",
+          "methods": [
+            {
+              "textRaw": "nonEmpty()",
+              "type": "method",
+              "name": "nonEmpty",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回集合是否非空.</p>\n<p>已弃用, 建议使用 <a href=\"#m-isnotempty\">isNotEmpty</a> 替代.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nonEmpty"
+        },
+        {
+          "textRaw": "[m#] toArray",
+          "name": "[m#]_toarray",
+          "methods": [
+            {
+              "textRaw": "toArray()",
+              "type": "method",
+              "name": "toArray",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [JavaArray](dataTypes#javaarray)<[UiObject](uiObjectType)> } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [JavaArray](dataTypes#javaarray)<[UiObject](uiObjectType)> "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>转换集合为 <a href=\"dataTypes#javaarray\">Java 数组</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toArray"
+        },
+        {
+          "textRaw": "[m#] toList",
+          "name": "[m#]_tolist",
+          "methods": [
+            {
+              "textRaw": "toList()",
+              "type": "method",
+              "name": "toList",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#javaarraylist\">JavaArrayList</a>&lt;<a href=\"uiObjectType\">UiObject</a>&gt; }</li>\n</ul>\n<p>转换集合为 <a href=\"dataTypes#javaarraylist\">Java 数组列表</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toList"
+        },
+        {
+          "textRaw": "[m#] get",
+          "name": "[m#]_get",
+          "methods": [
+            {
+              "textRaw": "get(i)",
+              "type": "method",
+              "name": "get",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>按索引获取集合中的 UiObject 元素.</p>\n<p>已弃用, 建议使用数组下标形式访问元素.</p>\n<pre><code class=\"lang-js\">let wc = pickup(/.+/, &#39;{}&#39;);\nif (wc.length &gt;= 2) {\n    console.log(wc.get(2) instanceof UiObject); // true\n    console.log(wc[2] instanceof UiObject); // true\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "i"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] get"
+        },
+        {
+          "textRaw": "[m#] size",
+          "name": "[m#]_size",
+          "methods": [
+            {
+              "textRaw": "size()",
+              "type": "method",
+              "name": "size",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>返回集合大小.</p>\n<p>已弃用, 建议使用 length 属性.</p>\n<pre><code class=\"lang-js\">let wc = pickup(/.+/, &#39;{}&#39;);\nconsole.log(wc.size()); // e.g. 23\nconsole.log(wc.length); // e.g. 23\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] size"
+        },
+        {
+          "textRaw": "[m#] each",
+          "name": "[m#]_each",
+          "methods": [
+            {
+              "textRaw": "each(consumer)",
+              "type": "method",
+              "name": "each",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><strong>consumer</strong> { <a href=\"dataTypes#function\">(</a>w: <a href=\"uiObjectType\">UiObject</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#void\">void</a> } - 消费者</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>对集合中每个元素执行一次消费.</p>\n<p>已弃用, 建议使用 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach\">forEach</a>.</p>\n<pre><code class=\"lang-js\">let wc = pickup(/.+/, &#39;{}&#39;);\nwc.each(w =&gt; console.log(w.content()));\nwc.forEach(w =&gt; console.log(w.content()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "consumer"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] each"
+        },
+        {
+          "textRaw": "[m#] find",
+          "name": "[m#]_find",
+          "methods": [
+            {
+              "textRaw": "find(selector)",
+              "type": "method",
+              "name": "find",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">UiSelector</a> } - 选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>筛选新的控件集合.</p>\n<p>以集合中每一个元素为根节点, 依次按选择器筛选出所有满足条件的后代节点加入新集合, 将此新集合作为返回结果.</p>\n<pre><code class=\"lang-js\">/* 例如此集合中共有 3 个控件. */\nlet wc = pickup(/.+/);\nconsole.log(wc.length); // 3\n\n/* 3 个控件作为根节点, 其所有的子孙节点分别有 10, 50, 200 个. */\nconsole.log(wc.map(w =&gt; w.find().length)); // [ 10, 50, 200 ]\n\n/* 其中 clickable 为 true 的控件分别有 2, 3, 4 个. */\nconsole.log(wc.map(w =&gt; w.find().filter(c =&gt; c.clickable()).length)); // [ 2, 3, 4 ]\n\n/* 因此 wc.find(clickable(true)) 应返回 2 + 3 + 4 个. */\nconsole.log(wc.find(clickable(true)).length); // 9\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] find"
+        },
+        {
+          "textRaw": "[m#] findOne",
+          "name": "[m#]_findone",
+          "methods": [
+            {
+              "textRaw": "findOne(selector)",
+              "type": "method",
+              "name": "findOne",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">UiSelector</a> } - 选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>筛选一个控件.</p>\n<p>以集合中每一个元素为根节点, 遍历其所有后代节点, 当满足选择器的筛选条件时, 返回此控件并停止筛选.<br>无满足筛选条件的控件时返回 null.</p>\n<pre><code class=\"lang-js\">let wc = pickup(/.+/);\nconsole.log(wc.findOne(clickable(true))); /* 返回一个可点击控件或 null. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] findOne"
+        },
+        {
+          "textRaw": "[m#] performAction",
+          "name": "[m#]_performaction",
+          "desc": "<p>用于执行控件集合的行为.</p>\n<p>集合中所有控件将全部执行指定的行为.</p>\n",
+          "methods": [
+            {
+              "textRaw": "performAction(action, ...arguments)",
+              "type": "method",
+              "name": "performAction",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>action</strong> { <a href=\"dataTypes#number\">number</a> } - 行为的唯一标志符 (Action ID)</li>\n<li><strong>arguments</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"uiObjectActionsType#i-actionargument\">ActionArgument</a><a href=\"documentation#可变参数\">[]</a> } - 行为参数, 用于给行为传递参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回行为是否全部执行成功.</p>\n<blockquote>\n<p>注: 即使在执行过程中, 某一个控件执行失败, 后续控件依旧继续执行行为, 而非立即终止.</p>\n</blockquote>\n<blockquote>\n<p>参阅: <a href=\"uiObjectActionsType\">UiObjectActions</a> 章节.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "...arguments"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] performAction"
+        },
+        {
+          "textRaw": "[m#] click",
+          "name": "[m#]_click",
+          "methods": [
+            {
+              "textRaw": "click()",
+              "type": "method",
+              "name": "click",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-click\">[ 点击 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] click"
+        },
+        {
+          "textRaw": "[m#] longClick",
+          "name": "[m#]_longclick",
+          "methods": [
+            {
+              "textRaw": "longClick()",
+              "type": "method",
+              "name": "longClick",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-longclick\">[ 长按 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] longClick"
+        },
+        {
+          "textRaw": "[m#] accessibilityFocus",
+          "name": "[m#]_accessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "accessibilityFocus()",
+              "type": "method",
+              "name": "accessibilityFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-accessibilityfocus\">[ 获取无障碍焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] accessibilityFocus"
+        },
+        {
+          "textRaw": "[m#] clearAccessibilityFocus",
+          "name": "[m#]_clearaccessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "clearAccessibilityFocus()",
+              "type": "method",
+              "name": "clearAccessibilityFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-clearaccessibilityfocus\">[ 清除无障碍焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearAccessibilityFocus"
+        },
+        {
+          "textRaw": "[m#] focus",
+          "name": "[m#]_focus",
+          "methods": [
+            {
+              "textRaw": "focus()",
+              "type": "method",
+              "name": "focus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-focus\">[ 获取焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] focus"
+        },
+        {
+          "textRaw": "[m#] clearFocus",
+          "name": "[m#]_clearfocus",
+          "methods": [
+            {
+              "textRaw": "clearFocus()",
+              "type": "method",
+              "name": "clearFocus",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-clearfocus\">[ 清除焦点 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearFocus"
+        },
+        {
+          "textRaw": "[m#] dragStart",
+          "name": "[m#]_dragstart",
+          "methods": [
+            {
+              "textRaw": "dragStart()",
+              "type": "method",
+              "name": "dragStart",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-dragstart\">[ 拖放开始 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragStart"
+        },
+        {
+          "textRaw": "[m#] dragDrop",
+          "name": "[m#]_dragdrop",
+          "methods": [
+            {
+              "textRaw": "dragDrop()",
+              "type": "method",
+              "name": "dragDrop",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-dragdrop\">[ 拖放放下 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragDrop"
+        },
+        {
+          "textRaw": "[m#] dragCancel",
+          "name": "[m#]_dragcancel",
+          "methods": [
+            {
+              "textRaw": "dragCancel()",
+              "type": "method",
+              "name": "dragCancel",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=32</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-dragcancel\">[ 拖放取消 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dragCancel"
+        },
+        {
+          "textRaw": "[m#] imeEnter",
+          "name": "[m#]_imeenter",
+          "methods": [
+            {
+              "textRaw": "imeEnter()",
+              "type": "method",
+              "name": "imeEnter",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=30</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-imeenter\">[ 输入法 ENTER 键 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] imeEnter"
+        },
+        {
+          "textRaw": "[m#] moveWindow",
+          "name": "[m#]_movewindow",
+          "methods": [
+            {
+              "textRaw": "moveWindow(x, y)",
+              "type": "method",
+              "name": "moveWindow",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=26</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-movewindow\">[ 移动窗口到新位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] moveWindow"
+        },
+        {
+          "textRaw": "[m#] nextAtMovementGranularity",
+          "name": "[m#]_nextatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "nextAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "nextAtMovementGranularity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>granularity</strong> { <a href=\"dataTypes#number\">number</a> } - 粒度</li>\n<li><strong>isExtendSelection</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否扩展选则文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-nextatmovementgranularity\">[ 按粒度移至下一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m#] nextHtmlElement",
+          "name": "[m#]_nexthtmlelement",
+          "methods": [
+            {
+              "textRaw": "nextHtmlElement(element)",
+              "type": "method",
+              "name": "nextHtmlElement",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>element</strong> { <a href=\"dataTypes#string\">string</a> } - 元素名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-nexthtmlelement\">[ 按元素移至下一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextHtmlElement"
+        },
+        {
+          "textRaw": "[m#] pageLeft",
+          "name": "[m#]_pageleft",
+          "methods": [
+            {
+              "textRaw": "pageLeft()",
+              "type": "method",
+              "name": "pageLeft",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-pageleft\">[ 使视窗左移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageLeft"
+        },
+        {
+          "textRaw": "[m#] pageUp",
+          "name": "[m#]_pageup",
+          "methods": [
+            {
+              "textRaw": "pageUp()",
+              "type": "method",
+              "name": "pageUp",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-pageup\">[ 使视窗上移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageUp"
+        },
+        {
+          "textRaw": "[m#] pageRight",
+          "name": "[m#]_pageright",
+          "methods": [
+            {
+              "textRaw": "pageRight()",
+              "type": "method",
+              "name": "pageRight",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-pageright\">[ 使视窗右移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageRight"
+        },
+        {
+          "textRaw": "[m#] pageDown",
+          "name": "[m#]_pagedown",
+          "methods": [
+            {
+              "textRaw": "pageDown()",
+              "type": "method",
+              "name": "pageDown",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=29</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-pagedown\">[ 使视窗下移的翻页 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pageDown"
+        },
+        {
+          "textRaw": "[m#] pressAndHold",
+          "name": "[m#]_pressandhold",
+          "methods": [
+            {
+              "textRaw": "pressAndHold()",
+              "type": "method",
+              "name": "pressAndHold",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=30</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-pressandhold\">[ 按住 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pressAndHold"
+        },
+        {
+          "textRaw": "[m#] previousAtMovementGranularity",
+          "name": "[m#]_previousatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "previousAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "previousAtMovementGranularity",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>granularity</strong> { <a href=\"dataTypes#number\">number</a> } - 粒度</li>\n<li><strong>isExtendSelection</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否扩展选则文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-previousatmovementgranularity\">[ 按粒度移至上一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] previousAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m#] previousHtmlElement",
+          "name": "[m#]_previoushtmlelement",
+          "methods": [
+            {
+              "textRaw": "previousHtmlElement(element)",
+              "type": "method",
+              "name": "previousHtmlElement",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>element</strong> { <a href=\"dataTypes#string\">string</a> } - 元素名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-previoushtmlelement\">[ 按元素移至上一位置 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] previousHtmlElement"
+        },
+        {
+          "textRaw": "[m#] showTextSuggestions",
+          "name": "[m#]_showtextsuggestions",
+          "methods": [
+            {
+              "textRaw": "showTextSuggestions()",
+              "type": "method",
+              "name": "showTextSuggestions",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=33</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-showtextsuggestions\">[ 显示文本建议 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] showTextSuggestions"
+        },
+        {
+          "textRaw": "[m#] showTooltip",
+          "name": "[m#]_showtooltip",
+          "methods": [
+            {
+              "textRaw": "showTooltip()",
+              "type": "method",
+              "name": "showTooltip",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=28</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-showtooltip\">[ 显示工具提示信息 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] showTooltip"
+        },
+        {
+          "textRaw": "[m#] hideTooltip",
+          "name": "[m#]_hidetooltip",
+          "methods": [
+            {
+              "textRaw": "hideTooltip()",
+              "type": "method",
+              "name": "hideTooltip",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>API&gt;=28</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-hidetooltip\">[ 隐藏工具提示信息 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hideTooltip"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "show()",
+              "type": "method",
+              "name": "show",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-show\">[ 显示在视窗内 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] dismiss",
+          "name": "[m#]_dismiss",
+          "methods": [
+            {
+              "textRaw": "dismiss()",
+              "type": "method",
+              "name": "dismiss",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-dismiss\">[ 消隐 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dismiss"
+        },
+        {
+          "textRaw": "[m#] copy",
+          "name": "[m#]_copy",
+          "methods": [
+            {
+              "textRaw": "copy()",
+              "type": "method",
+              "name": "copy",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-copy\">[ 复制文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] copy"
+        },
+        {
+          "textRaw": "[m#] cut",
+          "name": "[m#]_cut",
+          "methods": [
+            {
+              "textRaw": "cut()",
+              "type": "method",
+              "name": "cut",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-cut\">[ 剪切文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cut"
+        },
+        {
+          "textRaw": "[m#] paste",
+          "name": "[m#]_paste",
+          "methods": [
+            {
+              "textRaw": "paste()",
+              "type": "method",
+              "name": "paste",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-paste\">[ 粘贴文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] paste"
+        },
+        {
+          "textRaw": "[m#] select",
+          "name": "[m#]_select",
+          "methods": [
+            {
+              "textRaw": "select()",
+              "type": "method",
+              "name": "select",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-select\">[ 选中 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] select"
+        },
+        {
+          "textRaw": "[m#] expand",
+          "name": "[m#]_expand",
+          "methods": [
+            {
+              "textRaw": "expand()",
+              "type": "method",
+              "name": "expand",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-expand\">[ 展开 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] expand"
+        },
+        {
+          "textRaw": "[m#] collapse",
+          "name": "[m#]_collapse",
+          "methods": [
+            {
+              "textRaw": "collapse()",
+              "type": "method",
+              "name": "collapse",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-collapse\">[ 折叠 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] collapse"
+        },
+        {
+          "textRaw": "[m#] scrollLeft",
+          "name": "[m#]_scrollleft",
+          "methods": [
+            {
+              "textRaw": "scrollLeft()",
+              "type": "method",
+              "name": "scrollLeft",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollleft\">[ 使视窗左移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollLeft"
+        },
+        {
+          "textRaw": "[m#] scrollUp",
+          "name": "[m#]_scrollup",
+          "methods": [
+            {
+              "textRaw": "scrollUp()",
+              "type": "method",
+              "name": "scrollUp",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollup\">[ 使视窗上移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollUp"
+        },
+        {
+          "textRaw": "[m#] scrollRight",
+          "name": "[m#]_scrollright",
+          "methods": [
+            {
+              "textRaw": "scrollRight()",
+              "type": "method",
+              "name": "scrollRight",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollright\">[ 使视窗右移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollRight"
+        },
+        {
+          "textRaw": "[m#] scrollDown",
+          "name": "[m#]_scrolldown",
+          "methods": [
+            {
+              "textRaw": "scrollDown()",
+              "type": "method",
+              "name": "scrollDown",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrolldown\">[ 使视窗下移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollDown"
+        },
+        {
+          "textRaw": "[m#] scrollForward",
+          "name": "[m#]_scrollforward",
+          "methods": [
+            {
+              "textRaw": "scrollForward()",
+              "type": "method",
+              "name": "scrollForward",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollforward\">[ 使视窗前移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollForward"
+        },
+        {
+          "textRaw": "[m#] scrollBackward",
+          "name": "[m#]_scrollbackward",
+          "methods": [
+            {
+              "textRaw": "scrollBackward()",
+              "type": "method",
+              "name": "scrollBackward",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollbackward\">[ 使视窗后移的滚动 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollBackward"
+        },
+        {
+          "textRaw": "[m#] scrollTo",
+          "name": "[m#]_scrollto",
+          "methods": [
+            {
+              "textRaw": "scrollTo(row, column)",
+              "type": "method",
+              "name": "scrollTo",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>row</strong> { <a href=\"dataTypes#number\">number</a> } - 行序数</li>\n<li><strong>column</strong> { <a href=\"dataTypes#number\">number</a> } - 列序数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-scrollto\">[ 将指定位置滚动至视窗内 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "row"
+                    },
+                    {
+                      "name": "column"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollTo"
+        },
+        {
+          "textRaw": "[m#] contextClick",
+          "name": "[m#]_contextclick",
+          "methods": [
+            {
+              "textRaw": "contextClick()",
+              "type": "method",
+              "name": "contextClick",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-contextclick\">[ 上下文点击 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] contextClick"
+        },
+        {
+          "textRaw": "[m#] setText",
+          "name": "[m#]_settext",
+          "methods": [
+            {
+              "textRaw": "setText(text)",
+              "type": "method",
+              "name": "setText",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-settext\">[ 设置文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setText"
+        },
+        {
+          "textRaw": "[m#] setSelection",
+          "name": "[m#]_setselection",
+          "methods": [
+            {
+              "textRaw": "setSelection(start, end)",
+              "type": "method",
+              "name": "setSelection",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 开始位置</li>\n<li><strong>end</strong> { <a href=\"dataTypes#number\">number</a> } - 结束位置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-setselection\">[ 选择文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setSelection"
+        },
+        {
+          "textRaw": "[m#] clearSelection",
+          "name": "[m#]_clearselection",
+          "methods": [
+            {
+              "textRaw": "clearSelection()",
+              "type": "method",
+              "name": "clearSelection",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-clearselection\">[ 取消选择文本 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearSelection"
+        },
+        {
+          "textRaw": "[m#] setProgress",
+          "name": "[m#]_setprogress",
+          "methods": [
+            {
+              "textRaw": "setProgress(progress)",
+              "type": "method",
+              "name": "setProgress",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>progress</strong> { <a href=\"dataTypes#number\">number</a> } - 进度值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>控件集合执行 <a href=\"uiObjectActionsType#m-setprogress\">[ 设置进度值 ] 行为</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "progress"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setProgress"
+        },
+        {
+          "textRaw": "[m] of",
+          "name": "[m]_of",
+          "methods": [
+            {
+              "textRaw": "of(list)",
+              "type": "method",
+              "name": "of",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**list** { [UiSelector](uiSelectorType)[[]](dataTypes#array) } - 控件数组 ",
+                      "name": "**list**",
+                      "type": " [UiSelector](uiSelectorType)[[]](dataTypes#array) ",
+                      "desc": "控件数组"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [UiObjectCollection](uiObjectCollectionType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "list"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将控件数组转换为 <a href=\"uiObjectCollectionType\">UiObjectCollection</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/hello.+/);\nlet wB = pickup({ clickable: true });\n\nlet wc = UiObjectCollection.of([ wA, wB ]);\n\n/* 对 UiObjectCollection 进行操作. */\nwc.click();\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] of"
+        }
+      ],
+      "type": "module",
+      "displayName": "控件集合 (UiObjectCollection)"
+    }
+  ]
+}

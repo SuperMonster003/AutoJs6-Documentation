@@ -28,6 +28,82 @@ const path = require('path');
 const preprocess = require('./preprocess.js');
 const typeParser = require('./type-parser.js');
 
+let options = {};
+
+// @Overwrite by SuperMonster003 on Jul 27, 2022.
+marked.Renderer.prototype.link = function (href, title, text) {
+    if (this.options.sanitize) {
+        try {
+            var prot = decodeURIComponent(unescape(href))
+                .replace(/[^\w:]/g, '')
+                .toLowerCase();
+        } catch (e) {
+            return text;
+        }
+        if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
+            return text;
+        }
+    }
+
+    var baseUrls = {};
+    var originIndependentUrl = /^$|^[a-z][a-z0-9+.-]*:|^[?#]/i;
+
+    function resolveUrl(base, href) {
+        if (!baseUrls[' ' + base]) {
+            // we can ignore everything in base after the last slash of its path component,
+            // but we might need to add _that_
+            // https://tools.ietf.org/html/rfc3986#section-3
+            if (/^[^:]+:\/*[^/]*$/.test(base)) {
+                baseUrls[' ' + base] = base + '/';
+            } else {
+                baseUrls[' ' + base] = base.replace(/[^/]*$/, '');
+            }
+        }
+        base = baseUrls[' ' + base];
+
+        if (href.slice(0, 2) === '//') {
+            return base.replace(/:[\s\S]*/, ':') + href;
+        }
+        if (href.charAt(0) === '/') {
+            return base.replace(/(:\/*[^/]*)[\s\S]*/, '$1') + href;
+        }
+        return base + href;
+    }
+
+    if (this.options.baseUrl && !originIndependentUrl.test(href)) {
+        href = resolveUrl(this.options.baseUrl, href);
+    }
+
+    ( /* @IIFE */ function appendHTMLExt() {
+        if (!href.endsWith('/') && !href.match(/^https?:\/\//) && !href.match(/\?\w+=\w+/) && !/\.html#/.test(href)) {
+            href = href.trim().replace(/^(.+?)(\.html)?(#.+)?$/, '$1.html$3');
+        }
+    })();
+
+    if (href.startsWith('#')) {
+
+        // #m-select
+        // #uiobjectactionstype_m_select
+
+        let fileName = options.filename.replace(/.+?(\w+)\.md$/, '$1');
+        href = '#' + fileName.toLowerCase() + '_' + href.replace(/^#|\.html$/g, '').replaceAll('-', '_');
+    } else if (href.includes('.html#')) {
+
+        // uiObjectActionsType.html#m-select
+        // uiObjectActionsType.html#uiobjectactionstype_m_select
+
+        let [ fileName, anchor ] = href.split('.html#');
+        href = fileName + '.html#' + fileName.toLowerCase() + '_' + anchor;
+        href = href.replace(/\.html$/, '').replaceAll('-', '_');
+    }
+    var out = '<a href="' + href + '"';
+    if (title) {
+        out += ' title="' + title + '"';
+    }
+    out += '>' + text + '</a>';
+    return out;
+};
+
 module.exports = toHTML;
 
 const STABILITY_TEXT_REG_EXP = /(.*:)\s*(\d)([\s\S]*)/;
@@ -53,6 +129,7 @@ var gtocData = null;
  * opts: input, filename, template, nodeVersion.
  */
 function toHTML(opts, cb) {
+    options = opts;
     const template = opts.template;
     const nodeVersion = opts.nodeVersion || process.version;
 

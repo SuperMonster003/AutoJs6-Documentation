@@ -2,47 +2,79 @@
   "source": "..\\api\\qa.md",
   "modules": [
     {
-      "textRaw": "Q & A",
-      "name": "q_&_a",
+      "textRaw": "疑难解答 (Q & A)",
+      "name": "疑难解答_(q_&_a)",
+      "desc": "<hr>\n",
       "modules": [
         {
-          "textRaw": "如何定时运行脚本nenenene",
-          "name": "如何定时运行脚本nenenene",
-          "desc": "<p>点击脚本右边的菜单按钮-&gt;更多-&gt;定时任务即可定时运行脚本，但是必须保持Auto.js后台运行(自启动白名单、电源管理白名单等)。同时，可以在脚本的开头使用<code>device.wakeUp()</code>来唤醒屏幕；但是，Auto.js没有解锁屏幕的功能，因此难以在有锁屏密码的设备上达到效果。</p>\n",
+          "textRaw": "图像",
+          "name": "图像",
+          "modules": [
+            {
+              "textRaw": "区域截图",
+              "name": "区域截图",
+              "desc": "<p>AutoJs6 不支持区域截图.<br>只能通过 <code>images.captureScreen</code> 截取屏幕后使用 <code>images.clip</code> 等方式做进一步处理.</p>\n",
+              "type": "module",
+              "displayName": "区域截图"
+            }
+          ],
           "type": "module",
-          "displayName": "如何定时运行脚本nenenene"
+          "displayName": "图像"
         },
         {
-          "textRaw": "定时任何如何获取外部参数",
-          "name": "定时任何如何获取外部参数",
-          "desc": "<p>如果一个脚本是用intent&quot;启动&quot;的，比如定时任务中的特定事件（网络状态变化等）触发而启动的，则可以通过<code>engines.myEngine().execArgv.intent</code>获取启动的intent，从而获取外部参数。</p>\n",
+          "textRaw": "定时任务",
+          "name": "定时任务",
+          "modules": [
+            {
+              "textRaw": "定时运行脚本",
+              "name": "定时运行脚本",
+              "desc": "<p>脚本右侧菜单 -&gt; 定时任务, 即可定时运行脚本.<br>需保持 AutoJs6 后台运行, 包括 [ 自启动白名单 / 忽略电池优化 / 忽略后台活动限制 / 系统多任务保留 ] 等.<br>在设备关屏情况下, 可使用 <code>device.wakeUp()</code> 唤醒屏幕.<br>但 AutoJs6 暂未提供解锁功能, 因此可能需要根据设备自行设计解锁代码.</p>\n",
+              "type": "module",
+              "displayName": "定时运行脚本"
+            },
+            {
+              "textRaw": "定时任务获取外部参数",
+              "name": "定时任务获取外部参数",
+              "desc": "<p>若脚本由 intent (如网络状态变化等特定事件) 触发启动, 可通过 <code>engines.myEngine().execArgv.intent</code> 获取 intent, 进而获取外部参数.</p>\n",
+              "type": "module",
+              "displayName": "定时任务获取外部参数"
+            }
+          ],
           "type": "module",
-          "displayName": "定时任何如何获取外部参数"
+          "displayName": "定时任务"
         },
         {
-          "textRaw": "如何把图片和脚本一起打包，或者打包多个脚本",
-          "name": "如何把图片和脚本一起打包，或者打包多个脚本",
-          "desc": "<p>如果除了单脚本以外还有其他脚本、图片、音乐等资源一起打包，则需要使用项目功能。</p>\n<p>点击Auto.js的&quot;+&quot;号，选择项目，填写项目名称、包名等信息以后，点击&quot;√&quot;即可新建一个项目。可以在项目中放多个脚本、模块、资源文件，点击项目工具栏的apk打包图标即可打包一个项目，点击工具栏可以重新配置项目。</p>\n<p>例如，主脚本要读取同一文件夹下的图片1.png，再执行找图，则可以通过<code>images.read(&quot;./1.png&quot;)</code>来读取，其中&quot;./1.png&quot;表示同一目录1.png图片；ui中的图片控件要引用同一文件夹的2.png图片则为<code>&lt;img src=&quot;file://2.png&quot;/&gt;</code>。Auto.js内置的函数和模块都支持相对路径，但是，其他情况则需要使用<code>files.path()</code>函数来把相对路径转换为绝对路径。</p>\n",
+          "textRaw": "打包应用",
+          "name": "打包应用",
+          "modules": [
+            {
+              "textRaw": "图片等资源共同打包及多脚本打包",
+              "name": "图片等资源共同打包及多脚本打包",
+              "desc": "<p>上述需求需使用 &quot;项目&quot; 功能.</p>\n<p>点击 AutoJs6 主页面 &quot;+&quot; 图标, 选择项目, 填写信息后可新建一个项目.<br>项目支持存放多个 [ 脚本 / 模块 / 资源文件 ].<br>项目工具栏的 APK 打包图标, 点击可打包一个项目.</p>\n<p>例如:<br>脚本读取同目录 <code>1.png</code>: <code>images.read(&quot;./1.png&quot;)</code>.<br>UI 脚本图片控件引用同目录 <code>2.png</code>: <code>&lt;img src=&quot;file://2.png&quot;/&gt;</code>.<br>AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 <code>files.path()</code> 转换为绝对路径.</p>\n",
+              "type": "module",
+              "displayName": "图片等资源共同打包及多脚本打包"
+            },
+            {
+              "textRaw": "打包应用不显示主界面",
+              "name": "打包应用不显示主界面",
+              "desc": "<p>需使用 &quot;项目&quot; 功能.<br>新建项目后, 在项目目录 <code>project.json</code> 文件中增加以下条目:</p>\n<pre><code class=\"lang-json\">{\n  &quot;launchConfig&quot;: {\n    &quot;hideLogs&quot;: true\n  }\n}\n</code></pre>\n<p>例如:</p>\n<pre><code class=\"lang-json\">{\n  &quot;name&quot;: &quot;First-Project&quot;,\n  &quot;versionName&quot;: &quot;1.0.0&quot;,\n  &quot;versionCode&quot;: 1,\n  &quot;packageName&quot;: &quot;org.autojs.example.first&quot;,\n  &quot;main&quot;: &quot;main.js&quot;,\n  &quot;launchConfig&quot;: {\n    &quot;hideLogs&quot;: true\n  }\n}\n</code></pre>\n",
+              "type": "module",
+              "displayName": "打包应用不显示主界面"
+            }
+          ],
           "type": "module",
-          "displayName": "如何把图片和脚本一起打包，或者打包多个脚本"
+          "displayName": "打包应用"
         },
         {
-          "textRaw": "如何使打包的应用不显示主界面",
-          "name": "如何使打包的应用不显示主界面",
-          "desc": "<p>需要使用项目功能。新建项目后，修改项目下的<code>project.json</code>文件，增加以下条目：</p>\n<pre><code>&quot;launchConfig&quot;: {\n    &quot;hideLogs&quot;: true\n}\n</code></pre><p>例如：</p>\n<pre><code>{\n  &quot;name&quot;: &quot;项目名称&quot;,\n  &quot;versionName&quot;: &quot;1.0.0&quot;,\n  &quot;versionCode&quot;: 1,\n  &quot;packageName&quot;: &quot;org.autojs.example&quot;,\n  &quot;main&quot;: &quot;main.js&quot;,\n  &quot;launchConfig&quot;: {\n      &quot;hideLogs&quot;: true\n  }\n}\n</code></pre><p>&quot;launchConfig&quot;表示启动配置，&quot;hideLogs&quot;表示隐藏日志。</p>\n<p>参见项目与项目配置。</p>\n",
+          "textRaw": "功能扩展",
+          "name": "功能扩展",
+          "desc": "<p>AutoJs6 支持直接调用 [ Java / Android / 扩展库 ] 等 API.<br>对于 AutoJs6 没有内置的功能, 可进行 Java 脚本化, 即直接参照 Java (或 Kotlin 等) 源码, 转换为 JavaScript 代码.<br>例如:</p>\n<pre><code class=\"lang-java\">import android.graphics.Bitmap;\nimport android.graphics.Matrix;\n\npublic static Bitmap rotate(Bitmap src, int degrees, float px, float py) {\n    if (degrees == 0) return src;\n    Matrix matrix = new Matrix();\n    matrix.setRotate(degrees, px, py);\n    Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);\n    return ret;\n}\n</code></pre>\n<p>转换为 JavaScript 代码:</p>\n<pre><code class=\"lang-js\">importClass(android.graphics.Bitmap);\nimportClass(android.graphics.Matrix);\n\nfunction rotate(src, degrees, px, py) {\n    if (degrees == 0) return src;\n    let matrix = new Matrix();\n    matrix.setRotate(degrees, px, py);\n    let ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);\n    return ret;\n}\n</code></pre>\n<p>关于脚本化 Java 的更多信息, 参阅 <a href=\"scriptingJava\">Scripting Java - 脚本化 Java</a> 章节.</p>\n",
           "type": "module",
-          "displayName": "如何使打包的应用不显示主界面"
-        }
-      ],
-      "properties": [
-        {
-          "textRaw": "Auto.js自带的模块和函数中没有的功能如何实现",
-          "name": "js自带的模块和函数中没有的功能如何实现",
-          "desc": "<p>由于Auto.js支持直接调用Android的API，对于Auto.js没有内置的函数，可以直接通过修改Android代码为JavaScript代码实现。例如旋转图片的Android代码为：</p>\n<pre><code>import android.graphics.Bitmap;\nimport android.graphics.Matrix;\n\npublic static Bitmap rotate(final Bitmap src,\n                            final int degrees,\n                            final float px,\n                            final float py) {\n    if (degrees == 0) return src;\n    Matrix matrix = new Matrix();\n    matrix.setRotate(degrees, px, py);\n    Bitmap ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);\n    return ret;\n}\n</code></pre><p>转换为JavaScript的代码后为：</p>\n<pre><code>importClass(android.graphics.Bitmap);\nimportClass(android.graphics.Matrix);\n\nfunction rotate(src, degrees, px, py){\n    if (degrees == 0) return src;\n    var matrix = new Matrix();\n    matrix.setRotate(degrees, px, py);\n    var ret = Bitmap.createBitmap(src, 0, 0, src.getWidth(), src.getHeight(), matrix, true);\n    return ret;\n}\n</code></pre><p>有关调用Android和Java的API的更多信息，参见<a href=\"https://developer.mozilla.org/zh-CN/docs/Mozilla/Projects/Rhino/Scripting_Java\">Work with Java</a>。</p>\n"
+          "displayName": "功能扩展"
         }
       ],
       "type": "module",
-      "displayName": "Q & A"
+      "displayName": "疑难解答 (Q & A)"
     }
   ]
 }

@@ -11,8 +11,6 @@ Each type of heading has a description block.
 added: v0.10.0
 -->
 
-> Stability: 3 - Stable
-
 description and examples.
 
 ### module.property

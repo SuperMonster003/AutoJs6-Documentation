@@ -1,0 +1,355 @@
+{
+  "source": "..\\api\\arrayx.md",
+  "modules": [
+    {
+      "textRaw": "Arrayx (Array 扩展)",
+      "name": "arrayx_(array_扩展)",
+      "desc": "<p>Arrayx 用于扩展 JavaScript 标准内置对象 Array 的功能 (参阅 <a href=\"glossaries#内置对象扩展\">内置对象扩展</a>).</p>\n<p>Arrayx 全局可用:</p>\n<pre><code class=\"lang-js\">console.log(typeof Arrayx); // &quot;object&quot;\nconsole.log(typeof Arrayx.union); // &quot;function&quot;\n</code></pre>\n<p>当启用内置扩展后, Arrayx 将被应用在 Array 及其原型上:</p>\n<pre><code class=\"lang-js\">console.log(typeof Array.prototype.union); // &quot;function&quot;\nconsole.log(typeof [].union); // &quot;function&quot;\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "启用内置扩展",
+          "name": "启用内置扩展",
+          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Array&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n",
+          "type": "module",
+          "displayName": "启用内置扩展"
+        },
+        {
+          "textRaw": "排序稳定性",
+          "name": "排序稳定性",
+          "desc": "<p>Arrayx 的诸多排序方法, 如 [ sortBy / sortDescending / sortByDescending / sorted / sortedBy / sortedDescending / sortedByDescending ] 等, 其内部实现均调用了 JavaScript 的原生方法 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort\">Array.prototype.sort</a>.</p>\n<p>自 ES10（ECMAScript 2019）起，<a href=\"https://tc39.es/ecma262/#sec-array.prototype.sort\">规范</a> 要求 Array.prototype.sort 为稳定排序, 因此 Arrayx 的排序方法也是稳定的.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#%E6%8E%92%E5%BA%8F%E7%A8%B3%E5%AE%9A%E6%80%A7\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "排序稳定性"
+        },
+        {
+          "textRaw": "排序方式",
+          "name": "排序方式",
+          "desc": "<p>Arrayx 排序方法中的 selector (条件选择器) 使用的 compareFn (比较函数) 与默认的稍有不同.<br>默认的比较函数按照转换为字符串的诸个字符的 Unicode 位点进行 <strong>升序</strong> 排序, 例如 80 会被排列到 9 之前.<br>而 Arrayx 排序方法的 selector 则采用简单的直接比较方法:</p>\n<pre><code class=\"lang-js\">/* Arrayx 使用的 compareFn. */\n(a, b) =&gt; a === b ? 0 : a &gt; b ? 1 : -1;\n</code></pre>\n<p>因此对于 number 数组的排序会出现不同的结果:</p>\n<pre><code class=\"lang-js\">console.log([ 80, 70, 9 ].sort()); // [ 70, 80, 9 ]\nconsole.log(Arrayx.sorted([ 80, 70, 9 ])); // [ 9, 70, 80 ]\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Arrayx</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "排序方式"
+        },
+        {
+          "textRaw": "[m] ensureArray",
+          "name": "[m]_ensurearray",
+          "methods": [
+            {
+              "textRaw": "ensureArray(...o)",
+              "type": "method",
+              "name": "ensureArray",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>相当于严格类型检查, 当任意一个 o 不满足 <code>Array.isArray(o)</code> 时抛出异常.</p>\n<pre><code class=\"lang-js\">/* 确保每一个对象都是 Array. */\n\nconsole.log(Arrayx.ensureArray([])); /* 无异常. */\nconsole.log(Arrayx.ensureArray([], 9)); /* 抛出异常. */\nconsole.log(Arrayx.ensureArray([ 5 ], [ 2, 3 ])); /* 无异常. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Array.ensureArray([])); /* 无异常. */\nconsole.log(Array.ensureArray([], 9)); /* 抛出异常. */\nconsole.log(Array.ensureArray([ 5 ], [ 2, 3 ])); /* 无异常. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...o"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureArray"
+        },
+        {
+          "textRaw": "[m] intersect",
+          "name": "[m]_intersect",
+          "methods": [
+            {
+              "textRaw": "intersect(o, ...others)",
+              "type": "method",
+              "name": "intersect",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 数组</li>\n<li><strong>others</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#generic\">U</a><a href=\"dataTypes#array\">[]</a><a href=\"documentation#可变参数\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { (<a href=\"dataTypes#generic\">T</a> &amp; <a href=\"dataTypes#generic\">U</a>)<a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回多个数组的交集.</p>\n<pre><code class=\"lang-js\">let arrA = [ 1, 2, 3 ];\nlet arrB = [ 2, 3, 4 ];\nconsole.log(Arrayx.intersect(arrA, arrB)); // [ 2, 3 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrA.intersect(arrB)); /* 同上. */\n\nlet arrC = [ 1, 1, 2 ];\nlet arrD = [ 1, 1, 3 ];\n/* 返回的交集结果中不包含重复元素. */\nconsole.log(Arrayx.intersect(arrC, arrD)); // [ 1 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrC.intersect(arrD)); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "o"
+                    },
+                    {
+                      "name": "...others"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] intersect"
+        },
+        {
+          "textRaw": "[m] union",
+          "name": "[m]_union",
+          "methods": [
+            {
+              "textRaw": "union(o, ...others)",
+              "type": "method",
+              "name": "union",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 数组</li>\n<li><strong>others</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#generic\">U</a><a href=\"dataTypes#array\">[]</a><a href=\"documentation#可变参数\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { (<a href=\"dataTypes#generic\">T</a> | <a href=\"dataTypes#generic\">U</a>)<a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回多个数组的并集.</p>\n<pre><code class=\"lang-js\">let arrA = [ 1, 2 ];\nlet arrB = [ 3, 4 ];\nconsole.log(Arrayx.union(arrA, arrB)); // [ 1, 2, 3, 4 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrA.union(arrB)); /* 同上. */\n\nlet arrC = [ 7, 8, 9 ];\nlet arrD = [ 7, 10 ];\n/* 返回的并集结果中不包含重复元素. */\nconsole.log(Arrayx.union(arrC, arrD)); // [ 7, 8, 9, 10 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrC.union(arrD)); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "o"
+                    },
+                    {
+                      "name": "...others"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] union"
+        },
+        {
+          "textRaw": "[m] distinct",
+          "name": "[m]_distinct",
+          "methods": [
+            {
+              "textRaw": "distinct(arr)",
+              "type": "method",
+              "name": "distinct",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回去除重复元素后的新数组.</p>\n<pre><code class=\"lang-js\">let arr = [ 1, 2, 1, 3, 2, 2 ];\nconsole.log(Arrayx.distinct(arr)); // [ 1, 2, 3 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arr.distinct()); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] distinct"
+        },
+        {
+          "textRaw": "[m] distinctBy",
+          "name": "[m]_distinctby",
+          "methods": [
+            {
+              "textRaw": "distinctBy(arr, selector)",
+              "type": "method",
+              "name": "distinctBy",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#function\">(</a>e: <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">U</a> } - 条件选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回按一定条件去除重复元素后的新数组.</p>\n<pre><code class=\"lang-js\">/* 按奇偶条件去重. */\n/* 即结果数组中的所有元素保证相互之间奇偶互异. */\nlet arrA = [ 1, 2, 1, 3, 2, 2 ];\nconsole.log(Arrayx.distinctBy(arrA, e =&gt; e % 2)); // [ 1, 2 ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrA.distinctBy(e =&gt; e % 2)); // /* 同上. */\n\n/* 按字符串长度条件去重. */\n/* 即结果数组中的所有元素保证相互之间长度不同. */\nlet arrB = [ &#39;a&#39;, &#39;ab&#39;, &#39;c&#39;, &#39;bc&#39;, &#39;abc&#39;, &#39;123&#39; ];\nconsole.log(Arrayx.distinctBy(arrB, e =&gt; e.length)); // [ &#39;a&#39;, &#39;ab&#39;, &#39;abc&#39; ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrB.distinctBy(e =&gt; e.length)); /* 同上. */\n\n/* 按对象属性条件去重. */\nlet arrC = [\n    { num: 1, count: 10 },\n    { num: 2, count: 10 },\n    { num: 3, count: 20 },\n    { num: 4, count: 10 },\n    { num: 5, count: 20 },\n];\nconsole.log(Arrayx.distinctBy(arrC, e =&gt; e.count)); // [ { num: 1, count: 10 }, { num: 3, count: 20 } ]\n\n/* 启用内置对象扩展后. */\nconsole.log(arrC.distinctBy(e =&gt; e.count)); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    },
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] distinctBy"
+        },
+        {
+          "textRaw": "[m] sortBy",
+          "name": "[m]_sortby",
+          "methods": [
+            {
+              "textRaw": "sortBy(arr, selector)",
+              "type": "method",
+              "name": "sortBy",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#function\">(</a>e: <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">U</a> } - 条件选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地排序, 并返回排序后的新数组.<br>方法调用后, 原数组将发生改变.</p>\n<pre><code class=\"lang-js\">/* 将字符串按 &quot;数字化&quot; 顺序排序. */\nlet arrA = [ &#39;10&#39;, &#39;2&#39;, &#39;30&#39;, &#39;4&#39;, &#39;50&#39;, &#39;0x6&#39; ];\nconsole.log(Arrayx.sortBy(arrA, Number)); // [ &#39;2&#39;, &#39;4&#39;, &#39;0x6&#39;, &#39;10&#39;, &#39;30&#39;, &#39;50&#39; ]\n\n/* arrA 将发生改变. */\nconsole.log(arrA); // [ &#39;2&#39;, &#39;4&#39;, &#39;0x6&#39;, &#39;10&#39;, &#39;30&#39;, &#39;50&#39; ]\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrA.sortBy(Number)); /* 结果同上. */\n\n/* 按字符串长度条件排序. */\nlet arrB = [ &#39;a&#39;, &#39;ab&#39;, &#39;c&#39;, &#39;bc&#39;, &#39;abc&#39;, &#39;123&#39; ];\nconsole.log(Arrayx.sortBy(arrB, e =&gt; e.length)); // [ &#39;a&#39;, &#39;c&#39;, &#39;ab&#39;, &#39;bc&#39;, &#39;abc&#39;, &#39;123&#39; ]\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrB.sortBy(e =&gt; e.length)); /* 结果同上. */\n\n/* 按对象属性条件排序. */\nlet arrC = [\n    { num: 1, count: 10 },\n    { num: 2, count: 30 },\n    { num: 3, count: 20 },\n    { num: 4, count: 10 },\n    { num: 5, count: 0 },\n];\nconsole.log(Arrayx.sortBy(arrC, e =&gt; e.count)); /* num 按照 5 - 1 - 4 - 3 - 2 排序. */\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrC.sortBy(e =&gt; e.count)); /* 结果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    },
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortBy"
+        },
+        {
+          "textRaw": "[m] sortDescending",
+          "name": "[m]_sortdescending",
+          "methods": [
+            {
+              "textRaw": "sortDescending(arr)",
+              "type": "method",
+              "name": "sortDescending",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地 <strong>降序</strong> 排序, 并返回排序后的新数组.<br>方法调用后, 原数组将发生改变.</p>\n<pre><code class=\"lang-js\">/* 将字符串按 &quot;数字化&quot; 顺序排序. */\nlet arrA = [ &#39;10&#39;, &#39;2&#39;, &#39;30&#39;, &#39;4&#39;, &#39;50&#39;, &#39;0x6&#39; ];\n\n// [ &#39;2&#39;, &#39;4&#39;, &#39;0x6&#39;, &#39;10&#39;, &#39;30&#39;, &#39;50&#39; ]\nconsole.log(Arrayx.sortDescending(arrA, Number));\n\n/* arrA 将发生改变. */\nconsole.log(arrA[0]); // &#39;2&#39;\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrA.sortDescending(Number)); /* 结果同上. */\n\n/* 按字符串长度条件排序. */\nlet arrB = [ &#39;a&#39;, &#39;ab&#39;, &#39;c&#39;, &#39;bc&#39;, &#39;abc&#39;, &#39;123&#39; ];\n\n// [ &#39;a&#39;, &#39;c&#39;, &#39;ab&#39;, &#39;bc&#39;, &#39;abc&#39;, &#39;123&#39; ]\nconsole.log(Arrayx.sortDescending(arrB, e =&gt; e.length));\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrB.sortDescending(e =&gt; e.length)); /* 结果同上. */\n\n/* 按对象属性条件排序. */\nlet arrC = [\n    { num: 1, count: 10 },\n    { num: 2, count: 30 },\n    { num: 3, count: 20 },\n    { num: 4, count: 10 },\n    { num: 5, count: 0 },\n];\n\n/* 元素将按照 num 属性值以 5 - 1 - 4 - 3 - 2 排序. */\nconsole.log(Arrayx.sortDescending(arrC, e =&gt; e.count));\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrC.sortDescending(e =&gt; e.count)); /* 结果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortDescending"
+        },
+        {
+          "textRaw": "[m] sortByDescending",
+          "name": "[m]_sortbydescending",
+          "methods": [
+            {
+              "textRaw": "sortByDescending(arr, selector)",
+              "type": "method",
+              "name": "sortByDescending",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#function\">(</a>e: <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">U</a> } - 条件选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地 <strong>降序</strong> 排序, 并返回排序后的新数组.<br>方法调用后, 原数组将发生改变.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-sortby\">sortBy</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    },
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortByDescending"
+        },
+        {
+          "textRaw": "[m] sorted",
+          "name": "[m]_sorted",
+          "methods": [
+            {
+              "textRaw": "sorted(arr)",
+              "type": "method",
+              "name": "sorted",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按简单比较方式原地排序, 并返回排序后的新数组.<br>方法调用后, 原数组将 <strong>不</strong> 发生改变.</p>\n<pre><code class=\"lang-js\">let arr = [ 2, 3, 1, 20, 10 ];\n\nconsole.log(Arrayx.sorted(arr)); // [ 1, 2, 3, 10, 20 ] \n\n/* 启用内置对象扩展后. */\nconsole.log(arr.sorted()); /* 同上. */\n\n/* arr 不发生改变. */\nconsole.log(arr); // [ 2, 3, 1, 20, 10 ]\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sorted"
+        },
+        {
+          "textRaw": "[m] sortedBy",
+          "name": "[m]_sortedby",
+          "methods": [
+            {
+              "textRaw": "sortedBy(arr, selector)",
+              "type": "method",
+              "name": "sortedBy",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#function\">(</a>e: <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">U</a> } - 条件选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地排序, 并返回排序后的新数组.<br>方法调用后, 原数组将 <strong>不</strong> 发生改变.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-sortby\">sortBy</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    },
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortedBy"
+        },
+        {
+          "textRaw": "[m] sortedDescending",
+          "name": "[m]_sorteddescending",
+          "methods": [
+            {
+              "textRaw": "sortedDescending(arr)",
+              "type": "method",
+              "name": "sortedDescending",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地 <strong>降序</strong> 排序, 并返回排序后的新数组.<br>方法调用后, 原数组将 <strong>不</strong> 发生改变.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-sortdescending\">sortDescending</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortedDescending"
+        },
+        {
+          "textRaw": "[m] sortedByDescending",
+          "name": "[m]_sortedbydescending",
+          "methods": [
+            {
+              "textRaw": "sortedByDescending(arr, selector)",
+              "type": "method",
+              "name": "sortedByDescending",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#function\">(</a>e: <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">U</a> } - 条件选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按一定条件原地 <strong>降序</strong> 排序, 并返回排序后的新数组.<br>方法调用后, 原数组将 <strong>不</strong> 发生改变.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-sortbydescending\">sortByDescending</a></p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    },
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sortedByDescending"
+        },
+        {
+          "textRaw": "[m] shuffle",
+          "name": "[m]_shuffle",
+          "methods": [
+            {
+              "textRaw": "shuffle(arr)",
+              "type": "method",
+              "name": "shuffle",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>arr</strong> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> } - 待处理数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>按随机乱序方式原地排序, 并返回排序后的新数组.<br>方法调用后, 原数组将发生改变.</p>\n<pre><code class=\"lang-js\">/* 将元素随机乱序排序. */\nlet arrA = [ 1, 2, 3, 4, 5, 6 ];\nconsole.log(Arrayx.shuffle(arrA)); /* e.g. [ 2, 4, 5, 1, 6, 3 ] */\n\n/* arrA 将发生改变. */\nconsole.log(arrA); /* 很可能不再是 [ 1, 2, 3, 4, 5, 6 ]. */\n\n/* 启用内置对象扩展后的使用方式. */\nconsole.log(arrA.shuffle()); /* 另一个随机的结果. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "arr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] shuffle"
+        }
+      ],
+      "type": "module",
+      "displayName": "Arrayx (Array 扩展)"
+    }
+  ]
+}

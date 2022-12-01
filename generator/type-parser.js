@@ -62,7 +62,7 @@ module.exports = {
     toLink: function (typeInput) {
         const typeLinks = [];
         typeInput = typeInput.replace('{', '').replace('}', '');
-        const typeTexts = typeInput.split('|');
+        const typeTexts = typeInput.split(/\s*\|\s*/);
 
         typeTexts.forEach(function (typeText) {
             typeText = typeText.trim();
@@ -87,15 +87,15 @@ module.exports = {
                 }
 
                 if (typeUrl) {
-                    typeLinks.push('<a href="' + typeUrl + '" class="type">&lt;' +
-                        typeTextFull + '&gt;</a>');
+                    typeLinks.push('<a href="' + typeUrl + '" class="type">' +
+                        typeTextFull + '</a>');
                 } else {
-                    typeLinks.push('<span class="type">&lt;' + typeTextFull +
-                        '&gt;</span>');
+                    typeLinks.push('<span class="type">' + typeTextFull +
+                        '</span>');
                 }
             }
         });
 
-        return typeLinks.length ? typeLinks.join(' | ') : typeInput;
+        return "{ " + (typeLinks.length ? typeLinks.join(' | ') : typeInput) + " }";
     },
 };

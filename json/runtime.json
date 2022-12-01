@@ -1,0 +1,89 @@
+{
+  "source": "..\\api\\runtime.md",
+  "modules": [
+    {
+      "textRaw": "运行时 (Runtime)",
+      "name": "运行时_(runtime)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 31, 2022.</p>\n\n<hr>\n",
+      "methods": [
+        {
+          "textRaw": "runtime.requestPermissions(permissions)",
+          "type": "method",
+          "name": "requestPermissions",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`permissions` {Array} 权限的字符串数组 ",
+                  "name": "permissions",
+                  "type": "Array",
+                  "desc": "权限的字符串数组"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "permissions"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>动态申请安卓的权限. 例如：</p>\n<pre><code>//请求GPS权限\nruntime.requestPermissions([&quot;access_fine_location&quot;]);\n</code></pre><p>尽管安卓有很多权限, 但必须写入Manifest才能动态申请, 为了防止权限的滥用, 目前Auto.js只能额外申请两个权限：</p>\n<ul>\n<li><code>access_fine_location</code> GPS权限</li>\n<li><code>record_audio</code> 录音权限</li>\n</ul>\n<p>您可以通过APK编辑器来增加Auto.js以及Auto.js打包的应用的权限.</p>\n<p>安卓所有的权限列表参见<a href=\"https://developer.android.com/guide/topics/permissions/overview/\">Permissions Overview</a>. （并没有用）</p>\n"
+        },
+        {
+          "textRaw": "runtime.loadJar(path)",
+          "type": "method",
+          "name": "loadJar",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {string} jar文件路径 ",
+                  "name": "path",
+                  "type": "string",
+                  "desc": "jar文件路径"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>加载目标jar文件, 加载成功后将可以使用该Jar文件的类.</p>\n<pre><code>// 加载jsoup.jar\nruntime.loadJar(&quot;./jsoup.jar&quot;);\n// 使用jsoup解析html\nimportClass(org.jsoup.Jsoup);\nlog(Jsoup.parse(files.read(&quot;./test.html&quot;)));\n</code></pre><p>(jsoup是一个Java实现的解析Html DOM的库, 可以在<a href=\"https://jsoup.org/download/\">Jsoup</a>下载/)</p>\n"
+        },
+        {
+          "textRaw": "runtime.loadDex(path)",
+          "type": "method",
+          "name": "loadDex",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`path` {string} dex文件路径 ",
+                  "name": "path",
+                  "type": "string",
+                  "desc": "dex文件路径"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>加载目标dex文件, 加载成功后将可以使用该dex文件的类.</p>\n<p>因为加载jar实际上是把jar转换为dex再加载的, 因此加载dex文件会比jar文件快得多. 可以使用Android SDK的build tools的dx工具把jar转换为dex.</p>\n"
+        }
+      ],
+      "type": "module",
+      "displayName": "运行时 (Runtime)"
+    }
+  ]
+}

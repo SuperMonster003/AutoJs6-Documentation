@@ -1,0 +1,1479 @@
+{
+  "source": "..\\api\\accessibilityActionsType.md",
+  "modules": [
+    {
+      "textRaw": "无障碍行为 (AccessibilityActions)",
+      "name": "无障碍行为_(accessibilityactions)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>无障碍控件节点的行为集合, 是一个 Java 接口.<br>该接口有一个抽象方法 performAction 可用于用户执行指定的无障碍行为.</p>\n<p>下表列出了部分行为 ID 名称, 及对应已实现封装的方法名称 (星号表示 AutoJs6 新增方法):</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left\">行为 ID</th>\n<th style=\"text-align:left\">封装方法名</th>\n<th>最低 API 等级</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left\">ACTION_ACCESSIBILITY_FOCUS</td>\n<td style=\"text-align:left\">accessibilityFocus</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CLEAR_ACCESSIBILITY_FOCUS</td>\n<td style=\"text-align:left\">clearAccessibilityFocus</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CLEAR_FOCUS</td>\n<td style=\"text-align:left\">clearFocus</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CLEAR_SELECTION</td>\n<td style=\"text-align:left\">clearSelection *</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CLICK</td>\n<td style=\"text-align:left\">click</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_COLLAPSE</td>\n<td style=\"text-align:left\">collapse</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CONTEXT_CLICK</td>\n<td style=\"text-align:left\">contextClick</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_COPY</td>\n<td style=\"text-align:left\">copy</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_CUT</td>\n<td style=\"text-align:left\">cut</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_DISMISS</td>\n<td style=\"text-align:left\">dismiss</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_DRAG_CANCEL</td>\n<td style=\"text-align:left\">dragCancel *</td>\n<td>32 (12.1) [S_V2]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_DRAG_DROP</td>\n<td style=\"text-align:left\">dragDrop *</td>\n<td>32 (12.1) [S_V2]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_DRAG_START</td>\n<td style=\"text-align:left\">dragStart *</td>\n<td>32 (12.1) [S_V2]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_EXPAND</td>\n<td style=\"text-align:left\">expand</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_FOCUS</td>\n<td style=\"text-align:left\">focus</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_HIDE_TOOLTIP</td>\n<td style=\"text-align:left\">hideTooltip *</td>\n<td>28 (9) [P]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_IME_ENTER</td>\n<td style=\"text-align:left\">imeEnter *</td>\n<td>30 (11) [R]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_LONG_CLICK</td>\n<td style=\"text-align:left\">longClick</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_MOVE_WINDOW</td>\n<td style=\"text-align:left\">moveWindow *</td>\n<td>26 (8) [O]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_NEXT_AT_MOVEMENT_GRANULARITY</td>\n<td style=\"text-align:left\">nextAtMovementGranularity *</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_NEXT_HTML_ELEMENT</td>\n<td style=\"text-align:left\">nextHtmlElement *</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PAGE_DOWN</td>\n<td style=\"text-align:left\">pageDown *</td>\n<td>29 (10) [Q]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PAGE_LEFT</td>\n<td style=\"text-align:left\">pageLeft *</td>\n<td>29 (10) [Q]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PAGE_RIGHT</td>\n<td style=\"text-align:left\">pageRight *</td>\n<td>29 (10) [Q]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PAGE_UP</td>\n<td style=\"text-align:left\">pageUp *</td>\n<td>29 (10) [Q]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PASTE</td>\n<td style=\"text-align:left\">paste</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PRESS_AND_HOLD</td>\n<td style=\"text-align:left\">pressAndHold *</td>\n<td>30 (11) [R]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PREVIOUS_AT_MOVEMENT_GRANULARITY</td>\n<td style=\"text-align:left\">previousAtMovementGranularity *</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_PREVIOUS_HTML_ELEMENT</td>\n<td style=\"text-align:left\">previousHtmlElement *</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_BACKWARD</td>\n<td style=\"text-align:left\">scrollBackward</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_DOWN</td>\n<td style=\"text-align:left\">scrollDown</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_FORWARD</td>\n<td style=\"text-align:left\">scrollForward</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_LEFT</td>\n<td style=\"text-align:left\">scrollLeft</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_RIGHT</td>\n<td style=\"text-align:left\">scrollRight</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_TO_POSITION</td>\n<td style=\"text-align:left\">scrollTo</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SCROLL_UP</td>\n<td style=\"text-align:left\">scrollUp</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SELECT</td>\n<td style=\"text-align:left\">select</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SET_PROGRESS</td>\n<td style=\"text-align:left\">setProgress</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SET_SELECTION</td>\n<td style=\"text-align:left\">setSelection</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SET_TEXT</td>\n<td style=\"text-align:left\">setText</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SHOW_ON_SCREEN</td>\n<td style=\"text-align:left\">show</td>\n<td>-</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SHOW_TEXT_SUGGESTIONS</td>\n<td style=\"text-align:left\">showTextSuggestions *</td>\n<td>33 (13) [TIRAMISU]</td>\n</tr>\n<tr>\n<td style=\"text-align:left\">ACTION_SHOW_TOOLTIP</td>\n<td style=\"text-align:left\">showTooltip *</td>\n<td>28 (9) [P]</td>\n</tr>\n</tbody>\n</table>\n<p>若当前设备不满足列表中最低 API 等级要求, 使用对应方法时不会抛出异常, 会静默返回 false:</p>\n<pre><code class=\"lang-js\">/* ACTION_IME_ENTER 要求设备 API &gt;= 30 (安卓 11). */\nconsole.log()\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo.AccessibilityAction\">Android Docs</a></p>\n</blockquote>\n<blockquote>\n<p>注: 对于上述表格中未实现封装的行为, 可通过 <a href=\"#m-performaction\">performAction</a> 实现自定义封装, 详见相关示例代码.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">AccessibilityActions</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m!] performAction",
+          "name": "[m!]_performaction",
+          "desc": "<p>用于执行指定的控件行为.</p>\n",
+          "methods": [
+            {
+              "textRaw": "performAction(action, ...arguments)",
+              "type": "method",
+              "name": "performAction",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**action** { [number](dataTypes#number) } - 行为的唯一标志符 (Action ID) ",
+                      "name": "**action**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "行为的唯一标志符 (Action ID)"
+                    },
+                    {
+                      "textRaw": "**arguments** { [...](documentation#可变参数)[ActionArgument](#i-actionargument)[[]](documentation#可变参数) } - 用于给行为指定参数的 \"行为参数\" 类型 ",
+                      "name": "**arguments**",
+                      "type": " [...](documentation#可变参数)[ActionArgument](#i-actionargument)[[]](documentation#可变参数) ",
+                      "desc": "用于给行为指定参数的 \"行为参数\" 类型"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "...arguments"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述及示例.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!] performAction"
+        },
+        {
+          "textRaw": "[m!=] click",
+          "name": "[m!=]_click",
+          "methods": [
+            {
+              "textRaw": "click()",
+              "type": "method",
+              "name": "click",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] click"
+        },
+        {
+          "textRaw": "[m!=] longClick",
+          "name": "[m!=]_longclick",
+          "methods": [
+            {
+              "textRaw": "longClick()",
+              "type": "method",
+              "name": "longClick",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] longClick"
+        },
+        {
+          "textRaw": "[m!=] accessibilityFocus",
+          "name": "[m!=]_accessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "accessibilityFocus()",
+              "type": "method",
+              "name": "accessibilityFocus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] accessibilityFocus"
+        },
+        {
+          "textRaw": "[m!=] clearAccessibilityFocus",
+          "name": "[m!=]_clearaccessibilityfocus",
+          "methods": [
+            {
+              "textRaw": "clearAccessibilityFocus()",
+              "type": "method",
+              "name": "clearAccessibilityFocus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] clearAccessibilityFocus"
+        },
+        {
+          "textRaw": "[m!=] focus",
+          "name": "[m!=]_focus",
+          "methods": [
+            {
+              "textRaw": "focus()",
+              "type": "method",
+              "name": "focus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] focus"
+        },
+        {
+          "textRaw": "[m!=] clearFocus",
+          "name": "[m!=]_clearfocus",
+          "methods": [
+            {
+              "textRaw": "clearFocus()",
+              "type": "method",
+              "name": "clearFocus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] clearFocus"
+        },
+        {
+          "textRaw": "[m!=] clearSelection",
+          "name": "[m!=]_clearselection",
+          "methods": [
+            {
+              "textRaw": "clearSelection()",
+              "type": "method",
+              "name": "clearSelection",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] clearSelection"
+        },
+        {
+          "textRaw": "[m!=] dragCancel",
+          "name": "[m!=]_dragcancel",
+          "methods": [
+            {
+              "textRaw": "dragCancel()",
+              "type": "method",
+              "name": "dragCancel",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] dragCancel"
+        },
+        {
+          "textRaw": "[m!=] dragDrop",
+          "name": "[m!=]_dragdrop",
+          "methods": [
+            {
+              "textRaw": "dragDrop()",
+              "type": "method",
+              "name": "dragDrop",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] dragDrop"
+        },
+        {
+          "textRaw": "[m!=] dragStart",
+          "name": "[m!=]_dragstart",
+          "methods": [
+            {
+              "textRaw": "dragStart()",
+              "type": "method",
+              "name": "dragStart",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] dragStart"
+        },
+        {
+          "textRaw": "[m!=] hideTooltip",
+          "name": "[m!=]_hidetooltip",
+          "methods": [
+            {
+              "textRaw": "hideTooltip()",
+              "type": "method",
+              "name": "hideTooltip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] hideTooltip"
+        },
+        {
+          "textRaw": "[m!=] imeEnter",
+          "name": "[m!=]_imeenter",
+          "methods": [
+            {
+              "textRaw": "imeEnter()",
+              "type": "method",
+              "name": "imeEnter",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] imeEnter"
+        },
+        {
+          "textRaw": "[m!=] moveWindow",
+          "name": "[m!=]_movewindow",
+          "methods": [
+            {
+              "textRaw": "moveWindow(x, y)",
+              "type": "method",
+              "name": "moveWindow",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] moveWindow"
+        },
+        {
+          "textRaw": "[m!=] nextAtMovementGranularity",
+          "name": "[m!=]_nextatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "nextAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "nextAtMovementGranularity",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**granularity** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**granularity**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "**isExtendSelection** { [boolean](dataTypes#boolean) } - 参数描述 ",
+                      "name": "**isExtendSelection**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] nextAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m!=] nextHtmlElement",
+          "name": "[m!=]_nexthtmlelement",
+          "methods": [
+            {
+              "textRaw": "nextHtmlElement(element)",
+              "type": "method",
+              "name": "nextHtmlElement",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**element** { [string](dataTypes#string) } - 参数描述 ",
+                      "name": "**element**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] nextHtmlElement"
+        },
+        {
+          "textRaw": "[m!=] pageDown",
+          "name": "[m!=]_pagedown",
+          "methods": [
+            {
+              "textRaw": "pageDown()",
+              "type": "method",
+              "name": "pageDown",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] pageDown"
+        },
+        {
+          "textRaw": "[m!=] pageLeft",
+          "name": "[m!=]_pageleft",
+          "methods": [
+            {
+              "textRaw": "pageLeft()",
+              "type": "method",
+              "name": "pageLeft",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] pageLeft"
+        },
+        {
+          "textRaw": "[m!=] pageRight",
+          "name": "[m!=]_pageright",
+          "methods": [
+            {
+              "textRaw": "pageRight()",
+              "type": "method",
+              "name": "pageRight",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] pageRight"
+        },
+        {
+          "textRaw": "[m!=] pageUp",
+          "name": "[m!=]_pageup",
+          "methods": [
+            {
+              "textRaw": "pageUp()",
+              "type": "method",
+              "name": "pageUp",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] pageUp"
+        },
+        {
+          "textRaw": "[m!=] pressAndHold",
+          "name": "[m!=]_pressandhold",
+          "methods": [
+            {
+              "textRaw": "pressAndHold()",
+              "type": "method",
+              "name": "pressAndHold",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] pressAndHold"
+        },
+        {
+          "textRaw": "[m!=] previousAtMovementGranularity",
+          "name": "[m!=]_previousatmovementgranularity",
+          "methods": [
+            {
+              "textRaw": "previousAtMovementGranularity(granularity, isExtendSelection)",
+              "type": "method",
+              "name": "previousAtMovementGranularity",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**granularity** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**granularity**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "**isExtendSelection** { [boolean](dataTypes#boolean) } - 参数描述 ",
+                      "name": "**isExtendSelection**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "granularity"
+                    },
+                    {
+                      "name": "isExtendSelection"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] previousAtMovementGranularity"
+        },
+        {
+          "textRaw": "[m!=] previousHtmlElement",
+          "name": "[m!=]_previoushtmlelement",
+          "methods": [
+            {
+              "textRaw": "previousHtmlElement(element)",
+              "type": "method",
+              "name": "previousHtmlElement",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**element** { [string](dataTypes#string) } - 参数描述 ",
+                      "name": "**element**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "element"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] previousHtmlElement"
+        },
+        {
+          "textRaw": "[m!=] showTextSuggestions",
+          "name": "[m!=]_showtextsuggestions",
+          "methods": [
+            {
+              "textRaw": "showTextSuggestions()",
+              "type": "method",
+              "name": "showTextSuggestions",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] showTextSuggestions"
+        },
+        {
+          "textRaw": "[m!=] showTooltip",
+          "name": "[m!=]_showtooltip",
+          "methods": [
+            {
+              "textRaw": "showTooltip()",
+              "type": "method",
+              "name": "showTooltip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] showTooltip"
+        },
+        {
+          "textRaw": "[m!=] copy",
+          "name": "[m!=]_copy",
+          "methods": [
+            {
+              "textRaw": "copy()",
+              "type": "method",
+              "name": "copy",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] copy"
+        },
+        {
+          "textRaw": "[m!=] paste",
+          "name": "[m!=]_paste",
+          "methods": [
+            {
+              "textRaw": "paste()",
+              "type": "method",
+              "name": "paste",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] paste"
+        },
+        {
+          "textRaw": "[m!=] select",
+          "name": "[m!=]_select",
+          "methods": [
+            {
+              "textRaw": "select()",
+              "type": "method",
+              "name": "select",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] select"
+        },
+        {
+          "textRaw": "[m!=] cut",
+          "name": "[m!=]_cut",
+          "methods": [
+            {
+              "textRaw": "cut()",
+              "type": "method",
+              "name": "cut",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] cut"
+        },
+        {
+          "textRaw": "[m!=] collapse",
+          "name": "[m!=]_collapse",
+          "methods": [
+            {
+              "textRaw": "collapse()",
+              "type": "method",
+              "name": "collapse",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] collapse"
+        },
+        {
+          "textRaw": "[m!=] expand",
+          "name": "[m!=]_expand",
+          "methods": [
+            {
+              "textRaw": "expand()",
+              "type": "method",
+              "name": "expand",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] expand"
+        },
+        {
+          "textRaw": "[m!=] dismiss",
+          "name": "[m!=]_dismiss",
+          "methods": [
+            {
+              "textRaw": "dismiss()",
+              "type": "method",
+              "name": "dismiss",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] dismiss"
+        },
+        {
+          "textRaw": "[m!=] show",
+          "name": "[m!=]_show",
+          "methods": [
+            {
+              "textRaw": "show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] show"
+        },
+        {
+          "textRaw": "[m!=] scrollForward",
+          "name": "[m!=]_scrollforward",
+          "methods": [
+            {
+              "textRaw": "scrollForward()",
+              "type": "method",
+              "name": "scrollForward",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollForward"
+        },
+        {
+          "textRaw": "[m!=] scrollBackward",
+          "name": "[m!=]_scrollbackward",
+          "methods": [
+            {
+              "textRaw": "scrollBackward()",
+              "type": "method",
+              "name": "scrollBackward",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollBackward"
+        },
+        {
+          "textRaw": "[m!=] scrollUp",
+          "name": "[m!=]_scrollup",
+          "methods": [
+            {
+              "textRaw": "scrollUp()",
+              "type": "method",
+              "name": "scrollUp",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollUp"
+        },
+        {
+          "textRaw": "[m!=] scrollDown",
+          "name": "[m!=]_scrolldown",
+          "methods": [
+            {
+              "textRaw": "scrollDown()",
+              "type": "method",
+              "name": "scrollDown",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollDown"
+        },
+        {
+          "textRaw": "[m!=] scrollLeft",
+          "name": "[m!=]_scrollleft",
+          "methods": [
+            {
+              "textRaw": "scrollLeft()",
+              "type": "method",
+              "name": "scrollLeft",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollLeft"
+        },
+        {
+          "textRaw": "[m!=] scrollRight",
+          "name": "[m!=]_scrollright",
+          "methods": [
+            {
+              "textRaw": "scrollRight()",
+              "type": "method",
+              "name": "scrollRight",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollRight"
+        },
+        {
+          "textRaw": "[m!=] contextClick",
+          "name": "[m!=]_contextclick",
+          "methods": [
+            {
+              "textRaw": "contextClick()",
+              "type": "method",
+              "name": "contextClick",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] contextClick"
+        },
+        {
+          "textRaw": "[m!=] setSelection",
+          "name": "[m!=]_setselection",
+          "methods": [
+            {
+              "textRaw": "setSelection(start, end)",
+              "type": "method",
+              "name": "setSelection",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**start** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**start**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "**end** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**end**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] setSelection"
+        },
+        {
+          "textRaw": "[m!=] setText",
+          "name": "[m!=]_settext",
+          "methods": [
+            {
+              "textRaw": "setText(text)",
+              "type": "method",
+              "name": "setText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [string](dataTypes#string) } - 参数描述 ",
+                      "name": "**text**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] setText"
+        },
+        {
+          "textRaw": "[m!=] setProgress",
+          "name": "[m!=]_setprogress",
+          "methods": [
+            {
+              "textRaw": "setProgress(progress)",
+              "type": "method",
+              "name": "setProgress",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**progress** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**progress**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "progress"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] setProgress"
+        },
+        {
+          "textRaw": "[m!=] scrollTo",
+          "name": "[m!=]_scrollto",
+          "methods": [
+            {
+              "textRaw": "scrollTo(row, column)",
+              "type": "method",
+              "name": "scrollTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**row** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**row**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "**column** { [number](dataTypes#number) } - 参数描述 ",
+                      "name": "**column**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "参数描述"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "row"
+                    },
+                    {
+                      "name": "column"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!=] scrollTo"
+        },
+        {
+          "textRaw": "[I] ActionArgument",
+          "name": "[i]_actionargument",
+          "modules": [
+            {
+              "textRaw": "[C] IntActionArgument",
+              "name": "[c]_intactionargument",
+              "modules": [
+                {
+                  "textRaw": "[c] (name, value)",
+                  "name": "[c]_(name,_value)",
+                  "type": "module",
+                  "displayName": "[c] (name, value)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[C] IntActionArgument"
+            },
+            {
+              "textRaw": "[C] BooleanActionArgument",
+              "name": "[c]_booleanactionargument",
+              "modules": [
+                {
+                  "textRaw": "[c] (name, value)",
+                  "name": "[c]_(name,_value)",
+                  "type": "module",
+                  "displayName": "[c] (name, value)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[C] BooleanActionArgument"
+            },
+            {
+              "textRaw": "[C] CharSequenceActionArgument",
+              "name": "[c]_charsequenceactionargument",
+              "modules": [
+                {
+                  "textRaw": "[c] (name, value)",
+                  "name": "[c]_(name,_value)",
+                  "type": "module",
+                  "displayName": "[c] (name, value)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[C] CharSequenceActionArgument"
+            },
+            {
+              "textRaw": "[C] StringActionArgument",
+              "name": "[c]_stringactionargument",
+              "modules": [
+                {
+                  "textRaw": "[c] (name, value)",
+                  "name": "[c]_(name,_value)",
+                  "type": "module",
+                  "displayName": "[c] (name, value)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[C] StringActionArgument"
+            },
+            {
+              "textRaw": "[C] FloatActionArgument",
+              "name": "[c]_floatactionargument",
+              "modules": [
+                {
+                  "textRaw": "[c] (name, value)",
+                  "name": "[c]_(name,_value)",
+                  "type": "module",
+                  "displayName": "[c] (name, value)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[C] FloatActionArgument"
+            }
+          ],
+          "type": "module",
+          "displayName": "[I] ActionArgument"
+        }
+      ],
+      "type": "module",
+      "displayName": "无障碍行为 (AccessibilityActions)"
+    }
+  ]
+}

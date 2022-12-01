@@ -363,9 +363,13 @@ function parseSignature(text, sig) {
         }
         // at this point, the name should match.
         if (p !== param.name) {
-            console.error('Warning: invalid param "%s"', p);
-            console.error(' > ' + JSON.stringify(param));
-            console.error(' > ' + text);
+
+            // @Comment by SuperMonster003 on Oct 31, 2022.
+            //  ! Suppress warnings.
+
+            // console.error('Warning: invalid param "%s"', p);
+            // console.error(' > ' + JSON.stringify(param));
+            // console.error(' > ' + text);
         }
         if (optional) param.optional = true;
         if (def !== undefined) param.default = def;

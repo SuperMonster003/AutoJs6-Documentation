@@ -521,7 +521,9 @@ function highlight(prefix, suffix, tag) {
             }
         }
         if (highlighted === false && donthighlight == false) {
+            sh_highlightElement(element, sh_languages['java']);
             sh_highlightElement(element, sh_languages['javascript']);
+            sh_highlightElement(element, sh_languages['badjs']);
         }
     }
 }

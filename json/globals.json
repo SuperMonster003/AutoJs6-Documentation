@@ -2,145 +2,212 @@
   "source": "..\\api\\globals.md",
   "modules": [
     {
-      "textRaw": "全局变量与函数",
-      "name": "全局变量与函数",
-      "desc": "<p>全局变量和函数在所有模块中均可使用。 但以下变量的作用域只在模块内，详见 <a href=\"modules\">module</a>：</p>\n<ul>\n<li>exports</li>\n<li>module</li>\n<li>require()\n以下的对象是特定于 Auto.js 的。 有些内置对象是 JavaScript 语言本身的一部分，它们也是全局的。</li>\n</ul>\n<p>一些模块中的函数为了使用方便也可以直接全局使用，这些函数在此不再赘述。例如timers模块的setInterval, setTimeout等函数。</p>\n",
+      "textRaw": "全局对象",
+      "name": "全局对象",
+      "desc": "<p>在 JavaScript 中, <a href=\"https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object\">几乎一切都是对象</a>.<br>此处的全局 &quot;对象&quot; 包括 [ 变量 / 方法 / 构造器 ] 等.<br>全局对象随处可用, 包括 ECMA 标准内置对象 (如 [ Number / RegExp / String ] 等).</p>\n<hr>\n<blockquote>\n<p>注: 为便于使用, 一些 AutoJs6 模块中的方法也被全局化 (如 <code>images.captureScreen()</code> 等).<br>相应的全局化方法均以 <code>Global</code> 标签标注.</p>\n</blockquote>\n<hr>\n<blockquote>\n<p>注: 文件即可作为脚本运行使用, 也可作为模块被导入使用 (使用 require 方法).<br>当作为模块使用时, <code>exports</code> 和 <code>module</code> 可作为全局对象使用.<br>另在 UI 模式下也有一些专属全局对象, 如 <code>activity</code> 等.</p>\n</blockquote>\n<hr>\n<blockquote>\n<p>注: AutoJs6 对全局对象做了防覆写保护, 以下全局声明或赋值将导致异常或非预期结果:</p>\n<pre><code class=\"lang-js\">/* 以全局对象 sleep 为例 */\n\n/* 声明无效 */\nlet sleep = 1; /* 异常: 变量 sleep 重复声明. */\nconst sleep = 1; /* 同上. */\nvar sleep = 1; /* 同上 */\n\n/* 覆写无效 (非严格模式) */\nsleep = 1;\ntypeof sleep; // &quot;function&quot; - 覆写未生效.\n\n/* 覆写无效 (严格模式) */\n&quot;use strict&quot;;\nsleep = 1; /* 异常: 无法修改只读属性: sleep. */\n</code></pre>\n<p>局部作用域不受上述情况影响:</p>\n<pre><code class=\"lang-js\">(function () {\n    let sleep = 1;\n    return typeof sleep;\n})(); // &quot;number&quot;\n</code></pre>\n</blockquote>\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] sleep",
+          "name": "[m]_sleep",
+          "methods": [
+            {
+              "textRaw": "sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"primitiveTypes.html#number\">number</a> } - 休眠时间 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#undefined\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间.</p>\n<pre><code class=\"lang-js\">/* 休眠 9 秒钟. */\nsleep(9000);\n/* 休眠 9 秒钟 (使用科学计数法). */\nsleep(9e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sleep(millisMin, millisMax)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>v6.1.1</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>millisMin</strong> { <a href=\"primitiveTypes.html#number\">number</a> } - 休眠时间下限 (毫秒)</li>\n<li><strong>millisMax</strong> { <a href=\"primitiveTypes.html#number\">number</a> } - 休眠时间上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#undefined\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间, 该时间随机落在 millisMin 和 millisMax 之间.</p>\n<pre><code class=\"lang-js\">/* 随机休眠 3 - 5 秒钟. */\nsleep(3e3, 5e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millisMin"
+                    },
+                    {
+                      "name": "millisMax"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sleep(millis, bounds)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>v6.1.1</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"primitiveTypes.html#number\">number</a> } - 休眠时间 (毫秒)</li>\n<li><strong>bounds</strong> { <a href=\"customTypes.html#NumberString\">NumberString</a> | <a href=\"primitiveTypes.html#string\">string</a> } - 浮动值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#undefined\">void</a> }</li>\n</ul>\n<p>使当前线程休眠一段时间, 该时间随机落在 millis ± bounds 之间.<br>bounds 参数为 <a href=\"customTypes.html#NumberString\">数字字符串</a> 类型 (如 &quot;12&quot;), 或在字符串开头附加 &quot;±&quot; 明确参数含义 (如 &quot;±12&quot;).</p>\n<pre><code class=\"lang-js\">/* 随机休眠 3 - 5 秒钟 (即 4 ± 1 秒钟). */\nsleep(4e3, &quot;1e3&quot;);\nsleep(4e3, &quot;±1e3&quot;); /* 同上 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    },
+                    {
+                      "name": "bounds"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sleep"
+        },
+        {
+          "textRaw": "[m] currentPackage",
+          "name": "[m]_currentpackage",
+          "methods": [
+            {
+              "textRaw": "currentPackage()",
+              "type": "method",
+              "name": "currentPackage",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#string\">string</a> }</li>\n</ul>\n<p>获取最近一次监测到的应用包名, 并视为当前正在运行的应用包名.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentPackage"
+        },
+        {
+          "textRaw": "[m] currentActivity",
+          "name": "[m]_currentactivity",
+          "methods": [
+            {
+              "textRaw": "currentActivity()",
+              "type": "method",
+              "name": "currentActivity",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#string\">string</a> }</li>\n</ul>\n<p>获取最近一次监测到的活动名称, 并视为当前正在运行的活动名称.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentActivity"
+        },
+        {
+          "textRaw": "[m] setClip",
+          "name": "[m]_setclip",
+          "methods": [
+            {
+              "textRaw": "setClip(text)",
+              "type": "method",
+              "name": "setClip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [string](primitiveTypes.html#string) } - 剪贴板内容 ",
+                      "name": "**text**",
+                      "type": " [string](primitiveTypes.html#string) ",
+                      "desc": "剪贴板内容"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](primitiveTypes.html#undefined) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](primitiveTypes.html#undefined) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置系统剪贴板内容.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-getclip\">getClip</a> | <a href=\"UiObject.html#UiObject#paste\">UiObject#paste</a></p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setClip"
+        },
+        {
+          "textRaw": "[m] getClip",
+          "name": "[m]_getclip",
+          "methods": [
+            {
+              "textRaw": "getClip()",
+              "type": "method",
+              "name": "getClip",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](primitiveTypes.html#string) } - 系统剪贴板内容 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](primitiveTypes.html#string) ",
+                      "desc": "系统剪贴板内容"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>参阅: <a href=\"#m-setclip\">setClip</a> | <a href=\"UiObject.html#UiObject#paste\">UiObject#paste</a></p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getClip"
+        },
+        {
+          "textRaw": "[m] toast",
+          "name": "[m]_toast",
+          "methods": [
+            {
+              "textRaw": "toast(text, isLong?, isForcible?)",
+              "type": "method",
+              "name": "toast",
+              "desc": "<p><strong><code>Overload 1-3/3</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"primitiveTypes.html#string\">string</a> } - 消息内容</li>\n<li><strong>[ isLong = false ]</strong> { &quot;long&quot; | &quot;l&quot; | &quot;short&quot; | &quot;s&quot; | <a href=\"primitiveTypes.html#boolean\">boolean</a> } - 是否以较长时间显示</li>\n<li><strong>[ isForcible = false ]</strong> { &quot;forcible&quot; | &quot;f&quot; | <a href=\"primitiveTypes.html#boolean\">boolean</a> } - 是否强制覆盖显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"primitiveTypes.html#undefined\">void</a> }</li>\n</ul>\n<p>显示一个消息浮动框.</p>\n<p>消息框的显示默认是依次进行的:</p>\n<pre><code class=\"lang-js\">/* 显示消息框 2 秒钟 */\ntoast(&quot;hello&quot;);\n/* 显示消息框 2 秒钟, 且在前一个消息框消失后才显示 */\ntoast(&quot;world&quot;);\n/* 显示消息框 3.5 秒钟, 且在前一个消息框消失后才显示 */\ntoast(&quot;hello world&quot;, &#39;long&#39;);\n</code></pre>\n<p>使用 &quot;强制覆盖显示&quot; 参数可立即显示消息框:</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\n/* 显示消息框 2 秒钟, 且立即显示, 前一个消息框 &quot;hello&quot; 被 &quot;覆盖&quot; */\ntoast(&quot;world&quot;, &quot;short&quot;, &quot;forcible&quot;);\n</code></pre>\n<blockquote>\n<p>注: 强制覆盖仅对当前 <a href=\"terms.html\">脚本运行时</a> 有效, 对其他脚本或应用无效.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "isLong?"
+                    },
+                    {
+                      "name": "isForcible?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toast"
+        },
+        {
+          "textRaw": "context",
+          "name": "context",
+          "desc": "<p>全局变量. 一个android.content.Context对象.</p>\n<p>注意该对象为ApplicationContext, 因此不能用于界面、对话框等的创建.</p>\n",
+          "type": "module",
+          "displayName": "context"
+        }
+      ],
       "methods": [
-        {
-          "textRaw": "sleep(n)",
-          "type": "method",
-          "name": "sleep",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`n` {number} 毫秒数 ",
-                  "name": "n",
-                  "type": "number",
-                  "desc": "毫秒数"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "n"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>暂停运行n<strong>毫秒</strong>的时间。1秒等于1000毫秒。</p>\n<pre><code>//暂停5秒\nsleep(5000);\n</code></pre>"
-        },
-        {
-          "textRaw": "currentPackage()",
-          "type": "method",
-          "name": "currentPackage",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {string} ",
-                  "name": "返回",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回最近一次监测到的正在运行的应用的包名，一般可以认为就是当前正在运行的应用的包名。</p>\n<p>此函数依赖于无障碍服务，如果服务未启动，则抛出异常并提示用户启动。</p>\n"
-        },
-        {
-          "textRaw": "currentActivity()",
-          "type": "method",
-          "name": "currentActivity",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {string} ",
-                  "name": "返回",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回最近一次监测到的正在运行的Activity的名称，一般可以认为就是当前正在运行的Activity的名称。</p>\n<p>此函数依赖于无障碍服务，如果服务未启动，则抛出异常并提示用户启动。</p>\n"
-        },
-        {
-          "textRaw": "setClip(text)",
-          "type": "method",
-          "name": "setClip",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`text` {string} 文本 ",
-                  "name": "text",
-                  "type": "string",
-                  "desc": "文本"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "text"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>设置剪贴板内容。此剪贴板即系统剪贴板，在一般应用的输入框中&quot;粘贴&quot;既可使用。</p>\n<pre><code>setClip(&quot;剪贴板文本&quot;);\n</code></pre>"
-        },
-        {
-          "textRaw": "getClip()",
-          "type": "method",
-          "name": "getClip",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {string} ",
-                  "name": "返回",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回系统剪贴板的内容。</p>\n<pre><code>toast(&quot;剪贴板内容为:&quot; + getClip());\n</code></pre>"
-        },
-        {
-          "textRaw": "toast(message)",
-          "type": "method",
-          "name": "toast",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "message {string} 要显示的信息 ",
-                  "name": "message",
-                  "type": "string",
-                  "desc": "要显示的信息"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "message"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>以气泡显示信息message几秒。(具体时间取决于安卓系统，一般都是2秒)</p>\n<p>注意，信息的显示是&quot;异步&quot;执行的，并且，不会等待信息消失程序才继续执行。如果在循环中执行该命令，可能出现脚本停止运行后仍然有不断的气泡信息出现的情况。\n例如:</p>\n<pre><code>for(var i = 0; i &lt; 100; i++){\n  toast(i);\n}\n</code></pre><p>运行这段程序以后，会很快执行完成，且不断弹出消息，在任务管理中关闭所有脚本也无法停止。\n要保证气泡消息才继续执行可以用：</p>\n<pre><code>for(var i = 0; i &lt; 100; i++){\n  toast(i);\n  sleep(2000);\n}\n</code></pre><p>或者修改toast函数：</p>\n<pre><code>var _toast_ = toast;\ntoast = function(message){\n  _toast_(message);\n  sleep(2000);\n}\nfor(var i = 0; i &lt; 100; i++){\n  toast(i);\n}\n</code></pre>"
-        },
         {
           "textRaw": "toastLog(message)",
           "type": "method",
@@ -164,7 +231,7 @@
               ]
             }
           ],
-          "desc": "<p>相当于<code>toast(message);log(message)</code>。显示信息message并在控制台中输出。参见console.log。</p>\n"
+          "desc": "<p>相当于<code>toast(message);log(message)</code>. 显示信息message并在控制台中输出. 参见console.log.</p>\n"
         },
         {
           "textRaw": "waitForActivity(activity[, period = 200])",
@@ -200,7 +267,7 @@
               ]
             }
           ],
-          "desc": "<p>等待指定的Activity出现，period为检查Activity的间隔。</p>\n"
+          "desc": "<p>等待指定的Activity出现, period为检查Activity的间隔.</p>\n"
         },
         {
           "textRaw": "waitForPackage(package[, period = 200])",
@@ -236,13 +303,13 @@
               ]
             }
           ],
-          "desc": "<p>等待指定的应用出现。例如<code>waitForPackage(&quot;com.tencent.mm&quot;)</code>为等待当前界面为微信。</p>\n"
+          "desc": "<p>等待指定的应用出现. 例如<code>waitForPackage(&quot;com.tencent.mm&quot;)</code>为等待当前界面为微信.</p>\n"
         },
         {
           "textRaw": "exit()",
           "type": "method",
           "name": "exit",
-          "desc": "<p>立即停止脚本运行。</p>\n<p>立即停止是通过抛出<code>ScriptInterrupttedException</code>来实现的，因此如果用<code>try...catch</code>把exit()函数的异常捕捉，则脚本不会立即停止，仍会运行几行后再停止。</p>\n",
+          "desc": "<p>立即停止脚本运行.</p>\n<p>立即停止是通过抛出<code>ScriptInterrupttedException</code>来实现的, 因此如果用<code>try...catch</code>把exit()函数的异常捕捉, 则脚本不会立即停止, 仍会运行几行后再停止.</p>\n",
           "signatures": [
             {
               "params": []
@@ -286,7 +353,7 @@
               ]
             }
           ],
-          "desc": "<p>返回一个在[min...max]之间的随机数。例如random(0, 2)可能产生0, 1, 2。</p>\n"
+          "desc": "<p>返回一个在[min...max]之间的随机数. 例如random(0, 2)可能产生0, 1, 2.</p>\n"
         },
         {
           "textRaw": "random()",
@@ -306,7 +373,7 @@
               "params": []
             }
           ],
-          "desc": "<p>返回在[0, 1)的随机浮点数。</p>\n"
+          "desc": "<p>返回在[0, 1)的随机浮点数.</p>\n"
         },
         {
           "textRaw": "requiresApi(api)",
@@ -330,7 +397,7 @@
               ]
             }
           ],
-          "desc": "<p>表示此脚本需要Android API版本达到指定版本才能运行。例如<code>requiresApi(19)</code>表示脚本需要在Android 4.4以及以上运行。</p>\n<p>调用该函数时会判断运行脚本的设备系统的版本号，如果没有达到要求则抛出异常。</p>\n<p>可以参考以下Android API和版本的对照表:</p>\n<p>平台版本： API级别</p>\n<p>Android 7.0： 24</p>\n<p>Android 6.0： 23</p>\n<p>Android 5.1： 22</p>\n<p>Android 5.0： 21</p>\n<p>Android 4.4W： 20</p>\n<p>Android 4.4： 19</p>\n<p>Android 4.3： 18</p>\n"
+          "desc": "<p>表示此脚本需要Android API版本达到指定版本才能运行. 例如<code>requiresApi(19)</code>表示脚本需要在Android 4.4以及以上运行.</p>\n<p>调用该函数时会判断运行脚本的设备系统的版本号, 如果没有达到要求则抛出异常.</p>\n<p>可以参考以下Android API和版本的对照表:</p>\n<p>平台版本： API级别</p>\n<p>Android 7.0： 24</p>\n<p>Android 6.0： 23</p>\n<p>Android 5.1： 22</p>\n<p>Android 5.0： 21</p>\n<p>Android 4.4W： 20</p>\n<p>Android 4.4： 19</p>\n<p>Android 4.3： 18</p>\n"
         },
         {
           "textRaw": "requiresAutojsVersion(version)",
@@ -355,7 +422,7 @@
               ]
             }
           ],
-          "desc": "<p>表示此脚本需要Auto.js版本达到指定版本才能运行。例如<code>requiresAutojsVersion(&quot;3.0.0 Beta&quot;)</code>表示脚本需要在Auto.js 3.0.0 Beta以及以上运行。</p>\n<p>调用该函数时会判断运行脚本的Auto.js的版本号，如果没有达到要求则抛出异常。</p>\n<p>version参数可以是整数表示版本号，例如<code>requiresAutojsVersion(250)</code>；也可以是字符串格式表示的版本，例如&quot;3.0.0 Beta&quot;, &quot;3.1.0 Alpha4&quot;, &quot;3.2.0&quot;等。</p>\n<p>可以通过<code>app.autojs.versionCode</code>和<code>app.autojs.versionName</code>获取当前的Auto.js版本号和版本。</p>\n"
+          "desc": "<p>表示此脚本需要Auto.js版本达到指定版本才能运行. 例如<code>requiresAutojsVersion(&quot;3.0.0 Beta&quot;)</code>表示脚本需要在Auto.js 3.0.0 Beta以及以上运行.</p>\n<p>调用该函数时会判断运行脚本的Auto.js的版本号, 如果没有达到要求则抛出异常.</p>\n<p>version参数可以是整数表示版本号, 例如<code>requiresAutojsVersion(250)</code>；也可以是字符串格式表示的版本, 例如&quot;3.0.0 Beta&quot;, &quot;3.1.0 Alpha4&quot;, &quot;3.2.0&quot;等.</p>\n<p>可以通过<code>app.autojs.versionCode</code>和<code>app.autojs.versionName</code>获取当前的Auto.js版本号和版本.</p>\n"
         },
         {
           "textRaw": "runtime.requestPermissions(permissions)",
@@ -380,7 +447,7 @@
               ]
             }
           ],
-          "desc": "<p>动态申请安卓的权限。例如：</p>\n<pre><code>//请求GPS权限\nruntime.requestPermissions([&quot;access_fine_location&quot;]);\n</code></pre><p>尽管安卓有很多权限，但必须写入Manifest才能动态申请，为了防止权限的滥用，目前Auto.js只能额外申请两个权限：</p>\n<ul>\n<li><code>access_fine_location</code> GPS权限</li>\n<li><code>record_audio</code> 录音权限</li>\n</ul>\n<p>您可以通过APK编辑器来增加Auto.js以及Auto.js打包的应用的权限。</p>\n<p>安卓所有的权限列表参见<a href=\"https://developer.android.com/guide/topics/permissions/overview\">Permissions Overview</a>。（并没有用）</p>\n"
+          "desc": "<p>动态申请安卓的权限. 例如：</p>\n<pre><code>//请求GPS权限\nruntime.requestPermissions([&quot;access_fine_location&quot;]);\n</code></pre><p>尽管安卓有很多权限, 但必须写入Manifest才能动态申请, 为了防止权限的滥用, 目前Auto.js只能额外申请两个权限：</p>\n<ul>\n<li><code>access_fine_location</code> GPS权限</li>\n<li><code>record_audio</code> 录音权限</li>\n</ul>\n<p>您可以通过APK编辑器来增加Auto.js以及Auto.js打包的应用的权限.</p>\n<p>安卓所有的权限列表参见<a href=\"https://developer.android.com/guide/topics/permissions/overview\">Permissions Overview</a>. （并没有用）</p>\n"
         },
         {
           "textRaw": "runtime.loadJar(path)",
@@ -405,7 +472,7 @@
               ]
             }
           ],
-          "desc": "<p>加载目标jar文件，加载成功后将可以使用该Jar文件的类。</p>\n<pre><code>// 加载jsoup.jar\nruntime.loadJar(&quot;./jsoup.jar&quot;);\n// 使用jsoup解析html\nimportClass(org.jsoup.Jsoup);\nlog(Jsoup.parse(files.read(&quot;./test.html&quot;)));\n</code></pre><p>(jsoup是一个Java实现的解析Html DOM的库，可以在<a href=\"https://jsoup.org/download\">Jsoup</a>下载)</p>\n"
+          "desc": "<p>加载目标jar文件, 加载成功后将可以使用该Jar文件的类.</p>\n<pre><code>// 加载jsoup.jar\nruntime.loadJar(&quot;./jsoup.jar&quot;);\n// 使用jsoup解析html\nimportClass(org.jsoup.Jsoup);\nlog(Jsoup.parse(files.read(&quot;./test.html&quot;)));\n</code></pre><p>(jsoup是一个Java实现的解析Html DOM的库, 可以在<a href=\"https://jsoup.org/download\">Jsoup</a>下载)</p>\n"
         },
         {
           "textRaw": "runtime.loadDex(path)",
@@ -430,20 +497,11 @@
               ]
             }
           ],
-          "desc": "<p>加载目标dex文件，加载成功后将可以使用该dex文件的类。</p>\n<p>因为加载jar实际上是把jar转换为dex再加载的，因此加载dex文件会比jar文件快得多。可以使用Android SDK的build tools的dx工具把jar转换为dex。</p>\n"
-        }
-      ],
-      "modules": [
-        {
-          "textRaw": "context",
-          "name": "context",
-          "desc": "<p>全局变量。一个android.content.Context对象。</p>\n<p>注意该对象为ApplicationContext，因此不能用于界面、对话框等的创建。</p>\n",
-          "type": "module",
-          "displayName": "context"
+          "desc": "<p>加载目标dex文件, 加载成功后将可以使用该dex文件的类.</p>\n<p>因为加载jar实际上是把jar转换为dex再加载的, 因此加载dex文件会比jar文件快得多. 可以使用Android SDK的build tools的dx工具把jar转换为dex.</p>\n"
         }
       ],
       "type": "module",
-      "displayName": "全局变量与函数"
+      "displayName": "全局对象"
     }
   ]
 }

@@ -1,0 +1,246 @@
+{
+  "source": "..\\api\\intent.md",
+  "modules": [
+    {
+      "textRaw": "意图",
+      "name": "意图",
+      "desc": "<p>相关全局对象: app.</p>\n<p>Intent(意图) 是一个消息传递对象, 您可以使用它从其他应用组件请求操作. 尽管 Intent 可以通过多种方式促进组件之间的通信, 但其基本用例主要包括以下三个：</p>\n<ul>\n<li><p>启动活动(Activity)：\nActivity 表示应用中的一个&quot;屏幕&quot;. 例如应用主入口都是一个Activity, 应用的功能通常也以Activity的形式独立, 例如微信的主界面、朋友圈、聊天窗口都是不同的Activity. 通过将 Intent 传递给 startActivity(), 您可以启动新的 Activity 实例. Intent 描述了要启动的 Activity, 并携带了任何必要的数据.</p>\n</li>\n<li><p>启动服务(Service)：\nService 是一个不使用用户界面而在后台执行操作的组件. 通过将 Intent 传递给 startService(), 您可以启动服务执行一次性操作（例如, 下载文件）. Intent 描述了要启动的服务, 并携带了任何必要的数据.</p>\n</li>\n<li><p>传递广播：\n广播是任何应用均可接收的消息. 系统将针对系统事件（例如：系统启动或设备开始充电时）传递各种广播. 通过将 Intent 传递给 sendBroadcast()、sendOrderedBroadcast() 或 sendStickyBroadcast(), 您可以将广播传递给其他应用.</p>\n</li>\n</ul>\n<p>本模块提供了构建Intent的函数(<code>app.intent()</code>), 启动Activity的函数<code>app.startActivity()</code>, 发送广播的函数<code>app.sendBroadcast()</code>.</p>\n<p>使用这些方法可以用来方便的调用其他应用. 例如直接打开某个QQ号的个人卡片页, 打开某个QQ号的聊天窗口等.</p>\n<pre><code>var qq = &quot;2732014414&quot;;\napp.startActivity({ \n    action: &quot;android.intent.action.VIEW&quot;, \n    data:&quot;mqq://im/chat?chat_type=wpa&amp;version=1&amp;src_type=web&amp;uin=&quot; + qq, \n    packageName: &quot;com.tencent.mobileqq&quot;, \n});\n\n</code></pre>",
+      "methods": [
+        {
+          "textRaw": "app.intent(options)",
+          "type": "method",
+          "name": "intent",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`options` {Object} 选项, 包括： ",
+                  "options": [
+                    {
+                      "textRaw": "`action` {string} 意图的Action, 指意图要完成的动作, 是一个字符串常量, 比如\"android.intent.action.SEND\". 当action以\"android.intent.action\"开头时, 可以省略前缀, 直接用\"SEND\"代替. 参见[Actions](https://developer.android.com/reference/android/content/Intent.html#standard-activity-actions/). ",
+                      "name": "action",
+                      "type": "string",
+                      "desc": "意图的Action, 指意图要完成的动作, 是一个字符串常量, 比如\"android.intent.action.SEND\". 当action以\"android.intent.action\"开头时, 可以省略前缀, 直接用\"SEND\"代替. 参见[Actions](https://developer.android.com/reference/android/content/Intent.html#standard-activity-actions/)."
+                    },
+                    {
+                      "textRaw": "`type` {string} 意图的MimeType, 表示和该意图直接相关的数据的类型, 表示比如\"text/plain\"为纯文本类型. ",
+                      "name": "type",
+                      "type": "string",
+                      "desc": "意图的MimeType, 表示和该意图直接相关的数据的类型, 表示比如\"text/plain\"为纯文本类型."
+                    },
+                    {
+                      "textRaw": "`data` {string} 意图的Data, 表示和该意图直接相关的数据, 是一个Uri, 可以是文件路径或者Url等. 例如要打开一个文件, action为\"android.intent.action.VIEW\", data为\"file:///sdcard/1.txt\". ",
+                      "name": "data",
+                      "type": "string",
+                      "desc": "意图的Data, 表示和该意图直接相关的数据, 是一个Uri, 可以是文件路径或者Url等. 例如要打开一个文件, action为\"android.intent.action.VIEW\", data为\"file:///sdcard/1.txt\"."
+                    },
+                    {
+                      "textRaw": "`category` {Array} 意图的类别. 比较少用. 参见[Categories](https://developer.android.com/reference/android/content/Intent.html#standard-categories/). ",
+                      "name": "category",
+                      "type": "Array",
+                      "desc": "意图的类别. 比较少用. 参见[Categories](https://developer.android.com/reference/android/content/Intent.html#standard-categories/)."
+                    },
+                    {
+                      "textRaw": "`packageName` {string} 目标包名 ",
+                      "name": "packageName",
+                      "type": "string",
+                      "desc": "目标包名"
+                    },
+                    {
+                      "textRaw": "`className` {string} 目标Activity或Service等组件的名称 ",
+                      "name": "className",
+                      "type": "string",
+                      "desc": "目标Activity或Service等组件的名称"
+                    },
+                    {
+                      "textRaw": "`extras` {Object} 以键值对构成的这个Intent的Extras(额外信息). 提供该意图的其他信息, 例如发送邮件时的邮件标题、邮件正文. 参见[Extras](https://developer.android.com/reference/android/content/Intent.html#standard-extra-data/). ",
+                      "name": "extras",
+                      "type": "Object",
+                      "desc": "以键值对构成的这个Intent的Extras(额外信息). 提供该意图的其他信息, 例如发送邮件时的邮件标题、邮件正文. 参见[Extras](https://developer.android.com/reference/android/content/Intent.html#standard-extra-data/)."
+                    },
+                    {
+                      "textRaw": "`flags` {Array} intent的标识, 字符串数组, 例如`[\"activity_new_task\", \"grant_read_uri_permission\"]`. 参见[Flags](https://developer.android.com/reference/android/content/Intent.html#setFlags%28int%29/). **[v4.1.0新增]** ",
+                      "name": "flags",
+                      "type": "Array",
+                      "desc": "intent的标识, 字符串数组, 例如`[\"activity_new_task\", \"grant_read_uri_permission\"]`. 参见[Flags](https://developer.android.com/reference/android/content/Intent.html#setFlags%28int%29/). **[v4.1.0新增]**"
+                    },
+                    {
+                      "textRaw": "`root` {Boolea} 是否以root权限启动、发送该intent. 使用该参数后, 不能使用`context.startActivity()`等方法, 而应该直接使用诸如`app.startActivity({...})`的方法. **[v4.1.0新增]** ",
+                      "name": "root",
+                      "type": "Boolea",
+                      "desc": "是否以root权限启动、发送该intent. 使用该参数后, 不能使用`context.startActivity()`等方法, 而应该直接使用诸如`app.startActivity({...})`的方法. **[v4.1.0新增]**"
+                    }
+                  ],
+                  "name": "options",
+                  "type": "Object",
+                  "desc": "选项, 包括："
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>根据选项, 构造一个意图Intent对象.</p>\n<p>例如：</p>\n<pre><code>//打开应用来查看图片文件\nvar i = app.intent({\n    action: &quot;VIEW&quot;,\n    type: &quot;image/png&quot;,\n    data: &quot;file:///sdcard/1.png&quot;\n});\ncontext.startActivity(i);\n</code></pre><p>需要注意的是, 除非应用专门暴露Activity出来, 否则在没有root权限的情况下使用intent是无法跳转到特定Activity、应用的特定界面的. 例如我们能通过Intent跳转到QQ的分享界面, 是因为QQ对外暴露了分享的Activity；而在没有root权限的情况下, 我们无法通过intent跳转到QQ的设置界面, 因为QQ并没有暴露这个Activity.</p>\n<p>但如果有root权限, 则在intent的参数加上<code>&quot;root&quot;: true</code>即可. 例如使用root权限跳转到Auto.js的设置界面为：</p>\n<pre><code>app.startActivity({\n    packageName: &quot;org.autojs.autojs&quot;,\n    className: &quot;org.autojs.autojs.ui.settings.SettingsActivity_&quot;,\n    root: true\n});\n</code></pre><p>另外, 关于intent的参数如何获取的问题, 一些intent是意外发现并且在网络中传播的（例如跳转QQ聊天窗口是因为QQ给网页提供了跳转到客服QQ的方法）, 如果要自己获取活动的intent的参数, 可以通过例如&quot;intent记录&quot;, &quot;隐式启动&quot;等应用拦截内部intent或者查询暴露的intent. 其中拦截内部intent需要XPosed框架, 或者可以通过反编译等手段获取参数. 总之, 没有简单直接的方法.</p>\n<p>更多信息, 请百度<a href=\"https://www.baidu.com/s?wd=android%20Intent\">安卓Intent</a>或参考<a href=\"https://developer.android.com/guide/components/intents-filters.html#Types\">Android指南: Intent</a>.</p>\n"
+        },
+        {
+          "textRaw": "app.startActivity(options)",
+          "type": "method",
+          "name": "startActivity",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`options` {Object} 选项 ",
+                  "name": "options",
+                  "type": "Object",
+                  "desc": "选项"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>根据选项构造一个Intent, 并启动该Activity.</p>\n<pre><code>app.startActivity({\n    action: &quot;SEND&quot;,\n    type: &quot;text/plain&quot;,\n    data: &quot;file:///sdcard/1.txt&quot;\n});\n</code></pre>"
+        },
+        {
+          "textRaw": "app.sendBroadcast(options)",
+          "type": "method",
+          "name": "sendBroadcast",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`options` {Object} 选项 ",
+                  "name": "options",
+                  "type": "Object",
+                  "desc": "选项"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>根据选项构造一个Intent, 并发送该广播.</p>\n"
+        },
+        {
+          "textRaw": "app.startService(options)",
+          "type": "method",
+          "name": "startService",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "`options` {Object} 选项 ",
+                  "name": "options",
+                  "type": "Object",
+                  "desc": "选项"
+                }
+              ]
+            },
+            {
+              "params": [
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ],
+          "desc": "<p>根据选项构造一个Intent, 并启动该服务.</p>\n"
+        },
+        {
+          "textRaw": "app.sendBroadcast(name)",
+          "type": "method",
+          "name": "sendBroadcast",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>name</code> {string} 特定的广播名称, 包括：<ul>\n<li><code>inspect_layout_hierarchy</code> 布局层次分析</li>\n<li><code>inspect_layout_bounds</code> 布局范围</li>\n</ul>\n</li>\n</ul>\n<p>发送以上特定名称的广播可以触发Auto.js的布局分析, 方便脚本调试. 这些广播在Auto.js发送才有效, 在打包的脚本上运行将没有任何效果.</p>\n<pre><code>app.sendBroadcast(&quot;inspect_layout_bounds&quot;);\n</code></pre>",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "name"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "app.intentToShell(options)",
+          "type": "method",
+          "name": "intentToShell",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>options</code> {Object} 选项</li>\n</ul>\n<p>根据选项构造一个Intent, 转换为对应的shell的intent命令的参数.</p>\n<p>例如:</p>\n<pre><code>shell(&quot;am start &quot; + app.intentToShell({\n    packageName: &quot;org.autojs.autojs&quot;,\n    className: &quot;org.autojs.autojs.ui.settings.SettingsActivity_&quot;\n}), true);\n</code></pre><p>参见<a href=\"https://developer.android.com/studio/command-line/adb#IntentSpec/\">intent参数的规范</a>.</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "options"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "app.parseUri(uri)",
+          "type": "method",
+          "name": "parseUri",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>uri</code> {string} 一个代表Uri的字符串, 例如&quot;file:///sdcard/1.txt&quot;, &quot;<a href=\"https://www.autojs.org&quot;\">https://www.autojs.org&quot;</a></li>\n<li>返回 {Uri} 一个代表Uri的对象, 参见<a href=\"https://developer.android.com/reference/android/net/Uri/\">android.net.Uri</a>.</li>\n</ul>\n<p>解析uri字符串并返回相应的Uri对象. 即使Uri格式错误, 该函数也会返回一个Uri对象, 但之后如果访问该对象的scheme, path等值可能因解析失败而返回<code>null</code>.</p>\n<p>需要注意的是, 在高版本Android上, 由于系统限制直接在Uri暴露文件的绝对路径, 因此如果uri字符串是文件<code>file://...</code>, 返回的Uri会是诸如<code>content://...</code>的形式.</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "uri"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "app.getUriForFile(path)",
+          "type": "method",
+          "name": "getUriForFile",
+          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>path</code> {string} 文件路径, 例如&quot;/sdcard/1.txt&quot;</li>\n<li>返回 {Uri} 一个指向该文件的Uri的对象, 参见<a href=\"https://developer.android.com/reference/android/net/Uri/\">android.net.Uri</a>.</li>\n</ul>\n<p>从一个文件路径创建一个uri对象. 需要注意的是, 在高版本Android上, 由于系统限制直接在Uri暴露文件的绝对路径, 因此返回的Uri会是诸如<code>content://...</code>的形式.</p>\n",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "path"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "app.getInstalledApps([options])",
+          "type": "method",
+          "name": "getInstalledApps",
+          "desc": "<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<ul>\n<li><code>options</code> {Object} 选项, 包括：<ul>\n<li><code>get</code>: 指定返回的应用信息中包含的信息<ul>\n<li><code>&quot;activities&quot;</code> 应用的Activity组件信息</li>\n<li><code>&quot;configurations&quot;</code> 应用的硬件配置</li>\n<li><code>&quot;gids&quot;</code> 应用的group id</li>\n<li><code>&quot;instrumentation&quot;</code> 应用的Instrumentation信息</li>\n<li><code>&quot;intent_filters&quot;</code> 应用的意图过滤</li>\n<li><code>&quot;meta_data&quot;</code> 应用的元信息（默认）</li>\n<li><code>&quot;permissions&quot;</code> 应用的权限信息</li>\n<li><code>&quot;providers&quot;</code> 应用的ContentProvider组件信息</li>\n<li><code>&quot;receivers&quot;</code> 应用的BroadcastReceiver组件信息</li>\n<li><code>&quot;services&quot;</code> 应用的Service组件信息</li>\n<li><code>&quot;shared_library_files&quot;</code> 应用的动态链接库文件信息</li>\n<li><code>&quot;signatures&quot;</code> 应用的签名信息（已弃用</li>\n<li><code>&quot;signing_certificates&quot;</code> 应用的签名信息</li>\n<li><code>&quot;uri_permission_patterns&quot;</code></li>\n<li><code>&quot;disabled_components&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n</ul>\n</li>\n<li><code>match</code>: 指定要匹配的应用列表<ul>\n<li><code>&quot;uninstalled_packages&quot;</code> 被卸载的但保留了数据的应用</li>\n<li><code>&quot;disabled_components&quot;</code> 被禁用的组件</li>\n<li><code>&quot;disabled_until_used_components&quot;</code> 禁用直到被使用的组件</li>\n<li><code>&quot;system_only&quot;</code> 只匹配系统应用</li>\n<li><code>&quot;factory_only&quot;</code> 只匹配预装应用</li>\n<li><code>&quot;apex&quot;</code> APEX应用</li>\n</ul>\n</li>\n</ul>\n</li>\n<li>返回 {Array\\&lt;ApplicationInfo>}</li>\n</ul>\n<p>返回为当前用户安装的所有应用程序包的列表. 如果设置了match选项 <code>uninstalled_packages</code>, 则包括被删除但保留了数据的应用程序.\n获取安装的应用列表.</p>\n<p>返回值是ApplicationInfo对象的数组.  如果没有安装任何应用, 则返回一个空数组.</p>\n<p>选项options的match选项用于指定要返回哪些应用程序, get选项用于指定返回的应用程序携带哪些信息.</p>\n<pre><code>let apps = $app.getInstalledApps({\n    matcg\n})\n</code></pre>",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "name": "options",
+                  "optional": true
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "type": "module",
+      "displayName": "意图"
+    }
+  ]
+}

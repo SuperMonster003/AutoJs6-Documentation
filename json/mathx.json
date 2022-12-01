@@ -1,0 +1,477 @@
+{
+  "source": "..\\api\\mathx.md",
+  "modules": [
+    {
+      "textRaw": "Mathx (Math 扩展)",
+      "name": "mathx_(math_扩展)",
+      "desc": "<p>Mathx 用于扩展 JavaScript 标准内置对象 Math 的功能 (参阅 <a href=\"glossaries#内置对象扩展\">内置对象扩展</a>).</p>\n<p>Mathx 全局可用:</p>\n<pre><code class=\"lang-js\">console.log(typeof Mathx); // &quot;object&quot;\nconsole.log(typeof Mathx.sum); // &quot;function&quot;\n</code></pre>\n<p>当启用内置扩展后, Mathx 将被应用在 Math 上:</p>\n<pre><code class=\"lang-js\">console.log(typeof Math.sum); // &quot;function&quot;\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "启用内置扩展",
+          "name": "启用内置扩展",
+          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Math&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<blockquote>\n<p>注: 因 Mathx 所有属性及方法均为 &quot;针对对象的内置对象扩展&quot;, 在启用内置对象扩展时, 使用方法仅仅是 Mathx 与 Math 的差别, 故示例代码中将不再赘述相关示例, 但别名方法例外 (如 min 的别名 mini, max 的别名 maxi 等).</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Mathx</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "启用内置扩展"
+        },
+        {
+          "textRaw": "[m] randInt",
+          "name": "[m]_randint",
+          "desc": "<p>randInt 用于返回一个指定范围内的随机整数.</p>\n<p>因 NaN 不属于整数范畴, 故 randInt 内部实现对范围数值中出现的 NaN 做了过滤处理, 进而使 NaN 失去了常见的传染性.</p>\n<pre><code class=\"lang-js\">/* NaN 不属于整数范畴. */\nconsole.log(Number.isInteger(NaN)); // false\n\n/* NaN 出现在范围数值中时将失去其传染性. */\nconsole.log(Number.isNaN(Mathx.randInt(1, NaN))); // false\n</code></pre>\n<p>若范围数值中出现非整数数值, 将范围中极小值作 <code>Math.ceil()</code> 处理, 极大值作 <code>Math.floor()</code> 处理.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.randInt(1.8, 3.3)); /* 视为 randInt(2, 3). */\nconsole.log(Mathx.randInt(-9.7, -2.4)); /* 视为 randInt(-9, -3). */\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "randInt(start, stop)",
+              "type": "method",
+              "name": "randInt",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/5</code></strong></p>\n<ul>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 范围起点 (含)</li>\n<li><strong>stop</strong> { <a href=\"dataTypes#number\">number</a> } - 范围止点 (含)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt(10, 20)); // e.g. 13\n\n/* start 和 stop 可自动交换. */\nconsole.log(Mathx.randInt(20, 10)); /* 与 randInt(10, 20) 效果相同. */\n\n/* start 与 stop 相等时返回唯一值. */\nconsole.log(Mathx.randInt(15, 15)); // 15\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "stop"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "randInt(stop)",
+              "type": "method",
+              "name": "randInt",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>stop</strong> { <a href=\"dataTypes#number\">number</a> } - 范围止点 (含)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数, stop 参数作为止点, 0 作为起点.<br>相当于 <code>randInt(0, stop)</code>.<br>当 stop 为负数时, 起止点将自动交换.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt(10, 20)); // e.g. 13\n\n/* start 和 stop 可自动交换. */\nconsole.log(Mathx.randInt(20, 10)); /* 与 randInt(10, 20) 效果相同. */\n\n/* start 与 stop 相等时返回唯一值. */\nconsole.log(Mathx.randInt(15, 15)); // 15\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "stop"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "randInt(range?)",
+              "type": "method",
+              "name": "randInt",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [3-4]/5</code></strong></p>\n<ul>\n<li><strong>[ range = [ <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MIN_SAFE_INTEGER\">MIN_SAFE_INTEGER</a>, <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Number/MAX_SAFE_INTEGER\">MAX_SAFE_INTEGER</a> ] ]</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 范围数组 (含两边界)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt([ 10, 20 ])); // e.g. 13\n\n/* 范围数组中的数字没有数量限制, 排序后将两个极值作为边界. */\nconsole.log(Mathx.randInt([ 20, 10, 13, 11, 15 ])); /* 与 randInt([ 10, 20 ]) 效果相同. */\n\n/* 范围数组中排序后极值相同时将直接返回此极值. */\nconsole.log(Mathx.randInt([ 15, 15, 15 ])); // 15\n\n/* 范围数组为空数组或省略参数时将返回任意 &quot;安全&quot; 整数. */\nconsole.log(Mathx.randInt([])); // e.g. -7217922776918875\nconsole.log(Mathx.randInt([ Number.MIN_SAFE_INTEGER, Number.MAX_SAFE_INTEGER ])); /* 效果同上. */\nconsole.log(Mathx.randInt()); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "range?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "randInt(...numbers)",
+              "type": "method",
+              "name": "randInt",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 5/5</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 范围数组 (含两边界)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt(10, 20)); // e.g. 13\n\n/* 可变参数没有数量限制, 排序后将两个极值作为边界. */\nconsole.log(Mathx.randInt(20, 10, 13, 11, 15)); /* 与 randInt(10, 20) 效果相同. */\n\n/* 可变参数排序后极值相同时将直接返回此极值. */\nconsole.log(Mathx.randInt(15, 15, 15)); // 15\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] randInt"
+        },
+        {
+          "textRaw": "[m] sum",
+          "name": "[m]_sum",
+          "desc": "<p>求和.</p>\n",
+          "methods": [
+            {
+              "textRaw": "sum(...numbers)",
+              "type": "method",
+              "name": "sum",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求和数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的加和结果.</p>\n<pre><code class=\"lang-js\">/* 整数求和. */\nconsole.log(Mathx.sum(1, 2, 3)); // 6\nconsole.log(Mathx.sum(9)); // 9\n\n/* 浮点数求和. */\nconsole.log(Mathx.sum(0.1, 0.1)); // 0.2\nconsole.log(Mathx.sum(0.1, 0.2, 0.3)); // 0.6000000000000001\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.sum(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.sum()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.sum(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 6\nconsole.log(Mathx.sum({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 23\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.sum(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 15\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sum(numbers, fraction?)",
+              "type": "method",
+              "name": "sum",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求和数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的加和结果, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.sum([ 1, 2, 3 ])); // 6\nconsole.log(Mathx.sum([ 1, 2, [ 3 ] ])); // 6\nconsole.log(Mathx.sum([ 0.1, 0.2, 0.309 ], 2)); // 0.61\nconsole.log(Mathx.sum([ 0.1, 0.2, 0.309 ], 10)); // 0.609\nconsole.log(Mathx.sum([ 0.1, 0.2, 0.309 ], 0)); // 1\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sum"
+        },
+        {
+          "textRaw": "[m] avg",
+          "name": "[m]_avg",
+          "desc": "<p>算术平均数.</p>\n",
+          "methods": [
+            {
+              "textRaw": "avg(...numbers)",
+              "type": "method",
+              "name": "avg",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求算术平均值的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的算术平均值.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.avg(1, 2, 3)); // 2\nconsole.log(Mathx.avg(9)); // 9\nconsole.log(Mathx.avg(0.1, 0.1)); // 0.1\nconsole.log(Mathx.avg(0.1, 0.2, 0.3)); // 0.20000000000000004\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.avg(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.avg()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.avg(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 2\nconsole.log(Mathx.avg({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 11.5\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.avg(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 3\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "avg(numbers, fraction?)",
+              "type": "method",
+              "name": "avg",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求算术平均值数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的算术平均值, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.avg([ 1, 2, 3 ])); // 2\nconsole.log(Mathx.avg([ 1, 2, [ 3 ] ])); // 2\nconsole.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 2)); // 0.2\nconsole.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 10)); // 0.203\nconsole.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 0)); // 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] avg"
+        },
+        {
+          "textRaw": "[m] median",
+          "name": "[m]_median",
+          "desc": "<p>中位数.</p>\n",
+          "methods": [
+            {
+              "textRaw": "median(...numbers)",
+              "type": "method",
+              "name": "median",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求中位数的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的中位数.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.median(1, 2, 3)); // 2\nconsole.log(Mathx.median(9)); // 9\nconsole.log(Mathx.median(0.1, 0.1)); // 0.1\nconsole.log(Mathx.median(0.1, 0.2, 0.3)); // 0.2\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.median(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.median()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.median(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 2\nconsole.log(Mathx.median({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 11.5\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.median(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 3\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "median(numbers, fraction?)",
+              "type": "method",
+              "name": "median",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求中位数数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的中位数, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.median([ 1, 2, 3 ])); // 2\nconsole.log(Mathx.median([ 1, 2, [ 3 ] ])); // 2\nconsole.log(Mathx.median([ 0.1, 0.2, 0.309 ], 2)); // 0.2\nconsole.log(Mathx.median([ 0.1, 0.2, 0.309 ], 10)); // 0.203\nconsole.log(Mathx.median([ 0.1, 0.2, 0.309 ], 0)); // 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] median"
+        },
+        {
+          "textRaw": "[m] var",
+          "name": "[m]_var",
+          "desc": "<p>方差.</p>\n",
+          "methods": [
+            {
+              "textRaw": "var(...numbers)",
+              "type": "method",
+              "name": "var",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求方差的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的方差.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.var(1, 2, 3)); // 0.6666666666666666\nconsole.log(Mathx.var(1, 2, 3, 4, 5)); // 2\nconsole.log(Mathx.var(9)); // 0\nconsole.log(Mathx.var(0.1, 0.1)); // 0\nconsole.log(Mathx.var(0.1, 0.2, 0.3)); // 0.006666666666666665\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.var(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.var()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.var(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 0.6666666666666666\nconsole.log(Mathx.var({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 0.25\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.var(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 2\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "var(numbers, fraction?)",
+              "type": "method",
+              "name": "var",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求方差数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的方差, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.var([ 1, 2, 3 ])); // 0.6666666666666666\nconsole.log(Mathx.var([ 1, 2, [ 3 ] ])); // 0.6666666666666666\nconsole.log(Mathx.var([ 0.1, 0.2, 0.309 ], 2)); // 0.01\nconsole.log(Mathx.var([ 0.1, 0.2, 0.309 ], 10)); // 0.0072846667\nconsole.log(Mathx.var([ 0.1, 0.2, 0.309 ], 0)); // 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] var"
+        },
+        {
+          "textRaw": "[m] std",
+          "name": "[m]_std",
+          "desc": "<p>标准差 (均方差).</p>\n",
+          "methods": [
+            {
+              "textRaw": "std(...numbers)",
+              "type": "method",
+              "name": "std",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求标准差的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的标准差.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.std(1, 2, 3)); // 0.816496580927726\nconsole.log(Mathx.std(1, 2, 3, 4, 5)); // 1.4142135623730951\nconsole.log(Mathx.std(9)); // 0\nconsole.log(Mathx.std(0.1, 0.1)); // 0\nconsole.log(Mathx.std(0.1, 0.2, 0.3)); // 0.0816496580927726\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.std(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.std()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.std(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 0.0816496580927726\nconsole.log(Mathx.std({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 0.5\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.std(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 1.4142135623730951\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "std(numbers, fraction?)",
+              "type": "method",
+              "name": "std",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求标准差数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的标准差, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.std([ 1, 2, 3 ])); // 0.816496580927726\nconsole.log(Mathx.std([ 1, 2, [ 3 ] ])); // 0.816496580927726\nconsole.log(Mathx.std([ 0.1, 0.2, 0.309 ], 2)); // 0.09\nconsole.log(Mathx.std([ 0.1, 0.2, 0.309 ], 10)); // 0.0853502587\nconsole.log(Mathx.std([ 0.1, 0.2, 0.309 ], 0)); // 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] std"
+        },
+        {
+          "textRaw": "[m] cv",
+          "name": "[m]_cv",
+          "desc": "<p>变异系数 (离散系数).</p>\n",
+          "methods": [
+            {
+              "textRaw": "cv(...numbers)",
+              "type": "method",
+              "name": "cv",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求变异系数的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有数字的变异系数.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.cv(1, 2, 3)); // 0.5\nconsole.log(Mathx.cv(1, 2, 3, 4, 5)); // 0.5270462766947299\nconsole.log(Mathx.cv(9)); // NaN\nconsole.log(Mathx.cv(0.1, 0.1)); // 0\nconsole.log(Mathx.cv([ 0.1, 0.2, 0.3 ], 2)); // 0.5\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.cv(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回 NaN. */\nconsole.log(Mathx.cv()); // NaN\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.cv(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 0.5\nconsole.log(Mathx.cv({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 0.06148754619013457\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.cv(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 0.5270462766947299\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "cv(numbers, fraction?)",
+              "type": "method",
+              "name": "cv",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求变异系数数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内数字的变异系数, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.cv([ 1, 2, 3 ])); // 0.5\nconsole.log(Mathx.cv([ 1, 2, [ 3 ] ])); // 0.5\nconsole.log(Mathx.cv([ 0.1, 0.2, 0.309 ], 2)); // 0.51\nconsole.log(Mathx.cv([ 0.1, 0.2, 0.309 ], 10)); // 0.5149373973\nconsole.log(Mathx.cv([ 0.1, 0.2, 0.309 ], 0)); // 1\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cv"
+        },
+        {
+          "textRaw": "[m] max",
+          "name": "[m]_max",
+          "desc": "<p>最大值.</p>\n<p>内置扩展别名: maxi.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.max([ 5, 23 ])); // 23\n\n/* 启用内置对象扩展后. */\nconsole.log(Math.maxi([ 5, 23 ])); // 23\n</code></pre>\n<p>需额外留意空数组作为参数及无参时的一些情况:</p>\n<pre><code class=\"lang-js\">console.log(Math.max()); // -Infinity\nconsole.log(Mathx.max()); // -Infinity\n\nconsole.log(Math.max([])); // 0\nconsole.log(Mathx.max([])); // -Infinity\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "max(...numbers)",
+              "type": "method",
+              "name": "max",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>xAlias</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求最大值的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有参数中的最大数字.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.max(1, 2, 3)); // 3\nconsole.log(Mathx.max(9)); // 9\nconsole.log(Mathx.max(0.1, 0.1)); // 0.1\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.max(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回与 Math.max() 相同的值. */\nconsole.log(Mathx.max()); // -Infinity\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.max(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 3\nconsole.log(Mathx.max({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 12\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.max(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 5\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "max(numbers, fraction?)",
+              "type": "method",
+              "name": "max",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>xAlias</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求最大值的数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内参数的最大数字, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.max([ 1, 2, 3 ])); // 3\nconsole.log(Mathx.max([ 1, 2, [ 3 ] ])); // 3\nconsole.log(Mathx.max([ 0.1, 0.2, 0.309 ], 2)); // 0.31\nconsole.log(Mathx.max([ 0.1, 0.2, 0.309 ], 10)); // 0.309\nconsole.log(Mathx.max([ 0.1, 0.2, 0.309 ], 0)); // 0\n\n/* 相当于无参调用 Math.max(). */\nconsole.log(Mathx.max([])); // -Infinity\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] max"
+        },
+        {
+          "textRaw": "[m] min",
+          "name": "[m]_min",
+          "desc": "<p>最小值.</p>\n<p>内置扩展别名: mini.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.min([ 5, 23 ])); // 5\n\n/* 启用内置对象扩展后. */\nconsole.log(Math.mini([ 5, 23 ])); // 5\n</code></pre>\n<p>需额外留意空数组作为参数及无参时的一些情况:</p>\n<pre><code class=\"lang-js\">console.log(Math.min()); // Infinity\nconsole.log(Mathx.min()); // Infinity\n\nconsole.log(Math.min([])); // 0\nconsole.log(Mathx.min([])); // Infinity\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "min(...numbers)",
+              "type": "method",
+              "name": "min",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>xAlias</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#number\">number</a><a href=\"documentation#可变参数\">[]</a> } - 待求最小值的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回所有参数中的最小数字.</p>\n<pre><code class=\"lang-js\">/* 常规运算. */\nconsole.log(Mathx.min(1, 2, 3)); // 1\nconsole.log(Mathx.min(9)); // 9\nconsole.log(Mathx.min(0.1, 0.1)); // 0.1\n\n/* NaN 保持其传染性. */\nconsole.log(Mathx.min(7, 8, 9, NaN)); // NaN\n\n/* 无参将返回与 Math.min() 相同的值. */\nconsole.log(Mathx.min()); // Infinity\n\n/* 元素将被 Number 化. */\nconsole.log(Mathx.min(&#39;1&#39;, &#39;2&#39;, &#39;3&#39;)); // 1\nconsole.log(Mathx.min({ valueOf: () =&gt; 11 }, { valueOf: () =&gt; 12 })); // 11\n\n/* 嵌套将被展平. */\nconsole.log(Mathx.min(1, [ 2, [ 3, [ 4 ] ], 5 ])); // 1\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "min(numbers, fraction?)",
+              "type": "method",
+              "name": "min",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>xAlias</code></strong> <strong><code>Overload [2-3]/3</code></strong></p>\n<ul>\n<li><strong>numbers</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 待求最小值的数字数组</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回数组内参数的最小数字, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.min([ 1, 2, 3 ])); // 1\nconsole.log(Mathx.min([ 1, 2, [ 3 ] ])); // 1\nconsole.log(Mathx.min([ 0.1, 0.2, 0.309 ], 2)); // 0.1\nconsole.log(Mathx.min([ 0.1, 0.2, 0.309 ], 10)); // 0.1\nconsole.log(Mathx.min([ 0.1, 0.2, 0.309 ], 0)); // 0\n\n/* 相当于无参调用 Math.min(). */\nconsole.log(Mathx.min([])); // Infinity\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numbers"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] min"
+        },
+        {
+          "textRaw": "[m] dist",
+          "name": "[m]_dist",
+          "desc": "<p>两点间距离.</p>\n<p>上述 &quot;距离&quot; 指的是 <a href=\"https://zh.wikipedia.org/wiki/%E6%AC%A7%E5%87%A0%E9%87%8C%E5%BE%97%E8%B7%9D%E7%A6%BB\">欧几里得距离 (Euclidean distance)</a>, 亦称作欧氏距离.</p>\n",
+          "methods": [
+            {
+              "textRaw": "dist(pointA, pointB, fraction?)",
+              "type": "method",
+              "name": "dist",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>pointA</strong> { <a href=\"dataTypes#tuple\">[</a> <a href=\"dataTypes#number\">number</a>, <a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#tuple\">]</a> | <a href=\"dataTypes#object\">{</a> x: <a href=\"dataTypes#number\">number</a>, y: <a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#object\">}</a> | <a href=\"dataTypes#opencvpoint\">OpencvPoint</a> | <a href=\"dataTypes#androidrect\">AndroidRect</a> }</li>\n<li><strong>pointB</strong> { <a href=\"dataTypes#tuple\">[</a> <a href=\"dataTypes#number\">number</a>, <a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#tuple\">]</a> | <a href=\"dataTypes#object\">{</a> x: <a href=\"dataTypes#number\">number</a>, y: <a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#object\">}</a> | <a href=\"dataTypes#opencvpoint\">OpencvPoint</a> | <a href=\"dataTypes#androidrect\">AndroidRect</a> }</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回两点间距离, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">const Point = org.opencv.core.Point;\nconst Rect = android.graphics.Rect;\n\n/* 无参返回 NaN. */\nconsole.log(Mathx.dist()); // NaN\n\n/* 以数组作点. */\nconsole.log(Mathx.dist([ 0, 0 ], [ 3, 4 ])); // 5\n\n/* 以包含 x 及 y 属性的对象作点. */\nconsole.log(Mathx.dist({ x: 0, y: 0 }, { x: 3, y: 4 })); // 5\n\n/* 以 Point 作点. */\nconsole.log(Mathx.dist(new Point(6, 7), new Point(12, 15))); // 10\n\n/* 以 Rect 作点, 此时其中心点作为参照点. */\nconsole.log(Mathx.dist(new Rect(0, 0, 10, 10), new Rect(10, 10, 20, 20))); // 14.142135623730951\nconsole.log(Mathx.dist(new Rect(0, 0, 10, 10), new Rect(10, 10, 20, 20), 3)); // 14.142\n\n/* 两点类型可以不一致. */\nconsole.log(Mathx.dist([ 0, 0 ], new Point(3, 4))); // 5\nconsole.log(Mathx.dist([ 0, 0 ], new Rect(0, 0, 6, 8))); // 5\n\n/* 点可以用浮点数表示. */\nconsole.log(Mathx.dist(new Point(0, 0), new Point(0.5, 0.5))); // 0.7071067811865476\n\n/* Rect 的中心点也可以为浮点数. */\nconsole.log(Mathx.dist(new Point(0, 0), new Rect(0, 0, 1, 1))); // 0.7071067811865476\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pointA"
+                    },
+                    {
+                      "name": "pointB"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "dist(rect, fraction?)",
+              "type": "method",
+              "name": "dist",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"dataTypes#androidrect\">AndroidRect</a> } - 矩形</li>\n<li><strong>[ fraction = undefined ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后的数字个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回矩形的对角点间距, 并根据 fraction 参数进行可能的四舍五入.</p>\n<pre><code class=\"lang-js\">/* 长 6 (12 - 6) 宽 8 (15 - 7) 的矩形, 对角线长度为 10. */\nconsole.log(Mathx.dist(new Rect(6, 7, 12, 15))); // 10\n\n/* 边长为 1 的正方形, 对角线长度为 √2 (根号 2). 结果保留 3 位小数. */\nconsole.log(Mathx.dist(new Rect(0, 0, 1, 1), 3)); // 1.414\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] dist"
+        }
+      ],
+      "type": "module",
+      "displayName": "Mathx (Math 扩展)"
+    }
+  ]
+}

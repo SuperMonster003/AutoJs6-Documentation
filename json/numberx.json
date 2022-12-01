@@ -1,0 +1,233 @@
+{
+  "source": "..\\api\\numberx.md",
+  "modules": [
+    {
+      "textRaw": "Numberx (Number 扩展)",
+      "name": "numberx_(number_扩展)",
+      "desc": "<p>Numberx 用于扩展 JavaScript 标准内置对象 Number 的功能 (参阅 <a href=\"glossaries#内置对象扩展\">内置对象扩展</a>).</p>\n<p>Numberx 全局可用:</p>\n<pre><code class=\"lang-js\">console.log(typeof Numberx); // &quot;object&quot;\nconsole.log(typeof Numberx.clamp); // &quot;function&quot;\n</code></pre>\n<p>当启用内置扩展后, Numberx 将被应用在 Number 及其原型上:</p>\n<pre><code class=\"lang-js\">console.log(typeof Number.prototype.clamp); // &quot;function&quot;\nconsole.log(typeof (123).clamp); // &quot;function&quot;\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "启用内置扩展",
+          "name": "启用内置扩展",
+          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Number&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Numberx</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "启用内置扩展"
+        },
+        {
+          "textRaw": "[p] ICU",
+          "name": "[p]_icu",
+          "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ 996 ]] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>996.ICU - Developers&#39; lives matter (程序员生命健康值得呵护).</p>\n<p>常量值: 996</p>\n<pre><code class=\"lang-js\">/* 静态常量. */\nconsole.log(`${Numberx.ICU} is not only a number`);\n\n/* 启用内置对象扩展后. */\nconsole.log(`${Number.ICU} is not only a number`);\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://zh.wikipedia.org/wiki/996%E5%B7%A5%E4%BD%9C%E5%88%B6\">Wikipedia</a> / <a href=\"https://github.com/996icu/996.ICU\">GitHub</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p] ICU"
+        },
+        {
+          "textRaw": "[m] ensureNumber",
+          "name": "[m]_ensurenumber",
+          "methods": [
+            {
+              "textRaw": "ensureNumber(...o)",
+              "type": "method",
+              "name": "ensureNumber",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>相当于严格类型检查, 当任意一个 o 不满足 <code>typeof o === &#39;number&#39;</code> 时抛出异常.</p>\n<pre><code class=\"lang-js\">/* 确保每一个对象都是 number 基本类型. */\n\nconsole.log(Numberx.ensureNumber(9)); /* 无异常. */\nconsole.log(Numberx.ensureNumber(null)); /* 抛出异常. */\nconsole.log(Numberx.ensureNumber(NaN, 0, Infinity)); /* 无异常. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.ensureNumber(9)); /* 无异常. */\nconsole.log(Number.ensureNumber(null)); /* 抛出异常. */\nconsole.log(Number.ensureNumber(NaN, 0, Infinity)); /* 无异常. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...o"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureNumber"
+        },
+        {
+          "textRaw": "[m] clamp",
+          "name": "[m]_clamp",
+          "methods": [
+            {
+              "textRaw": "clamp(num, ...clamps)",
+              "type": "method",
+              "name": "clamp",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>clamps</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 限制范围</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回限制在指定范围内的数字.<br>当给定数字不在限制范围内时, 则就近返回一个范围边界值.</p>\n<p>通常限制范围用两个大小不同的数字数组表示,<br>如范围 10 - 30 可用 <code>[ 10, 30 ]</code> 表示.<br>范围参数会根据给定参数排序后挑选出最大值与最小值作为限制上限及下限,<br>因此 <code>[ 30, 10 ]</code> 与 <code>[ 10, 30 ]</code> 效果相同,<br>而与 <code>[ 10, 11, 15, 22, 30 ]</code> 或 <code>[ 20, 30, 25, 10 ]</code> 等效果也相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, [ 10, 12, 30, 22, 20 ])); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp([ 10, 12, 30, 22, 20 ])); /* 同上. */\n</code></pre>\n<p>因范围参数 clamps 是 <a href=\"documentation#可变参数\">可变参数</a>, 因此以下两种调用方式效果相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, 10, 30)); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp(10, 30)); /* 同上. */\n</code></pre>\n<p>当限制范围参数是 1 个数字时, 相当于 <code>[ x, x ]</code>, 则一定返回 x 本身;<br>当限制范围参数是 0 个数字时 (省略或空数组), 则返回 num 本身:</p>\n<pre><code class=\"lang-js\">let num = 307;\nconsole.log(Numberx.clamp(num, 523)); // 523\nconsole.log(Numberx.clamp(num)); // 307\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp(523)); // 523\nconsole.log(num.clamp()); // 307\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "num"
+                    },
+                    {
+                      "name": "...clamps"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clamp"
+        },
+        {
+          "textRaw": "[m] toFixedNum",
+          "name": "[m]_tofixednum",
+          "methods": [
+            {
+              "textRaw": "toFixedNum(num, fraction?)",
+              "type": "method",
+              "name": "toFixedNum",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>[ fraction = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小数点后数字的个数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>使用定点表示法来格式化一个数值, 然后返回其对应的 number 值.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.toFixedNum(123.456, 2)); // 123.46\nconsole.log(Numberx.toFixedNum(3.004, 2)); // 3\nconsole.log(Numberx.toFixedNum(1.23456e3)); // 1235\n\n/* 启用内置对象扩展后. */\n\nconsole.log((123.456).toFixedNum(2)); // 123.46\nconsole.log((3.004).toFixedNum(2)); // 3\nconsole.log((1.23456e3).toFixedNum()); // 1235\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "num"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toFixedNum"
+        },
+        {
+          "textRaw": "[m] padStart",
+          "name": "[m]_padstart",
+          "methods": [
+            {
+              "textRaw": "padStart(num, targetLength, pad?)",
+              "type": "method",
+              "name": "padStart",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot;（U+0030）。</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>填充从当前数字对应字符串的开头开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padStart(5, 2, 0)); // &quot;05&quot;\nconsole.log(Numberx.padStart(5, 2)); // &quot;05&quot;\nconsole.log(Numberx.padStart(3, 3)); // &quot;003&quot;\nconsole.log(Numberx.padStart(99, 5, &quot;AB&quot;)); // &quot;ABA99&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padStart(2, 0)); // &quot;05&quot;\nconsole.log((5).padStart(2)); // &quot;05&quot;\nconsole.log((3).padStart(3)); // &quot;003&quot;\nconsole.log((99).padStart(5, &quot;AB&quot;)); // &quot;ABA99&quot;\n</code></pre>\n<p>格式化日期与时间:</p>\n<pre><code class=\"lang-js\">let pad = x =&gt; Numberx.padStart(x, 2, 0); /* 启用内置对象扩展后: `x.padStart(2, 0)`. */\nlet now = new Date();\nlet date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;\nlet time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;\nconsole.log(`${date} ${time}`); /* e.g. &quot;2022-11-01 08:47:15&quot; */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "num"
+                    },
+                    {
+                      "name": "targetLength"
+                    },
+                    {
+                      "name": "pad?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] padStart"
+        },
+        {
+          "textRaw": "[m] padEnd",
+          "name": "[m]_padend",
+          "methods": [
+            {
+              "textRaw": "padEnd(num, targetLength, pad?)",
+              "type": "method",
+              "name": "padEnd",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot;（U+0030）。</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>填充从当前数字对应字符串的末尾开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padEnd(5, 2, 0)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(5, 2)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(3, 3)); // &quot;300&quot;\nconsole.log(Numberx.padEnd(99.1, 5)); // &quot;99.10&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padEnd(2, 0)); // &quot;50&quot;\nconsole.log((5).padEnd(2)); // &quot;50&quot;\nconsole.log((3).padEnd(3)); // &quot;300&quot;\nconsole.log((99.1).padEnd(5)); // &quot;99.10&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "num"
+                    },
+                    {
+                      "name": "targetLength"
+                    },
+                    {
+                      "name": "pad?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] padEnd"
+        },
+        {
+          "textRaw": "[m] parseFloat",
+          "name": "[m]_parsefloat",
+          "methods": [
+            {
+              "textRaw": "parseFloat(string, radix)",
+              "type": "method",
+              "name": "parseFloat",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>string</strong> { <a href=\"dataTypes#string\">string</a> } - 待解析的字符串</li>\n<li><strong>radix</strong> { <a href=\"dataTypes#number\">number</a> } - 进制的基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>根据指定的进制基数, 解析字符串并返回一个数字.</p>\n<p>标准内置对象 Number 的 parseInt 支持进制基数 radix 参数, 即 parseInt(string, radix), 但 parseFloat 不支持 radix 参数.</p>\n<p>此扩展方法对上述 radix 参数提供了支持:</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Numberx.parseFloat(&quot;0.101&quot;, 2)); // 0.625\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Number.parseFloat(&quot;0.101&quot;, 2)); // 0.625\nconsole.log(parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(parseFloat(&quot;0.101&quot;, 2)); // 0.625\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "string"
+                    },
+                    {
+                      "name": "radix"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] parseFloat"
+        },
+        {
+          "textRaw": "[m] parsePercent",
+          "name": "[m]_parsepercent",
+          "methods": [
+            {
+              "textRaw": "parsePercent(percentage)",
+              "type": "method",
+              "name": "parsePercent",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>percentage</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 百分数字符串或任意数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>此方法用于解析一个百分数字符串 (如 <code>&quot;5%&quot;</code>) 并返回其代表的数值.<br>如果 percentage 是一个 number 基本类型值, 则直接返回.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Numberx.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Numberx.parsePercent(&#39;2%%&#39;)); // 0.0002\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Number.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Number.parsePercent(&#39;2%%&#39;)); // 0.0002\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "percentage"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] parsePercent"
+        },
+        {
+          "textRaw": "[m] parseRatio",
+          "name": "[m]_parseratio",
+          "methods": [
+            {
+              "textRaw": "parseRatio(ratio)",
+              "type": "method",
+              "name": "parseRatio",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>ratio</strong> { <a href=\"dataTypes#string\">string</a> } - 比率字符串</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>此方法用于解析一个比率字符串 (如 <code>&quot;5:23&quot;</code>) 并返回其代表的数值.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parseRatio(&#39;3:2&#39;)); // 1.5\nconsole.log(Numberx.parseRatio(&#39;3:0.1&#39;)); // 30\nconsole.log(Numberx.parseRatio(&#39;0.1:0.01&#39;)); // 10\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parseRatio(&#39;3:2&#39;)); // 1.5\nconsole.log(Number.parseRatio(&#39;3:0.1&#39;)); // 30\nconsole.log(Number.parseRatio(&#39;0.1:0.01&#39;)); // 10\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "ratio"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] parseRatio"
+        }
+      ],
+      "type": "module",
+      "displayName": "Numberx (Number 扩展)"
+    }
+  ]
+}

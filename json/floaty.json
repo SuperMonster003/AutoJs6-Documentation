@@ -2,9 +2,9 @@
   "source": "..\\api\\floaty.md",
   "modules": [
     {
-      "textRaw": "Floaty",
-      "name": "floaty",
-      "desc": "<p>floaty模块提供了悬浮窗的相关函数，可以在屏幕上显示自定义悬浮窗，控制悬浮窗大小、位置等。</p>\n<p>悬浮窗在脚本停止运行时会自动关闭，因此，要保持悬浮窗不被关闭，可以用一个空的setInterval来实现，例如：</p>\n<pre><code>setInterval(()=&gt;{}, 1000);\n</code></pre>",
+      "textRaw": "悬浮窗 (Floaty)",
+      "name": "悬浮窗_(floaty)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>floaty模块提供了悬浮窗的相关函数, 可以在屏幕上显示自定义悬浮窗, 控制悬浮窗大小、位置等.</p>\n<p>悬浮窗在脚本停止运行时会自动关闭, 因此, 要保持悬浮窗不被关闭, 可以用一个空的setInterval来实现, 例如：</p>\n<pre><code>setInterval(()=&gt;{}, 1000);\n</code></pre>",
       "methods": [
         {
           "textRaw": "floaty.window(layout)",
@@ -29,7 +29,7 @@
               ]
             }
           ],
-          "desc": "<p>指定悬浮窗的布局，创建并<strong>显示</strong>一个悬浮窗，返回一个<code>FloatyWindow</code>对象。</p>\n<p>该悬浮窗自带关闭、调整大小、调整位置按键，可根据需要调用<code>setAdjustEnabled()</code>函数来显示或隐藏。</p>\n<p>其中layout参数可以是xml布局或者一个View，更多信息参见ui模块的说明。</p>\n<p>例子：</p>\n<pre><code>var w = floaty.window(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字，并在两秒后消失。</p>\n<p>另外，因为脚本运行的线程不是UI线程，而所有对控件的修改操作需要在UI线程执行，此时需要用<code>ui.run</code>，例如:</p>\n<pre><code>ui.run(function(){\n    w.text.setText(&quot;文本&quot;);\n});\n</code></pre><p>有关返回的<code>FloatyWindow</code>对象的说明，参见下面的<code>FloatyWindow</code>章节。</p>\n"
+          "desc": "<p>指定悬浮窗的布局, 创建并<strong>显示</strong>一个悬浮窗, 返回一个<code>FloatyWindow</code>对象.</p>\n<p>该悬浮窗自带关闭、调整大小、调整位置按键, 可根据需要调用<code>setAdjustEnabled()</code>函数来显示或隐藏.</p>\n<p>其中layout参数可以是xml布局或者一个View, 更多信息参见ui模块的说明.</p>\n<p>例子：</p>\n<pre><code>var w = floaty.window(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.</p>\n<p>另外, 因为脚本运行的线程不是UI线程, 而所有对控件的修改操作需要在UI线程执行, 此时需要用<code>ui.run</code>, 例如:</p>\n<pre><code>ui.run(function(){\n    w.text.setText(&quot;文本&quot;);\n});\n</code></pre><p>有关返回的<code>FloatyWindow</code>对象的说明, 参见下面的<code>FloatyWindow</code>章节.</p>\n"
         },
         {
           "textRaw": "floaty.rawWindow(layout)",
@@ -54,13 +54,13 @@
               ]
             }
           ],
-          "desc": "<p>指定悬浮窗的布局，创建并<strong>显示</strong>一个原始悬浮窗，返回一个<code>FloatyRawWindow</code>对象。</p>\n<p>与<code>floaty.window()</code>函数不同的是，该悬浮窗不会增加任何额外设施（例如调整大小、位置按钮），您可以根据自己需要编写任何布局。</p>\n<p>而且，该悬浮窗支持完全全屏，可以覆盖状态栏，因此可以做护眼模式之类的应用。</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setPosition(500, 500);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字，并在两秒后消失。</p>\n<p>有关返回的<code>FloatyRawWindow</code>对象的说明，参见下面的<code>FloatyRawWindow</code>章节。</p>\n"
+          "desc": "<p>指定悬浮窗的布局, 创建并<strong>显示</strong>一个原始悬浮窗, 返回一个<code>FloatyRawWindow</code>对象.</p>\n<p>与<code>floaty.window()</code>函数不同的是, 该悬浮窗不会增加任何额外设施（例如调整大小、位置按钮）, 您可以根据自己需要编写任何布局.</p>\n<p>而且, 该悬浮窗支持完全全屏, 可以覆盖状态栏, 因此可以做护眼模式之类的应用.</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setPosition(500, 500);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.</p>\n<p>有关返回的<code>FloatyRawWindow</code>对象的说明, 参见下面的<code>FloatyRawWindow</code>章节.</p>\n"
         },
         {
           "textRaw": "floaty.closeAll()",
           "type": "method",
           "name": "closeAll",
-          "desc": "<p>关闭所有本脚本的悬浮窗。</p>\n",
+          "desc": "<p>关闭所有本脚本的悬浮窗.</p>\n",
           "signatures": [
             {
               "params": []
@@ -69,12 +69,12 @@
         }
       ],
       "type": "module",
-      "displayName": "Floaty"
+      "displayName": "悬浮窗 (Floaty)"
     },
     {
       "textRaw": "FloatyWindow",
       "name": "floatywindow",
-      "desc": "<p>悬浮窗对象，可通过<code>FloatyWindow.{id}</code>获取悬浮窗界面上的元素。例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件，类似于ui。</p>\n",
+      "desc": "<p>悬浮窗对象, 可通过<code>FloatyWindow.{id}</code>获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件, 类似于ui.</p>\n",
       "methods": [
         {
           "textRaw": "window.setAdjustEnabled(enabled)",
@@ -99,7 +99,7 @@
               ]
             }
           ],
-          "desc": "<p>如果enabled为true，则在悬浮窗左上角、右上角显示可供位置、大小调整的标示，就像控制台一样；\n如果enabled为false，则隐藏上述标示。</p>\n"
+          "desc": "<p>如果enabled为true, 则在悬浮窗左上角、右上角显示可供位置、大小调整的标示, 就像控制台一样；\n如果enabled为false, 则隐藏上述标示.</p>\n"
         },
         {
           "textRaw": "window.setPosition(x, y)",
@@ -133,13 +133,13 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗位置。</p>\n"
+          "desc": "<p>设置悬浮窗位置.</p>\n"
         },
         {
           "textRaw": "window.getX()",
           "type": "method",
           "name": "getX",
-          "desc": "<p>返回悬浮窗位置的X坐标。</p>\n",
+          "desc": "<p>返回悬浮窗位置的X坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -150,7 +150,7 @@
           "textRaw": "window.getY()",
           "type": "method",
           "name": "getY",
-          "desc": "<p>返回悬浮窗位置的Y坐标。</p>\n",
+          "desc": "<p>返回悬浮窗位置的Y坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -189,13 +189,13 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗宽高。</p>\n"
+          "desc": "<p>设置悬浮窗宽高.</p>\n"
         },
         {
           "textRaw": "window.getWidht()",
           "type": "method",
           "name": "getWidht",
-          "desc": "<p>返回悬浮窗宽度。</p>\n",
+          "desc": "<p>返回悬浮窗宽度.</p>\n",
           "signatures": [
             {
               "params": []
@@ -206,7 +206,7 @@
           "textRaw": "window.getHeight()",
           "type": "method",
           "name": "getHeight",
-          "desc": "<p>返回悬浮窗高度。</p>\n",
+          "desc": "<p>返回悬浮窗高度.</p>\n",
           "signatures": [
             {
               "params": []
@@ -217,7 +217,7 @@
           "textRaw": "window.close()",
           "type": "method",
           "name": "close",
-          "desc": "<p>关闭悬浮窗。如果悬浮窗已经是关闭状态，则此函数将不执行任何操作。</p>\n<p>被关闭后的悬浮窗不能再显示。</p>\n",
+          "desc": "<p>关闭悬浮窗. 如果悬浮窗已经是关闭状态, 则此函数将不执行任何操作.</p>\n<p>被关闭后的悬浮窗不能再显示.</p>\n",
           "signatures": [
             {
               "params": []
@@ -228,7 +228,7 @@
           "textRaw": "window.exitOnClose()",
           "type": "method",
           "name": "exitOnClose",
-          "desc": "<p>使悬浮窗被关闭时自动结束脚本运行。</p>\n",
+          "desc": "<p>使悬浮窗被关闭时自动结束脚本运行.</p>\n",
           "signatures": [
             {
               "params": []
@@ -242,7 +242,7 @@
     {
       "textRaw": "FloatyRawWindow",
       "name": "floatyrawwindow",
-      "desc": "<p>原始悬浮窗对象，可通过<code>window.{id}</code>获取悬浮窗界面上的元素。例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件，类似于ui。</p>\n",
+      "desc": "<p>原始悬浮窗对象, 可通过<code>window.{id}</code>获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件, 类似于ui.</p>\n",
       "methods": [
         {
           "textRaw": "window.setTouchable(touchable)",
@@ -267,7 +267,7 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗是否可触摸，如果为true, 则悬浮窗将接收到触摸、点击等事件并且无法继续传递到悬浮窗下面；如果为false, 悬浮窗上的触摸、点击等事件将被直接传递到悬浮窗下面。处于安全考虑，被悬浮窗接收的触摸事情无法再继续传递到下层。</p>\n<p>可以用此特性来制作护眼模式脚本。</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#44ffcc00&quot;/&gt;\n);\n\nw.setSize(-1, -1);\nw.setTouchable(false);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 4000);\n\n</code></pre>"
+          "desc": "<p>设置悬浮窗是否可触摸, 如果为true, 则悬浮窗将接收到触摸、点击等事件并且无法继续传递到悬浮窗下面；如果为false, 悬浮窗上的触摸、点击等事件将被直接传递到悬浮窗下面. 处于安全考虑, 被悬浮窗接收的触摸事情无法再继续传递到下层.</p>\n<p>可以用此特性来制作护眼模式脚本.</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#44ffcc00&quot;/&gt;\n);\n\nw.setSize(-1, -1);\nw.setTouchable(false);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 4000);\n\n</code></pre>"
         },
         {
           "textRaw": "window.setPosition(x, y)",
@@ -301,13 +301,13 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗位置。</p>\n"
+          "desc": "<p>设置悬浮窗位置.</p>\n"
         },
         {
           "textRaw": "window.getX()",
           "type": "method",
           "name": "getX",
-          "desc": "<p>返回悬浮窗位置的X坐标。</p>\n",
+          "desc": "<p>返回悬浮窗位置的X坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -318,7 +318,7 @@
           "textRaw": "window.getY()",
           "type": "method",
           "name": "getY",
-          "desc": "<p>返回悬浮窗位置的Y坐标。</p>\n",
+          "desc": "<p>返回悬浮窗位置的Y坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -357,13 +357,13 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗宽高。</p>\n<p>特别地，如果设置为-1，则为占满全屏；设置为-2则为根据悬浮窗内容大小而定。例如：</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#77ff0000&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setSize(-1, -1);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n\n</code></pre>"
+          "desc": "<p>设置悬浮窗宽高.</p>\n<p>特别地, 如果设置为-1, 则为占满全屏；设置为-2则为根据悬浮窗内容大小而定. 例如：</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#77ff0000&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setSize(-1, -1);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n\n</code></pre>"
         },
         {
           "textRaw": "window.getWidht()",
           "type": "method",
           "name": "getWidht",
-          "desc": "<p>返回悬浮窗宽度。</p>\n",
+          "desc": "<p>返回悬浮窗宽度.</p>\n",
           "signatures": [
             {
               "params": []
@@ -374,7 +374,7 @@
           "textRaw": "window.getHeight()",
           "type": "method",
           "name": "getHeight",
-          "desc": "<p>返回悬浮窗高度。</p>\n",
+          "desc": "<p>返回悬浮窗高度.</p>\n",
           "signatures": [
             {
               "params": []
@@ -385,7 +385,7 @@
           "textRaw": "window.close()",
           "type": "method",
           "name": "close",
-          "desc": "<p>关闭悬浮窗。如果悬浮窗已经是关闭状态，则此函数将不执行任何操作。</p>\n<p>被关闭后的悬浮窗不能再显示。</p>\n",
+          "desc": "<p>关闭悬浮窗. 如果悬浮窗已经是关闭状态, 则此函数将不执行任何操作.</p>\n<p>被关闭后的悬浮窗不能再显示.</p>\n",
           "signatures": [
             {
               "params": []
@@ -396,7 +396,7 @@
           "textRaw": "window.exitOnClose()",
           "type": "method",
           "name": "exitOnClose",
-          "desc": "<p>使悬浮窗被关闭时自动结束脚本运行。</p>\n",
+          "desc": "<p>使悬浮窗被关闭时自动结束脚本运行.</p>\n",
           "signatures": [
             {
               "params": []

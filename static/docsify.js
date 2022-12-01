@@ -5646,12 +5646,16 @@
         );
     }
 
+    function isDarkModeEnabled() {
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    }
+
     /**
      * Cover Page
      * @returns {String} Cover page
      */
     function cover() {
-        var SL = ', 100%, 85%';
+        var SL = isDarkModeEnabled() ? ', 10%, 15%' : ', 100%, 85%';
         var bgc =
             'linear-gradient(to left bottom, ' +
             'hsl(' + (Math.floor(Math.random() * 255) + SL) + ') 0%,' +

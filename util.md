@@ -1,7 +1,5 @@
 # Util
 
-> Stability: 2 - Stable
-
 The `util` module is primarily designed to support the needs of Node.js' own
 internal APIs. However, many of the utilities are useful for application and
 module developers as well. It can be accessed using:
@@ -565,8 +563,6 @@ see [Custom promisified functions][].
 added: v8.3.0
 -->
 
-> Stability: 1 - Experimental
-
 An implementation of the [WHATWG Encoding Standard][] `TextDecoder` API.
 
 ```js
@@ -705,8 +701,6 @@ mark.
 added: v8.3.0
 -->
 
-> Stability: 1 - Experimental
-
 An implementation of the [WHATWG Encoding Standard][] `TextEncoder` API. All
 instances of `TextEncoder` only support UTF-8 encoding.
 
@@ -741,8 +735,6 @@ added: v0.7.5
 deprecated: v6.0.0
 -->
 
-> Stability: 0 - Deprecated: Use [`Object.assign()`] instead.
-
 The `util._extend()` method was never intended to be used outside of internal
 Node.js modules. The community found and used it anyway.
 
@@ -756,8 +748,6 @@ added: v0.3.0
 deprecated: v0.11.3
 -->
 
-> Stability: 0 - Deprecated: Use [`console.error()`][] instead.
-
 * `string` {string} The message to print to `stderr`
 
 Deprecated predecessor of `console.error`.
@@ -769,8 +759,6 @@ added: v0.3.0
 deprecated: v0.11.3
 -->
 
-> Stability: 0 - Deprecated: Use [`console.error()`][] instead.
-
 * `...strings` {string} The message to print to `stderr`
 
 Deprecated predecessor of `console.error`.
@@ -781,8 +769,6 @@ Deprecated predecessor of `console.error`.
 added: v0.6.0
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -808,8 +794,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is a `Boolean`. Otherwise, returns `false`.
@@ -831,8 +815,6 @@ util.isBoolean(false);
 added: v0.11.5
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated: Use [`Buffer.isBuffer()`][] instead.
 
 * `object` {any}
 
@@ -856,8 +838,6 @@ added: v0.6.0
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is a `Date`. Otherwise, returns `false`.
@@ -879,8 +859,6 @@ util.isDate({});
 added: v0.6.0
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -920,8 +898,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is a `Function`. Otherwise, returns
@@ -948,8 +924,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is strictly `null`. Otherwise, returns
@@ -973,8 +947,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is `null` or `undefined`. Otherwise,
@@ -997,8 +969,6 @@ util.isNullOrUndefined(null);
 added: v0.11.5
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -1024,8 +994,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is strictly an `Object` **and** not a
@@ -1050,8 +1018,6 @@ util.isObject(function() {});
 added: v0.11.5
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -1088,8 +1054,6 @@ added: v0.6.0
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is a `RegExp`. Otherwise, returns `false`.
@@ -1111,8 +1075,6 @@ util.isRegExp({});
 added: v0.11.5
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -1138,8 +1100,6 @@ added: v0.11.5
 deprecated: v4.0.0
 -->
 
-> Stability: 0 - Deprecated
-
 * `object` {any}
 
 Returns `true` if the given `object` is a `Symbol`. Otherwise, returns `false`.
@@ -1161,8 +1121,6 @@ util.isSymbol(Symbol('foo'));
 added: v0.11.5
 deprecated: v4.0.0
 -->
-
-> Stability: 0 - Deprecated
 
 * `object` {any}
 
@@ -1187,8 +1145,6 @@ added: v0.3.0
 deprecated: v6.0.0
 -->
 
-> Stability: 0 - Deprecated: Use a third party module instead.
-
 * `string` {string}
 
 The `util.log()` method prints the given `string` to `stdout` with an included
@@ -1207,8 +1163,6 @@ added: v0.3.0
 deprecated: v0.11.3
 -->
 
-> Stability: 0 - Deprecated: Use [`console.log()`][] instead.
-
 Deprecated predecessor of `console.log`.
 
 ### util.puts([...strings])
@@ -1217,8 +1171,6 @@ Deprecated predecessor of `console.log`.
 added: v0.3.0
 deprecated: v0.11.3
 -->
-
-> Stability: 0 - Deprecated: Use [`console.log()`][] instead.
 
 Deprecated predecessor of `console.log`.
 

@@ -2,13 +2,13 @@
 
 <div align="center">
   <p>
-    <img alt="AF_Banner" src="./api/images/autojs6-documentation-banner-800×224.png"/>
+    <img alt="AF_Banner" src="./api/images/autojs6-documentation-banner_800×208_transparent.png"/>
   </p>
 
   <p>AutoJs6 项目文档</p>
 
   <p>
-    <a href="https://supermonster003.github.io/AutoJs6-Documentation"><img alt="Version name" src="https://img.shields.io/badge/version-1.0.0-1283C3"/></a>
+    <a href="https://supermonster003.github.io/AutoJs6-Documentation"><img alt="Version name" src="https://img.shields.io/badge/version-1.0.2-1283C3"/></a>
     <a href="https://github.com/SuperMonster003/AutoJs6-Documentation/issues"><img alt="GitHub closed issues" src="https://img.shields.io/github/issues/SuperMonster003/AutoJs6-Documentation?color=009688"/></a>
     <a href="https://github.com/SuperMonster003/AutoJs6-Documentation/commit/99a1d8490fac5b6d55f6f183db59ad833a2064ed"><img alt="Created" src="https://img.shields.io/date/1657941168?color=2e7d32&label=created"/></a>
     <br>

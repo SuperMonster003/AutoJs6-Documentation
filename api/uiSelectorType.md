@@ -5031,7 +5031,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 点击 ] 行为](uiObjectActionsType#m-click).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
 > 注: 此方法不是全局的, 它被 automator.click 替代
 
@@ -5045,7 +5045,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 长按 ] 行为](uiObjectActionsType#m-longclick).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
 > 注: 此方法不是全局的, 它被 automator.longClick 替代
 
@@ -5059,7 +5059,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 获取无障碍焦点 ] 行为](uiObjectActionsType#m-accessibilityfocus).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] clearAccessibilityFocus
 
@@ -5071,7 +5071,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 清除无障碍焦点 ] 行为](uiObjectActionsType#m-clearaccessibilityfocus).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] focus
 
@@ -5083,7 +5083,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 获取焦点 ] 行为](uiObjectActionsType#m-focus).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] clearFocus
 
@@ -5095,7 +5095,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 清除焦点 ] 行为](uiObjectActionsType#m-clearfocus).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] dragStart
 
@@ -5107,7 +5107,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 拖放开始 ] 行为](uiObjectActionsType#m-dragstart).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] dragDrop
 
@@ -5119,7 +5119,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 拖放放下 ] 行为](uiObjectActionsType#m-dragdrop).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] dragCancel
 
@@ -5131,7 +5131,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 拖放取消 ] 行为](uiObjectActionsType#m-dragcancel).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] imeEnter
 
@@ -5143,7 +5143,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 输入法 ENTER 键 ] 行为](uiObjectActionsType#m-imeenter).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] moveWindow
 
@@ -5157,7 +5157,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 移动窗口到新位置 ] 行为](uiObjectActionsType#m-movewindow).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] nextAtMovementGranularity
 
@@ -5171,7 +5171,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 按粒度移至下一位置 ] 行为](uiObjectActionsType#m-nextatmovementgranularity).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] nextHtmlElement
 
@@ -5184,7 +5184,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 按元素移至下一位置 ] 行为](uiObjectActionsType#m-nexthtmlelement).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] pageLeft
 
@@ -5196,7 +5196,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗左移的翻页 ] 行为](uiObjectActionsType#m-pageleft).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] pageUp
 
@@ -5208,7 +5208,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗上移的翻页 ] 行为](uiObjectActionsType#m-pageup).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] pageRight
 
@@ -5220,7 +5220,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗右移的翻页 ] 行为](uiObjectActionsType#m-pageright).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] pageDown
 
@@ -5232,7 +5232,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗下移的翻页 ] 行为](uiObjectActionsType#m-pagedown).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] pressAndHold
 
@@ -5244,7 +5244,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 按住 ] 行为](uiObjectActionsType#m-pressandhold).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] previousAtMovementGranularity
 
@@ -5258,7 +5258,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 按粒度移至上一位置 ] 行为](uiObjectActionsType#m-previousatmovementgranularity).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] previousHtmlElement
 
@@ -5271,7 +5271,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 按元素移至上一位置 ] 行为](uiObjectActionsType#m-previoushtmlelement).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] showTextSuggestions
 
@@ -5283,7 +5283,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 显示文本建议 ] 行为](uiObjectActionsType#m-showtextsuggestions).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] showTooltip
 
@@ -5295,7 +5295,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 显示工具提示信息 ] 行为](uiObjectActionsType#m-showtooltip).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] hideTooltip
 
@@ -5307,7 +5307,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 隐藏工具提示信息 ] 行为](uiObjectActionsType#m-hidetooltip).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] show
 
@@ -5319,7 +5319,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 显示在视窗内 ] 行为](uiObjectActionsType#m-show).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] dismiss
 
@@ -5331,7 +5331,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 消隐 ] 行为](uiObjectActionsType#m-dismiss).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] copy
 
@@ -5343,7 +5343,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 复制文本 ] 行为](uiObjectActionsType#m-copy).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] cut
 
@@ -5355,7 +5355,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 剪切文本 ] 行为](uiObjectActionsType#m-cut).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] paste
 
@@ -5367,7 +5367,42 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 粘贴文本 ] 行为](uiObjectActionsType#m-paste).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合, 集合中的所有控件将全部执行一次 `paste()`.  
+然而实际执行全局方法 `paste()` 时, 往往只有一个控件执行了粘贴行为, 并非所有控件都执行一遍.  
+这是因为控件 `w` 完成粘贴行为的前提, 是它处于聚焦状态 (`w.focused()` 为 `true`).  
+在一个活动窗口中, 往往最多只有一个控件处于聚焦状态, 因此只有该控件可以完成粘贴行为.  
+如果需要所有的文本编辑控件全部完成粘贴行为, 可参考如下代码:
+
+```js 
+let wc = className('EditText').find();
+wc.forEach((w) => {
+    w.focus();
+    w.paste();
+});
+wc.at(-1).clearFocus();
+```
+
+除了 `w.paste()`, `w.setText(getClip())` 也可用于实现粘贴效果:
+
+```js
+className('EditText').find().forEach(w => w.setText(getClip()));
+```
+
+与 `w.paste()` 不同的是, `w.setText()` 不需要控件 `w` 处于聚焦状态.
+
+对已聚焦的文本编辑控件执行粘贴操作:
+
+```js
+focused().className('EditText').find().forEach(w => w.setText(getClip()));
+
+/* 拾取器写法, 效果同上. */
+pickup({
+    focused: true,
+    className: 'EditText',
+}, '[w]').forEach(w => w.setText(getClip()));
+```
+
+上述示例虽然使用了集合筛选, 但得到的控件集合中往往只有一个控件.
 
 ## [m#] select
 
@@ -5379,7 +5414,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 选中 ] 行为](uiObjectActionsType#m-select).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] expand
 
@@ -5391,7 +5426,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 展开 ] 行为](uiObjectActionsType#m-expand).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] collapse
 
@@ -5403,7 +5438,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 折叠 ] 行为](uiObjectActionsType#m-collapse).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] scrollLeft
 
@@ -5415,7 +5450,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗左移的滚动 ] 行为](uiObjectActionsType#m-scrollleft).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] scrollUp
 
@@ -5427,7 +5462,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗上移的滚动 ] 行为](uiObjectActionsType#m-scrollup).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
 > 注: 此方法不是全局的, 它被 automator.scrollUp 替代
 
@@ -5441,7 +5476,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗右移的滚动 ] 行为](uiObjectActionsType#m-scrollright).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] scrollDown
 
@@ -5453,7 +5488,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗下移的滚动 ] 行为](uiObjectActionsType#m-scrolldown).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
 > 注: 此方法不是全局的, 它被 automator.scrollDown 替代
 
@@ -5467,7 +5502,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗前移的滚动 ] 行为](uiObjectActionsType#m-scrollforward).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] scrollBackward
 
@@ -5479,7 +5514,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 使视窗后移的滚动 ] 行为](uiObjectActionsType#m-scrollbackward).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] scrollTo
 
@@ -5493,7 +5528,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 将指定位置滚动至视窗内 ] 行为](uiObjectActionsType#m-scrollto).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] contextClick
 
@@ -5505,7 +5540,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 上下文点击 ] 行为](uiObjectActionsType#m-contextclick).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] setText
 
@@ -5518,7 +5553,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 设置文本 ] 行为](uiObjectActionsType#m-settext).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
 > 注: 此方法不是全局的, 它被 automator.setText 替代
 
@@ -5534,7 +5569,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 选择文本 ] 行为](uiObjectActionsType#m-setselection).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] clearSelection
 
@@ -5546,7 +5581,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 取消选择文本 ] 行为](uiObjectActionsType#m-clearselection).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m#] setProgress
 
@@ -5559,7 +5594,7 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 设置进度值 ] 行为](uiObjectActionsType#m-setprogress).
 
-因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.
+因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
 
 ## [m] pickup
 
@@ -6104,3 +6139,37 @@ descMatch('.+'); /* 可匹配 w, 与 descMatch('') 效果相同. */
 /* 相当于 descMatch(/spl\.?.+$/) . */
 descMatch('spl\\.?.+$'); /* 可匹配 w. */
 ```
+
+# 选择器行为
+
+通常执行控件行为时, 按以下过程进行:
+
+```text
+构建选择器 - 筛选 (查找) - 对结果 (控件或集合) 执行行为
+```
+
+而选择器行为的过程:
+
+```text
+构建选择器 - 执行行为
+```
+
+## 原理
+
+选择器行为隐含默认的筛选过程, 即 [untilFind](#m-untilfind).
+
+例如 `text('abc').click()`, 相当于 `text('abc').untilFind().click()`.
+
+## 不推荐使用
+
+1. **潜在的永久阻塞风险**
+
+   因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.  
+   如上述示例, `text('abc')` 不存在时, 脚本将持续阻塞.
+
+2. **全局行为缺少针对性**
+
+   以 `paste()` 为例.  
+   当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合.  
+   这样的集合往往有几十甚至几百个控件, 再执行 `paste()` 时, 集合中的所有控件全部执行一次 `paste()`.  
+   这样的操作往往是非预期且耗时的, 因此不建议使用 `paste()` 这样的全局方法, 推荐使用具体且尽量可控的筛选器筛选出特定的控件或集合, 再有针对性地执行 `paste()` 操作.

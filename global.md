@@ -203,7 +203,7 @@ sleep(4e3, "±1e3"); /* 同上. */
 
 设置系统剪贴板内容.
 
-> 参阅: [getClip](#m-getclip) / [UiObject#paste](uiObjectType#m-paste)
+> 参阅: [getClip](#m-getclip)
 
 ---
 
@@ -225,7 +225,7 @@ setClip("test");
 console.log(getClip());
 ```
 
-> 参阅: [setClip](#m-setclip) / [UiObject#paste](uiObjectType#m-paste)
+> 参阅: [setClip](#m-setclip)
 
 > 参阅: [Android Docs](https://developer.android.com/about/versions/10/privacy/changes#clipboard-data)
 

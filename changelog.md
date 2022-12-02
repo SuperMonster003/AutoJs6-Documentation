@@ -1,5 +1,11 @@
 # 更新日志 (Changelog)
 
+## 2022/12/02
+
+- `优化` App 文档去除右上角 Repo 区域防止遮挡文档内容
+- `优化` [选择器](uiSelectorType) 章节完善选择器行为相关内容
+- `优化` 完善 [UiSelector#paste](uiSelectorType#m-paste) 方法相关内容
+
 ## 2022/12/01
 
 - `新增` 夜间模式主题适配

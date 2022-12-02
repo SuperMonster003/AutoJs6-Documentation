@@ -9121,7 +9121,7 @@
                 var navAppendToTarget = body;
 
                 if (el) {
-                    if (config.repo) {
+                    if (config.repo && document.body.clientWidth >= document.body.clientHeight) {
                         html += corner(config.repo, config.cornerExternalLinkTarge);
                     }
 

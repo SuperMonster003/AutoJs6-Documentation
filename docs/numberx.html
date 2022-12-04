@@ -133,6 +133,12 @@
 <li><span class="stability_undefined"><a href="#numberx_ensurenumber_o">ensureNumber(...o)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#numberx_m_check">[m] check</a></span><ul>
+<li><span class="stability_undefined"><a href="#numberx_check_o">check(o)</a></span></li>
+<li><span class="stability_undefined"><a href="#numberx_check_numa_numb">check(numA, numB)</a></span></li>
+<li><span class="stability_undefined"><a href="#numberx_check_numberoroperator">check(...numberOrOperator)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#numberx_m_clamp">[m] clamp</a></span><ul>
 <li><span class="stability_undefined"><a href="#numberx_clamp_num_clamps">clamp(num, ...clamps)</a></span></li>
 </ul>
@@ -225,6 +231,66 @@ console.log(Number.ensureNumber(9)); /* 无异常. */
 console.log(Number.ensureNumber(null)); /* 抛出异常. */
 console.log(Number.ensureNumber(NaN, 0, Infinity)); /* 无异常. */
 </code></pre>
+<h2>[m] check<span><a class="mark" href="#numberx_m_check" id="numberx_m_check">#</a></span></h2>
+<h3>check(o)<span><a class="mark" href="#numberx_check_o" id="numberx_check_o">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/3</code></strong> <strong><code>xObject</code></strong></p>
+<ul>
+<li><strong>o</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 任意对象</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>检查对象参数是否为数字类型, 相当于 <code>typeof o === &#39;number&#39;</code>.</p>
+<pre><code class="lang-js">console.log(Numberx.check(9)); // true
+console.log(Numberx.check(&#39;9&#39;)); // false
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(9)); // true
+console.log(Number.check(&#39;9&#39;)); // false
+</code></pre>
+<h3>check(numA, numB)<span><a class="mark" href="#numberx_check_numa_numb" id="numberx_check_numa_numb">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/3</code></strong> <strong><code>xObject</code></strong></p>
+<ul>
+<li><strong>numA</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
+<li><strong>numB</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>检查两个数字是否相等.</p>
+<p>任何一个参数不是 <code>number</code> 类型, 则返回 <code>false</code>.</p>
+<pre><code class="lang-js">console.log(Numberx.check(9, 2 + 7)); // true
+console.log(Numberx.check(&#39;9&#39;, &#39;9&#39;)); // false
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(9, 2 + 7)); // true
+console.log(Number.check(&#39;9&#39;, &#39;9&#39;)); // false
+</code></pre>
+<h3>check(...numberOrOperator)<span><a class="mark" href="#numberx_check_numberoroperator" id="numberx_check_numberoroperator">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>xObject</code></strong></p>
+<ul>
+<li><strong>o</strong> { <span class="type"><a href="documentation.html#documentation_可变参数">...</a>(<a href="dataTypes.html#datatypes_number">number</a> <a href="dataTypes.html#datatypes_联合类型"></span> | <span class="type"></a> <a href="dataTypes.html#datatypes_comparisonoperatorstring">ComparisonOperatorString</a>)<a href="documentation.html#documentation_可变参数">[]</a></span> } - 任意对象</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>检查数字与操作符字符串的逻辑关系.</p>
+<p>对于参数索引 [0, 1, 2 ... n],<br>索引 [0, 2, 4 ...] 需为 <code>number</code> 类型,<br>索引 [1, 3, 5 ...] 需为 <code>string</code> 类型.</p>
+<p>参数不满足上述类型需求时将抛出异常.</p>
+<pre><code class="lang-js">let a = 0.5;
+let b = 5;
+let c = 23;
+let d = 2011;
+
+console.log(Numberx.check(a, &#39;&lt;&#39;, b)); // true
+console.log(Numberx.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true
+console.log(Numberx.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true
+console.log(Numberx.check(a, c, d)); /* 抛出异常. */
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(a, &#39;&lt;&#39;, b)); // true
+console.log(Number.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true
+console.log(Number.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true
+console.log(Number.check(a, c, d)); /* 抛出异常. */
+</code></pre>
+<p>逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.<br>例如对于 <code>check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b)</code>, 仅检查 <code>a &lt; d</code> 与 <code>d &gt; b</code>, 而不会检查 <code>a</code> 与 <code>b</code> 的关系.</p>
 <h2>[m] clamp<span><a class="mark" href="#numberx_m_clamp" id="numberx_m_clamp">#</a></span></h2>
 <h3>clamp(num, ...clamps)<span><a class="mark" href="#numberx_clamp_num_clamps" id="numberx_clamp_num_clamps">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>

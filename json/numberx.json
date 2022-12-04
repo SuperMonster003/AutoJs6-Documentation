@@ -44,6 +44,62 @@
           "displayName": "[m] ensureNumber"
         },
         {
+          "textRaw": "[m] check",
+          "name": "[m]_check",
+          "methods": [
+            {
+              "textRaw": "check(o)",
+              "type": "method",
+              "name": "check",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/3</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#any\">any</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检查对象参数是否为数字类型, 相当于 <code>typeof o === &#39;number&#39;</code>.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.check(9)); // true\nconsole.log(Numberx.check(&#39;9&#39;)); // false\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.check(9)); // true\nconsole.log(Number.check(&#39;9&#39;)); // false\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "o"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "check(numA, numB)",
+              "type": "method",
+              "name": "check",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/3</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>numA</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n<li><strong>numB</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检查两个数字是否相等.</p>\n<p>任何一个参数不是 <code>number</code> 类型, 则返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.check(9, 2 + 7)); // true\nconsole.log(Numberx.check(&#39;9&#39;, &#39;9&#39;)); // false\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.check(9, 2 + 7)); // true\nconsole.log(Number.check(&#39;9&#39;, &#39;9&#39;)); // false\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "numA"
+                    },
+                    {
+                      "name": "numB"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "check(...numberOrOperator)",
+              "type": "method",
+              "name": "check",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#联合类型\">|</a> <a href=\"dataTypes#comparisonoperatorstring\">ComparisonOperatorString</a>)<a href=\"documentation#可变参数\">[]</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检查数字与操作符字符串的逻辑关系.</p>\n<p>对于参数索引 [0, 1, 2 ... n],<br>索引 [0, 2, 4 ...] 需为 <code>number</code> 类型,<br>索引 [1, 3, 5 ...] 需为 <code>string</code> 类型.</p>\n<p>参数不满足上述类型需求时将抛出异常.</p>\n<pre><code class=\"lang-js\">let a = 0.5;\nlet b = 5;\nlet c = 23;\nlet d = 2011;\n\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Numberx.check(a, c, d)); /* 抛出异常. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Number.check(a, c, d)); /* 抛出异常. */\n</code></pre>\n<p>逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.<br>例如对于 <code>check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b)</code>, 仅检查 <code>a &lt; d</code> 与 <code>d &gt; b</code>, 而不会检查 <code>a</code> 与 <code>b</code> 的关系.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numberOrOperator"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] check"
+        },
+        {
           "textRaw": "[m] clamp",
           "name": "[m]_clamp",
           "methods": [

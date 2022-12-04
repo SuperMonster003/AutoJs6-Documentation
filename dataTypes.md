@@ -639,6 +639,20 @@ console.log(arrList.length); // 0
 "1.5e3";
 ```
 
+## ComparisonOperatorString
+
+比较操作符字符串.
+
+[字符串模式](glossaries#字符串模式): `/<=?|>=?|=/`.
+
+```js
+">";
+">=";
+"<";
+"<=";
+"="; /* 对应全等操作符 "===" . */
+```
+
 ## ScreenMetricNumberX
 
 屏幕横向度量值.
@@ -678,8 +692,6 @@ top 赋值为 -80, 表示 Y 坐标为 -80.
 top 赋值为 0.5, 表示 Y 坐标为 50% 纵向屏幕高度, 即 `0.5 * device.height`.  
 top 赋值为 -0.1, 表示 Y 坐标为 -10% 纵向屏幕高度, 即 `-0.1 * device.height`.  
 top 赋值为 -1, 表示 Y 坐标为纵向屏幕高度的代指值, 即 `device.height`.
-
----
 
 ## OpencvPoint
 
@@ -784,8 +796,6 @@ console.log(new org.opencv.core.Point([ 5, 23, 7, 8, 9 ])); // {5.0, 23.0}
 点 Y 坐标.
 
 如: Point(180, **440**) 表示点距屏幕上边缘 440 像素.
-
----
 
 ## OpencvSize
 
@@ -902,8 +912,6 @@ console.log(new org.opencv.core.Size([ 5, 23, 7, 8, 9 ])); // 5x23
 - { [number](dataTypes#number) }
 
 尺寸高度值.
-
----
 
 ## AndroidRect
 

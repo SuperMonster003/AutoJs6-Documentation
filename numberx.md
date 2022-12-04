@@ -78,6 +78,86 @@ console.log(Number.ensureNumber(null)); /* 抛出异常. */
 console.log(Number.ensureNumber(NaN, 0, Infinity)); /* 无异常. */
 ```
 
+## [m] check
+
+### check(o)
+
+**`6.2.0`** **`Overload 1/3`** **`xObject`**
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检查对象参数是否为数字类型, 相当于 `typeof o === 'number'`.
+
+```js
+console.log(Numberx.check(9)); // true
+console.log(Numberx.check('9')); // false
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(9)); // true
+console.log(Number.check('9')); // false
+```
+
+### check(numA, numB)
+
+**`6.2.0`** **`Overload 2/3`** **`xObject`**
+
+- **numA** { [number](dataTypes#number) }
+- **numB** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检查两个数字是否相等.
+
+任何一个参数不是 `number` 类型, 则返回 `false`.
+
+```js
+console.log(Numberx.check(9, 2 + 7)); // true
+console.log(Numberx.check('9', '9')); // false
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(9, 2 + 7)); // true
+console.log(Number.check('9', '9')); // false
+```
+
+### check(...numberOrOperator)
+
+**`6.2.0`** **`Overload 3/3`** **`xObject`**
+
+- **o** { [...](documentation#可变参数)([number](dataTypes#number) [|](dataTypes#联合类型) [ComparisonOperatorString](dataTypes#comparisonoperatorstring))[[]](documentation#可变参数) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检查数字与操作符字符串的逻辑关系.
+
+对于参数索引 [0, 1, 2 ... n],  
+索引 [0, 2, 4 ...] 需为 `number` 类型,  
+索引 [1, 3, 5 ...] 需为 `string` 类型.
+
+参数不满足上述类型需求时将抛出异常.
+
+```js
+let a = 0.5;
+let b = 5;
+let c = 23;
+let d = 2011;
+
+console.log(Numberx.check(a, '<', b)); // true
+console.log(Numberx.check(a, '<', b, '<=', c)); // true
+console.log(Numberx.check(a, '<', d, '>', b, '<', c, '>', a)); // true
+console.log(Numberx.check(a, c, d)); /* 抛出异常. */
+
+/* 启用内置对象扩展后. */
+
+console.log(Number.check(a, '<', b)); // true
+console.log(Number.check(a, '<', b, '<=', c)); // true
+console.log(Number.check(a, '<', d, '>', b, '<', c, '>', a)); // true
+console.log(Number.check(a, c, d)); /* 抛出异常. */
+```
+
+逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.  
+例如对于 `check(a, '<', d, '>', b)`, 仅检查 `a < d` 与 `d > b`, 而不会检查 `a` 与 `b` 的关系.
+
 ## [m] clamp
 
 ### clamp(num, ...clamps)

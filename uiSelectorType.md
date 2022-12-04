@@ -1553,8 +1553,6 @@ pickup({ packageNameMatch: /\.\w*r\w*d$/ }, '@');
 pickup({ packageNameMatch: [ /\.\w*r\w*d$/ ] }, '@');
 ```
 
----
-
 ## [m#] currentApp
 
 ### currentApp(app)

@@ -168,69 +168,6 @@ sleep(4e3, "1e3");
 sleep(4e3, "±1e3"); /* 同上. */
 ```
 
----
-
-## [m] currentPackage
-
-### currentPackage()
-
-**`A11Y`**
-
-- <ins>**returns**</ins> { [string](dataTypes#string) }
-
-获取最近一次监测到的应用包名, 并视为当前正在运行的应用包名.
-
----
-
-## [m] currentActivity
-
-### currentActivity()
-
-**`A11Y`**
-
-- <ins>**returns**</ins> { [string](dataTypes#string) }
-
-获取最近一次监测到的活动名称, 并视为当前正在运行的活动名称.
-
----
-
-## [m] setClip
-
-### setClip(text)
-
-- **text** { [string](dataTypes#string) } - 剪贴板内容
-- <ins>**returns**</ins> { [void](dataTypes#void) }
-
-设置系统剪贴板内容.
-
-> 参阅: [getClip](#m-getclip)
-
----
-
-## [m] getClip
-
-### getClip()
-
-- <ins>**returns**</ins> { [string](dataTypes#string) } - 系统剪贴板内容
-
-需额外留意, 自 [Android API 29 (10) [Q]](apiLevel) 起, 剪贴板数据的访问将受到限制:
-
-为更好地保护用户隐私权, 除默认输入法及当前获取焦点的前置应用外, 均无法访问剪贴板数据.
-
-```js
-setClip("test");
-
-/* 安卓 10 以下: 打印 "test". */
-/* 安卓 10 及以上: 若 AutoJs6 前置, 打印 "test", 否则打印空字符串. */
-console.log(getClip());
-```
-
-> 参阅: [setClip](#m-setclip)
-
-> 参阅: [Android Docs](https://developer.android.com/about/versions/10/privacy/changes#clipboard-data)
-
----
-
 ## [m+] toast
 
 ### toast(text)
@@ -332,8 +269,6 @@ toast("forcibly dismissed");
 
 > 注: 强制取消显示仅对当前脚本有效, 对其他脚本及应用程序无效.
 
----
-
 ## [m] toastLog
 
 显示消息浮动框并在控制台打印消息.  
@@ -388,7 +323,27 @@ console.log(text);
 
 > 参阅: [toast(text, isForcible)](#toasttext-isforcible)
 
----
+## [m] random
+
+### random()
+
+**`Overload 1/2`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+与 Math.random() 相同, 返回落在 [0, 1) 区间的随机数字.
+
+### random(min, max)
+
+**`Overload 2/2`**
+
+- **min** { [number](dataTypes#number) } - 随机数下限
+- **max** { [number](dataTypes#number) } - 随机数上限
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+返回落在 [min, max] 区间的随机数字.
+
+> 注: random(min, max) 右边界闭合, 而 random() 右边界开放.
 
 ## [m] wait
 
@@ -648,8 +603,6 @@ wait(() => {
 
 > 参阅: [wait(condition, limit, interval)](#waitcondition-limit-interval)
 
----
-
 ## [m] waitForActivity
 
 等待指定名称的 Activity 出现 (前置).  
@@ -731,8 +684,6 @@ wait(() => {
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
 > 参阅: [wait(condition, limit, interval, callback)](#waitcondition-limit-interval-callback)
-
----
 
 ## [m] waitForPackage
 
@@ -816,13 +767,15 @@ wait(() => {
 
 > 参阅: [wait(condition, limit, interval, callback)](#waitcondition-limit-interval-callback)
 
----
-
 ## [m] exit
+
+停止脚本运行.
 
 ### exit()
 
-停止脚本运行.
+**`Overload 1/2`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
 通过抛出 `ScriptInterruptedException` 异常实现脚本停止.  
 因此用 `try` 包裹 `exit()` 语句将会使脚本继续运行片刻:
@@ -858,7 +811,10 @@ try {
     // Ignored.
 }
 if (!isStopped()) {
-    while (true) log("hello"); /* 控制台不会打印 "hello". */
+    while (true) {
+        /* 控制台不会打印 "hello". */
+        log("hello");
+    }
 }
 ```
 
@@ -876,33 +832,95 @@ if (!engines.myEngine().isStopped()) {
 }
 ```
 
----
+### exit(e)
 
-## [m] random
+**`Overload 2/2`**
 
-### random()
+- **e** { [JavaException](exceptions.md#java) } - 异常参数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+停止脚本运行并抛出异常参数指定的异常.
 
-与 Math.random() 相同, 返回落在 [0, 1) 区间的随机数字.
+此方法通常不会在脚本中使用.
 
-### random(min, max)
+```js
+let arg = 'hello';
+try {
+    if (typeof arg !== "number") {
+        throw Error('arg 参数非 number 类型');
+    }
+} catch (e) {
+    exit(new java.lang.Throwable(e))
+}
+```
 
-- **min** { [number](dataTypes#number) } - 随机数下限
-- **max** { [number](dataTypes#number) } - 随机数上限
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+需额外留意上述示例的异常参数使用了 Throwable 重新包装, 因为异常参数类型为 Java 的 Exception, 而非 JavaScript 的 Error.  
+关于异常相关的内容, 可参阅 [异常](exceptions) 章节.
 
-返回落在 [min, max] 区间的随机数字.
+## [m] stop
 
-> 注: random(min, max) 右边界闭合, 而 random() 右边界开放.
+### stop()
 
----
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+停止脚本运行.
+
+[exit()](#exit) 的别名方法.
+
+> 注: stop 方法不存在 [exit(e)](#exite) 对应的重载方法.
+
+## [m] isStopped
+
+### isStopped()
+
+**`DEPRECATED`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检测脚本主线程是否已中断.
+
+即 `runtime.isInterrupted()`.
+
+## [m] isShuttingDown
+
+### isShuttingDown()
+
+**`DEPRECATED`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检测脚本主线程是否已中断.
+
+因方法名称易造成歧义及混淆, 因此被弃用, 建议使用 [isStopped()](#m-isstopped) 或 `runtime.isInterrupted()` 替代.
+
+## [m] isRunning
+
+### isRunning()
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检测脚本主线程是否未被中断.
+
+即 `!runtime.isInterrupted()`.
+
+## [m] notStopped
+
+### notStopped()
+
+**`DEPRECATED`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检测脚本主线程是否未被中断.
+
+因方法名称易造成歧义及混淆, 因此被弃用, 建议使用 [isRunning()](#m-isrunning) 或 `!runtime.isInterrupted()` 替代.
 
 ## [m] requiresApi
 
 ### requiresApi(api)
 
 - **api** { [number](dataTypes#number) } - 安卓 API 级别
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
 脚本运行的最低 API 级别要求.
 
@@ -920,11 +938,11 @@ requiresApi(android.os.Build.VERSION_CODES.R); /* 同上. */
 > - [Android API Level - 安卓 API 级别](apiLevel)
 > - [util.versionCodes](util#versioncodes)
 
----
-
 ## [m] requiresAutojsVersion
 
 ### requiresAutojsVersion(versionName)
+
+**`Overload 1/2`**
 
 - **versionName** { [string](dataTypes#string) } - AutoJs6 版本名称
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -940,6 +958,8 @@ requiresAutojsVersion("6.2.0");
 > 参阅: [autojs.versionName](autojs#versionname)
 
 ### requiresAutojsVersion(versionCode)
+
+**`Overload 2/2`**
 
 - **versionCode** { [number](dataTypes#number) } - AutoJs6 版本号
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -1006,13 +1026,58 @@ importClass(
 
 > 参阅: [访问 Java 包和类](scriptingJava#访问-Java-包和类)
 
-## [m] isStopped
+## [m] currentPackage
 
-### isStopped()
+### currentPackage()
 
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+**`A11Y`**
 
-检测脚本当前线程是否已停止.
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+获取最近一次监测到的应用包名, 并视为当前正在运行的应用包名.
+
+## [m] currentActivity
+
+### currentActivity()
+
+**`A11Y`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+获取最近一次监测到的活动名称, 并视为当前正在运行的活动名称.
+
+## [m] setClip
+
+### setClip(text)
+
+- **text** { [string](dataTypes#string) } - 剪贴板内容
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置系统剪贴板内容.
+
+> 参阅: [getClip](#m-getclip)
+
+## [m] getClip
+
+### getClip()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 系统剪贴板内容
+
+需额外留意, 自 [Android API 29 (10) [Q]](apiLevel) 起, 剪贴板数据的访问将受到限制:
+
+为更好地保护用户隐私权, 除默认输入法及当前获取焦点的前置应用外, 均无法访问剪贴板数据.
+
+```js
+setClip("test");
+
+/* 安卓 10 以下: 打印 "test". */
+/* 安卓 10 及以上: 若 AutoJs6 前置, 打印 "test", 否则打印空字符串. */
+console.log(getClip());
+```
+
+> 参阅: [setClip](#m-setclip)
+
+> 参阅: [Android Docs](https://developer.android.com/about/versions/10/privacy/changes#clipboard-data)
 
 ## [m] selector
 

@@ -1,5 +1,11 @@
 # 更新日志 (Changelog)
 
+# v1.0.5
+
+###### 2022/12/16
+
+- `新增` [global.cX](global#m-cx) / [global.cY](global#m-cy) 等相关文档
+
 # v1.0.4
 
 ###### 2022/12/04

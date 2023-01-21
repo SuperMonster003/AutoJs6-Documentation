@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
 
@@ -101,6 +102,7 @@
 <ul>
 <li><a class="nav-scriptingJava" href="scriptingJava.html">Scripting Java - 脚本化 Java</a></li>
 <li><a class="nav-apiLevel" href="apiLevel.html">Android API Level - 安卓 API 级别</a></li>
+<li><a class="nav-colorTable" href="colorTable.html">Color Table - 颜色列表</a></li>
 </ul>
 <div class="line"></div>
 
@@ -266,6 +268,30 @@
 </li>
 <li><span class="stability_undefined"><a href="#datatypes_pickupresult">PickupResult</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_uiobjectinvokable">UiObjectInvokable</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_rootmode">RootMode</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_colorhex">ColorHex</a></span><ul>
+<li><span class="stability_undefined"><a href="#datatypes_aarrggbb">#AARRGGBB</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_rrggbb">#RRGGBB</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_rgb">#RGB</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#datatypes_colorint">ColorInt</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_colorname">ColorName</a></span><ul>
+<li><span class="stability_undefined"><a href="#datatypes_12">名称冲突</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_13">参数格式</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#datatypes_colorcomponent">ColorComponent</a></span><ul>
+<li><span class="stability_undefined"><a href="#datatypes_14">分量表示法</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_15">表示范围</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_16">表示法组合</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_1">灵活的 1</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_1_1_0">1 与 1.0</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#datatypes_colorcomponents">ColorComponents</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_range">Range</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_intrange">IntRange</a></span></li>
 </ul>
 </li>
 </ul>
@@ -632,7 +658,7 @@ foo(&quot;1.3&quot;); /* 不符合预期. */
 <h2>condition<span><a class="mark" href="#datatypes_condition" id="datatypes_condition">#</a></span></h2>
 <h2>readonly<span><a class="mark" href="#datatypes_readonly" id="datatypes_readonly">#</a></span></h2>
 <h1>操纵泛型<span><a class="mark" href="#datatypes_5" id="datatypes_5">#</a></span></h1>
-<p>例如 Array<T></p>
+<p>例如 Array<T>.</p>
 <h2>Uppercase<span><a class="mark" href="#datatypes_uppercase" id="datatypes_uppercase">#</a></span></h2>
 <p><strong>Uppercase&lt;T&gt;: string</strong></p>
 <p>通常用于输出转换.<br>接受 string 类型并生成所有字母大写的同类型数据.</p>
@@ -646,7 +672,7 @@ foo(&quot;1.3&quot;); /* 不符合预期. */
 </code></pre>
 <h2>IgnoreCase<span><a class="mark" href="#datatypes_ignorecase" id="datatypes_ignorecase">#</a></span></h2>
 <p><strong>IgnoreCase&lt;T extends string&gt;: T</strong></p>
-<p>通常用于输出转换.<br>接受 string 类型并生成忽略大小写的同类型数据.</p>
+<p>通常用于参数值的输入转换.<br>接受 string 类型并生成忽略大小写的同类型数据.</p>
 <p>例如, 对于 IgnoreCase&lt;&quot;webUrl&quot;&gt;, 以下数据均符合预期:</p>
 <pre><code class="lang-js">[ &quot;webUrl&quot;, &quot;WEBURL&quot;, &quot;WebUrl&quot;, &quot;WEBurl&quot; ];
 </code></pre>
@@ -1398,6 +1424,380 @@ detect(w, [ &#39;child&#39;, 0 ]); /* i.e. w.child(0) */
 detect(w, [ &#39;setText&#39;, &#39;hello&#39; ]); /* i.e. w.setText(&#39;hello&#39;) */
 detect(w, [ &#39;setSelection&#39;, 2, 3 ]); /* i.e. w.setSelection(2, 3) */
 </code></pre>
+<h2>RootMode<span><a class="mark" href="#datatypes_rootmode" id="datatypes_rootmode">#</a></span></h2>
+<p>Root 模式, 枚举类型, 已全局化.</p>
+<table>
+<thead>
+<tr>
+<th>枚举实例名</th>
+<th>描述</th>
+<th>JavaScript 代表参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AUTO_DETECT</td>
+<td>自动检测 Root 权限</td>
+<td>&#39;auto&#39; / -1</td>
+</tr>
+<tr>
+<td>FORCE_ROOT</td>
+<td>强制 Root 模式</td>
+<td>&#39;root&#39; / 1 / true</td>
+</tr>
+<tr>
+<td>FORCE_NON_ROOT</td>
+<td>强制非 Root 模式</td>
+<td>&#39;non-root&#39; / 0 / false</td>
+</tr>
+</tbody>
+</table>
+<p>检测 Root 模式:</p>
+<pre><code class="lang-js">console.log(autojs.getRootMode() === RootMode.AUTO_DETECT);
+console.log(autojs.getRootMode() === RootMode.FORCE_ROOT);
+console.log(autojs.getRootMode() === RootMode.FORCE_NON_ROOT);
+</code></pre>
+<p>设置 Root 模式, 以设置 &#39;强制 Root 模式&#39; 为例:</p>
+<pre><code class="lang-js">autojs.setRootMode(RootMode.FORCE_ROOT);
+autojs.setRootMode(&#39;root&#39;); /* 同上. */
+autojs.setRootMode(1); /* 同上. */
+autojs.setRootMode(true); /* 同上. */
+</code></pre>
+<h2>ColorHex<span><a class="mark" href="#datatypes_colorhex" id="datatypes_colorhex">#</a></span></h2>
+<p>颜色代码 (Color Hex Code).</p>
+<p>在网页中经常使用的形如 <code>#FF4500</code> 的字符串表示一个颜色.</p>
+<p>在 AutoJs6 中, 有三种表示方式, 均使用十六进制代码表示:</p>
+<h3>#AARRGGBB<span><a class="mark" href="#datatypes_aarrggbb" id="datatypes_aarrggbb">#</a></span></h3>
+<p>使用四个分量表示颜色, 分量顺序固定为 <code>A (alpha)</code>, <code>R (red)</code>, <code>G (green)</code>, <code>B (blue)</code>. 每个分量使用 <code>0-255</code> 对应的十六进制数表示, 不足两位时需补零.</p>
+<p>例如一个颜色使用 <code>rgba(120, 14, 224, 255)</code> 表示, 将其转换为 <code>#AARRGGBB</code> 格式:</p>
+<pre><code class="lang-text">R: 120 -&gt; 0x78
+G: 14 -&gt; 0xE
+B: 224 -&gt; 0xE0
+A: 255 -&gt; 0xFF
+#AARRGGBB -&gt; #FF780EE0
+</code></pre>
+<p>注意上述示例的 <code>G</code> 分量需补零.</p>
+<blockquote>
+<p>扩展阅读:</p>
+<p>反向转换, 即 &#39;#FF780EE0&#39; 转换为 RGBA 分量:<br>colors.toRgba(&#39;#FF780EE0&#39;); // [ 120, 14, 224, 255 ]</p>
+<p>获取单独的分量:<br>let [r, g, b, a] = colors.toRgba(&#39;#FF780EE0&#39;);<br>console.log(r); // 120</p>
+</blockquote>
+<h3>#RRGGBB<span><a class="mark" href="#datatypes_rrggbb" id="datatypes_rrggbb">#</a></span></h3>
+<p>当 <code>A (alpha)</code> 分量为 <code>255 (0xFF)</code> 时, 可省略 <code>A</code> 分量:</p>
+<pre><code class="lang-js">colors.toInt(&#39;#CD853F&#39;) === colors.toInt(&#39;#FFCD853F&#39;); // true
+</code></pre>
+<p>获取 <code>#RRGGBB</code> 的 <code>A (alpha)</code> 分量, 将得到 <code>255</code>:</p>
+<pre><code class="lang-js">colors.alpha(&#39;#CD853F&#39;); // 255
+</code></pre>
+<p>需额外留意, 当使用十六进制数字表示颜色时, <code>FF</code> 不可省略:</p>
+<pre><code class="lang-js">colors.toHex(&#39;#CD853F&#39;, 8); // #FFCD853F
+colors.toHex(&#39;#FFCD853F&#39;, 8); // #FFCD853F
+colors.toHex(0xCD853F); // #00CD853F
+colors.toHex(0xFFCD853F); // #FFCD853F
+</code></pre>
+<h3>#RGB<span><a class="mark" href="#datatypes_rgb" id="datatypes_rgb">#</a></span></h3>
+<p><code>#RRGGBB</code> 十六进制代码的三位数简写形式, 如 <code>#BBFF33</code> 可简写为 <code>#BF3</code>, <code>#FFFFFF</code> 可简写为 <code>#FFF</code>.</p>
+<p>与 <code>#RRGGBB</code> 相同, <code>#RGB</code> 的 <code>A (alpha)</code> 分量也恒为 <code>255 (0xFF)</code>.</p>
+<pre><code class="lang-js">colors.toInt(&#39;#BBFF33&#39;) === colors.toInt(&#39;#BF3&#39;); // true
+colors.alpha(&#39;#BF3&#39;) === 255; // true
+</code></pre>
+<h2>ColorInt<span><a class="mark" href="#datatypes_colorint" id="datatypes_colorint">#</a></span></h2>
+<p>颜色整数 (Color Integer).</p>
+<p>多数情况下, 使用颜色整数代表一个颜色, 在安卓源码中, 颜色整数用 <code>ColorInt</code> 表示, 其值的范围由 <code>Java</code> 的 <code>Integer</code> 类型决定, 即 <code>-2^31..2^31-1</code>.<br>例如数字 <code>0xBF110523</code> 对应十进制的 <code>3205563683</code>, 超出了上述 <code>ColorInt</code> 的范围, 因此相关的 <code>colors</code> 方法 (如 <a href="color.html#color_m_toint">colors.toInt</a>, <a href="color.html#color_m_tohex">colors.toHex</a> 等) 会将此数值通过 <code>2^32</code> 偏移量移动至合适的范围内, 于是得到结果 <code>-1089403613</code>.</p>
+<pre><code class="lang-js">colors.toInt(0xBF110523); // -1089403613
+colors.toInt(&#39;#BF110523&#39;); /* 结果同上. */
+
+console.log(0xBF110523); // 3205563683
+console.log(0xBF110523 - 2 ** 32); // -1089403613
+</code></pre>
+<p><code>ColorInt</code> 作为参数类型传入时, 没有范围限制, 因为参数会通过 <code>2^32</code> 偏移量移动至上述合法范围内.</p>
+<p>如 <code>colors.toHex(0xFFFF3300)</code> 将返回 <code>&quot;#FF3300&quot;</code>, 虽然参数 <code>0xFFFF3300</code> 并不在 <code>-2^31</code> 与 <code>2^31-1</code> 之间.</p>
+<p><code>ColorInt</code> 作为返回值类型时, 将确保其值位于 <code>-2^31</code> 与 <code>2^31-1</code> 之间, 且因 <code>JavaScript</code> 默认将数字以十进制显示 <code>number</code> 变量, 导致 <code>ColorInt</code> 结果缺乏可读性.</p>
+<p>如 <code>colors.toInt(0xFFFF3300)</code> 返回 <code>-52480</code>, 这个值不适于阅读, 但可用于参数传入其他方法.</p>
+<h2>ColorName<span><a class="mark" href="#datatypes_colorname" id="datatypes_colorname">#</a></span></h2>
+<p>颜色名称.</p>
+<p><a href="colorTable.html">颜色列表 (Color Table)</a> 章节中, 各个颜色列表中 &quot;变量名&quot; 的字符串形式可直接作为颜色名称使用:</p>
+<pre><code class="lang-js">/* CSS 颜色列表中的 ORANGE_RED. */
+
+/* 作为 ColorInt 使用. */
+colors.toHex(colors.css.ORANGE_RED);
+/* 作为 ColorName 使用. */
+colors.toHex(&#39;ORANGE_RED&#39;);
+
+/* WEB 颜色列表中的 CREAM. */
+
+/* 作为 ColorInt 使用. */
+colors.toHex(colors.web.CREAM);
+/* 作为 ColorName 使用. */
+colors.toHex(&#39;CREAM&#39;);
+</code></pre>
+<h3>名称冲突<span><a class="mark" href="#datatypes_12" id="datatypes_12">#</a></span></h3>
+<p>当使用 <code>颜色名称 (ColorName)</code> 作为参数时, 同一个名称可能同时出现在不同的 <a href="colorTable.html">颜色列表</a> 中, 如 <code>CYAN</code> 在所有列表中均有出现, 且 <a href="colorTable.html#colortable_material_颜色列表">Material 颜色列表</a> 中的 <code>CYAN</code> 与其它列表中的 <code>CYAN</code> 颜色不同.</p>
+<p>为避免上述冲突, 按如下命名空间优先级查找并使用颜色名称对应的颜色:</p>
+<pre><code class="lang-text">android &gt; css &gt; web &gt; material
+</code></pre>
+<p>详情参阅 <a href="colorTable.html">颜色列表 (Color Table)</a> 章节的 <a href="colorTable.html#colortable_颜色名称冲突">颜色名称冲突</a> 小节.</p>
+<h3>参数格式<span><a class="mark" href="#datatypes_13" id="datatypes_13">#</a></span></h3>
+<p>ColorName 除了大写形式 (如 <code>BLACK</code> 或 <code>DARK_RED</code>) 外, 还支持以下几种格式 (以 <code>LIGHT_GREY</code> 为例):</p>
+<ul>
+<li><code>LIGHT_GREY</code> -- 大写 + 下划线</li>
+<li><code>LIGHTGREY</code> -- 大写合并</li>
+<li><code>light_grey</code> -- 小写 + 下划线</li>
+<li><code>lightgrey</code> -- 小写合并</li>
+<li><code>light-grey</code> -- 小写 + 连字符</li>
+</ul>
+<p>因此下面示例代码的结果是相同的:</p>
+<pre><code class="lang-js">colors.toInt(colors.LIGHT_GREY);
+colors.toInt(&#39;LIGHT_GREY&#39;);
+colors.toInt(&#39;LIGHTGREY&#39;);
+colors.toInt(&#39;light_grey&#39;);
+colors.toInt(&#39;lightgrey&#39;);
+colors.toInt(&#39;light-grey&#39;);
+</code></pre>
+<h2>ColorComponent<span><a class="mark" href="#datatypes_colorcomponent" id="datatypes_colorcomponent">#</a></span></h2>
+<p>颜色分量类型.</p>
+<p>例如表示一个值为 <code>128</code> 的 <code>R (red)</code> 分量, 可使用 <code>128</code>, <code>0.5</code> 及 <code>50%</code> 等表示法.</p>
+<h3>分量表示法<span><a class="mark" href="#datatypes_14" id="datatypes_14">#</a></span></h3>
+<p>通常使用整数表示一个颜色分量, 如 <code>colors.rgb(10, 20, 30)</code>.<br>RGB 系列色彩模式范围为 <code>[0..255]</code>, HSX 系列色彩模式范围为 <code>[0..100]</code>.</p>
+<p>除上述整数分量表示法, AutoJs6 还支持百分数等方式表示一个颜色分量 (如 <code>0.2</code>, <code>&quot;20%&quot;</code> 等).</p>
+<p>下表列举了 AutoJs6 支持的分量表示法:</p>
+<p><strong>1. 整数</strong></p>
+<table>
+<thead>
+<tr>
+<th>样例</th>
+<th>等效语句</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>colors.rgb(64, 32, 224)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.rgba(64, 32, 224, 255)</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.hsv(30, 20, 60)</td>
+<td>colors.hsv(30, 0.2, 0.6)</td>
+<td>S (saturation) 和 V (value) 分量范围为 [0..100]</td>
+</tr>
+<tr>
+<td>colors.hsva(30, 20, 60, 255)</td>
+<td>colors.hsva(30, 0.2, 0.6, 255)</td>
+<td>A (alpha) 分量范围为 [0..255]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>2. 浮点数</strong></p>
+<table>
+<thead>
+<tr>
+<th>样例</th>
+<th>等效语句</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>colors.rgb(0.5, 0.25, 0.125)</td>
+<td>colors.rgb(128, 64, 32)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.rgba(0.5, 0.25, 0.1, 0.2)</td>
+<td>colors.rgba(128, 64, 26, 51)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.hsv(10, 0.3, 0.2)</td>
+<td>colors.hsv(10, 30, 20)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.hsva(10, 0.3, 0.2, 0.5)</td>
+<td>colors.hsva(10, 30, 20, 128)</td>
+<td>不同分量的范围不同</td>
+</tr>
+</tbody>
+</table>
+<p><strong>3. 百分数</strong></p>
+<table>
+<thead>
+<tr>
+<th>样例</th>
+<th>等效语句</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>colors.rgb(&#39;50%&#39;, &#39;25%&#39;, &#39;12.5%&#39;)</td>
+<td>colors.rgb(128, 64, 32)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.rgba(&#39;50%&#39;, &#39;25%&#39;, &#39;10%&#39;, &#39;20%&#39;)</td>
+<td>colors.rgba(128, 64, 26, 51)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.hsv(10, &#39;30%&#39;, &#39;20%&#39;)</td>
+<td>colors.hsv(10, 30, 20)</td>
+<td>-</td>
+</tr>
+<tr>
+<td>colors.hsva(10, &#39;30%&#39;, &#39;20%&#39;, &#39;50%&#39;)</td>
+<td>colors.hsva(10, 30, 20, 128)</td>
+<td>不同分量的范围不同</td>
+</tr>
+</tbody>
+</table>
+<h3>表示范围<span><a class="mark" href="#datatypes_15" id="datatypes_15">#</a></span></h3>
+<p>不同分量的范围不同, 当使用浮点数或百分数等表示法时, 需留意其表示范围:</p>
+<table>
+<thead>
+<tr>
+<th>分量</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R (red)</td>
+<td>[0..255]</td>
+</tr>
+<tr>
+<td>G (green)</td>
+<td>[0..255]</td>
+</tr>
+<tr>
+<td>B (blue)</td>
+<td>[0..255]</td>
+</tr>
+<tr>
+<td>A (alpha)</td>
+<td>[0..255]</td>
+</tr>
+<tr>
+<td>H (hue)</td>
+<td>[0..360]</td>
+</tr>
+<tr>
+<td>S (saturation)</td>
+<td>[0..100]</td>
+</tr>
+<tr>
+<td>V (value)</td>
+<td>[0..100]</td>
+</tr>
+<tr>
+<td>L (lightness)</td>
+<td>[0..100]</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-js">colors.hsva(0.5, 0.5, 0.5, 0.5);
+colors.hsva(180, 50, 50, 128); /* 同上. */
+</code></pre>
+<h3>表示法组合<span><a class="mark" href="#datatypes_16" id="datatypes_16">#</a></span></h3>
+<p>分量表示法支持组合使用:</p>
+<pre><code class="lang-js">colors.rgb(0.5, &#39;25%&#39;, 32); /* 相当于 colors.rgb(128, 64, 32) . */
+colors.rgba(0.5, &#39;25%&#39;, 32, &#39;50%&#39;); /* 相当于 colors.rgba(128, 64, 32, 128) . */
+</code></pre>
+<h3>灵活的 1<span><a class="mark" href="#datatypes_1" id="datatypes_1">#</a></span></h3>
+<p>在组合使用分量表示法时, <code>1</code> 既可作为整数分量也可作为百分数分量, 原则如下:</p>
+<p>对于非 <code>RGB</code> 分量, 如 <code>A (alpha)</code>, <code>S (saturation)</code>, <code>V (value)</code>, <code>L (lightness)</code> 等, <code>1</code> 一律解释为 <code>100%</code>.</p>
+<pre><code class="lang-js">colors.argb(1, 255, 255, 255); /* 相当于 argb(255, 255, 255, 255), 1 解释为 100% . */
+colors.hsv(60, 1, 0.5); /* S 分量相当于 100, 1 解释为 100% . */
+colors.hsla(0, 1, 1, 1); /* 相当于 hsla(0, 100, 100, 255) . */
+</code></pre>
+<p>而对于 <code>RGB</code> 分量, 只有当 <code>R</code> / <code>G</code> / <code>B</code> 三个分量全部满足 <code>c &lt;= 1</code> 且不全为 <code>1</code> 时, 解释为百分数 <code>1</code> (即 <code>100%</code>), 其他情况, 解释为整数 <code>1</code>.</p>
+<pre><code class="lang-js">colors.rgb(1, 0.2, 0.5); /* 相当于 rgb(255, 51, 128), 1 解释为 100%, 得到 255 . */
+colors.rgb(1, 0.2, 224); /* 相当于 rgb(1, 51, 224), 1 解释为 1 . */
+colors.rgb(1, 160, 224); /* 无特殊转换, 1 解释为 1 . */
+colors.rgb(1, 1, 1); /* 相当于 rgb(1, 1, 1), 颜色代码为 #010101, 1 全部解释为 1 . */
+colors.rgb(1, 1, 0.5); /* 相当于 rgb(255, 255, 128), 1 全部解释为 100% . */
+</code></pre>
+<p>由此可见, 对于 <code>RGB</code> 分量, 只要有一个分量使用了 <code>0.x</code> 的百分数表示法, <code>1</code> 将全部解释为 <code>255 (100%)</code>.</p>
+<h3>1 与 1.0<span><a class="mark" href="#datatypes_1_1_0" id="datatypes_1_1_0">#</a></span></h3>
+<p><code>JavaScript</code> 只有数字类型, <code>1</code> 与 <code>1.0</code> 没有区别, 以下两个语句完全等价:</p>
+<pre><code class="lang-js">colors.rgb(1, 1, 0.5);
+colors.rgb(1.0, 1.0, 0.5); /* 同上. */
+</code></pre>
+<p>因此当使用 <code>1</code> 表示 <code>100%</code> 传入一个颜色分量参数时, 建议使用 <code>1.0</code> 以增加可读性:</p>
+<pre><code class="lang-js">colors.hsla(120, 0.32, 1.0, 0.5); /* 使用 1.0 代表 100% . */
+</code></pre>
+<h2>ColorComponents<span><a class="mark" href="#datatypes_colorcomponents" id="datatypes_colorcomponents">#</a></span></h2>
+<p><a href="#datatypes_colorcomponent">颜色分量</a> 数组.</p>
+<p>同一种颜色可用不同的色彩模式表示, 如 RGB 色彩模式或 HSV 色彩模式等.</p>
+<p>每个色彩模式的 <code>分量 (Component)</code> 组成的数组称为颜色分量数组, 如 RGB 色彩模式的分量数组 <code>[100, 240, 72]</code> 表示 <code>R (red)</code> 分量为 <code>100</code>, <code>G (green)</code> 分量为 <code>240</code>, <code>B (blue)</code> 分量为 <code>72</code>, 访问时可使用数组下标方式或解构赋值方式:</p>
+<pre><code class="lang-js">let components = colors.toRgb(colors.rgb(100, 240, 72)); // [ 100, 240, 72 ]
+
+/* 数组下标方式. */
+console.log(`R: ${components[0]}, G: ${components[1]}, B: ${components[2]}`);
+
+/* 结构赋值方式. */
+let [ r, g, b ] = components;
+console.log(`R: ${r}, G: ${g}, B: ${b}`);
+</code></pre>
+<p>colors 全局对象的很多 <code>&quot;to&quot;</code> 开头的方法都可返回颜色分量数组,<br>如 <a href="color.html#color_m_torgb">toRgb</a>, <a href="color.html#color_m_tohsv">toHsv</a>, <a href="color.html#color_m_tohsl">toHsl</a>, <a href="color.html#color_m_torgba">toRgba</a>, <a href="color.html#color_m_toargb">toArgb</a> 等.</p>
+<h2>Range<span><a class="mark" href="#datatypes_range" id="datatypes_range">#</a></span></h2>
+<p>表示一个数字的数值范围.</p>
+<table>
+<thead>
+<tr>
+<th>表示法</th>
+<th>范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>(a..b)</td>
+<td>{ <span class="type">x &#124; a &lt; x &lt; b</span> }</td>
+</tr>
+<tr>
+<td>[a..b]</td>
+<td>{ <span class="type">x &#124; a &lt;= x &lt;= b</span> }</td>
+</tr>
+<tr>
+<td>(a..b]</td>
+<td>{ <span class="type">x &#124; a &lt; x &lt;= b</span> }</td>
+</tr>
+<tr>
+<td>[a..b)</td>
+<td>{ <span class="type">x &#124; a &lt;= x &lt; b</span> }</td>
+</tr>
+<tr>
+<td>(a..+∞)</td>
+<td>{ <span class="type">x &#124; x &gt; a</span> }</td>
+</tr>
+<tr>
+<td>[a..+∞)</td>
+<td>{ <span class="type">x &#124; x &gt;= a</span> }</td>
+</tr>
+<tr>
+<td>(-∞..b)</td>
+<td>{ <span class="type">x &#124; x &lt; b</span> }</td>
+</tr>
+<tr>
+<td>(-∞..b]</td>
+<td>{ <span class="type">x &#124; x &lt;= b</span> }</td>
+</tr>
+<tr>
+<td>(-∞..+∞)</td>
+<td>{ <span class="type">x</span> } (任意值)</td>
+</tr>
+</tbody>
+</table>
+<p>如 <code>Range[10..30]</code> 表示数字 <code>x</code> 位于 <code>10 &lt;= x &lt;= 30</code> 范围内, 而 <code>Range[0..1)</code> 表示数字 <code>x</code> 位于 <code>0 &lt;= x &lt; 1</code> 范围内.</p>
+<h2>IntRange<span><a class="mark" href="#datatypes_intrange" id="datatypes_intrange">#</a></span></h2>
+<p>表示一个整数的取值范围. 其表示法可参阅 <a href="#datatypes_range">Range</a> 小节.</p>
+<p>如 <code>IntRange[10..30]</code> 表示整数 <code>x</code> 位于 <code>10 &lt;= x &lt;= 30</code> 范围内, 而 <code>IntRange[0..100)</code> 表示整数 <code>x</code> 位于 <code>0 &lt;= x &lt; 100</code> 范围内.</p>
 
         </div>
     </div>

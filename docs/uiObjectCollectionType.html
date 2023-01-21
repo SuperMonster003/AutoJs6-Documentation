@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType active" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
 
@@ -101,6 +102,7 @@
 <ul>
 <li><a class="nav-scriptingJava" href="scriptingJava.html">Scripting Java - 脚本化 Java</a></li>
 <li><a class="nav-apiLevel" href="apiLevel.html">Android API Level - 安卓 API 级别</a></li>
+<li><a class="nav-colorTable" href="colorTable.html">Color Table - 颜色列表</a></li>
 </ul>
 <div class="line"></div>
 
@@ -399,6 +401,14 @@ let wcList = [
     pickup(s, &#39;{}&#39;),
 ];
 console.log(wcList.every(o =&gt; o.getClass() === UiObjectCollection)); // true
+</code></pre>
+<p>当 pickup 使用 children 等作为结果筛选器时, 返回的是不经过包装的 UiObjectCollection, 因此需要使用一次 toArray 方法才能使用 JavaScript 的数组相关方法:</p>
+<pre><code class="lang-js">let wc = pickup(/.+/, &#39;p&#39;, &#39;children&#39;);
+/* 需使用 toArray 进行一次转换. */
+wc.toArray().forEach(w =&gt; console.log(w.content()));
+
+/* 直接使用 children 方法则不需要 toArray 转换. */
+pickup(/.+/, &#39;p&#39;).children().forEach( /* ... */ );
 </code></pre>
 <p>UiObjectCollection 可能为空集合:</p>
 <pre><code class="lang-js">/* 空集合. */

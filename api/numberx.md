@@ -215,6 +215,62 @@ console.log(num.clamp(523)); // 523
 console.log(num.clamp()); // 307
 ```
 
+## [m] clampTo
+
+### clampTo(num, range, cycle?)
+
+**`6.2.0`** **`xProto`** **`Overload [1-2]/2`**
+
+- **num** { [number](dataTypes#number) } - 待处理数字
+- **range** { [number](dataTypes#number)[[]](dataTypes#array) } - 限制范围
+- **[cycle = maxOf(range) - minOf(range)]** { [number](dataTypes#number) } - 周期, 默认为 range 参数的跨度
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+返回按周期限制在指定范围内的数字.
+
+在数学中, 周期函数是无论任何独立变量上经过一个确定的周期之后数值皆能重复的函数.  
+
+如果在函数 _f_ 中所有的位置 _x_ 都满足 _f_ ( _x_ + _T_ ) = _f_ ( _x_ ), 那么, _f_ 就是周期为 _T_ 的周期函数.  
+如果周期函数 _f_ 的周期为 _T_ , 那么对于 _f_ 中任意 _x_ 及任意整数 _n_, 有 _f_ ( _x_ + _Tn_ ) = _f_ ( _x_ ).
+
+三角函数正弦函数与余弦函数都是常见的周期函数, 如 _f_ ( _x_ ) = sin _x_ 与 _f_ ( _x_ ) = cos _x_ 等, 其周期为 `2π`.
+
+`clampTo` 方法的作用是将数字通过周期变换回落到指定范围内:
+
+```js
+Numberx.clampTo(30, [ 0, 360 ]); // 30
+Numberx.clampTo(390, [ 0, 360 ]); // 30
+Numberx.clampTo(30 + 10 * 360, [ 0, 360 ]); // 30
+Numberx.clampTo(30 - 10 * 360, [ 0, 360 ]); // 30
+
+/* 启用内置对象扩展后. */
+
+(30).clampTo([ 0, 360 ]); // 30
+(390).clampTo([ 0, 360 ]); // 30
+(30 + 10 * 360).clampTo([ 0, 360 ]); // 30
+(30 - 10 * 360).clampTo([ 0, 360 ]); // 30
+```
+
+`cycle` 参数默认是范围的跨度, 即范围的两个极值差, 当极值为 `0` 时, 将抛出异常:
+
+```js
+Numberx.clampTo(30, [0, 0]); /* 抛出异常. */
+
+/* 启用内置对象扩展后. */
+
+(30).clampTo([0, 0]); /* 抛出异常. */
+```
+
+指定一个周期:
+
+```js
+Numberx.clampTo(372, [0, 360], 10); // 352
+
+/* 启用内置对象扩展后. */
+
+(372).clampTo([0, 360], 10); // 352
+```
+
 ## [m] toFixedNum
 
 ### toFixedNum(num, fraction?)
@@ -378,4 +434,26 @@ console.log(Numberx.parseRatio('0.1:0.01')); // 10
 console.log(Number.parseRatio('3:2')); // 1.5
 console.log(Number.parseRatio('3:0.1')); // 30
 console.log(Number.parseRatio('0.1:0.01')); // 10
+```
+
+## [m] parseAny
+
+### parseAny(o)
+
+**`6.2.0`** **`xObject`**
+
+- **o** { [any](dataTypes#any) } - 待解析的对象
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+此方法用于解析任意对象并返回其代表的数值.
+
+```js
+console.log(Numberx.parseAny('9')); // 9
+console.log(Numberx.parseAny('30.05')); // 30.05
+console.log(Numberx.parseAny('0xFF')); // 255
+
+console.log(Numberx.parseAny('20%')); // 0.2
+console.log(Numberx.parseAny('20%%')); // 0.002
+
+console.log(Numberx.parseAny('18:9')); // 2
 ```

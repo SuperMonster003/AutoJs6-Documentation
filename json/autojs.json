@@ -4,7 +4,335 @@
     {
       "textRaw": "AutoJs6 本体应用",
       "name": "autojs6_本体应用",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n",
+      "desc": "<p>autojs 全局对象主要包含与 AutoJs6 应用本身相关的属性及方法, 如获取 AutoJs6 的 [ Root 状态 / 语言标签 / 权限状态 ] 等.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">autojs</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] getLanguage",
+          "name": "[m]_getlanguage",
+          "methods": [
+            {
+              "textRaw": "getLanguage()",
+              "type": "method",
+              "name": "getLanguage",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html\">java.util.Locale</a> }</li>\n</ul>\n<p>获取 AutoJs6 <code>语言</code> 设置选项.</p>\n<p>此方法返回一个 java.util.Locale 对象, 如需返回其标签名, 如 <code>en-US</code>, <code>zh-CN</code> 等, 可使用 <code>autojs.getLanguage().toLanguageTag()</code> 或直接使用 <a href=\"#m-getlanguagetag\">autojs.getLanguageTag()</a> 方法.</p>\n<pre><code class=\"lang-js\">console.log(autojs.getLanguage().getDisplayName()); /* e.g. 日本語 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getLanguage"
+        },
+        {
+          "textRaw": "[m] getLanguageTag",
+          "name": "[m]_getlanguagetag",
+          "methods": [
+            {
+              "textRaw": "getLanguageTag()",
+              "type": "method",
+              "name": "getLanguageTag",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取 AutoJs6 语言设置选项.</p>\n<p>此方法返回 <a href=\"https://en.wikipedia.org/wiki/IETF_language_tag\">IETF 语言标签</a>, 相当于 <code>autojs.getLanguage().toLanguageTag()</code>:</p>\n<pre><code class=\"lang-js\">console.log(autojs.getLanguageTag()); /* e.g. en-US */\n</code></pre>\n<p>此方法可用于设定 i18n 对象的区域:</p>\n<pre><code class=\"lang-js\">i18n.setLocale(autojs.getLanguageTag());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getLanguageTag"
+        },
+        {
+          "textRaw": "[m] isRootAvailable",
+          "name": "[m]_isrootavailable",
+          "methods": [
+            {
+              "textRaw": "isRootAvailable()",
+              "type": "method",
+              "name": "isRootAvailable",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 Root 权限有效性.</p>\n<pre><code class=\"lang-js\">console.log(autojs.isRootAvailable()); // e.g. true\n</code></pre>\n<p>注意上述示例的检测结果取决于 AutoJs6 的 <code>强制 Root 权限检查</code> 设置.<br>此设置可通过 AutoJs6 应用设置修改, 或 <a href=\"#m-setrootmode\">setRootMode</a> 方法携带 <code>isWriteIntoPreference</code> 参数实现修改.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isRootAvailable"
+        },
+        {
+          "textRaw": "[m] getRootMode",
+          "name": "[m]_getrootmode",
+          "methods": [
+            {
+              "textRaw": "getRootMode()",
+              "type": "method",
+              "name": "getRootMode",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#rootmode\">RootMode</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 Root 权限状态.</p>\n<pre><code class=\"lang-js\"> /* 是否为 &#39;自动检测 Root 权限&#39; 状态. */\nconsole.log(autojs.getRootMode() === RootMode.AUTO_DETECT);\n/* 是否为 &#39;强制 Root 模式&#39; 状态. */\nconsole.log(autojs.getRootMode() === RootMode.FORCE_ROOT);\n/* 是否为 &#39;强制非 Root 模式&#39; 状态. */\nconsole.log(autojs.getRootMode() === RootMode.FORCE_NON_ROOT);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getRootMode"
+        },
+        {
+          "textRaw": "[m] setRootMode",
+          "name": "[m]_setrootmode",
+          "methods": [
+            {
+              "textRaw": "setRootMode(rootMode, isWriteIntoPreference?)",
+              "type": "method",
+              "name": "setRootMode",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>rootMode</strong> { <a href=\"dataTypes#rootmode\">RootMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | &#39;auto&#39; | &#39;root&#39; | &#39;non-root&#39; } - Root 模式参数</li>\n<li><strong>[isWriteIntoPreference = false]</strong> {  <a href=\"dataTypes#boolean\">boolean</a> } - 是否写入应用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 AutoJs6 的 Root 模式.</p>\n<p>默认情况下, AutoJs6 将根据 <code>su</code> 二进制名称特征来判断是否具有 Root 权限.\n但有时设备可能使用了非常规 Root 方式或 Root 权限检测结果出现异常, 此时可设置 <code>强制 Root 模式</code> 或 <code>强制非 Root 模式</code> 来改变 AutoJs6 对 Root 权限的检测结果.</p>\n<p>以设置 &#39;强制 Root 模式&#39; 为例:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT);\nautojs.setRootMode(&#39;root&#39;); /* 同上. */\nautojs.setRootMode(1); /* 同上. */\nautojs.setRootMode(true); /* 同上. */\n</code></pre>\n<p>上述示例设置的 Root 模式, 将影响 <a href=\"#m-isrootavailable\">isRootAvailable</a> 的结果, 使其固定返回 <code>true</code>.<br>如果设置为 <code>RootMode.FORCE_NON_ROOT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将固定返回 <code>false</code>.<br>如果设置为 <code>RootMode.AUTO_DETECT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将根据 AutoJs6 是否具有 <code>su</code> 二进制名称特征决定其返回结果.  </p>\n<p>在没有特殊需求的情况下, 建议始终保持 Root 模式为 &#39;自动&#39; 模式.</p>\n<p>需额外留意, Root 模式修改仅对当前 <code>运行时 (Runtime)</code> 有效, 当脚本结束时, 已设置的 Root 模式将自动还原为 &#39;自动&#39; 模式, 即 <code>RootMode.AUTO_DETECT</code>.</p>\n<p>如需将保留修改的 Root 模式, 可使用 <code>isWriteIntoPreference</code> 参数, 修改将立即写入应用设置中:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT, true);\n</code></pre>\n<p>上述示例代码的效果, 等效于在 AutoJs6 应用中进行如下设置:</p>\n<pre><code class=\"lang-text\">[ AutoJs6 设置 ] - [ 强制 Root 权限检查 ] - [ 强制 Root 模式 ] # [ 选择 ]\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rootMode"
+                    },
+                    {
+                      "name": "isWriteIntoPreference?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setRootMode"
+        },
+        {
+          "textRaw": "[m] canModifySystemSettings",
+          "name": "[m]_canmodifysystemsettings",
+          "methods": [
+            {
+              "textRaw": "canModifySystemSettings()",
+              "type": "method",
+              "name": "canModifySystemSettings",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 <code>修改系统设置</code> 权限状态.</p>\n<pre><code class=\"lang-js\">console.log(autojs.canModifySystemSettings()); // e.g. true\n</code></pre>\n<p>拥有 <code>修改系统设置</code> 后, AutoJs6 可以通过脚本修改部分系统设置, 如修改屏幕超时参数, 修改媒体音量值等.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] canModifySystemSettings"
+        },
+        {
+          "textRaw": "[m] canWriteSecureSettings",
+          "name": "[m]_canwritesecuresettings",
+          "methods": [
+            {
+              "textRaw": "canWriteSecureSettings()",
+              "type": "method",
+              "name": "canWriteSecureSettings",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 <code>修改安全设置</code> 权限状态.</p>\n<pre><code class=\"lang-js\">console.log(autojs.canWriteSecureSettings()); // e.g. true\n</code></pre>\n<p>拥有 <code>修改安全设置</code> 后, AutoJs6 可以通过脚本修改部分安全设置, 如修改屏幕常亮类别参数, 修改无障碍服务列表内容等.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] canWriteSecureSettings"
+        },
+        {
+          "textRaw": "[m] canDisplayOverOtherApps",
+          "name": "[m]_candisplayoverotherapps",
+          "methods": [
+            {
+              "textRaw": "canDisplayOverOtherApps()",
+              "type": "method",
+              "name": "canDisplayOverOtherApps",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 <code>显示在其他应用上层</code> 权限状态.</p>\n<pre><code class=\"lang-js\">console.log(autojs.canDisplayOverOtherApps()); // e.g. true\n</code></pre>\n<p>拥有 <code>显示在其他应用上层</code> 后, AutoJs6 可以使用悬浮窗工具, 并可通过脚本显示对话框或自定义浮动组件等.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] canDisplayOverOtherApps"
+        },
+        {
+          "textRaw": "[p] versionName",
+          "name": "[p]_versionname",
+          "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本名称.</p>\n<pre><code class=\"lang-js\">console.log(autojs.versionName); // e.g. 6.2.0-alpha9\nconsole.log(autojs.version.name); /* 同上. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] versionName"
+        },
+        {
+          "textRaw": "[p] versionCode",
+          "name": "[p]_versioncode",
+          "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>获取版本号.</p>\n<pre><code class=\"lang-js\">console.log(autojs.versionCode); // e.g. 1545\nconsole.log(autojs.version.code); /* 同上. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] versionCode"
+        },
+        {
+          "textRaw": "[p] versionDate",
+          "name": "[p]_versiondate",
+          "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本日期.</p>\n<pre><code class=\"lang-js\">console.log(autojs.versionDate); // e.g. Dec 18, 2022\nconsole.log(autojs.version.date); /* 同上. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] versionDate"
+        },
+        {
+          "textRaw": "[p+] version",
+          "name": "[p+]_version",
+          "modules": [
+            {
+              "textRaw": "[p] name",
+              "name": "[p]_name",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本名称.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.name); // e.g. 6.2.0-alpha9\nconsole.log(autojs.versionName); /* 同上. */\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[p] name"
+            },
+            {
+              "textRaw": "[p] code",
+              "name": "[p]_code",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>获取版本号.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.code); // e.g. 1545\nconsole.log(autojs.versionCode); /* 同上. */\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[p] code"
+            },
+            {
+              "textRaw": "[p] date",
+              "name": "[p]_date",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本日期.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.date); // e.g. Dec 18, 2022\nconsole.log(autojs.versionDate); /* 同上. */\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[p] date"
+            },
+            {
+              "textRaw": "[m] isEqual",
+              "name": "[m]_isequal",
+              "methods": [
+                {
+                  "textRaw": "isEqual(otherVersion)",
+                  "type": "method",
+                  "name": "isEqual",
+                  "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否与参数对应的版本号等同.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.isEqual(&#39;6.2.0&#39;)); // e.g. true\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "otherVersion"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isEqual"
+            },
+            {
+              "textRaw": "[m] isHigherThan",
+              "name": "[m]_ishigherthan",
+              "methods": [
+                {
+                  "textRaw": "isHigherThan(otherVersion)",
+                  "type": "method",
+                  "name": "isHigherThan",
+                  "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否高于待比较版本.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.isHigherThan(&#39;6.1.3&#39;)); // e.g. true\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "otherVersion"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isHigherThan"
+            },
+            {
+              "textRaw": "[m] isLowerThan",
+              "name": "[m]_islowerthan",
+              "methods": [
+                {
+                  "textRaw": "isLowerThan(otherVersion)",
+                  "type": "method",
+                  "name": "isLowerThan",
+                  "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否低于待比较版本.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.isLowerThan(&#39;6.2.0&#39;)); // e.g. true\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "otherVersion"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isLowerThan"
+            },
+            {
+              "textRaw": "[m] isAtLeast",
+              "name": "[m]_isatleast",
+              "methods": [
+                {
+                  "textRaw": "isAtLeast(otherVersion)",
+                  "type": "method",
+                  "name": "isAtLeast",
+                  "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否不低于 (即大于等于) 参数对应的版本号.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.isAtLeast(&#39;6.1.3&#39;)); // e.g. true\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "otherVersion"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "isAtLeast(otherVersion, ignoreSuffix)",
+                  "type": "method",
+                  "name": "isAtLeast",
+                  "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><strong>[ignoreSuffix = false]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否忽略版本后缀</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否不低于 (即大于等于) 参数对应的版本号且根据 <code>ignoreSuffix</code> 参数决定是否忽略版本后缀.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.name); // e.g. 6.2.0-alpha9\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;)); // e.g. false\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;, true)); // e.g. true\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "otherVersion"
+                        },
+                        {
+                          "name": "ignoreSuffix"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isAtLeast"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p+] version"
+        },
+        {
+          "textRaw": "[p+] R",
+          "name": "[p+]_r",
+          "desc": "<p>使用 R 类的子类中的静态整数可访问相应的应用资源, 如 <code>R.string</code> 访问字符串资源, <code>R.drawable</code> 访问可绘制资源等.</p>\n<p><a href=\"global#p-r\">global.R</a> 的别名属性, 参阅 <a href=\"global#p-r\">全局对象 (Global)</a> 章节.</p>\n",
+          "type": "module",
+          "displayName": "[p+] R"
+        }
+      ],
       "type": "module",
       "displayName": "AutoJs6 本体应用"
     }

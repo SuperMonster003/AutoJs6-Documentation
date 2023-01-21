@@ -322,6 +322,9 @@ requestScreenCapture(false);
 - `A11Y?`: 方法可能会依赖无障碍服务.
 - `Async`: 异步执行的方法.
 - `Async?`: 可能异步执行的方法 (通过参数控制).
+- `Getter`: 仅取值属性, 即使用 Getter 定义的对象属性.
+- `Setter`: 仅存值属性, 即使用 Setter 定义的对象属性.
+- `Getter/Setter`: 可存值且可取值属性, 即同时使用 Setter 及 Getter 定义的对象属性.
 - `Enum`: 枚举类.
 - `CONSTANT`: 常量.
 - `DEPRECATED`: 已弃用的属性或方法.
@@ -343,6 +346,10 @@ requestScreenCapture(false);
     - 例如在 `device` 作为 [临时作用域对象](#临时作用域对象) 时:
     - `[p] height` 代表 `device.height` 属性, 而非方法.
     - 此标签对 [ Getter / Setter / "类" 属性 / 对象属性 / 方法扩展属性 ] 等不作区分.
+- \[p+]: 具有扩展属性的对象属性.
+    - 如 autojs 是一个对象, version 是 autojs 的扩展属性,
+    - 支持 `autojs.version.xxx` 这样的访问方式,
+    - 因此 version 属性将被标记为 `[p+]`.
 - \[I]: Java 接口.
 - \[C]: Java 类或 JavaScript 构造函数.
 - \[c]: Java 类的构造方法.

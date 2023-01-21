@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
 
@@ -101,6 +102,7 @@
 <ul>
 <li><a class="nav-scriptingJava" href="scriptingJava.html">Scripting Java - 脚本化 Java</a></li>
 <li><a class="nav-apiLevel" href="apiLevel.html">Android API Level - 安卓 API 级别</a></li>
+<li><a class="nav-colorTable" href="colorTable.html">Color Table - 颜色列表</a></li>
 </ul>
 <div class="line"></div>
 
@@ -4965,8 +4967,8 @@ pickup({
 <h3>pickup(selector)<span><a class="mark" href="#uiselectortype_pickup_selector" id="uiselectortype_pickup_selector">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>相当于 <code>selector.findOnce()</code>.</p>
 <p>selector 参数支持 <a href="dataTypes.html#datatypes_单一型选择器">单一型选择器</a> (<a href="dataTypes.html#datatypes_经典选择器">经典选择器</a> / <a href="dataTypes.html#datatypes_内容选择器">内容选择器</a> / <a href="dataTypes.html#datatypes_对象选择器">对象选择器</a>) 和 <a href="dataTypes.html#datatypes_混合型选择器">混合型选择器</a>:</p>
@@ -4995,9 +4997,9 @@ pickup([ &#39;abc&#39;, {
 <h3>pickup(selector, result)<span><a class="mark" href="#uiselectortype_pickup_selector_result" id="uiselectortype_pickup_selector_result">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>对 <code>selector.findOnce()</code> 根据 <code>result</code> 参数进行 <a href="dataTypes.html#datatypes_pickupresult">结果筛选</a> 或 <a href="dataTypes.html#datatypes_uiobjectinvokable">参化调用</a>.</p>
 <pre><code class="lang-js">/* 结果筛选 - 文本. */
@@ -5027,9 +5029,9 @@ className(&#39;EditText&#39;).findOnce().setSelection(1, 5); /* 效果同上, �
 <h3>pickup(selector, compass)<span><a class="mark" href="#uiselectortype_pickup_selector_compass" id="uiselectortype_pickup_selector_compass">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>对 <code>selector.findOnce()</code> 进行 <a href="uiObjecttype.html#uiobjecttype_m_compass">罗盘定位</a>.</p>
 <pre><code class="lang-js">pickup(text(&#39;abc&#39;), &#39;p3&#39;); /* 空指针安全. */
@@ -5038,10 +5040,10 @@ text(&#39;abc&#39;).findOnce().parent().parent().parent(); /* 效果同上, 但�
 <h3>pickup(selector, compass, result)<span><a class="mark" href="#uiselectortype_pickup_selector_compass_result" id="uiselectortype_pickup_selector_compass_result">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>对 <code>selector.findOnce()</code> 进行 <a href="uiObjecttype.html#uiobjecttype_m_compass">罗盘定位</a> 后, 再进行 <a href="dataTypes.html#datatypes_pickupresult">结果筛选</a> 或 <a href="dataTypes.html#datatypes_uiobjectinvokable">参化调用</a>.</p>
 <pre><code class="lang-js">pickup(text(&#39;abc&#39;), &#39;p3&#39;, &#39;click&#39;); /* 空指针安全. */
@@ -5054,9 +5056,9 @@ w.parent().child(w.indexInParent() + 1).bounds(); /* 效果同上, 但存在潜�
 <h3>pickup(root, selector)<span><a class="mark" href="#uiselectortype_pickup_root_selector" id="uiselectortype_pickup_root_selector">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 执行 <code>selector.findOnce()</code> 筛选.</p>
 <pre><code class="lang-js">let w = text(&#39;abc&#39;).findOnce();
@@ -5068,10 +5070,10 @@ pickup(w, &#39;xyz&#39;); /* 在 w 控件的所有子孙节点中筛选内容为
 <h3>pickup(root, selector, result)<span><a class="mark" href="#uiselectortype_pickup_root_selector_result" id="uiselectortype_pickup_root_selector_result">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 7/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <code>selector.findOnce()</code> 根据 <code>result</code> 参数进行 <a href="dataTypes.html#datatypes_pickupresult">结果筛选</a> 或 <a href="dataTypes.html#datatypes_uiobjectinvokable">参化调用</a>.</p>
 <pre><code class="lang-js">let w = text(&#39;abc&#39;).findOnce();
@@ -5083,10 +5085,10 @@ pickup(w, &#39;xyz&#39;, &#39;height&#39;); /* 在 w 控件的所有子孙节点
 <h3>pickup(root, selector, compass)<span><a class="mark" href="#uiselectortype_pickup_root_selector_compass" id="uiselectortype_pickup_root_selector_compass">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 8/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <code>selector.findOnce()</code> 进行 <a href="uiObjecttype.html#uiobjecttype_m_compass">罗盘定位</a>.</p>
 <pre><code class="lang-js">let w = text(&#39;abc&#39;).findOnce();
@@ -5098,11 +5100,11 @@ pickup(w, &#39;xyz&#39;, &#39;p2&#39;); /* 在 w 控件的所有子孙节点中�
 <h3>pickup(root, selector, compass, result)<span><a class="mark" href="#uiselectortype_pickup_root_selector_compass_result" id="uiselectortype_pickup_root_selector_compass_result">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 9/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <code>selector.findOnce()</code> 进行 <a href="uiObjecttype.html#uiobjecttype_m_compass">罗盘定位</a> 后, 再进行 <a href="dataTypes.html#datatypes_pickupresult">结果筛选</a> 或 <a href="dataTypes.html#datatypes_uiobjectinvokable">参化调用</a>.</p>
 <pre><code class="lang-js">let w = text(&#39;abc&#39;).findOnce();
@@ -5114,8 +5116,8 @@ pickup(w, &#39;xyz&#39;, &#39;p2&#39;, &#39;width&#39;); /* 在 w 控件的所�
 <h3>pickup(selector, callback)<span><a class="mark" href="#uiselectortype_pickup_selector_callback" id="uiselectortype_pickup_selector_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 10/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
 </ul>
 <p>对 <a href="#uiselectortype_pickupselector">pickup(selector)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
@@ -5132,10 +5134,10 @@ pickup(w, &#39;xyz&#39;, &#39;p2&#39;, &#39;width&#39;); /* 在 w 控件的所�
 <h3>pickup(selector, result, callback)<span><a class="mark" href="#uiselectortype_pickup_selector_result_callback" id="uiselectortype_pickup_selector_result_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 11/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>对 <a href="#uiselectortype_pickupselector_result">pickup(selector, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <pre><code class="lang-js">pickup(clickable(true), &#39;point&#39;, (o) =&gt; {
@@ -5149,10 +5151,10 @@ pickup(w, &#39;xyz&#39;, &#39;p2&#39;, &#39;width&#39;); /* 在 w 控件的所�
 <h3>pickup(selector, compass, callback)<span><a class="mark" href="#uiselectortype_pickup_selector_compass_callback" id="uiselectortype_pickup_selector_compass_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 12/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>对 <a href="#uiselectortype_pickupselector_compass">pickup(selector, compass)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <pre><code class="lang-js">pickup(text(&#39;abc&#39;), &#39;p3&#39;, (o) =&gt; {
@@ -5164,19 +5166,19 @@ pickup(w, &#39;xyz&#39;, &#39;p2&#39;, &#39;width&#39;); /* 在 w 控件的所�
 <h3>pickup(selector, compass, result, callback)<span><a class="mark" href="#uiselectortype_pickup_selector_compass_result_callback" id="uiselectortype_pickup_selector_compass_result_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 13/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href="#uiselectortype_pickupselector_compass_result">pickup(selector, compass, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <h3>pickup(root, selector, callback)<span><a class="mark" href="#uiselectortype_pickup_root_selector_callback" id="uiselectortype_pickup_root_selector_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 14/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
 </ul>
 <p>对 <a href="#uiselectortype_pickupselector">pickup(selector)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
@@ -5197,11 +5199,11 @@ pickup(w, text(&#39;abc&#39;), (o) =&gt; {
 <h3>pickup(root, selector, result, callback)<span><a class="mark" href="#uiselectortype_pickup_root_selector_result_callback" id="uiselectortype_pickup_root_selector_result_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 15/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href="#uiselectortype_pickupselector_result">pickup(selector, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <pre><code class="lang-js">/* w 将作为根节点. */
@@ -5219,11 +5221,11 @@ pickup(w, clickable(true), &#39;point&#39;, (o) =&gt; {
 <h3>pickup(root, selector, compass, callback)<span><a class="mark" href="#uiselectortype_pickup_root_selector_compass_callback" id="uiselectortype_pickup_root_selector_compass_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 16/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href="#uiselectortype_pickupselector_compass">pickup(selector, compass)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <pre><code class="lang-js">/* w 将作为根节点. */
@@ -5239,12 +5241,12 @@ pickup(w, text(&#39;abc&#39;), &#39;p3&#39;, (o) =&gt; {
 <h3>pickup(root, selector, compass, result, callback)<span><a class="mark" href="#uiselectortype_pickup_root_selector_compass_result_callback" id="uiselectortype_pickup_root_selector_compass_result_callback">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 17/17</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
-<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> }</li>
-<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> }</li>
-<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> }</li>
-<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> }</li>
-<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> }</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+<li><strong>root</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 筛选根节点参数</li>
+<li><strong>selector</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 混合选择器参数</li>
+<li><strong>compass</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 控件罗盘参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果筛选参数</li>
+<li><strong>callback</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(</a>o: <a href="dataTypes.html#datatypes_any">any</a><a href="dataTypes.html#datatypes_function">)</a> <a href="dataTypes.html#datatypes_function">=&gt;</a> <a href="dataTypes.html#datatypes_generic">R</a></span> } - 筛选回调参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 筛选结果</li>
 </ul>
 <p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href="#uiselectortype_pickupselector_compass_result">pickup(selector, compass, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>
 <pre><code class="lang-js">/* w 将作为根节点. */
@@ -5356,6 +5358,14 @@ descMatch(/l[ae]ng?/); /* 可匹配 w. */
 descMatch(/.+/); /* 可匹配 w, 与 descMatch(/(?:)/) 效果相同. */
 descMatch(new RegExp(&#39;spl\\.?.+__CONTENT__#39;)); /* 可匹配 w. */
 </code></pre>
+<p>筛选条件为正则表达式类型时, 支持 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2">修饰符</a> (又称 <code>标志</code>):</p>
+<pre><code class="lang-js">w.desc(); // AutoJs6
+descMatch(/autojs6/i); /* 可匹配 w. */
+descMatch(new RegExp(&#39;autojs6&#39;, &#39;i&#39;)); /* 可匹配 w. */
+</code></pre>
+<blockquote>
+<p>注: 截至 2022 年 12 月, 支持的修饰符仅包含 &#39;i&#39;.</p>
+</blockquote>
 <h3>字符串类型<span><a class="mark" href="#uiselectortype_4" id="uiselectortype_4">#</a></span></h3>
 <p>筛选条件为字符串类型时, 相当于 JavaScript 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp">RegExp.prototype.constructor</a> 构造函数的 <code>pattern (模式)</code> 参数.</p>
 <p>如字符串 <code>&#39;abc&#39;</code> 按照正则表达式 <code>/abc/</code> 处理,<br>字符串 <code>&#39;\\d+&#39;</code> 按照正则表达式 <code>/\d+/</code> 处理.</p>

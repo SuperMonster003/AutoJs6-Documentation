@@ -1,5 +1,24 @@
 # 更新日志 (Changelog)
 
+# v1.1.0
+
+###### 2023/01/21
+
+- `新增` [AutoJs6 本体应用](autojs) 文档
+- `新增` [颜色列表 (Color Table)](colorTable) 文档
+- `新增` [版本工具类 (Version)](versionType) 文档
+- `新增` [数据类型](dataTypes) 章节增加 [RootMode](dataTypes#rootmode) / [ColorInt](dataTypes#colorint) / [IntRange](dataTypes#intrange) 等类型
+- `新增` [global.R](global#p-r) 文档
+- `新增` [Numberx.clampTo](numberx#m-clampto) / [Numberx.parseAny](numberx#m-parseany) 文档
+- `优化` 完善 [颜色 (Color)](color) 章节
+
+# v1.0.6
+
+###### 2022/12/18
+
+- `新增` [版本工具类 (Version)](versionType) 文档
+- `新增` [global.existsAll](global#m-existsall) / [global.existsOne](global#m-existsone) 文档
+
 # v1.0.5
 
 ###### 2022/12/16

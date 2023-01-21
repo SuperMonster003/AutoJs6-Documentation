@@ -1,12 +1,5 @@
 # 全局对象 (Global)
 
----
-
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Nov 20, 2022.</p>
-
----
-
 在 JavaScript 中, [几乎一切都是对象](https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object/).  
 此处的全局 "对象" 包括 [ 变量 / 方法 / 构造器 ] 等.  
 全局对象随处可用, 包括 ECMA 标准内置对象 (如 [ Number / RegExp / String ] 等).
@@ -122,7 +115,7 @@ typeof global.sleep; // "function"
 
 ### sleep(millis)
 
-**`Overload 1/3`** **`Non-UI`**
+**`Global`** **`Overload 1/3`** **`Non-UI`**
 
 - **millis** { [number](dataTypes#number) } - 休眠时间 (毫秒)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -138,7 +131,7 @@ sleep(9e3);
 
 ### sleep(millisMin, millisMax)
 
-**`6.2.0`** **`Overload 2/3`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 2/3`** **`Non-UI`**
 
 - **millisMin** { [number](dataTypes#number) } - 休眠时间下限 (毫秒)
 - **millisMax** { [number](dataTypes#number) } - 休眠时间上限 (毫秒)
@@ -153,7 +146,7 @@ sleep(3e3, 5e3);
 
 ### sleep(millis, bounds)
 
-**`6.2.0`** **`Overload 3/3`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 3/3`** **`Non-UI`**
 
 - **millis** { [number](dataTypes#number) } - 休眠时间 (毫秒)
 - **bounds** { [NumberString](dataTypes#NumberString) | [string](dataTypes#string) } - 浮动值
@@ -172,7 +165,7 @@ sleep(4e3, "±1e3"); /* 同上. */
 
 ### toast(text)
 
-**`Overload 1/4`** **`Async`**
+**`Global`** **`Overload 1/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -192,7 +185,7 @@ toast("hello world");
 
 ### toast(text, isLong)
 
-**`Overload 2/4`** **`Async`**
+**`Global`** **`Overload 2/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
@@ -210,7 +203,7 @@ toast("hello", true); /* 同上. */
 
 ### toast(text, isLong, isForcible)
 
-**`Overload 3/4`** **`Async`**
+**`Global`** **`Overload 3/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
@@ -229,7 +222,7 @@ toast("world", "short", "forcible");
 
 ### toast(text, isForcible)
 
-**`Overload 4/4`** **`Async`**
+**`Global`** **`Overload 4/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isForcible** { "forcible" | "f" } - 强制覆盖显示 (字符标识)
@@ -247,7 +240,7 @@ toast("world", "forcible");
 
 ### toast.dismissAll()
 
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+**`Global`** - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 强制取消显示所有消息框.
 
@@ -285,7 +278,7 @@ console.log(text);
 
 ### toastLog(text)
 
-**`Overload 1/4`**
+**`Global`** **`Overload 1/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -294,7 +287,7 @@ console.log(text);
 
 ### toastLog(text, isLong)
 
-**`Overload 2/4`**
+**`Global`** **`Overload 2/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
@@ -304,7 +297,7 @@ console.log(text);
 
 ### toastLog(text, isLong, isForcible)
 
-**`Overload 3/4`**
+**`Global`** **`Overload 3/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
@@ -315,7 +308,7 @@ console.log(text);
 
 ### toastLog(text, isForcible)
 
-**`Overload 4/4`**
+**`Global`** **`Overload 4/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
 - **isForcible** { "forcible" | "f" } - 强制覆盖显示 (字符标识)
@@ -327,7 +320,7 @@ console.log(text);
 
 ### random()
 
-**`Overload 1/2`**
+**`Global`** **`Overload 1/2`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
@@ -335,7 +328,7 @@ console.log(text);
 
 ### random(min, max)
 
-**`Overload 2/2`**
+**`Global`** **`Overload 2/2`**
 
 - **min** { [number](dataTypes#number) } - 随机数下限
 - **max** { [number](dataTypes#number) } - 随机数上限
@@ -349,7 +342,7 @@ console.log(text);
 
 ### wait(condition)
 
-**`6.2.0`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => any)](dataTypes#function) | [PickupSelector](dataTypes#pickupselector) } - 结束等待条件
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
@@ -390,13 +383,17 @@ if (wait(() => device.isScreenOff())) {
 
 ```js
 /* 以下三种方式为 Pickup 选择器的不同格式, 效果相同. */
-wait("立即开始");
-wait(content("立即开始")); /* 同上. */
-wait({ content: "立即开始" }); /* 同上. */
+wait('立即开始');
+wait(content('立即开始')); /* 同上. */
+wait({ content: '立即开始' }); /* 同上. */
 
-/* 对比上述函数方式. */
-wait(() => content("立即开始").exists());
-wait(() => pickup("立即开始", "?")); /* 同上. */
+/* 函数方式. */
+wait(() => content('立即开始').exists());
+wait(() => pickup('立即开始', '?')); /* 同上. */
+
+/* wait 返回结果的简单应用. */
+wait('立即开始') && toast('OK');
+wait('立即开始') ? toast('√') : toast('×');
 ```
 
 等待条件的满足与否, 与函数返回值有关.  
@@ -433,7 +430,7 @@ wait(() => {
 
 ### wait(condition, limit)
 
-**`6.2.0`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => any)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -452,7 +449,7 @@ wait(() => device.isScreenOff(), 5e3); /* limit >= 100, 视为时间限制. */
 
 ### wait(condition, limit, interval)
 
-**`6.2.0`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => any)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -482,7 +479,7 @@ wait(() => device.isScreenOff(), 20, 0);
 
 ### wait(condition, callback)
 
-**`6.2.0`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => T)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **callback** {{
@@ -570,7 +567,7 @@ wait(() => {
 
 ### wait(condition, limit, callback)
 
-**`6.2.0`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => T)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -587,7 +584,7 @@ wait(() => {
 
 ### wait(condition, limit, interval, callback)
 
-**`6.2.0`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
 
 - **condition** { [(() => T)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -612,7 +609,7 @@ wait(() => {
 
 ### waitForActivity(activityName)
 
-**`6.2.0`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
@@ -621,7 +618,7 @@ wait(() => {
 
 ### waitForActivity(activityName, limit)
 
-**`6.2.0`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -631,7 +628,7 @@ wait(() => {
 
 ### waitForActivity(activityName, limit, interval)
 
-**`6.2.0`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -642,7 +639,7 @@ wait(() => {
 
 ### waitForActivity(activityName, callback)
 
-**`6.2.0`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **callback** {{
@@ -656,7 +653,7 @@ wait(() => {
 
 ### waitForActivity(activityName, limit, callback)
 
-**`6.2.0`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -671,7 +668,7 @@ wait(() => {
 
 ### waitForActivity(activityName, limit, interval, callback)
 
-**`6.2.0`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -694,7 +691,7 @@ wait(() => {
 
 ### waitForPackage(packageName)
 
-**`6.2.0`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 1/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
@@ -703,7 +700,7 @@ wait(() => {
 
 ### waitForPackage(packageName, limit)
 
-**`6.2.0`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 2/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -713,7 +710,7 @@ wait(() => {
 
 ### waitForPackage(packageName, limit, interval)
 
-**`6.2.0`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 3/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -724,7 +721,7 @@ wait(() => {
 
 ### waitForPackage(packageName, callback)
 
-**`6.2.0`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 4/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **callback** {{
@@ -738,7 +735,7 @@ wait(() => {
 
 ### waitForPackage(packageName, limit, callback)
 
-**`6.2.0`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 5/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -753,7 +750,7 @@ wait(() => {
 
 ### waitForPackage(packageName, limit, interval, callback)
 
-**`6.2.0`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
+**`6.2.0`** **`Global`** **`Overload 6/6`** **`A11Y?`** **`Non-UI`**
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
@@ -773,7 +770,7 @@ wait(() => {
 
 ### exit()
 
-**`Overload 1/2`**
+**`Global`** **`Overload 1/3`**
 
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
@@ -834,14 +831,15 @@ if (!engines.myEngine().isStopped()) {
 
 ### exit(e)
 
-**`Overload 2/2`**
+**`Global`** **`Overload 2/3`**
 
 - **e** { [JavaException](exceptions.md#java) } - 异常参数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 停止脚本运行并抛出异常参数指定的异常.
 
-此方法通常不会在脚本中使用.
+此方法通常不会在脚本中使用, 因 `e` 参数通常需要手动实例化.  
+如需自动完成实例化操作, 可使用 [exit(errorMessage)](#exiterrormessage) 方法, 可支持直接传入字符串类型的异常消息参数.
 
 ```js
 let arg = 'hello';
@@ -857,11 +855,29 @@ try {
 需额外留意上述示例的异常参数使用了 Throwable 重新包装, 因为异常参数类型为 Java 的 Exception, 而非 JavaScript 的 Error.  
 关于异常相关的内容, 可参阅 [异常](exceptions) 章节.
 
+### exit(errorMessage)
+
+**`6.2.0`** **`Global`** **`Overload 3/3`**
+
+- **errorMessage** { [string](dataTypes#string) } - 异常消息参数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+停止脚本运行并抛出异常参数指定的异常.
+
+相当于 `exit(new java.lang.Exception(errorMessage))`.
+
+```js
+let buttonText = '点此开始';
+if (!pickup(buttonText)) {
+    exit(`"${buttonText}" 按钮不存在.`);
+}
+```
+
 ## [m] stop
 
 ### stop()
 
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+**`Global`** - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 停止脚本运行.
 
@@ -873,7 +889,7 @@ try {
 
 ### isStopped()
 
-**`DEPRECATED`**
+**`Global`** **`DEPRECATED`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -885,7 +901,7 @@ try {
 
 ### isShuttingDown()
 
-**`DEPRECATED`**
+**`Global`** **`DEPRECATED`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -897,7 +913,7 @@ try {
 
 ### isRunning()
 
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+**`Global`** - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 检测脚本主线程是否未被中断.
 
@@ -907,7 +923,7 @@ try {
 
 ### notStopped()
 
-**`DEPRECATED`**
+**`Global`** **`DEPRECATED`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -919,7 +935,8 @@ try {
 
 ### requiresApi(api)
 
-- **api** { [number](dataTypes#number) } - 安卓 API 级别
+**`Global`** - **api** { [number](dataTypes#number) } - 安卓 API 级别
+
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 脚本运行的最低 API 级别要求.
@@ -942,7 +959,7 @@ requiresApi(android.os.Build.VERSION_CODES.R); /* 同上. */
 
 ### requiresAutojsVersion(versionName)
 
-**`Overload 1/2`**
+**`Global`** **`Overload 1/2`**
 
 - **versionName** { [string](dataTypes#string) } - AutoJs6 版本名称
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -959,7 +976,7 @@ requiresAutojsVersion("6.2.0");
 
 ### requiresAutojsVersion(versionCode)
 
-**`Overload 2/2`**
+**`Global`** **`Overload 2/2`**
 
 - **versionCode** { [number](dataTypes#number) } - AutoJs6 版本号
 - <ins>**returns**</ins> { [void](dataTypes#void) }
@@ -978,7 +995,8 @@ requiresAutojsVersion(1024);
 
 ### importPackage(...pkg)
 
-- **pkg** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 包
+**`Global`** - **pkg** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 包
+
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 ```js
@@ -1002,7 +1020,8 @@ importPackage(java.io, java.lang, java.util); /* 同上. */
 
 ### importClass(...cls)
 
-- **cls** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 类
+**`Global`** - **cls** { ...( [string](dataTypes#string) | [object](dataTypes#object) ) } - 需导入的 Java 类
+
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 ```js
@@ -1030,7 +1049,7 @@ importClass(
 
 ### currentPackage()
 
-**`A11Y`**
+**`Global`** **`A11Y`**
 
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
@@ -1040,7 +1059,7 @@ importClass(
 
 ### currentActivity()
 
-**`A11Y`**
+**`Global`** **`A11Y`**
 
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
@@ -1050,7 +1069,8 @@ importClass(
 
 ### setClip(text)
 
-- **text** { [string](dataTypes#string) } - 剪贴板内容
+**`Global`** - **text** { [string](dataTypes#string) } - 剪贴板内容
+
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 设置系统剪贴板内容.
@@ -1061,7 +1081,7 @@ importClass(
 
 ### getClip()
 
-- <ins>**returns**</ins> { [string](dataTypes#string) } - 系统剪贴板内容
+**`Global`** - <ins>**returns**</ins> { [string](dataTypes#string) } - 系统剪贴板内容
 
 需额外留意, 自 [Android API 29 (10) [Q]](apiLevel) 起, 剪贴板数据的访问将受到限制:
 
@@ -1083,9 +1103,92 @@ console.log(getClip());
 
 ### selector()
 
-- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+**`Global`** - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 构建一个 "空" [选择器](uiSelectorType).
+
+## [m] pickup
+
+拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.  
+支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.
+
+参阅 [UiSelector.pickup](uiSelectorType#m-pickup).
+
+## [m] detect
+
+控件探测.
+
+探测相当于对控件进行一系列组合操作 (罗盘定位, 结果筛选, 参化调用, 回调处理).
+
+参阅 [UiObject#detect](uiObjectType#m-detect).
+
+## [m] existsAll
+
+### existsAll(...selectors)
+
+**`Global`** - **selectors** { [...](documentation#可变参数)[PickupSelector](dataTypes#pickupselector)[[]](documentation#可变参数) } - 混合选择器参数
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 选择器全部满足 "存在" 条件
+
+提供的选择器参数全部满足 "存在" 条件, 即 `selector.exists() === true`.
+
+例如要求当前活动窗口中同时存在以下三个选择器对应的控件:
+
+1. contentMatch(/^开始.*/)
+2. descMatch(/descriptions?/)
+3. content('点击继续')
+
+```js
+console.log(existsAll(contentMatch(/^开始.*/), descMatch(/descriptions?/), content('点击继续'))); /* e.g. true */
+```
+
+因混合选择器参数支持对 content 系列选择器的简化, 因此上述示例也可改写为以下形式:
+
+```js
+console.log(existsAll(/^开始.*/, descMatch(/descriptions?/), '点击继续')); /* e.g. true */
+```
+
+此方法对应的传统的逻辑判断形式:
+
+```js
+console.log(contentMatch(/^开始.*/).exists()
+    && descMatch(/descriptions?/).exists()
+    && content('点击继续').exists()); /* e.g. true */
+```
+
+## [m] existsOne
+
+### existsOne(...selectors)
+
+**`Global`** - **selectors** { [...](documentation#可变参数)[PickupSelector](dataTypes#pickupselector)[[]](documentation#可变参数) } - 混合选择器参数
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 选择器任一满足 "存在" 条件
+
+提供的选择器参数任一满足 "存在" 条件, 即 `selector.exists() === true`.
+
+例如要求当前活动窗口中存在任意一个以下选择器对应的控件:
+
+1. contentMatch(/^开始.*/)
+2. descMatch(/descriptions?/)
+3. content('点击继续')
+
+```js
+console.log(existsOne(contentMatch(/^开始.*/), descMatch(/descriptions?/), content('点击继续'))); /* e.g. true */
+```
+
+因混合选择器参数支持对 content 系列选择器的简化, 因此上述示例也可改写为以下形式:
+
+```js
+console.log(existsOne(/^开始.*/, descMatch(/descriptions?/), '点击继续')); /* e.g. true */
+```
+
+此方法对应的传统的逻辑判断形式:
+
+```js
+console.log(contentMatch(/^开始.*/).exists()
+    || descMatch(/descriptions?/).exists()
+    || content('点击继续').exists()); /* e.g. true */
+```
 
 ## [m] cX
 
@@ -1093,7 +1196,7 @@ console.log(getClip());
 
 ### cX()
 
-**`6.2.0`** **`Overload 1/5`**
+**`6.2.0`** **`Global`** **`Overload 1/5`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
@@ -1105,7 +1208,7 @@ console.log(cX() === device.width); // true
 
 ### cX(x, base)
 
-**`6.2.0`** **`Overload 2/4`**
+**`6.2.0`** **`Global`** **`Overload 2/4`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值
 - **[ base = 720 ]** { [number](dataTypes#number) } - 坐标值基数
@@ -1141,7 +1244,7 @@ cX(100); /* 相当于 cX(100, 1096) . */
 
 ### cX(x, isRatio)
 
-**`6.2.0`** **`Overload 3/4`**
+**`6.2.0`** **`Global`** **`Overload 3/4`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
@@ -1156,7 +1259,7 @@ cX(100); /* 相当于 cX(100, 1096) . */
 
 ### cX(x)
 
-**`6.2.0`** **`Overload 4/4`**
+**`6.2.0`** **`Global`** **`Overload 4/4`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
@@ -1171,7 +1274,7 @@ cX(100); /* 相当于 cX(100, 1096) . */
 
 ### cY()
 
-**`6.2.0`** **`Overload 1/5`**
+**`6.2.0`** **`Global`** **`Overload 1/5`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
@@ -1183,7 +1286,7 @@ console.log(cY() === device.width); // true
 
 ### cY(y, base)
 
-**`6.2.0`** **`Overload 2/4`**
+**`6.2.0`** **`Global`** **`Overload 2/4`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值
 - **[ base = 1280 ]** { [number](dataTypes#number) } - 坐标值基数
@@ -1219,7 +1322,7 @@ cY(100); /* 相当于 cY(100, 2560) . */
 
 ### cY(y, isRatio)
 
-**`6.2.0`** **`Overload 3/4`**
+**`6.2.0`** **`Global`** **`Overload 3/4`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
@@ -1234,7 +1337,7 @@ cY(100); /* 相当于 cY(100, 2560) . */
 
 ### cY(y)
 
-**`6.2.0`** **`Overload 4/4`**
+**`6.2.0`** **`Global`** **`Overload 4/4`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
@@ -1280,7 +1383,7 @@ cY(100); /* 相当于 cY(100, 2560) . */
 
 ### cYx(coordinateY, baseX)
 
-**`6.2.0`** **`Overload [1(A)]/3`**
+**`6.2.0`** **`Global`** **`Overload [1(A)]/3`**
 
 - **coordinateY** { [number](dataTypes#number) } - 纵坐标值
 - **[ baseX = 720 ]** { [number](dataTypes#number) } - 横坐标基数
@@ -1316,7 +1419,7 @@ cYx(512); /* 相当于 cYx(512, 1096) . */
 
 ### cYx(percentY, ratio)
 
-**`6.2.0`** **`Overload [1(B)]/3`**
+**`6.2.0`** **`Global`** **`Overload [1(B)]/3`**
 
 - **percentY** { [number](dataTypes#number) } - 纵坐标百分比
 - **[ ratio = '9:16' ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 设备宽高比
@@ -1352,7 +1455,7 @@ cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560) . */
 
 ### cYx(y, isRatio)
 
-**`6.2.0`** **`Overload 2/3`**
+**`6.2.0`** **`Global`** **`Overload 2/3`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
@@ -1367,7 +1470,7 @@ cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560) . */
 
 ### cYx(y)
 
-**`6.2.0`** **`Overload 3/3`**
+**`6.2.0`** **`Global`** **`Overload 3/3`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
@@ -1418,7 +1521,7 @@ cYx(384); /* 相当于 cYx(384, 720) . */
 
 ### cXy(coordinateX, baseY)
 
-**`6.2.0`** **`Overload [1(A)]/3`**
+**`6.2.0`** **`Global`** **`Overload [1(A)]/3`**
 
 - **coordinateX** { [number](dataTypes#number) } - 横坐标值
 - **[ baseY = 1280 ]** { [number](dataTypes#number) } - 纵坐标基数
@@ -1454,7 +1557,7 @@ cXy(512); /* 相当于 cXy(512, 2560) . */
 
 ### cXy(percentX, ratio)
 
-**`6.2.0`** **`Overload [1(B)]/3`**
+**`6.2.0`** **`Global`** **`Overload [1(B)]/3`**
 
 - **percentX** { [number](dataTypes#number) } - 横坐标百分比
 - **[ ratio = '9:16' ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 设备宽高比
@@ -1490,7 +1593,7 @@ cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
 
 ### cXy(x, isRatio)
 
-**`6.2.0`** **`Overload 2/3`**
+**`6.2.0`** **`Global`** **`Overload 2/3`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
@@ -1505,7 +1608,7 @@ cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
 
 ### cXy(x)
 
-**`6.2.0`** **`Overload 3/3`**
+**`6.2.0`** **`Global`** **`Overload 3/3`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
@@ -1521,7 +1624,7 @@ cXy(384); /* 相当于 cXy(384, 720) . */
 
 ## [p] WIDTH
 
-**`6.2.0`**
+**`6.2.0`** **`Global`** **`Getter`**
 
 - { [number](dataTypes#number) }
 
@@ -1529,8 +1632,256 @@ cXy(384); /* 相当于 cXy(384, 720) . */
 
 ## [p] HEIGHT
 
-**`6.2.0`**
+**`6.2.0`** **`Global`** **`Getter`**
 
 - { [number](dataTypes#number) }
 
 [device.height](device#p-height) 的别名属性.
+
+## [p+] R
+
+在代码中使用 R 类的子类中的静态整数可访问 [应用资源](glossaries#应用资源), 详情参阅 [资源 ID](glossaries#资源-ID) 术语.
+
+### [p+] anim
+
+**`6.2.0`** **`Global`**
+
+动画资源.
+
+定义预先了确定的动画.  
+补间动画保存在 `res/anim/` 中, 可通过 `R.anim` 属性访问.  
+帧动画保存在 `res/drawable/` 中, 可通过 `R.drawable` 属性访问.
+
+```js
+'ui';
+
+ui.layout(<vertical id="main">
+    <vertical width="100" height="100" bg="#00695C"></vertical>
+</vertical>);
+
+const AnimationUtils = android.view.animation.AnimationUtils;
+
+const mContentContainer = ui.main;
+const mSlideDownAnimation = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+mSlideDownAnimation.setDuration(2000);
+mContentContainer.startAnimation(mSlideDownAnimation);
+```
+
+### [p+] array
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+提供数组的 XML 资源.
+
+```js
+dialogs.build({
+    title: R.string.text_pinch_to_zoom,
+    items: R.array.values_editor_pinch_to_zoom_strategy,
+    itemsSelectMode: 'single',
+    itemsSelectedIndex: defSelectedIndex,
+    positive: 'OK',
+}).on('single_choice', function (idx, item) {
+    toastLog(`${idx}: ${item}`);
+}).show();
+```
+
+### [p+] bool
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+包含布尔值的 XML 资源.
+
+```js
+console.log(context.getResources().getBoolean(R.bool.pref_auto_check_for_updates));
+```
+
+### [p+] color
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+包含颜色值 (十六进制颜色) 的 XML 资源.
+
+```js
+console.log(colors.toString(context.getColor(R.color.console_view_warn), 6)); // #1976D2
+```
+
+### [p+] dimen
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+包含尺寸值 (及度量单位) 的 XML 资源.
+
+```js
+console.log(context.getResources().getDimensionPixelSize(R.dimen.textSize_item_property)); // e.g. 28
+```
+
+### [p+] drawable
+
+**`6.2.0`** **`Global`**
+
+可绘制资源.
+
+使用位图或 XML 定义各种图形.  
+保存在 `res/drawable/` 中，可通过 `R.drawable` 属性访问.
+
+```js
+/* 绘制一个淡绿色的铃铛图标. */
+
+'ui';
+
+ui.layout(<vertical bg="#FFFFFF">
+    <img id="img" tint="#9CCC65"/>
+</vertical>);
+
+ui.img.setImageResource(R.drawable.ic_ali_notification);
+```
+
+### [p+] id
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+为应用资源和组件提供唯一标识符的 XML 资源.
+
+```js
+'ui';
+
+ui.layout(<vertical bg="#FFFFFF">
+    <text id="txt" size="30"/>
+</vertical>);
+
+let childCount = ui.txt.getRootView().findViewById(R.id.action_bar_root).getChildCount(); // e.g 2
+ui.txt.setText(`Child count is ${childCount}`);
+```
+
+### [p+] integer
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+包含整数值的 XML 资源.
+
+```js
+console.log(context.getResources().getInteger(R.integer.layout_node_info_view_decoration_line)); // 2
+```
+
+### [p+] layout
+
+**`6.2.0`** **`Global`**
+
+布局资源.
+
+定义应用界面的布局.  
+保存在 `res/layout/` 中，可通过 `R.layout` 属性访问.
+
+```js
+'ui';
+
+activity.setContentView(R.layout.activity_log);
+```
+
+### [p+] menu
+
+**`6.2.0`** **`Global`**
+
+菜单资源.
+
+定义应用菜单的内容.  
+保存在 `res/menu/` 中，可通过 `R.menu` 属性访问.
+
+```js
+'ui';
+
+ui.layout(<vertical bg="#FFFFFF">
+    <text id="txt" size="30"/>
+</vertical>);
+
+const PopupMenu = android.widget.PopupMenu;
+
+let childCount = ui.txt.getRootView().findViewById(R.id.action_bar_root).getChildCount(); // e.g 2
+ui.txt.setText(`Child count is ${childCount}`);
+
+let popupMenu = new PopupMenu(context, ui.txt);
+popupMenu.inflate(R.menu.menu_script_options);
+popupMenu.show();
+```
+
+### [p+] plurals
+
+**`6.2.0`** **`Global`**
+
+静态资源.
+
+定义资源复数形式.
+
+```js
+console.log(context.getResources().getQuantityString(
+    R.plurals.text_already_stop_n_scripts,
+    new java.lang.Integer(1),
+    new java.lang.Integer(1))); // e.g. 1 script stopped
+console.log(context.getResources().getQuantityString(
+    R.plurals.text_already_stop_n_scripts,
+    new java.lang.Integer(3),
+    new java.lang.Integer(3))); // e.g. 3 scripts stopped
+```
+
+### [p+] string
+
+**`6.2.0`** **`Global`**
+
+字符串资源.
+
+定义字符串.  
+保存在 `res/values/` 中，可通过 `R.string` 属性访问.
+
+```js
+console.log(context.getString(R.string.app_name)); // AutoJs6
+```
+
+### [p+] strings
+
+**`6.2.0`** **`Global`**
+
+字符串资源.
+
+同 [R.string](#p-string).  
+因 `TypeScript Declarations (TS 声明文件)` 中, `string` 为保留关键字, 不能作为类名使用, 为了使 `IDE` 实现智能补全, 特提供 `R.strings` 别名类.
+
+```js
+console.log(context.getString(R.strings.app_name)); // AutoJs6
+console.log(context.getString(R.string.app_name)); /* 同上, 但 IDE 无法智能补全. */
+```
+
+### [p+] style
+
+**`6.2.0`** **`Global`**
+
+样式资源.
+
+定义界面元素的外观和格式.  
+保存在 `res/values/` 中，可通过 `R.style` 属性访问.
+
+```js
+'ui';
+
+const MaterialDialog = com.afollestad.materialdialogs.MaterialDialog;
+const ContextThemeWrapper = android.view.ContextThemeWrapper;
+
+new MaterialDialog.Builder(new ContextThemeWrapper(activity, R.style.Material3DarkTheme))
+    .title('Hello')
+    .positiveText('OK')
+    .onPositive(() => ui.finish())
+    .cancelable(false)
+    .build()
+    .show();
+```

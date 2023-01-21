@@ -16,11 +16,11 @@
 
 |                         章节                          |   部署进度   |
 |:---------------------------------------------------:|:--------:|
-|               [Global - 全局对象](global)               | &gt; 70% |
+|               [Global - 全局对象](global)               |    √     |
 |            [Automator - 自动化](automator)             | &gt; 60% |
-|              [AutoJs6 - 本体应用](autojs)               |    ×     |
+|              [AutoJs6 - 本体应用](autojs)               |    √     |
 |                  [App - 通用应用](app)                  |    ×     |
-|                 [Color - 颜色](color)                 |    ×     |
+|                 [Color - 颜色](color)                 | &gt; 70% |
 |                 [Image - 图像](image)                 |    ×     |
 |                  [Keys - 按键](keys)                  |    ×     |
 |                [Device - 设备](device)                |    ×     |
@@ -61,9 +61,11 @@
 | [UiObjectCollection - 控件集合](uiObjectCollectionType) |    √     |
 |   [UiObjectActions - 控件节点行为](uiObjectActionsType)   |    √     |
 |               [App - 应用枚举类](appType)                |    √     |
+|           [Version - 版本工具类](versionType)            |    √     |
 |             [Polyfill - 代码填泥](polyfill)             |    √     |
 |             [Arrayx - Array 扩展](arrayx)             |    √     |
 |           [Numberx - Number 扩展](numberx)            |    √     |
 |              [Mathx - Math 扩展](mathx)               |    √     |
 |     [Scripting Java - 脚本化 Java](scriptingJava)      |    √     |
 |      [Android API Level - 安卓 API 级别](apiLevel)      |    √     |
+|          [Color Table - 颜色列表](colorTable)           |    √     |

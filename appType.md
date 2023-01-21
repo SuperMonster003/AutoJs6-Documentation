@@ -89,7 +89,6 @@ const tt = App.FIREFOX;
 console.log(tt.getAppName());
 console.log(tt.getPackageName());
 console.log(tt.getAlias());
-
 ```
 
 ## [m#] getAppName

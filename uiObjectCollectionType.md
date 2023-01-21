@@ -55,6 +55,17 @@ let wcList = [
 console.log(wcList.every(o => o.getClass() === UiObjectCollection)); // true
 ```
 
+当 pickup 使用 children 等作为结果筛选器时, 返回的是不经过包装的 UiObjectCollection, 因此需要使用一次 toArray 方法才能使用 JavaScript 的数组相关方法:
+
+```js
+let wc = pickup(/.+/, 'p', 'children');
+/* 需使用 toArray 进行一次转换. */
+wc.toArray().forEach(w => console.log(w.content()));
+
+/* 直接使用 children 方法则不需要 toArray 转换. */
+pickup(/.+/, 'p').children().forEach( /* ... */ );
+```
+
 UiObjectCollection 可能为空集合:
 
 ```js

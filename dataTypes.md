@@ -431,7 +431,7 @@ foo("1.3"); /* 不符合预期. */
 
 # 操纵泛型
 
-例如 Array<T>
+例如 Array<T>.
 
 ## Uppercase
 
@@ -462,7 +462,7 @@ foo("1.3"); /* 不符合预期. */
 
 **IgnoreCase&lt;T extends string>: T**
 
-通常用于输出转换.  
+通常用于参数值的输入转换.  
 接受 string 类型并生成忽略大小写的同类型数据.
 
 例如, 对于 IgnoreCase<"webUrl">, 以下数据均符合预期:
@@ -1478,3 +1478,331 @@ detect(w, [ 'child', 0 ]); /* i.e. w.child(0) */
 detect(w, [ 'setText', 'hello' ]); /* i.e. w.setText('hello') */
 detect(w, [ 'setSelection', 2, 3 ]); /* i.e. w.setSelection(2, 3) */
 ```
+
+## RootMode
+
+Root 模式, 枚举类型, 已全局化.
+
+| 枚举实例名          | 描述           | JavaScript 代表参数        |
+|----------------|--------------|------------------------|
+| AUTO_DETECT    | 自动检测 Root 权限 | 'auto' / -1            |
+| FORCE_ROOT     | 强制 Root 模式   | 'root' / 1 / true      |
+| FORCE_NON_ROOT | 强制非 Root 模式  | 'non-root' / 0 / false |
+
+检测 Root 模式:
+
+```js
+console.log(autojs.getRootMode() === RootMode.AUTO_DETECT);
+console.log(autojs.getRootMode() === RootMode.FORCE_ROOT);
+console.log(autojs.getRootMode() === RootMode.FORCE_NON_ROOT);
+```
+
+设置 Root 模式, 以设置 '强制 Root 模式' 为例:
+
+```js
+autojs.setRootMode(RootMode.FORCE_ROOT);
+autojs.setRootMode('root'); /* 同上. */
+autojs.setRootMode(1); /* 同上. */
+autojs.setRootMode(true); /* 同上. */
+```
+
+## ColorHex
+
+颜色代码 (Color Hex Code).
+
+在网页中经常使用的形如 `#FF4500` 的字符串表示一个颜色.
+
+在 AutoJs6 中, 有三种表示方式, 均使用十六进制代码表示:
+
+### #AARRGGBB
+
+使用四个分量表示颜色, 分量顺序固定为 `A (alpha)`, `R (red)`, `G (green)`, `B (blue)`. 每个分量使用 `0-255` 对应的十六进制数表示, 不足两位时需补零.
+
+例如一个颜色使用 `rgba(120, 14, 224, 255)` 表示, 将其转换为 `#AARRGGBB` 格式:
+
+```text
+R: 120 -> 0x78
+G: 14 -> 0xE
+B: 224 -> 0xE0
+A: 255 -> 0xFF
+#AARRGGBB -> #FF780EE0
+```
+
+注意上述示例的 `G` 分量需补零.
+
+> 扩展阅读:
+> 
+> 反向转换, 即 '#FF780EE0' 转换为 RGBA 分量:  
+> colors.toRgba('#FF780EE0'); // [ 120, 14, 224, 255 ]
+> 
+> 获取单独的分量:  
+> let [r, g, b, a] = colors.toRgba('#FF780EE0');  
+> console.log(r); // 120
+
+### #RRGGBB
+
+当 `A (alpha)` 分量为 `255 (0xFF)` 时, 可省略 `A` 分量:
+
+```js
+colors.toInt('#CD853F') === colors.toInt('#FFCD853F'); // true
+```
+
+获取 `#RRGGBB` 的 `A (alpha)` 分量, 将得到 `255`:
+
+```js
+colors.alpha('#CD853F'); // 255
+```
+
+需额外留意, 当使用十六进制数字表示颜色时, `FF` 不可省略:
+
+```js
+colors.toHex('#CD853F', 8); // #FFCD853F
+colors.toHex('#FFCD853F', 8); // #FFCD853F
+colors.toHex(0xCD853F); // #00CD853F
+colors.toHex(0xFFCD853F); // #FFCD853F
+```
+
+### #RGB
+
+`#RRGGBB` 十六进制代码的三位数简写形式, 如 `#BBFF33` 可简写为 `#BF3`, `#FFFFFF` 可简写为 `#FFF`.
+
+与 `#RRGGBB` 相同, `#RGB` 的 `A (alpha)` 分量也恒为 `255 (0xFF)`.
+
+```js
+colors.toInt('#BBFF33') === colors.toInt('#BF3'); // true
+colors.alpha('#BF3') === 255; // true
+```
+
+## ColorInt
+
+颜色整数 (Color Integer).
+
+多数情况下, 使用颜色整数代表一个颜色, 在安卓源码中, 颜色整数用 `ColorInt` 表示, 其值的范围由 `Java` 的 `Integer` 类型决定, 即 `-2^31..2^31-1`.  
+例如数字 `0xBF110523` 对应十进制的 `3205563683`, 超出了上述 `ColorInt` 的范围, 因此相关的 `colors` 方法 (如 [colors.toInt](color#m-toint), [colors.toHex](color#m-tohex) 等) 会将此数值通过 `2^32` 偏移量移动至合适的范围内, 于是得到结果 `-1089403613`.
+
+```js
+colors.toInt(0xBF110523); // -1089403613
+colors.toInt('#BF110523'); /* 结果同上. */
+
+console.log(0xBF110523); // 3205563683
+console.log(0xBF110523 - 2 ** 32); // -1089403613
+```
+
+`ColorInt` 作为参数类型传入时, 没有范围限制, 因为参数会通过 `2^32` 偏移量移动至上述合法范围内.
+
+如 `colors.toHex(0xFFFF3300)` 将返回 `"#FF3300"`, 虽然参数 `0xFFFF3300` 并不在 `-2^31` 与 `2^31-1` 之间.
+
+`ColorInt` 作为返回值类型时, 将确保其值位于 `-2^31` 与 `2^31-1` 之间, 且因 `JavaScript` 默认将数字以十进制显示 `number` 变量, 导致 `ColorInt` 结果缺乏可读性.
+
+如 `colors.toInt(0xFFFF3300)` 返回 `-52480`, 这个值不适于阅读, 但可用于参数传入其他方法.
+
+## ColorName
+
+颜色名称.
+
+[颜色列表 (Color Table)](colorTable) 章节中, 各个颜色列表中 "变量名" 的字符串形式可直接作为颜色名称使用:
+
+```js
+/* CSS 颜色列表中的 ORANGE_RED. */
+
+/* 作为 ColorInt 使用. */
+colors.toHex(colors.css.ORANGE_RED);
+/* 作为 ColorName 使用. */
+colors.toHex('ORANGE_RED');
+
+/* WEB 颜色列表中的 CREAM. */
+
+/* 作为 ColorInt 使用. */
+colors.toHex(colors.web.CREAM);
+/* 作为 ColorName 使用. */
+colors.toHex('CREAM');
+```
+
+### 名称冲突
+
+当使用 `颜色名称 (ColorName)` 作为参数时, 同一个名称可能同时出现在不同的 [颜色列表](colorTable) 中, 如 `CYAN` 在所有列表中均有出现, 且 [Material 颜色列表](colorTable#material-颜色列表) 中的 `CYAN` 与其它列表中的 `CYAN` 颜色不同.
+
+为避免上述冲突, 按如下命名空间优先级查找并使用颜色名称对应的颜色:
+
+```text
+android > css > web > material
+```
+
+详情参阅 [颜色列表 (Color Table)](colorTable) 章节的 [颜色名称冲突](colorTable#颜色名称冲突) 小节.
+
+### 参数格式
+
+ColorName 除了大写形式 (如 `BLACK` 或 `DARK_RED`) 外, 还支持以下几种格式 (以 `LIGHT_GREY` 为例):
+
+- `LIGHT_GREY` -- 大写 + 下划线
+- `LIGHTGREY` -- 大写合并
+- `light_grey` -- 小写 + 下划线
+- `lightgrey` -- 小写合并
+- `light-grey` -- 小写 + 连字符
+
+因此下面示例代码的结果是相同的:
+
+```js
+colors.toInt(colors.LIGHT_GREY);
+colors.toInt('LIGHT_GREY');
+colors.toInt('LIGHTGREY');
+colors.toInt('light_grey');
+colors.toInt('lightgrey');
+colors.toInt('light-grey');
+```
+
+## ColorComponent
+
+颜色分量类型.
+
+例如表示一个值为 `128` 的 `R (red)` 分量, 可使用 `128`, `0.5` 及 `50%` 等表示法.
+
+### 分量表示法
+
+通常使用整数表示一个颜色分量, 如 `colors.rgb(10, 20, 30)`.  
+RGB 系列色彩模式范围为 `[0..255]`, HSX 系列色彩模式范围为 `[0..100]`.
+
+除上述整数分量表示法, AutoJs6 还支持百分数等方式表示一个颜色分量 (如 `0.2`, `"20%"` 等).
+
+下表列举了 AutoJs6 支持的分量表示法:
+
+**1. 整数**
+
+| 样例                            | 等效语句                           | 备注                                        |
+|-------------------------------|--------------------------------|-------------------------------------------|
+| colors.rgb(64, 32, 224)       | -                              | -                                         |
+| colors.rgba(64, 32, 224, 255) | -                              | -                                         |
+| colors.hsv(30, 20, 60)        | colors.hsv(30, 0.2, 0.6)       | S (saturation) 和 V (value) 分量范围为 [0..100] |
+| colors.hsva(30, 20, 60, 255)  | colors.hsva(30, 0.2, 0.6, 255) | A (alpha) 分量范围为 [0..255]                  |
+
+**2. 浮点数**
+
+| 样例                               | 等效语句                         | 备注        |
+|----------------------------------|------------------------------|-----------|
+| colors.rgb(0.5, 0.25, 0.125)     | colors.rgb(128, 64, 32)      | -         |
+| colors.rgba(0.5, 0.25, 0.1, 0.2) | colors.rgba(128, 64, 26, 51) | -         |
+| colors.hsv(10, 0.3, 0.2)         | colors.hsv(10, 30, 20)       | -         |
+| colors.hsva(10, 0.3, 0.2, 0.5)   | colors.hsva(10, 30, 20, 128) | 不同分量的范围不同 |
+
+**3. 百分数**
+
+| 样例                                      | 等效语句                         | 备注        |
+|-----------------------------------------|------------------------------|-----------|
+| colors.rgb('50%', '25%', '12.5%')       | colors.rgb(128, 64, 32)      | -         |
+| colors.rgba('50%', '25%', '10%', '20%') | colors.rgba(128, 64, 26, 51) | -         |
+| colors.hsv(10, '30%', '20%')            | colors.hsv(10, 30, 20)       | -         |
+| colors.hsva(10, '30%', '20%', '50%')    | colors.hsva(10, 30, 20, 128) | 不同分量的范围不同 |
+
+### 表示范围
+
+不同分量的范围不同, 当使用浮点数或百分数等表示法时, 需留意其表示范围:
+
+| 分量             | 范围       |
+|----------------|----------|
+| R (red)        | [0..255] |
+| G (green)      | [0..255] |
+| B (blue)       | [0..255] |
+| A (alpha)      | [0..255] |
+| H (hue)        | [0..360] |
+| S (saturation) | [0..100] |
+| V (value)      | [0..100] |
+| L (lightness)  | [0..100] |
+
+```js
+colors.hsva(0.5, 0.5, 0.5, 0.5);
+colors.hsva(180, 50, 50, 128); /* 同上. */
+```
+
+### 表示法组合
+
+分量表示法支持组合使用:
+
+```js
+colors.rgb(0.5, '25%', 32); /* 相当于 colors.rgb(128, 64, 32) . */
+colors.rgba(0.5, '25%', 32, '50%'); /* 相当于 colors.rgba(128, 64, 32, 128) . */
+```
+
+### 灵活的 1
+
+在组合使用分量表示法时, `1` 既可作为整数分量也可作为百分数分量, 原则如下:
+
+对于非 `RGB` 分量, 如 `A (alpha)`, `S (saturation)`, `V (value)`, `L (lightness)` 等, `1` 一律解释为 `100%`.
+
+```js
+colors.argb(1, 255, 255, 255); /* 相当于 argb(255, 255, 255, 255), 1 解释为 100% . */
+colors.hsv(60, 1, 0.5); /* S 分量相当于 100, 1 解释为 100% . */
+colors.hsla(0, 1, 1, 1); /* 相当于 hsla(0, 100, 100, 255) . */
+```
+
+而对于 `RGB` 分量, 只有当 `R` / `G` / `B` 三个分量全部满足 `c <= 1` 且不全为 `1` 时, 解释为百分数 `1` (即 `100%`), 其他情况, 解释为整数 `1`.
+
+```js
+colors.rgb(1, 0.2, 0.5); /* 相当于 rgb(255, 51, 128), 1 解释为 100%, 得到 255 . */
+colors.rgb(1, 0.2, 224); /* 相当于 rgb(1, 51, 224), 1 解释为 1 . */
+colors.rgb(1, 160, 224); /* 无特殊转换, 1 解释为 1 . */
+colors.rgb(1, 1, 1); /* 相当于 rgb(1, 1, 1), 颜色代码为 #010101, 1 全部解释为 1 . */
+colors.rgb(1, 1, 0.5); /* 相当于 rgb(255, 255, 128), 1 全部解释为 100% . */
+```
+
+由此可见, 对于 `RGB` 分量, 只要有一个分量使用了 `0.x` 的百分数表示法, `1` 将全部解释为 `255 (100%)`.
+
+### 1 与 1.0
+
+`JavaScript` 只有数字类型, `1` 与 `1.0` 没有区别, 以下两个语句完全等价:
+
+```js
+colors.rgb(1, 1, 0.5);
+colors.rgb(1.0, 1.0, 0.5); /* 同上. */
+```
+
+因此当使用 `1` 表示 `100%` 传入一个颜色分量参数时, 建议使用 `1.0` 以增加可读性:
+
+```js
+colors.hsla(120, 0.32, 1.0, 0.5); /* 使用 1.0 代表 100% . */
+```
+
+## ColorComponents
+
+[颜色分量](#colorcomponent) 数组.
+
+同一种颜色可用不同的色彩模式表示, 如 RGB 色彩模式或 HSV 色彩模式等.
+
+每个色彩模式的 `分量 (Component)` 组成的数组称为颜色分量数组, 如 RGB 色彩模式的分量数组 `[100, 240, 72]` 表示 `R (red)` 分量为 `100`, `G (green)` 分量为 `240`, `B (blue)` 分量为 `72`, 访问时可使用数组下标方式或解构赋值方式:
+
+```js
+let components = colors.toRgb(colors.rgb(100, 240, 72)); // [ 100, 240, 72 ]
+
+/* 数组下标方式. */
+console.log(`R: ${components[0]}, G: ${components[1]}, B: ${components[2]}`);
+
+/* 结构赋值方式. */
+let [ r, g, b ] = components;
+console.log(`R: ${r}, G: ${g}, B: ${b}`);
+```
+
+colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数组,  
+如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
+
+## Range
+
+表示一个数字的数值范围.
+
+| 表示法       | 	范围                    |
+|-----------|------------------------|
+| (a..b) 	  | {x &#124; a < x < b}   |
+| [a..b] 	  | {x &#124; a <= x <= b} |
+| (a..b] 	  | {x &#124; a < x <= b}  |
+| [a..b) 	  | {x &#124; a <= x < b}  |
+| (a..+∞)   | 	{x &#124; x > a}      |
+| [a..+∞)   | 	{x &#124; x >= a}     |
+| (-∞..b)   | 	{x &#124; x < b}      |
+| (-∞..b]   | 	{x &#124; x <= b}     |
+| (-∞..+∞)	 | {x} (任意值)              |
+
+如 `Range[10..30]` 表示数字 `x` 位于 `10 <= x <= 30` 范围内, 而 `Range[0..1)` 表示数字 `x` 位于 `0 <= x < 1` 范围内.
+
+## IntRange
+
+表示一个整数的取值范围. 其表示法可参阅 [Range](#range) 小节.
+
+如 `IntRange[10..30]` 表示整数 `x` 位于 `10 <= x <= 30` 范围内, 而 `IntRange[0..100)` 表示整数 `x` 位于 `0 <= x < 100` 范围内.

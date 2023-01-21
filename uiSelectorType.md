@@ -5621,8 +5621,8 @@ pickup().depth(); // 0
 
 **`6.2.0`** **`Global`** **`Overload 2/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 相当于 `selector.findOnce()`.
 
@@ -5656,9 +5656,9 @@ pickup([ 'abc', {
 
 **`6.2.0`** **`Global`** **`Overload 3/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 对 `selector.findOnce()` 根据 `result` 参数进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
@@ -5692,9 +5692,9 @@ className('EditText').findOnce().setSelection(1, 5); /* 效果同上, 但存在�
 
 **`6.2.0`** **`Global`** **`Overload 4/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass).
 
@@ -5707,10 +5707,10 @@ text('abc').findOnce().parent().parent().parent(); /* 效果同上, 但存在潜
 
 **`6.2.0`** **`Global`** **`Overload 5/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
@@ -5727,9 +5727,9 @@ w.parent().child(w.indexInParent() + 1).bounds(); /* 效果同上, 但存在潜�
 
 **`6.2.0`** **`Global`** **`Overload 6/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 执行 `selector.findOnce()` 筛选.
 
@@ -5744,10 +5744,10 @@ pickup(w, 'xyz'); /* 在 w 控件的所有子孙节点中筛选内容为 'xyz' �
 
 **`6.2.0`** **`Global`** **`Overload 7/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 根据 `result` 参数进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
@@ -5762,10 +5762,10 @@ pickup(w, 'xyz', 'height'); /* 在 w 控件的所有子孙节点中筛选内容�
 
 **`6.2.0`** **`Global`** **`Overload 8/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass).
 
@@ -5780,11 +5780,11 @@ pickup(w, 'xyz', 'p2'); /* 在 w 控件的所有子孙节点中筛选内容为 '
 
 **`6.2.0`** **`Global`** **`Overload 9/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
@@ -5799,8 +5799,8 @@ pickup(w, 'xyz', 'p2', 'width'); /* 在 w 控件的所有子孙节点中筛选�
 
 **`6.2.0`** **`Global`** **`Overload 10/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
 - <ins>**returns**</ins> { [R](dataTypes#generic) }
 
 对 [pickup(selector)](#pickupselector) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
@@ -5821,10 +5821,10 @@ pickup(text('abc'), (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 11/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 对 [pickup(selector, result)](#pickupselector-result) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -5842,10 +5842,10 @@ pickup(clickable(true), 'point', (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 12/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 对 [pickup(selector, compass)](#pickupselector-compass) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -5861,11 +5861,11 @@ pickup(text('abc'), 'p3', (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 13/17`** **`A11Y`**
 
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 [pickup(selector, compass, result)](#pickupselector-compass-result) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -5873,9 +5873,9 @@ pickup(text('abc'), 'p3', (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 14/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
 - <ins>**returns**</ins> { [R](dataTypes#generic) }
 
 对 [pickup(selector)](#pickupselector) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
@@ -5900,11 +5900,11 @@ pickup(w, text('abc'), (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 15/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 [pickup(selector, result)](#pickupselector-result) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -5926,11 +5926,11 @@ pickup(w, clickable(true), 'point', (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 16/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 [pickup(selector, compass)](#pickupselector-compass) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -5950,12 +5950,12 @@ pickup(w, text('abc'), 'p3', (o) => {
 
 **`6.2.0`** **`Global`** **`Overload 17/17`** **`A11Y`**
 
-- **root** { [UiObject](uiObjectType) }
-- **selector** { [PickupSelector](dataTypes#pickupselector) }
-- **compass** { [DetectCompass](dataTypes#detectcompass) }
-- **result** { [PickupResult](dataTypes#pickupresult) }
-- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) }
-- <ins>**returns**</ins> { [any](dataTypes#any) }
+- **root** { [UiObject](uiObjectType) } - 筛选根节点参数
+- **selector** { [PickupSelector](dataTypes#pickupselector) } - 混合选择器参数
+- **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
+- **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
+- **callback** { [(](dataTypes#function)o: [any](dataTypes#any)[)](dataTypes#function) [=>](dataTypes#function) [R](dataTypes#generic) } - 筛选回调参数
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
 以 `root` 参数指定的控件为根节点, 对 [pickup(selector, compass, result)](#pickupselector-compass-result) 增加回调处理, 将回调函数的返回值 (`undefined` 除外) 作为最终结果. 当回调函数返回 `undefined` 时, 则将拾取器的结果作为最终结果.
 
@@ -6112,6 +6112,16 @@ descMatch(/l[ae]ng?/); /* 可匹配 w. */
 descMatch(/.+/); /* 可匹配 w, 与 descMatch(/(?:)/) 效果相同. */
 descMatch(new RegExp('spl\\.?.+$')); /* 可匹配 w. */
 ```
+
+筛选条件为正则表达式类型时, 支持 [修饰符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2) (又称 `标志`):
+
+```js
+w.desc(); // AutoJs6
+descMatch(/autojs6/i); /* 可匹配 w. */
+descMatch(new RegExp('autojs6', 'i')); /* 可匹配 w. */
+```
+
+> 注: 截至 2022 年 12 月, 支持的修饰符仅包含 'i'.
 
 ### 字符串类型
 

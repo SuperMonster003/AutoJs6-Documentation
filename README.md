@@ -20,7 +20,7 @@
 
 ### 简介
 
-* AutoJs6 项目文档
+* AutoJs6 应用文档
 * 网页版查看: [AutoJs6-Documentation](https://supermonster003.github.io/AutoJs6-Documentation/)
 * 部分文档与实际代码行为可能存在出入
 * 模板 / 样式 / Generator 来自 [Node.js](https://github.com/nodejs/node/tree/master/doc/)

@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
 <li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
@@ -107,7 +108,7 @@
 <div class="line"></div>
 
 <ul>
-<li><a class="nav-https-github-com-SuperMonster003-AutoJs6-" href="https://github.com/SuperMonster003/AutoJs6/">GitHub - 应用项目地址</a></li>
+<li><a class="nav-https-github-com-SuperMonster003-AutoJs6" href="https://github.com/SuperMonster003/AutoJs6">GitHub - 应用项目地址</a></li>
 <li><a class="nav-https-github-com-SuperMonster003-AutoJs6-Documentation" href="https://github.com/SuperMonster003/AutoJs6-Documentation">GitHub - 文档项目地址</a></li>
 </ul>
 
@@ -1826,7 +1827,7 @@ wD.className(); // androidx.recyclerview.widget.RecyclerView
 </code></pre>
 <p><code>classNameMatch(/EditText/)</code> 或 <code>classNameMatch(&#39;EditText&#39;)</code> 可以匹配 <code>wC</code> 控件.<br><code>classNameMatch(/Edit/)</code> 或 <code>classNameMatch(&#39;Edit&#39;)</code> 也可以匹配 <code>wC</code> 控件.</p>
 <p><code>classNameMatch(/^android/)</code> 或 <code>classNameMatch(&#39;^android&#39;)</code> 可以匹配 <code>wA</code>, <code>wB</code>, <code>wC</code> 和 <code>wD</code> 控件.</p>
-<p><code>classNameMatch(/V\w{0,3}$/)</code> 或 <code>classNameMatch(&#39;V\\w{0,3}__CONTENT__#39;)</code> 可以匹配控件 <code>wA</code> 和 <code>wD</code>.</p>
+<p><code>classNameMatch(/V\w{0,3}$/)</code> 或 <code>classNameMatch(&#39;V\\w{0,3}$')</code> 可以匹配控件 <code>wA</code> 和 <code>wD</code>.</p>
 <p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
 <pre><code class="lang-js">pickup(classNameMatch(/V\w{0,3}$/), &#39;@&#39;);
 pickup({ classNameMatch: /V\w{0,3}$/ }, &#39;@&#39;);
@@ -2007,8 +2008,8 @@ wC.packageName(); // com.twitter.android
 wD.packageName(); // com.accuweather.android
 </code></pre>
 <p><code>packageNameMatch(/office/)</code> 或 <code>packageNameMatch(&#39;office&#39;)</code> 可以匹配 <code>wC</code> 控件.</p>
-<p><code>packageNameMatch(/android$/)</code> 或 <code>packageNameMatch(&#39;android__CONTENT__#39;)</code> 可以匹配 <code>wC</code> 和 <code>wD</code> 控件.</p>
-<p><code>packageNameMatch(/\.\w*r\w*d$/)</code> 或 <code>packageNameMatch(&#39;\\.\\w*r\\w*d__CONTENT__#39;)</code> 可以匹配控件 <code>wB</code>, <code>wC</code> 和 <code>wD</code>.</p>
+<p><code>packageNameMatch(/android$/)</code> 或 <code>packageNameMatch(&#39;android$')</code> 可以匹配 <code>wC</code> 和 <code>wD</code> 控件.</p>
+<p><code>packageNameMatch(/\.\w*r\w*d$/)</code> 或 <code>packageNameMatch(&#39;\\.\\w*r\\w*d$')</code> 可以匹配控件 <code>wB</code>, <code>wC</code> 和 <code>wD</code>.</p>
 <p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
 <pre><code class="lang-js">pickup(packageNameMatch(/\.\w*r\w*d$/), &#39;@&#39;);
 pickup({ packageNameMatch: /\.\w*r\w*d$/ }, &#39;@&#39;);
@@ -5307,7 +5308,7 @@ descMatches(/.+/); /* 可匹配 w. */
 /* 相当于 descMatch(/^(?:)$/) . */
 descMatches(/(?:)/); /* 不可匹配 w. */
 /* 相当于 descMatch(/^spl\.?.+$/) . */
-descMatches(new RegExp(&#39;spl\\.?.+__CONTENT__#39;)); /* 不可匹配 w. */
+descMatches(new RegExp(&#39;spl\\.?.+$')); /* 不可匹配 w. */
 </code></pre>
 <h3>字符串类型<span><a class="mark" href="#uiselectortype_2" id="uiselectortype_2">#</a></span></h3>
 <p>筛选条件为字符串类型时, 相当于 JavaScript 的 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp">RegExp.prototype.constructor</a> 构造函数的 <code>pattern (模式)</code> 参数, 但依照起止位置做完全匹配, 相当于自动添加匹配起始位置的 <code>^</code> 与匹配结束位置的 <code>$</code>.</p>
@@ -5318,7 +5319,7 @@ descMatches(&#39;s.*did&#39;); /* 不可匹配 w. */
 /* 相当于 descMatch(/^did$/) . */
 descMatches(&#39;did&#39;); /* 不可匹配 w. */
 /* 相当于 descMatch(/^did$/) . */
-descMatches(&#39;did__CONTENT__#39;); /* 不可匹配 w. */
+descMatches(&#39;did$'); /* 不可匹配 w. */
 /* 相当于 descMatch(/^did$/) . */
 descMatches(&#39;^did&#39;); /* 不可匹配 w. */
 /* 相当于 descMatch(/^.*did.*$/) . */
@@ -5330,7 +5331,7 @@ descMatches(&#39;.+&#39;); /* 可匹配 w. */
 /* 相当于 descMatch(/^$/) . */
 descMatches(&#39;&#39;); /* 不可匹配 w. */
 /* 相当于 descMatch(/^spl\.?.+$/) . */
-descMatches(&#39;spl\\.?.+__CONTENT__#39;); /* 不可匹配 w. */
+descMatches(&#39;spl\\.?.+$'); /* 不可匹配 w. */
 </code></pre>
 <p>对于 xxxMatches, 会经常出现类似如下的匹配方式:</p>
 <pre><code class="lang-js">/* 相当于 descMatch(/^.*word.*$/) . */
@@ -5356,7 +5357,7 @@ descMatch(/did$/); /* 可匹配 w. */
 descMatch(/^did/); /* 不可匹配 w. */
 descMatch(/l[ae]ng?/); /* 可匹配 w. */
 descMatch(/.+/); /* 可匹配 w, 与 descMatch(/(?:)/) 效果相同. */
-descMatch(new RegExp(&#39;spl\\.?.+__CONTENT__#39;)); /* 可匹配 w. */
+descMatch(new RegExp(&#39;spl\\.?.+$')); /* 可匹配 w. */
 </code></pre>
 <p>筛选条件为正则表达式类型时, 支持 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2">修饰符</a> (又称 <code>标志</code>):</p>
 <pre><code class="lang-js">w.desc(); // AutoJs6
@@ -5375,7 +5376,7 @@ descMatch(&#39;s.*did&#39;); /* 可匹配 w. */
 /* 相当于 descMatch(/did/) . */
 descMatch(&#39;did&#39;); /* 可匹配 w. */
 /* 相当于 descMatch(/did$/) . */
-descMatch(&#39;did__CONTENT__#39;); /* 可匹配 w. */
+descMatch(&#39;did$'); /* 可匹配 w. */
 /* 相当于 descMatch(/^did/) . */
 descMatch(&#39;^did&#39;); /* 不可匹配 w. */
 /* 相当于 descMatch(/l[ae]ng?/) . */
@@ -5383,7 +5384,7 @@ descMatch(&#39;l[ae]ng?&#39;); /* 可匹配 w. */
 /* 相当于 descMatch(/.+/) . */
 descMatch(&#39;.+&#39;); /* 可匹配 w, 与 descMatch(&#39;&#39;) 效果相同. */
 /* 相当于 descMatch(/spl\.?.+$/) . */
-descMatch(&#39;spl\\.?.+__CONTENT__#39;); /* 可匹配 w. */
+descMatch(&#39;spl\\.?.+$'); /* 可匹配 w. */
 </code></pre>
 <h1>选择器行为<span><a class="mark" href="#uiselectortype_5" id="uiselectortype_5">#</a></span></h1>
 <p>通常执行控件行为时, 按以下过程进行:</p>

@@ -174,7 +174,7 @@ function loadGtoc(cb) {
         preprocess(gtocPath, data, function (err, data) {
             if (err) return cb(err);
 
-            data = marked(data).replace(/<a href="(.*?)"/gm, function (a, m) {
+            data = (typeof marked.marked === 'function' ? marked.marked : marked)(data).replace(/<a href="(.*?)"/gm, function (a, m) {
                 return '<a class="nav-' + toID(m) + '" href="' + m + '"';
             });
             return cb(null, data);
@@ -412,7 +412,7 @@ function parseYAML(text) {
 
         changes.forEach((change) => {
             html.push(`<tr><td>${change.version}</td>`);
-            html.push(`<td>${marked(change.description)}</td></tr>`);
+            html.push(`<td>${(typeof marked.marked === 'function' ? marked.marked : marked)(change.description)}</td></tr>`);
         });
 
         html.push('</table>');
@@ -432,6 +432,10 @@ const BSD_ONLY_SYSCALLS = new Set([ 'lchmod' ]);
 // Returns modified text, with such refs replace with HTML links, for example
 // '<a href="http://man7.org/linux/man-pages/man2/open.2.html">open(2)</a>'
 function linkManPages(text) {
+    if (typeof text === 'object') {
+        text = text.text;
+    }
+
     return text.replace(
         / ([a-z.]+)\((\d)([a-z]?)\)/gm,
         (match, name, number, optionalCharacter) => {
@@ -507,10 +511,12 @@ function buildToc(lexed, filename, cb) {
         }
 
         if (tok.type !== 'heading') return;
-        if (tok.depth - depth > 1) {
-            return cb(new Error('Inappropriate heading level\n' +
-                JSON.stringify(tok)));
-        }
+
+        // @Comment by SuperMonster003 on Mar 1, 2023.
+        // if (tok.depth - depth > 1) {
+        //     return cb(new Error('Inappropriate heading level\n' +
+        //         JSON.stringify(tok)));
+        // }
 
         depth = tok.depth;
         const realFilename = path.basename(realFilenames[0], '.md');

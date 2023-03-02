@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
 <li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
@@ -107,7 +108,7 @@
 <div class="line"></div>
 
 <ul>
-<li><a class="nav-https-github-com-SuperMonster003-AutoJs6-" href="https://github.com/SuperMonster003/AutoJs6/">GitHub - 应用项目地址</a></li>
+<li><a class="nav-https-github-com-SuperMonster003-AutoJs6" href="https://github.com/SuperMonster003/AutoJs6">GitHub - 应用项目地址</a></li>
 <li><a class="nav-https-github-com-SuperMonster003-AutoJs6-Documentation" href="https://github.com/SuperMonster003/AutoJs6-Documentation">GitHub - 文档项目地址</a></li>
 </ul>
 
@@ -128,18 +129,129 @@
         <div id="toc">
             <h2>目录</h2>
             <ul>
-<li><span class="stability_undefined"><a href="#web_web">万维网 (Web)</a></span></li>
+<li><span class="stability_undefined"><a href="#web_web">万维网 (Web)</a></span><ul>
+<li><span class="stability_undefined"><a href="#web_m_newinjectablewebview">[m] newInjectableWebView</a></span><ul>
+<li><span class="stability_undefined"><a href="#web_newinjectablewebview_url">newInjectableWebView(url?)</a></span></li>
+<li><span class="stability_undefined"><a href="#web_newinjectablewebview_activity">newInjectableWebView(activity)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#web_m_newinjectablewebclient">[m] newInjectableWebClient</a></span><ul>
+<li><span class="stability_undefined"><a href="#web_newinjectablewebclient">newInjectableWebClient()</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
 
         <div id="apicontent">
             <h1>万维网 (Web)<span><a class="mark" href="#web_web" id="web_web">#</a></span></h1>
+<p>在应用里显示网页内容, 而不是打开独立的浏览器, 此时可使用 WebView 类, 以实现在 <a href="activity.html">activity</a> 中显示网页内容.</p>
+<p>web 模块主要用于 <a href="https://developer.android.com/reference/android/webkit/WebView">WebView</a> 网页的 [ <a href="glossaries.html#glossaries_注入">注入 (Inject)</a> / 构建客户端 ] 等.</p>
+<blockquote>
+<p>注: 与 <a href="http.html">http</a> 模块不同, http 模块主要用于网络的请求与响应.</p>
+</blockquote>
 <hr>
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">web</p>
 
 <hr>
+<h2>[m] newInjectableWebView<span><a class="mark" href="#web_m_newinjectablewebview" id="web_m_newinjectablewebview">#</a></span></h2>
+<h3>newInjectableWebView(url?)<span><a class="mark" href="#web_newinjectablewebview_url" id="web_newinjectablewebview_url">#</a></span></h3>
+<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>UI</code></strong></p>
+<ul>
+<li><strong>[url]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 需要 WebView 加载的 URL</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_injectablewebview">InjectableWebView</a></span> }</li>
+</ul>
+<p>新建并返回一个 <a href="dataTypes.html#datatypes_injectablewebview">InjectableWebView</a> (可 <a href="glossaries.html#glossaries_注入">注入</a> 的 <a href="https://developer.android.com/reference/android/webkit/WebView">WebView</a>) 实例.</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+
+ui.layout(&lt;vertical&gt;
+    &lt;frame id=&quot;main&quot;/&gt;
+&lt;/vertical&gt;);
+
+/* 创建一个 InjectableWebView 实例. */
+let webView = newInjectableWebView();
+/* 加载指定的 URL, &quot;https://&quot; 也可省略. */
+webView.loadUrl(&#39;https://www.github.com&#39;);
+/* 注入 JavaScript 脚本, 显示 alert 消息框. */
+webView.inject(&#39;alert(&quot;hello&quot;)&#39;);
+/* 附加视图对象到 id 为 main 的视图上. */
+ui.main.addView(webView);
+</code></pre>
+<p>上述示例也可使用 <code>setContentView</code> 实现更简单的内容加载 (但不包含代码注入):</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+activity.setContentView(web.newInjectableWebView(&#39;www.github.com&#39;));
+</code></pre>
+<p>除上述注入简单的 <code>alert</code> 消息框外, 还支持其他更多注入方式:</p>
+<pre><code class="lang-js">/* 以给定的 URL 来替换当前的资源. */
+webView.inject(&#39;document.location.replace(&quot;https://www.jetbrains.com&quot;)&#39;);
+/* 替换整个 document 的内容. */
+webView.inject(&#39;document.write(&quot;hello&quot;)&#39;);
+/* 替换 body 元素为指定的 HTML 内容. */
+webView.inject(&#39;document.body.innerHTML = &quot;&lt;p&gt;hello&lt;/p&gt;&quot;&#39;);
+/* 指定 body 元素的字体颜色. */
+webView.inject(&#39;document.body.style = &quot;color:green&quot;&#39;);
+/* 在文档末尾附加一个自定义元素. */
+webView.inject(&#39;let p = document.createElement(&quot;p&quot;); p.innerHTML = &quot;hello&quot;; document.body.appendChild(p)&#39;);
+/* 使用回调方法获取内部信息. */
+webView.inject(&#39;navigator.userAgent&#39;, result =&gt; console.log(result));
+</code></pre>
+<p>如需对上述 <code>webView</code> 实例进行一些设置, 可通过 <code>webView.getSettings()</code> 获得 <a href="https://developer.android.com/reference/android/webkit/WebSettings">android.webkit.WebSettings</a> 对象, 再进行个性化设置:</p>
+<pre><code class="lang-js">let settings = webView.getSettings();
+
+/* 设置 WebView 默认字体大小, 默认值 16. */
+settings.setDefaultFontSize(18);
+/* 设置是否允许脚本自动弹出新窗口, 默认 false. */
+settings.setJavaScriptCanOpenWindowsAutomatically(true);
+/* 设置 WebView 是否支持使用屏幕控件或手势进行缩放, 默认 true. */
+settings.setSupportZoom(false);
+
+/* ... */
+</code></pre>
+<p>对于 <code>InjectableWebView</code>, 其内部已经对 WebView 进行了一些初始化设置, 包括:</p>
+<pre><code class="lang-java">settings.setUseWideViewPort(true);
+settings.setBuiltInZoomControls(true);
+settings.setLoadWithOverviewMode(true);
+settings.setJavaScriptEnabled(true);
+settings.setJavaScriptCanOpenWindowsAutomatically(true);
+settings.setDomStorageEnabled(true);
+settings.setDisplayZoomControls(false);
+</code></pre>
+<blockquote>
+<p>注: 上述设置参考自 Auto.js 4.1.1 Alpha2 源码.</p>
+</blockquote>
+<p>此外, <code>InjectableWebView</code> 内部还初始化了一个默认的 <a href="https://developer.android.com/reference/android/webkit/WebChromeClient">WebChromeClient</a> 客户端:</p>
+<pre><code class="lang-java">setWebChromeClient(new WebChromeClient());
+</code></pre>
+<blockquote>
+<p>注:<br>WebChromeClient 中的 &quot;Chrome&quot; 与 Google Chrome 浏览器中的 &quot;Chrome&quot; 不同.<br>WebView 中的 &quot;Chrome&quot; 指代 WebView 外面的装饰及 UI 部分.<br>WebChromeClient 是 HTML/JavaScript 与 Android 客户端交互的中间件, 它将 WebView 中 JavaScript 产生的事件封装后传递到 Android 客户端, 从而避免一些可能的安全问题.<br>同时 WebChromeClient 也可以辅助 WebView 处理 JavaScript 对话框, 显示加载进度, 上传文件等.</p>
+</blockquote>
+<p>在 WebView 中访问了多个网页时, 按返回键会立即关闭整个页面, 而不是回退到上一个历史网页.<br>如果希望在 WebView 里浏览历史网页, 可参考如下代码:</p>
+<pre><code class="lang-js">ui.emitter.on(&#39;back_pressed&#39;, function (e) {
+    if (webView.canGoBack()) {
+        webView.goBack();
+        e.consumed = true;
+    }
+});
+</code></pre>
+<h3>newInjectableWebView(activity)<span><a class="mark" href="#web_newinjectablewebview_activity" id="web_newinjectablewebview_activity">#</a></span></h3>
+<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>UI</code></strong></p>
+<ul>
+<li><strong>activity</strong> { <span class="type"><a href="dataTypes.html#datatypes_scriptexecuteactivity">ScriptExecuteActivity</a></span> } - 上下文对象, 默认为 UI 模式下的全局 activity 对象</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_injectablewebview">InjectableWebView</a></span> }</li>
+</ul>
+<p>新建并返回一个 <a href="dataTypes.html#datatypes_injectablewebview">InjectableWebView</a> (可 <a href="glossaries.html#glossaries_注入">注入</a> 的 <a href="https://developer.android.com/reference/android/webkit/WebView">WebView</a>) 实例, 通过 activity 参数可传入不同的 org.mozilla.javascript.Context 上下文对象, 该对象主要用于执行 JavaScript 语句.</p>
+<h2>[m] newInjectableWebClient<span><a class="mark" href="#web_m_newinjectablewebclient" id="web_m_newinjectablewebclient">#</a></span></h2>
+<h3>newInjectableWebClient()<span><a class="mark" href="#web_newinjectablewebclient" id="web_newinjectablewebclient">#</a></span></h3>
+<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_injectablewebclient">InjectableWebClient</a></span> }</li>
+</ul>
+<p>新建并返回一个 <a href="dataTypes.html#datatypes_injectablewebclient">InjectableWebClient</a> (可 <a href="glossaries.html#glossaries_注入">注入</a> 的 <a href="https://developer.android.com/reference/android/webkit/WebViewClient">WebViewClient</a>) 实例.</p>
+<pre><code class="lang-js">/* 为 webView 对象重新设置一个新的客户端. */
+webView.setWebViewClient(newInjectableWebClient());
+</code></pre>
 
         </div>
     </div>

@@ -3,11 +3,13 @@
 ---
 
 <p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Mar 2, 2023.</p>
 
 ---
 
 http模块提供一些进行http请求的函数.
+
+> 注: 与 [web](web) 模块不同, web 模块主要用于 WebView 网页的注入及客户端构建.
 
 ## http.get(url[, options, callback])
 

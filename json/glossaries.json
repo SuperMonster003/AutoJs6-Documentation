@@ -204,7 +204,7 @@
         {
           "textRaw": "控件矩形外展",
           "name": "控件矩形外展",
-          "desc": "<p><a href=\"dataTypes.md#androidrect\">控件矩形</a> 边界为非整数时, 外展将对各个边界做如下取整操作:</p>\n<ul>\n<li>left - 左边界左移, 即向下取整, 类似 JavaScript 语言的 Math.floor(left)</li>\n<li>top - 上边界上移, 即向下取整, 类似 JavaScript 语言的 Math.floor(top)</li>\n<li>right - 右边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(right)</li>\n<li>bottom - 下边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(bottom)</li>\n</ul>\n<p>例如:  </p>\n<p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 外展后得到<br><code>Rect(10, 12, 121, 1883)</code></p>\n<blockquote>\n<p>注: &quot;外展&quot; 源自健身术语</p>\n</blockquote>\n",
+          "desc": "<p><a href=\"dataTypes.md#androidrect\">控件矩形</a> 边界为非整数时, 外展将对各个边界做如下取整操作:</p>\n<ul>\n<li>left - 左边界左移, 即向下取整, 类似 JavaScript 语言的 Math.floor(left)</li>\n<li>top - 上边界上移, 即向下取整, 类似 JavaScript 语言的 Math.floor(top)</li>\n<li>right - 右边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(right)</li>\n<li>bottom - 下边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(bottom)</li>\n</ul>\n<p>例如:</p>\n<p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 外展后得到<br><code>Rect(10, 12, 121, 1883)</code></p>\n<blockquote>\n<p>注: &quot;外展&quot; 源自健身术语</p>\n</blockquote>\n",
           "type": "module",
           "displayName": "控件矩形外展"
         },
@@ -214,6 +214,80 @@
           "desc": "<p><a href=\"dataTypes.md#androidrect\">控件矩形</a> 边界为非整数时, 外展将对各个边界做如下取整操作:</p>\n<ul>\n<li>left - 左边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(left)</li>\n<li>top - 上边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(top)</li>\n<li>right - 右边界左移, 即向下取整, 类似 JavaScript 语言的 Math.floor(right)</li>\n<li>bottom - 下边界上移, 即向下取整, 类似 JavaScript 语言的 Math.floor(bottom)</li>\n</ul>\n<p>例如:</p>\n<p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 内收后得到<br><code>Rect(11, 13, 120, 1882)</code></p>\n<blockquote>\n<p>注: &quot;内收&quot; 源自健身术语</p>\n</blockquote>\n",
           "type": "module",
           "displayName": "控件矩形内收"
+        },
+        {
+          "textRaw": "阈值",
+          "name": "阈值",
+          "desc": "<p>阈值, 英文 threshold, 也称 &quot;临界值&quot;.<br>阈值是令对象发生某种变化所需某种条件的值.</p>\n<p>在 AutoJs6 中, 图像与颜色相关的许多方法, 均支持通过参数传入不同类型和数值的阈值.</p>\n<p>阈值的范围通常为 <code>IntRange[0..255]</code> 和 <code>Range[0..1]</code>.</p>\n",
+          "modules": [
+            {
+              "textRaw": "相似度",
+              "name": "相似度",
+              "desc": "<p>阈值通常可与 <code>相似度 (Similarity)</code> 进行转换, 作为参数时通常也支持互相替代:</p>\n<pre><code class=\"lang-text\">%Similarity% = 1 - %Threshold% / 255\n%Threshold% = (1 - %Similarity%) * 255\n</code></pre>\n<p><code>阈值 0</code> 等效于 <code>相似度 1</code> (完全匹配, 不允许丝毫误差)<br><code>阈值 4</code> 约等效于 <code>相似度 0.984</code> (匹配时可以容忍一点误差)<br><code>阈值 128</code> 等效于 <code>相似度 0.5</code> (匹配时误差容忍相对宽松)<br><code>阈值 255</code> 等效于 <code>相似度 0</code> (完全容忍, 不常用)</p>\n",
+              "type": "module",
+              "displayName": "相似度"
+            },
+            {
+              "textRaw": "颜色匹配阈值",
+              "name": "颜色匹配阈值",
+              "desc": "<p>取值范围: IntRange[0..255]</p>\n<p>参数类型与此类阈值相关的常用方法:</p>\n<ul>\n<li><a href=\"color#m-issimilar\">colors.isSimilar</a></li>\n<li>images.findColor</li>\n<li>images.findColorInRegion</li>\n<li>images.findMultiColors</li>\n<li>images.detectsColor</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "颜色匹配阈值"
+            },
+            {
+              "textRaw": "图像匹配阈值",
+              "name": "图像匹配阈值",
+              "desc": "<p>取值范围: Range[0..1]</p>\n<p>参数类型与此类阈值相关的常用方法:</p>\n<ul>\n<li>images.findImage</li>\n<li>images.findImageInRegion</li>\n<li>images.matchTemplate</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "图像匹配阈值"
+            },
+            {
+              "textRaw": "图像阈值化阈值",
+              "name": "图像阈值化阈值",
+              "desc": "<p>取值范围: IntRange[0..255]</p>\n<p>参数类型与此类阈值相关的常用方法:</p>\n<ul>\n<li>images.threshold(a, b, <i><strong>threshold</strong></i>, c)</li>\n<li>images.adaptiveThreshold</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "图像阈值化阈值"
+            }
+          ],
+          "type": "module",
+          "displayName": "阈值"
+        },
+        {
+          "textRaw": "亮度",
+          "name": "亮度",
+          "desc": "<p>亮度既可指物理上对于光的量度, 也可指颜色上色彩的明亮程度.</p>\n<p>Luminance, Lightness 和 Brightness 都与 &quot;亮度&quot; 有关.</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:center\">术语</th>\n<th style=\"text-align:center\">常用译名</th>\n<th style=\"text-align:center\">性质</th>\n<th style=\"text-align:center\">可测量或计算</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:center\"><a href=\"#luminance\">Luminance</a></td>\n<td style=\"text-align:center\">亮度</td>\n<td style=\"text-align:center\">物理量</td>\n<td style=\"text-align:center\">√</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"#brightness\">Brightness</a></td>\n<td style=\"text-align:center\">视亮度</td>\n<td style=\"text-align:center\">感知量</td>\n<td style=\"text-align:center\">×</td>\n</tr>\n<tr>\n<td style=\"text-align:center\"><a href=\"#lightness\">Lightness</a></td>\n<td style=\"text-align:center\">明度</td>\n<td style=\"text-align:center\">感知量</td>\n<td style=\"text-align:center\">×</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "Luminance",
+              "name": "luminance",
+              "desc": "<p>在光度学和色度学中, 亮度 (luminance) 表示人眼对光强度实际感受的物理量, 即单位面积看上去有多明亮.</p>\n<p>国际单位制规定亮度的符号是 <code>Lv</code>, 单位为 <code>坎德拉每平方米 (cd/m²)</code>, 另一个常用非国际单位为 <code>尼特 (nit)</code>.<br>亮度是一个物理量, 它可被测量及计算.</p>\n<p><a href=\"#lightness\">Lightness</a> 和 <a href=\"#brightness\">Brightness</a> 用于表示人眼对光亮的实际感受.<br>这个感受是一个感知量, 与物理量不同, 感知量不可测量, 也不可计算.</p>\n<p>相同的食盐, 不同人品尝有不同的咸度感受; 同样地, 相同的颜色, 不同人观察也会有不同的亮度感受.</p>\n<p>与 Luminance 相关的参考资料:</p>\n<ul>\n<li>亮度 (Luminance) - <a href=\"https://en.wikipedia.org/wiki/Luminance\">Wikipedia (英)</a></li>\n</ul>\n",
+              "type": "module",
+              "displayName": "Luminance"
+            },
+            {
+              "textRaw": "Brightness",
+              "name": "brightness",
+              "desc": "<p>视亮度 (Brightness) 是对于光源或物体表面明暗的视知觉特性, 是一个感知量.<br>视亮度是视觉的特性, 对视觉目标的辐射或反射的光亮度的感知.<br>这种感知对于光的亮度不是线性的, 而是依赖于视觉环境.  </p>\n<p>与 Brightness 相关的参考资料:</p>\n<ul>\n<li>视亮度 (Brightness) - <a href=\"https://en.wikipedia.org/wiki/Brightness\">Wikipedia (英)</a></li>\n<li>芒克-怀特错觉 (White&#39;s Illusion) - <a href=\"https://en.wikipedia.org/wiki/White%27s_illusion\">Wikipedia (英)</a></li>\n<li>侧抑制 (Lateral Inhibition) - <a href=\"https://en.wikipedia.org/wiki/Lateral_inhibition\">Wikipedia (英)</a></li>\n</ul>\n",
+              "type": "module",
+              "displayName": "Brightness"
+            },
+            {
+              "textRaw": "Lightness",
+              "name": "lightness",
+              "desc": "<p>明度 (Lightness) 是一个物体与同样亮的白色物体相比后的明亮程度.</p>\n<p>与 Lightness 相关的参考资料:</p>\n<ul>\n<li>明度 (Lightness) - <a href=\"https://en.wikipedia.org/wiki/Lightness\">Wikipedia (英)</a></li>\n</ul>\n",
+              "type": "module",
+              "displayName": "Lightness"
+            }
+          ],
+          "type": "module",
+          "displayName": "亮度"
+        },
+        {
+          "textRaw": "注入",
+          "name": "注入",
+          "desc": "<p>代码注入 (Code Injection) 是因处理无效数据的而引发的非预期运行结果.  </p>\n<p>代码注入可被攻击者用来导入代码到某特定的计算机程序, 以改变程序的执行进程或目的.</p>\n<p>常用的代码注入包含 [ 脚本注入 (XSS) / SQL 注入 / PHP 注入 / ASP 注入 ] 等.</p>\n<blockquote>\n<p>参阅: <a href=\"https://en.wikipedia.org/wiki/Code_injection\">Wikipedia (英)</a> / <a href=\"https://zh.wikipedia.org/wiki/%E4%BB%A3%E7%A2%BC%E6%B3%A8%E5%85%A5\">Wikipedia (中)</a> </p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "注入"
         }
       ],
       "type": "module",

@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
 <li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
@@ -107,7 +108,7 @@
 <div class="line"></div>
 
 <ul>
-<li><a class="nav-https-github-com-SuperMonster003-AutoJs6-" href="https://github.com/SuperMonster003/AutoJs6/">GitHub - 应用项目地址</a></li>
+<li><a class="nav-https-github-com-SuperMonster003-AutoJs6" href="https://github.com/SuperMonster003/AutoJs6">GitHub - 应用项目地址</a></li>
 <li><a class="nav-https-github-com-SuperMonster003-AutoJs6-Documentation" href="https://github.com/SuperMonster003/AutoJs6-Documentation">GitHub - 文档项目地址</a></li>
 </ul>
 
@@ -164,6 +165,20 @@
 <li><span class="stability_undefined"><a href="#glossaries_18">子项信息集控件</a></span></li>
 <li><span class="stability_undefined"><a href="#glossaries_19">控件矩形外展</a></span></li>
 <li><span class="stability_undefined"><a href="#glossaries_20">控件矩形内收</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_21">阈值</a></span><ul>
+<li><span class="stability_undefined"><a href="#glossaries_22">相似度</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_23">颜色匹配阈值</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_24">图像匹配阈值</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_25">图像阈值化阈值</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#glossaries_26">亮度</a></span><ul>
+<li><span class="stability_undefined"><a href="#glossaries_luminance">Luminance</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_brightness">Brightness</a></span></li>
+<li><span class="stability_undefined"><a href="#glossaries_lightness">Lightness</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#glossaries_27">注入</a></span></li>
 </ul>
 </li>
 </ul>
@@ -576,7 +591,7 @@ scrollable().find().some((w) =&gt; {
 <li>right - 右边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(right)</li>
 <li>bottom - 下边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(bottom)</li>
 </ul>
-<p>例如:  </p>
+<p>例如:</p>
 <p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 外展后得到<br><code>Rect(10, 12, 121, 1883)</code></p>
 <blockquote>
 <p>注: &quot;外展&quot; 源自健身术语</p>
@@ -593,6 +608,104 @@ scrollable().find().some((w) =&gt; {
 <p><code>Rect(10.9, 12.6 - 120.37, 1882.02)</code> 内收后得到<br><code>Rect(11, 13, 120, 1882)</code></p>
 <blockquote>
 <p>注: &quot;内收&quot; 源自健身术语</p>
+</blockquote>
+<h2>阈值<span><a class="mark" href="#glossaries_21" id="glossaries_21">#</a></span></h2>
+<p>阈值, 英文 threshold, 也称 &quot;临界值&quot;.<br>阈值是令对象发生某种变化所需某种条件的值.</p>
+<p>在 AutoJs6 中, 图像与颜色相关的许多方法, 均支持通过参数传入不同类型和数值的阈值.</p>
+<p>阈值的范围通常为 <code>IntRange[0..255]</code> 和 <code>Range[0..1]</code>.</p>
+<h3>相似度<span><a class="mark" href="#glossaries_22" id="glossaries_22">#</a></span></h3>
+<p>阈值通常可与 <code>相似度 (Similarity)</code> 进行转换, 作为参数时通常也支持互相替代:</p>
+<pre><code class="lang-text">%Similarity% = 1 - %Threshold% / 255
+%Threshold% = (1 - %Similarity%) * 255
+</code></pre>
+<p><code>阈值 0</code> 等效于 <code>相似度 1</code> (完全匹配, 不允许丝毫误差)<br><code>阈值 4</code> 约等效于 <code>相似度 0.984</code> (匹配时可以容忍一点误差)<br><code>阈值 128</code> 等效于 <code>相似度 0.5</code> (匹配时误差容忍相对宽松)<br><code>阈值 255</code> 等效于 <code>相似度 0</code> (完全容忍, 不常用)</p>
+<h3>颜色匹配阈值<span><a class="mark" href="#glossaries_23" id="glossaries_23">#</a></span></h3>
+<p>取值范围: IntRange[0..255]</p>
+<p>参数类型与此类阈值相关的常用方法:</p>
+<ul>
+<li><a href="color.html#color_m_issimilar">colors.isSimilar</a></li>
+<li>images.findColor</li>
+<li>images.findColorInRegion</li>
+<li>images.findMultiColors</li>
+<li>images.detectsColor</li>
+</ul>
+<h3>图像匹配阈值<span><a class="mark" href="#glossaries_24" id="glossaries_24">#</a></span></h3>
+<p>取值范围: Range[0..1]</p>
+<p>参数类型与此类阈值相关的常用方法:</p>
+<ul>
+<li>images.findImage</li>
+<li>images.findImageInRegion</li>
+<li>images.matchTemplate</li>
+</ul>
+<h3>图像阈值化阈值<span><a class="mark" href="#glossaries_25" id="glossaries_25">#</a></span></h3>
+<p>取值范围: IntRange[0..255]</p>
+<p>参数类型与此类阈值相关的常用方法:</p>
+<ul>
+<li>images.threshold(a, b, <i><strong>threshold</strong></i>, c)</li>
+<li>images.adaptiveThreshold</li>
+</ul>
+<h2>亮度<span><a class="mark" href="#glossaries_26" id="glossaries_26">#</a></span></h2>
+<p>亮度既可指物理上对于光的量度, 也可指颜色上色彩的明亮程度.</p>
+<p>Luminance, Lightness 和 Brightness 都与 &quot;亮度&quot; 有关.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">术语</th>
+<th style="text-align:center">常用译名</th>
+<th style="text-align:center">性质</th>
+<th style="text-align:center">可测量或计算</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><a href="#glossaries_luminance">Luminance</a></td>
+<td style="text-align:center">亮度</td>
+<td style="text-align:center">物理量</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="#glossaries_brightness">Brightness</a></td>
+<td style="text-align:center">视亮度</td>
+<td style="text-align:center">感知量</td>
+<td style="text-align:center">×</td>
+</tr>
+<tr>
+<td style="text-align:center"><a href="#glossaries_lightness">Lightness</a></td>
+<td style="text-align:center">明度</td>
+<td style="text-align:center">感知量</td>
+<td style="text-align:center">×</td>
+</tr>
+</tbody>
+</table>
+<h3>Luminance<span><a class="mark" href="#glossaries_luminance" id="glossaries_luminance">#</a></span></h3>
+<p>在光度学和色度学中, 亮度 (luminance) 表示人眼对光强度实际感受的物理量, 即单位面积看上去有多明亮.</p>
+<p>国际单位制规定亮度的符号是 <code>Lv</code>, 单位为 <code>坎德拉每平方米 (cd/m²)</code>, 另一个常用非国际单位为 <code>尼特 (nit)</code>.<br>亮度是一个物理量, 它可被测量及计算.</p>
+<p><a href="#glossaries_lightness">Lightness</a> 和 <a href="#glossaries_brightness">Brightness</a> 用于表示人眼对光亮的实际感受.<br>这个感受是一个感知量, 与物理量不同, 感知量不可测量, 也不可计算.</p>
+<p>相同的食盐, 不同人品尝有不同的咸度感受; 同样地, 相同的颜色, 不同人观察也会有不同的亮度感受.</p>
+<p>与 Luminance 相关的参考资料:</p>
+<ul>
+<li>亮度 (Luminance) - <a href="https://en.wikipedia.org/wiki/Luminance">Wikipedia (英)</a></li>
+</ul>
+<h3>Brightness<span><a class="mark" href="#glossaries_brightness" id="glossaries_brightness">#</a></span></h3>
+<p>视亮度 (Brightness) 是对于光源或物体表面明暗的视知觉特性, 是一个感知量.<br>视亮度是视觉的特性, 对视觉目标的辐射或反射的光亮度的感知.<br>这种感知对于光的亮度不是线性的, 而是依赖于视觉环境.  </p>
+<p>与 Brightness 相关的参考资料:</p>
+<ul>
+<li>视亮度 (Brightness) - <a href="https://en.wikipedia.org/wiki/Brightness">Wikipedia (英)</a></li>
+<li>芒克-怀特错觉 (White&#39;s Illusion) - <a href="https://en.wikipedia.org/wiki/White%27s_illusion">Wikipedia (英)</a></li>
+<li>侧抑制 (Lateral Inhibition) - <a href="https://en.wikipedia.org/wiki/Lateral_inhibition">Wikipedia (英)</a></li>
+</ul>
+<h3>Lightness<span><a class="mark" href="#glossaries_lightness" id="glossaries_lightness">#</a></span></h3>
+<p>明度 (Lightness) 是一个物体与同样亮的白色物体相比后的明亮程度.</p>
+<p>与 Lightness 相关的参考资料:</p>
+<ul>
+<li>明度 (Lightness) - <a href="https://en.wikipedia.org/wiki/Lightness">Wikipedia (英)</a></li>
+</ul>
+<h2>注入<span><a class="mark" href="#glossaries_27" id="glossaries_27">#</a></span></h2>
+<p>代码注入 (Code Injection) 是因处理无效数据的而引发的非预期运行结果.  </p>
+<p>代码注入可被攻击者用来导入代码到某特定的计算机程序, 以改变程序的执行进程或目的.</p>
+<p>常用的代码注入包含 [ 脚本注入 (XSS) / SQL 注入 / PHP 注入 / ASP 注入 ] 等.</p>
+<blockquote>
+<p>参阅: <a href="https://en.wikipedia.org/wiki/Code_injection">Wikipedia (英)</a> / <a href="https://zh.wikipedia.org/wiki/%E4%BB%A3%E7%A2%BC%E6%B3%A8%E5%85%A5">Wikipedia (中)</a> </p>
 </blockquote>
 
         </div>

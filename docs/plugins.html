@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
 <li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
@@ -107,7 +108,7 @@
 <div class="line"></div>
 
 <ul>
-<li><a class="nav-https-github-com-SuperMonster003-AutoJs6-" href="https://github.com/SuperMonster003/AutoJs6/">GitHub - 应用项目地址</a></li>
+<li><a class="nav-https-github-com-SuperMonster003-AutoJs6" href="https://github.com/SuperMonster003/AutoJs6">GitHub - 应用项目地址</a></li>
 <li><a class="nav-https-github-com-SuperMonster003-AutoJs6-Documentation" href="https://github.com/SuperMonster003/AutoJs6-Documentation">GitHub - 文档项目地址</a></li>
 </ul>
 
@@ -128,18 +129,137 @@
         <div id="toc">
             <h2>目录</h2>
             <ul>
-<li><span class="stability_undefined"><a href="#plugins_plugins">插件 (Plugins)</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_plugins">插件 (Plugins)</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins">应用插件</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_1">项目插件</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_2">内置扩展插件</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_m_load">[m] load</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_load_apppluginpackagename">load(appPluginPackageName)</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_load_projectpluginname">load(projectPluginName)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_extend">[m] extend</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_extend_modulenames">extend(...moduleNames)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_extendall">[m] extendAll</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_extendall">extendAll()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_extendallbut">[m] extendAllBut</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_extendallbut_modulenames">extendAllBut(...moduleNames)</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 
         </div>
 
         <div id="apicontent">
             <h1>插件 (Plugins)<span><a class="mark" href="#plugins_plugins" id="plugins_plugins">#</a></span></h1>
+<p>在 AutoJs6 中, 插件分为 [ 应用插件 / 项目插件 / 内置扩展插件 ].</p>
+<p>plugins 模块主要用于插件及扩展模块的加载并使其功能生效.</p>
+<h2>应用插件<span><a class="mark" href="#plugins" id="plugins">#</a></span></h2>
+<p>应用插件通常是一个由开发者编写的可安装的 APK 文件, 安装插件后可由 AutoJs6 通过 <a href="#plugins_m_load">plugins.load</a> 方法加载并使用插件.</p>
+<p>应用插件的使用步骤:</p>
+<ul>
+<li>按需寻找或自行开发插件 (APK 格式)</li>
+<li>安装到指定设备</li>
+<li>脚本中将插件包名以字符串形式传入 plugins.load 方法并赋值给一个变量</li>
+<li>这个变量即指向插件的导出对象 (module.exports)</li>
+</ul>
+<p>加载及使用方式:</p>
+<pre><code class="lang-js">let { exp } = plugins.load(&#39;org.autojs.autojs.plugin.demo&#39;);
+exp.test(&#39;hello&#39;);
+</code></pre>
+<h2>项目插件<span><a class="mark" href="#plugins_1" id="plugins_1">#</a></span></h2>
+<p>项目插件是依附于项目的一组 JavaScript 模块, 它们位于项目根目录的 <code>plugins</code> 文件夹中, 由 AutoJs6 通过 <a href="#plugins_m_load">plugins.load</a> 方法加载并使用.</p>
+<p>例如项目结构 (部分) 如下:</p>
+<pre><code class="lang-text">┌ modules ┬ moduleA.js
+│         └ moduleB.js
+│         ┌ pluginA.js
+├ plugins ┼ pluginB.js
+│         └ pluginC.js
+└ main.js
+</code></pre>
+<p>对于此项目, <code>pluginA.js</code>, <code>pluginB.js</code> 及 <code>pluginC.js</code> 均称为项目插件, 加载方式如下:</p>
+<pre><code class="lang-js">plugins.load(&#39;pluginA&#39;);
+plugins.load(&#39;pluginA.js&#39;); /* 同上. */
+</code></pre>
+<h2>内置扩展插件<span><a class="mark" href="#plugins_2" id="plugins_2">#</a></span></h2>
+<p>内置扩展插件相当于内置的项目插件, 它们是内置于 AutoJs6 软件中的, 可通过调用 <a href="#plugins_m_extend">plugins.extend</a> 等方法选择性地启用部分或全部内置扩展插件, 也称作内置扩展模块.</p>
+<p>加载方式:</p>
+<pre><code class="lang-js">/* 启用 Array 内置扩展插件. */
+plugins.extend(&#39;Arrayx&#39;);
+
+/* 启用全部内置扩展插件. */
+plugins.extendAll();
+</code></pre>
+<p>截至 2023 年 2 月, AutoJs6 内置了以下扩展插件:</p>
+<ul>
+<li><a href="arrayx.html">Arrayx - Array 扩展</a></li>
+<li><a href="numberx.html">Numberx - Number 扩展</a></li>
+<li><a href="mathx.html">Mathx - Math 扩展</a></li>
+</ul>
 <hr>
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">plugins</p>
 
 <hr>
+<h2>[m] load<span><a class="mark" href="#plugins_m_load" id="plugins_m_load">#</a></span></h2>
+<h3>load(appPluginPackageName)<span><a class="mark" href="#plugins_load_apppluginpackagename" id="plugins_load_apppluginpackagename">#</a></span></h3>
+<p><strong><code>[6.2.0]</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<ul>
+<li><strong>packageName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 应用插件的包名</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+</ul>
+<p>加载 <a href="#plugins_应用插件">应用插件</a>.</p>
+<pre><code class="lang-js">/* 一个可能的样例. */
+plugins.load(&#39;org.autojs.autojs.plugin.demo&#39;);
+</code></pre>
+<h3>load(projectPluginName)<span><a class="mark" href="#plugins_load_projectpluginname" id="plugins_load_projectpluginname">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<ul>
+<li><strong>packageName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 项目插件名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> }</li>
+</ul>
+<p>加载 <a href="#plugins_项目插件">项目插件</a>.</p>
+<h2>[m] extend<span><a class="mark" href="#plugins_m_extend" id="plugins_m_extend">#</a></span></h2>
+<h3>extend(...moduleNames)<span><a class="mark" href="#plugins_extend_modulenames" id="plugins_extend_modulenames">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong></p>
+<ul>
+<li><strong>moduleNames</strong> { <span class="type"><a href="documentation.html#documentation_可变参数">...</a><a href="dataTypes.html#datatypes_extendmodulesnames">ExtendModulesNames</a><a href="documentation.html#documentation_可变参数">[]</a></span> } - 内置扩展插件名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>加载指定的 <a href="#plugins_内置扩展插件">内置扩展插件</a>.</p>
+<pre><code class="lang-js">/* 启用 Array 内置扩展插件. */
+plugins.extend(&#39;Arrayx&#39;);
+
+/* 启用 Array 和 Number 内置扩展插件. */
+plugins.extend(&#39;Arrayx&#39;, &#39;Numberx&#39;);
+</code></pre>
+<h2>[m] extendAll<span><a class="mark" href="#plugins_m_extendall" id="plugins_m_extendall">#</a></span></h2>
+<h3>extendAll()<span><a class="mark" href="#plugins_extendall" id="plugins_extendall">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>加载所有的 <a href="#plugins_内置扩展插件">内置扩展插件</a>.</p>
+<pre><code class="lang-js">plugins.extendAll();
+</code></pre>
+<p>如需在所有脚本均自动加载所有内置扩展插件, 而无需每次使用 <code>plugins.extendAll()</code>, 可对 AutoJs6 进行如下设置:</p>
+<pre><code class="lang-text">AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]
+</code></pre>
+<h2>[m] extendAllBut<span><a class="mark" href="#plugins_m_extendallbut" id="plugins_m_extendallbut">#</a></span></h2>
+<h3>extendAllBut(...moduleNames)<span><a class="mark" href="#plugins_extendallbut_modulenames" id="plugins_extendallbut_modulenames">#</a></span></h3>
+<p><strong><code>6.2.0</code></strong></p>
+<ul>
+<li><strong>moduleNames</strong> { <span class="type"><a href="documentation.html#documentation_可变参数">...</a><a href="dataTypes.html#datatypes_extendmodulesnames">ExtendModulesNames</a><a href="documentation.html#documentation_可变参数">[]</a></span> } - 内置扩展插件名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>加载所有的 <a href="#plugins_内置扩展插件">内置扩展插件</a>, 但排除指定的插件.</p>
+<pre><code class="lang-js">plugins.extendAllBut(&#39;Mathx&#39;); /* 加载除 Math 外的全部内置扩展插件. */
+</code></pre>
 
         </div>
     </div>

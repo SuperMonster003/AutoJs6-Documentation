@@ -84,6 +84,15 @@ function next(er, input) {
             require('./html.js')(o, function (er, html) {
                     if (er) throw er;
                     if (out) {
+
+                        // FIXME by SuperMonster003 on Mar 2, 2023.
+                        //  ! A better idea is needed.
+                        if (html.match('__CONTENT__')) {
+                            html = html
+                                .replace(/__CONTENT__#39;/g, `$$'`)
+                                .replace(/__CONTENT__quot/g, `$$"`);
+                        }
+
                         fs.writeFileSync(out, html);
                     } else {
                         console.log(html);

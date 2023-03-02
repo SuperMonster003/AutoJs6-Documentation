@@ -87,6 +87,7 @@
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
 <li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
 <li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
 </ul>
 <div class="line"></div>
@@ -107,7 +108,7 @@
 <div class="line"></div>
 
 <ul>
-<li><a class="nav-https-github-com-SuperMonster003-AutoJs6-" href="https://github.com/SuperMonster003/AutoJs6/">GitHub - 应用项目地址</a></li>
+<li><a class="nav-https-github-com-SuperMonster003-AutoJs6" href="https://github.com/SuperMonster003/AutoJs6">GitHub - 应用项目地址</a></li>
 <li><a class="nav-https-github-com-SuperMonster003-AutoJs6-Documentation" href="https://github.com/SuperMonster003/AutoJs6-Documentation">GitHub - 文档项目地址</a></li>
 </ul>
 
@@ -129,16 +130,14 @@
             <h2>目录</h2>
             <ul>
 <li><span class="stability_undefined"><a href="#storages_storages">存储 (Storages)</a></span><ul>
-<li><span class="stability_undefined"><a href="#storages_storages_create_name">storages.create(name)</a></span></li>
-<li><span class="stability_undefined"><a href="#storages_storages_remove_name">storages.remove(name)</a></span></li>
+<li><span class="stability_undefined"><a href="#storages_m_create">[m] create</a></span><ul>
+<li><span class="stability_undefined"><a href="#storages_create_name">create(name)</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#storages_storages_1">Storages</a></span><ul>
-<li><span class="stability_undefined"><a href="#storages_storage_get_key_defaultvalue">Storage.get(key[, defaultValue])</a></span></li>
-<li><span class="stability_undefined"><a href="#storages_storage_put_key_value">Storage.put(key, value)</a></span></li>
-<li><span class="stability_undefined"><a href="#storages_storage_remove_key">Storage.remove(key)</a></span></li>
-<li><span class="stability_undefined"><a href="#storages_storage_contains_key">Storage.contains(key)</a></span></li>
-<li><span class="stability_undefined"><a href="#storages_storage_clear">Storage.clear()</a></span></li>
+<li><span class="stability_undefined"><a href="#storages_m_remove">[m] remove</a></span><ul>
+<li><span class="stability_undefined"><a href="#storages_remove_name">remove(name)</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -147,61 +146,98 @@
 
         <div id="apicontent">
             <h1>存储 (Storages)<span><a class="mark" href="#storages_storages" id="storages_storages">#</a></span></h1>
+<p>storages 模块可用于保存 [ 简单数据 / 配置信息 / 列表清单 ] 等.<br>保存的数据在脚本间共享, 因此不适于敏感数据的存储.</p>
+<p>保存数据时, 需要一个名称, 类似命名空间.<br>一个名称对应一个独立的本地存储.<br>但无法像 Web 开发中 LocalStorage 一样提供域名独立的存储, 因为脚本路径可能随时改变.</p>
+<p>保存的数据仅在以下情况下会被删除:</p>
+<ul>
+<li>AutoJs6 应用被卸载或清除数据</li>
+<li>使用 <a href="#storages_m_remove">storages.remove</a> / <a href="storageType.html#storagetype_m_remove">Storage#remove</a> / <a href="storageType.html#storagetype_m_clear">Storage#clear</a> 等方法删除</li>
+</ul>
+<p>支持存入的数据类型:</p>
+<ul>
+<li><a href="dataTypes.html#datatypes_number">number</a></li>
+<li><a href="dataTypes.html#datatypes_boolean">boolean</a></li>
+<li><a href="dataTypes.html#datatypes_string">string</a></li>
+<li><a href="dataTypes.html#datatypes_null">null</a></li>
+<li><a href="dataTypes.html#datatypes_array">Array</a></li>
+<li><a href="dataTypes.html#datatypes_object">Object</a></li>
+<li>... ...</li>
+</ul>
+<p>具体的存入规则详见 <a href="storageType.html#storagetype_m_put">Storage#put</a> 小节.</p>
+<p>存入时, 由 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify">JSON.stringify</a> 序列化数据为 <a href="dataTypes.html#datatypes_string">string</a> 类型后再存入,<br>读取时, 由 <a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse">JSON.parse</a> 还原为原本的数据类型.</p>
 <hr>
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">storages</p>
 
 <hr>
-<p>storages模块提供了保存简单数据、用户配置等的支持. 保存的数据除非应用被卸载或者被主动删除, 否则会一直保留.</p>
-<p>storages支持<code>number</code>, <code>boolean</code>, <code>string</code>等数据类型以及把<code>Object</code>, <code>Array</code>用<code>JSON.stringify</code>序列化存取.</p>
-<p>storages保存的数据在脚本之间是共享的, 任何脚本只要知道storage名称便可以获取到相应的数据, 因此它不能用于敏感数据的储存.
-storages无法像Web开发中LocalStorage一样提供根据域名独立的存储, 因为脚本的路径随时可能改变.</p>
-<h2>storages.create(name)<span><a class="mark" href="#storages_storages_create_name" id="storages_storages_create_name">#</a></span></h2>
+<h2>[m] create<span><a class="mark" href="#storages_m_create" id="storages_m_create">#</a></span></h2>
+<h3>create(name)<span><a class="mark" href="#storages_create_name" id="storages_create_name">#</a></span></h3>
 <div class="signature"><ul>
-<li><code>name</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 本地存储名称</li>
+<li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 存储名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="storageType.html">Storage</a></span> }</li>
 </ul>
-</div><p>创建一个本地存储并返回一个<code>Storage</code>对象. 不同名称的本地存储的数据是隔开的, 而相同名称的本地存储的数据是共享的.</p>
-<p>例如在一个脚本中, 创建名称为ABC的存储并存入a=123:</p>
-<pre><code>var storage = storages.create(&quot;ABC&quot;);
-storage.put(&quot;a&quot;, 123);
-</code></pre><p>而在另一个脚本中是可以获取到ABC以及a的值的：</p>
-<pre><code>var storage = storages.create(&quot;ABC&quot;);
-log(&quot;a = &quot; + storage.get(&quot;a&quot;));
-</code></pre><p>因此, 本地存储的名称比较重要, 尽量使用含有域名、作者邮箱等唯一信息的名称来避免冲突, 例如：</p>
-<pre><code>var storage = storages.create(&quot;2732014414@qq.com:ABC&quot;);
-</code></pre><h2>storages.remove(name)<span><a class="mark" href="#storages_storages_remove_name" id="storages_storages_remove_name">#</a></span></h2>
+</div><p>以 <code>name</code> 参数为名称创建一个本地存储, 并返回 <a href="storageType.html">Storage</a> 实例:</p>
+<pre><code class="lang-js">/* 创建一个名为 fruit 的本地存储. */
+let sto = storages.create(&#39;fruit&#39;);
+
+/* 存入 &quot;键值对&quot; 数据. */
+sto.put(&#39;apple&#39;, 10);
+sto.put(&#39;banana&#39;, 20);
+
+/* 访问数据. */
+sto.get(&#39;apple&#39;); // 10
+sto.get(&#39;banana&#39;); // 20
+sto.get(&#39;cherry&#39;); // undefined
+</code></pre>
+<p>不同的 <code>name</code> 参数可以创建不同的本地存储:</p>
+<pre><code class="lang-js">let stoFruit = storages.create(&#39;fruit&#39;);
+let stoPhone = storages.create(&#39;phone&#39;);
+
+/* &quot;键&quot; 名均为 apple, 不同的本地存储之间数据独立. */
+stoFruit.put(&#39;apple&#39;, 7);
+stoPhone.put(&#39;apple&#39;, 3);
+
+/* 访问数据 */
+stoFruit.get(&#39;apple&#39;) // 7
+stoPhone.get(&#39;apple&#39;) // 3
+</code></pre>
+<p>如果 <code>name</code> 参数对应的本地存储已存在, 则返回一个本地存储副本:</p>
+<pre><code class="lang-js">let sto = storages.create(&#39;fruit&#39;);
+sto.put(&#39;apple&#39;, 10);
+
+/* 名为 fruit 的本地存储已创建, 因此返回的是存储副本. */
+let stoCopied = storages.create(&#39;fruit&#39;);
+
+/* 虽然 stoCopied 没有存入 apple 数据, 但 fruit 本地存储中存在. */
+stoCopied.get(&#39;apple&#39;); // 10
+
+/* 副本与原始的本地存储并非引用关系. */
+sto === stoCopied; // false
+</code></pre>
+<p>为保证数据安全及唯一性, <code>name</code> 参数应尽量具体:</p>
+<pre><code class="lang-js">storages.create(&#39;project-publishing-schedule&#39;);
+</code></pre>
+<h2>[m] remove<span><a class="mark" href="#storages_m_remove" id="storages_m_remove">#</a></span></h2>
+<h3>remove(name)<span><a class="mark" href="#storages_remove_name" id="storages_remove_name">#</a></span></h3>
 <div class="signature"><ul>
-<li><code>name</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 本地存储名称</li>
+<li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 存储名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - name 参数对应的本地存储是否存在</li>
 </ul>
-</div><p>删除一个本地存储以及他的全部数据. 如果该存储不存在, 返回false；否则返回true.</p>
-<h1>Storages<span><a class="mark" href="#storages_storages_1" id="storages_storages_1">#</a></span></h1>
-<h2>Storage.get(key[, defaultValue])<span><a class="mark" href="#storages_storage_get_key_defaultvalue" id="storages_storage_get_key_defaultvalue">#</a></span></h2>
-<div class="signature"><ul>
-<li><code>key</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 键值</li>
-<li><code>defaultValue</code> { <span class="type">any</span> } 可选, 默认值</li>
-</ul>
-</div><p>从本地存储中取出键值为key的数据并返回.</p>
-<p>如果该存储中不包含该数据, 这时若指定了默认值参数则返回默认值, 否则返回undefined.</p>
-<p>返回的数据可能是任意数据类型, 这取决于使用<code>Storage.put</code>保存该键值的数据时的数据类型.</p>
-<h2>Storage.put(key, value)<span><a class="mark" href="#storages_storage_put_key_value" id="storages_storage_put_key_value">#</a></span></h2>
-<div class="signature"><ul>
-<li><code>key</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 键值</li>
-<li><code>value</code> { <span class="type">any</span> } 值</li>
-</ul>
-</div><p>把值value保存到本地存储中. value可以是undefined以外的任意数据类型. 如果value为undefined则抛出TypeError.</p>
-<p>存储的过程实际上是使用JSON.stringify把value转换为字符串再保存, 因此value必须是可JSON化的才能被接受.</p>
-<h2>Storage.remove(key)<span><a class="mark" href="#storages_storage_remove_key" id="storages_storage_remove_key">#</a></span></h2>
-<div class="signature"><ul>
-<li><code>key</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 键值</li>
-</ul>
-</div><p>移除键值为key的数据. 不返回任何值.</p>
-<h2>Storage.contains(key)<span><a class="mark" href="#storages_storage_contains_key" id="storages_storage_contains_key">#</a></span></h2>
-<div class="signature"><ul>
-<li><code>key</code> { <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#String_type" class="type">string</a> } 键值</li>
-</ul>
-</div><p>返回该本地存储是否包含键值为key的数据. 是则返回true, 否则返回false.</p>
-<h2>Storage.clear()<span><a class="mark" href="#storages_storage_clear" id="storages_storage_clear">#</a></span></h2>
-<p>移除该本地存储的所有数据. 不返回任何值.</p>
+</div><p>清除名为 <code>name</code> 的本地存储包含的全部数据.</p>
+<p>如果名为 <code>name</code> 的本地存储已存在, 返回 <code>true</code>, 否则返回 <code>false</code>.</p>
+<pre><code class="lang-js">let sto = storages.create(&#39;fruit&#39;);
+sto.put(&#39;apple&#39;, 10);
+sto.get(&#39;apple&#39;); // 10
+
+/* 相当于 storages.create(&#39;fruit&#39;).clear(); . */
+storages.remove(&#39;fruit&#39;); // true
+
+/* 执行 remove 方法后, sto 对象将不存在任何存储数据. */
+sto.get(&#39;apple&#39;); // undefined
+
+/* 但 sto 依然可以存放新的数据. */
+sto.put(&#39;banana&#39;, 20);
+sto.get(&#39;banana&#39;); // 20
+</code></pre>
 
         </div>
     </div>

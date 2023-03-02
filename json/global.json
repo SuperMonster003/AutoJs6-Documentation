@@ -154,17 +154,27 @@
                   ]
                 }
               ]
-            },
+            }
+          ],
+          "modules": [
             {
-              "textRaw": "toast.dismissAll()",
-              "type": "method",
-              "name": "dismissAll",
-              "desc": "<p><strong><code>Global</code></strong> - <ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</p>\n<p>强制取消显示所有消息框.</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\ntoast(&quot;world&quot;);\ntoast(&quot;of&quot;);\ntoast(&quot;JavaScript&quot;);\n\nsleep(1e3);\n\n/* &quot;hello&quot; 显示 1 秒后消失, &quot;world&quot; 及其他消息框均不再显示. */\n/* 若无 sleep 语句, 由于 toast 是异步的, 上述消息框均不会显示. */\ntoast.dismissAll();\n\n/* dismissAll 仅对已在队列中的消息框有效, 因此下述消息框正常显示. */\ntoast(&quot;forcibly dismissed&quot;);\n</code></pre>\n<blockquote>\n<p>注: 强制取消显示仅对当前脚本有效, 对其他脚本及应用程序无效.</p>\n</blockquote>\n",
-              "signatures": [
+              "textRaw": "[m] dismissAll",
+              "name": "[m]_dismissall",
+              "methods": [
                 {
-                  "params": []
+                  "textRaw": "dismissAll()",
+                  "type": "method",
+                  "name": "dismissAll",
+                  "desc": "<p><strong><code>Global</code></strong> - <ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</p>\n<p>强制消除所有由 AutoJs6 产生的消息框, 包括正在显示的及等待显示的.</p>\n<p>使用方式:</p>\n<pre><code class=\"lang-js\">toast.dismissAll(); /* 立即消除所有消息框. */\n</code></pre>\n<p>示例:</p>\n<pre><code class=\"lang-js\">toast(&quot;hello&quot;);\ntoast(&quot;world&quot;);\ntoast(&quot;of&quot;);\ntoast(&quot;JavaScript&quot;);\n\nsleep(1e3);\n\n/* &quot;hello&quot; 显示 1 秒后消失, &quot;world&quot; 及其他消息框均不再显示. */\n/* 若无 sleep 语句, 由于 toast 是异步的, 上述消息框均不会显示. */\ntoast.dismissAll();\n\n/* dismissAll 仅对已在队列中的消息框有效, 因此下述消息框正常显示. */\ntoast(&quot;forcibly dismissed&quot;);\n</code></pre>\n<blockquote>\n<p>注: 强制取消显示仅对当前脚本有效, 对其他脚本及应用程序无效.</p>\n</blockquote>\n",
+                  "signatures": [
+                    {
+                      "params": []
+                    }
+                  ]
                 }
-              ]
+              ],
+              "type": "module",
+              "displayName": "[m] dismissAll"
             }
           ],
           "type": "module",
@@ -350,7 +360,7 @@
               "textRaw": "wait(condition, callback)",
               "type": "method",
               "name": "wait",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition\">wait(condition)</a> 增加回调对象.</p>\n<p>回调对象集合了两个方法, then 与 else 分别对应等待成功与等待失败的情况:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; device.isScreenOff(), {\n    then: () =&gt; console.log(&quot;等待屏幕关闭成功&quot;),\n    else: () =&gt; console.log(&quot;等待屏幕关闭超时&quot;),\n});\n</code></pre>\n<p>两种方法都将最后一次检查结果作为实参, 可在方法体内直接使用:</p>\n<pre><code class=\"lang-js\">/* 等待一个落在 99.99 到 100 区间的随机数. */\nwait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功, 数字是: ${o}`);\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n    },\n});\n</code></pre>\n<blockquote>\n<p>注: else 回调方法的参数只能是 [ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ],<br>因此 else 的参数几乎不会用到.</p>\n</blockquote>\n<p>需特别注意, 回调方法的返回值具有穿透性.<br>在回调方法内使用 return 语句, 将直接影响 wait() 的返回值 (undefined 除外).</p>\n<p>上述示例中, then 和 else 回调都没有返回值, 因此 wait() 返回值是 boolean 类型, 表示等待条件是否满足.<br>下述示例在回调函数中增加了返回值 (非 undefined), 则 wait() 也将返回这个值.</p>\n<pre><code class=\"lang-js\">let result = wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功`);\n        return o;\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n        return NaN;\n    },\n});\nresult; /* 一个数字 (如 99.99732126036437) 或 NaN. */\n</code></pre>\n<p>上述示例如果等待条件满足, 则返回 then 的返回值 (number 类型),<br>等待条件超时, 则返回 else 的返回值 (NaN, 也为 number 类型).</p>\n<p>如果去掉 else 的返回语句, 则等待条件超时后, wait() 将返回 false (boolean 类型).</p>\n<p>如需对 wait() 的返回值做进一步处理, 则建议两个回调方法的返回值类型一致:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        return [ o - 1, o, o + 1 ];\n    },\n    else() {\n        /* 即使等待条件超时, 也可调用 forEach 方法. */\n        return [];\n    },\n}).forEach(x =&gt; console.log(x));\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition\">wait(condition)</a> 增加回调对象.</p>\n<p>回调对象集合了两个方法, then 与 else 分别对应等待成功与等待失败的情况:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; device.isScreenOff(), {\n    then: () =&gt; console.log(&quot;等待屏幕关闭成功&quot;),\n    else: () =&gt; console.log(&quot;等待屏幕关闭超时&quot;),\n});\n</code></pre>\n<p>两种方法都将最后一次检查结果作为实参, 可在方法体内直接使用:</p>\n<pre><code class=\"lang-js\">/* 等待一个落在 99.99 到 100 区间的随机数. */\nwait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功, 数字是: ${o}`);\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n    },\n});\n</code></pre>\n<blockquote>\n<p>注: else 回调方法的参数只能是 [ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ],<br>因此 else 的参数几乎不会用到.</p>\n</blockquote>\n<p>需特别注意, 回调方法的返回值具有穿透性.<br>在回调方法内使用 return 语句, 将直接影响 wait() 的返回值 (undefined 除外).</p>\n<p>上述示例中, then 和 else 回调都没有返回值, 因此 wait() 返回值是 boolean 类型, 表示等待条件是否满足.<br>下述示例在回调函数中增加了返回值 (非 undefined), 则 wait() 也将返回这个值.</p>\n<pre><code class=\"lang-js\">let result = wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        console.log(`获取随机数成功`);\n        return o;\n    },\n    else() {\n        console.log(&quot;获取 99.99 到 100 的随机数超时&quot;);\n        return NaN;\n    },\n});\nresult; /* 一个数字 (如 99.99732126036437) 或 NaN. */\n</code></pre>\n<p>上述示例如果等待条件满足, 则返回 then 的返回值 (number 类型),<br>等待条件超时, 则返回 else 的返回值 (NaN, 也为 number 类型).</p>\n<p>如果去掉 else 的返回语句, 则等待条件超时后, wait() 将返回 false (boolean 类型).</p>\n<p>如需对 wait() 的返回值做进一步处理, 则建议两个回调方法的返回值类型一致:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    let num = Math.random() * 100;\n    return num &gt; 99.99 &amp;&amp; num;\n}, {\n    then(o) {\n        return [ o - 1, o, o + 1 ];\n    },\n    else() {\n        /* 即使等待条件超时, 也可调用 forEach 方法. */\n        return [];\n    },\n}).forEach(x =&gt; console.log(x));\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -368,7 +378,7 @@
               "textRaw": "wait(condition, limit, callback)",
               "type": "method",
               "name": "wait",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, callback)</a> 增加条件检测限制.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit\">wait(condition, limit)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, callback)</a> 增加条件检测限制.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit\">wait(condition, limit)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -389,7 +399,7 @@
               "textRaw": "wait(condition, limit, interval, callback)",
               "type": "method",
               "name": "wait",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, limit, callback)</a> 增加条件检测间隔.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval\">wait(condition, limit, interval)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; T)</a> | <a href=\"uiSelectorType#m-pickup\">PickupSelector</a> } - 结束等待条件</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<p><a href=\"#waitcondition-callback\">wait(condition, limit, callback)</a> 增加条件检测间隔.</p>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval\">wait(condition, limit, interval)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -476,7 +486,7 @@
               "textRaw": "waitForActivity(activityName, callback)",
               "type": "method",
               "name": "waitForActivity",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -494,7 +504,7 @@
               "textRaw": "waitForActivity(activityName, limit, callback)",
               "type": "method",
               "name": "waitForActivity",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -515,7 +525,7 @@
               "textRaw": "waitForActivity(activityName, limit, interval, callback)",
               "type": "method",
               "name": "waitForActivity",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>activityName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标活动名称</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -602,7 +612,7 @@
               "textRaw": "waitForPackage(packageName, callback)",
               "type": "method",
               "name": "waitForPackage",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-callback\">wait(condition, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -620,7 +630,7 @@
               "textRaw": "waitForPackage(packageName, limit, callback)",
               "type": "method",
               "name": "waitForPackage",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-callback\">wait(condition, limit, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -641,7 +651,7 @@
               "textRaw": "waitForPackage(packageName, limit, interval, callback)",
               "type": "method",
               "name": "waitForPackage",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n<li>else?(result?: <a href=\"dataTypes#generic\">T</a>): <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 目标应用包名</li>\n<li><strong>limit</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测限制</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 等待条件检测间隔</li>\n<li><strong>callback</strong> {{<ul>\n<li>then(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n<li>else(result?: <a href=\"dataTypes#generic\">T</a>)?: <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n</li>\n<li>}} - 等待结束回调对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">R</a> extends <a href=\"dataTypes#void\">void</a> ? <a href=\"dataTypes#boolean\">boolean</a> : <a href=\"dataTypes#generic\">R</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a>, <a href=\"dataTypes#generic\">R</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"#waitcondition-limit-interval-callback\">wait(condition, limit, interval, callback)</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -1373,6 +1383,1399 @@
           ],
           "type": "module",
           "displayName": "[m] cXy"
+        },
+        {
+          "textRaw": "[m+] species",
+          "name": "[m+]_species",
+          "methods": [
+            {
+              "textRaw": "species(o)",
+              "type": "method",
+              "name": "species",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#any\">any</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>查看任意对象的 &quot;种类&quot;, 如 <code>Object</code>, <code>Array</code>, <code>Number</code>, <code>String</code>, <code>RegExp</code> 等.</p>\n<p>内部实现代码摘要:</p>\n<pre><code class=\"lang-js\">Object.prototype.toString.call(o).slice(&#39;[Object\\x20&#39;.length, &#39;]&#39;.length * -1);\n</code></pre>\n<p>示例:</p>\n<pre><code class=\"lang-js\">species(&#39;xyz&#39;); // String\nspecies(20); // Number\nspecies(20n); // BigInt\nspecies(true); // Boolean\nspecies(undefined); // Undefined\nspecies(null); // Null\nspecies(() =&gt; null); // Function\nspecies({ a: &#39;Apple&#39; }); // Object\nspecies([ 5, 10, 15 ]); // Array\nspecies(/^\\d{8,11}$/); // RegExp\nspecies(new Date()); // Date\nspecies(new TypeError()); // Error\nspecies(new Map()); // Map\nspecies(new Set()); // Set\nspecies(&lt;text/&gt;); // XML\nspecies(org.autojs.autojs6); // JavaPackage\nspecies(org.autojs.autojs6.R); // JavaClass\n</code></pre>\n<p>如需判断某个对象是否为特定的 &quot;种类&quot;, 可使用形如 <code>species.isXxx</code> 的扩展方法:</p>\n<pre><code class=\"lang-js\">species.isObject(23); // false\nspecies.isNumber(23); // true\nspecies.isRegExp(/test$/); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "o"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "[m] isArray",
+              "name": "[m]_isarray",
+              "methods": [
+                {
+                  "textRaw": "isArray(o)",
+                  "type": "method",
+                  "name": "isArray",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isArray"
+            },
+            {
+              "textRaw": "[m] isArrayBuffer",
+              "name": "[m]_isarraybuffer",
+              "methods": [
+                {
+                  "textRaw": "isArrayBuffer(o)",
+                  "type": "method",
+                  "name": "isArrayBuffer",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>ArrayBuffer</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isArrayBuffer"
+            },
+            {
+              "textRaw": "[m] isBigInt",
+              "name": "[m]_isbigint",
+              "methods": [
+                {
+                  "textRaw": "isBigInt(o)",
+                  "type": "method",
+                  "name": "isBigInt",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>BigInt</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isBigInt"
+            },
+            {
+              "textRaw": "[m] isBoolean",
+              "name": "[m]_isboolean",
+              "methods": [
+                {
+                  "textRaw": "isBoolean(o)",
+                  "type": "method",
+                  "name": "isBoolean",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Boolean</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isBoolean"
+            },
+            {
+              "textRaw": "[m] isContinuation",
+              "name": "[m]_iscontinuation",
+              "methods": [
+                {
+                  "textRaw": "isContinuation(o)",
+                  "type": "method",
+                  "name": "isContinuation",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Continuation</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isContinuation"
+            },
+            {
+              "textRaw": "[m] isDataView",
+              "name": "[m]_isdataview",
+              "methods": [
+                {
+                  "textRaw": "isDataView(o)",
+                  "type": "method",
+                  "name": "isDataView",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>DataView</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isDataView"
+            },
+            {
+              "textRaw": "[m] isDate",
+              "name": "[m]_isdate",
+              "methods": [
+                {
+                  "textRaw": "isDate(o)",
+                  "type": "method",
+                  "name": "isDate",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Date</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isDate"
+            },
+            {
+              "textRaw": "[m] isError",
+              "name": "[m]_iserror",
+              "methods": [
+                {
+                  "textRaw": "isError(o)",
+                  "type": "method",
+                  "name": "isError",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Error</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isError"
+            },
+            {
+              "textRaw": "[m] isFloat32Array",
+              "name": "[m]_isfloat32array",
+              "methods": [
+                {
+                  "textRaw": "isFloat32Array(o)",
+                  "type": "method",
+                  "name": "isFloat32Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Float32Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isFloat32Array"
+            },
+            {
+              "textRaw": "[m] isFloat64Array",
+              "name": "[m]_isfloat64array",
+              "methods": [
+                {
+                  "textRaw": "isFloat64Array(o)",
+                  "type": "method",
+                  "name": "isFloat64Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Float64Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isFloat64Array"
+            },
+            {
+              "textRaw": "[m] isFunction",
+              "name": "[m]_isfunction",
+              "methods": [
+                {
+                  "textRaw": "isFunction(o)",
+                  "type": "method",
+                  "name": "isFunction",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Function</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isFunction"
+            },
+            {
+              "textRaw": "[m] isHTMLDocument",
+              "name": "[m]_ishtmldocument",
+              "methods": [
+                {
+                  "textRaw": "isHTMLDocument(o)",
+                  "type": "method",
+                  "name": "isHTMLDocument",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>HTMLDocument</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isHTMLDocument"
+            },
+            {
+              "textRaw": "[m] isInt16Array",
+              "name": "[m]_isint16array",
+              "methods": [
+                {
+                  "textRaw": "isInt16Array(o)",
+                  "type": "method",
+                  "name": "isInt16Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Int16Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isInt16Array"
+            },
+            {
+              "textRaw": "[m] isInt32Array",
+              "name": "[m]_isint32array",
+              "methods": [
+                {
+                  "textRaw": "isInt32Array(o)",
+                  "type": "method",
+                  "name": "isInt32Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Int32Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isInt32Array"
+            },
+            {
+              "textRaw": "[m] isInt8Array",
+              "name": "[m]_isint8array",
+              "methods": [
+                {
+                  "textRaw": "isInt8Array(o)",
+                  "type": "method",
+                  "name": "isInt8Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Int8Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isInt8Array"
+            },
+            {
+              "textRaw": "[m] isJavaObject",
+              "name": "[m]_isjavaobject",
+              "methods": [
+                {
+                  "textRaw": "isJavaObject(o)",
+                  "type": "method",
+                  "name": "isJavaObject",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>JavaObject</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isJavaObject"
+            },
+            {
+              "textRaw": "[m] isJavaPackage",
+              "name": "[m]_isjavapackage",
+              "methods": [
+                {
+                  "textRaw": "isJavaPackage(o)",
+                  "type": "method",
+                  "name": "isJavaPackage",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>JavaPackage</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isJavaPackage"
+            },
+            {
+              "textRaw": "[m] isMap",
+              "name": "[m]_ismap",
+              "methods": [
+                {
+                  "textRaw": "isMap(o)",
+                  "type": "method",
+                  "name": "isMap",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Map</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isMap"
+            },
+            {
+              "textRaw": "[m] isNamespace",
+              "name": "[m]_isnamespace",
+              "methods": [
+                {
+                  "textRaw": "isNamespace(o)",
+                  "type": "method",
+                  "name": "isNamespace",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Namespace</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isNamespace"
+            },
+            {
+              "textRaw": "[m] isNull",
+              "name": "[m]_isnull",
+              "methods": [
+                {
+                  "textRaw": "isNull(o)",
+                  "type": "method",
+                  "name": "isNull",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Null</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isNull"
+            },
+            {
+              "textRaw": "[m] isNumber",
+              "name": "[m]_isnumber",
+              "methods": [
+                {
+                  "textRaw": "isNumber(o)",
+                  "type": "method",
+                  "name": "isNumber",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Number</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isNumber"
+            },
+            {
+              "textRaw": "[m] isObject",
+              "name": "[m]_isobject",
+              "methods": [
+                {
+                  "textRaw": "isObject(o)",
+                  "type": "method",
+                  "name": "isObject",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Object</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isObject"
+            },
+            {
+              "textRaw": "[m] isQName",
+              "name": "[m]_isqname",
+              "methods": [
+                {
+                  "textRaw": "isQName(o)",
+                  "type": "method",
+                  "name": "isQName",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>QName</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isQName"
+            },
+            {
+              "textRaw": "[m] isRegExp",
+              "name": "[m]_isregexp",
+              "methods": [
+                {
+                  "textRaw": "isRegExp(o)",
+                  "type": "method",
+                  "name": "isRegExp",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>RegExp</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isRegExp"
+            },
+            {
+              "textRaw": "[m] isSet",
+              "name": "[m]_isset",
+              "methods": [
+                {
+                  "textRaw": "isSet(o)",
+                  "type": "method",
+                  "name": "isSet",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Set</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isSet"
+            },
+            {
+              "textRaw": "[m] isString",
+              "name": "[m]_isstring",
+              "methods": [
+                {
+                  "textRaw": "isString(o)",
+                  "type": "method",
+                  "name": "isString",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>String</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isString"
+            },
+            {
+              "textRaw": "[m] isUint16Array",
+              "name": "[m]_isuint16array",
+              "methods": [
+                {
+                  "textRaw": "isUint16Array(o)",
+                  "type": "method",
+                  "name": "isUint16Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Uint16Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isUint16Array"
+            },
+            {
+              "textRaw": "[m] isUint32Array",
+              "name": "[m]_isuint32array",
+              "methods": [
+                {
+                  "textRaw": "isUint32Array(o)",
+                  "type": "method",
+                  "name": "isUint32Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Uint32Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isUint32Array"
+            },
+            {
+              "textRaw": "[m] isUint8Array",
+              "name": "[m]_isuint8array",
+              "methods": [
+                {
+                  "textRaw": "isUint8Array(o)",
+                  "type": "method",
+                  "name": "isUint8Array",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Uint8Array</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isUint8Array"
+            },
+            {
+              "textRaw": "[m] isUint8ClampedArray",
+              "name": "[m]_isuint8clampedarray",
+              "methods": [
+                {
+                  "textRaw": "isUint8ClampedArray(o)",
+                  "type": "method",
+                  "name": "isUint8ClampedArray",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Uint8ClampedArray</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isUint8ClampedArray"
+            },
+            {
+              "textRaw": "[m] isUndefined",
+              "name": "[m]_isundefined",
+              "methods": [
+                {
+                  "textRaw": "isUndefined(o)",
+                  "type": "method",
+                  "name": "isUndefined",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Undefined</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isUndefined"
+            },
+            {
+              "textRaw": "[m] isWeakMap",
+              "name": "[m]_isweakmap",
+              "methods": [
+                {
+                  "textRaw": "isWeakMap(o)",
+                  "type": "method",
+                  "name": "isWeakMap",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>WeakMap</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isWeakMap"
+            },
+            {
+              "textRaw": "[m] isWeakSet",
+              "name": "[m]_isweakset",
+              "methods": [
+                {
+                  "textRaw": "isWeakSet(o)",
+                  "type": "method",
+                  "name": "isWeakSet",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>WeakSet</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isWeakSet"
+            },
+            {
+              "textRaw": "[m] isWindow",
+              "name": "[m]_iswindow",
+              "methods": [
+                {
+                  "textRaw": "isWindow(o)",
+                  "type": "method",
+                  "name": "isWindow",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>Window</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isWindow"
+            },
+            {
+              "textRaw": "[m] isXML",
+              "name": "[m]_isxml",
+              "methods": [
+                {
+                  "textRaw": "isXML(o)",
+                  "type": "method",
+                  "name": "isXML",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>XML</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isXML"
+            },
+            {
+              "textRaw": "[m] isXMLList",
+              "name": "[m]_isxmllist",
+              "methods": [
+                {
+                  "textRaw": "isXMLList(o)",
+                  "type": "method",
+                  "name": "isXMLList",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**o** { [any](dataTypes#any) } - 任意对象 ",
+                          "name": "**o**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "任意对象"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [boolean](dataTypes#boolean) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "o"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>判断对象的 &quot;种类&quot; 是否为 <code>XMLList</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] isXMLList"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m+] species"
         },
         {
           "textRaw": "[p] WIDTH",

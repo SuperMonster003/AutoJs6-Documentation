@@ -1,85 +1,121 @@
 # 存储 (Storages)
 
+storages 模块可用于保存 [ 简单数据 / 配置信息 / 列表清单 ] 等.  
+保存的数据在脚本间共享, 因此不适于敏感数据的存储.
+
+保存数据时, 需要一个名称, 类似命名空间.  
+一个名称对应一个独立的本地存储.  
+但无法像 Web 开发中 LocalStorage 一样提供域名独立的存储, 因为脚本路径可能随时改变.
+
+保存的数据仅在以下情况下会被删除:
+
+- AutoJs6 应用被卸载或清除数据
+- 使用 [storages.remove](#m-remove) / [Storage#remove](storageType#m-remove) / [Storage#clear](storageType#m-clear) 等方法删除
+
+支持存入的数据类型:
+
+- [number](dataTypes#number)
+- [boolean](dataTypes#boolean)
+- [string](dataTypes#string)
+- [null](dataTypes#null)
+- [Array](dataTypes#array)
+- [Object](dataTypes#object)
+- ... ...
+
+具体的存入规则详见 [Storage#put](storageType#m-put) 小节.
+
+存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,  
+读取时, 由 [JSON.parse](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse) 还原为原本的数据类型.
+
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">storages</p>
 
 ---
 
-storages模块提供了保存简单数据、用户配置等的支持. 保存的数据除非应用被卸载或者被主动删除, 否则会一直保留.
+## [m] create
 
-storages支持`number`, `boolean`, `string`等数据类型以及把`Object`, `Array`用`JSON.stringify`序列化存取.
+### create(name)
 
-storages保存的数据在脚本之间是共享的, 任何脚本只要知道storage名称便可以获取到相应的数据, 因此它不能用于敏感数据的储存.
-storages无法像Web开发中LocalStorage一样提供根据域名独立的存储, 因为脚本的路径随时可能改变.
+- **name** { [string](dataTypes#string) } - 存储名称
+- <ins>**returns**</ins> { [Storage](storageType) }
 
-## storages.create(name)
+以 `name` 参数为名称创建一个本地存储, 并返回 [Storage](storageType) 实例:
 
-* `name` {string} 本地存储名称
+```js
+/* 创建一个名为 fruit 的本地存储. */
+let sto = storages.create('fruit');
 
-创建一个本地存储并返回一个`Storage`对象. 不同名称的本地存储的数据是隔开的, 而相同名称的本地存储的数据是共享的.
+/* 存入 "键值对" 数据. */
+sto.put('apple', 10);
+sto.put('banana', 20);
 
-例如在一个脚本中, 创建名称为ABC的存储并存入a=123:
-
-```
-var storage = storages.create("ABC");
-storage.put("a", 123);
-```
-
-而在另一个脚本中是可以获取到ABC以及a的值的：
-
-```
-var storage = storages.create("ABC");
-log("a = " + storage.get("a"));
+/* 访问数据. */
+sto.get('apple'); // 10
+sto.get('banana'); // 20
+sto.get('cherry'); // undefined
 ```
 
-因此, 本地存储的名称比较重要, 尽量使用含有域名、作者邮箱等唯一信息的名称来避免冲突, 例如：
+不同的 `name` 参数可以创建不同的本地存储:
 
+```js
+let stoFruit = storages.create('fruit');
+let stoPhone = storages.create('phone');
+
+/* "键" 名均为 apple, 不同的本地存储之间数据独立. */
+stoFruit.put('apple', 7);
+stoPhone.put('apple', 3);
+
+/* 访问数据 */
+stoFruit.get('apple') // 7
+stoPhone.get('apple') // 3
 ```
-var storage = storages.create("2732014414@qq.com:ABC");
+
+如果 `name` 参数对应的本地存储已存在, 则返回一个本地存储副本:
+
+```js
+let sto = storages.create('fruit');
+sto.put('apple', 10);
+
+/* 名为 fruit 的本地存储已创建, 因此返回的是存储副本. */
+let stoCopied = storages.create('fruit');
+
+/* 虽然 stoCopied 没有存入 apple 数据, 但 fruit 本地存储中存在. */
+stoCopied.get('apple'); // 10
+
+/* 副本与原始的本地存储并非引用关系. */
+sto === stoCopied; // false
 ```
 
-## storages.remove(name)
+为保证数据安全及唯一性, `name` 参数应尽量具体:
 
-* `name` {string} 本地存储名称
+```js
+storages.create('project-publishing-schedule');
+```
 
-删除一个本地存储以及他的全部数据. 如果该存储不存在, 返回false；否则返回true.
+## [m] remove
 
-# Storages
+### remove(name)
 
-## Storage.get(key[, defaultValue])
+- **name** { [string](dataTypes#string) } - 存储名称
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - name 参数对应的本地存储是否存在
 
-* `key` {string} 键值
-* `defaultValue` {any} 可选, 默认值
+清除名为 `name` 的本地存储包含的全部数据.
 
-从本地存储中取出键值为key的数据并返回.
+如果名为 `name` 的本地存储已存在, 返回 `true`, 否则返回 `false`.
 
-如果该存储中不包含该数据, 这时若指定了默认值参数则返回默认值, 否则返回undefined.
+```js
+let sto = storages.create('fruit');
+sto.put('apple', 10);
+sto.get('apple'); // 10
 
-返回的数据可能是任意数据类型, 这取决于使用`Storage.put`保存该键值的数据时的数据类型.
+/* 相当于 storages.create('fruit').clear(); . */
+storages.remove('fruit'); // true
 
-## Storage.put(key, value)
+/* 执行 remove 方法后, sto 对象将不存在任何存储数据. */
+sto.get('apple'); // undefined
 
-* `key` {string} 键值
-* `value` {any} 值
-
-把值value保存到本地存储中. value可以是undefined以外的任意数据类型. 如果value为undefined则抛出TypeError.
-
-存储的过程实际上是使用JSON.stringify把value转换为字符串再保存, 因此value必须是可JSON化的才能被接受.
-
-## Storage.remove(key)
-
-* `key` {string} 键值
-
-移除键值为key的数据. 不返回任何值.
-
-## Storage.contains(key)
-
-* `key` {string} 键值
-
-返回该本地存储是否包含键值为key的数据. 是则返回true, 否则返回false.
-
-## Storage.clear()
-
-移除该本地存储的所有数据. 不返回任何值.
+/* 但 sto 依然可以存放新的数据. */
+sto.put('banana', 20);
+sto.get('banana'); // 20
+```

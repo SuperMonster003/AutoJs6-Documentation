@@ -3,9 +3,13 @@
 
 * [Overview - 综述](overview)
 * [About - 关于文档](documentation)
-* [Progress - 完善进度](progress)
-* [Changelog - 更新日志](changelog)
-* [Q&A - 疑难解答](qa)
+* [Progress - 文档部署进度](progress)
+* [Changelog - 文档更新日志](changelog)
+
+<div class="line"></div>
+
+* [Manual - AutoJs6 使用手册](manual)
+* [Q & A - 疑难解答](qa)
 
 <div class="line"></div>
 
@@ -65,6 +69,7 @@
 * [UiObjectCollection - 控件集合](uiObjectCollectionType)
 * [UiObjectActions - 控件节点行为](uiObjectActionsType)
 * [App - 应用枚举类](appType)
+* [Storage - 存储类](storageType)
 * [Version - 版本工具类](versionType)
 
 <div class="line"></div>
@@ -82,5 +87,5 @@
 
 <div class="line"></div>
 
-* [GitHub - 应用项目地址](https://github.com/SuperMonster003/AutoJs6/)
+* [GitHub - 应用项目地址](https://github.com/SuperMonster003/AutoJs6)
 * [GitHub - 文档项目地址](https://github.com/SuperMonster003/AutoJs6-Documentation)

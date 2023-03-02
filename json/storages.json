@@ -4,200 +4,88 @@
     {
       "textRaw": "存储 (Storages)",
       "name": "存储_(storages)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>storages模块提供了保存简单数据、用户配置等的支持. 保存的数据除非应用被卸载或者被主动删除, 否则会一直保留.</p>\n<p>storages支持<code>number</code>, <code>boolean</code>, <code>string</code>等数据类型以及把<code>Object</code>, <code>Array</code>用<code>JSON.stringify</code>序列化存取.</p>\n<p>storages保存的数据在脚本之间是共享的, 任何脚本只要知道storage名称便可以获取到相应的数据, 因此它不能用于敏感数据的储存.\nstorages无法像Web开发中LocalStorage一样提供根据域名独立的存储, 因为脚本的路径随时可能改变.</p>\n",
-      "methods": [
+      "desc": "<p>storages 模块可用于保存 [ 简单数据 / 配置信息 / 列表清单 ] 等.<br>保存的数据在脚本间共享, 因此不适于敏感数据的存储.</p>\n<p>保存数据时, 需要一个名称, 类似命名空间.<br>一个名称对应一个独立的本地存储.<br>但无法像 Web 开发中 LocalStorage 一样提供域名独立的存储, 因为脚本路径可能随时改变.</p>\n<p>保存的数据仅在以下情况下会被删除:</p>\n<ul>\n<li>AutoJs6 应用被卸载或清除数据</li>\n<li>使用 <a href=\"#m-remove\">storages.remove</a> / <a href=\"storageType#m-remove\">Storage#remove</a> / <a href=\"storageType#m-clear\">Storage#clear</a> 等方法删除</li>\n</ul>\n<p>支持存入的数据类型:</p>\n<ul>\n<li><a href=\"dataTypes#number\">number</a></li>\n<li><a href=\"dataTypes#boolean\">boolean</a></li>\n<li><a href=\"dataTypes#string\">string</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#array\">Array</a></li>\n<li><a href=\"dataTypes#object\">Object</a></li>\n<li>... ...</li>\n</ul>\n<p>具体的存入规则详见 <a href=\"storageType#m-put\">Storage#put</a> 小节.</p>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>读取时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse\">JSON.parse</a> 还原为原本的数据类型.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">storages</p>\n\n<hr>\n",
+      "modules": [
         {
-          "textRaw": "storages.create(name)",
-          "type": "method",
-          "name": "create",
-          "signatures": [
+          "textRaw": "[m] create",
+          "name": "[m]_create",
+          "methods": [
             {
-              "params": [
+              "textRaw": "create(name)",
+              "type": "method",
+              "name": "create",
+              "signatures": [
                 {
-                  "textRaw": "`name` {string} 本地存储名称 ",
-                  "name": "name",
-                  "type": "string",
-                  "desc": "本地存储名称"
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 存储名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "存储名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Storage](storageType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Storage](storageType) "
+                    }
+                  ]
+                },
                 {
-                  "name": "name"
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
                 }
-              ]
+              ],
+              "desc": "<p>以 <code>name</code> 参数为名称创建一个本地存储, 并返回 <a href=\"storageType\">Storage</a> 实例:</p>\n<pre><code class=\"lang-js\">/* 创建一个名为 fruit 的本地存储. */\nlet sto = storages.create(&#39;fruit&#39;);\n\n/* 存入 &quot;键值对&quot; 数据. */\nsto.put(&#39;apple&#39;, 10);\nsto.put(&#39;banana&#39;, 20);\n\n/* 访问数据. */\nsto.get(&#39;apple&#39;); // 10\nsto.get(&#39;banana&#39;); // 20\nsto.get(&#39;cherry&#39;); // undefined\n</code></pre>\n<p>不同的 <code>name</code> 参数可以创建不同的本地存储:</p>\n<pre><code class=\"lang-js\">let stoFruit = storages.create(&#39;fruit&#39;);\nlet stoPhone = storages.create(&#39;phone&#39;);\n\n/* &quot;键&quot; 名均为 apple, 不同的本地存储之间数据独立. */\nstoFruit.put(&#39;apple&#39;, 7);\nstoPhone.put(&#39;apple&#39;, 3);\n\n/* 访问数据 */\nstoFruit.get(&#39;apple&#39;) // 7\nstoPhone.get(&#39;apple&#39;) // 3\n</code></pre>\n<p>如果 <code>name</code> 参数对应的本地存储已存在, 则返回一个本地存储副本:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\n\n/* 名为 fruit 的本地存储已创建, 因此返回的是存储副本. */\nlet stoCopied = storages.create(&#39;fruit&#39;);\n\n/* 虽然 stoCopied 没有存入 apple 数据, 但 fruit 本地存储中存在. */\nstoCopied.get(&#39;apple&#39;); // 10\n\n/* 副本与原始的本地存储并非引用关系. */\nsto === stoCopied; // false\n</code></pre>\n<p>为保证数据安全及唯一性, <code>name</code> 参数应尽量具体:</p>\n<pre><code class=\"lang-js\">storages.create(&#39;project-publishing-schedule&#39;);\n</code></pre>\n"
             }
           ],
-          "desc": "<p>创建一个本地存储并返回一个<code>Storage</code>对象. 不同名称的本地存储的数据是隔开的, 而相同名称的本地存储的数据是共享的.</p>\n<p>例如在一个脚本中, 创建名称为ABC的存储并存入a=123:</p>\n<pre><code>var storage = storages.create(&quot;ABC&quot;);\nstorage.put(&quot;a&quot;, 123);\n</code></pre><p>而在另一个脚本中是可以获取到ABC以及a的值的：</p>\n<pre><code>var storage = storages.create(&quot;ABC&quot;);\nlog(&quot;a = &quot; + storage.get(&quot;a&quot;));\n</code></pre><p>因此, 本地存储的名称比较重要, 尽量使用含有域名、作者邮箱等唯一信息的名称来避免冲突, 例如：</p>\n<pre><code>var storage = storages.create(&quot;2732014414@qq.com:ABC&quot;);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] create"
         },
         {
-          "textRaw": "storages.remove(name)",
-          "type": "method",
-          "name": "remove",
-          "signatures": [
+          "textRaw": "[m] remove",
+          "name": "[m]_remove",
+          "methods": [
             {
-              "params": [
+              "textRaw": "remove(name)",
+              "type": "method",
+              "name": "remove",
+              "signatures": [
                 {
-                  "textRaw": "`name` {string} 本地存储名称 ",
-                  "name": "name",
-                  "type": "string",
-                  "desc": "本地存储名称"
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 存储名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "存储名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - name 参数对应的本地存储是否存在 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "name 参数对应的本地存储是否存在"
+                    }
+                  ]
+                },
                 {
-                  "name": "name"
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
                 }
-              ]
+              ],
+              "desc": "<p>清除名为 <code>name</code> 的本地存储包含的全部数据.</p>\n<p>如果名为 <code>name</code> 的本地存储已存在, 返回 <code>true</code>, 否则返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\nsto.get(&#39;apple&#39;); // 10\n\n/* 相当于 storages.create(&#39;fruit&#39;).clear(); . */\nstorages.remove(&#39;fruit&#39;); // true\n\n/* 执行 remove 方法后, sto 对象将不存在任何存储数据. */\nsto.get(&#39;apple&#39;); // undefined\n\n/* 但 sto 依然可以存放新的数据. */\nsto.put(&#39;banana&#39;, 20);\nsto.get(&#39;banana&#39;); // 20\n</code></pre>\n"
             }
           ],
-          "desc": "<p>删除一个本地存储以及他的全部数据. 如果该存储不存在, 返回false；否则返回true.</p>\n"
+          "type": "module",
+          "displayName": "[m] remove"
         }
       ],
       "type": "module",
       "displayName": "存储 (Storages)"
-    },
-    {
-      "textRaw": "Storages",
-      "name": "storages",
-      "methods": [
-        {
-          "textRaw": "Storage.get(key[, defaultValue])",
-          "type": "method",
-          "name": "get",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`key` {string} 键值 ",
-                  "name": "key",
-                  "type": "string",
-                  "desc": "键值"
-                },
-                {
-                  "textRaw": "`defaultValue` {any} 可选, 默认值 ",
-                  "name": "defaultValue",
-                  "type": "any",
-                  "desc": "可选, 默认值",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "key"
-                },
-                {
-                  "name": "defaultValue",
-                  "optional": true
-                }
-              ]
-            }
-          ],
-          "desc": "<p>从本地存储中取出键值为key的数据并返回.</p>\n<p>如果该存储中不包含该数据, 这时若指定了默认值参数则返回默认值, 否则返回undefined.</p>\n<p>返回的数据可能是任意数据类型, 这取决于使用<code>Storage.put</code>保存该键值的数据时的数据类型.</p>\n"
-        },
-        {
-          "textRaw": "Storage.put(key, value)",
-          "type": "method",
-          "name": "put",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`key` {string} 键值 ",
-                  "name": "key",
-                  "type": "string",
-                  "desc": "键值"
-                },
-                {
-                  "textRaw": "`value` {any} 值 ",
-                  "name": "value",
-                  "type": "any",
-                  "desc": "值"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "key"
-                },
-                {
-                  "name": "value"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>把值value保存到本地存储中. value可以是undefined以外的任意数据类型. 如果value为undefined则抛出TypeError.</p>\n<p>存储的过程实际上是使用JSON.stringify把value转换为字符串再保存, 因此value必须是可JSON化的才能被接受.</p>\n"
-        },
-        {
-          "textRaw": "Storage.remove(key)",
-          "type": "method",
-          "name": "remove",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`key` {string} 键值 ",
-                  "name": "key",
-                  "type": "string",
-                  "desc": "键值"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "key"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>移除键值为key的数据. 不返回任何值.</p>\n"
-        },
-        {
-          "textRaw": "Storage.contains(key)",
-          "type": "method",
-          "name": "contains",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`key` {string} 键值 ",
-                  "name": "key",
-                  "type": "string",
-                  "desc": "键值"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "key"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>返回该本地存储是否包含键值为key的数据. 是则返回true, 否则返回false.</p>\n"
-        },
-        {
-          "textRaw": "Storage.clear()",
-          "type": "method",
-          "name": "clear",
-          "desc": "<p>移除该本地存储的所有数据. 不返回任何值.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        }
-      ],
-      "type": "module",
-      "displayName": "Storages"
     }
   ]
 }

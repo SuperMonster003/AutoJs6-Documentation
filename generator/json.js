@@ -61,10 +61,12 @@ function doJSON(input, filename, cb) {
 
         if (type === 'heading' &&
             !text.trim().match(/^example/i)) {
-            if (tok.depth - depth > 1) {
-                return cb(new Error('Inappropriate heading level\n' +
-                    JSON.stringify(tok)));
-            }
+
+            // @Comment by SuperMonster003 on Mar 1, 2023.
+            // if (tok.depth - depth > 1) {
+            //     return cb(new Error('Inappropriate heading level\n' +
+            //         JSON.stringify(tok)));
+            // }
 
             // Sometimes we have two headings with a single
             // blob of description.  Treat as a clone.

@@ -4,7 +4,7 @@
     {
       "textRaw": "数据类型 (Data Types)",
       "name": "数据类型_(data_types)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>数据类型是用来约束数据的解释.<br>本章节的数据类型包括 [ number / void / any / object / 泛型 / 交叉类型 ] 等.</p>\n<blockquote>\n<p>注: 此章节的类型概念 与 JavaScript 数据类型 (如 <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive/\">基本类型</a>) 以及 TypeScript 数据类型 (如 <a href=\"https://www.typescriptlang.org/docs/handbook/2/everyday-types.html\">基础类型</a>) 在概念上可能存在出入, 因此仅适用于对文档内容的辅助理解, 不适用于严格的概念参考.</p>\n</blockquote>\n",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Feb 22, 2023.</p>\n\n<hr>\n<p>数据类型是用来约束数据的解释.<br>本章节的数据类型包括 [ number / void / any / object / 泛型 / 交叉类型 ] 等.</p>\n<blockquote>\n<p>注: 此章节的类型概念 与 JavaScript 数据类型 (如 <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive/\">基本类型</a>) 以及 TypeScript 数据类型 (如 <a href=\"https://www.typescriptlang.org/docs/handbook/2/everyday-types.html\">基础类型</a>) 在概念上可能存在出入, 因此仅适用于对文档内容的辅助理解, 不适用于严格的概念参考.</p>\n</blockquote>\n",
       "modules": [
         {
           "textRaw": "Boolean",
@@ -195,7 +195,7 @@
         {
           "textRaw": "Capitalize",
           "name": "capitalize",
-          "desc": "<p><strong>Capitalize&lt;T&gt;: string</strong></p>\n<p>通常用于输出转换.<br>接受 string 类型并生成首字母大写的同类型数据.</p>\n<pre><code class=\"lang-js\">\n</code></pre>\n",
+          "desc": "<p><strong>Capitalize&lt;T&gt;: string</strong></p>\n<p>通常用于输出转换.<br>接受 string 类型并生成首字母大写的同类型数据.</p>\n",
           "type": "module",
           "displayName": "Capitalize"
         },
@@ -214,6 +214,21 @@
           "displayName": "Pattern"
         },
         {
+          "textRaw": "AnyBut",
+          "name": "anybut",
+          "desc": "<p><strong>AnyBut&lt;T&gt;</strong></p>\n<p>任意类型但排除 T.</p>\n<p><strong>foo(bar)</strong></p>\n<ul>\n<li><strong>bar</strong> { <a href=\"#anybut\">AnyBut</a><a href=\"#generic\">&lt;</a><a href=\"#number\">number</a><a href=\"#generic\">&gt;</a> }</li>\n</ul>\n<p>上述示例的 bar 参数接受除 <a href=\"#number\">number</a> 外的任意类型.</p>\n",
+          "type": "module",
+          "displayName": "AnyBut"
+        }
+      ],
+      "type": "module",
+      "displayName": "操纵泛型"
+    },
+    {
+      "textRaw": "自定义类型",
+      "name": "自定义类型",
+      "modules": [
+        {
           "textRaw": "JavaArray",
           "name": "javaarray",
           "desc": "<p>Java Array (Java 数组).</p>\n<pre><code class=\"lang-js\">let javaArr = java.lang.reflect.Array\n    .newInstance(java.lang.Float.TYPE, 3);\n\nconsole.log(util.isJavaArray(javaArr)); // true\nconsole.log(Array.isArray(javaArr)); // false\n</code></pre>\n<p>Java 数组可使用 JavaScript 数组的属性及方法:</p>\n<pre><code class=\"lang-js\">let javaArr = java.lang.reflect.Array\n    .newInstance(java.lang.Float.TYPE, 3);\n\nconsole.log(javaArr.length); // 3\n\nconsole.log(javaArr.slice === Array.prototype.slice); // true\nArray.isArray(javaArr.slice(0)); // true\n</code></pre>\n<p>Java 数组一旦被初始化, 长度将不可改变, [ 改变长度 / 越界赋值 ] 均会失败且抛出异常:</p>\n<pre><code class=\"lang-js\">let javaArr = java.lang.reflect.Array\n    .newInstance(java.lang.Float.TYPE, 3);\n\n/* 静默失败. */\njavaArr.length = 20;\nconsole.log(javaArr.length); // 3\n\n/* push 或 unshift 导致越界抛出异常. */\njavaArr.push(9); /* Error. */\njavaArr.unshift(9); /* Error. */\n\n/* pop 或 shift 不抛出异常但不改变数组长度. */\njavaArr.pop();\nconsole.log(javaArr.length); // 3\njavaArr.shift();\nconsole.log(javaArr.length); // 3\n\n/* 越界访问不抛出异常, 会返回 undefined. */\nconsole.log(javaArr[9]); // undefined\n\n/* 越界赋值将抛出异常. */\njavaArr[9] = 10; /* Error. */\n</code></pre>\n<p>Java 数组中的元素将隐式转换为指定的类型, 同时此类型也会被转换为 JavaScript 类型, 如 Java 的 Integer 等均转换为 Number:</p>\n<pre><code class=\"lang-js\">let javaArr = java.lang.reflect.Array\n    .newInstance(java.lang.Integer.TYPE, 3);\n\nconsole.log(javaArr.join()); // &#39;0,0,0&#39;\n\n/* Number(&#39;1a&#39;) -&gt; NaN */\njavaArr[0] = &#39;1a&#39;;\nconsole.log(javaArr[0]); // NaN\n\n/* Number(&#39;2.2&#39;) -&gt; 2.2 $ JS */\n/* java.lang.Integer(2.2 $ JS) -&gt; 2 $ Java */\n/* Number(2 $ Java) -&gt; 2 $ JS */\njavaArr[2] = &#39;2.2&#39;;\nconsole.log(javaArr[0]); // 2\n\n/* 0xFF $ Hexadecimal == 255 $ Decimal / JS */\n/* java.lang.Integer(255 $ JS) -&gt; 255 $ Java */\n/* Number(255 $ Java) -&gt; 255 $ JS */\njavaArr[0] = 0xFF;\nconsole.log(javaArr[0]); // 255\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://docs.oracle.com/javase/tutorial/java/nutsandbolts/arrays.html\">Oracle Docs</a></p>\n</blockquote>\n",
@@ -226,15 +241,7 @@
           "desc": "<p>Java ArrayList (Java 数组列表).</p>\n<p>与 <a href=\"#javaarray\">Java Array</a> 不同的是, ArrayList 创建的数组可调整大小:</p>\n<pre><code class=\"lang-js\">let arrList = new java.util.ArrayList();\n\narrList.add(10);\narrList.add(&#39;20&#39;);\narrList.add([ &#39;30&#39; ]);\narrList.add(/40/g);\n\nconsole.log(arrList.length); // 4\n\narrList.forEach((o) =&gt; {\n    // 10 (Number)\n    // 20 (String)\n    // 30 (Array)\n    // /40/g (RegExp)\n    console.log(`${o} (${species(o)})`);\n});\n\narrList.addAll(arrList);\nconsole.log(arrList.length); // 8\n\narrList.clear();\nconsole.log(arrList.length); // 0\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html\">Oracle Docs</a></p>\n</blockquote>\n",
           "type": "module",
           "displayName": "JavaArrayList"
-        }
-      ],
-      "type": "module",
-      "displayName": "操纵泛型"
-    },
-    {
-      "textRaw": "自定义类型",
-      "name": "自定义类型",
-      "modules": [
+        },
         {
           "textRaw": "NumberString",
           "name": "numberstring",
@@ -377,7 +384,7 @@
         {
           "textRaw": "AndroidRect",
           "name": "androidrect",
-          "desc": "<p>android.graphics.Rect 别名.<br>表示一个矩形, 作为控件信息时则用于表示控件在屏幕的相对位置及空间范围, 又称 <strong>控件矩形</strong>.</p>\n<pre><code class=\"lang-js\">let bounds = pickup(/.+/, &#39;bounds&#39;);\nconsole.log(`${bounds.centerX()}, ${bounds.centerY()}`);\n</code></pre>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[p#]</code> <a href=\"#p-left\">left</a></li>\n<li><code>[p#]</code> <a href=\"#p-top\">top</a></li>\n<li><code>[p#]</code> <a href=\"#p-right\">right</a></li>\n<li><code>[p#]</code> <a href=\"#p-bottom\">bottom</a></li>\n<li><code>[m#]</code> <a href=\"#m-width\">width()</a></li>\n<li><code>[m#]</code> <a href=\"#m-height\">height()</a></li>\n<li><code>[m#]</code> <a href=\"#m-centerx\">centerX()</a></li>\n<li><code>[m#]</code> <a href=\"#m-centery\">centerY()</a></li>\n<li><code>[m#]</code> <a href=\"#m-exactcenterx\">exactCenterX()</a></li>\n<li><code>[m#]</code> <a href=\"#m-exactcentery\">exactCenterY()</a></li>\n<li><code>[m#]</code> <a href=\"#m-contains\">contains()</a></li>\n<li><code>[m#]</code> <a href=\"#m-intersect\">intersect()</a></li>\n<li><code>[m#]</code> <a href=\"#m-intersects\">intersects()</a></li>\n</ul>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"uiObjectType#m-bounds\">UiObject#bounds</a></li>\n<li><a href=\"uiSelectorType#m-pickup\">UiSelector.pickup</a></li>\n</ul>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/reference/android/graphics/Rect\">Android Docs</a></p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">android.graphics.Rect</p>\n\n<hr>\n",
+          "desc": "<p><a href=\"https://developer.android.com/reference/android/graphics/Rect\">android.graphics.Rect</a> 别名.<br>表示一个矩形, 作为控件信息时则用于表示控件在屏幕的相对位置及空间范围, 又称 <strong>控件矩形</strong>.</p>\n<pre><code class=\"lang-js\">let bounds = pickup(/.+/, &#39;bounds&#39;);\nconsole.log(`${bounds.centerX()}, ${bounds.centerY()}`);\n</code></pre>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[p#]</code> <a href=\"#p-left\">left</a></li>\n<li><code>[p#]</code> <a href=\"#p-top\">top</a></li>\n<li><code>[p#]</code> <a href=\"#p-right\">right</a></li>\n<li><code>[p#]</code> <a href=\"#p-bottom\">bottom</a></li>\n<li><code>[m#]</code> <a href=\"#m-width\">width()</a></li>\n<li><code>[m#]</code> <a href=\"#m-height\">height()</a></li>\n<li><code>[m#]</code> <a href=\"#m-centerx\">centerX()</a></li>\n<li><code>[m#]</code> <a href=\"#m-centery\">centerY()</a></li>\n<li><code>[m#]</code> <a href=\"#m-exactcenterx\">exactCenterX()</a></li>\n<li><code>[m#]</code> <a href=\"#m-exactcentery\">exactCenterY()</a></li>\n<li><code>[m#]</code> <a href=\"#m-contains\">contains()</a></li>\n<li><code>[m#]</code> <a href=\"#m-intersect\">intersect()</a></li>\n<li><code>[m#]</code> <a href=\"#m-intersects\">intersects()</a></li>\n</ul>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"uiObjectType#m-bounds\">UiObject#bounds</a></li>\n<li><a href=\"uiSelectorType#m-pickup\">UiSelector.pickup</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">android.graphics.Rect</p>\n\n<hr>\n",
           "modules": [
             {
               "textRaw": "[C] android.graphics.Rect",
@@ -728,9 +735,16 @@
         {
           "textRaw": "AndroidBundle",
           "name": "androidbundle",
-          "desc": "<p>android.os.Bundle 别名.<br>表示一个会被打包成捆的容器, 容器内可存储 <code>键值对 (Key-Value Pair)</code> 形式的数据.</p>\n<pre><code class=\"lang-js\">let bundleA = new android.os.Bundle();\nbundleA.putInt(&quot;num_key&quot;, 23);\nconsole.log(bundleA.getInt(&quot;num_key&quot;) === 23); // true\n\nlet bundleB = new android.os.Bundle();\nlet arrList = new java.util.ArrayList(2);\narrList.add(&quot;A&quot;);\narrList.add(&quot;B&quot;);\nbundleB.putStringArrayList(&quot;arr_list_key&quot;, arrList);\nconsole.log(bundleB.getStringArrayList(&quot;arr_list_key&quot;).get(0) === &quot;A&quot;); // true\nconsole.log(bundleB.getStringArrayList(&quot;arr_list_key&quot;).get(1) === &quot;B&quot;); // true\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/reference/android/os/Bundle\">Android Docs</a></p>\n</blockquote>\n",
+          "desc": "<p><a href=\"https://developer.android.com/reference/android/os/Bundle\">android.os.Bundle</a> 别名.<br>表示一个会被打包成捆的容器, 容器内可存储 <code>键值对 (Key-Value Pair)</code> 形式的数据.</p>\n<pre><code class=\"lang-js\">let bundleA = new android.os.Bundle();\nbundleA.putInt(&quot;num_key&quot;, 23);\nconsole.log(bundleA.getInt(&quot;num_key&quot;) === 23); // true\n\nlet bundleB = new android.os.Bundle();\nlet arrList = new java.util.ArrayList(2);\narrList.add(&quot;A&quot;);\narrList.add(&quot;B&quot;);\nbundleB.putStringArrayList(&quot;arr_list_key&quot;, arrList);\nconsole.log(bundleB.getStringArrayList(&quot;arr_list_key&quot;).get(0) === &quot;A&quot;); // true\nconsole.log(bundleB.getStringArrayList(&quot;arr_list_key&quot;).get(1) === &quot;B&quot;); // true\n</code></pre>\n",
           "type": "module",
           "displayName": "AndroidBundle"
+        },
+        {
+          "textRaw": "ScriptExecuteActivity",
+          "name": "scriptexecuteactivity",
+          "desc": "<p><a href=\"https://developer.android.com/reference/android/app/Activity\">android.app.Activity</a> 的子类.</p>\n<p>ScriptExecuteActivity 是 UI 模式下, 全局对象 activity 的类型:</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\nactivity instanceof org.autojs.autojs.execution.ScriptExecuteActivity; // true\n</code></pre>\n<p>一些 activity 相关的示例:</p>\n<pre><code class=\"lang-js\">/* 结束当前 activity. */\nactivity.finish();\n/* 设置状态栏颜色为深红色. */\nactivity.getWindow().setStatusBarColor(colors.toInt(&#39;dark-red&#39;));\n/* 将视图对象作为内容加载. */\nactivity.setContentView(web.newInjectableWebView(&#39;www.github.com&#39;));\n/* 获取顶层窗口的高度. */\nactivity.getWindow().getDecorView().getRootView().getHeight();\n</code></pre>\n<p>因 ScriptExecuteActivity 继承了 android.app.Activity 等非常多的 Java 类, 因此 activity 获得了非常丰富的属性和方法, 详情参阅 <a href=\"https://developer.android.com/reference/android/app/Activity\">Android Docs</a> 及 <a href=\"https://github.com/SuperMonster003/AutoJs6/blob/10960ddbee71f75ef80907ad5b6ab42f3e1bf31e/app/src/main/java/org/autojs/autojs/execution/ScriptExecuteActivity.java#L30\">AutoJs6 源码</a>.</p>\n",
+          "type": "module",
+          "displayName": "ScriptExecuteActivity"
         },
         {
           "textRaw": "DetectCompass",
@@ -853,7 +867,7 @@
         {
           "textRaw": "ColorInt",
           "name": "colorint",
-          "desc": "<p>颜色整数 (Color Integer).</p>\n<p>多数情况下, 使用颜色整数代表一个颜色, 在安卓源码中, 颜色整数用 <code>ColorInt</code> 表示, 其值的范围由 <code>Java</code> 的 <code>Integer</code> 类型决定, 即 <code>-2^31..2^31-1</code>.<br>例如数字 <code>0xBF110523</code> 对应十进制的 <code>3205563683</code>, 超出了上述 <code>ColorInt</code> 的范围, 因此相关的 <code>colors</code> 方法 (如 <a href=\"color#m-toint\">colors.toInt</a>, <a href=\"color#m-tohex\">colors.toHex</a> 等) 会将此数值通过 <code>2^32</code> 偏移量移动至合适的范围内, 于是得到结果 <code>-1089403613</code>.</p>\n<pre><code class=\"lang-js\">colors.toInt(0xBF110523); // -1089403613\ncolors.toInt(&#39;#BF110523&#39;); /* 结果同上. */\n\nconsole.log(0xBF110523); // 3205563683\nconsole.log(0xBF110523 - 2 ** 32); // -1089403613\n</code></pre>\n<p><code>ColorInt</code> 作为参数类型传入时, 没有范围限制, 因为参数会通过 <code>2^32</code> 偏移量移动至上述合法范围内.</p>\n<p>如 <code>colors.toHex(0xFFFF3300)</code> 将返回 <code>&quot;#FF3300&quot;</code>, 虽然参数 <code>0xFFFF3300</code> 并不在 <code>-2^31</code> 与 <code>2^31-1</code> 之间.</p>\n<p><code>ColorInt</code> 作为返回值类型时, 将确保其值位于 <code>-2^31</code> 与 <code>2^31-1</code> 之间, 且因 <code>JavaScript</code> 默认将数字以十进制显示 <code>number</code> 变量, 导致 <code>ColorInt</code> 结果缺乏可读性.</p>\n<p>如 <code>colors.toInt(0xFFFF3300)</code> 返回 <code>-52480</code>, 这个值不适于阅读, 但可用于参数传入其他方法.</p>\n",
+          "desc": "<p>颜色整数 (Color Integer).</p>\n<p>多数情况下, 使用颜色整数代表一个颜色.<br>在安卓源码中, 颜色整数用 <code>ColorInt</code> 表示, 其值的范围由 <code>Java</code> 的 <code>Integer</code> 类型决定, 即 <code>[-2^31..2^31-1]</code>.<br>例如数字 <code>0xBF110523</code> 对应十进制的 <code>3205563683</code>, 超出了上述 <code>ColorInt</code> 的范围, 因此相关方法 (如 <a href=\"color#m-toint\">colors.toInt</a>) 会将此数值通过 <code>2^32</code> 偏移量移动至合适的范围内, 最终得到结果 <code>-1089403613</code>.</p>\n<pre><code class=\"lang-js\">colors.toInt(0xBF110523); // -1089403613\ncolors.toInt(&#39;#BF110523&#39;); /* 结果同上. */\n\nconsole.log(0xBF110523); // 3205563683\nconsole.log(0xBF110523 - 2 ** 32); // -1089403613\n</code></pre>\n<p>由此可知, 当 <code>ColorInt</code> 作为参数类型传入时, 没有范围限制, 因为参数会通过 <code>2^32</code> 偏移量移动至上述合法范围内. 如 <code>colors.toHex(0xFFFF3300)</code> 将正确返回 <code>&quot;#FF3300&quot;</code>, 虽然参数 <code>0xFFFF3300</code> 并不在 <code>[-2^31..2^31-1]</code> 范围内.</p>\n<p>当 <code>ColorInt</code> 作为返回值类型时, 其返回值一定位于 <code>[-2^31..2^31-1]</code> 范围内. 如 <code>colors.toInt(0xFFFF3300)</code> 返回 <code>-52480</code>, 此返回值缺乏可读性, 通常只用于作为新的参数传入其他方法.</p>\n<blockquote>\n<p>注:<br>事实上, <code>-52480</code> 是 <code>0xFFFF3300 - 2 ** 32</code> 的结果.<br>如需将 <code>-52480</code> 这样的值还原为具有可读性的颜色代码, 可使用 <a href=\"color#m-tohex\">colors.toHex</a> 等方法.</p>\n</blockquote>\n",
           "type": "module",
           "displayName": "ColorInt"
         },
@@ -927,9 +941,53 @@
         {
           "textRaw": "ColorComponents",
           "name": "colorcomponents",
-          "desc": "<p><a href=\"#colorcomponent\">颜色分量</a> 数组.</p>\n<p>同一种颜色可用不同的色彩模式表示, 如 RGB 色彩模式或 HSV 色彩模式等.</p>\n<p>每个色彩模式的 <code>分量 (Component)</code> 组成的数组称为颜色分量数组, 如 RGB 色彩模式的分量数组 <code>[100, 240, 72]</code> 表示 <code>R (red)</code> 分量为 <code>100</code>, <code>G (green)</code> 分量为 <code>240</code>, <code>B (blue)</code> 分量为 <code>72</code>, 访问时可使用数组下标方式或解构赋值方式:</p>\n<pre><code class=\"lang-js\">let components = colors.toRgb(colors.rgb(100, 240, 72)); // [ 100, 240, 72 ]\n\n/* 数组下标方式. */\nconsole.log(`R: ${components[0]}, G: ${components[1]}, B: ${components[2]}`);\n\n/* 结构赋值方式. */\nlet [ r, g, b ] = components;\nconsole.log(`R: ${r}, G: ${g}, B: ${b}`);\n</code></pre>\n<p>colors 全局对象的很多 <code>&quot;to&quot;</code> 开头的方法都可返回颜色分量数组,<br>如 <a href=\"color#m-torgb\">toRgb</a>, <a href=\"color#m-tohsv\">toHsv</a>, <a href=\"color#m-tohsl\">toHsl</a>, <a href=\"color#m-torgba\">toRgba</a>, <a href=\"color#m-toargb\">toArgb</a> 等.</p>\n",
+          "desc": "<p><a href=\"#colorcomponent\">颜色分量</a> 数组.</p>\n<p>同一种颜色可用不同的色彩模式表示, 如 RGB 色彩模式或 HSV 色彩模式等.</p>\n<p>每个色彩模式的 <code>分量 (Component)</code> 组成的数组称为颜色分量数组, 如 RGB 色彩模式的分量数组 <code>[100, 240, 72]</code> 表示 <code>R (red)</code> 分量为 <code>100</code>, <code>G (green)</code> 分量为 <code>240</code>, <code>B (blue)</code> 分量为 <code>72</code>, 访问时可使用数组下标方式或解构赋值方式:</p>\n<pre><code class=\"lang-js\">let components = colors.toRgb(colors.rgb(100, 240, 72)); // [ 100, 240, 72 ]\n\n/* 数组下标方式. */\nconsole.log(`R: ${components[0]}, G: ${components[1]}, B: ${components[2]}`);\n\n/* 结构赋值方式. */\nlet [ r, g, b ] = components;\nconsole.log(`R: ${r}, G: ${g}, B: ${b}`);\n</code></pre>\n<p>colors 全局对象的很多 <code>&quot;to&quot;</code> 开头的方法都可返回颜色分量数组, 如 <a href=\"color#m-torgb\">toRgb</a>, <a href=\"color#m-tohsv\">toHsv</a>, <a href=\"color#m-tohsl\">toHsl</a>, <a href=\"color#m-torgba\">toRgba</a>, <a href=\"color#m-toargb\">toArgb</a> 等.</p>\n",
           "type": "module",
           "displayName": "ColorComponents"
+        },
+        {
+          "textRaw": "ColorDetectionAlgorithm",
+          "name": "colordetectionalgorithm",
+          "desc": "<p>颜色检测算法, 用于检测两个颜色之间的差异程度, 即颜色差异.</p>\n<p><a href=\"https://zh.wikipedia.org/wiki/%E9%A2%9C%E8%89%B2%E5%B7%AE%E5%BC%82\">颜色差异</a> (<a href=\"https://en.wikipedia.org/wiki/Color_difference\">Color Difference</a>), 也称为颜色距离, 是色彩学领域的一个参量.<br>颜色差异将一个抽象概念进行了量化, 例如可以通过色彩空间内的 <a href=\"https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%B0%8F%E8%B7%9D%E7%A6%BB\">欧氏距离</a> (<a href=\"https://en.wikipedia.org/wiki/Euclidean_distance\">Euclidean Distance</a>) 计算出一个具体的差异量.</p>\n<p>量化颜色差异时, 存在多种不同的量化方法, 对应 AutoJs6 颜色模块的颜色检测算法.</p>\n<p>AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参数传入到某个函数中.</p>\n",
+          "modules": [
+            {
+              "textRaw": "RGB 差值检测",
+              "name": "rgb_差值检测",
+              "desc": "<p>参数名称: <code>diff</code></p>\n<p>计算两个 RGB 颜色各分量的差值:</p>\n<picture>\n  <source srcset=\"images/rgb-difference-color-detection-dark.png\" media=\"(prefers-color-scheme: dark)\">\n  <img src=\"images/rgb-difference-color-detection.png\" alt=\"rgb-difference-color-detection\">\n</picture>\n\n",
+              "type": "module",
+              "displayName": "RGB 差值检测"
+            },
+            {
+              "textRaw": "RGB 距离检测",
+              "name": "rgb_距离检测",
+              "desc": "<p>参数名称: <code>rgb</code></p>\n<p>计算 RGB 色彩空间中两点间距离:</p>\n<picture>\n  <source srcset=\"images/rgb-distance-color-detection-dark.png\" media=\"(prefers-color-scheme: dark)\">\n  <img src=\"images/rgb-distance-color-detection.png\" alt=\"rgb-distance-color-detection\">\n</picture>\n\n",
+              "type": "module",
+              "displayName": "RGB 距离检测"
+            },
+            {
+              "textRaw": "加权 RGB 距离检测",
+              "name": "加权_rgb_距离检测",
+              "desc": "<p>参数名称: <code>rgb+</code></p>\n<p>带有权重的 RGB 距离检测 (Delta E):</p>\n<picture>\n  <source srcset=\"images/weighted-rgb-distance-color-detection-dark.png\" media=\"(prefers-color-scheme: dark)\">\n  <img src=\"images/weighted-rgb-distance-color-detection.png\" alt=\"weighted-rgb-distance-color-detection\">\n</picture>\n\n<blockquote>\n<p>参阅:<br><a href=\"https://www.compuphase.com/cmetric.htm\">Colour metric (from compuphase.com)</a><br><a href=\"https://en.wikipedia.org/wiki/Color_difference#CIELAB_%CE%94E*\">CIELAB Delta E* (from Wikipedia)</a></p>\n</blockquote>\n",
+              "type": "module",
+              "displayName": "加权 RGB 距离检测"
+            },
+            {
+              "textRaw": "H 距离检测",
+              "name": "h_距离检测",
+              "desc": "<p>参数名称: <code>h</code></p>\n<p>HSV 色彩空间中 <code>H (hue)</code> 分量的距离检测:</p>\n<picture>\n  <source srcset=\"images/h-distance-color-detection-dark.png\" media=\"(prefers-color-scheme: dark)\">\n  <img src=\"images/h-distance-color-detection.png\" alt=\"weighted-rgb-distance-color-detection\">\n</picture>\n\n",
+              "type": "module",
+              "displayName": "H 距离检测"
+            },
+            {
+              "textRaw": "HS 距离检测",
+              "name": "hs_距离检测",
+              "desc": "<p>参数名称: <code>hs</code></p>\n<p>HSV 色彩空间中 <code>H (hue)</code> 及 <code>S (saturation)</code> 的相关距离检测:</p>\n<picture>\n  <source srcset=\"images/hs-distance-color-detection-dark.png\" media=\"(prefers-color-scheme: dark)\">\n  <img src=\"images/hs-distance-color-detection.png\" alt=\"weighted-rgb-distance-color-detection\">\n</picture>\n\n",
+              "type": "module",
+              "displayName": "HS 距离检测"
+            }
+          ],
+          "type": "module",
+          "displayName": "ColorDetectionAlgorithm"
         },
         {
           "textRaw": "Range",
@@ -944,6 +1002,113 @@
           "desc": "<p>表示一个整数的取值范围. 其表示法可参阅 <a href=\"#range\">Range</a> 小节.</p>\n<p>如 <code>IntRange[10..30]</code> 表示整数 <code>x</code> 位于 <code>10 &lt;= x &lt;= 30</code> 范围内, 而 <code>IntRange[0..100)</code> 表示整数 <code>x</code> 位于 <code>0 &lt;= x &lt; 100</code> 范围内.</p>\n",
           "type": "module",
           "displayName": "IntRange"
+        },
+        {
+          "textRaw": "StandardCharset",
+          "name": "standardcharset",
+          "desc": "<p>StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形式: </p>\n<table>\n<thead>\n<tr>\n<th>Charset</th>\n<th>String</th>\n<th style=\"text-align:center\">Wikipedia</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>ISO_8859_1</td>\n<td>&quot;ISO_8859_1&quot; / &quot;iso-8859-1&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/ISO/IEC_8859-1\">英</a> / <a href=\"https://zh.wikipedia.org/zh-hans/ISO/IEC_8859-1\">中</a></td>\n</tr>\n<tr>\n<td>US_ASCII</td>\n<td>&quot;US_ASCII&quot; / &quot;us-ascii&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/ASCII\">英</a> / <a href=\"https://zh.wikipedia.org/wiki/ASCII\">中</a></td>\n</tr>\n<tr>\n<td>UTF_8</td>\n<td>&quot;UTF_8&quot; / &quot;utf-8&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/UTF-8\">英</a> / <a href=\"https://zh.wikipedia.org/wiki/UTF-8\">中</a></td>\n</tr>\n<tr>\n<td>UTF_16</td>\n<td>&quot;UTF_16&quot; / &quot;utf-16&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/UTF-16\">英</a> / <a href=\"https://zh.wikipedia.org/wiki/UTF-16\">中</a></td>\n</tr>\n<tr>\n<td>UTF_16BE</td>\n<td>&quot;UTF_16BE&quot; / &quot;utf-16be&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes\">英</a></td>\n</tr>\n<tr>\n<td>UTF_16LE</td>\n<td>&quot;UTF_16LE&quot; / &quot;utf-16le&quot;</td>\n<td style=\"text-align:center\"><a href=\"https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes\">英</a></td>\n</tr>\n</tbody>\n</table>\n<p>Charset 类可由 StandardCharsets 的静态常量获取, 如 <code>StandardCharsets.UTF_8</code>.<br>字符串表示 StandardCharset 类型时, 支持与上述静态常量同名的大写形式, 如 <code>&quot;UTF_8&quot;</code>, 以及带连字符的小写形式, 如 <code>&quot;utf-8&quot;</code>.</p>\n<p>Typescript declaration (TS 声明):</p>\n<pre><code class=\"lang-ts\">declare type StandardCharset = java.nio.charset.StandardCharsets \n    | &#39;US_ASCII&#39; | &#39;ISO_8859_1&#39; | &#39;UTF_8&#39; | &#39;UTF_16BE&#39; | &#39;UTF_16LE&#39; | &#39;UTF_16&#39; \n    | &#39;us-ascii&#39; | &#39;iso-8859-1&#39; | &#39;utf-8&#39; | &#39;utf-16be&#39; | &#39;utf-16le&#39; | &#39;utf-16&#39;;\n</code></pre>\n<p>JavaScript 实例:</p>\n<pre><code class=\"lang-js\">/**\n * @param {StandardCharset} char\n * @returns void\n */\nfunction test(char) {\n    /* ... */\n}\n\ntest(StandardCharsets.UTF_8); /* Charset 类形式. */\ntest(&#39;UTF_8&#39;); /* 字符串大写形式. */\ntest(&#39;utf-8&#39;); /* 字符串小写形式. */\n</code></pre>\n<blockquote>\n<p>注: 在 AutoJs6 中, StandardCharsets 支持全局化调用.</p>\n</blockquote>\n<blockquote>\n<p>参阅: <a href=\"https://docs.oracle.com/javase/8/docs/api/java/nio/charset/StandardCharsets.html\">Java 文档 (标准版) (英)</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "StandardCharset"
+        },
+        {
+          "textRaw": "ExtendModulesNames",
+          "name": "extendmodulesnames",
+          "desc": "<p>AutoJs6 <a href=\"plugins#内置扩展插件\">内置扩展插件</a> 的插件名称.</p>\n<p>支持的字符串常量:</p>\n<ul>\n<li><code>&quot;Arrayx&quot;</code>&quot; 或 <code>&quot;Array&quot;</code></li>\n<li><code>&quot;Numberx&quot;</code>&quot; 或 <code>&quot;Number&quot;</code></li>\n<li><code>&quot;Mathx&quot;</code>&quot; 或 <code>&quot;Math&quot;</code></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "ExtendModulesNames"
+        },
+        {
+          "textRaw": "InjectableWebView",
+          "name": "injectablewebview",
+          "desc": "<p><a href=\"https://developer.android.com/reference/android/webkit/WebView\">android.webkit.WebView</a> 的子类.</p>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-inject\">inject</a></li>\n</ul>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"web#m-newinjectablewebview\">web.newInjectableWebView</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">InjectableWebView</p>\n\n<hr>\n",
+          "modules": [
+            {
+              "textRaw": "[m#] inject",
+              "name": "[m#]_inject",
+              "methods": [
+                {
+                  "textRaw": "inject(script, callback?)",
+                  "type": "method",
+                  "name": "inject",
+                  "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>script</strong> { <a href=\"#string\">string</a> } - 脚本</li>\n<li><strong>[callback]</strong> { <a href=\"#function\">(</a>value: <a href=\"#string\">string</a><a href=\"#function\">)</a> <a href=\"#function\">=&gt;</a> <a href=\"#void\">void</a> } - 脚本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>注入 <code>script</code> 参数提供的 JavaScript 脚本, <code>callback</code> 回调参数可用于获取脚本语句的执行结果.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\nlet webView = web.newInjectableWebView(&#39;www.github.com&#39;);\nwebView.inject(&#39;navigator.userAgent&#39;, value =&gt; console.log(value));\nactivity.setContentView(webView);\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "script"
+                        },
+                        {
+                          "name": "callback?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m#] inject"
+            }
+          ],
+          "type": "module",
+          "displayName": "InjectableWebView"
+        },
+        {
+          "textRaw": "InjectableWebClient",
+          "name": "injectablewebclient",
+          "desc": "<p><a href=\"https://developer.android.com/reference/android/webkit/WebViewClient\">android.webkit.WebViewClient</a> 的子类.</p>\n<p>部分属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-inject\">inject</a></li>\n<li><code>[m#]</code> <a href=\"#m-injectandwait\">injectAndWait</a></li>\n</ul>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"web#m-newinjectablewebclient\">web.newInjectableWebClient</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">InjectableWebClient</p>\n\n<hr>\n",
+          "modules": [
+            {
+              "textRaw": "[m#] inject",
+              "name": "[m#]_inject",
+              "methods": [
+                {
+                  "textRaw": "inject(script, callback?)",
+                  "type": "method",
+                  "name": "inject",
+                  "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>script</strong> { <a href=\"#string\">string</a> } - 脚本</li>\n<li><strong>[callback]</strong> { <a href=\"#function\">(</a>value: <a href=\"#string\">string</a><a href=\"#function\">)</a> <a href=\"#function\">=&gt;</a> <a href=\"#void\">void</a> } - 脚本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>注入 <code>script</code> 参数提供的 JavaScript 脚本, <code>callback</code> 回调参数可用于获取脚本语句的执行结果.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet client = web.newInjectableWebClient();\nclient.inject(&#39;navigator.userAgent&#39;, value =&gt; console.log(value));\n\nlet webView = web.newInjectableWebView(&#39;www.github.com&#39;);\nwebView.setWebViewClient(client);\nactivity.setContentView(webView);\n</code></pre>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "script"
+                        },
+                        {
+                          "name": "callback?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m#] inject"
+            },
+            {
+              "textRaw": "[m#] injectAndWait",
+              "name": "[m#]_injectandwait",
+              "methods": [
+                {
+                  "textRaw": "injectAndWait(script)",
+                  "type": "method",
+                  "name": "injectAndWait",
+                  "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>script</strong> { <a href=\"#string\">string</a> } - 脚本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 脚本执行结果</li>\n</ul>\n<p>注入 <code>script</code> 参数提供的 JavaScript 脚本, 等待脚本执行完毕, 返回执行结果.</p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "script"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m#] injectAndWait"
+            }
+          ],
+          "type": "module",
+          "displayName": "InjectableWebClient"
         }
       ],
       "type": "module",

@@ -542,7 +542,7 @@ scrollable().find().some((w) => {
 - right - 右边界右移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(right)
 - bottom - 下边界下移, 即向上取整, 类似 JavaScript 语言的 Math.ceil(bottom)
 
-例如:  
+例如:
 
 `Rect(10.9, 12.6 - 120.37, 1882.02)` 外展后得到  
 `Rect(10, 12, 121, 1883)`
@@ -564,3 +564,115 @@ scrollable().find().some((w) => {
 `Rect(11, 13, 120, 1882)`
 
 > 注: "内收" 源自健身术语
+
+## 阈值
+
+阈值, 英文 threshold, 也称 "临界值".  
+阈值是令对象发生某种变化所需某种条件的值.
+
+在 AutoJs6 中, 图像与颜色相关的许多方法, 均支持通过参数传入不同类型和数值的阈值.
+
+阈值的范围通常为 `IntRange[0..255]` 和 `Range[0..1]`.
+
+### 相似度
+
+阈值通常可与 `相似度 (Similarity)` 进行转换, 作为参数时通常也支持互相替代:
+
+```text
+%Similarity% = 1 - %Threshold% / 255
+%Threshold% = (1 - %Similarity%) * 255
+```
+
+`阈值 0` 等效于 `相似度 1` (完全匹配, 不允许丝毫误差)  
+`阈值 4` 约等效于 `相似度 0.984` (匹配时可以容忍一点误差)  
+`阈值 128` 等效于 `相似度 0.5` (匹配时误差容忍相对宽松)  
+`阈值 255` 等效于 `相似度 0` (完全容忍, 不常用)
+
+### 颜色匹配阈值
+
+取值范围: IntRange[0..255]
+
+参数类型与此类阈值相关的常用方法:
+
+- [colors.isSimilar](color#m-issimilar)
+- images.findColor
+- images.findColorInRegion
+- images.findMultiColors
+- images.detectsColor
+
+### 图像匹配阈值
+
+取值范围: Range[0..1]
+
+参数类型与此类阈值相关的常用方法:
+
+- images.findImage
+- images.findImageInRegion
+- images.matchTemplate
+
+### 图像阈值化阈值
+
+取值范围: IntRange[0..255]
+
+参数类型与此类阈值相关的常用方法:
+
+- images.threshold(a, b, <i><strong>threshold</strong></i>, c)
+- images.adaptiveThreshold ... (此处内容待完善)
+
+## 亮度
+
+亮度既可指物理上对于光的量度, 也可指颜色上色彩的明亮程度.
+
+Luminance, Lightness 和 Brightness 都与 "亮度" 有关.
+
+|            术语             |  常用译名  |  性质   |  可测量或计算  |
+|:-------------------------:|:------:|:-----:|:--------:|
+|  [Luminance](#luminance)  |   亮度   |  物理量  |    √     |
+| [Brightness](#brightness) |  视亮度   |  感知量  |    ×     |
+|  [Lightness](#lightness)  |   明度   |  感知量  |    ×     |
+
+### Luminance
+
+在光度学和色度学中, 亮度 (luminance) 表示人眼对光强度实际感受的物理量, 即单位面积看上去有多明亮.
+
+国际单位制规定亮度的符号是 `Lv`, 单位为 `坎德拉每平方米 (cd/m²)`, 另一个常用非国际单位为 `尼特 (nit)`.  
+亮度是一个物理量, 它可被测量及计算.
+
+[Lightness](#lightness) 和 [Brightness](#brightness) 用于表示人眼对光亮的实际感受.  
+这个感受是一个感知量, 与物理量不同, 感知量不可测量, 也不可计算.
+
+相同的食盐, 不同人品尝有不同的咸度感受; 同样地, 相同的颜色, 不同人观察也会有不同的亮度感受.
+
+与 Luminance 相关的参考资料:
+
+- 亮度 (Luminance) - [Wikipedia (英)](https://en.wikipedia.org/wiki/Luminance)
+
+### Brightness
+
+视亮度 (Brightness) 是对于光源或物体表面明暗的视知觉特性, 是一个感知量.  
+视亮度是视觉的特性, 对视觉目标的辐射或反射的光亮度的感知.  
+这种感知对于光的亮度不是线性的, 而是依赖于视觉环境.  
+
+与 Brightness 相关的参考资料:
+
+- 视亮度 (Brightness) - [Wikipedia (英)](https://en.wikipedia.org/wiki/Brightness)
+- 芒克-怀特错觉 (White's Illusion) - [Wikipedia (英)](https://en.wikipedia.org/wiki/White%27s_illusion)
+- 侧抑制 (Lateral Inhibition) - [Wikipedia (英)](https://en.wikipedia.org/wiki/Lateral_inhibition)
+
+### Lightness
+
+明度 (Lightness) 是一个物体与同样亮的白色物体相比后的明亮程度.
+
+与 Lightness 相关的参考资料:
+
+- 明度 (Lightness) - [Wikipedia (英)](https://en.wikipedia.org/wiki/Lightness)
+
+## 注入
+
+代码注入 (Code Injection) 是因处理无效数据的而引发的非预期运行结果.  
+
+代码注入可被攻击者用来导入代码到某特定的计算机程序, 以改变程序的执行进程或目的.
+
+常用的代码注入包含 [ 脚本注入 (XSS) / SQL 注入 / PHP 注入 / ASP 注入 ] 等.
+
+> 参阅: [Wikipedia (英)](https://en.wikipedia.org/wiki/Code_injection) / [Wikipedia (中)](https://zh.wikipedia.org/wiki/%E4%BB%A3%E7%A2%BC%E6%B3%A8%E5%85%A5) 

@@ -433,7 +433,7 @@ returns 后的 "{}" 内包含返回值类型.
 
 ## 声明
 
-当前项目 (文档) 及 [AutoJs6](https://github.com/SuperMonster003/AutoJs6/) (App) 均为二次开发.  
+当前项目 (文档) 及 [AutoJs6](https://github.com/SuperMonster003/AutoJs6) (App) 均为二次开发.  
 相对于 [原始 App](https://github.com/hyb1996/Auto.js/), 二次开发的 App 中会增加或修改部分模块功能.  
 相对于 [原始文档](https://github.com/hyb1996/AutoJs-Docs/), 二次开发的文档将进行部分增删或重新编写.  
 开发者无法保证对 API 的完全理解及文档的无纰漏撰写.  

@@ -238,11 +238,21 @@ toast("world", "forcible");
 
 > 注: 此方法的 isForcible 参数只能为具有明确意义的字符标识, 不能为 boolean 类型或其他类型, 否则 isForcible 将被视为 isLong.
 
-### toast.dismissAll()
+### [m] dismissAll
+
+#### dismissAll()
 
 **`Global`** - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-强制取消显示所有消息框.
+强制消除所有由 AutoJs6 产生的消息框, 包括正在显示的及等待显示的.
+
+使用方式:
+
+```js
+toast.dismissAll(); /* 立即消除所有消息框. */
+```
+
+示例:
 
 ```js
 toast("hello");
@@ -483,8 +493,8 @@ wait(() => device.isScreenOff(), 20, 0);
 
 - **condition** { [(() => T)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -572,8 +582,8 @@ wait(() => {
 - **condition** { [(() => T)](dataTypes#function) | [PickupSelector](uiSelectorType#m-pickup) } - 结束等待条件
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -590,8 +600,8 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -643,8 +653,8 @@ wait(() => {
 
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -658,8 +668,8 @@ wait(() => {
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -674,8 +684,8 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -725,8 +735,8 @@ wait(() => {
 
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -740,8 +750,8 @@ wait(() => {
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -756,8 +766,8 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - **callback** {{
-    - then?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
-    - else?(result?: [T](dataTypes#generic)): [R](dataTypes#generic)
+    - then(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
+    - else(result?: [T](dataTypes#generic))?: [R](dataTypes#generic)
 - }} - 等待结束回调对象
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
@@ -1621,6 +1631,377 @@ cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
 cXy(0.3); /* 相当于 cXy(0.3, '9:16') . */
 cXy(384); /* 相当于 cXy(384, 720) . */
 ```
+
+## [m+] species
+
+### species(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+查看任意对象的 "种类", 如 `Object`, `Array`, `Number`, `String`, `RegExp` 等.
+
+内部实现代码摘要:
+
+```js
+Object.prototype.toString.call(o).slice('[Object\x20'.length, ']'.length * -1);
+```
+
+示例:
+
+```js
+species('xyz'); // String
+species(20); // Number
+species(20n); // BigInt
+species(true); // Boolean
+species(undefined); // Undefined
+species(null); // Null
+species(() => null); // Function
+species({ a: 'Apple' }); // Object
+species([ 5, 10, 15 ]); // Array
+species(/^\d{8,11}$/); // RegExp
+species(new Date()); // Date
+species(new TypeError()); // Error
+species(new Map()); // Map
+species(new Set()); // Set
+species(<text/>); // XML
+species(org.autojs.autojs6); // JavaPackage
+species(org.autojs.autojs6.R); // JavaClass
+```
+
+如需判断某个对象是否为特定的 "种类", 可使用形如 `species.isXxx` 的扩展方法:
+
+```js
+species.isObject(23); // false
+species.isNumber(23); // true
+species.isRegExp(/test$/); // true
+```
+
+### [m] isArray
+
+#### isArray(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Array`.
+
+### [m] isArrayBuffer
+
+#### isArrayBuffer(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `ArrayBuffer`.
+
+### [m] isBigInt
+
+#### isBigInt(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `BigInt`.
+
+### [m] isBoolean
+
+#### isBoolean(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Boolean`.
+
+### [m] isContinuation
+
+#### isContinuation(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Continuation`.
+
+### [m] isDataView
+
+#### isDataView(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `DataView`.
+
+### [m] isDate
+
+#### isDate(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Date`.
+
+### [m] isError
+
+#### isError(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Error`.
+
+### [m] isFloat32Array
+
+#### isFloat32Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Float32Array`.
+
+### [m] isFloat64Array
+
+#### isFloat64Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Float64Array`.
+
+### [m] isFunction
+
+#### isFunction(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Function`.
+
+### [m] isHTMLDocument
+
+#### isHTMLDocument(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `HTMLDocument`.
+
+### [m] isInt16Array
+
+#### isInt16Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Int16Array`.
+
+### [m] isInt32Array
+
+#### isInt32Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Int32Array`.
+
+### [m] isInt8Array
+
+#### isInt8Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Int8Array`.
+
+### [m] isJavaObject
+
+#### isJavaObject(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `JavaObject`.
+
+### [m] isJavaPackage
+
+#### isJavaPackage(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `JavaPackage`.
+
+### [m] isMap
+
+#### isMap(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Map`.
+
+### [m] isNamespace
+
+#### isNamespace(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Namespace`.
+
+### [m] isNull
+
+#### isNull(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Null`.
+
+### [m] isNumber
+
+#### isNumber(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Number`.
+
+### [m] isObject
+
+#### isObject(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Object`.
+
+### [m] isQName
+
+#### isQName(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `QName`.
+
+### [m] isRegExp
+
+#### isRegExp(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `RegExp`.
+
+### [m] isSet
+
+#### isSet(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Set`.
+
+### [m] isString
+
+#### isString(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `String`.
+
+### [m] isUint16Array
+
+#### isUint16Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Uint16Array`.
+
+### [m] isUint32Array
+
+#### isUint32Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Uint32Array`.
+
+### [m] isUint8Array
+
+#### isUint8Array(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Uint8Array`.
+
+### [m] isUint8ClampedArray
+
+#### isUint8ClampedArray(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Uint8ClampedArray`.
+
+### [m] isUndefined
+
+#### isUndefined(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Undefined`.
+
+### [m] isWeakMap
+
+#### isWeakMap(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `WeakMap`.
+
+### [m] isWeakSet
+
+#### isWeakSet(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `WeakSet`.
+
+### [m] isWindow
+
+#### isWindow(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `Window`.
+
+### [m] isXML
+
+#### isXML(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `XML`.
+
+### [m] isXMLList
+
+#### isXMLList(o)
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `XMLList`.
 
 ## [p] WIDTH
 

@@ -3,7 +3,7 @@
 ---
 
 <p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Feb 22, 2023.</p>
 
 ---
 
@@ -454,10 +454,6 @@ foo("1.3"); /* 不符合预期. */
 通常用于输出转换.  
 接受 string 类型并生成首字母大写的同类型数据.
 
-```js
-
-```
-
 ## IgnoreCase
 
 **IgnoreCase&lt;T extends string>: T**
@@ -512,6 +508,20 @@ foo("heroes"); /* 不符合预期. */
 > 注: 目前 (2022/08) 在 JSDoc 及 TypeScript 中,  
 > 均不存在使用正则表达式字面量检查字符串的类型检查 (参阅 [StackOverflow](https://stackoverflow.com/questions/51445767/how-to-define-a-regex-matched-string-type-in-typescript)),  
 > 上述 Pattern 类型仅适用于对文档内容的辅助理解.
+
+## AnyBut
+
+**AnyBut&lt;T>**
+
+任意类型但排除 T.
+
+**foo(bar)**
+
+- **bar** { [AnyBut](#anybut)[<](#generic)[number](#number)[>](#generic) }
+
+上述示例的 bar 参数接受除 [number](#number) 外的任意类型.
+
+# 自定义类型
 
 ## JavaArray
 
@@ -623,8 +633,6 @@ console.log(arrList.length); // 0
 ```
 
 > 参阅: [Oracle Docs](https://docs.oracle.com/javase/8/docs/api/java/util/ArrayList.html)
-
-# 自定义类型
 
 ## NumberString
 
@@ -915,7 +923,7 @@ console.log(new org.opencv.core.Size([ 5, 23, 7, 8, 9 ])); // 5x23
 
 ## AndroidRect
 
-android.graphics.Rect 别名.  
+[android.graphics.Rect](https://developer.android.com/reference/android/graphics/Rect) 别名.  
 表示一个矩形, 作为控件信息时则用于表示控件在屏幕的相对位置及空间范围, 又称 **控件矩形**.
 
 ```js
@@ -943,8 +951,6 @@ console.log(`${bounds.centerX()}, ${bounds.centerY()}`);
 
 - [UiObject#bounds](uiObjectType#m-bounds)
 - [UiSelector.pickup](uiSelectorType#m-pickup)
-
-> 参阅: [Android Docs](https://developer.android.com/reference/android/graphics/Rect)
 
 ---
 
@@ -1245,7 +1251,7 @@ console.log(rectB); // Rect(200, 0 - 800, 800)
 
 ## AndroidBundle
 
-android.os.Bundle 别名.  
+[android.os.Bundle](https://developer.android.com/reference/android/os/Bundle) 别名.  
 表示一个会被打包成捆的容器, 容器内可存储 `键值对 (Key-Value Pair)` 形式的数据.
 
 ```js
@@ -1262,7 +1268,31 @@ console.log(bundleB.getStringArrayList("arr_list_key").get(0) === "A"); // true
 console.log(bundleB.getStringArrayList("arr_list_key").get(1) === "B"); // true
 ```
 
-> 参阅: [Android Docs](https://developer.android.com/reference/android/os/Bundle)
+## ScriptExecuteActivity
+
+[android.app.Activity](https://developer.android.com/reference/android/app/Activity) 的子类.
+
+ScriptExecuteActivity 是 UI 模式下, 全局对象 activity 的类型:
+
+```js
+'ui';
+activity instanceof org.autojs.autojs.execution.ScriptExecuteActivity; // true
+```
+
+一些 activity 相关的示例:
+
+```js
+/* 结束当前 activity. */
+activity.finish();
+/* 设置状态栏颜色为深红色. */
+activity.getWindow().setStatusBarColor(colors.toInt('dark-red'));
+/* 将视图对象作为内容加载. */
+activity.setContentView(web.newInjectableWebView('www.github.com'));
+/* 获取顶层窗口的高度. */
+activity.getWindow().getDecorView().getRootView().getHeight();
+```
+
+因 ScriptExecuteActivity 继承了 android.app.Activity 等非常多的 Java 类, 因此 activity 获得了非常丰富的属性和方法, 详情参阅 [Android Docs](https://developer.android.com/reference/android/app/Activity) 及 [AutoJs6 源码](https://github.com/SuperMonster003/AutoJs6/blob/10960ddbee71f75ef80907ad5b6ab42f3e1bf31e/app/src/main/java/org/autojs/autojs/execution/ScriptExecuteActivity.java#L30).
 
 ## DetectCompass
 
@@ -1531,10 +1561,10 @@ A: 255 -> 0xFF
 注意上述示例的 `G` 分量需补零.
 
 > 扩展阅读:
-> 
+>
 > 反向转换, 即 '#FF780EE0' 转换为 RGBA 分量:  
 > colors.toRgba('#FF780EE0'); // [ 120, 14, 224, 255 ]
-> 
+>
 > 获取单独的分量:  
 > let [r, g, b, a] = colors.toRgba('#FF780EE0');  
 > console.log(r); // 120
@@ -1577,8 +1607,9 @@ colors.alpha('#BF3') === 255; // true
 
 颜色整数 (Color Integer).
 
-多数情况下, 使用颜色整数代表一个颜色, 在安卓源码中, 颜色整数用 `ColorInt` 表示, 其值的范围由 `Java` 的 `Integer` 类型决定, 即 `-2^31..2^31-1`.  
-例如数字 `0xBF110523` 对应十进制的 `3205563683`, 超出了上述 `ColorInt` 的范围, 因此相关的 `colors` 方法 (如 [colors.toInt](color#m-toint), [colors.toHex](color#m-tohex) 等) 会将此数值通过 `2^32` 偏移量移动至合适的范围内, 于是得到结果 `-1089403613`.
+多数情况下, 使用颜色整数代表一个颜色.  
+在安卓源码中, 颜色整数用 `ColorInt` 表示, 其值的范围由 `Java` 的 `Integer` 类型决定, 即 `[-2^31..2^31-1]`.  
+例如数字 `0xBF110523` 对应十进制的 `3205563683`, 超出了上述 `ColorInt` 的范围, 因此相关方法 (如 [colors.toInt](color#m-toint)) 会将此数值通过 `2^32` 偏移量移动至合适的范围内, 最终得到结果 `-1089403613`.
 
 ```js
 colors.toInt(0xBF110523); // -1089403613
@@ -1588,13 +1619,13 @@ console.log(0xBF110523); // 3205563683
 console.log(0xBF110523 - 2 ** 32); // -1089403613
 ```
 
-`ColorInt` 作为参数类型传入时, 没有范围限制, 因为参数会通过 `2^32` 偏移量移动至上述合法范围内.
+由此可知, 当 `ColorInt` 作为参数类型传入时, 没有范围限制, 因为参数会通过 `2^32` 偏移量移动至上述合法范围内. 如 `colors.toHex(0xFFFF3300)` 将正确返回 `"#FF3300"`, 虽然参数 `0xFFFF3300` 并不在 `[-2^31..2^31-1]` 范围内.
 
-如 `colors.toHex(0xFFFF3300)` 将返回 `"#FF3300"`, 虽然参数 `0xFFFF3300` 并不在 `-2^31` 与 `2^31-1` 之间.
+当 `ColorInt` 作为返回值类型时, 其返回值一定位于 `[-2^31..2^31-1]` 范围内. 如 `colors.toInt(0xFFFF3300)` 返回 `-52480`, 此返回值缺乏可读性, 通常只用于作为新的参数传入其他方法.
 
-`ColorInt` 作为返回值类型时, 将确保其值位于 `-2^31` 与 `2^31-1` 之间, 且因 `JavaScript` 默认将数字以十进制显示 `number` 变量, 导致 `ColorInt` 结果缺乏可读性.
-
-如 `colors.toInt(0xFFFF3300)` 返回 `-52480`, 这个值不适于阅读, 但可用于参数传入其他方法.
+> 注:  
+> 事实上, `-52480` 是 `0xFFFF3300 - 2 ** 32` 的结果.  
+> 如需将 `-52480` 这样的值还原为具有可读性的颜色代码, 可使用 [colors.toHex](color#m-tohex) 等方法.
 
 ## ColorName
 
@@ -1780,8 +1811,77 @@ let [ r, g, b ] = components;
 console.log(`R: ${r}, G: ${g}, B: ${b}`);
 ```
 
-colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数组,  
-如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
+colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数组, 如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
+
+## ColorDetectionAlgorithm
+
+颜色检测算法, 用于检测两个颜色之间的差异程度, 即颜色差异.
+
+[颜色差异](https://zh.wikipedia.org/wiki/%E9%A2%9C%E8%89%B2%E5%B7%AE%E5%BC%82) ([Color Difference](https://en.wikipedia.org/wiki/Color_difference)), 也称为颜色距离, 是色彩学领域的一个参量.  
+颜色差异将一个抽象概念进行了量化, 例如可以通过色彩空间内的 [欧氏距离](https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%B0%8F%E8%B7%9D%E7%A6%BB) ([Euclidean Distance](https://en.wikipedia.org/wiki/Euclidean_distance)) 计算出一个具体的差异量.
+
+量化颜色差异时, 存在多种不同的量化方法, 对应 AutoJs6 颜色模块的颜色检测算法.
+
+AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参数传入到某个函数中.
+
+### RGB 差值检测
+
+参数名称: `diff`
+
+计算两个 RGB 颜色各分量的差值:
+
+<picture>
+  <source srcset="images/rgb-difference-color-detection-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="images/rgb-difference-color-detection.png" alt="rgb-difference-color-detection">
+</picture>
+
+### RGB 距离检测
+
+参数名称: `rgb`
+
+计算 RGB 色彩空间中两点间距离:
+
+<picture>
+  <source srcset="images/rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="images/rgb-distance-color-detection.png" alt="rgb-distance-color-detection">
+</picture>
+
+### 加权 RGB 距离检测
+
+参数名称: `rgb+`
+
+带有权重的 RGB 距离检测 (Delta E):
+
+<picture>
+  <source srcset="images/weighted-rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="images/weighted-rgb-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+</picture>
+
+> 参阅:   
+> [Colour metric (from compuphase.com)](https://www.compuphase.com/cmetric.htm)  
+> [CIELAB Delta E* (from Wikipedia)](https://en.wikipedia.org/wiki/Color_difference#CIELAB_%CE%94E*)
+
+### H 距离检测
+
+参数名称: `h`
+
+HSV 色彩空间中 `H (hue)` 分量的距离检测:
+
+<picture>
+  <source srcset="images/h-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="images/h-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+</picture>
+
+### HS 距离检测
+
+参数名称: `hs`
+
+HSV 色彩空间中 `H (hue)` 及 `S (saturation)` 的相关距离检测:
+
+<picture>
+  <source srcset="images/hs-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
+  <img src="images/hs-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+</picture>
 
 ## Range
 
@@ -1806,3 +1906,147 @@ colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数�
 表示一个整数的取值范围. 其表示法可参阅 [Range](#range) 小节.
 
 如 `IntRange[10..30]` 表示整数 `x` 位于 `10 <= x <= 30` 范围内, 而 `IntRange[0..100)` 表示整数 `x` 位于 `0 <= x < 100` 范围内.
+
+## StandardCharset
+
+StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形式: 
+
+| Charset    | String                      |                                                Wikipedia                                                 |
+|------------|-----------------------------|:--------------------------------------------------------------------------------------------------------:|
+| ISO_8859_1 | "ISO_8859_1" / "iso-8859-1" | [英](https://en.wikipedia.org/wiki/ISO/IEC_8859-1) / [中](https://zh.wikipedia.org/zh-hans/ISO/IEC_8859-1) |
+| US_ASCII   | "US_ASCII" / "us-ascii"     |           [英](https://en.wikipedia.org/wiki/ASCII) / [中](https://zh.wikipedia.org/wiki/ASCII)            |
+| UTF_8      | "UTF_8" / "utf-8"           |           [英](https://en.wikipedia.org/wiki/UTF-8) / [中](https://zh.wikipedia.org/wiki/UTF-8)            |
+| UTF_16     | "UTF_16" / "utf-16"         |          [英](https://en.wikipedia.org/wiki/UTF-16) / [中](https://zh.wikipedia.org/wiki/UTF-16)           |
+| UTF_16BE   | "UTF_16BE" / "utf-16be"     |                  [英](https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes)                   |
+| UTF_16LE   | "UTF_16LE" / "utf-16le"     |                  [英](https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes)                   |
+
+Charset 类可由 StandardCharsets 的静态常量获取, 如 `StandardCharsets.UTF_8`.  
+字符串表示 StandardCharset 类型时, 支持与上述静态常量同名的大写形式, 如 `"UTF_8"`, 以及带连字符的小写形式, 如 `"utf-8"`.
+
+Typescript declaration (TS 声明):
+
+```ts
+declare type StandardCharset = java.nio.charset.StandardCharsets 
+    | 'US_ASCII' | 'ISO_8859_1' | 'UTF_8' | 'UTF_16BE' | 'UTF_16LE' | 'UTF_16' 
+    | 'us-ascii' | 'iso-8859-1' | 'utf-8' | 'utf-16be' | 'utf-16le' | 'utf-16';
+```
+
+JavaScript 实例:
+
+```js
+/**
+ * @param {StandardCharset} char
+ * @returns void
+ */
+function test(char) {
+    /* ... */
+}
+
+test(StandardCharsets.UTF_8); /* Charset 类形式. */
+test('UTF_8'); /* 字符串大写形式. */
+test('utf-8'); /* 字符串小写形式. */
+```
+
+> 注: 在 AutoJs6 中, StandardCharsets 支持全局化调用.
+
+> 参阅: [Java 文档 (标准版) (英)](https://docs.oracle.com/javase/8/docs/api/java/nio/charset/StandardCharsets.html)
+
+## ExtendModulesNames
+
+AutoJs6 [内置扩展插件](plugins#内置扩展插件) 的插件名称.
+
+支持的字符串常量:
+
+- `"Arrayx"`" 或 `"Array"`
+- `"Numberx"`" 或 `"Number"`
+- `"Mathx"`" 或 `"Math"`
+
+## InjectableWebView
+
+[android.webkit.WebView](https://developer.android.com/reference/android/webkit/WebView) 的子类.
+
+部分属性或方法:
+
+- `[m#]` [inject](#m-inject)
+
+常见可以返回此类型的方法:
+
+- [web.newInjectableWebView](web#m-newinjectablewebview)
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">InjectableWebView</p>
+
+---
+
+### [m#] inject
+
+#### inject(script, callback?)
+
+**`Overload [1-2]/2`**
+
+- **script** { [string](#string) } - 脚本
+- **[callback]** { [(](#function)value: [string](#string)[)](#function) [=>](#function) [void](#void) } - 脚本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+注入 `script` 参数提供的 JavaScript 脚本, `callback` 回调参数可用于获取脚本语句的执行结果.
+
+```js
+'ui';
+let webView = web.newInjectableWebView('www.github.com');
+webView.inject('navigator.userAgent', value => console.log(value));
+activity.setContentView(webView);
+```
+
+## InjectableWebClient
+
+[android.webkit.WebViewClient](https://developer.android.com/reference/android/webkit/WebViewClient) 的子类.
+
+部分属性或方法:
+
+- `[m#]` [inject](#m-inject)
+- `[m#]` [injectAndWait](#m-injectandwait)
+
+常见可以返回此类型的方法:
+
+- [web.newInjectableWebClient](web#m-newinjectablewebclient)
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">InjectableWebClient</p>
+
+---
+
+### [m#] inject
+
+#### inject(script, callback?)
+
+**`Overload [1-2]/2`**
+
+- **script** { [string](#string) } - 脚本
+- **[callback]** { [(](#function)value: [string](#string)[)](#function) [=>](#function) [void](#void) } - 脚本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+注入 `script` 参数提供的 JavaScript 脚本, `callback` 回调参数可用于获取脚本语句的执行结果.
+
+```js
+'ui';
+
+let client = web.newInjectableWebClient();
+client.inject('navigator.userAgent', value => console.log(value));
+
+let webView = web.newInjectableWebView('www.github.com');
+webView.setWebViewClient(client);
+activity.setContentView(webView);
+```
+
+### [m#] injectAndWait
+
+#### injectAndWait(script)
+
+**`Overload [1-2]/2`**
+
+- **script** { [string](#string) } - 脚本
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 脚本执行结果
+
+注入 `script` 参数提供的 JavaScript 脚本, 等待脚本执行完毕, 返回执行结果.

@@ -16,12 +16,12 @@ web 模块主要用于 [WebView](https://developer.android.com/reference/android
 
 ### newInjectableWebView(url?)
 
-**`6.2.1`** **`Global`** **`UI`**
+**`6.2.1`** **`Global`** **`Overload [1-2]/3`** **`UI`**
 
 - **[url]** { [string](dataTypes#string) } - 需要 WebView 加载的 URL
-- <ins>**returns**</ins> { [InjectableWebView](dataTypes#injectablewebview) }
+- <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
 
-新建并返回一个 [InjectableWebView](dataTypes#injectablewebview) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例.
+新建并返回一个 [InjectableWebView](injectableWebViewType) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例.
 
 ```js
 'ui';
@@ -122,7 +122,7 @@ ui.emitter.on('back_pressed', function (e) {
 **`6.2.1`** **`Global`** **`Overload 3/3`** **`UI`**
 
 - **activity** { [ScriptExecuteActivity](dataTypes#scriptexecuteactivity) } - 上下文对象, 默认为 UI 模式下的全局 activity 对象
-- <ins>**returns**</ins> { [InjectableWebView](dataTypes#injectablewebview) }
+- <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
 
 新建并返回一个 [InjectableWebView](dataTypes#injectablewebview) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例, 通过 activity 参数可传入不同的 org.mozilla.javascript.Context 上下文对象, 该对象主要用于执行 JavaScript 语句.
 
@@ -132,9 +132,9 @@ ui.emitter.on('back_pressed', function (e) {
 
 **`6.2.1`** **`Global`**
 
-- <ins>**returns**</ins> { [InjectableWebClient](dataTypes#injectablewebclient) }
+- <ins>**returns**</ins> { [InjectableWebClient](injectableWebClientType) }
 
-新建并返回一个 [InjectableWebClient](dataTypes#injectablewebclient) (可 [注入](glossaries#注入) 的 [WebViewClient](https://developer.android.com/reference/android/webkit/WebViewClient)) 实例.
+新建并返回一个 [InjectableWebClient](injectableWebClientType) (可 [注入](glossaries#注入) 的 [WebViewClient](https://developer.android.com/reference/android/webkit/WebViewClient)) 实例.
 
 ```js
 /* 为 webView 对象重新设置一个新的客户端. */

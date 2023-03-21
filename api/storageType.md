@@ -1,13 +1,18 @@
-# 存储类 (Storage)
+# Storage (存储类)
 
-存储类 Storage 是一个私有虚拟类, 实例通常由 [storages](storages) 全局模块产生:
+存储类 Storage 是一个虚拟类, 实例通常由 [storages](storages) 全局模块产生:
 
 ```js
+/* Storage 为虚拟类, 并非真实存在. */
 typeof global.Storage; // "undefined"
 
 let sto = storages.create('test');
 sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 ```
+
+常见可以返回此类型的方法:
+
+- [storages.create](storages#m-create)
 
 ---
 
@@ -38,7 +43,7 @@ sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 - ... ...
 
 理论上, 除 [undefined](dataTypes#undefined) 和 [bigint](glossaries#bigint) 外的任意类型数据均可存入本地存储,  
-试图存入不支持类型的数据时, 将抛出异常.  
+试图存入不支持类型的数据时, 将抛出异常.
 
 存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,  
 因此数据转换时遵循 JSON 序列化规则 (如 NaN 将被转换为 null 等).

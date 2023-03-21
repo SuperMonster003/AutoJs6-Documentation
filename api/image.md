@@ -312,7 +312,7 @@ images.save(clip, "/sdcard/clip.png");
 **[v4.1.0新增]**
 
 * `img` {Image} 图片
-* `size` {Array} 定义滤波器的大小, 如[3, 3]
+* `size` {number} 定义滤波器的大小, 正奇数, 如 3
 * 返回 {Image}
 
 对图像进行中值滤波, 返回处理后的图像.

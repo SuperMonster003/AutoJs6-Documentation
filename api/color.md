@@ -1,7 +1,7 @@
 # 颜色 (Color)
 
 colors 模块可用于 [ 颜色模式转换 / 色彩空间转换 / 颜色分量合成及分解 ] 等.  
-同时包含一些颜色相关的工具, 如 [ 计算亮度值 / 相似度比较 ] 等.  
+同时包含一些颜色相关的工具, 如 [ 计算亮度值 / 相似度比较 ] 等.
 
 colors 模块与 [images](image) 模块配合使用, 可完成更多图色方面的功能.
 
@@ -50,7 +50,7 @@ AutoJs6 支持以下方式表示一个颜色:
         - [colors.BLACK](#p-black) ([融合颜色列表](colorTable#融合颜色列表) 的黑色颜色整数)
         - [colors.ORANGE](#p-orange) ([融合颜色列表](colorTable#融合颜色列表) 的橙色颜色整数)
         - ... ...
-- [颜色分量数组 (ColorComponents)](dataTypes.md#colorcomponents)
+- [颜色分量数组 (ColorComponents)](dataTypes#colorcomponents)
     - 方法
         - [colors.toRgb](#m-torgb) (颜色分量数组 `[R,G,B]`)
         - [colors.toRgba](#m-torgba) (颜色分量数组 `[R,G,B,A]`)
@@ -302,6 +302,8 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 
 ### alpha(color)
 
+**`Overload 1/2`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
@@ -313,6 +315,32 @@ colors.alpha(colors.TRANSPARENT); // 0
 colors.alpha('#05060708'); // 5
 ```
 
+### alpha(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [max=255]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `A (alpha)` 分量.
+
+取值范围 `[0..1]` (`options.max` 为 `1`) 或 `[0..255]` (`options.max` 为 `255` 或不指定).
+
+```js
+colors.alpha('#663399', { max: 1 }); // 1
+colors.alpha('#663399', { max: 255 }); // 255
+colors.alpha('#663399'); /* 同上. */
+
+colors.alpha('#05060708', { max: 1 }); // 0.0196078431372549
+colors.alpha('#05060708', { max: 255 }); // 5
+colors.alpha('#05060708'); /* 同上. */
+```
+
+当 `options.max` 为 `1` 时, 相当于 [colors.alphaDouble](#m-alphadouble) 方法.
+
 ## [m] alphaDouble
 
 ### alphaDouble(color)
@@ -322,15 +350,21 @@ colors.alpha('#05060708'); // 5
 
 获取颜色的 `A (alpha)` 分量, 取值范围 `[0..1]`.
 
+相当于 `colors.alpha(color, { max: 1 })`.
+
 ```js
 colors.alphaDouble('#663399'); // 1
 colors.alphaDouble(colors.TRANSPARENT); // 0
+
 colors.alphaDouble('#05060708'); // 0.0196078431372549
+colors.alpha('#05060708', { max: 1 }); /* 同上. */
 ```
 
 ## [m] red
 
 ### red(color)
+
+**`Overload 1/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
@@ -343,9 +377,48 @@ colors.red(colors.TRANSPARENT); // 0
 colors.red('#05060708'); // 6
 ```
 
+### red(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [max=255]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `R (red)` 分量.
+
+取值范围 `[0..1]` (`options.max` 为 `1`) 或 `[0..255]` (`options.max` 为 `255` 或不指定).
+
+```js
+colors.red('#663399', { max: 1 }); // 0.4
+colors.red('#663399', { max: 255 }); // 102
+colors.red('#663399'); /* 同上. */
+```
+
+当 `options.max` 为 `1` 时, 相当于 [colors.redDouble](#m-reddouble) 方法.
+
+## [m] redDouble
+
+### redDouble(color)
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `R (red)` 分量, 取值范围 `[0..1]`.
+
+相当于 `colors.red(color, { max: 1 })`.
+
+```js
+colors.redDouble('#663399'); // 0.4
+```
+
 ## [m] green
 
 ### green(color)
+
+**`Overload 1/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
@@ -358,9 +431,48 @@ colors.green(colors.TRANSPARENT); // 0
 colors.green('#05060708'); // 7
 ```
 
+### green(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [max=255]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `G (green)` 分量.
+
+取值范围 `[0..1]` (`options.max` 为 `1`) 或 `[0..255]` (`options.max` 为 `255` 或不指定).
+
+```js
+colors.green('#663399', { max: 1 }); // 0.2
+colors.green('#663399', { max: 255 }); // 51
+colors.green('#663399'); /* 同上. */
+```
+
+当 `options.max` 为 `1` 时, 相当于 [colors.greenDouble](#m-greendouble) 方法.
+
+## [m] greenDouble
+
+### greenDouble(color)
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `G (green)` 分量, 取值范围 `[0..1]`.
+
+相当于 `colors.green(color, { max: 1 })`.
+
+```js
+colors.greenDouble('#663399'); // 0.2
+```
+
 ## [m] blue
 
 ### blue(color)
+
+**`Overload 1/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
@@ -371,6 +483,43 @@ colors.green('#05060708'); // 7
 colors.blue('#663399'); // 153
 colors.blue(colors.TRANSPARENT); // 0
 colors.blue('#05060708'); // 8
+```
+
+### blue(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [max=255]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `B (blue)` 分量.
+
+取值范围 `[0..1]` (`options.max` 为 `1`) 或 `[0..255]` (`options.max` 为 `255` 或不指定).
+
+```js
+colors.blue('#663399', { max: 1 }); // 0.6
+colors.blue('#663399', { max: 255 }); // 153
+colors.blue('#663399'); /* 同上. */
+```
+
+当 `options.max` 为 `1` 时, 相当于 [colors.blueDouble](#m-bluedouble) 方法.
+
+## [m] blueDouble
+
+### blueDouble(color)
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `A (blue)` 分量, 取值范围 `[0..1]`.
+
+相当于 `colors.blue(color, { max: 1 })`.
+
+```js
+colors.blueDouble('#663399'); // 0.6
 ```
 
 ## [m] rgb
@@ -718,7 +867,7 @@ console.log(`R: ${r}, G: ${g}, B: ${b}`);
 
 ### toRgba(color)
 
-**`6.2.0`**
+**`6.2.0`** **`Overload 1/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -732,11 +881,31 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 
 需留意上述示例的参数格式为 `#AARRGGBB`, 结果格式为 `[RR, GG, BB, AA]`.
 
+### toRgba(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [maxAlpha=255]?: `1` | `255` - A (alpha) 分量的范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
+
+根据 `options` 选项参数获取颜色参数的 RGBA [颜色分量数组](dataTypes#colorcomponents).
+
+```js
+let [ r1, g1, b1, a1 ] = colors.toRgba('#DE663399');
+console.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255] . */
+
+let [ r2, g2, b2, a2 ] = colors.toRgba('#DE663399', { maxAlpha: 1 });
+console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1] . */
+```
+
 ## [m] toArgb
 
 ### toArgb(color)
 
-**`6.2.0`**
+**`6.2.0`** **`Overload 1/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -746,6 +915,26 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 ```js
 let [ a, r, g, b ] = colors.toArgb('#DE663399');
 console.log(`A: ${a}, R: ${r}, G: ${g}, B: ${b}`);
+```
+
+### toArgb(color, options)
+
+**`6.2.1`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [maxAlpha=255]?: `1` | `255` - A (alpha) 分量的范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
+
+根据 `options` 选项参数获取颜色参数的 ARGB [颜色分量数组](dataTypes#colorcomponents).
+
+```js
+let [ a1, r1, g1, b1 ] = colors.toArgb('#DE663399');
+console.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255] . */
+
+let [ a2, r2, g2, b2 ] = colors.toArgb('#DE663399', { maxAlpha: 1 });
+console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1] . */
 ```
 
 ## [m] toHsv
@@ -791,6 +980,8 @@ console.log(`H: ${h}, S: ${s}, V: ${v}`);
 
 获取颜色参数的 HSVA [颜色分量数组](dataTypes#colorcomponents).
 
+其中 A (alpha) 分量范围恒为 `[0..1]`.
+
 ```js
 let [ h, s, v, a ] = colors.toHsva('#BF663399');
 console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
@@ -807,6 +998,8 @@ console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSVA [颜色分量数组](dataTypes#colorcomponents).
+
+其中 A (alpha) 分量范围恒为 `[0..1]`.
 
 ```js
 let [ h, s, v, a ] = colors.toHsva(102, 51, 153, 191);
@@ -856,6 +1049,8 @@ console.log(`H: ${h}, S: ${s}, L: ${l}`);
 
 获取颜色参数的 HSLA [颜色分量数组](dataTypes#colorcomponents).
 
+其中 A (alpha) 分量范围恒为 `[0..1]`.
+
 ```js
 let [ h, s, l, a ] = colors.toHsla('#BF663399');
 console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
@@ -872,6 +1067,8 @@ console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSLA [颜色分量数组](dataTypes#colorcomponents).
+
+其中 A (alpha) 分量范围恒为 `[0..1]`.
 
 ```js
 let [ h, s, l, a ] = colors.toHsla(102, 51, 153, 191);
@@ -1019,6 +1216,92 @@ colors.luminance(colors.YELLOW); // 0.9278
 ```
 
 > 参阅: [W3C Wiki](https://www.w3.org/WAI/GL/wiki/Relative_luminance)
+
+## [m] toColorStateList
+
+### toColorStateList(...color)
+
+- **color** { [...](documentation#可变参数)([ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname))[[]](documentation#可变参数) } - 颜色参数
+- <ins>**returns**</ins> { [android.content.res.ColorStateList](https://developer.android.com/reference/android/content/res/ColorStateList) }
+
+将一个或多个颜色参数转换为 ColorStateList 实例.
+
+```js
+colors.toColorStateList('red'); /* 包含单一颜色的 ColorStateList. */
+colors.toColorStateList('red', 'green', 'orange'); /* 包含多个颜色的 ColorStateList. */
+```
+
+## [m] setPaintColor
+
+### setPaintColor(paint, color)
+
+- **paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔参数
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+方法 `setPaintColor` 用于解决在 `Android API 29 (10) [Q]` 及以上系统中 `Paint#setColor(color)` 无法正常设置画笔颜色的问题.
+
+```js
+let paint = new android.graphics.Paint();
+
+/* 安卓 10 及以上系统无法正常设置颜色. */
+// paint.setColor(colors.toInt('blue'));
+
+/* 使用 colors 模块实现原始功能. */
+colors.setPaintColor(paint, 'blue');
+```
+
+画笔无法正常设置颜色的原因, 是 `Android API 29 (10) [Q]` 源码中 `setColor` 有以下两种方法签名:
+
+```text
+setColor(@ColorInt int color): void
+setColor(@ColorLong long color): void
+```
+
+JavaScript 语言不区分 `int` 和 `long`, 即只有 `setColor(color: number)`,  
+它会优先匹配 Java 的 `setColor(@ColorLong long color): void`.
+
+`ColorLong` 颜色与 `ColorInt` 颜色不同在于, 前者包含了额外的 `ColorSpace` (颜色空间) 信息,  
+原有的 `ColorInt` 被当做 `ColorLong` 来解析, 导致颜色解析异常.
+
+除上述 `colors.setPaintColor` 的方法外, 还有其他一些解决方案:
+
+```js
+/* A. 使用 paint.setArgb 方法. */
+paint.setARGB(
+    colors.alpha(color),
+    colors.red(color),
+    colors.green(color),
+    colors.blue(color),
+);
+
+/* 同上, 语法更简洁. */
+paint.setARGB.apply(paint, colors.toArgb(color));
+
+/* B. 将 ColorInt "打包" 为 ColorLong. */
+paint.setColor(android.graphics.Color.pack(colors.toInt(color)));
+
+/* C. 直接使用带 ColorSpace 信息的 ColorLong. */
+paint.setColor(android.graphics.Color.pack(
+    colors.redDouble(color),
+    colors.greenDouble(color),
+    colors.blueDouble(color),
+    colors.alphaDouble(color),
+    android.graphics.ColorSpace.get(android.graphics.ColorSpace.Named.SRGB),
+));
+```
+
+`colors.setPaintColor` 的大致源码:
+
+```js
+function setPaintColor(paint, color) {
+    if (util.version.sdkInt >= util.versionCodes.Q) {
+        paint.setARGB.apply(paint, colors.toArgb(color));
+    } else {
+        paint.setColor(colors.toInt(color));
+    }
+}
+```
 
 ## [p+] android
 

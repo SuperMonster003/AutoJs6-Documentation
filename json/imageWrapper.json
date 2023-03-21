@@ -1,0 +1,261 @@
+{
+  "source": "..\\api\\imageWrapper.md",
+  "modules": [
+    {
+      "textRaw": "包装图像类 (ImageWrapper)",
+      "name": "包装图像类_(imagewrapper)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 2, 2023.</p>\n\n<hr>\n<p>包装图像类用于 AutoJs6 的图像处理.</p>\n<p>包装后的图像类隐藏了内部复杂的图像处理细节, 便于图像数据的 [ 生成 / 访问 / 传递 / 交互 ].</p>\n<pre><code class=\"lang-js\">util.getClassName(ImageWrapper); // org.autojs.autojs.core.image.ImageWrapper\nimages.read(&#39;./picture.jpg&#39;) instanceof ImageWrapper; /* ImageWrapper 实例判断. */\nImageWrapper.ofBitmap(bitmap); /* 将 Bitmap 包装为 ImageWrapper. */\n</code></pre>\n<p>在 [ <a href=\"image\">images</a> / <a href=\"ocr\">ocr</a> / <a href=\"canvas\">canvas</a> ] 等模块的方法中, 均或多或少地涉及 <code>ImageWrapper</code> 类型参数或返回值.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImageWrapper</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m#] getMajor",
+          "name": "[m#]_getmajor",
+          "methods": [
+            {
+              "textRaw": "getMajor()",
+              "type": "method",
+              "name": "getMajor",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取主版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;5.2.3&#39;).getMajor()); // 5\nconsole.log(new Version(11).getMajor()); // 11\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getMajor"
+        },
+        {
+          "textRaw": "[m#] getMinor",
+          "name": "[m#]_getminor",
+          "methods": [
+            {
+              "textRaw": "getMinor()",
+              "type": "method",
+              "name": "getMinor",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取次版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;5.2.3&#39;).getMinor()); // 2\nconsole.log(new Version(11.9).getMinor()); // 9\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getMinor"
+        },
+        {
+          "textRaw": "[m#] getPatch",
+          "name": "[m#]_getpatch",
+          "methods": [
+            {
+              "textRaw": "getPatch()",
+              "type": "method",
+              "name": "getPatch",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取补丁版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;5.2.3&#39;).getPatch()); // 3\nconsole.log(new Version(11.9).getPatch()); // 0\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getPatch"
+        },
+        {
+          "textRaw": "[m#] getSuffix",
+          "name": "[m#]_getsuffix",
+          "methods": [
+            {
+              "textRaw": "getSuffix()",
+              "type": "method",
+              "name": "getSuffix",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本号后缀.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;5.2.3&#39;).getSuffix()); /* &quot;&quot; (空字符串) */\n\nconsole.log(new Version(&#39;5.2.3-beta2&#39;).getSuffix()); // -beta2\nconsole.log(new Version(&#39;5.2.3_beta2&#39;).getSuffix()); // _beta2\n\nconsole.log(new Version(&#39;5.2.3 beta2&#39;).getSuffix()); /* beta2 */\nconsole.log(new Version(&#39;5.2.3beta2&#39;).getSuffix()); /* 同上 (不推荐). */\nconsole.log(new Version(&#39;5.2.3 beta 2&#39;).getSuffix()); /* 同上 (不推荐). */\n</code></pre>\n<p>即使在获取后缀时, 不同的符号会得到不同的结果, 但在比较版本大小时, 这些不同的符号不会影响比较结果:</p>\n<pre><code class=\"lang-js\">let verA = new Version(&#39;5.2.3-alpha11&#39;);\nlet verB = new Version(&#39;5.2.3 alpha11&#39;);\n\n/* 两者后缀不等同. */\nconsole.log(verA.getSuffix() === verB.getSuffix()); // false\n\n/* 两者版本比较结果相同. */\nconsole.log(verA.isEqual(verB)); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getSuffix"
+        },
+        {
+          "textRaw": "[m#] isEqual",
+          "name": "[m#]_isequal",
+          "methods": [
+            {
+              "textRaw": "isEqual(otherVersion)",
+              "type": "method",
+              "name": "isEqual",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>比较版本号, 返回是否与参数对应的版本号等同.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3&#39;).isEqual(&#39;2.3.0&#39;)); // true\nconsole.log(new Version(&#39;2.3&#39;).isEqual(new Version(&#39;2.3.0&#39;))); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isEqual"
+        },
+        {
+          "textRaw": "[m#] isHigherThan",
+          "name": "[m#]_ishigherthan",
+          "methods": [
+            {
+              "textRaw": "isHigherThan(otherVersion)",
+              "type": "method",
+              "name": "isHigherThan",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>比较版本号, 返回是否高于参数对应的版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3&#39;).isHigherThan(&#39;2.2&#39;)); // true\nconsole.log(new Version(&#39;2.3&#39;).isHigherThan(new Version(&#39;2.2&#39;))); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isHigherThan"
+        },
+        {
+          "textRaw": "[m#] isLowerThan",
+          "name": "[m#]_islowerthan",
+          "methods": [
+            {
+              "textRaw": "isLowerThan(otherVersion)",
+              "type": "method",
+              "name": "isLowerThan",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>比较版本号, 返回是否低于参数对应的版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.1&#39;).isLowerThan(&#39;2.2&#39;)); // true\nconsole.log(new Version(&#39;2.1&#39;).isLowerThan(new Version(&#39;2.2&#39;))); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isLowerThan"
+        },
+        {
+          "textRaw": "[m#] isAtLeast",
+          "name": "[m#]_isatleast",
+          "methods": [
+            {
+              "textRaw": "isAtLeast(otherVersion)",
+              "type": "method",
+              "name": "isAtLeast",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>比较版本号, 返回是否不低于 (即大于等于) 参数对应的版本号.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3&#39;).isAtLeast(&#39;2.2&#39;)); // true\nconsole.log(new Version(&#39;2.3&#39;).isAtLeast(new Version(&#39;2.2&#39;))); /* 同上. */\n\nconsole.log(new Version(&#39;2.3&#39;).isAtLeast(&#39;2.3&#39;)); // true\nconsole.log(new Version(&#39;2.3&#39;).isAtLeast(new Version(&#39;2.3&#39;))); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "isAtLeast(otherVersion, ignoreSuffix)",
+              "type": "method",
+              "name": "isAtLeast",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><strong>[ignoreSuffix = false]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否忽略版本后缀</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>比较版本号, 返回是否不低于 (即大于等于) 参数对应的版本号且根据 <code>ignoreSuffix</code> 参数决定是否忽略版本后缀.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3-alpha2&#39;).isAtLeast(&#39;2.3&#39;)); // false\nconsole.log(new Version(&#39;2.3-alpha2&#39;).isAtLeast(&#39;2.3&#39;, true)); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    },
+                    {
+                      "name": "ignoreSuffix"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isAtLeast"
+        },
+        {
+          "textRaw": "[m#] getSubversionNumbers",
+          "name": "[m#]_getsubversionnumbers",
+          "methods": [
+            {
+              "textRaw": "getSubversionNumbers()",
+              "type": "method",
+              "name": "getSubversionNumbers",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回版本号所有数字部分组成的数组.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3.5&#39;).getSubversionNumbers()); // [2, 3, 5]\n\n/* 后缀将被忽略. */\nconsole.log(new Version(&#39;2.3.5-alpha9&#39;).getSubversionNumbers()); // [2, 3, 5]\n\n/* \n * 注意虽然 &#39;2&#39; 与 &#39;2.0.0&#39; 版本比较等同,\n * 即 new Version(&#39;2&#39;).isEqual(&#39;2.0.0&#39;) 为 true,\n * 但两者 getSubversionNumbers() 不同. \n */\nconsole.log(new Version(&#39;2.0.0&#39;).getSubversionNumbers()); // [2, 0, 0]\nconsole.log(new Version(&#39;2&#39;).getSubversionNumbers()); // [2]\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getSubversionNumbers"
+        },
+        {
+          "textRaw": "[m#] getOriginalString",
+          "name": "[m#]_getoriginalstring",
+          "methods": [
+            {
+              "textRaw": "getOriginalString()",
+              "type": "method",
+              "name": "getOriginalString",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>返回版本号原始字符串.</p>\n<pre><code class=\"lang-js\">console.log(new Version(&#39;2.3.5&#39;).getOriginalString()); // 2.3.5\nconsole.log(new Version(&#39;2.3&#39;).getOriginalString()); // 2.3\nconsole.log(new Version(&#39;2.3-alpha5&#39;).getOriginalString()); // 2.3-alpha5\nconsole.log(new Version(&#39;2.0.0&#39;).getOriginalString()); // 2.0.0\nconsole.log(new Version(2).getOriginalString()); /* 2 (字符串类型) */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getOriginalString"
+        },
+        {
+          "textRaw": "[m#] compareTo",
+          "name": "[m#]_compareto",
+          "methods": [
+            {
+              "textRaw": "compareTo(otherVersion)",
+              "type": "method",
+              "name": "compareTo",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"#c-version\">Version</a> } - 待比较版本参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>比较两个版本并返回比较结果数字 [ 1 / -1 / 0 ].</p>\n<pre><code class=\"lang-js\">let verA = new Version(&#39;2&#39;);\nlet verB = new Version(&#39;2.0.3&#39;);\nlet verC = new Version(&#39;2.0.5&#39;);\n\nconsole.log(verA.compareTo(verB)); /* -1, 表示低于待比较版本. */\nconsole.log(verA.compareTo(new Version(&#39;2.0.0&#39;))); /* 0, 表示与待比较版本等同. */\nconsole.log(verC.compareTo(verB)); /* 1, 表示高于待比较版本. */\n\n/* 需留意 otherVersion 参数类型只能为 Version 类型. */\nconsole.log(verA.compareTo(new Version(&#39;2.0.0&#39;))); // 0\nconsole.log(verA.compareTo(&#39;2.0.0&#39;)); /* 抛出异常. */\n</code></pre>\n<p>配合 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort\">Array.prototype.sort</a> 可以方便地进行数组排序:</p>\n<pre><code class=\"lang-js\">let verList = [\n    new Version(&#39;2.3.5&#39;),\n    new Version(&#39;2.3.5-alpha9&#39;),\n    new Version(&#39;2.3.5-beta2&#39;),\n    new Version(&#39;2.3.5-snapshot&#39;),\n    new Version(&#39;2.3.6&#39;),\n    new Version(&#39;2.3&#39;),\n];\n// [ 2.3, 2.3.5-snapshot, 2.3.5-alpha9, 2.3.5-beta2, 2.3.5, 2.3.6 ]\nconsole.log(verList.sort((a, b) =&gt; a.compareTo(b)));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "otherVersion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] compareTo"
+        }
+      ],
+      "type": "module",
+      "displayName": "包装图像类 (ImageWrapper)"
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "source": "..\\api\\httpRequestHeadersType.md",
+  "modules": [
+    {
+      "textRaw": "HttpRequestHeaders",
+      "name": "httprequestheaders",
+      "desc": "<p>HttpRequestHeaders 是一个代表 <a href=\"httpHeaderGlossary#请求标头\">HTTP 请求头</a> 信息的接口.</p>\n<p>HTTP 标头字段是大小写 <strong>不敏感</strong> 的 (根据 <a href=\"http://www.ietf.org/rfc/rfc2616.txt\">RFC 2616</a>), 本章节采用 <strong>全部小写</strong> 的形式表示标头字段 (如 content-type).</p>\n<blockquote>\n<p>注: 本章节仅列出部分请求头字段信息, 更多信息可参阅 <a href=\"httpHeaderGlossary.md#请求标头\">HTTP 标头</a> 术语章节.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpRequestHeaders</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[I] HttpRequestHeaders",
+          "name": "[i]_httprequestheaders",
+          "desc": "<p>HttpRequestHeaders 接口类型的变量, 实际是将 JavaScript 对象 (通常作为 <code>options.headers</code> 的值) 进行遍历, 将每一个 header 依次传入 <a href=\"https://square.github.io/okhttp/3.x/okhttp/okhttp3/Request.Builder.html\">okhttp3.Request.Builder</a> 实例.</p>\n<p>大致过程如下:</p>\n<pre><code class=\"lang-js\">/**\n * @param {okhttp3.Request.Builder} request\n */\nfunction setHeaders(request) {\n    Object.entries(this.options.headers || {}).forEach((entries) =&gt; {\n        let [ key, value ] = entries;\n        if (Array.isArray(value)) {\n            value.forEach(v =&gt; request.header(key, v));\n        } else {\n            request.header(key, value);\n        }\n    });\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[I] HttpRequestHeaders"
+        },
+        {
+          "textRaw": "[p?] accept",
+          "name": "[p?]_accept",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>accept 请求头用来表明客户端可处理的内容类型.</p>\n<pre><code class=\"lang-text\"># 语法 (合并)\naccept: (&lt;MIME_type&gt;/&lt;MIME_subtype&gt;|&lt;MIME_type&gt;/*|*/*)[;q=&lt;quality-value&gt;]\n\n# 语法 (展开)\naccept: &lt;MIME_type&gt;/&lt;MIME_subtype&gt;\naccept: &lt;MIME_type&gt;/&lt;MIME_subtype&gt;;q=&lt;quality-value&gt;\naccept: &lt;MIME_type&gt;/*\naccept: &lt;MIME_type&gt;/*;q=&lt;quality-value&gt;\naccept: */*\naccept: */*;q=&lt;quality-value&gt;\n\n# 示例\naccept: text/html\naccept: image/*\naccept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;MIME_type&gt;/&lt;MIME_subtype&gt;</td>\n<td>单一精确的 <a href=\"mimeTypeGlossary\">MIME 类型</a>, 如text/html</td>\n</tr>\n<tr>\n<td>&lt;MIME_type&gt;/*</td>\n<td>未指明子类的一类 MIME 类型. 如 image/* 可用于指代 image/png, image/svg, image/gif 等任何图片类型</td>\n</tr>\n<tr>\n<td><em>/</em></td>\n<td>任意类型的 MIME 类型</td>\n</tr>\n<tr>\n<td>&lt;quality-value&gt;</td>\n<td>相对质量价值, 又称作权重, 表示优先顺序, 范围 [0..1], 默认为 1</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] accept"
+        },
+        {
+          "textRaw": "[p?] accept-encoding",
+          "name": "[p?]_accept-encoding",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>请求头 accept-encoding 将客户端能够理解的内容编码方式 (通常为压缩算法) 通知给服务端.</p>\n<pre><code class=\"lang-text\"># 语法 (合并)\naccept-encoding: (gzip|compress|deflate|br|identity|*)[;q=&lt;quality-value&gt;]\n\n# 语法 (展开)\naccept-encoding: gzip\naccept-encoding: gzip;q=&lt;quality-value&gt;\naccept-encoding: compress\naccept-encoding: compress;q=&lt;quality-value&gt;\naccept-encoding: deflate\naccept-encoding: deflate;q=&lt;quality-value&gt;\naccept-encoding: br\naccept-encoding: br;q=&lt;quality-value&gt;\naccept-encoding: identity\naccept-encoding: identity;q=&lt;quality-value&gt;\naccept-encoding: *\naccept-encoding: *;q=&lt;quality-value&gt;\n\n# 示例\naccept-encoding: gzip\naccept-encoding: gzip, compress, br\naccept-encoding: br;q=1.0, gzip;q=0.8, *;q=0.1\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>gzip</td>\n<td>采用 Lempel-Ziv coding (LZ77) 压缩算法, 以及 32 位 CRC 校验的编码方式</td>\n</tr>\n<tr>\n<td>compress</td>\n<td>采用 Lempel-Ziv-Welch (LZW) 压缩算法</td>\n</tr>\n<tr>\n<td>deflate</td>\n<td>采用 zlib 结构 (RFC 1950) 和 deflate 压缩算法 (RFC 1951)</td>\n</tr>\n<tr>\n<td>br</td>\n<td>采用 Brotli 算法的编码方式</td>\n</tr>\n<tr>\n<td>identity</td>\n<td>用于指代自身 (如: 未经过压缩和修改). 除非特别指明, 这个标记始终可被接受</td>\n</tr>\n<tr>\n<td>&lt;quality-value&gt;</td>\n<td>相对质量价值, 又称作权重, 表示优先顺序, 范围 [0..1], 默认为 1</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Encoding\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] accept-encoding"
+        },
+        {
+          "textRaw": "[p?] accept-language",
+          "name": "[p?]_accept-language",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>accept-language 请求头允许客户端声明它可以理解的自然语言, 及优先选择的区域方言.</p>\n<pre><code class=\"lang-text\"># 语法 (合并)\naccept-language: (&lt;language&gt;|*)[;q=&lt;quality-value&gt;]\n\n# 语法 (展开)\naccept-language: &lt;language&gt;\naccept-language: &lt;language&gt;;q=&lt;quality-value&gt;\naccept-language: *\naccept-language: *;q=&lt;quality-value&gt;\n\n# 示例\naccept-language: de\naccept-language: de-CH\naccept-language: en-US,en;q=0.5\naccept-language: zh-CN, zh;q=0.8, zh-TW;q=0.7, zh-HK;q=0.5, en-US;q=0.3, en;q=0.2\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;language&gt;</td>\n<td>语言代码或语言区域代码</td>\n</tr>\n<tr>\n<td>*</td>\n<td>任意语言</td>\n</tr>\n<tr>\n<td>&lt;quality-value&gt;</td>\n<td>相对质量价值, 又称作权重, 表示优先顺序, 范围 [0..1], 默认为 1</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Accept-Language\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] accept-language"
+        },
+        {
+          "textRaw": "[p?] connection",
+          "name": "[p?]_connection",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>connection 通用标头控制网络连接在当前会话完成后是否仍然保持打开状态.</p>\n<pre><code class=\"lang-text\"># 示例\nconnection: keep-alive\nconnection: close\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>close</td>\n<td>表明客户端或服务器想要关闭该网络连接. 这是 HTTP/1.0 请求的默认值</td>\n</tr>\n<tr>\n<td>keep-alive</td>\n<td>表明客户端想要保持该网络连接打开. HTTP/1.1 的请求默认使用一个持久连接</td>\n</tr>\n<tr>\n<td>... ...</td>\n<td>... ...</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Connection\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] connection"
+        },
+        {
+          "textRaw": "[p?] host",
+          "name": "[p?]_host",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>host 头表示请求发送的目标服务器主机名和端口号.</p>\n<p>如无端口号, 将使用服务默认端口 (如 HTTPS: 443, HTTP: 80 等)</p>\n<p>所有 HTTP/1.1 请求报文中 <strong>必须包含</strong> 一个 host 头字段, 缺少或超过一个 host 头的 HTTP/1.1 请求可能会收到 400 (Bad Request) 状态码.</p>\n<pre><code class=\"lang-text\"># 语法\nhost: &lt;host&gt;\nhost: &lt;host&gt;:&lt;port&gt;\n\n# 示例\nhost: developer.mozilla.org\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;host&gt;</td>\n<td>服务器域名</td>\n</tr>\n<tr>\n<td>&lt;port&gt;</td>\n<td>服务器监听的 TCP 端口号</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Host\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] host"
+        },
+        {
+          "textRaw": "[p?] referer",
+          "name": "[p?]_referer",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>referer 请求头包含了当前请求来源页面的地址. </p>\n<p>服务端一般使用 referer 头识别访问来源, 以此进行统计分析, 日志记录及缓存优化等.</p>\n<pre><code class=\"lang-text\"># 语法\nreferer: &lt;url&gt;\n\n# 示例\nreferer: https://developer.mozilla.org/en-US/docs/Web/JavaScript\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;url&gt;</td>\n<td>当前页面被链接而至的前一页面的绝对路径或者相对路径</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Referer\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] referer"
+        },
+        {
+          "textRaw": "[p?] user-agent",
+          "name": "[p?]_user-agent",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>user-agent 首部包含了一个特征字符串, 用于让网络协议的对端识别发起请求的用户代理软件的应用类型, 操作系统, 软件开发商以及版本号. </p>\n<pre><code class=\"lang-text\"># 语法\nUser-Agent: &lt;product&gt; / &lt;product-version&gt; &lt;comment&gt;\n\n# 浏览器常用格式\nUser-Agent: Mozilla/&lt;version&gt; (&lt;system-information&gt;) &lt;platform&gt; (&lt;platform-details&gt;) &lt;extensions&gt;\n\n# 示例\nMozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0\nMozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0\nMozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\nMozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Safari/537.36 OPR/38.0.2220.41\nMozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1\nGooglebot/2.1 (+http://www.google.com/bot.html)\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;product&gt;</td>\n<td>产品识别码</td>\n</tr>\n<tr>\n<td>&lt;product-version&gt;</td>\n<td>产品版本号</td>\n</tr>\n<tr>\n<td>&lt;comment&gt;</td>\n<td>零个或多个关于组成产品信息的注释</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/User-Agent\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] user-agent"
+        },
+        {
+          "textRaw": "[p?] cache-control",
+          "name": "[p?]_cache-control",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>标头字段 cache-control 被用于在 HTTP 请求和响应中, 通过指定指令来实现缓存机制.</p>\n<pre><code class=\"lang-text\"># 语法\ncache-control: max-age=&lt;seconds&gt;\ncache-control: max-stale[=&lt;seconds&gt;]\ncache-control: min-fresh=&lt;seconds&gt;\ncache-control: no-cache\ncache-control: no-store\ncache-control: no-transform\ncache-control: only-if-cached\n... ...\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>max-age=&lt;seconds&gt;</td>\n<td>设置缓存存储最大周期, 单位为秒, 超过这个时间缓存被认为过期</td>\n</tr>\n<tr>\n<td>max-state[=&lt;seconds&gt;]</td>\n<td>表明客户端愿意接收一个已经过期的资源. 秒数可选, 表示响应过时后不能超过该给定的时间</td>\n</tr>\n<tr>\n<td>min-fresh=&lt;seconds&gt;</td>\n<td>表示客户端希望获取一个能在指定的秒数内保持其最新状态的响应</td>\n</tr>\n<tr>\n<td>no-cache</td>\n<td>发布缓存副本前, 强制要求原始服务器进行验证缓存中的请求</td>\n</tr>\n<tr>\n<td>no-store</td>\n<td>不使用任何缓存</td>\n</tr>\n<tr>\n<td>no-transform</td>\n<td>不得对资源进行转换或转变</td>\n</tr>\n<tr>\n<td>only-if-cached</td>\n<td>表明客户端只接受已缓存的响应, 且不要向原始服务器检查是否有更新的拷贝</td>\n</tr>\n<tr>\n<td>... ...</td>\n<td>... ...</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] cache-control"
+        },
+        {
+          "textRaw": "[p?] cookie",
+          "name": "[p?]_cookie",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>cookie 请求标头包含先前由服务器通过 set-cookie 标头投放或通过 JavaScript 的 <code>Document.cookie</code> 方法设置, 然后存储到客户端的 HTTP cookie.</p>\n<p>这个标头是可选的, 且可能会被忽略, 例如在浏览器隐私设置里禁用了 cookie 等.</p>\n<pre><code class=\"lang-text\"># 语法\ncookie: &lt;cookie-list&gt;\ncookie: name=value\ncookie: name=value; name2=value2; name3=value3 ...\n\n# 示例\ncookie: PHPSESSID=298zf09hf012fh2; csrftoken=u32t4o3tb3gg43; _gat=1\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;cookie-list&gt;</td>\n<td>一系列的名值对, 形式为 <cookie-name>=<cookie-value>, 以分号和空格分隔</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cookie\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] cookie"
+        },
+        {
+          "textRaw": "[p?] range",
+          "name": "[p?]_range",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>Range 请求首部告知服务器返回文件的哪一部分.</p>\n<p>在一个 Range 首部中可以一次性请求多个部分, 服务器会以 multipart 文件的形式将其返回.</p>\n<pre><code class=\"lang-text\"># 语法\nrange: &lt;unit&gt;=&lt;range-start&gt;-\nrange: &lt;unit&gt;=&lt;range-start&gt;-&lt;range-end&gt;\nrange: &lt;unit&gt;=&lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;\nrange: &lt;unit&gt;=&lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;, &lt;range-start&gt;-&lt;range-end&gt;\n\n# 示例\nrange: bytes=200-1000, 2000-6576, 19000-\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;unit&gt;</td>\n<td>数据区间所采用的单位, 通常是字节 (bytes)</td>\n</tr>\n<tr>\n<td>&lt;range-start&gt;</td>\n<td>一个整数, 表示在特定单位下范围的起始值</td>\n</tr>\n<tr>\n<td>&lt;range-end&gt;</td>\n<td>一个整数, 表示在特定单位下范围的结束值. 可选, 默认表示范围一直到文档结束</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Range\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] range"
+        }
+      ],
+      "type": "module",
+      "displayName": "HttpRequestHeaders"
+    }
+  ]
+}

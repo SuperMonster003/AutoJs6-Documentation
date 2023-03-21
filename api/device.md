@@ -330,15 +330,15 @@ device.keepScreenOn()
 
 ## device.vibrate(millis)
 
-* `millis` {number} 震动时间, 单位毫秒
+* `millis` {number} 振动时间, 单位毫秒
 
-使设备震动一段时间.
+使设备振动一段时间.
 
 ```
-//震动两秒
+//振动两秒
 device.vibrate(2000);
 ```
 
 ## device.cancelVibration()
 
-如果设备处于震动状态, 则取消震动.
+如果设备处于振动状态, 则取消振动.

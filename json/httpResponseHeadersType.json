@@ -1,0 +1,126 @@
+{
+  "source": "..\\api\\httpResponseHeadersType.md",
+  "modules": [
+    {
+      "textRaw": "HttpResponseHeaders",
+      "name": "httpresponseheaders",
+      "desc": "<p>HttpResponseHeaders 是一个代表 <a href=\"httpHeaderGlossary#响应标头\">HTTP 响应头</a> 信息的接口.</p>\n<p>HTTP 标头字段是大小写 <strong>不敏感</strong> 的 (根据 <a href=\"http://www.ietf.org/rfc/rfc2616.txt\">RFC 2616</a>), 本章节采用 <strong>全部小写</strong> 的形式表示标头字段 (如 content-type).</p>\n<blockquote>\n<p>注: 本章节仅列出部分响应头字段信息, 更多信息可参阅 <a href=\"httpHeaderGlossary.md#响应标头\">HTTP 标头</a> 术语章节.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpResponseHeaders</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[I] HttpResponseHeaders",
+          "name": "[i]_httpresponseheaders",
+          "desc": "<p>HttpResponseHeaders 接口类型的变量, 实际是将 <a href=\"https://square.github.io/okhttp/3.x/okhttp/index.html?okhttp3/Headers.html\">okhttp3.Headers</a> 进行 JavaScript 对象化得到的.</p>\n<p>大致过程如下:</p>\n<pre><code class=\"lang-js\">function getHeaders() {\n    let result = {};\n\n    /** @type {okhttp3.Headers} */\n    let headers = res.headers();\n\n    for (let i = 0; i &lt; headers.size(); i += 1) {\n        let name = headers.name(i).toLowerCase();\n        let value = headers.value(i);\n        if (!(name in result)) {\n            result[name] = value;\n            continue;\n        }\n\n        /* 同名的响应头字段, 将新旧数据共同存入数组中. */\n\n        let origin = result[name];\n        if (!Array.isArray(origin)) {\n            result[name] = [ origin ];\n        }\n        result[name].push(value);\n    }\n    return result;\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[I] HttpResponseHeaders"
+        },
+        {
+          "textRaw": "[p?] cache-control",
+          "name": "[p?]_cache-control",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>标头字段 cache-control 被用于在 HTTP 请求和响应中, 通过指定指令来实现缓存机制.</p>\n<pre><code class=\"lang-text\"># 语法\ncache-control: must-revalidate\ncache-control: no-cache\ncache-control: no-store\ncache-control: no-transform\ncache-control: public\ncache-control: private\ncache-control: proxy-revalidate\ncache-control: max-age=&lt;seconds&gt;\ncache-control: s-maxage=&lt;seconds&gt;\n... ...\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>must-revalidate</td>\n<td>一旦资源过期, 在成功向原始服务器验证之前, 缓存不能用该资源响应后续请求</td>\n</tr>\n<tr>\n<td>no-cache</td>\n<td>发布缓存副本前, 强制要求原始服务器进行验证缓存中的请求</td>\n</tr>\n<tr>\n<td>no-store</td>\n<td>不使用任何缓存</td>\n</tr>\n<tr>\n<td>no-transform</td>\n<td>不得对资源进行转换或转变</td>\n</tr>\n<tr>\n<td>public</td>\n<td>表明响应可以被任何对象 (客户端及代理服务器等) 缓存, 即使是通常不可缓存的内容</td>\n</tr>\n<tr>\n<td>private</td>\n<td>表明响应只能被单个用户缓存, 不能作为共享缓存</td>\n</tr>\n<tr>\n<td>proxy-revalidate</td>\n<td>与 must-revalidate 作用相同, 但它仅适用于共享缓存 (如代理), 并被私有缓存忽略</td>\n</tr>\n<tr>\n<td>max-age=&lt;seconds&gt;</td>\n<td>设置缓存存储最大周期, 单位为秒, 超过这个时间缓存被认为过期</td>\n</tr>\n<tr>\n<td>s-maxage=&lt;seconds&gt;</td>\n<td>覆盖 max-age 或 expires 头, 但仅适用于共享缓存, 私有缓存会忽略</td>\n</tr>\n<tr>\n<td>... ...</td>\n<td>... ...</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Cache-Control\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] cache-control"
+        },
+        {
+          "textRaw": "[p?] content-type",
+          "name": "[p?]_content-type",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>标头字段 Content-Type 告诉客户端实际返回内容的内容类型 (如 <a href=\"mimeTypeGlossary\">MIME 类型</a>).</p>\n<pre><code class=\"lang-text\"># 示例\ncontent-type: text/html; charset=utf-8\ncontent-type: multipart/form-data; boundary=something\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>media-type</td>\n<td>资源或数据的 <a href=\"mimeTypeGlossary\">MIME 类型</a></td>\n</tr>\n<tr>\n<td>charset</td>\n<td>字符编码</td>\n</tr>\n<tr>\n<td>... ...</td>\n<td>... ...</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Type\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] content-type"
+        },
+        {
+          "textRaw": "[p?] content-encoding",
+          "name": "[p?]_content-encoding",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>标头字段 content-encoding 列出了对当前实体消息 (消息荷载) 应用的编码类型以及编码顺序.</p>\n<p>它告知接收者需要以何种顺序解码该实体消息才能获得原始荷载格式.</p>\n<p>content-encoding 主要用于在不丢失原媒体类型内容的情况下压缩消息数据.</p>\n<p>注意原始媒体内容的类型通过 <a href=\"#p-content-type\">content-type</a> 首部给出, 而 content-encoding 应用于数据的表示或编码形式. 如果原始媒体以某种方式编码 (如 zip 文件), 则该信息不应该被包含在 content-encoding 首部内.</p>\n<pre><code class=\"lang-text\"># 示例\ncontent-encoding: gzip\ncontent-encoding: compress\ncontent-encoding: deflate\ncontent-encoding: br\ncontent-encoding: deflate, gzip\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>gzip</td>\n<td>采用 Lempel-Ziv Coding (LZ77) 压缩算法, 以及 32 位 CRC 校验的编码方式</td>\n</tr>\n<tr>\n<td>compress</td>\n<td>采用 Lempel-Ziv-Welch (LZW) 压缩算法</td>\n</tr>\n<tr>\n<td>deflate</td>\n<td>采用 zlib 结构 (RFC 1950) 和 deflate 压缩算法 (RFC 1951)</td>\n</tr>\n<tr>\n<td>br</td>\n<td>采用 Brotli 算法的编码方式</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Encoding\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] content-encoding"
+        },
+        {
+          "textRaw": "[p?] date",
+          "name": "[p?]_date",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>date 是一个通用首部, 其中包含了报文创建的日期和时间.</p>\n<pre><code class=\"lang-text\"># 语法\ndate: &lt;day-name&gt;, &lt;day&gt; &lt;month&gt; &lt;year&gt; &lt;hour&gt;:&lt;minute&gt;:&lt;second&gt; GMT\n\n# 示例\ndate: Wed, 21 Oct 2015 07:28:00 GMT\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;day-name&gt;</td>\n<td>&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot; 之一 (区分大小写)</td>\n</tr>\n<tr>\n<td>&lt;day&gt;</td>\n<td>2 位数字表示天数, 例如 &quot;04&quot; 或 &quot;23&quot;</td>\n</tr>\n<tr>\n<td>&lt;month&gt;</td>\n<td>&quot;Jan&quot;, &quot;Feb&quot;, &quot;Mar&quot;, &quot;Apr&quot;, &quot;May&quot;, &quot;Jun&quot;, &quot;Jul&quot;, &quot;Aug&quot;, &quot;Sep&quot;, &quot;Oct&quot;, &quot;Nov&quot;, &quot;Dec&quot; 之一 (区分大小写)</td>\n</tr>\n<tr>\n<td>&lt;year&gt;</td>\n<td>4 位数字表示年份, 例如 &quot;1990&quot; 或 &quot;2016&quot;</td>\n</tr>\n<tr>\n<td>&lt;hour&gt;</td>\n<td>2 位数字表示小时数, 例如 &quot;09&quot; 或 &quot;23&quot;</td>\n</tr>\n<tr>\n<td>&lt;minute&gt;</td>\n<td>2 位数字表示分钟数, 例如 &quot;04&quot; 或 &quot;59&quot;</td>\n</tr>\n<tr>\n<td>&lt;second&gt;</td>\n<td>2 位数字表示秒数, 例如 &quot;04&quot; 或 &quot;59&quot;</td>\n</tr>\n<tr>\n<td>GMT</td>\n<td>格林尼治标准时间. 在 HTTP 协议中, 时间都是用格林尼治标准时间表示, 而非本地时间</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Date\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] date"
+        },
+        {
+          "textRaw": "[p?] server",
+          "name": "[p?]_server",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>server 首部包含了处理请求的源头服务器所用到的软件相关信息.</p>\n<pre><code class=\"lang-text\"># 语法\nserver: &lt;product&gt;\n\n# 示例\nserver: Apache/2.4.1 (Unix)\nserver: nginx/1.16.1\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;product&gt;</td>\n<td>处理请求的软件或者产品的名称</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Server\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] server"
+        },
+        {
+          "textRaw": "[p?] transfer-encoding",
+          "name": "[p?]_transfer-encoding",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>transfer-encoding 首部指明实体传递采用的编码形式.</p>\n<p>transfer-encoding 仅应用于两个节点之间的消息传递, 而非资源本身. 一个多节点连接的每一段都可应用不同的transfer-encoding 值. 如需将压缩后的数据应用于整个连接, 可使用端到端传输首部 content-encoding.</p>\n<pre><code class=\"lang-text\"># 示例\ntransfer-encoding: chunked\ntransfer-encoding: compress\ntransfer-encoding: deflate\ntransfer-encoding: gzip\ntransfer-encoding: identity\ntransfer-encoding: gzip, chunked\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;chunked&gt;</td>\n<td>数据以一系列分块的形式进行发送</td>\n</tr>\n<tr>\n<td>&lt;compress&gt;</td>\n<td>采用 Lempel-Ziv-Welch (LZW) 压缩算法</td>\n</tr>\n<tr>\n<td>&lt;deflate&gt;</td>\n<td>采用 zlib 结构 (RFC 1950) 和 deflate 压缩算法 (RFC 1951)</td>\n</tr>\n<tr>\n<td>&lt;gzip&gt;</td>\n<td>采用 Lempel-Ziv coding (LZ77) 压缩算法, 以及 32 位 CRC 校验的编码方式</td>\n</tr>\n<tr>\n<td>&lt;identity&gt;</td>\n<td>用于指代自身 (如: 未经过压缩和修改). 除非特别指明, 这个标记始终可被接受</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Transfer-Encoding\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] transfer-encoding"
+        },
+        {
+          "textRaw": "[p?] expires",
+          "name": "[p?]_expires",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>expires 响应头包含日期及时间. 指在此时间之后, 响应过期.</p>\n<p>若 cache-control 响应头设置了 &quot;max-age&quot; 或 &quot;s-max-age&quot; 指令, 则 expires 头将被忽略.</p>\n<pre><code class=\"lang-text\"># 语法\nexpires: &lt;http-date&gt;\n\n# 示例\nexpires: Wed, 21 Oct 2015 07:28:00 GMT\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Expires\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] expires"
+        },
+        {
+          "textRaw": "[p?] last-modified",
+          "name": "[p?]_last-modified",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>last-modified 首部包含源头服务器认定的资源做出修改的日期及时间.</p>\n<p>它通常被用作一个验证器来判断接收到的或者存储的资源是否彼此一致.</p>\n<p>由于精确度比 etag 低, 因此常作为备用, 含 if-modified-since 或 if-unmodified-since 首部的条件请求会使用这个字段.</p>\n<pre><code class=\"lang-text\"># 语法\nlast-modified: &lt;http-date&gt;\n\n# 示例\nlast-modified: Wed, 21 Oct 2015 07:28:00 GMT\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Last-Modified\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] last-modified"
+        },
+        {
+          "textRaw": "[p?] connection",
+          "name": "[p?]_connection",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>connection 通用标头控制网络连接在当前会话完成后是否仍然保持打开状态.</p>\n<pre><code class=\"lang-text\"># 示例\nconnection: keep-alive\nconnection: close\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>close</td>\n<td>表明客户端或服务器想要关闭该网络连接. 这是 HTTP/1.0 请求的默认值</td>\n</tr>\n<tr>\n<td>keep-alive</td>\n<td>表明客户端想要保持该网络连接打开. HTTP/1.1 的请求默认使用一个持久连接</td>\n</tr>\n<tr>\n<td>... ...</td>\n<td>... ...</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Connection\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] connection"
+        },
+        {
+          "textRaw": "[p?] etag",
+          "name": "[p?]_etag",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>etag 响应头是资源特定版本的标识符.</p>\n<p>若给定 URL 中的资源更改, 则一定要生成新的 etag 值, 通过比较这些 etag 能快速确定此资源是否变化.</p>\n<pre><code class=\"lang-text\"># 语法\netag: W/&quot;&lt;etag_value&gt;&quot;\netag: &quot;&lt;etag_value&gt;&quot;\n\n# 示例\netag: &quot;737060cd8c284d8af7ad3082f209582d&quot;\netag: &quot;33a64df551425fcc55e4d42a148795d9f25f89d4&quot;\netag: W/&quot;0815&quot;\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>W/ (可选)</td>\n<td>表示使用弱验证器</td>\n</tr>\n<tr>\n<td>&lt;etag_value&gt;</td>\n<td>实体标签唯一地表示所请求的资源</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/ETag\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] etag"
+        },
+        {
+          "textRaw": "[p?] refresh",
+          "name": "[p?]_refresh",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>refresh 标头字段指示浏览器重新加载页面或重定向到另一个页面.</p>\n<pre><code class=\"lang-text\"># 语法\nrefresh: &lt;seconds&gt;\nrefresh: &lt;seconds&gt;;url=&lt;url&gt;\n\n# 示例\nrefresh: 3\nrefresh: 3;url=https://www.mozilla.org\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;seconds&gt;</td>\n<td>重载或重定向页面前的等待时间, 单位为秒</td>\n</tr>\n<tr>\n<td>&lt;url&gt;</td>\n<td>重定向页面的 URL</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/meta#attr-http-equiv\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] refresh"
+        },
+        {
+          "textRaw": "[p?] access-control-allow-origin",
+          "name": "[p?]_access-control-allow-origin",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>access-control-allow-origin 响应标头指定了该响应的资源是否被允许与给定的来源 (origin) 共享.</p>\n<pre><code class=\"lang-text\"># 语法\naccess-control-allow-origin: *\naccess-control-allow-origin: &lt;origin&gt;\naccess-control-allow-origin: null\n\n# 示例\naccess-control-allow-origin: *\naccess-control-allow-origin: https://developer.mozilla.org\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>*</td>\n<td>对于不包含凭据的请求, 服务器会以 &quot;*&quot; 作为通配符, 从而允许任意来源的请求代码都具有访问资源的权限</td>\n</tr>\n<tr>\n<td>&lt;origin&gt;</td>\n<td>指定一个来源 (仅能指定一个). 若服务器支持多个来源的客户端, 其必须以与指定客户端匹配的来源来响应请求</td>\n</tr>\n<tr>\n<td>null</td>\n<td>指定来源为 &quot;null&quot;, 不建议被使用</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Origin\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] access-control-allow-origin"
+        },
+        {
+          "textRaw": "[p?] access-control-allow-methods",
+          "name": "[p?]_access-control-allow-methods",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>响应首部 access-control-allow-methods 在对 &quot;预检请求 (Preflight Request)&quot; 的应答中明确了客户端所要访问的资源允许使用的方法或方法列表.</p>\n<pre><code class=\"lang-text\"># 语法\naccess-control-allow-methods: &lt;method&gt;, &lt;method&gt;, ...\n\n# 示例\naccess-control-allow-methods: POST, GET, OPTIONS\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;method&gt;</td>\n<td>用逗号隔开的允许使用的 <a href=\"httpRequestMethodsGlossary\">HTTP 请求方法 (HTTP Request Methods)</a> 列表</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Methods\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] access-control-allow-methods"
+        },
+        {
+          "textRaw": "[p?] access-control-allow-credentials",
+          "name": "[p?]_access-control-allow-credentials",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>access-control-allow-credentials 响应头用于在请求要求包含 credentials (Request.credentials 的值为 include) 时, 告知浏览器是否可以将对请求的响应暴露给前端 JavaScript 代码.</p>\n<pre><code class=\"lang-text\"># 语法\naccess-control-allow-credentials: true\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>true</td>\n<td>这个头的唯一有效值 (区分大小写). 若不需要 credentials, 可直接忽视这个头, 而不必设置为 false</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] access-control-allow-credentials"
+        },
+        {
+          "textRaw": "[p?] content-range",
+          "name": "[p?]_content-range",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>content-range 表示一个数据片段在整个文件中的位置.</p>\n<pre><code class=\"lang-text\"># 语法\ncontent-range: &lt;unit&gt; &lt;range-start&gt;-&lt;range-end&gt;/&lt;size&gt;\ncontent-range: &lt;unit&gt; &lt;range-start&gt;-&lt;range-end&gt;/*\ncontent-range: &lt;unit&gt; */&lt;size&gt;\n\n# 示例\ncontent-range: bytes 0-5/7877\ncontent-range: bytes 200-1000/67589\ncontent-range: bytes 1000-2000/*\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>指令</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&lt;unit&gt;</td>\n<td>数据区间所采用的单位, 通常是字节 (bytes)</td>\n</tr>\n<tr>\n<td>&lt;range-start&gt;</td>\n<td>一个整数, 表示在给定单位下, 区间的起始值</td>\n</tr>\n<tr>\n<td>&lt;range-end&gt;</td>\n<td>一个整数, 表示在给定单位下, 区间的结束值</td>\n</tr>\n<tr>\n<td>&lt;size&gt;</td>\n<td>整个文件的大小 (大小未知可用 &quot;*&quot; 表示)</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅: <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Headers/Content-Range\">MDN</a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] content-range"
+        }
+      ],
+      "type": "module",
+      "displayName": "HttpResponseHeaders"
+    }
+  ]
+}

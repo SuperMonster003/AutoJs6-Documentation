@@ -303,7 +303,7 @@ console.log((1.23456e3).toFixedNum()); // 1235
 
 - **num** { [number](dataTypes#number) } - 待处理数字
 - **targetLength** { [number](dataTypes#number) } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.
-- **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0"（U+0030）。
+- **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0" (U+0030).
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.  
@@ -341,7 +341,7 @@ console.log(`${date} ${time}`); /* e.g. "2022-11-01 08:47:15" */
 
 - **num** { [number](dataTypes#number) } - 待处理数字
 - **targetLength** { [number](dataTypes#number) } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.
-- **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0"（U+0030）。
+- **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0" (U+0030).
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.  

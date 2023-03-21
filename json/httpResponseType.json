@@ -1,0 +1,102 @@
+{
+  "source": "..\\api\\httpResponseType.md",
+  "modules": [
+    {
+      "textRaw": "HttpResponse",
+      "name": "httpresponse",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 2, 2023.</p>\n\n<hr>\n<p>HTTP 请求回应类 HttpResponse 是一个虚拟类, 实例通常由 <a href=\"http\">http</a> 全局模块产生:</p>\n<pre><code class=\"lang-js\">/* HttpResponse 为虚拟类, 并非真实存在. */\ntypeof global.HttpResponse; // &quot;undefined&quot;\n</code></pre>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"http#m-get\">http.get</a></li>\n<li><a href=\"http#m-post\">http.post</a></li>\n<li><a href=\"http#m-postmultipart\">http.postMultipart</a></li>\n<li><a href=\"http#m-request\">http.request</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpResponse</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p#] statusCode",
+          "name": "[p#]_statuscode",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>...</p>\n",
+          "type": "module",
+          "displayName": "[p#] statusCode"
+        },
+        {
+          "textRaw": "[p#] statusMessage",
+          "name": "[p#]_statusmessage",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>...</p>\n",
+          "type": "module",
+          "displayName": "[p#] statusMessage"
+        },
+        {
+          "textRaw": "[p#] body",
+          "name": "[p#]_body",
+          "desc": "<ul>\n<li>{ <a href=\"httpResponseBodyType\">HttpResponseBody</a> }</li>\n</ul>\n<p>...</p>\n",
+          "type": "module",
+          "displayName": "[p#] body"
+        },
+        {
+          "textRaw": "[p#] method",
+          "name": "[p#]_method",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>...</p>\n",
+          "type": "module",
+          "displayName": "[p#] method"
+        },
+        {
+          "textRaw": "[p#] url",
+          "name": "[p#]_url",
+          "desc": "<ul>\n<li>{ <a href=\"okhttp3HttpUrlType\">Okhttp3HttpUrl</a> }</li>\n</ul>\n<p>...</p>\n",
+          "type": "module",
+          "displayName": "[p#] url"
+        },
+        {
+          "textRaw": "[p#] request",
+          "name": "[p#]_request",
+          "desc": "<ul>\n<li>{ <a href=\"okhttp3RequestType\">Okhttp3Request</a> }</li>\n</ul>\n<p>当前响应对应的请求, 是一个 <a href=\"okhttp3RequestType\">Okhttp3Request</a> 实例.</p>\n<pre><code class=\"lang-js\">http.get(&#39;https://www.msn.com&#39;).request.method(); // GET\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] request"
+        },
+        {
+          "textRaw": "[p#] headers",
+          "name": "[p#]_headers",
+          "desc": "<ul>\n<li>{ <a href=\"httpResponseHeadersType\">HttpResponseHeaders</a> }</li>\n</ul>\n<p>当前响应的 <a href=\"httpHeaderGlossary#响应标头\">响应标头</a> 信息, 是一个 JavaScript 对象.</p>\n<p>该对象的 <code>键 (Key)</code> 是响应头名称, <code>值 (Value)</code> 是对应的响应头数据.</p>\n<p>所有响应头名称均为小写形式.</p>\n<pre><code class=\"lang-js\">Object.entries(http.get(&#39;https://www.msn.com&#39;).headers).forEach((entry) =&gt; {\n    let [ key, value ] = entry;\n    console.log(`${key}: ${value}`);\n});\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] headers"
+        }
+      ],
+      "type": "module",
+      "displayName": "HttpResponse"
+    },
+    {
+      "textRaw": "ResponseLegacy",
+      "name": "responselegacy",
+      "desc": "<p>HTTP请求的响应.</p>\n",
+      "properties": [
+        {
+          "textRaw": "`statusCode` {number} ",
+          "type": "number",
+          "name": "statusCode",
+          "desc": "<p>当前响应的HTTP状态码. 例如200(OK), 404(Not Found)等.</p>\n<p>有关HTTP状态码的信息, 参见<a href=\"http://www.runoob.com/http/http-status-codes.html\">菜鸟教程：HTTP状态码</a>.</p>\n"
+        },
+        {
+          "textRaw": "`statusMessage` {string} ",
+          "type": "string",
+          "name": "statusMessage",
+          "desc": "<p>当前响应的HTTP状态信息. 例如&quot;OK&quot;, &quot;Bad Request&quot;, &quot;Forbidden&quot;.</p>\n<p>有关HTTP状态码的信息, 参见<a href=\"http://www.runoob.com/http/http-status-codes.html\">菜鸟教程：HTTP状态码</a>.</p>\n<p>例子：</p>\n<pre><code>var res = http.get(&quot;www.baidu.com&quot;);\nif(res.statusCode &gt;= 200 &amp;&amp; res.statusCode &lt; 300){\n    toast(&quot;页面获取成功!&quot;);\n}else if(res.statusCode == 404){\n    toast(&quot;页面没找到哦...&quot;);\n}else{\n    toast(&quot;错误: &quot; + res.statusCode + &quot; &quot; + res.statusMessage);\n}\n</code></pre>"
+        },
+        {
+          "textRaw": "`body` {Object} ",
+          "type": "Object",
+          "name": "body",
+          "desc": "<p>当前响应的内容. 他有以下属性和函数：</p>\n<ul>\n<li>bytes() {Array} 以字节数组形式返回响应内容</li>\n<li>string() {string} 以字符串形式返回响应内容</li>\n<li>json() {Object} 把响应内容作为JSON格式的数据并调用JSON.parse, 返回解析后的对象</li>\n<li>contentType {string} 当前响应的内容类型</li>\n</ul>\n"
+        },
+        {
+          "textRaw": "`url` {number} 当前响应所对应的请求URL. ",
+          "type": "number",
+          "name": "url",
+          "desc": "当前响应所对应的请求URL."
+        },
+        {
+          "textRaw": "`method` {string} 当前响应所对应的HTTP请求的方法. 例如\"GET\", \"POST\", \"PUT\"等. ",
+          "type": "string",
+          "name": "method",
+          "desc": "当前响应所对应的HTTP请求的方法. 例如\"GET\", \"POST\", \"PUT\"等."
+        }
+      ],
+      "type": "module",
+      "displayName": "ResponseLegacy"
+    }
+  ]
+}

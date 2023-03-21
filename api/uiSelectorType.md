@@ -1,6 +1,6 @@
 # 选择器 (UiSelector)
 
-UiSelector (选择器), 亦可看作是 [控件节点](uiObjectType) 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 `控件节点`, 并做进一步处理, 如 [ 执行 [控件行为](uiObjectActionsType) (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 [控件层级](glossaries#控件层级) 中进行 [罗盘](uiObjectType.md#m-compass) 导航 ] 等.
+UiSelector (选择器), 亦可看作是 [控件节点](uiObjectType) 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 `控件节点`, 并做进一步处理, 如 [ 执行 [控件行为](uiObjectActionsType) (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 [控件层级](glossaries#控件层级) 中进行 [罗盘](uiObjectType#m-compass) 导航 ] 等.
 
 ```js
 text("立即开始");
@@ -281,7 +281,7 @@ pickup({ idContains: [ 'some_' ] }, '@');
 
 **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [ID 资源选择器](#m-id) 的 [正则全匹配筛选器](#xxxmatches).
@@ -328,7 +328,7 @@ pickup({ idMatches: [ /.*some_.*/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [ID 资源选择器](#m-id) 的 [正则匹配筛选器](#xxxmatch).
@@ -525,7 +525,7 @@ pickup({ textContains: [ 'on' ] }, '@');
 
 **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [文本选择器](#m-text) 的 [正则全匹配筛选器](#xxxmatches).
@@ -570,7 +570,7 @@ pickup({ textMatches: [ /.*t\w{0,3}/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [文本选择器](#m-text) 的 [正则匹配筛选器](#xxxmatch).
@@ -750,7 +750,7 @@ pickup({ descContains: [ 'on' ] }, '@');
 
 **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [内容描述标签选择器](#m-desc) 的 [正则全匹配筛选器](#xxxmatches).
@@ -795,7 +795,7 @@ pickup({ descMatches: [ /.*t\w{0,3}/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [内容描述标签选择器](#m-desc) 的 [正则匹配筛选器](#xxxmatch).
@@ -975,7 +975,7 @@ pickup({ contentContains: [ 'on' ] }, '@');
 
 **`6.2.0`** **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [内容选择器](#m-content) 的 [正则全匹配筛选器](#xxxmatches).
@@ -1020,7 +1020,7 @@ pickup({ contentMatches: [ /.*t\w{0,3}/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [内容选择器](#m-content) 的 [正则匹配筛选器](#xxxmatch).
@@ -1220,7 +1220,7 @@ pickup({ classNameContains: [ 'Button' ] }, '@');
 
 **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [类名选择器](#m-classname) 的 [正则全匹配筛选器](#xxxmatches).
@@ -1265,7 +1265,7 @@ pickup({ classNameMatches: [ /.*V\w{0,3}/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [类名选择器](#m-classname) 的 [正则匹配筛选器](#xxxmatch).
@@ -1477,7 +1477,7 @@ pickup({ packageNameContains: [ 'office' ] }, '@');
 
 **`Global`** **`DEPRECATED`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [包名选择器](#m-packagename) 的 [正则全匹配筛选器](#xxxmatches).
@@ -1522,7 +1522,7 @@ pickup({ packageNameMatches: [ /.*\.\w*r\w*d/ ] }, '@');
 
 **`6.2.0`** **`Global`**
 
-- **regex** { [string](dataTypes#string) | [RegExp](dataTypes.md#regexp) }
+- **regex** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
 [包名选择器](#m-packagename) 的 [正则匹配筛选器](#xxxmatch).
@@ -1640,7 +1640,7 @@ pickup({ currentApp: [ 'alipay' ] }, '@');
 - **bottom** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形下边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 选择器.
+[控件矩形 (Rect)](androidRectType) 选择器.
 
 - 筛选条件说明: 控件矩形完全匹配指定的边界参数
 - 关联控件属性: [bounds](uiObjectType#m-bounds)
@@ -1703,7 +1703,7 @@ pickup({ bounds: [ 0, 192, -1, -1 ] }, '@');
 - **bottom** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形下边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 选择器.
+[控件矩形 (Rect)](androidRectType) 选择器.
 
 - 筛选条件说明: 控件矩形完全位于指定的边界内
 - 关联控件属性: [bounds](uiObjectType#m-bounds)
@@ -1768,7 +1768,7 @@ pickup({ boundsInside: [ 0, 0.02, 0.95, 0.95 ] }, '@');
 - **bottom** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形下边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 选择器.
+[控件矩形 (Rect)](androidRectType) 选择器.
 
 - 筛选条件说明: 控件矩形完全包含指定的边界
 - 关联控件属性: [bounds](uiObjectType#m-bounds)
@@ -1839,7 +1839,7 @@ pickup({ boundsContains: [ 0, 0.3, 0.85, 0.85 ] }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形左边界 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定边界相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -1873,7 +1873,7 @@ pickup({ boundsLeft: 0.1 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -1908,7 +1908,7 @@ pickup({ boundsLeft: [ 0.05, 0.15 ] }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形上边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定边界相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -1942,7 +1942,7 @@ pickup({ boundsTop: 0.1 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -1977,7 +1977,7 @@ pickup({ boundsTop: [ 0.02, 0.12 ] }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形右边界 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定边界相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -2011,7 +2011,7 @@ pickup({ boundsRight: 0.237 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -2046,7 +2046,7 @@ pickup({ boundsRight: [ 0.2, 0.25 ] }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形下边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定边界相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -2080,7 +2080,7 @@ pickup({ boundsBottom: 0.85 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -2115,7 +2115,7 @@ pickup({ boundsBottom: [ 0.8, 0.9 ] }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定度量相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -2152,7 +2152,7 @@ pickup({ boundsWidth: 206 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -2190,7 +2190,7 @@ pickup({ boundsWidth: [ 0.139, 0.278 ] }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定度量相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -2227,7 +2227,7 @@ pickup({ boundsHeight: 0.8 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -2265,7 +2265,7 @@ pickup({ boundsHeight: [ 0.781, 0.982 ] }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形中心点 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -2302,7 +2302,7 @@ pickup({ boundsCenterX: 0.142 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -2340,7 +2340,7 @@ pickup({ boundsCenterX: [ 0.111, 0.222 ] }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形中心点 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -2377,7 +2377,7 @@ pickup({ boundsCenterY: 0.45 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -2415,7 +2415,7 @@ pickup({ boundsCenterY: [ 0.417, 0.469 ] }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -2450,7 +2450,7 @@ pickup({ boundsMinLeft: 0.05 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -2485,7 +2485,7 @@ pickup({ boundsMinTop: 0.02 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -2520,7 +2520,7 @@ pickup({ boundsMinRight: 0.2 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -2555,7 +2555,7 @@ pickup({ boundsMinBottom: 0.8 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -2593,7 +2593,7 @@ pickup({ boundsMinWidth: 0.139 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -2631,7 +2631,7 @@ pickup({ boundsMinHeight: 0.781 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -2669,7 +2669,7 @@ pickup({ boundsMinCenterX: 0.111 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -2707,7 +2707,7 @@ pickup({ boundsMinCenterY: 0.417 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -2742,7 +2742,7 @@ pickup({ boundsMaxLeft: 0.15 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -2777,7 +2777,7 @@ pickup({ boundsMaxTop: 0.12 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -2812,7 +2812,7 @@ pickup({ boundsMaxRight: 0.25 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -2847,7 +2847,7 @@ pickup({ boundsMaxBottom: 0.9 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -2885,7 +2885,7 @@ pickup({ boundsMaxWidth: 0.278 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -2923,7 +2923,7 @@ pickup({ boundsMaxHeight: 0.982 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -2961,7 +2961,7 @@ pickup({ boundsMaxCenterX: 0.222 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -2999,7 +2999,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形左边界 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定边界相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -3014,7 +3014,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -3030,7 +3030,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形上边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定边界相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -3045,7 +3045,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -3061,7 +3061,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形右边界 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定边界相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -3076,7 +3076,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -3092,7 +3092,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形下边界 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定边界相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -3107,7 +3107,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -3123,7 +3123,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定度量相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -3138,7 +3138,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -3154,7 +3154,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定度量相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -3169,7 +3169,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -3185,7 +3185,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形中心点 X 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3200,7 +3200,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3216,7 +3216,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **value** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形中心点 Y 坐标或百分比
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3231,7 +3231,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3247,7 +3247,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -3263,7 +3263,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -3279,7 +3279,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -3295,7 +3295,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -3311,7 +3311,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -3327,7 +3327,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -3343,7 +3343,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3359,7 +3359,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **min** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3375,7 +3375,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的左边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的左边界与指定的边界限制相符
 - 关联控件属性: [ [boundsLeft](uiObjectType#m-boundsleft) / [bounds](uiObjectType#m-bounds) ]
@@ -3391,7 +3391,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的上边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的上边界与指定的边界限制相符
 - 关联控件属性: [ [boundsTop](uiObjectType#m-boundstop) / [bounds](uiObjectType#m-bounds) ]
@@ -3407,7 +3407,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以 X 坐标或百分比表示的右边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的右边界与指定的边界限制相符
 - 关联控件属性: [ [boundsRight](uiObjectType#m-boundsright) / [bounds](uiObjectType#m-bounds) ]
@@ -3423,7 +3423,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以 Y 坐标或百分比表示的下边界最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的下边界与指定的边界限制相符
 - 关联控件属性: [ [boundsBottom](uiObjectType#m-boundsbottom) / [bounds](uiObjectType#m-bounds) ]
@@ -3439,7 +3439,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形横向宽度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的尺寸选择器.
+[控件矩形 (Rect)](androidRectType) 的尺寸选择器.
 
 - 筛选条件说明: 控件矩形的宽度与指定的度量限制相符
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [bounds](uiObjectType#m-bounds) ]
@@ -3455,7 +3455,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形纵向高度或百分比度量的最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形的高度与指定的度量限制相符
 - 关联控件属性: [ [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -3471,7 +3471,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) } - 矩形以坐标值或百分比表示的中心点 X 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3487,7 +3487,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **max** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) } - 矩形以坐标值或百分比表示的中心点 Y 坐标最大值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的边界选择器.
+[控件矩形 (Rect)](androidRectType) 的边界选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3504,7 +3504,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 - **tolerance** { [number](dataTypes#number) } - 居中误差容限
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与屏幕中点 X 坐标的差值是否在误差容限内的情况与指定参数 (b) 相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3545,7 +3545,7 @@ pickup({ screenCenterX: 0.1 }, '@');
 - **b** { [boolean](dataTypes#boolean) } - X 坐标是否居中
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与屏幕中点 X 坐标的差值是否在误差容限内的情况与指定参数 (b) 相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3559,7 +3559,7 @@ pickup({ screenCenterX: 0.1 }, '@');
 - **tolerance** { [number](dataTypes#number) } - 居中误差容限
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与屏幕中点 X 坐标的差值在误差容限内
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3572,7 +3572,7 @@ pickup({ screenCenterX: 0.1 }, '@');
 
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 X 坐标与屏幕中点 X 坐标的差值不大于 0.016
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
@@ -3589,7 +3589,7 @@ pickup({ screenCenterX: 0.1 }, '@');
 - **tolerance** { [number](dataTypes#number) } - 居中误差容限
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与屏幕中点 Y 坐标的差值是否在误差容限内的情况与指定参数 (b) 相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3630,7 +3630,7 @@ pickup({ screenCenterY: 0.1 }, '@');
 - **b** { [boolean](dataTypes#boolean) } - Y 坐标是否居中
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与屏幕中点 Y 坐标的差值是否在误差容限内的情况与指定参数 (b) 相符
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3644,7 +3644,7 @@ pickup({ screenCenterY: 0.1 }, '@');
 - **tolerance** { [number](dataTypes#number) } - 居中误差容限
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与屏幕中点 Y 坐标的差值在误差容限内
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3657,7 +3657,7 @@ pickup({ screenCenterY: 0.1 }, '@');
 
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的中心点选择器.
+[控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
 - 筛选条件说明: 控件矩形中心点 Y 坐标与屏幕中点 Y 坐标的差值不大于 0.016
 - 关联控件属性: [ [boundsCenterY](uiObjectType#m-boundscentery) / [bounds](uiObjectType#m-bounds) ]
@@ -3673,7 +3673,7 @@ pickup({ screenCenterY: 0.1 }, '@');
 - **min** { [number](dataTypes#number) } - 矩形可视化部分的空间占比最小值
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的空间选择器.
+[控件矩形 (Rect)](androidRectType) 的空间选择器.
 
 - 筛选条件说明: 控件矩形可视化部分的空间占比 (即屏幕覆盖率) 满足指定的参数
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -3727,7 +3727,7 @@ pickup({ screenCoverage: 0.7 }, '@');
 
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-[控件矩形 (Rect)](dataTypes#androidrect) 的空间选择器.
+[控件矩形 (Rect)](androidRectType) 的空间选择器.
 
 - 筛选条件说明: 控件矩形可视化部分的屏幕占比不小于 `94.8%`
 - 关联控件属性: [ [boundsWidth](uiObjectType#m-boundswidth) / [boundsHeight](uiObjectType#m-boundsheight) / [bounds](uiObjectType#m-bounds) ]
@@ -5099,7 +5099,7 @@ console.log(wc.length);
 
 ### dragStart()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=32`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=32`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5111,7 +5111,7 @@ console.log(wc.length);
 
 ### dragDrop()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=32`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=32`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5123,7 +5123,7 @@ console.log(wc.length);
 
 ### dragCancel()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=32`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=32`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5135,7 +5135,7 @@ console.log(wc.length);
 
 ### imeEnter()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=30`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=30`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5147,7 +5147,7 @@ console.log(wc.length);
 
 ### moveWindow(x, y)
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=26`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=26`**
 
 - **x** { [number](dataTypes#number) } - X 坐标
 - **y** { [number](dataTypes#number) } - Y 坐标
@@ -5188,7 +5188,7 @@ console.log(wc.length);
 
 ### pageLeft()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=29`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=29`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5200,7 +5200,7 @@ console.log(wc.length);
 
 ### pageUp()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=29`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=29`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5212,7 +5212,7 @@ console.log(wc.length);
 
 ### pageRight()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=29`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=29`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5224,7 +5224,7 @@ console.log(wc.length);
 
 ### pageDown()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=29`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=29`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5236,7 +5236,7 @@ console.log(wc.length);
 
 ### pressAndHold()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=30`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=30`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5275,7 +5275,7 @@ console.log(wc.length);
 
 ### showTextSuggestions()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=33`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=33`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5287,7 +5287,7 @@ console.log(wc.length);
 
 ### showTooltip()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=28`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=28`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
@@ -5299,7 +5299,7 @@ console.log(wc.length);
 
 ### hideTooltip()
 
-**`6.2.0`** **`A11Y`** **`AP**`Global`** I>=28`**
+**`6.2.0`** **`Global`** **`A11Y`** **`API>=28`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 

@@ -1,0 +1,356 @@
+{
+  "source": "..\\api\\androidRectType.md",
+  "modules": [
+    {
+      "textRaw": "AndroidRect",
+      "name": "androidrect",
+      "desc": "<p><a href=\"https://developer.android.com/reference/android/graphics/Rect\">android.graphics.Rect</a> 别名.</p>\n<p>Rect 表示一个矩形, 作为控件信息时则用于表示控件在屏幕的相对位置及空间范围, 又称 <strong>控件矩形</strong>.</p>\n<pre><code class=\"lang-js\">let bounds = pickup(/.+/, &#39;bounds&#39;);\nconsole.log(`${bounds.centerX()}, ${bounds.centerY()}`);\n</code></pre>\n<p>常见可以返回此类型的方法:</p>\n<ul>\n<li><a href=\"uiObjectType#m-bounds\">UiObject#bounds</a></li>\n<li><a href=\"uiSelectorType#m-pickup\">UiSelector.pickup</a></li>\n</ul>\n<blockquote>\n<p>注: 本章节仅列出部分属性或方法.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">android.graphics.Rect</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[C] android.graphics.Rect",
+          "name": "[c]_android.graphics.rect",
+          "modules": [
+            {
+              "textRaw": "[c] (left, top, right, bottom)",
+              "name": "[c]_(left,_top,_right,_bottom)",
+              "desc": "<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形下边界 Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-androidgraphicsrect\">android.graphics.Rect</a> }</li>\n</ul>\n<p>生成一个矩形.</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect(10, 20, 80, 90);\nconsole.log(rect); // Rect(10, 20 - 80, 90)\n</code></pre>\n<p>如果坐标值为浮点数, 将做向下取整处理:</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect(10.2, 20.7, 80.1, 90.92);\nconsole.log(rect); // Rect(10, 20 - 80, 90)\n</code></pre>\n<p>坐标值可以为 0 或负数:</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect(0, 0, -80, -90);\nconsole.log(rect); // Rect(0, 0 - -80, -90)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (left, top, right, bottom)"
+            },
+            {
+              "textRaw": "[c] ()",
+              "name": "[c]_()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-androidgraphicsrect\">android.graphics.Rect</a> }</li>\n</ul>\n<p>生成一个空矩形.</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect();\nconsole.log(rect); // Rect(0, 0 - 0, 0)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] ()"
+            },
+            {
+              "textRaw": "[c] (rect)",
+              "name": "[c]_(rect)",
+              "desc": "<ul>\n<li><strong>rect</strong> { <a href=\"#c-androidgraphicsrect\">android.graphics.Rect</a> } - 参照矩形</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-androidgraphicsrect\">android.graphics.Rect</a> }</li>\n</ul>\n<p>生成一个新矩形, 并按照参照矩形的参数初始化.</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(10, 20, 80, 90);\nlet rectB = new android.graphics.Rect(rectA);\nconsole.log(rectB); // Rect(10, 20 - 80, 90)\nrectB.top = 1;\nrectB.bottom = 0;\nconsole.log(rectB); // Rect(10, 1 - 80, 0)\nconsole.log(rectA); // Rect(10, 20 - 80, 90)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (rect)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] android.graphics.Rect"
+        },
+        {
+          "textRaw": "[p#] left",
+          "name": "[p#]_left",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>矩形左边界 X 坐标.</p>\n<p>如: Rect(<strong>180</strong>, 440, 750, 1200) 表示矩形左边界距屏幕左边缘 180 像素.</p>\n",
+          "type": "module",
+          "displayName": "[p#] left"
+        },
+        {
+          "textRaw": "[p#] top",
+          "name": "[p#]_top",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>矩形上边界 Y 坐标.</p>\n<p>如: Rect(180, <strong>440</strong>, 750, 1200) 表示矩形上边界距屏幕上边缘 440 像素.</p>\n",
+          "type": "module",
+          "displayName": "[p#] top"
+        },
+        {
+          "textRaw": "[p#] right",
+          "name": "[p#]_right",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>矩形右边界 X 坐标.</p>\n<p>如: Rect(180, 440, <strong>750</strong>, 1200) 表示矩形右边界距屏幕左边缘 750 像素.</p>\n",
+          "type": "module",
+          "displayName": "[p#] right"
+        },
+        {
+          "textRaw": "[p#] bottom",
+          "name": "[p#]_bottom",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>矩形下边界 Y 坐标.</p>\n<p>如: Rect(180, 440, 750, <strong>1200</strong>) 表示矩形下边界距屏幕上边缘 1200 像素.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bottom"
+        },
+        {
+          "textRaw": "[m#] width",
+          "name": "[m#]_width",
+          "methods": [
+            {
+              "textRaw": "width()",
+              "type": "method",
+              "name": "width",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形宽度.</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rect.width()); // 570\n</code></pre>\n<p>宽度可能为 0 或负数:</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(0, 440, 0, 1200);\nconsole.log(rectA.width()); // 0\nlet rectB = new android.graphics.Rect(30, 440, 10, 1200);\nconsole.log(rectB.width()); // -20\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] width"
+        },
+        {
+          "textRaw": "[m#] height",
+          "name": "[m#]_height",
+          "methods": [
+            {
+              "textRaw": "height()",
+              "type": "method",
+              "name": "height",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形高度.</p>\n<pre><code class=\"lang-js\">let rect = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rect.height()); // 760\n</code></pre>\n<p>高度可能为 0 或负数:</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(180, 1200, 750, 1200);\nconsole.log(rectA.height()); // 0\nlet rectB = new android.graphics.Rect(180, 40, 750, 10);\nconsole.log(rectB.height()); // -30\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] height"
+        },
+        {
+          "textRaw": "[m#] centerX",
+          "name": "[m#]_centerx",
+          "methods": [
+            {
+              "textRaw": "centerX()",
+              "type": "method",
+              "name": "centerX",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形中点 X 坐标 (向下取整).</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rectA.centerX()); // 465\n\nlet rectB = new android.graphics.Rect(100, 200, 101, 201);\nconsole.log(rectB.centerX()); // 100\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] centerX"
+        },
+        {
+          "textRaw": "[m#] centerY",
+          "name": "[m#]_centery",
+          "methods": [
+            {
+              "textRaw": "centerY()",
+              "type": "method",
+              "name": "centerY",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形中点 Y 坐标 (向下取整).</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rectA.centerY()); // 820\n\nlet rectB = new android.graphics.Rect(100, 200, 101, 201);\nconsole.log(rectB.centerY()); // 200\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] centerY"
+        },
+        {
+          "textRaw": "[m#] exactCenterX",
+          "name": "[m#]_exactcenterx",
+          "methods": [
+            {
+              "textRaw": "exactCenterX()",
+              "type": "method",
+              "name": "exactCenterX",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形中点 X 坐标 (浮点数).</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rectA.exactCenterX()); // 465\n\nlet rectB = new android.graphics.Rect(100, 200, 101, 201);\nconsole.log(rectB.exactCenterX()); // 100.5\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exactCenterX"
+        },
+        {
+          "textRaw": "[m#] exactCenterY",
+          "name": "[m#]_exactcentery",
+          "methods": [
+            {
+              "textRaw": "exactCenterY()",
+              "type": "method",
+              "name": "exactCenterY",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>矩形中点 Y 坐标 (浮点数).</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(180, 440, 750, 1200);\nconsole.log(rectA.exactCenterY()); // 820\n\nlet rectB = new android.graphics.Rect(100, 200, 101, 201);\nconsole.log(rectB.exactCenterY()); // 200.5\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exactCenterY"
+        },
+        {
+          "textRaw": "[m#] contains",
+          "name": "[m#]_contains",
+          "methods": [
+            {
+              "textRaw": "contains(rect)",
+              "type": "method",
+              "name": "contains",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形 ",
+                      "name": "**rect**",
+                      "type": " [android.graphics.Rect](#c-androidgraphicsrect) ",
+                      "desc": "参照矩形"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>返回是否包含另一个矩形.<br>参照矩形的所有边均在当前矩形内 (包含边重叠情况) 则满足包含条件.<br>空矩形与任何矩形不存在包含关系.</p>\n<pre><code class=\"lang-js\">let rectThis = new android.graphics.Rect(180, 440, 750, 1200);\n\nlet rectRefA = new android.graphics.Rect(rectThis);\nconsole.log(rectThis.contains(rectRefA)); // true\n\nlet rectRefB = new android.graphics.Rect(200, 440, 750, 1200);\nconsole.log(rectThis.contains(rectRefB)); // true\n\nlet rectRefC = new android.graphics.Rect(); /* 空矩形. */\nconsole.log(rectThis.contains(rectRefC)); // false\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] contains"
+        },
+        {
+          "textRaw": "[m#] intersect",
+          "name": "[m#]_intersect",
+          "methods": [
+            {
+              "textRaw": "intersect(rect)",
+              "type": "method",
+              "name": "intersect",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形 ",
+                      "name": "**rect**",
+                      "type": " [android.graphics.Rect](#c-androidgraphicsrect) ",
+                      "desc": "参照矩形"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>返回是否与参展矩形相交 (不包括边界或点重叠的情况).<br>如果相交, 则返回 true, <strong>且当前矩形被设置为相交部分的矩形</strong>.</p>\n<pre><code class=\"lang-js\">let rectThis = new android.graphics.Rect(0, 0, 600, 600);\nlet rectRef = new android.graphics.Rect(200, 0, 800, 800);\n\nconsole.log(rectThis.intersect(rectRef)); // true\n\n/* rectThis 被修改. */\nconsole.log(rectThis); // Rect(200, 0 - 600, 600) \n</code></pre>\n<p>如果不相交, 则返回 false, 当前矩形不会被修改:</p>\n<pre><code class=\"lang-js\">let rectThis = new android.graphics.Rect(0, 0, 100, 100);\nlet rectRef = new android.graphics.Rect(100, 0, 800, 800);\n\nconsole.log(rectThis.intersect(rectRef)); // false\n\n/* rectThis 保持原来的值. */\nconsole.log(rectThis); // Rect(0, 0 - 100, 100)\n</code></pre>\n<p>空矩形与任意矩形不相交:</p>\n<pre><code class=\"lang-js\">let rectThis = new android.graphics.Rect(0, 0, 100, 100);\nlet rectRef = new android.graphics.Rect();\nconsole.log(rectThis.intersect(rectRef)); // false\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] intersect"
+        },
+        {
+          "textRaw": "[m] intersects",
+          "name": "[m]_intersects",
+          "methods": [
+            {
+              "textRaw": "intersects(rectA, rectB)",
+              "type": "method",
+              "name": "intersects",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形 ",
+                      "name": "**rect**",
+                      "type": " [android.graphics.Rect](#c-androidgraphicsrect) ",
+                      "desc": "参照矩形"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "rectA"
+                    },
+                    {
+                      "name": "rectB"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>返回是否和另一个长方形相交.</p>\n<p>此方法近判断是否相交, 不改变任何矩形:</p>\n<pre><code class=\"lang-js\">let rectA = new android.graphics.Rect(0, 0, 600, 600);\nlet rectB = new android.graphics.Rect(200, 0, 800, 800);\n\nconsole.log(android.graphics.Rect.intersects(rectA, rectB)); // true\n\n/* rectA 和 refB 均保持原来的值. */\nconsole.log(rectA); // Rect(0, 0 - 600, 600)\nconsole.log(rectB); // Rect(200, 0 - 800, 800)\n</code></pre>\n<p>需额外留意 <a href=\"#m-intersects\">intersects</a> 与 <a href=\"#m-intersect\">intersect</a> 的区别:</p>\n<ul>\n<li><p><code>[m#] intersect</code> 为实例方法, <code>rectA.intersect(rectB)</code> 需传入一个参数, 当相交时 <code>rectA</code> 会被改变, 返回结果为 &quot;是否相交&quot;.</p>\n</li>\n<li><p><code>[m] intersects</code> 为静态方法, <code>Rect.intersects(rectA, rectB)</code> 需传入两个参数, 且不改变任何矩形, 仅返回 &quot;是否相交&quot; 结果.</p>\n</li>\n</ul>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] intersects"
+        }
+      ],
+      "type": "module",
+      "displayName": "AndroidRect"
+    }
+  ]
+}

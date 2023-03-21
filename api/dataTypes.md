@@ -701,573 +701,6 @@ top 赋值为 0.5, 表示 Y 坐标为 50% 纵向屏幕高度, 即 `0.5 * device.
 top 赋值为 -0.1, 表示 Y 坐标为 -10% 纵向屏幕高度, 即 `-0.1 * device.height`.  
 top 赋值为 -1, 表示 Y 坐标为纵向屏幕高度的代指值, 即 `device.height`.
 
-## OpencvPoint
-
-org.opencv.core.Point 别名.
-表示一个点, 作为控件信息时则表示点在屏幕的相对位置.
-
-```js
-let point = pickup(/.+/, '.');
-console.log(`${point.x}, ${point.y}`);
-```
-
-部分属性或方法:
-
-- `[p#]` [x](#p-x)
-- `[p#]` [y](#p-y)
-
-常见可以返回此类型的方法:
-
-- [UiSelector.pickup](uiSelectorType#m-pickup)
-
-> 参阅: [OpenCV Docs](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Point.html)
-
----
-
-<p style="font: bold 2em sans-serif; color: #FF7043">org.opencv.core.Point</p>
-
----
-
-### [C] org.opencv.core.Point
-
-#### [c] (x, y)
-
-- **x** { [number](dataTypes#number) } - 点 X 坐标
-- **y** { [number](dataTypes#number) } - 点 Y 坐标
-- <ins>**returns**</ins> { [org.opencv.core.Point](#c-orgopencvcorepoint) }
-
-生成一个点.
-
-```js
-console.log(new org.opencv.core.Point(10, 20)); // {10.0, 20.0}
-```
-
-坐标不会被化为整型:
-
-```js
-console.log(new org.opencv.core.Point(10.8, 20.44)); // {10.8, 20.44}
-```
-
-#### [c] ()
-
-- <ins>**returns**</ins> { [org.opencv.core.Point](#c-orgopencvcorepoint) }
-
-生成一个点, 并初始化为 `{0, 0}` 坐标.
-
-```js
-console.log(new org.opencv.core.Point()); // {0.0, 0.0}
-```
-
-#### [c] (points)
-
-- **points** { [number](dataTypes#number)[[]](dataTypes#array) } - 点坐标数组
-- <ins>**returns**</ins> { [org.opencv.core.Point](#c-orgopencvcorepoint) }
-
-生成一个点, 并按指定参数初始化坐标.
-
-两个坐标:
-
-```js
-console.log(new org.opencv.core.Point([ 5, 23 ])); // {5.0, 23.0}
-```
-
-一个坐标, 此坐标作为 X 坐标, Y 坐标初始化为 0:
-
-```js
-console.log(new org.opencv.core.Point([ 5 ])); // {5.0, 0.0}
-```
-
-空数组, X 与 Y 坐标均为 0:
-
-```js
-console.log(new org.opencv.core.Point([])); // {0.0, 0.0}
-```
-
-超过两个坐标, 多余坐标将被忽略:
-
-```js
-console.log(new org.opencv.core.Point([ 5, 23, 7, 8, 9 ])); // {5.0, 23.0}
-```
-
-### [p#] x
-
-- { [number](dataTypes#number) }
-
-点 X 坐标.
-
-如: Point(**180**, 440) 表示点距屏幕左边缘 180 像素.
-
-### [p#] y
-
-- { [number](dataTypes#number) }
-
-点 Y 坐标.
-
-如: Point(180, **440**) 表示点距屏幕上边缘 440 像素.
-
-## OpencvSize
-
-org.opencv.core.Size 别名.
-表示一个长宽尺寸对象, 作为控件信息时则表示控件矩形在屏幕的控件占用尺寸.
-
-```js
-let size = pickup(/.+/, 'size');
-console.log(`${size.width}x${size.height}`);
-```
-
-部分属性或方法:
-
-* `[p#]` [x](#p-width)
-* `[p#]` [y](#p-height)
-
-常见可以返回此类型的方法:
-
-- [UiObject.size](uiobjectType#m-size)
-
-> 参阅: [OpenCV Docs](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Size.html)
-
----
-
-<p style="font: bold 2em sans-serif; color: #FF7043">org.opencv.core.Size</p>
-
----
-
-### [C] org.opencv.core.Size
-
-#### [c] (width, height)
-
-- **width** { [number](dataTypes#number) } - 宽度值
-- **height** { [number](dataTypes#number) } - 高度值
-- <ins>**returns**</ins> { [org.opencv.core.Size](#c-orgopencvcoresize) }
-
-生成一个尺寸对象.
-
-```js
-console.log(new org.opencv.core.Size(100, 200)); // 100x200
-```
-
-坐标不会被化为整型:
-
-```js
-/* 打印时, 数值会转换为整数. */
-console.log(new org.opencv.core.Size(1.8, 3.2)); // 1x3
-/* 但获取宽高值时, 依然保留原始值, 不会被化为整型. */
-console.log(new org.opencv.core.Size(1.8, 3.2).width); // 1.8
-console.log(new org.opencv.core.Size(1.8, 3.2).height); // 3.2
-```
-
-#### [c] ()
-
-- <ins>**returns**</ins> { [org.opencv.core.Size](#c-orgopencvcoresize) }
-
-生成一个尺寸对象, 并初始化为 `0x0` 宽高尺寸.
-
-```js
-console.log(new org.opencv.core.Size()); // 0x0
-```
-
-#### [c] (point)
-
-- **point** { [OpencvPoint](#opencvpoint) } - 用于表示尺寸的 "点"
-- <ins>**returns**</ins> { [org.opencv.core.Size](#c-orgopencvcoresize) }
-
-生成一个尺寸对象, 并按参数初始化宽高尺寸.
-
-```js
-const { Size, Point } = org.opencv.core;
-console.log(new Size(new Point(5, 23))); // 5x23
-```
-
-#### [c] (dimensions)
-
-- **dimensions** { [number](dataTypes#number)[[]](dataTypes#array) } - 尺寸值数组
-- <ins>**returns**</ins> { [org.opencv.core.Size](#c-orgopencvcoresize) }
-
-生成一个尺寸对象, 并按指定参数初始化宽高尺寸.
-
-两个尺寸值:
-
-```js
-console.log(new org.opencv.core.Size([ 5, 23 ])); // 5x23
-```
-
-一个尺寸值, 此尺寸值作为宽度值, 高度值初始化为 0:
-
-```js
-console.log(new org.opencv.core.Size([ 5 ])); // 5x0
-```
-
-空数组, 宽度尺寸值均为 0:
-
-```js
-console.log(new org.opencv.core.Size([])); // 0x0
-```
-
-超过两个尺寸值, 多余尺寸值将被忽略:
-
-```js
-console.log(new org.opencv.core.Size([ 5, 23, 7, 8, 9 ])); // 5x23
-```
-
-### [p#] width
-
-- { [number](dataTypes#number) }
-
-尺寸宽度值.
-
-### [p#] height
-
-- { [number](dataTypes#number) }
-
-尺寸高度值.
-
-## AndroidRect
-
-[android.graphics.Rect](https://developer.android.com/reference/android/graphics/Rect) 别名.  
-表示一个矩形, 作为控件信息时则用于表示控件在屏幕的相对位置及空间范围, 又称 **控件矩形**.
-
-```js
-let bounds = pickup(/.+/, 'bounds');
-console.log(`${bounds.centerX()}, ${bounds.centerY()}`);
-```
-
-部分属性或方法:
-
-- `[p#]` [left](#p-left)
-- `[p#]` [top](#p-top)
-- `[p#]` [right](#p-right)
-- `[p#]` [bottom](#p-bottom)
-- `[m#]` [width()](#m-width)
-- `[m#]` [height()](#m-height)
-- `[m#]` [centerX()](#m-centerx)
-- `[m#]` [centerY()](#m-centery)
-- `[m#]` [exactCenterX()](#m-exactcenterx)
-- `[m#]` [exactCenterY()](#m-exactcentery)
-- `[m#]` [contains()](#m-contains)
-- `[m#]` [intersect()](#m-intersect)
-- `[m#]` [intersects()](#m-intersects)
-
-常见可以返回此类型的方法:
-
-- [UiObject#bounds](uiObjectType#m-bounds)
-- [UiSelector.pickup](uiSelectorType#m-pickup)
-
----
-
-<p style="font: bold 2em sans-serif; color: #FF7043">android.graphics.Rect</p>
-
----
-
-### [C] android.graphics.Rect
-
-#### [c] (left, top, right, bottom)
-
-- **left** { [number](dataTypes#number) } - 矩形左边界 X 坐标
-- **top** { [number](dataTypes#number) } - 矩形上边界 Y 坐标
-- **right** { [number](dataTypes#number) } - 矩形右边界 X 坐标
-- **bottom** { [number](dataTypes#number) } - 矩形下边界 Y 坐标
-- <ins>**returns**</ins> { [android.graphics.Rect](#c-androidgraphicsrect) }
-
-生成一个矩形.
-
-```js
-let rect = new android.graphics.Rect(10, 20, 80, 90);
-console.log(rect); // Rect(10, 20 - 80, 90)
-```
-
-如果坐标值为浮点数, 将做向下取整处理:
-
-```js
-let rect = new android.graphics.Rect(10.2, 20.7, 80.1, 90.92);
-console.log(rect); // Rect(10, 20 - 80, 90)
-```
-
-坐标值可以为 0 或负数:
-
-```js
-let rect = new android.graphics.Rect(0, 0, -80, -90);
-console.log(rect); // Rect(0, 0 - -80, -90)
-```
-
-#### [c] ()
-
-- <ins>**returns**</ins> { [android.graphics.Rect](#c-androidgraphicsrect) }
-
-生成一个空矩形.
-
-```js
-let rect = new android.graphics.Rect();
-console.log(rect); // Rect(0, 0 - 0, 0)
-```
-
-#### [c] (rect)
-
-- **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
-- <ins>**returns**</ins> { [android.graphics.Rect](#c-androidgraphicsrect) }
-
-生成一个新矩形, 并按照参照矩形的参数初始化.
-
-```js
-let rectA = new android.graphics.Rect(10, 20, 80, 90);
-let rectB = new android.graphics.Rect(rectA);
-console.log(rectB); // Rect(10, 20 - 80, 90)
-rectB.top = 1;
-rectB.bottom = 0;
-console.log(rectB); // Rect(10, 1 - 80, 0)
-console.log(rectA); // Rect(10, 20 - 80, 90)
-```
-
-### [p#] left
-
-- { [number](dataTypes#number) }
-
-矩形左边界 X 坐标.
-
-如: Rect(**180**, 440, 750, 1200) 表示矩形左边界距屏幕左边缘 180 像素.
-
-### [p#] top
-
-- { [number](dataTypes#number) }
-
-矩形上边界 Y 坐标.
-
-如: Rect(180, **440**, 750, 1200) 表示矩形上边界距屏幕上边缘 440 像素.
-
-### [p#] right
-
-- { [number](dataTypes#number) }
-
-矩形右边界 X 坐标.
-
-如: Rect(180, 440, **750**, 1200) 表示矩形右边界距屏幕左边缘 750 像素.
-
-### [p#] bottom
-
-- { [number](dataTypes#number) }
-
-矩形下边界 Y 坐标.
-
-如: Rect(180, 440, 750, **1200**) 表示矩形下边界距屏幕上边缘 1200 像素.
-
-### [m#] width
-
-#### width()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形宽度.
-
-```js
-let rect = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rect.width()); // 570
-```
-
-宽度可能为 0 或负数:
-
-```js
-let rectA = new android.graphics.Rect(0, 440, 0, 1200);
-console.log(rectA.width()); // 0
-let rectB = new android.graphics.Rect(30, 440, 10, 1200);
-console.log(rectB.width()); // -20
-```
-
-### [m#] height
-
-#### height()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形高度.
-
-```js
-let rect = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rect.height()); // 760
-```
-
-高度可能为 0 或负数:
-
-```js
-let rectA = new android.graphics.Rect(180, 1200, 750, 1200);
-console.log(rectA.height()); // 0
-let rectB = new android.graphics.Rect(180, 40, 750, 10);
-console.log(rectB.height()); // -30
-```
-
-### [m#] centerX
-
-#### centerX()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形中点 X 坐标 (向下取整).
-
-```js
-let rectA = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rectA.centerX()); // 465
-
-let rectB = new android.graphics.Rect(100, 200, 101, 201);
-console.log(rectB.centerX()); // 100
-```
-
-### [m#] centerY
-
-#### centerY()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形中点 Y 坐标 (向下取整).
-
-```js
-let rectA = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rectA.centerY()); // 820
-
-let rectB = new android.graphics.Rect(100, 200, 101, 201);
-console.log(rectB.centerY()); // 200
-```
-
-### [m#] exactCenterX
-
-#### exactCenterX()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形中点 X 坐标 (浮点数).
-
-```js
-let rectA = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rectA.exactCenterX()); // 465
-
-let rectB = new android.graphics.Rect(100, 200, 101, 201);
-console.log(rectB.exactCenterX()); // 100.5
-```
-
-### [m#] exactCenterY
-
-#### exactCenterY()
-
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-矩形中点 Y 坐标 (浮点数).
-
-```js
-let rectA = new android.graphics.Rect(180, 440, 750, 1200);
-console.log(rectA.exactCenterY()); // 820
-
-let rectB = new android.graphics.Rect(100, 200, 101, 201);
-console.log(rectB.exactCenterY()); // 200.5
-```
-
-### [m#] contains
-
-#### contains(rect)
-
-- **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
-
-返回是否包含另一个矩形.  
-参照矩形的所有边均在当前矩形内 (包含边重叠情况) 则满足包含条件.  
-空矩形与任何矩形不存在包含关系.
-
-```js
-let rectThis = new android.graphics.Rect(180, 440, 750, 1200);
-
-let rectRefA = new android.graphics.Rect(rectThis);
-console.log(rectThis.contains(rectRefA)); // true
-
-let rectRefB = new android.graphics.Rect(200, 440, 750, 1200);
-console.log(rectThis.contains(rectRefB)); // true
-
-let rectRefC = new android.graphics.Rect(); /* 空矩形. */
-console.log(rectThis.contains(rectRefC)); // false
-```
-
-### [m#] intersect
-
-#### intersect(rect)
-
-- **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
-
-返回是否与参展矩形相交 (不包括边界或点重叠的情况).  
-如果相交, 则返回 true, **且当前矩形被设置为相交部分的矩形**.
-
-```js
-let rectThis = new android.graphics.Rect(0, 0, 600, 600);
-let rectRef = new android.graphics.Rect(200, 0, 800, 800);
-
-console.log(rectThis.intersect(rectRef)); // true
-
-/* rectThis 被修改. */
-console.log(rectThis); // Rect(200, 0 - 600, 600) 
-```
-
-如果不相交, 则返回 false, 当前矩形不会被修改:
-
-```js
-let rectThis = new android.graphics.Rect(0, 0, 100, 100);
-let rectRef = new android.graphics.Rect(100, 0, 800, 800);
-
-console.log(rectThis.intersect(rectRef)); // false
-
-/* rectThis 保持原来的值. */
-console.log(rectThis); // Rect(0, 0 - 100, 100)
-```
-
-空矩形与任意矩形不相交:
-
-```js
-let rectThis = new android.graphics.Rect(0, 0, 100, 100);
-let rectRef = new android.graphics.Rect();
-console.log(rectThis.intersect(rectRef)); // false
-```
-
-### [m] intersects
-
-#### intersects(rectA, rectB)
-
-- **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
-
-返回是否和另一个长方形相交.
-
-此方法近判断是否相交, 不改变任何矩形:
-
-```js
-let rectA = new android.graphics.Rect(0, 0, 600, 600);
-let rectB = new android.graphics.Rect(200, 0, 800, 800);
-
-console.log(android.graphics.Rect.intersects(rectA, rectB)); // true
-
-/* rectA 和 refB 均保持原来的值. */
-console.log(rectA); // Rect(0, 0 - 600, 600)
-console.log(rectB); // Rect(200, 0 - 800, 800)
-```
-
-需额外留意 [intersects](#m-intersects) 与 [intersect](#m-intersect) 的区别:
-
-- `[m#] intersect` 为实例方法, `rectA.intersect(rectB)` 需传入一个参数, 当相交时 `rectA` 会被改变, 返回结果为 "是否相交".
-
-- `[m] intersects` 为静态方法, `Rect.intersects(rectA, rectB)` 需传入两个参数, 且不改变任何矩形, 仅返回 "是否相交" 结果.
-
-## AndroidBundle
-
-[android.os.Bundle](https://developer.android.com/reference/android/os/Bundle) 别名.  
-表示一个会被打包成捆的容器, 容器内可存储 `键值对 (Key-Value Pair)` 形式的数据.
-
-```js
-let bundleA = new android.os.Bundle();
-bundleA.putInt("num_key", 23);
-console.log(bundleA.getInt("num_key") === 23); // true
-
-let bundleB = new android.os.Bundle();
-let arrList = new java.util.ArrayList(2);
-arrList.add("A");
-arrList.add("B");
-bundleB.putStringArrayList("arr_list_key", arrList);
-console.log(bundleB.getStringArrayList("arr_list_key").get(0) === "A"); // true
-console.log(bundleB.getStringArrayList("arr_list_key").get(1) === "B"); // true
-```
-
 ## ScriptExecuteActivity
 
 [android.app.Activity](https://developer.android.com/reference/android/app/Activity) 的子类.
@@ -1813,6 +1246,21 @@ console.log(`R: ${r}, G: ${g}, B: ${b}`);
 
 colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数组, 如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
 
+需额外注意 [toRgba](color#m-torgba) 和 [toArgb](color#m-toargb) 结果中的 `A (alpha)` 分量, 默认范围为 `0-255`, 而其他方法则恒为 `0-1`:
+
+```js
+colors.toRgba('blue-grey')[3]; /* A 分量为 255. */
+colors.toArgb('blue-grey')[0]; /* A 分量为 255. */
+colors.toHsva('blue-grey')[3]; /* A 分量为 1. */
+colors.toHsla('blue-grey')[3]; /* A 分量为 1. */
+```
+
+如需使 `toRgba` 和 `toArgb` 结果中 `A (alpha)` 分量范围也为 `0-1`, 可使用 `maxAlpha` 参数:
+
+```js
+colors.toRgba('blue-grey', { maxAlpha: 1 })[3]; /* A 分量为 1. */
+```
+
 ## ColorDetectionAlgorithm
 
 颜色检测算法, 用于检测两个颜色之间的差异程度, 即颜色差异.
@@ -1820,7 +1268,7 @@ colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数�
 [颜色差异](https://zh.wikipedia.org/wiki/%E9%A2%9C%E8%89%B2%E5%B7%AE%E5%BC%82) ([Color Difference](https://en.wikipedia.org/wiki/Color_difference)), 也称为颜色距离, 是色彩学领域的一个参量.  
 颜色差异将一个抽象概念进行了量化, 例如可以通过色彩空间内的 [欧氏距离](https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%B0%8F%E8%B7%9D%E7%A6%BB) ([Euclidean Distance](https://en.wikipedia.org/wiki/Euclidean_distance)) 计算出一个具体的差异量.
 
-量化颜色差异时, 存在多种不同的量化方法, 对应 AutoJs6 颜色模块的颜色检测算法.
+量化颜色差异时, 存在多种不同的量化方法, 通常使用颜色检测算法计算欧式距离, 由此距离进行颜色差异的量化.
 
 AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参数传入到某个函数中.
 
@@ -1961,92 +1409,338 @@ AutoJs6 [内置扩展插件](plugins#内置扩展插件) 的插件名称.
 - `"Numberx"`" 或 `"Number"`
 - `"Mathx"`" 或 `"Math"`
 
-## InjectableWebView
+```js
+/* 启用 Array 内置扩展插件. */
+plugins.extend('Arrayx');
+plugins.extend('Arrayx'); /* 同上. */
+```
 
-[android.webkit.WebView](https://developer.android.com/reference/android/webkit/WebView) 的子类.
+## ActivityShortForm
 
-部分属性或方法:
+AutoJs6 跳转内部 Activity 的页面简称.
 
-- `[m#]` [inject](#m-inject)
-
-常见可以返回此类型的方法:
-
-- [web.newInjectableWebView](web#m-newinjectablewebview)
-
----
-
-<p style="font: bold 2em sans-serif; color: #FF7043">InjectableWebView</p>
-
----
-
-### [m#] inject
-
-#### inject(script, callback?)
-
-**`Overload [1-2]/2`**
-
-- **script** { [string](#string) } - 脚本
-- **[callback]** { [(](#function)value: [string](#string)[)](#function) [=>](#function) [void](#void) } - 脚本
-- <ins>**returns**</ins> { [void](dataTypes#void) }
-
-注入 `script` 参数提供的 JavaScript 脚本, `callback` 回调参数可用于获取脚本语句的执行结果.
+这些简称全部对应于 AutoJs6 内置的 Activity 页面, 如 AutoJs6 的日志页面和设置页面等.
 
 ```js
-'ui';
-let webView = web.newInjectableWebView('www.github.com');
-webView.inject('navigator.userAgent', value => console.log(value));
-activity.setContentView(webView);
+/* 跳转至 AutoJs6 日志页面. */
+app.startActivity('console');
+app.startActivity('log'); /* 同上. */
+
+/* 跳转至 AutoJs6 主页页面. */
+app.startActivity('homepage');
+app.startActivity('home'); /* 同上. */
 ```
+
+支持的全部页面简称:
+
+- 日志页面 - `console` / `log` 
+- 设置页面 - `settings` / `preferences` / `pref`
+- 主页页面 - `homepage` / `home`
+- 关于页面 - `about`
+- 打包页面 - `build`
+- 文档页面 - `documentation` / `doc` / `docs`
+
+## BroadcastShortForm
+
+AutoJs6 可接收的广播行为简称.
+
+这些简称全部对应于 AutoJs6 可接收的广播行为, 如进行布局范围分析等.
+
+```js
+/* 发送 "布局范围分析" 广播. */
+app.sendBroadcast('inspect_layout_bounds');
+app.sendBroadcast('bounds'); /* 同上. */
+
+/* 发送 "布局层次分析" 广播. */
+app.sendBroadcast('inspect_layout_hierarchy');
+app.sendBroadcast('hierarchy'); /* 同上. */
+```
+
+支持的全部广播行为简称:
+
+- 布局范围分析 - `inspect_layout_bounds` / `bounds`
+- 布局层次分析 - `inspect_layout_hierarchy` / `hierarchy`
+
+## NoticeBuilder
+
+//// -=-= PENDING =-=- ////
+
+androidx.core.app.NotificationCompat.Builder
+
+ref: https://developer.android.com/reference/android/app/Notification.Builder
+ 
+### setAutoCancel
+
+Make this notification automatically dismissed when the user touches it.
+
+### setChannelId
+
+Specifies the channel the notification should be delivered on.
+
+### setChronometerCountDown
+
+Sets the Chronometer to count down instead of counting up.
+This is only relevant if setUsesChronometer(boolean) has been set to true. If it isn't set the chronometer will count up.
+
+### setColor
+
+Sets Notification#color.
+
+### setContentIntent
+
+Supply a PendingIntent to be sent when the notification is clicked.
+
+### setContentText
+
+Set the second line of text in the platform notification template.
+
+### setContentTitle
+
+Set the first line of text in the platform notification template.
+
+### setOnGoing
+
+Set whether this is an "ongoing" notification. Ongoing notifications cannot be dismissed by the user on locked devices, or by notification listeners, and some notifications cannnot be dismissed on unlocked devices (system, device management, media), so your application or service must take care of canceling them. They are typically used to indicate a background task that the user is actively engaged with (e.g., playing music) or is pending in some way and therefore occupying the device (e.g., a file download, sync operation, active network connection).
+to cancel: NotificationManager.cancel(id) / Notification.Builder.setAutoCancel(true)
+
+### setProgress
+
+Set the progress this notification represents. The platform template will represent this using a ProgressBar.
+
+### setSmallIcon
+
+Set the small icon, which will be used to represent the notification in the status bar and content view
+
+### setStyle
+
+Add a rich notification style to be applied at build time.
+
+### setTimeoutAfter
+
+Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled.
+
+### setUsesChronometer
+
+Show the Notification#when field as a stopwatch. Instead of presenting when as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call). The counter can also be set to count down to when when using setChronometerCountDown(boolean).
+
+### setWhen
+
+Add a timestamp pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using setShowWhen(boolean)
+
+### setShowWhen
+
+Control whether the timestamp set with setWhen is shown in the content view. For apps targeting Build.VERSION_CODES.N and above, this defaults to false. For earlier apps, the default is true.
+
+## NoticeOptions
+
+//// -=-= PENDING =-=- ////
+
+    channelId?: Notice.Options.Id | null;
+    /**
+     * Will override argument title if specified.
+     *
+     * @default string of R.string.default_script_notification_title (only when both title and content are null)
+     */
+    title?: string | null;
+    /**
+     * Will override argument content if specified.
+     *
+     * @default string of R.string.default_script_notification_content (only when both title and content are null)
+     */
+    content?: string | null;
+    /**
+     * @default null
+     */
+    bigContent?: string | null;
+    /**
+     * @default false
+     */
+    appendScriptName?: Options.AppendScriptName;
+    /**
+     * @default null
+     */
+    intent?: Intent.Common | Intent | Intent.ShortForm.Activity | Intent.URI.Any | null;
+    /**
+     * @default varies by (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+     */
+    notificationId?: number;
+    /**
+     * @default false
+     */
+    autoCancel?: boolean;
+    /**
+     * @default false
+     */
+    isSilent?: boolean;
+    /**
+     * @default NotificationCompat.PRIORITY_HIGH (1)
+     */
+    priority?: Options.Priority;
+
+## NoticeChannelOptions
+
+//// -=-= PENDING =-=- ////
+
+    id?: string | number;
+    /**
+     * @default string of R.string.default_script_notification_channel_name
+     */
+    name?: string;
+    /**
+     * @default string of R.string.default_script_notification_channel_description
+     */
+    description?: string;
+    /**
+     * Property importance only takes effect when create a channel at the first time.
+     *
+     * @default NotificationManager.IMPORTANCE_HIGH (4)
+     */
+    importance?: Options.Importance;
+    enableVibration?: boolean;
+    vibrationPattern?: number[] | string;
+    enableLights?: boolean;
+    lightColor?: Colors.ColorHex | Colors.ColorInt | Colors.ColorName;
+    lockscreenVisibility?: Options.LockscreenVisibility;
+
+## NoticePresetConfiguration
+
+//// -=-= PENDING =-=- ////
+
+    useScriptNameAsDefaultChannelId: boolean;
+    useDynamicDefaultNotificationId: boolean;
+    enableChannelInvalidModificationWarnings: boolean;
+
+    defaultTitle: string;
+    defaultContent: string;
+    defaultBigContent: string;
+    defaultAppendScriptName: Options.AppendScriptName;
+    defaultAutoCancel: boolean,
+    defaultIsSilent: boolean,
+    defaultPriority: Options.Priority;
+
+    defaultChannelName: string;
+    defaultChannelDescription: string;
+
+    /**
+     * @default NotificationManager.IMPORTANCE_HIGH (4)
+     */
+    defaultImportanceForChannel: Channel.Options.Importance;
+    defaultEnableVibrationForChannel: boolean;
+    defaultVibrationPatternForChannel: number[];
+    defaultEnableLightsForChannel: boolean;
+    defaultLightColorForChannel: Colors.ColorHex | Colors.ColorInt | Colors.ColorName;
+    /**
+     * @default Notification.VISIBILITY_PUBLIC (1)
+     */
+    defaultLockscreenVisibilityForChannel: Channel.Options.LockscreenVisibility;
+
+## OcrOptions
+
+OcrOptions 是一个代表 OCR 识别选项的接口.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">OcrOptions</p>
+
+---
+
+## [p?] region
+
+- { [number](dataTypes#number)[[]](dataTypes#array) | [AndroidRect](androidRectType) | [OpencvRect](opencvRectType) }
+
+指定 OCR 识别的区域.
+
+## OcrResult
+
+OcrResult 是一个代表 OCR 识别结果的接口.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">OcrResult</p>
+
+---
+
+## [p?] label
+
+- { [string](dataTypes#string) }
+
+OCR 识别结果的标签, 通常可用于最终的文字识别结果.
+
+```js
+images.requestScreenCapture();
+let img = images.captureScreen();
+let results = ocr.detect(img);
+results.map(o => o.label); /* 将识别结果全部映射为标签 (文本). */
+```
+
+## [p?] confidence
+
+- { [string](dataTypes#string) }
+
+OCR 识别结果的置信度, 置信度越高, 意味着识别结果可能越准确.
+
+```js
+images.requestScreenCapture();
+let img = images.captureScreen();
+let results = ocr.detect(img);
+results.filter(o => o.confidence > 0.9); /* 筛选置信度高于 0.9 的结果. */
+```
+
+## [p?] bounds
+
+- { [AndroidRect](androidRectType) }
+
+OCR 识别结果的位置矩形, 用 [AndroidRect](androidRectType) 表示.
+
+```js
+images.requestScreenCapture();
+let img = images.captureScreen();
+let results = ocr.detect(img);
+let clickToStart = results.find(o => o.label === '点击开始');
+if (!isNullish(clickToStart)) {
+    /* 点击 OCR 识别结果的位置矩形. */
+    click(clickToStart.bounds);
+}
+```
+
+## [m?] toString
+
+### toString()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+OCR 识别结果的 `toString` 覆写方法, 格式示例:
+
+```text
+OcrResult@46a77f4{label=19:43:52, confidence=0.9165039, bounds=Rect(14, 15 - 121, 35)}
+OcrResult@9fed472{label=Service, confidence=0.88002235, bounds=Rect(30, 76 - 106, 97)}
+OcrResult@59cab38{label=Tools, confidence=0.8421875, bounds=Rect(30, 324 - 88, 345)}
+```
+
+## InjectableWebView
+
+参阅 [InjectableWebView](injectableWebViewType) 类型章节.
 
 ## InjectableWebClient
 
-[android.webkit.WebViewClient](https://developer.android.com/reference/android/webkit/WebViewClient) 的子类.
+参阅 [InjectableWebClient](injectableWebClientType) 类型章节.
 
-部分属性或方法:
+## Storage
 
-- `[m#]` [inject](#m-inject)
-- `[m#]` [injectAndWait](#m-injectandwait)
+参阅 [Storage](storageType) 类型章节.
 
-常见可以返回此类型的方法:
+## OpencvPoint
 
-- [web.newInjectableWebClient](web#m-newinjectablewebclient)
+参阅 [OpencvPoint](opencvPointType) 类型章节.
 
----
+## OpencvSize
 
-<p style="font: bold 2em sans-serif; color: #FF7043">InjectableWebClient</p>
+参阅 [OpencvSize](opencvSizeType) 类型章节.
 
----
+## AndroidRect
 
-### [m#] inject
+参阅 [AndroidRect](androidRectType) 类型章节.
 
-#### inject(script, callback?)
+## AndroidBundle
 
-**`Overload [1-2]/2`**
-
-- **script** { [string](#string) } - 脚本
-- **[callback]** { [(](#function)value: [string](#string)[)](#function) [=>](#function) [void](#void) } - 脚本
-- <ins>**returns**</ins> { [void](dataTypes#void) }
-
-注入 `script` 参数提供的 JavaScript 脚本, `callback` 回调参数可用于获取脚本语句的执行结果.
-
-```js
-'ui';
-
-let client = web.newInjectableWebClient();
-client.inject('navigator.userAgent', value => console.log(value));
-
-let webView = web.newInjectableWebView('www.github.com');
-webView.setWebViewClient(client);
-activity.setContentView(webView);
-```
-
-### [m#] injectAndWait
-
-#### injectAndWait(script)
-
-**`Overload [1-2]/2`**
-
-- **script** { [string](#string) } - 脚本
-- <ins>**returns**</ins> { [string](dataTypes#string) } - 脚本执行结果
-
-注入 `script` 参数提供的 JavaScript 脚本, 等待脚本执行完毕, 返回执行结果.
+参阅 [AndroidBundle](androidBundleType) 类型章节.

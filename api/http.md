@@ -3,7 +3,7 @@
 ---
 
 <p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Mar 2, 2023.</p>
+<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Mar 21, 2023.</p>
 
 ---
 
@@ -11,7 +11,9 @@ http模块提供一些进行http请求的函数.
 
 > 注: 与 [web](web) 模块不同, web 模块主要用于 WebView 网页的注入及客户端构建.
 
-## http.get(url[, options, callback])
+## [m] get
+
+### get(url, options?, callback?)
 
 * `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
 * `options` {Object} 请求选项. 参见[http.request()][].
@@ -71,7 +73,9 @@ if(res.statusCode != 200){
 }
 ```
 
-## http.post(url, data[, options, callback])
+## [m] post
+
+### post(url, data, options?, callback?)
 
 * `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
 * `data` {string} | {Object} POST数据.
@@ -100,7 +104,9 @@ if(html.contains("页面跳转中")){
 }
 ```
 
-## http.postJson(url[, data, options, callback])
+## [m] postJson
+
+### postJson(url, data?, options?, callback?)
 
 * `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
 * `data` {Object} POST数据.
@@ -123,7 +129,9 @@ r = http.postJson(url, {
 toastLog(r.body.string());
 ```
 
-## http.postMultipart(url, files[, options, callback])
+## [m] postMultipart
+
+### postMultipart(url, files, options?, callback?)
 
 * `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
 * `files` {Object} POST数据.
@@ -174,7 +182,9 @@ var res = http.postMultipart(url, {
 log(res.body.string());
 ```
 
-## http.request(url[, options, callback])
+## [m] request
+
+### request(url, options?, callback?)
 
 * `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
 * `options` {Object} 请求选项. 参见[http.buildRequest()][].
@@ -191,80 +201,8 @@ log(res.body.string());
 
 该函数是get, post, postJson等函数的基础函数. 因此除非是PUT, DELET等请求, 或者需要更高定制的HTTP请求, 否则直接使用get, post, postJson等函数会更加方便.
 
-# Response
+## [m] buildRequest
 
-HTTP请求的响应.
+### buildRequest(url, options)
 
-## Response.statusCode
-
-* {number}
-
-当前响应的HTTP状态码. 例如200(OK), 404(Not Found)等.
-
-有关HTTP状态码的信息, 参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html).
-
-## Response.statusMessage
-
-* {string}
-
-当前响应的HTTP状态信息. 例如"OK", "Bad Request", "Forbidden".
-
-有关HTTP状态码的信息, 参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html).
-
-例子：
-
-```
-var res = http.get("www.baidu.com");
-if(res.statusCode >= 200 && res.statusCode < 300){
-	toast("页面获取成功!");
-}else if(res.statusCode == 404){
-	toast("页面没找到哦...");
-}else{
-	toast("错误: " + res.statusCode + " " + res.statusMessage);
-}
-```
-
-## Response.headers
-
-* {Object}
-
-当前响应的HTTP头部信息. 该对象的键是响应头名称, 值是各自的响应头值.  所有响应头名称都是小写的(吗).
-
-有关HTTP头部信息, 参见[菜鸟教程：HTTP响应头信息](http://www.runoob.com/http/http-header-fields.html).
-
-例子:
-
-```
-console.show();
-var res = http.get("www.qq.com");
-console.log("HTTP Headers:")
-for(var headerName in res.headers){
-	console.log("%s: %s", headerName, res.headers[headerName]);
-}
-```
-
-## Response.body
-
-* {Object}
-
-当前响应的内容. 他有以下属性和函数：
-
-* bytes() {Array} 以字节数组形式返回响应内容
-* string() {string} 以字符串形式返回响应内容
-* json() {Object} 把响应内容作为JSON格式的数据并调用JSON.parse, 返回解析后的对象
-* contentType {string} 当前响应的内容类型
-
-## Response.request
-
-* {Request}
-  当前响应所对应的请求. 参见[Request][].
-
-## Response.url
-
-* {number}
-  当前响应所对应的请求URL.
-
-## Response.method
-
-* {string}
-  当前响应所对应的HTTP请求的方法. 例如"GET", "POST", "PUT"等.
+... ...

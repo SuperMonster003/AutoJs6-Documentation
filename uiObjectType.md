@@ -257,11 +257,11 @@ console.log(w.findOne(contentMatch(/\s*.{10,}\s*/)));
 
 **`A11Y`**
 
-- <ins>**returns**</ins> { [AndroidRect](dataTypes#androidrect) }
+- <ins>**returns**</ins> { [AndroidRect](androidRectType) }
 
 方法 [boundsInScreen](#m-boundsinscreen) 的别名.
 
-返回一个 [控件矩形 (Rect)](dataTypes#androidrect), 表示控件在屏幕的相对位置及空间范围.
+返回一个 [控件矩形 (Rect)](androidRectType), 表示控件在屏幕的相对位置及空间范围.
 
 ```js
 let bounds = contentMatch(/.+/).findOnce().bounds();
@@ -278,9 +278,9 @@ console.log(bounds); // e.g. Rect(0, 48 - 112, 160)
 
 **`A11Y`**
 
-- <ins>**returns**</ins> { [AndroidRect](dataTypes#androidrect) }
+- <ins>**returns**</ins> { [AndroidRect](androidRectType) }
 
-返回一个 [控件矩形 (Rect)](dataTypes#androidrect), 表示控件在屏幕的相对位置及空间范围.
+返回一个 [控件矩形 (Rect)](androidRectType), 表示控件在屏幕的相对位置及空间范围.
 
 ```js
 let bounds = contentMatch(/.+/).findOnce().boundsInScreen();
@@ -299,9 +299,9 @@ console.log(bounds); // e.g. Rect(0, 48 - 112, 160)
 
 **`DEPRECATED`**
 
-- <ins>**returns**</ins> { [AndroidRect](dataTypes#androidrect) }
+- <ins>**returns**</ins> { [AndroidRect](androidRectType) }
 
-返回一个 [控件矩形 (Rect)](dataTypes#androidrect), 表示控件于其父控件的相对位置及空间范围.
+返回一个 [控件矩形 (Rect)](androidRectType), 表示控件于其父控件的相对位置及空间范围.
 
 因其父控件实际上是 `View#getParentForAccessibility()` 的结果, 而非此控件的 `viewParent`, 所以得到的结果是不可靠的.
 
@@ -656,9 +656,9 @@ console.log(wC.boundsExactCenterY()); // e.g. -16.5
 
 **`6.2.0`** **`A11Y`**
 
-- <ins>**returns**</ins> { [OpencvPoint](dataTypes#opencvpoint) }
+- <ins>**returns**</ins> { [OpencvPoint](opencvPointType) }
 
-返回控件矩形的中心点 ([Point](dataTypes#opencvpoint)).
+返回控件矩形的中心点 ([Point](opencvPointType)).
 
 该中心点坐标由 [exactCenterX](#m-exactcenterx) 和 [exactCenterY](#m-exactcentery) 计算获得, 因此会保留精度.
 
@@ -680,9 +680,9 @@ console.log(wB.point().y); // e.g. 6.5
 
 **`6.2.0`** **`A11Y`**
 
-- <ins>**returns**</ins> { [OpencvSize](dataTypes#opencvsize) }
+- <ins>**returns**</ins> { [OpencvSize](opencvSizeType) }
 
-返回控件矩形的尺寸 ([Size](dataTypes#opencvsize)).
+返回控件矩形的尺寸 ([Size](opencvSizeType)).
 
 ```js
 let w = pickup(/.+/);
@@ -820,7 +820,7 @@ console.log(idMatch(/.+/).findOnce().simpleId()); /* 同上. */
 
 - <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) }
 
-返回节点的 [ID 资源全称](#m-fullid) 的 [资源 ID](glossaries.md#资源-ID) 十六进制字符串值, 简称 `ID 资源十六进制代表值`.
+返回节点的 [ID 资源全称](#m-fullid) 的 [资源 ID](glossaries#资源-ID) 十六进制字符串值, 简称 `ID 资源十六进制代表值`.
 
 1. 获取 `ID 资源全称` 对应的 `资源 ID`
 2. 将 `资源 ID` 的十六进制值以 `0x` 作为前缀进行组合

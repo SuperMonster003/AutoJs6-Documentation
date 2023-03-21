@@ -473,7 +473,7 @@ Material Color (材料颜色) 是 Material Design (材料设计) 中的色彩方
 
 Material Design 是谷歌开发的一种视觉语言和设计系统, 拥有近乎扁平化的风格和充满活力的色彩方案.
 
-下述颜色列表列出了所有 Material Color, 带有下划线和数字的变量名表示颜色色号, 每个颜色将 500 色号作为默认代表颜色, 即 `colors.material.RED` 与 `colors.material.RED_500` 等价 (黑白两种颜色除外), 带有 `A` 的变量, 如 `RED_A400` 代表强调色, 对应英文 `Accent`.
+Material Color 中, 带有下划线和数字的变量名表示颜色色号, 每个颜色将 500 色号作为默认代表颜色, 即 `colors.material.RED` 与 `colors.material.RED_500` 等价 (黑白两种颜色除外), 带有 `A` 的变量, 如 `RED_A400` 代表强调色, 对应英文 `Accent`.
 
 使用方式:
 
@@ -746,7 +746,7 @@ colors.material.ORANGE;
 
 支持三位数简写的颜色 Hex 代码格式需满足 R / G / B 的每个分量符合叠字模式, 如 `#663399`, `#CCFF00`, `#888888` 等.
 
-使用 [colors.toHex(color, 3)](color.md#tohexcolor-length) 可实现由 `#RRGGBB` 到 `#RGB` 的转换:
+使用 [colors.toHex(color, 3)](color#tohexcolor-length) 可实现由 `#RRGGBB` 到 `#RGB` 的转换:
 
 ```js
 colors.toHex(colors.GRAY, 3); // #888

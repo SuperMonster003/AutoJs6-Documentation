@@ -31,7 +31,7 @@ console.log(typeof [].union); // "function"
 
 Arrayx 的诸多排序方法, 如 [ sortBy / sortDescending / sortByDescending / sorted / sortedBy / sortedDescending / sortedByDescending ] 等, 其内部实现均调用了 JavaScript 的原生方法 [Array.prototype.sort](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort).
 
-自 ES10（ECMAScript 2019）起，[规范](https://tc39.es/ecma262/#sec-array.prototype.sort) 要求 Array.prototype.sort 为稳定排序, 因此 Arrayx 的排序方法也是稳定的.
+自 ES10 (ECMAScript 2019) 起, [规范](https://tc39.es/ecma262/#sec-array.prototype.sort) 要求 Array.prototype.sort 为稳定排序, 因此 Arrayx 的排序方法也是稳定的.
 
 > 参阅: [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#%E6%8E%92%E5%BA%8F%E7%A8%B3%E5%AE%9A%E6%80%A7)
 

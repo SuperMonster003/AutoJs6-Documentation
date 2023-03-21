@@ -8,6 +8,7 @@
 @include app
 @include color
 @include image
+@include ocr
 @include keys
 @include device
 @include storages
@@ -16,7 +17,8 @@
 @include tasks
 @include modules
 @include plugins
-@include continuation
+@include toast
+@include notice
 @include console
 @include shell
 @include media
@@ -24,6 +26,7 @@
 @include recorder
 @include timers
 @include threads
+@include continuation
 @include events
 @include dialogs
 @include floaty

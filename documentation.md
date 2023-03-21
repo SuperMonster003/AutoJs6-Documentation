@@ -228,7 +228,7 @@ device.vibrate("hello"); /* 无延迟. */
 #### device.vibrate(text, delay?)
 
 - **text** { [string](dataTypes#string) } - 需转换为摩斯码的文本
-- **[ delay = 0 ]** { [number](dataTypes#number) } - 震动延迟
+- **[ delay = 0 ]** { [number](dataTypes#number) } - 振动延迟
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 上述示例的 delay 参数是可选的 (以 "?" 标注) 且包含默认值 (以 "=" 标注).  
@@ -342,7 +342,7 @@ requestScreenCapture(false);
 - \[m+]: 具有扩展属性的对象方法.
     - 如 auto 本身是一个方法 (或称函数), waitFor 是 auto 的一个扩展方法.
     - 以下两种调用方式均可用: `auto()` 及 `auto.waitFor()`.
-- \[p]: 属性.
+- \[p]: 普通对象属性或类静态成员属性或接口变量属性.
     - 例如在 `device` 作为 [临时作用域对象](#临时作用域对象) 时:
     - `[p] height` 代表 `device.height` 属性, 而非方法.
     - 此标签对 [ Getter / Setter / "类" 属性 / 对象属性 / 方法扩展属性 ] 等不作区分.

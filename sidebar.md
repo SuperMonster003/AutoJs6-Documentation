@@ -4,6 +4,7 @@
 * [Changelog - 文档更新日志](changelog)
 
 * &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
+
 * [Manual - AutoJs6 使用手册](manual)
 * [Q & A - 疑难解答](qa)
 
@@ -15,6 +16,7 @@
 * [App - 通用应用](app)
 * [Color - 颜色](color)
 * [Image - 图像](image)
+* [OCR - 光学字符识别](ocr)
 * [Keys - 按键](keys)
 * [Device - 设备](device)
 * [Storage - 储存](storages)
@@ -23,6 +25,8 @@
 * [Task - 任务](tasks)
 * [Module - 模块](modules)
 * [Plugins - 插件](plugins)
+* [Toast - 消息浮动框](toast)
+* [Notice - 消息通知](notice)
 * [Console - 控制台](console)
 * [Shell](shell)
 * [Media - 多媒体](media)
@@ -45,7 +49,20 @@
 
 * &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
 
-* [Glossaries - 术语](glossaries)
+* [UiSelector - 选择器](uiSelectorType)
+* [UiObject - 控件节点](uiObjectType)
+* [UiObjectCollection - 控件集合](uiObjectCollectionType)
+* [UiObjectActions - 控件节点行为](uiObjectActionsType)
+* [ImageWrapper - 包装图像类](imageWrapper)
+* [App - 应用枚举类](appType)
+* [Version - 版本工具类](versionType)
+* [Polyfill - 代码填泥](polyfill)
+* [Arrayx - Array 扩展](arrayx)
+* [Numberx - Number 扩展](numberx)
+* [Mathx - Math 扩展](mathx)
+
+* &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
+
 * [Exceptions - 异常](exceptions)
 * [Intent - 意图](intentType)
 * [Runtime - 运行时](runtime)
@@ -54,27 +71,35 @@
 
 * &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
 
-* [Data Types - 数据类型](dataTypes)
-* [UiSelector - 选择器](uiSelectorType)
-* [UiObject - 控件节点](uiObjectType)
-* [UiObjectCollection - 控件集合](uiObjectCollectionType)
-* [UiObjectActions - 控件节点行为](uiObjectActionsType)
-* [App - 应用枚举类](appType)
-* [Storage - 存储类](storageType)
-* [Version - 版本工具类](versionType)
-
-* &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
-
-* [Polyfill - 代码填泥](polyfill)
-* [Arrayx - Array 扩展](arrayx)
-* [Numberx - Number 扩展](numberx)
-* [Mathx - Math 扩展](mathx)
-
-* &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
-
 * [Scripting Java - 脚本化 Java](scriptingJava)
 * [Android API Level - 安卓 API 级别](apiLevel)
 * [Color Table - 颜色列表](colorTable)
+
+* &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
+
+* [Glossaries - 术语](glossaries)
+* [HttpHeader - HTTP 标头](httpHeaderGlossary)
+* [HttpRequestMethods - HTTP 请求方法](httpRequestMethodsGlossary)
+* [MimeType - MIME 类型](mimeTypeGlossary)
+
+* &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
+
+* [Data Types - 数据类型](dataTypes)
+* [AndroidBundle](androidBundleType)
+* [AndroidRect](androidRectType)
+* [HttpRequestBuilderOptions](httpRequestBuilderOptionsType)
+* [HttpRequestHeaders](httpRequestHeadersType)
+* [HttpResponseBody](httpResponseBodyType)
+* [HttpResponseHeaders](httpResponseHeadersType)
+* [HttpResponse](httpResponseType)
+* [InjectableWebClient](injectableWebClientType)
+* [InjectableWebView](injectableWebViewType)
+* [Okhttp3HttpUrl](okhttp3HttpUrlType)
+* [Okhttp3Request](okhttp3RequestType)
+* [OpencvPoint](opencvPointType)
+* [OpencvRect](opencvRectType)
+* [OpencvSize](opencvSizeType)
+* [Storage - 存储类](storageType)
 
 * &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
 

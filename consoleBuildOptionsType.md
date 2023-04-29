@@ -154,6 +154,8 @@ console.build({ contentTextSize: 18 }).show();
 
 ## [p?] contentTextColor
 
+**`Overload 1/2`**
+
 - {{
     - verbose?: [OmniColor](omniTypes#omnicolor);
     - log?: [OmniColor](omniTypes#omnicolor);
@@ -161,7 +163,7 @@ console.build({ contentTextSize: 18 }).show();
     - warn?: [OmniColor](omniTypes#omnicolor);
     - error?: [OmniColor](omniTypes#omnicolor);
     - assert?: [OmniColor](omniTypes#omnicolor);
-- } | [OmniColor](omniTypes#omnicolor) } - 浮动窗口日志文本字体颜色
+- }} - 浮动窗口日志文本字体颜色
 
 设置控制台浮动窗口的日志文本字体颜色, 按日志等级设置一个或多个不同的字体颜色.
 
@@ -189,7 +191,11 @@ console.build({
 });
 ```
 
-如果希望不区分日志等级, 统一设置所有日志的文本颜色, 可参考下述示例:
+**`Overload 2/2`**
+
+- { [OmniColor](omniTypes#omnicolor) } - 浮动窗口日志文本统一字体颜色
+
+使用 `{ contentTextColor: OmniColor }` 时, 不区分日志等级, 统一设置所有日志的文本颜色:
 
 ```js
 /* 所有日志本文的颜色统一设置为深绿色. */

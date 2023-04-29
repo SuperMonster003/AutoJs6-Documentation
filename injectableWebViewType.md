@@ -21,7 +21,7 @@
 **`Overload [1-2]/2`**
 
 - **script** { [string](dataTypes#string) } - 脚本
-- **[callback]** { [(](dataTypes#function)value: [string](dataTypes#string)[)](dataTypes#function) [=>](dataTypes#function) [void](dataTypes#void) } - 脚本
+- **[ callback ]** { [(](dataTypes#function)value: [string](dataTypes#string)[)](dataTypes#function) [=>](dataTypes#function) [void](dataTypes#void) } - 脚本
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 注入 `script` 参数提供的 JavaScript 脚本, `callback` 回调参数可用于获取脚本语句的执行结果.

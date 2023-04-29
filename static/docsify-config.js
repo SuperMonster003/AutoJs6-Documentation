@@ -5,7 +5,7 @@ window.$docsify = {
     loadSidebar: true,
     subMaxLevel: 3,
     coverpage: true,
-    loadNavbar: true,
+    loadNavbar: false,
     auto2top: true,
     homepage: 'overview.md',
     search: {
@@ -13,5 +13,10 @@ window.$docsify = {
         paths: 'auto',
         placeholder: '搜索文档',
         noData: '无搜索结果',
+    },
+    copyCode: {
+        buttonText: 'Copy',
+        errorText: 'Error',
+        successText: 'Copied',
     },
 };

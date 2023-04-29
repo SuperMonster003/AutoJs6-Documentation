@@ -14,8 +14,8 @@ AutoJs6 内置模块指脚本可全局使用的 JavaScript 模块.
 
 ### 查看内置模块源代码
 
-除 [直接查看开源代码](https://github.com/SuperMonster003/AutoJs6/tree/master/app/src/main/assets/modules) 外, 还可以将内置模块解压到本地存储后查看:  
-下载 [AutoJs6 APK](https://github.com/SuperMonster003/AutoJs6/releases/latest) 并使用压缩软件将 APK 内的 `\assets\modules` 文件夹解压到本地.  
+除 [直接查看开源代码](http://project.autojs6.com/tree/master/app/src/main/assets/modules) 外, 还可以将内置模块解压到本地存储后查看:  
+下载 [AutoJs6 APK](http://download.autojs6.com) 并使用压缩软件将 APK 内的 `\assets\modules` 文件夹解压到本地.  
 模块通常以 `__%name%__.js` 格式命名, 其中 `%name%` 对应模块名.  
 可使用文本编辑器等软件查看模块源代码.
 
@@ -27,9 +27,9 @@ AutoJs6 内置模块指脚本可全局使用的 JavaScript 模块.
 > 因 `新生 APK` 包名发生变化, 需卸载已安装的 `开源 AutoJs6 APK` (下文作 `开源 APK`) 后再安装 `新生 APK`.  
 > 当 `开源 APK` 出现新版本时, 同样需卸载 `新生 APK` 才能安装新版本的 `开源 APK`.  
 > 此时, 修改或增加的内置模块将失效.  
-> 如欲将自己的代码整合到 `开源 APK` 中, 可向开源项目提交 [Pull Request (PR)](https://github.com/SuperMonster003/AutoJs6/pulls).
+> 如欲将自己的代码整合到 `开源 APK` 中, 可向开源项目提交 [Pull Request (PR)](http://pr.autojs6.com).
 
-克隆 (Clone) [AutoJs6 源码](https://github.com/SuperMonster003/AutoJs6).  
+克隆 (Clone) [AutoJs6 源码](http://project.autojs6.com).  
 使用 [Android Studio](https://developer.android.com/studio/archive) 打开并完成项目构建 (Build).  
 定位 `\app\src\main\assets\modules` 目录.
 
@@ -127,7 +127,7 @@ Context.
 ```
 
 因此以下示例均满足要求:  
-`"1"`, `"1a"`, `"a1"`, `"hello 2011"`.
+`'1'`, `'1a'`, `'a1'`, `"hello 2011"`.
 
 字符串模式支持正则表达式的 [标记参数](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2), 如 `/hello/i`.
 
@@ -677,60 +677,43 @@ Luminance, Lightness 和 Brightness 都与 "亮度" 有关.
 
 > 参阅: [Wikipedia (英)](https://en.wikipedia.org/wiki/Code_injection) / [Wikipedia (中)](https://zh.wikipedia.org/wiki/%E4%BB%A3%E7%A2%BC%E6%B3%A8%E5%85%A5)
 
-## 通知渠道
+## 占位符替换参数
 
-通知渠道 (Notification Channel) 用于分类管理通知.
-
-从 `Android API 26 (8.0) [O]` 起, 必须为所有通知分配渠道, 否则通知将不会显示. 
-
-通过将通知归类到不同渠道中, 用户可以管理 AutoJs6 的特定通知渠道, 控制每个渠道的选项和行为.
-
-例如设置两个渠道, 水果和天气. 水果渠道用于发送与水果销量变化相关的通知, 天气渠道用于发送气象数据变化相关的通知.
-
-不同渠道的通知可分别定制, 如是否弹出通知, 是否振动, 通知指示灯开关及颜色, 是否静音等. 渠道之间的设置是互相独立的.
-
-> 注: 在安卓 7.x 系统上, 用户只能简单地启动或禁用所有 AutoJs6 的通知, 无法按渠道管理通知. 
-
-### 创建渠道
-
-如需创建通知渠道, 可使用 [notice.channel.create](notice#m-create) 方法.
-
-> 注: 渠道的大致创建过程, 是构建一个具有唯一渠道 ID且用户可见名称和重要性级别的 NotificationChannel 对象, 然后通过 createNotificationChannel 注册这个通知渠道. 
-
-通常, 每种不同类型的通知, 均建议创建各自的渠道. 创建时, 可自定义渠道的默认通知行为, 如指示灯颜色及是否振动等.
-
-需额外留意, 渠道创建后, 将无法通过代码更改这些设置 (除名称, 描述, 和受条件限制的优先级之外), 对于渠道的设置, 用户拥有最终控制权.
-
-### 渠道重要性
-
-渠道重要性会影响渠道中通知的干扰级别, 从 IMPORTANCE_NONE(0) 到 IMPORTANCE_HIGH(4) 的五个重要性级别分别对应不同程度的 "通知强度".
-
-"通知强度" 越高, 通知的干扰性越大, 如级别 4 可能会在屏幕上弹出通知, 通常还会发出声音并使手机振动; 而级别 0 则安静地在通知栏创建通知, 甚至不会使用户有任何察觉.
-
-### 渠道权限
-
-创建通知渠道后, 无法使用代码更改通知行为 (除名称, 描述, 和受条件限制的优先级之外), 此时用户拥有完全控制权, 如修改渠道的振动和提醒提示音等行为.
-
-使用代码可以获取用户对渠道所应用的设置:
+AutoJs6 提供了简化的占位符格式化参数功能, 类似 Java 语言的 `String.format` 方法.
 
 ```js
-let channel = notice.channel.get('my_channel_id'); /* 获取渠道对象. */
-
-channel.getImportance(); /* 获取重要性级别. */
-channel.getLightColor(); /* 获取指示灯颜色. */
-channel.getVibrationPattern(); /* 获取振动模式. */
-channel.getSound(); /* 获取提示音. */
+console.log('%s 获得了 %d 个奖章', '大卫', 23);
 ```
 
-### 删除渠道
+上述示例中 `console.log` 方法提供了占位符格式化参数支持, 运行后控制台将显示一条消息, "大卫 获得了 23 个奖章".
 
-可通过 [notice.channel.remove](notice#m-remove) 删除通知渠道.
+其中, `%s` 和 `%d` 是占位符, 分别表示接受字符串类型和数字类型的参数, 因此后面的剩余参数将依次进行占位符替换, 替换时, JavaScript 将进行参数的隐式转换.
 
-删除渠道后, 如果重新创建相同 ID 的渠道, 将重新恢复之前被删除的渠道 (反删除), 且附带之前渠道的所有配置.
+AutoJs6 支持的所有占位符如下:
 
-这样的设计是防止应用通过代码的方式恶意篡改用户对通知渠道的配置.
+| <span style="white-space:nowrap">占位符</span> | 简述                                                            | 示例                                                                          | 示例结果                                                                     |
+|:-------------------------------------------:|---------------------------------------------------------------|-----------------------------------------------------------------------------|--------------------------------------------------------------------------|
+|                     %s                      | <span style="white-space:nowrap">字符串占位符</span>                | <span style="white-space:nowrap">"状态: %s", "开启"<br/>"状态: %s", 100</span>    | <span style="white-space:nowrap">"状态: 开启"<br/>"状态: 100"</span>           |
+|                     %d                      | <span style="white-space:nowrap">数字占位符</span>                 | <span style="white-space:nowrap">"数量: %d", 5<br/>"数量: %d", "hello"</span>   | <span style="white-space:nowrap">"数量: 5"<br/>"数量: NaN"</span>            |
+|                     %j                      | <span style="white-space:nowrap">JSON 对象占位符</span>            | <span style="white-space:nowrap">"o: %j", { a: 1, b: 2 }</span>             | <span style="white-space:nowrap">'o: {"a":1,"b":2}'</span>               |
+|                     %%                      | <span style="white-space:nowrap">转义 % 符号<br/>%% 将转换为 %</span> | <span style="white-space:nowrap">"1%% is 0.01"<br/>"1%%%% is 0.0001"</span> | <span style="white-space:nowrap">"1% is 0.01"<br/>"1%% is 0.0001"</span> |
 
-如需完全清除某个或某些渠道 (通常出于测试目的而创建的), 可重新安装应用或清除应用数据.
+JavaScript 的模板字符串也可以很好地完成占位符格式化功能:
+
+```js
+let person = 'John';
+let score = 91;
+let subject = 'Chinese';
+
+/* 使用占位符替换参数. */
+console.log('%s got a %s score of %d', person, subject, score);
+
+/* 使用 JavaScript 模板字符串. */
+console.log(`${person} got a ${subject} score of ${score}`);
+
+/* 上述两种方法均可在控制台显示预期输出内容. */
+// "John got a Chinese score of 91"
+```
 
 ## HTTP 标头
 

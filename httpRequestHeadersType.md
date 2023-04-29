@@ -4,7 +4,7 @@ HttpRequestHeaders 是一个代表 [HTTP 请求头](httpHeaderGlossary#请求标
 
 HTTP 标头字段是大小写 **不敏感** 的 (根据 [RFC 2616](http://www.ietf.org/rfc/rfc2616.txt)), 本章节采用 **全部小写** 的形式表示标头字段 (如 content-type).
 
-> 注: 本章节仅列出部分请求头字段信息, 更多信息可参阅 [HTTP 标头](httpHeaderGlossary.md#请求标头) 术语章节.
+> 注: 本章节仅列出部分请求头字段信息, 更多信息可参阅 [HTTP 标头](httpHeaderGlossary#请求标头) 术语章节.
 
 ---
 

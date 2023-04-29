@@ -62,7 +62,7 @@ AutoJs6 对以下功能进行了十足的打磨:
 
 其中尤其具备 AutoJs6 特色的, 当属 [pickup 选择器](uiSelectorType#m-pickup) 及 [compass 控件罗盘](uiObjectType#m-compass).
 
-关于 AutoJs6 的更多内容, 可参阅 [项目更新日志](https://github.com/SuperMonster003/AutoJs6/blob/master/app/src/main/assets/doc/CHANGELOG.md).
+关于 AutoJs6 的更多内容, 可参阅 [项目更新日志](http://changelog.autojs6.com).
 
 ## 文档
 
@@ -91,7 +91,7 @@ AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目�
 
 AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 实现的.
 
-> 注: AutoJs6 的 [OCR 实现源码](https://github.com/SuperMonster003/AutoJs6/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/MlKitOCR.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的开源项目.
+> 注: AutoJs6 的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/MlKitOCR.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的开源项目.
 
 > 参阅: [光学字符识别 (OCR)](ocr) 模块
 
@@ -151,6 +151,8 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 | 酷派 (Coolpad)                     | 	CoolOS                 |
 | 卓易 (Droi)                        | 	Freeme OS              |
 | 锤子科技 (Smartisan)                 | Smartisan OS            |
+| 中兴 (ZTE / 天机 / 远航 / Axon)        | MyOS                    |
+| 努比亚 (Nubia / 红魔)                 | REDMAGIC OS             |
 | Google Pixel                     | 原生                      |
 | AVD (安卓虚拟机)                      | 原生                      |
 | 索尼 (Sony / XPERIA)               | 类原生                     |
@@ -159,7 +161,6 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 | LG                               | 类原生                     |
 | 摩托罗拉 (Motorola)                  | 类原生                     |
 | 诺基亚 (Nokia)                      | 类原生 (仅限部分机型)            |
-| 中兴 (ZTE)                         | 类原生                     |
 | 华硕 (ASUS / ZenFone / ROG Phone)  | 类原生                     |
 | 宏达电 (HTC)                        | 类原生                     |
 
@@ -275,7 +276,7 @@ function rotate(src, degrees, px, py) {
 如有任何问题或建议, 可在 GitHub 项目议题页面发起新的反馈.
 
 关于 <strong>项目文档</strong> 的反馈:  
-https://github.com/SuperMonster003/AutoJs6-Documentation/issues
+http://docs-issues.autojs6.com
 
 关于 <strong>AutoJs6</strong> 的反馈:  
-https://github.com/SuperMonster003/AutoJs6/issues
+http://issues.autojs6.com

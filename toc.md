@@ -48,6 +48,7 @@
 * [Base64](base64)
 * [Crypto - 密文](crypto)
 * [Internationalization - 国际化](i18n)
+* [Standardization - 标准化](s13n)
 * [E4X](e4x)
 
 <div class="line"></div>
@@ -58,6 +59,7 @@
 * [UiObjectActions - 控件节点行为](uiObjectActionsType)
 * [ImageWrapper - 包装图像类](imageWrapper)
 * [App - 应用枚举类](appType)
+* [Color - 颜色类](colorType)
 * [Version - 版本工具类](versionType)
 * [Polyfill - 代码填泥](polyfill)
 * [Arrayx - Array 扩展](arrayx)
@@ -84,12 +86,16 @@
 * [HttpHeader - HTTP 标头](httpHeaderGlossary)
 * [HttpRequestMethods - HTTP 请求方法](httpRequestMethodsGlossary)
 * [MimeType - MIME 类型](mimeTypeGlossary)
+* [NotificationChannel - 通知渠道](notificationChannelGlossary)
 
 <div class="line"></div>
 
 * [Data Types - 数据类型](dataTypes)
+* [Omnipotent Types - 全能类型](omniTypes)
+* [Storage - 存储类](storageType)
 * [AndroidBundle](androidBundleType)
 * [AndroidRect](androidRectType)
+* [ConsoleBuildOptions](consoleBuildOptionsType)
 * [HttpRequestBuilderOptions](httpRequestBuilderOptionsType)
 * [HttpRequestHeaders](httpRequestHeadersType)
 * [HttpResponseBody](httpResponseBodyType)
@@ -97,14 +103,18 @@
 * [HttpResponse](httpResponseType)
 * [InjectableWebClient](injectableWebClientType)
 * [InjectableWebView](injectableWebViewType)
+* [NoticeOptions](noticeOptionsType)
+* [NoticeChannelOptions](noticeChannelOptionsType)
+* [NoticePresetConfiguration](noticePresetConfigurationType)
+* [NoticeBuilder](noticeBuilderType)
 * [Okhttp3HttpUrl](okhttp3HttpUrlType)
+* [OcrOptions](ocrOptionsType)
 * [Okhttp3Request](okhttp3RequestType)
 * [OpencvPoint](opencvPointType)
 * [OpencvRect](opencvRectType)
 * [OpencvSize](opencvSizeType)
-* [Storage - 存储类](storageType)
 
 <div class="line"></div>
 
-* [GitHub - 应用项目地址](https://github.com/SuperMonster003/AutoJs6)
-* [GitHub - 文档项目地址](https://github.com/SuperMonster003/AutoJs6-Documentation)
+* [GitHub - 应用项目地址](http://project.autojs6.com)
+* [GitHub - 文档项目地址](http://docs-project.autojs6.com)

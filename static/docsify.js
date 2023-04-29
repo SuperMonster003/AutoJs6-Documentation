@@ -79,9 +79,7 @@
      * @returns {Boolean} True if the passed-in url is external
      */
     function isExternal(url) {
-        var match = url.match(
-            /^([^:/?#]+:)?(?:\/{2,}([^/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/,
-        );
+        var match = url.match(/^([^:/?#]+:)?(?:\/{2,}([^/?#]*))?([^?#]+)?(\?[^#]*)?(#.*)?/);
 
         if (
             typeof match[1] === 'string' &&
@@ -93,12 +91,7 @@
         if (
             typeof match[2] === 'string' &&
             match[2].length > 0 &&
-            match[2].replace(
-                new RegExp(
-                    ':(' + { 'http:': 80, 'https:': 443 }[location.protocol] + ')?$',
-                ),
-                '',
-            ) !== location.host
+            match[2].replace(new RegExp(':(' + { 'http:': 80, 'https:': 443 }[location.protocol] + ')?$'), '') !== location.host
         ) {
             return true;
         }
@@ -121,9 +114,7 @@
                 window.history.pushState &&
                 window.history.replaceState &&
                 // PushState isn’t reliable on iOS until 5.
-                !navigator.userAgent.match(
-                    /((iPod|iPhone|iPad).+\bOS\s+[1-4]\D|WebApps\/.+CFNetwork)/,
-                )
+                !navigator.userAgent.match(/((iPod|iPhone|iPad).+\bOS\s+[1-4]\D|WebApps\/.+CFNetwork)/)
             );
         })();
 
@@ -178,9 +169,7 @@
      * findAll(nav, 'a') => [].slice.call(nav.querySelectorAll('a'))
      */
     function findAll(el, node) {
-        return [].slice.call(
-            node ? el.querySelectorAll(node) : $.querySelectorAll(el),
-        );
+        return [].slice.call(node ? el.querySelectorAll(node) : $.querySelectorAll(el));
     }
 
     function create(node, tpl) {
@@ -298,11 +287,7 @@
                 continue;
             }
 
-            qs.push(
-                obj[key]
-                    ? ((encode(key)) + '=' + (encode(obj[key]))).toLowerCase()
-                    : encode(key),
-            );
+            qs.push(obj[key] ? ((encode(key)) + '=' + (encode(obj[key]))).toLowerCase() : encode(key));
         }
 
         return qs.length ? ('?' + (qs.join('&'))) : '';
@@ -471,10 +456,7 @@
         }
 
         if (this.config.relativePath && path.indexOf('/') !== 0) {
-            var currentDir = currentRoute.substring(
-                0,
-                currentRoute.lastIndexOf('/') + 1,
-            );
+            var currentDir = currentRoute.substring(0, currentRoute.lastIndexOf('/') + 1);
             return cleanPath(resolvePath(currentDir + path));
         }
 
@@ -979,11 +961,9 @@
     var ERB_EXPR = seal(/<%[\s\S]*|[\s\S]*%>/gm);
     var DATA_ATTR = seal(/^data-[\-\w.\u00B7-\uFFFF]/); // eslint-disable-line no-useless-escape
     var ARIA_ATTR = seal(/^aria-[\-\w]+$/); // eslint-disable-line no-useless-escape
-    var IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i, // eslint-disable-line no-useless-escape
-    );
+    var IS_ALLOWED_URI = seal(/^(?:(?:(?:f|ht)tps?|mailto|tel|callto|cid|xmpp):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i); // eslint-disable-line no-useless-escape
     var IS_SCRIPT_OR_DATA = seal(/^(?:\w+script|data):/i);
-    var ATTR_WHITESPACE = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g, // eslint-disable-line no-control-regex
-    );
+    var ATTR_WHITESPACE = seal(/[\u0000-\u0020\u00A0\u1680\u180E\u2000-\u2029\u205F\u3000]/g); // eslint-disable-line no-control-regex
 
     var _typeof = typeof Symbol === 'function' && typeof Symbol.iterator === 'symbol' ? function (obj) {
         return typeof obj;
@@ -2278,9 +2258,7 @@
                             return progressbar({
                                 step: Math.floor(Math.random() * 5 + 1),
                             });
-                        },
-                        500,
-                    );
+                        }, 500);
 
                     on('progress', progressbar);
                     on('loadend', function (evt) {
@@ -2314,10 +2292,7 @@
     }
 
     function replaceVar(block, color) {
-        block.innerHTML = block.innerHTML.replace(
-            /var\(\s*--theme-color.*?\)/g,
-            color,
-        );
+        block.innerHTML = block.innerHTML.replace(/var\(\s*--theme-color.*?\)/g, color);
     }
 
     function cssVars(color) {
@@ -2372,13 +2347,9 @@
         });
 
         isMobile &&
-        on(
-            body,
-            'click',
-            function (_) {
-                return body.classList.contains('close') && toggle();
-            },
-        );
+        on(body, 'click', function (_) {
+            return body.classList.contains('close') && toggle();
+        });
     }
 
     function collapse(el) {
@@ -2686,8 +2657,7 @@
             },
             typeof window.$docsify === 'function'
                 ? window.$docsify(vm)
-                : window.$docsify,
-        );
+                : window.$docsify);
 
         var script =
             currentScript ||
@@ -5137,8 +5107,7 @@
                         for (j = 0; j < l2; j++) {
                             cell += this.renderer.tablecell(
                                 this.parseInline(token.tokens.header[j]),
-                                { header: true, align: token.align[j] },
-                            );
+                                { header: true, align: token.align[j] });
                         }
                         header += this.renderer.tablerow(cell);
 
@@ -5152,8 +5121,7 @@
                             for (k = 0; k < l3; k++) {
                                 cell += this.renderer.tablecell(
                                     this.parseInline(row[k]),
-                                    { header: false, align: token.align[k] },
-                                );
+                                    { header: false, align: token.align[k] });
                             }
 
                             body += this.renderer.tablerow(cell);
@@ -5647,7 +5615,7 @@
     }
 
     function isDarkModeEnabled() {
-        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
     }
 
     /**
@@ -5783,9 +5751,8 @@
             .replace(/:\+1:/g, ':thumbsup:')
             .replace(/:-1:/g, ':thumbsdown:')
             .replace(/<(pre|template|code)[^>]*?>[\s\S]+?<\/(pre|template|code)>/g, function (m) {
-                    return m.replace(/:/g, '__colon__');
-                },
-            )
+                return m.replace(/:/g, '__colon__');
+            })
             .replace(/:(\w+?):/gi, (window.emojify) || replace)
             .replace(/__colon__/g, ':');
     }
@@ -5892,8 +5859,7 @@
 
             if (attrs.length > 0) {
                 return ('<img src="' + url + '" data-origin="' + href + '" alt="' + text + '" ' + (attrs.join(
-                    ' ',
-                )) + ' />');
+                    ' ')) + ' />');
             }
 
             return ('<img src="' + url + '" data-origin="' + href + '" alt="' + text + '"' + attrs + '>');
@@ -7638,21 +7604,21 @@
                 'keyword': {
                     // The lookbehind prevents wrong highlighting of e.g. kotlin.properties.get
                     pattern: /(^|[^.])\b(?:abstract|actual|annotation|as|break|by|catch|class|companion|const|constructor|continue|crossinline|data|do|dynamic|else|enum|expect|external|final|finally|for|fun|get|if|import|in|infix|init|inline|inner|interface|internal|is|lateinit|noinline|null|object|open|operator|out|override|package|private|protected|public|reified|return|sealed|set|super|suspend|tailrec|this|throw|to|try|typealias|val|var|vararg|when|where|while)\b/,
-                    lookbehind: true
+                    lookbehind: true,
                 },
                 'function': [
                     {
                         pattern: /(?:`[^\r\n`]+`|\b\w+)(?=\s*\()/,
-                        greedy: true
+                        greedy: true,
                     },
                     {
                         pattern: /(\.)(?:`[^\r\n`]+`|\w+)(?=\s*\{)/,
                         lookbehind: true,
-                        greedy: true
-                    }
+                        greedy: true,
+                    },
                 ],
                 'number': /\b(?:0[xX][\da-fA-F]+(?:_[\da-fA-F]+)*|0[bB][01]+(?:_[01]+)*|\d+(?:_\d+)*(?:\.\d+(?:_\d+)*)?(?:[eE][+-]?\d+(?:_\d+)*)?[fFL]?)\b/,
-                'operator': /\+[+=]?|-[-=>]?|==?=?|!(?:!|==?)?|[\/*%<>]=?|[?:]:?|\.\.|&&|\|\||\b(?:and|inv|or|shl|shr|ushr|xor)\b/
+                'operator': /\+[+=]?|-[-=>]?|==?=?|!(?:!|==?)?|[\/*%<>]=?|[?:]:?|\.\.|&&|\|\||\b(?:and|inv|or|shl|shr|ushr|xor)\b/,
             });
 
             delete Prism.languages.kotlin['class-name'];
@@ -7660,12 +7626,12 @@
             var interpolationInside = {
                 'interpolation-punctuation': {
                     pattern: /^\$\{?|\}$/,
-                    alias: 'punctuation'
+                    alias: 'punctuation',
                 },
                 'expression': {
                     pattern: /[\s\S]+/,
-                    inside: Prism.languages.kotlin
-                }
+                    inside: Prism.languages.kotlin,
+                },
             };
 
             Prism.languages.insertBefore('kotlin', 'string', {
@@ -7677,10 +7643,10 @@
                         inside: {
                             'interpolation': {
                                 pattern: /\$(?:[a-z_]\w*|\{[^{}]*\})/i,
-                                inside: interpolationInside
+                                inside: interpolationInside,
                             },
-                            'string': /[\s\S]+/
-                        }
+                            'string': /[\s\S]+/,
+                        },
                     },
                     {
                         pattern: /"(?:[^"\\\r\n$]|\\.|\$(?:(?!\{)|\{[^{}]*\}))*"/,
@@ -7689,17 +7655,17 @@
                             'interpolation': {
                                 pattern: /((?:^|[^\\])(?:\\{2})*)\$(?:[a-z_]\w*|\{[^{}]*\})/i,
                                 lookbehind: true,
-                                inside: interpolationInside
+                                inside: interpolationInside,
                             },
-                            'string': /[\s\S]+/
-                        }
-                    }
+                            'string': /[\s\S]+/,
+                        },
+                    },
                 ],
                 'char': {
                     // https://kotlinlang.org/spec/expressions.html#character-literals
                     pattern: /'(?:[^'\\\r\n]|\\(?:.|u[a-fA-F0-9]{0,4}))'/,
-                    greedy: true
-                }
+                    greedy: true,
+                },
             });
 
             delete Prism.languages.kotlin['string'];
@@ -7707,15 +7673,15 @@
             Prism.languages.insertBefore('kotlin', 'keyword', {
                 'annotation': {
                     pattern: /\B@(?:\w+:)?(?:[A-Z]\w*|\[[^\]]+\])/,
-                    alias: 'builtin'
-                }
+                    alias: 'builtin',
+                },
             });
 
             Prism.languages.insertBefore('kotlin', 'function', {
                 'label': {
                     pattern: /\b\w+@|@\w+\b/,
-                    alias: 'symbol'
-                }
+                    alias: 'symbol',
+                },
             });
 
             Prism.languages.kt = Prism.languages.kotlin;
@@ -8009,8 +7975,7 @@
             var text = prism.highlight(
                 code.replace(/@DOCSIFY_QM@/g, '`'),
                 langOrMarkup,
-                lang,
-            );
+                lang);
 
             return ('<pre v-pre data-lang="' + lang + '"><code class="lang-' + lang + '">' + text + '</code></pre>');
         });
@@ -8038,8 +8003,7 @@
 
         return (renderer.list = function (body, ordered, start) {
             var isTaskList = /<li class="task-list-item">/.test(
-                body.split('class="task-list"')[0],
-            );
+                body.split('class="task-list"')[0]);
             var isStartReq = start && start > 1;
             var tag = ordered ? 'ol' : 'ul';
             var tagAttrs = [
@@ -8107,8 +8071,7 @@
                         ? ''
                         : linkRel !== ''
                             ? (' rel="' + linkRel + '"')
-                            : '',
-                );
+                            : '');
             }
 
             // special case to check crossorigin urls
@@ -8211,8 +8174,7 @@
             marked_1.setOptions(
                 merge(mdConf, {
                     renderer: merge(renderer, mdConf.renderer),
-                }),
-            );
+                }));
             compile = marked_1;
         }
 
@@ -8279,8 +8241,7 @@
                 href = getPath(
                     this.contentBase,
                     getParentPath(this.router.getCurrentPath()),
-                    href,
-                );
+                    href);
             }
 
             var media;
@@ -8563,9 +8524,7 @@
                         } else if (token.embed.type === 'code') {
                             if (token.embed.fragment) {
                                 var fragment = token.embed.fragment;
-                                var pattern = new RegExp(
-                                    ('(?:###|\\/\\/\\/)\\s*\\[' + fragment + '\\]([\\s\\S]*)(?:###|\\/\\/\\/)\\s*\\[' + fragment + '\\]'),
-                                );
+                                var pattern = new RegExp(('(?:###|\\/\\/\\/)\\s*\\[' + fragment + '\\]([\\s\\S]*)(?:###|\\/\\/\\/)\\s*\\[' + fragment + '\\]'));
                                 text = stripIndent((text.match(pattern) || [])[1] || '').trim();
                             }
 
@@ -8574,8 +8533,7 @@
                                 token.embed.lang +
                                 '\n' +
                                 text.replace(/`/g, '@DOCSIFY_QM@') +
-                                '\n```\n',
-                            );
+                                '\n```\n');
                         } else if (token.embed.type === 'mermaid') {
                             embedToken = [
                                 { type: 'html', text: ('<div class="mermaid">\n' + text + '\n</div>') } ];
@@ -8637,8 +8595,7 @@
                         }
 
                         return src;
-                    },
-                );
+                    });
             }
         });
 
@@ -8794,8 +8751,7 @@
                         var vueConfig = ref[1];
 
                         return elm;
-                    }),
-            );
+                    }));
 
             // Template syntax, vueComponents, vueGlobalOptions
             if (docsifyConfig.vueGlobalOptions || vueComponentNames.length) {
@@ -8860,8 +8816,7 @@
                             }
 
                             return [ elm, vueConfig ];
-                        }),
-                );
+                        }));
             }
 
             // Mount
@@ -8917,8 +8872,7 @@
             var match = Object.keys(nameLink).filter(
                 function (key) {
                     return path.indexOf(key) > -1;
-                },
-            )[0];
+                })[0];
 
             el.setAttribute('href', nameLink[match]);
         }
@@ -9021,14 +8975,12 @@
                             html = formatUpdated(
                                 html,
                                 opt.updatedAt,
-                                this$1.config.formatUpdated,
-                            );
+                                this$1.config.formatUpdated);
                         }
 
                         this$1.callHook('afterEach', html, function (hookData) {
-                                return renderMain.call(this$1, hookData);
-                            },
-                        );
+                            return renderMain.call(this$1, hookData);
+                        });
                     };
 
                     if (this$1.isHTML) {
@@ -9048,8 +9000,7 @@
                                     : html;
                                 callback();
                                 next();
-                            },
-                        );
+                            });
                     }
                 });
             };
@@ -9060,8 +9011,7 @@
                 toggleClass(
                     getNode('main'),
                     coverOnly ? 'add' : 'remove',
-                    'hidden',
-                );
+                    'hidden');
                 if (!text) {
                     toggleClass(el, 'remove', 'show');
                     return;
@@ -9162,9 +9112,7 @@
                 }
 
                 if (config.themeColor) {
-                    $.head.appendChild(
-                        create('div', theme(config.themeColor)).firstElementChild,
-                    );
+                    $.head.appendChild(create('div', theme(config.themeColor)).firstElementChild);
                     // Polyfll
                     cssVars(config.themeColor);
                 }
@@ -9190,8 +9138,7 @@
         get(
             vm.router.getFile(path + file) + qs,
             false,
-            vm.config.requestHeaders,
-        ).then(next, function (_) {
+            vm.config.requestHeaders).then(next, function (_) {
             return loadNested(path, qs, file, next, vm);
         });
     }
@@ -9307,14 +9254,12 @@
                             return this$1._renderMain(
                                 text,
                                 opt,
-                                this$1._loadSideAndNav(path, qs, loadSidebar, cb),
-                            );
+                                this$1._loadSideAndNav(path, qs, loadSidebar, cb));
                         },
                         function (_) {
                             this$1._fetchFallbackPage(path, qs, cb) ||
                             this$1._fetch404(file, qs, cb);
-                        },
-                    );
+                        });
 
                     // Load nav
                     loadNavbar &&
@@ -9326,8 +9271,7 @@
                             return this$1._renderNav(text);
                         },
                         this,
-                        true,
-                    );
+                        true);
                 }
             };
 
@@ -9361,8 +9305,7 @@
                         get(
                             path + stringifyQuery(query, [ 'id' ]),
                             false,
-                            requestHeaders,
-                        ).then(function (text) {
+                            requestHeaders).then(function (text) {
                             return this$1._renderCover(text, coverOnly);
                         });
                     } else {
@@ -9414,9 +9357,7 @@
                     return false;
                 }
 
-                var newPath = this.router.getFile(
-                    path.replace(new RegExp(('^/' + local)), ''),
-                );
+                var newPath = this.router.getFile(path.replace(new RegExp(('^/' + local)), ''));
                 var req = request(newPath + qs, true, requestHeaders);
 
                 req.then(
@@ -9424,13 +9365,11 @@
                         return this$1._renderMain(
                             text,
                             opt,
-                            this$1._loadSideAndNav(path, qs, loadSidebar, cb),
-                        );
+                            this$1._loadSideAndNav(path, qs, loadSidebar, cb));
                     },
                     function () {
                         return this$1._fetch404(path, qs, cb);
-                    },
-                );
+                    });
 
                 return true;
             };
@@ -9462,8 +9401,7 @@
                         },
                         function () {
                             return this$1._renderMain(null, {}, fnLoadSideAndNav);
-                        },
-                    );
+                        });
                     return true;
                 }
 

@@ -45,7 +45,7 @@ base64.decode(base64.encode('简体中文', 'utf-16'), 'utf-8'); // ��{�OS
 ### encode(str, encoding?)
 
 - **str** { [string](dataTypes#string) } - 待编码字符串
-- **[encoding="UTF_8"]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
+- **[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 对字符串进行 Base64 编码.
@@ -64,7 +64,7 @@ base64.encode('hello', 'utf-16le'); // aABlAGwAbABvAA==
 ### decode(str, encoding?)
 
 - **str** { [string](dataTypes#string) } - 待解码字符串
-- **[encoding="UTF_8"]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
+- **[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 对字符串进行 Base64 解码.

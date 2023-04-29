@@ -24,7 +24,7 @@ var img = images.read("./1.png");
 img.recycle();
 ```
 
-例外的是, `caputerScreen()`返回的图片不需要回收.
+例外的是, `captureScreen()` 返回的图片不需要回收.
 
 ## 图片处理
 
@@ -161,17 +161,17 @@ images.save(clip, "/sdcard/clip.png");
 
 参见[Imgproc.resize](https://docs.opencv.org/3.4.4/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d/).
 
-## images.rotate(img, degress[, x, y])
+## images.rotate(img, degree[, x, y])
 
 **[v4.1.0新增]**
 
 * `img` {Image} 图片
-* `degress` {number} 旋转角度.
+* `degree` {number} 旋转角度.
 * `x` {number} 旋转中心x坐标, 默认为图片中点
 * `y` {number} 旋转中心y坐标, 默认为图片中点
 * 返回 {Image}
 
-将图片逆时针旋转degress度, 返回旋转后的图片对象.
+将图片逆时针旋转 degree 度, 返回旋转后的图片对象.
 
 例如逆时针旋转90度为`images.rotate(img, 90)`.
 

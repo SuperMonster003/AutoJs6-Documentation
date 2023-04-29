@@ -73,7 +73,7 @@ typeof global.sleep; // "function"
 runtime.topLevelScope;
 ```
 
-`runtime.topLevelScope` 本身有 `"global"` 属性, 因此全局对象 `global` 也一样拥有:
+`runtime.topLevelScope` 本身有 `global` 属性, 因此全局对象 `global` 也一样拥有:
 
 ```js
 typeof runtime.topLevelScope.global; // "object"
@@ -677,7 +677,7 @@ wait(() => {
 
 ### exit()
 
-**`Global`** **`Overload 1/3`**
+**`Global`** **`Overload 1/2`**
 
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
@@ -722,7 +722,7 @@ if (!isStopped()) {
 }
 ```
 
-除了 [isStopped](#isstopped), 还可通过 threads 或 engines 获取停止状态:
+除了 [isStopped](#isstopped), 还可通过 `threads` 或 `engines` 模块获取停止状态:
 
 ```js
 /* threads. */
@@ -738,15 +738,12 @@ if (!engines.myEngine().isStopped()) {
 
 ### exit(e)
 
-**`Global`** **`Overload 2/3`**
+**`Global`** **`Overload 2/2`**
 
-- **e** { [JavaException](exceptions#java) } - 异常参数
+- **e** { [OmniThrowable](omniTypes#omnithrowable) } - 异常参数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 停止脚本运行并抛出异常参数指定的异常.
-
-此方法通常不会在脚本中使用, 因 `e` 参数通常需要手动实例化.  
-如需自动完成实例化操作, 可使用 [exit(errorMessage)](#exiterrormessage) 方法, 可支持直接传入字符串类型的异常消息参数.
 
 ```js
 let arg = 'hello';
@@ -755,23 +752,11 @@ try {
         throw Error('arg 参数非 number 类型');
     }
 } catch (e) {
-    exit(new java.lang.Throwable(e))
+    exit(e);
 }
 ```
 
-需额外留意上述示例的异常参数使用了 Throwable 重新包装, 因为异常参数类型为 Java 的 Exception, 而非 JavaScript 的 Error.  
-关于异常相关的内容, 可参阅 [异常](exceptions) 章节.
-
-### exit(errorMessage)
-
-**`6.2.0`** **`Global`** **`Overload 3/3`**
-
-- **errorMessage** { [string](dataTypes#string) } - 异常消息参数
-- <ins>**returns**</ins> { [void](dataTypes#void) }
-
-停止脚本运行并抛出异常参数指定的异常.
-
-相当于 `exit(new java.lang.Exception(errorMessage))`.
+[OmniThrowable](omniTypes#omnithrowable) 支持字符串参数, 可将字符串参数作为异常消息传入 `exit` 方法中:
 
 ```js
 let buttonText = '点此开始';

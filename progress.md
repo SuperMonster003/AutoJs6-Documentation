@@ -9,8 +9,8 @@
 
 - `√` - 全部完成 (或具备基础完整度)
 - `[ 空白 ]` - 暂未开始部署 (或暂时保留原始文档内容)
-- `&lt; 10%` - 预估部署进度, 小于指定百分比
-- `&gt; 20%` - 预估部署进度, 大于指定百分比
+- `< 10%` - 预估部署进度, 小于指定百分比
+- `> 20%` - 预估部署进度, 大于指定百分比
 
 ---
 
@@ -32,8 +32,8 @@
 |               [Module - 模块](modules)                |          |
 |               [Plugins - 插件](plugins)               |    √     |
 |               [Toast - 消息浮动框](toast)                |    √     |
-|               [Notice - 消息通知](notice)               | &gt; 75% |
-|              [Console - 控制台](console)               |          |
+|               [Notice - 消息通知](notice)               |    √     |
+|              [Console - 控制台](console)               |    √     |
 |                   [Shell](shell)                    |          |
 |                [Media - 多媒体](media)                 |          |
 |               [Sensor - 传感器](sensors)               |          |
@@ -51,6 +51,7 @@
 |                  [Base64](base64)                   |    √     |
 |                [Crypto - 密文](crypto)                |          |
 |         [Internationalization - 国际化](i18n)          |          |
+|            [Standardization - 标准化](s13n)            |          |
 |                     [E4X](e4x)                      |    √     |
 |            [Glossaries - 术语](glossaries)            |    √     |
 |            [Exceptions - 异常](exceptions)            |    √     |
@@ -65,6 +66,7 @@
 |   [UiObjectActions - 控件节点行为](uiObjectActionsType)   |    √     |
 |        [ImageWrapper - 包装图像类](imageWrapper)         | &lt; 5%  |
 |               [App - 应用枚举类](appType)                |    √     |
+|              [Color - 颜色类](colorType)               |    √     |
 |           [Version - 版本工具类](versionType)            |    √     |
 |             [Polyfill - 代码填泥](polyfill)             |    √     |
 |             [Arrayx - Array 扩展](arrayx)             |    √     |

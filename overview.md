@@ -2,7 +2,7 @@
 
 ---
 
-[AutoJs6](https://github.com/SuperMonster003/AutoJs6): 安卓平台 JavaScript 自动化工具.
+[AutoJs6](http://project.autojs6.com): 安卓平台 JavaScript 自动化工具.
 
 - 脚本语言: [JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/)  
 - 脚本引擎: [Rhino](https://github.com/mozilla/rhino/)  
@@ -18,7 +18,7 @@
 - 查看 Rhino 引擎兼容性列表
   - [Rhino ES2015 Support](https://mozilla.github.io/rhino/compat/engines.html)
 - 使用 PC (个人计算机) 开发
-  - [AutoJs6 VSCode Extension](https://github.com/SuperMonster003/AutoJs6-VSCode-Extension/)
+  - [AutoJs6 VSCode Extension](http://vscext-project.autojs6.com)
 - 使用 Node.js 开发
   - [Auto.js Pro](https://pro.autojs.org/)
 - 使用 TypeScript 开发

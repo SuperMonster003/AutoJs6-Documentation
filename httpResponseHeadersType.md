@@ -4,7 +4,7 @@ HttpResponseHeaders 是一个代表 [HTTP 响应头](httpHeaderGlossary#响应�
 
 HTTP 标头字段是大小写 **不敏感** 的 (根据 [RFC 2616](http://www.ietf.org/rfc/rfc2616.txt)), 本章节采用 **全部小写** 的形式表示标头字段 (如 content-type).
 
-> 注: 本章节仅列出部分响应头字段信息, 更多信息可参阅 [HTTP 标头](httpHeaderGlossary.md#响应标头) 术语章节.
+> 注: 本章节仅列出部分响应头字段信息, 更多信息可参阅 [HTTP 标头](httpHeaderGlossary#响应标头) 术语章节.
 
 ---
 

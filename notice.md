@@ -1,12 +1,5 @@
 # 消息通知 (Notice)
 
----
-
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Mar 21, 2023.</p>
-
----
-
 notice 模块用于创建并显示消息通知.
 
 位于通知栏的消息, 可用于 [ 消息提醒 / 信息通信 / 执行操作 ] 等.
@@ -55,6 +48,7 @@ notice('world', { notificationId: id }); /* 通知 ID 相同, 因此 1 秒后上
 
 notice.config({ useDynamicDefaultNotificationId: false }); /* 禁用动态通知 ID 选项. */
 notice('hello');
+sleep(1e3); /* 阻塞 1 秒. */
 notice('world'); /* 1 秒后上一条通知被替代 (覆盖). */
 ```
 
@@ -72,6 +66,50 @@ notice('hello', {
 /* 更多配置选项, 可参阅本章节后续内容. */
 ```
 
+如果需要发送多条上述定制通知, 可将上述定制选项提取出来:
+
+```js
+/* 定义一个定制通知选项变量. */
+let options = {
+    bigContent: 'This is a message which says "hello"\n-- from AutoJs6', /* 设置长内容. */
+    isSilent: true, /* 静音模式. */
+    appendScriptName: 'content', /* 附加脚本名称到内容结尾. */
+    intent: 'docs', /* 点击通知后跳转到 AutoJs6 的文档页面. */
+    autoCancel: true, /* 点击通知后自动移除通知. */
+};
+
+/* 以上述定制选项发送三条通知. */
+
+notice('hello', options);
+notice('world', options);
+notice('tour', options);
+```
+
+上述示例指定通知 ID 可实现通知覆盖:
+
+```js
+/* 指定一个通知 ID 为固定值. */
+options.notificationId = 20;
+
+/* 以上述定制选项发送三条可覆盖的通知. */
+
+notice('hello', options);
+sleep(1e3);
+notice('world', options); /* 1 秒后覆盖 'hello'. */
+sleep(1e3);
+notice('tour', options); /* 1 秒后覆盖 'world'. */
+
+/* options 可随时进行定制修改. */
+
+delete options.bigContent; /* 删除长内容. */
+sleep(1e3);
+notice('movie', options); /* 1 秒后覆盖 'tour' */
+
+options.intent = 'home'; /* 修改 intent 属性. */
+sleep(1e3);
+notice('here', options); /* 1 秒后覆盖 'movie' */
+```
+
 ## 通知渠道
 
 `通知渠道 (Notification Channel)` 用于分类管理通知.
@@ -80,21 +118,23 @@ notice('hello', {
 
 不同渠道的通知可分别定制, 如是否弹出通知, 是否振动, 通知指示灯开关及颜色, 是否静音等. 渠道之间的设置是互相独立的.
 
-> 更多通知渠道的内容, 参阅 [通知渠道](glossaries.md#通知渠道) 术语章节.
+> 更多通知渠道的内容, 参阅 [通知渠道](notificationChannelGlossary) 术语章节.
 
 > notice 模块的渠道相关方法, 参阅 [notice.channel](#p-channel) 小节.
 
 ### 创建渠道
+
+通知渠道使用 `渠道 ID (Channel ID)` 作为唯一标识.
 
 以渠道 ID 名称 `'my_channel_id'` 为例, 当 ID 为 `'my_channel_id'` 的渠道从未创建时, `channel.create('my_channel_id', options)` 将创建一个新的渠道, 其 ID 为 `'my_channel_id'`.
 
 ```js
 notice.channel.create('my_channel_id', {
     name: 'New message',
-    description: 'There is a new message from David',
+    description: 'Messages from David',
     importance: 3,
     enableLights: true,
-    lightColor: colors.toInt('blue'),
+    lightColor: 'blue',
     enableVibration: true,
 });
 ```
@@ -153,6 +193,12 @@ notice.channel.create('my_channel_id', {
 
 对于渠道的设置, 用户拥有最终控制权.
 
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">notice</p>
+
+---
+
 ## [@] notice
 
 notice 可作为全局对象使用:
@@ -165,10 +211,10 @@ typeof notice.getBuilder; // "function"
 
 ### notice(content)
 
-**`6.2.1`** **`Global`** **`Overload 1/8`**
+**`6.3.0`** **`Global`** **`Overload 1/8`**
 
 - **content** { [string](dataTypes#string) } - 通知消息的内容
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 包含内容.
 
@@ -178,11 +224,11 @@ notice('hello');
 
 ### notice(title, content)
 
-**`6.2.1`** **`Global`** **`Overload 2/8`**
+**`6.3.0`** **`Global`** **`Overload 2/8`**
 
 - **title** { [string](dataTypes#string) } - 通知消息的标题
 - **content** { [string](dataTypes#string) } - 通知消息的内容
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 包含标题及内容.
 
@@ -194,9 +240,9 @@ notice('message', 'hello');
 
 ### notice()
 
-**`6.2.1`** **`Global`** **`Overload 3/8`**
+**`6.3.0`** **`Global`** **`Overload 3/8`**
 
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 主要用于测试.
 
@@ -211,10 +257,10 @@ notice();
 
 ### notice(options)
 
-**`6.2.1`** **`Global`** **`Overload 4/8`**
+**`6.3.0`** **`Global`** **`Overload 4/8`**
 
-- **options** { [NoticeOptions](dataTypes#noticeoptions) } - 通知选项配置
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **options** { [NoticeOptions](noticeOptionsType) } - 通知选项配置
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 并进行选项配置.
 
@@ -228,15 +274,15 @@ notice({
 });
 ```
 
-更多配置选项, 可参阅 [NoticeOptions](dataTypes#noticeoptions) 类型章节.
+更多配置选项, 可参阅 [NoticeOptions](noticeOptionsType) 类型章节.
 
 ### notice(content, options)
 
-**`6.2.1`** **`Global`** **`Overload 5/8`**
+**`6.3.0`** **`Global`** **`Overload 5/8`**
 
 - **content** { [string](dataTypes#string) } - 通知消息的内容
-- **options** { [NoticeOptions](dataTypes#noticeoptions) } - 通知选项配置
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **options** { [NoticeOptions](noticeOptionsType) } - 通知选项配置
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 包含内容, 并进行选项配置.
 
@@ -252,12 +298,12 @@ notice('hello', { isSilent: true });
 
 ### notice(title, content, options)
 
-**`6.2.1`** **`Global`** **`Overload 6/8`**
+**`6.3.0`** **`Global`** **`Overload 6/8`**
 
 - **title** { [string](dataTypes#string) } - 通知消息的标题
 - **content** { [string](dataTypes#string) } - 通知消息的内容
-- **options** { [NoticeOptions](dataTypes#noticeoptions) } - 通知选项配置
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **options** { [NoticeOptions](noticeOptionsType) } - 通知选项配置
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 发送通知, 包含标题及内容, 并进行选项配置.
 
@@ -274,10 +320,10 @@ notice('message', 'hello', { isSilent: true });
 
 ### notice(builder)
 
-**`6.2.1`** **`Global`** **`Overload 7/8`**
+**`6.3.0`** **`Global`** **`Overload 7/8`**
 
-- **builder** { [NoticeBuilder](dataTypes#noticebuilder) } - 通知构建器
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **builder** { [NoticeBuilder](noticeBuilderType) } - 通知构建器
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 使用 `通知构建器 (Notice Builder)` 发送通知.
 
@@ -285,23 +331,128 @@ notice('message', 'hello', { isSilent: true });
 
 ### notice(builder, options)
 
-**`6.2.1`** **`Global`** **`Overload 8/8`**
+**`6.3.0`** **`Global`** **`Overload 8/8`**
 
-- **builder** { [NoticeBuilder](dataTypes#noticebuilder) } - 通知构建器
-- **options** { [NoticeOptions](dataTypes#noticeoptions) } - 通知选项配置
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **builder** { [NoticeBuilder](noticeBuilderType) } - 通知构建器
+- **options** { [NoticeOptions](noticeOptionsType) } - 通知选项配置
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 通知 ID
 
 使用 `通知构建器 (Notice Builder)` 发送通知, 并进行选项配置.
 
+```js
+let notificationId = 12;
+let progress = 0;
+let progressMax = 100;
+
+let builder = notice.getBuilder()
+    .setSilent(true)
+    .setContentTitle('正在下载应用');
+
+while (progress < progressMax) {
+    builder
+        .setProgress(progressMax, progress, false)
+        .setContentText(`已完成 ${progress}%`);
+    notice(builder, { notificationId });
+    sleep(50);
+    progress += Mathx.randInt(1, 4);
+}
+builder
+    .setContentText(`已完成 ${progressMax}%`)
+    .setContentTitle('下载完成')
+notice(builder, { notificationId });
+```
+
 参阅 [getBuilder](#m-getbuilder) 小节.
+
+## [m] isEnabled
+
+### isEnabled()
+
+**`6.3.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检测 AutoJs6 的通知是否未被阻止 (not blocked).
+
+通常的阻止 (block) 情况:
+
+- 通知全局开关默认未开启或被用户关闭
+- 通知权限 `Manifest.permission.POST_NOTIFICATIONS` 未授予或被撤回
+
+```js
+console.log(notice.isEnabled()); /* e.g. true */
+```
+
+部分机型的 toast 功能依赖通知权限, 如需在使用 toast 时检查通知权限是否被阻止, 可使用 `isEnabled` 或 `ensureEnabled` 方法:
+
+```js
+if (!notice.isEnabled()) {
+    console.warn('通知被阻止, toast 可能无法正常显示');
+}
+toast('hello');
+
+notice.ensureEnabled();
+toast('hello');
+```
+
+结合 [notice.launchSettings](#m-launchsettings) 可辅助用户跳转至通知设置页面:
+
+```js
+if (!notice.isEnabled()) {
+    notice.launchSettings();
+}
+```
+
+## [m] ensureEnabled
+
+### ensureEnabled()
+
+**`6.3.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+确保 AutoJs6 的通知未被阻止 (not blocked).
+
+当通知被阻止时将抛出 `Exception` 异常.
+
+## [m] launchSettings
+
+### launchSettings()
+
+**`6.3.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+跳转至 AutoJs6 的通知设置页面.
+
+```js
+notice.launchSettings();
+```
+
+## [m] cancel
+
+### cancel(id)
+
+**`6.3.0`**
+
+- **id** { [number](dataTypes#number) } - 通知 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+消除通知.
+
+```js
+let id = notice({ title: 'New message' });
+/* 2 秒后自动消除通知. */
+setTimeout(() => notice.cancel(id), 2e3);
+```
 
 ## [m] getBuilder
 
 ### getBuilder()
 
-**`6.2.1`**
+**`6.3.0`**
 
-- <ins>**returns**</ins> { [NoticeBuilder](dataTypes#noticebuilder) }
+- <ins>**returns**</ins> { [NoticeBuilder](noticeBuilderType) }
 
 获取一个简单通知构建器.
 
@@ -325,9 +476,15 @@ notice(notice.getBuilder()
     .setContentText('The sky is getting dark'));
 ```
 
+构建器可用于设置更多通知行为, 如 [setStyle](noticeBuilderType#m-setstyle), [setTimeoutAfter](noticeBuilderType#m-settimeoutafter), [setProgress](noticeBuilderType#m-setprogress) 等.
+
+但需要注意参数类型需严格符合要求, AutoJs6 内置的 [全能类型](omniTypes) 是不可用的.
+
+关于通知构建器的更多用法, 参阅 [NoticeBuilder](noticeBuilderType) 类型章节.
+
 ## [m] config
 
-config 方法用于配置通知渠道与通知发送的默认行为.
+config 方法用于修改默认配置, 即用于配置通知渠道与通知发送的默认行为.
 
 例如 `notice('hello')` 会发送一个内容为 "hello" 的通知, 但其中隐含了许多默认的通知行为.
 
@@ -357,9 +514,9 @@ notice('finished', { isSilent: true });
 
 ### config(preset)
 
-**`6.2.1`**
+**`6.3.0`**
 
-- **preset** { [NoticePresetConfiguration](dataTypes#noticepresetconfiguration) } - 通知预设配置对象
+- **preset** { [NoticePresetConfiguration](noticePresetConfigurationType) } - 通知预设配置对象
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 配置通知渠道与通知发送的默认行为.
@@ -374,7 +531,7 @@ notice.config({
 });
 ```
 
-更多可用的默认行为配置, 参阅 [NoticePresetConfiguration](dataTypes#noticepresetconfiguration) 类型章节.
+更多可用的默认行为配置, 参阅 [NoticePresetConfiguration](noticePresetConfigurationType) 类型章节.
 
 ## [p+] channel
 
@@ -386,7 +543,7 @@ notice.config({
 
 #### create(channelId)
 
-**`6.2.1`** **`Overload 1/3`**
+**`6.3.0`** **`Overload 1/3`**
 
 - **channelId** { [string](dataTypes#string) | [number](dataTypes#number) } - 渠道 ID
 - <ins>**returns**</ins> { [string](dataTypes#string) } - 渠道 ID
@@ -401,10 +558,10 @@ notice('hello', { channelId: id }); /* 发送通知. */
 
 #### create(channelId, options)
 
-**`6.2.1`** **`Overload 2/3`**
+**`6.3.0`** **`Overload 2/3`**
 
 - **channelId** { [string](dataTypes#string) | [number](dataTypes#number) } - 渠道 ID
-- **options** { [NoticeChannelOptions](dataTypes#noticechanneloptions) } - 渠道创建选项
+- **options** { [NoticeChannelOptions](noticeChannelOptionsType) } - 渠道创建选项
 - <ins>**returns**</ins> { [string](dataTypes#string) } - 渠道 ID
 
 创建通知渠道, 指定渠道 ID 并进行渠道配置.
@@ -412,15 +569,15 @@ notice('hello', { channelId: id }); /* 发送通知. */
 ```js
 notice.channel.create('my_channel_id', {
     name: 'New message', /* 渠道名称. */
-    description: 'There is a new message from David', /* 渠道描述. */
+    description: 'Messages from David', /* 渠道描述. */
     importance: 3, /* 渠道优先级. */
     enableLights: true, /* 启用指示灯. */
-    lightColor: colors.toInt('blue'), /* 设置指示灯颜色. */
+    lightColor: 'blue', /* 设置指示灯颜色. */
     enableVibration: true, /* 启用振动. */
 });
 ```
 
-更多渠道配置相关信息, 参阅 [NoticeChannelOptions](dataTypes#noticechanneloptions) 类型章节.
+更多渠道配置相关信息, 参阅 [NoticeChannelOptions](noticeChannelOptionsType) 类型章节.
 
 > 注: 渠道 ID 可能重复指定.  
 > 出现重复指定时, 按以下优先级处理:  
@@ -428,9 +585,9 @@ notice.channel.create('my_channel_id', {
 
 #### create(options)
 
-**`6.2.1`** **`Overload 3/3`**
+**`6.3.0`** **`Overload 3/3`**
 
-- **options** { [NoticeChannelOptions](dataTypes#noticechanneloptions) } - 渠道创建选项
+- **options** { [NoticeChannelOptions](noticeChannelOptionsType) } - 渠道创建选项
 - <ins>**returns**</ins> { [string](dataTypes#string) } - 渠道 ID
 
 创建通知渠道, 与 `create(channelId, options)` 方法类似, 但省略 `channelId` 参数.
@@ -443,13 +600,13 @@ notice.channel.create({ id: 'my_channel_id' });
 
 当不指定 `id` 时, 渠道 ID 将使用当前运行脚本的脚本名称.
 
-更多渠道配置相关信息, 参阅 [NoticeChannelOptions](dataTypes#noticechanneloptions) 类型章节.
+更多渠道配置相关信息, 参阅 [NoticeChannelOptions](noticeChannelOptionsType) 类型章节.
 
 ### [m] contains
 
 #### contains(channelId)
 
-**`6.2.1`**
+**`6.3.0`**
 
 - **channelId** { [string](dataTypes#string) | [number](dataTypes#number) } - 渠道 ID
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前渠道 ID 是否已被创建
@@ -464,7 +621,7 @@ notice.channel.contains('my_channel_id'); /* e.g. false */
 
 #### remove(channelId)
 
-**`6.2.1`**
+**`6.3.0`**
 
 - **channelId** { [string](dataTypes#string) | [number](dataTypes#number) } - 渠道 ID
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 删除前, 当前渠道 ID 是否已被创建
@@ -484,7 +641,7 @@ if (notice.channel.contains(id)) {
 
 #### get(channelId)
 
-**`6.2.1`**
+**`6.3.0`**
 
 - <ins>**returns**</ins> { [android.app.NotificationChannel](https://developer.android.com/reference/android/app/NotificationChannel) | [null](dataTypes#null) } - 渠道实例
 
@@ -510,7 +667,7 @@ if (channel !== null) {
 
 #### getAll()
 
-**`6.2.1`**
+**`6.3.0`**
 
 - <ins>**returns**</ins> { [android.app.NotificationChannel](https://developer.android.com/reference/android/app/NotificationChannel)[[]](dataTypes#array) } - 渠道实例数组
 

@@ -119,7 +119,7 @@ console.log(new Version('5.2.3-beta').isHigherThan('5.2.3-snapshot')); // true
 **`6.2.0`** **`Global`** **`Overload 2/2`**
 
 - **versionString** { [string](dataTypes#string) | [number](dataTypes#number) } - 版本号参数
-- **[throwExceptions = false]** { [boolean](dataTypes#boolean) } - 是否在版本号参数不合法时抛出异常
+- **[ throwExceptions = `false` ]** { [boolean](dataTypes#boolean) } - 是否在版本号参数不合法时抛出异常
 - <ins>**returns**</ins> { [Version](#c-version) }
 
 throwExceptions 参数用于控制是否在版本号参数不合法时抛出异常.
@@ -290,7 +290,7 @@ console.log(new Version('2.3').isAtLeast(new Version('2.3'))); /* 同上. */
 **`6.2.0`** **`Overload 2/2`**
 
 - **otherVersion** { [string](dataTypes#string) | [Version](#c-version) } - 待比较版本参数
-- **[ignoreSuffix = false]** { [boolean](dataTypes#boolean) } - 是否忽略版本后缀
+- **[ ignoreSuffix = `false` ]** { [boolean](dataTypes#boolean) } - 是否忽略版本后缀
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 比较版本号, 返回是否不低于 (即大于等于) 参数对应的版本号且根据 `ignoreSuffix` 参数决定是否忽略版本后缀.

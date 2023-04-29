@@ -27,7 +27,7 @@
 内置错误类型 TypeError, RangeError 等均扩展自 Error 构造器.  
 例如, 如果一个对象是 TypeError 的实例, 则也一定是 Error 的实例.
 
-Error 实例的属性及方法可参阅 [Error 对象](#Error-对象) 章节.
+Error 实例的属性及方法可参阅 [Error 对象](#error-对象) 章节.
 
 ```js
 try {
@@ -817,7 +817,7 @@ try {
 
 ## [p] stackTraceLimit
 
-- [ Infinity ] { [number](dataTypes#number) }
+- [ `Infinity` ] { [number](dataTypes#number) }
 
 设置或读取收集的栈追踪信息的栈帧数量.
 

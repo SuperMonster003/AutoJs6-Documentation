@@ -89,7 +89,7 @@ console.log(autojs.getRootMode() === RootMode.FORCE_NON_ROOT);
 **`6.2.0`** **`Overload [1-2]/2`**
 
 - **rootMode** { [RootMode](dataTypes#rootmode) | [number](dataTypes#number) | [boolean](dataTypes#boolean) | 'auto' | 'root' | 'non-root' } - Root 模式参数
-- **[isWriteIntoPreference = false]** {  [boolean](dataTypes#boolean) } - 是否写入应用设置
+- **[ isWriteIntoPreference = `false` ]** {  [boolean](dataTypes#boolean) } - 是否写入应用设置
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 设置 AutoJs6 的 Root 模式.
@@ -213,6 +213,20 @@ console.log(autojs.versionDate); // e.g. Dec 18, 2022
 console.log(autojs.version.date); /* 同上. */
 ```
 
+## [p] themeColor
+
+### themeColor
+
+**`6.3.0`** **`Getter`**
+
+- { [ThemeColor](dataTypes#themecolor) }
+
+获取 AutoJs6 的主题颜色实例.
+
+```js
+autojs.themeColor.getColorPrimary(); /* 获取 AutoJs6 主题色的主色色值. */
+```
+
 ## [p+] version
 
 ### [p] name
@@ -319,7 +333,7 @@ console.log(autojs.version.isAtLeast('6.1.3')); // e.g. true
 **`6.2.0`** **`Overload 2/2`**
 
 - **otherVersion** { [string](dataTypes#string) | [Version](versionType#c-version) } - 待比较版本参数
-- **[ignoreSuffix = false]** { [boolean](dataTypes#boolean) } - 是否忽略版本后缀
+- **[ ignoreSuffix = `false` ]** { [boolean](dataTypes#boolean) } - 是否忽略版本后缀
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 返回 AutoJs6 版本是否不低于 (即大于等于) 参数对应的版本号且根据 `ignoreSuffix` 参数决定是否忽略版本后缀.

@@ -223,7 +223,7 @@ console.log(num.clamp()); // 307
 
 - **num** { [number](dataTypes#number) } - 待处理数字
 - **range** { [number](dataTypes#number)[[]](dataTypes#array) } - 限制范围
-- **[cycle = maxOf(range) - minOf(range)]** { [number](dataTypes#number) } - 周期, 默认为 range 参数的跨度
+- **[ cycle = `maxOf(range) - minOf(range)` ]** { [number](dataTypes#number) } - 周期, 默认为 range 参数的跨度
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
 返回按周期限制在指定范围内的数字.

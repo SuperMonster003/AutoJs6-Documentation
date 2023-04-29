@@ -16,9 +16,9 @@ web 模块主要用于 [WebView](https://developer.android.com/reference/android
 
 ### newInjectableWebView(url?)
 
-**`6.2.1`** **`Global`** **`Overload [1-2]/3`** **`UI`**
+**`6.3.0`** **`Global`** **`Overload [1-2]/3`** **`UI`**
 
-- **[url]** { [string](dataTypes#string) } - 需要 WebView 加载的 URL
+- **[ url ]** { [string](dataTypes#string) } - 需要 WebView 加载的 URL
 - <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
 
 新建并返回一个 [InjectableWebView](injectableWebViewType) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例.
@@ -119,18 +119,18 @@ ui.emitter.on('back_pressed', function (e) {
 
 ### newInjectableWebView(activity)
 
-**`6.2.1`** **`Global`** **`Overload 3/3`** **`UI`**
+**`6.3.0`** **`Global`** **`Overload 3/3`** **`UI`**
 
 - **activity** { [ScriptExecuteActivity](dataTypes#scriptexecuteactivity) } - 上下文对象, 默认为 UI 模式下的全局 activity 对象
 - <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
 
-新建并返回一个 [InjectableWebView](dataTypes#injectablewebview) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例, 通过 activity 参数可传入不同的 org.mozilla.javascript.Context 上下文对象, 该对象主要用于执行 JavaScript 语句.
+新建并返回一个 [InjectableWebView](dataTypes#injectablewebview) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例, 通过 `activity` 参数可传入不同的 `org.mozilla.javascript.Context` 上下文对象, 该对象主要用于执行 JavaScript 语句.
 
 ## [m] newInjectableWebClient
 
 ### newInjectableWebClient()
 
-**`6.2.1`** **`Global`**
+**`6.3.0`** **`Global`**
 
 - <ins>**returns**</ins> { [InjectableWebClient](injectableWebClientType) }
 

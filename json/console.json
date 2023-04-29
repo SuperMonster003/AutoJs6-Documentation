@@ -4,481 +4,1116 @@
     {
       "textRaw": "控制台 (Console)",
       "name": "控制台_(console)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>控制台模块提供了一个和Web浏览器中相似的用于调试的控制台. 用于输出一些调试信息、中间结果等.\nconsole模块中的一些函数也可以直接作为全局函数使用, 例如log, print等.</p>\n",
-      "methods": [
+      "desc": "<p>AutoJs6 的控制台类似 Web 浏览器的调试控制台, 用于信息输出或辅助代码调试.</p>\n",
+      "modules": [
         {
-          "textRaw": "console.show()",
-          "type": "method",
-          "name": "show",
-          "desc": "<p>显示控制台. 这会显示一个控制台的悬浮窗(需要悬浮窗权限).</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
+          "textRaw": "显示控制台",
+          "name": "显示控制台",
+          "desc": "<p>AutoJs6 支持以下几种方式显示控制台:</p>\n<ul>\n<li>点击 AutoJs6 应用主页右上区域 &quot;日志&quot; 图标 - 显示控制台 Activity 活动页面.</li>\n<li>使用代码 <code>console.launch()</code> - 显示控制台 Activity 活动页面.</li>\n<li>使用代码 <code>console.show()</code> - 显示控制台 <code>浮动窗口 (Floating Window)</code>.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "显示控制台"
         },
         {
-          "textRaw": "console.hide()",
-          "type": "method",
-          "name": "hide",
-          "desc": "<p>隐藏控制台悬浮窗.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
+          "textRaw": "模块作用",
+          "name": "模块作用",
+          "desc": "<p>console 模块的主要作用:</p>\n<ul>\n<li>控制台日志内容的管理 - [ 按分级显示内容 / 内容清空 / 时间跟踪 / 栈追踪 / 存入文件 ] 等<ul>\n<li><a href=\"#m-log\">console.log</a></li>\n<li><a href=\"#m-setgloballogconfig\">console.setGlobalLogConfig</a></li>\n</ul>\n</li>\n<li>控制台浮动窗口的管理 - [ 窗口样式 / 文字样式 / 窗口显示与隐藏 / 窗口位置与尺寸 ] 等<ul>\n<li><a href=\"#m-show\">console.show</a></li>\n</ul>\n</li>\n<li>控制台 Activity 活动窗口管理<ul>\n<li><a href=\"#m-launch\">console.launch</a></li>\n</ul>\n</li>\n</ul>\n<p>控制台浮动窗口的相关方法仅对浮动窗口有效, 而对 Activity 活动窗口无效:</p>\n<pre><code class=\"lang-js\">/* 浮动窗口日志文本字体大小修改为 23sp, */\n/* 但 Activity 活动窗口的日志字体不受影响. */\n\nconsole.setContentTextSize(23);\nconsole.show(); /* 浮动窗口日志字体 23sp. */\n\nconsole.launch(); /* Activity 活动窗口的日志字体仍为默认大小. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "模块作用"
         },
         {
-          "textRaw": "console.clear()",
-          "type": "method",
-          "name": "clear",
-          "desc": "<p>清空控制台.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
+          "textRaw": "浮动窗口",
+          "name": "浮动窗口",
+          "desc": "<p>使用 <a href=\"#m-show\">console.show</a> 可显示控制台的浮动窗口.</p>\n<ul>\n<li>浮动窗口右上区域有三个操作按钮<ul>\n<li>最小化按钮 - 收起浮动窗口并显示一个浮动按钮</li>\n<li>空间状态配置按钮 - 显示或隐藏空间状态 (位置及尺寸) 配置按钮</li>\n<li>关闭按钮 - 隐藏浮动窗口</li>\n</ul>\n</li>\n<li>拖动标题栏区域也可实现浮动窗口的位置移动</li>\n<li>日志显示区域支持双指缩放改变文本字体大小</li>\n</ul>\n<p>如需使用代码配置浮动窗口的外观与样式, 参阅 <a href=\"#m-build\">console.build</a> 小节.</p>\n<p>一个简单的浮动窗口配置示例, 以便快速了解浮动窗口的配置方式:</p>\n<ul>\n<li>尺寸 - 宽 80% 屏幕宽度, 高 60% 屏幕高度</li>\n<li>位置 - X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度</li>\n<li>标题 - HELLO WORLD</li>\n<li>标题字号 - 18sp</li>\n<li>标题背景颜色 - 900 号深橙色, 80% 透明度</li>\n<li>日志字号 - 16sp</li>\n<li>日志背景颜色 - 与标题背景颜色相同, 50% 透明度</li>\n<li>浮动窗口在脚本结束后 6 秒钟自动隐藏</li>\n</ul>\n<pre><code class=\"lang-js\">/* 使用构建器方式. */\n\nconsole.build({\n    size: [ 0.8, 0.6 ],\n    position: [ 0.1, 0.15 ],\n    title: &#39;HELLO WORLD&#39;,\n    titleTextSize: 18,\n    contentTextSize: 16,\n    backgroundColor: &#39;deep-orange-900&#39;,\n    titleBackgroundAlpha: 0.8,\n    contentBackgroundAlpha: 0.5,\n    exitOnClose: 6e3,\n}).show();\n\n/* 使用链式配置方式. */\n\nconsole\n    .setSize(0.8, 0.6)\n    .setPosition(0.1, 0.15)\n    .setTitle(&#39;HELLO WORLD&#39;)\n    .setTitleTextSize(18)\n    .setContentTextSize(16)\n    .setBackgroundColor(&#39;deep-orange-900&#39;)\n    .setTitleBackgroundAlpha(0.8)\n    .setContentBackgroundAlpha(0.5)\n    .setExitOnClose(6e3)\n    .show();\n\n/* 使用传统分步配置方式. */\n\nconsole.setSize(0.8, 0.6);\nconsole.setPosition(0.1, 0.15);\nconsole.setTitle(&#39;HELLO WORLD&#39;);\nconsole.setTitleTextSize(18);\nconsole.setContentTextSize(16);\nconsole.setBackgroundColor(&#39;deep-orange-900&#39;);\nconsole.setTitleBackgroundAlpha(0.8);\nconsole.setContentBackgroundAlpha(0.5);\nconsole.setExitOnClose(6e3);\nconsole.show();\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "浮动窗口"
         },
         {
-          "textRaw": "console.log([data][, ...args])",
-          "type": "method",
-          "name": "log",
-          "signatures": [
+          "textRaw": "[m] show",
+          "name": "[m]_show",
+          "methods": [
             {
-              "params": [
+              "textRaw": "show()",
+              "type": "method",
+              "name": "show",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>显示控制台浮动窗口.</p>\n<p>窗口显示之前或之后, 均可设置浮动窗口的样式及空间状态.<br>如将窗口尺寸设置为 <code>500</code> × <code>800</code>:</p>\n<pre><code class=\"lang-js\">/* 在 show 之前设置尺寸. */\n\nconsole.setSize(500, 800);\nconsole.show();\n\n/* 在 show 之后设置尺寸. */\n\nconsole.show();\nconsole.setSize(500, 800);\n\n/* 上述两个示例均支持链式调用. */\nconsole.show().setSize(500, 800);\nconsole.setSize(500, 800).show();\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>打印到控制台, 并带上换行符.  可以传入多个参数, 第一个参数作为主要信息, 其他参数作为类似于 <a href=\"http://man7.org/linux/man-pages/man3/printf.3.html/\">printf(3)</a> 中的代替值（参数都会传给 util.format(/)）.</p>\n<pre><code>const count = 5;\nconsole.log(&#39;count: %d&#39;, count);\n// 打印: count: 5 到 stdout\nconsole.log(&#39;count:&#39;, count);\n// 打印: count: 5 到 stdout\n</code></pre><p>详见 util.format().</p>\n<p>该函数也可以作为全局函数使用.</p>\n"
+          "type": "module",
+          "displayName": "[m] show"
         },
         {
-          "textRaw": "console.verbose([data][, ...args])",
-          "type": "method",
-          "name": "verbose",
-          "signatures": [
+          "textRaw": "[m] isShowing",
+          "name": "[m]_isshowing",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isShowing()",
+              "type": "method",
+              "name": "isShowing",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控制台浮动窗口是否未处于隐藏状态.</p>\n<p>未隐藏状态包含以下情况:</p>\n<ul>\n<li>浮动窗口展开显示</li>\n<li>浮动窗口折叠显示 (最小化)</li>\n</ul>\n<pre><code class=\"lang-js\">console.show();\nconsole.isShowing(); // true\n\nconsole.collapse(); /* 折叠 (最小化) 浮动窗口. */\nconsole.isShowing(); /* 依然为 true. */\n\nconsole.hide(); /* 隐藏浮动窗口. */\nconsole.isShowing(); // false\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log类似, 但输出结果以灰色字体显示. 输出优先级低于log, 用于输出观察性质的信息.</p>\n"
+          "type": "module",
+          "displayName": "[m] isShowing"
         },
         {
-          "textRaw": "console.info([data][, ...args])",
-          "type": "method",
-          "name": "info",
-          "signatures": [
+          "textRaw": "[m] hide",
+          "name": "[m]_hide",
+          "methods": [
             {
-              "params": [
+              "textRaw": "hide()",
+              "type": "method",
+              "name": "hide",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>隐藏控制台浮动窗口.</p>\n<p>窗口隐藏后, 其样式及空间状态均被保留, 即使在脚本结束后:</p>\n<pre><code class=\"lang-js\">console.show();\nconsole.setSize(500, 800);\nconsole.hide();\n</code></pre>\n<p>此时在另一个脚本运行如下代码:</p>\n<pre><code class=\"lang-js\">console.show();\n</code></pre>\n<p>显示浮动窗口后, 窗口尺寸依然为 <code>500</code> × <code>800</code>, 之前的窗口配置被还原.</p>\n<p>如需在显示之前恢复窗口配置默认值, 可使用 <code>console.reset()</code>:</p>\n<pre><code class=\"lang-js\">console.reset();\nconsole.show();\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log类似, 但输出结果以绿色字体显示. 输出优先级高于log, 用于输出重要信息.</p>\n"
+          "type": "module",
+          "displayName": "[m] hide"
         },
         {
-          "textRaw": "console.warn([data][, ...args])",
-          "type": "method",
-          "name": "warn",
-          "signatures": [
+          "textRaw": "[m] reset",
+          "name": "[m]_reset",
+          "methods": [
             {
-              "params": [
+              "textRaw": "reset()",
+              "type": "method",
+              "name": "reset",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>重置控制台浮动窗口的样式及空间状态, 恢复其默认值.</p>\n<p><code>reset</code> 方法在浮动窗口显示时也可使用:</p>\n<pre><code class=\"lang-js\">console.setSize(500, 800).show();\nsetTimeout(console.reset, 2e3); /* 2 秒钟后重置. */\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log类似, 但输出结果以蓝色字体显示. 输出优先级高于info, 用于输出警告信息.</p>\n"
+          "type": "module",
+          "displayName": "[m] reset"
         },
         {
-          "textRaw": "console.error([data][, ...args])",
-          "type": "method",
-          "name": "error",
-          "signatures": [
+          "textRaw": "[m] collapse",
+          "name": "[m]_collapse",
+          "methods": [
             {
-              "params": [
+              "textRaw": "collapse()",
+              "type": "method",
+              "name": "collapse",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>折叠显示控制台浮动窗口, 即最小化窗口.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any",
-                  "optional": true
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log类似, 但输出结果以红色字体显示. 输出优先级高于warn, 用于输出错误信息.</p>\n"
+          "type": "module",
+          "displayName": "[m] collapse"
         },
         {
-          "textRaw": "console.assert(value, message)",
-          "type": "method",
-          "name": "assert",
-          "signatures": [
+          "textRaw": "[m] expand",
+          "name": "[m]_expand",
+          "methods": [
             {
-              "params": [
+              "textRaw": "expand()",
+              "type": "method",
+              "name": "expand",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>展开显示控制台浮动窗口.</p>\n<p>使用 <a href=\"#m-show\">console.show</a> 显示窗口时, 默认为展开显示状态.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "value {any} 要断言的布尔值 ",
-                  "name": "value",
-                  "type": "any",
-                  "desc": "要断言的布尔值"
-                },
-                {
-                  "textRaw": "message {string} value为false时要输出的信息 ",
-                  "name": "message",
-                  "type": "string",
-                  "desc": "value为false时要输出的信息"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "value"
-                },
-                {
-                  "name": "message"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>断言. 如果value为false则输出错误信息message并停止脚本运行.</p>\n<pre><code>var a = 1 + 1;\nconsole.assert(a == 2, &quot;加法出错啦&quot;);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] expand"
         },
         {
-          "textRaw": "console.time([label])",
-          "type": "method",
-          "name": "time",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>label</code> {String} 计时器标签, 可省略</li>\n</ul>\n<p>启动一个定时器, 用以计算一个操作的持续时间.\n定时器由一个唯一的 <code>label</code> 标识.\n当调用 <code>console.timeEnd()</code> 时, 可以使用相同的 <code>label</code> 来停止定时器, 并以毫秒为单位将持续时间输出到控制台.\n重复启动同一个标签的定时器会覆盖之前启动同一标签的定时器.</p>\n",
-          "signatures": [
+          "textRaw": "[m] launch",
+          "name": "[m]_launch",
+          "methods": [
             {
-              "params": [
+              "textRaw": "launch()",
+              "type": "method",
+              "name": "launch",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>启动控制台 Activity 活动窗口.</p>\n<p>此方法相当于是 AutoJs6 首页右上区域点击 &quot;日志&quot; 图标的代码实现.</p>\n",
+              "signatures": [
                 {
-                  "name": "label",
-                  "optional": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "textRaw": "console.timeEnd(label)",
-          "type": "method",
-          "name": "timeEnd",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>label</code> {String} 计时器标签</li>\n</ul>\n<p>停止之前通过调用 <code>console.time()</code> 启动的定时器, 并打印结果到控制台.\n调用 <code>console.timeEnd()</code> 后定时器会被删除. 如果不存在标签指定的定时器则会打印 <code>NaNms</code>.</p>\n<pre><code class=\"lang-js\">console.time(&#39;求和&#39;);\nvar sum = 0;\nfor(let i = 0; i &lt; 100000; i++){\n    sum += i;\n}\nconsole.timeEnd(&#39;求和&#39;);\n// 打印 求和: xxx ms\n</code></pre>\n",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "label"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "textRaw": "console.trace([data][, ...args])",
-          "type": "method",
-          "name": "trace",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>data</code> {any}</li>\n<li><code>...args</code> {any}</li>\n</ul>\n<p>与console.log类似, 同时会打印出调用这个函数所在的调用栈信息（即当前运行的文件、行数等信息）.</p>\n<pre><code class=\"lang-js\">console.trace(&#39;Show me&#39;);\n// 打印: (堆栈跟踪会根据被调用的跟踪的位置而变化)\n// Show me\n//  at &lt;test&gt;:7\n</code></pre>\n",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "data",
-                  "optional": true
-                },
-                {
-                  "name": "...args",
-                  "optional": true
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "textRaw": "console.input(data[, ...args])",
-          "type": "method",
-          "name": "input",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any"
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data"
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log一样输出信息, 并在控制台显示输入框等待输入. 按控制台的确认按钮后会将输入的字符串用eval计算后返回.</p>\n<p><strong>部分机型可能会有控制台不显示输入框的情况, 属于bug. </strong></p>\n<p>例如：</p>\n<pre><code>var n = console.input(&quot;请输入一个数字:&quot;); \n//输入123之后：\ntoast(n + 1);\n//显示124\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] launch"
         },
         {
-          "textRaw": "console.rawInput(data[, ...args])",
-          "type": "method",
-          "name": "rawInput",
-          "signatures": [
+          "textRaw": "[m] build",
+          "name": "[m]_build",
+          "methods": [
             {
-              "params": [
+              "textRaw": "build(options)",
+              "type": "method",
+              "name": "build",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> } - 构建器选项</li>\n<li><ins><strong>returns</strong></ins> {{ show(): <a href=\"dataTypes#void\">void</a> }}</li>\n</ul>\n<p>构建控制台浮动窗口的配置.</p>\n<p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>\n<p>构建器支持一次性配置多个浮动窗口样式选项:</p>\n<pre><code class=\"lang-js\">console.build({\n    size: [ 0.8, 0.6 ], /* 窗口大小, 80% 屏幕宽度 × 60% 屏幕高度. */\n    position: [ 0.1, 0.15 ], /* 窗口位置, X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度. */\n    title: &#39;HELLO WORLD&#39;, /* 窗口标题文本. */\n    titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */\n    contentTextSize: 16, /* 窗口日志字号, 单位 sp. */\n    backgroundColor: &#39;deep-orange-900&#39;, /* 窗口标题及日志区域的背景色, 900 号深橙色. */\n    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */\n    contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */\n    exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */\n}).show(); /* 使用 show 方法显示浮动窗口. */\n</code></pre>\n<p>更多构建参数及使用方法, 参阅 <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> 类型章节.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`data` {any} ",
-                  "name": "data",
-                  "type": "any"
-                },
-                {
-                  "textRaw": "`...args` {any} ",
-                  "name": "...args",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data"
-                },
-                {
-                  "name": "...args",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>与console.log一样输出信息, 并在控制台显示输入框等待输入. 按控制台的确认按钮后会将输入的字符串直接返回.</p>\n<p>部分机型可能会有控制台不显示输入框的情况, 属于bug.</p>\n<p>例如：</p>\n<pre><code>var n = console.rawInput(&quot;请输入一个数字:&quot;); \n//输入123之后：\ntoast(n + 1);\n//显示1231\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] build"
         },
         {
-          "textRaw": "console.setSize(w, h)",
-          "type": "method",
-          "name": "setSize",
-          "signatures": [
+          "textRaw": "[m] setSize",
+          "name": "[m]_setsize",
+          "methods": [
             {
-              "params": [
+              "textRaw": "setSize(width, height)",
+              "type": "method",
+              "name": "setSize",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口宽度值 (像素值/百分数)</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口高度值 (像素值/百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的尺寸.</p>\n<pre><code class=\"lang-js\">console.setSize(0.8, 700).show(); /* 80% 屏幕宽度, 700 像素高度. */\nconsole.build({ size: [ 0.8, 700 ] }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`w` {number} 宽度 ",
-                  "name": "w",
-                  "type": "number",
-                  "desc": "宽度"
-                },
-                {
-                  "textRaw": "`h` {number} 高度 ",
-                  "name": "h",
-                  "type": "number",
-                  "desc": "高度"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "w"
-                },
-                {
-                  "name": "h"
+                  "params": [
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>设置控制台的大小, 单位像素.</p>\n<pre><code>console.show();\n//设置控制台大小为屏幕的四分之一\nconsole.setSize(device.width / 2, device.height / 2);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] setSize"
         },
         {
-          "textRaw": "console.setPosition(x, y)",
-          "type": "method",
-          "name": "setPosition",
-          "signatures": [
+          "textRaw": "[m] setPosition",
+          "name": "[m]_setposition",
+          "methods": [
             {
-              "params": [
+              "textRaw": "setPosition(x, y)",
+              "type": "method",
+              "name": "setPosition",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 X 坐标 (像素值/百分数)</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 Y 坐标 (像素值/百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的位置.</p>\n<pre><code class=\"lang-js\">console.setPosition(0.1, 0.15).show(); /* X: 10% 屏幕宽度, Y: 15% 屏幕高度. */\nconsole.build({ position: [ 0.1, 0.15 ] }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`x` {number} 横坐标 ",
-                  "name": "x",
-                  "type": "number",
-                  "desc": "横坐标"
-                },
-                {
-                  "textRaw": "`y` {number} 纵坐标 ",
-                  "name": "y",
-                  "type": "number",
-                  "desc": "纵坐标"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>设置控制台的位置, 单位像素.</p>\n<pre><code>console.show();\nconsole.setPosition(100, 100);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] setPosition"
         },
         {
-          "textRaw": "console.setGlobalLogConfig(config)",
-          "type": "method",
-          "name": "setGlobalLogConfig",
-          "desc": "<p><strong>[v4.1.0新增]</strong></p>\n<ul>\n<li><code>config</code> {Object} 日志配置, 可选的项有：<ul>\n<li><code>file</code> {string} 日志文件路径, 将会把日志写入该文件中</li>\n<li><code>maxFileSize</code> {number} 最大文件大小, 单位字节, 默认为512 * 1024 (512KB)</li>\n<li><code>rootLevel</code> {string} 写入的日志级别, 默认为&quot;ALL&quot;（所有日志）, 可以为&quot;OFF&quot;(关闭), &quot;DEBUG&quot;, &quot;INFO&quot;, &quot;WARN&quot;, &quot;ERROR&quot;, &quot;FATAL&quot;等.</li>\n<li><code>maxBackupSize</code> {number} 日志备份文件最大数量, 默认为5</li>\n<li><code>filePattern</code> {string} 日志写入格式, 参见<a href=\"http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html/\">PatternLayout</a></li>\n</ul>\n</li>\n</ul>\n<p>设置日志保存的路径和配置. 例如把日志保存到&quot;/sdcard/1.txt&quot;:</p>\n<pre><code>console.setGlobalLogConfig({\n    &quot;file&quot;: &quot;/sdcard/1.txt&quot;\n});\n</code></pre><p>注意该函数会影响所有脚本的日志记录.</p>\n",
-          "signatures": [
+          "textRaw": "[m] setExitOnClose",
+          "name": "[m]_setexitonclose",
+          "methods": [
             {
-              "params": [
+              "textRaw": "setExitOnClose(exitOnClose?)",
+              "type": "method",
+              "name": "setExitOnClose",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li>[ <code>true</code> ] <strong>exitOnClose</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 浮动窗口是否自动关闭</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口在脚本结束时是否自动关闭.</p>\n<pre><code class=\"lang-js\">console.setExitOnClose(true).show(); /* 自动关闭启用, 脚本结束后 5 秒钟自动关闭浮动窗口. */\nconsole.setExitOnClose().show(); /* 省略参数, 效果同上. */\nconsole.build({ exitOnClose: true }).show(); /* 效果同上. */\n\nconsole.setExitOnClose(false).show(); /* 禁用自动关闭. */\nconsole.build({ exitOnClose: false }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
                 {
-                  "name": "config"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "textRaw": "print(text)",
-          "type": "method",
-          "name": "print",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "text {string} | {Object} 要打印到控制台的信息 ",
-                  "name": "text",
-                  "type": "string",
-                  "desc": "| {Object} 要打印到控制台的信息"
+                  "params": [
+                    {
+                      "name": "exitOnClose?"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "setExitOnClose(timeout)",
+              "type": "method",
+              "name": "setExitOnClose",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口自动关闭的超时时间 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口在脚本结束时自动关闭的超时时间, 单位为毫秒.</p>\n<pre><code class=\"lang-js\">console.setExitOnClose(6e3).show(); /* 脚本结束后 6 秒钟自动关闭浮动窗口. */\nconsole.build({ exitOnClose: 6e3 }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
                 {
-                  "name": "text"
+                  "params": [
+                    {
+                      "name": "timeout"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>相当于<code>log(text)</code>.</p>\n"
+          "type": "module",
+          "displayName": "[m] setExitOnClose"
+        },
+        {
+          "textRaw": "[m] setTitle",
+          "name": "[m]_settitle",
+          "methods": [
+            {
+              "textRaw": "setTitle(title)",
+              "type": "method",
+              "name": "setTitle",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 浮动窗口标题文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题文本.</p>\n<pre><code class=\"lang-js\">console.setTitle(&#39;空调温度监测&#39;).show();\nconsole.build({ title: &#39;空调温度监测&#39; }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "title"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitle"
+        },
+        {
+          "textRaw": "[m] setTitleTextSize",
+          "name": "[m]_settitletextsize",
+          "methods": [
+            {
+              "textRaw": "setTitleTextSize(size)",
+              "type": "method",
+              "name": "setTitleTextSize",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>size</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题文本字体大小</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题文本字体大小, 单位 <code>sp</code>.</p>\n<pre><code class=\"lang-js\">console.setTitleTextSize(20).show(); /* 设置标题字体大小为 20sp. */\nconsole.build({ titleTextSize: 20 }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "size"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleTextSize"
+        },
+        {
+          "textRaw": "[m] setTitleTextColor",
+          "name": "[m]_settitletextcolor",
+          "methods": [
+            {
+              "textRaw": "setTitleTextColor(color)",
+              "type": "method",
+              "name": "setTitleTextColor",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题文本字体颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题文本字体颜色.</p>\n<pre><code class=\"lang-js\">console.setTitleTextColor(&#39;dark-orange&#39;).show(); /* 设置标题字体颜色为深橙色. */\nconsole.build({ titleTextColor: &#39;dark-orange&#39; }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleTextColor"
+        },
+        {
+          "textRaw": "[m] setTitleBackgroundColor",
+          "name": "[m]_settitlebackgroundcolor",
+          "methods": [
+            {
+              "textRaw": "setTitleBackgroundColor(color)",
+              "type": "method",
+              "name": "setTitleBackgroundColor",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题显示区域背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为深蓝色. */\nconsole.setTitleBackgroundColor(&#39;dark-blue&#39;).show();\nconsole.build({ titleBackgroundColor: &#39;dark-blue&#39; }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole.setTitleBackgroundColor(Color(&#39;dark-blue&#39;).setAlpha(0.5)).show();\nconsole.setTitleBackgroundColor(&#39;#8000008B&#39;).show(); /* 效果同上. */\n\n/* 透明度也可使用 setTitleBackgroundAlpha 单独设置. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleBackgroundColor"
+        },
+        {
+          "textRaw": "[m] setTitleBackgroundAlpha",
+          "name": "[m]_settitlebackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "setTitleBackgroundAlpha(alpha)",
+              "type": "method",
+              "name": "setTitleBackgroundAlpha",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为半透明. */\nconsole.setTitleBackgroundAlpha(0.5).show();\nconsole.build({ titleBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "alpha"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] setTitleIconsTint",
+          "name": "[m]_settitleiconstint",
+          "methods": [
+            {
+              "textRaw": "setTitleIconsTint(color)",
+              "type": "method",
+              "name": "setTitleIconsTint",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口操作按钮着色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的操作按钮着色.</p>\n<pre><code class=\"lang-js\">/* 设置操作按钮着色为绿色. */\nconsole.setTitleIconsTint(&#39;green&#39;).show();\nconsole.build({ titleIconsTint: &#39;green&#39; }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleIconsTint"
+        },
+        {
+          "textRaw": "[m] setContentTextSize",
+          "name": "[m]_setcontenttextsize",
+          "methods": [
+            {
+              "textRaw": "setContentTextSize(size: number)",
+              "type": "method",
+              "name": "setContentTextSize",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>param</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口日志文本字体大小</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志文本字体大小, 单位 <code>sp</code>.</p>\n<pre><code class=\"lang-js\">/* 设置日志文本字体大小为 18sp. */\nconsole.setContentTextSize(18).show();\nconsole.build({ contentTextSize: 18 }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "size: number"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentTextSize"
+        },
+        {
+          "textRaw": "[m] setContentTextColor",
+          "name": "[m]_setcontenttextcolor",
+          "methods": [
+            {
+              "textRaw": "setContentTextColor(colorMap)",
+              "type": "method",
+              "name": "setContentTextColor",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>colorMap</strong> {{<ul>\n<li>verbose?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n<li>log?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n<li>info?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n<li>warn?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n<li>error?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n<li>assert?: <a href=\"omniTypes#omnicolor\">OmniColor</a>;</li>\n</ul>\n</li>\n<li>}} - 浮动窗口日志文本字体颜色表</li>\n</ul>\n<p>设置控制台浮动窗口的日志文本字体颜色, 按日志等级设置一个或多个不同的字体颜色.</p>\n<pre><code class=\"lang-js\">/* 设置 LOG 等级日志字体颜色为深橙色. */\nconsole.setContentTextColor({ log: &#39;dark-orange&#39; }).show();\nconsole.log(&#39;content text color test for console.log&#39;);\n\n/* 设置 ERROR 等级日志字体颜色为深红色. */\nconsole.setContentTextColor({ error: &#39;dark-red&#39; }).show();\nconsole.error(&#39;content text color test for console.error&#39;);\n\n/* 设置多个不同等级日志的字体颜色. */\nconsole.setContentTextColor({\n    verbose: &#39;gray&#39;,\n    log: &#39;white&#39;,\n    info: &#39;light-green&#39;,\n    warn: &#39;light-blue&#39;,\n    error: &#39;red&#39;,\n}).show();\n[ &#39;verbose&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39; ].forEach((fName) =&gt; {\n    console[fName].call(console, `content text color test for console.${fName}`);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "colorMap"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "setContentTextColor(color)",
+              "type": "method",
+              "name": "setContentTextColor",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>colors</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口日志文本字体统一颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志文本字体的统一颜色.</p>\n<p>此方法设置颜色时不区分日志等级, 统一设置所有日志的文本颜色.</p>\n<pre><code class=\"lang-js\">/* 所有日志本文的颜色统一设置为深绿色. */\nconsole.setContentTextColor(&#39;dark-green&#39;).show();\n[ &#39;verbose&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39; ].forEach((fName) =&gt; {\n    console[fName].call(console, `content text color test for console.${fName}`);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentTextColor"
+        },
+        {
+          "textRaw": "[m] setContentBackgroundColor",
+          "name": "[m]_setcontentbackgroundcolor",
+          "methods": [
+            {
+              "textRaw": "setContentBackgroundColor(color)",
+              "type": "method",
+              "name": "setContentBackgroundColor",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口日志显示区域背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志显示区域背景颜色.</p>\n<pre><code class=\"lang-js\">/* 设置日志显示区域背景颜色为深蓝色. */\nconsole.setContentBackgroundColor(&#39;dark-blue&#39;).show();\nconsole.build({ contentBackgroundColor: &#39;dark-blue&#39; }).show(); /* 效果同上. */\n\n/* 设置日志显示区域背景颜色为半透明深蓝色. */\nconsole.setContentBackgroundColor(Color(&#39;dark-blue&#39;).setAlpha(0.5)).show();\nconsole.setContentBackgroundColor(&#39;#8000008B&#39;).show(); /* 效果同上. */\n\n/* 透明度也可使用 setContentBackgroundAlpha 单独设置. */\nconsole\n    .setContentBackgroundColor(&#39;dark-blue&#39;)\n    .setContentBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentBackgroundColor"
+        },
+        {
+          "textRaw": "[m] setContentBackgroundAlpha",
+          "name": "[m]_setcontentbackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "setContentBackgroundAlpha(alpha)",
+              "type": "method",
+              "name": "setContentBackgroundAlpha",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置日志显示区域背景颜色为半透明. */\nconsole.setContentBackgroundAlpha(0.5).show();\nconsole.build({ contentBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置日志显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setContentBackgroundColor(&#39;dark-blue&#39;)\n    .setContentBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "alpha"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] setTextSize",
+          "name": "[m]_settextsize",
+          "methods": [
+            {
+              "textRaw": "setTextSize(size)",
+              "type": "method",
+              "name": "setTextSize",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>size</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题及日志文本字体大小</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志文本字体大小, 单位 <code>sp</code>.</p>\n<p>相当于 <a href=\"#m-settitletextsize\">setTitleTextSize</a> 和 <a href=\"#m-setcontenttextsize\">setContentTextSize</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 设置标题及日志文本字体大小为 18sp. */\nconsole.setTextSize(18).show();\nconsole.build({ textSize: 18 }).show(); /* 效果同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "size"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTextSize"
+        },
+        {
+          "textRaw": "[m] setTextColor",
+          "name": "[m]_settextcolor",
+          "methods": [
+            {
+              "textRaw": "setTextColor(color)",
+              "type": "method",
+              "name": "setTextColor",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题及日志文本字体颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志文本字体颜色.</p>\n<p>对于日志文本, 不区分等级, 统一设置字体颜色.</p>\n<p>相当于 <a href=\"#m-settitletextcolor\">setTitleTextColor</a> 和 <a href=\"#m-setcontenttextcolor\">setContentTextColor</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 所有标题及日志本文的颜色统一设置为浅蓝色. */\nconsole.setTextColor(&#39;light-blue&#39;).show();\n[ &#39;verbose&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39; ].forEach((fName) =&gt; {\n    console[fName].call(console, ` text color test for console.${fName}`);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTextColor"
+        },
+        {
+          "textRaw": "[m] setBackgroundColor",
+          "name": "[m]_setbackgroundcolor",
+          "methods": [
+            {
+              "textRaw": "setBackgroundColor(color)",
+              "type": "method",
+              "name": "setBackgroundColor",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题及日志显示区域背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志显示区域背景颜色.</p>\n<p>相当于 <a href=\"#m-settitlebackgroundcolor\">setTitleBackgroundColor</a> 和 <a href=\"#m-setcontentbackgroundcolor\">setContentBackgroundColor</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 设置标题及日志显示区域背景颜色为浅黄色. */\nconsole.setBackgroundColor(&#39;light-yellow&#39;).show();\nconsole.build({ backgroundColor: &#39;light-yellow&#39; }).show(); /* 效果同上. */\n\n/* 设置标题及日志显示区域背景颜色为半透明浅黄色. */\nconsole.setBackgroundColor(Color(&#39;light-yellow&#39;).setAlpha(0.5)).show();\nconsole.setBackgroundColor(&#39;#80FFFFE0&#39;).show(); /* 效果同上. */\n\n/* 透明度也可使用 backgroundAlpha 单独设置. */\nconsole\n    .setBackgroundColor(&#39;light-yellow&#39;)\n    .setBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setBackgroundColor"
+        },
+        {
+          "textRaw": "[m] setBackgroundAlpha",
+          "name": "[m]_setbackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "setBackgroundAlpha(alpha)",
+              "type": "method",
+              "name": "setBackgroundAlpha",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题及日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志显示区域背景颜色透明度.</p>\n<p>相当于 <a href=\"#m-settitlebackgroundalpha\">setTitleBackgroundAlpha</a> 和 <a href=\"#m-setcontentbackgroundalpha\">setContentBackgroundAlpha</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 设置标题及日志显示区域背景颜色为半透明. */\nconsole.setBackgroundAlpha(0.5).show();\nconsole.build({ backgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题及日志显示区域背景颜色为半透明浅黄色. */\nconsole\n    .setBackgroundColor(&#39;light-yellow&#39;)\n    .setBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "alpha"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] verbose",
+          "name": "[m]_verbose",
+          "methods": [
+            {
+              "textRaw": "verbose(data, ...args)",
+              "type": "method",
+              "name": "verbose",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 测试消息 / 调试消息 / 重要性级别最低的消息</p>\n<p>优先级: <strong>verbose</strong> &lt; log &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #E0E0E0</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #C0C0C0\">◑</span> ] - #DFC0C0C0</li>\n<li>暗色主题 - [ <span style=\"color: #7F7F80\">◑</span> ] - #7F7F80</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] verbose"
+        },
+        {
+          "textRaw": "[m] log",
+          "name": "[m]_log",
+          "methods": [
+            {
+              "textRaw": "log(data, ...args)",
+              "type": "method",
+              "name": "log",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 普通消息</p>\n<p>优先级: verbose &lt; <strong>log</strong> &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFFFFF\">◑</span> ] - #FFFFFF</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #000000\">◑</span> ] - #CC000000</li>\n<li>暗色主题 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #DFE0E0E0</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] log"
+        },
+        {
+          "textRaw": "[m] info",
+          "name": "[m]_info",
+          "methods": [
+            {
+              "textRaw": "info(data, ...args)",
+              "type": "method",
+              "name": "info",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**data** { [string](dataTypes#string) } - 可包含占位符的待格式化对象 ",
+                      "name": "**data**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "可包含占位符的待格式化对象"
+                    },
+                    {
+                      "textRaw": "**args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数) ",
+                      "name": "**args**",
+                      "type": " [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) ",
+                      "desc": "[占位符替换参数](glossaries#占位符替换参数)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 重要消息 / 值得注意的消息</p>\n<p>优先级: verbose &lt; log &lt; <strong>info</strong> &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #DCEDC8\">◑</span> ] - #DCEDC8</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #43A047\">◑</span> ] - #43A047</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] info"
+        },
+        {
+          "textRaw": "[m] warn",
+          "name": "[m]_warn",
+          "methods": [
+            {
+              "textRaw": "warn(data, ...args)",
+              "type": "method",
+              "name": "warn",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 警告消息 / 隐患消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; <strong>warn</strong> &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #B3E5FC\">◑</span> ] - #B3E5FC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #1976D2\">◑</span> ] - #1976D2</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] warn"
+        },
+        {
+          "textRaw": "[m] error",
+          "name": "[m]_error",
+          "methods": [
+            {
+              "textRaw": "error(data, ...args)",
+              "type": "method",
+              "name": "error",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**data** { [string](dataTypes#string) } - 可包含占位符的待格式化对象 ",
+                      "name": "**data**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "可包含占位符的待格式化对象"
+                    },
+                    {
+                      "textRaw": "**args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数) ",
+                      "name": "**args**",
+                      "type": " [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) ",
+                      "desc": "[占位符替换参数](glossaries#占位符替换参数)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 错误消息 / 异常消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; <strong>error</strong> &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFCDD2\">◑</span> ] - #FFCDD2</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #C62828\">◑</span> ] - #C62828</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] error"
+        },
+        {
+          "textRaw": "[m] assert",
+          "name": "[m]_assert",
+          "methods": [
+            {
+              "textRaw": "assert(bool, message?)",
+              "type": "method",
+              "name": "assert",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>bool</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>bool</code> 参数为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个变量</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(new Date().getSeconds() &lt; 30, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bool"
+                    },
+                    {
+                      "name": "message?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "assert(func, message?)",
+              "type": "method",
+              "name": "assert",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"#function\">() =&gt;</a> <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>func</code> 参数的执行结果为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个函数</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(function () {\n    return new Date().getSeconds() &lt; 30;\n}, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "func"
+                    },
+                    {
+                      "name": "message?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] assert"
+        },
+        {
+          "textRaw": "[m] clear",
+          "name": "[m]_clear",
+          "methods": [
+            {
+              "textRaw": "clear()",
+              "type": "method",
+              "name": "clear",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>清空控制台日志内容.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clear"
+        },
+        {
+          "textRaw": "[m] print",
+          "name": "[m]_print",
+          "methods": [
+            {
+              "textRaw": "print(data, ...args)",
+              "type": "method",
+              "name": "print",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>等效于 <a href=\"#m-log\">console.log</a>.</p>\n<blockquote>\n<p>注: AutoJs6 的 <code>print</code> 方法在功能上更接近其他语言的 <code>printLn</code>, 而且在浏览器中, 全局方法 <code>print</code> 用于打印当前页面. 因此 <code>print</code> 全局方法被弃用, 不推荐使用.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] print"
+        },
+        {
+          "textRaw": "[m] printAllStackTrace",
+          "name": "[m]_printallstacktrace",
+          "methods": [
+            {
+              "textRaw": "printAllStackTrace(e)",
+              "type": "method",
+              "name": "printAllStackTrace",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>e</strong> { <a href=\"omniTypes#omnithrowable\">OmniThrowable</a> } - 异常参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>在控制台打印详细的栈追踪信息.</p>\n<pre><code class=\"lang-js\">try {\n    null.toString()\n} catch (e) {\n    /* 打印简单的错误消息. */\n    /* 通常只有 1 行消息. */\n    console.error(e.message);\n\n    /* 使用 exit 方法抛出异常. */\n    /* 通常有不到 10 行消息. */\n    exit(e);\n\n    /* 使用 console.printAllStackTrace 打印完整栈追踪信息. */\n    /* 通常有几十行消息. */\n    console.printAllStackTrace(e);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "e"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] printAllStackTrace"
+        },
+        {
+          "textRaw": "[m] trace",
+          "name": "[m]_trace",
+          "methods": [
+            {
+              "textRaw": "trace(message, level?)",
+              "type": "method",
+              "name": "trace",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 追踪消息</li>\n<li><strong>[ level = &quot;debug&quot; ]</strong> { <code>&#39;verbose&#39;</code> | <code>&#39;debug&#39;</code> | <code>&#39;info&#39;</code> | <code>&#39;warn&#39;</code> | <code>&#39;error&#39;</code> | <a href=\"dataTypes#number\">number</a> } - 消息输出等级</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出当前位置调用栈的追踪信息到控制台.</p>\n<p><code>level</code> 参数接收由整形常量转化而来的字符串简化形式:</p>\n<table>\n<thead>\n<tr>\n<th>字符串</th>\n<th>整形常量</th>\n<th>简述</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&#39;verbose&#39;</td>\n<td><span style=\"white-space:nowrap\">Log.VERBOSE = 2</span></td>\n<td><span style=\"white-space:nowrap\">对应 <a href=\"#m-verbose\">console.verbose</a> 输出等级.</span></td>\n</tr>\n<tr>\n<td><strong>&#39;debug&#39;</strong></td>\n<td><span style=\"white-space:nowrap\">Log.DEBUG = 3</span></td>\n<td><span style=\"white-space:nowrap\">对应 <a href=\"#m-log\">console.log</a> 输出等级.</span></td>\n</tr>\n<tr>\n<td>&#39;info&#39;</td>\n<td><span style=\"white-space:nowrap\">Log.INFO = 4</span></td>\n<td><span style=\"white-space:nowrap\">对应 <a href=\"#m-info\">console.info</a> 输出等级.</span></td>\n</tr>\n<tr>\n<td>&#39;warn&#39;</td>\n<td><span style=\"white-space:nowrap\">Log.WARN = 5</span></td>\n<td><span style=\"white-space:nowrap\">对应 <a href=\"#m-warn\">console.warn</a> 输出等级.</span></td>\n</tr>\n<tr>\n<td>&#39;error&#39;</td>\n<td><span style=\"white-space:nowrap\">Log.ERROR = 6</span></td>\n<td><span style=\"white-space:nowrap\">对应 <a href=\"#m-error\">console.error</a> 输出等级.</span></td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">function printMessages() {\n    console.trace(&#39;This is a &quot;normal&quot; message for test&#39;);\n    console.trace(&#39;This is an &quot;info&quot; message for test&#39;, &#39;info&#39;);\n    console.trace(&#39;This is a &quot;warn&quot; message for test&#39;, &#39;warn&#39;);\n    console.trace(&#39;This is an &quot;error&quot; message for test&#39;, &#39;error&#39;);\n    console.launch();\n}\n\n({\n    init() {\n        this.intermediate();\n    },\n    intermediate() {\n        printMessages();\n    },\n}).init();\n\n// Error 等级的追踪信息输出样例:\n// 20:46:00.709/E: This is an &quot;error&quot; message for test\n//     at consoleTrace.js:5 (printMessages)\n//     at consoleTrace.js:14\n//     at consoleTrace.js:11\n//     at consoleTrace.js:9\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "level?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] trace"
+        },
+        {
+          "textRaw": "[m] time",
+          "name": "[m]_time",
+          "methods": [
+            {
+              "textRaw": "time(label?)",
+              "type": "method",
+              "name": "time",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ label ]** { [string](dataTypes#string) } - 计时标签 ",
+                      "name": "**[",
+                      "desc": "label ]** { [string](dataTypes#string) } - 计时标签"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "label?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>启动计时器, 用以计算以 <code>label</code> 参数标记的时间间隔.</p>\n<p><a href=\"#m-timeend\">console.timeEnd</a> 传入与 <code>label</code> 参数相同的值时, 计时器停止, 并输出时间间隔信息到控制台.</p>\n<p>多次使用 time 方法传入相同 <code>label</code> 时, 将重置其关联的计时器.</p>\n<pre><code class=\"lang-js\">console.time(&#39;fruit&#39;);\nsleep(2e3);\nconsole.timeEnd(&#39;fruit&#39;);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] time"
+        },
+        {
+          "textRaw": "[m] timeEnd",
+          "name": "[m]_timeend",
+          "methods": [
+            {
+              "textRaw": "timeEnd(label?)",
+              "type": "method",
+              "name": "timeEnd",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ label ]** { [string](dataTypes#string) } - 计时标签 ",
+                      "name": "**[",
+                      "desc": "label ]** { [string](dataTypes#string) } - 计时标签"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "label?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>与 console.time 配合使用, 用以计算以 <code>label</code> 参数标记的时间间隔.</p>\n<p><code>label</code> 关联的计时器不存在时, 打印 <code>NaNms</code>.</p>\n<pre><code class=\"lang-js\">console.time(&#39;fruit&#39;);\nsleep(2e3);\nconsole.timeEnd(&#39;fruit&#39;);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] timeEnd"
+        },
+        {
+          "textRaw": "[m] setGlobalLogConfig",
+          "name": "[m]_setgloballogconfig",
+          "methods": [
+            {
+              "textRaw": "setGlobalLogConfig(config)",
+              "type": "method",
+              "name": "setGlobalLogConfig",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**config** {{ ",
+                      "options": [
+                        {
+                          "textRaw": "[ file = `'android-log4j.log'` ]?: [string](dataTypes#string) - 待写入日志的文件路径, 支持绝对路径及相对路径 ",
+                          "name": "[",
+                          "desc": "file = `'android-log4j.log'` ]?: [string](dataTypes#string) - 待写入日志的文件路径, 支持绝对路径及相对路径"
+                        },
+                        {
+                          "textRaw": "[ maxFileSize = `512 * 1024` ]?: [number](dataTypes#number) - 文件的分卷阈值容量 (单位为字节) ",
+                          "name": "[",
+                          "desc": "maxFileSize = `512 * 1024` ]?: [number](dataTypes#number) - 文件的分卷阈值容量 (单位为字节)"
+                        },
+                        {
+                          "textRaw": "[ maxBackupSize = `5` ]?: [number](dataTypes#number) - 文件最大备份数量, 达到上限后将替换最旧文件 ",
+                          "name": "[",
+                          "desc": "maxBackupSize = `5` ]?: [number](dataTypes#number) - 文件最大备份数量, 达到上限后将替换最旧文件"
+                        },
+                        {
+                          "textRaw": "[ rootLevel = `'all'` ]?: `'all'` | `'off'` | `'debug'` | `'info'` | `'warn'` | `'error'` | `'fatal'` - 日志写入级别 ",
+                          "name": "[",
+                          "desc": "rootLevel = `'all'` ]?: `'all'` | `'off'` | `'debug'` | `'info'` | `'warn'` | `'error'` | `'fatal'` - 日志写入级别"
+                        },
+                        {
+                          "textRaw": "[ filePattern = `'%d - [%p::%c::%C] - %m%n'` ]?: [string](dataTypes#string) - 日志写入格式, 参阅 [PatternLayout](https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html) ",
+                          "name": "[",
+                          "desc": "filePattern = `'%d - [%p::%c::%C] - %m%n'` ]?: [string](dataTypes#string) - 日志写入格式, 参阅 [PatternLayout](https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html)"
+                        }
+                      ],
+                      "name": "**config**",
+                      "desc": "{{"
+                    },
+                    {
+                      "textRaw": "}} - 日志输出至文件的配置选项 ",
+                      "name": "}}",
+                      "desc": "日志输出至文件的配置选项"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "config"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置将全局日志写入文件的配置选项.</p>\n<p>该方法会影响所有脚本的日志记录.</p>\n<pre><code class=\"lang-js\">console.setGlobalLogConfig({\n    file: `./log/${Date.now()}.log`,\n    filePattern: &#39;%d{yyyy-MM-dd/}%m%n&#39;,\n    maxBackupSize: 16,\n    maxFileSize: 384 &lt;&lt; 10, /* 384 KB. */\n});\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setGlobalLogConfig"
+        },
+        {
+          "textRaw": "[m] input",
+          "name": "[m]_input",
+          "methods": [
+            {
+              "textRaw": "input(data, ...args)",
+              "type": "method",
+              "name": "input",
+              "desc": "<p><strong><code>ABANDONED</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>此方法已于 <code>6.3.0</code> 版本被废弃, 使用后将无任何效果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] input"
+        },
+        {
+          "textRaw": "[m] rawInput",
+          "name": "[m]_rawinput",
+          "methods": [
+            {
+              "textRaw": "rawInput(data, ...args)",
+              "type": "method",
+              "name": "rawInput",
+              "desc": "<p><strong><code>ABANDONED</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>此方法已于 <code>6.3.0</code> 版本被废弃, 使用后将无任何效果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] rawInput"
         }
       ],
       "type": "module",

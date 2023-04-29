@@ -62,10 +62,10 @@ console.info('Input file = %s', inputFile);
 fs.readFile(inputFile, 'utf8', function (er, input) {
     if (er) throw er;
     // process the input for @include lines
-    processIncludes(inputFile, input, next);
+    processIncludes(inputFile, input, processIncludesCallback);
 });
 
-function next(er, input) {
+function processIncludesCallback(er, input) {
     if (er) throw er;
     switch (format) {
         case 'json':

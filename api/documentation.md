@@ -4,7 +4,7 @@
 
 AutoJs6 文档, 包含模块 API 使用方法及用例.  
 项目复刻 (Fork) 自 [hyb1996/AutoJs-Docs](https://github.com/hyb1996/AutoJs-Docs/) (GitHub).  
-项目地址: [SuperMonster003/AutoJs6-Documentation](https://github.com/SuperMonster003/AutoJs6-Documentation/) (GitHub).
+项目地址: [SuperMonster003/AutoJs6-Documentation](http://docs-project.autojs6.com) (GitHub).
 
 ---
 
@@ -83,13 +83,14 @@ returns 后的 "{}" 内包含返回值类型.
 
 对象字面量形式的类型则用一对双花括号表示:
 
-- {{ name: [string](dataTypes#string); age: [number](dataTypes#number) }}
+- **properties** {{ name: [string](dataTypes#string); age: [number](dataTypes#number) }}
 
 多行形式:
 
-- {{
-- -- name: [string](dataTypes#string);
-- -- age: [number](dataTypes#number);
+- **properties** {{
+    - name: [string](dataTypes#string);
+    - age: [number](dataTypes#number);
+    - laugh(decibel?: [number](dataTypes#number));
 - }}
 
 一个符合上述示例期望的变量:
@@ -100,7 +101,7 @@ let o = { name: "David", age: 13 };
 
 可存取的属性在读取时如果有非 undefined 默认值, 则以一对方括号表示:
 
-- [ 1200 ] { [number](dataTypes#number) }
+- [ `1200` ] { [number](dataTypes#number) }
 
 上述示例表示一个默认值为 1200 的可存取属性.
 
@@ -327,7 +328,8 @@ requestScreenCapture(false);
 - `Getter/Setter`: 可存值且可取值属性, 即同时使用 Setter 及 Getter 定义的对象属性.
 - `Enum`: 枚举类.
 - `CONSTANT`: 常量.
-- `DEPRECATED`: 已弃用的属性或方法.
+- `DEPRECATED`: 已弃用的属性或方法. 表示不推荐使用, 通常会有替代属性或替代方法.
+- `ABANDONED`: 已废弃的属性或方法. 表示不再提供功能支持, 使用后功能将无效.
 - `xProto`: 针对原型的内置对象扩展.
 - `xObject`: 针对对象的内置对象扩展.
 - `xAlias`: 内置对象扩展时使用不同的方法或属性名称 (别名).
@@ -380,7 +382,7 @@ requestScreenCapture(false);
     - `[3]` 代表 apple 的一个方法, 名称为 "getColor",
     - 由 `[4]` 得知, 其调用方式为 `apple.getColor()`.
     - 注意 `[6]` 与 `[2]` 不同:
-    - [`6`] 代表 banana 的一个方法, 名称为 "banana",
+    - `[6]` 代表 banana 的一个方法, 名称为 "banana",
     - 由 `[7]` 和 `[8]` 得知, 其调用方式有两种,
     - `banana.banana(x)` 和 `banana.banana(x, y)`.
 
@@ -433,8 +435,8 @@ returns 后的 "{}" 内包含返回值类型.
 
 ## 声明
 
-当前项目 (文档) 及 [AutoJs6](https://github.com/SuperMonster003/AutoJs6) (App) 均为二次开发.  
+当前项目 (文档) 及 [AutoJs6](http://project.autojs6.com) (App) 均为二次开发.  
 相对于 [原始 App](https://github.com/hyb1996/Auto.js/), 二次开发的 App 中会增加或修改部分模块功能.  
 相对于 [原始文档](https://github.com/hyb1996/AutoJs-Docs/), 二次开发的文档将进行部分增删或重新编写.  
 开发者无法保证对 API 的完全理解及文档的无纰漏撰写.  
-如有任何不当之处, 欢迎提交 [Issue](https://github.com/SuperMonster003/AutoJs6-Documentation/issues/) 或 [PR](https://github.com/SuperMonster003/AutoJs6-Documentation/pulls/).  
+如有任何不当之处, 欢迎提交 [Issue](http://docs-issues.autojs6.com) 或 [PR](http://docs-pr.autojs6.com).  

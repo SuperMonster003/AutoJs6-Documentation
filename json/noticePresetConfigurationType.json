@@ -1,0 +1,140 @@
+{
+  "source": "..\\api\\noticePresetConfigurationType.md",
+  "modules": [
+    {
+      "textRaw": "NoticePresetConfiguration",
+      "name": "noticepresetconfiguration",
+      "desc": "<p>NoticePresetConfiguration 是一个发送 AutoJs6 通知时用于设置通知及 <a href=\"notice#通知渠道\">渠道</a> 默认行为及默认样式的接口.</p>\n<p>常见参数中使用此接口类型的方法:</p>\n<ul>\n<li><a href=\"notice#m-config\">notice.config</a>(<strong>preset</strong>)</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">NoticePresetConfiguration</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] defaultTitle",
+          "name": "[p?]_defaulttitle",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#string\">string</a> } - 默认通知标题</li>\n</ul>\n<p><code>defaultTitle</code> 用于为通知标题指定一个默认值.</p>\n<p><code>defaultTitle</code> 为 <code>null</code> 时, 通知标题的值取决于 <code>content</code> 属性值:</p>\n<ol>\n<li><code>content</code> 为空或未设置<ul>\n<li>默认值为资源 <code>R.string.default_script_notification_title</code> 代表值</li>\n<li>如简体中文语言对应 &quot;脚本通知&quot;, English 语言对应 &quot;Script notification&quot;</li>\n</ul>\n</li>\n<li><code>content</code> 已设置<ul>\n<li>默认值由系统决定显示文本</li>\n<li>如应用名称 (AutoJs6)</li>\n</ul>\n</li>\n</ol>\n<pre><code class=\"lang-js\">/* 假设默认配置 config.defaultTitle 未设置. */\n\n/* title 为 &quot;脚本通知&quot; (简体中文语言). */\nnotice();\n\n/* title 可能显示为 AutoJs6 (由系统决定), 因为 content 已设置. */\nnotice(&#39;hello&#39;);\nnotice({ content: &#39;hello&#39; }); /* 效果同上. */\n</code></pre>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-title\">NoticeOptions#title</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultTitle"
+        },
+        {
+          "textRaw": "[p?] defaultContent",
+          "name": "[p?]_defaultcontent",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#string\">string</a> } - 默认通知内容</li>\n</ul>\n<p><code>defaultContent</code> 用于为通知内容指定一个默认值.</p>\n<p><code>defaultContent</code> 为 <code>null</code> 时, 通知内容的值取决于 <code>title</code> 属性值:</p>\n<ol>\n<li><code>title</code> 为空或未设置<ul>\n<li>默认值为资源 <code>R.string.default_script_notification_content</code> 代表值</li>\n<li>如简体中文语言对应 &quot;来自脚本的通知&quot;, English 语言对应 &quot;Notification from script&quot;</li>\n</ul>\n</li>\n<li><code>title</code> 已设置<ul>\n<li>默认值为空 (不显示任何内容)</li>\n</ul>\n</li>\n</ol>\n<pre><code class=\"lang-js\">/* 假设默认配置 config.defaultContent 未设置. */\n\n/* content 为 &quot;来自脚本的通知&quot; (简体中文语言). */\nnotice();\n\n/* content 为空, 不显示通知内容, 仅显示标题. */\nnotice({ title: &#39;hello&#39; });\nnotice(&#39;&#39;, &#39;hello&#39;); /* 效果同上, 但不常用. */\n</code></pre>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-content\">NoticeOptions#content</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultContent"
+        },
+        {
+          "textRaw": "[p?] defaultBigContent",
+          "name": "[p?]_defaultbigcontent",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#string\">string</a> } - 默认通知长文本内容</li>\n</ul>\n<p><code>defaultBigContent</code> 用于为通知长文本内容指定一个默认值.</p>\n<p><code>defaultBigContent</code> 为 <code>null</code> 时, 通知消息中将不显示长文本内容.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-bigcontent\">NoticeOptions#bigContent</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultBigContent"
+        },
+        {
+          "textRaw": "[p?] defaultIsSilent",
+          "name": "[p?]_defaultissilent",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 默认的通知安静模式</li>\n</ul>\n<p><code>defaultIsSilent</code> 用于为通知的安静模式指定一个默认值.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-issilent\">NoticeOptions#isSilent</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultIsSilent"
+        },
+        {
+          "textRaw": "[p?] defaultAutoCancel",
+          "name": "[p?]_defaultautocancel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 通知消息是否自动消除的默认值</li>\n</ul>\n<p><code>defaultAutoCancel</code> 用于为通知在用户点击时是否自动消除指定一个默认值.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-autocancel\">NoticeOptions#autoCancel</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultAutoCancel"
+        },
+        {
+          "textRaw": "[p?] defaultAppendScriptName",
+          "name": "[p?]_defaultappendscriptname",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#boolean\">boolean</a> | <code>&#39;auto&#39;</code> | <code>&#39;title&#39;</code> | <code>&#39;content&#39;</code> | <code>&#39;bigContent&#39;</code> } - 默认的脚本文件全名附加目标</li>\n</ul>\n<p><code>defaultAppendScriptName</code> 用于指定通知消息中附加脚本文件全名的默认附加目标.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-appendscriptname\">NoticeOptions#appendScriptName</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultAppendScriptName"
+        },
+        {
+          "textRaw": "[p?] defaultPriority",
+          "name": "[p?]_defaultpriority",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#number\">number</a> | <code>&#39;default&#39;</code> | <code>&#39;low&#39;</code> | <code>&#39;min&#39;</code> | <code>&#39;high&#39;</code> | <code>&#39;max&#39;</code> } - 默认优先级</li>\n</ul>\n<p><code>defaultPriority</code> 用于为通知消息指定一个默认优先级.</p>\n<p><code>defaultPriority</code> 为 <code>null</code> 时, 通知默认优先级将恢复为 <code>&#39;high&#39;</code>.</p>\n<p><code>defaultPriority</code> 仅适用于以下操作系统:</p>\n<ul>\n<li><code>Android API 24 (7.0) [N]</code></li>\n<li><code>Android API 25 (7.1-7.1.2) [N_MR1]</code></li>\n</ul>\n<p>其他版本操作系统将忽略此设置项.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-priority\">NoticeOptions#priority</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultPriority"
+        },
+        {
+          "textRaw": "[p?] defaultChannelName",
+          "name": "[p?]_defaultchannelname",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#string\">string</a> } - 默认渠道名称</li>\n</ul>\n<p><code>defaultChannelName</code> 用于为通知渠道名称指定一个默认值.</p>\n<p><code>defaultChannelName</code> 为 <code>null</code> 时, 渠道名称默认值与通知标题默认值相同, 如 &quot;脚本通知&quot;.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-name\">NoticeChannelOptions#name</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultChannelName"
+        },
+        {
+          "textRaw": "[p?] defaultChannelDescription",
+          "name": "[p?]_defaultchanneldescription",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#string\">string</a> } - 默认渠道描述</li>\n</ul>\n<p><code>defaultChannelDescription</code> 用于为通知渠道描述指定一个默认值.</p>\n<p><code>defaultChannelDescription</code> 为 <code>null</code> 时, 渠道描述默认值与通知内容默认值相同, 如 &quot;来自脚本的通知&quot;.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-description\">NoticeChannelOptions#description</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultChannelDescription"
+        },
+        {
+          "textRaw": "[p?] defaultImportanceForChannel",
+          "name": "[p?]_defaultimportanceforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#number\">number</a> | <code>&#39;default&#39;</code> | <code>&#39;high&#39;</code> | <code>&#39;low&#39;</code> | <code>&#39;max&#39;</code> | <code>&#39;min&#39;</code> | <code>&#39;none&#39;</code> | <code>&#39;unspecified&#39;</code> } - 默认的渠道通知重要性级别</li>\n</ul>\n<p><code>defaultImportanceForChannel</code> 用于为通知渠道指定一个默认重要性级别.</p>\n<p><code>defaultImportanceForChannel</code> 为 <code>null</code> 时, 渠道默认优先级将恢复为 <code>&#39;high&#39;</code>.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-importance\">NoticeChannelOptions#importance</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultImportanceForChannel"
+        },
+        {
+          "textRaw": "[p?] defaultEnableVibrationForChannel",
+          "name": "[p?]_defaultenablevibrationforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 默认渠道振动状态</li>\n</ul>\n<p><code>defaultEnableVibrationForChannel</code> 属性可设置默认的渠道振动状态.</p>\n<p><code>defaultEnableVibrationForChannel</code> 为 <code>null</code> 时, 渠道振动状态将恢复为 <code>false</code>, 即禁用振动.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-enablevibration\">NoticeChannelOptions#enableVibration</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultEnableVibrationForChannel"
+        },
+        {
+          "textRaw": "[p?] defaultVibrationPatternForChannel",
+          "name": "[p?]_defaultvibrationpatternforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"omniTypes#omnivibrationpattern\">OmniVibrationPattern</a> } - 默认渠道振动模式</li>\n</ul>\n<p><code>defaultVibrationPatternForChannel</code> 属性可设置默认的渠道振动模式.</p>\n<p><code>defaultVibrationPatternForChannel</code> 为 <code>null</code> 时, 渠道振动模式将恢复为 <code>null</code>.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-vibrationpattern\">NoticeChannelOptions#vibrationPattern</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultVibrationPatternForChannel"
+        },
+        {
+          "textRaw": "[p?] defaultEnableLightsForChannel",
+          "name": "[p?]_defaultenablelightsforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 渠道的通知指示灯默认行为</li>\n</ul>\n<p><code>defaultEnableLightsForChannel</code> 属性可设置渠道的通知指示灯默认行为.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-enableLights\">NoticeChannelOptions#enableLights</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultEnableLightsForChannel"
+        },
+        {
+          "textRaw": "[p?] defaultLightColorForChannel",
+          "name": "[p?]_defaultlightcolorforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 渠道的通知指示灯默认颜色</li>\n</ul>\n<p><code>defaultLightColorForChannel</code> 属性可设置渠道的通知指示灯默认颜色.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-lightcolor\">NoticeChannelOptions#lightColor</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultLightColorForChannel"
+        },
+        {
+          "textRaw": "[p?] defaultLockscreenVisibilityForChannel",
+          "name": "[p?]_defaultlockscreenvisibilityforchannel",
+          "desc": "<ul>\n<li>[ <code>null</code> ] { <a href=\"dataTypes#number\">number</a> | <code>&#39;public&#39;</code> | <code>&#39;private&#39;</code> | <code>&#39;secret&#39;</code> | <code>&#39;no_override&#39;</code> } - 渠道的通知可见详情的默认级别</li>\n</ul>\n<p><code>defaultLockscreenVisibilityForChannel</code> 属性可设置渠道的通知可见详情的默认级别.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeChannelOptionsType#p-lockscreenvisibility\">NoticeChannelOptions#lockscreenVisibility</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] defaultLockscreenVisibilityForChannel"
+        },
+        {
+          "textRaw": "[p?] useDynamicDefaultNotificationId",
+          "name": "[p?]_usedynamicdefaultnotificationid",
+          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用动态通知 ID</li>\n</ul>\n<p><code>useDynamicDefaultNotificationId</code> 属性可设置发送的通知是否使用动态通知 ID.</p>\n<p>默认值情况:</p>\n<ul>\n<li><code>true</code> - 动态值 <code>(System.currentTimeMillis() % Int.MAX_VALUE).toInt()</code></li>\n<li><code>false</code> - 常量值 <code>String(&#39;script_notification&#39;).hashCode()</code></li>\n</ul>\n<p>设置 <code>true</code> 时, 每一个通知将独立显示, 否则后续通知将覆盖之前的通知.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-notificationid\">NoticeOptions#notificationId</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] useDynamicDefaultNotificationId"
+        },
+        {
+          "textRaw": "[p?] useScriptNameAsDefaultChannelId",
+          "name": "[p?]_usescriptnameasdefaultchannelid",
+          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用脚本全程作为默认渠道 ID</li>\n</ul>\n<p>通知渠道使用 <code>渠道 ID (Channel ID)</code> 作为唯一标识, <code>useScriptNameAsDefaultChannelId</code> 属性可设置当前发送通知的默认渠道 ID 是否为动态 ID.</p>\n<p>默认值情况:</p>\n<ul>\n<li><code>true</code> - 当前运行的脚本文件全名 (如 <code>test.js</code>)</li>\n<li><code>false</code> - 常量值 <code>script_channel</code></li>\n</ul>\n<p>设置 <code>true</code> 时, 默认渠道 ID 为动态 ID, 使用脚本文件全名作为 ID 值, 如 <code>test.js</code>. 此时, 在不指定渠道 ID 发送通知时, 将默认在 <code>test.js</code> 渠道上发送.</p>\n<p>否则, 默认渠道 ID 将固定为 <code>script_channel</code> 常量值.</p>\n<p>相关的接口属性:</p>\n<ul>\n<li><a href=\"noticeOptionsType#p-channelid\">NoticeOptions#channelId</a></li>\n<li><a href=\"noticeChannelOptionsType#p-id\">NoticeChannelOptions#id</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] useScriptNameAsDefaultChannelId"
+        },
+        {
+          "textRaw": "[p?] enableChannelInvalidModificationWarnings",
+          "name": "[p?]_enablechannelinvalidmodificationwarnings",
+          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在通知渠道修改无作用时显示控制台警告信息</li>\n</ul>\n<p><code>enableChannelInvalidModificationWarnings</code> 属性可设置在通知渠道修改无作用时, 是否在显示控制台相关警告信息.</p>\n<p>渠道创建后, 将无法通过代码更改渠道的设置 (除名称, 描述, 和受条件限制的优先级之外), 对于渠道的设置, 用户拥有最终控制权:</p>\n<pre><code class=\"lang-js\">/* 创建一个全新的通知渠道, 并设置通知指示灯为蓝色. */\n\nlet channelId = `test_channel_id_${Date.now()}`;\nnotice.channel.create(channelId, { lightColor: &#39;blue&#39; });\n\n/* 通知渠道创建后, 将无法再通过代码更改其配置, 只能由用户更改. */\n\n/* 尝试通过代码修改渠道配置, 将通知指示灯修改为红色. */\nnotice.channel.create(channelId, { lightColor: &#39;red&#39; });\n\n/* 此时如果 enableChannelInvalidModificationWarnings 配置为 true, */\n/* 将在控制台显示一条警告信息. */\n/* 因为修改不会生效, 指示灯依然为蓝色. */\n\n/* 如不希望出现这些警告信息, 可配置选项为 false. */\nnotice.config({ enableChannelInvalidModificationWarnings: false });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] enableChannelInvalidModificationWarnings"
+        }
+      ],
+      "type": "module",
+      "displayName": "NoticePresetConfiguration"
+    }
+  ]
+}

@@ -2,11 +2,24 @@ import os
 import os.path
 import sys
 
+import importlib.util
+
+jproperties_spec = importlib.util.find_spec("jproperties")
+
+if jproperties_spec is None:
+    os.system("pip install jproperties")
+
+from jproperties import Properties
+
 in_dir = os.path.join('..', 'api')
 out_dir = os.path.join('..', 'docs')
 json_out_dir = os.path.join('..', 'json')
 template = os.path.join('..', 'template.html')
-version = '6.2.0'
+
+configs = Properties()
+with open('version.properties', 'rb') as config_file:
+    configs.load(config_file)
+version = configs.get("VERSION_NAME").data
 
 
 def process(in_file, out_file, fmt="html"):

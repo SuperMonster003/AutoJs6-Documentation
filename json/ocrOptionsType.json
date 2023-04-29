@@ -1,0 +1,37 @@
+{
+  "source": "..\\api\\ocrOptionsType.md",
+  "modules": [
+    {
+      "textRaw": "OcrOptions",
+      "name": "ocroptions",
+      "desc": "<p>OcrOptions 是一个代表 OCR 识别选项的接口.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">OcrOptions</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] region",
+          "name": "[p?]_region",
+          "desc": "<ul>\n<li>{ <a href=\"omniTypes#omniregion\">OmniRegion</a> }</li>\n</ul>\n<p>指定 OCR 识别的区域.</p>\n<p>当 <code>region</code> 值为 <code>undefined</code> 时, 表示不指定区域限制.<br>当 <code>region</code> 值为 <code>null</code> 时, 表示空区域, 此时 <a href=\"ocr\">ocr</a> 模块的相关方法将返回空结果 (如空数组).</p>\n",
+          "modules": [
+            {
+              "textRaw": "number[]",
+              "name": "number[]",
+              "desc": "<p>可使用数组表示区域, 数组中包含 4 个数字:</p>\n<pre><code class=\"lang-text\">[ x, y, w, h ]\n\nx - number - X 坐标 (像素值或百分比)\ny - number - Y 坐标 (像素值或百分比)\nw - number - 区域宽度 (像素值或百分比)\nh - number - 区域高度 (像素值或百分比)\n</code></pre>\n<pre><code class=\"lang-js\">/* 识别本地 testA.png 图像文件中的文本内容, 区域为 [ 0, 0, 150, 300 ]. */\n\nlet regionA = [ 0, 0, 150, 300 ];\nocr(&#39;testA.png&#39;, regionA);\n\n/* 识别本地 testB.png 图像文件中的文本内容, */\n/* 区域为 [ 0, 0, 0.5, 0.8 ], */\n/* 即以 (0, 0) 为起点, 宽为 50% 屏幕宽度, 高为 80% 屏幕高度. */\n\nlet regionB = [ 0, 0, 0.5, 0.8 ];\nocr(&#39;testB.png&#39;, regionB);\n\n/* 识别本地 testC.png 图像文件中的文本内容, */\n/* 区域为 [ 0, 0.2, -1, 0.6 ], */\n/* 即以 (0, 20% 屏幕高度) 为起点, 宽为 100% 屏幕宽度, 高为 60% 屏幕高度. */\n\nlet regionC = [ 0, 0.2, -1, 0.8 ];\nocr(&#39;testC.png&#39;, regionC);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "number[]"
+            },
+            {
+              "textRaw": "AndroidRect",
+              "name": "androidrect",
+              "desc": "<p>也可使用 <a href=\"androidRectType\">AndroidRect</a> 表示区域:</p>\n<pre><code class=\"lang-js\">/* 识别本地 test.png 图像文件中的文本内容, 区域为文本 &quot;点击开始&quot; 所在的控件矩形. */\n\nlet bounds = pickup(&#39;点击开始&#39;, &#39;bounds&#39;); /* bounds 是一个 AndroidRect 实例. */\nocr(&#39;test.png&#39;, { region: bounds });\n</code></pre>\n",
+              "type": "module",
+              "displayName": "AndroidRect"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p?] region"
+        }
+      ],
+      "type": "module",
+      "displayName": "OcrOptions"
+    }
+  ]
+}

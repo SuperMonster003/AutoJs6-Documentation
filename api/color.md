@@ -77,6 +77,8 @@ AutoJs6 支持以下方式表示一个颜色:
 
 ### toInt(color)
 
+**`6.2.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 颜色整数
 
@@ -132,18 +134,18 @@ colors.toHex('burnt-orange'); // #CC5500
 **`6.2.0`** **`Overload 2/3`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **[alpha = 'auto']** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
+- **[ alpha = `'auto'` ]** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
 将颜色参数转换为 [颜色代码 (ColorHex)](dataTypes#colorhex), 并根据 `alpha` 参数决定颜色代码 `A (alpha)` 分量的显示状态.
 
 `A (alpha)` 分量参数取值表:
 
-| 取值             | 含义                          | 默认  |
-|----------------|-----------------------------|:---:|
-| 'keep' / true  | 强制显示 A 分量, 不论 A 分量是否为 0xFF  |     |      
-| 'none' / false | 强制去除 A 分量, 只保留 R / G / B 分量 |     |      
-| 'auto'         | 根据 A 分量是否为 0xFF 自动决定显示状态    |  √  |
+| 取值                                                     | 含义                                                                  | 默认 |
+|--------------------------------------------------------|---------------------------------------------------------------------|:--:|
+| <span style="white-space:nowrap">'keep' / true</span>  | <span style="white-space:nowrap">强制显示 A 分量, 不论 A 分量是否为 0xFF</span>  |    |      
+| <span style="white-space:nowrap">'none' / false</span> | <span style="white-space:nowrap">强制去除 A 分量, 只保留 R / G / B 分量</span> |    |      
+| <span style="white-space:nowrap">'auto'</span>         | <span style="white-space:nowrap">根据 A 分量是否为 0xFF 自动决定显示状态</span>    | √  |
 
 ```js
 let cA = '#AAC0C0C0';
@@ -179,11 +181,11 @@ colors.toHex(cC, 'keep'); /* 同上. */
 
 Hex 代码长度参数取值表:
 
-| 取值  | 含义                         |
-|:---:|----------------------------|
-|  8  | 强制显示 A 分量, 结果格式为 #AARRGGBB |        
-|  6  | 强制去除 A 分量, 结果格式为 #RRGGBB   |        
-|  3  | 强制去除 A 分量, 结果格式为 #RGB      |  
+| <span style="white-space:nowrap">取值</span> | 含义                                                                 |
+|:------------------------------------------:|--------------------------------------------------------------------|
+|                     8                      | <span style="white-space:nowrap">强制显示 A 分量, 结果格式为 #AARRGGBB</span> |        
+|                     6                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RRGGBB</span>   |        
+|                     3                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RGB</span>      |  
 
 ```js
 let cA = '#AA9966CC';
@@ -214,6 +216,8 @@ colors.toHex(cD, 3); /* 抛出异常. */
 
 ### toFullHex(color)
 
+**`6.2.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码的完整形式
 
@@ -226,12 +230,91 @@ colors.toHex('#CC5500'); // #CC5500
 colors.toFullHex('#CC5500'); // #FFCC5500
 ```
 
+## [m] build
+
+### build(color?)
+
+**`6.3.0`** **`Overload [1-2]/4`**
+
+- **[ color = `Colors.BLACK` ]** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Color](colorType) } - Color 实例
+
+构建一个 [Color](colorType) 实例, 相当于 `new Color(color?)` 或 `Color(color?)`.
+
+```js
+colors.build('dark-orange') /* 以深橙色构建 Color 实例 */
+    .setAlpha(0.85) /* 设置透明度 85%. */
+    .removeBlue() /* 移除 B (blue) 分量. */
+    .toHex(); // #D9FF8C00
+
+/* 构建空 Color 实例, 设置 HSLA 分量并转换为 Hex 代码. */
+colors.build().setHsla(0.25, 0.8, 0.64, 0.9).toHex(); // #E6A3ED5A
+```
+
+### build(red, green, blue, alpha?)
+
+**`6.3.0`** **`Overload [3-4]/4`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
+- **[ alpha = `1` ]** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+构建一个 [Color](colorType) 实例, 相当于 `new Color(red, green, blue, alpha?)`.
+
+```js
+colors.build(120, 60, 240).setAlpha(0.85).toHex(); // #D9783CF0
+colors.build(120, 60, 240, 0.85).toHex(); /* 同上. */
+colors.build().setRgba(120, 60, 240, 0.85).toHex(); /* 同上. */
+```
+
+## [m] digest
+
+### digest(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 颜色摘要
+
+获取颜色摘要.
+
+格式为 `hex($HEX), rgba($R,$G,$B/$A), int($INT)`.
+
+其中, `A (alpha)` 分量将显示为 `0..1` 范围, 至少一位小数, 至多两位小数:
+
+| 分量值  | 显示值  |
+|------|------|
+| 0    | 0.0  |
+| 1    | 1.0  |
+| 0.64 | 0.64 |
+| 128  | 0.5  |
+| 255  | 1.0  |
+| 100  | 0.39 |
+
+示例:
+
+```js
+// hex(#009688), rgba(0,150,136/1.0), int(-16738680)
+colors.digest('#009688');
+
+// hex(#BE009688), rgba(0,150,136/0.75), int(-1107257720)
+colors.digest('#BE009688');
+
+// hex(#FF0000), rgba(255,0,0/1.0), int(-65536)
+colors.digest('red');
+
+// hex(#6400008B), rgba(0,0,139/0.39), int(1677721739)
+colors.build('dark-blue').setAlpha(100).digest();
+```
+
 ## [m] parseColor
 
 ### parseColor(color)
 
 - **color** { [string](dataTypes#string) } - 颜色参数
-- <ins>**returns**</ins> { [number](dataTypes#number) } - 颜色整数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 颜色整数
 
 将颜色参数转换为 [颜色整数 (ColorInt)](dataTypes#colorint).
 
@@ -279,7 +362,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 **`6.2.0`** **`Overload 2/3`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **[alpha = 'auto']** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
+- **[ alpha = `'auto'` ]** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
 将颜色参数转换为 [颜色代码 (ColorHex)](dataTypes#colorhex), 并根据 `alpha` 参数决定颜色代码 `A (alpha)` 分量的显示状态.
@@ -317,11 +400,11 @@ colors.alpha('#05060708'); // 5
 
 ### alpha(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [max=255]?: `1` | `255` - 范围最大值
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
 
@@ -345,6 +428,8 @@ colors.alpha('#05060708'); /* 同上. */
 
 ### alphaDouble(color)
 
+**`6.3.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
@@ -359,6 +444,84 @@ colors.alphaDouble(colors.TRANSPARENT); // 0
 colors.alphaDouble('#05060708'); // 0.0196078431372549
 colors.alpha('#05060708', { max: 1 }); /* 同上. */
 ```
+
+## [m] getAlpha
+
+### getAlpha(color)
+
+**`6.3.0`** **`Overload 1/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `A (alpha)` 分量, 取值范围 `[0..255]`.
+
+[colors.alpha(color)](#m-alpha) 的别名方法.
+
+### getAlpha(color, options)
+
+**`6.3.0`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `A (alpha)` 分量.
+
+[colors.alpha(color, options)](#m-alpha) 的别名方法.
+
+## [m] getAlphaDouble
+
+### getAlphaDouble(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `A (alpha)` 分量, 取值范围 `[0..1]`.
+
+[colors.alphaDouble(color)](#m-alphadouble) 的别名方法.
+
+## [m] setAlpha
+
+### setAlpha(color, alpha)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+设置颜色的 `A (alpha)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.setAlpha('#663399', 0x80)); // #80663399
+colors.toHex(colors.setAlpha('#663399', 0.5)); /* 同上, 0.5 解析为百分数分量, 即 50%. */
+
+colors.toHex(colors.setAlpha('#663399', 255)); // #FF663399
+colors.toHex(colors.setAlpha('#663399', 1)); /* 同上, 1 默认作为百分数分量, 即 100%. */
+```
+
+## [m] removeAlpha
+
+### removeAlpha(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+去除颜色的 `A (alpha)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.removeAlpha('#BE663399')); // #663399
+colors.toHex(colors.removeAlpha('#CC5500')); // #CC5500
+````
+
+相当于 `colors.setAlpha(color, 0)`.
 
 ## [m] red
 
@@ -379,11 +542,11 @@ colors.red('#05060708'); // 6
 
 ### red(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [max=255]?: `1` | `255` - 范围最大值
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
 
@@ -403,6 +566,8 @@ colors.red('#663399'); /* 同上. */
 
 ### redDouble(color)
 
+**`6.3.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
@@ -413,6 +578,84 @@ colors.red('#663399'); /* 同上. */
 ```js
 colors.redDouble('#663399'); // 0.4
 ```
+
+## [m] getRed
+
+### getRed(color)
+
+**`6.3.0`** **`Overload 1/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `R (red)` 分量, 取值范围 `[0..255]`.
+
+[colors.red(color)](#m-red) 的别名方法.
+
+### getRed(color, options)
+
+**`6.3.0`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `R (red)` 分量.
+
+[colors.red(color, options)](#m-red) 的别名方法.
+
+## [m] getRedDouble
+
+### getRedDouble(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `R (red)` 分量, 取值范围 `[0..1]`.
+
+[colors.redDouble(color)](#m-reddouble) 的别名方法.
+
+## [m] setRed
+
+### setRed(color, red)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+设置颜色的 `R (red)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.setRed('#663399', 0x80)); // #803399
+colors.toHex(colors.setRed('#663399', 0.5)); /* 同上, 0.5 解析为百分数分量, 即 50%. */
+
+colors.toHex(colors.setRed('#663399', 255)); // #FF3399
+colors.toHex(colors.setRed('#663399', 1)); /* #013399, 不同上. 1 默认作为整数分量, 而非 100%. */
+```
+
+## [m] removeRed
+
+### removeRed(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+去除颜色的 `R (red)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.removeRed('#BE663399')); // #BE003399
+colors.toHex(colors.removeRed('#CC5500')); // #005500
+````
+
+相当于 `colors.setRed(color, 0)`.
 
 ## [m] green
 
@@ -433,11 +676,11 @@ colors.green('#05060708'); // 7
 
 ### green(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [max=255]?: `1` | `255` - 范围最大值
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
 
@@ -457,6 +700,8 @@ colors.green('#663399'); /* 同上. */
 
 ### greenDouble(color)
 
+**`6.3.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
@@ -467,6 +712,84 @@ colors.green('#663399'); /* 同上. */
 ```js
 colors.greenDouble('#663399'); // 0.2
 ```
+
+## [m] getGreen
+
+### getGreen(color)
+
+**`6.3.0`** **`Overload 1/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `G (green)` 分量, 取值范围 `[0..255]`.
+
+[colors.green(color)](#m-green) 的别名方法.
+
+### getGreen(color, options)
+
+**`6.3.0`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `G (green)` 分量.
+
+[colors.green(color, options)](#m-green) 的别名方法.
+
+## [m] getGreenDouble
+
+### getGreenDouble(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `G (green)` 分量, 取值范围 `[0..1]`.
+
+[colors.greenDouble(color)](#m-greendouble) 的别名方法.
+
+## [m] setGreen
+
+### setGreen(color, green)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+设置颜色的 `G (green)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.setGreen('#663399', 0x80)); // #668099
+colors.toHex(colors.setGreen('#663399', 0.5)); /* 同上, 0.5 解析为百分数分量, 即 50%. */
+
+colors.toHex(colors.setGreen('#663399', 255)); // #66FF99
+colors.toHex(colors.setGreen('#663399', 1)); /* #660199, 不同上. 1 默认作为整数分量, 而非 100%. */
+```
+
+## [m] removeGreen
+
+### removeGreen(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+去除颜色的 `G (green)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.removeGreen('#BE663399')); // #BE660099
+colors.toHex(colors.removeGreen('#CC5500')); // #CC0000
+````
+
+相当于 `colors.setGreen(color, 0)`.
 
 ## [m] blue
 
@@ -487,11 +810,11 @@ colors.blue('#05060708'); // 8
 
 ### blue(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [max=255]?: `1` | `255` - 范围最大值
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
 
@@ -511,6 +834,8 @@ colors.blue('#663399'); /* 同上. */
 
 ### blueDouble(color)
 
+**`6.3.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
@@ -521,6 +846,84 @@ colors.blue('#663399'); /* 同上. */
 ```js
 colors.blueDouble('#663399'); // 0.6
 ```
+
+## [m] getBlue
+
+### getBlue(color)
+
+**`6.3.0`** **`Overload 1/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `B (blue)` 分量, 取值范围 `[0..255]`.
+
+[colors.blue(color)](#m-blue) 的别名方法.
+
+### getBlue(color, options)
+
+**`6.3.0`** **`Overload 2/2`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **options** {{
+    - [ max = `255` ]?: `1` | `255` - 范围最大值
+- }} - 选项参数
+- <ins>**returns**</ins> { [IntRange[0..1]](dataTypes#intrange) | [IntRange[0..255]](dataTypes#intrange) }
+
+获取颜色的 `B (blue)` 分量.
+
+[colors.blue(color, options)](#m-blue) 的别名方法.
+
+## [m] getBlueDouble
+
+### getBlueDouble(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
+
+获取颜色的 `A (blue)` 分量, 取值范围 `[0..1]`.
+
+[colors.blueDouble(color)](#m-bluedouble) 的别名方法.
+
+## [m] setBlue
+
+### setBlue(color, blue)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+设置颜色的 `B (blue)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.setBlue('#663399', 0x80)); // #663380
+colors.toHex(colors.setBlue('#663399', 0.5)); /* 同上, 0.5 解析为百分数分量, 即 50%. */
+
+colors.toHex(colors.setBlue('#663399', 255)); // #6633FF
+colors.toHex(colors.setBlue('#663399', 1)); /* #663301, 不同上. 1 默认作为整数分量, 而非 100%. */
+```
+
+## [m] removeBlue
+
+### removeBlue(color)
+
+**`6.3.0`**
+
+- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+去除颜色的 `B (blue)` 分量, 返回新颜色的颜色整数.
+
+```js
+colors.toHex(colors.removeBlue('#BE663399')); // #BE663300
+colors.toHex(colors.removeBlue('#CC5500')); // #CC5500
+````
+
+相当于 `colors.setBlue(color, 0)`.
 
 ## [m] rgb
 
@@ -883,11 +1286,11 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 
 ### toRgba(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [maxAlpha=255]?: `1` | `255` - A (alpha) 分量的范围最大值
+    - [ maxAlpha = `255` ]?: `1` | `255` - A (alpha) 分量的范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
@@ -919,11 +1322,11 @@ console.log(`A: ${a}, R: ${r}, G: ${g}, B: ${b}`);
 
 ### toArgb(color, options)
 
-**`6.2.1`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/2`**
 
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [maxAlpha=255]?: `1` | `255` - A (alpha) 分量的范围最大值
+    - [ maxAlpha = `255` ]?: `1` | `255` - A (alpha) 分量的范围最大值
 - }} - 选项参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
@@ -1083,8 +1486,8 @@ console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
 
 - **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **[threshold=4]** { [IntRange[0..255]](dataTypes#intrange) } - [颜色匹配阈值](glossaries#颜色匹配阈值)
-- **[algorithm="diff"]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) } - 颜色检测算法
+- **[ threshold = `4` ]** { [IntRange[0..255]](dataTypes#intrange) } - [颜色匹配阈值](glossaries#颜色匹配阈值)
+- **[ algorithm = `'diff'` ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) } - 颜色检测算法
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 两个颜色是否相似
 
 判断两个颜色是否相似.
@@ -1115,9 +1518,9 @@ colors.isSimilar('orange', 'dark-orange', 8, 'hs'); // true
 - **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **options** {{
-    - [similarity≈0.9843]?: [Range[0..1]](dataTypes#range) - [颜色匹配相似度](glossaries#相似度)
-    - [threshold=4]?: [IntRange[0..255]](dataTypes#intrange) - [颜色匹配阈值](glossaries#颜色匹配阈值)
-    - [algorithm="diff"]?: [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) - 颜色检测算法
+    - [ similarity ≈ `0.9843` ]?: [Range[0..1]](dataTypes#range) - [颜色匹配相似度](glossaries#相似度)
+    - [ threshold = `4` ]?: [IntRange[0..255]](dataTypes#intrange) - [颜色匹配阈值](glossaries#颜色匹配阈值)
+    - [ algorithm = `'diff'` ]?: [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) - 颜色检测算法
 - }} - 选项参数
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 两个颜色是否相似
 
@@ -1137,7 +1540,7 @@ colors.isSimilar('#010101', '#020202', { similarity: 0.95 }); // true
 
 - **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **[alphaMatters=false]** { [boolean](dataTypes#boolean) } - 是否考虑 `A (alpha)` 分量
+- **[ alphaMatters = `false` ]** { [boolean](dataTypes#boolean) } - 是否考虑 `A (alpha)` 分量
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 两个颜色是否相等
 
 判断两个颜色是否相等, 比较时由 `alphaMatters` 参数决定是否考虑 `A (alpha)` 分量:
@@ -1201,6 +1604,8 @@ colors.equals('#FF0000', '#F00'); /* 抛出异常. */
 
 ### luminance(color)
 
+**`6.2.0`**
+
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) } - 颜色亮度
 
@@ -1221,6 +1626,8 @@ colors.luminance(colors.YELLOW); // 0.9278
 
 ### toColorStateList(...color)
 
+**`6.2.0`**
+
 - **color** { [...](documentation#可变参数)([ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname))[[]](documentation#可变参数) } - 颜色参数
 - <ins>**returns**</ins> { [android.content.res.ColorStateList](https://developer.android.com/reference/android/content/res/ColorStateList) }
 
@@ -1234,6 +1641,8 @@ colors.toColorStateList('red', 'green', 'orange'); /* 包含多个颜色的 Colo
 ## [m] setPaintColor
 
 ### setPaintColor(paint, color)
+
+**`6.2.0`**
 
 - **paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔参数
 - **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
@@ -1305,179 +1714,187 @@ function setPaintColor(paint, color) {
 
 ## [p+] android
 
+**`6.2.0`**
+
 [Android 颜色列表](colorTable#Android-颜色列表) 对象.
 
 ## [p+] css
+
+**`6.2.0`**
 
 [Css 颜色列表](colorTable#CSS-颜色列表) 对象.
 
 ## [p+] web
 
+**`6.2.0`**
+
 [Web 颜色列表](colorTable#WEB-颜色列表) 对象.
 
 ## [p+] material
+
+**`6.2.0`**
 
 [Material 颜色列表](colorTable#Material-颜色列表) 对象.
 
 ## [p] BLACK
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #000000">　</span> 黑 (`#000000` `rgb(0,0,0`) 的颜色整数.
+<span style="color: #000000">◑</span> 黑 (`#000000` `rgb(0,0,0`) 的颜色整数.
 
 ## [p] BLUE
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #0000FF">　</span> 蓝 (`#0000FF` `rgb(0,0,255`) 的颜色整数.
+<span style="color: #0000FF">◑</span> 蓝 (`#0000FF` `rgb(0,0,255`) 的颜色整数.
 
 ## [p] CYAN
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #00FFFF">　</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
+<span style="color: #00FFFF">◑</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
 
 ## [p] AQUA
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #00FFFF">　</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
+<span style="color: #00FFFF">◑</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
 
 ## [p] DARK_GRAY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #444444">　</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
+<span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
 ## [p] DARK_GREY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #444444">　</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
+<span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
 ## [p] DKGRAY
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #444444">　</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
+<span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
 ## [p] GRAY
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #888888">　</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
+<span style="color: #888888">◑</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
 
 ## [p] GREY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #888888">　</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
+<span style="color: #888888">◑</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
 
 ## [p] GREEN
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #00FF00">　</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
+<span style="color: #00FF00">◑</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
 
 ## [p] LIME
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #00FF00">　</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
+<span style="color: #00FF00">◑</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
 
 ## [p] LIGHT_GRAY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #CCCCCC">　</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
+<span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
 ## [p] LIGHT_GREY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #CCCCCC">　</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
+<span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
 ## [p] LTGRAY
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #CCCCCC">　</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
+<span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
 ## [p] MAGENTA
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #FF00FF">　</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
+<span style="color: #FF00FF">◑</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
 
 ## [p] FUCHSIA
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #FF00FF">　</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
+<span style="color: #FF00FF">◑</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
 
 ## [p] MAROON
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #800000">　</span> 栗 (`#800000` `rgb(128,0,0`) 的颜色整数.
+<span style="color: #800000">◑</span> 栗 (`#800000` `rgb(128,0,0`) 的颜色整数.
 
 ## [p] NAVY
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #000080">　</span> 海军蓝 / 藏青 (`#000080` `rgb(0,0,128`) 的颜色整数.
+<span style="color: #000080">◑</span> 海军蓝 / 藏青 (`#000080` `rgb(0,0,128`) 的颜色整数.
 
 ## [p] OLIVE
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #808000">　</span> 橄榄 (`#808000` `rgb(128,128,0`) 的颜色整数.
+<span style="color: #808000">◑</span> 橄榄 (`#808000` `rgb(128,128,0`) 的颜色整数.
 
 ## [p] PURPLE
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #800080">　</span> 紫 (`#800080` `rgb(128,0,128`) 的颜色整数.
+<span style="color: #800080">◑</span> 紫 (`#800080` `rgb(128,0,128`) 的颜色整数.
 
 ## [p] RED
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #FF0000">　</span> 红 (`#FF0000` `rgb(255,0,0`) 的颜色整数.
+<span style="color: #FF0000">◑</span> 红 (`#FF0000` `rgb(255,0,0`) 的颜色整数.
 
 ## [p] SILVER
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #C0C0C0">　</span> 银 (`#C0C0C0` `rgb(192,192,192`) 的颜色整数.
+<span style="color: #C0C0C0">◑</span> 银 (`#C0C0C0` `rgb(192,192,192`) 的颜色整数.
 
 ## [p] TEAL
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #008080">　</span> 鸭绿 / 凫绿 (`#008080` `rgb(0,128,128`) 的颜色整数.
+<span style="color: #008080">◑</span> 鸭绿 / 凫绿 (`#008080` `rgb(0,128,128`) 的颜色整数.
 
 ## [p] WHITE
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #FFFFFF">　</span> 白 (`#FFFFFF` `rgb(255,255,255`) 的颜色整数.
+<span style="color: #FFFFFF">◑</span> 白 (`#FFFFFF` `rgb(255,255,255`) 的颜色整数.
 
 ## [p] YELLOW
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
-<span style="background-color: #FFFF00">　</span> 黄 (`#FFFF00` `rgb(255,255,0)`) 的颜色整数.
+<span style="color: #FFFF00">◑</span> 黄 (`#FFFF00` `rgb(255,255,0)`) 的颜色整数.
 
 ## [p] ORANGE
 
 **`6.2.0`** **`CONSTANT`**
 
-<span style="background-color: #FFA500">　</span> 橙 (`#FFA500` `rgb(255,165,0)`) 的颜色整数.
+<span style="color: #FFA500">◑</span> 橙 (`#FFA500` `rgb(255,165,0)`) 的颜色整数.
 
 ## [p] TRANSPARENT
 
-**`6.2.0`** **`CONSTANT`**
+**`CONSTANT`**
 
 全透明 (`#00000000` `argb(0, 0, 0, 0)`) 的颜色整数.
 

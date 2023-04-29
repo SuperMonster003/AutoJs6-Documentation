@@ -12,6 +12,8 @@
 
 > 注: 此章节的类型概念 与 JavaScript 数据类型 (如 [基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive/)) 以及 TypeScript 数据类型 (如 [基础类型](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)) 在概念上可能存在出入, 因此仅适用于对文档内容的辅助理解, 不适用于严格的概念参考.
 
+---
+
 ## Boolean
 
 布尔类型.
@@ -725,7 +727,7 @@ activity.setContentView(web.newInjectableWebView('www.github.com'));
 activity.getWindow().getDecorView().getRootView().getHeight();
 ```
 
-因 ScriptExecuteActivity 继承了 android.app.Activity 等非常多的 Java 类, 因此 activity 获得了非常丰富的属性和方法, 详情参阅 [Android Docs](https://developer.android.com/reference/android/app/Activity) 及 [AutoJs6 源码](https://github.com/SuperMonster003/AutoJs6/blob/10960ddbee71f75ef80907ad5b6ab42f3e1bf31e/app/src/main/java/org/autojs/autojs/execution/ScriptExecuteActivity.java#L30).
+因 ScriptExecuteActivity 继承了 android.app.Activity 等非常多的 Java 类, 因此 activity 获得了非常丰富的属性和方法, 详情参阅 [Android Docs](https://developer.android.com/reference/android/app/Activity) 及 [AutoJs6 源码](http://project.autojs6.com/blob/10960ddbee71f75ef80907ad5b6ab42f3e1bf31e/app/src/main/java/org/autojs/autojs/execution/ScriptExecuteActivity.java#L30).
 
 ## DetectCompass
 
@@ -946,11 +948,11 @@ detect(w, [ 'setSelection', 2, 3 ]); /* i.e. w.setSelection(2, 3) */
 
 Root 模式, 枚举类型, 已全局化.
 
-| 枚举实例名          | 描述           | JavaScript 代表参数        |
-|----------------|--------------|------------------------|
-| AUTO_DETECT    | 自动检测 Root 权限 | 'auto' / -1            |
-| FORCE_ROOT     | 强制 Root 模式   | 'root' / 1 / true      |
-| FORCE_NON_ROOT | 强制非 Root 模式  | 'non-root' / 0 / false |
+| 枚举实例名          | 描述                                                   | <span style="white-space:nowrap">JavaScript 代表参数</span>        |
+|----------------|------------------------------------------------------|----------------------------------------------------------------|
+| AUTO_DETECT    | <span style="white-space:nowrap">自动检测 Root 权限</span> | '<span style="white-space:nowrap">auto' / -1</span>            |
+| FORCE_ROOT     | <span style="white-space:nowrap">强制 Root 模式</span>   | <span style="white-space:nowrap"> 'root' / 1 / true</span>     |
+| FORCE_NON_ROOT | <span style="white-space:nowrap">强制非 Root 模式</span>  | <span style="white-space:nowrap">'non-root' / 0 / false</span> |
 
 检测 Root 模式:
 
@@ -1244,7 +1246,7 @@ let [ r, g, b ] = components;
 console.log(`R: ${r}, G: ${g}, B: ${b}`);
 ```
 
-colors 全局对象的很多 `"to"` 开头的方法都可返回颜色分量数组, 如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
+colors 全局对象的很多 "to" 开头的方法都可返回颜色分量数组, 如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
 
 需额外注意 [toRgba](color#m-torgba) 和 [toArgb](color#m-toargb) 结果中的 `A (alpha)` 分量, 默认范围为 `0-255`, 而其他方法则恒为 `0-1`:
 
@@ -1279,8 +1281,10 @@ AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参�
 计算两个 RGB 颜色各分量的差值:
 
 <picture>
-  <source srcset="images/rgb-difference-color-detection-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="images/rgb-difference-color-detection.png" alt="rgb-difference-color-detection">
+  <source srcset="images/rgb-difference-color-detection-dark.png" media="(prefers-color-scheme: dark) and (max-width: 1024px)" width="430px">
+    <source srcset="images/rgb-difference-color-detection-dark.png" media="(prefers-color-scheme: dark) and (min-width: 1024px)" width="215px">
+    <source srcset="images/rgb-difference-color-detection.png" media="(min-width: 1024px)" width="215px">
+    <img src="images/rgb-difference-color-detection.png" alt="rgb-difference-color-detection" width="430">
 </picture>
 
 ### RGB 距离检测
@@ -1290,8 +1294,10 @@ AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参�
 计算 RGB 色彩空间中两点间距离:
 
 <picture>
-  <source srcset="images/rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="images/rgb-distance-color-detection.png" alt="rgb-distance-color-detection">
+  <source srcset="images/rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (max-width: 1024px)" width="508px">
+    <source srcset="images/rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (min-width: 1024px)" width="254px">
+    <source srcset="images/rgb-distance-color-detection.png" media="(min-width: 1024px)" width="254px">
+    <img src="images/rgb-distance-color-detection.png" alt="rgb-distance-color-detection" width="508">
 </picture>
 
 ### 加权 RGB 距离检测
@@ -1301,8 +1307,10 @@ AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参�
 带有权重的 RGB 距离检测 (Delta E):
 
 <picture>
-  <source srcset="images/weighted-rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="images/weighted-rgb-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+  <source srcset="images/weighted-rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (max-width: 1024px)" width="1070px">
+    <source srcset="images/weighted-rgb-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (min-width: 1024px)" width="535px">
+    <source srcset="images/weighted-rgb-distance-color-detection.png" media="(min-width: 1024px)" width="535px">
+    <img src="images/weighted-rgb-distance-color-detection.png" alt="weighted-rgb-distance-color-detection" width="1070">
 </picture>
 
 > 参阅:   
@@ -1316,8 +1324,10 @@ AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参�
 HSV 色彩空间中 `H (hue)` 分量的距离检测:
 
 <picture>
-  <source srcset="images/h-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="images/h-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+  <source srcset="images/h-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (max-width: 1024px)" width="821px">
+    <source srcset="images/h-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (min-width: 1024px)" width="411px">
+    <source srcset="images/h-distance-color-detection.png" media="(min-width: 1024px)" width="411px">
+    <img src="images/h-distance-color-detection.png" alt="h-distance-color-detection" width="821">
 </picture>
 
 ### HS 距离检测
@@ -1327,8 +1337,10 @@ HSV 色彩空间中 `H (hue)` 分量的距离检测:
 HSV 色彩空间中 `H (hue)` 及 `S (saturation)` 的相关距离检测:
 
 <picture>
-  <source srcset="images/hs-distance-color-detection-dark.png" media="(prefers-color-scheme: dark)">
-  <img src="images/hs-distance-color-detection.png" alt="weighted-rgb-distance-color-detection">
+  <source srcset="images/hs-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (max-width: 1024px)" width="695px">
+    <source srcset="images/hs-distance-color-detection-dark.png" media="(prefers-color-scheme: dark) and (min-width: 1024px)" width="348px">
+    <source srcset="images/hs-distance-color-detection.png" media="(min-width: 1024px)" width="348px">
+    <img src="images/hs-distance-color-detection.png" alt="hs-distance-color-detection" width="695">
 </picture>
 
 ## Range
@@ -1369,7 +1381,7 @@ StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形�
 | UTF_16LE   | "UTF_16LE" / "utf-16le"     |                  [英](https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes)                   |
 
 Charset 类可由 StandardCharsets 的静态常量获取, 如 `StandardCharsets.UTF_8`.  
-字符串表示 StandardCharset 类型时, 支持与上述静态常量同名的大写形式, 如 `"UTF_8"`, 以及带连字符的小写形式, 如 `"utf-8"`.
+字符串表示 StandardCharset 类型时, 支持与上述静态常量同名的大写形式, 如 `'UTF_8'`, 以及带连字符的小写形式, 如 `'utf-8'`.
 
 Typescript declaration (TS 声明):
 
@@ -1405,9 +1417,9 @@ AutoJs6 [内置扩展插件](plugins#内置扩展插件) 的插件名称.
 
 支持的字符串常量:
 
-- `"Arrayx"`" 或 `"Array"`
-- `"Numberx"`" 或 `"Number"`
-- `"Mathx"`" 或 `"Math"`
+- `'Arrayx'`' 或 `'Array'`
+- `'Numberx'`' 或 `'Number'`
+- `'Mathx'`' 或 `'Math'`
 
 ```js
 /* 启用 Array 内置扩展插件. */
@@ -1461,195 +1473,6 @@ app.sendBroadcast('hierarchy'); /* 同上. */
 - 布局范围分析 - `inspect_layout_bounds` / `bounds`
 - 布局层次分析 - `inspect_layout_hierarchy` / `hierarchy`
 
-## NoticeBuilder
-
-//// -=-= PENDING =-=- ////
-
-androidx.core.app.NotificationCompat.Builder
-
-ref: https://developer.android.com/reference/android/app/Notification.Builder
- 
-### setAutoCancel
-
-Make this notification automatically dismissed when the user touches it.
-
-### setChannelId
-
-Specifies the channel the notification should be delivered on.
-
-### setChronometerCountDown
-
-Sets the Chronometer to count down instead of counting up.
-This is only relevant if setUsesChronometer(boolean) has been set to true. If it isn't set the chronometer will count up.
-
-### setColor
-
-Sets Notification#color.
-
-### setContentIntent
-
-Supply a PendingIntent to be sent when the notification is clicked.
-
-### setContentText
-
-Set the second line of text in the platform notification template.
-
-### setContentTitle
-
-Set the first line of text in the platform notification template.
-
-### setOnGoing
-
-Set whether this is an "ongoing" notification. Ongoing notifications cannot be dismissed by the user on locked devices, or by notification listeners, and some notifications cannnot be dismissed on unlocked devices (system, device management, media), so your application or service must take care of canceling them. They are typically used to indicate a background task that the user is actively engaged with (e.g., playing music) or is pending in some way and therefore occupying the device (e.g., a file download, sync operation, active network connection).
-to cancel: NotificationManager.cancel(id) / Notification.Builder.setAutoCancel(true)
-
-### setProgress
-
-Set the progress this notification represents. The platform template will represent this using a ProgressBar.
-
-### setSmallIcon
-
-Set the small icon, which will be used to represent the notification in the status bar and content view
-
-### setStyle
-
-Add a rich notification style to be applied at build time.
-
-### setTimeoutAfter
-
-Specifies a duration in milliseconds after which this notification should be canceled, if it is not already canceled.
-
-### setUsesChronometer
-
-Show the Notification#when field as a stopwatch. Instead of presenting when as a timestamp, the notification will show an automatically updating display of the minutes and seconds since when. Useful when showing an elapsed time (like an ongoing phone call). The counter can also be set to count down to when when using setChronometerCountDown(boolean).
-
-### setWhen
-
-Add a timestamp pertaining to the notification (usually the time the event occurred). For apps targeting Build.VERSION_CODES.N and above, this time is not shown anymore by default and must be opted into by using setShowWhen(boolean)
-
-### setShowWhen
-
-Control whether the timestamp set with setWhen is shown in the content view. For apps targeting Build.VERSION_CODES.N and above, this defaults to false. For earlier apps, the default is true.
-
-## NoticeOptions
-
-//// -=-= PENDING =-=- ////
-
-    channelId?: Notice.Options.Id | null;
-    /**
-     * Will override argument title if specified.
-     *
-     * @default string of R.string.default_script_notification_title (only when both title and content are null)
-     */
-    title?: string | null;
-    /**
-     * Will override argument content if specified.
-     *
-     * @default string of R.string.default_script_notification_content (only when both title and content are null)
-     */
-    content?: string | null;
-    /**
-     * @default null
-     */
-    bigContent?: string | null;
-    /**
-     * @default false
-     */
-    appendScriptName?: Options.AppendScriptName;
-    /**
-     * @default null
-     */
-    intent?: Intent.Common | Intent | Intent.ShortForm.Activity | Intent.URI.Any | null;
-    /**
-     * @default varies by (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
-     */
-    notificationId?: number;
-    /**
-     * @default false
-     */
-    autoCancel?: boolean;
-    /**
-     * @default false
-     */
-    isSilent?: boolean;
-    /**
-     * @default NotificationCompat.PRIORITY_HIGH (1)
-     */
-    priority?: Options.Priority;
-
-## NoticeChannelOptions
-
-//// -=-= PENDING =-=- ////
-
-    id?: string | number;
-    /**
-     * @default string of R.string.default_script_notification_channel_name
-     */
-    name?: string;
-    /**
-     * @default string of R.string.default_script_notification_channel_description
-     */
-    description?: string;
-    /**
-     * Property importance only takes effect when create a channel at the first time.
-     *
-     * @default NotificationManager.IMPORTANCE_HIGH (4)
-     */
-    importance?: Options.Importance;
-    enableVibration?: boolean;
-    vibrationPattern?: number[] | string;
-    enableLights?: boolean;
-    lightColor?: Colors.ColorHex | Colors.ColorInt | Colors.ColorName;
-    lockscreenVisibility?: Options.LockscreenVisibility;
-
-## NoticePresetConfiguration
-
-//// -=-= PENDING =-=- ////
-
-    useScriptNameAsDefaultChannelId: boolean;
-    useDynamicDefaultNotificationId: boolean;
-    enableChannelInvalidModificationWarnings: boolean;
-
-    defaultTitle: string;
-    defaultContent: string;
-    defaultBigContent: string;
-    defaultAppendScriptName: Options.AppendScriptName;
-    defaultAutoCancel: boolean,
-    defaultIsSilent: boolean,
-    defaultPriority: Options.Priority;
-
-    defaultChannelName: string;
-    defaultChannelDescription: string;
-
-    /**
-     * @default NotificationManager.IMPORTANCE_HIGH (4)
-     */
-    defaultImportanceForChannel: Channel.Options.Importance;
-    defaultEnableVibrationForChannel: boolean;
-    defaultVibrationPatternForChannel: number[];
-    defaultEnableLightsForChannel: boolean;
-    defaultLightColorForChannel: Colors.ColorHex | Colors.ColorInt | Colors.ColorName;
-    /**
-     * @default Notification.VISIBILITY_PUBLIC (1)
-     */
-    defaultLockscreenVisibilityForChannel: Channel.Options.LockscreenVisibility;
-
-## OcrOptions
-
-OcrOptions 是一个代表 OCR 识别选项的接口.
-
----
-
-<p style="font: bold 2em sans-serif; color: #FF7043">OcrOptions</p>
-
----
-
-## [p?] region
-
-- { [number](dataTypes#number)[[]](dataTypes#array) | [AndroidRect](androidRectType) | [OpencvRect](opencvRectType) }
-
-指定 OCR 识别的区域.
-
 ## OcrResult
 
 OcrResult 是一个代表 OCR 识别结果的接口.
@@ -1660,7 +1483,7 @@ OcrResult 是一个代表 OCR 识别结果的接口.
 
 ---
 
-## [p?] label
+### [p] label
 
 - { [string](dataTypes#string) }
 
@@ -1673,7 +1496,7 @@ let results = ocr.detect(img);
 results.map(o => o.label); /* 将识别结果全部映射为标签 (文本). */
 ```
 
-## [p?] confidence
+### [p] confidence
 
 - { [string](dataTypes#string) }
 
@@ -1686,7 +1509,7 @@ let results = ocr.detect(img);
 results.filter(o => o.confidence > 0.9); /* 筛选置信度高于 0.9 的结果. */
 ```
 
-## [p?] bounds
+### [p] bounds
 
 - { [AndroidRect](androidRectType) }
 
@@ -1703,9 +1526,9 @@ if (!isNullish(clickToStart)) {
 }
 ```
 
-## [m?] toString
+### [m] toString
 
-### toString()
+#### toString()
 
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
@@ -1716,6 +1539,29 @@ OcrResult@46a77f4{label=19:43:52, confidence=0.9165039, bounds=Rect(14, 15 - 121
 OcrResult@9fed472{label=Service, confidence=0.88002235, bounds=Rect(30, 76 - 106, 97)}
 OcrResult@59cab38{label=Tools, confidence=0.8421875, bounds=Rect(30, 324 - 88, 345)}
 ```
+
+## ThemeColor
+
+AutoJs6 内置类 `org.autojs.autojs.theme.ThemeColor` 的别名.
+
+ThemeColor 表示一个主题颜色.
+
+常见可以返回此类型的方法或属性:
+
+- [autojs.themeColor](autojs#p-themecolor)
+
+常见参数中使用此类型的方法:
+
+- [Color](colorType)(**themeColor**)
+
+当 ThemeColor 作为 [OmniColor](omniTypes#omnicolor) 使用时, 将使用其 "主色" 作为色值:
+
+```js
+let themeColor = autojs.themeColor;
+Color(themeColor).toInt() === Color(themeColor.getColorPrimary()).toInt(); // true
+```
+
+### 
 
 ## InjectableWebView
 

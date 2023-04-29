@@ -1,8 +1,8 @@
-![logo](images/logo.png)
+<img src="images/logo.png" width="136" height="136" alt="logo"/>
 
-# [AutoJs6](https://github.com/SuperMonster003/AutoJs6)
+# [AutoJs6](http://project.autojs6.com)
 
 安卓平台 JavaScript 自动化工具
 
-[下载应用](https://github.com/SuperMonster003/AutoJs6/releases/)
+[下载应用](http://download.autojs6.com)
 [阅读文档](/overview)

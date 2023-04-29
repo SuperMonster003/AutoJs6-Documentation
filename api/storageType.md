@@ -24,7 +24,7 @@ sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 
 ### put(key, value)
 
-**`[6.2.1]`**
+**`[6.3.0]`**
 
 - **key** { [string](dataTypes#string) } - 待存入键名
 - **value** { [AnyBut](dataTypes#anybut)[<](dataTypes#generic)[undefined](dataTypes#undefined), [bigint](glossaries#bigint)[>](dataTypes#generic) } - 待存入数据
@@ -68,7 +68,7 @@ sto.put('a', 1).put('b', 2).put('c', 3).put('d', 4);
 **`Overload [1-2]/2`**
 
 - **key** { [string](dataTypes#string) } - 数据的键名
-- **[defaultValue]** { [any](dataTypes#any) } - 数据默认值
+- **[ defaultValue ]** { [any](dataTypes#any) } - 数据默认值
 - <ins>**returns**</ins> { [any](dataTypes#any) }
 
 读取本地存储中键值与 `key` 参数对应的数据.

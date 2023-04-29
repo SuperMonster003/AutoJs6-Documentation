@@ -21,7 +21,7 @@ let request = new okhttp3.Request.Builder()
 console.log(request);
 ```
 
-常见属性或可以返回此类型的方法:
+常见可以返回此类型的方法或属性:
 
 - [httpResponseType#request](httpResponseType#p-request)
 - [okhttp3.Request.Builder#build](https://square.github.io/okhttp/3.x/okhttp/okhttp3/Request.Builder.html#build--)

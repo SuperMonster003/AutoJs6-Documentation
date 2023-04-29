@@ -1,0 +1,42 @@
+{
+  "source": "..\\api\\notificationChannelGlossary.md",
+  "modules": [
+    {
+      "textRaw": "Notification Channel (通知渠道)",
+      "name": "notification_channel_(通知渠道)",
+      "desc": "<p>通知渠道 (Notification Channel) 用于分类管理通知.</p>\n<p>从 <code>Android API 26 (8.0) [O]</code> 起, 必须为所有通知分配渠道, 否则通知将不会显示.</p>\n<p>通过将通知归类到不同渠道中, 用户可以管理 AutoJs6 的特定通知渠道, 控制每个渠道的选项和行为.</p>\n<p>例如设置两个渠道, 水果和天气. 水果渠道用于发送与水果销量变化相关的通知, 天气渠道用于发送气象数据变化相关的通知.</p>\n<p>不同渠道的通知可分别定制, 如是否弹出通知, 是否振动, 通知指示灯开关及颜色, 是否静音等. 渠道之间的设置是互相独立的.</p>\n<blockquote>\n<p>注: 在安卓 7.x 系统上, 用户只能简单地启动或禁用所有 AutoJs6 的通知, 无法按渠道管理通知.</p>\n</blockquote>\n",
+      "modules": [
+        {
+          "textRaw": "创建渠道",
+          "name": "创建渠道",
+          "desc": "<p>如需创建通知渠道, 可使用 <a href=\"notice#m-create\">notice.channel.create</a> 方法.</p>\n<blockquote>\n<p>注: 渠道的大致创建过程, 是构建一个具有唯一渠道 ID且用户可见名称和重要性级别的 NotificationChannel 对象, 然后通过 createNotificationChannel 注册这个通知渠道.</p>\n</blockquote>\n<p>通常, 每种不同类型的通知, 均建议创建各自的渠道. 创建时, 可自定义渠道的默认通知行为, 如指示灯颜色及是否振动等.</p>\n<p>需额外留意, 渠道创建后, 将无法通过代码更改这些设置 (除名称, 描述, 和受条件限制的优先级之外), 对于渠道的设置, 用户拥有最终控制权.</p>\n",
+          "type": "module",
+          "displayName": "创建渠道"
+        },
+        {
+          "textRaw": "渠道重要性",
+          "name": "渠道重要性",
+          "desc": "<p>渠道重要性会影响渠道中通知的干扰级别, 从 IMPORTANCE_NONE(0) 到 IMPORTANCE_HIGH(4) 的五个重要性级别分别对应不同程度的 &quot;通知强度&quot;.</p>\n<p>&quot;通知强度&quot; 越高, 通知的干扰性越大, 如级别 4 可能会在屏幕上弹出通知, 通常还会发出声音并使手机振动; 而级别 0 则安静地在通知栏创建通知, 甚至不会使用户有任何察觉.</p>\n",
+          "type": "module",
+          "displayName": "渠道重要性"
+        },
+        {
+          "textRaw": "渠道权限",
+          "name": "渠道权限",
+          "desc": "<p>创建通知渠道后, 无法使用代码更改通知行为 (除名称, 描述, 和受条件限制的优先级之外), 此时用户拥有完全控制权, 如修改渠道的振动和提醒提示音等行为.</p>\n<p>使用代码可以获取用户对渠道所应用的设置:</p>\n<pre><code class=\"lang-js\">let channel = notice.channel.get(&#39;my_channel_id&#39;); /* 获取渠道对象. */\n\nchannel.getImportance(); /* 获取重要性级别. */\nchannel.getLightColor(); /* 获取指示灯颜色. */\nchannel.getVibrationPattern(); /* 获取振动模式. */\nchannel.getSound(); /* 获取提示音. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "渠道权限"
+        },
+        {
+          "textRaw": "删除渠道",
+          "name": "删除渠道",
+          "desc": "<p>可通过 <a href=\"notice#m-remove\">notice.channel.remove</a> 删除通知渠道.</p>\n<p>删除渠道后, 如果重新创建相同 ID 的渠道, 将重新恢复之前被删除的渠道 (反删除), 且附带之前渠道的所有配置.</p>\n<p>这样的设计是防止应用通过代码的方式恶意篡改用户对通知渠道的配置.</p>\n<p>如需完全清除某个或某些渠道 (通常出于测试目的而创建的), 可重新安装应用或清除应用数据.</p>\n",
+          "type": "module",
+          "displayName": "删除渠道"
+        }
+      ],
+      "type": "module",
+      "displayName": "Notification Channel (通知渠道)"
+    }
+  ]
+}

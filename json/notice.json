@@ -4,24 +4,24 @@
     {
       "textRaw": "消息通知 (Notice)",
       "name": "消息通知_(notice)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 21, 2023.</p>\n\n<hr>\n<p>notice 模块用于创建并显示消息通知.</p>\n<p>位于通知栏的消息, 可用于 [ 消息提醒 / 信息通信 / 执行操作 ] 等.</p>\n<blockquote>\n<p>注: 不同安卓系统的通知表现可能存在较大差异, 与文档描述也可能存在出入.</p>\n</blockquote>\n",
+      "desc": "<p>notice 模块用于创建并显示消息通知.</p>\n<p>位于通知栏的消息, 可用于 [ 消息提醒 / 信息通信 / 执行操作 ] 等.</p>\n<blockquote>\n<p>注: 不同安卓系统的通知表现可能存在较大差异, 与文档描述也可能存在出入.</p>\n</blockquote>\n",
       "modules": [
         {
           "textRaw": "简单操作",
           "name": "简单操作",
-          "desc": "<p>显示一条通知:</p>\n<pre><code class=\"lang-js\">/* 内容为 hello (标题为空). */\nnotice(&#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice(&#39;new message&#39;, &#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice({ title: &#39;new message&#39;, content: &#39;hello&#39; });\n\n/* 标题为 new message, 内容为 hello. */\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;new message&#39;)\n    .setContentText(&#39;hello&#39;));\n</code></pre>\n<p>显示两条独立的通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\nnotice(&#39;world&#39;);\n</code></pre>\n<p>显示两条可覆盖的通知:</p>\n<pre><code class=\"lang-js\">/* 方法 A: 通过指定相同的通知 ID 实现通知覆盖. */\n\nlet id = 5; /* 任意 ID 均可, 用于区分不同的通知. */\n\nnotice(&#39;hello&#39;, { notificationId: id }); /* 指定一个通知 ID. */\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;, { notificationId: id }); /* 通知 ID 相同, 因此 1 秒后上一条通知被替代 (覆盖). */\n\n/* 方法 B: 通过 notice.config 配置 notice 的默认选项. */\n\nnotice.config({ useDynamicDefaultNotificationId: false }); /* 禁用动态通知 ID 选项. */\nnotice(&#39;hello&#39;);\nnotice(&#39;world&#39;); /* 1 秒后上一条通知被替代 (覆盖). */\n</code></pre>\n<p>显示一条定制通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n\n/* 更多配置选项, 可参阅本章节后续内容. */\n</code></pre>\n",
+          "desc": "<p>显示一条通知:</p>\n<pre><code class=\"lang-js\">/* 内容为 hello (标题为空). */\nnotice(&#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice(&#39;new message&#39;, &#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice({ title: &#39;new message&#39;, content: &#39;hello&#39; });\n\n/* 标题为 new message, 内容为 hello. */\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;new message&#39;)\n    .setContentText(&#39;hello&#39;));\n</code></pre>\n<p>显示两条独立的通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\nnotice(&#39;world&#39;);\n</code></pre>\n<p>显示两条可覆盖的通知:</p>\n<pre><code class=\"lang-js\">/* 方法 A: 通过指定相同的通知 ID 实现通知覆盖. */\n\nlet id = 5; /* 任意 ID 均可, 用于区分不同的通知. */\n\nnotice(&#39;hello&#39;, { notificationId: id }); /* 指定一个通知 ID. */\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;, { notificationId: id }); /* 通知 ID 相同, 因此 1 秒后上一条通知被替代 (覆盖). */\n\n/* 方法 B: 通过 notice.config 配置 notice 的默认选项. */\n\nnotice.config({ useDynamicDefaultNotificationId: false }); /* 禁用动态通知 ID 选项. */\nnotice(&#39;hello&#39;);\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;); /* 1 秒后上一条通知被替代 (覆盖). */\n</code></pre>\n<p>显示一条定制通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n\n/* 更多配置选项, 可参阅本章节后续内容. */\n</code></pre>\n<p>如果需要发送多条上述定制通知, 可将上述定制选项提取出来:</p>\n<pre><code class=\"lang-js\">/* 定义一个定制通知选项变量. */\nlet options = {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n};\n\n/* 以上述定制选项发送三条通知. */\n\nnotice(&#39;hello&#39;, options);\nnotice(&#39;world&#39;, options);\nnotice(&#39;tour&#39;, options);\n</code></pre>\n<p>上述示例指定通知 ID 可实现通知覆盖:</p>\n<pre><code class=\"lang-js\">/* 指定一个通知 ID 为固定值. */\noptions.notificationId = 20;\n\n/* 以上述定制选项发送三条可覆盖的通知. */\n\nnotice(&#39;hello&#39;, options);\nsleep(1e3);\nnotice(&#39;world&#39;, options); /* 1 秒后覆盖 &#39;hello&#39;. */\nsleep(1e3);\nnotice(&#39;tour&#39;, options); /* 1 秒后覆盖 &#39;world&#39;. */\n\n/* options 可随时进行定制修改. */\n\ndelete options.bigContent; /* 删除长内容. */\nsleep(1e3);\nnotice(&#39;movie&#39;, options); /* 1 秒后覆盖 &#39;tour&#39; */\n\noptions.intent = &#39;home&#39;; /* 修改 intent 属性. */\nsleep(1e3);\nnotice(&#39;here&#39;, options); /* 1 秒后覆盖 &#39;movie&#39; */\n</code></pre>\n",
           "type": "module",
           "displayName": "简单操作"
         },
         {
           "textRaw": "通知渠道",
           "name": "通知渠道",
-          "desc": "<p><code>通知渠道 (Notification Channel)</code> 用于分类管理通知.</p>\n<p>例如设置两个渠道, 水果和天气. 水果渠道用于发送与水果销量变化相关的通知, 天气渠道用于发送气象数据变化相关的通知.</p>\n<p>不同渠道的通知可分别定制, 如是否弹出通知, 是否振动, 通知指示灯开关及颜色, 是否静音等. 渠道之间的设置是互相独立的.</p>\n<blockquote>\n<p>更多通知渠道的内容, 参阅 <a href=\"glossaries.md#通知渠道\">通知渠道</a> 术语章节.</p>\n</blockquote>\n<blockquote>\n<p>notice 模块的渠道相关方法, 参阅 <a href=\"#p-channel\">notice.channel</a> 小节.</p>\n</blockquote>\n",
+          "desc": "<p><code>通知渠道 (Notification Channel)</code> 用于分类管理通知.</p>\n<p>例如设置两个渠道, 水果和天气. 水果渠道用于发送与水果销量变化相关的通知, 天气渠道用于发送气象数据变化相关的通知.</p>\n<p>不同渠道的通知可分别定制, 如是否弹出通知, 是否振动, 通知指示灯开关及颜色, 是否静音等. 渠道之间的设置是互相独立的.</p>\n<blockquote>\n<p>更多通知渠道的内容, 参阅 <a href=\"notificationChannelGlossary\">通知渠道</a> 术语章节.</p>\n</blockquote>\n<blockquote>\n<p>notice 模块的渠道相关方法, 参阅 <a href=\"#p-channel\">notice.channel</a> 小节.</p>\n</blockquote>\n",
           "modules": [
             {
               "textRaw": "创建渠道",
               "name": "创建渠道",
-              "desc": "<p>以渠道 ID 名称 <code>&#39;my_channel_id&#39;</code> 为例, 当 ID 为 <code>&#39;my_channel_id&#39;</code> 的渠道从未创建时, <code>channel.create(&#39;my_channel_id&#39;, options)</code> 将创建一个新的渠道, 其 ID 为 <code>&#39;my_channel_id&#39;</code>.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;,\n    description: &#39;There is a new message from David&#39;,\n    importance: 3,\n    enableLights: true,\n    lightColor: colors.toInt(&#39;blue&#39;),\n    enableVibration: true,\n});\n</code></pre>\n<p>上述示例代码创建了一个新渠道, 并进行了渠道配置, 包括 [ 名称 (name) / 描述 (description) / 优先级 (importance) / 启动指示灯且设置为蓝色 / 启用振动 ].</p>\n<p>创建渠道后, 使用渠道 ID 可以在渠道内显示通知:</p>\n<pre><code class=\"lang-js\">/* 简单通知. */\nnotice(&#39;hello&#39;, { channelId: &#39;my_channel_id&#39; });\n\n/* 设置一些选项. */\nnotice(&#39;hello&#39;, {\n    channelId: &#39;my_channel_id&#39;,\n    isSilent: true, /* 静音模式. */\n    intent: &#39;homepage&#39;, /* 点击通知后跳转到 AutoJs6 的主页页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n</code></pre>\n",
+              "desc": "<p>通知渠道使用 <code>渠道 ID (Channel ID)</code> 作为唯一标识.</p>\n<p>以渠道 ID 名称 <code>&#39;my_channel_id&#39;</code> 为例, 当 ID 为 <code>&#39;my_channel_id&#39;</code> 的渠道从未创建时, <code>channel.create(&#39;my_channel_id&#39;, options)</code> 将创建一个新的渠道, 其 ID 为 <code>&#39;my_channel_id&#39;</code>.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;,\n    description: &#39;Messages from David&#39;,\n    importance: 3,\n    enableLights: true,\n    lightColor: &#39;blue&#39;,\n    enableVibration: true,\n});\n</code></pre>\n<p>上述示例代码创建了一个新渠道, 并进行了渠道配置, 包括 [ 名称 (name) / 描述 (description) / 优先级 (importance) / 启动指示灯且设置为蓝色 / 启用振动 ].</p>\n<p>创建渠道后, 使用渠道 ID 可以在渠道内显示通知:</p>\n<pre><code class=\"lang-js\">/* 简单通知. */\nnotice(&#39;hello&#39;, { channelId: &#39;my_channel_id&#39; });\n\n/* 设置一些选项. */\nnotice(&#39;hello&#39;, {\n    channelId: &#39;my_channel_id&#39;,\n    isSilent: true, /* 静音模式. */\n    intent: &#39;homepage&#39;, /* 点击通知后跳转到 AutoJs6 的主页页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n</code></pre>\n",
               "type": "module",
               "displayName": "创建渠道"
             },
@@ -42,7 +42,7 @@
             {
               "textRaw": "渠道放权",
               "name": "渠道放权",
-              "desc": "<p>使用代码创建渠道时, 可自定义渠道的默认通知行为, 如指示灯颜色及是否振动等.</p>\n<p>但渠道创建后, 将无法通过代码更改这些设置 (除上面提到的名称, 描述, 和受条件限制的优先级之外).</p>\n<p>对于渠道的设置, 用户拥有最终控制权.</p>\n",
+              "desc": "<p>使用代码创建渠道时, 可自定义渠道的默认通知行为, 如指示灯颜色及是否振动等.</p>\n<p>但渠道创建后, 将无法通过代码更改这些设置 (除上面提到的名称, 描述, 和受条件限制的优先级之外).</p>\n<p>对于渠道的设置, 用户拥有最终控制权.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">notice</p>\n\n<hr>\n",
               "type": "module",
               "displayName": "渠道放权"
             }
@@ -59,7 +59,7 @@
               "textRaw": "notice(content)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 包含内容.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含内容.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -74,7 +74,7 @@
               "textRaw": "notice(title, content)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 包含标题及内容.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;);\n</code></pre>\n<blockquote>\n<p>注: 第 1 个 (索引 0) 参数代表标题, 第 2 个 (索引 1) 参数代表内容.</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含标题及内容.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;);\n</code></pre>\n<blockquote>\n<p>注: 第 1 个 (索引 0) 参数代表标题, 第 2 个 (索引 1) 参数代表内容.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -92,7 +92,7 @@
               "textRaw": "notice()",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/8</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 主要用于测试.</p>\n<p>该测试通知包含标题及内容.</p>\n<pre><code class=\"lang-js\">// 以 AutoJs6 语言为 English 为例, \n// 标题为 Script notification, \n// 内容为 Notification from script.\nnotice();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/8</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 主要用于测试.</p>\n<p>该测试通知包含标题及内容.</p>\n<pre><code class=\"lang-js\">// 以 AutoJs6 语言为 English 为例, \n// 标题为 Script notification, \n// 内容为 Notification from script.\nnotice();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -103,7 +103,7 @@
               "textRaw": "notice(options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/8</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#noticeoptions\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 并进行选项配置.</p>\n<pre><code class=\"lang-js\">notice({\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;settings&#39;, /* 点击通知后跳转到 AutoJs6 的设置页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n</code></pre>\n<p>更多配置选项, 可参阅 <a href=\"dataTypes#noticeoptions\">NoticeOptions</a> 类型章节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/8</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 并进行选项配置.</p>\n<pre><code class=\"lang-js\">notice({\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;settings&#39;, /* 点击通知后跳转到 AutoJs6 的设置页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n</code></pre>\n<p>更多配置选项, 可参阅 <a href=\"noticeOptionsType\">NoticeOptions</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -118,7 +118,7 @@
               "textRaw": "notice(content, options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"dataTypes#noticeoptions\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 包含内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.content &gt; content</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.content &gt; content</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -136,7 +136,7 @@
               "textRaw": "notice(title, content, options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"dataTypes#noticeoptions\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送通知, 包含标题及内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>title</code> 和 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 标题参数与内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.title &gt; title\noptions.content &gt; content</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含标题及内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>title</code> 和 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 标题参数与内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.title &gt; title\noptions.content &gt; content</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -157,7 +157,7 @@
               "textRaw": "notice(builder)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 7/8</code></strong></p>\n<ul>\n<li><strong>builder</strong> { <a href=\"dataTypes#noticebuilder\">NoticeBuilder</a> } - 通知构建器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 <code>通知构建器 (Notice Builder)</code> 发送通知.</p>\n<p>参阅 <a href=\"#m-getbuilder\">getBuilder</a> 小节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 7/8</code></strong></p>\n<ul>\n<li><strong>builder</strong> { <a href=\"noticeBuilderType\">NoticeBuilder</a> } - 通知构建器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>使用 <code>通知构建器 (Notice Builder)</code> 发送通知.</p>\n<p>参阅 <a href=\"#m-getbuilder\">getBuilder</a> 小节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -172,7 +172,7 @@
               "textRaw": "notice(builder, options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 8/8</code></strong></p>\n<ul>\n<li><strong>builder</strong> { <a href=\"dataTypes#noticebuilder\">NoticeBuilder</a> } - 通知构建器</li>\n<li><strong>options</strong> { <a href=\"dataTypes#noticeoptions\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 <code>通知构建器 (Notice Builder)</code> 发送通知, 并进行选项配置.</p>\n<p>参阅 <a href=\"#m-getbuilder\">getBuilder</a> 小节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 8/8</code></strong></p>\n<ul>\n<li><strong>builder</strong> { <a href=\"noticeBuilderType\">NoticeBuilder</a> } - 通知构建器</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>使用 <code>通知构建器 (Notice Builder)</code> 发送通知, 并进行选项配置.</p>\n<pre><code class=\"lang-js\">let notificationId = 12;\nlet progress = 0;\nlet progressMax = 100;\n\nlet builder = notice.getBuilder()\n    .setSilent(true)\n    .setContentTitle(&#39;正在下载应用&#39;);\n\nwhile (progress &lt; progressMax) {\n    builder\n        .setProgress(progressMax, progress, false)\n        .setContentText(`已完成 ${progress}%`);\n    notice(builder, { notificationId });\n    sleep(50);\n    progress += Mathx.randInt(1, 4);\n}\nbuilder\n    .setContentText(`已完成 ${progressMax}%`)\n    .setContentTitle(&#39;下载完成&#39;)\nnotice(builder, { notificationId });\n</code></pre>\n<p>参阅 <a href=\"#m-getbuilder\">getBuilder</a> 小节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -191,6 +191,86 @@
           "displayName": "[@] notice"
         },
         {
+          "textRaw": "[m] isEnabled",
+          "name": "[m]_isenabled",
+          "methods": [
+            {
+              "textRaw": "isEnabled()",
+              "type": "method",
+              "name": "isEnabled",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检测 AutoJs6 的通知是否未被阻止 (not blocked).</p>\n<p>通常的阻止 (block) 情况:</p>\n<ul>\n<li>通知全局开关默认未开启或被用户关闭</li>\n<li>通知权限 <code>Manifest.permission.POST_NOTIFICATIONS</code> 未授予或被撤回</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(notice.isEnabled()); /* e.g. true */\n</code></pre>\n<p>部分机型的 toast 功能依赖通知权限, 如需在使用 toast 时检查通知权限是否被阻止, 可使用 <code>isEnabled</code> 或 <code>ensureEnabled</code> 方法:</p>\n<pre><code class=\"lang-js\">if (!notice.isEnabled()) {\n    console.warn(&#39;通知被阻止, toast 可能无法正常显示&#39;);\n}\ntoast(&#39;hello&#39;);\n\nnotice.ensureEnabled();\ntoast(&#39;hello&#39;);\n</code></pre>\n<p>结合 <a href=\"#m-launchsettings\">notice.launchSettings</a> 可辅助用户跳转至通知设置页面:</p>\n<pre><code class=\"lang-js\">if (!notice.isEnabled()) {\n    notice.launchSettings();\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isEnabled"
+        },
+        {
+          "textRaw": "[m] ensureEnabled",
+          "name": "[m]_ensureenabled",
+          "methods": [
+            {
+              "textRaw": "ensureEnabled()",
+              "type": "method",
+              "name": "ensureEnabled",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>确保 AutoJs6 的通知未被阻止 (not blocked).</p>\n<p>当通知被阻止时将抛出 <code>Exception</code> 异常.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureEnabled"
+        },
+        {
+          "textRaw": "[m] launchSettings",
+          "name": "[m]_launchsettings",
+          "methods": [
+            {
+              "textRaw": "launchSettings()",
+              "type": "method",
+              "name": "launchSettings",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>跳转至 AutoJs6 的通知设置页面.</p>\n<pre><code class=\"lang-js\">notice.launchSettings();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] launchSettings"
+        },
+        {
+          "textRaw": "[m] cancel",
+          "name": "[m]_cancel",
+          "methods": [
+            {
+              "textRaw": "cancel(id)",
+              "type": "method",
+              "name": "cancel",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>消除通知.</p>\n<pre><code class=\"lang-js\">let id = notice({ title: &#39;New message&#39; });\n/* 2 秒后自动消除通知. */\nsetTimeout(() =&gt; notice.cancel(id), 2e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cancel"
+        },
+        {
           "textRaw": "[m] getBuilder",
           "name": "[m]_getbuilder",
           "methods": [
@@ -198,7 +278,7 @@
               "textRaw": "getBuilder()",
               "type": "method",
               "name": "getBuilder",
-              "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#noticebuilder\">NoticeBuilder</a> }</li>\n</ul>\n<p>获取一个简单通知构建器.</p>\n<p>简单通知构建器包含以下默认设置:</p>\n<ul>\n<li><code>setSmallIcon(R.drawable.autojs6_material)</code> # AutoJs6 应用图标作为 smallIcon</li>\n<li><code>setPriority(NotificationCompat.PRIORITY_HIGH)</code> # 高优先级 (仅针对 Android 7.1 及以下)</li>\n</ul>\n<p>构建器通常配合 <code>notice</code> 方法作为 第 1 个 (索引 0) 参数使用, 即 <code>notice(notice.getBuilder())</code>:</p>\n<pre><code class=\"lang-js\">let builder = notice.getBuilder();\nbuilder.setContentTitle(&#39;Weather condition&#39;);\nbuilder.setContentText(&#39;The sky is getting dark&#39;);\nnotice(builder);\n\n/* 链式调用使代码更简洁. */\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;Weather condition&#39;)\n    .setContentText(&#39;The sky is getting dark&#39;));\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"noticeBuilderType\">NoticeBuilder</a> }</li>\n</ul>\n<p>获取一个简单通知构建器.</p>\n<p>简单通知构建器包含以下默认设置:</p>\n<ul>\n<li><code>setSmallIcon(R.drawable.autojs6_material)</code> # AutoJs6 应用图标作为 smallIcon</li>\n<li><code>setPriority(NotificationCompat.PRIORITY_HIGH)</code> # 高优先级 (仅针对 Android 7.1 及以下)</li>\n</ul>\n<p>构建器通常配合 <code>notice</code> 方法作为 第 1 个 (索引 0) 参数使用, 即 <code>notice(notice.getBuilder())</code>:</p>\n<pre><code class=\"lang-js\">let builder = notice.getBuilder();\nbuilder.setContentTitle(&#39;Weather condition&#39;);\nbuilder.setContentText(&#39;The sky is getting dark&#39;);\nnotice(builder);\n\n/* 链式调用使代码更简洁. */\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;Weather condition&#39;)\n    .setContentText(&#39;The sky is getting dark&#39;));\n</code></pre>\n<p>构建器可用于设置更多通知行为, 如 <a href=\"noticeBuilderType#m-setstyle\">setStyle</a>, <a href=\"noticeBuilderType#m-settimeoutafter\">setTimeoutAfter</a>, <a href=\"noticeBuilderType#m-setprogress\">setProgress</a> 等.</p>\n<p>但需要注意参数类型需严格符合要求, AutoJs6 内置的 <a href=\"omniTypes\">全能类型</a> 是不可用的.</p>\n<p>关于通知构建器的更多用法, 参阅 <a href=\"noticeBuilderType\">NoticeBuilder</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -212,13 +292,13 @@
         {
           "textRaw": "[m] config",
           "name": "[m]_config",
-          "desc": "<p>config 方法用于配置通知渠道与通知发送的默认行为.</p>\n<p>例如 <code>notice(&#39;hello&#39;)</code> 会发送一个内容为 &quot;hello&quot; 的通知, 但其中隐含了许多默认的通知行为.</p>\n<blockquote>\n<p>注: 初次使用 notice 模块时, 建议先跳过此小节内容, 待了解包括 <a href=\"#p-channel\">channel</a> 等在内的相关内容后再继续阅读当前小节.</p>\n</blockquote>\n<p>例如, <code>isSilent</code> 默认为 <code>false</code>, 表示不进行强制静音.<br>通过 <code>notice.config</code> 可配置所有通知发送时, 默认启用强制静音:</p>\n<pre><code class=\"lang-js\">notice.config({ defaultIsSilent: true }); /* 通知发送时, 默认强制静音. */\n</code></pre>\n<p>执行上述示例代码后, <code>notice(&#39;hello&#39;)</code> 将会静音发送通知.</p>\n<p>如果不执行上述代码, 则需要在每一个 notice 方法中加入 <code>isSilent</code> 选项设置:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\nnotice(&#39;message&#39;, { isSilent: true });\nnotice(&#39;finished&#39;, { isSilent: true });\n/* ... ... */\n</code></pre>\n<p>因此, <code>notice.config</code> 适用于在同一个脚本或项目中, 有多次使用 <code>notice</code> 需求的场景.</p>\n<blockquote>\n<p>注: notice.config 配置的是默认行为, 当通过参数明确指定了某个行为时, 默认行为将不会生效.</p>\n</blockquote>\n",
+          "desc": "<p>config 方法用于修改默认配置, 即用于配置通知渠道与通知发送的默认行为.</p>\n<p>例如 <code>notice(&#39;hello&#39;)</code> 会发送一个内容为 &quot;hello&quot; 的通知, 但其中隐含了许多默认的通知行为.</p>\n<blockquote>\n<p>注: 初次使用 notice 模块时, 建议先跳过此小节内容, 待了解包括 <a href=\"#p-channel\">channel</a> 等在内的相关内容后再继续阅读当前小节.</p>\n</blockquote>\n<p>例如, <code>isSilent</code> 默认为 <code>false</code>, 表示不进行强制静音.<br>通过 <code>notice.config</code> 可配置所有通知发送时, 默认启用强制静音:</p>\n<pre><code class=\"lang-js\">notice.config({ defaultIsSilent: true }); /* 通知发送时, 默认强制静音. */\n</code></pre>\n<p>执行上述示例代码后, <code>notice(&#39;hello&#39;)</code> 将会静音发送通知.</p>\n<p>如果不执行上述代码, 则需要在每一个 notice 方法中加入 <code>isSilent</code> 选项设置:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\nnotice(&#39;message&#39;, { isSilent: true });\nnotice(&#39;finished&#39;, { isSilent: true });\n/* ... ... */\n</code></pre>\n<p>因此, <code>notice.config</code> 适用于在同一个脚本或项目中, 有多次使用 <code>notice</code> 需求的场景.</p>\n<blockquote>\n<p>注: notice.config 配置的是默认行为, 当通过参数明确指定了某个行为时, 默认行为将不会生效.</p>\n</blockquote>\n",
           "methods": [
             {
               "textRaw": "config(preset)",
               "type": "method",
               "name": "config",
-              "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><strong>preset</strong> { <a href=\"dataTypes#noticepresetconfiguration\">NoticePresetConfiguration</a> } - 通知预设配置对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>配置通知渠道与通知发送的默认行为.</p>\n<pre><code class=\"lang-js\">notice.config({\n    useDynamicDefaultNotificationId: false, /* 禁用动态通知 ID. */\n    useScriptNameAsDefaultChannelId: false, /* 禁用以脚本名称作为渠道 ID. */\n    enableChannelInvalidModificationWarnings: false, /* 禁用渠道修改无效的警告消息. */\n    defaultTitle: &#39;NEW MESSAGE&#39;, /* 修改默认通知标题. */\n    /* ... ... */\n});\n</code></pre>\n<p>更多可用的默认行为配置, 参阅 <a href=\"dataTypes#noticepresetconfiguration\">NoticePresetConfiguration</a> 类型章节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>preset</strong> { <a href=\"noticePresetConfigurationType\">NoticePresetConfiguration</a> } - 通知预设配置对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>配置通知渠道与通知发送的默认行为.</p>\n<pre><code class=\"lang-js\">notice.config({\n    useDynamicDefaultNotificationId: false, /* 禁用动态通知 ID. */\n    useScriptNameAsDefaultChannelId: false, /* 禁用以脚本名称作为渠道 ID. */\n    enableChannelInvalidModificationWarnings: false, /* 禁用渠道修改无效的警告消息. */\n    defaultTitle: &#39;NEW MESSAGE&#39;, /* 修改默认通知标题. */\n    /* ... ... */\n});\n</code></pre>\n<p>更多可用的默认行为配置, 参阅 <a href=\"noticePresetConfigurationType\">NoticePresetConfiguration</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -246,7 +326,7 @@
                   "textRaw": "create(channelId)",
                   "type": "method",
                   "name": "create",
-                  "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 并指定渠道 ID.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nnotice.channel.create(id); /* 创建渠道. */\nnotice(&#39;hello&#39;, { channelId: id }); /* 发送通知. */\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 并指定渠道 ID.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nnotice.channel.create(id); /* 创建渠道. */\nnotice(&#39;hello&#39;, { channelId: id }); /* 发送通知. */\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": [
@@ -261,7 +341,7 @@
                   "textRaw": "create(channelId, options)",
                   "type": "method",
                   "name": "create",
-                  "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><strong>options</strong> { <a href=\"dataTypes#noticechanneloptions\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 指定渠道 ID 并进行渠道配置.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;, /* 渠道名称. */\n    description: &#39;There is a new message from David&#39;, /* 渠道描述. */\n    importance: 3, /* 渠道优先级. */\n    enableLights: true, /* 启用指示灯. */\n    lightColor: colors.toInt(&#39;blue&#39;), /* 设置指示灯颜色. */\n    enableVibration: true, /* 启用振动. */\n});\n</code></pre>\n<p>更多渠道配置相关信息, 参阅 <a href=\"dataTypes#noticechanneloptions\">NoticeChannelOptions</a> 类型章节.</p>\n<blockquote>\n<p>注: 渠道 ID 可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.id &gt; channelId</p>\n</blockquote>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><strong>options</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 指定渠道 ID 并进行渠道配置.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;, /* 渠道名称. */\n    description: &#39;Messages from David&#39;, /* 渠道描述. */\n    importance: 3, /* 渠道优先级. */\n    enableLights: true, /* 启用指示灯. */\n    lightColor: &#39;blue&#39;, /* 设置指示灯颜色. */\n    enableVibration: true, /* 启用振动. */\n});\n</code></pre>\n<p>更多渠道配置相关信息, 参阅 <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> 类型章节.</p>\n<blockquote>\n<p>注: 渠道 ID 可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.id &gt; channelId</p>\n</blockquote>\n",
                   "signatures": [
                     {
                       "params": [
@@ -279,7 +359,7 @@
                   "textRaw": "create(options)",
                   "type": "method",
                   "name": "create",
-                  "desc": "<p><strong><code>6.2.1</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#noticechanneloptions\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 与 <code>create(channelId, options)</code> 方法类似, 但省略 <code>channelId</code> 参数.</p>\n<p>如需指定渠道 ID, 可在 <code>options</code> 参数中使用 <code>id</code> 属性:</p>\n<pre><code class=\"lang-js\">notice.channel.create({ id: &#39;my_channel_id&#39; });\n</code></pre>\n<p>当不指定 <code>id</code> 时, 渠道 ID 将使用当前运行脚本的脚本名称.</p>\n<p>更多渠道配置相关信息, 参阅 <a href=\"dataTypes#noticechanneloptions\">NoticeChannelOptions</a> 类型章节.</p>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 与 <code>create(channelId, options)</code> 方法类似, 但省略 <code>channelId</code> 参数.</p>\n<p>如需指定渠道 ID, 可在 <code>options</code> 参数中使用 <code>id</code> 属性:</p>\n<pre><code class=\"lang-js\">notice.channel.create({ id: &#39;my_channel_id&#39; });\n</code></pre>\n<p>当不指定 <code>id</code> 时, 渠道 ID 将使用当前运行脚本的脚本名称.</p>\n<p>更多渠道配置相关信息, 参阅 <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> 类型章节.</p>\n",
                   "signatures": [
                     {
                       "params": [
@@ -302,7 +382,7 @@
                   "textRaw": "contains(channelId)",
                   "type": "method",
                   "name": "contains",
-                  "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前渠道 ID 是否已被创建</li>\n</ul>\n<p>返回指定 <code>渠道 ID (Channel ID)</code> 的 AutoJs6 渠道是否存在.</p>\n<pre><code class=\"lang-js\">notice.channel.contains(&#39;my_channel_id&#39;); /* e.g. false */\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前渠道 ID 是否已被创建</li>\n</ul>\n<p>返回指定 <code>渠道 ID (Channel ID)</code> 的 AutoJs6 渠道是否存在.</p>\n<pre><code class=\"lang-js\">notice.channel.contains(&#39;my_channel_id&#39;); /* e.g. false */\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": [
@@ -325,7 +405,7 @@
                   "textRaw": "remove(channelId)",
                   "type": "method",
                   "name": "remove",
-                  "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 删除前, 当前渠道 ID 是否已被创建</li>\n</ul>\n<p>根据 <code>渠道 ID (Channel ID)</code> 删除 AutoJs6 的渠道实例.</p>\n<p>删除前, 若渠道已被创建且未被删除, 则返回 <code>true</code>, 否则返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nif (notice.channel.contains(id)) {\n    notice.channel.remove(id); // true\n}\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 删除前, 当前渠道 ID 是否已被创建</li>\n</ul>\n<p>根据 <code>渠道 ID (Channel ID)</code> 删除 AutoJs6 的渠道实例.</p>\n<p>删除前, 若渠道已被创建且未被删除, 则返回 <code>true</code>, 否则返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nif (notice.channel.contains(id)) {\n    notice.channel.remove(id); // true\n}\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": [
@@ -348,7 +428,7 @@
                   "textRaw": "get(channelId)",
                   "type": "method",
                   "name": "get",
-                  "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/app/NotificationChannel\">android.app.NotificationChannel</a> | <a href=\"dataTypes#null\">null</a> } - 渠道实例</li>\n</ul>\n<p>根据 <code>渠道 ID (Channel ID)</code> 获取 AutoJs6 的渠道实例, 不存在时返回 <code>null</code>.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nif (notice.channel.contains(id)) {\n    console.log(notice.channel.get(id)); /* 打印通知渠道信息. */\n} else {\n    console.log(`ID &quot;${id}&quot; 对应的通知渠道不存在`);\n}\n\n/* 不使用 contains 也可以判断 Channel ID 的存在性. */\n\nlet channel = notice.channel.get(id);\nif (channel !== null) {\n    /* ... */\n}\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/app/NotificationChannel\">android.app.NotificationChannel</a> | <a href=\"dataTypes#null\">null</a> } - 渠道实例</li>\n</ul>\n<p>根据 <code>渠道 ID (Channel ID)</code> 获取 AutoJs6 的渠道实例, 不存在时返回 <code>null</code>.</p>\n<pre><code class=\"lang-js\">let id = &#39;my_channel_id&#39;;\nif (notice.channel.contains(id)) {\n    console.log(notice.channel.get(id)); /* 打印通知渠道信息. */\n} else {\n    console.log(`ID &quot;${id}&quot; 对应的通知渠道不存在`);\n}\n\n/* 不使用 contains 也可以判断 Channel ID 的存在性. */\n\nlet channel = notice.channel.get(id);\nif (channel !== null) {\n    /* ... */\n}\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": [
@@ -371,7 +451,7 @@
                   "textRaw": "getAll()",
                   "type": "method",
                   "name": "getAll",
-                  "desc": "<p><strong><code>6.2.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/app/NotificationChannel\">android.app.NotificationChannel</a><a href=\"dataTypes#array\">[]</a> } - 渠道实例数组</li>\n</ul>\n<p>获取 AutoJs6 的所有通知渠道实例 (不包含已被删除的).</p>\n<pre><code class=\"lang-js\">console.log(`当前共计渠道 ${notice.channel.getAll().length} 个`);\nnotice.channel.getAll().map(ch =&gt; ch.getId()); /* 获取所有渠道的 ID. */\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/app/NotificationChannel\">android.app.NotificationChannel</a><a href=\"dataTypes#array\">[]</a> } - 渠道实例数组</li>\n</ul>\n<p>获取 AutoJs6 的所有通知渠道实例 (不包含已被删除的).</p>\n<pre><code class=\"lang-js\">console.log(`当前共计渠道 ${notice.channel.getAll().length} 个`);\nnotice.channel.getAll().map(ch =&gt; ch.getId()); /* 获取所有渠道的 ID. */\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": []

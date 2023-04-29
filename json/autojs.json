@@ -90,7 +90,7 @@
               "textRaw": "setRootMode(rootMode, isWriteIntoPreference?)",
               "type": "method",
               "name": "setRootMode",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>rootMode</strong> { <a href=\"dataTypes#rootmode\">RootMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | &#39;auto&#39; | &#39;root&#39; | &#39;non-root&#39; } - Root 模式参数</li>\n<li><strong>[isWriteIntoPreference = false]</strong> {  <a href=\"dataTypes#boolean\">boolean</a> } - 是否写入应用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 AutoJs6 的 Root 模式.</p>\n<p>默认情况下, AutoJs6 将根据 <code>su</code> 二进制名称特征来判断是否具有 Root 权限.\n但有时设备可能使用了非常规 Root 方式或 Root 权限检测结果出现异常, 此时可设置 <code>强制 Root 模式</code> 或 <code>强制非 Root 模式</code> 来改变 AutoJs6 对 Root 权限的检测结果.</p>\n<p>以设置 &#39;强制 Root 模式&#39; 为例:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT);\nautojs.setRootMode(&#39;root&#39;); /* 同上. */\nautojs.setRootMode(1); /* 同上. */\nautojs.setRootMode(true); /* 同上. */\n</code></pre>\n<p>上述示例设置的 Root 模式, 将影响 <a href=\"#m-isrootavailable\">isRootAvailable</a> 的结果, 使其固定返回 <code>true</code>.<br>如果设置为 <code>RootMode.FORCE_NON_ROOT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将固定返回 <code>false</code>.<br>如果设置为 <code>RootMode.AUTO_DETECT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将根据 AutoJs6 是否具有 <code>su</code> 二进制名称特征决定其返回结果.  </p>\n<p>在没有特殊需求的情况下, 建议始终保持 Root 模式为 &#39;自动&#39; 模式.</p>\n<p>需额外留意, Root 模式修改仅对当前 <code>运行时 (Runtime)</code> 有效, 当脚本结束时, 已设置的 Root 模式将自动还原为 &#39;自动&#39; 模式, 即 <code>RootMode.AUTO_DETECT</code>.</p>\n<p>如需将保留修改的 Root 模式, 可使用 <code>isWriteIntoPreference</code> 参数, 修改将立即写入应用设置中:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT, true);\n</code></pre>\n<p>上述示例代码的效果, 等效于在 AutoJs6 应用中进行如下设置:</p>\n<pre><code class=\"lang-text\">[ AutoJs6 设置 ] - [ 强制 Root 权限检查 ] - [ 强制 Root 模式 ] # [ 选择 ]\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>rootMode</strong> { <a href=\"dataTypes#rootmode\">RootMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | &#39;auto&#39; | &#39;root&#39; | &#39;non-root&#39; } - Root 模式参数</li>\n<li><strong>[ isWriteIntoPreference = <code>false</code> ]</strong> {  <a href=\"dataTypes#boolean\">boolean</a> } - 是否写入应用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 AutoJs6 的 Root 模式.</p>\n<p>默认情况下, AutoJs6 将根据 <code>su</code> 二进制名称特征来判断是否具有 Root 权限.\n但有时设备可能使用了非常规 Root 方式或 Root 权限检测结果出现异常, 此时可设置 <code>强制 Root 模式</code> 或 <code>强制非 Root 模式</code> 来改变 AutoJs6 对 Root 权限的检测结果.</p>\n<p>以设置 &#39;强制 Root 模式&#39; 为例:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT);\nautojs.setRootMode(&#39;root&#39;); /* 同上. */\nautojs.setRootMode(1); /* 同上. */\nautojs.setRootMode(true); /* 同上. */\n</code></pre>\n<p>上述示例设置的 Root 模式, 将影响 <a href=\"#m-isrootavailable\">isRootAvailable</a> 的结果, 使其固定返回 <code>true</code>.<br>如果设置为 <code>RootMode.FORCE_NON_ROOT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将固定返回 <code>false</code>.<br>如果设置为 <code>RootMode.AUTO_DETECT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将根据 AutoJs6 是否具有 <code>su</code> 二进制名称特征决定其返回结果.  </p>\n<p>在没有特殊需求的情况下, 建议始终保持 Root 模式为 &#39;自动&#39; 模式.</p>\n<p>需额外留意, Root 模式修改仅对当前 <code>运行时 (Runtime)</code> 有效, 当脚本结束时, 已设置的 Root 模式将自动还原为 &#39;自动&#39; 模式, 即 <code>RootMode.AUTO_DETECT</code>.</p>\n<p>如需将保留修改的 Root 模式, 可使用 <code>isWriteIntoPreference</code> 参数, 修改将立即写入应用设置中:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT, true);\n</code></pre>\n<p>上述示例代码的效果, 等效于在 AutoJs6 应用中进行如下设置:</p>\n<pre><code class=\"lang-text\">[ AutoJs6 设置 ] - [ 强制 Root 权限检查 ] - [ 强制 Root 模式 ] # [ 选择 ]\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -185,6 +185,21 @@
           "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本日期.</p>\n<pre><code class=\"lang-js\">console.log(autojs.versionDate); // e.g. Dec 18, 2022\nconsole.log(autojs.version.date); /* 同上. */\n</code></pre>\n",
           "type": "module",
           "displayName": "[p] versionDate"
+        },
+        {
+          "textRaw": "[p] themeColor",
+          "name": "[p]_themecolor",
+          "modules": [
+            {
+              "textRaw": "themeColor",
+              "name": "themecolor",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#themecolor\">ThemeColor</a> }</li>\n</ul>\n<p>获取 AutoJs6 的主题颜色实例.</p>\n<pre><code class=\"lang-js\">autojs.themeColor.getColorPrimary(); /* 获取 AutoJs6 主题色的主色色值. */\n</code></pre>\n",
+              "type": "module",
+              "displayName": "themeColor"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] themeColor"
         },
         {
           "textRaw": "[p+] version",
@@ -303,7 +318,7 @@
                   "textRaw": "isAtLeast(otherVersion, ignoreSuffix)",
                   "type": "method",
                   "name": "isAtLeast",
-                  "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><strong>[ignoreSuffix = false]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否忽略版本后缀</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否不低于 (即大于等于) 参数对应的版本号且根据 <code>ignoreSuffix</code> 参数决定是否忽略版本后缀.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.name); // e.g. 6.2.0-alpha9\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;)); // e.g. false\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;, true)); // e.g. true\n</code></pre>\n",
+                  "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>otherVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"versionType#c-version\">Version</a> } - 待比较版本参数</li>\n<li><strong>[ ignoreSuffix = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否忽略版本后缀</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回 AutoJs6 版本是否不低于 (即大于等于) 参数对应的版本号且根据 <code>ignoreSuffix</code> 参数决定是否忽略版本后缀.</p>\n<pre><code class=\"lang-js\">console.log(autojs.version.name); // e.g. 6.2.0-alpha9\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;)); // e.g. false\nconsole.log(autojs.version.isAtLeast(&#39;6.2.0&#39;, true)); // e.g. true\n</code></pre>\n",
                   "signatures": [
                     {
                       "params": [

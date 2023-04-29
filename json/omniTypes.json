@@ -1,0 +1,49 @@
+{
+  "source": "..\\api\\omniTypes.md",
+  "modules": [
+    {
+      "textRaw": "全能类型 (Omnipotent Types)",
+      "name": "全能类型_(omnipotent_types)",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Apr 9, 2023.</p>\n\n<hr>\n<p>全能类型是一种聚合类型.</p>\n<p>AutoJs6 模块中, 一个参数往往接受多种不同的类型, 这些类型均可体现这个参数的含义. 这样的类型成为全能类型.</p>\n<p>如对于 <code>颜色 (color)</code>, 有 <a href=\"dataTypes#colorhex\">ColorHex</a> 和 <a href=\"dataTypes#colorname\">ColorName</a> 等多种类型可以表示, 它们都可以作为实参传入方法中:</p>\n<pre><code class=\"lang-js\">/* 需要为 console 悬浮窗设置一个浅蓝色标题. */\n/* 以下 4 种方法分别传入不同类型的参数, 但实现了同样的效果. */\n\nconsole.setTitleTextColor(&#39;light-blue&#39;); /* ColorName 类型. */\nconsole.setTitleTextColor(&#39;#ADD8E6&#39;); /* ColorHex 类型. */\nconsole.setTitleTextColor(Color(&#39;#ADD8E6&#39;).toInt()); /* ColorInt 类型. */\nconsole.setTitleTextColor(Color(&#39;#ADD8E6&#39;)); /* Color 类型. */\n\nconsole.show(); /* 显示控制台悬浮窗. */\n</code></pre>\n<p>上述示例中 <code>console.setTitleTextColor</code> 的方法签名可以写成以下形式:</p>\n<pre><code class=\"lang-text\">console.setTitleTextColor(color: OmniColor): void\n</code></pre>\n<p>其中使用 <code>OmniColor</code> 这个全能类型代表了颜色聚合类型.</p>\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "OmniColor",
+          "name": "omnicolor",
+          "desc": "<p>颜色聚合类型.</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>简述</th>\n<th>示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"dataTypes#colorhex\">ColorHex</a></td>\n<td><span style=\"white-space:nowrap\">颜色代码</span></td>\n<td><span style=\"white-space:nowrap\"><code>#663399</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#colorint\">ColorInt</a></td>\n<td><span style=\"white-space:nowrap\">颜色整数</span></td>\n<td><span style=\"white-space:nowrap\"><code>-10079335</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#colorname\">ColorName</a></td>\n<td><span style=\"white-space:nowrap\">颜色名称</span></td>\n<td><span style=\"white-space:nowrap\"><code>&#39;rebecca-purple&#39;</code></span></td>\n</tr>\n<tr>\n<td><a href=\"colorType\">Color</a></td>\n<td><span style=\"white-space:nowrap\">颜色类</span></td>\n<td><span style=\"white-space:nowrap\"><code>Color(&#39;#663399&#39;)</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#themecolor\">ThemeColor</a></td>\n<td><span style=\"white-space:nowrap\">主题颜色类</span></td>\n<td><span style=\"white-space:nowrap\"><code>autojs.themeColor</code></span></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "OmniColor"
+        },
+        {
+          "textRaw": "OmniIntent",
+          "name": "omniintent",
+          "desc": "<p>Intent 聚合类型.</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>简述</th>\n<th>示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"intentType\">Intent</a></td>\n<td><span style=\"white-space:nowrap\">意图类</span></td>\n<td><span style=\"white-space:nowrap\"><code>new Intent().setAction( ... )</code> / <code>app.intent({ ... })</code></span></td>\n</tr>\n<tr>\n<td><a href=\"intentOptionsType\">IntentOptions</a></td>\n<td><span style=\"white-space:nowrap\">意图选项</span></td>\n<td><span style=\"white-space:nowrap\"><code>{ action: ... , className: ... , data: ... }</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#intentshortformforactivity\">IntentShortFormForActivity</a></td>\n<td><span style=\"white-space:nowrap\">意图活动简称</span></td>\n<td><span style=\"white-space:nowrap\"><code>docs</code> / <code>home</code> / <code>settings</code> / <code>console</code> / <code>about</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#intenturistring\">IntentUriString</a></td>\n<td><span style=\"white-space:nowrap\">意图 URI 字符串</span></td>\n<td><span style=\"white-space:nowrap\"><code>&#39;https://msn.com&#39;</code> / <code>&#39;msn.com&#39;</code></span></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "OmniIntent"
+        },
+        {
+          "textRaw": "OmniVibrationPattern",
+          "name": "omnivibrationpattern",
+          "desc": "<p>振动模式聚合类型.</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>简述</th>\n<th>示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><span style=\"white-space:nowrap\"><a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a></span></td>\n<td><span style=\"white-space:nowrap\">传统振动模式 (按数字代表的启停间隔振动)</span></td>\n<td><span style=\"white-space:nowrap\"><code>[ 0, 200, 0, 200, 0, 200 ]</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><span style=\"white-space:nowrap\">文本 (按文本对应的摩斯电码振动)</span></td>\n<td><span style=\"white-space:nowrap\"><code>&#39;hello&#39;</code></span></td>\n</tr>\n</tbody>\n</table>\n<p>用于模拟 SOS (紧急求救信号) 的示例:</p>\n<pre><code class=\"lang-js\">device.vibrate([ 100, 100, 100, 100, 100, 300, 300, 100, 300, 100, 300, 300, 100, 100, 100, 100, 100 ], 0);\ndevice.vibrate(&#39;SOS&#39;); /* 效果同上. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "OmniVibrationPattern"
+        },
+        {
+          "textRaw": "OmniRegion",
+          "name": "omniregion",
+          "desc": "<p>区域聚合类型.</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>简述</th>\n<th>示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><span style=\"white-space:nowrap\"><a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a></span></td>\n<td><span style=\"white-space:nowrap\">数字数组, [ X 坐标, Y 坐标, 宽, 高 ]</span></td>\n<td><span style=\"white-space:nowrap\"><code>[ 0, 0, 200, 400 ]</code></span></td>\n</tr>\n<tr>\n<td><a href=\"opencvRectType\">OpencvRect</a></td>\n<td><span style=\"white-space:nowrap\"><code>org.opencv.core.Rect</code> 类型</span></td>\n<td><span style=\"white-space:nowrap\">1. <code>images.buildRegion(img, [ 0, 0, 200, 400 ])</code><br/>2. <code>new org.opencv.core.Rect(x, y, w, h)</code></span></td>\n</tr>\n<tr>\n<td><a href=\"androidRectType\">AndroidRect</a></td>\n<td><span style=\"white-space:nowrap\"><code>android.graphics.Rect</code> 类型</span></td>\n<td><span style=\"white-space:nowrap\">1. <code>pickup(/\\w+/, &#39;bounds&#39;)</code><br/>2. <code>new android.graphics.Rect(left, top, right, bottom)</code></span></td>\n</tr>\n</tbody>\n</table>\n<p>将一个 500 × 500 的图片裁剪其中心区域 300 × 300 的示例:</p>\n<pre><code class=\"lang-js\">let img = images.read(&#39;...&#39;);\nlet imgWidth = img.getWidth(); // 500\nlet imgHeight = img.getHeight(); // 500\n\nlet clipWidth = 300;\nlet clipHeight = 300;\nlet clipX = (imgWidth - clipWidth) / 2;\nlet clipY = (imgHeight - clipHeight) / 2;\n\n/* 使用 number[] 作为区域. */\n\nimages.clip(img, [ clipX, clipY, clipWidth, clipHeight ]);\n\n/* 使用 OpencvRect 作为区域. */\n\nimages.clip(img, new org.opencv.core.Rect(clipX, clipY, clipWidth, clipHeight));\n\n/* 使用 AndroidRect 作为区域. */\n\nlet left = clipX;\nlet top = clipY;\nlet right = clipX + clipWidth;\nlet bottom = clipY + clipHeight;\nimages.clip(img, new android.graphics.Rect(left, top, right, bottom));\n\n/* AndroidRect 结合控件的应用. */\n/* 假设屏幕的活动窗口中存在一个控件, id 为 aim, 它的控件矩形区域恰好为所需区域. */\n\nlet bounds = pickup({ id: &#39;aim&#39; }, &#39;bounds&#39;);\nimages.clip(img, bounds); /* bounds 是一个 AndroidRect 实例. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "OmniRegion"
+        },
+        {
+          "textRaw": "OmniThrowable",
+          "name": "omnithrowable",
+          "desc": "<p>可抛异常聚合类型.</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>简述</th>\n<th>示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"exceptions#error-对象\">Error</a></td>\n<td><span style=\"white-space:nowrap\">AutoJs6 内置错误类型</span></td>\n<td><span style=\"white-space:nowrap\">1. <code>Error(&#39;error&#39;)</code><br/>2. <code>TypeError(&#39;error&#39;)</code></span></td>\n</tr>\n<tr>\n<td><span style=\"white-space:nowrap\"><a href=\"exceptions#java\">java.lang.Throwable</a></span></td>\n<td><span style=\"white-space:nowrap\"><code>Throwable</code> 及其所有子类型</span></td>\n<td><span style=\"white-space:nowrap\">1. <code>new java.lang.Exception(&#39;error&#39;)</code><br/>2. <code>try { a++ } catch(e) { e.rhinoException }</code></span></td>\n</tr>\n<tr>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><span style=\"white-space:nowrap\">字符串, 表示异常消息, 将被包装为 <code>java.lang.Exception</code> 实例</span></td>\n<td><span style=\"white-space:nowrap\"><code>&#39;An error has occurred&#39;</code></span></td>\n</tr>\n</tbody>\n</table>\n<p>使用 <a href=\"console#m-printallstacktrace\">console.printAllStackTrace</a> 打印详细栈追踪的示例:</p>\n<pre><code class=\"lang-js\">try {\n    a++;\n} catch (e) {\n    console.printAllStackTrace(e); /* Error 实例. */\n    console.printAllStackTrace(e.rhinoException); /* java.lang.Throwable 实例. */\n    console.printAllStackTrace(e.message); /* 字符串变量. */\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "OmniThrowable"
+        }
+      ],
+      "type": "module",
+      "displayName": "全能类型 (Omnipotent Types)"
+    }
+  ]
+}

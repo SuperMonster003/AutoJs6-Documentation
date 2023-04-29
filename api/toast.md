@@ -2,6 +2,23 @@
 
 toast 模块用于 [消息浮动框](https://developer.android.com/guide/topics/ui/notifiers/toasts?hl=zh-cn) 的 [ 显示 / 消除 / 定制 ] 等.
 
+部分操作系统的 toast 消息可能无法按队列依次显示, 新的 toast 消息直接覆盖之前的 toast 消息.
+
+可能出现上述异常的操作系统:
+
+- API 级别 28 (安卓 9) [P]
+- 鸿蒙 (HarmonyOS) 2
+
+部分机型需授予 "后台弹出页面" 权限才能正常显示 toast 消息.
+
+可能依赖上述权限的设备及操作系统:
+
+- 小米 (XiaoMi / Redmi / BlackShark) - MIUI
+- 维沃 (VIVO / IQOO) - Funtouch OS / OriginOS
+- 欧珀 (OPPO / Realme) - ColorOS
+
+部分机型的 toast 消息正常显示依赖通知权限, 当未授予通知权限或通知被 `阻止 (block)` 时, toast 可能无法正常显示, 参阅 [notice.isEnabled](notice#m-isenabled) 小节.
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">toast</p>

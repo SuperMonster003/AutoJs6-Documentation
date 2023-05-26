@@ -13,7 +13,7 @@ c.getRedDouble(); // 1
 
 Color 类是对 [colors](color) 模块的一种变式封装, 用于解决 colors 模块冗余嵌套的难题.
 
-如需对颜色 `hsv(174,100,59)` 设置 `80%` 透明度然后返回其 Hex 代码:
+例如需要对颜色 `hsv(174,100,59)` 设置 `80%` 透明度然后返回其 Hex 代码:
 
 ```js
 colors.toHex(colors.setAlpha(colors.hsv(174, 100, 59), 0.8));
@@ -42,7 +42,7 @@ new Color()
     .toHex();
 ```
 
-> 注: 上述示例仅用于演示, 否则可使用 colors.hsva 或 Color#setHsva 同时设置 HSV 分量与 A 分量.
+> 注: 上述示例仅用于演示, 实际可使用 colors.hsva 或 Color#setHsva 同时设置 HSV 分量与 A 分量.
 
 Color 实例方法的使用方式与 colors 模块对应方法多数情况是类似的, 因此某些情况下可用于替代 colors 模块.
 

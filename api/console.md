@@ -1013,6 +1013,18 @@ console.setGlobalLogConfig({
 });
 ```
 
+## [m] resetGlobalLogConfig
+
+### resetGlobalLogConfig()
+
+**`6.3.1`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+重置全局日志写入配置.
+
+此方法可重置 [setGlobalLogConfig](#m-setgloballogconfig) 的全部选项配置.
+
 ## [m] input
 
 ### input(data, ...args)
@@ -1023,7 +1035,7 @@ console.setGlobalLogConfig({
 - **args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-此方法已于 `6.3.0` 版本被废弃, 使用后将无任何效果.
+此方法已于 `6.3.1` 版本被废弃, 使用后将无任何效果.
 
 ## [m] rawInput
 
@@ -1035,4 +1047,4 @@ console.setGlobalLogConfig({
 - **args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-此方法已于 `6.3.0` 版本被废弃, 使用后将无任何效果.
+此方法已于 `6.3.1` 版本被废弃, 使用后将无任何效果.

@@ -91,7 +91,7 @@ AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目�
 
 AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 实现的.
 
-> 注: AutoJs6 的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/MlKitOCR.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的开源项目.
+> 注: AutoJs6 的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/MlKitOCR.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [开源项目](https://github.com/TonyJiangWJ/Auto.js).
 
 > 参阅: [光学字符识别 (OCR)](ocr) 模块
 

@@ -7,7 +7,7 @@
 
 ---
 
-http模块提供一些进行http请求的函数.
+http 模块主要用于发送 HTTP 请求, 获取并解析 HTTP 响应.
 
 > 注: 与 [web](web) 模块不同, web 模块主要用于 WebView 网页的注入及客户端构建.
 
@@ -195,11 +195,11 @@ log(res.body.string());
 选项options可以包含以下属性：
 
 * `headers` {Object} 键值对形式的HTTP头部信息. 有关HTTP头部信息, 参见[菜鸟教程：HTTP响应头信息](http://www.runoob.com/http/http-header-fields.html).
-* `method` {string} HTTP请求方法. 包括"GET", "POST", "PUT", "DELET", "PATCH".
+* `method` {string} HTTP请求方法. 包括"GET", "POST", "PUT", "DELETE", "PATCH".
 * `contentType` {string} HTTP头部信息中的"Content-Type", 表示HTTP请求的内容类型. 例如"text/plain", "application/json". 更多信息参见[菜鸟教程：HTTP contentType](http://www.runoob.com/http/http-content-type.html).
 * `body` {string} | {Array} | {Function} HTTP请求的内容. 可以是一个字符串, 也可以是一个字节数组；或者是一个以[BufferedSink](https://github.com/square/okio/blob/master/okio/src/main/java/okio/BufferedSink.java/)为参数的函数.
 
-该函数是get, post, postJson等函数的基础函数. 因此除非是PUT, DELET等请求, 或者需要更高定制的HTTP请求, 否则直接使用get, post, postJson等函数会更加方便.
+该函数是get, post, postJson等函数的基础函数. 因此除非是PUT, DELETE等请求, 或者需要更高定制的HTTP请求, 否则直接使用get, post, postJson等函数会更加方便.
 
 ## [m] buildRequest
 

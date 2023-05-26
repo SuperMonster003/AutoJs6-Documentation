@@ -10,7 +10,8 @@ Android 平台初始版本提供的是 API 级别 1, 后续版本的 API 级别�
 
 | API 级别 | 版本名称 (Version Name)        | 版本代号 (Version Code)    | 版本号 (Version Number) | 内部代号 (Internal Codename) | 发行日期         |
 |:-------|:---------------------------|:-----------------------|:---------------------|:-------------------------|:-------------|
-| 34     | Android 14                 | ?                      | 14                   | Upside Down Cake         | Feb 8, 2023  |
+| 35 (?) | Android 15                 | VANILLA_ICE_CREAM      | 15                   | Vanilla Ice Cream        | Q3, 2024 (?) |
+| 34     | Android 14                 | UPSIDE_DOWN_CAKE       | 14                   | Upside Down Cake         | Q3, 2023 (?) |
 | 33     | Android 13                 | TIRAMISU               | 13                   | Tiramisu                 | Aug 15, 2022 |
 | 32     | Android 12L                | S_V2                   | 12.1                 | Snow Cone v2             | Mar 7, 2022  |
 | 31     | Android 12                 | S                      | 12                   | Snow Cone                | Oct 4, 2021  |
@@ -67,6 +68,7 @@ console.log(device.sdkInt); /* e.g. 30 */
 ```js
 /* 在 API 级别低于 30 的设备上将抛出异常. */
 runtime.requiresApi(30);
+runtime.requiresApi(util.versionCodes.R); /* 效果同上. */
 ```
 
 > 注: AutoJs6 安装及使用需满足的最低 API 级别为 24 (7.0) [N].

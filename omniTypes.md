@@ -47,6 +47,48 @@ console.setTitleTextColor(color: OmniColor): void
 | [Color](colorType)                 | <span style="white-space:nowrap">颜色类</span>   | <span style="white-space:nowrap">`Color('#663399')`</span>  |
 | [ThemeColor](dataTypes#themecolor) | <span style="white-space:nowrap">主题颜色类</span> | <span style="white-space:nowrap">`autojs.themeColor`</span> |
 
+`OmniColor` 不仅可用于参数传入方法中, 还可以作为 XML 元素的属性值:
+
+```js
+'ui';
+
+ui.layout(<vertical>
+    <button text="click to start" color="#006400"/>
+</vertical>);
+```
+
+上述示例设置按钮布局的文字颜色为深绿色, 使用了 [ColorHex](dataTypes#colorhex) 作为颜色值.
+
+使用 [ColorName](dataTypes#colorname) 作为颜色值也可达到相同的效果:
+
+```js
+'ui';
+
+ui.layout(<vertical>
+    <button text="click to start" color="dark-green"/>
+</vertical>);
+```
+
+使用 [ColorInt](dataTypes#colorint) 作为颜色值同样可以达到相同的效果:
+
+```js
+'ui';
+
+ui.layout(<vertical>
+    <button text="click to start" color="-16751616"/>
+</vertical>);
+```
+
+如需使用主题色作为颜色值, 需要使用一对花括号以及绑定全局作用域的表达式:
+
+```js
+'ui';
+
+ui.layout(<vertical>
+    <button text="click to start" color="{{autojs.themeColor}}"/>
+</vertical>);
+```
+
 ## OmniIntent
 
 Intent 聚合类型.

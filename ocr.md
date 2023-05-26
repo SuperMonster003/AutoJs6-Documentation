@@ -173,7 +173,7 @@ ocr.recognizeText('./picture.jpg'); /* 获取本地图像文件中的所有文�
 
 ### recognizeText(imgPath, region)
 
-**`6.3.0`** **`Overload [4-5]/6`**
+**`6.3.0`** **`Overload 6/6`**
 
 - **imgPath** { [string](dataTypes#string) } - 图像路径
 - **region** { [OmniRegion](omniTypes#omniregion) } - OCR 识别区域

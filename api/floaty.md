@@ -115,7 +115,7 @@ setTimeout(()=>{
 
 设置悬浮窗宽高.
 
-## window.getWidht()
+## window.getWidth()
 
 返回悬浮窗宽度.
 
@@ -198,7 +198,7 @@ setTimeout(()=>{
 
 ```
 
-## window.getWidht()
+## window.getWidth()
 
 返回悬浮窗宽度.
 

@@ -1,0 +1,67 @@
+{
+  "source": "..\\api\\cryptoKeyType.md",
+  "modules": [
+    {
+      "textRaw": "CryptoKey",
+      "name": "cryptokey",
+      "desc": "<p>CryptoKey 是 <code>org.autojs.autojs.core.crypto.Crypto.Key</code> 的子类, 其实例可代表一个密钥 (确切地说, 是自定义密钥, 而非 Java 密钥), 主要用于 <a href=\"crypto\">密文</a> 模块.</p>\n<p>常见相关方法或属性:</p>\n<ul>\n<li><a href=\"cryptoKeyPairType#p-publickey\">CryptoKeyPair#publicKey</a></li>\n<li><a href=\"cryptoKeyPairType#p-privatekey\">CryptoKeyPair#privateKey</a></li>\n<li><a href=\"crypto#c-key\">crypto.Key</a>::new</li>\n</ul>\n<blockquote>\n<p>注: 本章节仅列出 CryptoKey 独有的而不包含继承的属性及方法.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">CryptoKey</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p] data",
+          "name": "[p]_data",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#bytearray\">ByteArray</a> } - Java 字节数组</li>\n</ul>\n<p>以字节数组表示的密钥数据.</p>\n<pre><code class=\"lang-js\">console.log(new crypto.Key(&#39;Y&#39;).data); // [89]\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] data"
+        },
+        {
+          "textRaw": "[p] keyPair",
+          "name": "[p]_keypair",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>[ <code>null</code> ] { <code>&#39;public&#39;</code> | <code>&#39;private&#39;</code> } - 公私性质</li>\n</ul>\n<p>密钥的公私性质, 用于非对称加密.</p>\n<pre><code class=\"lang-js\">console.log(new crypto.Key(&#39;Y&#39;).keyPair); // null\nconsole.log(new crypto.Key(&#39;Y&#39;, { keyPair: &#39;public&#39; }).keyPair); // public\n</code></pre>\n<p>需特别留意, 与 Auto.js Pro 不同, <code>keyPair</code> 默认值为 <code>null</code>, 而非 <code>undefined</code>. 这是因为 AutoJs6 的 <a href=\"crypto\">crypto</a> 模块底层实现不是 JavaScript 语言.</p>\n",
+          "type": "module",
+          "displayName": "[p] keyPair"
+        },
+        {
+          "textRaw": "[m] toKeySpec",
+          "name": "[m]_tokeyspec",
+          "methods": [
+            {
+              "textRaw": "toKeySpec(transformation)",
+              "type": "method",
+              "name": "toKeySpec",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**transformation** { [CryptoCipherTransformation](dataTypes#cryptociphertransformation) } - 密码转换名称 ",
+                      "name": "**transformation**",
+                      "type": " [CryptoCipherTransformation](dataTypes#cryptociphertransformation) ",
+                      "desc": "密码转换名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) } Java 密钥 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) ",
+                      "desc": "Java 密钥"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "transformation"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>由密码对生成一个指定算法的 Java 密钥 (Java Key).</p>\n<p><code>toKeySpec</code> 中的 &quot;spec&quot; 全称为 &quot;specification&quot;, 意为 &quot;规范&quot;. 因此, 此方法可理解为将自定义密钥转换为规范的密钥.</p>\n<pre><code class=\"lang-js\">/* 生成一个 DES 算法的规范密钥. */\n\nlet specKey = new crypto.Key(&#39;Y&#39;).toKeySpec(&#39;DES&#39;);\nconsole.log(specKey);\n\n/* 生成一个 RSA 算法的规范密钥对. */\n\nlet specPublicKey = new crypto.Key([\n    48, 60, 48, 13, 6, 9, 42, -122, 72, -122, -9, 13, 1, 1, 1, 5, 0, 3, 43, 0, 48, 40, 2, 33, 0, -68, -97, -19, 103, 19, 14, 68, 33, -65, 52, 76, 115, 33, 33, 12, 84, -82, -116, 101, 60, 106, 119, -90, -41, 107, -16, 1, 52, 94, 29, -121, 55, 2, 3, 1, 0, 1,\n], { keyPair: &#39;public&#39; });\n\nconsole.log(specPublicKey.toKeySpec(&#39;RSA&#39;));\n\nlet specPrivateKey = new crypto.Key([\n    48, -127, -62, 2, 1, 0, 48, 13, 6, 9, 42, -122, 72, -122, -9, 13, 1, 1, 1, 5, 0, 4, -127, -83, 48, -127, -86, 2, 1, 0, 2, 33, 0, -32, 71, -69, 124, -32, -63, -67, -61, 9, -54, 91, -81, 127, -102, 62, 102, 124, 19, 65, 49, -14, 40, 52, 23, -101, -64, -14, -34, -44, -88, -70, -15, 2, 3, 1, 0, 1, 2, 32, 0, -86, -9, -99, 52, -95, -121, 15, 20, 43, 111, 61, 40, 100, -10, -42, 25, 40, -111, -44, -102, 107, -8, -83, -56, -77, 89, -109, -83, -97, 77, 53, 2, 17, 0, -2, -37, 9, 64, -54, 67, -75, 73, 87, -118, -35, -8, 103, -9, -101, -3, 2, 17, 0, -31, 73, -116, -122, 27, -20, 59, -10, 60, -13, -85, 0, 1, -117, 27, 5, 2, 17, 0, -10, -47, 78, -66, -50, -92, -112, 55, -67, 110, -95, -42, 103, 106, 40, 73, 2, 16, 48, -127, -28, -106, -17, -90, 50, -42, -9, 18, -60, 43, -15, 41, 33, 125, 2, 16, 8, 74, 76, 65, 77, -95, 96, 94, 81, 44, 46, 51, 69, 62, -6, -24,\n], { keyPair: &#39;private&#39; });\n\nconsole.log(specPrivateKey.toKeySpec(&#39;RSA&#39;));\n</code></pre>\n<p><code>toKeySpec</code> 方法在实际应用中几乎不会用到, 它往往用于 <code>cipher</code> 对象的初始化.<br>为更加深入地了解 <code>toKeySpec</code> 的使用方式, 下述示例使用了非常底层的方式展示了一个使用 DES 算法的加密和解密的过程:</p>\n<pre><code class=\"lang-js\">/* 原始数据. */\nlet data = &#39;ABC..XYZ&#39;;\n\n/* 转换名称 (此处可视为算法名称). */\nlet transformation = &#39;DES&#39;;\n\n/* 获取规范密钥. */\n\nlet specKey = new crypto.Key(data).toKeySpec(transformation);\n\n/* 加密过程. */\n\nlet cipherA = javax.crypto.Cipher.getInstance(transformation);\ncipherA.init(javax.crypto.Cipher.ENCRYPT_MODE, specKey);\n\nlet bosA = new java.io.ByteArrayOutputStream();\nlet cosA = new javax.crypto.CipherOutputStream(bosA, cipherA);\ncosA.write(new java.lang.String(data).getBytes(), 0, data.length);\ncosA.close();\nlet resultA = bosA.toByteArray();\nbosA.close();\n\n/* 加密后的数据 (字节数组). */\nconsole.log(resultA); // [74, -49, 32, -94, 104, 57, 45, 3, -72, -113, 89, -13, -78, -24, -64, 75]\n\n/* 解密过程, 将加密后的数据 resultA 作为解密的输入数据. */\n\nlet cipherB = javax.crypto.Cipher.getInstance(transformation);\ncipherB.init(javax.crypto.Cipher.DECRYPT_MODE, specKey);\n\nlet bosB = new java.io.ByteArrayOutputStream();\nlet cosB = new javax.crypto.CipherOutputStream(bosB, cipherB);\ncosB.write(resultA, 0, resultA.length);\ncosB.close();\nlet resultB = String(bosB);\nbosB.close();\n\n/* 解密后的数据 (字符串). */\nconsole.log(resultB); // ABC..XYZ\nconsole.log(resultB === data); // true\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toKeySpec"
+        }
+      ],
+      "type": "module",
+      "displayName": "CryptoKey"
+    }
+  ]
+}

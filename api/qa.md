@@ -275,7 +275,7 @@ function rotate(src, degrees, px, py) {
 
 如有任何问题或建议, 可在 GitHub 项目议题页面发起新的反馈.
 
-关于 <strong>项目文档</strong> 的反馈:  
+关于 <strong>应用文档</strong> 的反馈:  
 http://docs-issues.autojs6.com
 
 关于 <strong>AutoJs6</strong> 的反馈:  

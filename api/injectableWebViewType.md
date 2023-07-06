@@ -2,11 +2,11 @@
 
 [android.webkit.WebView](https://developer.android.com/reference/android/webkit/WebView) 的子类.
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [web.newInjectableWebView](web#m-newinjectablewebview)
 
-> 注: 本章节仅列出 InjectableWebView 独有的而不包含继承的属性或方法.
+> 注: 本章节仅列出 InjectableWebView 独有的而不包含继承的属性及方法.
 
 ---
 

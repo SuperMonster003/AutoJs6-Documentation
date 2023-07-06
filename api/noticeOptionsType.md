@@ -3,7 +3,7 @@
 NoticeOptions 是一个发送 AutoJs6 通知时用于设置通知选项的接口.  
 这些选项将影响通知的 [ 文本内容 / 发送方式 / 主题样式 / 视听反馈 ] 等.
 
-常见参数中使用此接口类型的方法:
+常见相关方法或属性:
 
 - [notice](notice#notice)(**options**)
 - [notice](notice#notice)(content, **options**)

@@ -46,10 +46,10 @@
 |               [Floaty - 悬浮窗](floaty)                |          |
 |                [Canvas - 画布](canvas)                |          |
 |                   [UI - 用户界面](ui)                   |          |
-|                  [Web - 万维网](web)                   |    √     |
+|                  [Web - 万维网](web)                   | &gt; 80% |
 |                    [HTTP](http)                     | &lt; 5%  |
 |                  [Base64](base64)                   |    √     |
-|                [Crypto - 密文](crypto)                |          |
+|                [Crypto - 密文](crypto)                |    √     |
 |         [Internationalization - 国际化](i18n)          |          |
 |            [Standardization - 标准化](s13n)            |          |
 |                     [E4X](e4x)                      |    √     |

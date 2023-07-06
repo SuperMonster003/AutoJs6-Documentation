@@ -465,6 +465,39 @@ Color('#663399').setAlpha(255).toHex(); // #FF663399
 Color('#663399').setAlpha(1).toHex(); /* 同上, 1 默认作为百分数分量, 即 100%. */
 ```
 
+## [m] setAlphaRelative
+
+### setAlphaRelative(percentage)
+
+**`6.3.1`**
+
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [Color](colorType) }
+
+针对 `A (alpha)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `A (alpha)` 分量为 `80`, 希望设置 `A` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+Color(color).setAlphaRelative(0.5);
+Color(color).setAlphaRelative('50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `A` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+Color(color).setAlphaRelative(1.5);
+Color(color).setAlphaRelative('150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+Color(color).setAlphaRelative(10); /* A 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `A` 分量为 `0` 时, 无论如何设置相对量, `A` 分量均保持 `0` 值.
+
 ## [m#] removeAlpha
 
 ### removeAlpha()
@@ -590,6 +623,39 @@ Color('#663399').setRed(0.5).toHex(); /* 同上, 0.5 解析为百分数分量, �
 Color('#663399').setRed(255).toHex(); // #FF3399
 Color('#663399').setRed(1).toHex(); /* #013399, 不同上. 1 默认作为整数分量, 而非 100%. */
 ```
+
+## [m] setRedRelative
+
+### setRedRelative(percentage)
+
+**`6.3.1`**
+
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [Color](colorType) }
+
+针对 `R (red)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `R (red)` 分量为 `80`, 希望设置 `R` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+Color(color).setRedRelative(0.5);
+Color(color).setRedRelative('50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `R` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+Color(color).setRedRelative(1.5);
+Color(color).setRedRelative('150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+Color(color).setRedRelative(10); /* R 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `R` 分量为 `0` 时, 无论如何设置相对量, `R` 分量均保持 `0` 值.
 
 ## [m#] removeRed
 
@@ -717,6 +783,39 @@ Color('#663399').setGreen(255).toHex(); // #66FF99
 Color('#663399').setGreen(1).toHex(); /* #660199, 不同上. 1 默认作为整数分量, 而非 100%. */
 ```
 
+## [m] setGreenRelative
+
+### setGreenRelative(percentage)
+
+**`6.3.1`**
+
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [Color](colorType) }
+
+针对 `G (green)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `G (green)` 分量为 `80`, 希望设置 `G` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+Color(color).setGreenRelative(0.5);
+Color(color).setGreenRelative('50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `G` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+Color(color).setGreenRelative(1.5);
+Color(color).setGreenRelative('150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+Color(color).setGreenRelative(10); /* G 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `G` 分量为 `0` 时, 无论如何设置相对量, `G` 分量均保持 `0` 值.
+
 ## [m#] removeGreen
 
 ### removeGreen()
@@ -842,6 +941,39 @@ Color('#663399').setBlue(0.5).toHex(); /* 同上, 0.5 解析为百分数分量, 
 Color('#663399').setBlue(255).toHex(); // #6633FF
 Color('#663399').setBlue(1).toHex(); /* #663301, 不同上. 1 默认作为整数分量, 而非 100%. */
 ```
+
+## [m] setBlueRelative
+
+### setBlueRelative(percentage)
+
+**`6.3.1`**
+
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [Color](colorType) }
+
+针对 `B (blue)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `B (blue)` 分量为 `80`, 希望设置 `B` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+Color(color).setBlueRelative(0.5);
+Color(color).setBlueRelative('50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `B` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+Color(color).setBlueRelative(1.5);
+Color(color).setBlueRelative('150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+Color(color).setBlueRelative(10); /* B 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `B` 分量为 `0` 时, 无论如何设置相对量, `B` 分量均保持 `0` 值.
 
 ## [m#] removeBlue
 

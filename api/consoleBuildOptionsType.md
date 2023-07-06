@@ -3,7 +3,7 @@
 ConsoleBuildOptions 是一个显示控制台浮动窗口时用于设置窗口选项的接口.  
 这些选项将影响控制台浮动窗口的 [ 日志内容样式 / 标题样式 / 窗口尺寸 / 窗口位置 ] 等.
 
-常见参数中使用此接口类型的方法:
+常见相关方法或属性:
 
 - [console.build](console#m-build)(**options**)
 
@@ -15,7 +15,7 @@ ConsoleBuildOptions 是一个显示控制台浮动窗口时用于设置窗口选
 
 ## [p?] size
 
-- { [&#91;](dataTypes#string) width: [number](dataTypes#number), height: [number](dataTypes#number) [&#93;](dataTypes#string) } - 浮动窗口尺寸
+- { [&#91;](dataTypes#array) width: [number](dataTypes#number), height: [number](dataTypes#number) [&#93;](dataTypes#array) } - 浮动窗口尺寸
 
 设置控制台浮动窗口的尺寸.
 
@@ -29,7 +29,7 @@ console.build({ size: [ 0.6, 0.7 ] }).show();
 
 ## [p?] position
 
-- { [&#91;](dataTypes#string) x: [number](dataTypes#number), y: [number](dataTypes#number) [&#93;](dataTypes#string) } - 浮动窗口位置
+- { [&#91;](dataTypes#array) x: [number](dataTypes#number), y: [number](dataTypes#number) [&#93;](dataTypes#array) } - 浮动窗口位置
 
 设置控制台浮动窗口的位置.
 

@@ -4,191 +4,281 @@
     {
       "textRaw": "密文 (Crypto)",
       "name": "密文_(crypto)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p><strong> [<a href=\"https://pro.autojs.org/\">Pro 8.0.0新增</a>] </strong></p>\n<p>$crypto模块提供了对称加密(例如AES)、非对称加密(例如RSA)、消息摘要(例如MD5, SHA)等支持.</p>\n",
-      "methods": [
-        {
-          "textRaw": "$crypto.digest(message, algorithm[, options])",
-          "type": "method",
-          "name": "digest",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`message` {any} ",
-                  "name": "message",
-                  "type": "any"
-                },
-                {
-                  "textRaw": "`algorithm` {string} 消息摘要算法, 包括： ",
-                  "options": [
-                    {
-                      "textRaw": "MD5 ",
-                      "name": "MD5"
-                    },
-                    {
-                      "textRaw": "SHA-1 ",
-                      "name": "SHA-1"
-                    },
-                    {
-                      "textRaw": "SHA-256 ",
-                      "name": "SHA-256"
-                    },
-                    {
-                      "textRaw": "SHA-384 ",
-                      "name": "SHA-384"
-                    },
-                    {
-                      "textRaw": "SHA-512 ",
-                      "name": "SHA-512"
-                    }
-                  ],
-                  "name": "algorithm",
-                  "type": "string",
-                  "desc": "消息摘要算法, 包括："
-                },
-                {
-                  "textRaw": "`options` {any} ",
-                  "name": "options",
-                  "type": "any",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "message"
-                },
-                {
-                  "name": "algorithm"
-                },
-                {
-                  "name": "options",
-                  "optional": true
-                }
-              ]
-            }
-          ],
-          "desc": "<p>对信息message使用消息摘要算法<code>algorithm</code>进行摘要并返回结果, 默认的输出格式为hex.</p>\n<p>参数message的类型默认为字符串, 返回值默认为hex；可以通过options来指定参数message的类型和返回值的类型、格式, 比如文件、base64、字节数组、hex等. 参见《输入和输出的类型和格式》.</p>\n<pre><code class=\"lang-javascript\">// 计算字符串abc的md5\ntoastLog($crypto.digest(&quot;abc&quot;, &quot;MD5&quot;));\n// 计算字符串abc的sha-256\ntoastLog($crypto.digest(&quot;abc&quot;, &quot;SHA-256&quot;));\n// 计算文件/sdcard/1.txt的md5\ntoastLog($crypto.digest(&quot;/sdcard/1.txt&quot;, &quot;MD5&quot;, {\n    input: &quot;file&quot;\n}));\n</code></pre>\n"
-        },
-        {
-          "textRaw": "$crypto.encrypt(data, key, algorithm, options)",
-          "type": "method",
-          "name": "encrypt",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`data` {any} 明文消息 ",
-                  "name": "data",
-                  "type": "any",
-                  "desc": "明文消息"
-                },
-                {
-                  "textRaw": "`key` {Key} 密钥 ",
-                  "name": "key",
-                  "type": "Key",
-                  "desc": "密钥"
-                },
-                {
-                  "textRaw": "`algorithm` {string} 加密算法, 包括： ",
-                  "options": [
-                    {
-                      "textRaw": "AES ",
-                      "name": "AES"
-                    },
-                    {
-                      "textRaw": "AES/ECB/NoPadding ",
-                      "name": "AES/ECB/NoPadding"
-                    },
-                    {
-                      "textRaw": "AES/ECB/PKCS5Padding ",
-                      "name": "AES/ECB/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "AES/CBC/NoPadding ",
-                      "name": "AES/CBC/NoPadding"
-                    },
-                    {
-                      "textRaw": "AES/CBC/PKCS5Padding ",
-                      "name": "AES/CBC/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "AES/CFB/NoPadding ",
-                      "name": "AES/CFB/NoPadding"
-                    },
-                    {
-                      "textRaw": "AES/CFB/PKCS5Padding ",
-                      "name": "AES/CFB/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "AES/CTR/NoPadding ",
-                      "name": "AES/CTR/NoPadding"
-                    },
-                    {
-                      "textRaw": "AES/CTR/PKCS5Padding ",
-                      "name": "AES/CTR/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "AES/OFB/PKCS5Padding ",
-                      "name": "AES/OFB/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "AES/OFB/PKCS5Padding ",
-                      "name": "AES/OFB/PKCS5Padding"
-                    },
-                    {
-                      "textRaw": "RSA/ECB/PKCS1Padding ",
-                      "name": "RSA/ECB/PKCS1Padding"
-                    },
-                    {
-                      "textRaw": "RSA/ECB/NoPadding ",
-                      "name": "RSA/ECB/NoPadding"
-                    },
-                    {
-                      "textRaw": "... 具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher/) ",
-                      "name": "...",
-                      "desc": "具体可参阅 [javax.crypto.Cipher](https://developer.android.com/reference/javax/crypto/Cipher/)"
-                    }
-                  ],
-                  "name": "algorithm",
-                  "type": "string",
-                  "desc": "加密算法, 包括："
-                },
-                {
-                  "textRaw": "`options` {Object} 加密选项 ",
-                  "name": "options",
-                  "type": "Object",
-                  "desc": "加密选项"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "data"
-                },
-                {
-                  "name": "key"
-                },
-                {
-                  "name": "algorithm"
-                },
-                {
-                  "name": "options"
-                }
-              ]
-            }
-          ],
-          "displayName": "输入和输出的类型和格式"
-        }
-      ],
+      "desc": "<p>crypto 模块提供 [ 对称加密 (如 AES) / 非对称加密 (如 RSA) / 消息摘要 (如 MD5, SHA) ] 等支持.</p>\n<blockquote>\n<p>注: 本章节参考自 <a href=\"https://pro.autojs.org/docs/zh/v8/crypto.html\">Auto.js Pro 文档</a>.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">crypto</p>\n\n<hr>\n",
       "modules": [
         {
-          "textRaw": "输入和输出的类型和格式",
-          "name": "输入和输出的类型和格式",
+          "textRaw": "[m] digest",
+          "name": "[m]_digest",
+          "methods": [
+            {
+              "textRaw": "digest(message, algorithm)",
+              "type": "method",
+              "name": "digest",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 待获取摘要的消息</li>\n<li><strong>algorithm</strong> { <a href=\"dataTypes#cryptodigestalgorithm\">CryptoDigestAlgorithm</a> } - 消息摘要算法</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> }</li>\n</ul>\n<p>获取 <code>消息 (message)</code> 经指定 <code>算法 (algorithm)</code> 计算后的 <code>消息摘要 (message digest)</code>.</p>\n<pre><code class=\"lang-js\">/* 获取字符串 &quot;hello&quot; 的 MD5 摘要. */\nconsole.log(crypto.digest(&#39;hello&#39;, &#39;MD5&#39;)); // 5d41402abc4b2a76b9719d911017c592\n\n/* 获取字符串 &quot;hello&quot; 的 SHA-1 摘要. */\nconsole.log(crypto.digest(&#39;hello&#39;, &#39;SHA-1&#39;)); // aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "algorithm"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "digest(message)",
+              "type": "method",
+              "name": "digest",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 待获取摘要的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取 <code>消息 (message)</code> 的 MD5 <code>消息摘要 (message digest)</code>.</p>\n<p>相当于 <code>crypto.digest(message, &#39;MD5&#39;)</code>.</p>\n<pre><code class=\"lang-js\">/* 获取字符串 &quot;hello&quot; 的 MD5 摘要. */\nconsole.log(crypto.digest(&#39;hello&#39;)); // 5d41402abc4b2a76b9719d911017c592\nconsole.log(crypto.digest(&#39;hello&#39;, &#39;MD5&#39;)); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "digest(message, algorithm, options)",
+              "type": "method",
+              "name": "digest",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 待获取摘要的消息</li>\n<li><strong>algorithm</strong> { <a href=\"dataTypes#cryptodigestalgorithm\">CryptoDigestAlgorithm</a> } - 消息摘要算法</li>\n<li><strong>options</strong> { <a href=\"dataTypes#cryptodigestoptions\">CryptoDigestOptions</a> } - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> }</li>\n</ul>\n<p>获取 <code>消息 (message)</code> 经指定 <code>算法 (algorithm)</code> 计算后的 <code>消息摘要 (message digest)</code>.</p>\n<p>通过 <code>options</code> 参数可指定输入消息的类型 (文件, Base64, Hex, 字符串) 及摘要的类型 (字节数组, Base64, Hex, 字符串) 等.</p>\n<pre><code class=\"lang-js\">/* 获取字符串 &quot;hello&quot; 的 MD5 摘要, 并输出其字节数组. */\nconsole.log(crypto.digest(&#39;hello&#39;, &#39;MD5&#39;, { output: &#39;bytes&#39; })); // [93, 65, 64, 42, -68, 75, 42, 118, -71, 113, -99, -111, 16, 23, -59, -110]\n\n/* 获取字符串 &quot;hello&quot; 的 SHA-1 摘要, 并输出其 Base64 编码. */\nconsole.log(crypto.digest(&#39;hello&#39;, &#39;SHA-1&#39;, { output: &#39;base64&#39; })); // qvTGHdzF6KLavt4PO0gs2a6pQ00=\n\n/* 获取 Base64 数据的 MD5 摘要. */\nconsole.log(crypto.digest(&#39;qvTGHdzF6KLavt4PO0gs2a6pQ00=&#39;, &#39;MD5&#39;, { input: &#39;base64&#39; })); // 406f65cdc25d6a9db86c06e4bc19a2cf\n\n/* 获取文件的 MD5 摘要. */\nlet str = &#39;hello&#39;;\nlet path = files.path(`./tmp-${Date.now()}`);\nfiles.create(path);\nfiles.write(path, str);\nconsole.log(crypto.digest(path, &#39;MD5&#39;, { input: &#39;file&#39; })); // 5d41402abc4b2a76b9719d911017c592\nfiles.remove(path);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "algorithm"
+                    },
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "digest(message, options)",
+              "type": "method",
+              "name": "digest",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 待获取摘要的消息</li>\n<li><strong>algorithm</strong> { <a href=\"dataTypes#cryptodigestalgorithm\">CryptoDigestAlgorithm</a> } - 消息摘要算法</li>\n<li><strong>options</strong> { <a href=\"dataTypes#cryptodigestoptions\">CryptoDigestOptions</a> } - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> }</li>\n</ul>\n<p>获取 <code>消息 (message)</code> 的 MD5 <code>消息摘要 (message digest)</code>.</p>\n<p>通过 <code>options</code> 参数可指定输入消息的类型 (文件, Base64, Hex, 字符串) 及摘要的类型 (字节数组, Base64, Hex, 字符串) 等.</p>\n<p>相当于 <code>crypto.digest(message, &#39;MD5&#39;, options)</code>.</p>\n<pre><code class=\"lang-js\">/* 获取字符串 &quot;hello&quot; 的 MD5 摘要, 并输出其字节数组. */\nconsole.log(crypto.digest(&#39;hello&#39;, { output: &#39;bytes&#39; })); // [93, 65, 64, 42, -68, 75, 42, 118, -71, 113, -99, -111, 16, 23, -59, -110]\n\n/* 获取 Base64 数据的 MD5 摘要. */\nconsole.log(crypto.digest(&#39;qvTGHdzF6KLavt4PO0gs2a6pQ00=&#39;, { input: &#39;base64&#39; })); // 406f65cdc25d6a9db86c06e4bc19a2cf\n\n/* 获取文件的 MD5 摘要. */\nlet str = &#39;hello&#39;;\nlet path = files.path(`./tmp-${Date.now()}`);\nfiles.create(path);\nfiles.write(path, str);\nconsole.log(crypto.digest(path, { input: &#39;file&#39; })); // 5d41402abc4b2a76b9719d911017c592\nfiles.remove(path);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "type": "module",
-          "displayName": "输入和输出的类型和格式"
+          "displayName": "[m] digest"
+        },
+        {
+          "textRaw": "[m] encrypt",
+          "name": "[m]_encrypt",
+          "methods": [
+            {
+              "textRaw": "encrypt(data, key, transformation, options?)",
+              "type": "method",
+              "name": "encrypt",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 待加密数据</li>\n<li><strong>key</strong> { <a href=\"#c-key\">crypto.Key</a> | <a href=\"https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html\">java.security.Key</a> } - 加密密钥</li>\n<li><strong>transformation</strong> { <a href=\"dataTypes#cryptociphertransformation\">CryptoCipherTransformation</a> } - 密码转换名称</li>\n<li><strong>[ options ]</strong> { <a href=\"cryptoCipherOptionsType\">CryptoCipherOptions</a> } - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> }</li>\n</ul>\n<p>数据加密.</p>\n",
+              "modules": [
+                {
+                  "textRaw": "输入",
+                  "name": "输入",
+                  "desc": "<p><code>data</code> 参数的性质可借助 <code>options.input</code> 属性进行区分, 详见 <a href=\"cryptoCipherOptionsType#p-input\">CryptoCipherOptions#input</a>.</p>\n<p>如果 <code>data</code> 参数为字节数组, 则 <code>options.input</code> 将被忽略. 因为字节数组可以唯一确定 <code>data</code> 的性质, 无需再通过 <code>options.input</code> 指定.</p>\n",
+                  "type": "module",
+                  "displayName": "输入"
+                },
+                {
+                  "textRaw": "输出",
+                  "name": "输出",
+                  "desc": "<p><code>options.output</code> 指定输出的数据格式, 详见 <a href=\"cryptoCipherOptionsType#p-output\">CryptoCipherOptions#output</a>.</p>\n<p>特别地, 当 <code>options.output</code> 为 <code>&#39;file&#39;</code> 时, 输出格式为十六进制值. 因为加密后写入文件的数据通常是不可读的 (常被视作乱码), 因此最终的返回值类型没有采用 <code>&#39;string&#39;</code>, 而是 <code>&#39;hex&#39;</code>.</p>\n<p><code>options.output</code> 影响的其实仅仅是加密结果的表现形式, 这些形式之前通常可以互相转换. 真正影响加密结果的, 是加密过程.</p>\n",
+                  "type": "module",
+                  "displayName": "输出"
+                },
+                {
+                  "textRaw": "加密",
+                  "name": "加密",
+                  "desc": "<p>加密过程受 <code>key</code> 和 <code>transformation</code> 两个参数的影响. 详见 <a href=\"#c-key\">crypto.Key</a> 及 <a href=\"dataTypes#cryptociphertransformation\">CryptoCipherTransformation</a> 小节.</p>\n<p>为保证最大兼容性, <code>key</code> 参数同时支持原生的 <code>java.security.Key</code> 类型, 此时 <code>key</code> 将自动按照 <code>new crypto.Key(key.encoded)</code> 进行转换.</p>\n",
+                  "type": "module",
+                  "displayName": "加密"
+                },
+                {
+                  "textRaw": "示例",
+                  "name": "示例",
+                  "desc": "<p>AES 算法加密示例:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\n\n/* 创建密钥实例. */\n/* 密钥长度需为 [ 16, 24, 32 ] 之一. */\nlet key = new crypto.Key(&#39;a&#39;.repeat(16));\n\n/* 加密数据, 输出格式保持默认, 即 bytes. */\nconsole.log(crypto.encrypt(message, key, &#39;AES&#39;)); // [-20, 97, -47, 124, 88, 10, 85, -42, -128, -117, 11, 98, -33, -85, 106, 13]\n\n/* 输出格式修改为 Base64. */\nconsole.log(crypto.encrypt(message, key, &#39;AES&#39;, { output: &#39;base64&#39; })); // 7GHRfFgKVdaAiwti36tqDQ==\n\n/* AES 默认工作模式为 ECB, 默认填充方式为 PKCS5Padding, 结果同上. */\nconsole.log(crypto.encrypt(message, key, &#39;AES/ECB/PKCS5Padding&#39;, { output: &#39;base64&#39; })); // 7GHRfFgKVdaAiwti36tqDQ==\n</code></pre>\n<p>RSA 算法加密示例:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\n\n/* 生成 RSA 密钥对. */\nlet key = crypto.generateKeyPair(&#39;RSA&#39;, 2048);\n\n/* 使用公钥加密, 转换名称为 RSA/ECB/PKCS1Padding. */\nconsole.log(crypto.encrypt(message, key.publicKey, &#39;RSA/ECB/PKCS1Padding&#39;)); /* 结果随机, 因为生成的密钥是不确定的. */\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "示例"
+                },
+                {
+                  "textRaw": "可逆性",
+                  "name": "可逆性",
+                  "desc": "<p>加密与解密具有可逆性:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\nlet key = new crypto.Key(&#39;a&#39;.repeat(16));\nlet encrypted = crypto.encrypt(message, key, &#39;AES&#39;);\n\n/* 解密还原为 hello. */\nconsole.log(crypto.decrypt(encrypted, key, &#39;AES&#39;, { output: &#39;string&#39; }));\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "可逆性"
+                }
+              ],
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "transformation"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] encrypt"
+        },
+        {
+          "textRaw": "[m] decrypt",
+          "name": "[m]_decrypt",
+          "methods": [
+            {
+              "textRaw": "decrypt(data, key, transformation, options?)",
+              "type": "method",
+              "name": "decrypt",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 待解密数据</li>\n<li><strong>key</strong> { <a href=\"#c-key\">crypto.Key</a> | <a href=\"https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html\">java.security.Key</a> } - 解密密钥</li>\n<li><strong>transformation</strong> { <a href=\"dataTypes#cryptociphertransformation\">CryptoCipherTransformation</a> } - 密码转换名称</li>\n<li><strong>[ options ]</strong> { <a href=\"cryptoCipherOptionsType\">CryptoCipherOptions</a> } - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> }</li>\n</ul>\n<p>数据解密.</p>\n",
+              "modules": [
+                {
+                  "textRaw": "输入",
+                  "name": "输入",
+                  "desc": "<p><code>data</code> 参数的性质可借助 <code>options.input</code> 属性进行区分, 详见 <a href=\"cryptoCipherOptionsType#p-input\">CryptoCipherOptions#input</a>.</p>\n<p>如果 <code>data</code> 参数为字节数组, 则 <code>options.input</code> 将被忽略. 因为字节数组可以唯一确定 <code>data</code> 的性质, 无需再通过 <code>options.input</code> 指定.</p>\n",
+                  "type": "module",
+                  "displayName": "输入"
+                },
+                {
+                  "textRaw": "输出",
+                  "name": "输出",
+                  "desc": "<p><code>options.output</code> 指定输出的数据格式, 详见 <a href=\"cryptoCipherOptionsType#p-output\">CryptoCipherOptions#output</a>.</p>\n<p>特别地, 当 <code>options.output</code> 为 <code>&#39;file&#39;</code> 时, 输出格式为十六进制值. 因为解密后写入文件的数据通常是不可读的 (常被视作乱码), 因此最终的返回值类型没有采用 <code>&#39;string&#39;</code>, 而是 <code>&#39;hex&#39;</code>.</p>\n<p><code>options.output</code> 影响的其实仅仅是解密结果的表现形式, 这些形式之前通常可以互相转换. 真正影响解密结果的, 是解密过程.</p>\n",
+                  "type": "module",
+                  "displayName": "输出"
+                },
+                {
+                  "textRaw": "解密",
+                  "name": "解密",
+                  "desc": "<p>解密过程受 <code>key</code> 和 <code>transformation</code> 两个参数的影响. 详见 <a href=\"#c-key\">crypto.Key</a> 及 <a href=\"dataTypes#cryptociphertransformation\">CryptoCipherTransformation</a> 小节.</p>\n<p>为保证最大兼容性, <code>key</code> 参数同时支持原生的 <code>java.security.Key</code> 类型, 此时 <code>key</code> 将自动按照 <code>new crypto.Key(key.encoded)</code> 进行转换.</p>\n",
+                  "type": "module",
+                  "displayName": "解密"
+                },
+                {
+                  "textRaw": "示例",
+                  "name": "示例",
+                  "desc": "<p>AES 算法解密示例:</p>\n<pre><code class=\"lang-js\">let ec = {\n    bytes: [\n        -20, 97, -47, 124, 88, 10, 85, -42, -128, -117, 11, 98, -33, -85, 106, 13,\n    ],\n    base64: &#39;7GHRfFgKVdaAiwti36tqDQ==&#39;,\n    hex: &#39;ec61d17c580a55d6808b0b62dfab6a0d&#39;,\n};\n\n/* 创建密钥实例. */\n/* 密钥长度需为 [ 16, 24, 32 ] 之一. */\nlet key = new crypto.Key(&#39;a&#39;.repeat(16));\n\n/* 解密数据, 输入为字节数组形式, 输出字符串形式. */\nconsole.log(crypto.decrypt(ec.bytes, key, &#39;AES&#39;, { input: &#39;bytes&#39;, output: &#39;string&#39; })); // hello\n\n/* 解密数据, 输入为 Base64 形式, 输出字符串形式. */\nconsole.log(crypto.decrypt(ec.base64, key, &#39;AES&#39;, { input: &#39;base64&#39;, output: &#39;string&#39; })); // hello\n\n/* 解密数据, 输入为十六进制值形式, 输出字符串形式. */\nconsole.log(crypto.decrypt(ec.hex, key, &#39;AES&#39;, { input: &#39;hex&#39;, output: &#39;string&#39; })); // hello\n</code></pre>\n<p>RSA 算法解密示例:</p>\n<p>参阅下文 <code>可逆性</code> 小节.</p>\n",
+                  "type": "module",
+                  "displayName": "示例"
+                },
+                {
+                  "textRaw": "可逆性",
+                  "name": "可逆性",
+                  "desc": "<p>加密与解密具有可逆性:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\n\n/* 生成 RSA 密钥对. */\nlet key = crypto.generateKeyPair(&#39;RSA&#39;, 2048);\n\n/* 使用公钥加密, 转换名称为 RSA/ECB/OAEPwithSHA-224andMGF1Padding. */\nlet ec = crypto.encrypt(message, key.publicKey, &#39;RSA/ECB/OAEPwithSHA-224andMGF1Padding&#39;);\n\n/* 使用私钥解密, 转换名称同样为 RSA/ECB/PKCS1Padding. */\nlet dc = crypto.decrypt(ec, key.privateKey, &#39;RSA/ECB/OAEPwithSHA-224andMGF1Padding&#39;, { output: &#39;string&#39; });\n\n/* 解密还原为 message 变量的值, 即 &#39;hello&#39;. */\nconsole.log(dc); // hello\nconsole.log(dc === message); // true\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "可逆性"
+                }
+              ],
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "transformation"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] decrypt"
+        },
+        {
+          "textRaw": "[m] generateKeyPair",
+          "name": "[m]_generatekeypair",
+          "methods": [
+            {
+              "textRaw": "generateKeyPair(algorithm, length?)",
+              "type": "method",
+              "name": "generateKeyPair",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>algorithm</strong> { <a href=\"dataTypes#cryptokeypairgeneratoralgorithm\">CryptoKeyPairGeneratorAlgorithm</a> } - 密钥对生成器算法</li>\n<li><strong>[ length = <code>256</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 密钥长度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"cryptoKeyPairType\">CryptoKeyPair</a> } - 密钥对</li>\n</ul>\n<p>生成指定算法及长度的随机密钥对.</p>\n<blockquote>\n<p>注: 不同算法对密钥长度有不同的要求.</p>\n</blockquote>\n<p>如需生成固定密钥的密钥对, 可使用 <a href=\"#c-keypair\">crypto.KeyPair</a> 直接构造.</p>\n<p>密钥对通常会参与非对称加密算法的加解密过程:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\n\n/* 生成 RSA 密钥对. */\nlet key = crypto.generateKeyPair(&#39;RSA&#39;, 2048);\n\n/* 使用公钥加密, 转换名称为 RSA/ECB/OAEPwithSHA-224andMGF1Padding. */\nlet ec = crypto.encrypt(message, key.publicKey, &#39;RSA/ECB/OAEPwithSHA-224andMGF1Padding&#39;);\n\n/* 使用私钥解密, 转换名称同样为 RSA/ECB/PKCS1Padding. */\nlet dc = crypto.decrypt(ec, key.privateKey, &#39;RSA/ECB/OAEPwithSHA-224andMGF1Padding&#39;, { output: &#39;string&#39; });\n\n/* 解密还原为 message 变量的值, 即 &#39;hello&#39;. */\nconsole.log(dc); // hello\nconsole.log(dc === message); // true\n</code></pre>\n<p>但需额外注意, 某些算法生成的密钥对, 仅仅用作密钥交换, 密钥交换后将确定一个对称密钥, 最终使用一个对称密钥算法 (如 DES) 进行加解密. 因此密钥对不一定参与非对称加解密过程.</p>\n<p>上述情况典型的样例, 当属 Diffie-Hellman（迪菲-赫尔曼) 算法:</p>\n<pre><code class=\"lang-js\">let message = &#39;hello&#39;;\n\n/* 生成 Diffie-Hellman（迪菲-赫尔曼) 密钥对. */\nlet keyPair = crypto.generateKeyPair(&#39;DiffieHellman&#39;);\n\n/* 借助 Diffie-Hellman 密钥对, 使用 DES 算法生成一个确定的密钥. */\nlet key = keyPair.toKeySpec(&#39;DES&#39;);\n\n/* 使用上述密钥加密, 转换名称 (此处可视为算法名称) 也为 DES. */\n/* 除 DES 外, 凡是对称加密算法均被支持, 如 AES. */\n/* 但需保证与上述 toKeySpec 方法传入的参数一致. */\nlet ec = crypto.encrypt(message, key, &#39;DES&#39;);\n\n/* 使用上述同一个密钥解密, 转换名称同样为 DES (与加密算法一致). */\nlet dc = crypto.decrypt(ec, key, &#39;DES&#39;, { output: &#39;string&#39; });\n\n/* 解密还原为 message 变量的值, 即 &#39;hello&#39;. */\nconsole.log(dc); // hello\nconsole.log(dc === message); // true\n</code></pre>\n<p>上述示例再次验证, 密钥对不一定会参与加解密过程. 例如 <code>DiffieHellman</code> 密钥对, 仅仅用于确定一个对称密钥.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "algorithm"
+                    },
+                    {
+                      "name": "length?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] generateKeyPair"
+        },
+        {
+          "textRaw": "[C] Key",
+          "name": "[c]_key",
+          "modules": [
+            {
+              "textRaw": "[c] (data, options?)",
+              "name": "[c]_(data,_options?)",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 用于生成密钥的数据</li>\n<li><strong>[ options ]</strong> { <a href=\"cryptoCipherOptionsType\">CryptoCipherOptions</a> &amp; {<ul>\n<li>keyPair?: <code>&#39;public&#39;</code> | <code>&#39;private&#39;</code> - 指定密钥的公私性质, 用于非对称加密</li>\n</ul>\n</li>\n<li>}} - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"cryptoKeyType\">CryptoKey</a> }</li>\n</ul>\n<p>生成一个自定义密钥.</p>\n<p>关于自定义密钥的实例方法属性及相关示例, 参阅 <a href=\"cryptoKeyType\">CryptoKey</a> 类型章节.</p>\n<p>使用 <code>crypto.Key</code> 构造函数可以很方便地复制密钥数据:</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;string with length of thrity two&#39;);\n\nconsole.log(key);\n\nlet copiedKeyA = new crypto.Key(base64.encode(key.data), { input: &quot;base64&quot; });\n\nconsole.log(copiedKeyA);\n\nlet copiedKeyB = new crypto.Key(key.data, { input: &quot;bytes&quot; });\n\nconsole.log(copiedKeyB);\n\nlet copiedKeyC = new crypto.Key(Crypto.toHex(key.data), { input: &quot;hex&quot; });\n\nconsole.log(copiedKeyC);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (data, options?)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] Key"
+        },
+        {
+          "textRaw": "[C] KeyPair",
+          "name": "[c]_keypair",
+          "modules": [
+            {
+              "textRaw": "[c] (publicKeyData, privateKeyData, options?)",
+              "name": "[c]_(publickeydata,_privatekeydata,_options?)",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>publicKeyData</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 用于生成公钥的数据</li>\n<li><strong>privateKeyData</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 用于生成私钥的数据</li>\n<li><strong>[ options ]</strong> { <a href=\"cryptoCipherOptionsType\">CryptoCipherOptions</a> } - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"cryptoKeyPairType\">CryptoKeyPair</a> }</li>\n</ul>\n<p>生成一个固定密钥对.</p>\n<p>如需生成一个随机密钥对, 可使用 <a href=\"#m-generatekeypair\">crypto.generateKeyPair</a>.</p>\n<p>关于密钥对的实例方法属性及相关示例, 参阅 <a href=\"cryptoKeyPairType\">CryptoKeyPair</a> 类型章节.</p>\n<p>使用 <code>crypto.KeyPair</code> 构造函数可以很方便地复制密钥对数据:</p>\n<pre><code class=\"lang-js\">let keyPair = crypto.generateKeyPair(&#39;RSA&#39;);\n\nconsole.log(keyPair);\n\nlet copiedKeyPairA = new crypto.KeyPair(\n    base64.encode(keyPair.publicKey.data),\n    base64.encode(keyPair.privateKey.data),\n    { input: &#39;base64&#39; },\n);\n\nconsole.log(copiedKeyPairA);\n\nlet copiedKeyPairB = new crypto.KeyPair(\n    keyPair.publicKey.data,\n    keyPair.privateKey.data,\n    { input: &#39;bytes&#39; },\n);\n\nconsole.log(copiedKeyPairB);\n\nlet copiedKeyPairC = new crypto.KeyPair(\n    Crypto.toHex(keyPair.publicKey.data),\n    Crypto.toHex(keyPair.privateKey.data),\n    { input: &quot;hex&quot; },\n);\n\nconsole.log(copiedKeyPairC);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (publicKeyData, privateKeyData, options?)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] KeyPair"
         }
       ],
       "type": "module",

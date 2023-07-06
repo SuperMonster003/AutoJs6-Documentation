@@ -1,0 +1,67 @@
+{
+  "source": "..\\api\\cryptoKeyPairType.md",
+  "modules": [
+    {
+      "textRaw": "CryptoKeyPair",
+      "name": "cryptokeypair",
+      "desc": "<p>CryptoKeyPair 是 <code>org.autojs.autojs.core.crypto.Crypto.KeyPair</code> 的子类, 其实例可代表一个公私密钥对, 主要用于 <a href=\"crypto\">密文</a> 模块.</p>\n<p>常见相关方法或属性:</p>\n<ul>\n<li><a href=\"crypto#m-generatekeypair\">crypto.generateKeyPair</a></li>\n<li><a href=\"crypto#c-keypair\">crypto.KeyPair</a>::new</li>\n</ul>\n<blockquote>\n<p>注: 本章节仅列出 CryptoKeyPair 独有的而不包含继承的属性及方法.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">CryptoKeyPair</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p] publicKey",
+          "name": "[p]_publickey",
+          "desc": "<ul>\n<li>{ <a href=\"cryptoKeyType\">CryptoKey</a> } - 公钥</li>\n</ul>\n<p>用于非对称加密的公钥.</p>\n<pre><code class=\"lang-js\">let kp = crypto.generateKeyPair(&#39;RSA&#39;, 256);\nconsole.log(kp.publicKey);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] publicKey"
+        },
+        {
+          "textRaw": "[p] privateKey",
+          "name": "[p]_privatekey",
+          "desc": "<ul>\n<li>{ <a href=\"cryptoKeyType\">CryptoKey</a> } - 私钥</li>\n</ul>\n<p>用于非对称加密的私钥.</p>\n<pre><code class=\"lang-js\">let kp = crypto.generateKeyPair(&#39;DSA&#39;, 1024);\nconsole.log(kp.privateKey);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] privateKey"
+        },
+        {
+          "textRaw": "[m] toKeySpec",
+          "name": "[m]_tokeyspec",
+          "methods": [
+            {
+              "textRaw": "toKeySpec(transformation)",
+              "type": "method",
+              "name": "toKeySpec",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**transformation** { [CryptoCipherTransformation](dataTypes#cryptociphertransformation) } - 密码转换名称 ",
+                      "name": "**transformation**",
+                      "type": " [CryptoCipherTransformation](dataTypes#cryptociphertransformation) ",
+                      "desc": "密码转换名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) } Java 密钥 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) ",
+                      "desc": "Java 密钥"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "transformation"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>由密码对生成一个指定算法的 Java 密钥 (Java Key).</p>\n<p><code>toKeySpec</code> 中的 &quot;spec&quot; 全称为 &quot;specification&quot;, 意为 &quot;规范&quot;. 因此, 此方法可理解为将密钥对转换为一个规范的密钥.</p>\n<p>需额外留意, 此方法不能通过构造函数生成的实例进行访问, 只能通过 <a href=\"crypto#m-generatekeypair\">crypto.generateKeyPair</a> 的返回值进行访问:</p>\n<pre><code class=\"lang-js\">/* 抛出异常. */\nnew crypto.KeyPair(&#39;pub&#39;, &#39;pri&#39;).toKeySpec(&#39;DES&#39;);\n\n/* 无异常. */\ncrypto.generateKeyPair(&#39;DiffieHellman&#39;).toKeySpec(&#39;DES&#39;);\n</code></pre>\n<p><code>toKeySpec</code> 方法的实际应用, 可参考 <a href=\"crypto#m-generatekeypair\">crypto.generateKeyPair</a> 小节的示例.</p>\n<blockquote>\n<p>注: 如需转换为 <code>crypto.Key</code>, 可使用 <code>new crypto.Key(key)</code>.</p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toKeySpec"
+        }
+      ],
+      "type": "module",
+      "displayName": "CryptoKeyPair"
+    }
+  ]
+}

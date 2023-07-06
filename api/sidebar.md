@@ -90,8 +90,16 @@
 * [Data Types - 数据类型](dataTypes)
 * [Omnipotent Types - 全能类型](omniTypes)
 * [Storage - 存储类](storageType)
+
+<details>
+
+<summary style="padding-left: 1em">Other Types - 其他类型</summary>
+
 * [AndroidBundle](androidBundleType)
 * [AndroidRect](androidRectType)
+* [CryptoCipherOptions](cryptoCipherOptionsType)
+* [CryptoKey](cryptoKeyType)
+* [CryptoKeyPair](cryptoKeyPairType)
 * [ConsoleBuildOptions](consoleBuildOptionsType)
 * [HttpRequestBuilderOptions](httpRequestBuilderOptionsType)
 * [HttpRequestHeaders](httpRequestHeadersType)
@@ -110,6 +118,8 @@
 * [OpencvPoint](opencvPointType)
 * [OpencvRect](opencvRectType)
 * [OpencvSize](opencvSizeType)
+
+</details>
 
 * &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash; &ndash;
 

@@ -103,6 +103,10 @@ console.show();
 
 ---
 
+<p style="font: bold 2em sans-serif; color: #FF7043">console</p>
+
+---
+
 ## [m] show
 
 ### show()

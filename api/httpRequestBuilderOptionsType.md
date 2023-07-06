@@ -10,7 +10,7 @@
 HttpRequestBuilderOptions 是一个构建 HTTP 请求时用于传递构建选项的接口.  
 这些选项将影响 HTTP 请求的构建.
 
-常见参数中使用此接口类型的方法:
+常见相关方法或属性:
 
 - [http.buildRequest](http#m-buildRequest)(url, **options**)
 - [http.request](http#m-request)(url, **options**, callback)

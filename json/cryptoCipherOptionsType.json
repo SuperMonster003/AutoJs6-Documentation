@@ -1,0 +1,49 @@
+{
+  "source": "..\\api\\cryptoCipherOptionsType.md",
+  "modules": [
+    {
+      "textRaw": "CryptoCipherOptions",
+      "name": "cryptocipheroptions",
+      "desc": "<p>CryptoCipherOptions 是一个用于 <code>密码 (Cipher)</code> 加解密的选项接口, 主要用于 <a href=\"crypto\">密文</a> 模块.</p>\n<p>常见相关方法或属性:</p>\n<ul>\n<li><a href=\"crypto#m-encrypt\">crypto.encrypt</a>(data, key, transformation, <strong>options</strong>)</li>\n<li><a href=\"crypto#m-decrypt\">crypto.decrypt</a>(data, key, transformation, <strong>options</strong>)</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">CryptoCipherOptions</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] input",
+          "name": "[p?]_input",
+          "desc": "<ul>\n<li>[ <code>&#39;string&#39;</code> ] { <code>&#39;file&#39;</code> | <code>&#39;base64&#39;</code> | <code>&#39;hex&#39;</code> | <code>&#39;string&#39;</code> } - 输入数据类型</li>\n</ul>\n<p>指定密码的输入数据类型.</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\n/* 输入数据类型为 string, 即字符串. */\n/* 此时 input 选项可省略, 因 &#39;string&#39; 为默认值. */\nconsole.log(crypto.encrypt(&#39;hello world&#39;, key, &#39;AES&#39;, { input: &#39;string&#39; })); // [-52, 100, 9, -87, 1, 80, 33, -26, -70, -9, 17, 106, 38, 63, -94, -41]\n\n/* 输入数据类型为 base64. */\nconsole.log(crypto.encrypt(base64.encode(&#39;hello world&#39;), key, &#39;AES&#39;, { input: &#39;base64&#39; })); // [-52, 100, 9, -87, 1, 80, 33, -26, -70, -9, 17, 106, 38, 63, -94, -41]\n\n/* 输入数据类型为 hex, 即十六进制值. */\nconsole.log(crypto.encrypt(&#39;68656c6c6f20776f726c64&#39;, key, &#39;AES&#39;, { input: &#39;hex&#39; })); // [-52, 100, 9, -87, 1, 80, 33, -26, -70, -9, 17, 106, 38, 63, -94, -41]\n\n/* 输入数据类型为 file, 即文件. */\n/* input 参数作为文件名, 支持绝对路径及相对路径. */\nconsole.log(crypto.encrypt(&#39;./test.txt&#39;, key, &#39;AES&#39;, { input: &#39;file&#39; })); /* 结果取决于具体文件内容. */\n\n/* 加密并将加密结果 (字符串值) 写入文件. */\ncrypto.encrypt(&#39;68656c6c6f20776f726c64&#39;, key, &#39;AES&#39;, { input: &#39;hex&#39;, output: &#39;file&#39;, dest: &#39;encrypted.txt&#39; });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] input"
+        },
+        {
+          "textRaw": "[p?] output",
+          "name": "[p?]_output",
+          "desc": "<ul>\n<li>[ <code>&#39;bytes&#39;</code> ] { <code>&#39;bytes&#39;</code> | <code>&#39;base64&#39;</code> | <code>&#39;hex&#39;</code> | <code>&#39;string&#39;</code> | <code>&#39;file&#39;</code> } - 输出数据类型</li>\n</ul>\n<p>指定密码的输出数据类型.</p>\n<p>输出数据类型默认是 <code>&#39;bytes&#39;</code>, 即字节数组. 如需输出字符串, 可指定 <code>&#39;string&#39;</code> 值.</p>\n<p><code>output</code> 属性通常用于 crypto.decrypt 方法的选项参数中.</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\nlet encrypted = crypto.encrypt(&#39;hello world&#39;, key, &#39;AES&#39;);\n\n/* 解密时默认输出 bytes 格式, 即字节数组. */\nconsole.log(crypto.decrypt(encrypted, key, &#39;AES&#39;)); // [104, 101, 108, 108, 111, 32, 119, 111, 114, 108, 100]\n\n/* 解密输出字符串值. */\nconsole.log(crypto.decrypt(encrypted, key, &#39;AES&#39;, { output: &#39;string&#39; })); // hello world\n\n/* 解密输出十六进制值. */\nconsole.log(crypto.decrypt(encrypted, key, &#39;AES&#39;, { output: &#39;hex&#39; })); // 68656c6c6f20776f726c64\n\n/* 解密输出字符串并写入文件. */\ncrypto.decrypt(encrypted, key, &#39;AES&#39;, { output: &#39;file&#39;, dest: &#39;./decrypted.txt&#39; });\n</code></pre>\n<blockquote>\n<p>注: 当 <code>output</code> 指定为 <code>&#39;file&#39;</code> 时, 需同时指定 <code>dest</code> 属性, 否则将抛出异常.</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "[p?] output"
+        },
+        {
+          "textRaw": "[p?] encoding",
+          "name": "[p?]_encoding",
+          "desc": "<ul>\n<li>[ <code>&#39;UTF-8&#39;</code> ] { <code>&#39;US-ASCII&#39;</code> | <code>&#39;ISO-8859-1&#39;</code> | <code>&#39;UTF-8&#39;</code> | <code>&#39;UTF-16BE&#39;</code> | <code>&#39;UTF-16LE&#39;</code> | <code>&#39;UTF-16&#39;</code> } - 编码</li>\n</ul>\n<p>指定输入或输出的字符串编码.</p>\n<p><code>encoding</code> 属性仅在 <code>input</code> 属性为 <code>&#39;string&#39;</code> 或 <code>output</code> 属性为 <code>&#39;string&#39;</code> 时有效, 其他情况 <code>encoding</code> 属性的值将被忽略.</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\nlet encrypted = crypto.encrypt(&#39;hello world&#39;, key, &#39;AES&#39;, { input: &#39;string&#39;, encoding: &#39;utf-16&#39;, output: &#39;hex&#39; });\nconsole.log(encrypted); // 0005750e34f9827f925780eaabd785c18281d84320ccb380b116c3239846e3b4\nlet decrypted = crypto.decrypt(encrypted, key, &#39;AES&#39;, { input: &#39;hex&#39;, output: &#39;string&#39;, encoding: &#39;utf-16&#39; });\nconsole.log(decrypted); // hello world\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] encoding"
+        },
+        {
+          "textRaw": "[p?] dest",
+          "name": "[p?]_dest",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 目标路径</li>\n</ul>\n<p>指定数据处理结果需要写入的目标路径, 是 &quot;destination&quot; 的简写.</p>\n<p><code>dest</code> 属性仅当 <code>output</code> 属性为 <code>&#39;file&#39;</code> 时有效.</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\nlet encrypted = crypto.encrypt(&#39;hello world&#39;, key, &#39;AES&#39;);\n\n/* 解密输出字符串并写入文件. */\ncrypto.decrypt(encrypted, key, &#39;AES&#39;, { output: &#39;file&#39;, dest: &#39;./decrypted.txt&#39; });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] dest"
+        },
+        {
+          "textRaw": "[p?] iv",
+          "name": "[p?]_iv",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> | <a href=\"https://developer.android.com/reference/java/security/spec/AlgorithmParameterSpec\">java.security.spec.AlgorithmParameterSpec</a> } - 初始向量</li>\n</ul>\n<p><code>iv</code> 属性用于指定初始向量.</p>\n<p>IV 称为初始向量, 不同 IV 加密后的数据结果不同, 加密和解密需要相同的 IV. 对于每个块来说, key 是不变的, 但仅第一个块的 IV 由用户提供, 其他块 IV 自动生成. IV 的长度通常被认为是 16 字节 (可能会自动按需补齐或截断).</p>\n<p>例如在使用 CBC 有向量模式时, <code>iv</code> 属性是必要的, 而如果使用 ECB 无向量模式, 则无需 <code>iv</code> 属性.</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\n/* 将抛出异常, 因为缺少 IV. */\n/* java.security.InvalidAlgorithmParameterException: IV must be specified in CBC mode */\ncrypto.encrypt(&#39;hello world&#39;, key, &#39;AES/CBC/PKCS5Padding&#39;);\n\n/* 传入一个 iv 参数 (长度为 16) 进行加密. */\n/* 加密的模式为 CBC. */\nlet encrypted = crypto.encrypt(&#39;hello world&#39;, key, &#39;AES/CBC/PKCS5Padding&#39;, { iv: &#39;a 16-byte string&#39; });\nconsole.log(encrypted); // [-91, 30, -6, 67, -61, -32, -56, 26, 0, -85, -13, 113, -45, -68, -118, -115]\n\n/* 使用与加密时相同的 iv 参数进行解密. */\n/* 除 iv 参数外, Key, 工作模式, 填充方式也都需要与加密时相同. */\nlet decrypted = crypto.decrypt(encrypted, key, &#39;AES/CBC/PKCS5Padding&#39;, { input: &#39;hex&#39;, output: &#39;string&#39;, iv: &#39;a 16-byte string&#39; });\nconsole.log(decrypted); // hello world\n</code></pre>\n<p><code>iv</code> 参数也支持 <code>AlgorithmParameterSpec</code> 类型:</p>\n<pre><code class=\"lang-js\">let key = new crypto.Key(&#39;test&#39;.repeat(4));\n\nlet iv = new javax.crypto.spec.IvParameterSpec(new java.lang.String(&#39;a 16-byte string&#39;).getBytes());\n\nlet encrypted = crypto.encrypt(&#39;hello world&#39;, key, &#39;AES/CBC/PKCS5Padding&#39;, { iv: iv });\nconsole.log(encrypted);\nlet decrypted = crypto.decrypt(encrypted, key, &#39;AES/CBC/PKCS5Padding&#39;, { input: &#39;hex&#39;, output: &#39;string&#39;, iv: iv });\nconsole.log(decrypted);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] iv"
+        }
+      ],
+      "type": "module",
+      "displayName": "CryptoCipherOptions"
+    }
+  ]
+}

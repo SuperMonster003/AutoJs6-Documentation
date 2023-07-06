@@ -10,7 +10,7 @@ let sto = storages.create('test');
 sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 ```
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [storages.create](storages#m-create)
 

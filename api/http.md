@@ -11,6 +11,12 @@ http 模块主要用于发送 HTTP 请求, 获取并解析 HTTP 响应.
 
 > 注: 与 [web](web) 模块不同, web 模块主要用于 WebView 网页的注入及客户端构建.
 
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">http</p>
+
+---
+
 ## [m] get
 
 ### get(url, options?, callback?)

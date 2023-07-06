@@ -14,7 +14,7 @@ HTTP 请求回应类 HttpResponse 是一个虚拟类, 实例通常由 [http](htt
 typeof global.HttpResponse; // "undefined"
 ```
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [http.get](http#m-get)
 - [http.post](http#m-post)

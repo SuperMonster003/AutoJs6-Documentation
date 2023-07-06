@@ -144,7 +144,7 @@ wc.forEach(w => {
 
 执行控件行为后, 返回结果是 [boolean](dataTypes#boolean) 类型, 表示集合中所有控件在执行行为过程中未出现失败或异常.
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [UiObject#find](uiObjectType#m-find)
 - [UiObject#children](uiObjectType#m-children)

@@ -4,7 +4,7 @@
 
 NoticeBuilder 表示一个通知构建器.
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [notice.getBuilder](notice#m-getbuilder)
 

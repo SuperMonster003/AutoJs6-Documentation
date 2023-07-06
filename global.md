@@ -193,7 +193,7 @@ console.log(text);
 **`Global`** **`Overload 2/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
+  **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 > 参阅: [toast(text, isLong)](toast#toasttext-islong)
@@ -203,8 +203,8 @@ console.log(text);
 **`Global`** **`Overload 3/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
-- **isForcible = false** { "forcible" | "f" | [boolean](dataTypes#boolean) } - 是否强制覆盖显示
+  **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
+  **isForcible = false** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 > 参阅: [toast(text, isLong, isForcible)](toast#toasttext-islong-isforcible)
@@ -214,7 +214,7 @@ console.log(text);
 **`Global`** **`Overload 4/4`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isForcible** { "forcible" | "f" } - 强制覆盖显示 (字符标识)
+- **isForcible** { `'forcible'` | `'f'` } - 强制覆盖显示 (字符标识)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 > 参阅: [toast(text, isForcible)](toast#toasttext-isforcible)

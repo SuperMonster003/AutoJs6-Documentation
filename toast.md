@@ -59,7 +59,7 @@ toast("hello world");
 **`Global`** **`Overload 2/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
+- **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 控制单个消息框显示时长:
@@ -77,8 +77,8 @@ toast("hello", true); /* 同上. */
 **`Global`** **`Overload 3/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isLong = false** { "long" | "l" | "short" | "s" | [boolean](dataTypes#boolean) } - 是否以较长时间显示
-- **isForcible = false** { "forcible" | "f" | [boolean](dataTypes#boolean) } - 是否强制覆盖显示
+- **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
+- **isForcible = false** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 使用 "强制覆盖显示" 参数可立即显示消息框:
@@ -96,7 +96,7 @@ toast("world", "short", "forcible");
 **`Global`** **`Overload 4/4`** **`Async`**
 
 - **text** { [string](dataTypes#string) } - 消息内容
-- **isForcible** { "forcible" | "f" } - 强制覆盖显示 (字符标识)
+- **isForcible** { `'forcible'` | `'f'` } - 强制覆盖显示 (字符标识)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 此方法相当于忽略 isLong 参数:

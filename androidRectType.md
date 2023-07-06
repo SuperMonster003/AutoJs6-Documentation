@@ -9,7 +9,7 @@ let bounds = pickup(/.+/, 'bounds');
 console.log(`${bounds.centerX()}, ${bounds.centerY()}`);
 ```
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [UiObject#bounds](uiObjectType#m-bounds)
 - [UiSelector.pickup](uiSelectorType#m-pickup)

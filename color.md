@@ -79,7 +79,7 @@ AutoJs6 支持以下方式表示一个颜色:
 
 **`6.2.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 颜色整数
 
 将颜色参数转换为 [颜色整数 (ColorInt)](dataTypes#colorint).
@@ -105,7 +105,7 @@ colors.toInt('burnt-orange'); // -3386112
 
 **`6.2.0`** **`Overload 1/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
 将颜色参数转换为 [颜色代码 (ColorHex)](dataTypes#colorhex).
@@ -133,7 +133,7 @@ colors.toHex('burnt-orange'); // #CC5500
 
 **`6.2.0`** **`Overload 2/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **[ alpha = `'auto'` ]** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
@@ -173,7 +173,7 @@ colors.toHex(cC, 'keep'); /* 同上. */
 
 **`6.2.0`** **`Overload 3/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **length** { `8` | `6` | `3` } - Hex 代码长度参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
@@ -218,7 +218,7 @@ colors.toHex(cD, 3); /* 抛出异常. */
 
 **`6.2.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码的完整形式
 
 将颜色参数强制转换为 [颜色代码 (ColorHex)](dataTypes#colorhex) 的完整形式 (#AARRGGBB).
@@ -236,7 +236,7 @@ colors.toFullHex('#CC5500'); // #FFCC5500
 
 **`6.3.0`** **`Overload [1-2]/4`**
 
-- **[ color = `Colors.BLACK` ]** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **[ color = `Colors.BLACK` ]** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Color](colorType) } - Color 实例
 
 构建一个 [Color](colorType) 实例, 相当于 `new Color(color?)` 或 `Color(color?)`.
@@ -275,7 +275,7 @@ colors.build().setRgba(120, 60, 240, 0.85).toHex(); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [string](dataTypes#string) } - 颜色摘要
 
 获取颜色摘要.
@@ -350,7 +350,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 
 **`[6.2.0]`** **`Overload 1/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
 将颜色参数转换为 [颜色代码 (ColorHex)](dataTypes#colorhex).
@@ -361,7 +361,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 
 **`6.2.0`** **`Overload 2/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **[ alpha = `'auto'` ]** { [boolean](dataTypes#boolean) | `'keep'` | `'none'` | `'auto'` } - A (alpha) 分量参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
@@ -373,7 +373,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 
 **`6.2.0`** **`Overload 3/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **length** { `8` | `6` | `3` } - Hex 代码长度参数
 - <ins>**returns**</ins> { [ColorHex](dataTypes#colorhex) } - 颜色代码
 
@@ -387,7 +387,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 
 **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `A (alpha)` 分量, 取值范围 `[0..255]`.
@@ -402,7 +402,7 @@ colors.alpha('#05060708'); // 5
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -430,7 +430,7 @@ colors.alpha('#05060708'); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `A (alpha)` 分量, 取值范围 `[0..1]`.
@@ -451,7 +451,7 @@ colors.alpha('#05060708', { max: 1 }); /* 同上. */
 
 **`6.3.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `A (alpha)` 分量, 取值范围 `[0..255]`.
@@ -462,7 +462,7 @@ colors.alpha('#05060708', { max: 1 }); /* 同上. */
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -478,7 +478,7 @@ colors.alpha('#05060708', { max: 1 }); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `A (alpha)` 分量, 取值范围 `[0..1]`.
@@ -491,7 +491,7 @@ colors.alpha('#05060708', { max: 1 }); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
@@ -505,13 +505,47 @@ colors.toHex(colors.setAlpha('#663399', 255)); // #FF663399
 colors.toHex(colors.setAlpha('#663399', 1)); /* 同上, 1 默认作为百分数分量, 即 100%. */
 ```
 
+## [m] setAlphaRelative
+
+### setAlphaRelative(color, percentage)
+
+**`6.3.1`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+针对 `A (alpha)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `A (alpha)` 分量为 `80`, 希望设置 `A` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+colors.setAlphaRelative(color, 0.5);
+colors.setAlphaRelative(color, '50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `A` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+colors.setAlphaRelative(color, 1.5);
+colors.setAlphaRelative(color, '150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+colors.setAlphaRelative(color, 10); /* A 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `A` 分量为 `0` 时, 无论如何设置相对量, `A` 分量均保持 `0` 值.
+
 ## [m] removeAlpha
 
 ### removeAlpha(color)
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
 去除颜色的 `A (alpha)` 分量, 返回新颜色的颜色整数.
@@ -529,7 +563,7 @@ colors.toHex(colors.removeAlpha('#CC5500')); // #CC5500
 
 **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `R (red)` 分量, 取值范围 `[0..255]`.
@@ -544,7 +578,7 @@ colors.red('#05060708'); // 6
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -568,7 +602,7 @@ colors.red('#663399'); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `R (red)` 分量, 取值范围 `[0..1]`.
@@ -585,7 +619,7 @@ colors.redDouble('#663399'); // 0.4
 
 **`6.3.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `R (red)` 分量, 取值范围 `[0..255]`.
@@ -596,7 +630,7 @@ colors.redDouble('#663399'); // 0.4
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -612,7 +646,7 @@ colors.redDouble('#663399'); // 0.4
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `R (red)` 分量, 取值范围 `[0..1]`.
@@ -625,7 +659,7 @@ colors.redDouble('#663399'); // 0.4
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
@@ -639,13 +673,47 @@ colors.toHex(colors.setRed('#663399', 255)); // #FF3399
 colors.toHex(colors.setRed('#663399', 1)); /* #013399, 不同上. 1 默认作为整数分量, 而非 100%. */
 ```
 
+## [m] setRedRelative
+
+### setRedRelative(color, percentage)
+
+**`6.3.1`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+针对 `R (red)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `R (red)` 分量为 `80`, 希望设置 `R` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+colors.setRedRelative(color, 0.5);
+colors.setRedRelative(color, '50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `R` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+colors.setRedRelative(color, 1.5);
+colors.setRedRelative(color, '150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+colors.setRedRelative(color, 10); /* R 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `R` 分量为 `0` 时, 无论如何设置相对量, `R` 分量均保持 `0` 值.
+
 ## [m] removeRed
 
 ### removeRed(color)
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
 去除颜色的 `R (red)` 分量, 返回新颜色的颜色整数.
@@ -663,7 +731,7 @@ colors.toHex(colors.removeRed('#CC5500')); // #005500
 
 **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `G (green)` 分量, 取值范围 `[0..255]`.
@@ -678,7 +746,7 @@ colors.green('#05060708'); // 7
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -702,7 +770,7 @@ colors.green('#663399'); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `G (green)` 分量, 取值范围 `[0..1]`.
@@ -719,18 +787,52 @@ colors.greenDouble('#663399'); // 0.2
 
 **`6.3.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `G (green)` 分量, 取值范围 `[0..255]`.
 
 [colors.green(color)](#m-green) 的别名方法.
 
+## [m] setGreenRelative
+
+### setGreenRelative(color, percentage)
+
+**`6.3.1`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+针对 `G (green)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `G (green)` 分量为 `80`, 希望设置 `G` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+colors.setGreenRelative(color, 0.5);
+colors.setGreenRelative(color, '50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `G` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+colors.setGreenRelative(color, 1.5);
+colors.setGreenRelative(color, '150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+colors.setGreenRelative(color, 10); /* G 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `G` 分量为 `0` 时, 无论如何设置相对量, `G` 分量均保持 `0` 值.
+
 ### getGreen(color, options)
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -746,7 +848,7 @@ colors.greenDouble('#663399'); // 0.2
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `G (green)` 分量, 取值范围 `[0..1]`.
@@ -759,7 +861,7 @@ colors.greenDouble('#663399'); // 0.2
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
@@ -779,7 +881,7 @@ colors.toHex(colors.setGreen('#663399', 1)); /* #660199, 不同上. 1 默认作�
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
 去除颜色的 `G (green)` 分量, 返回新颜色的颜色整数.
@@ -797,7 +899,7 @@ colors.toHex(colors.removeGreen('#CC5500')); // #CC0000
 
 **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `B (blue)` 分量, 取值范围 `[0..255]`.
@@ -812,7 +914,7 @@ colors.blue('#05060708'); // 8
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -836,7 +938,7 @@ colors.blue('#663399'); /* 同上. */
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `A (blue)` 分量, 取值范围 `[0..1]`.
@@ -853,7 +955,7 @@ colors.blueDouble('#663399'); // 0.6
 
 **`6.3.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [IntRange[0..255]](dataTypes#intrange) }
 
 获取颜色的 `B (blue)` 分量, 取值范围 `[0..255]`.
@@ -864,7 +966,7 @@ colors.blueDouble('#663399'); // 0.6
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ max = `255` ]?: `1` | `255` - 范围最大值
 - }} - 选项参数
@@ -880,7 +982,7 @@ colors.blueDouble('#663399'); // 0.6
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) }
 
 获取颜色的 `A (blue)` 分量, 取值范围 `[0..1]`.
@@ -893,7 +995,7 @@ colors.blueDouble('#663399'); // 0.6
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
@@ -907,13 +1009,47 @@ colors.toHex(colors.setBlue('#663399', 255)); // #6633FF
 colors.toHex(colors.setBlue('#663399', 1)); /* #663301, 不同上. 1 默认作为整数分量, 而非 100%. */
 ```
 
+## [m] setBlueRelative
+
+### setBlueRelative(color, percentage)
+
+**`6.3.1`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **percentage** { [ColorComponent](dataTypes#colorcomponent) } - 相对百分数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+针对 `B (blue)` 分量设置其相对百分比, 返回新颜色的颜色整数.
+
+如当前颜色 `B (blue)` 分量为 `80`, 希望设置 `B` 分量为 `50%` 相对量, 即 `40`:
+
+```js
+colors.setBlueRelative(color, 0.5);
+colors.setBlueRelative(color, '50%'); /* 效果同上. */
+```
+
+同样地, 如希望设置 `B` 分量为 `1.5` 倍相对量, 即 `120`:
+
+```js
+colors.setBlueRelative(color, 1.5);
+colors.setBlueRelative(color, '150%');
+```
+
+当设置的相对量超过 `255` 时, 将以 `255` 为最终值:
+
+```js
+colors.setBlueRelative(color, 10); /* B 分量最终值为 255, 而非 800. */
+```
+
+特别地, 当原本颜色的 `B` 分量为 `0` 时, 无论如何设置相对量, `B` 分量均保持 `0` 值.
+
 ## [m] removeBlue
 
 ### removeBlue(color)
 
 **`6.3.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
 去除颜色的 `B (blue)` 分量, 返回新颜色的颜色整数.
@@ -931,7 +1067,7 @@ colors.toHex(colors.removeBlue('#CC5500')); // #CC5500
 
 **`[6.2.0]`** **`Overload 1/3`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
 
 获取 `color` 参数对应的 [颜色整数 (ColorInt)](dataTypes#colorint).
@@ -1256,7 +1392,7 @@ colors.hsla([ '25%', '80%', '64%', '25%' ]); /* 同上. */
 
 **`6.2.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 RGB [颜色分量数组](dataTypes#colorcomponents).
@@ -1272,7 +1408,7 @@ console.log(`R: ${r}, G: ${g}, B: ${b}`);
 
 **`6.2.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 RGBA [颜色分量数组](dataTypes#colorcomponents).
@@ -1288,7 +1424,7 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ maxAlpha = `255` ]?: `1` | `255` - A (alpha) 分量的范围最大值
 - }} - 选项参数
@@ -1310,7 +1446,7 @@ console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..
 
 **`6.2.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 ARGB [颜色分量数组](dataTypes#colorcomponents).
@@ -1324,7 +1460,7 @@ console.log(`A: ${a}, R: ${r}, G: ${g}, B: ${b}`);
 
 **`6.3.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ maxAlpha = `255` ]?: `1` | `255` - A (alpha) 分量的范围最大值
 - }} - 选项参数
@@ -1346,7 +1482,7 @@ console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..
 
 **`6.2.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSV [颜色分量数组](dataTypes#colorcomponents).
@@ -1378,7 +1514,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}`);
 
 **`6.2.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSVA [颜色分量数组](dataTypes#colorcomponents).
@@ -1415,7 +1551,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 
 **`6.2.0`** **`Overload 1/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSL [颜色分量数组](dataTypes#colorcomponents).
@@ -1447,7 +1583,7 @@ console.log(`H: ${h}, S: ${s}, L: ${l}`);
 
 **`6.2.0`** **`Overload 2/2`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
 
 获取颜色参数的 HSLA [颜色分量数组](dataTypes#colorcomponents).
@@ -1484,8 +1620,8 @@ console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
 
 **`[6.2.0]`** **`Overload [1-3]/4`**
 
-- **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **[ threshold = `4` ]** { [IntRange[0..255]](dataTypes#intrange) } - [颜色匹配阈值](glossaries#颜色匹配阈值)
 - **[ algorithm = `'diff'` ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) } - 颜色检测算法
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 两个颜色是否相似
@@ -1515,8 +1651,8 @@ colors.isSimilar('orange', 'dark-orange', 8, 'hs'); // true
 
 **`6.2.0`** **`Overload 4/4`**
 
-- **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **options** {{
     - [ similarity ≈ `0.9843` ]?: [Range[0..1]](dataTypes#range) - [颜色匹配相似度](glossaries#相似度)
     - [ threshold = `4` ]?: [IntRange[0..255]](dataTypes#intrange) - [颜色匹配阈值](glossaries#颜色匹配阈值)
@@ -1538,8 +1674,8 @@ colors.isSimilar('#010101', '#020202', { similarity: 0.95 }); // true
 
 **`6.2.0`** **`Overload[1-2]/2`**
 
-- **colorA** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
-- **colorB** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **[ alphaMatters = `false` ]** { [boolean](dataTypes#boolean) } - 是否考虑 `A (alpha)` 分量
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 两个颜色是否相等
 
@@ -1606,7 +1742,7 @@ colors.equals('#FF0000', '#F00'); /* 抛出异常. */
 
 **`6.2.0`**
 
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [Range[0..1]](dataTypes#range) } - 颜色亮度
 
 获取颜色的 [亮度 (Luminance)](glossaries#luminance), 取值范围 `[0..1]`.
@@ -1628,7 +1764,7 @@ colors.luminance(colors.YELLOW); // 0.9278
 
 **`6.2.0`**
 
-- **color** { [...](documentation#可变参数)([ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname))[[]](documentation#可变参数) } - 颜色参数
+- **color** { [...](documentation#可变参数)[OmniColor](omniTypes#omnicolor)[[]](documentation#可变参数) } - 颜色参数
 - <ins>**returns**</ins> { [android.content.res.ColorStateList](https://developer.android.com/reference/android/content/res/ColorStateList) }
 
 将一个或多个颜色参数转换为 ColorStateList 实例.
@@ -1645,7 +1781,7 @@ colors.toColorStateList('red', 'green', 'orange'); /* 包含多个颜色的 Colo
 **`6.2.0`**
 
 - **paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔参数
-- **color** { [ColorHex](dataTypes#colorhex) | [ColorInt](dataTypes#colorint) | [ColorName](dataTypes#colorname) } - 颜色参数
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 方法 `setPaintColor` 用于解决在 `Android API 29 (10) [Q]` 及以上系统中 `Paint#setColor(color)` 无法正常设置画笔颜色的问题.

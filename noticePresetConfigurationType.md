@@ -2,7 +2,7 @@
 
 NoticePresetConfiguration 是一个发送 AutoJs6 通知时用于设置通知及 [渠道](notice#通知渠道) 默认行为及默认样式的接口.
 
-常见参数中使用此接口类型的方法:
+常见相关方法或属性:
 
 - [notice.config](notice#m-config)(**preset**)
 

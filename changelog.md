@@ -1,5 +1,15 @@
 # 文档更新日志 (Changelog)
 
+## v1.1.5
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/07/06</p>
+
+- `新增` [密文 (Crypto)](https://docs.autojs6.com/#/crypto) 文档
+- `新增` [CryptoCipherOptions](https://docs.autojs6.com/#/cryptoCipherOptionsType) / [CryptoKey](https://docs.autojs6.com/#/cryptoKeyType) / [CryptoKeyPair](https://docs.autojs6.com/#/cryptoKeyPairType) 等类型
+- `修复` floaty 模块 widht 拼写失误 _[`issue #1`](http://docs-project.autojs6.com/issues/1)_
+- `优化` 完善 [Base64](https://docs.autojs6.com/#/base64) 章节
+- `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
+
 ## v1.1.4
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/05/26</p>

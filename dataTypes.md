@@ -1369,7 +1369,7 @@ HSV 色彩空间中 `H (hue)` 及 `S (saturation)` 的相关距离检测:
 
 ## StandardCharset
 
-StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形式: 
+StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形式:
 
 | Charset    | String                      |                                                Wikipedia                                                 |
 |------------|-----------------------------|:--------------------------------------------------------------------------------------------------------:|
@@ -1386,8 +1386,8 @@ Charset 类可由 StandardCharsets 的静态常量获取, 如 `StandardCharsets.
 Typescript declaration (TS 声明):
 
 ```ts
-declare type StandardCharset = java.nio.charset.StandardCharsets 
-    | 'US_ASCII' | 'ISO_8859_1' | 'UTF_8' | 'UTF_16BE' | 'UTF_16LE' | 'UTF_16' 
+declare type StandardCharset = java.nio.charset.StandardCharsets
+    | 'US_ASCII' | 'ISO_8859_1' | 'UTF_8' | 'UTF_16BE' | 'UTF_16LE' | 'UTF_16'
     | 'us-ascii' | 'iso-8859-1' | 'utf-8' | 'utf-16be' | 'utf-16le' | 'utf-16';
 ```
 
@@ -1409,7 +1409,7 @@ test('utf-8'); /* 字符串小写形式. */
 
 > 注: 在 AutoJs6 中, StandardCharsets 支持全局化调用.
 
-> 参阅: [Java 文档 (标准版) (英)](https://docs.oracle.com/javase/8/docs/api/java/nio/charset/StandardCharsets.html)
+> 参阅: [Oracle Docs](https://docs.oracle.com/javase/8/docs/api/java/nio/charset/StandardCharsets.html)
 
 ## ExtendModulesNames
 
@@ -1445,7 +1445,7 @@ app.startActivity('home'); /* 同上. */
 
 支持的全部页面简称:
 
-- 日志页面 - `console` / `log` 
+- 日志页面 - `console` / `log`
 - 设置页面 - `settings` / `preferences` / `pref`
 - 主页页面 - `homepage` / `home`
 - 关于页面 - `about`
@@ -1546,12 +1546,9 @@ AutoJs6 内置类 `org.autojs.autojs.theme.ThemeColor` 的别名.
 
 ThemeColor 表示一个主题颜色.
 
-常见可以返回此类型的方法或属性:
+常见相关方法或属性:
 
 - [autojs.themeColor](autojs#p-themecolor)
-
-常见参数中使用此类型的方法:
-
 - [Color](colorType)(**themeColor**)
 
 当 ThemeColor 作为 [OmniColor](omniTypes#omnicolor) 使用时, 将使用其 "主色" 作为色值:
@@ -1561,32 +1558,285 @@ let themeColor = autojs.themeColor;
 Color(themeColor).toInt() === Color(themeColor.getColorPrimary()).toInt(); // true
 ```
 
-### 
+## JsByteArray
 
-## InjectableWebView
+JavaScript 用于表示 "字节数组" 的类型, 即 [number](dataTypes#number)[[]](dataTypes#array).
 
-参阅 [InjectableWebView](injectableWebViewType) 类型章节.
+> 注: Java 使用 byte[] 类型表示字节数组.
 
-## InjectableWebClient
+将 JavaScript 字节数组转换为 JavaScript 字符串:
 
-参阅 [InjectableWebClient](injectableWebClientType) 类型章节.
+```js
+let arr = [ 104, 101, 108, 108, 111 ];
+let string = ArrayUtils.jsBytesToString(arr);
+console.log(string); // hello
+```
+
+将 JavaScript 字符串转换为 Java 字节数组:
+
+```js
+let str = 'hello';
+let bytes = new java.lang.String(str).getBytes();
+console.log(bytes); // [ 104, 101, 108, 108, 111 ]
+console.log(species(bytes)); // JavaArray
+```
+
+将 JavaScript 字节数组转换为 Java 字节数组:
+
+```js
+let arr = [ 104, 101, 108, 108, 111 ];
+let bytes = ArrayUtils.jsBytesToByteArray(arr);
+console.log(bytes); // [ 104, 101, 108, 108, 111 ]
+console.log(species(bytes)); // JavaArray
+```
+
+## ByteArray
+
+Java 用于表示 "字节数组" 的类型, 即 `byte[]`.
+
+> 注: Kotlin 使用 ByteArray 类型表示字节数组.
+
+Java 字节数组不是 JavaScript 的 `number[]`:
+
+```js
+console.log(util.getClass(new java.lang.String('hello').getBytes())); // class [B
+console.log(util.getClassName(new java.lang.String('hello').getBytes())); // [B
+```
+
+Java 字节数组转换为 JavaScript 字符串:
+
+```js
+let bytes = new java.lang.String('hello').getBytes();
+console.log(bytes); // [ 104, 101, 108, 108, 111 ]
+let str = String(new java.lang.String(bytes));
+console.log(str); // hello
+```
+
+在 Java 中, 字节数组中的元素范围为 `[-127..128]`:
+
+```js
+let key = new crypto.Key('a'.repeat(16));
+console.log(
+    crypto.encrypt('hello world', key, 'AES')
+); // [ 105, -52, -100, 42, -7, 27, -87, -32, 83, -59, 25, 115, -103, -75, 98, 18 ]
+```
+
+如需转换为 `[0..255]` 范围, 可使用 `x & 0xFF` 的转换方式:
+
+```js
+let key = new crypto.Key('a'.repeat(16));
+console.log(
+    crypto.encrypt('hello world', key, 'AES').map(x => x & 0xFF)
+); // [ 105, 204, 156, 42, 249, 27, 169, 224, 83, 197, 25, 115, 153, 181, 98, 18 ]
+```
+
+## CryptoDigestAlgorithm
+
+[密文](crypto) 模块使用的消息摘要算法.
+
+| 值 (字符串) |
+|---------|
+| MD5     |
+| SHA-1   |
+| SHA-224 |
+| SHA-256 |
+| SHA-384 |
+| SHA-512 |
+
+MD: 消息摘要算法 (Message-Digest algorithm), 其中 MD5 被广泛使用. MD5 是一种密码散列函数, 可生成一个 128 位散列值 (常表示为 32 位十六进制数字), 以确保信息传输完整一致.
+
+SHA: 安全散列算法 (Secure Hash Algorithm), 一个密码散列函数家族. 可计算出消息对应的长度固定的字符串 (即消息摘要) 的算法. 输入消息不同, 消息摘要有很高的概率会不同. 当不同消息得到相同的消息摘要 (即使概率很低) 时, 称为散列碰撞或哈希冲突.
+
+```js
+/* 获取字符串 "hello" 的 MD5 摘要. */
+console.log(crypto.digest('hello', 'MD5')); // 5d41402abc4b2a76b9719d911017c592
+
+/* 获取字符串 "hello" 的 SHA-1 摘要. */
+console.log(crypto.digest('hello', 'SHA-1')); // aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d
+
+/* 空文 MD5. */
+console.log(crypto.digest('', 'MD5')); // d41d8cd98f00b204e9800998ecf8427e
+```
+
+> 参阅: [Oracle Docs](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.html#keypairgenerator-algorithms) / [常用消息摘要算法简介](http://www.semlinker.com/message-digest-intro)
+
+## CryptoKeyPairGeneratorAlgorithm
+
+[密文](crypto) 模块使用的密钥对生成器算法.
+
+| 值 (字符串) | 别名            |
+|---------|---------------|
+| DH      | DiffieHellman |
+| DSA     | -             |
+| RSA     | -             |
+| EC      | -             |
+| XDH     | -             |
+
+例如, AutoJs6 的 [crypto.generateKeyPair](crypto#m-generatekeypair) 方法可以生成用于非对称加密算法的公私密钥对:
+
+```js
+let kp = crypto.generateKeyPair('DSA', 1024);
+console.log(kp.publicKey);
+console.log(kp.privateKey);
+```
+
+上述示例的 `'DSA'` 即为有效的密钥对生成器算法之一.
+
+> 参阅: [Oracle Docs](https://docs.oracle.com/en/java/javase/11/docs/specs/security/standard-names.html#keypairgenerator-algorithms)
+
+## CryptoDigestOptions
+
+消息摘要生成选项, 主要用于 [密文](crypto) 模块.
+
+| 属性       | 有效值                                                                            | 简述                              |
+|----------|--------------------------------------------------------------------------------|---------------------------------|
+| input    | 'file' / 'base64' / 'hex' / **'string'**                                       | 指定输入类型.                         |
+| output   | 'bytes' / 'base64' / **'hex'** / 'string'                                      | 指定输出类型.                         |
+| encoding | 'US-ASCII' / 'ISO-8859-1' / **'UTF-8'**<br> 'UTF-16BE' / 'UTF-16LE' / 'UTF-16' | 指定输入或输出编码,<br>仅对 'string' 类型有效. |
+
+> 注: 上表中粗体值为属性默认值.
+
+## CryptoCipherTransformation
+
+密码转换名称, 主要用于 [密文](crypto) 模块.
+
+Cipher, 可翻译为 "密码" 或 "密码器".
+
+AutoJs6 的 [crypto](crypto) 模块中, [encrypt](crypto#m-encrypt) 和 [decrypt](crypto#m-decrypt) 的内部实现均借助了 `javax.crypto.Cipher` 实例.
+
+`javax.crypto.Cipher` 类提供加解密功能, 它构成了 `JCE (Java Cryptography Extension)` 的核心, 是 Java JDK 原生 API.
+
+Cipher 实例的初始化使用的是 `Cipher.getInstance(transformation: String)` 方法, 这个 `transformation` 参数, 即 "转换名称", 其作用就是获取到不同加解密方式的 Cipher 实例.
+
+转换名称 `transformation` 参数的格式有两种:
+
+- 算法名称 (algorithm)
+- 算法名称/工作模式/填充方式 (algorithm/mode/padding)
+
+```js
+/* 转换名称格式为 "算法名称" 的 Cipher 实例. */
+let cipherA = Cipher.getInstance("AES");
+
+/* 转换名称格式为 "算法名称/工作模式/填充方式" 的 Cipher 实例. */
+let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
+```
+
+常见相关方法或属性:
+
+- [crypto.encrypt](crypto#m-encrypt)(data, key, **transformation**, options?)
+- [crypto.decrypt](crypto#m-decrypt)(data, key, **transformation**, options?)
+
+下表列出了 AutoJs6 支持的转换名称构成要素, 可组合出多种不同的转换名称:
+
+| 算法名称     | 工作模式                                   | 填充方式                                                                                                                                                                                                        |
+|----------|----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AES      | CBC<br>CFB<br>CTR<br>CTS<br>ECB<br>OFB | ISO10126Padding<br>NoPadding<br>PKCS5Padding                                                                                                                                                                |
+| AES      | GCM                                    | NoPadding                                                                                                                                                                                                   |
+| AES_128  | CBC<br>ECB                             | NoPadding<br>PKCS5Padding                                                                                                                                                                                   |
+| AES_128  | GCM                                    | NoPadding                                                                                                                                                                                                   |
+| AES_256  | CBC<br>ECB                             | NoPadding<br>PKCS5Padding                                                                                                                                                                                   |
+| AES_256  | GCM                                    | NoPadding                                                                                                                                                                                                   |
+| ARC4     | ECB                                    | NoPadding                                                                                                                                                                                                   |
+| ARC4     | NONE                                   | NoPadding                                                                                                                                                                                                   |
+| BLOWFISH | CBC<br>CFB<br>CTR<br>CTS<br>ECB<br>OFB | ISO10126Padding<br>NoPadding<br>PKCS5Padding                                                                                                                                                                |
+| ChaCha20 | NONE<br>Poly1305                       | NoPadding                                                                                                                                                                                                   |
+| DES      | CBC<br>CFB<br>CTR<br>CTS<br>ECB<br>OFB | ISO10126Padding<br>NoPadding<br>PKCS5Padding                                                                                                                                                                |
+| DESede   | CBC<br>CFB<br>CTR<br>CTS<br>ECB<br>OFB | ISO10126Padding<br>NoPadding<br>PKCS5Padding                                                                                                                                                                |
+| RSA      | ECB<br>NONE                            | NoPadding<br>OAEPPadding<br>PKCS1Padding<br>OAEPwithSHA-1andMGF1Padding<br>OAEPwithSHA-224andMGF1Padding<br>OAEPwithSHA-256andMGF1Padding<br>OAEPwithSHA-384andMGF1Padding<br>OAEPwithSHA-512andMGF1Padding |
+
+以 DES 算法为例, 以下均为有效的转换名称:
+
+- DES
+- DES/CBC/ISO10126Padding
+- DES/CBC/PKCS5Padding
+- DES/ECB/PKCS5Padding
+- DES/ECB/NoPadding
+- ... ...
 
 ## Storage
 
-参阅 [Storage](storageType) 类型章节.
+参阅 [Storage - 存储类](storageType) 类型章节.
 
-## OpencvPoint
+## AndroidBundle
 
-参阅 [OpencvPoint](opencvPointType) 类型章节.
-
-## OpencvSize
-
-参阅 [OpencvSize](opencvSizeType) 类型章节.
+参阅 [AndroidBundle](androidBundleType) 类型章节.
 
 ## AndroidRect
 
 参阅 [AndroidRect](androidRectType) 类型章节.
 
-## AndroidBundle
+## CryptoCipherOptions
 
-参阅 [AndroidBundle](androidBundleType) 类型章节.
+参阅 [CryptoCipherOptions](cryptoCipherOptionsType) 类型章节.
+
+## ConsoleBuildOptions
+
+参阅 [ConsoleBuildOptions](consoleBuildOptionsType) 类型章节.
+
+## HttpRequestBuilderOptions
+
+参阅 [HttpRequestBuilderOptions](httpRequestBuilderOptionsType) 类型章节.
+
+## HttpRequestHeaders
+
+参阅 [HttpRequestHeaders](httpRequestHeadersType) 类型章节.
+
+## HttpResponseBody
+
+参阅 [HttpResponseBody](httpResponseBodyType) 类型章节.
+
+## HttpResponseHeaders
+
+参阅 [HttpResponseHeaders](httpResponseHeadersType) 类型章节.
+
+## HttpResponse
+
+参阅 [HttpResponse](httpResponseType) 类型章节.
+
+## InjectableWebClient
+
+参阅 [InjectableWebClient](injectableWebClientType) 类型章节.
+
+## InjectableWebView
+
+参阅 [InjectableWebView](injectableWebViewType) 类型章节.
+
+## NoticeOptions
+
+参阅 [NoticeOptions](noticeOptionsType) 类型章节.
+
+## NoticeChannelOptions
+
+参阅 [NoticeChannelOptions](noticeChannelOptionsType) 类型章节.
+
+## NoticePresetConfiguration
+
+参阅 [NoticePresetConfiguration](noticePresetConfigurationType) 类型章节.
+
+## NoticeBuilder
+
+参阅 [NoticeBuilder](noticeBuilderType) 类型章节.
+
+## Okhttp3HttpUrl
+
+参阅 [Okhttp3HttpUrl](okhttp3HttpUrlType) 类型章节.
+
+## OcrOptions
+
+参阅 [OcrOptions](ocrOptionsType) 类型章节.
+
+## Okhttp3Request
+
+参阅 [Okhttp3Request](okhttp3RequestType) 类型章节.
+
+## OpencvPoint
+
+参阅 [OpencvPoint](opencvPointType) 类型章节.
+
+## OpencvRect
+
+参阅 [OpencvRect](opencvRectType) 类型章节.
+
+## OpencvSize
+
+参阅 [OpencvSize](opencvSizeType) 类型章节.

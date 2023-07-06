@@ -4,6 +4,12 @@ ocr 模块用于识别图像中的文本.
 
 AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 实现的.
 
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">ocr</p>
+
+---
+
 ## [@] ocr
 
 ocr 可作为全局对象使用:

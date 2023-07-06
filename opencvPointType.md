@@ -9,7 +9,7 @@ let point = pickup(/.+/, '.');
 console.log(`${point.x}, ${point.y}`);
 ```
 
-常见可以返回此类型的方法:
+常见相关方法或属性:
 
 - [UiSelector.pickup](uiSelectorType#m-pickup)
 

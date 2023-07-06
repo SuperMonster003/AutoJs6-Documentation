@@ -3,7 +3,7 @@
 NoticeChannelOptions 是一个发送 AutoJs6 通知时用于设置 [渠道](notice#通知渠道) 的接口.  
 这些设置将一次性作为初始值应用到指定的渠道上.
 
-常见参数中使用此接口类型的方法:
+常见相关方法或属性:
 
 - [notice.channel.create](notice#m-create)(channelId, **options**)
 - [notice.channel.create](notice#m-create)(**options**)

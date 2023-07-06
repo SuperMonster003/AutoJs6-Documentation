@@ -328,6 +328,7 @@ requestScreenCapture(false);
 - `Getter/Setter`: 可存值且可取值属性, 即同时使用 Setter 及 Getter 定义的对象属性.
 - `Enum`: 枚举类.
 - `CONSTANT`: 常量.
+- `READONLY`: 只读属性或方法.
 - `DEPRECATED`: 已弃用的属性或方法. 表示不推荐使用, 通常会有替代属性或替代方法.
 - `ABANDONED`: 已废弃的属性或方法. 表示不再提供功能支持, 使用后功能将无效.
 - `xProto`: 针对原型的内置对象扩展.

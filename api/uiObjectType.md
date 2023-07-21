@@ -44,21 +44,30 @@ w.parent().parent().parent().child(2);
 
 ## [m#] parent
 
-### parent()
+### parent(i?)
 
-**`A11Y`**
+**`[6.3.3]`** **`A11Y`** **`Overload [1-2]/2`**
 
+- **[ i = `1` ]** { [number](dataTypes#number) } - 相对级数
 - <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
 
 返回其父控件.
 
+当指定级数 `i` 时, 返回其对应级数的父控件.
+
+`i` 为 `0` 时, 返回控件自身,  
+`i` 为正整数时, 返回第 `i` 级父控件,  
+`i` 为负数时, 将抛出异常.
+
 ```js
 let w = pickup(/.+/);
 w.parent();
+w.parent(1); /* 同上. */
 w.compass('p'); /* 同上. */
 detect(w, 'p'); /* 同上. */
 
 w.parent().parent().parent();
+w.parent(3); /* 同上. */
 w.compass('p3'); /* 同上. */
 detect(w, 'p3'); /* 同上. */
 ```
@@ -67,12 +76,15 @@ detect(w, 'p3'); /* 同上. */
 
 ### child(i)
 
-**`A11Y`**
+**`[6.3.3]`** **`A11Y`**
 
 - **i** { [number](dataTypes#number) } - 索引
 - <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
 
-返回其索引为 i 的子控件.
+返回其索引为 `i` 的子控件.
+
+`i` 为正整数或 `0`, 返回正数索引子控件,  
+`i` 为负整数, 返回倒数索引子控件,  
 
 ```js
 let w = pickup(/.+/);
@@ -83,7 +95,63 @@ detect(w, 'c3'); /* 同上. */
 w.child(3).child(1);
 w.compass('c3c1'); /* 同上. */
 detect(w, 'c3>1'); /* 同上. */
+
+w.child(-1); /* 最后一个子控件. */
+
+w.child(-2); /* 倒数第 2 个子控件. */
+w.compass('c-2'); /* 同上. */
+detect(w, 'c-2'); /* 同上. */
 ```
+
+## [m#] firstChild
+
+### firstChild()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) }
+
+返回第一个子控件.
+
+相当于 `child(0)`.
+
+## [m#] lastChild
+
+### lastChild()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) }
+
+返回最后一个子控件.
+
+相当于 `child(-1)`.
+
+## [m#] childCount
+
+### childCount()
+
+**`A11Y`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+返回当前节点的子控件数量.
+
+别名属性或方法:
+
+- `[m#]` getChildCount
+
+## [m#] hasChildren
+
+### hasChildren()
+
+**`6.2.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回当前节点是否有子节点.
+
+相当于 `childCount() > 0`.
 
 ## [m#] children
 
@@ -113,31 +181,144 @@ let w = pickup({ filter: w => w.children().length > 5 });
 console.log(w.find().length); /* e.g. 20 */
 ```
 
-## [m#] childCount
+## [m#] sibling
 
-### childCount()
+### sibling(i)
 
-**`A11Y`**
+**`6.3.3`** **`A11Y`**
+
+- **i** { [number](dataTypes#number) } - 索引
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
+
+返回其索引为 `i` 的兄弟控件.
+
+`i` 为正整数或 `0`, 返回正数索引兄弟控件,  
+`i` 为负整数, 返回倒数索引兄弟控件,  
+
+当 `i` 与 [indexInParent()](#m-indexinparent) 相同时, 返回其自身.
+
+```js
+let w = pickup(/.+/);
+w.sibling(0); /* 第 1 (索引为 0) 的兄弟控件. */
+w.compass('s0'); /* 同上. */
+detect(w, 's0'); /* 同上. */
+
+w.sibling(-2); /* 倒数第 2 个兄弟控件. */
+w.compass('s-2'); /* 同上. */
+detect(w, 's-2'); /* 同上. */
+```
+
+如需获取相邻的兄弟控件, 可使用 [offset](#m-offset), 或使用 [nextSibling](#m-nextsibling) 与 [previousSibling](#m-previoussibling).
+
+## [m#] firstSibling
+
+### firstSibling()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) }
+
+返回第一个兄弟控件 (可能为自身).
+
+相当于 `sibling(0)`.
+
+## [m#] lastSibling
+
+### lastSibling()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) }
+
+返回最后一个兄弟控件 (可能为自身).
+
+相当于 `sibling(-1)`.
+
+## [m#] offset
+
+### offset(i)
+
+**`6.3.3`** **`A11Y`**
+
+- **i** { [number](dataTypes#number) } - 索引偏移量
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
+
+返回其索引偏移量为 `i` 的兄弟控件.
+
+`i` 为正整数, 返回后向兄弟控件,  
+`i` 为负整数, 返回前向兄弟控件,  
+`i` 为 `0`, 返回当前控件自身. 
+
+```js
+let w = pickup(/.+/);
+w.offset(3);
+w.compass('s>3'); /* 同上. */
+detect(w, 's>3'); /* 同上. */
+
+w.offset(-2);
+w.compass('s<2'); /* 同上. */
+detect(w, 's<2'); /* 同上. */
+```
+
+如需获取相邻的兄弟控件, 除 [offset](#m-offset) 外, 还可使用 [nextSibling](#m-nextsibling) 与 [previousSibling](#m-previoussibling).
+
+## [m#] nextSibling
+
+### nextSibling()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
+
+返回后一个兄弟控件.
+
+相当于 `offset(1)`.
+
+## [m#] previousSibling
+
+### previousSibling()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
+
+返回前一个兄弟控件.
+
+相当于 `offset(-1)`.
+
+## [m#] siblingCount
+
+### siblingCount()
+
+**`6.3.3`** **`A11Y`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-返回当前节点的子控件数量.
+返回当前节点的兄弟控件总数量 (含自身).
 
-别名属性或方法:
+`siblingCount` 返回一个总是大于等于 `1` 的数字.
 
-- `[m#]` getChildCount
+## [m#] isSingleton
 
-## [m#] hasChildren
+### isSingleton()
 
-### hasChildren()
-
-**`6.2.0`** **`A11Y`**
+**`6.3.3`** **`A11Y`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-返回当前节点是否有子节点.
+返回当前节点是否为独身节点, 即除自身外没有其他兄弟节点.
 
-相当于 `childCount() > 0`.
+相当于 `siblingCount() === 1`.
+
+## [m#] siblings
+
+### siblings()
+
+**`6.3.3`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
+
+返回当前节点的兄弟控件集合 (含自身).
 
 ## [m#] indexInParent
 

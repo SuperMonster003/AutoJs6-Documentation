@@ -54,6 +54,12 @@
 
 [comment]: <> "Version history only shows last 3 versions"
 
+## v1.1.6
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>
+
+- `优化` 完善 [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节
+
 ## v1.1.5
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/07/06</p>
@@ -72,26 +78,6 @@
 - `新增` [web.newWebSocket](https://docs.autojs6.com/#/web?id=m-newwebsocket) 文档
 - `优化` 完善 [全能类型 (Omnipotent Types)](https://docs.autojs6.com/#/omniTypes) 章节
 - `优化` 完善 [安卓 API 级别 (Android API Level)](https://docs.autojs6.com/#/apiLevel) 章节
-
-## v1.1.3
-
-<p style="font: bold 0.8em sans-serif; color: #888888">2023/04/29</p>
-
-- `新增` [颜色类 (Color)](https://docs.autojs6.com/#/colorType) 文档
-- `新增` [控制台 (Console)](https://docs.autojs6.com/#/console) 文档
-- `新增` [标准化 (Standardization)](https://docs.autojs6.com/#/s13n) 文档
-- `新增` [全能类型 (Omnipotent Types)](https://docs.autojs6.com/#/omniTypes) 文档
-- `新增` [NoticeBuilder](https://docs.autojs6.com/#/noticeBuilderType) / [NoticeChannelOptions](https://docs.autojs6.com/#/noticeChannelOptionsType) / [NoticeOptions](https://docs.autojs6.com/#/noticeOptionsType) 等类型
-- `新增` 示例代码区域增加 Copy 按钮以复制代码内容
-- `新增` 文档中的图片内容支持点击以全屏方式查看
-- `修复` 文档内容中部分图片资源丢失的问题
-- `优化` 生成器根据 properties 文件自动获取 AutoJs6 版本信息
-- `优化` 压缩本地 JavaScript 文件以提升页面加载速度
-- `优化` 本地化字体文件避免网络条件不佳时影响页面加载速度
-- `优化` 部分表格内容强制禁用自动断行以提升阅读体验
-- `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
-- `优化` 完善 [消息通知 (Notice)](https://docs.autojs6.com/#/notice) 章节
-- `优化` 完善 [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节
 
 ##### 更多版本历史可参阅
 

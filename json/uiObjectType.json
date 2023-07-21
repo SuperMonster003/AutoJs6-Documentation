@@ -18,13 +18,17 @@
           "name": "[m#]_parent",
           "methods": [
             {
-              "textRaw": "parent()",
+              "textRaw": "parent(i?)",
               "type": "method",
               "name": "parent",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其父控件.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.parent();\nw.compass(&#39;p&#39;); /* 同上. */\ndetect(w, &#39;p&#39;); /* 同上. */\n\nw.parent().parent().parent();\nw.compass(&#39;p3&#39;); /* 同上. */\ndetect(w, &#39;p3&#39;); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ i = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 相对级数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其父控件.</p>\n<p>当指定级数 <code>i</code> 时, 返回其对应级数的父控件.</p>\n<p><code>i</code> 为 <code>0</code> 时, 返回控件自身,<br><code>i</code> 为正整数时, 返回第 <code>i</code> 级父控件,<br><code>i</code> 为负数时, 将抛出异常.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.parent();\nw.parent(1); /* 同上. */\nw.compass(&#39;p&#39;); /* 同上. */\ndetect(w, &#39;p&#39;); /* 同上. */\n\nw.parent().parent().parent();\nw.parent(3); /* 同上. */\nw.compass(&#39;p3&#39;); /* 同上. */\ndetect(w, &#39;p3&#39;); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
-                  "params": []
+                  "params": [
+                    {
+                      "name": "i?"
+                    }
+                  ]
                 }
               ]
             }
@@ -40,7 +44,7 @@
               "textRaw": "child(i)",
               "type": "method",
               "name": "child",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 i 的子控件.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.child(3);\nw.compass(&#39;c3&#39;); /* 同上. */\ndetect(w, &#39;c3&#39;); /* 同上. */\n\nw.child(3).child(1);\nw.compass(&#39;c3c1&#39;); /* 同上. */\ndetect(w, &#39;c3&gt;1&#39;); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的子控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引子控件,<br><code>i</code> 为负整数, 返回倒数索引子控件,  </p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.child(3);\nw.compass(&#39;c3&#39;); /* 同上. */\ndetect(w, &#39;c3&#39;); /* 同上. */\n\nw.child(3).child(1);\nw.compass(&#39;c3c1&#39;); /* 同上. */\ndetect(w, &#39;c3&gt;1&#39;); /* 同上. */\n\nw.child(-1); /* 最后一个子控件. */\n\nw.child(-2); /* 倒数第 2 个子控件. */\nw.compass(&#39;c-2&#39;); /* 同上. */\ndetect(w, &#39;c-2&#39;); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -56,14 +60,14 @@
           "displayName": "[m#] child"
         },
         {
-          "textRaw": "[m#] children",
-          "name": "[m#]_children",
+          "textRaw": "[m#] firstChild",
+          "name": "[m#]_firstchild",
           "methods": [
             {
-              "textRaw": "children()",
+              "textRaw": "firstChild()",
               "type": "method",
-              "name": "children",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>返回当前节点的子控件集合.</p>\n<pre><code class=\"lang-js\">let cc = pickup({ filter: w =&gt; w.children().length &gt; 5 }, &#39;children&#39;);\n\nconsole.log(cc.length); /* e.g. 10 */\n\ncc.forEach((w) =&gt; {\n    let content = w.content();\n    content &amp;&amp; console.log(content);\n})\n</code></pre>\n<p>如需返回当前节点下的所有子孙控件集合, 可使用 <a href=\"#m-find\">UiObject#find()</a>.</p>\n<pre><code class=\"lang-js\">let w = pickup({ filter: w =&gt; w.children().length &gt; 5 });\nconsole.log(w.find().length); /* e.g. 20 */\n</code></pre>\n",
+              "name": "firstChild",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>返回第一个子控件.</p>\n<p>相当于 <code>child(0)</code>.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -72,7 +76,26 @@
             }
           ],
           "type": "module",
-          "displayName": "[m#] children"
+          "displayName": "[m#] firstChild"
+        },
+        {
+          "textRaw": "[m#] lastChild",
+          "name": "[m#]_lastchild",
+          "methods": [
+            {
+              "textRaw": "lastChild()",
+              "type": "method",
+              "name": "lastChild",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>返回最后一个子控件.</p>\n<p>相当于 <code>child(-1)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] lastChild"
         },
         {
           "textRaw": "[m#] childCount",
@@ -111,6 +134,204 @@
           ],
           "type": "module",
           "displayName": "[m#] hasChildren"
+        },
+        {
+          "textRaw": "[m#] children",
+          "name": "[m#]_children",
+          "methods": [
+            {
+              "textRaw": "children()",
+              "type": "method",
+              "name": "children",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>返回当前节点的子控件集合.</p>\n<pre><code class=\"lang-js\">let cc = pickup({ filter: w =&gt; w.children().length &gt; 5 }, &#39;children&#39;);\n\nconsole.log(cc.length); /* e.g. 10 */\n\ncc.forEach((w) =&gt; {\n    let content = w.content();\n    content &amp;&amp; console.log(content);\n})\n</code></pre>\n<p>如需返回当前节点下的所有子孙控件集合, 可使用 <a href=\"#m-find\">UiObject#find()</a>.</p>\n<pre><code class=\"lang-js\">let w = pickup({ filter: w =&gt; w.children().length &gt; 5 });\nconsole.log(w.find().length); /* e.g. 20 */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] children"
+        },
+        {
+          "textRaw": "[m#] sibling",
+          "name": "[m#]_sibling",
+          "methods": [
+            {
+              "textRaw": "sibling(i)",
+              "type": "method",
+              "name": "sibling",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引兄弟控件,<br><code>i</code> 为负整数, 返回倒数索引兄弟控件,  </p>\n<p>当 <code>i</code> 与 <a href=\"#m-indexinparent\">indexInParent()</a> 相同时, 返回其自身.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.sibling(0); /* 第 1 (索引为 0) 的兄弟控件. */\nw.compass(&#39;s0&#39;); /* 同上. */\ndetect(w, &#39;s0&#39;); /* 同上. */\n\nw.sibling(-2); /* 倒数第 2 个兄弟控件. */\nw.compass(&#39;s-2&#39;); /* 同上. */\ndetect(w, &#39;s-2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 可使用 <a href=\"#m-offset\">offset</a>, 或使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "i"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sibling"
+        },
+        {
+          "textRaw": "[m#] firstSibling",
+          "name": "[m#]_firstsibling",
+          "methods": [
+            {
+              "textRaw": "firstSibling()",
+              "type": "method",
+              "name": "firstSibling",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>返回第一个兄弟控件 (可能为自身).</p>\n<p>相当于 <code>sibling(0)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] firstSibling"
+        },
+        {
+          "textRaw": "[m#] lastSibling",
+          "name": "[m#]_lastsibling",
+          "methods": [
+            {
+              "textRaw": "lastSibling()",
+              "type": "method",
+              "name": "lastSibling",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>返回最后一个兄弟控件 (可能为自身).</p>\n<p>相当于 <code>sibling(-1)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] lastSibling"
+        },
+        {
+          "textRaw": "[m#] offset",
+          "name": "[m#]_offset",
+          "methods": [
+            {
+              "textRaw": "offset(i)",
+              "type": "method",
+              "name": "offset",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引偏移量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引偏移量为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数, 返回后向兄弟控件,<br><code>i</code> 为负整数, 返回前向兄弟控件,<br><code>i</code> 为 <code>0</code>, 返回当前控件自身. </p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.offset(3);\nw.compass(&#39;s&gt;3&#39;); /* 同上. */\ndetect(w, &#39;s&gt;3&#39;); /* 同上. */\n\nw.offset(-2);\nw.compass(&#39;s&lt;2&#39;); /* 同上. */\ndetect(w, &#39;s&lt;2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 除 <a href=\"#m-offset\">offset</a> 外, 还可使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "i"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] offset"
+        },
+        {
+          "textRaw": "[m#] nextSibling",
+          "name": "[m#]_nextsibling",
+          "methods": [
+            {
+              "textRaw": "nextSibling()",
+              "type": "method",
+              "name": "nextSibling",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回后一个兄弟控件.</p>\n<p>相当于 <code>offset(1)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextSibling"
+        },
+        {
+          "textRaw": "[m#] previousSibling",
+          "name": "[m#]_previoussibling",
+          "methods": [
+            {
+              "textRaw": "previousSibling()",
+              "type": "method",
+              "name": "previousSibling",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回前一个兄弟控件.</p>\n<p>相当于 <code>offset(-1)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] previousSibling"
+        },
+        {
+          "textRaw": "[m#] siblingCount",
+          "name": "[m#]_siblingcount",
+          "methods": [
+            {
+              "textRaw": "siblingCount()",
+              "type": "method",
+              "name": "siblingCount",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回当前节点的兄弟控件总数量 (含自身).</p>\n<p><code>siblingCount</code> 返回一个总是大于等于 <code>1</code> 的数字.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] siblingCount"
+        },
+        {
+          "textRaw": "[m#] isSingleton",
+          "name": "[m#]_issingleton",
+          "methods": [
+            {
+              "textRaw": "isSingleton()",
+              "type": "method",
+              "name": "isSingleton",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回当前节点是否为独身节点, 即除自身外没有其他兄弟节点.</p>\n<p>相当于 <code>siblingCount() === 1</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isSingleton"
+        },
+        {
+          "textRaw": "[m#] siblings",
+          "name": "[m#]_siblings",
+          "methods": [
+            {
+              "textRaw": "siblings()",
+              "type": "method",
+              "name": "siblings",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>返回当前节点的兄弟控件集合 (含自身).</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] siblings"
         },
         {
           "textRaw": "[m#] indexInParent",

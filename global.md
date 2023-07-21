@@ -1911,7 +1911,7 @@ species.isRegExp(/test$/); // true
 
 动画资源.
 
-定义预先了确定的动画.  
+定义了预先确定的动画.  
 补间动画保存在 `res/anim/` 中, 可通过 `R.anim` 属性访问.  
 帧动画保存在 `res/drawable/` 中, 可通过 `R.drawable` 属性访问.
 
@@ -2142,6 +2142,7 @@ const ContextThemeWrapper = android.view.ContextThemeWrapper;
 
 new MaterialDialog.Builder(new ContextThemeWrapper(activity, R.style.Material3DarkTheme))
     .title('Hello')
+    .content('This is a test for showing a dialog with material 3 dark theme.')
     .positiveText('OK')
     .onPositive(() => ui.finish())
     .cancelable(false)

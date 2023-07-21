@@ -1,5 +1,11 @@
 # 文档更新日志 (Changelog)
 
+## v1.1.6
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>
+
+- `优化` 完善 [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节
+
 ## v1.1.5
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/07/06</p>

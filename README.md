@@ -54,6 +54,17 @@
 
 [comment]: <> "Version history only shows last 3 versions"
 
+## v1.1.7
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/10/30</p>
+
+- `新增` [Shizuku](https://docs.autojs6.com/#/shizuku) 文档
+- `新增` [WebSocket](https://docs.autojs6.com/#/websocketType) 文档
+- `新增` [条码 (Barcode)](https://docs.autojs6.com/#/barcode) 文档
+- `新增` [二维码 (QR Code)](https://docs.autojs6.com/#/qrcode) 文档
+- `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
+- `优化` 完善 [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节
+
 ## v1.1.6
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>
@@ -69,15 +80,6 @@
 - `修复` floaty 模块 widht 拼写失误 _[`issue #1`](http://docs-project.autojs6.com/issues/1)_
 - `优化` 完善 [Base64](https://docs.autojs6.com/#/base64) 章节
 - `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
-
-## v1.1.4
-
-<p style="font: bold 0.8em sans-serif; color: #888888">2023/05/26</p>
-
-- `新增` [console.resetGlobalLogConfig](https://docs.autojs6.com/#/console?id=m-resetgloballogconfig) 文档
-- `新增` [web.newWebSocket](https://docs.autojs6.com/#/web?id=m-newwebsocket) 文档
-- `优化` 完善 [全能类型 (Omnipotent Types)](https://docs.autojs6.com/#/omniTypes) 章节
-- `优化` 完善 [安卓 API 级别 (Android API Level)](https://docs.autojs6.com/#/apiLevel) 章节
 
 ##### 更多版本历史可参阅
 

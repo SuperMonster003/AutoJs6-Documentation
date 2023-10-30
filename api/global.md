@@ -1889,7 +1889,7 @@ species.isRegExp(/test$/); // true
 
 **`6.2.0`** **`Global`** **`Getter`**
 
-- { [number](dataTypes#number) }
+- **&lt;get&gt;** [number](dataTypes#number)
 
 [device.width](device#p-width) 的别名属性.
 
@@ -1897,7 +1897,7 @@ species.isRegExp(/test$/); // true
 
 **`6.2.0`** **`Global`** **`Getter`**
 
-- { [number](dataTypes#number) }
+- **&lt;get&gt;** [number](dataTypes#number)
 
 [device.height](device#p-height) 的别名属性.
 

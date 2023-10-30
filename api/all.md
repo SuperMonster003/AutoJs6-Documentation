@@ -9,6 +9,8 @@
 @include color
 @include image
 @include ocr
+@include barcode
+@include qrcode
 @include keys
 @include device
 @include storages

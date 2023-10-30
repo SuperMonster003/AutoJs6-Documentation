@@ -1,0 +1,38 @@
+{
+  "source": "..\\api\\shizuku.md",
+  "modules": [
+    {
+      "textRaw": "Shizuku",
+      "name": "shizuku",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 30, 2023.</p>\n\n<hr>\n<p>通过 <a href=\"https://shizuku.rikka.app/introduction/\">Shizuku</a> 可以获得 ADB 特权并使用系统 API.</p>\n<p>使用 Shizuku 需满足以下全部条件</p>\n<ul>\n<li>设备已安装 <a href=\"https://github.com/RikkaApps/Shizuku/releases\">Shizuku 应用</a> (版本不低于 <code>11</code>)</li>\n<li>Shizuku 服务已启动 (参阅 <a href=\"https://shizuku.rikka.app/guide/setup/#start-shizuku\">Shizuku 用户手册</a>)</li>\n<li>AutoJs6 首页抽屉开启 Shizuku 权限开关</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">shizuku</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] shizuku",
+          "name": "[@]_shizuku",
+          "desc": "<p>shizuku 可作为全局对象使用:</p>\n<pre><code class=\"lang-js\">typeof shizuku; // &quot;function&quot;\ntypeof shizuku.execCommand; // &quot;function&quot;\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "shizuku(cmd)",
+              "type": "method",
+              "name": "shizuku",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>cmd</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行命令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shellResultType\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 执行命令.</p>\n<pre><code class=\"lang-js\">/* 模拟返回键. */\nshizuku(&#39;input keyevent 4&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_BACK}`); /* 同上. */\n\n/* 模拟电源键. */\nshizuku(&#39;input keyevent 26&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_POWER}`); /* 同上. */\n\n/* 点击屏幕坐标 (100, 120). */\nshizuku(&quot;input tap 100 120&quot;);\n\n/* 授予 AutoJs6 &quot;修改安全设置&quot; 权限. */\nshizuku(&#39;pm grant org.autojs.autojs6 android.permission.WRITE_SECURE_SETTINGS&#39;);\n\n/* 授予 AutoJs6 &quot;投影媒体&quot; 权限. */\nshizuku(&#39;appops set org.autojs.autojs6 PROJECT_MEDIA allow&#39;);\n\n/* 获取当前时间. */\nconsole.log(shizuku(&#39;date&#39;).result.trim());\n</code></pre>\n<p><strong><code>6.4.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>cmdList</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 待执行的多行命令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shellResultType\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 一次性执行多行命令, 每行命令对应 <code>cmdList</code> 数组中的一个元素.</p>\n<pre><code class=\"lang-js\">shizuku([ &#39;cmd-a&#39;, &#39;cmd-b&#39;, &#39;cmd-c&#39; ]);\nshizuku(&#39;cmd-a\\ncmd-b\\ncmd-c&#39;); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cmd"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] shizuku"
+        }
+      ],
+      "type": "module",
+      "displayName": "Shizuku"
+    }
+  ]
+}

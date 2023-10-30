@@ -1,0 +1,458 @@
+{
+  "source": "..\\api\\webSocketType.md",
+  "modules": [
+    {
+      "textRaw": "WebSocket",
+      "name": "websocket",
+      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 30, 2023.</p>\n\n<hr>\n<p>WebSocket 类主要用于构建一个 <a href=\"https://square.github.io/okhttp/4.x/okhttp/okhttp3/-web-socket/\">OkHttp3 WebSocket</a> 接口实现类的实例, 以便完成基于 <a href=\"https://zh.wikipedia.org/wiki/WebSocket\">WebSocket 协议</a> 的网络请求.</p>\n<blockquote>\n<p>注: WebSocket 不同于 Socket.<br>WebSocket 是应用层的网络传输协议. 而 Socket 并非协议, 是位于应用层和传输控制层之间的一组接口, 是对 TCP/IP 协议的封装.</p>\n</blockquote>\n<p>一个流程相对完备的 WebSocket 示例:</p>\n<pre><code class=\"lang-js\">console.setExitOnClose(7e3).show();\n\nlet ws = new WebSocket(&#39;wss://echo.websocket.events&#39;);\n\nws\n    .on(WebSocket.EVENT_OPEN, (res, ws) =&gt; {\n        console.log(&#39;WebSocket 已连接&#39;);\n    })\n    .on(WebSocket.EVENT_MESSAGE, (message, ws) =&gt; {\n        console.log(&#39;接收到消息&#39;);\n        // if (message instanceof okio.ByteString) {\n        //     console.log(`消息类型: ByteString`);\n        // } else if (typeof message === &#39;string&#39;) {\n        //     console.log(`消息类型: String`);\n        // } else {\n        //     throw TypeError(&#39;Should never happen&#39;);\n        // }\n    })\n    .on(WebSocket.EVENT_TEXT, (text, ws) =&gt; {\n        console.info(&#39;接收到文本消息:&#39;);\n        console.info(`text: ${text}`);\n    })\n    .on(WebSocket.EVENT_BYTES, (bytes, ws) =&gt; {\n        console.info(&#39;接收到字节数组消息:&#39;);\n        console.info(`utf8: ${bytes.utf8()}`);\n        console.info(`base64: ${bytes.base64()}`);\n        console.info(`md5: ${bytes.md5()}`);\n        console.info(`hex: ${bytes.hex()}`);\n    })\n    .on(WebSocket.EVENT_CLOSING, (code, reason, ws) =&gt; {\n        console.log(&#39;WebSocket 关闭中&#39;);\n    })\n    .on(WebSocket.EVENT_CLOSED, (code, reason, ws) =&gt; {\n        console.log(&#39;WebSocket 已关闭&#39;);\n        console.log(`code: ${code}`);\n        if (reason) console.log(`reason: ${reason}`);\n    })\n    .on(WebSocket.EVENT_FAILURE, (err, res, ws) =&gt; {\n        console.error(&#39;WebSocket 连接失败&#39;);\n        console.error(err);\n    });\n\n/* 发送文本消息. */\nws.send(&#39;Hello WebSocket&#39;);\n\n/* 发送字节数组消息. */\nws.send(new okio.ByteString(new java.lang.String(&#39;Hello WebSocket&#39;).getBytes()));\n\nsetTimeout(() =&gt; {\n    console.log(&#39;断开 WebSocket&#39;);\n    ws.close(&#39;由用户断开连接&#39;);\n}, 8e3);\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">WebSocket</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[C] WebSocket",
+          "name": "[c]_websocket",
+          "desc": "<ul>\n<li><ins><strong>extends</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> }</li>\n</ul>\n<p>WebSocket 类继承自 <a href=\"eventEmitterType\">EventEmitter</a> 类.</p>\n<p>因此 WebSocket 实例拥有继承而来的 <a href=\"eventEmitterType#m-on\">on</a>, <a href=\"eventEmitterType#m-once\">once</a>, <a href=\"eventEmitterType#m-emit\">emit</a>, <a href=\"eventEmitterType#m-eventnames\">eventNames</a>, <a href=\"eventEmitterType#m-addlistener\">addListener</a>, <a href=\"eventEmitterType#m-removelistener\">removeListener</a> 等方法, 详情参阅 <a href=\"eventEmitterType\">事件发射器 (EventEmitter)</a> 章节.</p>\n<blockquote>\n<p>注:<br>特别地, on 和 once 方法在子类进行了 <code>覆写 (override)</code>, 其返回值类型被具体化为 WebSocket, 以便于链式调用.<br>为节约篇幅, 本章节仅列举了 on 方法的相关文档, once 方法与 on 的用法相同.</p>\n</blockquote>\n",
+          "modules": [
+            {
+              "textRaw": "[c] (url)",
+              "name": "[c]_(url)",
+              "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>Global</code></strong></p>\n<ul>\n<li><strong>url</strong> { <a href=\"dataTypes#string\">string</a> } - 请求的 URL 地址</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"webSocketType\">WebSocket</a> }</li>\n</ul>\n<p>构建一个 <a href=\"webSocketType\">WebSocket</a> 实例.</p>\n<blockquote>\n<p>注: 构建实例时, 已经隐含客户端建立连接的过程.</p>\n</blockquote>\n<p>以下示例建立一个 WebSocket 连接, 并在 5 秒钟后主动断开连接.</p>\n<pre><code class=\"lang-js\">let ws = new WebSocket(&#39;wss://echo.websocket.events&#39;);\nsetTimeout(() =&gt; {\n    console.log(&#39;断开 WebSocket&#39;);\n    ws.close(WebSocket.CODE_CLOSE_NORMAL, &#39;Closed by user&#39;);\n}, 5e3);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (url)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] WebSocket"
+        },
+        {
+          "textRaw": "[m] send",
+          "name": "[m]_send",
+          "methods": [
+            {
+              "textRaw": "send(text)",
+              "type": "method",
+              "name": "send",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<p>Attempts to enqueue text to be UTF-8 encoded and sent as a the data of a text (type 0x1) message.\nThis method returns true if the message was enqueued. Messages that would overflow the outgoing message buffer will be rejected and trigger a graceful shutdown of this web socket. This method returns false in that case, and in any other case where this web socket is closing, closed, or canceled.\nThis method returns immediately.</p>\n<pre><code class=\"lang-js\">let ws = new WebSocket(&#39;wss://echo.websocket.events&#39;);\nws.send(&#39;Hello WebSocket&#39;);\nws.exitOnClose();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "send(bytes)",
+              "type": "method",
+              "name": "send",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<p>Attempts to enqueue bytes to be sent as a the data of a binary (type 0x2) message.\nThis method returns true if the message was enqueued. Messages that would overflow the outgoing message buffer (16 MiB) will be rejected and trigger a graceful shutdown of this web socket. This method returns false in that case, and in any other case where this web socket is closing, closed, or canceled.\nThis method returns immediately.</p>\n<pre><code class=\"lang-js\">let ws = new WebSocket(&#39;wss://echo.websocket.events&#39;);\nws.send(new okio.ByteString(new java.lang.String(&#39;Hello WebSocket&#39;).getBytes()));\nws.exitOnClose();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bytes"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] send"
+        },
+        {
+          "textRaw": "[m] close",
+          "name": "[m]_close",
+          "methods": [
+            {
+              "textRaw": "close(code?, reason?)",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>Overload [1-3]/4</code></strong></p>\n<ul>\n<li><strong>[ code = <code>WebSocket.CODE_CLOSE_NORMAL [1000]</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 状态码</li>\n<li><strong>[ reason = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 连接关闭原因</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 优雅关闭是否已经启动</li>\n</ul>\n<p>尝试启动 WebSocket 优雅关闭, 此时已排队的报文将在 WebSocket 断开前被传送.</p>\n<blockquote>\n<p>注: 相对应地, <a href=\"#m-cancel\">cancel</a> 则会立即释放资源, 而丢弃所有排队的报文.</p>\n</blockquote>\n<p>如果调用 <code>close</code> 时启动了优雅关闭, 返回 true.<br>如果调用 <code>close</code> 时, 优雅关闭已经启动, 或 WebSocket 已关闭或取消, 返回 false.</p>\n<p>参数 <code>code</code> 可选, 代表状态码, 通过状态码可以获取或判断连接关闭的原因. 其范围为 <code>[1000..5000)</code>.</p>\n<p>参数 <code>reason</code> 可选, 代表关闭原因, 方便用户直接通过阅读字符串获取连接关闭的原因.</p>\n<p>以下调用方式均被支持 (其中 <code>ws</code> 代表一个 WebSocket 实例):</p>\n<pre><code class=\"lang-js\">ws.close(); /* 默认状态码, 无具体关闭原因. */\nws.close(WebSocket.CODE_CLOSE_NORMAL); /* 指定状态码, 无具体关闭原因. */\nws.close(WebSocket.CODE_CLOSE_NORMAL, &#39;用户正常关闭&#39;); /* 指定状态码, 指定具体关闭原因. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "code?"
+                    },
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "close(reason)",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>reason</strong> { <a href=\"dataTypes#string\">string</a> } - 连接关闭原因</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 优雅关闭是否已经启动</li>\n</ul>\n<p>相当于 <code>close(WebSocket.CODE_CLOSE_NORMAL, reason)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "reason"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] close"
+        },
+        {
+          "textRaw": "[m] exitOnClose",
+          "name": "[m]_exitonclose",
+          "methods": [
+            {
+              "textRaw": "exitOnClose()",
+              "type": "method",
+              "name": "exitOnClose",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<p>... ...</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "exitOnClose(timeout)",
+              "type": "method",
+              "name": "exitOnClose",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<p>... ...</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] exitOnClose"
+        },
+        {
+          "textRaw": "[m] cancel",
+          "name": "[m]_cancel",
+          "methods": [
+            {
+              "textRaw": "cancel()",
+              "type": "method",
+              "name": "cancel",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>立即强制释放该 WebSocket 所占用的资源, 并丢弃所有排队的报文.</p>\n<blockquote>\n<p>注: 相对应地, <a href=\"#m-close\">close</a> 则会在释放资源之前将排队的报文完成传送.</p>\n</blockquote>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cancel"
+        },
+        {
+          "textRaw": "[m] queueSize",
+          "name": "[m]_queuesize",
+          "methods": [
+            {
+              "textRaw": "queueSize()",
+              "type": "method",
+              "name": "queueSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>Returns the size in bytes of all messages enqueued to be transmitted to the server. This doesn&#39;t include framing overhead. If compression is enabled, uncompressed messages size is used to calculate this value. It also doesn&#39;t include any bytes buffered by the operating system or network intermediaries. This method returns 0 if no messages are waiting in the queue. If may return a nonzero value after the web socket has been canceled; this indicates that enqueued messages were not transmitted.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queueSize"
+        },
+        {
+          "textRaw": "[m] on",
+          "name": "[m]_on",
+          "methods": [
+            {
+              "textRaw": "on(eventName, callback)",
+              "type": "method",
+              "name": "on",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**eventName** { [string](dataTypes#string) } - 最大连接重建次数 ",
+                      "name": "**eventName**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "最大连接重建次数"
+                    },
+                    {
+                      "textRaw": "**callback** { [(](dataTypes#function)args: [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数)[)](dataTypes#function) [=>](dataTypes#function) [any](dataTypes#any) } - 事件监听回调参数 ",
+                      "name": "**callback**",
+                      "type": " [(](dataTypes#function)args: [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数)[)](dataTypes#function) [=>](dataTypes#function) [any](dataTypes#any) ",
+                      "desc": "事件监听回调参数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [WebSocket](webSocketType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [WebSocket](webSocketType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "eventName"
+                    },
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>注册一个 WebSocket 相关的事件监听器, 当事件名称与 <code>eventName</code> 参数一致时, 触发执行回调函数 <code>callback</code>.</p>\n<p>... ...</p>\n<p>不同事件名称, 其对应监听回调函数的参数也不同 (给出具体对应的在 [p] 文档内).</p>\n<p>... ...</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] on"
+        },
+        {
+          "textRaw": "[m] rebuild",
+          "name": "[m]_rebuild",
+          "methods": [
+            {
+              "textRaw": "rebuild(maxRebuildTimes?)",
+              "type": "method",
+              "name": "rebuild",
+              "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>maxRebuildTimes</strong> { <a href=\"dataTypes#number\">number</a> } - 最大连接重建次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>... ...</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "maxRebuildTimes?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] rebuild"
+        },
+        {
+          "textRaw": "[m] request",
+          "name": "[m]_request",
+          "methods": [
+            {
+              "textRaw": "request()",
+              "type": "method",
+              "name": "request",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Okhttp3Request](okhttp3RequestType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Okhttp3Request](okhttp3RequestType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>Returns the original request that initiated this web socket.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] request"
+        },
+        {
+          "textRaw": "[p] EVENT_OPEN",
+          "name": "[p]_event_open",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>open</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量.</p>\n<ul>\n<li>事件触发: 远程对等端接受网络套接字, 并且可以开始信息传输.</li>\n<li>事件监听: <a href=\"#m-on\">WebSocket#on</a></li>\n</ul>\n<pre><code class=\"lang-js\">let ws = new WebSocket(&#39;wss://echo.websocket.events&#39;);\nws.on(WebSocket.EVENT_OPEN, (res, ws) =&gt; console.log(&#39;WebSocket 已连接&#39;));\nws.exitOnClose();\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_OPEN"
+        },
+        {
+          "textRaw": "[p] EVENT_MESSAGE",
+          "name": "[p]_event_message",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>message</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when a text (type 0x1) message has been received.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_MESSAGE"
+        },
+        {
+          "textRaw": "[p] EVENT_TEXT",
+          "name": "[p]_event_text",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>text</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when a text (type 0x1) message has been received.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_TEXT"
+        },
+        {
+          "textRaw": "[p] EVENT_BYTES",
+          "name": "[p]_event_bytes",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>bytes</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when a text (type 0x1) message has been received.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_BYTES"
+        },
+        {
+          "textRaw": "[p] EVENT_CLOSING",
+          "name": "[p]_event_closing",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>closing</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when the remote peer has indicated that no more incoming messages will be transmitted.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_CLOSING"
+        },
+        {
+          "textRaw": "[p] EVENT_CLOSED",
+          "name": "[p]_event_closed",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>closed</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when both peers have indicated that no more messages will be transmitted and the connection has been successfully released. No further calls to this listener will be made.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_CLOSED"
+        },
+        {
+          "textRaw": "[p] EVENT_FAILURE",
+          "name": "[p]_event_failure",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>failure</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n<p>Invoked when a web socket has been closed due to an error reading from or writing to the network. Both outgoing and incoming messages may have been lost. No further calls to this listener will be made.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_FAILURE"
+        },
+        {
+          "textRaw": "[p] EVENT_MAX_REBUILDS",
+          "name": "[p]_event_max_rebuilds",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>max_rebuilds</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>WebSocket 事件名称常量, 用于 xxx 事件.</p>\n",
+          "type": "module",
+          "displayName": "[p] EVENT_MAX_REBUILDS"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_NORMAL",
+          "name": "[p]_code_close_normal",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1000</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示成功操作或常规的 Socket 关闭操作.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_NORMAL"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_GOING_AWAY",
+          "name": "[p]_code_close_going_away",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1001</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端正在处于移除状态, 服务端或客户端即将不可用.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_GOING_AWAY"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_PROTOCOL_ERROR",
+          "name": "[p]_code_close_protocol_error",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1002</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端因协议错误或无效帧而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_PROTOCOL_ERROR"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_UNSUPPORTED",
+          "name": "[p]_code_close_unsupported",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1003</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端因帧数据类型不支持而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_UNSUPPORTED"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSED_NO_STATUS",
+          "name": "[p]_code_closed_no_status",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1005</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示不包含错误原因, 仅代表已经关闭的状态.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSED_NO_STATUS"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_ABNORMAL",
+          "name": "[p]_code_close_abnormal",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1006</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示异常关闭 (如浏览器关闭).</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_ABNORMAL"
+        },
+        {
+          "textRaw": "[p] CODE_UNSUPPORTED_PAYLOAD",
+          "name": "[p]_code_unsupported_payload",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1007</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端接收到不一致的报文 (如异常格式的 UTF-8).</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_UNSUPPORTED_PAYLOAD"
+        },
+        {
+          "textRaw": "[p] CODE_POLICY_VIOLATION",
+          "name": "[p]_code_policy_violation",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1008</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端因收到了违反其策略的报文而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_POLICY_VIOLATION"
+        },
+        {
+          "textRaw": "[p] CODE_CLOSE_TOO_LARGE",
+          "name": "[p]_code_close_too_large",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1009</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端因无法处理长度过大的报文而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_CLOSE_TOO_LARGE"
+        },
+        {
+          "textRaw": "[p] CODE_MANDATORY_EXTENSION",
+          "name": "[p]_code_mandatory_extension",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1010</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示终端因期望与服务端进行扩展协商而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_MANDATORY_EXTENSION"
+        },
+        {
+          "textRaw": "[p] CODE_SERVER_ERROR",
+          "name": "[p]_code_server_error",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1011</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示服务端因发生内部错误而即将终止连接.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_SERVER_ERROR"
+        },
+        {
+          "textRaw": "[p] CODE_SERVICE_RESTART",
+          "name": "[p]_code_service_restart",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1012</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示服务端正在重启过程中.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_SERVICE_RESTART"
+        },
+        {
+          "textRaw": "[p] CODE_TRY_AGAIN_LATER",
+          "name": "[p]_code_try_again_later",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1013</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示服务端临时拒绝了终端请求.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_TRY_AGAIN_LATER"
+        },
+        {
+          "textRaw": "[p] CODE_BAD_GATEWAY",
+          "name": "[p]_code_bad_gateway",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1014</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示网关服务器接收到无效的请求.</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_BAD_GATEWAY"
+        },
+        {
+          "textRaw": "[p] CODE_TLS_HANDSHAKE_FAIL",
+          "name": "[p]_code_tls_handshake_fail",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[ <code>1015</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>WebSocket 状态码, 表示 TLS 握手失败 (如服务端证书未通过验证等).</p>\n",
+          "type": "module",
+          "displayName": "[p] CODE_TLS_HANDSHAKE_FAIL"
+        }
+      ],
+      "type": "module",
+      "displayName": "WebSocket"
+    }
+  ]
+}

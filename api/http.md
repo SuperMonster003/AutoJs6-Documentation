@@ -19,11 +19,44 @@ http 模块主要用于发送 HTTP 请求, 获取并解析 HTTP 响应.
 
 ## [m] get
 
-### get(url, options?, callback?)
+### get(url)
 
-* `url` {string} 请求的URL地址, 需要以"http://"或"https://"开头. 如果url没有以"http://"开头, 则默认为"http://".
+**`Overload 1/3`**
+
+- **url** { [string](dataTypes#string) } - 请求的 URL 地址 (默认使用 HTTP 协议)
+- <ins>**returns**</ins> { [HttpResponse](httpResponseType) } - 请求的响应实例
+
+```js
+let response = http.get('www.github.com');
+if (response.statusCode === 200) {
+    console.log('请求成功');
+} else {
+    console.log('请求失败');
+}
+```
+
+### get(url, options)
+
+**`Overload 2/3`**
+
+- **url** { [string](dataTypes#string) } - 请求的 URL 地址 (默认使用 HTTP 协议)
+- **options** { [HttpRequestBuilderOptions](httpRequestBuilderOptionsType) } - 请求的构建选项
+- <ins>**returns**</ins> { [HttpResponse](httpResponseType) } - 请求的响应实例
+
+### get(url, options, callback)
+
+**`Overload 3/3`** **`Async`**
+
+- **url** { [string](dataTypes#string) } - 请求的 URL 地址 (默认使用 HTTP 协议)
+- **options** { [HttpRequestBuilderOptions](httpRequestBuilderOptionsType) } - 请求的构建选项
+- **callback** { [HttpRequestBuilderOptions](httpRequestBuilderOptionsType) } - 请求的响应回调
+- <ins>**returns**</ins> { [HttpResponse](httpResponseType) } - 请求的响应实例
+
+
+- **url** { [string](dataTypes#string) } - 请求的 URL 地址
 * `options` {Object} 请求选项. 参见[http.request()][].
 * `callback` {Function} 回调函数, 可选, 其参数是一个[Response][]对象. 如果不加回调函数, 则该请求将阻塞、同步地执行.
+
 
 对地址url进行一次HTTP GET 请求. 如果没有回调函数, 则在请求完成或失败时返回此次请求的响应(参见[Response][]).
 

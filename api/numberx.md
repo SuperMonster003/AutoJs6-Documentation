@@ -37,7 +37,7 @@ console.log(typeof (123).clamp); // "function"
 
 **`6.2.0`** **`xObject`** **`CONSTANT`**
 
-- [[ 996 ]] { [number](dataTypes#number) }
+- [ `996` ] { [number](dataTypes#number) }
 
 996.ICU - Developers' lives matter (程序员生命健康值得呵护).
 

@@ -31,7 +31,7 @@ ImageWrapper.ofBitmap(bitmap); /* 将 Bitmap 包装为 ImageWrapper. */
 
 **`6.2.0`**
 
-- <ins>**returns**</ins> { [ImageWrapper](imageWrapper) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
 
 //// -=-= PENDING =-=- ////
 

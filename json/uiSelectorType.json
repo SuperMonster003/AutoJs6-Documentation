@@ -4719,7 +4719,7 @@
               "textRaw": "pickup(root, selector, compass, result, callback)",
               "type": "method",
               "name": "pickup",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 17/17</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>root</strong> { <a href=\"uiObjectType\">UiObject</a> } - 筛选根节点参数</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 混合选择器参数</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 控件罗盘参数</li>\n<li><strong>result</strong> { <a href=\"dataTypes#pickupresult\">PickupResult</a> } - 结果筛选参数</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">(</a>o: <a href=\"dataTypes#any\">any</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">R</a> } - 筛选回调参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 筛选结果</li>\n</ul>\n<p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href=\"#pickupselector-compass-result\">pickup(selector, compass, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>\n<pre><code class=\"lang-js\">/* w 将作为根节点. */\n/* 也可使用 pickup({descMatch: /hello?.+/}) 替换. */\nlet w = descMatch(/hello?.+/).findOnce();\n\npickup(w, text(&#39;abc&#39;), &#39;s&gt;1&#39;, &#39;bounds&#39;, (o) =&gt; {\n    if (o === null) {\n        throw Error(&#39;获取控件矩形失败, 请确保前台页面符合需求.&#39;);\n    }\n}); /* 如果没有异常, pickup 结果为原本的拾取结果. */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 17/17</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>root</strong> { <a href=\"uiObjectType\">UiObject</a> } - 筛选根节点参数</li>\n<li><strong>selector</strong> { <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 混合选择器参数</li>\n<li><strong>compass</strong> { <a href=\"dataTypes#detectcompass\">DetectCompass</a> } - 控件罗盘参数</li>\n<li><strong>result</strong> { <a href=\"dataTypes#pickupresult\">PickupResult</a> } - 结果筛选参数</li>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">(</a>o: <a href=\"dataTypes#any\">any</a><a href=\"dataTypes#function\">)</a> <a href=\"dataTypes#function\">=&gt;</a> <a href=\"dataTypes#generic\">R</a> } - 筛选回调参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 筛选结果</li>\n</ul>\n<p>以 <code>root</code> 参数指定的控件为根节点, 对 <a href=\"#pickupselector-compass-result\">pickup(selector, compass, result)</a> 增加回调处理, 将回调函数的返回值 (<code>undefined</code> 除外) 作为最终结果. 当回调函数返回 <code>undefined</code> 时, 则将拾取器的结果作为最终结果.</p>\n<pre><code class=\"lang-js\">/* w 将作为根节点. */\n/* 也可使用 pickup({descMatch: /hello?.+/}) 替换. */\nlet w = descMatch(/hello?.+/).findOnce();\n\npickup(w, text(&#39;abc&#39;), &#39;s&gt;1&#39;, &#39;bounds&#39;, (o) =&gt; {\n    if (o === null) {\n        throw Error(&#39;获取控件矩形失败, 请确保前台页面符合需求.&#39;);\n    }\n}); /* 如果没有异常, pickup 结果为原本的拾取结果. */\n</code></pre>\n<hr>\n",
               "signatures": [
                 {
                   "params": [
@@ -4749,6 +4749,29 @@
       ],
       "type": "module",
       "displayName": "选择器 (UiSelector)"
+    },
+    {
+      "textRaw": "选择器行为",
+      "name": "选择器行为",
+      "desc": "<p>通常执行控件行为时, 按以下过程进行:</p>\n<pre><code class=\"lang-text\">构建选择器 - 筛选 (查找) - 对结果 (控件或集合) 执行行为\n</code></pre>\n<p>而选择器行为的过程:</p>\n<pre><code class=\"lang-text\">构建选择器 - 执行行为\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "执行原理",
+          "name": "执行原理",
+          "desc": "<p>选择器行为隐含默认的筛选过程, 即 <a href=\"#m-untilfind\">untilFind</a>.</p>\n<p>例如 <code>text(&#39;abc&#39;).click()</code>, 相当于 <code>text(&#39;abc&#39;).untilFind().click()</code>.</p>\n",
+          "type": "module",
+          "displayName": "执行原理"
+        },
+        {
+          "textRaw": "谨慎使用",
+          "name": "谨慎使用",
+          "desc": "<p>与选择器行为相关的全局方法, 均不建议使用. 原因如下.</p>\n<ol>\n<li><p><strong>潜在的永久阻塞风险</strong></p>\n<p>因 <code>untilFind</code> 方法具有阻塞特性, 意味着此方法可能导致脚本 <strong>永久阻塞</strong>.<br>如上述示例, <code>text(&#39;abc&#39;)</code> 不存在时, 脚本将持续阻塞.</p>\n</li>\n<li><p><strong>全局行为缺少针对性</strong></p>\n<p>以 <code>paste()</code> 为例.<br>当使用全局方法 <code>paste()</code> 时, 相当于 <code>untilFind().paste()</code>, <code>untilFind()</code> 前无筛选条件, 因此 <code>untilFind()</code> 将得到窗口全部控件的集合.<br>这样的集合往往有几十甚至几百个控件, 再执行 <code>paste()</code> 时, 集合中的所有控件全部执行一次 <code>paste()</code>.<br>这样的操作往往是非预期且耗时的, 因此不建议使用 <code>paste()</code> 这样的全局方法, 推荐使用具体且尽量可控的筛选器筛选出特定的控件或集合, 再有针对性地执行 <code>paste()</code> 操作.</p>\n</li>\n</ol>\n<hr>\n",
+          "type": "module",
+          "displayName": "谨慎使用"
+        }
+      ],
+      "type": "module",
+      "displayName": "选择器行为"
     },
     {
       "textRaw": "筛选器类型",
@@ -4824,29 +4847,6 @@
       ],
       "type": "module",
       "displayName": "筛选器类型"
-    },
-    {
-      "textRaw": "选择器行为",
-      "name": "选择器行为",
-      "desc": "<p>通常执行控件行为时, 按以下过程进行:</p>\n<pre><code class=\"lang-text\">构建选择器 - 筛选 (查找) - 对结果 (控件或集合) 执行行为\n</code></pre>\n<p>而选择器行为的过程:</p>\n<pre><code class=\"lang-text\">构建选择器 - 执行行为\n</code></pre>\n",
-      "modules": [
-        {
-          "textRaw": "原理",
-          "name": "原理",
-          "desc": "<p>选择器行为隐含默认的筛选过程, 即 <a href=\"#m-untilfind\">untilFind</a>.</p>\n<p>例如 <code>text(&#39;abc&#39;).click()</code>, 相当于 <code>text(&#39;abc&#39;).untilFind().click()</code>.</p>\n",
-          "type": "module",
-          "displayName": "原理"
-        },
-        {
-          "textRaw": "不推荐使用",
-          "name": "不推荐使用",
-          "desc": "<ol>\n<li><p><strong>潜在的永久阻塞风险</strong></p>\n<p>因 <code>untilFind</code> 方法具有阻塞特性, 意味着此方法可能导致脚本 <strong>永久阻塞</strong>.<br>如上述示例, <code>text(&#39;abc&#39;)</code> 不存在时, 脚本将持续阻塞.</p>\n</li>\n<li><p><strong>全局行为缺少针对性</strong></p>\n<p>以 <code>paste()</code> 为例.<br>当使用全局方法 <code>paste()</code> 时, 相当于 <code>untilFind().paste()</code>, <code>untilFind()</code> 前无筛选条件, 因此 <code>untilFind()</code> 将得到窗口全部控件的集合.<br>这样的集合往往有几十甚至几百个控件, 再执行 <code>paste()</code> 时, 集合中的所有控件全部执行一次 <code>paste()</code>.<br>这样的操作往往是非预期且耗时的, 因此不建议使用 <code>paste()</code> 这样的全局方法, 推荐使用具体且尽量可控的筛选器筛选出特定的控件或集合, 再有针对性地执行 <code>paste()</code> 操作.</p>\n</li>\n</ol>\n",
-          "type": "module",
-          "displayName": "不推荐使用"
-        }
-      ],
-      "type": "module",
-      "displayName": "选择器行为"
     }
   ]
 }

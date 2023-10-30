@@ -429,8 +429,15 @@ console.log(UiObject.bounds()); /* 访问的是类 UiObject 的静态方法 boun
 - <ins>**returns**</ins> { [T](dataTypes#generic) }
 - <ins>**template**</ins> { [T](dataTypes#generic) }
 
-returns 后的 "{}" 内包含返回值类型.  
-上述示例表示 colors.rgb 方法调用后将返回 [number](dataTypes#number) 类型数据.
+template 标签指示了一个模板参数 `T`, 这个参数可以代表任意一个类型, 如 `string`.
+
+示例 `foo.bar(a, b)` 中, 返回值与参数 `a` 的类型均为 `T`, 因此两者的类型相同.
+
+例如当参数 `a` 传入 `string` 类型时, 返回值也为 `string` 类型:
+
+```js
+typeof foo.bar('hello', 3); // string
+```
 
 > 参阅: [泛型](dataTypes#generic)
 

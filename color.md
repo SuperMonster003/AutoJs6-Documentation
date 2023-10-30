@@ -67,6 +67,14 @@ AutoJs6 支持以下方式表示一个颜色:
         - "orange" (橙色)
         - ... ...
 
+## 黑色与 0
+
+需特别留意, 黑色的颜色字符串为 `#000000`, 它是完全颜色字符串 `#FF000000` 的简写形式, 其 ARGB 分量表示为 `argb(255, 0, 0, 0)`.
+
+因此黑色的颜色整数不是 `0`, 而是 `-16777216`.
+
+颜色整数 `0` 对应的是完全透明色, 即 `#00000000`, 其 ARGB 分量表示为 `argb(0, 0, 0, 0)`.
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">colors</p>
@@ -269,9 +277,9 @@ colors.build(120, 60, 240, 0.85).toHex(); /* 同上. */
 colors.build().setRgba(120, 60, 240, 0.85).toHex(); /* 同上. */
 ```
 
-## [m] digest
+## [m] summary
 
-### digest(color)
+### summary(color)
 
 **`6.3.0`**
 
@@ -297,16 +305,16 @@ colors.build().setRgba(120, 60, 240, 0.85).toHex(); /* 同上. */
 
 ```js
 // hex(#009688), rgba(0,150,136/1.0), int(-16738680)
-colors.digest('#009688');
+colors.summary('#009688');
 
 // hex(#BE009688), rgba(0,150,136/0.75), int(-1107257720)
-colors.digest('#BE009688');
+colors.summary('#BE009688');
 
 // hex(#FF0000), rgba(255,0,0/1.0), int(-65536)
-colors.digest('red');
+colors.summary('red');
 
 // hex(#6400008B), rgba(0,0,139/0.39), int(1677721739)
-colors.build('dark-blue').setAlpha(100).digest();
+colors.build('dark-blue').setAlpha(100).summary();
 ```
 
 ## [m] parseColor
@@ -1876,11 +1884,15 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-16777216` ] { [number](dataTypes#number) }
+
 <span style="color: #000000">◑</span> 黑 (`#000000` `rgb(0,0,0`) 的颜色整数.
 
 ## [p] BLUE
 
 **`CONSTANT`**
+
+- [ `-16776961` ] { [number](dataTypes#number) }
 
 <span style="color: #0000FF">◑</span> 蓝 (`#0000FF` `rgb(0,0,255`) 的颜色整数.
 
@@ -1888,11 +1900,15 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-16711681` ] { [number](dataTypes#number) }
+
 <span style="color: #00FFFF">◑</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
 
 ## [p] AQUA
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-16711681` ] { [number](dataTypes#number) }
 
 <span style="color: #00FFFF">◑</span> 青 (`#00FFFF` `rgb(0,255,255`) 的颜色整数.
 
@@ -1900,11 +1916,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-12303292` ] { [number](dataTypes#number) }
+
 <span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
 ## [p] DARK_GREY
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-12303292` ] { [number](dataTypes#number) }
 
 <span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
@@ -1912,11 +1932,15 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-12303292` ] { [number](dataTypes#number) }
+
 <span style="color: #444444">◑</span> 暗灰 (`#444444` `rgb(68,68,68`) 的颜色整数.
 
 ## [p] GRAY
 
 **`CONSTANT`**
+
+- [ `-7829368` ] { [number](dataTypes#number) }
 
 <span style="color: #888888">◑</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
 
@@ -1924,11 +1948,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-7829368` ] { [number](dataTypes#number) }
+
 <span style="color: #888888">◑</span> 灰 (`#888888` `rgb(136,136,136`) 的颜色整数.
 
 ## [p] GREEN
 
 **`CONSTANT`**
+
+- [ `-16711936` ] { [number](dataTypes#number) }
 
 <span style="color: #00FF00">◑</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
 
@@ -1936,11 +1964,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-16711936` ] { [number](dataTypes#number) }
+
 <span style="color: #00FF00">◑</span> 绿 (`#00FF00` `rgb(0,255,0`) 的颜色整数.
 
 ## [p] LIGHT_GRAY
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-3355444` ] { [number](dataTypes#number) }
 
 <span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
@@ -1948,11 +1980,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-3355444` ] { [number](dataTypes#number) }
+
 <span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
 ## [p] LTGRAY
 
 **`CONSTANT`**
+
+- [ `-3355444` ] { [number](dataTypes#number) }
 
 <span style="color: #CCCCCC">◑</span> 亮灰 (`#CCCCCC` `rgb(204,204,204`) 的颜色整数.
 
@@ -1960,11 +1996,15 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-65281` ] { [number](dataTypes#number) }
+
 <span style="color: #FF00FF">◑</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
 
 ## [p] FUCHSIA
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-65281` ] { [number](dataTypes#number) }
 
 <span style="color: #FF00FF">◑</span> 品红 / 洋红 (`#FF00FF` `rgb(255,0,255`) 的颜色整数.
 
@@ -1972,11 +2012,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-8388608` ] { [number](dataTypes#number) }
+
 <span style="color: #800000">◑</span> 栗 (`#800000` `rgb(128,0,0`) 的颜色整数.
 
 ## [p] NAVY
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-16777088` ] { [number](dataTypes#number) }
 
 <span style="color: #000080">◑</span> 海军蓝 / 藏青 (`#000080` `rgb(0,0,128`) 的颜色整数.
 
@@ -1984,11 +2028,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-8355840` ] { [number](dataTypes#number) }
+
 <span style="color: #808000">◑</span> 橄榄 (`#808000` `rgb(128,128,0`) 的颜色整数.
 
 ## [p] PURPLE
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-8388480` ] { [number](dataTypes#number) }
 
 <span style="color: #800080">◑</span> 紫 (`#800080` `rgb(128,0,128`) 的颜色整数.
 
@@ -1996,11 +2044,15 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-65536` ] { [number](dataTypes#number) }
+
 <span style="color: #FF0000">◑</span> 红 (`#FF0000` `rgb(255,0,0`) 的颜色整数.
 
 ## [p] SILVER
 
 **`6.2.0`** **`CONSTANT`**
+
+- [ `-4144960` ] { [number](dataTypes#number) }
 
 <span style="color: #C0C0C0">◑</span> 银 (`#C0C0C0` `rgb(192,192,192`) 的颜色整数.
 
@@ -2008,11 +2060,15 @@ function setPaintColor(paint, color) {
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-16744320` ] { [number](dataTypes#number) }
+
 <span style="color: #008080">◑</span> 鸭绿 / 凫绿 (`#008080` `rgb(0,128,128`) 的颜色整数.
 
 ## [p] WHITE
 
 **`CONSTANT`**
+
+- [ `-1` ] { [number](dataTypes#number) }
 
 <span style="color: #FFFFFF">◑</span> 白 (`#FFFFFF` `rgb(255,255,255`) 的颜色整数.
 
@@ -2020,17 +2076,23 @@ function setPaintColor(paint, color) {
 
 **`CONSTANT`**
 
+- [ `-256` ] { [number](dataTypes#number) }
+
 <span style="color: #FFFF00">◑</span> 黄 (`#FFFF00` `rgb(255,255,0)`) 的颜色整数.
 
 ## [p] ORANGE
 
 **`6.2.0`** **`CONSTANT`**
 
+- [ `-23296` ] { [number](dataTypes#number) }
+
 <span style="color: #FFA500">◑</span> 橙 (`#FFA500` `rgb(255,165,0)`) 的颜色整数.
 
 ## [p] TRANSPARENT
 
 **`CONSTANT`**
+
+- [ `0` ] { [number](dataTypes#number) }
 
 全透明 (`#00000000` `argb(0, 0, 0, 0)`) 的颜色整数.
 

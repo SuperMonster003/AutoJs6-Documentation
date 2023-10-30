@@ -147,68 +147,11 @@ webView.setWebViewClient(newInjectableWebClient());
 
 **`6.3.1`** **`Global`**
 
-- **url** { [string](dataTypes#string) }
+- **url** { [string](dataTypes#string) } - 请求的 URL 地址
 - <ins>**returns**</ins> { [WebSocket](webSocketType) }
 
-新建并返回一个 [WebSocket](webSocketType) 实例.
+构建一个 [WebSocket](webSocketType) 实例.
 
-```js
-console.setExitOnClose(7e3).show();
+相当于 `new WebSocket(url)`.
 
-let ws = web.newWebSocket('wss://echo.websocket.events');
-
-ws
-    .on('open', (res, ws) => {
-        console.log('WebSocket 已连接');
-    })
-    .on('message', (message, ws) => {
-        console.log('接收到消息');
-        // if (message instanceof okio.ByteString) {
-        //     console.log(`消息类型: ByteString`);
-        // } else if (typeof message === 'string') {
-        //     console.log(`消息类型: String`);
-        // } else {
-        //     throw TypeError('Should never happen');
-        // }
-    })
-    .on('text', (text, ws) => {
-        console.info('接收到文本消息:');
-        console.info(`text: ${text}`);
-    })
-    .on('bytes', (bytes, ws) => {
-        console.info('接收到字节数组消息:');
-        console.info(`utf8: ${bytes.utf8()}`);
-        console.info(`base64: ${bytes.base64()}`);
-        console.info(`md5: ${bytes.md5()}`);
-        console.info(`hex: ${bytes.hex()}`);
-    })
-    .on('closing', (code, reason, ws) => {
-        console.log('WebSocket 关闭中');
-    })
-    .on('closed', (code, reason, ws) => {
-        console.log('WebSocket 已关闭');
-        console.log(`code: ${code}`);
-        if (reason) console.log(`reason: ${reason}`);
-    })
-    .on('failure', (err, res, ws) => {
-        console.error('WebSocket 连接失败');
-        console.error(err);
-    });
-
-/* 发送文本消息. */
-ws.send('Hello WebSocket');
-
-/* 发送字节数组消息. */
-ws.send(new okio.ByteString(new java.lang.String('Hello WebSocket').getBytes()));
-
-setTimeout(() => {
-    console.log('断开 WebSocket');
-
-    /* code 支持的范围 [1000,5000). */
-    /* 1000 表示成功操作或常规的 Socket 关闭操作. */
-    /* 参阅 https://github.com/Luka967/websocket-close-codes */
-    ws.close(1000, 'Closed by user');
-}, 8e3);
-
-setTimeout(() => console.log('Exit'), 9e3);
-```
+> 参阅: [WebSocket](webSocketType) 章节

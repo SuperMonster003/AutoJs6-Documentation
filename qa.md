@@ -89,9 +89,11 @@ AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目�
 
 ### OCR 特性
 
-AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 实现的.
+AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 及 [Baidu PaddlePaddle](https://www.paddlepaddle.org.cn/) 的 [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite) 实现的.
 
-> 注: AutoJs6 的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/MlKitOCR.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [开源项目](https://github.com/TonyJiangWJ/Auto.js).
+> 注:   
+> AutoJs6 基于 MLKit 引擎的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/OcrMLKit.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [Auto.js](https://github.com/TonyJiangWJ/Auto.js) 项目.  
+> AutoJs6 基于 Paddle Lite 引擎的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/OcrPaddle.kt) 源自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [GitHub PR](http://pr.autojs6.com/120).
 
 > 参阅: [光学字符识别 (OCR)](ocr) 模块
 
@@ -190,9 +192,9 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 
 ## 打包应用
 
-AutoJs6 使用 Auto.js 最终免费版打包插件, 因此打包应用与 AutoJs6 主应用有较大的功能和界面差异.
+AutoJs6 打包功能尚不完善, 打包应用与 AutoJs6 主应用可能有较大的功能和界面差异.
 
-AutoJs6 暂时不考虑对打包应用做进一步开发, 甚至可能永久搁置.
+AutoJs6 开发者暂不考虑参与打包功能相关的开发工作, 目前以 [LZX284](https://github.com/LZX284) 为主要贡献者进行打包功能的开发及维护, 后续将继续由其他开发者贡献相关代码. 
 
 ### 图片等资源共同打包及多脚本打包
 

@@ -215,11 +215,9 @@ console.log(autojs.version.date); /* 同上. */
 
 ## [p] themeColor
 
-### themeColor
-
 **`6.3.0`** **`Getter`**
 
-- { [ThemeColor](dataTypes#themecolor) }
+- **&lt;get&gt;** [ThemeColor](dataTypes#themecolor)
 
 获取 AutoJs6 的主题颜色实例.
 

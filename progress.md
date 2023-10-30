@@ -23,6 +23,8 @@
 |                 [Color - 颜色](color)                 |    √     |
 |                 [Image - 图像](image)                 |          |
 |                 [OCR - 光学字符识别](ocr)                 |    √     |
+|               [Barcode - 条码](barcode)               | &lt; 1%  |
+|               [QR Code - 二维码](qrcode)               | &lt; 1%  |
 |                  [Keys - 按键](keys)                  |          |
 |                [Device - 设备](device)                |          |
 |              [Storage - 储存](storages)               |    √     |
@@ -35,6 +37,7 @@
 |               [Notice - 消息通知](notice)               |    √     |
 |              [Console - 控制台](console)               |    √     |
 |                   [Shell](shell)                    |          |
+|                 [Shizuku](shizuku)                  | &lt; 5%  |
 |                [Media - 多媒体](media)                 |          |
 |               [Sensor - 传感器](sensors)               |          |
 |             [Recorder - 记录器](recorder)              |          |
@@ -64,7 +67,9 @@
 |           [UiObject - 控件节点](uiObjectType)           |    √     |
 | [UiObjectCollection - 控件集合](uiObjectCollectionType) |    √     |
 |   [UiObjectActions - 控件节点行为](uiObjectActionsType)   |    √     |
-|        [ImageWrapper - 包装图像类](imageWrapper)         | &lt; 5%  |
+|             [WebSocket](webSocketType)              | &gt; 70% |
+|      [EventEmitter - 事件发射器](eventEmitterType)       |          |
+|      [ImageWrapper - 包装图像类](imageWrapperType)       | &lt; 5%  |
 |               [App - 应用枚举类](appType)                |    √     |
 |              [Color - 颜色类](colorType)               |    √     |
 |           [Version - 版本工具类](versionType)            |    √     |

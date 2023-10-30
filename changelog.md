@@ -1,5 +1,16 @@
 # 文档更新日志 (Changelog)
 
+## v1.1.7
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/10/30</p>
+
+- `新增` [Shizuku](https://docs.autojs6.com/#/shizuku) 文档
+- `新增` [WebSocket](https://docs.autojs6.com/#/websocketType) 文档
+- `新增` [条码 (Barcode)](https://docs.autojs6.com/#/barcode) 文档
+- `新增` [二维码 (QR Code)](https://docs.autojs6.com/#/qrcode) 文档
+- `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
+- `优化` 完善 [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节
+
 ## v1.1.6
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>

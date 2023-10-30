@@ -981,7 +981,7 @@ autojs.setRootMode(true); /* 同上. */
 
 ### #AARRGGBB
 
-使用四个分量表示颜色, 分量顺序固定为 `A (alpha)`, `R (red)`, `G (green)`, `B (blue)`. 每个分量使用 `0-255` 对应的十六进制数表示, 不足两位时需补零.
+使用四个分量表示颜色, 分量顺序固定为 `A (alpha)`, `R (red)`, `G (green)`, `B (blue)`. 每个分量使用 `[0..255]` 对应的十六进制数表示, 不足两位时需补零.
 
 例如一个颜色使用 `rgba(120, 14, 224, 255)` 表示, 将其转换为 `#AARRGGBB` 格式:
 
@@ -1248,7 +1248,7 @@ console.log(`R: ${r}, G: ${g}, B: ${b}`);
 
 colors 全局对象的很多 "to" 开头的方法都可返回颜色分量数组, 如 [toRgb](color#m-torgb), [toHsv](color#m-tohsv), [toHsl](color#m-tohsl), [toRgba](color#m-torgba), [toArgb](color#m-toargb) 等.
 
-需额外注意 [toRgba](color#m-torgba) 和 [toArgb](color#m-toargb) 结果中的 `A (alpha)` 分量, 默认范围为 `0-255`, 而其他方法则恒为 `0-1`:
+需额外注意 [toRgba](color#m-torgba) 和 [toArgb](color#m-toargb) 结果中的 `A (alpha)` 分量, 默认范围为 `[0..255]`, 而其他方法则恒为 `[0..1]`:
 
 ```js
 colors.toRgba('blue-grey')[3]; /* A 分量为 255. */
@@ -1257,7 +1257,7 @@ colors.toHsva('blue-grey')[3]; /* A 分量为 1. */
 colors.toHsla('blue-grey')[3]; /* A 分量为 1. */
 ```
 
-如需使 `toRgba` 和 `toArgb` 结果中 `A (alpha)` 分量范围也为 `0-1`, 可使用 `maxAlpha` 参数:
+如需使 `toRgba` 和 `toArgb` 结果中 `A (alpha)` 分量范围也为 `[0..1]`, 可使用 `maxAlpha` 参数:
 
 ```js
 colors.toRgba('blue-grey', { maxAlpha: 1 })[3]; /* A 分量为 1. */
@@ -1473,6 +1473,15 @@ app.sendBroadcast('hierarchy'); /* 同上. */
 - 布局范围分析 - `inspect_layout_bounds` / `bounds`
 - 布局层次分析 - `inspect_layout_hierarchy` / `hierarchy`
 
+## OcrModeName
+
+AutoJs6 的 OCR 模式名称.
+
+当使用不同的模式名称时, `ocr` 全局方法及其相关方法 (如 [ocr.detect](ocr#m-detect)) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.
+
+- `mlkit` - 代表 MLKit 引擎
+- `paddle` - 代表 Paddle Lite 引擎
+
 ## OcrResult
 
 OcrResult 是一个代表 OCR 识别结果的接口.
@@ -1487,13 +1496,13 @@ OcrResult 是一个代表 OCR 识别结果的接口.
 
 - { [string](dataTypes#string) }
 
-OCR 识别结果的标签, 通常可用于最终的文字识别结果.
+OCR 识别结果的文本标签, 通常可用于最终的文字识别结果.
 
 ```js
 images.requestScreenCapture();
 let img = images.captureScreen();
 let results = ocr.detect(img);
-results.map(o => o.label); /* 将识别结果全部映射为标签 (文本). */
+results.map(o => o.label); /* 将识别结果全部映射为文本标签. */
 ```
 
 ### [p] confidence

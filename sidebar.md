@@ -47,6 +47,7 @@
 * [HTTP](http)
 * [Base64](base64)
 * [Crypto - 密文](crypto)
+* [OpenCC - 中文转换](opencc)
 * [Internationalization - 国际化](i18n)
 * [Standardization - 标准化](s13n)
 * [E4X](e4x)
@@ -122,6 +123,7 @@
 * [OpenCVPoint](opencvPointType)
 * [OpenCVRect](opencvRectType)
 * [OpenCVSize](opencvSizeType)
+* [OpenCCConversion](openCCConversionType)
 
 </details>
 

@@ -272,6 +272,7 @@ console.build({
     titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */
     contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */
     exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */
+    touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */
 }).show(); /* 使用 show 方法显示浮动窗口. */
 ```
 
@@ -343,6 +344,51 @@ console.build({ exitOnClose: false }).show(); /* 效果同上. */
 ```js
 console.setExitOnClose(6e3).show(); /* 脚本结束后 6 秒钟自动关闭浮动窗口. */
 console.build({ exitOnClose: 6e3 }).show(); /* 效果同上. */
+```
+
+## [m] setTouchable
+
+### setTouchable(touchable?)
+
+**`6.5.0`**
+
+- [ `true` ] **touchable** { [boolean](dataTypes#boolean) } - 是否响应点击事件
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口是否响应点击事件, 默认为 `true`.
+
+如需穿透点击, 可设置为 `false`.
+
+```js
+console.setTouchable(false).show(); /* 点击事件将穿透控制台浮动窗口. */
+console.build({ touchable: false }).show(); /* 效果同上. */
+```
+
+当 `setTouchable` 传入 `false` 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 [hide](#m-hide) 或 [setExitOnClose](#m-setexitonclose) 等代码方式实现浮动窗口关闭:
+
+```js
+/* 借助 setExitOnClose 实现脚本结束后自动关闭窗口. */
+
+console
+    .setTouchable(false)
+    .setExitOnClose(true)
+    .show();
+
+/* 使用 build 构建器写法. */
+
+console.build({
+    touchable: false,
+    exitOnClose: true,
+}).show();
+
+/* 使用音量键控制, 例如按下 "音量减" 键关闭窗口 (需要无障碍服务). */
+
+events.observeKey();
+events.setKeyInterceptionEnabled(true);
+events.on('volume_down', () => {
+    console.hide();
+    exit(); /* 退出脚本 (可选). */
+});
 ```
 
 ## [m] setTitle

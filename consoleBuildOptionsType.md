@@ -43,7 +43,7 @@ console.build({ position: [ 0.2, 0.1 ] }).show();
 
 ## [p?] exitOnClose
 
-- { [number](dataTypes#number) | [boolean](dataTypes#boolean) } - 浮动窗口自动关闭的超时时间或启用状态
+- [ `false` ] { [number](dataTypes#number) | [boolean](dataTypes#boolean) } - 浮动窗口自动关闭的超时时间或启用状态
 
 设置控制台浮动窗口在脚本结束时自动关闭的超时时间或启用状态.
 
@@ -59,6 +59,21 @@ console.build({ exitOnClose: false }).show();
 ```
 
 `exitOnClose` 设置为 `true` 时, 相当于 `exitOnClose(5e3)`, 即脚本结束时浮动窗口在 `5` 秒钟后自动关闭.
+
+## [p?] touchable
+
+- [ `true` ] { [boolean](dataTypes#boolean) } - 是否响应点击事件
+
+设置控制台浮动窗口是否响应点击事件, 默认为 `true`.
+
+如需穿透点击, 可设置为 `false`.
+
+```js
+/* 点击事件将穿透控制台浮动窗口. */
+console.build({ touchable: false }).show();
+```
+
+当设置 `touchable` 为 `false` 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 [hide](console#m-hide) 或 [setExitOnClose](console#m-setexitonclose) 等代码方式实现浮动窗口关闭. 详见 [console.setTouchable](console#m-settouchable) 小节.
 
 ## [p?] title
 

@@ -704,7 +704,7 @@ console
     - 亮色主题 - [ <span style="color: #C0C0C0">◑</span> ] - #DFC0C0C0
     - 暗色主题 - [ <span style="color: #7F7F80">◑</span> ] - #7F7F80
 
-> 注: 此方法将自动添加末尾换行符
+> 注: 此方法将自动添加末尾换行符.
 
 ## [m] log
 
@@ -729,7 +729,7 @@ console
     - 亮色主题 - [ <span style="color: #000000">◑</span> ] - #CC000000
     - 暗色主题 - [ <span style="color: #E0E0E0">◑</span> ] - #DFE0E0E0
 
-> 注: 此方法将自动添加末尾换行符
+> 注: 此方法将自动添加末尾换行符.
 
 ## [m] info
 
@@ -750,7 +750,7 @@ console
 - 浮动窗口 - [ <span style="color: #DCEDC8">◑</span> ] - #DCEDC8
 - Activity 活动窗口 - [ <span style="color: #43A047">◑</span> ] - #43A047
 
-> 注: 此方法将自动添加末尾换行符
+> 注: 此方法将自动添加末尾换行符.
 
 ## [m] warn
 
@@ -773,7 +773,7 @@ console
 - 浮动窗口 - [ <span style="color: #B3E5FC">◑</span> ] - #B3E5FC
 - Activity 活动窗口 - [ <span style="color: #1976D2">◑</span> ] - #1976D2
 
-> 注: 此方法将自动添加末尾换行符
+> 注: 此方法将自动添加末尾换行符.
 
 ## [m] error
 
@@ -794,7 +794,7 @@ console
 - 浮动窗口 - [ <span style="color: #FFCDD2">◑</span> ] - #FFCDD2
 - Activity 活动窗口 - [ <span style="color: #C62828">◑</span> ] - #C62828
 
-> 注: 此方法将自动添加末尾换行符
+> 注: 此方法将自动添加末尾换行符.
 
 ## [m] assert
 
@@ -823,7 +823,7 @@ console
 console.assert(new Date().getSeconds() < 30, '断言失败, 当前时间秒数不小于 30');
 ```
 
-> 注: 此方法将自动在控制台消息中添加末尾换行符
+> 注: 此方法将自动在控制台消息中添加末尾换行符.
 
 ### assert(func, message?)
 
@@ -852,7 +852,7 @@ console.assert(function () {
 }, '断言失败, 当前时间秒数不小于 30');
 ```
 
-> 注: 此方法将自动在控制台消息中添加末尾换行符
+> 注: 此方法将自动在控制台消息中添加末尾换行符.
 
 ## [m] clear
 

@@ -62,7 +62,7 @@
 
 - `新增` [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 文档
 - `新增` [消息通知 (Notice)](https://docs.autojs6.com/#/notice) 文档
-- `新增` [HttpRequestHeaders](https://docs.autojs6.com/#/httpRequestHeadersType) / [HttpResponseHeaders](https://docs.autojs6.com/#/httpResponseHeadersType) / [OpencvRect](https://docs.autojs6.com/#/opencvRectType) 等类型
+- `新增` [HttpRequestHeaders](https://docs.autojs6.com/#/httpRequestHeadersType) / [HttpResponseHeaders](https://docs.autojs6.com/#/httpResponseHeadersType) / [OpenCVRect](https://docs.autojs6.com/#/opencvRectType) 等类型
 - `新增` [通知渠道](https://docs.autojs6.com/#/glossaries?id=通知渠道) / [HTTP 标头](https://docs.autojs6.com/#/glossaries?id=HTTP-标头) / [MIME 类型](https://docs.autojs6.com/#/glossaries?id=MIME-类型) / [HTTP 请求方法](https://docs.autojs6.com/#/glossaries?id=HTTP-请求方法) 等术语
 - `新增` [颜色 (Color)](https://docs.autojs6.com/#/color) 章节增加 [toColorStateList](https://docs.autojs6.com/#/color?id=m-tocolorstatelist) 及 [setPaintColor](https://docs.autojs6.com/#/color?id=m-setpaintcolor) 条目
 - `修复` 文档更新日志条目中的链接无效的问题

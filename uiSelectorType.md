@@ -5031,7 +5031,7 @@ console.log(wc.length);
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.click 替代
+> 注: 此方法不是全局的, 它被 automator.click 替代.
 
 ## [m#] longClick
 
@@ -5045,7 +5045,7 @@ console.log(wc.length);
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.longClick 替代
+> 注: 此方法不是全局的, 它被 automator.longClick 替代.
 
 ## [m#] accessibilityFocus
 
@@ -5462,7 +5462,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.scrollUp 替代
+> 注: 此方法不是全局的, 它被 automator.scrollUp 替代.
 
 ## [m#] scrollRight
 
@@ -5488,7 +5488,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.scrollDown 替代
+> 注: 此方法不是全局的, 它被 automator.scrollDown 替代.
 
 ## [m#] scrollForward
 
@@ -5553,7 +5553,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.setText 替代
+> 注: 此方法不是全局的, 它被 automator.setText 替代.
 
 ## [m#] setSelection
 

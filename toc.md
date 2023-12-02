@@ -118,9 +118,9 @@
 * [Okhttp3HttpUrl](okhttp3HttpUrlType)
 * [OcrOptions](ocrOptionsType)
 * [Okhttp3Request](okhttp3RequestType)
-* [OpencvPoint](opencvPointType)
-* [OpencvRect](opencvRectType)
-* [OpencvSize](opencvSizeType)
+* [OpenCVPoint](opencvPointType)
+* [OpenCVRect](opencvRectType)
+* [OpenCVSize](opencvSizeType)
 
 <div class="line"></div>
 

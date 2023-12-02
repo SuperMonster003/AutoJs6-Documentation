@@ -123,7 +123,7 @@ device.vibrate('SOS'); /* 效果同上. */
 | 类型                                                                                      | 简述                                                                 | 示例                                                                                                                                     |
 |-----------------------------------------------------------------------------------------|--------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
 | <span style="white-space:nowrap">[number](dataTypes#number)[[]](dataTypes#array)</span> | <span style="white-space:nowrap">数字数组, [ X 坐标, Y 坐标, 宽, 高 ]</span> | <span style="white-space:nowrap">`[ 0, 0, 200, 400 ]`</span>                                                                           |
-| [OpencvRect](opencvRectType)                                                            | <span style="white-space:nowrap">`org.opencv.core.Rect` 类型</span>  | <span style="white-space:nowrap">1. `images.buildRegion(img, [ 0, 0, 200, 400 ])`<br/>2. `new org.opencv.core.Rect(x, y, w, h)`</span> |
+| [OpenCVRect](opencvRectType)                                                            | <span style="white-space:nowrap">`org.opencv.core.Rect` 类型</span>  | <span style="white-space:nowrap">1. `images.buildRegion(img, [ 0, 0, 200, 400 ])`<br/>2. `new org.opencv.core.Rect(x, y, w, h)`</span> |
 | [AndroidRect](androidRectType)                                                          | <span style="white-space:nowrap">`android.graphics.Rect` 类型</span> | <span style="white-space:nowrap">1. `pickup(/\w+/, 'bounds')`<br/>2. `new android.graphics.Rect(left, top, right, bottom)`</span>      |
 
 将一个 500 × 500 的图片裁剪其中心区域 300 × 300 的示例:
@@ -142,7 +142,7 @@ let clipY = (imgHeight - clipHeight) / 2;
 
 images.clip(img, [ clipX, clipY, clipWidth, clipHeight ]);
 
-/* 使用 OpencvRect 作为区域. */
+/* 使用 OpenCVRect 作为区域. */
 
 images.clip(img, new org.opencv.core.Rect(clipX, clipY, clipWidth, clipHeight));
 

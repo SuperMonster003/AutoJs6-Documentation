@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ConsoleBuildOptions | AutoJs6 文档 - 6.4.0</title>
+    <title>ConsoleBuildOptions | AutoJs6 文档 - 6.5.0</title>
     <link rel="stylesheet" href="assets/fonts.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/sh.css">
@@ -72,6 +72,7 @@
 <li><a class="nav-http" href="http.html">HTTP</a></li>
 <li><a class="nav-base64" href="base64.html">Base64</a></li>
 <li><a class="nav-crypto" href="crypto.html">Crypto - 密文</a></li>
+<li><a class="nav-opencc" href="opencc.html">OpenCC - 中文转换</a></li>
 <li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
 <li><a class="nav-s13n" href="s13n.html">Standardization - 标准化</a></li>
 <li><a class="nav-e4x" href="e4x.html">E4X</a></li>
@@ -145,9 +146,10 @@
 <li><a class="nav-okhttp3HttpUrlType" href="okhttp3HttpUrlType.html">Okhttp3HttpUrl</a></li>
 <li><a class="nav-ocrOptionsType" href="ocrOptionsType.html">OcrOptions</a></li>
 <li><a class="nav-okhttp3RequestType" href="okhttp3RequestType.html">Okhttp3Request</a></li>
-<li><a class="nav-opencvPointType" href="opencvPointType.html">OpencvPoint</a></li>
-<li><a class="nav-opencvRectType" href="opencvRectType.html">OpencvRect</a></li>
-<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpencvSize</a></li>
+<li><a class="nav-opencvPointType" href="opencvPointType.html">OpenCVPoint</a></li>
+<li><a class="nav-opencvRectType" href="opencvRectType.html">OpenCVRect</a></li>
+<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpenCVSize</a></li>
+<li><a class="nav-openCCConversionType" href="openCCConversionType.html">OpenCCConversion</a></li>
 </ul>
 <div class="line"></div>
 
@@ -160,7 +162,7 @@
 
     <div id="column1" data-id="consoleBuildOptionsType" class="interior">
         <header>
-            <h1>AutoJs6 文档 - 6.4.0</h1>
+            <h1>AutoJs6 文档 - 6.5.0</h1>
             <div id="gtoc">
                 <p class="index">
                     <a href="index.html" name="toc">索引</a> |
@@ -177,6 +179,7 @@
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_size">[p?] size</a></span></li>
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_position">[p?] position</a></span></li>
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_exitonclose">[p?] exitOnClose</a></span></li>
+<li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_touchable">[p?] touchable</a></span></li>
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_title">[p?] title</a></span></li>
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_titletextsize">[p?] titleTextSize</a></span></li>
 <li><span class="stability_undefined"><a href="#consolebuildoptionstype_p_titletextcolor">[p?] titleTextColor</a></span></li>
@@ -232,7 +235,7 @@ console.build({ position: [ 0.2, 0.1 ] }).show();
 </code></pre>
 <h2>[p?] exitOnClose<span><a class="mark" href="#consolebuildoptionstype_p_exitonclose" id="consolebuildoptionstype_p_exitonclose">#</a></span></h2>
 <div class="signature"><ul>
-<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 浮动窗口自动关闭的超时时间或启用状态</li>
+<li>[ <code>false</code> ] { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 浮动窗口自动关闭的超时时间或启用状态</li>
 </ul>
 </div><p>设置控制台浮动窗口在脚本结束时自动关闭的超时时间或启用状态.</p>
 <pre><code class="lang-js">/* 脚本结束时 6 秒后自动关闭浮动窗口. */
@@ -245,6 +248,16 @@ console.build({ exitOnClose: 0 }).show();
 console.build({ exitOnClose: false }).show();
 </code></pre>
 <p><code>exitOnClose</code> 设置为 <code>true</code> 时, 相当于 <code>exitOnClose(5e3)</code>, 即脚本结束时浮动窗口在 <code>5</code> 秒钟后自动关闭.</p>
+<h2>[p?] touchable<span><a class="mark" href="#consolebuildoptionstype_p_touchable" id="consolebuildoptionstype_p_touchable">#</a></span></h2>
+<div class="signature"><ul>
+<li>[ <code>true</code> ] { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否响应点击事件</li>
+</ul>
+</div><p>设置控制台浮动窗口是否响应点击事件, 默认为 <code>true</code>.</p>
+<p>如需穿透点击, 可设置为 <code>false</code>.</p>
+<pre><code class="lang-js">/* 点击事件将穿透控制台浮动窗口. */
+console.build({ touchable: false }).show();
+</code></pre>
+<p>当设置 <code>touchable</code> 为 <code>false</code> 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 <a href="console.html#console_m_hide">hide</a> 或 <a href="console.html#console_m_setexitonclose">setExitOnClose</a> 等代码方式实现浮动窗口关闭. 详见 <a href="console.html#console_m_settouchable">console.setTouchable</a> 小节.</p>
 <h2>[p?] title<span><a class="mark" href="#consolebuildoptionstype_p_title" id="consolebuildoptionstype_p_title">#</a></span></h2>
 <div class="signature"><ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 浮动窗口标题文本</li>

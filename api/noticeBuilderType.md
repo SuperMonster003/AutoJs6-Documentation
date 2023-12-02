@@ -365,7 +365,7 @@ notice(notice.getBuilder()
 
 > 注:  
 > chronometer [krəˈnɒmɪtə(r)]  
-> _n._ 精密记时表; 高度精确的钟表
+> _n._ 精密记时表; 高度精确的钟表.
 
 ## [m] setChronometerCountDown
 
@@ -390,7 +390,7 @@ notice(notice.getBuilder()
 
 > 注:  
 > chronometer [krəˈnɒmɪtə(r)]  
-> _n._ 精密记时表; 高度精确的钟表
+> _n._ 精密记时表; 高度精确的钟表.
 
 ## [m] setWhen
 

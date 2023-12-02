@@ -1,5 +1,18 @@
 # 文档更新日志 (Changelog)
 
+## v1.1.8
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/12/01</p>
+
+- `新增` [中文转换 (OpenCC)](https://docs.autojs6.com/#/opencc) 文档
+- `新增` [OpenCCConversion](https://docs.autojs6.com/#/openCCConversionType) 类型
+- `新增` [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节增加 [plus](https://docs.autojs6.com/#/uiObjectType?id=m-plus) / [append](https://docs.autojs6.com/#/uiObjectType?id=m-append) 条目
+- `新增` [控制台 (Console)](https://docs.autojs6.com/#/console) 章节增加 [setTouchable](https://docs.autojs6.com/#/console?id=m-settouchable) 条目
+- `新增` [ConsoleBuildOptions](https://docs.autojs6.com/#/consoleBuildOptionsType) 章节增加 [touchable](https://docs.autojs6.com/#/consoleBuildOptionsType?id=p-touchable) 条目
+- `优化` [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节增加 Paddle 工作模式使用提示
+- `优化` 完善 [Shizuku](https://docs.autojs6.com/#/shizuku) 章节
+- `优化` 完善 [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节
+
 ## v1.1.7
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/10/30</p>
@@ -62,7 +75,7 @@
 
 - `新增` [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 文档
 - `新增` [消息通知 (Notice)](https://docs.autojs6.com/#/notice) 文档
-- `新增` [HttpRequestHeaders](https://docs.autojs6.com/#/httpRequestHeadersType) / [HttpResponseHeaders](https://docs.autojs6.com/#/httpResponseHeadersType) / [OpencvRect](https://docs.autojs6.com/#/opencvRectType) 等类型
+- `新增` [HttpRequestHeaders](https://docs.autojs6.com/#/httpRequestHeadersType) / [HttpResponseHeaders](https://docs.autojs6.com/#/httpResponseHeadersType) / [OpenCVRect](https://docs.autojs6.com/#/opencvRectType) 等类型
 - `新增` [通知渠道](https://docs.autojs6.com/#/glossaries?id=通知渠道) / [HTTP 标头](https://docs.autojs6.com/#/glossaries?id=HTTP-标头) / [MIME 类型](https://docs.autojs6.com/#/glossaries?id=MIME-类型) / [HTTP 请求方法](https://docs.autojs6.com/#/glossaries?id=HTTP-请求方法) 等术语
 - `新增` [颜色 (Color)](https://docs.autojs6.com/#/color) 章节增加 [toColorStateList](https://docs.autojs6.com/#/color?id=m-tocolorstatelist) 及 [setPaintColor](https://docs.autojs6.com/#/color?id=m-setpaintcolor) 条目
 - `修复` 文档更新日志条目中的链接无效的问题

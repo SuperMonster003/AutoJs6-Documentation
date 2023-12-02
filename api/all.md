@@ -38,5 +38,6 @@
 @include http
 @include base64
 @include crypto
+@include opencc
 @include i18n
 @include e4x

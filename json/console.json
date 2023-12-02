@@ -168,7 +168,7 @@
               "textRaw": "build(options)",
               "type": "method",
               "name": "build",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> } - 构建器选项</li>\n<li><ins><strong>returns</strong></ins> {{ show(): <a href=\"dataTypes#void\">void</a> }}</li>\n</ul>\n<p>构建控制台浮动窗口的配置.</p>\n<p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>\n<p>构建器支持一次性配置多个浮动窗口样式选项:</p>\n<pre><code class=\"lang-js\">console.build({\n    size: [ 0.8, 0.6 ], /* 窗口大小, 80% 屏幕宽度 × 60% 屏幕高度. */\n    position: [ 0.1, 0.15 ], /* 窗口位置, X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度. */\n    title: &#39;HELLO WORLD&#39;, /* 窗口标题文本. */\n    titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */\n    contentTextSize: 16, /* 窗口日志字号, 单位 sp. */\n    backgroundColor: &#39;deep-orange-900&#39;, /* 窗口标题及日志区域的背景色, 900 号深橙色. */\n    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */\n    contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */\n    exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */\n}).show(); /* 使用 show 方法显示浮动窗口. */\n</code></pre>\n<p>更多构建参数及使用方法, 参阅 <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> 类型章节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> } - 构建器选项</li>\n<li><ins><strong>returns</strong></ins> {{ show(): <a href=\"dataTypes#void\">void</a> }}</li>\n</ul>\n<p>构建控制台浮动窗口的配置.</p>\n<p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>\n<p>构建器支持一次性配置多个浮动窗口样式选项:</p>\n<pre><code class=\"lang-js\">console.build({\n    size: [ 0.8, 0.6 ], /* 窗口大小, 80% 屏幕宽度 × 60% 屏幕高度. */\n    position: [ 0.1, 0.15 ], /* 窗口位置, X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度. */\n    title: &#39;HELLO WORLD&#39;, /* 窗口标题文本. */\n    titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */\n    contentTextSize: 16, /* 窗口日志字号, 单位 sp. */\n    backgroundColor: &#39;deep-orange-900&#39;, /* 窗口标题及日志区域的背景色, 900 号深橙色. */\n    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */\n    contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */\n    exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */\n    touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */\n}).show(); /* 使用 show 方法显示浮动窗口. */\n</code></pre>\n<p>更多构建参数及使用方法, 参阅 <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -272,6 +272,29 @@
           ],
           "type": "module",
           "displayName": "[m] setExitOnClose"
+        },
+        {
+          "textRaw": "[m] setTouchable",
+          "name": "[m]_settouchable",
+          "methods": [
+            {
+              "textRaw": "setTouchable(touchable?)",
+              "type": "method",
+              "name": "setTouchable",
+              "desc": "<p><strong><code>6.5.0</code></strong></p>\n<ul>\n<li>[ <code>true</code> ] <strong>touchable</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否响应点击事件</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口是否响应点击事件, 默认为 <code>true</code>.</p>\n<p>如需穿透点击, 可设置为 <code>false</code>.</p>\n<pre><code class=\"lang-js\">console.setTouchable(false).show(); /* 点击事件将穿透控制台浮动窗口. */\nconsole.build({ touchable: false }).show(); /* 效果同上. */\n</code></pre>\n<p>当 <code>setTouchable</code> 传入 <code>false</code> 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 <a href=\"#m-hide\">hide</a> 或 <a href=\"#m-setexitonclose\">setExitOnClose</a> 等代码方式实现浮动窗口关闭:</p>\n<pre><code class=\"lang-js\">/* 借助 setExitOnClose 实现脚本结束后自动关闭窗口. */\n\nconsole\n    .setTouchable(false)\n    .setExitOnClose(true)\n    .show();\n\n/* 使用 build 构建器写法. */\n\nconsole.build({\n    touchable: false,\n    exitOnClose: true,\n}).show();\n\n/* 使用音量键控制, 例如按下 &quot;音量减&quot; 键关闭窗口 (需要无障碍服务). */\n\nevents.observeKey();\nevents.setKeyInterceptionEnabled(true);\nevents.on(&#39;volume_down&#39;, () =&gt; {\n    console.hide();\n    exit(); /* 退出脚本 (可选). */\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "touchable?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTouchable"
         },
         {
           "textRaw": "[m] setTitle",
@@ -618,7 +641,7 @@
               "textRaw": "verbose(data, ...args)",
               "type": "method",
               "name": "verbose",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 测试消息 / 调试消息 / 重要性级别最低的消息</p>\n<p>优先级: <strong>verbose</strong> &lt; log &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #E0E0E0</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #C0C0C0\">◑</span> ] - #DFC0C0C0</li>\n<li>暗色主题 - [ <span style=\"color: #7F7F80\">◑</span> ] - #7F7F80</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 测试消息 / 调试消息 / 重要性级别最低的消息</p>\n<p>优先级: <strong>verbose</strong> &lt; log &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #E0E0E0</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #C0C0C0\">◑</span> ] - #DFC0C0C0</li>\n<li>暗色主题 - [ <span style=\"color: #7F7F80\">◑</span> ] - #7F7F80</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -644,7 +667,7 @@
               "textRaw": "log(data, ...args)",
               "type": "method",
               "name": "log",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 普通消息</p>\n<p>优先级: verbose &lt; <strong>log</strong> &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFFFFF\">◑</span> ] - #FFFFFF</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #000000\">◑</span> ] - #CC000000</li>\n<li>暗色主题 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #DFE0E0E0</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 普通消息</p>\n<p>优先级: verbose &lt; <strong>log</strong> &lt; info &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFFFFF\">◑</span> ] - #FFFFFF</li>\n<li>Activity 活动窗口<ul>\n<li>亮色主题 - [ <span style=\"color: #000000\">◑</span> ] - #CC000000</li>\n<li>暗色主题 - [ <span style=\"color: #E0E0E0\">◑</span> ] - #DFE0E0E0</li>\n</ul>\n</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -703,7 +726,7 @@
                   ]
                 }
               ],
-              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 重要消息 / 值得注意的消息</p>\n<p>优先级: verbose &lt; log &lt; <strong>info</strong> &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #DCEDC8\">◑</span> ] - #DCEDC8</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #43A047\">◑</span> ] - #43A047</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n"
+              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 重要消息 / 值得注意的消息</p>\n<p>优先级: verbose &lt; log &lt; <strong>info</strong> &lt; warn &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #DCEDC8\">◑</span> ] - #DCEDC8</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #43A047\">◑</span> ] - #43A047</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符.</p>\n</blockquote>\n"
             }
           ],
           "type": "module",
@@ -717,7 +740,7 @@
               "textRaw": "warn(data, ...args)",
               "type": "method",
               "name": "warn",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 警告消息 / 隐患消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; <strong>warn</strong> &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #B3E5FC\">◑</span> ] - #B3E5FC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #1976D2\">◑</span> ] - #1976D2</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>输出参数内容到控制台.</p>\n<p>主要用途: 警告消息 / 隐患消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; <strong>warn</strong> &lt; error &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #B3E5FC\">◑</span> ] - #B3E5FC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #1976D2\">◑</span> ] - #1976D2</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -776,7 +799,7 @@
                   ]
                 }
               ],
-              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 错误消息 / 异常消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; <strong>error</strong> &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFCDD2\">◑</span> ] - #FFCDD2</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #C62828\">◑</span> ] - #C62828</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符</p>\n</blockquote>\n"
+              "desc": "<p>输出参数内容到控制台.</p>\n<p>主要用途: 错误消息 / 异常消息</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; <strong>error</strong> &lt; assert</p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FFCDD2\">◑</span> ] - #FFCDD2</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #C62828\">◑</span> ] - #C62828</li>\n</ul>\n<blockquote>\n<p>注: 此方法将自动添加末尾换行符.</p>\n</blockquote>\n"
             }
           ],
           "type": "module",
@@ -790,7 +813,7 @@
               "textRaw": "assert(bool, message?)",
               "type": "method",
               "name": "assert",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>bool</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>bool</code> 参数为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个变量</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(new Date().getSeconds() &lt; 30, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>bool</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>bool</code> 参数为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个变量</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(new Date().getSeconds() &lt; 30, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -808,7 +831,7 @@
               "textRaw": "assert(func, message?)",
               "type": "method",
               "name": "assert",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"#function\">() =&gt;</a> <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>func</code> 参数的执行结果为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个函数</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(function () {\n    return new Date().getSeconds() &lt; 30;\n}, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"#function\">() =&gt;</a> <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>func</code> 参数的执行结果为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个函数</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(function () {\n    return new Date().getSeconds() &lt; 30;\n}, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [

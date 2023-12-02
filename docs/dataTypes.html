@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>数据类型 (Data Types) | AutoJs6 文档 - 6.4.0</title>
+    <title>数据类型 (Data Types) | AutoJs6 文档 - 6.5.0</title>
     <link rel="stylesheet" href="assets/fonts.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/sh.css">
@@ -72,6 +72,7 @@
 <li><a class="nav-http" href="http.html">HTTP</a></li>
 <li><a class="nav-base64" href="base64.html">Base64</a></li>
 <li><a class="nav-crypto" href="crypto.html">Crypto - 密文</a></li>
+<li><a class="nav-opencc" href="opencc.html">OpenCC - 中文转换</a></li>
 <li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
 <li><a class="nav-s13n" href="s13n.html">Standardization - 标准化</a></li>
 <li><a class="nav-e4x" href="e4x.html">E4X</a></li>
@@ -145,9 +146,10 @@
 <li><a class="nav-okhttp3HttpUrlType" href="okhttp3HttpUrlType.html">Okhttp3HttpUrl</a></li>
 <li><a class="nav-ocrOptionsType" href="ocrOptionsType.html">OcrOptions</a></li>
 <li><a class="nav-okhttp3RequestType" href="okhttp3RequestType.html">Okhttp3Request</a></li>
-<li><a class="nav-opencvPointType" href="opencvPointType.html">OpencvPoint</a></li>
-<li><a class="nav-opencvRectType" href="opencvRectType.html">OpencvRect</a></li>
-<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpencvSize</a></li>
+<li><a class="nav-opencvPointType" href="opencvPointType.html">OpenCVPoint</a></li>
+<li><a class="nav-opencvRectType" href="opencvRectType.html">OpenCVRect</a></li>
+<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpenCVSize</a></li>
+<li><a class="nav-openCCConversionType" href="openCCConversionType.html">OpenCCConversion</a></li>
 </ul>
 <div class="line"></div>
 
@@ -160,7 +162,7 @@
 
     <div id="column1" data-id="dataTypes" class="interior">
         <header>
-            <h1>AutoJs6 文档 - 6.4.0</h1>
+            <h1>AutoJs6 文档 - 6.5.0</h1>
             <div id="gtoc">
                 <p class="index">
                     <a href="index.html" name="toc">索引</a> |
@@ -315,9 +317,10 @@
 <li><span class="stability_undefined"><a href="#datatypes_okhttp3httpurl">Okhttp3HttpUrl</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_ocroptions">OcrOptions</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_okhttp3request">Okhttp3Request</a></span></li>
-<li><span class="stability_undefined"><a href="#datatypes_opencvpoint">OpencvPoint</a></span></li>
-<li><span class="stability_undefined"><a href="#datatypes_opencvrect">OpencvRect</a></span></li>
-<li><span class="stability_undefined"><a href="#datatypes_opencvsize">OpencvSize</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_opencvpoint">OpenCVPoint</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_opencvrect">OpenCVRect</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_opencvsize">OpenCVSize</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_openccconversion">OpenCCConversion</a></span></li>
 </ul>
 </li>
 </ul>
@@ -1600,16 +1603,18 @@ app.startActivity(&#39;home&#39;); /* 同上. */
 <p>这些简称全部对应于 AutoJs6 可接收的广播行为, 如进行布局范围分析等.</p>
 <pre><code class="lang-js">/* 发送 &quot;布局范围分析&quot; 广播. */
 app.sendBroadcast(&#39;inspect_layout_bounds&#39;);
+app.sendBroadcast(&#39;layout_bounds&#39;); /* 同上. */
 app.sendBroadcast(&#39;bounds&#39;); /* 同上. */
 
 /* 发送 &quot;布局层次分析&quot; 广播. */
 app.sendBroadcast(&#39;inspect_layout_hierarchy&#39;);
+app.sendBroadcast(&#39;layout_hierarchy&#39;);
 app.sendBroadcast(&#39;hierarchy&#39;); /* 同上. */
 </code></pre>
 <p>支持的全部广播行为简称:</p>
 <ul>
-<li>布局范围分析 - <code>inspect_layout_bounds</code> / <code>bounds</code></li>
-<li>布局层次分析 - <code>inspect_layout_hierarchy</code> / <code>hierarchy</code></li>
+<li>布局范围分析 - <code>inspect_layout_bounds</code> / <code>layout_bounds</code> / <code>bounds</code></li>
+<li>布局层次分析 - <code>inspect_layout_hierarchy</code> / <code>layout_hierarchy</code> / <code>hierarchy</code></li>
 </ul>
 <h2>OcrModeName<span><a class="mark" href="#datatypes_ocrmodename" id="datatypes_ocrmodename">#</a></span></h2>
 <p>AutoJs6 的 OCR 模式名称.</p>
@@ -1990,12 +1995,14 @@ let cipherB = Cipher.getInstance(&quot;DES/CBC/PKCS5Padding&quot;);
 <p>参阅 <a href="ocrOptionsType.html">OcrOptions</a> 类型章节.</p>
 <h2>Okhttp3Request<span><a class="mark" href="#datatypes_okhttp3request" id="datatypes_okhttp3request">#</a></span></h2>
 <p>参阅 <a href="okhttp3RequestType.html">Okhttp3Request</a> 类型章节.</p>
-<h2>OpencvPoint<span><a class="mark" href="#datatypes_opencvpoint" id="datatypes_opencvpoint">#</a></span></h2>
-<p>参阅 <a href="opencvPointType.html">OpencvPoint</a> 类型章节.</p>
-<h2>OpencvRect<span><a class="mark" href="#datatypes_opencvrect" id="datatypes_opencvrect">#</a></span></h2>
-<p>参阅 <a href="opencvRectType.html">OpencvRect</a> 类型章节.</p>
-<h2>OpencvSize<span><a class="mark" href="#datatypes_opencvsize" id="datatypes_opencvsize">#</a></span></h2>
-<p>参阅 <a href="opencvSizeType.html">OpencvSize</a> 类型章节.</p>
+<h2>OpenCVPoint<span><a class="mark" href="#datatypes_opencvpoint" id="datatypes_opencvpoint">#</a></span></h2>
+<p>参阅 <a href="opencvPointType.html">OpenCVPoint</a> 类型章节.</p>
+<h2>OpenCVRect<span><a class="mark" href="#datatypes_opencvrect" id="datatypes_opencvrect">#</a></span></h2>
+<p>参阅 <a href="opencvRectType.html">OpenCVRect</a> 类型章节.</p>
+<h2>OpenCVSize<span><a class="mark" href="#datatypes_opencvsize" id="datatypes_opencvsize">#</a></span></h2>
+<p>参阅 <a href="opencvSizeType.html">OpenCVSize</a> 类型章节.</p>
+<h2>OpenCCConversion<span><a class="mark" href="#datatypes_openccconversion" id="datatypes_openccconversion">#</a></span></h2>
+<p>参阅 <a href="openCCConversionType.html">OpenCCConversion</a> 类型章节.</p>
 
         </div>
     </div>

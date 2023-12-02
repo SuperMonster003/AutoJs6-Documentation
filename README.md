@@ -45,6 +45,15 @@
 - 文档可能会随时更新
 - 部分文档与实际代码行为可能存在出入
 - 如有任何问题可在当前项目的 [议题 (Issues)](http://docs-project.autojs6.com/issues) 页面提交反馈
+- 如需快速了解文档的常见问题, 可参阅 [疑难解答](https://docs.autojs6.com/#/qa) 章节
+
+******
+
+### 进度
+
+******
+
+- 基于 `Auto.js 4.1.0` 文档修改完善, [部署进度](https://docs.autojs6.com/#/progress) 可能相对缓慢
 
 ******
 
@@ -53,6 +62,19 @@
 ******
 
 [comment]: <> "Version history only shows last 3 versions"
+
+## v1.1.8
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2023/12/01</p>
+
+- `新增` [中文转换 (OpenCC)](https://docs.autojs6.com/#/opencc) 文档
+- `新增` [OpenCCConversion](https://docs.autojs6.com/#/openCCConversionType) 类型
+- `新增` [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节增加 [plus](https://docs.autojs6.com/#/uiObjectType?id=m-plus) / [append](https://docs.autojs6.com/#/uiObjectType?id=m-append) 条目
+- `新增` [控制台 (Console)](https://docs.autojs6.com/#/console) 章节增加 [setTouchable](https://docs.autojs6.com/#/console?id=m-settouchable) 条目
+- `新增` [ConsoleBuildOptions](https://docs.autojs6.com/#/consoleBuildOptionsType) 章节增加 [touchable](https://docs.autojs6.com/#/consoleBuildOptionsType?id=p-touchable) 条目
+- `优化` [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节增加 Paddle 工作模式使用提示
+- `优化` 完善 [Shizuku](https://docs.autojs6.com/#/shizuku) 章节
+- `优化` 完善 [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节
 
 ## v1.1.7
 
@@ -70,16 +92,6 @@
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>
 
 - `优化` 完善 [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节
-
-## v1.1.5
-
-<p style="font: bold 0.8em sans-serif; color: #888888">2023/07/06</p>
-
-- `新增` [密文 (Crypto)](https://docs.autojs6.com/#/crypto) 文档
-- `新增` [CryptoCipherOptions](https://docs.autojs6.com/#/cryptoCipherOptionsType) / [CryptoKey](https://docs.autojs6.com/#/cryptoKeyType) / [CryptoKeyPair](https://docs.autojs6.com/#/cryptoKeyPairType) 等类型
-- `修复` floaty 模块 widht 拼写失误 _[`issue #1`](http://docs-project.autojs6.com/issues/1)_
-- `优化` 完善 [Base64](https://docs.autojs6.com/#/base64) 章节
-- `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
 
 ##### 更多版本历史可参阅
 

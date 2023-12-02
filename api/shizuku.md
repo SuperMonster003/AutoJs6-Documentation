@@ -57,9 +57,14 @@ shizuku('pm grant org.autojs.autojs6 android.permission.WRITE_SECURE_SETTINGS');
 /* 授予 AutoJs6 "投影媒体" 权限. */
 shizuku('appops set org.autojs.autojs6 PROJECT_MEDIA allow');
 
+/* 启用 AutoJs6 "无障碍服务". */
+shizuku('settings put secure enabled_accessibility_services org.autojs.autojs6/org.autojs.autojs.core.accessibility.AccessibilityServiceUsher');
+
 /* 获取当前时间. */
 console.log(shizuku('date').result.trim());
 ```
+
+### shizuku(cmdList)
 
 **`6.4.0`** **`Overload 2/2`**
 

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>控制台 (Console) | AutoJs6 文档 - 6.4.0</title>
+    <title>控制台 (Console) | AutoJs6 文档 - 6.5.0</title>
     <link rel="stylesheet" href="assets/fonts.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/sh.css">
@@ -72,6 +72,7 @@
 <li><a class="nav-http" href="http.html">HTTP</a></li>
 <li><a class="nav-base64" href="base64.html">Base64</a></li>
 <li><a class="nav-crypto" href="crypto.html">Crypto - 密文</a></li>
+<li><a class="nav-opencc" href="opencc.html">OpenCC - 中文转换</a></li>
 <li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
 <li><a class="nav-s13n" href="s13n.html">Standardization - 标准化</a></li>
 <li><a class="nav-e4x" href="e4x.html">E4X</a></li>
@@ -145,9 +146,10 @@
 <li><a class="nav-okhttp3HttpUrlType" href="okhttp3HttpUrlType.html">Okhttp3HttpUrl</a></li>
 <li><a class="nav-ocrOptionsType" href="ocrOptionsType.html">OcrOptions</a></li>
 <li><a class="nav-okhttp3RequestType" href="okhttp3RequestType.html">Okhttp3Request</a></li>
-<li><a class="nav-opencvPointType" href="opencvPointType.html">OpencvPoint</a></li>
-<li><a class="nav-opencvRectType" href="opencvRectType.html">OpencvRect</a></li>
-<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpencvSize</a></li>
+<li><a class="nav-opencvPointType" href="opencvPointType.html">OpenCVPoint</a></li>
+<li><a class="nav-opencvRectType" href="opencvRectType.html">OpenCVRect</a></li>
+<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpenCVSize</a></li>
+<li><a class="nav-openCCConversionType" href="openCCConversionType.html">OpenCCConversion</a></li>
 </ul>
 <div class="line"></div>
 
@@ -160,7 +162,7 @@
 
     <div id="column1" data-id="console" class="interior">
         <header>
-            <h1>AutoJs6 文档 - 6.4.0</h1>
+            <h1>AutoJs6 文档 - 6.5.0</h1>
             <div id="gtoc">
                 <p class="index">
                     <a href="index.html" name="toc">索引</a> |
@@ -220,6 +222,10 @@
 <li><span class="stability_undefined"><a href="#console_m_setexitonclose">[m] setExitOnClose</a></span><ul>
 <li><span class="stability_undefined"><a href="#console_setexitonclose_exitonclose">setExitOnClose(exitOnClose?)</a></span></li>
 <li><span class="stability_undefined"><a href="#console_setexitonclose_timeout">setExitOnClose(timeout)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#console_m_settouchable">[m] setTouchable</a></span><ul>
+<li><span class="stability_undefined"><a href="#console_settouchable_touchable">setTouchable(touchable?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#console_m_settitle">[m] setTitle</a></span><ul>
@@ -572,6 +578,7 @@ setTimeout(console.reset, 2e3); /* 2 秒钟后重置. */
     titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */
     contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */
     exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */
+    touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */
 }).show(); /* 使用 show 方法显示浮动窗口. */
 </code></pre>
 <p>更多构建参数及使用方法, 参阅 <a href="consoleBuildOptionsType.html">ConsoleBuildOptions</a> 类型章节.</p>
@@ -623,6 +630,42 @@ console.build({ exitOnClose: false }).show(); /* 效果同上. */
 <p>设置控制台浮动窗口在脚本结束时自动关闭的超时时间, 单位为毫秒.</p>
 <pre><code class="lang-js">console.setExitOnClose(6e3).show(); /* 脚本结束后 6 秒钟自动关闭浮动窗口. */
 console.build({ exitOnClose: 6e3 }).show(); /* 效果同上. */
+</code></pre>
+<h2>[m] setTouchable<span><a class="mark" href="#console_m_settouchable" id="console_m_settouchable">#</a></span></h2>
+<h3>setTouchable(touchable?)<span><a class="mark" href="#console_settouchable_touchable" id="console_settouchable_touchable">#</a></span></h3>
+<p><strong><code>6.5.0</code></strong></p>
+<ul>
+<li>[ <code>true</code> ] <strong>touchable</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否响应点击事件</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
+</ul>
+<p>设置控制台浮动窗口是否响应点击事件, 默认为 <code>true</code>.</p>
+<p>如需穿透点击, 可设置为 <code>false</code>.</p>
+<pre><code class="lang-js">console.setTouchable(false).show(); /* 点击事件将穿透控制台浮动窗口. */
+console.build({ touchable: false }).show(); /* 效果同上. */
+</code></pre>
+<p>当 <code>setTouchable</code> 传入 <code>false</code> 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 <a href="#console_m_hide">hide</a> 或 <a href="#console_m_setexitonclose">setExitOnClose</a> 等代码方式实现浮动窗口关闭:</p>
+<pre><code class="lang-js">/* 借助 setExitOnClose 实现脚本结束后自动关闭窗口. */
+
+console
+    .setTouchable(false)
+    .setExitOnClose(true)
+    .show();
+
+/* 使用 build 构建器写法. */
+
+console.build({
+    touchable: false,
+    exitOnClose: true,
+}).show();
+
+/* 使用音量键控制, 例如按下 &quot;音量减&quot; 键关闭窗口 (需要无障碍服务). */
+
+events.observeKey();
+events.setKeyInterceptionEnabled(true);
+events.on(&#39;volume_down&#39;, () =&gt; {
+    console.hide();
+    exit(); /* 退出脚本 (可选). */
+});
 </code></pre>
 <h2>[m] setTitle<span><a class="mark" href="#console_m_settitle" id="console_m_settitle">#</a></span></h2>
 <h3>setTitle(title)<span><a class="mark" href="#console_settitle_title" id="console_settitle_title">#</a></span></h3>
@@ -903,7 +946,7 @@ console
 </li>
 </ul>
 <blockquote>
-<p>注: 此方法将自动添加末尾换行符</p>
+<p>注: 此方法将自动添加末尾换行符.</p>
 </blockquote>
 <h2>[m] log<span><a class="mark" href="#console_m_log" id="console_m_log">#</a></span></h2>
 <h3>log(data, ...args)<span><a class="mark" href="#console_log_data_args" id="console_log_data_args">#</a></span></h3>
@@ -926,7 +969,7 @@ console
 </li>
 </ul>
 <blockquote>
-<p>注: 此方法将自动添加末尾换行符</p>
+<p>注: 此方法将自动添加末尾换行符.</p>
 </blockquote>
 <h2>[m] info<span><a class="mark" href="#console_m_info" id="console_m_info">#</a></span></h2>
 <h3>info(data, ...args)<span><a class="mark" href="#console_info_data_args" id="console_info_data_args">#</a></span></h3>
@@ -944,7 +987,7 @@ console
 <li>Activity 活动窗口 - [ <span style="color: #43A047">◑</span> ] - #43A047</li>
 </ul>
 <blockquote>
-<p>注: 此方法将自动添加末尾换行符</p>
+<p>注: 此方法将自动添加末尾换行符.</p>
 </blockquote>
 <h2>[m] warn<span><a class="mark" href="#console_m_warn" id="console_m_warn">#</a></span></h2>
 <h3>warn(data, ...args)<span><a class="mark" href="#console_warn_data_args" id="console_warn_data_args">#</a></span></h3>
@@ -963,7 +1006,7 @@ console
 <li>Activity 活动窗口 - [ <span style="color: #1976D2">◑</span> ] - #1976D2</li>
 </ul>
 <blockquote>
-<p>注: 此方法将自动添加末尾换行符</p>
+<p>注: 此方法将自动添加末尾换行符.</p>
 </blockquote>
 <h2>[m] error<span><a class="mark" href="#console_m_error" id="console_m_error">#</a></span></h2>
 <h3>error(data, ...args)<span><a class="mark" href="#console_error_data_args" id="console_error_data_args">#</a></span></h3>
@@ -981,7 +1024,7 @@ console
 <li>Activity 活动窗口 - [ <span style="color: #C62828">◑</span> ] - #C62828</li>
 </ul>
 <blockquote>
-<p>注: 此方法将自动添加末尾换行符</p>
+<p>注: 此方法将自动添加末尾换行符.</p>
 </blockquote>
 <h2>[m] assert<span><a class="mark" href="#console_m_assert" id="console_m_assert">#</a></span></h2>
 <h3>assert(bool, message?)<span><a class="mark" href="#console_assert_bool_message" id="console_assert_bool_message">#</a></span></h3>
@@ -1003,7 +1046,7 @@ console
 <pre><code class="lang-js">console.assert(new Date().getSeconds() &lt; 30, &#39;断言失败, 当前时间秒数不小于 30&#39;);
 </code></pre>
 <blockquote>
-<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>
+<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>
 </blockquote>
 <h3>assert(func, message?)<span><a class="mark" href="#console_assert_func_message" id="console_assert_func_message">#</a></span></h3>
 <p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>
@@ -1026,7 +1069,7 @@ console
 }, &#39;断言失败, 当前时间秒数不小于 30&#39;);
 </code></pre>
 <blockquote>
-<p>注: 此方法将自动在控制台消息中添加末尾换行符</p>
+<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>
 </blockquote>
 <h2>[m] clear<span><a class="mark" href="#console_m_clear" id="console_m_clear">#</a></span></h2>
 <h3>clear()<span><a class="mark" href="#console_clear" id="console_clear">#</a></span></h3>

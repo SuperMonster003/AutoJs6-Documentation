@@ -1,4 +1,4 @@
-# HttpResponseBodyType
+# HttpResponseBody
 
 ---
 

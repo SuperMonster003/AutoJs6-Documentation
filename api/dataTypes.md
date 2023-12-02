@@ -1461,17 +1461,19 @@ AutoJs6 可接收的广播行为简称.
 ```js
 /* 发送 "布局范围分析" 广播. */
 app.sendBroadcast('inspect_layout_bounds');
+app.sendBroadcast('layout_bounds'); /* 同上. */
 app.sendBroadcast('bounds'); /* 同上. */
 
 /* 发送 "布局层次分析" 广播. */
 app.sendBroadcast('inspect_layout_hierarchy');
+app.sendBroadcast('layout_hierarchy');
 app.sendBroadcast('hierarchy'); /* 同上. */
 ```
 
 支持的全部广播行为简称:
 
-- 布局范围分析 - `inspect_layout_bounds` / `bounds`
-- 布局层次分析 - `inspect_layout_hierarchy` / `hierarchy`
+- 布局范围分析 - `inspect_layout_bounds` / `layout_bounds` / `bounds`
+- 布局层次分析 - `inspect_layout_hierarchy` / `layout_hierarchy` / `hierarchy`
 
 ## OcrModeName
 
@@ -1838,14 +1840,18 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 
 参阅 [Okhttp3Request](okhttp3RequestType) 类型章节.
 
-## OpencvPoint
+## OpenCVPoint
 
-参阅 [OpencvPoint](opencvPointType) 类型章节.
+参阅 [OpenCVPoint](opencvPointType) 类型章节.
 
-## OpencvRect
+## OpenCVRect
 
-参阅 [OpencvRect](opencvRectType) 类型章节.
+参阅 [OpenCVRect](opencvRectType) 类型章节.
 
-## OpencvSize
+## OpenCVSize
 
-参阅 [OpencvSize](opencvSizeType) 类型章节.
+参阅 [OpenCVSize](opencvSizeType) 类型章节.
+
+## OpenCCConversion
+
+参阅 [OpenCCConversion](openCCConversionType) 类型章节.

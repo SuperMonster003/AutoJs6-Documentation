@@ -1,4 +1,4 @@
-# Okhttp3HttpUrlType
+# Okhttp3HttpUrl
 
 ---
 

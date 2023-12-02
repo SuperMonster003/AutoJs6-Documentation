@@ -616,8 +616,8 @@ console.log(Mathx.min([])); // Infinity
 
 **`6.2.0`** **`xObject`** **`Overload [1-2]/4`**
 
-- **pointA** { [\[](dataTypes#tuple) [number](dataTypes#number), [number](dataTypes#number) [\]](dataTypes#tuple) | [{](dataTypes#object) x: [number](dataTypes#number), y: [number](dataTypes#number) [}](dataTypes#object) | [OpencvPoint](opencvPointType) | [AndroidRect](androidRectType) }
-- **pointB** { [\[](dataTypes#tuple) [number](dataTypes#number), [number](dataTypes#number) [\]](dataTypes#tuple) | [{](dataTypes#object) x: [number](dataTypes#number), y: [number](dataTypes#number) [}](dataTypes#object) | [OpencvPoint](opencvPointType) | [AndroidRect](androidRectType) }
+- **pointA** { [\[](dataTypes#tuple) [number](dataTypes#number), [number](dataTypes#number) [\]](dataTypes#tuple) | [{](dataTypes#object) x: [number](dataTypes#number), y: [number](dataTypes#number) [}](dataTypes#object) | [OpenCVPoint](opencvPointType) | [AndroidRect](androidRectType) }
+- **pointB** { [\[](dataTypes#tuple) [number](dataTypes#number), [number](dataTypes#number) [\]](dataTypes#tuple) | [{](dataTypes#object) x: [number](dataTypes#number), y: [number](dataTypes#number) [}](dataTypes#object) | [OpenCVPoint](opencvPointType) | [AndroidRect](androidRectType) }
 - **[ fraction = undefined ]** { [number](dataTypes#number) } - 小数点后的数字个数
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 

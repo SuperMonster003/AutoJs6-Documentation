@@ -1,4 +1,4 @@
-# OpencvSize
+# OpenCVSize
 
 [org.opencv.core.Size](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Size.html) 别名.
 
@@ -57,7 +57,7 @@ console.log(new org.opencv.core.Size()); // 0x0
 
 ### [c] (point)
 
-- **point** { [OpencvPoint](opencvPointType) } - 用于表示尺寸的 "点"
+- **point** { [OpenCVPoint](opencvPointType) } - 用于表示尺寸的 "点"
 - <ins>**returns**</ins> { [org.opencv.core.Size](#c-orgopencvcoresize) }
 
 生成一个尺寸对象, 并按参数初始化宽高尺寸.

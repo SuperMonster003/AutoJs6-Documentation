@@ -22,7 +22,7 @@ console.log(ver.isEqual('6.1.3')); // true
 console.log(ver.isAtLeast('6.1.1')); // true
 ```
 
-> 注: 此工具类源于 GitHub 开源项目 [G00fY2/version-compare](https://github.com/G00fY2/version-compare)
+> 注: 此工具类源于 GitHub 开源项目 [G00fY2/version-compare](https://github.com/G00fY2/version-compare).
 
 ---
 

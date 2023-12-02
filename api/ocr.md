@@ -181,6 +181,8 @@ console.log(ocr.mode); // "mlkit"
 
 当使用不同的工作模式名称时, `ocr` 全局方法及其相关方法 (如 [ocr.detect](#m-detect)) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.
 
+> 注: 使用 Paddle 工作模式时, 建议开启 AutoJs6 的 "忽略电池优化" 开关, 并降低对 AutoJs6 节电及后台运行等方面的限制, 否则可能导致应用崩溃.
+
 ## [m] recognizeText
 
 用于识别图像中的全部文本.

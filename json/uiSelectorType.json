@@ -4,7 +4,7 @@
     {
       "textRaw": "选择器 (UiSelector)",
       "name": "选择器_(uiselector)",
-      "desc": "<p>UiSelector (选择器), 亦可看作是 <a href=\"uiObjectType\">控件节点</a> 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 <code>控件节点</code>, 并做进一步处理, 如 [ 执行 <a href=\"uiObjectActionsType\">控件行为</a> (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 <a href=\"glossaries#控件层级\">控件层级</a> 中进行 <a href=\"uiObjectType#m-compass\">罗盘</a> 导航 ] 等.</p>\n<pre><code class=\"lang-js\">text(&quot;立即开始&quot;);\n</code></pre>\n<p>上述示例是一个选择器, 要求控件满足文本为 &quot;立即开始&quot; 的条件.</p>\n<p>选择器的构建通常是基于控件属性的, 如 [ text / desc / className / action / height / id ] 等.</p>\n<p>构建式选择器调用后会返回自身类型, 因此可使用 <a href=\"https://zh.m.wikipedia.org/zh-hans/%E6%96%B9%E6%B3%95%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8\">链式调用</a> 构建出用于多条件筛选的选择器:</p>\n<pre><code class=\"lang-js\">text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\n</code></pre>\n<p>上述示例是一个多条件选择器, 要求控件同时满足三个条件: 文本为 &quot;立即开始&quot;, 控件高度值不低于屏幕高度的 20%, 控件可点击.</p>\n<p>在当前章节, 绝大多数方法的返回值类型标均注为 &quot;UiSelector&quot;, 它们属于可链式调用的 &quot;选择器构建方法&quot;, 其他方法统称为 &quot;动作&quot;, 可归纳为 &quot;状态方法&quot; (查看状态的动作), &quot;查找方法&quot; (查找控件的动作), &quot;<a href=\"uiObjectActionsType\">行为方法</a>&quot; (执行控件行为的动作).</p>\n<p>选择器构建方法:</p>\n<ul>\n<li>[m#] text</li>\n<li>[m#] desc</li>\n<li>[m#] id</li>\n<li>[m#] className</li>\n<li>... ...</li>\n</ul>\n<p>状态方法:</p>\n<ul>\n<li>[m#] exists</li>\n<li>[m#] toString</li>\n</ul>\n<p>查找方法:</p>\n<ul>\n<li>[m#] findOnce</li>\n<li>[m#] find</li>\n<li>[m#] findOne</li>\n<li>[m#] untilFindOne</li>\n<li>[m#] untilFind / waitFor</li>\n<li>[m] pickup</li>\n</ul>\n<p>行为方法:</p>\n<ul>\n<li>[m#] click</li>\n<li>[m#] longClick</li>\n<li>[m#] focus</li>\n<li>[m#] clearFocus</li>\n<li>... ...</li>\n</ul>\n<p>一个选择器构建之后, 需要执行一个上述 &quot;动作&quot; 才能发挥选择器的作用:</p>\n<pre><code class=\"lang-js\">let sel = text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\nconsole.log(sel.exists()); /* 查看状态的动作. */\nconsole.log(sel.findOnce()); /* 查找控件的动作. */\nconsole.log(sel.click()); /* 执行控件行为的动作. */\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiSelector</p>\n\n<hr>\n",
+      "desc": "<p>UiSelector (选择器), 亦可看作是 <a href=\"uiObjectType\">控件节点</a> 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 <code>控件节点</code>, 并做进一步处理, 如 [ 执行 <a href=\"uiObjectActionsType\">控件行为</a> (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 <a href=\"glossaries#控件层级\">控件层级</a> 中进行 <a href=\"uiObjectType#m-compass\">罗盘</a> 导航 ] 等.</p>\n<pre><code class=\"lang-js\">text(&quot;立即开始&quot;);\n</code></pre>\n<p>上述示例是一个选择器, 要求控件满足文本为 &quot;立即开始&quot; 的条件.</p>\n<p>选择器的构建通常是基于控件属性的, 如 [ text / desc / className / action / height / id ] 等.</p>\n<p>构建式选择器调用后会返回自身类型, 因此可使用 <a href=\"https://zh.m.wikipedia.org/zh-hans/%E6%96%B9%E6%B3%95%E9%93%BE%E5%BC%8F%E8%B0%83%E7%94%A8\">链式调用</a> 构建出用于多条件筛选的选择器:</p>\n<pre><code class=\"lang-js\">text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\n</code></pre>\n<p>上述示例是一个多条件选择器, 要求控件同时满足三个条件: 文本为 &quot;立即开始&quot;, 控件高度值不低于屏幕高度的 20%, 控件可点击. 详情参阅本章 <a href=\"#链式特性\">链式特性</a> 小节.</p>\n<p>在当前章节, 绝大多数方法的返回值类型标均注为 &quot;UiSelector&quot;, 它们属于可链式调用的 &quot;选择器构建方法&quot;, 其他方法统称为 &quot;动作&quot;, 可归纳为 &quot;状态方法&quot; (查看状态的动作), &quot;查找方法&quot; (查找控件的动作), &quot;<a href=\"uiObjectActionsType\">行为方法</a>&quot; (执行控件行为的动作).</p>\n<p>选择器构建方法:</p>\n<ul>\n<li>[m#] text</li>\n<li>[m#] desc</li>\n<li>[m#] id</li>\n<li>[m#] className</li>\n<li>... ...</li>\n</ul>\n<p>状态方法:</p>\n<ul>\n<li>[m#] exists</li>\n<li>[m#] toString</li>\n</ul>\n<p>查找方法:</p>\n<ul>\n<li>[m#] findOnce</li>\n<li>[m#] find</li>\n<li>[m#] findOne</li>\n<li>[m#] untilFindOne</li>\n<li>[m#] untilFind / waitFor</li>\n<li>[m] pickup</li>\n</ul>\n<p>行为方法:</p>\n<ul>\n<li>[m#] click</li>\n<li>[m#] longClick</li>\n<li>[m#] focus</li>\n<li>[m#] clearFocus</li>\n<li>... ...</li>\n</ul>\n<p>一个选择器构建之后, 需要执行一个上述 &quot;动作&quot; 才能发挥选择器的作用:</p>\n<pre><code class=\"lang-js\">let sel = text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\nconsole.log(sel.exists()); /* 查看状态的动作. */\nconsole.log(sel.findOnce()); /* 查找控件的动作. */\nconsole.log(sel.click()); /* 执行控件行为的动作. */\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiSelector</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] UiSelector",
@@ -3530,7 +3530,7 @@
               "textRaw": "click()",
               "type": "method",
               "name": "click",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-click\">[ 点击 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.click 替代</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-click\">[ 点击 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.click 替代.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": []
@@ -3549,7 +3549,7 @@
               "textRaw": "longClick()",
               "type": "method",
               "name": "longClick",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-longclick\">[ 长按 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.longClick 替代</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-longclick\">[ 长按 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.longClick 替代.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": []
@@ -4167,7 +4167,7 @@
               "textRaw": "scrollUp()",
               "type": "method",
               "name": "scrollUp",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-scrollup\">[ 使视窗上移的滚动 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.scrollUp 替代</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-scrollup\">[ 使视窗上移的滚动 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.scrollUp 替代.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": []
@@ -4205,7 +4205,7 @@
               "textRaw": "scrollDown()",
               "type": "method",
               "name": "scrollDown",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-scrolldown\">[ 使视窗下移的滚动 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.scrollDown 替代</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-scrolldown\">[ 使视窗下移的滚动 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.scrollDown 替代.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": []
@@ -4307,7 +4307,7 @@
               "textRaw": "setText(text)",
               "type": "method",
               "name": "setText",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-settext\">[ 设置文本 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.setText 替代</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-settext\">[ 设置文本 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险, 因此此方法不建议使用.</p>\n<blockquote>\n<p>注: 此方法不是全局的, 它被 automator.setText 替代.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -4389,6 +4389,52 @@
           ],
           "type": "module",
           "displayName": "[m#] setProgress"
+        },
+        {
+          "textRaw": "[m#] plus",
+          "name": "[m#]_plus",
+          "methods": [
+            {
+              "textRaw": "plus(selector)",
+              "type": "method",
+              "name": "plus",
+              "desc": "<p><strong><code>6.5.0</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">UiSelector</a> } - 待拼接的选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> } - 拼接后的新选择器</li>\n</ul>\n<p>选择器拼接, 不改变原选择器.</p>\n<pre><code class=\"lang-js\">let selA = text(&#39;A&#39;).minTop(0.5);\nlet selB = desc(&#39;B&#39;).maxHeight(0.5);\nlet selPlused = selA.plus(selB);\nconsole.log(selPlused); // text(&quot;A&quot;).minTop(0.5).desc(&quot;B&quot;).maxHeight(0.5)\nconsole.log(selA); // text(&quot;A&quot;).minTop(0.5)\n</code></pre>\n<p>上述示例可见, <code>plus</code> 方法不改变 <code>selA</code> 的值.</p>\n<blockquote>\n<p>参阅: <a href=\"#m-append\">append</a> 方法小节.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] plus"
+        },
+        {
+          "textRaw": "[m#] append",
+          "name": "[m#]_append",
+          "methods": [
+            {
+              "textRaw": "append(selector)",
+              "type": "method",
+              "name": "append",
+              "desc": "<p><strong><code>6.5.0</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">UiSelector</a> } - 待拼接的选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> } - 拼接后的新选择器</li>\n</ul>\n<p>选择器拼接, 且改变原选择器. 是一种 <code>可变方法 (mutable method)</code>.</p>\n<pre><code class=\"lang-js\">let selA = text(&#39;A&#39;).minTop(0.5);\nlet selB = desc(&#39;B&#39;).maxHeight(0.5);\nlet selPlused = selA.append(selB);\nconsole.log(selPlused); // text(&quot;A&quot;).minTop(0.5).desc(&quot;B&quot;).maxHeight(0.5)\nconsole.log(selA); // text(&quot;A&quot;).minTop(0.5).desc(&quot;B&quot;).maxHeight(0.5)\n</code></pre>\n<p>上述示例可见, <code>append</code> 方法会改变 <code>selA</code> 的值.</p>\n<p>因此上述示例等价于下述示例:</p>\n<pre><code class=\"lang-js\">let selA = text(&#39;A&#39;).minTop(0.5);\nlet selB = desc(&#39;B&#39;).maxHeight(0.5);\nselA.append(selB);\nconsole.log(selA); // text(&quot;A&quot;).minTop(0.5).desc(&quot;B&quot;).maxHeight(0.5)\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"#m-plus\">plus</a> 方法小节.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] append"
         },
         {
           "textRaw": "[m] pickup",
@@ -4847,6 +4893,13 @@
       ],
       "type": "module",
       "displayName": "筛选器类型"
+    },
+    {
+      "textRaw": "链式特性",
+      "name": "链式特性",
+      "desc": "<p>链式调用可以构建出多条件筛选的选择器:</p>\n<pre><code class=\"lang-js\">let sel = text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\nlet w = sel.findOnce();\nif (w !== null) { /* ... */ }\n</code></pre>\n<p>但需特别留意, 上述示例 <code>sel</code> 变量是 <code>可变的 (mutable)</code>:</p>\n<pre><code class=\"lang-js\">let sel = text(&quot;立即开始&quot;).minHeight(0.2).clickable(true);\n\nlet wA = sel.findOnce();\nif (wA != null) { /* ... */}\nconsole.log(sel); // text(&quot;立即开始&quot;).minHeight(0.2).clickable(true)\n\nlet wB = sel.descMatch(/\\w+/).findOnce();\nif (wB != null) { /* ... */}\nconsole.log(sel); // text(&quot;立即开始&quot;).minHeight(0.2).clickable(true).descMatch(/\\w+/)\n\nlet wC = sel.findOnce();\nif (wC != null) { /* ... */}\nconsole.log(sel); // text(&quot;立即开始&quot;).minHeight(0.2).clickable(true).descMatch(/\\w+/)\n</code></pre>\n<p>上述示例中, <code>wB</code> 变量赋值时, <code>sel.descMatch(/\\w+/)</code> 使得 <code>sel</code> 发生改变.</p>\n<p>此时的 <code>sel</code> 相当于是 <code>text(&quot;立即开始&quot;).minHeight(0.2).clickable(true).sel.descMatch(/\\w+/)</code>.</p>\n<p>因此 <code>wC</code> 与 <code>wA</code> 虽然使用了同样赋值语句, 但它们的 <code>sel</code> 并不相同.</p>\n<p>将语句 <code>let wB = sel.descMatch(/\\w+/).findOnce()</code><br>修改为 <code>let wB = sel.plus(descMatch(/\\w+/)).findOnce()</code><br>即可保持 <code>sel</code> 变量不变.  </p>\n<p>关于选择器的拼接, 可参阅 <a href=\"#m-plus\">plus</a> 与 <a href=\"#m-append\">append</a> 方法小节.</p>\n",
+      "type": "module",
+      "displayName": "链式特性"
     }
   ]
 }

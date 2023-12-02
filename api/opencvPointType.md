@@ -1,4 +1,4 @@
-# OpencvPoint
+# OpenCVPoint
 
 [org.opencv.core.Point](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Point.html) 别名.
 

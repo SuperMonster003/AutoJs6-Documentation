@@ -16,7 +16,7 @@ text("立即开始");
 text("立即开始").minHeight(0.2).clickable(true);
 ```
 
-上述示例是一个多条件选择器, 要求控件同时满足三个条件: 文本为 "立即开始", 控件高度值不低于屏幕高度的 20%, 控件可点击.
+上述示例是一个多条件选择器, 要求控件同时满足三个条件: 文本为 "立即开始", 控件高度值不低于屏幕高度的 20%, 控件可点击. 详情参阅本章 [链式特性](#链式特性) 小节.
 
 在当前章节, 绝大多数方法的返回值类型标均注为 "UiSelector", 它们属于可链式调用的 "选择器构建方法", 其他方法统称为 "动作", 可归纳为 "状态方法" (查看状态的动作), "查找方法" (查找控件的动作), "[行为方法](uiObjectActionsType)" (执行控件行为的动作).
 
@@ -5031,7 +5031,7 @@ console.log(wc.length);
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.click 替代
+> 注: 此方法不是全局的, 它被 automator.click 替代.
 
 ## [m#] longClick
 
@@ -5045,7 +5045,7 @@ console.log(wc.length);
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.longClick 替代
+> 注: 此方法不是全局的, 它被 automator.longClick 替代.
 
 ## [m#] accessibilityFocus
 
@@ -5462,7 +5462,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.scrollUp 替代
+> 注: 此方法不是全局的, 它被 automator.scrollUp 替代.
 
 ## [m#] scrollRight
 
@@ -5488,7 +5488,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.scrollDown 替代
+> 注: 此方法不是全局的, 它被 automator.scrollDown 替代.
 
 ## [m#] scrollForward
 
@@ -5553,7 +5553,7 @@ pickup({
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险, 因此此方法不建议使用.
 
-> 注: 此方法不是全局的, 它被 automator.setText 替代
+> 注: 此方法不是全局的, 它被 automator.setText 替代.
 
 ## [m#] setSelection
 
@@ -5593,6 +5593,61 @@ pickup({
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 设置进度值 ] 行为](uiObjectActionsType#m-setprogress).
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
+
+## [m#] plus
+
+### plus(selector)
+
+**`6.5.0`**
+
+- **selector** { [UiSelector](uiSelectorType) } - 待拼接的选择器
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) } - 拼接后的新选择器
+
+选择器拼接, 不改变原选择器.
+
+```js
+let selA = text('A').minTop(0.5);
+let selB = desc('B').maxHeight(0.5);
+let selPlused = selA.plus(selB);
+console.log(selPlused); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
+console.log(selA); // text("A").minTop(0.5)
+```
+
+上述示例可见, `plus` 方法不改变 `selA` 的值.
+
+> 参阅: [append](#m-append) 方法小节.
+
+## [m#] append
+
+### append(selector)
+
+**`6.5.0`**
+
+- **selector** { [UiSelector](uiSelectorType) } - 待拼接的选择器
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) } - 拼接后的新选择器
+
+选择器拼接, 且改变原选择器. 是一种 `可变方法 (mutable method)`.
+
+```js
+let selA = text('A').minTop(0.5);
+let selB = desc('B').maxHeight(0.5);
+let selPlused = selA.append(selB);
+console.log(selPlused); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
+console.log(selA); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
+```
+
+上述示例可见, `append` 方法会改变 `selA` 的值.
+
+因此上述示例等价于下述示例:
+
+```js
+let selA = text('A').minTop(0.5);
+let selB = desc('B').maxHeight(0.5);
+selA.append(selB);
+console.log(selA); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
+```
+
+> 参阅: [plus](#m-plus) 方法小节.
 
 ## [m] pickup
 
@@ -6187,3 +6242,43 @@ descMatch('.+'); /* 可匹配 w, 与 descMatch('') 效果相同. */
 /* 相当于 descMatch(/spl\.?.+$/) . */
 descMatch('spl\\.?.+$'); /* 可匹配 w. */
 ```
+
+# 链式特性
+
+链式调用可以构建出多条件筛选的选择器:
+
+```js
+let sel = text("立即开始").minHeight(0.2).clickable(true);
+let w = sel.findOnce();
+if (w !== null) { /* ... */ }
+```
+
+但需特别留意, 上述示例 `sel` 变量是 `可变的 (mutable)`:
+
+```js
+let sel = text("立即开始").minHeight(0.2).clickable(true);
+
+let wA = sel.findOnce();
+if (wA != null) { /* ... */}
+console.log(sel); // text("立即开始").minHeight(0.2).clickable(true)
+
+let wB = sel.descMatch(/\w+/).findOnce();
+if (wB != null) { /* ... */}
+console.log(sel); // text("立即开始").minHeight(0.2).clickable(true).descMatch(/\w+/)
+
+let wC = sel.findOnce();
+if (wC != null) { /* ... */}
+console.log(sel); // text("立即开始").minHeight(0.2).clickable(true).descMatch(/\w+/)
+```
+
+上述示例中, `wB` 变量赋值时, `sel.descMatch(/\w+/)` 使得 `sel` 发生改变.
+
+此时的 `sel` 相当于是 `text("立即开始").minHeight(0.2).clickable(true).sel.descMatch(/\w+/)`.
+
+因此 `wC` 与 `wA` 虽然使用了同样赋值语句, 但它们的 `sel` 并不相同.
+
+将语句 `let wB = sel.descMatch(/\w+/).findOnce()`  
+修改为 `let wB = sel.plus(descMatch(/\w+/)).findOnce()`  
+即可保持 `sel` 变量不变.  
+
+关于选择器的拼接, 可参阅 [plus](#m-plus) 与 [append](#m-append) 方法小节.

@@ -837,11 +837,13 @@ console.log(wC.boundsExactCenterY()); // e.g. -16.5
 
 **`6.2.0`** **`A11Y`**
 
-- <ins>**returns**</ins> { [OpencvPoint](opencvPointType) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) }
 
 返回控件矩形的中心点 ([Point](opencvPointType)).
 
 该中心点坐标由 [exactCenterX](#m-exactcenterx) 和 [exactCenterY](#m-exactcentery) 计算获得, 因此会保留精度.
+
+是 [center](#m-center) 的别名方法.
 
 ```js
 let wA = pickup(/.+/);
@@ -855,13 +857,39 @@ console.log(wB.point()); // e.g. {5.5, 6.5}
 console.log(wB.point().y); // e.g. 6.5
 ```
 
+## [m#] center
+
+### center()
+
+**`6.4.2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) }
+
+返回控件矩形的中心点 ([Point](opencvPointType)).
+
+该中心点坐标由 [exactCenterX](#m-exactcenterx) 和 [exactCenterY](#m-exactcentery) 计算获得, 因此会保留精度.
+
+是 [point](#m-point) 的别名方法.
+
+```js
+let wA = pickup(/.+/);
+console.log(wA.bounds()); // e.g. Rect(0, 0 - 10, 12)
+console.log(wA.center()); // e.g. {5.0, 6.0}
+console.log(wA.center().x); // e.g. 5
+
+let wB = pickup(/.+/);
+console.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 13)
+console.log(wB.center()); // e.g. {5.5, 6.5}
+console.log(wB.center().y); // e.g. 6.5
+```
+
 ## [m#] size
 
 ### size()
 
 **`6.2.0`** **`A11Y`**
 
-- <ins>**returns**</ins> { [OpencvSize](opencvSizeType) }
+- <ins>**returns**</ins> { [OpenCVSize](opencvSizeType) }
 
 返回控件矩形的尺寸 ([Size](opencvSizeType)).
 

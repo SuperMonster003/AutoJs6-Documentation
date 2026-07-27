@@ -4,338 +4,469 @@
     {
       "textRaw": "按键 (Keys)",
       "name": "按键_(keys)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>按键模拟部分提供了一些模拟物理按键的全局函数, 包括Home、音量键、照相键等, 有的函数依赖于无障碍服务, 有的函数依赖于root权限.</p>\n<p>一般来说, 以大写字母开头的函数都依赖于root权限. 执行此类函数时, 如果没有root权限, 则函数执行后没有效果, 并会在控制台输出一个警告.</p>\n",
-      "methods": [
+      "desc": "<p>本章包含按键代码属性, 无障碍全局动作和 Shell 按键指令.</p>\n<ul>\n<li><code>keys</code> 与 <code>$keys</code> 指向同一个按键代码对象.</li>\n<li>小写动作同时挂载在 <code>automator</code> 对象和全局作用域, 依赖无障碍服务.</li>\n<li>大写动作以及 <code>KeyCode</code>, <code>Text</code> 和 <code>Input</code> 是全局 Shell 指令.</li>\n</ul>\n<p>大写按键动作和 <code>KeyCode</code> 从 AutoJs6 6.7.1 起优先通过可用的 Shizuku 服务执行. Shizuku 不可用时回退到 Root Shell. 这些方法不返回命令执行状态.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">keys</p>\n\n<hr>\n<p><code>keys</code> 中的初始值来自 Android <code>KeyEvent.KEYCODE_*</code> 常量, 可用于 <a href=\"events#事件-key\">按键事件监听</a>.</p>\n<p>这些属性在当前实现中不可删除, 但没有设置为只读, 因此脚本仍可覆盖属性值. 通常应仅将它们作为按键代码查询表使用.</p>\n",
+      "modules": [
         {
-          "textRaw": "back()",
-          "type": "method",
-          "name": "back",
-          "signatures": [
+          "textRaw": "[p] volume_down",
+          "name": "[p] volume_down",
+          "desc": "<ul>\n<li>[ <code>25</code> ] { <a href=\"dataTypes#number\">number</a> } - <a href=\"#p-volumedown\">volumeDown</a> 的下划线别名</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p] VOLUME_DOWN"
+        },
+        {
+          "textRaw": "[p] VOLUME_DOWN",
+          "name": "[p]_volume_down",
+          "desc": "<ul>\n<li>[ <code>25</code> ] { <a href=\"dataTypes#number\">number</a> } - <a href=\"#p-volumedown\">volumeDown</a> 的大写下划线别名</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">automator</p>\n\n<hr>\n<p>以下方法调用 Android 无障碍服务的全局动作. 返回值表示无障碍服务是否接受了对应动作. 无障碍服务不可用, 系统不支持该动作或系统拒绝执行时返回 <code>false</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] VOLUME_DOWN"
+        },
+        {
+          "textRaw": "[m] back",
+          "name": "[m]_back",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.back()",
+              "type": "method",
+              "name": "back",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>执行系统返回动作.</p>\n<pre><code class=\"lang-js\">if (!back()) {\n    console.warn(&#39;Back action was not accepted&#39;);\n}\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>模拟按下返回键. 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] back"
         },
         {
-          "textRaw": "home()",
-          "type": "method",
-          "name": "home",
-          "signatures": [
+          "textRaw": "[m] home",
+          "name": "[m]_home",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.home()",
+              "type": "method",
+              "name": "home",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>执行系统主屏幕动作.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>模拟按下Home键. 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] home"
         },
         {
-          "textRaw": "powerDialog()",
-          "type": "method",
-          "name": "powerDialog",
-          "signatures": [
+          "textRaw": "[m] powerDialog",
+          "name": "[m]_powerdialog",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.powerDialog()",
+              "type": "method",
+              "name": "powerDialog",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>打开系统电源菜单.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>弹出电源键菜单. 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] powerDialog"
         },
         {
-          "textRaw": "notifications()",
-          "type": "method",
-          "name": "notifications",
-          "signatures": [
+          "textRaw": "[m] notifications",
+          "name": "[m]_notifications",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.notifications()",
+              "type": "method",
+              "name": "notifications",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>展开系统通知栏.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>拉出通知栏. 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] notifications"
         },
         {
-          "textRaw": "quickSettings()",
-          "type": "method",
-          "name": "quickSettings",
-          "signatures": [
+          "textRaw": "[m] quickSettings",
+          "name": "[m]_quicksettings",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.quickSettings()",
+              "type": "method",
+              "name": "quickSettings",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>展开系统快速设置面板.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>显示快速设置(下拉通知栏到底). 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] quickSettings"
         },
         {
-          "textRaw": "recents()",
-          "type": "method",
-          "name": "recents",
-          "signatures": [
+          "textRaw": "[m] recents",
+          "name": "[m]_recents",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.recents()",
+              "type": "method",
+              "name": "recents",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>打开系统最近任务界面.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>显示最近任务. 返回是否执行成功.\n此函数依赖于无障碍服务.</p>\n"
+          "type": "module",
+          "displayName": "[m] recents"
         },
         {
-          "textRaw": "splitScreen()",
-          "type": "method",
-          "name": "splitScreen",
-          "signatures": [
+          "textRaw": "[m] splitScreen",
+          "name": "[m]_splitscreen",
+          "methods": [
             {
-              "params": [
+              "textRaw": "automator.splitScreen()",
+              "type": "method",
+              "name": "splitScreen",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否执行成功</li>\n</ul>\n<p>执行系统切换分屏动作. 实际结果还取决于设备系统和当前界面是否支持分屏.</p>\n<hr>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>分屏. 返回是否执行成功.\n此函数依赖于无障碍服务, 并且需要系统自身功能的支持.</p>\n"
+          "type": "module",
+          "displayName": "[m] splitScreen"
         },
         {
-          "textRaw": "Home()",
-          "type": "method",
-          "name": "Home",
-          "desc": "<p>模拟按下Home键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
+          "textRaw": "Shell 按键指令",
+          "name": "shell_按键指令",
+          "desc": "<p>以下大写方法分别向 Android <code>input keyevent</code> 发送固定键码. Shizuku 可用时通过 Shizuku 执行, 否则通过 Root Shell 执行.</p>\n",
+          "type": "module",
+          "displayName": "Shell 按键指令"
         },
         {
-          "textRaw": "Back()",
-          "type": "method",
-          "name": "Back",
-          "desc": "<p>模拟按下返回键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
+          "textRaw": "[m] Menu",
+          "name": "[m]_menu",
+          "methods": [
             {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Power()",
-          "type": "method",
-          "name": "Power",
-          "desc": "<p>模拟按下电源键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Menu()",
-          "type": "method",
-          "name": "Menu",
-          "desc": "<p>模拟按下菜单键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "VolumeUp()",
-          "type": "method",
-          "name": "VolumeUp",
-          "desc": "<p>按下音量上键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "VolumeDown()",
-          "type": "method",
-          "name": "VolumeDown",
-          "desc": "<p>按键音量上键.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Camera()",
-          "type": "method",
-          "name": "Camera",
-          "desc": "<p>模拟按下照相键.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Up()",
-          "type": "method",
-          "name": "Up",
-          "desc": "<p>模拟按下物理按键上.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Down()",
-          "type": "method",
-          "name": "Down",
-          "desc": "<p>模拟按下物理按键下.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Left()",
-          "type": "method",
-          "name": "Left",
-          "desc": "<p>模拟按下物理按键左.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Right()",
-          "type": "method",
-          "name": "Right",
-          "desc": "<p>模拟按下物理按键右.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "OK()",
-          "type": "method",
-          "name": "OK",
-          "desc": "<p>模拟按下物理按键确定.\n此函数依赖于root权限.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Text(text)",
-          "type": "method",
-          "name": "Text",
-          "signatures": [
-            {
-              "params": [
+              "textRaw": "Menu()",
+              "type": "method",
+              "name": "Menu",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送菜单键, 键码为 <code>82</code>.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "text {string} 要输入的文字, 只能为英文或英文符号 输入文字text. 例如`Text(\"aaa\");` ",
-                  "name": "text",
-                  "type": "string",
-                  "desc": "要输入的文字, 只能为英文或英文符号 输入文字text. 例如`Text(\"aaa\");`"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "text"
+                  "params": []
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m] Menu"
         },
         {
-          "textRaw": "KeyCode(code)",
-          "type": "method",
-          "name": "KeyCode",
-          "signatures": [
+          "textRaw": "[m] Home",
+          "name": "[m]_home",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Home()",
+              "type": "method",
+              "name": "Home",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送主屏幕键, 键码为 <code>3</code>.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "code {number} | <String> 要按下的按键的数字代码或名称. 参见下表. 模拟物理按键. 例如`KeyCode(29)`和`KeyCode(\"KEYCODE_A\")`是按下A键. ",
-                  "name": "code",
-                  "type": "number",
-                  "desc": "| <String> 要按下的按键的数字代码或名称. 参见下表. 模拟物理按键. 例如`KeyCode(29)`和`KeyCode(\"KEYCODE_A\")`是按下A键."
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "code"
+                  "params": []
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m] Home"
+        },
+        {
+          "textRaw": "[m] Back",
+          "name": "[m]_back",
+          "methods": [
+            {
+              "textRaw": "Back()",
+              "type": "method",
+              "name": "Back",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送返回键, 键码为 <code>4</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Back"
+        },
+        {
+          "textRaw": "[m] Up",
+          "name": "[m]_up",
+          "methods": [
+            {
+              "textRaw": "Up()",
+              "type": "method",
+              "name": "Up",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送方向上键, 键码为 <code>19</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Up"
+        },
+        {
+          "textRaw": "[m] Down",
+          "name": "[m]_down",
+          "methods": [
+            {
+              "textRaw": "Down()",
+              "type": "method",
+              "name": "Down",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送方向下键, 键码为 <code>20</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Down"
+        },
+        {
+          "textRaw": "[m] Left",
+          "name": "[m]_left",
+          "methods": [
+            {
+              "textRaw": "Left()",
+              "type": "method",
+              "name": "Left",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送方向左键, 键码为 <code>21</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Left"
+        },
+        {
+          "textRaw": "[m] Right",
+          "name": "[m]_right",
+          "methods": [
+            {
+              "textRaw": "Right()",
+              "type": "method",
+              "name": "Right",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送方向右键, 键码为 <code>22</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Right"
+        },
+        {
+          "textRaw": "[m] OK",
+          "name": "[m]_ok",
+          "methods": [
+            {
+              "textRaw": "OK()",
+              "type": "method",
+              "name": "OK",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送方向中心键, 键码为 <code>23</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] OK"
+        },
+        {
+          "textRaw": "[m] VolumeUp",
+          "name": "[m]_volumeup",
+          "methods": [
+            {
+              "textRaw": "VolumeUp()",
+              "type": "method",
+              "name": "VolumeUp",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送音量上键, 键码为 <code>24</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] VolumeUp"
+        },
+        {
+          "textRaw": "[m] VolumeDown",
+          "name": "[m]_volumedown",
+          "methods": [
+            {
+              "textRaw": "VolumeDown()",
+              "type": "method",
+              "name": "VolumeDown",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送音量下键, 键码为 <code>25</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] VolumeDown"
+        },
+        {
+          "textRaw": "[m] Power",
+          "name": "[m]_power",
+          "methods": [
+            {
+              "textRaw": "Power()",
+              "type": "method",
+              "name": "Power",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送电源键, 键码为 <code>26</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Power"
+        },
+        {
+          "textRaw": "[m] Camera",
+          "name": "[m]_camera",
+          "methods": [
+            {
+              "textRaw": "Camera()",
+              "type": "method",
+              "name": "Camera",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>发送相机键, 键码为 <code>27</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Camera"
+        },
+        {
+          "textRaw": "[m] KeyCode",
+          "name": "[m]_keycode",
+          "methods": [
+            {
+              "textRaw": "KeyCode(code)",
+              "type": "method",
+              "name": "KeyCode",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>[6.7.1]</code></strong></p>\n<ul>\n<li><strong>code</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 按键代码或名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 Shizuku 或 Root Shell 发送一个按键事件.</p>\n<p><strong>code</strong> 支持下列形式, 字母不区分大小写:</p>\n<ul>\n<li>十进制键码, 如 <code>29</code> 或 <code>&quot;29&quot;</code>.</li>\n<li>十六进制键码字符串, 如 <code>&quot;0x1D&quot;</code>.</li>\n<li>完整按键名称, 如 <code>&quot;KEYCODE_A&quot;</code>.</li>\n<li>省略 <code>KEYCODE_</code> 前缀的按键名称, 如 <code>&quot;A&quot;</code>.</li>\n</ul>\n<p>无法识别的名称, <code>KEYCODE_UNKNOWN</code> 或无法解析的数值会导致异常.</p>\n<pre><code class=\"lang-js\">KeyCode(29);\nKeyCode(&#39;A&#39;);\nKeyCode(&#39;KEYCODE_A&#39;);\nKeyCode(&#39;0x1D&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "code"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] KeyCode"
+        },
+        {
+          "textRaw": "[m] Text",
+          "name": "[m]_text",
+          "methods": [
+            {
+              "textRaw": "Text(text)",
+              "type": "method",
+              "name": "Text",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 传给 <code>input text</code> 的文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>通过 Root Shell 执行 <code>input text</code>. 参数会直接拼接到 Shell 命令, 不会自动进行引号包裹或 Shell 转义.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Text"
+        },
+        {
+          "textRaw": "[m] Input",
+          "name": "[m]_input",
+          "methods": [
+            {
+              "textRaw": "Input(text)",
+              "type": "method",
+              "name": "Input",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 传给 <code>input text</code> 的文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p><a href=\"#m-text\">Text</a> 的同义方法.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] Input"
+        },
+        {
+          "textRaw": "参阅",
+          "name": "参阅",
+          "desc": "<ul>\n<li><a href=\"https://developer.android.com/reference/android/view/KeyEvent\">Android KeyEvent 常量</a></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "参阅"
         }
       ],
       "type": "module",
       "displayName": "按键 (Keys)"
-    },
-    {
-      "textRaw": "附录: KeyCode对照表",
-      "name": "附录:_keycode对照表",
-      "desc": "<p>KeyCode KeyEvent Value</p>\n<ul>\n<li>KEYCODE_MENU 1</li>\n<li>KEYCODE_SOFT_RIGHT 2</li>\n<li>KEYCODE_HOME 3</li>\n<li>KEYCODE_BACK 4</li>\n<li>KEYCODE_CALL 5</li>\n<li>KEYCODE_ENDCALL 6</li>\n<li>KEYCODE_0 7</li>\n<li>KEYCODE_1 8</li>\n<li>KEYCODE_2 9</li>\n<li>KEYCODE_3 10</li>\n<li>KEYCODE_4 11</li>\n<li>KEYCODE_5 12</li>\n<li>KEYCODE_6 13</li>\n<li>KEYCODE_7 14</li>\n<li>KEYCODE_8 15</li>\n<li>KEYCODE_9 16</li>\n<li>KEYCODE_STAR 17</li>\n<li>KEYCODE_POUND 18</li>\n<li>KEYCODE_DPAD_UP 19</li>\n<li>KEYCODE_DPAD_DOWN 20</li>\n<li>KEYCODE_DPAD_LEFT 21</li>\n<li>KEYCODE_DPAD_RIGHT 22</li>\n<li>KEYCODE_DPAD_CENTER 23</li>\n<li>KEYCODE_VOLUME_UP 24</li>\n<li>KEYCODE_VOLUME_DOWN 25</li>\n<li>KEYCODE_POWER 26</li>\n<li>KEYCODE_CAMERA 27</li>\n<li>KEYCODE_CLEAR 28</li>\n<li>KEYCODE_A 29</li>\n<li>KEYCODE_B 30</li>\n<li>KEYCODE_C 31</li>\n<li>KEYCODE_D 32</li>\n<li>KEYCODE_E 33</li>\n<li>KEYCODE_F 34</li>\n<li>KEYCODE_G 35</li>\n<li>KEYCODE_H 36</li>\n<li>KEYCODE_I 37</li>\n<li>KEYCODE_J 38</li>\n<li>KEYCODE_K 39</li>\n<li>KEYCODE_L 40</li>\n<li>KEYCODE_M 41</li>\n<li>KEYCODE_N 42</li>\n<li>KEYCODE_O 43</li>\n<li>KEYCODE_P 44</li>\n<li>KEYCODE_Q 45</li>\n<li>KEYCODE_R 46</li>\n<li>KEYCODE_S 47</li>\n<li>KEYCODE_T 48</li>\n<li>KEYCODE_U 49</li>\n<li>KEYCODE_V 50</li>\n<li>KEYCODE_W 51</li>\n<li>KEYCODE_X 52</li>\n<li>KEYCODE_Y 53</li>\n<li>KEYCODE_Z 54</li>\n<li>KEYCODE_COMMA 55</li>\n<li>KEYCODE_PERIOD 56</li>\n<li>KEYCODE_ALT_LEFT 57</li>\n<li>KEYCODE_ALT_RIGHT 58</li>\n<li>KEYCODE_SHIFT_LEFT 59</li>\n<li>KEYCODE_SHIFT_RIGHT 60</li>\n<li>KEYCODE_TAB 61</li>\n<li>KEYCODE_SPACE 62</li>\n<li>KEYCODE_SYM 63</li>\n<li>KEYCODE_EXPLORER 64</li>\n<li>KEYCODE_ENVELOPE 65</li>\n<li>KEYCODE_ENTER 66</li>\n<li>KEYCODE_DEL 67</li>\n<li>KEYCODE_GRAVE 68</li>\n<li>KEYCODE_MINUS 69</li>\n<li>KEYCODE_EQUALS 70</li>\n<li>KEYCODE_LEFT_BRACKET 71</li>\n<li>KEYCODE_RIGHT_BRACKET 72</li>\n<li>KEYCODE_BACKSLASH 73</li>\n<li>KEYCODE_SEMICOLON 74</li>\n<li>KEYCODE_APOSTROPHE 75</li>\n<li>KEYCODE_SLASH 76</li>\n<li>KEYCODE_AT 77</li>\n<li>KEYCODE_NUM 78</li>\n<li>KEYCODE_HEADSETHOOK 79</li>\n<li>KEYCODE_FOCUS 80</li>\n<li>KEYCODE_PLUS 81</li>\n<li>KEYCODE_MENU 82</li>\n<li>KEYCODE_NOTIFICATION 83</li>\n<li>KEYCODE_SEARCH 84</li>\n<li>TAG_LAST_ KEYCODE 85  </li>\n</ul>\n",
-      "type": "module",
-      "displayName": "附录: KeyCode对照表"
     }
   ]
 }

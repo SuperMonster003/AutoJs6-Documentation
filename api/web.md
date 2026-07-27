@@ -12,6 +12,14 @@ web 模块主要用于 [WebView](https://developer.android.com/reference/android
 
 ---
 
+## [C] web.ByteString
+
+**`6.8.0`**
+
+- { [okio.ByteString](https://square.github.io/okio/3.x/okio/okio/-byte-string/) }
+
+公开 Okio `ByteString` Java 类, 用于构造或判断 WebSocket 二进制消息.
+
 ## [m] newInjectableWebView
 
 ### newInjectableWebView(url?)
@@ -99,13 +107,13 @@ settings.setDisplayZoomControls(false);
 setWebChromeClient(new WebChromeClient());
 ```
 
-> 注:  
-> WebChromeClient 中的 "Chrome" 与 Google Chrome 浏览器中的 "Chrome" 不同.  
-> WebView 中的 "Chrome" 指代 WebView 外面的装饰及 UI 部分.  
-> WebChromeClient 是 HTML/JavaScript 与 Android 客户端交互的中间件, 它将 WebView 中 JavaScript 产生的事件封装后传递到 Android 客户端, 从而避免一些可能的安全问题.  
+> 注:<br>
+> WebChromeClient 中的 "Chrome" 与 Google Chrome 浏览器中的 "Chrome" 不同.<br>
+> WebView 中的 "Chrome" 指代 WebView 外面的装饰及 UI 部分.<br>
+> WebChromeClient 是 HTML/JavaScript 与 Android 客户端交互的中间件, 它将 WebView 中 JavaScript 产生的事件封装后传递到 Android 客户端, 从而避免一些可能的安全问题.<br>
 > 同时 WebChromeClient 也可以辅助 WebView 处理 JavaScript 对话框, 显示加载进度, 上传文件等.
 
-在 WebView 中访问了多个网页时, 按返回键会立即关闭整个页面, 而不是回退到上一个历史网页.  
+在 WebView 中访问了多个网页时, 按返回键会立即关闭整个页面, 而不是回退到上一个历史网页.<br>
 如果希望在 WebView 里浏览历史网页, 可参考如下代码:
 
 ```js
@@ -143,15 +151,26 @@ webView.setWebViewClient(newInjectableWebClient());
 
 ## [m] newWebSocket
 
-### newWebSocket(url)
+### newWebSocket(url, options?)
 
-**`6.3.1`** **`Global`**
+**`6.3.1`** **`[6.8.0]`** **`Global`**
 
 - **url** { [string](dataTypes#string) } - 请求的 URL 地址
+- **[ options ]** { [Object](dataTypes#object) } - WebSocket 事件选项
+    - **eventThread** { `'this'` } - 使用当前脚本线程的定时器调度事件监听器
 - <ins>**returns**</ins> { [WebSocket](webSocketType) }
 
 构建一个 [WebSocket](webSocketType) 实例.
 
-相当于 `new WebSocket(url)`.
+省略 `options` 时相当于 `new WebSocket(url)`. `WebSocket` 构造器不提供 `eventThread` 选项.
+
+`newWebSocket` 是全局方法, 因此以下两种调用方式等效:
+
+```js
+web.newWebSocket("wss://example.com", { eventThread: "this" });
+newWebSocket("wss://example.com", { eventThread: "this" });
+```
+
+`options.eventThread` 为 `"this"` 时, WebSocket 事件监听器使用当前脚本线程的定时器调度. 省略此选项时, 事件监听器不绑定到当前脚本线程的定时器.
 
 > 参阅: [WebSocket](webSocketType) 章节

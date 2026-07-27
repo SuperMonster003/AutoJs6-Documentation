@@ -1,0 +1,440 @@
+{
+  "source": "..\\api\\mime.md",
+  "modules": [
+    {
+      "textRaw": "MIME",
+      "name": "mime",
+      "desc": "<p><code>mime</code> 模块用于解析 MIME 类型字符串, 根据文件扩展名查询 MIME 类型, 以及访问预定义 MIME 常量.</p>\n<p>MIME 类型的基本格式为 <code>type/subtype</code>, 并可在分号后附加参数. 更多概念参阅 <a href=\"mimeTypeGlossary\">MIME 类型</a>.</p>\n<p><code>mime</code> 与 <code>$mime</code> 引用同一个对象.</p>\n<pre><code class=\"lang-js\">let parsed = mime(&#39;text/plain; charset=utf-8&#39;);\n\nparsed.type; // &quot;text&quot;\nparsed.subtype; // &quot;plain&quot;\nparsed.mimeTypeRefined; // &quot;text/plain&quot;\nparsed.parameters.charset; // &quot;utf-8&quot;\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">mime</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] mime",
+          "name": "[@]_mime",
+          "methods": [
+            {
+              "textRaw": "mime(mimeString)",
+              "type": "method",
+              "name": "mime",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>mimeString</strong> { <a href=\"dataTypes#string\">string</a> } - MIME 类型字符串</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#jsmime\">JsMime</a> } - MIME 解析结果</li>\n</ul>\n<p>解析 MIME 类型字符串.</p>\n<pre><code class=\"lang-js\">let parsed = mime(&#39;application/json; charset=utf-8&#39;);\n\nconsole.log(parsed.type); // application\nconsole.log(parsed.subtype); // json\nconsole.log(parsed.mimeType); // application/json; charset=utf-8\nconsole.log(parsed.mimeTypeRefined); // application/json\nconsole.log(parsed.parameters); // { charset: &quot;utf-8&quot; }\nconsole.log(parsed.raw); // application/json; charset=utf-8\n</code></pre>\n<p>参数数量必须为 1. MIME 类型字符串无效时抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "mimeString"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] mime"
+        },
+        {
+          "textRaw": "[m] getMediaType",
+          "name": "[m]_getmediatype",
+          "methods": [
+            {
+              "textRaw": "mime.getMediaType(mediaType)",
+              "type": "method",
+              "name": "getMediaType",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>mediaType</strong> { <a href=\"dataTypes#string\">string</a> } - MIME 类型字符串</li>\n<li><ins><strong>returns</strong></ins> { okhttp3.MediaType } - OkHttp 媒体类型对象</li>\n</ul>\n<p>将字符串解析为 <code>okhttp3.MediaType</code>.</p>\n<p>字符串不符合 OkHttp 媒体类型语法时抛出异常.</p>\n<pre><code class=\"lang-js\">let mediaType = mime.getMediaType(&#39;application/json; charset=utf-8&#39;);\n\nconsole.log(mediaType.toString()); // application/json; charset=utf-8\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "mediaType"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getMediaType"
+        },
+        {
+          "textRaw": "[m] parseMediaType",
+          "name": "[m]_parsemediatype",
+          "methods": [
+            {
+              "textRaw": "mime.parseMediaType(mediaType)",
+              "type": "method",
+              "name": "parseMediaType",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>mediaType</strong> { <a href=\"dataTypes#string\">string</a> } - MIME 类型字符串</li>\n<li><ins><strong>returns</strong></ins> { okhttp3.MediaType | <a href=\"dataTypes#null\">null</a> } - OkHttp 媒体类型对象, 解析失败时为 <code>null</code></li>\n</ul>\n<p>尝试将字符串解析为 <code>okhttp3.MediaType</code>.</p>\n<p>与 <a href=\"#m-getmediatype\">mime.getMediaType</a> 不同, 字符串无效时返回 <code>null</code>.</p>\n<pre><code class=\"lang-js\">mime.parseMediaType(&#39;text/plain&#39;) !== null; // true\nmime.parseMediaType(&#39;not a mime type&#39;) === null; // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "mediaType"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] parseMediaType"
+        },
+        {
+          "textRaw": "[m] fromFile",
+          "name": "[m]_fromfile",
+          "methods": [
+            {
+              "textRaw": "mime.fromFile(path)",
+              "type": "method",
+              "name": "fromFile",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件路径或文件名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - MIME 类型, 未识别扩展名时为 <code>null</code></li>\n</ul>\n<p>根据文件扩展名查询 MIME 类型.</p>\n<p>此方法只解析路径中的扩展名, 不读取文件内容. 路径没有扩展名时返回 <a href=\"#p-wildcard\">mime.WILDCARD</a>.</p>\n<pre><code class=\"lang-js\">mime.fromFile(&#39;/sdcard/report.pdf&#39;); // &quot;application/pdf&quot;\nmime.fromFile(&#39;/sdcard/picture.png&#39;); // &quot;image/png&quot;\nmime.fromFile(&#39;/sdcard/README&#39;); // &quot;*/*&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] fromFile"
+        },
+        {
+          "textRaw": "[m] fromFileOr",
+          "name": "[m]_fromfileor",
+          "methods": [
+            {
+              "textRaw": "mime.fromFileOr(path, defaultType)",
+              "type": "method",
+              "name": "fromFileOr",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件路径或文件名</li>\n<li><strong>defaultType</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 未识别扩展名时使用的 MIME 类型</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - MIME 类型</li>\n</ul>\n<p>根据文件扩展名查询 MIME 类型. 扩展名无法识别时返回 <code>defaultType</code>.</p>\n<p>当 <code>defaultType</code> 为 <code>null</code> 时, 使用 <a href=\"#p-wildcard\">mime.WILDCARD</a>.</p>\n<pre><code class=\"lang-js\">mime.fromFileOr(&#39;/sdcard/data.unknown_ext&#39;, &#39;application/octet-stream&#39;);\n// &quot;application/octet-stream&quot;\n</code></pre>\n<p>路径没有扩展名时, <a href=\"#m-fromfile\">mime.fromFile</a> 会直接返回 <code>*/*</code>, 因此不会使用 <code>defaultType</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "defaultType"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] fromFileOr"
+        },
+        {
+          "textRaw": "[m] fromFileOrWildcard",
+          "name": "[m]_fromfileorwildcard",
+          "methods": [
+            {
+              "textRaw": "mime.fromFileOrWildcard(path)",
+              "type": "method",
+              "name": "fromFileOrWildcard",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件路径或文件名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - MIME 类型</li>\n</ul>\n<p>根据文件扩展名查询 MIME 类型. 扩展名无法识别时返回 <code>*/*</code>.</p>\n<p>等价于 <code>mime.fromFileOr(path, mime.WILDCARD)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] fromFileOrWildcard"
+        },
+        {
+          "textRaw": "MIME 常量",
+          "name": "mime_常量",
+          "desc": "<p><code>mime</code> 包含 2500 余个 MIME 字符串常量. 常量名称通常由 MIME 类型转换为大写下划线形式, 如 <code>application/json</code> 对应 <code>APPLICATION_JSON</code>.</p>\n<p>以下列出常用常量. 更多 MIME 类型参阅 <a href=\"mimeTypeGlossary\">MIME 类型</a>.</p>\n",
+          "type": "module",
+          "displayName": "MIME 常量"
+        },
+        {
+          "textRaw": "[p] WILDCARD",
+          "name": "[p]_wildcard",
+          "properties": [
+            {
+              "textRaw": "mime.WILDCARD",
+              "name": "WILDCARD",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;*/*&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>任意 MIME 类型.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] WILDCARD"
+        },
+        {
+          "textRaw": "[p] MEDIA_TYPE_WILDCARD",
+          "name": "[p]_media_type_wildcard",
+          "properties": [
+            {
+              "textRaw": "mime.MEDIA_TYPE_WILDCARD",
+              "name": "MEDIA_TYPE_WILDCARD",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;*&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>任意媒体主类型.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] MEDIA_TYPE_WILDCARD"
+        },
+        {
+          "textRaw": "[p] APPLICATION_JSON",
+          "name": "[p]_application_json",
+          "properties": [
+            {
+              "textRaw": "mime.APPLICATION_JSON",
+              "name": "APPLICATION_JSON",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;application/json&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>JSON 数据.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] APPLICATION_JSON"
+        },
+        {
+          "textRaw": "[p] APPLICATION_OCTET_STREAM",
+          "name": "[p]_application_octet_stream",
+          "properties": [
+            {
+              "textRaw": "mime.APPLICATION_OCTET_STREAM",
+              "name": "APPLICATION_OCTET_STREAM",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;application/octet-stream&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>任意二进制数据.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] APPLICATION_OCTET_STREAM"
+        },
+        {
+          "textRaw": "[p] MULTIPART_FORM_DATA",
+          "name": "[p]_multipart_form_data",
+          "properties": [
+            {
+              "textRaw": "mime.MULTIPART_FORM_DATA",
+              "name": "MULTIPART_FORM_DATA",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;multipart/form-data&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>多部分表单数据.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] MULTIPART_FORM_DATA"
+        },
+        {
+          "textRaw": "[p] TEXT_PLAIN",
+          "name": "[p]_text_plain",
+          "properties": [
+            {
+              "textRaw": "mime.TEXT_PLAIN",
+              "name": "TEXT_PLAIN",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;text/plain&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>纯文本.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] TEXT_PLAIN"
+        },
+        {
+          "textRaw": "[p] TEXT_HTML",
+          "name": "[p]_text_html",
+          "properties": [
+            {
+              "textRaw": "mime.TEXT_HTML",
+              "name": "TEXT_HTML",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;text/html&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>HTML 文档.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] TEXT_HTML"
+        },
+        {
+          "textRaw": "[p] IMAGE_PNG",
+          "name": "[p]_image_png",
+          "properties": [
+            {
+              "textRaw": "mime.IMAGE_PNG",
+              "name": "IMAGE_PNG",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;image/png&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>PNG 图像.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] IMAGE_PNG"
+        },
+        {
+          "textRaw": "[p] IMAGE_JPEG",
+          "name": "[p]_image_jpeg",
+          "properties": [
+            {
+              "textRaw": "mime.IMAGE_JPEG",
+              "name": "IMAGE_JPEG",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;image/jpeg&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>JPEG 图像.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] IMAGE_JPEG"
+        },
+        {
+          "textRaw": "[p] AUDIO_MPEG",
+          "name": "[p]_audio_mpeg",
+          "properties": [
+            {
+              "textRaw": "mime.AUDIO_MPEG",
+              "name": "AUDIO_MPEG",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;audio/mpeg&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MPEG 音频.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] AUDIO_MPEG"
+        },
+        {
+          "textRaw": "[p] VIDEO_MP4",
+          "name": "[p]_video_mp4",
+          "properties": [
+            {
+              "textRaw": "mime.VIDEO_MP4",
+              "name": "VIDEO_MP4",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;video/mp4&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MP4 视频.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] VIDEO_MP4"
+        },
+        {
+          "textRaw": "JsMime",
+          "name": "jsmime",
+          "desc": "<p><code>JsMime</code> 是 <a href=\"#mimemimestring\">mime(mimeString)</a> 返回的 MIME 解析结果.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">JsMime</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "JsMime"
+        },
+        {
+          "textRaw": "[p#] raw",
+          "name": "[p#]_raw",
+          "modules": [
+            {
+              "textRaw": "JsMime#raw",
+              "name": "jsmime#raw",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>未经修改的输入字符串.</p>\n",
+              "type": "module",
+              "displayName": "JsMime#raw"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] raw"
+        },
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "modules": [
+            {
+              "textRaw": "JsMime#type",
+              "name": "jsmime#type",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MIME 主类型, 如 <code>text</code>.</p>\n",
+              "type": "module",
+              "displayName": "JsMime#type"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] subtype",
+          "name": "[p#]_subtype",
+          "modules": [
+            {
+              "textRaw": "JsMime#subtype",
+              "name": "jsmime#subtype",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MIME 子类型, 如 <code>plain</code>.</p>\n",
+              "type": "module",
+              "displayName": "JsMime#subtype"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] subtype"
+        },
+        {
+          "textRaw": "[p#] mimeType",
+          "name": "[p#]_mimetype",
+          "modules": [
+            {
+              "textRaw": "JsMime#mimeType",
+              "name": "jsmime#mimetype",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>由主类型, 子类型和参数组成的 MIME 字符串.</p>\n<p>参数分隔符会规范化为 <code>;</code>.</p>\n",
+              "type": "module",
+              "displayName": "JsMime#mimeType"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] mimeType"
+        },
+        {
+          "textRaw": "[p#] mimeTypeRefined",
+          "name": "[p#]_mimetyperefined",
+          "modules": [
+            {
+              "textRaw": "JsMime#mimeTypeRefined",
+              "name": "jsmime#mimetyperefined",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>仅由主类型和子类型组成的 MIME 字符串, 不包含参数.</p>\n",
+              "type": "module",
+              "displayName": "JsMime#mimeTypeRefined"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] mimeTypeRefined"
+        },
+        {
+          "textRaw": "[p#] parameters",
+          "name": "[p#]_parameters",
+          "modules": [
+            {
+              "textRaw": "JsMime#parameters",
+              "name": "jsmime#parameters",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">object</a> }</li>\n</ul>\n<p>MIME 参数对象. 属性名称和值均为字符串.</p>\n<pre><code class=\"lang-js\">let parsed = mime(&#39;text/plain; charset=utf-8; format=flowed&#39;);\n\nparsed.parameters.charset; // &quot;utf-8&quot;\nparsed.parameters.format; // &quot;flowed&quot;\n</code></pre>\n",
+              "type": "module",
+              "displayName": "JsMime#parameters"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p#] parameters"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "JsMime#toString()",
+              "type": "method",
+              "name": "JsMime#toString",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 可读字符串</li>\n</ul>\n<p>返回包含全部解析字段的多行调试字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "[m#] toStringReadable",
+          "name": "[m#]_tostringreadable",
+          "methods": [
+            {
+              "textRaw": "JsMime#toStringReadable()",
+              "type": "method",
+              "name": "JsMime#toStringReadable",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 可读字符串</li>\n</ul>\n<p>返回与 <a href=\"#jsmimetostring\">JsMime#toString()</a> 相同的字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toStringReadable"
+        }
+      ],
+      "type": "module",
+      "displayName": "MIME"
+    }
+  ]
+}

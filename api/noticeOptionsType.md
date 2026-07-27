@@ -1,6 +1,6 @@
 # NoticeOptions
 
-NoticeOptions 是一个发送 AutoJs6 通知时用于设置通知选项的接口.  
+NoticeOptions 是一个发送 AutoJs6 通知时用于设置通知选项的接口.<br>
 这些选项将影响通知的 [ 文本内容 / 发送方式 / 主题样式 / 视听反馈 ] 等.
 
 常见相关方法或属性:
@@ -289,11 +289,11 @@ while (current <= 100) {
 }
 ```
 
-上述示例中, [isSilent](#p-issilent) 用于控制通知消息不发出声音及产生振动, 否则进度更新过程中, 用户将不断收到打扰.  
+上述示例中, [isSilent](#p-issilent) 用于控制通知消息不发出声音及产生振动, 否则进度更新过程中, 用户将不断收到打扰.<br>
 `notificationId` 设置为统一的值, 如果每个通知使用不同的 ID, 进度更新过程中, 将在通知栏布满上百条通知.
 
-当 `notificationId` 不指定时, 其默认值的情况取决于 [config.useDynamicDefaultNotificationId](noticePresetConfigurationType#p-usedynamicdefaultnotificationid) 配置值.  
-配置值为 `true` 时, 将以时间戳为参考量生成不同的通知 ID , 否则以内置的固定值作为通知 ID.
+当 `notificationId` 不指定时, 其默认值的情况取决于 [config.useDynamicDefaultNotificationId](noticePresetConfigurationType#p-usedynamicdefaultnotificationid) 配置值.<br>
+配置值为 `true` 时, 将以时间戳为参考量生成不同的通知 ID, 否则以内置的固定值作为通知 ID.
 
 因此, 默认情况下, 通知 ID 是动态的:
 
@@ -302,7 +302,7 @@ notice('hello');
 notice('world');
 ```
 
-上述示例中的两个 `notice` 方法没有指定通知 ID, 因此它们的通知 ID 默认是不同的.  
+上述示例中的两个 `notice` 方法没有指定通知 ID, 因此它们的通知 ID 默认是不同的.<br>
 通知栏会显示两个通知, 'world' 不会覆盖 'hello'.
 
 使用 console.log 方法在控制台打印 `notice` 的结果, 也可以看出通知 ID 的情况:
@@ -344,8 +344,8 @@ notice('hello', { channelId: 12 });
 /* 例如 exercise 渠道设置了启用振动及声音, 而 12 渠道设置了通知静音. */
 ```
 
-当 `channelId` 不指定时, 其默认值的情况取决于 [config.useScriptNameAsDefaultChannelId](noticePresetConfigurationType#p-usescriptnameasdefaultchannelid) 配置值.  
-配置值为 `true` 时, 将以脚本文件全名作为目标渠道 ID , 否则以内置的固定值作为目标渠道 ID.
+当 `channelId` 不指定时, 其默认值的情况取决于 [config.useScriptNameAsDefaultChannelId](noticePresetConfigurationType#p-usescriptnameasdefaultchannelid) 配置值.<br>
+配置值为 `true` 时, 将以脚本文件全名作为目标渠道 ID, 否则以内置的固定值作为目标渠道 ID.
 
 ```js
 /* 1. useScriptNameAsDefaultChannelId 启用 (默认). */

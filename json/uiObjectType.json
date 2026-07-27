@@ -4,7 +4,7 @@
     {
       "textRaw": "控件节点 (UiObject)",
       "name": "控件节点_(uiobject)",
-      "desc": "<p>UiObject 通常被称为 [ 控件 / 节点 / 控件节点 ], 可看做是一个通过安卓无障碍服务包装的 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo\">AccessibilityNodeInfo</a> 对象, 代表一个当前活动窗口中的节点, 通过此节点可收集控件信息或执行控件行为, 进而实现一系列自动化操作.</p>\n<p>应用界面通常由控件构成, 如 <a href=\"https://developer.android.com/reference/android/widget/ImageView\">ImageView</a> 构成图像控件, <a href=\"https://developer.android.com/reference/android/widget/TextView\">TextView</a> 构成文本控件. 通过不同的布局可决定不同控件的位置, 如 <a href=\"https://developer.android.com/reference/android/widget/LinearLayout\">LinearLayout (线性布局)</a> 按水平或垂直方式排布及显示控件, <a href=\"https://developer.android.com/reference/android/widget/AbsListView\">AbsListView (列表布局)</a> 按列表方式排布及显示控件.\n不同的布局方式形成了 <a href=\"glossaries#控件层级\">控件层级</a>.</p>\n<p>控件拥有特定的属性, 可分为两种类型, 状态型及行为型.<br>行为型属性可参阅章节 <a href=\"uiObjectActionsType\">控件节点行为 (UiObjectActions)</a>.<br>状态型属性访问均被封装为方法调用的形式, 如访问控件的类名, 需使用 <code>w.className()</code> 而非 <code>w.className</code>.</p>\n<blockquote>\n<p>注: 在 AutoJs6 中, 由 <a href=\"uiObjectType\">UiObject</a> 代表一个控件节点, 它继承自 <a href=\"https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat\">AccessibilityNodeInfoCompat</a>, 而并非一个 <a href=\"https://developer.android.com/reference/android/view/View\">View</a>.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiObject</p>\n\n<hr>\n",
+      "desc": "<p>UiObject 通常被称为 [ 控件 / 节点 / 控件节点 ], 可看做是一个通过安卓无障碍服务包装的 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo\">AccessibilityNodeInfo</a> 对象, 代表一个当前活动窗口中的节点, 通过此节点可收集控件信息或执行控件行为, 进而实现一系列自动化操作.</p>\n<p>应用界面通常由控件构成, 如 <a href=\"https://developer.android.com/reference/android/widget/ImageView\">ImageView</a> 构成图像控件, <a href=\"https://developer.android.com/reference/android/widget/TextView\">TextView</a> 构成文本控件. 通过不同的布局可决定不同控件的位置, 如 <a href=\"https://developer.android.com/reference/android/widget/LinearLayout\">LinearLayout (线性布局)</a> 按水平或垂直方式排布及显示控件, <a href=\"https://developer.android.com/reference/android/widget/AbsListView\">AbsListView (列表布局)</a> 按列表方式排布及显示控件.\n不同的布局方式形成了 <a href=\"glossaries#控件层级\">控件层级</a>.</p>\n<p>控件拥有特定的属性, 可分为两种类型, 状态型及行为型.<br>\n行为型属性可参阅章节 <a href=\"uiObjectActionsType\">控件节点行为 (UiObjectActions)</a>.<br>\n状态型属性访问均被封装为方法调用的形式, 如访问控件的类名, 需使用 <code>w.className()</code> 而非 <code>w.className</code>.</p>\n<blockquote>\n<p>注: 在 AutoJs6 中, 由 <a href=\"uiObjectType\">UiObject</a> 代表一个控件节点, 它继承自 <a href=\"https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat\">AccessibilityNodeInfoCompat</a>, 而并非一个 <a href=\"https://developer.android.com/reference/android/view/View\">View</a>.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">UiObject</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] UiObject",
@@ -21,7 +21,7 @@
               "textRaw": "parent(i?)",
               "type": "method",
               "name": "parent",
-              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ i = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 相对级数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其父控件.</p>\n<p>当指定级数 <code>i</code> 时, 返回其对应级数的父控件.</p>\n<p><code>i</code> 为 <code>0</code> 时, 返回控件自身,<br><code>i</code> 为正整数时, 返回第 <code>i</code> 级父控件,<br><code>i</code> 为负数时, 将抛出异常.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.parent();\nw.parent(1); /* 同上. */\nw.compass(&#39;p&#39;); /* 同上. */\ndetect(w, &#39;p&#39;); /* 同上. */\n\nw.parent().parent().parent();\nw.parent(3); /* 同上. */\nw.compass(&#39;p3&#39;); /* 同上. */\ndetect(w, &#39;p3&#39;); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ i = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 相对级数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其父控件.</p>\n<p>当指定级数 <code>i</code> 时, 返回其对应级数的父控件.</p>\n<p><code>i</code> 为 <code>0</code> 时, 返回控件自身,<br>\n<code>i</code> 为正整数时, 返回第 <code>i</code> 级父控件,<br>\n<code>i</code> 为负数时, 将抛出异常.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.parent();\nw.parent(1); /* 同上. */\nw.compass(&#39;p&#39;); /* 同上. */\ndetect(w, &#39;p&#39;); /* 同上. */\n\nw.parent().parent().parent();\nw.parent(3); /* 同上. */\nw.compass(&#39;p3&#39;); /* 同上. */\ndetect(w, &#39;p3&#39;); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -44,7 +44,7 @@
               "textRaw": "child(i)",
               "type": "method",
               "name": "child",
-              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的子控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引子控件,<br><code>i</code> 为负整数, 返回倒数索引子控件,  </p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.child(3);\nw.compass(&#39;c3&#39;); /* 同上. */\ndetect(w, &#39;c3&#39;); /* 同上. */\n\nw.child(3).child(1);\nw.compass(&#39;c3c1&#39;); /* 同上. */\ndetect(w, &#39;c3&gt;1&#39;); /* 同上. */\n\nw.child(-1); /* 最后一个子控件. */\n\nw.child(-2); /* 倒数第 2 个子控件. */\nw.compass(&#39;c-2&#39;); /* 同上. */\ndetect(w, &#39;c-2&#39;); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.3]</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的子控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引子控件,<br>\n<code>i</code> 为负整数, 返回倒数索引子控件,<br></p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.child(3);\nw.compass(&#39;c3&#39;); /* 同上. */\ndetect(w, &#39;c3&#39;); /* 同上. */\n\nw.child(3).child(1);\nw.compass(&#39;c3c1&#39;); /* 同上. */\ndetect(w, &#39;c3&gt;1&#39;); /* 同上. */\n\nw.child(-1); /* 最后一个子控件. */\n\nw.child(-2); /* 倒数第 2 个子控件. */\nw.compass(&#39;c-2&#39;); /* 同上. */\ndetect(w, &#39;c-2&#39;); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -162,7 +162,7 @@
               "textRaw": "sibling(i)",
               "type": "method",
               "name": "sibling",
-              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引兄弟控件,<br><code>i</code> 为负整数, 返回倒数索引兄弟控件,  </p>\n<p>当 <code>i</code> 与 <a href=\"#m-indexinparent\">indexInParent()</a> 相同时, 返回其自身.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.sibling(0); /* 第 1 (索引为 0) 的兄弟控件. */\nw.compass(&#39;s0&#39;); /* 同上. */\ndetect(w, &#39;s0&#39;); /* 同上. */\n\nw.sibling(-2); /* 倒数第 2 个兄弟控件. */\nw.compass(&#39;s-2&#39;); /* 同上. */\ndetect(w, &#39;s-2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 可使用 <a href=\"#m-offset\">offset</a>, 或使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数或 <code>0</code>, 返回正数索引兄弟控件,<br>\n<code>i</code> 为负整数, 返回倒数索引兄弟控件,<br></p>\n<p>当 <code>i</code> 与 <a href=\"#m-indexinparent\">indexInParent()</a> 相同时, 返回其自身.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.sibling(0); /* 第 1 (索引为 0) 的兄弟控件. */\nw.compass(&#39;s0&#39;); /* 同上. */\ndetect(w, &#39;s0&#39;); /* 同上. */\n\nw.sibling(-2); /* 倒数第 2 个兄弟控件. */\nw.compass(&#39;s-2&#39;); /* 同上. */\ndetect(w, &#39;s-2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 可使用 <a href=\"#m-offset\">offset</a>, 或使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -223,7 +223,7 @@
               "textRaw": "offset(i)",
               "type": "method",
               "name": "offset",
-              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引偏移量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引偏移量为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数, 返回后向兄弟控件,<br><code>i</code> 为负整数, 返回前向兄弟控件,<br><code>i</code> 为 <code>0</code>, 返回当前控件自身. </p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.offset(3);\nw.compass(&#39;s&gt;3&#39;); /* 同上. */\ndetect(w, &#39;s&gt;3&#39;); /* 同上. */\n\nw.offset(-2);\nw.compass(&#39;s&lt;2&#39;); /* 同上. */\ndetect(w, &#39;s&lt;2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 除 <a href=\"#m-offset\">offset</a> 外, 还可使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>i</strong> { <a href=\"dataTypes#number\">number</a> } - 索引偏移量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回其索引偏移量为 <code>i</code> 的兄弟控件.</p>\n<p><code>i</code> 为正整数, 返回后向兄弟控件,<br>\n<code>i</code> 为负整数, 返回前向兄弟控件,<br>\n<code>i</code> 为 <code>0</code>, 返回当前控件自身.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nw.offset(3);\nw.compass(&#39;s&gt;3&#39;); /* 同上. */\ndetect(w, &#39;s&gt;3&#39;); /* 同上. */\n\nw.offset(-2);\nw.compass(&#39;s&lt;2&#39;); /* 同上. */\ndetect(w, &#39;s&lt;2&#39;); /* 同上. */\n</code></pre>\n<p>如需获取相邻的兄弟控件, 除 <a href=\"#m-offset\">offset</a> 外, 还可使用 <a href=\"#m-nextsibling\">nextSibling</a> 与 <a href=\"#m-previoussibling\">previousSibling</a>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -341,7 +341,7 @@
               "textRaw": "indexInParent()",
               "type": "method",
               "name": "indexInParent",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回当前节点在其父控件的索引值.</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\na.indexInParent(); // 0 \np.child(0); /* 对应 a. */\n\nconsole.log(c.indexInParent()); // 2\np.child(2); /* 对应 c. */\n</code></pre>\n<p>方法 <code>indexInParent</code> 通常用于访问临近或相对位置的兄弟节点:</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\n/* c 是 b 的相邻兄弟节点 (相对索引为 1). */\np.child(b.indexInParent() + 1); /* 对应 c. */\nb.compass(&#39;s&gt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 也是 b 的相邻兄弟节点 (相对索引为 -1). */\np.child(b.indexInParent() - 1); /* 对应 a. */\nb.compass(&#39;s&lt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 是 c 的兄弟节点 (相对索引为 -2). */\np.child(c.indexInParent() - 2); /* 对应 a. */\nb.compass(&#39;s&lt;2&#39;); /* 使用罗盘方法, 效果同上. */\n</code></pre>\n<p>有时也需要获取当前节点的父控件在其父控件的索引值:</p>\n<pre><code class=\"lang-js\">let p = pickup({ filter: w =&gt; w.depth() &gt; 0 &amp;&amp; w.parent().indexInParent() &gt; 0 });\nconsole.log(p.parent().indexInParent()); // e.g. 2\n</code></pre>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回当前节点在其父控件的索引值.</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\na.indexInParent(); // 0\np.child(0); /* 对应 a. */\n\nconsole.log(c.indexInParent()); // 2\np.child(2); /* 对应 c. */\n</code></pre>\n<p>方法 <code>indexInParent</code> 通常用于访问临近或相对位置的兄弟节点:</p>\n<pre><code class=\"lang-js\">/* 例如 p 控件有 3 个子控件 (a, b, c). */\n\n/* c 是 b 的相邻兄弟节点 (相对索引为 1). */\np.child(b.indexInParent() + 1); /* 对应 c. */\nb.compass(&#39;s&gt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 也是 b 的相邻兄弟节点 (相对索引为 -1). */\np.child(b.indexInParent() - 1); /* 对应 a. */\nb.compass(&#39;s&lt;1&#39;); /* 使用罗盘方法, 效果同上. */\n\n/* a 是 c 的兄弟节点 (相对索引为 -2). */\np.child(c.indexInParent() - 2); /* 对应 a. */\nb.compass(&#39;s&lt;2&#39;); /* 使用罗盘方法, 效果同上. */\n</code></pre>\n<p>有时也需要获取当前节点的父控件在其父控件的索引值:</p>\n<pre><code class=\"lang-js\">let p = pickup({ filter: w =&gt; w.depth() &gt; 0 &amp;&amp; w.parent().indexInParent() &gt; 0 });\nconsole.log(p.parent().indexInParent()); // e.g. 2\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -351,6 +351,48 @@
           ],
           "type": "module",
           "displayName": "[m#] indexInParent"
+        },
+        {
+          "textRaw": "[m#] snapshot",
+          "name": "[m#]_snapshot",
+          "methods": [
+            {
+              "textRaw": "snapshot()",
+              "type": "method",
+              "name": "snapshot",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> } - 当前控件状态的副本</li>\n</ul>\n<p>复制当前控件节点及其已缓存状态. 返回的 UiObject 与原对象相互独立, 对副本执行 <code>refresh()</code> 不会刷新原对象.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\nlet copied = w.snapshot();\n\nconsole.log(copied.bounds());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] snapshot"
+        },
+        {
+          "textRaw": "[m#] isShifted",
+          "name": "[m#]_isshifted",
+          "methods": [
+            {
+              "textRaw": "isShifted(tolerance?)",
+              "type": "method",
+              "name": "isShifted",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ tolerance = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 允许的边界坐标偏移阈值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 控件边界是否已偏移</li>\n</ul>\n<p>比较当前对象已缓存的边界与刷新后的边界. 任一边界坐标的偏移量大于阈值时返回 <code>true</code>; 控件无法刷新时同样返回 <code>true</code>.</p>\n<p><code>tolerance</code> 按以下规则解释:</p>\n<ul>\n<li><code>0 &lt;= tolerance &lt; 1</code> 时使用相对阈值. 左右边界阈值为 <code>tolerance * width()</code>, 上下边界阈值为 <code>tolerance * height()</code></li>\n<li><code>tolerance &gt;= 1</code> 时使用绝对像素阈值</li>\n<li><code>tolerance &lt; 0</code> 时参数无效并抛出异常</li>\n</ul>\n<p>默认值 <code>0</code> 表示任一边界坐标发生变化即视为偏移.</p>\n<pre><code class=\"lang-js\">let w = text(&#39;提交&#39;).findOne();\n\n/* 允许不超过控件宽高 5% 的边界坐标变化. */\nconsole.log(w.isShifted(0.05));\n\n/* 允许不超过 8 px 的边界坐标变化. */\nconsole.log(w.isShifted(8));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "tolerance?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isShifted"
         },
         {
           "textRaw": "[m#] find",
@@ -588,7 +630,7 @@
               "textRaw": "boundsCenterX()",
               "type": "method",
               "name": "boundsCenterX",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcenterx\">boundsExactCenterX</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerX()); // e.g. 56\nconsole.log(wA.boundsCenterX()); // e.g. 56\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 20)\nconsole.log(wB.boundsCenterX()); // e.g. 5 (5.5 向下取整得 5)\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - -11, 20)\nconsole.log(wC.boundsCenterX()); // e.g. -6 (-5.5 向下取整得 -6)\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 X 坐标 (中心点距屏幕左边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcenterx\">boundsExactCenterX</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerX()); // e.g. 56\nconsole.log(wA.boundsCenterX()); // e.g. 56\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 20)\nconsole.log(wB.boundsCenterX()); // e.g. 5 (5.5 向下取整得 5).\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - -11, 20)\nconsole.log(wC.boundsCenterX()); // e.g. -6 (-5.5 向下取整得 -6).\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -626,7 +668,7 @@
               "textRaw": "boundsCenterY()",
               "type": "method",
               "name": "boundsCenterY",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcentery\">boundsExactCenterY</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerY()); // e.g. 104\nconsole.log(wA.boundsCenterY()); // e.g. 104\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 33)\nconsole.log(wB.boundsCenterY()); // e.g. 16 (16.5 向下取整得 16)\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - 11, -33)\nconsole.log(wC.boundsCenterY()); // e.g. -17 (-16.5 向下取整得 -17)\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件矩形的中心 Y 坐标 (中心点距屏幕上边缘的像素距离).</p>\n<p>该坐标为整数, 非整数数值将按 <strong>向下取整</strong> 处理, 因此会损失精度.</p>\n<p>如需保留精度, 可使用 <a href=\"#m-boundsexactcentery\">boundsExactCenterY</a>.</p>\n<pre><code class=\"lang-js\">let wA = pickup(/.+/);\nconsole.log(wA.bounds()); // e.g. Rect(0, 48 - 112, 160)\nconsole.log(wA.bounds().centerY()); // e.g. 104\nconsole.log(wA.boundsCenterY()); // e.g. 104\n\nlet wB = pickup(/.+/);\nconsole.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 33)\nconsole.log(wB.boundsCenterY()); // e.g. 16 (16.5 向下取整得 16).\n\nlet wC = pickup(/.+/);\nconsole.log(wC.bounds()); // e.g. Rect(0, 0 - 11, -33)\nconsole.log(wC.boundsCenterY()); // e.g. -17 (-16.5 向下取整得 -17).\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -911,7 +953,7 @@
               "textRaw": "clickBounds(offsetX?, offsetY?)",
               "type": "method",
               "name": "clickBounds",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-3]/3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ offsetX = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - X 坐标偏移量 (支持负值及百分率)</li>\n<li><strong>[ offsetY = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标偏移量 (支持负值及百分率)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否点击行为已执行且执行过程中无异常</li>\n</ul>\n<p>点击控件矩形的中心点坐标.</p>\n<p>点击操作借助 <a href=\"automator#m-click\">automator.click(x, y)</a> 完成, 此操作需要启用无障碍服务.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\nconsole.log(w.bounds()); // e.g. Rect(0, 60 - 100, 200)\n\nw.clickBounds(); /* 相当于 click(50, 130) . */\nclick(w.centerX(), w.centerY()); /* 效果同上. */\n\nw.clickBounds(10); /* X 坐标偏移量为 10 像素, 相当于 click(50 + 10, 130) . */\nw.clickBounds(10, 15); /* X 与 Y 坐标偏移量分别为 10 和 15 像素, 相当于 click(50 + 10, 130 + 15) . */\nw.clickBounds(0, -15); /* Y 坐标偏移量为 -15 像素, 相当于 click(50, 130 - 15) . */\nw.clickBounds(0.2); /* X 坐标偏移量为 20% 屏幕宽度, 相当于 click(50 + 0.2 * device.width, 130) . */\nw.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5% 屏幕高度. */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-3]/3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ offsetX = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - X 坐标偏移量 (支持负值及百分率)</li>\n<li><strong>[ offsetY = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标偏移量 (支持负值及百分率)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否点击行为已执行且执行过程中无异常</li>\n</ul>\n<p>点击控件矩形的中心点坐标.</p>\n<p>点击操作借助 <a href=\"automator#m-click\">automator.click(x, y)</a> 完成, 此操作需要启用无障碍服务.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\nconsole.log(w.bounds()); // e.g. Rect(0, 60 - 100, 200)\n\nw.clickBounds(); /* 相当于 click(50, 130). */\nclick(w.centerX(), w.centerY()); /* 效果同上. */\n\nw.clickBounds(10); /* X 坐标偏移量为 10 像素, 相当于 click(50 + 10, 130). */\nw.clickBounds(10, 15); /* X 与 Y 坐标偏移量分别为 10 和 15 像素, 相当于 click(50 + 10, 130 + 15). */\nw.clickBounds(0, -15); /* Y 坐标偏移量为 -15 像素, 相当于 click(50, 130 - 15). */\nw.clickBounds(0.2); /* X 坐标偏移量为 20% 屏幕宽度, 相当于 click(50 + 0.2 * device.width, 130). */\nw.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5% 屏幕高度. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -937,7 +979,7 @@
               "textRaw": "id()",
               "type": "method",
               "name": "id",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源全称 (Fully-Qualified ID Resource Name).</p>\n<p>若 ID 不存在, 返回 null.</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>ID 资源全称的 <code>类型</code> 为 <code>id</code>.<br>一个有效的 ID 资源全称: <code>com.test:id/some_entry</code>.</p>\n<pre><code class=\"lang-js\">console.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\nconsole.log(idMatch(/.+/).findOnce().fullId()); /* 同上. */\nconsole.log(idMatch(/.+/).findOnce().getViewIdResourceName()); /* 同上. */\n</code></pre>\n<p>需额外留意, 部分应用的控件 ID 资源全称可能不符合标准:</p>\n<pre><code class=\"lang-js\">/* 标准 ID 全称. */\nlet canonicalId = &quot;com.test:id/hello_world&quot;;\n\n/* 可能出现的非标准 ID 全称. */\nlet peculiarId = &quot;hello_world&quot;; /* 仅含资源项, 无包名及类型标识. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getViewIdResourceName</li>\n<li><code>[m#]</code> <a href=\"#m-fullid\">fullId</a></li>\n</ul>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源全称 (Fully-Qualified ID Resource Name).</p>\n<p>若 ID 不存在, 返回 null.</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>\nID 资源全称的 <code>类型</code> 为 <code>id</code>.<br>\n一个有效的 ID 资源全称: <code>com.test:id/some_entry</code>.</p>\n<pre><code class=\"lang-js\">console.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\nconsole.log(idMatch(/.+/).findOnce().fullId()); /* 同上. */\nconsole.log(idMatch(/.+/).findOnce().getViewIdResourceName()); /* 同上. */\n</code></pre>\n<p>需额外留意, 部分应用的控件 ID 资源全称可能不符合标准:</p>\n<pre><code class=\"lang-js\">/* 标准 ID 全称. */\nlet canonicalId = &quot;com.test:id/hello_world&quot;;\n\n/* 可能出现的非标准 ID 全称. */\nlet peculiarId = &quot;hello_world&quot;; /* 仅含资源项, 无包名及类型标识. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getViewIdResourceName</li>\n<li><code>[m#]</code> <a href=\"#m-fullid\">fullId</a></li>\n</ul>\n",
               "signatures": [
                 {
                   "params": []
@@ -975,7 +1017,7 @@
               "textRaw": "idEntry()",
               "type": "method",
               "name": "idEntry",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源项名称 (ID Resource Entry Name).</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>例如对于 ID 资源全称 <code>com.test:id/some_entry</code>, 其 ID 资源项名称为 <code>some_entry</code>.</p>\n<pre><code class=\"lang-js\">/* ID 资源全称. */\nconsole.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\n\n/* ID 资源项名称. */\nconsole.log(idMatch(/.+/).findOnce().idEntry()); // action_bar_root\nconsole.log(idMatch(/.+/).findOnce().simpleId()); /* 同上. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-simpleid\">simpleId</a></li>\n</ul>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回节点的 ID 资源项名称 (ID Resource Entry Name).</p>\n<p>安卓资源全称格式为 <code>package:type/entry</code>, 即 <code>包名:类型/资源项</code>.<br>\n例如对于 ID 资源全称 <code>com.test:id/some_entry</code>, 其 ID 资源项名称为 <code>some_entry</code>.</p>\n<pre><code class=\"lang-js\">/* ID 资源全称. */\nconsole.log(idMatch(/.+/).findOnce().id()); // e.g. org.autojs.autojs6:id/action_bar_root\n\n/* ID 资源项名称. */\nconsole.log(idMatch(/.+/).findOnce().idEntry()); // action_bar_root\nconsole.log(idMatch(/.+/).findOnce().simpleId()); /* 同上. */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> <a href=\"#m-simpleid\">simpleId</a></li>\n</ul>\n",
               "signatures": [
                 {
                   "params": []
@@ -1051,7 +1093,7 @@
               "textRaw": "desc()",
               "type": "method",
               "name": "desc",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回控件的内容描述标签.</p>\n<p>若内容描述标签容不存在, 返回 null.</p>\n<p>内容描述标签可以帮助需要无障碍服务的用户 (如视力障碍人群等) 理解当前控件的用途或说明.<br>如 <a href=\"https://support.google.com/accessibility/android/topic/10601570?hl=zh-Hans\">TalkBack</a> 开启后可以朗读控件的内容描述标签, 对于理解那些没有文本内容的控件尤其重要.</p>\n<pre><code class=\"lang-js\">console.log(descMatch(/.+/).findOnce().desc()); /* e.g. Restart icon */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getContentDescription</li>\n</ul>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回控件的内容描述标签.</p>\n<p>若内容描述标签容不存在, 返回 null.</p>\n<p>内容描述标签可以帮助需要无障碍服务的用户 (如视力障碍人群等) 理解当前控件的用途或说明.<br>\n如 <a href=\"https://support.google.com/accessibility/android/topic/10601570?hl=zh-Hans\">TalkBack</a> 开启后可以朗读控件的内容描述标签, 对于理解那些没有文本内容的控件尤其重要.</p>\n<pre><code class=\"lang-js\">console.log(descMatch(/.+/).findOnce().desc()); /* e.g. Restart icon */\n</code></pre>\n<p>别名属性或方法:</p>\n<ul>\n<li><code>[m#]</code> getContentDescription</li>\n</ul>\n",
               "signatures": [
                 {
                   "params": []
@@ -1507,7 +1549,7 @@
               "textRaw": "drawingOrder()",
               "type": "method",
               "name": "drawingOrder",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回节点的视图绘制次序.</p>\n<p>此次序由其父节点决定, 是一个相对于其兄弟节点的索引值.<br>在某些情况下, 视图 (View) 绘制的过程本质上是同时发生的, 两个兄弟节点可能返回同一个索引值, 甚至此索引值可能被忽略 (返回默认值 0).</p>\n<pre><code class=\"lang-js\">console.log(pickup(/.+/).drawingOrder()); // e.g. 0\n</code></pre>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回节点的视图绘制次序.</p>\n<p>此次序由其父节点决定, 是一个相对于其兄弟节点的索引值.<br>\n在某些情况下, 视图 (View) 绘制的过程本质上是同时发生的, 两个兄弟节点可能返回同一个索引值, 甚至此索引值可能被忽略 (返回默认值 0).</p>\n<pre><code class=\"lang-js\">console.log(pickup(/.+/).drawingOrder()); // e.g. 0\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -1526,7 +1568,7 @@
               "textRaw": "actionNames()",
               "type": "method",
               "name": "actionNames",
-              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回控件支持的 <a href=\"uiObjectActionsType\">控件行为</a> 数组.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\n/* e.g. [ ACTION_CLICK, ACTION_SET_SELECTION, ACTION_FOCUS ] */\nconsole.log(w.actionNames());\n</code></pre>\n<p>上述示例, 数组中的三个元素代表控件可以执行对应的行为, 即 <code>w.click()</code>, <code>w.setSelection(...)</code> 及 <code>w.focus()</code>.</p>\n<p>数组中的元素均为 &quot;ACTION_&quot; 开头的控件行为 ID 的字符串形式.<br>更多控件行为 ID 可参阅 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节的 <code>行为 ID</code> 表格.</p>\n<p>如需判断一个控件是否支持一个或多个行为, 可使用 <a href=\"#m-hasaction\">hasAction</a> 方法.</p>\n",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>返回控件支持的 <a href=\"uiObjectActionsType\">控件行为</a> 数组.</p>\n<pre><code class=\"lang-js\">let w = pickup(/.+/);\n\n/* e.g. [ ACTION_CLICK, ACTION_SET_SELECTION, ACTION_FOCUS ] */\nconsole.log(w.actionNames());\n</code></pre>\n<p>上述示例, 数组中的三个元素代表控件可以执行对应的行为, 即 <code>w.click()</code>, <code>w.setSelection(...)</code> 及 <code>w.focus()</code>.</p>\n<p>数组中的元素均为 &quot;ACTION_&quot; 开头的控件行为 ID 的字符串形式.<br>\n更多控件行为 ID 可参阅 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节的 <code>行为 ID</code> 表格.</p>\n<p>如需判断一个控件是否支持一个或多个行为, 可使用 <a href=\"#m-hasaction\">hasAction</a> 方法.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -1563,7 +1605,7 @@
         {
           "textRaw": "[m#] performAction",
           "name": "[m#]_performaction",
-          "desc": "<p>用于执行指定的控件行为.<br>在 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节已详细描述相关内容, 此处仅注明几个重载方法的签名, 相关内容将不再赘述.</p>\n",
+          "desc": "<p>用于执行指定的控件行为.<br>\n在 <a href=\"uiObjectActionsType\">控件节点行为</a> 章节已详细描述相关内容, 此处仅注明几个重载方法的签名, 相关内容将不再赘述.</p>\n",
           "methods": [
             {
               "textRaw": "performAction(action, ...arguments)",
@@ -2486,21 +2528,21 @@
                 {
                   "textRaw": "parent (p)",
                   "name": "parent_(p)",
-                  "desc": "<p>访问父控件.</p>\n<p>如 <code>w.parent()</code> 的两种罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;p&#39;); /* 较为常用. */\nw.compass(&#39;p1&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 可跟随一个数字, 表示层级跨度:</p>\n<pre><code class=\"lang-js\">/* 二级. */\nw.parent().parent(); /* 原始方式. */\nw.compass(&#39;pp&#39;);\nw.compass(&#39;p2&#39;); /* 较为常用. */\n\n/* 五级. */\nw.parent().parent().parent().parent().parent(); /* 原始方式. */\nw.compass(&#39;ppppp&#39;);\nw.compass(&#39;p5&#39;); /* 较为常用. */\nw.compass(&#39;p4p&#39;);\nw.compass(&#39;p3p2&#39;);\nw.compass(&#39;p2p1p2&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 每移动一次, 控件的 depth 将减少一级, 当 depth 为 0 时, 后续所有父级访问均返回 null:</p>\n<pre><code class=\"lang-js\">console.log(w.depth()); /* e.g. 23 */\nconsole.log(w.compass(&#39;p5&#39;).depth()); /* e.g. 18 */\nconsole.log(w.compass(&#39;p23&#39;).depth()); /* e.g. 0 */\nconsole.log(w.compass(&#39;p24&#39;)); // null\nconsole.log(w.compass(&#39;p40&#39;)); // null\n</code></pre>\n<p>罗盘 <code>p</code> 跟随负数时将抛出异常:</p>\n<pre><code class=\"lang-js\">/* e.g. java.lang.IllegalArgumentException: 无效的剩余罗盘参数: -2 */\nconsole.log(w.compass(&#39;p-2&#39;));\n</code></pre>\n<p><code>p0</code> 将返回控件本身:</p>\n<pre><code class=\"lang-js\">console.log(w.compass(&#39;p0&#39;) === w); // true\n</code></pre>\n",
+                  "desc": "<p>访问父控件.</p>\n<p>如 <code>w.parent()</code> 的两种罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;p&#39;); /* 较为常用. */\nw.compass(&#39;p1&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 可跟随一个数字, 表示层级跨度:</p>\n<pre><code class=\"lang-js\">/* 二级. */\nw.parent().parent(); /* 原始方式. */\nw.compass(&#39;pp&#39;);\nw.compass(&#39;p2&#39;); /* 较为常用. */\n\n/* 五级. */\nw.parent().parent().parent().parent().parent(); /* 原始方式. */\nw.compass(&#39;ppppp&#39;);\nw.compass(&#39;p5&#39;); /* 较为常用. */\nw.compass(&#39;p4p&#39;);\nw.compass(&#39;p3p2&#39;);\nw.compass(&#39;p2p1p2&#39;);\n</code></pre>\n<p>罗盘 <code>p</code> 每移动一次, 控件的 depth 将减少一级, 当 depth 为 0 时, 后续所有父级访问均返回 null:</p>\n<pre><code class=\"lang-js\">console.log(w.depth()); /* e.g. 23 */\nconsole.log(w.compass(&#39;p5&#39;).depth()); /* e.g. 18 */\nconsole.log(w.compass(&#39;p23&#39;).depth()); /* e.g. 0 */\nconsole.log(w.compass(&#39;p24&#39;)); // null\nconsole.log(w.compass(&#39;p40&#39;)); // null\n</code></pre>\n<p>罗盘 <code>p</code> 跟随负数时将抛出异常:</p>\n<pre><code class=\"lang-js\">/* e.g. java.lang.IllegalArgumentException: 无效的剩余罗盘参数: -2. */\nconsole.log(w.compass(&#39;p-2&#39;));\n</code></pre>\n<p><code>p0</code> 将返回控件本身:</p>\n<pre><code class=\"lang-js\">console.log(w.compass(&#39;p0&#39;) === w); // true\n</code></pre>\n",
                   "type": "module",
                   "displayName": "parent (p)"
                 },
                 {
                   "textRaw": "child (c)",
                   "name": "child_(c)",
-                  "desc": "<p>访问子控件.</p>\n<p>如 <code>w.child(0)</code> 的罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;c0&#39;);\n</code></pre>\n<p>罗盘 <code>c</code> 可跟随一个整数, 表示子控件索引:</p>\n<pre><code class=\"lang-js\">/* 索引 2 子控件 */\nw.child(2);\nw.compass(&#39;c2&#39;);\n\n/* 倒数第 2 子控件. */\nw.child(w.childCount() - 2);\nw.compass(&#39;c-2&#39;);\n</code></pre>\n<p>连续多级子控件访问, 可使用 <code>cXcYcZ</code> 或 <code>cX&gt;Y&gt;Z</code> 形式:</p>\n<pre><code class=\"lang-js\">w.child(1).child(1).child(0).child(5).child(2).child(3);\nw.compass(&#39;c1c1c0c5c2c3&#39;);\nw.compass(&#39;c1&gt;1&gt;0&gt;5&gt;2&gt;3&#39;); /* 同上. */\n</code></pre>\n",
+                  "desc": "<p>访问子控件.</p>\n<p>如 <code>w.child(0)</code> 的罗盘定位形式:</p>\n<pre><code class=\"lang-js\">w.compass(&#39;c0&#39;);\n</code></pre>\n<p>罗盘 <code>c</code> 可跟随一个整数, 表示子控件索引:</p>\n<pre><code class=\"lang-js\">/* 索引 2 子控件. */\nw.child(2);\nw.compass(&#39;c2&#39;);\n\n/* 倒数第 2 子控件. */\nw.child(w.childCount() - 2);\nw.compass(&#39;c-2&#39;);\n</code></pre>\n<p>连续多级子控件访问, 可使用 <code>cXcYcZ</code> 或 <code>cX&gt;Y&gt;Z</code> 形式:</p>\n<pre><code class=\"lang-js\">w.child(1).child(1).child(0).child(5).child(2).child(3);\nw.compass(&#39;c1c1c0c5c2c3&#39;);\nw.compass(&#39;c1&gt;1&gt;0&gt;5&gt;2&gt;3&#39;); /* 同上. */\n</code></pre>\n",
                   "type": "module",
                   "displayName": "child (c)"
                 },
                 {
                   "textRaw": "sibling (s)",
                   "name": "sibling_(s)",
-                  "desc": "<p>访问兄弟控件.</p>\n<p>例如一个控件有 10 个子控件, 这些子控件互为兄弟控件, 它们拥有同一个父控件.<br>10 个子控件中, 索引为 n (n &gt; 0 且 n &lt; 9) 的子控件有两个相邻兄弟控件节点, 即索引为 n - 1 的左邻兄弟和索引为 n + 1 的右邻兄弟.</p>\n<pre><code class=\"lang-js\">/* 左邻兄弟节点. */\nw.parent().child(w.indexInParent() - 1);\nw.compass(&#39;s&lt;1&#39;);\n\n/* 右邻兄弟节点. */\nw.parent().child(w.indexInParent() + 1);\nw.compass(&#39;s&gt;1&#39;);\n\n/* 右侧第 2 个兄弟节点. */\nw.parent().child(w.indexInParent() + 2);\nw.compass(&#39;s&gt;2&#39;);\n\n/* 索引 5 的兄弟节点. */\nw.parent().child(5);\nw.compass(&#39;s5&#39;);\n\n/* 倒数第 2 个兄弟节点. */\nw.parent().child(w.childCount() - 2);\nw.compass(&#39;s-2&#39;);\n</code></pre>\n",
+                  "desc": "<p>访问兄弟控件.</p>\n<p>例如一个控件有 10 个子控件, 这些子控件互为兄弟控件, 它们拥有同一个父控件.<br>\n10 个子控件中, 索引为 n (n &gt; 0 且 n &lt; 9) 的子控件有两个相邻兄弟控件节点, 即索引为 n - 1 的左邻兄弟和索引为 n + 1 的右邻兄弟.</p>\n<pre><code class=\"lang-js\">/* 左邻兄弟节点. */\nw.parent().child(w.indexInParent() - 1);\nw.compass(&#39;s&lt;1&#39;);\n\n/* 右邻兄弟节点. */\nw.parent().child(w.indexInParent() + 1);\nw.compass(&#39;s&gt;1&#39;);\n\n/* 右侧第 2 个兄弟节点. */\nw.parent().child(w.indexInParent() + 2);\nw.compass(&#39;s&gt;2&#39;);\n\n/* 索引 5 的兄弟节点. */\nw.parent().child(5);\nw.compass(&#39;s5&#39;);\n\n/* 倒数第 2 个兄弟节点. */\nw.parent().child(w.childCount() - 2);\nw.compass(&#39;s-2&#39;);\n</code></pre>\n",
                   "type": "module",
                   "displayName": "sibling (s)"
                 },

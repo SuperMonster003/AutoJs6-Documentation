@@ -9,14 +9,60 @@
         {
           "textRaw": "启用内置扩展",
           "name": "启用内置扩展",
-          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Math&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<blockquote>\n<p>注: 因 Mathx 所有属性及方法均为 &quot;针对对象的内置对象扩展&quot;, 在启用内置对象扩展时, 使用方法仅仅是 Mathx 与 Math 的差别, 故示例代码中将不再赘述相关示例, 但别名方法例外 (如 min 的别名 mini, max 的别名 maxi 等).</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Mathx</p>\n\n<hr>\n",
+          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Math&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>\n当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>\n内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<blockquote>\n<p>注: 因 Mathx 所有属性及方法均为 &quot;针对对象的内置对象扩展&quot;, 在启用内置对象扩展时, 使用方法仅仅是 Mathx 与 Math 的差别, 故示例代码中将不再赘述相关示例, 但别名方法例外 (如 min 的别名 mini, max 的别名 maxi 等).</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Mathx</p>\n\n<hr>\n",
           "type": "module",
           "displayName": "启用内置扩展"
         },
         {
+          "textRaw": "[m] randomInt",
+          "name": "[m]_randomint",
+          "methods": [
+            {
+              "textRaw": "randomInt(...range)",
+              "type": "method",
+              "name": "randomInt",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Global</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>...range</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 随机范围</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回范围内的随机整数, 起点和止点均包含在结果范围内. 参数中的数组会被递归展平.</p>\n<ul>\n<li>无参数时, 范围为 JavaScript 安全整数的完整范围.</li>\n<li>只有一个参数时, 以 <code>0</code> 和该参数作为范围端点.</li>\n<li>有多个参数时, 以全部有效数字的最小值和最大值作为范围端点. 下界向上取整, 上界向下取整.</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(randomInt(1, 10));\nconsole.log(Mathx.randomInt([ 1, 5 ], 10));\n</code></pre>\n<p>启用 Math 内置扩展后也可调用 <code>Math.randomInt</code>. 旧名称 <code>Mathx.randInt</code> 仍可用, 但已弃用.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...range"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] randomInt"
+        },
+        {
+          "textRaw": "[m] randomFloat",
+          "name": "[m]_randomfloat",
+          "methods": [
+            {
+              "textRaw": "randomFloat(...range)",
+              "type": "method",
+              "name": "randomFloat",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Global</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>...range</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 随机范围</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机浮点数</li>\n</ul>\n<p>返回范围内的随机浮点数. 参数中的数组会被递归展平.</p>\n<ul>\n<li>无参数时, 行为与 <code>Math.random()</code> 相同.</li>\n<li>只有一个参数时, 以 <code>0</code> 和该参数作为范围端点.</li>\n<li>有多个参数时, 以全部有效数字的最小值和最大值作为范围端点.</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(randomFloat(1, 10));\nconsole.log(Mathx.randomFloat([ -1, 1 ]));\n</code></pre>\n<p>启用 Math 内置扩展后也可调用 <code>Math.randomFloat</code>. <code>Mathx.random</code> 是此方法的别名. 旧名称 <code>Mathx.randFloat</code> 仍可用, 但已弃用.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...range"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] randomFloat"
+        },
+        {
           "textRaw": "[m] randInt",
           "name": "[m]_randint",
-          "desc": "<p>randInt 用于返回一个指定范围内的随机整数.</p>\n<p>因 NaN 不属于整数范畴, 故 randInt 内部实现对范围数值中出现的 NaN 做了过滤处理, 进而使 NaN 失去了常见的传染性.</p>\n<pre><code class=\"lang-js\">/* NaN 不属于整数范畴. */\nconsole.log(Number.isInteger(NaN)); // false\n\n/* NaN 出现在范围数值中时将失去其传染性. */\nconsole.log(Number.isNaN(Mathx.randInt(1, NaN))); // false\n</code></pre>\n<p>若范围数值中出现非整数数值, 将范围中极小值作 <code>Math.ceil()</code> 处理, 极大值作 <code>Math.floor()</code> 处理.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.randInt(1.8, 3.3)); /* 视为 randInt(2, 3). */\nconsole.log(Mathx.randInt(-9.7, -2.4)); /* 视为 randInt(-9, -3). */\n</code></pre>\n",
+          "desc": "<p>randInt 用于返回一个指定范围内的随机整数.</p>\n<p><strong><code>DEPRECATED</code></strong></p>\n<p>此方法是 <a href=\"#m-randomint\">randomInt</a> 的旧名称.</p>\n<p>因 NaN 不属于整数范畴, 故 randInt 内部实现对范围数值中出现的 NaN 做了过滤处理, 进而使 NaN 失去了常见的传染性.</p>\n<pre><code class=\"lang-js\">/* NaN 不属于整数范畴. */\nconsole.log(Number.isInteger(NaN)); // false\n\n/* NaN 出现在范围数值中时将失去其传染性. */\nconsole.log(Number.isNaN(Mathx.randInt(1, NaN))); // false\n</code></pre>\n<p>若范围数值中出现非整数数值, 将范围中极小值作 <code>Math.ceil()</code> 处理, 极大值作 <code>Math.floor()</code> 处理.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.randInt(1.8, 3.3)); /* 视为 randInt(2, 3). */\nconsole.log(Mathx.randInt(-9.7, -2.4)); /* 视为 randInt(-9, -3). */\n</code></pre>\n",
           "methods": [
             {
               "textRaw": "randInt(start, stop)",
@@ -40,7 +86,7 @@
               "textRaw": "randInt(stop)",
               "type": "method",
               "name": "randInt",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>stop</strong> { <a href=\"dataTypes#number\">number</a> } - 范围止点 (含)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数, stop 参数作为止点, 0 作为起点.<br>相当于 <code>randInt(0, stop)</code>.<br>当 stop 为负数时, 起止点将自动交换.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt(10, 20)); // e.g. 13\n\n/* start 和 stop 可自动交换. */\nconsole.log(Mathx.randInt(20, 10)); /* 与 randInt(10, 20) 效果相同. */\n\n/* start 与 stop 相等时返回唯一值. */\nconsole.log(Mathx.randInt(15, 15)); // 15\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>stop</strong> { <a href=\"dataTypes#number\">number</a> } - 范围止点 (含)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 范围内随机整数</li>\n</ul>\n<p>返回一个指定范围内的随机整数, stop 参数作为止点, 0 作为起点.<br>\n相当于 <code>randInt(0, stop)</code>.<br>\n当 stop 为负数时, 起止点将自动交换.</p>\n<pre><code class=\"lang-js\">/* 10 - 20 的随机整数. */\nconsole.log(Mathx.randInt(10, 20)); // e.g. 13\n\n/* start 和 stop 可自动交换. */\nconsole.log(Mathx.randInt(20, 10)); /* 与 randInt(10, 20) 效果相同. */\n\n/* start 与 stop 相等时返回唯一值. */\nconsole.log(Mathx.randInt(15, 15)); // 15\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -168,6 +214,29 @@
           ],
           "type": "module",
           "displayName": "[m] avg"
+        },
+        {
+          "textRaw": "[m] mean",
+          "name": "[m]_mean",
+          "methods": [
+            {
+              "textRaw": "mean(...numbers)",
+              "type": "method",
+              "name": "mean",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>...numbers</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 待计算的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 算术平均数</li>\n</ul>\n<p>返回全部参数递归展平后的算术平均数. <code>avg</code> 是此方法的兼容别名.</p>\n<p>当参数均为数组时, 最后一个独立的数字参数作为保留小数位数.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.mean(1, 2, 3)); // 2\nconsole.log(Mathx.mean([ 1, 2, 3 ], 2)); // 2\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] mean"
         },
         {
           "textRaw": "[m] median",
@@ -338,6 +407,29 @@
           "displayName": "[m] cv"
         },
         {
+          "textRaw": "[m] mode",
+          "name": "[m]_mode",
+          "methods": [
+            {
+              "textRaw": "mode(...numbers)",
+              "type": "method",
+              "name": "mode",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>...numbers</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 待计算的数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 众数</li>\n</ul>\n<p>返回全部参数递归展平后的第一个众数. 出现多个相同最高频次的值时, 只返回实现找到的第一个值. 任一元素转换后为 <code>NaN</code> 时返回 <code>NaN</code>.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.mode(1, 2, 2, 3)); // 2\nconsole.log(Mathx.mode([ 4, 4 ], [ 5, 6 ])); // 4\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...numbers"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] mode"
+        },
+        {
           "textRaw": "[m] max",
           "name": "[m]_max",
           "desc": "<p>最大值.</p>\n<p>内置扩展别名: maxi.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.max([ 5, 23 ])); // 23\n\n/* 启用内置对象扩展后. */\nconsole.log(Math.maxi([ 5, 23 ])); // 23\n</code></pre>\n<p>需额外留意空数组作为参数及无参时的一些情况:</p>\n<pre><code class=\"lang-js\">console.log(Math.max()); // -Infinity\nconsole.log(Mathx.max()); // -Infinity\n\nconsole.log(Math.max([])); // 0\nconsole.log(Mathx.max([])); // -Infinity\n</code></pre>\n",
@@ -420,6 +512,191 @@
           ],
           "type": "module",
           "displayName": "[m] min"
+        },
+        {
+          "textRaw": "[m] logMn",
+          "name": "[m]_logmn",
+          "methods": [
+            {
+              "textRaw": "logMn(base, antilogarithm, fraction?)",
+              "type": "method",
+              "name": "logMn",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 对数的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 真数</li>\n<li><strong>[ fraction = 13 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 保留小数位数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 对数</li>\n</ul>\n<p>计算以 <code>base</code> 为底的 <code>antilogarithm</code> 的对数, 并按 <code>fraction</code> 保留小数位数.</p>\n<pre><code class=\"lang-js\">console.log(Mathx.logMn(2, 8)); // 3\nconsole.log(Mathx.logMn(10, 2, 4)); // 0.301\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    },
+                    {
+                      "name": "fraction?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] logMn"
+        },
+        {
+          "textRaw": "[m] floorLog",
+          "name": "[m]_floorlog",
+          "methods": [
+            {
+              "textRaw": "floorLog(base, antilogarithm)",
+              "type": "method",
+              "name": "floorLog",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 对数的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 真数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 向下取整后的对数</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.floorLog(2, 10)); // 3\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] floorLog"
+        },
+        {
+          "textRaw": "[m] ceilLog",
+          "name": "[m]_ceillog",
+          "methods": [
+            {
+              "textRaw": "ceilLog(base, antilogarithm)",
+              "type": "method",
+              "name": "ceilLog",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 对数的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 真数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 向上取整后的对数</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.ceilLog(2, 10)); // 4\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ceilLog"
+        },
+        {
+          "textRaw": "[m] roundLog",
+          "name": "[m]_roundlog",
+          "methods": [
+            {
+              "textRaw": "roundLog(base, antilogarithm)",
+              "type": "method",
+              "name": "roundLog",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 对数的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 真数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 四舍五入后的对数</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.roundLog(2, 10)); // 3\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] roundLog"
+        },
+        {
+          "textRaw": "[m] floorPow",
+          "name": "[m]_floorpow",
+          "methods": [
+            {
+              "textRaw": "floorPow(base, antilogarithm)",
+              "type": "method",
+              "name": "floorPow",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 幂的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 参照值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 不大于参照值的相邻整数次幂</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.floorPow(2, 10)); // 8\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] floorPow"
+        },
+        {
+          "textRaw": "[m] ceilPow",
+          "name": "[m]_ceilpow",
+          "methods": [
+            {
+              "textRaw": "ceilPow(base, antilogarithm)",
+              "type": "method",
+              "name": "ceilPow",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 幂的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 参照值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 不小于参照值的相邻整数次幂</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.ceilPow(2, 10)); // 16\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ceilPow"
+        },
+        {
+          "textRaw": "[m] roundPow",
+          "name": "[m]_roundpow",
+          "methods": [
+            {
+              "textRaw": "roundPow(base, antilogarithm)",
+              "type": "method",
+              "name": "roundPow",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 幂的底数</li>\n<li><strong>antilogarithm</strong> { <a href=\"dataTypes#number\">number</a> } - 参照值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 指数四舍五入后的相邻整数次幂</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(Mathx.roundPow(2, 10)); // 8\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "base"
+                    },
+                    {
+                      "name": "antilogarithm"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] roundPow"
         },
         {
           "textRaw": "[m] dist",

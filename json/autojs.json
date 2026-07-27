@@ -7,6 +7,90 @@
       "desc": "<p>autojs 全局对象主要包含与 AutoJs6 应用本身相关的属性及方法, 如获取 AutoJs6 的 [ Root 状态 / 语言标签 / 权限状态 ] 等.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">autojs</p>\n\n<hr>\n",
       "modules": [
         {
+          "textRaw": "[m] isScreenPortrait",
+          "name": "[m]_isscreenportrait",
+          "methods": [
+            {
+              "textRaw": "isScreenPortrait()",
+              "type": "method",
+              "name": "isScreenPortrait",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 屏幕当前是否为竖屏方向</li>\n</ul>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenPortrait"
+        },
+        {
+          "textRaw": "[m] isScreenLandscape",
+          "name": "[m]_isscreenlandscape",
+          "methods": [
+            {
+              "textRaw": "isScreenLandscape()",
+              "type": "method",
+              "name": "isScreenLandscape",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 屏幕当前是否为横屏方向</li>\n</ul>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenLandscape"
+        },
+        {
+          "textRaw": "[m] restart",
+          "name": "[m]_restart",
+          "methods": [
+            {
+              "textRaw": "restart(scripts?)",
+              "type": "method",
+              "name": "restart",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ scripts ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] } - 应用重启后自动运行的脚本路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>重启 AutoJs6 应用. 指定 <strong>scripts</strong> 时, AutoJs6 重启后依次运行这些脚本.</p>\n<p>脚本路径会去除首尾空白, 未以 <code>.js</code> 结尾时自动补充扩展名. 特殊值 <code>&quot;@&quot;</code> 表示当前脚本.</p>\n<pre><code class=\"lang-js\">autojs.restart(&#39;@&#39;);\n</code></pre>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "scripts?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] restart"
+        },
+        {
+          "textRaw": "[m] exit",
+          "name": "[m]_exit",
+          "methods": [
+            {
+              "textRaw": "exit(scripts?)",
+              "type": "method",
+              "name": "exit",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ scripts ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] } - AutoJs6 下次启动后自动运行的脚本路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>退出 AutoJs6 应用. 指定 <strong>scripts</strong> 时, AutoJs6 下次启动后依次运行这些脚本.</p>\n<p>脚本路径的规范化规则与 <a href=\"#m-restart\">restart</a> 相同.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "scripts?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] exit"
+        },
+        {
           "textRaw": "[m] getLanguage",
           "name": "[m]_getlanguage",
           "methods": [
@@ -52,7 +136,7 @@
               "textRaw": "isRootAvailable()",
               "type": "method",
               "name": "isRootAvailable",
-              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 Root 权限有效性.</p>\n<pre><code class=\"lang-js\">console.log(autojs.isRootAvailable()); // e.g. true\n</code></pre>\n<p>注意上述示例的检测结果取决于 AutoJs6 的 <code>强制 Root 权限检查</code> 设置.<br>此设置可通过 AutoJs6 应用设置修改, 或 <a href=\"#m-setrootmode\">setRootMode</a> 方法携带 <code>isWriteIntoPreference</code> 参数实现修改.</p>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>获取 AutoJs6 的 Root 权限有效性.</p>\n<pre><code class=\"lang-js\">console.log(autojs.isRootAvailable()); // e.g. true\n</code></pre>\n<p>注意上述示例的检测结果取决于 AutoJs6 的 <code>强制 Root 权限检查</code> 设置.<br>\n此设置可通过 AutoJs6 应用设置修改, 或 <a href=\"#m-setrootmode\">setRootMode</a> 方法携带 <code>isWriteIntoPreference</code> 参数实现修改.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -90,7 +174,7 @@
               "textRaw": "setRootMode(rootMode, isWriteIntoPreference?)",
               "type": "method",
               "name": "setRootMode",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>rootMode</strong> { <a href=\"dataTypes#rootmode\">RootMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | &#39;auto&#39; | &#39;root&#39; | &#39;non-root&#39; } - Root 模式参数</li>\n<li><strong>[ isWriteIntoPreference = <code>false</code> ]</strong> {  <a href=\"dataTypes#boolean\">boolean</a> } - 是否写入应用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 AutoJs6 的 Root 模式.</p>\n<p>默认情况下, AutoJs6 将根据 <code>su</code> 二进制名称特征来判断是否具有 Root 权限.\n但有时设备可能使用了非常规 Root 方式或 Root 权限检测结果出现异常, 此时可设置 <code>强制 Root 模式</code> 或 <code>强制非 Root 模式</code> 来改变 AutoJs6 对 Root 权限的检测结果.</p>\n<p>以设置 &#39;强制 Root 模式&#39; 为例:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT);\nautojs.setRootMode(&#39;root&#39;); /* 同上. */\nautojs.setRootMode(1); /* 同上. */\nautojs.setRootMode(true); /* 同上. */\n</code></pre>\n<p>上述示例设置的 Root 模式, 将影响 <a href=\"#m-isrootavailable\">isRootAvailable</a> 的结果, 使其固定返回 <code>true</code>.<br>如果设置为 <code>RootMode.FORCE_NON_ROOT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将固定返回 <code>false</code>.<br>如果设置为 <code>RootMode.AUTO_DETECT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将根据 AutoJs6 是否具有 <code>su</code> 二进制名称特征决定其返回结果.  </p>\n<p>在没有特殊需求的情况下, 建议始终保持 Root 模式为 &#39;自动&#39; 模式.</p>\n<p>需额外留意, Root 模式修改仅对当前 <code>运行时 (Runtime)</code> 有效, 当脚本结束时, 已设置的 Root 模式将自动还原为 &#39;自动&#39; 模式, 即 <code>RootMode.AUTO_DETECT</code>.</p>\n<p>如需将保留修改的 Root 模式, 可使用 <code>isWriteIntoPreference</code> 参数, 修改将立即写入应用设置中:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT, true);\n</code></pre>\n<p>上述示例代码的效果, 等效于在 AutoJs6 应用中进行如下设置:</p>\n<pre><code class=\"lang-text\">[ AutoJs6 设置 ] - [ 强制 Root 权限检查 ] - [ 强制 Root 模式 ] # [ 选择 ]\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>rootMode</strong> { <a href=\"dataTypes#rootmode\">RootMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | &#39;auto&#39; | &#39;root&#39; | &#39;non-root&#39; } - Root 模式参数</li>\n<li><strong>[ isWriteIntoPreference = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否写入应用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 AutoJs6 的 Root 模式.</p>\n<p>默认情况下, AutoJs6 将根据 <code>su</code> 二进制名称特征来判断是否具有 Root 权限.\n但有时设备可能使用了非常规 Root 方式或 Root 权限检测结果出现异常, 此时可设置 <code>强制 Root 模式</code> 或 <code>强制非 Root 模式</code> 来改变 AutoJs6 对 Root 权限的检测结果.</p>\n<p>以设置 &#39;强制 Root 模式&#39; 为例:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT);\nautojs.setRootMode(&#39;root&#39;); /* 同上. */\nautojs.setRootMode(1); /* 同上. */\nautojs.setRootMode(true); /* 同上. */\n</code></pre>\n<p>上述示例设置的 Root 模式, 将影响 <a href=\"#m-isrootavailable\">isRootAvailable</a> 的结果, 使其固定返回 <code>true</code>.<br>\n如果设置为 <code>RootMode.FORCE_NON_ROOT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将固定返回 <code>false</code>.<br>\n如果设置为 <code>RootMode.AUTO_DETECT</code>, <a href=\"#m-isrootavailable\">isRootAvailable</a> 将根据 AutoJs6 是否具有 <code>su</code> 二进制名称特征决定其返回结果.<br></p>\n<p>在没有特殊需求的情况下, 建议始终保持 Root 模式为 &#39;自动&#39; 模式.</p>\n<p>需额外留意, Root 模式修改仅对当前 <code>运行时 (Runtime)</code> 有效, 当脚本结束时, 已设置的 Root 模式将自动还原为 &#39;自动&#39; 模式, 即 <code>RootMode.AUTO_DETECT</code>.</p>\n<p>如需将保留修改的 Root 模式, 可使用 <code>isWriteIntoPreference</code> 参数, 修改将立即写入应用设置中:</p>\n<pre><code class=\"lang-js\">autojs.setRootMode(RootMode.FORCE_ROOT, true);\n</code></pre>\n<p>上述示例代码的效果, 等效于在 AutoJs6 应用中进行如下设置:</p>\n<pre><code class=\"lang-text\">[ AutoJs6 设置 ] - [ 强制 Root 权限检查 ] - [ 强制 Root 模式 ] # [ 选择 ]\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -185,6 +269,34 @@
           "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>获取版本日期.</p>\n<pre><code class=\"lang-js\">console.log(autojs.versionDate); // e.g. Dec 18, 2022\nconsole.log(autojs.version.date); /* 同上. */\n</code></pre>\n",
           "type": "module",
           "displayName": "[p] versionDate"
+        },
+        {
+          "textRaw": "[p] name",
+          "name": "[p]_name",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>AutoJs6 应用名称.</p>\n",
+          "type": "module",
+          "displayName": "[p] name"
+        },
+        {
+          "textRaw": "[p] packageName",
+          "name": "[p]_packagename",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>当前宿主应用包名. 在打包应用中返回打包应用的包名.</p>\n",
+          "type": "module",
+          "displayName": "[p] packageName"
+        },
+        {
+          "textRaw": "[p] rotation",
+          "name": "[p]_rotation",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当前默认显示设备的旋转状态, 对应 Android <code>Surface.ROTATION_0</code> 至 <code>Surface.ROTATION_270</code> 常量值.</p>\n",
+          "type": "module",
+          "displayName": "[p] rotation"
+        },
+        {
+          "textRaw": "[p] orientation",
+          "name": "[p]_orientation",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当前资源配置的屏幕方向, 对应 Android <code>Configuration.ORIENTATION_*</code> 常量值.</p>\n",
+          "type": "module",
+          "displayName": "[p] orientation"
         },
         {
           "textRaw": "[p] themeColor",

@@ -1,503 +1,1025 @@
 # Shell
 
+shell 模块用于在 Android 设备本地执行 Shell 命令.
+
+它不会建立 ADB 连接. 普通模式使用 AutoJs6 应用进程可用的 `sh`, Root 模式使用 `su`. 命令正文通常与 `adb shell` 后面的部分相同.
+
+`shell` 与 `$shell` 指向同一个可调用模块对象.
+
+一次性执行与持久执行的区别:
+
+- `shell(...)` 和 `shell.execCommand(...)` 启动独立进程, 同步等待命令结束, 返回 [ShellResult](#c-shellresult), 随后销毁进程.
+- 全局 Java 类 [Shell](#c-shell) 维护一个终端会话, `Shell#exec()` 只写入命令并立即返回, 输出通过回调或阻塞方法读取.
+- shell 模块不返回 `java.lang.Process`. 大写 `Shell` 也不公开底层 `Process`, 其高级访问入口是 `Shell#getTermSession()`.
+
+命令权限由实际执行身份决定. `withRoot = true` 只表示尝试使用 `su`, 不保证设备已取得 Root 权限.
+
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">shell</p>
 
 ---
 
-shell即Unix Shell, 在类Unix系统提供与操作系统交互的一系列命令.
+## [@] shell
 
-很多程序可以用来执行shell命令, 例如终端模拟器.
+### shell(command, withRoot?)
 
-在Auto.js大致等同于用adb执行命令"adb shell". 其实现包括两种方式：
+**`[6.6.0]`** **`Overload [1-2]/4`**
 
-* 通过`java.lang.Runtime.exec`执行(shell, Tap, Home等函数)
-* 通过内嵌终端模拟器执行(RootAutomator, Shell等对象)
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否使用 Root
+- <ins>**returns**</ins> { [ShellResult](#c-shellresult) } - 命令执行结果
 
-# shell函数
+### shell(command, arguments, withRoot?)
 
-## shell(cmd[, root])
+**`6.6.0`** **`Overload [3-4]/4`**
 
-* cmd {string} 要执行的命令
-* root {Boolean} 是否以root权限运行, 默认为false.
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **arguments** { [string](dataTypes#string) | [ShellArguments](#shellarguments) } - 待拼接的命令参数
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否使用 Root
+- <ins>**returns**</ins> { [ShellResult](#c-shellresult) } - 命令执行结果
 
-一次性执行命令cmd, 并返回命令的执行结果. 返回对象的其属性如下:
+同步执行命令. 命令数组会先以换行符连接. 命令开头的 `adb shell` 和相邻空白会被忽略, 因此以下调用等效:
 
-* code {number} 返回码. 执行成功时为0, 失败时为非0的数字.
-* result {string} 运行结果(stdout输出结果)
-* error {string} 运行的错误信息(stderr输出结果). 例如执行需要root权限的命令但没有授予root权限会返回错误信息"Permission denied".
-
-示例(强制停止微信) ：
-
+```js
+let resultA = shell('id');
+let resultB = shell('adb shell id');
+console.log(resultA.code, resultB.code);
 ```
-var result = shell("am force-stop com.tencent.mm", true);
-log(result);
-console.show();
-if(result.code == 0){
-  toast("执行成功");
-}else{
-  toast("执行失败！请到控制台查看错误信息");
+
+Root 模式启动失败, 命令退出码非 `0` 或标准错误非空时, 通常仍返回 [ShellResult](#c-shellresult), 由调用方检查 `code` 和 `error`. 参数类型或数量不合法时会直接抛出异常.
+
+```js
+let result = shell('pm list packages', {
+    3: true,
+    user: 0,
+});
+if (result.code === 0) {
+    console.log(result.result.trim());
+} else {
+    console.error(result.error);
 }
 ```
 
-# Shell
+## [m] execCommand
 
-shell函数通过用来一次性执行单条命令并获取结果. 如果有多条命令需要执行, 用Shell对象的效率更高. 这是因为, 每次运行shell函数都会打开一个单独的shell进程并在运行结束后关闭他, 这个过程需要一定的时间；而Shell对象自始至终使用同一个shell进程.
+### execCommand(command, withRoot?)
 
-## new Shell(root)
+**`6.6.0`** **`Overload [1-2]/4`**
 
-* root {Boolean} 是否以root权限运行一个shell进程, 默认为false. 这将会影响其后使用该Shell对象执行的命令的权限
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否使用 Root
+- <ins>**returns**</ins> { [ShellResult](#c-shellresult) } - 命令执行结果
 
-Shell对象的"构造函数".
+### execCommand(command, arguments, withRoot?)
 
+**`6.6.0`** **`Overload [3-4]/4`**
+
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **arguments** { [string](dataTypes#string) | [ShellArguments](#shellarguments) } - 待拼接的命令参数
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否使用 Root
+- <ins>**returns**</ins> { [ShellResult](#c-shellresult) } - 命令执行结果
+
+与直接调用 `shell(...)` 等效.
+
+## [m] getCommand
+
+### getCommand(command, withRoot?)
+
+**`6.6.0`** **`Overload [1-2]/4`**
+
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否在结果前添加 `su`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 构造后的命令
+
+### getCommand(command, arguments, withRoot?)
+
+**`6.6.0`** **`Overload [3-4]/4`**
+
+- **command** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 命令或命令数组
+- **arguments** { [string](dataTypes#string) | [ShellArguments](#shellarguments) } - 待拼接的命令参数
+- **[ withRoot = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否在结果前添加 `su`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 构造后的命令
+
+仅构造命令字符串, 不执行命令. Root 启用时, 返回值以 `su` 和换行符开头.
+
+```js
+let command = shell.getCommand('pm list packages', '3 | user=0 | root');
+console.log(command);
+/* 输出:
+su
+pm list packages -3 --user 0
+*/
 ```
-var sh = new Shell(true);
-//强制停止微信
-sh.exec("am force-stop com.tencent.mm");
-sh.exit();
+
+## ShellArguments
+
+ShellArguments 是用于构造命令行参数的普通 JavaScript 对象.
+
+- **[ root = false ]** { [boolean](dataTypes#boolean) } - 是否使用 Root, 不会输出为命令行参数
+- **[ exit = false ]** { [boolean](dataTypes#boolean) } - 是否在命令末尾追加退出和清理命令
+
+除 `root` 和 `exit` 外, 其他属性会按以下规则转换:
+
+- 已以 `--` 开头的键转换为 kebab-case 长参数.
+- 已以单个 `-` 开头的键保持原样.
+- 长度为 `1` 或 `2` 的键添加单个 `-`.
+- 其他键转换为 kebab-case 并添加 `--`.
+- 值为 `true` 时只输出参数名.
+- 其他值输出为参数名和值. 包含空格或以 `-` 开头的字符串值使用双引号包围.
+
+例如 `{ user: 0, displayId: 2, v: true }` 转换为 `--user 0 --display-id 2 -v`.
+
+字符串形式的 `arguments` 使用 `|` 分隔条目. `key=value` 表示带值参数, 仅有 `key` 表示布尔标志:
+
+```js
+shell.getCommand('cmd package list packages', 'user=0 | 3');
+// cmd package list packages --user 0 -3
 ```
 
-## Shell.exec(cmd)
+特殊条目 `root` 和 `exit` 与对象同名属性作用相同. 特殊值转换为字符串后, 只有精确的 `false` 会将对应选项关闭, 其他值均会启用选项. `exit` 启用时实际追加:
 
-* `cmd` {string} 要执行的命令
-
-执行命令cmd. 该函数不会返回任何值.
-
-注意, 命令执行是"异步"的、非阻塞的. 也就是不会等待命令完成后才继续向下执行.
-
-尽管这样的设计使用起来有很多不便之处, 但受限于终端模拟器, 暂时没有解决方式；如果后续能找到解决方案, 则将提供`Shell.execAndWaitFor`函数.
-
-## Shell.exit()
-
-直接退出shell. 正在执行的命令会被强制退出.
-
-## Shell.exitAndWaitFor()
-
-执行"exit"命令并等待执行命令执行完成、退出shell.
-
-此函数会执行exit命令来正常退出shell.
-
-## Shell.setCallback(callback)
-
-* callback {Object} 回调函数
-
-设置该Shell的回调函数, 以便监听Shell的输出. 可以包括以下属性：
-
-* onOutput {Function} 每当shell有新的输出时便会调用该函数. 其参数是一个字符串.
-* onNewLine {Function} 每当shell有新的一行输出时便会调用该函数. 其参数是一个字符串(不包括最后的换行符).
-
-例如:
-
+```text
+exit
+kill $$
 ```
-var sh = new Shell();
+
+显式 `withRoot` 与 `arguments.root` 按逻辑或组合, 因此任一值为真都会启用 Root.
+
+此转换只提供基础的命令行拼接, 不等同于完整的 Shell 转义器. 对来自外部的数据仍应自行验证和转义.
+
+## [m] fromIntent
+
+### fromIntent(intent)
+
+**`[6.8.0]`**
+
+- **intent** { [Intent](intentType) | [object](dataTypes#object) } - Android Intent 或 Intent 选项对象
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `am` 命令可用的 Intent 参数片段
+
+将 Intent 转换为 `-n`, `-a`, `-c`, `-e`, `-f`, `-t` 和 `-d` 等参数组成的字符串. 返回值不包含 `am`, `start` 或其他命令前缀.
+
+此方法与 [app.intentToShell(options)](app#app-intenttoshell-options) 使用相同的转换规则. 字符串形式的 Activity 简称不属于此方法的有效输入.
+
+```js
+let intentArguments = shell.fromIntent({
+    packageName: autojs.packageName,
+    className: 'org.autojs.autojs.ui.settings.SettingsActivity_',
+});
+shell(`am start ${intentArguments}`);
+```
+
+## [m] kill
+
+### kill(app)
+
+**`6.6.0`**
+
+- **app** { [string](dataTypes#string) | [App](appType) } - 应用显示名, 包名, 预设别名或应用枚举
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否成功停止应用
+
+解析应用标识并使用 Root 执行 `am force-stop`. Root 不可用, 应用标识无法解析或命令退出码非 `0` 时返回 `false`.
+
+此方法不使用 Shizuku. 如需按可用权限选择执行方式, 可使用 [app.kill](app#m-kill).
+
+## [m] currentPackage
+
+### currentPackage()
+
+**`6.6.1`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 当前前台应用包名, 查询失败时为空字符串
+
+使用 Root 读取 `dumpsys activity activities` 的当前 resumed activity, 并返回组件中 `/` 之前的部分.
+
+## [m] currentActivity
+
+### currentActivity()
+
+**`6.6.1`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 当前前台 Activity 标识, 查询失败时为空字符串
+
+使用 Root 读取当前 resumed activity. 组件使用完整类名时返回 `/` 之后的类名. 组件使用以 `.` 开头的相对类名时, 当前实现返回完整的 `package/activity` 组件字符串.
+
+## [m] currentComponent
+
+### currentComponent()
+
+**`6.6.1`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 当前前台组件, 查询失败时为空字符串
+
+使用 Root 读取当前 resumed activity. 结果通常采用 `package/activity` 形式.
+
+---
+
+## [C] ShellResult
+
+ShellResult 是 `shell(...)`, `shell.execCommand(...)` 和 [shizuku](shizuku) 返回的 Java 对象, 实际类型为 `org.autojs.autojs.runtime.api.AbstractShell.Result`.
+
+ShellResult 不是全局构造函数. 其 3 个字段均为公开可写字段.
+
+<p style="font: bold 2em sans-serif; color: #FF7043">ShellResult</p>
+
+### [p#] code
+
+- { [number](dataTypes#number) } - 退出码
+
+通常 `0` 表示命令成功. 标准错误非空时, ShellResult 会确保 `code` 不为 `0`. 进程创建或执行异常也会转换为非零结果.
+
+### [p#] result
+
+- { [string](dataTypes#string) } - 标准输出
+
+输出非空时通常包含末尾换行符. 可使用 `result.trim()` 去除首尾空白.
+
+### [p#] error
+
+- { [string](dataTypes#string) } - 标准错误或执行异常消息
+
+### [m#] toString
+
+#### ShellResult#toString()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 便于诊断的结果摘要
+
+返回内容包含 `code`, `error` 和 `result`.
+
+### [m#] toJson
+
+#### ShellResult#toJson()
+
+**`6.4.0`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - JSON 字符串
+
+返回包含 `code`, `result` 和 `error` 的格式化 JSON.
+
+### [m#] throwIfError
+
+#### ShellResult#throwIfError()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+`code !== 0` 时抛出 `org.autojs.autojs.runtime.api.AbstractShell.Result.ShellException`, 否则直接返回.
+
+```js
+let result = shell('id');
+result.throwIfError();
+console.log(result.result.trim());
+```
+
+Java 静态方法 `org.autojs.autojs.runtime.api.AbstractShell.Result.fromJson(json)` 可从 JSON 恢复结果对象, 但它不是 shell 模块或全局 `ShellResult` 的成员.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">global</p>
+
+---
+
+## 全局兼容函数
+
+以下函数由 shell 模块直接挂载到全局作用域, 不属于 `shell` 对象的成员.
+
+### [m] KeyCode
+
+#### KeyCode(keyCode)
+
+**`Global`** **`[6.7.1]`**
+
+- **keyCode** { [number](dataTypes#number) | [string](dataTypes#string) } - Android 按键码或按键名称
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 Android 按键事件. 支持以下形式:
+
+- 数值或十进制数值字符串, 如 `24`.
+- 十六进制字符串, 如 `'0x18'`.
+- 完整按键名称, 如 `'KEYCODE_VOLUME_UP'`.
+- 省略 `KEYCODE_` 的名称, 如 `'VOLUME_UP'`.
+
+名称匹配不区分大小写. 无法识别的按键码会抛出异常.
+
+从 AutoJs6 6.7.1 起, Shizuku 可操作时优先使用 Shizuku 执行 `input keyevent`; 否则使用运行时 Root Shell. Shizuku 命令执行失败时不会再尝试 Root.
+
+```js
+KeyCode('BACK');
+KeyCode(24); // KEYCODE_VOLUME_UP
+```
+
+### 按键快捷函数
+
+以下函数使用与 [KeyCode](#m-keycode) 相同的 Shizuku 或 Root 选择规则.
+
+### [m] Menu
+
+#### Menu()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_MENU`.
+
+### [m] Home
+
+#### Home()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_HOME`.
+
+### [m] Back
+
+#### Back()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_BACK`.
+
+### [m] Up
+
+#### Up()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_DPAD_UP`.
+
+### [m] Down
+
+#### Down()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_DPAD_DOWN`.
+
+### [m] Left
+
+#### Left()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_DPAD_LEFT`.
+
+### [m] Right
+
+#### Right()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_DPAD_RIGHT`.
+
+### [m] OK
+
+#### OK()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_DPAD_CENTER`.
+
+### [m] VolumeUp
+
+#### VolumeUp()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_VOLUME_UP`.
+
+### [m] VolumeDown
+
+#### VolumeDown()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_VOLUME_DOWN`.
+
+### [m] Power
+
+#### Power()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_POWER`.
+
+### [m] Camera
+
+#### Camera()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `KEYCODE_CAMERA`.
+
+### [m] Text
+
+#### Text(text)
+
+**`Global`**
+
+- **text** { [string](dataTypes#string) } - 待输入文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过运行时 Root Shell 写入 `input text` 命令. 方法写入命令后返回, 不等待命令执行完成.
+
+### [m] Input
+
+#### Input(text)
+
+**`Global`**
+
+- **text** { [string](dataTypes#string) } - 待输入文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[Text(text)](#m-text) 的兼容别名.
+
+### [m] Tap
+
+#### Tap(x, y)
+
+**`Global`**
+
+- **x** { [number](dataTypes#number) } - X 坐标
+- **y** { [number](dataTypes#number) } - Y 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过运行时 Root Shell 写入 `input tap` 命令. 坐标受 [SetScreenMetrics](#m-setscreenmetrics) 设置的缩放规则影响.
+
+### [m] Swipe
+
+#### Swipe(x1, y1, x2, y2, duration?)
+
+**`Global`**
+
+- **x1** { [number](dataTypes#number) } - 起点 X 坐标
+- **y1** { [number](dataTypes#number) } - 起点 Y 坐标
+- **x2** { [number](dataTypes#number) } - 终点 X 坐标
+- **y2** { [number](dataTypes#number) } - 终点 Y 坐标
+- **[ duration ]** { [number](dataTypes#number) } - 滑动时长, 单位为毫秒
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过运行时 Root Shell 写入 `input swipe` 命令. 省略 `duration` 时不向系统命令提供时长参数.
+
+### [m] Screencap
+
+#### Screencap(path)
+
+**`Global`**
+
+- **path** { [string](dataTypes#string) } - Shell 可写入的目标路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过运行时 Root Shell 写入 `screencap -p` 命令. 路径不会经过 [files](files) 模块解析. 方法不等待截图完成.
+
+### [m] SetScreenMetrics
+
+#### SetScreenMetrics(width, height)
+
+**`Global`**
+
+- **width** { [number](dataTypes#number) } - 脚本设计宽度
+- **height** { [number](dataTypes#number) } - 脚本设计高度
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置运行时 Root Shell 的坐标缩放基准, 影响后续 [Tap](#m-tap) 和 [Swipe](#m-swipe). 此方法与小写全局方法 [setScreenMetrics](global#m-setscreenmetrics) 使用不同的内部对象.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">Shell</p>
+
+## [C] Shell
+
+大写 `Shell` 是通过运行时全局类代理提供的 Java 类 `org.autojs.autojs.runtime.api.Shell`.
+
+Shell 实例维护一个终端会话. 普通实例以 `sh` 初始化, Root 实例以 `su` 初始化. 它不使用 Shizuku.
+
+调用 `exit()` 或 `exitAndWaitFor()` 后不应继续复用实例. 自行创建的 Shell 实例应在脚本结束前显式退出.
+
+### [c] ()
+
+**`6.6.1`** **`Global`** **`Overload 1/4`**
+
+- <ins>**returns**</ins> { [Shell](#c-shell) } - 普通权限 Shell
+
+创建普通权限 Shell, 相当于 `new Shell(false)`.
+
+### [c] (withRoot)
+
+**`Global`** **`Overload 2/4`**
+
+- **withRoot** { [boolean](dataTypes#boolean) } - 是否以 `su` 初始化
+- <ins>**returns**</ins> { [Shell](#c-shell) } - Shell 实例
+
+### [c] (context)
+
+**`6.6.1`** **`Global`** **`Overload 3/4`**
+
+- **context** { [android.content.Context](https://developer.android.com/reference/android/content/Context) } - Android Context
+- <ins>**returns**</ins> { [Shell](#c-shell) } - 普通权限 Shell
+
+使用指定 Context 创建普通权限 Shell.
+
+### [c] (context, withRoot)
+
+**`Global`** **`Overload 4/4`**
+
+- **context** { [android.content.Context](https://developer.android.com/reference/android/content/Context) } - Android Context
+- **withRoot** { [boolean](dataTypes#boolean) } - 是否以 `su` 初始化
+- <ins>**returns**</ins> { [Shell](#c-shell) } - Shell 实例
+
+Shell 会在 Android 主线程异步创建终端会话. 首次执行命令时可能等待初始化完成. 初始化 `su` 失败时会抛出相应异常. 在 Android UI 主线程中创建实例后, 应等待 `onInitialized()` 再调用命令方法.
+
+```js
+let sh = new Shell(false);
+try {
+    console.log(sh.execAndWaitFor('pwd'));
+} finally {
+    sh.exitAndWaitFor();
+}
+```
+
+### [p] COMMAND_SU
+
+#### Shell.COMMAND_SU
+
+**`CONSTANT`** **`READONLY`**
+
+- [[ `'su'` ]] { [string](dataTypes#string) }
+
+Root Shell 的初始命令.
+
+### [p] COMMAND_SH
+
+#### Shell.COMMAND_SH
+
+**`CONSTANT`** **`READONLY`**
+
+- [[ `'sh'` ]] { [string](dataTypes#string) }
+
+普通 Shell 的初始命令.
+
+### [p] COMMAND_LINE_END
+
+#### Shell.COMMAND_LINE_END
+
+**`CONSTANT`** **`READONLY`**
+
+- [[ `'\n'` ]] { [string](dataTypes#string) }
+
+Shell 命令行结束符.
+
+### [p] COMMAND_EXIT
+
+#### Shell.COMMAND_EXIT
+
+**`CONSTANT`** **`READONLY`**
+
+- [[ `'exit\n'` ]] { [string](dataTypes#string) }
+
+Shell 退出命令.
+
+### [m#] exec
+
+#### Shell#exec(command)
+
+**`Async`**
+
+- **command** { [string](dataTypes#string) } - 待执行命令
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+等待终端完成初始化, 将命令和换行符写入会话, 随后返回. 此方法不等待命令执行完成.
+
+### [m#] execAndWaitFor
+
+#### Shell#execAndWaitFor(command)
+
+- **command** { [string](dataTypes#string) } - 待执行命令
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 本次命令的终端输出
+
+执行命令并阻塞到终端再次出现 Shell 提示符. 返回内容不包含首行的命令回显.
+
+此方法不提供退出码或独立标准错误. 需要 [ShellResult](#c-shellresult) 时使用 `shell(...)`. 不应在 Android UI 主线程调用此阻塞方法.
+
+### [m#] setCallback
+
+#### Shell#setCallback(callback)
+
+- **callback** { [Shell.Callback](#i-shellcallback) | [null](dataTypes#null) } - 输出回调, `null` 表示清除回调
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置终端事件回调.
+
+```js
+let sh = new Shell(false);
 sh.setCallback({
-	onNewLine: function(line){
-		//有新的一行输出时打印到控制台
-		log(line);
-	}
-})
-while(true){
-	//循环输入命令
-	var cmd = dialogs.rawInput("请输入要执行的命令, 输入exit退出");
-	if(cmd == "exit"){
-		break;
-	}
-	//执行命令
-	sh.exec(cmd);
-}
-sh.exit();
+    onNewLine(line) {
+        console.log(line);
+    },
+    onInitialized() {
+        sh.exec('id');
+    },
+});
 ```
 
-# 附录: shell命令简介
+### [m#] isInitialized
 
-以下关于shell命令的资料来自[AndroidStudio用户指南：Shell命令](https://developer.android.com/studio/command-line/adb.html#shellcommands/).
+#### Shell#isInitialized()
 
-## am命令
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 终端是否已完成初始化
 
-am命令即Activity Manager命令, 用于管理应用程序活动、服务等.
+### [m#] isExecWithRoot
 
-**以下命令均以"am "开头, 例如`shell('am start -p com.tencent.mm');`(启动微信)**
+#### Shell#isExecWithRoot()
 
-### start [options] intent
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 实例是否配置为使用 Root
 
-启动 intent 指定的 Activity(应用程序活动).   
-请参阅 [intent 参数的规范](#shell_intent).
+返回构造时的配置, 不表示 `su` 已成功授权.
 
-选项包括：
+### [m#] exit
 
-* -D：启用调试.
-* -W：等待启动完成.
-* --start-profiler file：启动分析器并将结果发送到 file.
-* -P file：类似于 --start-profiler, 但当应用进入空闲状态时分析停止.
-* -R count：重复 Activity 启动 count 次数. 在每次重复前, 将完成顶部 Activity.
-* -S：启动 Activity 前强行停止目标应用.
-* --opengl-trace：启用 OpenGL 函数的跟踪.
-* --user user_id | current：指定要作为哪个用户运行；如果未指定, 则作为当前用户运行.
+#### Shell#exit()
 
-### startservice [options] intent
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-启动 intent 指定的 Service(服务).   
-请参阅 [intent 参数的规范](#shell_intent).   
-选项包括：
+立即结束终端会话, 不等待已写入命令完成.
 
-* --user user_id | current：指定要作为哪个用户运行；如果未指定, 则作为当前用户运行.
+### [m#] exitAndWaitFor
 
-### force-stop package
+#### Shell#exitAndWaitFor()
 
-强行停止与 package（[应用包名](#应用包名)）关联的所有应用.
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### kill [options] package
+写入 `exit` 并阻塞等待 Shell 退出. Root 实例会依次退出 `su` 和外层 Shell.
 
-终止与 package（[应用包名](#应用包名)）关联的所有进程. 此命令仅终止可安全终止且不会影响用户体验的进程.   
-选项包括：
+不应在 Android UI 主线程调用此阻塞方法.
 
-* --user user_id | all | current：指定将终止其进程的用户；如果未指定, 则终止所有用户的进程.
+### [m#] getTermSession
 
-### kill-all
+#### Shell#getTermSession()
 
-终止所有后台进程.
+- <ins>**returns**</ins> { [object](dataTypes#object) | [null](dataTypes#null) } - `jackpal.androidterm.emulatorview.TermSession` 实例
 
-### broadcast [options] intent
+返回底层终端会话. 初始化完成前可能为 `null`. 此入口主要用于高级 Java 互操作.
 
-发出广播 intent.
-请参阅 [intent 参数的规范](#shell_intent).
+---
 
-选项包括：
+<p style="font: bold 2em sans-serif; color: #FF7043">Shell.Callback</p>
 
-* [--user user_id | all | current]：指定要发送到的用户；如果未指定, 则发送到所有用户.
+---
 
-### instrument [options] component
+## [I] Shell.Callback
 
-使用 Instrumentation 实例启动监控. 通常, 目标 component 是表单 test_package/runner_class.   
-选项包括：
+`Shell.Callback` 是终端事件回调接口. JavaScript 对象可按需实现其方法并传给 [`Shell#setCallback()`](#m-setcallback).
 
-* -r：输出原始结果（否则对 report_key_streamresult 进行解码）. 与 [-e perf true] 结合使用以生成性能测量的原始输出.
-* -e name value：将参数 name 设为 value. 对于测试运行器, 通用表单为 -e testrunner_flag value[,value...].
-* -p file：将分析数据写入 file.
-* -w：先等待仪器完成, 然后再返回. 测试运行器需要使用此选项.
-* --no-window-animation：运行时关闭窗口动画.
-* --user user_id | current：指定仪器在哪个用户中运行；如果未指定, 则在当前用户中运行.
-* profile start process file 启动 process 的分析器, 将结果写入 file.
-* profile stop process 停止 process 的分析器.
+### [m!] onOutput
 
-### dumpheap [options] process file
+#### Shell.Callback#onOutput(str)
 
-转储 process 的堆, 写入 file.
+- **str** { [string](dataTypes#string) } - 移除 `\r` 后的原始输出块
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-选项包括：
+终端收到输出块时调用. 一个输出块可能包含半行, 一行或多行文本.
 
-* --user [user_id|current]：提供进程名称时, 指定要转储的进程用户；如果未指定, 则使用当前用户.
-* -n：转储原生堆, 而非托管堆.
-* set-debug-app [options] package 将应用 package 设为调试.
+### [m!] onNewLine
 
-选项包括：
+#### Shell.Callback#onNewLine(line)
 
-* -w：应用启动时等待调试程序.
-* --persistent：保留此值.
-* clear-debug-app 使用 set-debug-app 清除以前针对调试用途设置的软件包.
+- **line** { [string](dataTypes#string) } - 不含换行符且已移除首尾空白的输出行
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### monitor [options]    启动对崩溃或 ANR 的监控.
+终端组成一行完整输出时调用.
 
-选项包括：
+### [m!] onInitialized
 
-* --gdb：在崩溃/ANR 时在给定端口上启动 gdbserv.
+#### Shell.Callback#onInitialized()
 
-### screen-compat {on|off} package
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-控制 package 的屏幕兼容性模式.
-
-### display-size [reset|widthxheight]
-
-替换模拟器/设备显示尺寸. 此命令对于在不同尺寸的屏幕上测试您的应用非常有用, 它支持使用大屏设备模仿小屏幕分辨率（反之亦然）.   
-示例：
-
-```
-shell("am display-size 1280x800", true);
-	
-```
-
-### display-density dpi
-
-替换模拟器/设备显示密度. 此命令对于在不同密度的屏幕上测试您的应用非常有用, 它支持使用低密度屏幕在高密度环境环境上进行测试（反之亦然）.   
-示例：
-
-```
-shell("am display-density 480", true);
-```
-
-### to-uri intent
-
-将给定的 intent 规范以 URI 的形式输出.
-请参阅  [intent 参数的规范](#shell_intent).
-
-### to-intent-uri intent
-
-将给定的 intent 规范以 intent:URI 的形式输出.
-请参阅 intent 参数的规范.
-
-### intent参数的规范
-
-对于采用 intent 参数的 am 命令, 您可以使用以下选项指定 intent：
-
-* -a action  
-  指定 intent 操作, 如“android.intent.action.VIEW”. 此指定只能声明一次.
-* -d data_uri  
-  指定 intent 数据 URI, 如“content://contacts/people/1”. 此指定只能声明一次.
-* -t mime_type  
-  指定 intent MIME 类型, 如“image/png”. 此指定只能声明一次.
-* -c category  
-  指定 intent 类别, 如“android.intent.category.APP_CONTACTS”.
-* -n component  
-  指定带有软件包名称前缀的组件名称以创建显式 intent, 如“com.example.app/.ExampleActivity”.
-* -f flags  
-  将标志添加到 setFlags() 支持的 intent.
-* --esn extra_key  
-  添加一个 null extra. URI intent 不支持此选项.
-* -e|--es extra_key extra_string_value  
-  添加字符串数据作为键值对.
-* --ez extra_key extra_boolean_value  
-  添加布尔型数据作为键值对.
-* --ei extra_key extra_int_value  
-  添加整数型数据作为键值对.
-* --el extra_key extra_long_value  
-  添加长整型数据作为键值对.
-* --ef extra_key extra_float_value  
-  添加浮点型数据作为键值对.
-* --eu extra_key extra_uri_value  
-  添加 URI 数据作为键值对.
-* --ecn extra_key extra_component_name_value  
-  添加组件名称, 将其作为 ComponentName 对象进行转换和传递.
-* --eia extra_key extra_int_value[,extra_int_value...]  
-  添加整数数组.
-* --ela extra_key extra_long_value[,extra_long_value...]  
-  添加长整型数组.
-* --efa extra_key extra_float_value[,extra_float_value...]  
-  添加浮点型数组.
-* --grant-read-uri-permission  
-  包含标志 FLAG_GRANT_READ_URI_PERMISSION.
-* --grant-write-uri-permission  
-  包含标志 FLAG_GRANT_WRITE_URI_PERMISSION.
-* --debug-log-resolution  
-  包含标志 FLAG_DEBUG_LOG_RESOLUTION.
-* --exclude-stopped-packages  
-  包含标志 FLAG_EXCLUDE_STOPPED_PACKAGES.
-* --include-stopped-packages  
-  包含标志 FLAG_INCLUDE_STOPPED_PACKAGES.
-* --activity-brought-to-front  
-  包含标志 FLAG_ACTIVITY_BROUGHT_TO_FRONT.
-* --activity-clear-top  
-  包含标志 FLAG_ACTIVITY_CLEAR_TOP.
-* --activity-clear-when-task-reset  
-  包含标志 FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET.
-* --activity-exclude-from-recents  
-  包含标志 FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS.
-* --activity-launched-from-history  
-  包含标志 FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY.
-* --activity-multiple-task  
-  包含标志 FLAG_ACTIVITY_MULTIPLE_TASK.
-* --activity-no-animation  
-  包含标志 FLAG_ACTIVITY_NO_ANIMATION.
-* --activity-no-history  
-  包含标志 FLAG_ACTIVITY_NO_HISTORY.
-* --activity-no-user-action  
-  包含标志 FLAG_ACTIVITY_NO_USER_ACTION.
-* --activity-previous-is-top  
-  包含标志 FLAG_ACTIVITY_PREVIOUS_IS_TOP.
-* --activity-reorder-to-front  
-  包含标志 FLAG_ACTIVITY_REORDER_TO_FRONT.
-* --activity-reset-task-if-needed  
-  包含标志 FLAG_ACTIVITY_RESET_TASK_IF_NEEDED.
-* --activity-single-top  
-  包含标志 FLAG_ACTIVITY_SINGLE_TOP.
-* --activity-clear-task  
-  包含标志 FLAG_ACTIVITY_CLEAR_TASK.
-* --activity-task-on-home  
-  包含标志 FLAG_ACTIVITY_TASK_ON_HOME.
-* --receiver-registered-only  
-  包含标志 FLAG_RECEIVER_REGISTERED_ONLY.
-* --receiver-replace-pending  
-  包含标志 FLAG_RECEIVER_REPLACE_PENDING.
-* --selector  
-  需要使用 -d 和 -t 选项以设置 intent 数据和类型.
-
-#### URI component package
-
-如果不受上述某一选项的限制, 您可以直接指定 URI、软件包名称和组件名称. 当参数不受限制时, 如果参数包含一个“:”（冒号）, 则此工具假定参数是一个 URI；如果参数包含一个“/”（正斜杠）, 则此工具假定参数是一个组件名称；否则, 此工具假定参数是一个软件包名称.
-
-## 应用包名
-
-所谓应用包名, 是唯一确定应用的标识. 例如微信的包名是"com.tencent.mm", QQ的包名是"com.tencent.mobileqq".   
-要获取一个应用的包名, 可以通过函数`getPackageName(appName)`获取. 参见帮助->其他一般函数.
-
-## pm命令
-
-pm命令用于管理应用程序, 例如卸载应用、冻结应用等.   
-**以下命令均以"pm "开头, 例如"shell(\"pm disable com.tencent.mm\");"(冻结微信)**
-
-### list packages [options] filter
-
-输出所有软件包, 或者, 仅输出包名称包含 filter 中的文本的软件包.   
-选项：
+终端完成初始化时调用.
 
-* -f：查看它们的关联文件.
-* -d：进行过滤以仅显示已停用的软件包.
-* -e：进行过滤以仅显示已启用的软件包.
-* -s：进行过滤以仅显示系统软件包.
-* -3：进行过滤以仅显示第三方软件包.
-* -i：查看软件包的安装程序.
-* -u：也包括卸载的软件包.
-* --user user_id：要查询的用户空间.
+### [m!] onInterrupted
 
-### list permission-groups
+#### Shell.Callback#onInterrupted(error)
 
-输出所有已知的权限组.
+- **error** { [java.lang.InterruptedException](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/InterruptedException.html) } - 中断异常
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### list permissions [options] group
+等待终端初始化或退出的线程被中断时调用. 注册此回调后, Shell 会把中断交给回调处理, 而不是直接退出并抛出脚本中断异常.
 
-输出所有已知权限, 或者, 仅输出 group 中的权限.   
-选项：
+---
 
-* -g：按组加以组织.
-* -f：输出所有信息.
-* -s：简短摘要.
-* -d：仅列出危险权限.
-* -u：仅列出用户将看到的权限.
+<p style="font: bold 2em sans-serif; color: #FF7043">Shell.SimpleCallback</p>
 
-### list instrumentation [options]
+---
 
-列出所有测试软件包.   
-选项：
+## [C] Shell.SimpleCallback
 
-* -f：列出用于测试软件包的 APK 文件.
-* target_package：列出仅用于此应用的测试软件包.
+- <ins>**implements**</ins> { [Shell.Callback](#i-shellcallback) }
 
-### list features
+`Shell.SimpleCallback` 为 `Shell.Callback` 的 4 个方法提供空实现, 适用于只需覆盖部分回调的 JavaAdapter 或 Java 互操作代码.
 
-输出系统的所有功能.
+### [c] ()
 
-### list libraries
+- <ins>**returns**</ins> { [Shell.SimpleCallback](#c-shellsimplecallback) } - 空回调实例
 
-输出当前设备支持的所有库.
+构造一个所有回调均不执行操作的实例.
 
-### list users
+---
 
-输出系统上的所有用户.
+<p style="font: bold 2em sans-serif; color: #FF7043">Shell</p>
 
-### path package
+---
 
-输出给定 package 的 APK 的路径.
+## Shell 兼容实例成员
 
-### install [options] path
+下列公开方法继承自 `org.autojs.autojs.runtime.api.AbstractShell`. 除设置方法外, 它们通常只是向当前 Shell 会话写入命令, 不等待执行完成.
 
-将软件包（通过 path 指定）安装到系统.   
-选项：
+### [m#] SetScreenMetrics
 
-* -l：安装具有转发锁定功能的软件包.
-* -r：重新安装现有应用, 保留其数据.
-* -t：允许安装测试 APK.
-* -i installer_package_name：指定安装程序软件包名称.
-* -s：在共享的大容量存储（如 sdcard）上安装软件包.
-* -f：在内部系统内存上安装软件包.
-* -d：允许版本代码降级.
-* -g：授予应用清单文件中列出的所有权限.
+#### Shell#SetScreenMetrics(width, height)
 
-### uninstall [options] package
+**`Overload 1/2`**
 
-从系统中卸载软件包.   
-选项：
+- **width** { [number](dataTypes#number) } - 脚本设计宽度
+- **height** { [number](dataTypes#number) } - 脚本设计高度
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-* -k：移除软件包后保留数据和缓存目录.
+#### Shell#SetScreenMetrics(screenMetrics)
 
-### clear package
+**`Overload 2/2`**
 
-删除与软件包关联的所有数据.
+- **screenMetrics** { org.autojs.autojs.runtime.api.ScreenMetrics } - 屏幕度量对象
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### enable package_or_component
+设置本实例的坐标缩放规则, 影响 `Tap`, `Swipe`, `TouchX` 和 `TouchY`.
 
-启用给定软件包或组件（作为“package/class”写入）.
+### [m#] SetTouchDevice
 
-### disable package_or_component
+#### Shell#SetTouchDevice(device)
 
-停用给定软件包或组件（作为“package/class”写入）.
+- **device** { [number](dataTypes#number) } - `/dev/input/eventN` 中的设备编号 `N`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### disable-user [options] package_or_component
+仅当实例尚未取得有效触摸设备编号时写入该编号.
 
-选项：
+### [m#] SendEvent
 
-* --user user_id：要停用的用户.
+#### Shell#SendEvent(type, code, value)
 
-### grant package_name permission
+**`Overload 1/2`**
 
-向应用授予权限. 在运行 Android 6.0（API 级别 23）及更高版本的设备上, 可以是应用清单中声明的任何权限. 在运行 Android 5.1（API 级别 22）和更低版本的设备上, 必须是应用定义的可选权限.
+- **type** { [number](dataTypes#number) } - Linux 输入事件类型
+- **code** { [number](dataTypes#number) } - Linux 输入事件码
+- **value** { [number](dataTypes#number) } - 事件值
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### revoke package_name permission
+#### Shell#SendEvent(device, type, code, value)
 
-从应用中撤销权限. 在运行 Android 6.0（API 级别 23）及更高版本的设备上, 可以是应用清单中声明的任何权限. 在运行 Android 5.1（API 级别 22）和更低版本的设备上, 必须是应用定义的可选权限.
+**`Overload 2/2`**
 
-### set-install-location location
+- **device** { [number](dataTypes#number) } - 输入设备编号
+- **type** { [number](dataTypes#number) } - Linux 输入事件类型
+- **code** { [number](dataTypes#number) } - Linux 输入事件码
+- **value** { [number](dataTypes#number) } - 事件值
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-更改默认安装位置. 位置值：
+写入 `sendevent /dev/input/eventN` 命令. 通常需要 Root 或等效的设备节点写权限.
 
-* 0：自动—让系统决定最佳位置.
-* 1：内部—安装在内部设备存储上.
-* 2：外部—安装在外部介质上.
+### [m#] Touch
 
-> 注：此命令仅用于调试目的；使用此命令会导致应用中断和其他意外行为.
+#### Shell#Touch(x, y)
 
-### get-install-location
+- **x** { [number](dataTypes#number) } - X 坐标
+- **y** { [number](dataTypes#number) } - Y 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-返回当前安装位置. 返回值：
+依次调用 [`Shell#TouchX()`](#m-touchx) 和 [`Shell#TouchY()`](#m-touchy) 发送触摸位置事件. 坐标按本实例的 ScreenMetrics 缩放.
 
-* 0 [auto]：让系统决定最佳位置.
-* 1 [internal]：安装在内部设备存储上
-* 2 [external]：安装在外部介质上
+### [m#] TouchX
 
-### set-permission-enforced permission [true|false]
+#### Shell#TouchX(x)
 
-指定是否应强制执行给定的权限.
+- **x** { [number](dataTypes#number) } - X 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### trim-caches desired_free_space
+写入 Linux 输入事件 `type=3, code=53`. 坐标按本实例的 ScreenMetrics 缩放.
 
-减少缓存文件以达到给定的可用空间.
+### [m#] TouchY
 
-### create-user user_name
+#### Shell#TouchY(y)
 
-使用给定的 user_name 创建新用户, 输出新用户的标识符.
+- **y** { [number](dataTypes#number) } - Y 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-### remove-user user_id
+写入 Linux 输入事件 `type=3, code=54`. 坐标按本实例的 ScreenMetrics 缩放.
 
-移除具有给定的 user_id 的用户, 删除与该用户关联的所有数据.
+### [m#] Tap
 
-### get-max-users
+#### Shell#Tap(x, y)
 
-输出设备支持的最大用户数.
+- **x** { [number](dataTypes#number) } - X 坐标
+- **y** { [number](dataTypes#number) } - Y 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-## 其他命令
+写入 `input tap x y`. 坐标按本实例的 ScreenMetrics 缩放.
 
-### 进行屏幕截图
+### [m#] Swipe
 
-screencap 命令是一个用于对设备显示屏进行屏幕截图的 shell 实用程序. 在 shell 中, 此语法为：
+#### Shell#Swipe(x1, y1, x2, y2)
 
-```
-screencap filename
-```
+**`Overload 1/2`**
 
-例如：
+- **x1** { [number](dataTypes#number) } - 起点 X 坐标
+- **y1** { [number](dataTypes#number) } - 起点 Y 坐标
+- **x2** { [number](dataTypes#number) } - 终点 X 坐标
+- **y2** { [number](dataTypes#number) } - 终点 Y 坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-```
-$ shell("screencap /sdcard/screen.png");
-```
+写入不含时长的 `input swipe` 命令. 坐标按本实例的 ScreenMetrics 缩放.
 
-### 列表文件
+#### Shell#Swipe(x1, y1, x2, y2, duration)
 
-```
-ls filepath
-```
+**`Overload 2/2`**
 
-例如:
+- **x1** { [number](dataTypes#number) } - 起点 X 坐标
+- **y1** { [number](dataTypes#number) } - 起点 Y 坐标
+- **x2** { [number](dataTypes#number) } - 终点 X 坐标
+- **y2** { [number](dataTypes#number) } - 终点 Y 坐标
+- **duration** { [number](dataTypes#number) } - 滑动时长, 单位为毫秒
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-```
-log(shell("ls /system/bin").result);
-```
+写入包含时长的 `input swipe` 命令. 坐标按本实例的 ScreenMetrics 缩放.
+
+### [m#] KeyCode
+
+#### Shell#KeyCode(keyCode)
+
+**`Overload [1-2]/2`**
+
+- **keyCode** { [number](dataTypes#number) | [string](dataTypes#string) } - Android 按键码或直接传给系统命令的按键文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+直接写入 `input keyevent keyCode`. 此方法不使用 Shizuku, 也不执行全局 [`KeyCode()`](#m-keycode) 的名称解析和有效性检查.
+
+### [m#] Home
+
+#### Shell#Home()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `3`.
+
+### [m#] Back
+
+#### Shell#Back()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `4`.
+
+### [m#] Power
+
+#### Shell#Power()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `26`.
+
+### [m#] Up
+
+#### Shell#Up()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `19`.
+
+### [m#] Down
+
+#### Shell#Down()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `20`.
+
+### [m#] Left
+
+#### Shell#Left()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `21`.
+
+### [m#] Right
+
+#### Shell#Right()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `22`.
+
+### [m#] OK
+
+#### Shell#OK()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `23`.
+
+### [m#] VolumeUp
+
+#### Shell#VolumeUp()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `24`.
+
+### [m#] VolumeDown
+
+#### Shell#VolumeDown()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `25`.
+
+### [m#] Menu
+
+#### Shell#Menu()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `1`. 此键码来自当前遗留实现, 与全局 [`Menu()`](#m-menu) 使用的 `KEYCODE_MENU` 不同.
+
+### [m#] Camera
+
+#### Shell#Camera()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入按键码 `27`.
+
+### [m#] Input
+
+#### Shell#Input(text)
+
+- **text** { [string](dataTypes#string) } - 待输入文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入 `input text text`.
+
+### [m#] Text
+
+#### Shell#Text(text)
+
+- **text** { [string](dataTypes#string) } - 待输入文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[`Shell#Input()`](#m-input) 的别名.
+
+### [m#] Screencap
+
+#### Shell#Screencap(path)
+
+- **path** { [string](dataTypes#string) } - Shell 可写入的目标路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入 `screencap -p path`.
+
+### [m#] sleep
+
+#### Shell#sleep(seconds)
+
+- **seconds** { [number](dataTypes#number) } - 延时时长, 单位为秒
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入 `sleep seconds`. 此方法执行 Shell 命令, 不会让 JavaScript 调用线程直接休眠.
+
+### [m#] usleep
+
+#### Shell#usleep(microseconds)
+
+- **microseconds** { [number](dataTypes#number) } - 延时时长, 单位为微秒
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+写入 `usleep microseconds`. 此方法执行 Shell 命令, 不会让 JavaScript 调用线程直接休眠.

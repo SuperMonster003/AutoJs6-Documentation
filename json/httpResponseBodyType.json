@@ -4,7 +4,198 @@
     {
       "textRaw": "HttpResponseBody",
       "name": "httpresponsebody",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 2, 2023.</p>\n\n<hr>\n",
+      "desc": "<p>HttpResponseBody 表示 <a href=\"httpResponseType\">HttpResponse</a> 的响应体.</p>\n<p>响应体底层是一次性数据流:</p>\n<ul>\n<li><a href=\"#m-string\">string</a>, <a href=\"#m-bytes\">bytes</a> 和 <a href=\"#m-json\">json</a> 会完整读取并自动关闭响应体.</li>\n<li><a href=\"#m-savetofile\">saveToFile</a> 会流式写入文件并自动关闭响应体.</li>\n<li><a href=\"#m-stream\">stream</a> 不会自动关闭响应体, 调用方必须负责关闭.</li>\n<li>默认不缓存完整响应体. 启用 <a href=\"httpRequestBuilderOptionsType#p-cachebody\">cacheBody</a> 后, 只有符合缓存条件的同类完整读取结果可以再次取得. 例如 <code>string()</code> 与 <code>json()</code> 共用字符串缓存, 但 <code>string()</code> 后再调用 <code>bytes()</code> 仍会失败.</li>\n</ul>\n<p>响应体关闭后, 未命中缓存的读取方法会抛出异常.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpResponseBody</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p#] contentType",
+          "name": "[p#]_contenttype",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://square.github.io/okhttp/4.x/okhttp/okhttp3/-media-type/\">okhttp3.MediaType</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>响应体的媒体类型. 响应未声明媒体类型时为 <code>null</code>.</p>\n<p>需要字符串时可调用 <code>String(response.body.contentType)</code> 或底层对象的 <code>toString()</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] contentType"
+        },
+        {
+          "textRaw": "[m#] string",
+          "name": "[m#]_string",
+          "methods": [
+            {
+              "textRaw": "string()",
+              "type": "method",
+              "name": "string",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 完整响应文本</li>\n</ul>\n<p>完整读取响应体并自动关闭它.</p>\n<p>当请求选项 <code>cacheBody</code> 为 <code>true</code>, 且服务端声明的内容长度不大于 <code>bodyCacheThresholdBytes</code> 时, 结果会缓存. 内容长度未知时也会缓存. 命中字符串缓存后可重复调用此方法, <a href=\"#m-json\">json</a> 也会复用同一缓存.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] string"
+        },
+        {
+          "textRaw": "[m#] bytes",
+          "name": "[m#]_bytes",
+          "methods": [
+            {
+              "textRaw": "bytes()",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#bytearray\">ByteArray</a> } - 完整响应字节数组</li>\n</ul>\n<p>完整读取响应体并自动关闭它.</p>\n<p>当请求选项 <code>cacheBody</code> 为 <code>true</code>, 且响应符合缓存条件时, 结果会缓存并可由后续 <code>bytes()</code> 调用再次取得. 字节缓存与字符串缓存相互独立.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] bytes"
+        },
+        {
+          "textRaw": "[m#] json",
+          "name": "[m#]_json",
+          "methods": [
+            {
+              "textRaw": "json()",
+              "type": "method",
+              "name": "json",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - JSON 解析结果</li>\n</ul>\n<p>通过 <a href=\"#m-string\">string</a> 完整读取响应体, 再使用 <code>JSON.parse</code> 解析. 响应文本不是有效 JSON 时抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] json"
+        },
+        {
+          "textRaw": "[m#] stream",
+          "name": "[m#]_stream",
+          "methods": [
+            {
+              "textRaw": "stream()",
+              "type": "method",
+              "name": "stream",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/java/io/InputStream\">java.io.InputStream</a> } - 响应体输入流</li>\n</ul>\n<p>获取响应体输入流, 用于逐块处理大型响应. 此方法不会自动关闭输入流或响应体.</p>\n<p>处理完成后应关闭流并调用 <a href=\"#m-close\">close</a>. <code>close()</code> 可安全地重复调用.</p>\n<pre><code class=\"lang-js\">let response = http.get(&quot;https://example.com/file.bin&quot;);\nlet input = response.body.stream();\ntry {\n    // 在此处逐块读取 input.\n} finally {\n    input.close();\n    response.body.close();\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] stream"
+        },
+        {
+          "textRaw": "[m#] saveToFile",
+          "name": "[m#]_savetofile",
+          "methods": [
+            {
+              "textRaw": "saveToFile(path, bufferSize?)",
+              "type": "method",
+              "name": "saveToFile",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 目标文件路径</li>\n<li><strong>[ bufferSize = 8192 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 复制缓冲区大小, 单位为字节</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-httpsaveresult\">HttpSaveResult</a> } - 保存结果</li>\n</ul>\n<p>将响应体流式写入文件, 避免把完整响应载入内存. <code>bufferSize</code> 不大于 <code>0</code> 时也使用 <code>8192</code>.</p>\n<p>目标路径会按当前脚本运行时路径规则解析. 路径指向目录时抛出异常. 文件复制期间的异常不会直接抛出, 而是记录在返回结果中.</p>\n<p>通过路径校验并开始文件复制后, 无论返回结果成功或失败, 此方法都会关闭输入流, 输出流和响应体. 调用后不能再从当前响应体读取未缓存的数据.</p>\n<pre><code class=\"lang-js\">let response = http.get(&quot;https://example.com/file.bin&quot;);\nlet result = response.body.saveToFile(&quot;./file.bin&quot;);\nif (!result.success) {\n    console.error(result.error);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "bufferSize?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] saveToFile"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "close()",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>关闭响应体及其底层资源. 此方法是幂等的, 可安全地重复调用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpSaveResult</p>\n\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[C] HttpSaveResult",
+          "name": "[c]_httpsaveresult",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<p>HttpSaveResult 是 <a href=\"#m-savetofile\">saveToFile</a> 返回的保存结果对象, 不能由脚本直接构造.</p>\n",
+          "type": "module",
+          "displayName": "[C] HttpSaveResult"
+        },
+        {
+          "textRaw": "[p#] code",
+          "name": "[p#]_code",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>结果码. <code>0</code> 表示成功, <code>-1</code> 表示文件复制失败.</p>\n",
+          "type": "module",
+          "displayName": "[p#] code"
+        },
+        {
+          "textRaw": "[p#] path",
+          "name": "[p#]_path",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>解析后的目标文件路径.</p>\n",
+          "type": "module",
+          "displayName": "[p#] path"
+        },
+        {
+          "textRaw": "[p#] bytesCopied",
+          "name": "[p#]_bytescopied",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>已经写入的字节数. 失败时可能大于 <code>0</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bytesCopied"
+        },
+        {
+          "textRaw": "[p#] success",
+          "name": "[p#]_success",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否保存成功, 等价于 <code>code === 0</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] success"
+        },
+        {
+          "textRaw": "[p#] error",
+          "name": "[p#]_error",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.android.com/reference/java/lang/Throwable\">java.lang.Throwable</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>保存失败时捕获的异常, 成功时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] error"
+        },
+        {
+          "textRaw": "[m#] isSuccess",
+          "name": "[m#]_issuccess",
+          "methods": [
+            {
+              "textRaw": "isSuccess()",
+              "type": "method",
+              "name": "isSuccess",
+              "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否保存成功</li>\n</ul>\n<p>返回值与 <a href=\"#p-success\">success</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isSuccess"
+        }
+      ],
       "type": "module",
       "displayName": "HttpResponseBody"
     }

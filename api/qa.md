@@ -68,8 +68,8 @@ AutoJs6 对以下功能进行了十足的打磨:
 
 ### 文档格式不统一
 
-AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目前仅完成部分章节的更新, 未更新的章节依然保留原始文档内容, 因此会存在新旧不同的文档编写格式.  
-因文档编写需要耗费巨量的时间及精力, 文档更新速度会相对缓慢.  
+AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目前仅完成部分章节的更新, 未更新的章节依然保留原始文档内容, 因此会存在新旧不同的文档编写格式.<br>
+因文档编写需要耗费巨量的时间及精力, 文档更新速度会相对缓慢.<br>
 当全部章节完成编写及更新后, 文档将实现格式统一.
 
 ### 不支持夜间模式
@@ -81,8 +81,8 @@ AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目�
 
 ### 内容难以理解
 
-对于存在阅读障碍的文档内容, 可尝试暂时略过, 继续阅读后续内容.  
-当完整阅读一个章节或小节后, 可能对之前略过内容的进一步理解有所帮助.  
+对于存在阅读障碍的文档内容, 可尝试暂时略过, 继续阅读后续内容.<br>
+当完整阅读一个章节或小节后, 可能对之前略过内容的进一步理解有所帮助.<br>
 也可提交反馈至 GitHub 项目页面, 开发者可能会根据提交的反馈适当调整文档内容.
 
 ## 图像
@@ -91,8 +91,8 @@ AutoJs6 文档是在开源版本文档的基础上进行更新和修改的, 目�
 
 AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 及 [Baidu PaddlePaddle](https://www.paddlepaddle.org.cn/) 的 [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite) 实现的.
 
-> 注:   
-> AutoJs6 基于 MLKit 引擎的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/OcrMLKit.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [Auto.js](https://github.com/TonyJiangWJ/Auto.js) 项目.  
+> 注:<br>
+> AutoJs6 基于 MLKit 引擎的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/OcrMLKit.kt) 参考自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [Auto.js](https://github.com/TonyJiangWJ/Auto.js) 项目.<br>
 > AutoJs6 基于 Paddle Lite 引擎的 [OCR 实现源码](http://project.autojs6.com/blob/master/app/src/main/java/org/autojs/autojs/runtime/api/OcrPaddle.kt) 源自 [TonyJiangWJ](https://github.com/TonyJiangWJ) 的 [GitHub PR](http://pr.autojs6.com/120).
 
 > 参阅: [光学字符识别 (OCR)](ocr) 模块
@@ -107,9 +107,9 @@ AutoJs6 不支持区域截图.
 
 ### 定时运行脚本
 
-脚本右侧菜单 -> 定时任务, 即可定时运行脚本.  
-需保持 AutoJs6 后台运行, 包括 [ 自启动白名单 / 忽略电池优化 / 忽略后台活动限制 / 系统多任务保留 ] 等.  
-在设备关屏情况下, 可使用 `device.wakeUp()` 唤醒屏幕.  
+脚本右侧菜单 -> 定时任务, 即可定时运行脚本.<br>
+需保持 AutoJs6 后台运行, 包括 [ 自启动白名单 / 忽略电池优化 / 忽略后台活动限制 / 系统多任务保留 ] 等.<br>
+在设备关屏情况下, 可使用 `device.wakeUp()` 唤醒屏幕.<br>
 但 AutoJs6 暂未提供解锁功能, 因此可能需要根据设备自行设计解锁代码.
 
 ### 定时任务获取外部参数
@@ -129,7 +129,7 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 下面列出几个 AutoJs6 中受系统版本影响的方法或属性:
 
 - [notice](notice) 模块的渠道相关功能只能在 `Android API 26 (8.0) [O]` 及以上起作用
-- [device.imei](device#p-imei) 只能在 `Android API 29 (10) [Q]` 及以下获取到设备 IMEI 值
+- [device.getIMEI()](device#device-getimei) 只能在 `Android API 29 (10) [Q]` 及以下获取到设备 IMEI 值
 - [UiSelector#imeEnter](uiSelectorType#m-imeenter) 只能在 `Android API 30 (11) [R]` 及以上才能起作用
 - [UiSelector#dragStart](uiSelectorType#m-dragstart) 只能在 `Android API 32 (12.1) [S_V2]` 及以上才能起作用
 - [UiSelector#showTextSuggestions](uiSelectorType#m-showtextsuggestions) 只能在 `Android API 33 (13) [TIRAMISU]` 及以上才能起作用
@@ -145,8 +145,8 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 |----------------------------------|-------------------------|
 | 魅族 (MEIZU)                       | Flyme OS                |
 | 欧珀 (OPPO / Realme)               | 	ColorOS                |
-| 小米 (XiaoMi / Redmi / BlackShark) | 	MIUI                   |
-| 一加 (OnePlus)                     | 氢OS / Oxygen OS         |
+| 小米 (Xiaomi / Redmi / BlackShark) | 	MIUI / HyperOS         |
+| 一加 (OnePlus)                     | 氢 OS / Oxygen OS        |
 | 维沃 (VIVO / IQOO)                 | 	Funtouch OS / OriginOS |
 | 华为 (Huawei / Honor) 	            | EMUI / HarmonyOS        |
 | 联想 (Lenovo)                      | 	ZUI                    |
@@ -194,24 +194,24 @@ AutoJs6 可以安装在 `Andoird API 24 (7.0) [N]` 及以上的操作系统.
 
 AutoJs6 打包功能尚不完善, 打包应用与 AutoJs6 主应用可能有较大的功能和界面差异.
 
-AutoJs6 开发者暂不考虑参与打包功能相关的开发工作, 目前以 [LZX284](https://github.com/LZX284) 为主要贡献者进行打包功能的开发及维护, 后续将继续由其他开发者贡献相关代码. 
+AutoJs6 开发者暂不考虑参与打包功能相关的开发工作, 目前以 [LZX284](https://github.com/LZX284) 为主要贡献者进行打包功能的开发及维护, 后续将继续由其他开发者贡献相关代码.
 
 ### 图片等资源共同打包及多脚本打包
 
 上述需求需使用 "项目" 功能.
 
-点击 AutoJs6 主页面 "+" 图标, 选择项目, 填写信息后可新建一个项目.  
-项目支持存放多个 [ 脚本 / 模块 / 资源文件 ].  
+点击 AutoJs6 主页面 "+" 图标, 选择项目, 填写信息后可新建一个项目.<br>
+项目支持存放多个 [ 脚本 / 模块 / 资源文件 ].<br>
 项目工具栏的 APK 打包图标, 点击可打包一个项目.
 
-例如:  
-脚本读取同目录 `1.png`: `images.read("./1.png")`.  
-UI 脚本图片控件引用同目录 `2.png`: `<img src="file://2.png"/>`.  
+例如:<br>
+脚本读取同目录 `1.png`: `images.read("./1.png")`.<br>
+UI 脚本图片控件引用同目录 `2.png`: `<img src="file://2.png"/>`.<br>
 AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 `files.path()` 转换为绝对路径.
 
 ### 打包应用不显示主界面
 
-需使用 "项目" 功能.  
+需使用 "项目" 功能.<br>
 新建项目后, 在项目目录 `project.json` 文件中增加以下条目:
 
 ```json
@@ -239,8 +239,8 @@ AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 `files
 
 ## 代码转换
 
-AutoJs6 支持直接调用 [ Java / Android / 扩展库 ] 等 API.  
-对于 AutoJs6 没有内置的功能, 可进行 Java 脚本化, 即直接参照 Java (或 Kotlin 等) 源码, 转换为 JavaScript 代码.  
+AutoJs6 支持直接调用 [ Java / Android / 扩展库 ] 等 API.<br>
+对于 AutoJs6 没有内置的功能, 可进行 Java 脚本化, 即直接参照 Java (或 Kotlin 等) 源码, 转换为 JavaScript 代码.<br>
 例如:
 
 ```java
@@ -277,8 +277,8 @@ function rotate(src, degrees, px, py) {
 
 如有任何问题或建议, 可在 GitHub 项目议题页面发起新的反馈.
 
-关于 <strong>应用文档</strong> 的反馈:  
+关于 <strong>应用文档</strong> 的反馈:<br>
 http://docs-issues.autojs6.com
 
-关于 <strong>AutoJs6</strong> 的反馈:  
+关于 <strong>AutoJs6</strong> 的反馈:<br>
 http://issues.autojs6.com

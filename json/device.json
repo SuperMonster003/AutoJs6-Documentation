@@ -4,677 +4,1817 @@
     {
       "textRaw": "设备 (Device)",
       "name": "设备_(device)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>device模块提供了与设备有关的信息与操作, 例如获取设备宽高, 内存使用率, IMEI, 调整设备亮度、音量等.</p>\n<p>此模块的部分函数, 例如调整音量, 需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出<code>SecurityException</code>并跳转到权限设置界面.</p>\n",
-      "properties": [
+      "desc": "<p>device 模块提供设备构建信息, 屏幕状态, 电量, 内存, 音量, 振动, 网络和唤醒锁等查询或操作能力.</p>\n<p><code>device</code> 与 <code>$device</code> 指向同一个模块对象.</p>\n<p>设备对象由 AutoJs6 扩充成员和内部 Java <code>Device</code> 实例的 Rhino 原型共同组成. 本页记录面向脚本的稳定成员. Java 实现中的 <code>doVibrate</code> 等静态 helper 及继承自 <code>java.lang.Object</code> 的反射成员仅供内部实现使用, 不作为稳定 API.</p>\n<p>修改屏幕亮度或音量的方法需要系统的 &quot;修改系统设置&quot; 权限. 权限不足时, AutoJs6 会打开对应设置页面并抛出 <code>SecurityException</code>. IMEI, 硬件序列号和 MAC 地址还会受到 Android 版本, 应用权限及设备实现限制.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">device</p>\n\n<hr>\n",
+      "modules": [
         {
-          "textRaw": "`width` {number} ",
-          "type": "number",
-          "name": "width",
-          "desc": "<p>设备屏幕分辨率宽度. 例如1080.</p>\n"
+          "textRaw": "[p] width",
+          "name": "[p]_width",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 当前设备屏幕宽度, 单位为像素</li>\n</ul>\n<p>返回设备的物理屏幕宽度. 屏幕旋转后, 宽度和高度可能互换.</p>\n",
+          "type": "module",
+          "displayName": "[p] width"
         },
         {
-          "textRaw": "`height` {number} ",
-          "type": "number",
-          "name": "height",
-          "desc": "<p>设备屏幕分辨率高度. 例如1920.</p>\n"
+          "textRaw": "[p] height",
+          "name": "[p]_height",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 当前设备屏幕高度, 单位为像素</li>\n</ul>\n<p>返回设备的物理屏幕高度. 屏幕旋转后, 宽度和高度可能互换.</p>\n",
+          "type": "module",
+          "displayName": "[p] height"
         },
         {
-          "textRaw": "`buildId` {string} ",
-          "type": "string",
-          "name": "buildId",
-          "desc": "<p>Either a changelist number, or a label like &quot;M4-rc20&quot;.</p>\n<p>修订版本号, 或者诸如&quot;M4-rc20&quot;的标识.</p>\n"
+          "textRaw": "[p] rotation",
+          "name": "[p]_rotation",
+          "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 屏幕旋转状态</li>\n</ul>\n<p>返回当前屏幕相对于设备自然方向的旋转状态:</p>\n<ul>\n<li><code>0</code>: <code>Surface.ROTATION_0</code>.</li>\n<li><code>1</code>: <code>Surface.ROTATION_90</code>.</li>\n<li><code>2</code>: <code>Surface.ROTATION_180</code>.</li>\n<li><code>3</code>: <code>Surface.ROTATION_270</code>.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p] rotation"
         },
         {
-          "textRaw": "`broad` {string} ",
-          "type": "string",
-          "name": "broad",
-          "desc": "<p>The name of the underlying board, like &quot;goldfish&quot;.</p>\n<p>设备的主板(?)型号.</p>\n"
+          "textRaw": "[p] orientation",
+          "name": "[p]_orientation",
+          "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 屏幕方向</li>\n</ul>\n<p>返回由当前屏幕旋转状态计算的方向:</p>\n<ul>\n<li><code>0</code>: <code>Configuration.ORIENTATION_UNDEFINED</code>.</li>\n<li><code>1</code>: <code>Configuration.ORIENTATION_PORTRAIT</code>.</li>\n<li><code>2</code>: <code>Configuration.ORIENTATION_LANDSCAPE</code>.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p] orientation"
         },
         {
-          "textRaw": "`brand` {string} ",
-          "type": "string",
-          "name": "brand",
-          "desc": "<p>The consumer-visible brand with which the product/hardware will be associated, if any.</p>\n<p>与产品或硬件相关的厂商品牌, 如&quot;Xiaomi&quot;, &quot;Huawei&quot;等.</p>\n"
+          "textRaw": "[p] density",
+          "name": "[p]_density",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 屏幕密度, 单位为 DPI</li>\n</ul>\n<p>返回当前设备显示指标中的 <code>densityDpi</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] density"
         },
         {
-          "textRaw": "`device` {string} ",
-          "type": "string",
-          "name": "device",
-          "desc": "<p>The name of the industrial design.</p>\n<p>设备在工业设计中的名称.</p>\n"
-        },
-        {
-          "textRaw": "`model` {string} ",
-          "type": "string",
-          "name": "model",
-          "desc": "<p>The end-user-visible name for the end product.</p>\n<p>设备型号.</p>\n"
-        },
-        {
-          "textRaw": "`product` {string} ",
-          "type": "string",
-          "name": "product",
-          "desc": "<p>The name of the overall product.</p>\n<p>整个产品的名称.</p>\n"
-        },
-        {
-          "textRaw": "`bootloader` {string} ",
-          "type": "string",
-          "name": "bootloader",
-          "desc": "<p>The system bootloader version number.</p>\n<p>设备Bootloader的版本.</p>\n"
-        },
-        {
-          "textRaw": "`hardware` {string} ",
-          "type": "string",
-          "name": "hardware",
-          "desc": "<p>The name of the hardware (from the kernel command line or /proc).</p>\n<p>设备的硬件名称(来自内核命令行或者/proc).</p>\n"
-        },
-        {
-          "textRaw": "`fingerprint` {string} ",
-          "type": "string",
-          "name": "fingerprint",
-          "desc": "<p>A string that uniquely identifies this build. Do not attempt to parse this value.</p>\n<p>构建(build)的唯一标识码.</p>\n"
-        },
-        {
-          "textRaw": "`serial` {string} ",
-          "type": "string",
-          "name": "serial",
-          "desc": "<p>A hardware serial number, if available. Alphanumeric only, case-insensitive.</p>\n<p>硬件序列号.</p>\n"
-        },
-        {
-          "textRaw": "`sdkInt` {number} ",
-          "type": "number",
-          "name": "sdkInt",
-          "desc": "<p>The user-visible SDK version of the framework; its possible values are defined in Build.VERSION_CODES.</p>\n<p>安卓系统API版本. 例如安卓4.4的sdkInt为19.</p>\n"
-        },
-        {
-          "textRaw": "`incremental` {string} ",
-          "type": "string",
-          "name": "incremental",
-          "desc": "<p>The internal value used by the underlying source control to represent this build. E.g., a perforce changelist number or a git hash.</p>\n"
-        },
-        {
-          "textRaw": "`release` {string} ",
-          "type": "string",
-          "name": "release",
-          "desc": "<p>The user-visible version string. E.g., &quot;1.0&quot; or &quot;3.4b5&quot;.</p>\n<p>Android系统版本号. 例如&quot;5.0&quot;, &quot;7.1.1&quot;.</p>\n"
-        },
-        {
-          "textRaw": "`baseOS` {string} ",
-          "type": "string",
-          "name": "baseOS",
-          "desc": "<p>The base OS build the product is based on.</p>\n"
-        },
-        {
-          "textRaw": "`securityPatch` {string} ",
-          "type": "string",
-          "name": "securityPatch",
-          "desc": "<p>The user-visible security patch level.</p>\n<p>安全补丁程序级别.</p>\n"
-        },
-        {
-          "textRaw": "`codename` {string} ",
-          "type": "string",
-          "name": "codename",
-          "desc": "<p>The current development codename, or the string &quot;REL&quot; if this is a release build.</p>\n<p>开发代号, 例如发行版是&quot;REL&quot;.</p>\n"
-        }
-      ],
-      "methods": [
-        {
-          "textRaw": "device.getIMEI()",
-          "type": "method",
-          "name": "getIMEI",
-          "signatures": [
+          "textRaw": "[m] summary",
+          "name": "[m]_summary",
+          "methods": [
             {
-              "params": [
+              "textRaw": "summary()",
+              "type": "method",
+              "name": "summary",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 多行设备信息摘要</li>\n</ul>\n<p>返回 Android 构建版本, 屏幕分辨率, 品牌, 制造商, 设备名称, 型号, 产品名称, 硬件名称, 序列号, IMEI 和 ABI 等信息.</p>\n<p><code>summary</code> 在 AutoJs6 6.3.0 起由取值属性变更为方法.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "{string} ",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备的IMEI.</p>\n"
-        },
-        {
-          "textRaw": "device.getAndroidId()",
-          "type": "method",
-          "name": "getAndroidId",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{string} ",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备的Android ID.</p>\n<p>Android ID为一个用16进制字符串表示的64位整数, 在设备第一次使用时随机生成, 之后不会更改, 除非恢复出厂设置.</p>\n"
-        },
-        {
-          "textRaw": "device.getMacAddress()",
-          "type": "method",
-          "name": "getMacAddress",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{string} ",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备的Mac地址. 该函数需要在有WLAN连接的情况下才能获取, 否则会返回null.</p>\n<p><strong>可能的后续修改</strong>：未来可能增加有root权限的情况下通过root权限获取, 从而在没有WLAN连接的情况下也能返回正确的Mac地址, 因此请勿使用此函数判断WLAN连接.</p>\n"
-        },
-        {
-          "textRaw": "device.getBrightness()",
-          "type": "method",
-          "name": "getBrightness",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} ",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前的(手动)亮度. 范围为0~255.</p>\n"
-        },
-        {
-          "textRaw": "device.getBrightnessMode()",
-          "type": "method",
-          "name": "getBrightnessMode",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} ",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前亮度模式, 0为手动亮度, 1为自动亮度.</p>\n"
-        },
-        {
-          "textRaw": "device.setBrightness(b)",
-          "type": "method",
-          "name": "setBrightness",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`b` {number} 亮度, 范围0~255 ",
-                  "name": "b",
-                  "type": "number",
-                  "desc": "亮度, 范围0~255"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "b"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>设置当前手动亮度. 如果当前是自动亮度模式, 该函数不会影响屏幕的亮度.</p>\n<p>此函数需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出SecurityException并跳转到权限设置界面.</p>\n"
+          "type": "module",
+          "displayName": "[m] summary"
         },
         {
-          "textRaw": "device.setBrightnessMode(mode)",
-          "type": "method",
-          "name": "setBrightnessMode",
-          "signatures": [
+          "textRaw": "[m] digest",
+          "name": "[m]_digest",
+          "methods": [
             {
-              "params": [
+              "textRaw": "digest()",
+              "type": "method",
+              "name": "digest",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 单行设备信息简表</li>\n</ul>\n<p>返回以下 3 组信息, 并使用 <code>&quot; / &quot;</code> 分隔:</p>\n<ul>\n<li>品牌, 以及与品牌不同时的制造商.</li>\n<li>设备代号, 以及与设备代号不同时的型号.</li>\n<li>Android 版本和 Android API 级别.</li>\n</ul>\n<p><code>digest</code> 在 AutoJs6 6.3.0 起由取值属性变更为方法.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`mode` {number} 亮度模式, 0为手动亮度, 1为自动亮度 ",
-                  "name": "mode",
-                  "type": "number",
-                  "desc": "亮度模式, 0为手动亮度, 1为自动亮度"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "mode"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>设置当前亮度模式.</p>\n<p>此函数需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出SecurityException并跳转到权限设置界面.</p>\n"
+          "type": "module",
+          "displayName": "[m] digest"
         },
         {
-          "textRaw": "device.getMusicVolume()",
-          "type": "method",
-          "name": "getMusicVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前媒体音量.</p>\n"
+          "textRaw": "[p] buildId",
+          "name": "[p]_buildid",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 构建显示 ID</li>\n</ul>\n<p>对应 <code>Build.DISPLAY</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] buildId"
         },
         {
-          "textRaw": "device.getNotificationVolume()",
-          "type": "method",
-          "name": "getNotificationVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前通知音量.</p>\n"
+          "textRaw": "[p] buildDisplay",
+          "name": "[p]_builddisplay",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 构建显示 ID</li>\n</ul>\n<p>与 <a href=\"#p-buildid\">buildId</a> 相同, 对应 <code>Build.DISPLAY</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] buildDisplay"
         },
         {
-          "textRaw": "device.getAlarmVolume()",
-          "type": "method",
-          "name": "getAlarmVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前闹钟音量.</p>\n"
+          "textRaw": "[p] product",
+          "name": "[p]_product",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 整体产品名称</li>\n</ul>\n<p>对应 <code>Build.PRODUCT</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] product"
         },
         {
-          "textRaw": "device.getMusicMaxVolume()",
-          "type": "method",
-          "name": "getMusicMaxVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回媒体音量的最大值.</p>\n"
+          "textRaw": "[p] board",
+          "name": "[p]_board",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 主板名称</li>\n</ul>\n<p>对应 <code>Build.BOARD</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] board"
         },
         {
-          "textRaw": "device.getNotificationMaxVolume()",
-          "type": "method",
-          "name": "getNotificationMaxVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回通知音量的最大值.</p>\n"
+          "textRaw": "[p] brand",
+          "name": "[p]_brand",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 面向用户的产品品牌</li>\n</ul>\n<p>对应 <code>Build.BRAND</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] brand"
         },
         {
-          "textRaw": "device.getAlarmMaxVolume()",
-          "type": "method",
-          "name": "getAlarmMaxVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} 整数值 ",
-                  "type": "number",
-                  "desc": "整数值"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回闹钟音量的最大值.</p>\n"
+          "textRaw": "[p] manufacturer",
+          "name": "[p]_manufacturer",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 产品或硬件制造商</li>\n</ul>\n<p>对应 <code>Build.MANUFACTURER</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] manufacturer"
         },
         {
-          "textRaw": "device.setMusicVolume(volume)",
-          "type": "method",
-          "name": "setMusicVolume",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`volume` {number} 音量 ",
-                  "name": "volume",
-                  "type": "number",
-                  "desc": "音量"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "volume"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>设置当前媒体音量.</p>\n<p>此函数需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出SecurityException并跳转到权限设置界面.</p>\n"
+          "textRaw": "[p] device",
+          "name": "[p]_device",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 工业设计中的设备代号</li>\n</ul>\n<p>对应 <code>Build.DEVICE</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] device"
         },
         {
-          "textRaw": "device.setNotificationVolume(volume)",
-          "type": "method",
-          "name": "setNotificationVolume",
-          "signatures": [
+          "textRaw": "[p] model",
+          "name": "[p]_model",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 面向用户的产品型号</li>\n</ul>\n<p>对应 <code>Build.MODEL</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] model"
+        },
+        {
+          "textRaw": "[p] bootloader",
+          "name": "[p]_bootloader",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 系统引导程序版本</li>\n</ul>\n<p>对应 <code>Build.BOOTLOADER</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] bootloader"
+        },
+        {
+          "textRaw": "[p] hardware",
+          "name": "[p]_hardware",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 硬件名称</li>\n</ul>\n<p>对应 <code>Build.HARDWARE</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] hardware"
+        },
+        {
+          "textRaw": "[p] fingerprint",
+          "name": "[p]_fingerprint",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 构建指纹</li>\n</ul>\n<p>对应 <code>Build.FINGERPRINT</code>. 构建指纹的格式由 Android 系统决定, 不应依赖固定的分段格式解析.</p>\n",
+          "type": "module",
+          "displayName": "[p] fingerprint"
+        },
+        {
+          "textRaw": "[p] sdkInt",
+          "name": "[p]_sdkint",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - Android API 级别</li>\n</ul>\n<p>对应 <code>Build.VERSION.SDK_INT</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] sdkInt"
+        },
+        {
+          "textRaw": "[p] incremental",
+          "name": "[p]_incremental",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 增量构建版本</li>\n</ul>\n<p>对应 <code>Build.VERSION.INCREMENTAL</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] incremental"
+        },
+        {
+          "textRaw": "[p] release",
+          "name": "[p]_release",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 面向用户的 Android 版本</li>\n</ul>\n<p>对应 <code>Build.VERSION.RELEASE</code>, 如 <code>&quot;14&quot;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] release"
+        },
+        {
+          "textRaw": "[p] baseOS",
+          "name": "[p]_baseos",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 产品所基于的基础系统构建</li>\n</ul>\n<p>对应 <code>Build.VERSION.BASE_OS</code>. 系统未提供此信息时可能为空字符串.</p>\n",
+          "type": "module",
+          "displayName": "[p] baseOS"
+        },
+        {
+          "textRaw": "[p] securityPatch",
+          "name": "[p]_securitypatch",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 安全补丁级别</li>\n</ul>\n<p>对应 <code>Build.VERSION.SECURITY_PATCH</code>. 系统未提供此信息时可能为空字符串.</p>\n",
+          "type": "module",
+          "displayName": "[p] securityPatch"
+        },
+        {
+          "textRaw": "[p] codename",
+          "name": "[p]_codename",
+          "desc": "<p><strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - Android 开发代号</li>\n</ul>\n<p>对应 <code>Build.VERSION.CODENAME</code>. 正式发行构建通常为 <code>&quot;REL&quot;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] codename"
+        },
+        {
+          "textRaw": "[p] serial",
+          "name": "[p]_serial",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 硬件序列号</li>\n</ul>\n<p>脚本运行时创建内部设备实例时读取并缓存硬件序列号. Android 不允许当前应用读取时返回 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] serial"
+        },
+        {
+          "textRaw": "[p] imei",
+          "name": "[p]_imei",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - IMEI</li>\n</ul>\n<p>脚本运行时创建内部设备实例时读取并缓存 IMEI. 设备不支持电话功能, 权限不足或 Android 不允许当前应用读取时返回 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] imei"
+        },
+        {
+          "textRaw": "[m] getMarketName",
+          "name": "[m]_getmarketname",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getMarketName()",
+              "type": "method",
+              "name": "getMarketName",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 设备市场名称</li>\n</ul>\n<p>按以下系统属性的顺序返回第一个非空值:</p>\n<ul>\n<li><code>ro.product.marketname</code>.</li>\n<li><code>ro.semc.product.name</code>.</li>\n<li><code>ro.config.marketing_name</code>.</li>\n<li><code>ro.product.model</code>.</li>\n</ul>\n<p>上述属性均无可用值时返回 <a href=\"#p-model\">model</a>.</p>\n<p><span id=\"device-getimei\"></span></p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`volume` {number} 音量 ",
-                  "name": "volume",
-                  "type": "number",
-                  "desc": "音量"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "volume"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>设置当前通知音量.</p>\n<p>此函数需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出SecurityException并跳转到权限设置界面.</p>\n"
+          "type": "module",
+          "displayName": "[m] getMarketName"
         },
         {
-          "textRaw": "device.setAlarmVolume(volume)",
-          "type": "method",
-          "name": "setAlarmVolume",
-          "signatures": [
+          "textRaw": "[m] getIMEI",
+          "name": "[m]_getimei",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getIMEI()",
+              "type": "method",
+              "name": "getIMEI",
+              "signatures": [
                 {
-                  "textRaw": "`volume` {number} 音量 ",
-                  "name": "volume",
-                  "type": "number",
-                  "desc": "音量"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 缓存的 IMEI ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "缓存的 IMEI"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
+              ],
+              "desc": "<p>返回 <a href=\"#p-imei\">imei</a>. 此方法不会申请 <code>android.permission.READ_PHONE_STATE</code>.</p>\n<p>在较新 Android 版本中, 即使应用已获得 <code>READ_PHONE_STATE</code>, 系统仍可能限制普通应用读取不可重置的设备标识, 此时返回 <code>null</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIMEI"
+        },
+        {
+          "textRaw": "[m] getSerial",
+          "name": "[m]_getserial",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getSerial()",
+              "type": "method",
+              "name": "getSerial",
+              "signatures": [
                 {
-                  "name": "volume"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 缓存的硬件序列号 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "缓存的硬件序列号"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回 <a href=\"#p-serial\">serial</a>. Android 不允许当前应用读取时返回 <code>null</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getSerial"
+        },
+        {
+          "textRaw": "[m] getAndroidId",
+          "name": "[m]_getandroidid",
+          "methods": [
+            {
+              "textRaw": "getAndroidId()",
+              "type": "method",
+              "name": "getAndroidId",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Android ID ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "Android ID"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回 <code>Settings.Secure.ANDROID_ID</code>. Android 8.0 及以上系统通常按应用签名密钥, 用户和设备确定此值. 系统未提供值时返回 <code>null</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getAndroidId"
+        },
+        {
+          "textRaw": "[m] getSharedDeviceId",
+          "name": "[m]_getshareddeviceid",
+          "methods": [
+            {
+              "textRaw": "getSharedDeviceId()",
+              "type": "method",
+              "name": "getSharedDeviceId",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - AutoJs6 共享设备 ID</li>\n</ul>\n<p>从 AutoJs6 的设备 ID 内容提供器读取持久化 UUID. AutoJs6 及获准访问同一提供器的应用可取得相同结果, 且不需要读取 IMEI 或硬件序列号. 查询未返回数据时返回 <code>null</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>设置当前闹钟音量.</p>\n<p>此函数需要&quot;修改系统设置&quot;的权限. 如果没有该权限, 会抛出SecurityException并跳转到权限设置界面.</p>\n"
+          "type": "module",
+          "displayName": "[m] getSharedDeviceId"
         },
         {
-          "textRaw": "device.getBattery()",
-          "type": "method",
-          "name": "getBattery",
-          "signatures": [
+          "textRaw": "[m] getMacAddress",
+          "name": "[m]_getmacaddress",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getMacAddress()",
+              "type": "method",
+              "name": "getMacAddress",
+              "signatures": [
                 {
-                  "textRaw": "{number} 0.0~100.0的浮点数 ",
-                  "type": "number",
-                  "desc": "0.0~100.0的浮点数"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - WLAN 接口 MAC 地址 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "WLAN 接口 MAC 地址"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": []
+              ],
+              "desc": "<p>依次尝试 Wi-Fi 连接信息, <code>wlan0</code> 网络接口和 <code>/sys/class/net/wlan0/address</code>. 无可用结果时返回 <code>null</code>.</p>\n<p>Android 的 MAC 地址隐私限制可能使方法取得占位地址或无法取得地址. 不应使用此方法判断 Wi-Fi 是否已连接, 也不应将结果作为稳定设备标识.</p>\n"
             }
           ],
-          "desc": "<p>返回当前电量百分比.</p>\n"
+          "type": "module",
+          "displayName": "[m] getMacAddress"
         },
         {
-          "textRaw": "device.isCharging()",
-          "type": "method",
-          "name": "isCharging",
-          "signatures": [
+          "textRaw": "[m] isManufacturer",
+          "name": "[m]_ismanufacturer",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isManufacturer(manufacturer)",
+              "type": "method",
+              "name": "isManufacturer",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><strong>manufacturer</strong> { <a href=\"dataTypes#string\">string</a> } - 待匹配的制造商名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否匹配当前制造商</li>\n</ul>\n<p>去除参数首尾空白后, 与 <code>Build.MANUFACTURER</code> 进行不区分大小写的完整匹配.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "{boolean} ",
-                  "type": "boolean"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备是否正在充电.</p>\n"
-        },
-        {
-          "textRaw": "device.getTotalMem()",
-          "type": "method",
-          "name": "getTotalMem",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} ",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备内存总量, 单位字节(B). 1MB = 1024 * 1024B.</p>\n"
-        },
-        {
-          "textRaw": "device.getAvailMem()",
-          "type": "method",
-          "name": "getAvailMem",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "{number} ",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备当前可用的内存, 单位字节(B).</p>\n"
-        },
-        {
-          "textRaw": "device.isScreenOn()",
-          "type": "method",
-          "name": "isScreenOn",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回设备屏幕是否是亮着的. 如果屏幕亮着, 返回<code>true</code>; 否则返回<code>false</code>.</p>\n<p>需要注意的是, 类似于vivo xplay系列的息屏时钟不属于&quot;屏幕亮着&quot;的情况, 虽然屏幕确实亮着但只能显示时钟而且不可交互, 此时<code>isScreenOn()</code>也会返回<code>false</code>.</p>\n"
-        },
-        {
-          "textRaw": "device.wakeUp()",
-          "type": "method",
-          "name": "wakeUp",
-          "desc": "<p>唤醒设备. 包括唤醒设备CPU、屏幕等. 可以用来点亮屏幕.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "device.wakeUpIfNeeded()",
-          "type": "method",
-          "name": "wakeUpIfNeeded",
-          "desc": "<p>如果屏幕没有点亮, 则唤醒设备.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "device.keepScreenOn([timeout])",
-          "type": "method",
-          "name": "keepScreenOn",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`timeout` {number} 屏幕保持常亮的时间, 单位毫秒. 如果不加此参数, 则一直保持屏幕常亮. ",
-                  "name": "timeout",
-                  "type": "number",
-                  "desc": "屏幕保持常亮的时间, 单位毫秒. 如果不加此参数, 则一直保持屏幕常亮.",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "timeout",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "manufacturer"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>保持屏幕常亮.</p>\n<p>此函数无法阻止用户使用锁屏键等正常关闭屏幕, 只能使得设备在无人操作的情况下保持屏幕常亮；同时, 如果此函数调用时屏幕没有点亮, 则会唤醒屏幕.</p>\n<p>在某些设备上, 如果不加参数timeout, 只能在Auto.js的界面保持屏幕常亮, 在其他界面会自动失效, 这是因为设备的省电策略造成的. 因此, 建议使用比较长的时长来代替&quot;一直保持屏幕常亮&quot;的功能, 例如<code>device.keepScreenOn(3600 * 1000)</code>.</p>\n<p>可以使用<code>device.cancelKeepingAwake()</code>来取消屏幕常亮.</p>\n<pre><code>//一直保持屏幕常亮\ndevice.keepScreenOn()\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] isManufacturer"
         },
         {
-          "textRaw": "device.keepScreenDim([timeout])",
-          "type": "method",
-          "name": "keepScreenDim",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`timeout` {number} 屏幕保持常亮的时间, 单位毫秒. 如果不加此参数, 则一直保持屏幕常亮. ",
-                  "name": "timeout",
-                  "type": "number",
-                  "desc": "屏幕保持常亮的时间, 单位毫秒. 如果不加此参数, 则一直保持屏幕常亮.",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "timeout",
-                  "optional": true
-                }
-              ]
-            }
-          ],
-          "desc": "<p>保持屏幕常亮, 但允许屏幕变暗来节省电量. 此函数可以用于定时脚本唤醒屏幕操作, 不需要用户观看屏幕, 可以让屏幕变暗来节省电量.</p>\n<p>此函数无法阻止用户使用锁屏键等正常关闭屏幕, 只能使得设备在无人操作的情况下保持屏幕常亮；同时, 如果此函数调用时屏幕没有点亮, 则会唤醒屏幕.</p>\n<p>可以使用<code>device.cancelKeepingAwake()</code>来取消屏幕常亮.</p>\n"
+          "textRaw": "[p+] manufacturers",
+          "name": "[p+]_manufacturers",
+          "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - 常见制造商识别对象</li>\n</ul>\n<p>以下方法均不接收参数并返回 <a href=\"dataTypes#boolean\">boolean</a>:</p>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>匹配条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>manufacturers.isHtc()</code></td>\n<td>制造商为 HTC</td>\n</tr>\n<tr>\n<td><code>manufacturers.isLG()</code></td>\n<td>制造商为 LG</td>\n</tr>\n<tr>\n<td><code>manufacturers.isOnePlus()</code></td>\n<td>制造商为 OnePlus</td>\n</tr>\n<tr>\n<td><code>manufacturers.isSamsung()</code></td>\n<td>制造商为 Samsung</td>\n</tr>\n<tr>\n<td><code>manufacturers.isZte()</code></td>\n<td>制造商为 ZTE</td>\n</tr>\n<tr>\n<td><code>manufacturers.isLetv()</code></td>\n<td>制造商为 Letv</td>\n</tr>\n<tr>\n<td><code>manufacturers.isHuawei()</code></td>\n<td>制造商为 Huawei, Nova 或 Honor</td>\n</tr>\n<tr>\n<td><code>manufacturers.isNova()</code></td>\n<td>制造商为 Nova</td>\n</tr>\n<tr>\n<td><code>manufacturers.isHonor()</code></td>\n<td>制造商为 Honor</td>\n</tr>\n<tr>\n<td><code>manufacturers.isXiaomi()</code></td>\n<td>制造商为 Xiaomi, 或 <a href=\"#p-brands\">brands</a> 识别为 Redmi 或 Mi Mix</td>\n</tr>\n<tr>\n<td><code>manufacturers.isOppo()</code></td>\n<td>制造商为 Oppo</td>\n</tr>\n<tr>\n<td><code>manufacturers.isSony()</code></td>\n<td>制造商为 Sony, 或 <a href=\"#p-brands\">brands</a> 识别为 Xperia</td>\n</tr>\n<tr>\n<td><code>manufacturers.isVivo()</code></td>\n<td>制造商为 Vivo</td>\n</tr>\n<tr>\n<td><code>manufacturers.isLenovo()</code></td>\n<td>制造商为 Lenovo</td>\n</tr>\n<tr>\n<td><code>manufacturers.isCoolpad()</code></td>\n<td>制造商为 Yulong</td>\n</tr>\n<tr>\n<td><code>manufacturers.isSmartisan()</code></td>\n<td>制造商为 Smartisan</td>\n</tr>\n<tr>\n<td><code>manufacturers.isMeizu()</code></td>\n<td>制造商为 Meizu</td>\n</tr>\n</tbody>\n</table>\n<p>制造商名称匹配均忽略大小写.</p>\n",
+          "type": "module",
+          "displayName": "[p+] manufacturers"
         },
         {
-          "textRaw": "device.cancelKeepingAwake()",
-          "type": "method",
-          "name": "cancelKeepingAwake",
-          "desc": "<p>取消设备保持唤醒状态. 用于取消<code>device.keepScreenOn()</code>, <code>device.keepScreenDim()</code>等函数设置的屏幕常亮.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
+          "textRaw": "[p+] brands",
+          "name": "[p+]_brands",
+          "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - 常见品牌或产品线识别对象</li>\n</ul>\n<p>以下方法均不接收参数并返回 <a href=\"dataTypes#boolean\">boolean</a>:</p>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>匹配条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>brands.isXperia()</code></td>\n<td>系统属性 <code>ro.semc.product.name</code> 包含 <code>&quot;xperia&quot;</code></td>\n</tr>\n<tr>\n<td><code>brands.isRedmi()</code></td>\n<td>系统属性 <code>ro.product.model</code> 包含 <code>&quot;redmi&quot;</code></td>\n</tr>\n<tr>\n<td><code>brands.isMiMix()</code></td>\n<td><code>Build.MODEL</code> 包含 <code>&quot;mi mix&quot;</code></td>\n</tr>\n</tbody>\n</table>\n<p>字符串包含判断不区分大小写.</p>\n",
+          "type": "module",
+          "displayName": "[p+] brands"
         },
         {
-          "textRaw": "device.vibrate(millis)",
-          "type": "method",
-          "name": "vibrate",
-          "signatures": [
+          "textRaw": "[p+] roms",
+          "name": "[p+]_roms",
+          "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - Android 定制系统识别对象</li>\n</ul>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>roms.isBackgroundStartGranted(context?)</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>检查 MIUI, Vivo 或 Oppo 的后台启动相关权限. 省略 <code>context</code> 时使用当前应用上下文. 其他系统返回 <code>true</code></td>\n</tr>\n<tr>\n<td><code>roms.isMiui()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.miui.ui.version.name</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isEmui()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.build.version.emui</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isOppo()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.build.version.opporom</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isSmartisan()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.smartisan.version</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isVivo()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.vivo.os.version</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isGionee()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.gn.sv.version</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isLenovo()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>系统属性 <code>ro.lenovo.lvp.version</code> 是否非空</td>\n</tr>\n<tr>\n<td><code>roms.isFlyme()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td><code>Build.DISPLAY</code> 是否包含 <code>&quot;flyme&quot;</code></td>\n</tr>\n<tr>\n<td><code>roms.isQiku()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>兼容库是否将当前系统识别为 Qiku 系统</td>\n</tr>\n</tbody>\n</table>\n<p><code>roms.isBackgroundStartGranted(context?)</code> 的可选参数类型为 <a href=\"https://developer.android.com/reference/android/content/Context\">android.content.Context</a>. 该方法只实现源码中列出的厂商规则, 不能作为所有 Android 系统后台启动能力的通用保证.</p>\n",
+          "type": "module",
+          "displayName": "[p+] roms"
+        },
+        {
+          "textRaw": "[m] hasReadPhoneStatePermission",
+          "name": "[m]_hasreadphonestatepermission",
+          "methods": [
             {
-              "params": [
+              "textRaw": "hasReadPhoneStatePermission()",
+              "type": "method",
+              "name": "hasReadPhoneStatePermission",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已授予读取电话状态权限</li>\n</ul>\n<p>检查当前应用的 <code>android.permission.READ_PHONE_STATE</code> 是否为已授予状态.</p>\n<p>此结果只表示权限授予状态. Android 对 IMEI 和硬件序列号的额外限制仍可能使读取结果为 <code>null</code>.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`millis` {number} 振动时间, 单位毫秒 ",
-                  "name": "millis",
-                  "type": "number",
-                  "desc": "振动时间, 单位毫秒"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "millis"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>使设备振动一段时间.</p>\n<pre><code>//振动两秒\ndevice.vibrate(2000);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] hasReadPhoneStatePermission"
         },
         {
-          "textRaw": "device.cancelVibration()",
-          "type": "method",
-          "name": "cancelVibration",
-          "desc": "<p>如果设备处于振动状态, 则取消振动.</p>\n",
-          "signatures": [
+          "textRaw": "[m] ensureReadPhoneStatePermission",
+          "name": "[m]_ensurereadphonestatepermission",
+          "methods": [
             {
-              "params": []
+              "textRaw": "ensureReadPhoneStatePermission()",
+              "type": "method",
+              "name": "ensureReadPhoneStatePermission",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>已授予 <code>android.permission.READ_PHONE_STATE</code> 时直接返回, 否则抛出 <code>SecurityException</code>.</p>\n<p>此方法只检查权限, 不会请求权限或打开权限设置页面.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m] ensureReadPhoneStatePermission"
+        },
+        {
+          "textRaw": "[m] getBrightness",
+          "name": "[m]_getbrightness",
+          "methods": [
+            {
+              "textRaw": "getBrightness()",
+              "type": "method",
+              "name": "getBrightness",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前系统屏幕亮度值 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前系统屏幕亮度值"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>读取 <code>Settings.System.SCREEN_BRIGHTNESS</code>. Android 通常使用 <code>0</code> 到 <code>255</code> 的范围. 设置项不存在时抛出 <code>Settings.SettingNotFoundException</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getBrightness"
+        },
+        {
+          "textRaw": "[m] getBrightnessMode",
+          "name": "[m]_getbrightnessmode",
+          "methods": [
+            {
+              "textRaw": "getBrightnessMode()",
+              "type": "method",
+              "name": "getBrightnessMode",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前系统亮度模式 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前系统亮度模式"
+                    },
+                    {
+                      "textRaw": "`0`: 手动亮度. ",
+                      "name": "0",
+                      "desc": "手动亮度."
+                    },
+                    {
+                      "textRaw": "`1`: 自动亮度. ",
+                      "name": "1",
+                      "desc": "自动亮度."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>设置项不存在时抛出 <code>Settings.SettingNotFoundException</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getBrightnessMode"
+        },
+        {
+          "textRaw": "[m] setBrightness",
+          "name": "[m]_setbrightness",
+          "methods": [
+            {
+              "textRaw": "setBrightness(brightness)",
+              "type": "method",
+              "name": "setBrightness",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**brightness** { [number](dataTypes#number) } - 新的系统屏幕亮度值 ",
+                      "name": "**brightness**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的系统屏幕亮度值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "brightness"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将参数写入 <code>Settings.System.SCREEN_BRIGHTNESS</code>. 源码不对参数范围进行校验. 当前处于自动亮度模式时, 写入值不一定立即成为屏幕的实际亮度.</p>\n<p>此方法需要系统的 &quot;修改系统设置&quot; 权限.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setBrightness"
+        },
+        {
+          "textRaw": "[m] setBrightnessMode",
+          "name": "[m]_setbrightnessmode",
+          "methods": [
+            {
+              "textRaw": "setBrightnessMode(mode)",
+              "type": "method",
+              "name": "setBrightnessMode",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**mode** { [number](dataTypes#number) } - 新的系统亮度模式, `0` 表示手动, `1` 表示自动 ",
+                      "name": "**mode**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的系统亮度模式, `0` 表示手动, `1` 表示自动"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "mode"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将参数写入 <code>Settings.System.SCREEN_BRIGHTNESS_MODE</code>. 源码不对参数值进行校验.</p>\n<p>此方法需要系统的 &quot;修改系统设置&quot; 权限.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setBrightnessMode"
+        },
+        {
+          "textRaw": "[m] getMusicVolume",
+          "name": "[m]_getmusicvolume",
+          "methods": [
+            {
+              "textRaw": "getMusicVolume()",
+              "type": "method",
+              "name": "getMusicVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前媒体音量 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前媒体音量"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getMusicVolume"
+        },
+        {
+          "textRaw": "[m] getNotificationVolume",
+          "name": "[m]_getnotificationvolume",
+          "methods": [
+            {
+              "textRaw": "getNotificationVolume()",
+              "type": "method",
+              "name": "getNotificationVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前通知音量 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前通知音量"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getNotificationVolume"
+        },
+        {
+          "textRaw": "[m] getAlarmVolume",
+          "name": "[m]_getalarmvolume",
+          "methods": [
+            {
+              "textRaw": "getAlarmVolume()",
+              "type": "method",
+              "name": "getAlarmVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前闹钟音量 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前闹钟音量"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getAlarmVolume"
+        },
+        {
+          "textRaw": "[m] getMusicMaxVolume",
+          "name": "[m]_getmusicmaxvolume",
+          "methods": [
+            {
+              "textRaw": "getMusicMaxVolume()",
+              "type": "method",
+              "name": "getMusicMaxVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 媒体音量上限 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "媒体音量上限"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getMusicMaxVolume"
+        },
+        {
+          "textRaw": "[m] getNotificationMaxVolume",
+          "name": "[m]_getnotificationmaxvolume",
+          "methods": [
+            {
+              "textRaw": "getNotificationMaxVolume()",
+              "type": "method",
+              "name": "getNotificationMaxVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 通知音量上限 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "通知音量上限"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getNotificationMaxVolume"
+        },
+        {
+          "textRaw": "[m] getAlarmMaxVolume",
+          "name": "[m]_getalarmmaxvolume",
+          "methods": [
+            {
+              "textRaw": "getAlarmMaxVolume()",
+              "type": "method",
+              "name": "getAlarmMaxVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 闹钟音量上限 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "闹钟音量上限"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getAlarmMaxVolume"
+        },
+        {
+          "textRaw": "[m] setMusicVolume",
+          "name": "[m]_setmusicvolume",
+          "methods": [
+            {
+              "textRaw": "setMusicVolume(volume)",
+              "type": "method",
+              "name": "setMusicVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**volume** { [number](dataTypes#number) } - 新的媒体音量 ",
+                      "name": "**volume**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的媒体音量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "volume"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>此方法需要系统的 &quot;修改系统设置&quot; 权限. 可使用 <a href=\"#getmusicmaxvolume\">getMusicMaxVolume()</a> 查询设备支持的上限.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setMusicVolume"
+        },
+        {
+          "textRaw": "[m] setNotificationVolume",
+          "name": "[m]_setnotificationvolume",
+          "methods": [
+            {
+              "textRaw": "setNotificationVolume(volume)",
+              "type": "method",
+              "name": "setNotificationVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**volume** { [number](dataTypes#number) } - 新的通知音量 ",
+                      "name": "**volume**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的通知音量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "volume"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>此方法需要系统的 &quot;修改系统设置&quot; 权限. 可使用 <a href=\"#getnotificationmaxvolume\">getNotificationMaxVolume()</a> 查询设备支持的上限.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setNotificationVolume"
+        },
+        {
+          "textRaw": "[m] setAlarmVolume",
+          "name": "[m]_setalarmvolume",
+          "methods": [
+            {
+              "textRaw": "setAlarmVolume(volume)",
+              "type": "method",
+              "name": "setAlarmVolume",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**volume** { [number](dataTypes#number) } - 新的闹钟音量 ",
+                      "name": "**volume**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的闹钟音量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "volume"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>此方法需要系统的 &quot;修改系统设置&quot; 权限. 可使用 <a href=\"#getalarmmaxvolume\">getAlarmMaxVolume()</a> 查询设备支持的上限.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setAlarmVolume"
+        },
+        {
+          "textRaw": "[m] getBattery",
+          "name": "[m]_getbattery",
+          "methods": [
+            {
+              "textRaw": "getBattery()",
+              "type": "method",
+              "name": "getBattery",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 电池电量百分比 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "电池电量百分比"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>根据系统电池广播中的电量和满量程计算百分比, 并保留 1 位小数. 无法取得电池广播时返回 <code>-1</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getBattery"
+        },
+        {
+          "textRaw": "[m] isCharging",
+          "name": "[m]_ischarging",
+          "methods": [
+            {
+              "textRaw": "isCharging()",
+              "type": "method",
+              "name": "isCharging",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 设备是否正在充电或已充满且仍连接电源 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "设备是否正在充电或已充满且仍连接电源"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>电池状态为 <code>BATTERY_STATUS_CHARGING</code> 或 <code>BATTERY_STATUS_FULL</code> 时返回 <code>true</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isCharging"
+        },
+        {
+          "textRaw": "[m] isPowerSourceAC",
+          "name": "[m]_ispowersourceac",
+          "methods": [
+            {
+              "textRaw": "isPowerSourceAC()",
+              "type": "method",
+              "name": "isPowerSourceAC",
+              "desc": "<p><strong><code>6.3.2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前电源是否为交流电源</li>\n</ul>\n<p>只有 <a href=\"#ischarging\">isCharging()</a> 为 <code>true</code>, 且系统报告 <code>BATTERY_PLUGGED_AC</code> 时返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPowerSourceAC"
+        },
+        {
+          "textRaw": "[m] isPowerSourceUSB",
+          "name": "[m]_ispowersourceusb",
+          "methods": [
+            {
+              "textRaw": "isPowerSourceUSB()",
+              "type": "method",
+              "name": "isPowerSourceUSB",
+              "desc": "<p><strong><code>6.3.2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前电源是否为 USB</li>\n</ul>\n<p>只有 <a href=\"#ischarging\">isCharging()</a> 为 <code>true</code>, 且系统报告 <code>BATTERY_PLUGGED_USB</code> 时返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPowerSourceUSB"
+        },
+        {
+          "textRaw": "[m] isPowerSourceWireless",
+          "name": "[m]_ispowersourcewireless",
+          "methods": [
+            {
+              "textRaw": "isPowerSourceWireless()",
+              "type": "method",
+              "name": "isPowerSourceWireless",
+              "desc": "<p><strong><code>6.3.2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前电源是否为无线充电</li>\n</ul>\n<p>只有 <a href=\"#ischarging\">isCharging()</a> 为 <code>true</code>, 且系统报告 <code>BATTERY_PLUGGED_WIRELESS</code> 时返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPowerSourceWireless"
+        },
+        {
+          "textRaw": "[m] isPowerSourceDock",
+          "name": "[m]_ispowersourcedock",
+          "methods": [
+            {
+              "textRaw": "isPowerSourceDock()",
+              "type": "method",
+              "name": "isPowerSourceDock",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>API&gt;=33</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前电源是否为 Dock</li>\n</ul>\n<p>Android API 33 及以上系统中, 只有 <a href=\"#ischarging\">isCharging()</a> 为 <code>true</code>, 且系统报告 <code>BATTERY_PLUGGED_DOCK</code> 时返回 <code>true</code>. 更低版本固定返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPowerSourceDock"
+        },
+        {
+          "textRaw": "[m] getTotalMem",
+          "name": "[m]_gettotalmem",
+          "methods": [
+            {
+              "textRaw": "getTotalMem()",
+              "type": "method",
+              "name": "getTotalMem",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 设备内存总量, 单位为字节 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "设备内存总量, 单位为字节"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getTotalMem"
+        },
+        {
+          "textRaw": "[m] getAvailMem",
+          "name": "[m]_getavailmem",
+          "methods": [
+            {
+              "textRaw": "getAvailMem()",
+              "type": "method",
+              "name": "getAvailMem",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前可用内存, 单位为字节 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前可用内存, 单位为字节"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getAvailMem"
+        },
+        {
+          "textRaw": "[m] getRotation",
+          "name": "[m]_getrotation",
+          "methods": [
+            {
+              "textRaw": "getRotation()",
+              "type": "method",
+              "name": "getRotation",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 屏幕旋转状态</li>\n</ul>\n<p>返回值与 <a href=\"#p-rotation\">rotation</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getRotation"
+        },
+        {
+          "textRaw": "[m] getOrientation",
+          "name": "[m]_getorientation",
+          "methods": [
+            {
+              "textRaw": "getOrientation()",
+              "type": "method",
+              "name": "getOrientation",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 屏幕方向</li>\n</ul>\n<p>返回值与 <a href=\"#p-orientation\">orientation</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getOrientation"
+        },
+        {
+          "textRaw": "[m] isScreenOn",
+          "name": "[m]_isscreenon",
+          "methods": [
+            {
+              "textRaw": "isScreenOn()",
+              "type": "method",
+              "name": "isScreenOn",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 屏幕是否处于点亮状态 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "屏幕是否处于点亮状态"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>仅当默认显示设备状态为 <code>Display.STATE_ON</code> 时返回 <code>true</code>. 息屏显示等不可交互状态不属于此处的点亮状态.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenOn"
+        },
+        {
+          "textRaw": "[m] isScreenOff",
+          "name": "[m]_isscreenoff",
+          "methods": [
+            {
+              "textRaw": "isScreenOff()",
+              "type": "method",
+              "name": "isScreenOff",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 屏幕是否处于熄灭状态 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "屏幕是否处于熄灭状态"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回 <code>!device.isScreenOn()</code> 的结果.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenOff"
+        },
+        {
+          "textRaw": "[m] isScreenPortrait",
+          "name": "[m]_isscreenportrait",
+          "methods": [
+            {
+              "textRaw": "isScreenPortrait()",
+              "type": "method",
+              "name": "isScreenPortrait",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 屏幕是否为竖屏</li>\n</ul>\n<p>屏幕旋转状态为 <code>Surface.ROTATION_0</code> 或 <code>Surface.ROTATION_180</code> 时返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenPortrait"
+        },
+        {
+          "textRaw": "[m] isScreenLandscape",
+          "name": "[m]_isscreenlandscape",
+          "methods": [
+            {
+              "textRaw": "isScreenLandscape()",
+              "type": "method",
+              "name": "isScreenLandscape",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 屏幕是否为横屏</li>\n</ul>\n<p>屏幕旋转状态为 <code>Surface.ROTATION_90</code> 或 <code>Surface.ROTATION_270</code> 时返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isScreenLandscape"
+        },
+        {
+          "textRaw": "[m] wakeUp",
+          "name": "[m]_wakeup",
+          "methods": [
+            {
+              "textRaw": "wakeUp()",
+              "type": "method",
+              "name": "wakeUp",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>使用带 <code>ACQUIRE_CAUSES_WAKEUP</code> 的亮屏唤醒锁保持屏幕点亮约 <code>200</code> 毫秒, 以唤醒设备.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] wakeUp"
+        },
+        {
+          "textRaw": "[m] wakeUpIfNeeded",
+          "name": "[m]_wakeupifneeded",
+          "methods": [
+            {
+              "textRaw": "wakeUpIfNeeded()",
+              "type": "method",
+              "name": "wakeUpIfNeeded",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>仅当 <a href=\"#isscreenon\">isScreenOn()</a> 返回 <code>false</code> 时调用 <a href=\"#wakeup\">wakeUp()</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] wakeUpIfNeeded"
+        },
+        {
+          "textRaw": "[m] keepAwake",
+          "name": "[m]_keepawake",
+          "methods": [
+            {
+              "textRaw": "keepAwake(flags)",
+              "type": "method",
+              "name": "keepAwake",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>flags</strong> { <a href=\"dataTypes#number\">number</a> } - Android <code>PowerManager</code> 唤醒锁级别及标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用指定标志创建并无限期持有唤醒锁, 直到调用 <a href=\"#cancelkeepingawake\">cancelKeepingAwake()</a> 或以不同标志再次获取唤醒锁.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "flags"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "keepAwake(flags, timeout)",
+              "type": "method",
+              "name": "keepAwake",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>flags</strong> { <a href=\"dataTypes#number\">number</a> } - Android <code>PowerManager</code> 唤醒锁级别及标志</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 自动释放前的最长时间, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用指定标志创建并在限定时间内持有唤醒锁.</p>\n<p><code>flags</code> 可使用 <a href=\"https://developer.android.com/reference/android/os/PowerManager\">android.os.PowerManager</a> 的 <code>*_WAKE_LOCK</code> 和 <code>ACQUIRE_CAUSES_WAKEUP</code> 等常量组合. 应用需要声明 <code>android.permission.WAKE_LOCK</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "flags"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] keepAwake"
+        },
+        {
+          "textRaw": "[m] keepScreenOn",
+          "name": "[m]_keepscreenon",
+          "methods": [
+            {
+              "textRaw": "keepScreenOn(timeout?)",
+              "type": "method",
+              "name": "keepScreenOn",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒 ",
+                      "name": "**[",
+                      "desc": "timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 <code>SCREEN_BRIGHT_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持屏幕点亮. 省略 <code>timeout</code> 时持续持有, 直到主动取消.</p>\n<p>此方法不会阻止用户通过电源键等操作关闭屏幕.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] keepScreenOn"
+        },
+        {
+          "textRaw": "[m] keepScreenDim",
+          "name": "[m]_keepscreendim",
+          "methods": [
+            {
+              "textRaw": "keepScreenDim(timeout?)",
+              "type": "method",
+              "name": "keepScreenDim",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒 ",
+                      "name": "**[",
+                      "desc": "timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 <code>SCREEN_DIM_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持设备唤醒, 同时允许屏幕变暗. 省略 <code>timeout</code> 时持续持有, 直到主动取消.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] keepScreenDim"
+        },
+        {
+          "textRaw": "[m] cancelKeepingAwake",
+          "name": "[m]_cancelkeepingawake",
+          "methods": [
+            {
+              "textRaw": "cancelKeepingAwake()",
+              "type": "method",
+              "name": "cancelKeepingAwake",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>释放当前由 device 模块持有的唤醒锁. 没有正在持有的唤醒锁时不执行操作.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cancelKeepingAwake"
+        },
+        {
+          "textRaw": "[m] vibrate",
+          "name": "[m]_vibrate",
+          "methods": [
+            {
+              "textRaw": "vibrate(millis)",
+              "type": "method",
+              "name": "vibrate",
+              "desc": "<p><strong><code>Overload 1/5</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 振动时长, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使设备振动一次.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "vibrate(timings)",
+              "type": "method",
+              "name": "vibrate",
+              "desc": "<p><strong><code>6.1.0</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>timings</strong> { <a href=\"dataTypes#number\">number</a>[] } - 交替表示等待和振动时长的模式数组, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>模式数组从等待时长开始, 后续元素在等待和振动之间交替.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timings"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "vibrate(off, millis)",
+              "type": "method",
+              "name": "vibrate",
+              "desc": "<p><strong><code>6.1.0</code></strong> <strong><code>Overload 3/5</code></strong></p>\n<ul>\n<li><strong>off</strong> { <a href=\"dataTypes#number\">number</a> } - 振动前的等待时长, 单位为毫秒</li>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 振动时长, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "off"
+                    },
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "vibrate(timingsWithoutOff, off)",
+              "type": "method",
+              "name": "vibrate",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 4/5</code></strong></p>\n<ul>\n<li><strong>timingsWithoutOff</strong> { <a href=\"dataTypes#number\">number</a>[] } - 不含首个等待时长的模式数组</li>\n<li><strong>off</strong> { <a href=\"dataTypes#number\">number</a> } - 添加到模式数组开头的等待时长, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>相当于 <code>device.vibrate([ off ].concat(timingsWithoutOff))</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timingsWithoutOff"
+                    },
+                    {
+                      "name": "off"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "vibrate(morseCode, delay?)",
+              "type": "method",
+              "name": "vibrate",
+              "desc": "<p><strong><code>6.1.0</code></strong> <strong><code>Overload 5/5</code></strong></p>\n<ul>\n<li><strong>morseCode</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换为摩斯电码振动模式的文本</li>\n<li><strong>[ delay = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 开始振动前的等待时长, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>振动调用会立即返回, 振动由 Android 系统继续执行. 应用需要声明 <code>android.permission.VIBRATE</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "morseCode"
+                    },
+                    {
+                      "name": "delay?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] vibrate"
+        },
+        {
+          "textRaw": "[m] cancelVibration",
+          "name": "[m]_cancelvibration",
+          "methods": [
+            {
+              "textRaw": "cancelVibration()",
+              "type": "method",
+              "name": "cancelVibration",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>取消 device 模块使用的系统振动器当前正在执行的振动.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cancelVibration"
+        },
+        {
+          "textRaw": "[m] getIpAddress",
+          "name": "[m]_getipaddress",
+          "methods": [
+            {
+              "textRaw": "getIpAddress(useIPv4?)",
+              "type": "method",
+              "name": "getIpAddress",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ useIPv4 = true ]** { [boolean](dataTypes#boolean) } - 是否获取 IPv4 地址 ",
+                      "name": "**[",
+                      "desc": "useIPv4 = true ]** { [boolean](dataTypes#boolean) } - 是否获取 IPv4 地址"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 当前设备的 IP 地址 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前设备的 IP 地址"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "useIPv4?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>扫描网络接口并返回第一个非回环地址. <code>useIPv4</code> 为 <code>true</code>, <code>null</code> 或 <code>undefined</code> 时返回 IPv4 地址, 为 <code>false</code> 时返回 IPv6 地址. IPv6 地址使用大写形式并移除区域标识. 无可用地址时返回 <code>&quot;0.0.0.0&quot;</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIpAddress"
+        },
+        {
+          "textRaw": "[m] getIpv6Address",
+          "name": "[m]_getipv6address",
+          "methods": [
+            {
+              "textRaw": "getIpv6Address()",
+              "type": "method",
+              "name": "getIpv6Address",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 当前设备的 IPv6 地址 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前设备的 IPv6 地址"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>相当于 <code>device.getIpAddress(false)</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIpv6Address"
+        },
+        {
+          "textRaw": "[m] getGatewayAddress",
+          "name": "[m]_getgatewayaddress",
+          "methods": [
+            {
+              "textRaw": "getGatewayAddress()",
+              "type": "method",
+              "name": "getGatewayAddress",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 当前 Wi-Fi 网关的 IPv4 地址 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前 Wi-Fi 网关的 IPv4 地址"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前 Wi-Fi DHCP 配置中的网关地址. 无可用地址时返回 <code>&quot;0.0.0.0&quot;</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getGatewayAddress"
+        },
+        {
+          "textRaw": "[m] isActiveNetworkMetered",
+          "name": "[m]_isactivenetworkmetered",
+          "methods": [
+            {
+              "textRaw": "isActiveNetworkMetered()",
+              "type": "method",
+              "name": "isActiveNetworkMetered",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前活动网络是否按流量计费 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前活动网络是否按流量计费"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isActiveNetworkMetered"
+        },
+        {
+          "textRaw": "[m] isConnectedOrConnecting",
+          "name": "[m]_isconnectedorconnecting",
+          "methods": [
+            {
+              "textRaw": "isConnectedOrConnecting()",
+              "type": "method",
+              "name": "isConnectedOrConnecting",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 活动网络是否已连接或正在连接 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "活动网络是否已连接或正在连接"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isConnectedOrConnecting"
+        },
+        {
+          "textRaw": "[m] isWifiAvailable",
+          "name": "[m]_iswifiavailable",
+          "methods": [
+            {
+              "textRaw": "isWifiAvailable()",
+              "type": "method",
+              "name": "isWifiAvailable",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前活动网络是否为 Wi-Fi ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前活动网络是否为 Wi-Fi"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>此结果表示正在使用的网络类型, 不表示 Wi-Fi 适配器是否已启用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isWifiAvailable"
+        },
+        {
+          "textRaw": "[m] setPointerLocation",
+          "name": "[m]_setpointerlocation",
+          "methods": [
+            {
+              "textRaw": "setPointerLocation(enabled)",
+              "type": "method",
+              "name": "setPointerLocation",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用系统指针位置显示</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 目标状态是否已确认</li>\n</ul>\n<p>当前状态已经符合目标时直接返回 <code>true</code>. 需要修改时依次尝试 Root 和 Shizuku 命令, 无可用权限或修改后的状态校验失败时返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setPointerLocation"
+        },
+        {
+          "textRaw": "[m] setPointerLocationEnabled",
+          "name": "[m]_setpointerlocationenabled",
+          "methods": [
+            {
+              "textRaw": "setPointerLocationEnabled()",
+              "type": "method",
+              "name": "setPointerLocationEnabled",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已确认启用</li>\n</ul>\n<p>相当于 <code>device.setPointerLocation(true)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setPointerLocationEnabled"
+        },
+        {
+          "textRaw": "[m] setPointerLocationDisabled",
+          "name": "[m]_setpointerlocationdisabled",
+          "methods": [
+            {
+              "textRaw": "setPointerLocationDisabled()",
+              "type": "method",
+              "name": "setPointerLocationDisabled",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已确认禁用</li>\n</ul>\n<p>相当于 <code>device.setPointerLocation(false)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setPointerLocationDisabled"
+        },
+        {
+          "textRaw": "[m] isPointerLocationEnabled",
+          "name": "[m]_ispointerlocationenabled",
+          "methods": [
+            {
+              "textRaw": "isPointerLocationEnabled()",
+              "type": "method",
+              "name": "isPointerLocationEnabled",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 系统指针位置显示是否已启用</li>\n</ul>\n<p>依次尝试系统设置接口, Root 命令和 Shizuku 命令读取状态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPointerLocationEnabled"
+        },
+        {
+          "textRaw": "[m] isPointerLocationDisabled",
+          "name": "[m]_ispointerlocationdisabled",
+          "methods": [
+            {
+              "textRaw": "isPointerLocationDisabled()",
+              "type": "method",
+              "name": "isPointerLocationDisabled",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 系统指针位置显示是否已禁用</li>\n</ul>\n<p>依次尝试系统设置接口, Root 命令和 Shizuku 命令读取状态. 所有读取方式均失败时, 当前实现按禁用状态处理.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isPointerLocationDisabled"
+        },
+        {
+          "textRaw": "[m] togglePointerLocation",
+          "name": "[m]_togglepointerlocation",
+          "methods": [
+            {
+              "textRaw": "togglePointerLocation()",
+              "type": "method",
+              "name": "togglePointerLocation",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 切换后的目标状态是否已确认</li>\n</ul>\n<p>读取当前状态并切换系统指针位置显示. 需要修改时依次尝试 Root 和 Shizuku 命令.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] togglePointerLocation"
         }
       ],
       "type": "module",

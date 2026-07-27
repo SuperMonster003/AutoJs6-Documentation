@@ -1,0 +1,28 @@
+{
+  "source": "..\\api\\suspicious.md",
+  "modules": [
+    {
+      "textRaw": "存疑内容 (Suspicious)",
+      "name": "存疑内容_(suspicious)",
+      "desc": "<p>本页记录无法仅依据 AutoJs6 6.8.0 Augmentable API 源码准确还原的公开成员或历史文档内容. 在行为得到实现, 官方声明或可重复运行结果确认前, 这些内容不写入正式 API 条目.</p>\n",
+      "modules": [
+        {
+          "textRaw": "threads.disposable 的通知时序与超时",
+          "name": "threads.disposable 的通知时序与超时",
+          "desc": "<ul>\n<li><strong>源码位置</strong> - <code>runtime/api/augment/threads/VolatileDisposeNativeObject.kt</code>.</li>\n<li><strong>当前状态</strong> - <code>setAndNotify(value)</code> 不记录单独的就绪状态. 它在等待开始前调用时, 后续 <code>blockedGet</code> 仍会等待新的条件信号. 指定正数超时时, 条件被提前通知后仍会继续等待至超时时间用尽, 然后返回已经保存的值. <code>blockedGetOrThrow(exception)</code> 只预先检查参数是否为 Java <code>Class</code>, 不验证它是否继承 <code>RuntimeException</code> 或具有可访问的无参数构造方法.</li>\n<li><strong>存疑原因</strong> - 当前行为与一次性结果容器通常具有的先通知后读取及提前唤醒语义不一致. 正式 <a href=\"threads\">Threads</a> 文档按源码标明时序限制, 预期行为仍需实现修正或可重复运行结果进一步确认.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "runtime.createContinuation(scope) 的父作用域"
+        },
+        {
+          "textRaw": "runtime.createContinuation(scope) 的父作用域",
+          "name": "runtime.createcontinuation(scope)_的父作用域",
+          "desc": "<ul>\n<li><strong>源码位置</strong> - <code>runtime/ScriptRuntime.kt</code> 中的 <code>createContinuation</code> 重载, 以及 <code>rhino/continuation/Continuation.kt</code> 中的 <code>create</code> 重载.</li>\n<li><strong>当前状态</strong> - <code>createContinuation(scope)</code> 把参数交给接受 <code>Scriptable</code> 的续体工厂, 该工厂立即使用 <code>scope.parentScope</code> 继续创建续体. 参数 <strong>scope</strong> 本身不会直接成为续体作用域.</li>\n<li><strong>存疑原因</strong> - 参数名和历史调用形式暗示应使用指定作用域, 但当前实现改用父作用域, 且顶层作用域的父作用域可能为空. 正式 <a href=\"runtime\">Runtime</a> 文档按源码标明此行为并建议使用 <a href=\"continuation\">continuation</a>, 预期作用域语义仍需实现修正或可重复运行结果进一步确认.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "runtime.createContinuation(scope) 的父作用域"
+        }
+      ],
+      "type": "module",
+      "displayName": "存疑内容 (Suspicious)"
+    }
+  ]
+}

@@ -54,8 +54,8 @@ Color 实例方法的使用方式与 colors 模块对应方法多数情况是类
 new Color('blue');
 Color('blue'); /* 效果同上. */
 
-new Color().setAlpha(0.5).digest();
-Color().setAlpha(0.5).digest();  /* 结果同上. */
+new Color().setAlpha(0.5).summary();
+Color().setAlpha(0.5).summary();  /* 结果同上. */
 ```
 
 需额外留意, Color 类的 `new` 关键字省略, 是 AutoJs6 开发者在编写 Color 类时为便于使用而专门设计的, 并不适用于所有构造器, 详情参阅 JavaScript 语法规范.
@@ -70,8 +70,8 @@ Color(); /* 同上. */
 colors.build(); /* 同上. */
 
 new Color('green');
-Color('green'); /* 同上 */
-colors.build('green'); /* 同上 */
+Color('green'); /* 同上. */
+colors.build('green'); /* 同上. */
 
 new Color(120, 24, 72, 0.5);
 Color(120, 24, 72, 0.5); /* 同上. */
@@ -105,7 +105,7 @@ Color(0).setAlpha(1).toHex(); /* 同上. */
 Color('green').toHex(); // #00FF00
 Color('#00FF00').toHex(); /* 同上. */
 Color().setGreen(255).toHex(); /* 同上. */
-Color('white').removeRed().removeBlue().toHex(); /* 同上. */ 
+Color('white').removeRed().removeBlue().toHex(); /* 同上. */
 ```
 
 需特别留意, `Color(0)` 返回的不是默认的黑色, 而是 `透明色 (#00000000)`:
@@ -208,7 +208,7 @@ Color('BURNT_ORANGE').toHex(); // #CC5500
 Color('burnt-orange').toHex(); // #CC5500
 ```
 
-当 `A (alpha)` 分量为 `100% (255/255;100/100)` 时, `FF` 会自动省略,  
+当 `A (alpha)` 分量为 `100% (255/255;100/100)` 时, `FF` 会自动省略,<br>
 如 `#FFC0C0C0` 将自动转换为 `#C0C0C0`, 此方法相当于 `toHex('auto')`.
 
 ### toHex(alpha)
@@ -224,8 +224,8 @@ Color('burnt-orange').toHex(); // #CC5500
 
 | 取值             | 含义                          | 默认 |
 |----------------|-----------------------------|:--:|
-| 'keep' / true  | 强制显示 A 分量, 不论 A 分量是否为 0xFF  |    |      
-| 'none' / false | 强制去除 A 分量, 只保留 R / G / B 分量 |    |      
+| 'keep' / true  | 强制显示 A 分量, 不论 A 分量是否为 0xFF  |    |
+| 'none' / false | 强制去除 A 分量, 只保留 R / G / B 分量 |    |
 | 'auto'         | 根据 A 分量是否为 0xFF 自动决定显示状态    | √  |
 
 ```js
@@ -263,9 +263,9 @@ Hex 代码长度参数取值表:
 
 | 取值 | 含义                         |
 |:--:|----------------------------|
-| 8  | 强制显示 A 分量, 结果格式为 #AARRGGBB |        
-| 6  | 强制去除 A 分量, 结果格式为 #RRGGBB   |        
-| 3  | 强制去除 A 分量, 结果格式为 #RGB      |  
+| 8  | 强制显示 A 分量, 结果格式为 #AARRGGBB |
+| 6  | 强制去除 A 分量, 结果格式为 #RRGGBB   |
+| 3  | 强制去除 A 分量, 结果格式为 #RGB      |
 
 ```js
 let cA = '#AA9966CC';
@@ -309,9 +309,9 @@ Color('#CC5500').toHex(); // #CC5500
 Color('#CC5500').toFullHex(); // #FFCC5500
 ```
 
-## [m#] digest
+## [m#] summary
 
-### digest()
+### summary()
 
 **`6.3.0`**
 
@@ -336,16 +336,16 @@ Color('#CC5500').toFullHex(); // #FFCC5500
 
 ```js
 // hex(#009688), rgba(0,150,136/1.0), int(-16738680)
-Color('#009688').digest();
+Color('#009688').summary();
 
 // hex(#BE009688), rgba(0,150,136/0.75), int(-1107257720)
-Color('#BE009688').digest();
+Color('#BE009688').summary();
 
 // hex(#FF0000), rgba(255,0,0/1.0), int(-65536)
-Color('red').digest();
+Color('red').summary();
 
 // hex(#6400008B), rgba(0,0,139/0.39), int(1677721739)
-Color('dark-blue').setAlpha(100).digest();
+Color('dark-blue').setAlpha(100).summary();
 ```
 
 ## [m#] alpha
@@ -1069,7 +1069,7 @@ Color().setRgb([ 1, 0.5, '3.53%' ]); /* 同上. */
 | #AARRGGBB | -                  |
 
 ```js
-Color().setArgb('#663399'); /* 相当于 setArgb('#FF663399') . */
+Color().setArgb('#663399'); /* 相当于 setArgb('#FF663399'). */
 Color().setArgb('#DE663399'); /* 结果不同上. */
 ```
 
@@ -1125,7 +1125,7 @@ Color().setArgb([ 0.25, 1, 0.5, '3.53%' ]); /* 同上. */
 | #RRGGBBAA | -                  |
 
 ```js
-Color().setRgba('#663399'); /* 相当于 setRgba('#663399FF') . */
+Color().setRgba('#663399'); /* 相当于 setRgba('#663399FF'). */
 Color().setRgba('#663399FF'); /* 结果同上. */
 Color().setRgba('#FF663399'); /* 结果不同上. */
 ```
@@ -1133,8 +1133,8 @@ Color().setRgba('#FF663399'); /* 结果不同上. */
 注意区分 `Color#setRgba` 与 `Color#setArgb`:
 
 ```js
-Color().setRgba('#11335577'); /* A (alpha) 分量为 0x77 . */
-Color().setArgb('#11335577'); /* A (alpha) 分量为 0x11 . */
+Color().setRgba('#11335577'); /* A (alpha) 分量为 0x77. */
+Color().setArgb('#11335577'); /* A (alpha) 分量为 0x11. */
 ```
 
 ### setRgba(red, green, blue, alpha)
@@ -1362,10 +1362,10 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 
 ```js
 let [ r1, g1, b1, a1 ] = Color('#DE663399').toRgba();
-console.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255] . */
+console.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255]. */
 
 let [ r2, g2, b2, a2 ] = Color('#DE663399').toRgba({ maxAlpha: 1 });
-console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1] . */
+console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1]. */
 ```
 
 ## [m#] toArgb
@@ -1396,10 +1396,10 @@ console.log(`A: ${a}, R: ${r}, G: ${g}, B: ${b}`);
 
 ```js
 let [ a1, r1, g1, b1 ] = Color('#DE663399').toArgb();
-console.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255] . */
+console.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255]. */
 
 let [ a2, r2, g2, b2 ] = Color('#DE663399').toArgb({ maxAlpha: 1 });
-console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1] . */
+console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1]. */
 ```
 
 ## [m#] toHsv

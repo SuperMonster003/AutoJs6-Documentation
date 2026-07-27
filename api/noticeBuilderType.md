@@ -78,7 +78,7 @@ notice(notice.getBuilder()
 
 设定通知为 "正在进行中" 状态.
 
-正在进行中, 意味着通知关联着一个用户正在参与的后台任务, 如 [ 播放音乐 / 下载任务 / 文件同步操作 / 网络连接激活 ] 等.  
+正在进行中, 意味着通知关联着一个用户正在参与的后台任务, 如 [ 播放音乐 / 下载任务 / 文件同步操作 / 网络连接激活 ] 等.<br>
 这样的通知不能被用户消除 (如左右滑动), 只能通过 [notice.cancel](notice#m-cancel) 或 [NoticeBuilder#setAutoCancel](noticeBuilderType#m-setautocancel) 等方式消除.
 
 ## [m] setProgress
@@ -363,8 +363,8 @@ notice(notice.getBuilder()
     .setUsesChronometer(true));
 ```
 
-> 注:  
-> chronometer [krəˈnɒmɪtə(r)]  
+> 注:<br>
+> chronometer [krəˈnɒmɪtə(r)]<br>
 > _n._ 精密记时表; 高度精确的钟表.
 
 ## [m] setChronometerCountDown
@@ -388,8 +388,8 @@ notice(notice.getBuilder()
 );
 ```
 
-> 注:  
-> chronometer [krəˈnɒmɪtə(r)]  
+> 注:<br>
+> chronometer [krəˈnɒmɪtə(r)]<br>
 > _n._ 精密记时表; 高度精确的钟表.
 
 ## [m] setWhen
@@ -401,7 +401,7 @@ notice(notice.getBuilder()
 
 添加一个通知时间戳 (毫秒), 用以表示通知发生 (或即将发生) 的具体时间.
 
-使用 `setWhen` 时, 需要设置 [setShowWhen](#m-setshowwhen) 为 `true`, 否则将无法显示时间消息. 
+使用 `setWhen` 时, 需要设置 [setShowWhen](#m-setshowwhen) 为 `true`, 否则将无法显示时间消息.
 
 ```js
 notice(notice.getBuilder()
@@ -409,7 +409,7 @@ notice(notice.getBuilder()
     .setContentText('通知时间测试 (过去 5 分钟)')
     .setWhen(Date.now() - 5 * 60e3)
     .setShowWhen(true));
-    
+
 notice(notice.getBuilder()
     .setContentTitle('通知测试')
     .setContentText('通知时间测试 (未来 2 分钟)')

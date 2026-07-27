@@ -2,81 +2,116 @@
 
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2022-10-22">
+<p><strong>文档状态:</strong> 此章节仍在补充或完善中.</p>
+</aside>
 
----
+floaty 模块提供了悬浮窗的相关函数, 可以在屏幕上显示自定义悬浮窗, 控制悬浮窗大小, 位置等.
 
-floaty模块提供了悬浮窗的相关函数, 可以在屏幕上显示自定义悬浮窗, 控制悬浮窗大小、位置等.
-
-悬浮窗在脚本停止运行时会自动关闭, 因此, 要保持悬浮窗不被关闭, 可以用一个空的setInterval来实现, 例如：
+悬浮窗在脚本停止运行时会自动关闭, 因此, 要保持悬浮窗不被关闭, 可以用一个空的 setInterval 来实现, 例如:
 
 ```
 setInterval(()=>{}, 1000);
 ```
 
-## floaty.window(layout)
+## [m] window
 
-* `layout` {xml} | {View} 悬浮窗界面的XML或者View
+### window(xml)
 
-指定悬浮窗的布局, 创建并**显示**一个悬浮窗, 返回一个`FloatyWindow`对象.
+**`[6.7.0]`**
 
-该悬浮窗自带关闭、调整大小、调整位置按键, 可根据需要调用`setAdjustEnabled()`函数来显示或隐藏.
+- **xml** { [XML](e4x) | [string](dataTypes#string) } - E4X XML 布局或 XML 布局字符串
+- <ins>**returns**</ins> { [FloatyWindow](#floatywindow) } - 可调整悬浮窗对象
 
-其中layout参数可以是xml布局或者一个View, 更多信息参见ui模块的说明.
+根据布局创建并显示一个带关闭, 调整大小和调整位置控件的悬浮窗. 可调用 `setAdjustEnabled()` 显示或隐藏调整控件.
 
-例子：
+`xml` 只接受 E4X XML 对象或字符串, 不接受 Android `View` 对象. 缺少悬浮窗权限时会打开系统设置并等待授权, 最长等待 `60` 秒.
 
-```
-var w = floaty.window(
+```js
+let window = floaty.window(
     <frame gravity="center">
         <text id="text">悬浮文字</text>
     </frame>
 );
-setTimeout(()=>{
-    w.close();
+
+setTimeout(() => {
+    window.close();
 }, 2000);
 ```
 
-这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.
+对悬浮窗控件的修改需要在 UI 线程执行, 可使用 [ui.run](ui#m-run):
 
-另外, 因为脚本运行的线程不是UI线程, 而所有对控件的修改操作需要在UI线程执行, 此时需要用`ui.run`, 例如:
-
-```
-ui.run(function(){
-    w.text.setText("文本");
+```js
+ui.run(() => {
+    window.text.setText('文本');
 });
 ```
 
-有关返回的`FloatyWindow`对象的说明, 参见下面的`FloatyWindow`章节.
+## [m] rawWindow
 
-## floaty.rawWindow(layout)
+### rawWindow(xml)
 
-* `layout` {xml} | {View} 悬浮窗界面的XML或者View
+**`[6.7.0]`**
 
-指定悬浮窗的布局, 创建并**显示**一个原始悬浮窗, 返回一个`FloatyRawWindow`对象.
+- **xml** { [XML](e4x) | [string](dataTypes#string) } - E4X XML 布局或 XML 布局字符串
+- <ins>**returns**</ins> { [FloatyRawWindow](#floatyrawwindow) } - 原始悬浮窗对象
 
-与`floaty.window()`函数不同的是, 该悬浮窗不会增加任何额外设施（例如调整大小、位置按钮）, 您可以根据自己需要编写任何布局.
+根据布局创建并显示原始悬浮窗. 与 [floaty.window](#m-window) 不同, 此方法不附加关闭或调整控件, 并支持覆盖状态栏的全屏布局.
 
-而且, 该悬浮窗支持完全全屏, 可以覆盖状态栏, 因此可以做护眼模式之类的应用.
+`xml` 只接受 E4X XML 对象或字符串, 不接受 Android `View` 对象. 缺少悬浮窗权限时会打开系统设置并等待授权, 最长等待 `60` 秒.
 
-```
-var w = floaty.rawWindow(
+```js
+let window = floaty.rawWindow(
     <frame gravity="center">
         <text id="text">悬浮文字</text>
     </frame>
 );
 
-w.setPosition(500, 500);
+window.setPosition(500, 500);
 
-setTimeout(()=>{
-    w.close();
+setTimeout(() => {
+    window.close();
 }, 2000);
 ```
 
-这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.
+## floaty.hasPermission()
 
-有关返回的`FloatyRawWindow`对象的说明, 参见下面的`FloatyRawWindow`章节.
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已取得悬浮窗权限
+
+检查当前应用是否可以在其他应用上层显示窗口.
+
+## floaty.checkPermission()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已取得悬浮窗权限
+
+[floaty.hasPermission](#floaty-haspermission) 的兼容别名.
+
+## floaty.requestPermission()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+打开系统悬浮窗权限设置页面.
+
+## floaty.ensurePermission()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+确保当前应用已取得悬浮窗权限. 权限缺失时打开系统设置页面.
+
+## [m] getClip
+
+### getClip(maxDelayAfterWindowReady?)
+
+**`6.6.0`**
+
+- **[ maxDelayAfterWindowReady = 500 ]** { [number](dataTypes#number) } - 临时悬浮窗就绪后剪贴板数据的最大等待时间, 单位为毫秒
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 剪贴板文本
+
+借助临时原始悬浮窗取得窗口焦点后读取剪贴板文本. 首次结果为空时, 在 `maxDelayAfterWindowReady` 时间内每隔约 `10` 毫秒重试. 临时窗口在读取时关闭.
+
+此方法需要悬浮窗权限. 权限缺失时会打开系统设置并等待授权, 最长等待 `60` 秒.
 
 ## floaty.closeAll()
 
@@ -84,34 +119,34 @@ setTimeout(()=>{
 
 # FloatyWindow
 
-悬浮窗对象, 可通过`FloatyWindow.{id}`获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么`window.aaa`即可获取到该控件, 类似于ui.
+悬浮窗对象, 可通过 `FloatyWindow.{id}` 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 `window.aaa` 即可获取到该控件, 类似于 ui.
 
 ## window.setAdjustEnabled(enabled)
 
-* `enabled` {boolean} 是否启用悬浮窗调整(大小、位置)
+- **enabled** { [boolean](dataTypes#boolean) } 是否启用悬浮窗调整 (大小, 位置)
 
-如果enabled为true, 则在悬浮窗左上角、右上角显示可供位置、大小调整的标示, 就像控制台一样；
-如果enabled为false, 则隐藏上述标示.
+如果 enabled 为 true, 则在悬浮窗左上角, 右上角显示可供位置, 大小调整的标示, 就像控制台一样;
+如果 enabled 为 false, 则隐藏上述标示.
 
 ## window.setPosition(x, y)
 
-* `x` {number} x
-* `x` {number} y
+- **x** { [number](dataTypes#number) } x
+- **x** { [number](dataTypes#number) } y
 
 设置悬浮窗位置.
 
 ## window.getX()
 
-返回悬浮窗位置的X坐标.
+返回悬浮窗位置的 X 坐标.
 
 ## window.getY()
 
-返回悬浮窗位置的Y坐标.
+返回悬浮窗位置的 Y 坐标.
 
 ## window.setSize(width, height)
 
-* `width` {number} 宽度
-* `height` {number} 高度
+- **width** { [number](dataTypes#number) } 宽度
+- **height** { [number](dataTypes#number) } 高度
 
 设置悬浮窗宽高.
 
@@ -135,18 +170,18 @@ setTimeout(()=>{
 
 # FloatyRawWindow
 
-原始悬浮窗对象, 可通过`window.{id}`获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么`window.aaa`即可获取到该控件, 类似于ui.
+原始悬浮窗对象, 可通过 `window.{id}` 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 `window.aaa` 即可获取到该控件, 类似于 ui.
 
 ## window.setTouchable(touchable)
 
-* `touchable` {Boolean} 是否可触摸
+- **touchable** {Boolean} 是否可触摸
 
-设置悬浮窗是否可触摸, 如果为true, 则悬浮窗将接收到触摸、点击等事件并且无法继续传递到悬浮窗下面；如果为false, 悬浮窗上的触摸、点击等事件将被直接传递到悬浮窗下面. 处于安全考虑, 被悬浮窗接收的触摸事情无法再继续传递到下层.
+设置悬浮窗是否可触摸, 如果为 true, 则悬浮窗将接收到触摸, 点击等事件并且无法继续传递到悬浮窗下面; 如果为 false, 悬浮窗上的触摸, 点击等事件将被直接传递到悬浮窗下面. 处于安全考虑, 被悬浮窗接收的触摸事情无法再继续传递到下层.
 
 可以用此特性来制作护眼模式脚本.
 
 ```
-var w = floaty.rawWindow(
+let w = floaty.rawWindow(
     <frame gravity="center" bg="#44ffcc00"/>
 );
 
@@ -161,30 +196,30 @@ setTimeout(()=>{
 
 ## window.setPosition(x, y)
 
-* `x` {number} x
-* `x` {number} y
+- **x** { [number](dataTypes#number) } x
+- **x** { [number](dataTypes#number) } y
 
 设置悬浮窗位置.
 
 ## window.getX()
 
-返回悬浮窗位置的X坐标.
+返回悬浮窗位置的 X 坐标.
 
 ## window.getY()
 
-返回悬浮窗位置的Y坐标.
+返回悬浮窗位置的 Y 坐标.
 
 ## window.setSize(width, height)
 
-* `width` {number} 宽度
-* `height` {number} 高度
+- **width** { [number](dataTypes#number) } 宽度
+- **height** { [number](dataTypes#number) } 高度
 
 设置悬浮窗宽高.
 
-特别地, 如果设置为-1, 则为占满全屏；设置为-2则为根据悬浮窗内容大小而定. 例如：
+特别地, 如果设置为 -1, 则为占满全屏; 设置为 -2 则为根据悬浮窗内容大小而定. 例如:
 
 ```
-var w = floaty.rawWindow(
+let w = floaty.rawWindow(
     <frame gravity="center" bg="#77ff0000">
         <text id="text">悬浮文字</text>
     </frame>

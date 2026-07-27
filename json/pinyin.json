@@ -1,0 +1,276 @@
+{
+  "source": "..\\api\\pinyin.md",
+  "modules": [
+    {
+      "textRaw": "拼音 (Pinyin)",
+      "name": "拼音_(pinyin)",
+      "desc": "<p>pinyin 模块用于将汉字转换为拼音, 并支持声调格式, 姓氏模式, 地名模式, 分词和多音字等选项.</p>\n<p>此模块自 AutoJs6 6.6.1 起提供. <code>pinyin</code> 与 <code>$pinyin</code> 指向同一个可调用模块对象.</p>\n<p>自 AutoJs6 6.8.0 起, pinyin 转换由外置 Pinyin 插件提供. 调用转换方法前, 必须安装并启用与当前 AutoJs6 版本兼容的 Pinyin 插件. 未发现可用插件引擎时, 调用将抛出异常.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">pinyin</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] pinyin",
+          "name": "[@]_pinyin",
+          "methods": [
+            {
+              "textRaw": "pinyin(hans, options?)",
+              "type": "method",
+              "name": "pinyin",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>hans</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#pinyinoptions\">PinyinOptions</a> } - 转换选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#pinyinresult\">PinyinResult</a> } - 二维拼音结果</li>\n</ul>\n<p>将文本转换为拼音.</p>\n<p>此调用与 <a href=\"#m-convert\">pinyin.convert(hans, options?)</a> 等价.</p>\n<pre><code class=\"lang-js\">let result = pinyin(&#39;重庆&#39;, {\n    style: pinyin.STYLE_TONE,\n    heteronym: true,\n});\n\nconsole.log(result);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "hans"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] pinyin"
+        },
+        {
+          "textRaw": "[p] STYLE_NORMAL",
+          "name": "[p]_style_normal",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>不标注声调的拼音风格, 对应数值 <code>0</code> 和名称 <code>NORMAL</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_NORMAL"
+        },
+        {
+          "textRaw": "[p] STYLE_TONE",
+          "name": "[p]_style_tone",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>使用带声调字符的拼音风格, 对应数值 <code>1</code> 和名称 <code>TONE</code>.</p>\n<p>这是 <a href=\"#p-pinyinoptions-style\">PinyinOptions#style</a> 的默认值.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_TONE"
+        },
+        {
+          "textRaw": "[p] STYLE_TONE2",
+          "name": "[p]_style_tone2",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>在音节末尾使用数字声调的拼音风格, 对应数值 <code>2</code> 和名称 <code>TONE2</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_TONE2"
+        },
+        {
+          "textRaw": "[p] STYLE_TO3NE",
+          "name": "[p]_style_to3ne",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>使用数字声调的 <code>TO3NE</code> 拼音风格, 对应数值 <code>5</code> 和名称 <code>TO3NE</code>.</p>\n<p><code>TO3NE</code> 是当前公开常量和选项名称的实际拼写.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_TO3NE"
+        },
+        {
+          "textRaw": "[p] STYLE_INITIALS",
+          "name": "[p]_style_initials",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>仅保留声母的拼音风格, 对应数值 <code>3</code> 和名称 <code>INITIALS</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_INITIALS"
+        },
+        {
+          "textRaw": "[p] STYLE_FIRST_LETTER",
+          "name": "[p]_style_first_letter",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinstyle\">PinyinStyle</a> }</li>\n</ul>\n<p>仅保留首字母的拼音风格, 对应数值 <code>4</code> 和名称 <code>FIRST_LETTER</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] STYLE_FIRST_LETTER"
+        },
+        {
+          "textRaw": "[p] MODE_NORMAL",
+          "name": "[p]_mode_normal",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinmode\">PinyinMode</a> }</li>\n</ul>\n<p>普通转换模式, 对应数值 <code>0</code> 和名称 <code>NORMAL</code>.</p>\n<p>这是 <a href=\"#p-pinyinoptions-mode\">PinyinOptions#mode</a> 的默认值.</p>\n",
+          "type": "module",
+          "displayName": "[p] MODE_NORMAL"
+        },
+        {
+          "textRaw": "[p] MODE_SURNAME",
+          "name": "[p]_mode_surname",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinmode\">PinyinMode</a> }</li>\n</ul>\n<p>姓氏转换模式, 对应数值 <code>1</code> 和名称 <code>SURNAME</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] MODE_SURNAME"
+        },
+        {
+          "textRaw": "[p] MODE_PLACENAME",
+          "name": "[p]_mode_placename",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinmode\">PinyinMode</a> }</li>\n</ul>\n<p>地名转换模式, 对应数值 <code>2</code> 和名称 <code>PLACE_NAME</code>.</p>\n<p>此属性与 <a href=\"#p-mode-place-name\">MODE_PLACE_NAME</a> 指向同一个常量.</p>\n",
+          "type": "module",
+          "displayName": "[p] MODE_PLACENAME"
+        },
+        {
+          "textRaw": "[p] MODE_PLACE_NAME",
+          "name": "[p]_mode_place_name",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>{ <a href=\"#pinyinmode\">PinyinMode</a> }</li>\n</ul>\n<p>地名转换模式, 对应数值 <code>2</code> 和名称 <code>PLACE_NAME</code>.</p>\n<p>此属性与 <a href=\"#p-mode-placename\">MODE_PLACENAME</a> 指向同一个常量.</p>\n",
+          "type": "module",
+          "displayName": "[p] MODE_PLACE_NAME"
+        },
+        {
+          "textRaw": "[m] convert",
+          "name": "[m]_convert",
+          "methods": [
+            {
+              "textRaw": "convert(hans, options?)",
+              "type": "method",
+              "name": "convert",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>hans</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#pinyinoptions\">PinyinOptions</a> } - 转换选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#pinyinresult\">PinyinResult</a> } - 二维拼音结果</li>\n</ul>\n<p>将文本转换为拼音.</p>\n<p>空字符串返回空数组. 插件返回的数据会被解析为二维字符串数组. 外层分组方式受 <code>segment</code>, <code>heteronym</code> 和 <code>group</code> 等选项及插件实现影响.</p>\n<p>返回数组带有一个不可枚举的 <code>compact()</code> 方法. 此方法计算各内层候选项的组合, 并返回组合后的二维字符串数组.</p>\n<pre><code class=\"lang-js\">let result = pinyin.convert(&#39;你好&#39;, {\n    style: pinyin.STYLE_TONE2,\n});\n\nconsole.log(result);\nconsole.log(result.compact());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "hans"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] convert"
+        },
+        {
+          "textRaw": "[m] simple",
+          "name": "[m]_simple",
+          "methods": [
+            {
+              "textRaw": "simple(str, enableNumericTone?, enableSegment?)",
+              "type": "method",
+              "name": "simple",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-3]/3</code></strong></p>\n<ul>\n<li><strong>str</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换文本</li>\n<li><strong>[ enableNumericTone = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用数字声调</li>\n<li><strong>[ enableSegment = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用分词</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 拼音转换结果</li>\n</ul>\n<p>使用简化选项将文本转换为拼音字符串.</p>\n<pre><code class=\"lang-js\">console.log(pinyin.simple(&#39;你好&#39;));\nconsole.log(pinyin.simple(&#39;你好&#39;, true));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "str"
+                    },
+                    {
+                      "name": "enableNumericTone?"
+                    },
+                    {
+                      "name": "enableSegment?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] simple"
+        },
+        {
+          "textRaw": "[m] fromCodePoint",
+          "name": "[m]_fromcodepoint",
+          "methods": [
+            {
+              "textRaw": "fromCodePoint(codePoint)",
+              "type": "method",
+              "name": "fromCodePoint",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>codePoint</strong> { <a href=\"dataTypes#number\">number</a> } - Unicode 代码点</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件中的拼音记录, 无记录时为 <code>null</code></li>\n</ul>\n<p>查询单个 Unicode 代码点对应的拼音记录.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "codePoint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] fromCodePoint"
+        },
+        {
+          "textRaw": "[m] fromPhrase",
+          "name": "[m]_fromphrase",
+          "methods": [
+            {
+              "textRaw": "fromPhrase(phrase)",
+              "type": "method",
+              "name": "fromPhrase",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>phrase</strong> { <a href=\"dataTypes#string\">string</a> } - 待查询词组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a><a href=\"dataTypes#array\">[]</a> } - 二维拼音结果</li>\n</ul>\n<p>查询插件词组数据中的拼音结果.</p>\n<p>插件返回的空字符串会被转换为空数组.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "phrase"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] fromPhrase"
+        },
+        {
+          "textRaw": "PinyinOptions",
+          "name": "pinyinoptions",
+          "desc": "<p>pinyin 转换选项.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[p] PinyinOptions#mode",
+              "name": "[p]_pinyinoptions#mode",
+              "desc": "<ul>\n<li>[ <code>pinyin.MODE_NORMAL</code> ] { <a href=\"#pinyinmode\">PinyinMode</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>转换模式.</p>\n<p>可使用模块常量, 数值 <code>0</code>, <code>1</code>, <code>2</code>, 或不区分大小写的名称 <code>NORMAL</code>, <code>SURNAME</code>, <code>PLACE_NAME</code>, <code>PLACENAME</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#mode"
+            },
+            {
+              "textRaw": "[p] PinyinOptions#style",
+              "name": "[p]_pinyinoptions#style",
+              "desc": "<ul>\n<li>[ <code>pinyin.STYLE_TONE</code> ] { <a href=\"#pinyinstyle\">PinyinStyle</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>拼音风格.</p>\n<p>可使用模块常量, 数值 <code>0</code> 到 <code>5</code>, 或不区分大小写的名称 <code>NORMAL</code>, <code>TONE</code>, <code>TONE2</code>, <code>TO3NE</code>, <code>INITIALS</code>, <code>FIRST_LETTER</code>.</p>\n<p>数值必须对应一个已定义风格. 无效数值或名称会抛出异常.</p>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#style"
+            },
+            {
+              "textRaw": "[p] PinyinOptions#segment",
+              "name": "[p]_pinyinoptions#segment",
+              "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否请求插件在转换前执行分词.</p>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#segment"
+            },
+            {
+              "textRaw": "[p] PinyinOptions#heteronym",
+              "name": "[p]_pinyinoptions#heteronym",
+              "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否保留多音字候选项.</p>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#heteronym"
+            },
+            {
+              "textRaw": "[p] PinyinOptions#group",
+              "name": "[p]_pinyinoptions#group",
+              "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用插件的结果分组选项. 具体分组结果由当前 Pinyin 插件实现决定.</p>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#group"
+            }
+          ],
+          "type": "module",
+          "displayName": "PinyinOptions"
+        },
+        {
+          "textRaw": "PinyinResult",
+          "name": "pinyinresult",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>二维拼音数组. 每个内层数组保存对应文本单元或分组的一个或多个拼音候选项.</p>\n<p>结果对象还提供不可枚举的 <code>compact()</code> 方法:</p>\n<pre><code class=\"lang-js\">let result = pinyin(&#39;海前&#39;, {\n    heteronym: true,\n    style: pinyin.STYLE_NORMAL,\n});\n\nlet combinations = result.compact();\nconsole.log(combinations);\n</code></pre>\n<p><code>compact()</code> 对各内层数组执行笛卡尔组合, 返回值仍为二维字符串数组.</p>\n",
+          "type": "module",
+          "displayName": "PinyinResult"
+        },
+        {
+          "textRaw": "PinyinStyle",
+          "name": "pinyinstyle",
+          "desc": "<p>pinyin 模块公开的拼音风格枚举类型. 可通过 <code>STYLE_NORMAL</code>, <code>STYLE_TONE</code>, <code>STYLE_TONE2</code>, <code>STYLE_TO3NE</code>, <code>STYLE_INITIALS</code> 和 <code>STYLE_FIRST_LETTER</code> 常量取得.</p>\n",
+          "type": "module",
+          "displayName": "PinyinStyle"
+        },
+        {
+          "textRaw": "PinyinMode",
+          "name": "pinyinmode",
+          "desc": "<p>pinyin 模块公开的转换模式枚举类型. 可通过 <code>MODE_NORMAL</code>, <code>MODE_SURNAME</code>, <code>MODE_PLACENAME</code> 和 <code>MODE_PLACE_NAME</code> 常量取得.</p>\n",
+          "type": "module",
+          "displayName": "PinyinMode"
+        }
+      ],
+      "type": "module",
+      "displayName": "拼音 (Pinyin)"
+    }
+  ]
+}

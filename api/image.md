@@ -1,798 +1,1270 @@
 # 图像 (Images)
 
----
+`images` 模块提供图像读取, 编解码, 截图, 图像处理, 找色, 找图, 特征匹配和相似度计算等功能.
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+从 AutoJs6 6.8.0 起, 依赖 OpenCV 的方法需要外部 OpenCV 插件. 调用这些方法前, 需在插件中心安装, 启用并授权兼容插件. 插件不可用时, 方法将抛出插件加载异常.
 
----
+本页多数名为 **image** 的参数同时接受 [ImageWrapper](imageWrapperType) 和图片路径 [string](dataTypes#string). 路径会按当前脚本的运行路径解析. 方法内部读取的临时图片会自动回收, 传入的普通 `ImageWrapper` 则不会自动回收, 除非它已通过 `oneShot()` 标记为一次性对象.
 
-images模块提供了一些手机设备中常见的图片处理函数, 包括截图、读写图片、图片剪裁、旋转、二值化、找色找图等.
+除 `captureScreen()` 返回的受截图模块管理的图片外, 不再使用的 `ImageWrapper` 应及时调用 [`recycle()`](imageWrapperType#m-recycle).
 
-该模块分为两个部分, 找图找色部分和图片处理部分.
+## OpenCV 与区域
 
-需要注意的是, image对象创建后尽量在不使用时进行回收, 同时避免循环创建大量图片. 因为图片是一种占用内存比较大的资源, 尽管Auto.js通过各种方式（比如图片缓存机制、垃圾回收时回收图片、脚本结束时回收所有图片）尽量降低图片资源的泄漏和内存占用, 但是糟糕的代码仍然可以占用大量内存.
+### [m] images.initOpenCvIfNeeded()
 
-Image对象通过调用`recycle()`函数来回收. 例如：
+**`6.8.0`**
 
-```
-// 读取图片
-var img = images.read("./1.png");
-//对图片进行操作
-... 
-// 回收图片
-img.recycle();
-```
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-例外的是, `captureScreen()` 返回的图片不需要回收.
+按需初始化 OpenCV 运行环境. 依赖 OpenCV 的图像方法通常会自动调用此方法.
 
-## 图片处理
+### [m] images.buildRegion(image, region)
 
-## images.read(path)
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 图片对象或图片路径
+- **region** { [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType) | [null](dataTypes#null) | [undefined](dataTypes#undefined) }
+- <ins>**returns**</ins> { [OpenCVRect](opencvRectType) } - 规范化后的区域
 
-* `path` {string} 图片路径
+将区域限制在图片范围内. 数组格式为 `[ x, y, width, height ]`. `x` 和 `y` 默认为 `0`, `width` 和 `height` 默认延伸到图片边缘. 坐标和尺寸也支持屏幕度量值, 详见 [ScreenMetricNumberX](dataTypes#screenmetricnumberx) 和 [ScreenMetricNumberY](dataTypes#screenmetricnumbery).
 
-读取在路径path的图片文件并返回一个Image对象. 如果文件不存在或者文件无法解码则返回null.
+负数, 反向尺寸或越界区域会抛出异常.
 
-## images.load(url)
+### [m] images.__buildRegion(region?, imageWidth?, imageHeight?)
 
-* `url` {string} 图片URL地址
+**`6.8.0`**
 
-加载在地址URL的网络图片并返回一个Image对象. 如果地址不存在或者图片无法解码则返回null.
+- **[ region ]** { [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType) }
+- **[ imageWidth ]** { [number](dataTypes#number) } - 图片宽度
+- **[ imageHeight ]** { [number](dataTypes#number) } - 图片高度
+- <ins>**returns**</ins> { [OpenCVRect](opencvRectType) | [null](dataTypes#null) } - 规范化后的区域, 或 `null`
 
-## images.copy(img)
+> 注: `__buildRegion` 是供模块桥接层使用的内部兼容辅助成员, 不属于稳定公共 API. 普通脚本应使用 [images.buildRegion(image, region)](#m-images-buildregion-image-region).
 
-* `img` {Image} 图片
-* 返回 {Image}
+按明确的图片尺寸规范化区域. `imageWidth` 或 `imageHeight` 缺失时返回 `null`. 此方法不解析屏幕度量比例值.
 
-复制一张图片并返回新的副本. 该函数会完全复制img对象的数据.
+## 读取与编解码
 
-## images.save(image, path[, format = "png", quality = 100])
+### [m] images.read(path, isStrict?)
 
-* `image` {Image} 图片
-* `path` {string} 路径
-* `format` {string} 图片格式, 可选的值为:
-    * `png`
-    * `jpeg`/`jpg`
-    * `webp`
-* `quality` {number} 图片质量, 为0~100的整数值
+- **path** { [string](dataTypes#string) } - 图片路径
+- **[ isStrict = false ]** { [boolean](dataTypes#boolean) } - 是否在读取失败时抛出异常
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) | [null](dataTypes#null) } - 解码后的图片, 或 `null`
 
-把图片image以PNG格式保存到path中. 如果文件不存在会被创建；文件存在会被覆盖.
+读取本地图片. 当图片不存在或无法解码时, 默认返回 `null`; `isStrict` 为 `true` 时抛出异常.
 
-```
-//把图片压缩为原来的一半质量并保存
-var img = images.read("/sdcard/1.png");
-images.save(img, "/sdcard/1.jpg", "jpg", 50);
-app.viewFile("/sdcard/1.jpg");
-```
+### [m] images.imread(path)
 
-## images.fromBase64(base64)
+**`6.6.0`**
 
-* `base64` {string} 图片的Base64数据
-* 返回 {Image}
+- **path** { [string](dataTypes#string) } - 图片路径
+- <ins>**returns**</ins> { [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) } - OpenCV 矩阵
 
-解码Base64数据并返回解码后的图片Image对象. 如果base64无法解码则返回`null`.
+使用 OpenCV 读取本地图片. 读取失败时可能返回空矩阵, 可使用 `Mat#empty()` 检查.
 
-## images.toBase64(img[, format = "png", quality = 100])
+### [m] images.load(src)
 
-* `image` {image} 图片
-* `format` {string} 图片格式, 可选的值为:
-    * `png`
-    * `jpeg`/`jpg`
-    * `webp`
-* `quality` {number} 图片质量, 为0~100的整数值
-* 返回 {string}
+- **src** { [string](dataTypes#string) } - 图片 URL
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) | [null](dataTypes#null) } - 下载并解码的图片
 
-把图片编码为base64数据并返回.
+同步加载网络图片. 网络失败时抛出异常, 无法取得有效位图时可能返回 `null`.
 
-## images.fromBytes(bytes)
+### [m] images.loadAsync(src)
 
-* `bytes` {byte[]} 字节数组
+**`6.7.0`** **`Async`**
 
-解码字节数组bytes并返回解码后的图片Image对象. 如果bytes无法解码则返回`null`.
+- **src** { [string](dataTypes#string) } - 图片 URL
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [ImageWrapper](imageWrapperType) 或 [null](dataTypes#null)
 
-## images.toBytes(img[, format = "png", quality = 100])
+异步加载网络图片. 网络或解码失败时 Promise 被拒绝.
 
-* `image` {image} 图片
-* `format` {string} 图片格式, 可选的值为:
-    * `png`
-    * `jpeg`/`jpg`
-    * `webp`
-* `quality` {number} 图片质量, 为0~100的整数值
-* 返回 {byte[]}
-
-把图片编码为字节数组并返回.
-
-## images.clip(img, x, y, w, h)
-
-* `img` {Image} 图片
-* `x` {number} 剪切区域的左上角横坐标
-* `y` {number} 剪切区域的左上角纵坐标
-* `w` {number} 剪切区域的宽度
-* `h` {number} 剪切区域的高度
-* 返回 {Image}
-
-从图片img的位置(x, y)处剪切大小为w * h的区域, 并返回该剪切区域的新图片.
-
-```
-var src = images.read("/sdcard/1.png");
-var clip = images.clip(src, 100, 100, 400, 400);
-images.save(clip, "/sdcard/clip.png");
-```
-
-## images.resize(img, size[, interpolation])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `size` {Array} 两个元素的数组[w, h], 分别表示宽度和高度；如果只有一个元素, 则宽度和高度相等
-* `interpolation` {string} 插值方法, 可选, 默认为"LINEAR"（线性插值）, 可选的值有：
-    * `NEAREST` 最近邻插值
-    * `LINEAR` 线性插值（默认）
-    * `AREA` 区域插值
-    * `CUBIC` 三次样条插值
-    * `LANCZOS4` Lanczos插值
-      参见[InterpolationFlags](https://docs.opencv.org/3.4.4/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121/)
-
-* 返回 {Image}
-
-调整图片大小, 并返回调整后的图片. 例如把图片放缩为200*300：`images.resize(img, [200, 300])`.
-
-参见[Imgproc.resize](https://docs.opencv.org/3.4.4/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d/).
-
-## images.scale(img, fx, fy[, interpolation])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `fx` {number} 宽度放缩倍数
-* `fy` {number} 高度放缩倍数
-* `interpolation` {string} 插值方法, 可选, 默认为"LINEAR"（线性插值）, 可选的值有：
-    * `NEAREST` 最近邻插值
-    * `LINEAR` 线性插值（默认）
-    * `AREA` 区域插值
-    * `CUBIC` 三次样条插值
-    * `LANCZOS4` Lanczos插值
-      参见[InterpolationFlags](https://docs.opencv.org/3.4.4/da/d54/group__imgproc__transform.html#ga5bb5a1fea74ea38e1a5445ca803ff121/)
-
-* 返回 {Image}
-
-放缩图片, 并返回放缩后的图片. 例如把图片变成原来的一半：`images.scale(img, 0.5, 0.5)`.
-
-参见[Imgproc.resize](https://docs.opencv.org/3.4.4/da/d54/group__imgproc__transform.html#ga47a974309e9102f5f08231edc7e7529d/).
-
-## images.rotate(img, degree[, x, y])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `degree` {number} 旋转角度.
-* `x` {number} 旋转中心x坐标, 默认为图片中点
-* `y` {number} 旋转中心y坐标, 默认为图片中点
-* 返回 {Image}
-
-将图片逆时针旋转 degree 度, 返回旋转后的图片对象.
-
-例如逆时针旋转90度为`images.rotate(img, 90)`.
-
-## images.concat(img1, image2[, direction])
-
-**[v4.1.0新增]**
-
-* `img1` {Image} 图片1
-* `img2` {Image} 图片2
-* direction {string} 连接方向, 默认为"RIGHT", 可选的值有：
-    * `LEFT` 将图片2接到图片1左边
-    * `RIGHT` 将图片2接到图片1右边
-    * `TOP` 将图片2接到图片1上边
-    * `BOTTOM` 将图片2接到图片1下边
-* 返回 {Image}
-
-连接两张图片, 并返回连接后的图像. 如果两张图片大小不一致, 小的那张将适当居中.
-
-## images.grayscale(img)
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* 返回 {Image}
-
-灰度化图片, 并返回灰度化后的图片.
-
-## image.threshold(img, threshold, maxVal[, type])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `threshold` {number} 阈值
-* `maxVal` {number} 最大值
-* `type` {string} 阈值化类型, 默认为"BINARY", 参见[ThresholdTypes](https://docs.opencv.org/3.4.4/d7/d1b/group__imgproc__misc.html#gaa9e58d2860d4afa658ef70a9b1115576/), 可选的值:
-    * `BINARY`
-    * `BINARY_INV`
-    * `TRUNC`
-    * `TOZERO`
-    * `TOZERO_INV`
-    * `OTSU`
-    * `TRIANGLE`
-
-* 返回 {Image}
-
-将图片阈值化, 并返回处理后的图像. 可以用这个函数进行图片二值化. 例如：`images.threshold(img, 100, 255, "BINARY")`, 这个代码将图片中大于100的值全部变成255, 其余变成0, 从而达到二值化的效果. 如果img是一张灰度化图片, 这个代码将会得到一张黑白图片.
-
-可以参考有关博客（比如[threshold函数的使用](https://blog.csdn.net/u012566751/article/details/77046445/)）或者OpenCV文档[threshold](https://docs.opencv.org/3.4.4/d7/d1b/group__imgproc__misc.html#gae8a4a146d1ca78c626a53577199e9c57/).
-
-## images.adaptiveThreshold(img, maxValue, adaptiveMethod, thresholdType, blockSize, C)
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `maxValue` {number} 最大值
-* `adaptiveMethod` {string} 在一个邻域内计算阈值所采用的算法, 可选的值有：
-    * `MEAN_C` 计算出领域的平均值再减去参数C的值
-    * `GAUSSIAN_C` 计算出领域的高斯均值再减去参数C的值
-* `thresholdType` {string} 阈值化类型, 可选的值有：
-    * `BINARY`
-    * `BINARY_INV`
-* `blockSize` {number} 邻域块大小
-* `C` {number} 偏移值调整量
-* 返回 {Image}
-
-对图片进行自适应阈值化处理, 并返回处理后的图像.
-
-可以参考有关博客（比如[threshold与adaptiveThreshold](https://blog.csdn.net/guduruyu/article/details/68059450/)）或者OpenCV文档[adaptiveThreshold](https://docs.opencv.org/3.4.4/d7/d1b/group__imgproc__misc.html#ga72b913f352e4a1b1b397736707afcde3
-/).
-
-## images.cvtColor(img, code[, dstCn])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `code` {string} 颜色空间转换的类型, 可选的值有一共有205个（参见[ColorConversionCodes](https://docs.opencv.org/3.4.4/d8/d01/group__imgproc__color__conversions.html#ga4e0972be5de079fed4e3a10e24ef5ef0/)）, 这里只列出几个：
-    * `BGR2GRAY` BGR转换为灰度
-    * `BGR2HSV ` BGR转换为HSV
-    * ``
-* `dstCn` {number} 目标图像的颜色通道数量, 如果不填写则根据其他参数自动决定.
-* 返回 {Image}
-
-对图像进行颜色空间转换, 并返回转换后的图像.
-
-可以参考有关博客（比如[颜色空间转换](https://blog.csdn.net/u011574296/article/details/70896811?locationNum=14&fps=1)）或者OpenCV文档[cvtColor](https://docs.opencv.org/3.4.4/d8/d01/group__imgproc__color__conversions.html#ga397ae87e1288a81d2363b61574eb8cab/).
-
-## images.inRange(img, lowerBound, upperBound)
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `lowerBound` {string} | {number} 颜色下界
-* `upperBound` {string} | {number} 颜色下界
-* 返回 {Image}
-
-将图片二值化, 在lowerBound~upperBound范围以外的颜色都变成0, 在范围以内的颜色都变成255.
-
-例如`images.inRange(img, "#000000", "#222222")`.
-
-## images.interval(img, color, interval)
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `color` {string} | {number} 颜色值
-* `interval` {number} 每个通道的范围间隔
-* 返回 {Image}
-
-将图片二值化, 在color-interval ~ color+interval范围以外的颜色都变成0, 在范围以内的颜色都变成255. 这里对color的加减是对每个通道而言的.
-
-例如`images.interval(img, "#888888", 16)`, 每个通道的颜色值均为0x88, 加减16后的范围是[0x78, 0x98], 因此这个代码将把#787878~#989898的颜色变成#FFFFFF, 而把这个范围以外的变成#000000.
-
-## images.blur(img, size[, anchor, type])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `size` {Array} 定义滤波器的大小, 如[3, 3]
-* `anchor` {Array} 指定锚点位置(被平滑点), 默认为图像中心
-* `type` {string} 推断边缘像素类型, 默认为"DEFAULT", 可选的值有：
-    * `CONSTANT` iiiiii|abcdefgh|iiiiiii with some specified i
-    * `REPLICATE` aaaaaa|abcdefgh|hhhhhhh
-    * `REFLECT` fedcba|abcdefgh|hgfedcb
-    * `WRAP` cdefgh|abcdefgh|abcdefg
-    * `REFLECT_101` gfedcb|abcdefgh|gfedcba
-    * `TRANSPARENT` uvwxyz|abcdefgh|ijklmno
-    * `REFLECT101` same as BORDER_REFLECT_101
-    * `DEFAULT` same as BORDER_REFLECT_101
-    * `ISOLATED` do not look outside of ROI
-* 返回 {Image}
-
-对图像进行模糊（平滑处理）, 返回处理后的图像.
-
-可以参考有关博客（比如[实现图像平滑处理](https://www.cnblogs.com/denny402/p/3848316.html)）或者OpenCV文档[blur](https://docs.opencv.org/3.4.4/d4/d86/group__imgproc__filter.html#ga8c45db9afe636703801b0b2e440fce37/).
-
-## images.medianBlur(img, size)
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `size` {number} 定义滤波器的大小, 正奇数, 如 3
-* 返回 {Image}
-
-对图像进行中值滤波, 返回处理后的图像.
-
-可以参考有关博客（比如[实现图像平滑处理](https://www.cnblogs.com/denny402/p/3848316.html)）或者OpenCV文档[blur](https://docs.opencv.org/3.4.4/d4/d86/group__imgproc__filter.html#ga564869aa33e58769b4469101aac458f9/).
-
-## images.gaussianBlur(img, size[, sigmaX, sigmaY, type])
-
-**[v4.1.0新增]**
-
-* `img` {Image} 图片
-* `size` {Array} 定义滤波器的大小, 如[3, 3]
-* `sigmaX` {number} x方向的标准方差, 不填写则自动计算
-* `sigmaY` {number} y方向的标准方差, 不填写则自动计算
-* `type` {string} 推断边缘像素类型, 默认为"DEFAULT", 参见`images.blur`
-* 返回 {Image}
-
-对图像进行高斯模糊, 返回处理后的图像.
-
-可以参考有关博客（比如[实现图像平滑处理](https://www.cnblogs.com/denny402/p/3848316.html)）或者OpenCV文档[GaussianBlur](https://docs.opencv.org/3.4.4/d4/d86/group__imgproc__filter.html#gaabe8c836e97159a9193fb0b11ac52cf1/).
-
-## images.matToImage(mat)
-
-**[v4.1.0新增]**
-
-* `mat` {Mat} OpenCV的Mat对象
-* 返回 {Image}
-
-把Mat对象转换为Image对象.
-
-## 找图找色
-
-## images.requestScreenCapture([landscape])
-
-* `landscape` {boolean} 布尔值,  表示将要执行的截屏是否为横屏. 如果landscape为false, 则表示竖屏截图; true为横屏截图.
-
-向系统申请屏幕截图权限, 返回是否请求成功.
-
-第一次使用该函数会弹出截图权限请求, 建议选择“总是允许”.
-
-这个函数只是申请截图权限, 并不会真正执行截图, 真正的截图函数是`captureScreen()`.
-
-该函数在截图脚本中只需执行一次, 而无需每次调用`captureScreen()`都调用一次.
-
-**如果不指定landscape值, 则截图方向由当前设备屏幕方向决定**, 因此务必注意执行该函数时的屏幕方向.
-
-建议在本软件界面运行该函数, 在其他软件界面运行时容易出现一闪而过的黑屏现象.
-
-示例:
-
-```
-//请求截图
-if(!requestScreenCapture()){
-    toast("请求截图失败");
-    exit();
-}
-//连续截图10张图片(间隔1秒)并保存到存储卡目录
-for(var i = 0; i < 10; i++){
-    captureScreen("/sdcard/screencapture" + i + ".png");
-    sleep(1000);
-}
-
-```
-
-该函数也可以作为全局函数使用.
-
-## images.captureScreen()
-
-截取当前屏幕并返回一个Image对象.
-
-没有截图权限时执行该函数会抛出SecurityException.
-
-该函数不会返回null, 两次调用可能返回相同的Image对象. 这是因为设备截图的更新需要一定的时间, 短时间内（一般来说是16ms）连续调用则会返回同一张截图.
-
-截图需要转换为Bitmap格式, 从而该函数执行需要一定的时间(0~20ms).
-
-另外在requestScreenCapture()执行成功后需要一定时间后才有截图可用, 因此如果立即调用captureScreen(), 会等待一定时间后(一般为几百ms)才返回截图.
-
-例子:
-
-```
-//请求横屏截图
-requestScreenCapture(true);
-//截图
-var img = captureScreen();
-//获取在点(100, 100)的颜色值
-var color = images.pixel(img, 100, 100);
-//显示该颜色值
-toast(colors.toString(color));
-```
-
-该函数也可以作为全局函数使用.
-
-## images.captureScreen(path)
-
-* `path` {string} 截图保存路径
-
-截取当前屏幕并以PNG格式保存到path中. 如果文件不存在会被创建；文件存在会被覆盖.
-
-该函数不会返回任何值. 该函数也可以作为全局函数使用.
-
-## images.pixel(image, x, y)
-
-* `image` {Image} 图片
-* `x` {number} 要获取的像素的横坐标.
-* `y` {number} 要获取的像素的纵坐标.
-
-返回图片image在点(x, y)处的像素的ARGB值.
-
-该值的格式为0xAARRGGBB, 是一个"32位整数"(虽然JavaScript中并不区分整数类型和其他数值类型).
-
-坐标系以图片左上角为原点. 以图片左侧边为y轴, 上侧边为x轴.
-
-## images.findColor(image, color, options)
-
-* `image` {Image} 图片
-* `color` {number} | {string} 要寻找的颜色的RGB值. 如果是一个整数, 则以0xRRGGBB的形式代表RGB值（A通道会被忽略）；如果是字符串, 则以"#RRGGBB"代表其RGB值.
-* `options` {Object} 选项
-
-在图片中寻找颜色color. 找到时返回找到的点Point, 找不到时返回null.
-
-选项包括：
-
-* `region` {Array} 找色区域. 是一个两个或四个元素的数组. (region[0], region[1])表示找色区域的左上角；region[2]*region[3]表示找色区域的宽高. 如果只有region只有两个元素, 则找色区域为(region[0], region[1])到屏幕右下角. 如果不指定region选项, 则找色区域为整张图片.
-* `threshold` {number} 找色时颜色相似度的临界值, 范围为0~255（越小越相似, 0为颜色相等, 255为任何颜色都能匹配）. 默认为4. threshold和浮点数相似度(0.0~1.0)的换算为 similarity = (255 - threshold) / 255.
-
-该函数也可以作为全局函数使用.
-
-一个循环找色的例子如下：
-
-```
-requestScreenCapture();
-
-//循环找色, 找到红色(#ff0000)时停止并报告坐标
-while(true){
-    var img = captureScreen();
-    var point = findColor(img, "#ff0000");
-    if(point){
-        toast("找到红色, 坐标为(" + point.x + ", " + point.y + ")");
+```js
+images.loadAsync("https://example.com/picture.png").then((image) => {
+    try {
+        console.log(image.size);
+    } finally {
+        image.recycle();
     }
-}
-
-```
-
-一个区域找色的例子如下：
-
-```
-//读取本地图片/sdcard/1.png
-var img = images.read("/sdcard/1.png");
-//判断图片是否加载成功
-if(!img){
-    toast("没有该图片");
-    exit();
-}
-//在该图片中找色, 指定找色区域为在位置(400, 500)的宽为300长为200的区域, 指定找色临界值为4
-var point = findColor(img, "#00ff00", {
-     region: [400, 500, 300, 200],
-     threshold: 4
- });
-if(point){
-    toast("找到啦:" + point);
-}else{
-    toast("没找到");
-}
-```
-
-## images.findColorInRegion(img, color, x, y[, width, height, threshold])
-
-区域找色的简便方法.
-
-相当于
-
-```
-images.findColor(img, color, {
-     region: [x, y, width, height],
-     threshold: threshold
 });
 ```
 
-该函数也可以作为全局函数使用.
+<span id="m-images-copy-image"></span>
 
-## images.findColorEquals(img, color[, x, y, width, height])
+### [m] images.copy(image)
 
-* `img` {Image} 图片
-* `color` {number} | {string} 要寻找的颜色
-* `x` {number} 找色区域的左上角横坐标
-* `y` {number} 找色区域的左上角纵坐标
-* `width` {number} 找色区域的宽度
-* `height` {number} 找色区域的高度
-* 返回 {Point}
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 深拷贝后的新图片
 
-在图片img指定区域中找到颜色和color完全相等的某个点, 并返回该点的左边；如果没有找到, 则返回`null`.
+复制像素数据并返回具有独立生命周期的新图片.
 
-找色区域通过`x`, `y`, `width`, `height`指定, 如果不指定找色区域, 则在整张图片中寻找.
+### [m] images.fromBase64(base64)
 
-该函数也可以作为全局函数使用.
+- **base64** { [string](dataTypes#string) } - Base64 图片数据
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 解码后的图片
 
-示例：
-(通过找QQ红点的颜色来判断是否有未读消息)
+输入无法解码为图片时抛出异常.
 
-```
+### [m] images.toBase64(image, format?, quality?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ format = "png" ]** { [string](dataTypes#string) } - 编码格式
+- **[ quality = 100 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 不含换行的 Base64 数据
+
+### [m] images.fromBytes(bytes)
+
+- **bytes** { [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 解码后的图片
+
+<span id="m-images-tobytes-image-format-quality"></span>
+
+### [m] images.toBytes(image, format?, quality?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ format = "png" ]** { [string](dataTypes#string) }
+- **[ quality = 100 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- <ins>**returns**</ins> { [ByteArray](dataTypes#bytearray) } - 编码后的 Java 字节数组
+
+`toBase64()` 和 `toBytes()` 支持 `png`, `jpg`, `jpeg`, `webp`, `webp_lossy`, `webp-lossy`, `webp_lossless` 和 `webp-lossless`. 后 4 种显式 WebP 模式要求 Android API 30 或更高.
+
+### [m] images.readPixels(path)
+
+- **path** { [string](dataTypes#string) } - 图片路径
+- <ins>**returns**</ins> {{
+    - data: [JavaArray](dataTypes#javaarray)\<[number](dataTypes#number)\>;
+    - width: [number](dataTypes#number);
+    - height: [number](dataTypes#number);
+- }}
+
+读取图片的全部 ARGB 像素. `data` 按从左到右, 从上到下的顺序排列, 长度为 `width * height`.
+
+### [m] images.matToImage(mat)
+
+- **mat** { [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+使用矩阵创建包装图片. 返回对象接管矩阵数据的生命周期, 不应再独立释放同一矩阵.
+
+## 保存与压缩
+
+从 AutoJs6 6.8.0 起, 本节方法在 `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时, 使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.
+
+插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常. PNG 质量为 `100` 以及其他图片格式不使用此插件.
+
+`images.compress(image)` 和 `images.compressToBytes(image)` 的默认参数为 `"png"` 和 `60`, 因而省略 `format` 与 `quality` 时也依赖 Image Quantization 插件. `images.save(image, path)` 默认使用 PNG 质量 `100`, 不依赖此插件.
+
+<span id="m-images-save-image-path-format-quality"></span>
+
+### [m] images.save(image, path, format?, quality?)
+
+**`[6.6.3]`** **`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **path** { [string](dataTypes#string) } - 保存路径
+- **[ format = "png" ]** { [string](dataTypes#string) }
+- **[ quality = 100 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否保存成功
+
+保存图片并按需创建父目录. 已有文件会被覆盖. 支持的格式与 [`toBytes()`](#m-images-tobytes-image-format-quality) 相同.
+
+PNG 的 `quality` 不为 `100` 时会使用上述外置插件执行有损量化. Android API 30 或更高版本的 `webp_lossless` 只接受质量 `100`, 否则抛出参数异常. 文件写入或父目录创建失败时抛出 I/O 异常.
+
+### [m] images.saveImage(image, path, format?, quality?)
+
+**`[6.6.3]`** **`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **path** { [string](dataTypes#string) }
+- **[ format = "png" ]** { [string](dataTypes#string) }
+- **[ quality = 100 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+`images.save()` 的别名.
+
+### [m] images.compress(image, format?, quality?)
+
+**`[6.6.3]`** **`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ format = "png" ]** { [string](dataTypes#string) }
+- **[ quality = 60 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 重新编码并解码后的图片
+
+压缩会改变编码体积或质量, 但不会按比例缩小图片尺寸. 默认 PNG 质量为 `60`, 因此仅传入 `image` 时会加载 Image Quantization 插件. 量化或编码后的数据无法解码为图片时抛出异常.
+
+若要降低解码分辨率和内存占用, 使用 [`downsample()`](#m-images-downsample-src-reqwidth-reqheight-withalpha).
+
+### [m] images.compressToBytes(image, format?, quality?)
+
+**`6.6.3`** **`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ format = "png" ]** { [string](dataTypes#string) }
+- **[ quality = 60 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- <ins>**returns**</ins> { [ByteArray](dataTypes#bytearray) } - 压缩后的 Java 字节数组
+
+默认 PNG 质量为 `60`, 因此仅传入 `image` 时会加载 Image Quantization 插件.
+
+<span id="m-images-downsample-src-reqwidth-reqheight-withalpha"></span>
+
+### [m] images.downsample(src, reqWidth, reqHeight, withAlpha?)
+
+**`6.6.3`**
+
+- **src** { [ByteArray](dataTypes#bytearray) | [string](dataTypes#string) | [java.net.URL](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html) | [android.net.Uri](https://developer.android.com/reference/android/net/Uri) | [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [ImageWrapper](imageWrapperType) } - 图片来源
+- **reqWidth** { [number](dataTypes#number) } - 目标宽度
+- **reqHeight** { [number](dataTypes#number) } - 目标高度
+- **[ withAlpha = true ]** { [boolean](dataTypes#boolean) } - 是否保留透明通道
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 降采样后的图片
+
+字符串可为运行时文件路径或 URI. 此方法在解码阶段选择采样尺寸, 适合降低大图的解码内存.
+
+### [m] images.getSize(src)
+
+- **src** { [ImageWrapper](imageWrapperType) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) | [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [OpenCVSize](opencvSizeType) }
+
+图片路径只读取边界信息, 不解码完整位图.
+
+### [m] images.getWidth(src)
+
+- **src** { [ImageWrapper](imageWrapperType) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) | [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 图片宽度
+
+### [m] images.getHeight(src)
+
+- **src** { [ImageWrapper](imageWrapperType) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) | [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 图片高度
+
+## 图像处理
+
+<span id="m-clip"></span>
+<span id="image_m_clip"></span>
+
+### [m] images.clip(image, region)
+
+**`Overload 1/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **region** { [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 剪切后的新图片
+
+### [m] images.clip(image, x, y, width, height)
+
+**`Overload 2/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **x** { [number](dataTypes#number) }
+- **y** { [number](dataTypes#number) }
+- **width** { [number](dataTypes#number) }
+- **height** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 剪切后的新图片
+
+### [m] images.pixel(image, x, y)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - ARGB 颜色整数
+
+坐标超出图片范围时抛出异常.
+
+### [m] images.invert(image)
+
+**`6.6.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 反色后的新图片
+
+反转 RGB 通道并保留原透明通道.
+
+### [m] images.grayscale(image, dstCn?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ dstCn ]** { [number](dataTypes#number) } - 目标通道数
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 灰度化后的新图片
+
+等价于使用颜色转换代码 `BGR2GRAY` 调用 [`cvtColor()`](#m-images-cvtcolor-image-code-dstcn).
+
+### [m] images.isGrayscale(image)
+
+**`6.6.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为灰度图
+
+单通道矩阵直接视为灰度图. 多通道矩阵仅当每个像素的各通道值均相同时返回 `true`.
+
+### [m] images.threshold(image, threshold, maxVal, type?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **threshold** { [number](dataTypes#number) } - 阈值
+- **maxVal** { [number](dataTypes#number) } - 最大值
+- **[ type = "BINARY" ]** { [string](dataTypes#string) | [number](dataTypes#number) } - OpenCV 阈值类型
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+字符串类型可省略 `THRESH_` 前缀, 并忽略大小写.
+
+### [m] images.inRange(image, lowerBound, upperBound)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **lowerBound** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **upperBound** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 二值化后的新图片
+
+保留各通道均位于指定闭区间内的像素.
+
+### [m] images.interval(image, color, threshold)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **threshold** { [number](dataTypes#number) } - 每个颜色通道的容差, 限制在 `0` 至 `255`
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 二值化后的新图片
+
+### [m] images.adaptiveThreshold(image, maxValue, adaptiveMethod, thresholdType, blockSize, C)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **maxValue** { [number](dataTypes#number) }
+- **adaptiveMethod** { [string](dataTypes#string) } - `MEAN_C` 或 `GAUSSIAN_C`
+- **thresholdType** { [string](dataTypes#string) } - `BINARY` 或 `BINARY_INV`
+- **blockSize** { [number](dataTypes#number) } - 邻域尺寸
+- **C** { [number](dataTypes#number) } - 从邻域结果中减去的常量
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+`adaptiveMethod` 和 `thresholdType` 不带 OpenCV 常量前缀.
+
+### [m] images.blur(image, size, anchor?, type?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **size** { [number](dataTypes#number) | [number](dataTypes#number)[] } - 核尺寸
+- **[ anchor ]** { [number](dataTypes#number)[] | [OpenCVPoint](opencvPointType) } - 锚点
+- **[ type = "DEFAULT" ]** { [string](dataTypes#string) | [number](dataTypes#number) } - OpenCV 边界类型
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+### [m] images.medianBlur(image, size)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **size** { [number](dataTypes#number) | [number](dataTypes#number)[] | [OpenCVSize](opencvSizeType) } - 正方形核尺寸
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+数组或 `OpenCVSize` 的宽度和高度必须相等. OpenCV 还要求核尺寸为大于 `1` 的奇数.
+
+### [m] images.gaussianBlur(image, size, sigmaX?, sigmaY?, type?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **size** { [number](dataTypes#number) | [number](dataTypes#number)[] }
+- **[ sigmaX = 0 ]** { [number](dataTypes#number) }
+- **[ sigmaY = 0 ]** { [number](dataTypes#number) }
+- **[ type = "DEFAULT" ]** { [string](dataTypes#string) | [number](dataTypes#number) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+### [m] images.bilateralFilter(image, d?, sigmaColor?, sigmaSpace?, borderType?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ d = 0 ]** { [number](dataTypes#number) } - 像素邻域直径
+- **[ sigmaColor = 40 ]** { [number](dataTypes#number) } - 颜色空间标准差
+- **[ sigmaSpace = 20 ]** { [number](dataTypes#number) } - 坐标空间标准差
+- **[ borderType = "DEFAULT" ]** { [string](dataTypes#string) | [number](dataTypes#number) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+<span id="m-images-cvtcolor-image-code-dstcn"></span>
+
+### [m] images.cvtColor(image, code, dstCn?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **code** { [string](dataTypes#string) } - OpenCV 颜色转换代码
+- **[ dstCn ]** { [number](dataTypes#number) } - 目标通道数
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+`code` 不带 `COLOR_` 前缀, 例如 `BGR2GRAY` 或 `RGBA2BGR`.
+
+<span id="m-images-resize-image-size-interpolation"></span>
+
+### [m] images.resize(image, size, interpolation?)
+
+**`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **size** { [number](dataTypes#number)[] } - 包含 1 个或 2 个尺寸的数组
+- **[ interpolation = "LINEAR" ]** { [string](dataTypes#string) | [number](dataTypes#number) } - OpenCV 插值方式
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+`[ width ]` 同时指定宽度和高度, `[ width, height ]` 分别指定两个尺寸. 每个尺寸必须为 `1` 至 `2147483647` 范围内的有限正数.
+
+插值名称支持 `NEAREST`, `LINEAR`, `CUBIC`, `AREA`, `LANCZOS4`, `LINEAR_EXACT` 和 `NEAREST_EXACT`. 名称可带 `INTER_` 前缀, 也可使用对应的 OpenCV 整数常量.
+
+`images.resize(image, width, height)` 不是有效重载.
+
+### [m] images.scale(image, fx, fy, interpolation?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **fx** { [number](dataTypes#number) } - 水平缩放系数
+- **fy** { [number](dataTypes#number) } - 垂直缩放系数
+- **[ interpolation = "LINEAR" ]** { [string](dataTypes#string) | [number](dataTypes#number) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+插值参数的可选值与 [`resize()`](#m-images-resize-image-size-interpolation) 相同.
+
+### [m] images.rotate(image, degree, centerX?, centerY?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **degree** { [number](dataTypes#number) } - 旋转角度
+- **[ centerX = image.width / 2 ]** { [number](dataTypes#number) }
+- **[ centerY = image.height / 2 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+### [m] images.flip(image)
+
+**`6.6.2`** **`Overload 1/3`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 水平翻转后的图片
+
+### [m] images.flip(image, orientation)
+
+**`6.6.2`** **`Overload 2/3`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **orientation** { [boolean](dataTypes#boolean) | [string](dataTypes#string) | [boolean](dataTypes#boolean)[] | [object](dataTypes#object) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+字符串支持 `horizontal`, `vertical`, `both` 及其缩写 `h`, `v`, `x`, `y`, `xy`. 数组格式为 `[ horizontal, vertical ]`. 对象可使用 `horizontal` 或 `h` 或 `x`, 以及 `vertical` 或 `v` 或 `y`.
+
+### [m] images.flip(image, horizontal, vertical)
+
+**`6.6.2`** **`Overload 3/3`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **horizontal** { [boolean](dataTypes#boolean) }
+- **vertical** { [boolean](dataTypes#boolean) }
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+### [m] images.concat(imageA, imageB, direction?)
+
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ direction = "END" ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 拼接方向
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) }
+
+方向支持 Android Gravity 常量 `START`, `END`, `TOP` 和 `BOTTOM`, 或对应整数. 水平拼接时图片垂直居中, 垂直拼接时图片水平居中.
+
+## 截图
+
+### [m] images.requestScreenCapture(options?)
+
+**`Global`** **`Non-UI`** **`Overload 1/3`**
+
+- **[ options ]** {{
+    - orientation?: [string](dataTypes#string) | [number](dataTypes#number);
+    - width?: [number](dataTypes#number);
+    - height?: [number](dataTypes#number);
+    - isAsync?: [boolean](dataTypes#boolean);
+    - async?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否获得截图权限
+
+请求屏幕捕获权限并等待用户选择. 默认选项为 `orientation = "auto"`, `width = -1`, `height = -1`, `isAsync = false`.
+
+`orientation` 支持 `auto`, `none`, `portrait`, `landscape` 或对应整数 `0`, `-1`, `1`, `2`. `isAsync` 控制截图器是否持续异步产生帧, `async` 是其兼容别名.
+
+此同步方法不能在 UI 线程调用. UI 模式应使用 [`requestScreenCaptureAsync()`](#m-images-requestscreencaptureasync-options).
+
+### [m] images.requestScreenCapture(landscape)
+
+**`Global`** **`Non-UI`** **`Overload 2/3`**
+
+- **landscape** { [boolean](dataTypes#boolean) } - `true` 为横屏, `false` 为竖屏
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+### [m] images.requestScreenCapture(width, height)
+
+**`Global`** **`Non-UI`** **`Overload 3/3`**
+
+- **width** { [number](dataTypes#number) } - 捕获宽度
+- **height** { [number](dataTypes#number) } - 捕获高度
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+此重载使用 `orientation = "none"`, 即不根据设备方向交换指定尺寸.
+
+<span id="m-images-requestscreencaptureasync-options"></span>
+
+### [m] images.requestScreenCaptureAsync(options?)
+
+**`Global`** **`Async`** **`6.6.0`** **`Overload 1/3`**
+
+- **[ options ]** {{
+    - orientation?: [string](dataTypes#string) | [number](dataTypes#number);
+    - width?: [number](dataTypes#number);
+    - height?: [number](dataTypes#number);
+    - isAsync?: [boolean](dataTypes#boolean);
+    - async?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [boolean](dataTypes#boolean) 类型的授权结果
+
+异步请求屏幕捕获权限. 参数和默认值与 `requestScreenCapture(options?)` 相同, 可在 UI 线程调用.
+
+### [m] images.requestScreenCaptureAsync(landscape)
+
+**`Global`** **`Async`** **`6.6.0`** **`Overload 2/3`**
+
+- **landscape** { [boolean](dataTypes#boolean) }
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [boolean](dataTypes#boolean)
+
+### [m] images.requestScreenCaptureAsync(width, height)
+
+**`Global`** **`Async`** **`6.6.0`** **`Overload 3/3`**
+
+- **width** { [number](dataTypes#number) }
+- **height** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [boolean](dataTypes#boolean)
+
+### [m] images.stopScreenCapture()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+停止当前截图器, 释放屏幕捕获资源, 并将仍在等待的授权请求以 `false` 完成. 之后再次截图需要重新请求权限.
+
+### [m] images.getScreenCaptureOptions()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [ScreenCapturer.Options](#screencapturer-options) | [null](dataTypes#null) } - 当前截图器选项
+
+尚未获得截图权限或截图器已停止时返回 `null`.
+
+<span id="m-capturescreen"></span>
+<span id="image_m_capturescreen"></span>
+<span id="m-images-capturescreen"></span>
+
+### [m] images.captureScreen()
+
+**`Global`** **`Overload 1/2`**
+
+- <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 当前屏幕图片
+
+在后台脚本线程中, 若尚未请求权限, 此方法会先同步调用 `requestScreenCapture()`. UI 线程不会自动请求权限.
+
+截图模块会管理返回图片的缓存和更新, 通常不需要手动回收该对象. 若截图暂时失败且已有可用的上一帧, 方法会返回上一帧的副本; 无任何有效帧时抛出异常.
+
+```js
 requestScreenCapture();
-launchApp("QQ");
-sleep(1200);
-var p = findColorEquals(captureScreen(), "#f64d30");
-if(p){
-    toast("有未读消息");
-}else{
-    toast("没有未读消息");
-}
+let image = captureScreen();
+console.log(`${image.width} x ${image.height}`);
 ```
 
-## images.findMultiColors(img, firstColor, colors[, options])
+### [m] images.captureScreen(path)
 
-* `img` {Image} 要找色的图片
-* `firstColor` {number} | {string} 第一个点的颜色
-* `colors` {Array} 表示剩下的点相对于第一个点的位置和颜色的数组, 数组的每个元素为[x, y, color]
-* `options` {Object} 选项, 包括：
-    * `region` {Array} 找色区域. 是一个两个或四个元素的数组. (region[0], region[1])表示找色区域的左上角；region[2]*region[3]表示找色区域的宽高. 如果只有region只有两个元素, 则找色区域为(region[0], region[1])到屏幕右下角. 如果不指定region选项, 则找色区域为整张图片.
-    * `threshold` {number} 找色时颜色相似度的临界值, 范围为0~255（越小越相似, 0为颜色相等, 255为任何颜色都能匹配）. 默认为4. threshold和浮点数相似度(0.0~1.0)的换算为 similarity = (255 - threshold) / 255.
+**`Global`** **`Overload 2/2`**
 
-多点找色, 类似于按键精灵的多点找色, 其过程如下：
+- **path** { [string](dataTypes#string) } - PNG 保存路径
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否保存成功
 
-1. 在图片img中找到颜色firstColor的位置(x0, y0)
-2. 对于数组colors的每个元素[x, y, color], 检查图片img在位置(x + x0, y + y0)上的像素是否是颜色color, 是的话返回(x0, y0), 否则继续寻找firstColor的位置, 重新执行第1步
-3. 整张图片都找不到时返回`null`
+捕获当前屏幕并直接保存到指定路径.
 
-例如, 对于代码`images.findMultiColors(img, "#123456", [[10, 20, "#ffffff"], [30, 40, "#000000"]])`, 假设图片在(100, 200)的位置的颜色为#123456, 这时如果(110, 220)的位置的颜色为#fffff且(130, 240)的位置的颜色为#000000, 则函数返回点(100, 200).
+### [m] images.on("screen_capture_available", listener)
 
-如果要指定找色区域, 则在options中指定, 例如:
+**`Async`**
 
-```
-var p = images.findMultiColors(img, "#123456", [[10, 20, "#ffffff"], [30, 40, "#000000"]], {
-    region: [0, 960, 1080, 960]
+- **listener** { [Function](dataTypes#function) } - `(image: ImageWrapper) => void`
+- <ins>**returns**</ins> { [object](dataTypes#object) } - 当前 `images` 对象
+
+当截图请求使用 `isAsync = true` 时, 每个可用帧触发一次事件. 监听器收到的图片由调用方负责及时回收.
+
+同一帧还会依次触发兼容事件 `capture_available` 和 `screen_capture`. 三个事件传入同一个 `ImageWrapper`.
+
+```js
+images.on("screen_capture_available", (image) => {
+    try {
+        console.log(images.pixel(image, 0, 0));
+    } finally {
+        image.recycle();
+    }
+});
+
+requestScreenCapture({
+    orientation: "auto",
+    isAsync: true,
 });
 ```
 
-## images.detectsColor(image, color, x, y[, threshold = 16, algorithm = "diff"])
+## 找色
 
-* `image` {Image} 图片
-* `color` {number} | {string} 要检测的颜色
-* `x` {number} 要检测的位置横坐标
-* `y` {number} 要检测的位置纵坐标
-* `threshold` {number} 颜色相似度临界值, 默认为16. 取值范围为0~255.
-* `algorithm` {string} 颜色匹配算法, 包括:
-    * "equal": 相等匹配, 只有与给定颜色color完全相等时才匹配.
-    * "diff": 差值匹配. 与给定颜色的R、G、B差的绝对值之和小于threshold时匹配.
-    * "rgb": rgb欧拉距离相似度. 与给定颜色color的rgb欧拉距离小于等于threshold时匹配.
+找色选项中的 `threshold` 默认为 `4`, 表示颜色通道差异阈值. 也可使用 `similarity`, 此时阈值按 `round(255 * (1 - similarity))` 换算. 同一选项对象不能同时包含 `threshold` 和 `similarity`.
 
-    * "rgb+": 加权rgb欧拉距离匹配([LAB Delta E](https://en.wikipedia.org/wiki/Color_difference/)).
-    * "hs": hs欧拉距离匹配. hs为HSV空间的色调值.
+### [m] images.detectColor(image, color, x, y, threshold?, algorithm?)
 
-返回图片image在位置(x, y)处是否匹配到颜色color. 用于检测图片中某个位置是否是特定颜色.
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **x** { [number](dataTypes#number) }
+- **y** { [number](dataTypes#number) }
+- **[ threshold = 4 ]** { [number](dataTypes#number) }
+- **[ algorithm = "diff" ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 指定位置是否匹配颜色
 
-一个判断微博客户端的某个微博是否被点赞过的例子：
+### [m] images.detectsColor(image, color, x, y, threshold?, algorithm?)
 
-```
-requestScreenCapture();
-//找到点赞控件
-var like = id("ly_feed_like_icon").findOne();
-//获取该控件中点坐标
-var x = like.bounds().centerX();
-var y = like.bounds().centerY();
-//截图
-var img = captureScreen();
-//判断在该坐标的颜色是否为橙红色
-if(images.detectsColor(img, "#fed9a8", x, y)){
-    //是的话则已经是点赞过的了, 不做任何动作
-}else{
-    //否则点击点赞按钮
-    like.click();
-}
-```
+**`DEPRECATED`**
 
-## images.findImage(img, template[, options])
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **x** { [number](dataTypes#number) }
+- **y** { [number](dataTypes#number) }
+- **[ threshold = 4 ]** { [number](dataTypes#number) }
+- **[ algorithm = "diff" ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-* `img` {Image} 大图片
-* `template` {Image} 小图片（模板）
-* `options` {Object} 找图选项
+已弃用的 `detectColor()` 别名.
 
-找图. 在大图片img中查找小图片template的位置（模块匹配）, 找到时返回位置坐标(Point), 找不到时返回null.
+### [m] images.detectMultiColors(image, x, y, firstColor, paths, options?)
 
-选项包括：
+**`6.6.0`**
 
-* `threshold` {number} 图片相似度. 取值范围为0~1的浮点数. 默认值为0.9.
-* `region` {Array} 找图区域. 参见findColor函数关于region的说明.
-* `level` {number} **一般而言不必修改此参数**. 不加此参数时该参数会根据图片大小自动调整. 找图算法是采用图像金字塔进行的, level参数表示金字塔的层次, level越大可能带来越高的找图效率, 但也可能造成找图失败（图片因过度缩小而无法分辨）或返回错误位置. 因此, 除非您清楚该参数的意义并需要进行性能调优, 否则不需要用到该参数.
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **x** { [number](dataTypes#number) } - 基准点横坐标
+- **y** { [number](dataTypes#number) } - 基准点纵坐标
+- **firstColor** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) } - 基准颜色
+- **paths** { [number](dataTypes#number)[][] } - 相对颜色路径
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 指定基准点是否匹配整组颜色
 
-该函数也可以作为全局函数使用.
+`paths` 的每一项为 `[ dx, dy, color ]`, 坐标相对于 `(x, y)`.
 
-一个最简单的找图例子如下：
+### [m] images.detectsMultiColors(image, x, y, firstColor, paths, options?)
 
-```
-var img = images.read("/sdcard/大图.png");
-var templ = images.read("/sdcard/小图.png");
-var p = findImage(img, templ);
-if(p){
-    toast("找到啦:" + p);
-}else{
-    toast("没找到");
-}
-```
+**`DEPRECATED`** **`6.6.0`**
 
-稍微复杂点的区域找图例子如下：
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **x** { [number](dataTypes#number) }
+- **y** { [number](dataTypes#number) }
+- **firstColor** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **paths** { [number](dataTypes#number)[][] }
+- **[ options ]** { [object](dataTypes#object) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-```
-auto();
-requestScreenCapture();
-var wx = images.read("/sdcard/微信图标.png");
-//返回桌面
-home();
-//截图并找图
-var p = findImage(captureScreen(), wx, {
-    region: [0, 50],
-    threshold: 0.8
+已弃用的 `detectMultiColors()` 别名.
+
+### [m] images.findPointByColor(image, color, options?)
+
+**`Overload 1/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) } - 首个匹配点
+
+### [m] images.findPointByColor(image, color, x?, y?, width?, height?, threshold?)
+
+**`Overload 2/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- **[ threshold = 4 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+### [m] images.findColor(image, color, options?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** { [object](dataTypes#object) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByColor(image, color, options?)` 代替.
+
+### [m] images.findColorInRegion(image, color, x?, y?, width?, height?, threshold?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- **[ threshold = 4 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByColor()` 的位置参数重载代替.
+
+### [m] images.findPointByColorExactly(image, color, x?, y?, width?, height?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+以阈值 `0` 查找完全匹配的颜色.
+
+### [m] images.findColorEquals(image, color, x?, y?, width?, height?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByColorExactly()` 代替.
+
+### [m] images.findPointsByColor(image, color, options?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType)[] } - 全部匹配点
+
+### [m] images.findAllPointsForColor(image, color, options?)
+
+**`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** { [object](dataTypes#object) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType)[] }
+
+使用 `findPointsByColor()` 代替.
+
+### [m] images.findPointByColors(image, firstColor, paths, options?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **firstColor** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **paths** { [number](dataTypes#number)[][] } - 每项为 `[ dx, dy, color ]`
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) } - 首个匹配模式的基准点
+
+### [m] images.findMultiColors(image, firstColor, paths, options?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **firstColor** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **paths** { [number](dataTypes#number)[][] }
+- **[ options ]** { [object](dataTypes#object) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByColors()` 代替.
+
+### [m] images.findPointsByColors(image, firstColor, paths, options?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **firstColor** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **paths** { [number](dataTypes#number)[][] }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType)[] } - 全部匹配模式的基准点
+
+## 找图与特征匹配
+
+### [m] images.findCircles(image, options?)
+
+**`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 灰度图或普通图片
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - dp?: [number](dataTypes#number);
+    - minDst?: [number](dataTypes#number);
+    - param1?: [number](dataTypes#number);
+    - param2?: [number](dataTypes#number);
+    - minRadius?: [number](dataTypes#number);
+    - maxRadius?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [Circle](#circle)[] } - 检测到的圆
+
+使用 OpenCV Hough 圆检测. 非灰度图片会先自动灰度化.
+
+默认值为 `dp = 1`, `minDst = image.height / 8`, `param1 = 100`, `param2 = 100`, `minRadius = 0`, `maxRadius = 0`. 从 AutoJs6 6.8.0 起, 指定 `region` 时返回的 `x` 和 `y` 为原图坐标, 已包含区域偏移.
+
+### [m] images.findPointByImage(image, template, options?)
+
+**`Overload 1/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 待搜索图片
+- **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 模板图片
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - weakThreshold?: [number](dataTypes#number);
+    - threshold?: [number](dataTypes#number);
+    - level?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) } - 最佳匹配的左上角坐标
+
+默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`. `level = -1` 表示自动选择图像金字塔层数.
+
+### [m] images.findPointByImage(image, template, x?, y?, width?, height?, threshold?)
+
+**`Overload 2/2`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- **[ threshold = 0.9 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+此重载仍使用 `weakThreshold = 0.6` 和 `level = -1`.
+
+### [m] images.findImage(image, template, options?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ options ]** { [object](dataTypes#object) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByImage(image, template, options?)` 代替.
+
+### [m] images.findImageInRegion(image, template, x?, y?, width?, height?, threshold?)
+
+**`Global`** **`DEPRECATED`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ x = 0 ]** { [number](dataTypes#number) }
+- **[ y = 0 ]** { [number](dataTypes#number) }
+- **[ width = image.width - x ]** { [number](dataTypes#number) }
+- **[ height = image.height - y ]** { [number](dataTypes#number) }
+- **[ threshold = 0.9 ]** { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) }
+
+使用 `findPointByImage()` 的位置参数重载代替.
+
+### [m] images.matchTemplate(image, template, options?)
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 待搜索图片
+- **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 模板图片
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - weakThreshold?: [number](dataTypes#number);
+    - threshold?: [number](dataTypes#number);
+    - level?: [number](dataTypes#number);
+    - max?: [number](dataTypes#number);
+    - useTransparentMask?: [boolean](dataTypes#boolean);
+    - transparentMask?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 匹配结果
+
+默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`, `max = 5`, `useTransparentMask = false`. `transparentMask` 是 `useTransparentMask` 的兼容别名, 仅在前者缺失时生效.
+
+`max` 限制返回结果数量. 开启透明遮罩后, 模板的透明通道参与遮罩构造.
+
+```js
+let result = images.matchTemplate("./screen.png", "./button.png", {
+    region: [ 0, 0, 1080, 1200 ],
+    weakThreshold: 0.6,
+    threshold: 0.9,
+    level: -1,
+    max: 5,
+    useTransparentMask: false,
 });
-if(p){
-    toast("在桌面找到了微信图标啦: " + p);
-}else{
-    toast("在桌面没有找到微信图标");
-}
+console.log(result.best());
 ```
 
-## images.findImageInRegion(img, template, x, y[, width, height, threshold])
+### [m] images.detectAndComputeFeatures(image, options?)
 
-区域找图的简便方法. 相当于：
+**`6.6.0`**
 
-```
-images.findImage(img, template, {
-    region: [x, y, width, height],
-    threshold: threshold
-})
-```
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - scale?: [number](dataTypes#number);
+    - grayscale?: [boolean](dataTypes#boolean);
+    - method?: [string](dataTypes#string) | [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [ImageFeatures](#imagefeatures) } - 特征描述对象
 
-该函数也可以作为全局函数使用.
+默认使用 `method = "SIFT"` 和 `grayscale = false`. `method` 支持 `SIFT`, `ORB` 或对应内部整数常量.
 
-## images.matchTemplate(img, template, options)
+`scale` 被限制在 `0` 至 `1`. 未指定时, 小于约 100 万像素的图片使用 `1`; 更大的图片按约 100 万像素且最长边不超过 `1600` 的规则自动缩放.
 
-**[v4.1.0新增]**
+### [m] images.matchFeatures(sceneFeatures, objectFeatures, options?)
 
-* `img` {Image} 大图片
-* `template` {Image} 小图片（模板）
-* `options` {Object} 找图选项：
-    * `threshold` {number} 图片相似度. 取值范围为0~1的浮点数. 默认值为0.9.
-    * `region` {Array} 找图区域. 参见findColor函数关于region的说明.
-    * `max` {number} 找图结果最大数量, 默认为5
-    * `level` {number} **一般而言不必修改此参数**. 不加此参数时该参数会根据图片大小自动调整. 找图算法是采用图像金字塔进行的, level参数表示金字塔的层次, level越大可能带来越高的找图效率, 但也可能造成找图失败（图片因过度缩小而无法分辨）或返回错误位置. 因此, 除非您清楚该参数的意义并需要进行性能调优, 否则不需要用到该参数.
-* 返回 {MatchingResult}
+**`6.6.0`**
 
-在大图片中搜索小图片, 并返回搜索结果MatchingResult. 该函数可以用于找图时找出多个位置, 可以通过max参数控制最大的结果数量. 也可以对匹配结果进行排序、求最值等操作.
+- **sceneFeatures** { [ImageFeatures](#imagefeatures) } - 场景图片特征
+- **objectFeatures** { [ImageFeatures](#imagefeatures) } - 目标图片特征
+- **[ options ]** {{
+    - matcher?: [string](dataTypes#string);
+    - drawMatches?: [string](dataTypes#string);
+    - threshold?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) | [null](dataTypes#null) } - 目标四边形, 或 `null`
 
-# MatchingResult
+`matcher` 是 `org.opencv.features2d.DescriptorMatcher` 的静态常量名. 未指定时, ORB 一类的 `CV_8U` 描述符使用 `BRUTEFORCE_HAMMING`, 其他描述符使用 `FLANNBASED`.
 
-**[v4.1.0新增]**
+默认阈值对 `CV_8U` 描述符为 `0.8`, 对其他描述符为 `0.7`. `drawMatches` 可指定调试匹配图的 JPG 保存路径.
 
-## matches
+## 相似度
 
-* {Array} 匹配结果的数组.
+除 `isEqual()` 外, 本节方法的图片参数接受 [ImageWrapper](imageWrapperType), 图片路径 [string](dataTypes#string) 或 [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html). 两张图片必须满足所选算法的尺寸和通道要求, 否则 OpenCV 或相似度实现会抛出异常.
 
-数组的元素是一个Match对象：
+### [m] images.psnr(imageA, imageB)
 
-* `point` {Point} 匹配位置
-* `similarity` {number} 相似度
+**`6.6.0`**
 
-例如:
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 峰值信噪比
 
-```
-var result = images.matchTemplate(img, template, {
-    max: 100
-});
-result.matches.forEach(match => {
-    log("point = " + match.point + ", similarity = " + match.similarity);
-});
-```
+结果通常越大表示差异越小.
 
-## points
+### [m] images.ssim(imageA, imageB)
 
-* {Array} 匹配位置的数组.
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 结构相似性指数
 
-## first()
+结果通常越接近 `1` 表示结构越相似.
 
-* 返回 {Match}
+### [m] images.mssim(imageA, imageB)
 
-第一个匹配结果. 如果没有任何匹配, 则返回`null`.
+**`6.6.0`**
 
-## last()
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 平均结构相似性指数
 
-* 返回 {Match}
+结果通常越接近 `1` 表示结构越相似.
 
-最后一个匹配结果. 如果没有任何匹配, 则返回`null`.
+### [m] images.hist(imageA, imageB)
 
-## leftmost()
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 直方图相关性
 
-* 返回 {Match}
+### [m] images.mse(imageA, imageB)
 
-位于大图片最左边的匹配结果. 如果没有任何匹配, 则返回`null`.
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 均方误差
 
-## topmost()
+结果越小表示差异越小, 完全相同为 `0`.
 
-* 返回 {Match}
+### [m] images.ncc(imageA, imageB)
 
-位于大图片最上边的匹配结果. 如果没有任何匹配, 则返回`null`.
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 归一化互相关结果
 
-## rightmost()
+结果通常越接近 `1` 表示相关性越高.
 
-* 返回 {Match}
+### [m] images.isEqual(imageA, imageB)
 
-位于大图片最右边的匹配结果. 如果没有任何匹配, 则返回`null`.
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 像素是否完全相同
 
-## bottommost()
+### [m] images.getSimilarity(imageA, imageB, options?)
 
-* 返回 {Match}
+**`6.6.0`** **`[6.8.0]`**
 
-位于大图片最下边的匹配结果. 如果没有任何匹配, 则返回`null`.
+- **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
+- **[ options ]** {{
+    - metric?: [string](dataTypes#string);
+    - type?: [string](dataTypes#string);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 所选算法的原始结果
 
-## best()
+`metric` 支持 `psnr`, `ssim`, `mssim`, `hist`, `mse` 和 `ncc`, 默认值为 `mssim`. `type` 是兼容别名, 仅在 `metric` 缺失时使用. 拼写 `pnsr` 会兼容为 `psnr`.
 
-* 返回 {Match}
+## 资源状态
 
-相似度最高的匹配结果. 如果没有任何匹配, 则返回`null`.
+### [m] images.isRecycled(...images)
 
-## worst()
+- **...images** { ...([ImageWrapper](imageWrapperType))[] } - 待检查的图片
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否全部为已回收图片
 
-* 返回 {Match}
+无参数时返回 `true`. 任一参数不是 `ImageWrapper` 或尚未回收时返回 `false`.
 
-相似度最低的匹配结果. 如果没有任何匹配, 则返回`null`.
+### [m] images.recycle(...images)
 
-## sortBy(cmp)
+- **...images** { ...([ImageWrapper](imageWrapperType))[] } - 待回收的图片
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否全部成功回收
 
-* cmp {Function}|{string} 比较函数, 或者是一个字符串表示排序方向. 例如"left"表示将匹配结果按匹配位置从左往右排序、"top"表示将匹配结果按匹配位置从上往下排序, "left-top"表示将匹配结果按匹配位置从左往右、从上往下排序. 方向包括`left`（左）, `top` （上）, `right` （右）, `bottom`（下）.
-* {MatchingResult}
+已回收的图片视为成功. 无参数时返回 `true`. 任一参数不是 `ImageWrapper` 或回收时发生异常, 结果为 `false`.
 
-对匹配结果进行排序, 并返回排序后的结果.
+单个图片也可直接调用 [`ImageWrapper#recycle()`](imageWrapperType#m-recycle).
 
-```
-var result = images.matchTemplate(img, template, {
-    max: 100
-});
-log(result.sortBy("top-right"));
-```
+## 类型
 
-# Image
+### Circle
 
-表示一张图片, 可以是截图的图片, 或者本地读取的图片, 或者从网络获取的图片.
+圆检测结果.
 
-## Image.getWidth()
+- **x** { [number](dataTypes#number) } - 圆心横坐标
+- **y** { [number](dataTypes#number) } - 圆心纵坐标
+- **radius** { [number](dataTypes#number) } - 半径
 
-返回以像素为单位图片宽度.
+<span id="screencapturer-options"></span>
 
-## Image.getHeight()
+### ScreenCapturer.Options
 
-返回以像素为单位的图片高度.
+`images.getScreenCaptureOptions()` 返回的 Java 记录类型.
 
-## Image.saveTo(path)
+#### [m#] width()
 
-* `path` {string} 路径
+- <ins>**returns**</ins> { [number](dataTypes#number) }
 
-把图片保存到路径path. （如果文件存在则覆盖）
+返回捕获宽度选项.
 
-## Image.pixel(x, y)
+#### [m#] height()
 
-* `x` {number} 横坐标
-* `y` {number} 纵坐标
+- <ins>**returns**</ins> { [number](dataTypes#number) }
 
-返回图片image在点(x, y)处的像素的ARGB值.
+返回捕获高度选项.
 
-该值的格式为0xAARRGGBB, 是一个"32位整数"(虽然JavaScript中并不区分整数类型和其他数值类型).
+#### [m#] orientation()
 
-坐标系以图片左上角为原点. 以图片左侧边为y轴, 上侧边为x轴.
+- <ins>**returns**</ins> { [number](dataTypes#number) } - `-1`, `0`, `1` 或 `2`
 
-##
+返回捕获方向选项.
 
-# Point
+#### [m#] density()
 
-findColor, findImage返回的对象. 表示一个点（坐标）.
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 屏幕密度
 
-## Point.x
+返回创建虚拟显示时使用的屏幕密度.
 
-横坐标.
+#### [m#] isAsync()
 
-## Point.y
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-纵坐标.
+返回截图器是否使用异步帧模式.
+
+<span id="c-images-objectframe"></span>
+
+### [C] images.ObjectFrame
+
+**`6.8.0`**
+
+由 4 个 [OpenCVPoint](opencvPointType) 表示的特征匹配边框类.
+
+#### [c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight)
+
+- **topLeft** { [OpenCVPoint](opencvPointType) }
+- **topRight** { [OpenCVPoint](opencvPointType) }
+- **bottomLeft** { [OpenCVPoint](opencvPointType) }
+- **bottomRight** { [OpenCVPoint](opencvPointType) }
+- <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) }
+
+创建一个对象边框.
+
+#### [p#] ObjectFrame#topLeft
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType) }
+
+#### [p#] ObjectFrame#topRight
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType) }
+
+#### [p#] ObjectFrame#bottomLeft
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType) }
+
+#### [p#] ObjectFrame#bottomRight
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType) }
+
+#### [p#] ObjectFrame#centerX
+
+**`READONLY`**
+
+- { [number](dataTypes#number) }
+
+#### [p#] ObjectFrame#centerY
+
+**`READONLY`**
+
+- { [number](dataTypes#number) }
+
+#### [p#] ObjectFrame#center
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType) }
+
+#### [m#] ObjectFrame#summary()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 四角点和中心点摘要
+
+### MatchingResult
+
+`images.matchTemplate()` 返回的匹配结果.
+
+#### [p#] MatchingResult#matches
+
+**`READONLY`**
+
+- { [TemplateMatch](#templatematch)[] } - 匹配项数组
+
+#### [p#] MatchingResult#points
+
+**`READONLY`**
+
+- { [OpenCVPoint](opencvPointType)[] } - 匹配点数组
+
+#### [m#] MatchingResult#first()
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+返回当前顺序中的第一项.
+
+#### [m#] MatchingResult#last()
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+返回当前顺序中的最后一项.
+
+#### [m#] MatchingResult#leftmost()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+#### [m#] MatchingResult#rightmost()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+#### [m#] MatchingResult#topmost()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+#### [m#] MatchingResult#bottommost()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+#### [m#] MatchingResult#best()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+#### [m#] MatchingResult#worst()
+
+**`[6.8.0]`**
+
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
+
+从 AutoJs6 6.8.0 起, 上述方向和相似度选择方法会按完整浮点值正确比较.
+
+#### [m#] MatchingResult#sortBy(direction)
+
+**`Overload 1/2`**
+
+- **direction** { [string](dataTypes#string) } - 排序方向
+- <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 新的排序结果
+
+方向由 `left`, `right`, `top`, `bottom`, `best`, `worst` 组成. 可使用 `-` 连接多个排序条件, 例如 `left-top`.
+
+#### [m#] MatchingResult#sortBy(compareFn)
+
+**`Overload 2/2`**
+
+- **compareFn** { [Function](dataTypes#function) } - `(a: TemplateMatch, b: TemplateMatch) => number`
+- <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 新的排序结果
+
+原 `MatchingResult` 不会被修改.
+
+### TemplateMatch
+
+- **point** { [OpenCVPoint](opencvPointType) } - 模板左上角坐标
+- **similarity** { [number](dataTypes#number) } - 匹配相似度
+
+### ImageFeatures
+
+`images.detectAndComputeFeatures()` 返回的特征描述对象.
+
+#### [p#] ImageFeatures#scale
+
+- { [number](dataTypes#number) } - 特征计算时使用的缩放比例
+
+#### [p#] ImageFeatures#region
+
+- { [OpenCVRect](opencvRectType) } - 特征对应的原图区域
+
+匹配结果会使用此区域还原到原图坐标.
+
+#### [p#] ImageFeatures#recycled
+
+- { [boolean](dataTypes#boolean) } - 是否已回收
+
+该字段与 `isRecycled()` 返回相同的资源状态.
+
+#### [m#] ImageFeatures#isRecycled()
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回特征资源是否已回收.
+
+#### [m#] ImageFeatures#recycle()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+释放特征点和描述符资源. 重复调用不会再次释放.
+
+#### [m#] ImageFeatures#setOneShot(enabled)
+
+- **enabled** { [boolean](dataTypes#boolean) }
+- <ins>**returns**</ins> { [ImageFeatures](#imagefeatures) }
+
+设置一次性资源标记并返回当前对象.
+
+#### [m#] ImageFeatures#oneShot()
+
+- <ins>**returns**</ins> { [ImageFeatures](#imagefeatures) }
+
+将对象标记为一次性对象. 它被 `matchFeatures()` 使用后会自动回收.
+
+#### [m#] ImageFeatures#shoot()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+仅当对象已标记为一次性时执行回收.

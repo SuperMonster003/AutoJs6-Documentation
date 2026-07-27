@@ -184,7 +184,7 @@ server: nginx/1.16.1
 
 transfer-encoding 首部指明实体传递采用的编码形式.
 
-transfer-encoding 仅应用于两个节点之间的消息传递, 而非资源本身. 一个多节点连接的每一段都可应用不同的transfer-encoding 值. 如需将压缩后的数据应用于整个连接, 可使用端到端传输首部 content-encoding.
+transfer-encoding 仅应用于两个节点之间的消息传递, 而非资源本身. 一个多节点连接的每一段都可应用不同的 transfer-encoding 值. 如需将压缩后的数据应用于整个连接, 可使用端到端传输首部 content-encoding.
 
 ```text
 # 示例

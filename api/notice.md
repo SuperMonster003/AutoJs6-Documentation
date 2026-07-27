@@ -103,11 +103,11 @@ notice('tour', options); /* 1 秒后覆盖 'world'. */
 
 delete options.bigContent; /* 删除长内容. */
 sleep(1e3);
-notice('movie', options); /* 1 秒后覆盖 'tour' */
+notice('movie', options); /* 1 秒后覆盖 'tour'. */
 
 options.intent = 'home'; /* 修改 intent 属性. */
 sleep(1e3);
-notice('here', options); /* 1 秒后覆盖 'movie' */
+notice('here', options); /* 1 秒后覆盖 'movie'. */
 ```
 
 ## 通知渠道
@@ -249,8 +249,8 @@ notice('message', 'hello');
 该测试通知包含标题及内容.
 
 ```js
-// 以 AutoJs6 语言为 English 为例, 
-// 标题为 Script notification, 
+// 以 AutoJs6 语言为 English 为例,
+// 标题为 Script notification,
 // 内容为 Notification from script.
 notice();
 ```
@@ -292,8 +292,8 @@ notice({
 notice('hello', { isSilent: true });
 ```
 
-> 注: 内容参数可能重复指定.  
-> 出现重复指定时, 按以下优先级处理:  
+> 注: 内容参数可能重复指定.<br>
+> 出现重复指定时, 按以下优先级处理:<br>
 > options.content > content
 
 ### notice(title, content, options)
@@ -313,8 +313,8 @@ notice('hello', { isSilent: true });
 notice('message', 'hello', { isSilent: true });
 ```
 
-> 注: 标题参数与内容参数可能重复指定.  
-> 出现重复指定时, 按以下优先级处理:  
+> 注: 标题参数与内容参数可能重复指定.<br>
+> 出现重复指定时, 按以下优先级处理:<br>
 > options.title > title
 > options.content > content
 
@@ -446,6 +446,14 @@ let id = notice({ title: 'New message' });
 setTimeout(() => notice.cancel(id), 2e3);
 ```
 
+## [p] builder
+
+**`6.6.2`** **`Getter`**
+
+- { [NoticeBuilder](noticeBuilderType) } - 简单通知构建器
+
+每次读取均创建一个新的简单通知构建器, 相当于调用 [notice.getBuilder()](#m-getbuilder).
+
 ## [m] getBuilder
 
 ### getBuilder()
@@ -461,7 +469,7 @@ setTimeout(() => notice.cancel(id), 2e3);
 - `setSmallIcon(R.drawable.autojs6_material)` # AutoJs6 应用图标作为 smallIcon
 - `setPriority(NotificationCompat.PRIORITY_HIGH)` # 高优先级 (仅针对 Android 7.1 及以下)
 
-构建器通常配合 `notice` 方法作为 第 1 个 (索引 0) 参数使用, 即 `notice(notice.getBuilder())`:
+构建器通常配合 `notice` 方法作为第 1 个 (索引 0) 参数使用, 即 `notice(notice.getBuilder())`:
 
 ```js
 let builder = notice.getBuilder();
@@ -490,7 +498,7 @@ config 方法用于修改默认配置, 即用于配置通知渠道与通知发�
 
 > 注: 初次使用 notice 模块时, 建议先跳过此小节内容, 待了解包括 [channel](#p-channel) 等在内的相关内容后再继续阅读当前小节.
 
-例如, `isSilent` 默认为 `false`, 表示不进行强制静音.  
+例如, `isSilent` 默认为 `false`, 表示不进行强制静音.<br>
 通过 `notice.config` 可配置所有通知发送时, 默认启用强制静音:
 
 ```js
@@ -579,9 +587,7 @@ notice.channel.create('my_channel_id', {
 
 更多渠道配置相关信息, 参阅 [NoticeChannelOptions](noticeChannelOptionsType) 类型章节.
 
-> 注: 渠道 ID 可能重复指定.  
-> 出现重复指定时, 按以下优先级处理:  
-> options.id > channelId
+当同时指定位置参数 **channelId** 和 `options.id` 时, 使用位置参数 **channelId**.
 
 #### create(options)
 
@@ -601,6 +607,27 @@ notice.channel.create({ id: 'my_channel_id' });
 当不指定 `id` 时, 渠道 ID 将使用当前运行脚本的脚本名称.
 
 更多渠道配置相关信息, 参阅 [NoticeChannelOptions](noticeChannelOptionsType) 类型章节.
+
+### [m] createIfNeeded
+
+#### createIfNeeded(channelId, options?)
+
+**`6.6.0`**
+
+- **channelId** { [string](dataTypes#string) | [number](dataTypes#number) } - 渠道 ID
+- **[ options ]** { [NoticeChannelOptions](noticeChannelOptionsType) } - 渠道创建选项
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+仅当指定渠道不存在时创建渠道. 已存在的渠道不会被修改.
+
+#### createIfNeeded(options)
+
+**`6.6.0`**
+
+- **options** { [NoticeChannelOptions](noticeChannelOptionsType) } - 渠道创建选项, 使用 `channelId` 属性指定渠道 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+仅当 `options.channelId` 对应的渠道不存在时创建渠道. 未指定 `channelId` 时使用当前脚本的默认渠道 ID.
 
 ### [m] contains
 

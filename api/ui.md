@@ -1,1120 +1,978 @@
 # 用户界面 (UI)
 
----
+UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 Android 视图. 布局采用声明式 XML, 外观与 JSX 或 React 组件树相似, 但运行时由 Rhino 按 [E4X](e4x) XML 处理, 不是浏览器 DOM, JSX 或 React.
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+`ui` 模块提供布局渲染, 视图查询, UI 线程调度, 自定义控件和系统栏控制等功能. `$ui` 是 `ui` 的等效别名.
 
----
+布局标签及属性的完整清单参阅 [UI 布局属性](uiAttributes).
 
-ui模块提供了编写用户界面的支持.
+## UI 模式
 
-    给Android开发者或者高阶用户的提醒, Auto.js的UI系统来自于Android, 所有属性和方法都能在Android源码中找到. 如果某些代码或属性没有出现在Auto.js的文档中, 可以参考Android的文档.
-    View: https://developer.android.google.cn/reference/android/view/View?hl=cn
-    Widget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn
+脚本的第一个有效语句使用字符串指令 `'ui';` 可启用 UI 模式. 注释和空行可以位于指令之前. 指令必须位于其他有效语句之前.
 
-带有ui的脚本的的最前面必须使用`"ui";`指定ui模式, 否则脚本将不会以ui模式运行. 正确示范:s
+```js
+'ui';
 
-```
-"ui";
-
-//脚本的其他代码
-```
-
-字符串"ui"的前面可以有注释、空行和空格**[v4.1.0新增]**, 但是不能有其他代码.
-
-界面是由视图(View)组成的. View分成两种, 控件(Widget)和布局(Layout). 控件(Widget)用来具体显示文字、图片、网页等, 比如文本控件(text)用来显示文字, 按钮控件(button)则可以显示一个按钮并提供点击效果, 图片控件(img)则用来显示来自网络或者文件的图片, 除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的"容器", 用于控制在他里面的控件的位置, 比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列), 水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列), 以及帧布局(frame), 他会把他里面的控件直接在左上角显示, 如果有多个控件, 后面的控件会重叠在前面的控件上.
-
-我们使用xml来编写界面, 并通过`ui.layout()`函数指定界面的布局xml. 举个例子：
-
-```
-"ui";
-$ui.layout(
-    <vertical>
-        <button text="第一个按钮"/>
-        <button text="第二个按钮"/>
-    </vertical>
-);
-```
-
-在这个例子中, 第3~6行的部分就是xml, 指定了界面的具体内容. 代码的第3行的标签`<vertical> ... </vertical>`表示垂直布局, 布局的标签通常以`<...>`开始, 以`</...>`结束, 两个标签之间的内容就是布局里面的内容, 例如`<frame> ... </frame>`. 在这个例子中第4, 5行的内容就是垂直布局(vertical)里面的内容. 代码的第4行是一个按钮控件(button), 控件的标签通常以`<...`开始, 以`/>`结束, 他们之间是控件的具体属性, 例如`<text ... />`. 在这个例子中`text="第一个按钮"`的部分就是按钮控件(button)的属性, 这个属性指定了这个按钮控件的文本内容(text)为"第一个按钮".
-
-代码的第5行和第4行一样, 也是一个按钮控件, 只不过他的文本内容为"第二个按钮". 这两个控件在垂直布局中, 因此会纵向排列, 效果如图：
-
-![ex1](images/ex1.png)
-
-如果我们把这个例子的垂直布局(vertical)改成水平布局(horizontal), 也即：
-
-```
-"ui";
-ui.layout(
-    <horizontal>
-        <button text="第一个按钮"/>
-        <button text="第二个按钮"/>
-    </horizontal>
-);
-```
-
-则这两个按钮会横向排列, 效果如图：
-
-![ex1-horizontal](images/ex1-horizontal.png)
-
-一个控件可以指定多个属性(甚至可以不指定任何属性), 用空格隔开即可；布局同样也可以指定属性, 例如:
-
-```
-"ui";
-ui.layout(
-    <vertical bg="#ff0000">
-        <button text="第一个按钮" textSize="20sp"/>
-        <button text="第二个按钮"/>
-    </vertical>
-);
-```
-
-第三行`bg="#ff0000"`指定了垂直布局的背景色(bg)为"#ff0000", 这是一个RGB颜色, 表示红色(有关RGB的相关知识参见[RGB颜色对照表](http://tool.oschina.net/commons?type=3)). 第四行的`textSize="20sp"`则指定了按钮控件的字体大小(textSize)为"20sp", sp是一个字体单位, 暂时不用深入理会. 上述代码的效果如图：
-
-![ex-properties](images/ex1-properties.png)
-
-一个界面便由一些布局和控件组成. 为了便于文档阅读, 我们再说明一下以下术语：
-
-* 子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图. 实际上布局里面不仅仅只能有控件, 还可以是嵌套的布局. 因此用子视图(Child View)更准确一些. 在上面的例子中, 按钮便是垂直布局的子控件.
-* 父视图, 父布局：直接包含一个控件的布局是这个控件的父布局/父视图(Parent View). 在上面的例子中, 垂直布局便是按钮的父布局.
-
-# 视图: View
-
-控件和布局都属于视图(View). 在这个章节中将介绍所有控件和布局的共有的属性和函数. 例如属性背景, 宽高等(所有控件和布局都能设置背景和宽高), 函数`click()`设置视图(View)被点击时执行的动作.
-
-## attr(name, value)
-
-* `name` {string} 属性名称
-* `value` {string} 属性的值
-
-设置属性的值. 属性指定是View在xml中的属性. 例如可以通过语句`attr("text", "文本")`来设置文本控件的文本值.
-
-```javascript
-"ui";
-
-$ui.layout(
-    <frame>
-        <text id="example" text="Hello"/>
-    </frame>
-);
-
-// 5秒后执行
-$ui.post(() => {
-    // 修改文本
-    $ui.example.attr("text", "Hello, Auto.js UI");
-    // 修改背景
-    $ui.example.attr("bg", "#ff00ff");
-    // 修改高度
-    $ui.example.attr("h", "500dp");
-}, 5000);
-```
-
-**注意：**并不是所有属性都能在js代码设置, 有一些属性只能在布局创建时设置, 例如style属性；还有一些属性虽然能在代码中设置, 但是还没支持；对于这些情况, 在Auto.js Pro 8.1.0+会抛出异常, 其他版本则不会抛出异常.
-
-## attr(name)
-
-* `name` {string} 属性名称
-* 返回 {string}
-
-获取属性的值.
-
-```javascript
-"ui";
-
-$ui.layout(
-    <frame>
-        <text id="example" text="1"/>
-    </frame>
-);
-
-plusOne();
-
-function plusOne() {
-    // 获取文本
-    let text = $ui.example.attr("text");
-    // 解析为数字
-    let num = parseInt(text);
-    // 数字加1
-    num++;
-    // 设置文本
-    $ui.example.attr("text", String(num));
-    // 1秒后继续
-    $ui.post(plusOne, 1000);
-}
-
-```
-
-## w
-
-View的宽度, 是属性`width`的缩写形式. 可以设置的值为`*`, `auto`和具体数值. 其中`*`表示宽度**尽量**填满父布局, 而`auto`表示宽度将根据View的内容自动调整(自适应宽度). 例如：
-
-```
-"ui";
-ui.layout(
-    <horizontal>
-        <button w="auto" text="自适应宽度"/>
-        <button w="*" text="填满父布局"/>
-    </horizontal>
-);
-```
-
-在这个例子中, 第一个按钮为自适应宽度, 第二个按钮为填满父布局, 显示效果为：
-
-![ex-w](images/ex-w.png)
-
-如果不设置该属性, 则不同的控件和布局有不同的默认宽度, 大多数为`auto`.
-
-宽度属性也可以指定一个具体数值. 例如`w="20"`, `w="20px"`等. 不加单位的情况下默认单位为dp, 其他单位包括px(像素), mm(毫米), in(英寸). 有关尺寸单位的更多内容, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-```
-"ui";
-ui.layout(
-    <horizontal>
-        <button w="200" text="宽度200dp"/>
-        <button w="100" text="宽度100dp"/>
-    </horizontal>
-);
-```
-
-## h
-
-View的高度, 是属性`height`的缩写形式. 可以设置的值为`*`, `auto`和具体数值. 其中`*`表示宽度**尽量**填满父布局, 而`auto`表示宽度将根据View的内容自动调整(自适应宽度).
-
-如果不设置该属性, 则不同的控件和布局有不同的默认高度, 大多数为`auto`.
-
-宽度属性也可以指定一个具体数值. 例如`h="20"`, `h="20px"`等. 不加单位的情况下默认单位为dp, 其他单位包括px(像素), mm(毫米), in(英寸). 有关尺寸单位的更多内容, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## id
-
-View的id, 用来区分一个界面下的不同控件和布局, 一个界面的id在同一个界面下通常是唯一的, 也就是一般不存在两个View有相同的id. id属性也是连接xml布局和JavaScript代码的桥梁, 在代码中可以通过一个View的id来获取到这个View, 并对他进行操作(设置点击动作、设置属性、获取属性等). 例如：
-
-```
-"ui";
-ui.layout(
-    <frame>
-        <button id="ok" text="确定"/>
-    </frame>
-);
-//通过ui.ok获取到按钮控件
-toast(ui.ok.getText());
-```
-
-这个例子中有一个按钮控件"确定", id属性为"ok", 那么我们可以在代码中使用`ui.ok`来获取他, 再通过`getText()`函数获取到这个按钮控件的文本内容.
-另外这个例子中使用帧布局(frame)是因为, 我们只有一个控件, 因此用于最简单的布局帧布局.
-
-## gravity
-
-View的"重力". 用于决定View的内容相对于View的位置, 可以设置的值为:
-
-* `left` 靠左
-* `right` 靠右
-* `top` 靠顶部
-* `bottom` 靠底部
-* `center` 居中
-* `center_vertical` 垂直居中
-* `center_horizontal` 水平居中
-
-例如对于一个按钮控件, `gravity="right"`会使其中的文本内容靠右显示. 例如：
-
-```
-"ui";
-ui.layout(
-    <frame>
-        <button gravity="right" w="*" h="auto" text="靠右的文字"/>
-    </frame>
-);
-```
-
-显示效果为:
-
-![ex-gravity](images/ex-gravity.png)
-
-这些属性是可以组合的, 例如`gravity="right|bottom"`的View他的内容会在右下角.
-
-## layout_gravity
-
-View在布局中的"重力", 用于决定View本身在他的**父布局**的位置, 可以设置的值和gravity属性相同. 注意把这个属性和gravity属性区分开来.
-
-```
-"ui";
-ui.layout(
-    <frame w="*" h="*">
-        <button layout_gravity="center" w="auto" h="auto" text="居中的按钮"/>
-        <button layout_gravity="right|bottom" w="auto" h="auto" text="右下角的按钮"/>
-    </frame>
-);
-```
-
-在这个例子中, 我们让帧布局(frame)的大小占满整个屏幕, 通过给第一个按钮设置属性`layout_gravity="center"`来使得按钮在帧布局中居中, 通过给第二个按钮设置属性`layout_gravity="right|bottom"`使得他在帧布局中位于右下角. 效果如图：
-
-![ex-layout-gravity](images/ex-layout-gravity.png)
-
-要注意的是, layout_gravity的属性不一定总是生效的, 具体取决于布局的类别. 例如不能让水平布局中的第一个子控件靠底部显示(否则和水平布局本身相违背).
-
-## margin
-
-margin为View和其他View的间距, 即外边距. margin属性包括四个值:
-
-* `marginLeft` 左外边距
-* `marginRight` 右外边距
-* `marginTop` 上外边距
-* `marginBottom` 下外边距
-
-而margin属性本身的值可以有三种格式:
-
-* `margin="marginAll"` 指定各个外边距都是该值. 例如`margin="10"`表示左右上下边距都是10dp.
-* `margin="marginLeft marginTop marginRight marginBottom"` 分别指定各个外边距. 例如`margin="10 20 30 40"`表示左边距为10dp, 上边距为20dp, 右边距为30dp, 下边距为40dp
-* `margin="marginHorizontal marginVertical"` 指定水平外边距和垂直外边距. 例如`margin="10 20"`表示左右边距为10dp, 上下边距为20dp.
-
-用一个例子来具体理解外边距的含义：
-
-```
-"ui";
-ui.layout(
-    <horizontal>
-        <button margin="30" text="距离四周30"/>
-        <button text="普通的按钮"/>
-    </horizontal>
-);
-```
-
-第一个按钮的margin属性指定了他的边距为30dp, 也就是他与水平布局以及第二个按钮的间距都是30dp, 其显示效果如图:
-
-![ex1-margin](images/ex1-margin.png)
-
-如果把`margin="30"`改成`margin="10 40"`那么第一个按钮的左右间距为10dp, 上下间距为40dp, 效果如图:
-
-![ex2-margin](images/ex2-margin.png)
-
-有关margin属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## marginLeft
-
-View的左外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效, 例如`margin="20" marginLeft="10"`的左外边距为10dp, 其他外边距为20dp.
-
-```
-"ui";
-ui.layout(
-    <horizontal>
-        <button marginLeft="50" text="距离左边50"/>
-        <button text="普通的按钮"/>
-    </horizontal>
-);
-```
-
-第一个按钮指定了左外边距为50dp, 则他和他的父布局水平布局(horizontal)的左边的间距为50dp, 效果如图：
-
-![ex-marginLeft](images/ex-marginLeft.png)
-
-## marginRight
-
-View的右外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## marginTop
-
-View的上外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## marginBottom
-
-View的下外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## padding
-
-View和他的自身内容的间距, 也就是内边距. 注意和margin属性区分开来, margin属性是View之间的间距, 而padding是View和他自身内容的间距. 举个例子, 一个文本控件的padding也即文本控件的边缘和他的文本内容的间距, paddingLeft即文本控件的左边和他的文本内容的间距.
-
-paddding属性的值同样有三种格式：
-
-* `padding="paddingAll"` 指定各个内边距都是该值. 例如`padding="10"`表示左右上下内边距都是10dp.
-* `padding="paddingLeft paddingTop paddingRight paddingBottom"` 分别指定各个内边距. 例如`padding="10 20 30 40"`表示左内边距为10dp, 上内边距为20dp, 右内边距为30dp, 下内边距为40dp
-* `padding="paddingHorizontal paddingVertical"` 指定水平内边距和垂直内边距. 例如`padding="10 20"`表示左右内边距为10dp, 上下内边距为20dp.
-
-用一个例子来具体理解内边距的含义：
-
-```
-"ui";
-ui.layout(
-    <frame w="*" h="*" gravity="center">
-        <text padding="10 20 30 40" bg="#ff0000" w="auto" h="auto" text="HelloWorld"/>
-    </frame>
-);
-```
-
-这个例子是一个居中的按钮(通过父布局的`gravity="center"`属性设置), 背景色为红色(`bg="#ff0000"`), 文本内容为"HelloWorld", 左边距为10dp, 上边距为20dp, 下边距为30dp, 右边距为40dp, 其显示效果如图：
-
-![ex-padding](images/ex-padding.png)
-
-## paddingLeft
-
-View的左内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## paddingRight
-
-View的右内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## paddingTop
-
-View的上内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## paddingBottom
-
-View的下内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.
-
-## bg
-
-View的背景. 其值可以是一个链接或路径指向的图片, 或者RGB格式的颜色, 或者其他背景. 具体参见[Drawables](#draw).
-
-例如, `bg="#00ff00"`设置背景为绿色, `bg="file:///sdcard/1.png"`设置背景为图片"1.png", `bg="?attr/selectableItemBackground"`设置背景为点击时出现的波纹效果(可能需要同时设置`clickable="true"`才生效).
-
-## alpha
-
-View的透明度, 其值是一个0~1之间的小数, 0表示完全透明, 1表示完全不透明. 例如`alpha="0.5"`表示半透明.
-
-## foreground
-
-View的前景. 前景即在一个View的内容上显示的内容, 可能会覆盖掉View本身的内容. 其值和属性bg的值类似.
-
-## minHeight
-
-View的最小高度. 该值不总是生效的, 取决于其父布局是否有足够的空间容纳.
-
-例：`<text height="auto" minHeight="50"/>`
-
-有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## minWidth
-
-View的最小宽度. 该值不总是生效的, 取决于其父布局是否有足够的空间容纳.
-
-例：`<input width="auto" minWidth="50"/>`
-
-有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## visibility
-
-View的可见性, 该属性可以决定View是否显示出来. 其值可以为：
-
-* `gone` 不可见.
-* `visible` 可见. 默认情况下View都是可见的.
-* `invisible` 不可见, 但仍然占用位置.
-
-## rotation
-
-View的旋转角度. 通过该属性可以让这个View顺时针旋转一定的角度. 例如`rotation="90"`可以让他顺时针旋转90度.
-
-如果要设置旋转中心, 可以通过`transformPivotX`, `transformPivotY`属性设置. 默认的旋转中心为View的中心.
-
-## transformPivotX
-
-View的变换中心坐标x. 用于View的旋转、放缩等变换的中心坐标. 例如`transformPivotX="10"`.
-
-该坐标的坐标系以View的左上角为原点. 也就是x值为变换中心到View的左边的距离.
-
-有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## transformPivotY
-
-View的变换中心坐标y. 用于View的旋转、放缩等变换的中心坐标. 例如`transformPivotY="10"`.
-
-该坐标的坐标系以View的左上角为原点. 也就是y值为变换中心到View的上边的距离.
-
-有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## style
-
-设置View的样式. 不同控件有不同的可选的内置样式. 具体参见各个控件的说明.
-
-需要注意的是, style属性只支持安卓5.1及其以上.
-
-# 文本控件: text
-
-文本控件用于显示文本, 可以控制文本的字体大小, 字体颜色, 字体等.
-
-以下介绍该控件的主要属性和方法, 如果要查看他的所有属性和方法, 请阅读[TextView](http://www.zhdoc.net/android/reference/android/widget/TextView.html).
-
-## text
-
-设置文本的内容. 例如`text="一段文本"`.
-
-## textColor
-
-设置字体的颜色, 可以是RGB格式的颜色(例如#ff00ff), 或者颜色名称(例如red, green等), 具体参见[颜色](#ui_颜色).
-
-示例, 红色字体：`<text text="红色字体" textColor="red"/>`
-
-## textSize
-
-设置字体的大小, 单位一般是sp. 按照Material Design的规范, 正文字体大小为14sp, 标题字体大小为18sp, 次标题为16sp.
-
-示例, 超大字体: `<text text="超大字体" textSize="40sp"/>`
-
-## textStyle
-
-设置字体的样式, 比如斜体、粗体等. 可选的值为：
-
-* bold 加粗字体
-* italic 斜体
-* normal 正常字体
-
-可以用或("|")把他们组合起来, 比如粗斜体为"bold|italic".
-
-例如, 粗体：`<text textStyle="bold" textSize="18sp" text="这是粗体"/>
-
-## lines
-
-设置文本控件的行数. 即使文本内容没有达到设置的行数, 控件也会留出相应的宽度来显示空白行；如果文本内容超出了设置的行数, 则超出的部分不会显示.
-
-另外在xml中是不能设置多行文本的, 要在代码中设置. 例如:
-
-```
-"ui";
-ui.layout(
-    <vertical>
-        <text id="myText" line="3">
-    </vertical>
-)
-//通过\n换行
-ui.myText.setText("第一行\n第二行\n第三行\n第四行");
-```
-
-## maxLines
-
-设置文本控件的最大行数.
-
-## typeface
-
-设置字体. 可选的值为：
-
-* `normal` 正常字体
-* `sans` 衬线字体
-* `serif` 非衬线字体
-* `monospace` 等宽字体
-
-示例, 等宽字体: `<text text="等宽字体" typeface="monospace"/>`
-
-## ellipsize
-
-设置文本的省略号位置. 文本的省略号会在文本内容超出文本控件时显示. 可选的值为：
-
-* `end`   在文本末尾显示省略号
-* `marquee`   跑马灯效果, 文本将滚动显示
-* `middle`    在文本中间显示省略号
-* `none`    不显示省略号
-* `start`    在文本开头显示省略号
-
-## ems
-
-当设置该属性后,TextView显示的字符长度（单位是em）,超出的部分将不显示, 或者根据ellipsize属性的设置显示省略号.
-
-例如, 限制文本最长为5em: `<text ems="5" ellipsize="end" text="很长很长很长很长很长很长很长的文本"/>
-
-## autoLink
-
-控制是否自动找到url和电子邮件地址等链接, 并转换为可点击的链接. 默认值为“none”.
-
-设置该值可以让文本中的链接、电话等变成可点击状态.
-
-可选的值为以下的值以其通过或("|")的组合：
-
-* `all`    匹配所有连接、邮件、地址、电话
-* `email`    匹配电子邮件地址
-* `map`    匹配地图地址
-* `none`    不匹配 (默认)
-* `phone`    匹配电话号码
-* `web`    匹配URL地址
-
-示例：`<text autoLink="web|phone" text="百度: http://www.baidu.com 电信电话: 10000"/>`
-
-# 按钮控件: button
-
-按钮控件是一个特殊的文本控件, 因此所有文本控件的函数的属性都适用于按钮控件.
-
-除此之外, 按钮控件有一些内置的样式, 通过`style`属性设置, 包括：
-
-* Widget.AppCompat.Button.Colored 带颜色的按钮
-* Widget.AppCompat.Button.Borderless 无边框按钮
-* Widget.AppCompat.Button.Borderless.Colored 带颜色的无边框按钮
-
-这些样式的具体效果参见"示例/界面控件/按钮控件.js".
-
-例如：`<button style="Widget.AppCompat.Button.Colored" text="漂亮的按钮"/>`
-
-# 输入框控件: input
-
-输入框控件也是一个特殊的文本控件, 因此所有文本控件的函数的属性和函数都适用于按钮控件. 输入框控件有自己的属性和函数, 要查看所有这些内容, 阅读[EditText](http://www.zhdoc.net/android/reference/android/widget/EditText.html).
-
-对于一个输入框控件, 我们可以通过text属性设置他的内容, 通过lines属性指定输入框的行数；在代码中通过`getText()`函数获取输入的内容. 例如：
-
-```
-"ui";
 ui.layout(
     <vertical padding="16">
-        <text textSize="16sp" textColor="black" text="请输入姓名"/>
-        <input id="name" text="小明"/>
+        <text id="title" text="AutoJs6" textSize="24sp"/>
         <button id="ok" text="确定"/>
-    </vertical>
+    </vertical>,
 );
-//指定确定按钮点击时要执行的动作
-ui.ok.click(function(){
-    //通过getText()获取输入的内容
-    var name = ui.name.getText();
-    toast(name + "您好!");
+
+ui.ok.on('click', function () {
+    ui.title.attr('text', '已点击');
 });
 ```
 
-效果如图：
+UI 模式脚本的 JavaScript 主线程就是 Android UI 线程. 不应在该线程执行耗时计算, 阻塞 I/O 或 `sleep`. 可在线程中完成耗时任务, 再通过 [ui.post](#m-post) 或 [ui.run](#m-run) 更新视图.
 
-![ex-input](ex-input.png)
+## 布局 XML
 
-除此之外, 输入框控件有另外一些主要属性(虽然这些属性对于文本控件也是可用的但一般只用于输入框控件)：
+布局必须有一个根元素. 属性值最终会转换为字符串并交给对应的视图属性处理器. 标签和属性名称区分大小写.
 
-## hint
+```js
+let xml = (
+    <frame w="*" h="*">
+        <text id="message"
+              w="auto"
+              h="auto"
+              layout_gravity="center"
+              text="Hello"/>
+    </frame>
+);
 
-输入提示. 这个提示会在输入框为空的时候显示出来. 如图所示:
-
-![ex-hint](images/ex-hint.png)
-
-上面图片效果的代码为：
-
+ui.layout(xml);
 ```
-"ui";
+
+在 AutoJs6 简写布局中:
+
+- `w="*"` 和 `h="*"` 分别转换为 `match_parent`.
+- `w="auto"` 和 `h="auto"` 分别转换为 `wrap_content`.
+- 未写单位的简写尺寸会补充 `dp`.
+- `id="name"` 会转换为 `@+id/name`.
+- `vertical`, `horizontal`, `frame` 等小写标签会转换为对应的 Android 视图类.
+- `text`, `button` 和 `input` 元素的直接文本内容会转换为 `text` 属性. 其他元素的直接文本内容不会成为视图内容.
+
+原生名称形式可使用 `android:layout_width="match_parent"` 等属性. 详细差异参阅 [布局转换模式](#布局转换模式).
+
+### 内置标签
+
+以下表格列出 AutoJs6 简写布局的全部内置标签. 同一行中的标签互为别名.
+
+| 标签 | 实际视图 | 用途 |
+| --- | --- | --- |
+| `view` | `android.view.View` | 基础视图 |
+| `space` | `android.widget.Space` | 空白占位视图 |
+| `linear`, `horizontal` | `JsLinearLayout` | 默认水平方向的线性布局 |
+| `vertical` | `JsLinearLayout` | 垂直方向的线性布局 |
+| `frame` | `JsFrameLayout` | 帧布局 |
+| `relative` | `JsRelativeLayout` | 相对布局 |
+| `scroll` | `JsScrollView` | 垂直滚动布局 |
+| `drawer` | `JsDrawerLayout` | 抽屉布局 |
+| `appbar` | `JsAppBarLayout` | Material AppBar 布局 |
+| `toolbar` | `JsToolbar` | 工具栏 |
+| `actionmenu` | `JsActionMenuView` | 工具栏菜单布局 |
+| `card` | `JsCardView` | 卡片布局 |
+| `text` | `JsTextView` | 文本视图. Android API 级别低于 `26` 时使用兼容实现 |
+| `button`, `btn` | `JsButton` | 按钮 |
+| `input`, `edittext` | `JsEditText` | 文本输入框 |
+| `checkedtext` | `JsCheckedTextView` | 可勾选文本 |
+| `chronometer` | `JsChronometer` | 计时文本 |
+| `textclock` | `JsTextClock` | 时钟文本 |
+| `textswitcher` | `JsTextSwitcher` | 带切换动画的文本 |
+| `checkbox` | `JsCheckBox` | 复选框 |
+| `radio`, `radiobutton` | `JsRadioButton` | 单选按钮 |
+| `radiogroup`, `radios` | `JsRadioGroup` | 单选按钮组 |
+| `switch` | `JsSwitch` | 开关 |
+| `togglebutton` | `JsToggleButton` | 切换按钮 |
+| `spinner` | `JsSpinner` | 下拉选择器 |
+| `numberpicker` | `JsNumberPicker` | 数值选择器 |
+| `datepicker` | `JsDatePicker` | 日期选择器 |
+| `timepicker` | `JsTimePicker` | 时间选择器 |
+| `calendar` | `JsCalendarView` | 日历 |
+| `search` | `JsSearchView` | 搜索框 |
+| `progressbar` | `JsProgressBar` | 进度条 |
+| `seekbar` | `JsSeekBar` | 拖动条 |
+| `ratingbar` | `JsRatingBar` | 评分条 |
+| `image`, `img` | `JsImageView` | 支持圆角的图片视图 |
+| `imagebutton` | `JsImageButton` | 图片按钮 |
+| `quickcontactbadge` | `JsQuickContactBadge` | 联系人快捷入口 |
+| `fab` | `JsFloatingActionButton` | Material 浮动操作按钮 |
+| `video` | `JsVideoView` | 视频视图 |
+| `webview`, `web` | `JsWebView` | WebView |
+| `canvas` | `JsCanvasView` | 可持续绘制的 Canvas 视图 |
+| `console` | `JsConsoleView` | 控制台日志视图 |
+| `list` | `JsListView` | 基于 RecyclerView 的列表 |
+| `grid` | `JsGridView` | 基于 RecyclerView 的网格 |
+| `viewpager` | `JsViewPager` | 分页视图 |
+| `tabs`, `tab` | `JsTabLayout` | Material 标签栏 |
+| `viewflipper` | `JsViewFlipper` | 自动或手动切换子视图 |
+| `viewswitcher` | `JsViewSwitcher` | 两个子视图之间切换 |
+
+也可将完整类名作为标签, 如 `<android.widget.TextView>`. 常用 AndroidX 和 Material 类还支持短类名, 如 `<ConstraintLayout>`, `<RecyclerView>`, `<NavigationView>` 和 `<TextInputLayout>`. 这些类仍由 AutoJs6 的动态布局器创建, 可用属性取决于 [UI 布局属性](uiAttributes) 中与其最近父类匹配的属性处理器. 未列出的 Android XML 属性不会因此自动获得支持.
+
+`menu`, `item`, `shape`, `paths`, `set`, `selector`, `merge` 和小写 `view` 之外的保留节点不能作为动态类名使用. 其中小写 `view` 由 AutoJs6 显式映射为 `android.view.View`.
+
+### 布局转换模式
+
+默认情况下, `ui.useAndroidLayout(null)` 使用自动模式:
+
+- XML 包含命名空间声明, 或包含 `android:` 或 `app:` 属性时, 保留原 XML.
+- 其他 XML 先经过 AutoJs6 简写标签及属性转换.
+
+`ui.useAndroidLayout(true)` 可强制保留原 XML, `ui.useAndroidLayout(false)` 可强制执行 AutoJs6 简写转换.
+
+这里的 "保留原 XML" 只表示跳过 `XmlConverter` 的标签及属性改写. 布局仍由 AutoJs6 `DynamicLayoutInflater` 创建, 不会改用 Android 平台 `LayoutInflater`, 也不会自动支持完整的 Android XML 属性集.
+
+```js
+ui.useAndroidLayout(true);
+
+let view = ui.inflate(
+    '<android.widget.TextView ' +
+    'xmlns:android="http://schemas.android.com/apk/res/android" ' +
+    'android:layout_width="match_parent" ' +
+    'android:layout_height="wrap_content" ' +
+    'android:text="Hello"/>',
+);
+```
+
+### 动态属性表达式
+
+属性字符串中的 `{{ expression }}` 会在应用属性时执行. 普通布局的求值上下文默认为脚本全局作用域. 一个属性可包含多个表达式.
+
+```js
+'ui';
+
+let name = 'AutoJs6';
+
 ui.layout(
     <vertical>
-        <input hint="请输入姓名"/>
-    </vertical>
-)
+        <text text="Hello, {{name}}"/>
+    </vertical>,
+);
 ```
 
-## textColorHint
+普通布局中的表达式只在布局或属性被应用时求值, 不提供 React 式的自动重渲染. 变量改变后应使用视图方法或 `attr` 主动更新. `<list>` 和 `<grid>` 会在项目绑定时以项目对象为上下文重新应用动态属性.
 
-指定输入提示的字体颜色.
+表达式结果的转换规则:
 
-## textSizeHint
+- 字符串保持原值.
+- AutoJs6 颜色对象转换为十六进制颜色字符串.
+- `ThemeColor` 转换为主题主色.
+- 其他值使用字符串形式拼接到属性值.
 
-指定输入提示的字体大小.
+表达式会执行 JavaScript 代码. 不应把不可信文本直接拼接为 `{{ ... }}` 表达式.
 
-## inputType
+### 视图 ID 与访问
 
-指定输入框可以输入的文本类型. 可选的值为以下值及其用"|"的组合:
+设置内容视图后, `ui.<id>` 会从 `ui.view` 开始递归查找对应 ID:
 
-* `date`    用于输入日期.
-* `datetime`    用于输入日期和时间.
-* `none`    没有内容类型. 此输入框不可编辑.
-* `number`    仅可输入数字.
-* `numberDecimal`    可以与number和它的其他选项组合, 以允许输入十进制数(包括小数).
-* `numberPassword`    仅可输入数字密码.
-* `numberSigned`    可以与number和它的其他选项组合, 以允许输入有符号的数.
-* `phone`    用于输入一个电话号码.
-* `text`    只是普通文本.
-* `textAutoComplete`    可以与text和它的其他选项结合, 以指定此字段将做自己的自动完成, 并适当地与输入法交互.
-* `textAutoCorrect`    可以与text和它的其他选项结合, 以请求自动文本输入纠错.
-* `textCapCharacters`    可以与text和它的其他选项结合, 以请求大写所有字符.
-* `textCapSentences`    可以与text和它的其他选项结合, 以请求大写每个句子里面的第一个字符.
-* `textCapWords`    可以与text和它的其他选项结合, 以请求大写每个单词里面的第一个字符.
-* `textEmailAddress`    用于输入一个电子邮件地址.
-* `textEmailSubject`    用于输入电子邮件的主题.
-* `textImeMultiLine`    可以与text和它的其他选项结合, 以指示虽然常规文本视图不应为多行, 但如果可以, 则IME应提供多行支持.
-* `textLongMessage`    用于输入长消息的内容.
-* `textMultiLine`    可以与text和它的其他选项结合, 以便在该字段中允许多行文本. 如果未设置此标志, 则文本字段将被限制为单行.
-* `textNoSuggestions`    可以与text及它的其他选项结合, 以指示输入法不应显示任何基于字典的单词建议.
-* `textPassword`    用于输入密码.
-* `textPersonName`    用于输入人名.
-* `textPhonetic`    用于输入拼音发音的文本, 如联系人条目中的拼音名称字段.
-* `textPostalAddress`    用于输入邮寄地址.
-* `textShortMessage`    用于输入短的消息内容.
-* `textUri`    用于输入一个URI.
-* `textVisiblePassword`    用于输入可见的密码.
-* `textWebEditText`    用于输入在web表单中的文本.
-* `textWebEmailAddress`    用于在web表单里输入一个电子邮件地址.
-* `textWebPassword`    用于在web表单里输入一个密码.
-* `time`    用于输入时间.
-
-例如, 想指定一个输入框的输入类型为小数数字, 为: `<input inputType="number|numberDecimal"/>`
-
-## password
-
-指定输入框输入框是否为密码输入框. 默认为`false`.
-
-例如：`<input password="true"/>`
-
-## numeric
-
-指定输入框输入框是否为数字输入框. 默认为`false`.
-
-例如：`<input numeric="true"/>`
-
-## phoneNumber
-
-指定输入框输入框是否为电话号码输入框. 默认为`false`.
-
-例如：`<input phoneNumber="true"/>`
-
-## digits
-
-指定输入框可以输入的字符. 例如, 要指定输入框只能输入"1234567890+-", 为`<input digits="1234567890+-"/>`.
-
-## singleLine
-
-指定输入框是否为单行输入框. 默认为`false`. 您也可以通过`lines="1"`来指定单行输入框.
-
-例如：`<input singleLine="true"/>`
-
-# 图片控件: img
-
-图片控件用于显示来自网络、本地或者内嵌数据的图片, 并可以指定图片以圆角矩形、圆形等显示. 但是不能用于显示gif动态图.
-
-这里只介绍他的主要方法和属性, 如果要查看他的所有方法和属性, 阅读[ImageView](http://www.zhdoc.net/android/reference/android/widget/ImageView.html).
-
-## src
-
-使用一个Uri指定图片的来源. 可以是图片的地址(http://....), 本地路径(file://....)或者base64数据("data:image/png;base64,...").
-
-如果使用图片地址或本地路径, Auto.js会自动使用适当的缓存来储存这些图片, 减少下次加载的时间.
-
-例如, 显示百度的logo:
-
-```
-"ui";
+```js
 ui.layout(
-    <frame>
-        <img src="https://www.baidu.com/img/bd_logo1.png"/>
-    </frame>
+    <vertical id="panel">
+        <text id="message" text="Hello"/>
+    </vertical>,
 );
+
+ui.message.attr('text', 'World');
+ui.panel.message.attr('textColor', '#ff5722');
 ```
 
-再例如, 显示文件/sdcard/1.png的图片为 `<img src="file:///sdcard/1.png"/>`.
-再例如, 使base64显示一张钱包小图片为：
+包装后的任意父视图也支持以 `parent.<id>` 递归查找后代视图.
 
-```
-"ui";
+若名称与 `ui` 已有成员冲突, 应使用 `ui.findById(id)`. 给 `ui.someName` 赋值会保存自定义属性并遮蔽同名 ID 查询; 赋值为 `null` 或 `undefined` 会移除遮蔽值.
+
+### 列表与网格
+
+`<list>` 和 `<grid>` 的第一个元素子节点是项目模板, 不是普通子视图. 数据源必须是 Rhino JavaScript 数组. `setDataSource(array)` 设置数据源后, 模板中的动态表达式以当前项目对象为求值上下文.
+
+```js
+'ui';
+
 ui.layout(
-    <frame>
-        <img w="40" h="40" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEu0lEQVRoge3bW4iVVRQH8N+ZnDKxvJUGCSWUlXYle/ChiKAkIiu7UXQjonwNIopM8cHoAhkRGQXdfIiE0Ep8KalQoptRTiFFZiRlOo6TPuSk4zk97G9w5vidc77LPjNi84f1MN+391rrf9a+rL32N4xiFMcUjouo5zyciYPYH0FnBadiNiZiD2oR9JbGRdgiOFPDIXRhCWYU0Dcj6duV6BrQuyWxNaLowBcOO1Uv+7EKc4WINUIlabMq6dNI35eJzRHDWOzS2MEB6cd6XI/OQf07k2frkzat9HQnNkcUG7R2dECq2I53EtmePMvaf+MwcWqKu+RzuqhUcfcwcWqKTvmiXFQ2GDodRhQz0aN9ZHsSG0cVrkGf+GT7MG8YeeTCHeKS7sOdMR1stjcWxY2YH0nXh1gdSdf/E+2I8KVYigkl9ewVUsxNpT1qMzaKN4ejJxrtyEt7IuraE1EX2jOkp+JBnFxSzz68KuTqoyiK2BHuxDO4NpK+j/GoOAWF6BiH98Q/SHyCycPIIxMm4FPZCPTj30SynIFr+A7ThotMK4wXopA1Ym9gSiKv5Oj3bdKnFMpuS514E1fm6NMnbF098s3NS4QS0Ik5+hyBsoSXYkGO9jvxy6C/t+IPIYJZcBWW57AXFfMNrSo2kqqw2l4hvSzcIRTw1sm24FVxb5s4NcR0/JXBuUNYJttI6sDjsi1kvTgrGpsMjq3O4FQNa+SbNhWsyKj7I4wpzSYDbpFtKB/EOSn9ZwpRfx5Xp7yfhN0Z9FdxXxxKjTEe2zI4U8NnKf3PNrT2VcWTKe1eyGjjT+Eapm14IqMjNTyd0n9JSrsDwhmaEN2H8GMOO8viUjyMSfJVJh9O0bGoQdt1eFm2oVwve7UpC1ssX568KEXH6fghp54s8lRkrk7CjpxOrGqg6wQ8IKSKWXPpVtIt8ly+v4ATf2t+yqlgDl5SbCjXy8JIXFXweQEHqngxo43JeEw54l+JVLKaJeypRZzoFxavrIWG6cKPW2SO9+PCMkQHsLiA8fpIv5/DmUn4qaCtpWWIEiLzdUHj9XJA2H5uFRbBZriuoI1NSpatpio+nJtFvFvYd2c1sDsGvxfQ3a/knrwgMtm0qD8rPSprCuq8uRmhVqvanBbvm+EQfsNKIcnvTmnTiUdwQcq73oJ2L2v2stXx6vyCRr8RDuk/C8OMUK24J6VtBaekPG81zxuh0TTJhC7FhtUOHF+n61whGalvu8uRWVJFvgPEYOkqQzhLVSPPXLoYa4Xh3Stcls1NaTdb8Xx7ZxnCvSUIfy/kzWno0Pyzx3dL2C0695Hto7NGUhXy5Lzp3kLZKiqNpNTl2+YShgdIvyXbVck44TB/oKTNzWUIv13S+IDsFmpY84QvZAcwTbh4e04o18SwtbIM4dsiOTFYVgzSv7wN+m9vRqjV/PrA0JuCox1bhYNKQ7Qi3CcU1fpiedRG9AkLXhRfbxCnKlET0s21ifwaSWcPbopBdDDOwGtClTD2vCsq+/C68K8HmVDk7DhFyIsvFzKnGThN+689+oU9dptwQb5B+LB8dx4lMb7xqAhkJwo/xljhFFSfSdUc3mPrcbwj15P+pP0/QiR7hYSkGsHnUYziWMF/mXV4JVcZ8G0AAAAASUVORK5CYII="/>
-    </frame>
-);
-```
-
-## tint
-
-图片着色, 其值是一个颜色名称或RGB颜色值. 使用该属性会将图片中的非透明区域都涂上同一颜色. 可以用于改变图片的颜色.
-
-例如, 对于上面的base64的图片: `<img w="40" h="40" tint="red" src="data:image/png;base64,..."/>`, 则钱包图标颜色会变成红色.
-
-## scaleType
-
-控制图片根据图片控件的宽高放缩时的模式. 可选的值为：
-
-* `center`    在控件中居中显示图像, 但不执行缩放.
-* `centerCrop`    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 等于或大于控件的相应尺寸 (不包括内边距padding)并且使图像在控件中居中显示.
-* `centerInside`    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 小于视图的相应尺寸 (不包括内边距padding)并且图像在控件中居中显示.
-* `fitCenter`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中居中显示
-* `fitEnd`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件中靠右下角显示
-* `fitStart`    保持图像的长宽比缩放图片, 使图片的宽**或**高和控件的宽高相同并使图片在控件靠左上角显示
-* `fitXY`    使图片和宽高和控件的宽高完全匹配, 但图片的长宽比可能不能保持一致
-* `matrix`    绘制时使用图像矩阵进行缩放. 需要在代码中使用`setImageMatrix(Matrix)`函数才能生效.
-
-默认的scaleType为`fitCenter`；除此之外最常用的是`fitXY`,  他能使图片放缩到控件一样的大小, 但图片可能会变形.
-
-## radius
-
-图片控件的半径. 如果设置为控件宽高的一半并且控件的宽高相同则图片将剪切为圆形显示；否则图片为圆角矩形显示, 半径即为四个圆角的半径, 也可以通过`radiusTopLeft`, `radiusTopRight`, `radiusBottomLeft`, `radiusBottomRight`等属性分别设置四个圆角的半径.
-
-例如, 圆角矩形的Auto.js图标：`<img w="100" h="100" radius="20" bg="white" src="http://www.autojs.org/assets/uploads/profile/3-profileavatar.png" />`
-
-有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## radiusTopLeft
-
-图片控件的左上角圆角的半径. 有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## radiusTopRight
-
-图片控件的右上角圆角的半径. 有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## radiusBottomLeft
-
-图片控件的左下角圆角的半径. 有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## radiusBottomRight
-
-图片控件的右下角圆角的半径. 有关该属性的单位, 参见[尺寸的单位: Dimension](#ui_尺寸的单位_Dimension).
-
-## borderWidth
-
-图片控件的边框宽度. 用于在图片外面显示一个边框, 边框会随着图片控件的外形(圆角等)改变而相应变化.
-例如, 圆角矩形带灰色边框的Auto.js图标：`<img w="100" h="100" radius="20" borderWidth="5" borderColor="gray" bg="white" src="http://www.autojs.org/assets/uploads/profile/3-profileavatar.png" />`
-
-## borderColor
-
-图片控件的边框颜色.
-
-## circle
-
-指定该图片控件的图片是否剪切为圆形显示. 如果为`true`, 则图片控件会使其宽高保持一致(如果宽高不一致, 则保持高度等于宽度)并使圆形的半径为宽度的一半.
-
-例如, 圆形的Auto.js图标：`<img w="100" h="100" circle="true" bg="white" src="http://www.autojs.org/assets/uploads/profile/3-profileavatar.png" />`
-
-# 垂直布局: vertical
-
-垂直布局是一种比较简单的布局, 会把在它里面的控件按照垂直方向依次摆放, 如下图所示：
-
-垂直布局:
-
-—————
-
-| 控件1 |
-
-| 控件2 |
-
-| 控件3 |
-
-| ............ |
-
-——————
-
-## layout_weight
-
-垂直布局中的控件可以通过`layout_weight`属性来控制控件高度占垂直布局高度的比例. 如果为一个控件指定`layout_weight`, 则这个控件的高度=垂直布局剩余高度 * layout_weight / weightSum；如果不指定weightSum, 则weightSum为所有子控件的layout_weight之和. 所谓"剩余高度", 指的是垂直布局中减去没有指定layout_weight的控件的剩余高度.
-例如:
-
-```
-"ui";
-ui.layout(
-    <vertical h="100dp">
-        <text layout_weight="1" text="控件1" bg="#ff0000"/>
-        <text layout_weight="1" text="控件2" bg="#00ff00"/>
-        <text layout_weight="1" text="控件3" bg="#0000ff"/>
-    </vertical>
-);
-```
-
-在这个布局中, 三个控件的layout_weight都是1, 也就是他们的高度都会占垂直布局高度的1/3, 都是33.3dp.
-再例如：
-
-```
-"ui";
-ui.layout(
-    <vertical h="100dp">
-        <text layout_weight="1" text="控件1" bg="#ff0000"/>
-        <text layout_weight="2" text="控件2" bg="#00ff00"/>
-        <text layout_weight="1" text="控件3" bg="#0000ff"/>
-    </vertical>
-);
-```
-
-在这个布局中, 第一个控件高度为1/4, 第二个控件为2/4, 第三个控件为1/4.
-再例如：
-
-```
-"ui";
-ui.layout(
-    <vertical h="100dp" weightSum="5">
-        <text layout_weight="1" text="控件1" bg="#ff0000"/>
-        <text layout_weight="2" text="控件2" bg="#00ff00"/>
-        <text layout_weight="1" text="控件3" bg="#0000ff"/>
-    </vertical>
-);
-```
-
-在这个布局中, 因为指定了weightSum为5, 因此第一个控件高度为1/5, 第二个控件为2/5, 第三个控件为1/5.
-再例如：
-
-```
-"ui";
-ui.layout(
-    <vertical h="100dp">
-        <text h="40dp" text="控件1" bg="#ff0000"/>
-        <text layout_weight="2" text="控件2" bg="#00ff00"/>
-        <text layout_weight="1" text="控件3" bg="#0000ff"/>
-    </vertical>
-);
-```
-
-在这个布局中, 第一个控件并没有指定layout_weight, 而是指定高度为40dp, 因此不加入比例计算, 此时布局剩余高度为60dp. 第二个控件高度为剩余高度的2/3, 也就是40dp, 第三个控件高度为剩余高度的1/3, 也就是20dp.
-
-垂直布局的layout_weight属性还可以用于控制他的子控件高度占满剩余空间, 例如：
-
-```
-"ui";
-ui.layout(
-    <vertical h="100dp">
-        <text h="40dp" text="控件1" bg="#ff0000"/>
-        <text h="40dp" text="控件2" bg="#00ff00"/>
-        <text layout_weight="1" text="控件3" bg="#0000ff"/>
-    </vertical>
-);
-```
-
-在这个布局中, 第三个控件的高度会占满除去控件1和控件2的剩余空间.
-
-# 水平布局: horizontal
-
-水平布局是一种比较简单的布局, 会把在它里面的控件按照水平方向依次摆放, 如下图所示：
-水平布局:
-————————————————————————————
-
-| 控件1 | 控件2 | 控件3 | ... |
-
-————————————————————————————
-
-## layout_weight
-
-水平布局中也可以使用layout_weight属性来控制子控件的**宽度**占父布局的比例. 和垂直布局中类似, 不再赘述.
-
-# 线性布局: linear
-
-实际上, 垂直布局和水平布局都属于线性布局. 线性布局有一个orientation的属性, 用于指定布局的方向, 可选的值为`vertical`和`horizontal`.
-
-例如`<linear orientation="vertical"></linear>`相当于`<vertical></vertical>`.
-
-线性布局的默认方向是横向的, 因此, 一个没有指定orientation属性的线性布局就是横向布局.
-
-# 帧布局: frame
-
-帧布局
-
-# 相对布局: relative
-
-# 勾选框控件: checkbox
-
-# 选择框控件: radio
-
-# 选择框布局: radiogroup
-
-# 开关控件: Switch
-
-开关控件用于表示一个选项是否被选中.
-
-## checked
-
-表示开关是否被选中. 可选的值为：
-
-* `true` 打开开关
-* `false` 关闭开关
-
-## text
-
-对开关进行描述的文字.
-
-# 进度条控件: progressbar
-
-# 拖动条控件: seekbar
-
-# 下来菜单控件: spinner
-
-# 时间选择控件: timepicker
-
-# 日期选择控件: datepicker
-
-# 浮动按钮控件: fab
-
-# 标题栏控件: toolbar
-
-# 卡片: card
-
-卡片控件是一个拥有圆角、阴影的控件.
-
-## cardBackgroundColor
-
-卡片的背景颜色.
-
-## cardCornerRadius
-
-卡片的圆角半径.
-
-## cardElevation
-
-设置卡片在z轴上的高度, 来控制阴影的大小.
-
-## contentPadding
-
-设置卡片的内边距. 该属性包括四个值：
-
-* `contentPaddingLeft` 左内边距
-* `contentPaddingRight` 右内边距
-* `contentPaddingTop` 上内边距
-* `contentPaddingBottom` 下内边距
-
-## foreground
-
-使用`foreground="?selectableItemBackground"`属性可以为卡片添加点击效果.
-
-# 抽屉布局: drawer
-
-# 列表: list
-
-# Tab: tab
-
-# ui
-
-## ui.layout(xml)
-
-* `xml` {XML} | {string} 布局XML或者XML字符串
-
-将布局XML渲染为视图（View）对象,  并设置为当前视图.
-
-## ui.layoutFile(xmlFile)
-
-* `xml` {string} 布局XML文件的路径
-
-此函数和`ui.layout`相似, 只不过允许传入一个xml文件路径来渲染布局.
-
-## ui.inflate(xml[, parent = null, attachToParent = false])
-
-* `xml` {string} | {XML} 布局XML或者XML字符串
-* `parent` {View} 父视图
-* `attachToParent` {boolean} 是否渲染的View加到父视图中, 默认为false
-* 返回 {View}
-
-将布局XML渲染为视图（View）对象. 如果该View将作为某个View的子View, 我们建议传入`parent`参数, 这样在渲染时依赖于父视图的一些布局属性能够正确应用.
-
-此函数用于动态创建、显示View.
-
-```javascript
-"ui";
-
-$ui.layout(
-    <linear id="container">
-    </linear>
+    <list id="people">
+        <horizontal padding="8">
+            <text id="label"
+                  layout_weight="1"
+                  text="{{name}}: {{age}}"/>
+            <button id="remove" text="删除"/>
+        </horizontal>
+    </list>,
 );
 
-// 动态创建3个文本控件, 并加到container容器中
-// 这里仅为实例, 实际上并不推荐这种做法, 如果要展示列表, 
-// 使用list组件；动态创建十几个、几十个View会让界面卡顿
-for (let i = 0; i < 3; i++) {
-    let textView = $ui.inflate(
-        <text textColor="#000000" textSize="14sp"/>
-    , $ui.container);
-    textView.attr("text", "文本控件" + i);
-    $ui.container.addView(textView);
-}
-```
+let people = [
+    { name: 'Alice', age: 18 },
+    { name: 'Bob', age: 20 },
+];
 
-# ui.registerWidget(name, widget)
+ui.people.setDataSource(people);
 
-* `name` {string} 组件名称
-* `widget` {Function} 组件
-
-注册一个自定义组件. 参考示例->界面控件->自定义控件.
-
-# ui.isUiThread()
-
-* 返回 {boolean}
-
-返回当前线程是否是UI线程.
-
-```javascript
-"ui";
-
-log($ui.isUiThread()); // => true
-
-$threads.start(function () {
-    log($ui.isUiThread()); // => false
+ui.people.on('item_click', function (item, position) {
+    toast(item.name + ', index=' + position);
 });
 
-```
-
-## ui.findView(id)
-
-* `id` {string} View的ID
-* 返回 {View}
-
-在当前视图中根据ID查找相应的视图对象并返回. 如果当前未设置视图或找不到此ID的视图时返回`null`.
-
-一般我们都是通过`ui.xxx`来获取id为xxx的控件, 如果xxx是一个ui已经有的属性, 就可以通过`$ui.findView()`来获取这个控件.
-
-## ui.finish()
-
-结束当前活动并销毁界面.
-
-## ui.setContentView(view)
-
-* `view` {View}
-
-将视图对象设置为当前视图.
-
-## ui.post(callback[, delay = 0])
-
-* `callback` {Function} 回调函数
-* `delay` {number} 延迟, 单位毫秒
-
-将`callback`加到UI线程的消息循环中, 并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）.
-
-此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用）, 也可以用于子线程中更新UI.
-
-```javascript
-"ui";
-
-ui.layout(
-    <frame>
-        <text id="result"/>
-    </frame>
-);
-
-ui.result.attr("text", "计算中");
-// 在子线程中计算1+ ... + 10000000
-threads.start({
-    let sum = 0;
-    for (let i = 0; i < 1000000; i++) {
-        sum += i;
-    }
-    // 由于不能在子线程操作UI, 所以要抛到UI线程执行
-    ui.post(() => {
-        ui.result.attr("text", String(sum));
+ui.people.on('item_bind', function (itemView, holder) {
+    itemView.remove.on('click', function () {
+        people.splice(holder.position, 1);
     });
 });
 ```
 
-## ui.run(callback)
+AutoJs6 使用 `Array.observe` 监听数组本身的 `splice` 和索引更新, 并通知 RecyclerView. 修改 `people[0].name` 这类嵌套对象属性不会触发数组更新; 可替换整个数组元素, 或重新设置数据源.
 
-* `callback` {Function} 回调函数
-* 返回 callback的执行结果
+`item_bind` 在 ViewHolder 创建时触发一次, 此时项目可能尚未写入 holder. `holder.item` 和 `holder.position` 是动态 getter, 应在之后发生的点击等回调中读取, 如上例所示.
 
-将`callback`在UI线程中执行. 如果当前已经在UI线程中, 则直接执行`callback`；否则将`callback`抛到UI线程中执行（加到UI线程的消息循环的末尾）, **并等待callback执行结束(阻塞当前线程)**.
+列表事件参阅 [NativeView 事件](#nativeview-事件). `<grid>` 另外支持 `spanCount` 和布局方向等属性.
 
-## ui.statusBarColor(color)
+### 分页, 标签栏和抽屉
 
-* color {string} | {number} 颜色
+`<viewpager>` 的直接子视图会成为页面. `titles` 属性提供以分隔符拆分的页面标题. Material `TabLayout` 的原生方法可将标签栏与分页视图关联:
 
-设置当前界面的状态栏颜色.
+```js
+ui.layout(
+    <vertical>
+        <tabs id="tabs"/>
+        <viewpager id="pages" titles="首页|设置" layout_weight="1">
+            <frame><text text="首页"/></frame>
+            <frame><text text="设置"/></frame>
+        </viewpager>
+    </vertical>,
+);
 
-```javascript
-"ui";
-ui.statusBarColor("#000000");
+ui.tabs.setupWithViewPager(ui.pages);
 ```
 
-## ui.useAndroidResources()
+`JsToolbar#setupWithDrawer(drawer)` 可安装 `ActionBarDrawerToggle` 并监听抽屉状态:
 
-启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性. 启用该特性后, 在project.json中进行以下配置, 就可以像写Android原生一样写界面：
+```js
+ui.toolbar.setupWithDrawer(ui.drawer);
+```
 
-```json
-{
-    // ...
-    androidResources: {
-        "resDir": "res",  // 资源文件夹
-        "manifest": "AndroidManifest.xml" // AndroidManifest文件路径
+### Canvas 视图
+
+`<canvas>` 是基于 `TextureView` 的持续绘制视图. `draw` 事件在专用单线程绘制循环中触发, 回调参数为 `(canvas, view)`. `setMaxFps(fps)` 设置最大帧率; `fps <= 0` 表示不主动限制帧间隔.
+
+```js
+ui.layout(<canvas id="board" w="*" h="*"/>);
+
+ui.board.setMaxFps(30);
+ui.board.on('draw', function (canvas) {
+    canvas.drawColor('#ffffff');
+});
+```
+
+Canvas 绘图 API 参阅 [画布](canvas).
+
+### WebView 视图
+
+`<webview>` 创建 `JsWebView`. 视图创建后, AutoJs6 会附加:
+
+- `webview.events` - WebView 原生事件发射器.
+- `webview.jsBridge` - 页面 JavaScript 与脚本之间的消息桥.
+
+`jsBridge` 提供 `send(event, ...args)`, `handle(channel, handler)`, `invoke(channel, ...args)` 和 `eval(code)`. `invoke` 和 `eval` 返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise). WebView 同时保留 Android `WebView` 的原生方法.
+
+## 控件扩展方法
+
+内置标签返回的对象可调用对应 Android 类的原生方法. 下表列出 AutoJs6 控件类在 Android 父类之外新增的公开方法.
+
+| 控件 | 方法 | 返回值及行为 |
+| --- | --- | --- |
+| `text`, `button`, `btn`, `input`, `edittext` | `text()` | 返回当前文本的 JavaScript 字符串 |
+| `text`, `button`, `btn`, `input`, `edittext` | `text(value)` | 调用 `setText(value)`, 无返回值 |
+| `frame`, `linear`, `horizontal`, `vertical`, `relative` | `id(id)` | 从自身递归查找 ID, 返回 Android View 或 `null` |
+| `checkbox`, `switch` | `setChecked(checked, notify)` | 设置勾选状态. `notify=false` 时抑制本次 `check` 回调 |
+| `checkbox`, `switch` | `toggle(notify)` | 切换勾选状态. `notify=false` 时抑制本次 `check` 回调 |
+| `image`, `img` | `setSource(uri)` | 使用该视图的 Drawable 加载器设置 URI 或路径 |
+| `image`, `img` | `setSource(image)` | 使用 [ImageWrapper](imageWrapperType) 的位图 |
+| `list`, `grid` | `setDataSource(array)` | 设置 Rhino JavaScript 数组数据源 |
+| `list`, `grid` | `getDataSource()` | 返回当前数据源 |
+| `viewpager` | `setTitles(titles)` | 设置字符串数组标题. 直接调用后可再调用 `getAdapter().notifyDataSetChanged()` |
+| `toolbar` | `setupWithDrawer(drawer)` | 安装并同步 `ActionBarDrawerToggle` |
+| `canvas` | `setMaxFps(fps)` | 设置绘制循环最大帧率 |
+| `video` | `clearMediaController()` | 清除 MediaController |
+| `video` | `resetMediaController()` | 恢复视图创建时生成的默认 MediaController |
+| `video` | `setCustomMediaController(controller)` | 设置自定义 MediaController 或 `null` |
+
+`list` 和 `grid` 还有供布局器使用的 `setItemTemplate`, `setDataSourceAdapter` 和 `initWithScriptRuntime`. 常规脚本不应替换这些内部协作对象.
+
+## NativeView 包装
+
+由 `ui.inflate`, `ui.findById` 或 ID 属性访问返回的对象是 Android `View` 的 Rhino 包装对象. 它既可调用实际 Java 视图的方法, 也附加属性访问, 后代 ID 查询和事件方法.
+
+### attr(name)
+
+- **name** { [string](dataTypes#string) } - 属性名称
+- <ins>**returns**</ins> { [string](dataTypes#string) | [undefined](dataTypes#undefined) } - 最近一次通过布局器设置的原始属性字符串
+
+返回已注册属性保存的最近值. 此值不保证反映之后通过 Android 原生方法修改的实时状态. 未注册的属性返回 `undefined`.
+
+### attr(name, value)
+
+- **name** { [string](dataTypes#string) } - 属性名称
+- **value** { [any](dataTypes#any) } - 转换为字符串后应用的属性值
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+应用一个已注册属性. 未知属性不执行操作. 明确列为不支持的属性会抛出异常.
+
+```js
+ui.message.attr('text', 'Ready');
+ui.message.attr('visibility', 'gone');
+```
+
+### attrReset(name)
+
+- **name** { [string](dataTypes#string) } - 属性名称
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+重新应用 [attr(name)](#attr-name) 当前保存的属性字符串. 此方法不是恢复 Android 默认值.
+
+### click()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+调用 Android `View#performClick()`.
+
+### click(listener)
+
+- **listener** { [Function](dataTypes#function) } - `(view) => void`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+注册 `click` 事件监听器, 等效于 `view.on('click', listener)`.
+
+### longClick()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+调用 Android `View#performLongClick()`.
+
+### longClick(listener)
+
+- **listener** { [Function](dataTypes#function) } - `(event, view) => void`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+注册 `long_click` 事件监听器.
+
+### EventEmitter 方法
+
+NativeView 转发以下 [EventEmitter](events#eventemitter) 方法:
+
+- `once(eventName, listener)`
+- `on(eventName, listener)`
+- `addListener(eventName, listener)`
+- `emit(eventName, ...args)`
+- `eventNames()`
+- `listenerCount(eventName)`
+- `listeners(eventName)`
+- `prependListener(eventName, listener)`
+- `prependOnceListener(eventName, listener)`
+- `removeAllListeners()`
+- `removeAllListeners(eventName)`
+- `removeListener(eventName, listener)`
+- `setMaxListeners(number)`
+
+`maxListeners` 是当前最大监听器数量属性. 包装原型的 `defaultMaxListeners()` 返回全局默认值.
+
+### widget
+
+自定义控件根视图的 `widget` 属性指向该 [ui.Widget](#c-widget) 实例. 普通视图的该属性为 `null`.
+
+### NativeView 事件
+
+| 事件 | 回调参数 | 适用视图及说明 |
+| --- | --- | --- |
+| `click` | `(view)` | 所有 View |
+| `long_click` | `(event, view)` | 所有 View. `event.consumed = true` 可消费长按 |
+| `touch` | `(event, view)` | 所有 View. 每个触摸事件触发 |
+| `touch_down` | `(event, view)` | 所有 View. `ACTION_DOWN` |
+| `touch_up` | `(event, view)` | 所有 View. `ACTION_UP` |
+| `touch_move` | `(event, view)` | 所有 View. `ACTION_MOVE` |
+| `key` | `(keyCode, event, view)` | 所有 View. 每个按键事件触发 |
+| `key_down` | `(keyCode, event, view)` | 所有 View. 按键按下 |
+| `key_up` | `(keyCode, event, view)` | 所有 View. 按键抬起 |
+| `scroll_change` | `(event, view)` | 所有 View. `event` 含 `scrollX`, `scrollY`, `oldScrollX`, `oldScrollY` |
+| `check` | `(isChecked, buttonView)` | `CompoundButton`, 如 checkbox, radio, switch 和 togglebutton |
+| `item_click` | `(item, position, itemView, listView)` | list 和 grid |
+| `item_long_click` | `(event, item, position, itemView, listView)` | list 和 grid. `event.consumed = true` 可消费长按 |
+| `item_bind` | `(itemView, holder)` | list 和 grid. `holder.item` 和 `holder.position` 指向当前项目 |
+
+为 `touch`, `long_click`, `key` 或 `item_long_click` 的 `event.consumed` 赋值为 `true`, 会使对应 Android 监听器返回已消费.
+
+## 自定义控件
+
+自定义控件构造函数继承 `ui.Widget`, `render()` 返回根布局, 再通过 `ui.registerWidget(name, constructor)` 注册为 XML 标签.
+
+```js
+'ui';
+
+let LabeledInput = (function () {
+    util.extend(LabeledInput, ui.Widget);
+
+    function LabeledInput() {
+        ui.Widget.call(this);
+        this.defineAttr('label', function (view, name, value) {
+            view.caption.attr('text', value);
+        });
     }
-}
+
+    LabeledInput.prototype.render = function () {
+        return (
+            <vertical>
+                <text id="caption"/>
+                <input id="editor"/>
+            </vertical>
+        );
+    };
+
+    LabeledInput.prototype.getText = function () {
+        return String(this.view.editor.getText());
+    };
+
+    ui.registerWidget('labeled-input', LabeledInput);
+    return LabeledInput;
+})();
+
+ui.layout(
+    <vertical>
+        <labeled-input id="name" label="姓名"/>
+        <button id="read" text="读取"/>
+    </vertical>,
+);
+
+ui.read.on('click', function () {
+    toast(ui.name.widget.getText());
+});
 ```
 
-res文件夹通常为以下结构：
+自定义标签的普通属性仍会交给 `render()` 返回的根视图处理. 由 `defineAttr` 声明的同名属性会优先交给自定义控件.
 
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">globalThis</p>
+
+---
+
+## [m] globalThis.isUiThread
+
+### globalThis.isUiThread()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否为 Android UI 线程
+
+`ui.isUiThread()` 与全局 `isUiThread()` 等效.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">ui</p>
+
+---
+
+## [p] view
+
+**`Getter/Setter`**
+
+- { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) } - 当前内容视图
+
+[ui.setContentView](#m-setcontentview) 会同步设置此属性. `ui.findById` 和 `ui.<id>` 从此视图开始查找.
+
+直接给 `ui.view` 赋值只改变查找起点, 不会调用 Activity 的 `setContentView`.
+
+## [p] bindingContext
+
+**`Getter/Setter`**
+
+- { [Object](dataTypes#object) | [null](dataTypes#null) } - 动态属性表达式的求值上下文
+
+初始值为脚本全局作用域. 列表绑定项目期间, AutoJs6 会临时替换为当前项目对象, 完成后恢复.
+
+此属性供高级动态布局使用. 修改后只影响之后应用的动态属性, 不会自动刷新现有视图.
+
+## [p] layoutInflater
+
+**`Getter`**
+
+- { [DynamicLayoutInflater](https://github.com/SuperMonster003/AutoJs6) } - 当前运行时的动态布局器
+
+供需要直接使用 `InflateContext` 或布局器标志的高级场景使用. 常规布局应使用 [ui.inflate](#m-inflate) 或 [ui.layout](#m-layout).
+
+## [p+] R
+
+**`Getter`**
+
+- { [Object](dataTypes#object) } - AutoJs6 应用资源对象
+
+[global.R](global#p-r) 的别名. 可通过 `ui.R.string`, `ui.R.drawable` 等下级属性访问资源 ID.
+
+## [p] root
+
+**`6.6.3`** **`UI`** **`Getter`**
+
+- { [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup) | [null](dataTypes#null) } - Activity 中 ID 为 `android.R.id.content` 的窗口根容器
+
+当前 Activity 不是脚本 UI Activity 时返回 `null`. `root` 与 [ui.view](#p-view) 不同, 前者是 Activity 的外层内容容器.
+
+## [p] emitter
+
+**`UI`** **`Getter`**
+
+- { [EventEmitter](events#eventemitter) | [null](dataTypes#null) } - 脚本 UI Activity 的事件发射器
+
+当前 Activity 不是脚本 UI Activity 时返回 `null`.
+
+常用事件:
+
+| 事件 | 参数 |
+| --- | --- |
+| `create` | `(savedInstanceState)` |
+| `pause` | `()` |
+| `resume` | `()` |
+| `save_instance_state` | `(outState)` |
+| `restore_instance_state` | `(savedInstanceState)` |
+| `back_pressed` | `(event)` |
+| `key_down` | `(keyCode, keyEvent, event)` |
+| `generic_motion_event` | `(motionEvent, event)` |
+| `activity_result` | `(requestCode, resultCode, data)` |
+| `create_options_menu` | `(menu)` |
+| `options_item_selected` | `(event, menuItem)` |
+
+`back_pressed`, `key_down` 和 `options_item_selected` 的控制事件支持 `event.consumed = true`.
+
+## [p] statusBarHeight
+
+**`6.6.2`** **`[6.7.0]`** **`Getter`**
+
+- { [number](dataTypes#number) } - 状态栏稳定高度, 单位为 px
+
+等效于使用默认选项调用 [ui.getStatusBarHeight](#m-getstatusbarheight).
+
+## [p] visibleStatusBarHeight
+
+**`6.7.0`** **`Getter`**
+
+- { [number](dataTypes#number) } - 当前可见状态栏高度, 单位为 px
+
+等效于使用默认选项调用 [ui.getVisibleStatusBarHeight](#m-getvisiblestatusbarheight).
+
+## [p] navigationBarHeight
+
+**`6.7.0`** **`Getter`**
+
+- { [number](dataTypes#number) } - 导航栏稳定厚度, 单位为 px
+
+等效于使用默认选项调用 [ui.getNavigationBarHeight](#m-getnavigationbarheight).
+
+## [p] visibleNavigationBarHeight
+
+**`6.7.0`** **`Getter`**
+
+- { [number](dataTypes#number) } - 当前可见导航栏厚度, 单位为 px
+
+等效于使用默认选项调用 [ui.getVisibleNavigationBarHeight](#m-getvisiblenavigationbarheight).
+
+## [m] useAndroidLayout
+
+### useAndroidLayout(enabled?)
+
+- **[ enabled = true ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 布局转换模式
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+控制后续 XML 是否经过 AutoJs6 简写转换:
+
+- `true` - 保留原 XML.
+- `false` - 强制执行 AutoJs6 简写转换.
+- `null` - 根据命名空间和带前缀属性自动判断.
+
+该设置不会改用 Android 平台 `LayoutInflater`. 参阅 [布局转换模式](#布局转换模式).
+
+## [m] layout
+
+### layout(xml)
+
+**`UI`**
+
+- **xml** { [XML](e4x) | [string](dataTypes#string) | [Document](https://developer.android.com/reference/org/w3c/dom/Document) } - 布局
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+渲染布局并将根视图设置为当前 UI Activity 的内容视图. 非 UI 模式调用时抛出异常.
+
+## [m] layoutFile
+
+### layoutFile(path)
+
+**`UI`**
+
+- **path** { [string](dataTypes#string) } - XML 文件路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+读取文件内容并调用 [ui.layout](#m-layout).
+
+## [m] inflate
+
+### inflate(xml, parent?, isAttachedToParent?)
+
+- **xml** { [XML](e4x) | [string](dataTypes#string) | [Document](https://developer.android.com/reference/org/w3c/dom/Document) } - 布局
+- **[ parent = null ]** { [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup) | [null](dataTypes#null) } - 父视图
+- **[ isAttachedToParent = false ]** { [boolean](dataTypes#boolean) } - 是否立即附加到父视图
+- <ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) } - NativeView 包装后的根视图
+
+动态渲染并返回视图. 在非 UI 模式下, 使用带 `ScriptTheme` 的应用上下文; 在 UI 模式下使用当前脚本 Activity.
+
+传入 `parent` 可使依赖父布局参数的属性在渲染时正确应用. `isAttachedToParent` 为 `true` 时, 布局器会把结果直接附加到 `parent`.
+
+```js
+let child = ui.inflate(
+    <text text="动态视图"/>,
+    ui.container,
+    false,
+);
+ui.container.addView(child);
 ```
-- res
-    - layout  // 布局资源
-    - drawable // 图片、形状等资源
-    - menu // 菜单资源
-    - values // 样式、字符串等资源
-    // ...
+
+## [m] setContentView
+
+### setContentView(view)
+
+**`UI`**
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 内容视图
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+在 UI 线程调用 Activity 的 `setContentView`, 并同步更新 [ui.view](#p-view).
+
+## [m] registerWidget
+
+### registerWidget(name, widget)
+
+- **name** { [string](dataTypes#string) } - 非空 XML 标签名称
+- **widget** { [Function](dataTypes#function) } - `ui.Widget` 子类构造函数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+注册自定义控件. 同名注册会替换当前运行时中的旧构造函数.
+
+## [m] findById
+
+### findById(id)
+
+- **id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID
+- <ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) } - NativeView 包装后的匹配视图
+
+从 [ui.view](#p-view) 开始递归查找. 尚未设置内容视图或没有匹配项时返回 `null`.
+
+ID 可写为普通名称或资源 ID 形式, 如 `title`, `@id/title` 或 `@+id/title`.
+
+## [m] findView
+
+### findView(id)
+
+- **id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID
+- <ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) }
+
+[ui.findById](#m-findbyid) 的等效方法.
+
+## [m] findByStringId
+
+### findByStringId(view, id)
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 查找起点
+- **id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID
+- <ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) }
+
+从指定视图开始递归查找并返回 NativeView 包装对象.
+
+## [m] ui.isUiThread
+
+### ui.isUiThread()
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否为 Android UI 线程
+
+全局 [isUiThread](#m-isuithread) 的模块形式.
+
+## [m] post
+
+### post(action, delay?)
+
+**`Async`**
+
+- **action** { [Function](dataTypes#function) } - 无参数回调
+- **[ delay ]** { [number](dataTypes#number) } - 延迟时间, 单位为 ms
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - Android Handler 是否成功加入任务
+
+将回调加入 UI 线程消息队列. 省略或传入 `null` 时立即加入, 否则使用 `postDelayed`. 延迟只表示最早调度时间, 不保证精确执行时刻.
+
+```js
+threads.start(function () {
+    let result = performLongTask();
+    ui.post(function () {
+        ui.message.attr('text', String(result));
+    });
+});
 ```
 
-可参考示例->复杂界面->Android原生界面.
+## [m] run
 
-# 尺寸的单位: Dimension
+### run(action)
 
-# Drawables
+- **action** { [Function](dataTypes#function) } - 无参数回调
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 回调结果
 
-# 颜色
+在 UI 线程执行回调. 当前已在 UI 线程时立即执行; 否则加入 UI 线程并阻塞调用线程直到完成. 回调抛出的异常会在调用线程重新抛出.
 
-**(完善中...)**
+不要从持有 UI 线程所需锁的线程调用此方法, 以免死锁.
+
+## [m] finish
+
+### finish()
+
+**`UI`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+结束当前脚本 UI Activity. Activity 已结束或已销毁时不重复操作.
+
+## [m] keepScreenOn
+
+### keepScreenOn()
+
+**`6.6.3`** **`UI`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+为窗口添加 `FLAG_KEEP_SCREEN_ON`. 此标志不会阻止用户主动锁定屏幕.
+
+## [m] backgroundColor
+
+### backgroundColor(color)
+
+**`UI`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 窗口背景颜色
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+将颜色强制转换为完全不透明色, 并设置为当前窗口背景.
+
+## [m] statusBarColor
+
+### statusBarColor(color)
+
+**`UI`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 状态栏背景颜色
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置当前 UI Activity 的状态栏背景颜色.
+
+## [m] statusBarIconLight
+
+### statusBarIconLight(isLight?)
+
+**`6.6.4`** **`UI`**
+
+- **[ isLight = true ]** { [boolean](dataTypes#boolean) } - 是否使用浅色图标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置状态栏图标明暗.
+
+## [m] statusBarIconLightBy
+
+### statusBarIconLightBy(refColor)
+
+**`6.6.4`** **`UI`**
+
+- **refColor** { [OmniColor](omniTypes#omnicolor) } - 参考背景颜色
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+根据参考颜色亮度选择状态栏图标. 深色背景使用浅色图标, 浅色背景使用深色图标.
+
+## [m] navigationBarColor
+
+### navigationBarColor(color)
+
+**`6.6.2`** **`UI`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 导航栏背景颜色
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置当前 UI Activity 的导航栏背景颜色.
+
+## [m] navigationBarIconLight
+
+### navigationBarIconLight(isLight?)
+
+**`6.6.4`** **`UI`** **`API>=26!`**
+
+- **[ isLight = true ]** { [boolean](dataTypes#boolean) } - 是否使用浅色图标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置导航栏图标明暗. Android API 级别低于 `26` 时抛出异常.
+
+## [m] navigationBarIconLightBy
+
+### navigationBarIconLightBy(refColor)
+
+**`6.6.4`** **`UI`** **`API>=26!`**
+
+- **refColor** { [OmniColor](omniTypes#omnicolor) } - 参考背景颜色
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+根据参考颜色亮度选择导航栏图标. Android API 级别低于 `26` 时抛出异常.
+
+## [m] getStatusBarHeight
+
+### getStatusBarHeight(options?)
+
+**`6.7.0`**
+
+- **[ options = {} ]** {{
+    - withComputed?: [boolean](dataTypes#boolean);
+    - withDimen?: [boolean](dataTypes#boolean);
+    - ignoreVisibility?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 状态栏高度, 单位为 px
+
+三个选项均默认为 `true`.
+
+- `withComputed` - 允许使用显示尺寸差值估算.
+- `withDimen` - 允许使用 Android 内部尺寸资源回退.
+- `ignoreVisibility` - 忽略当前可见性并返回稳定高度. 为 `false` 时, 不可见或无法确定则返回 `0`.
+
+## [m] getVisibleStatusBarHeight
+
+### getVisibleStatusBarHeight(options?)
+
+**`6.7.0`**
+
+- **[ options = {} ]** {{
+    - withComputed?: [boolean](dataTypes#boolean);
+    - withDimen?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前可见状态栏高度, 单位为 px
+
+强制使用可见性模式. 状态栏不可见或无法确定时返回 `0`. 当前实现不会在可见性模式中使用估算或内部尺寸资源回退.
+
+## [m] getNavigationBarHeight
+
+### getNavigationBarHeight(options?)
+
+**`6.7.0`**
+
+- **[ options = {} ]** {{
+    - withComputed?: [boolean](dataTypes#boolean);
+    - withDimen?: [boolean](dataTypes#boolean);
+    - ignoreVisibility?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 导航栏厚度, 单位为 px
+
+三个选项均默认为 `true`. 横屏导航栏位于侧边时, 返回 bottom, left 和 right 三个方向中的最大值.
+
+## [m] getVisibleNavigationBarHeight
+
+### getVisibleNavigationBarHeight(options?)
+
+**`6.7.0`**
+
+- **[ options = {} ]** {{
+    - withComputed?: [boolean](dataTypes#boolean);
+    - withDimen?: [boolean](dataTypes#boolean);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前可见导航栏厚度, 单位为 px
+
+强制使用可见性模式. 导航栏不可见或无法确定时返回 `0`. 当前实现不会在可见性模式中使用估算或内部尺寸资源回退.
+
+## [C] Widget
+
+### new Widget()
+
+- <ins>**returns**</ins> { [Object](dataTypes#object) } - 自定义控件基类实例
+
+构造实例并为其创建独立的自定义属性表. 通常通过 `util.extend(CustomWidget, ui.Widget)` 建立继承, 并在子类构造函数中调用 `ui.Widget.call(this)`.
+
+### Widget#render()
+
+- <ins>**returns**</ins> { [XML](e4x) | [string](dataTypes#string) } - 自定义控件根布局
+
+由子类实现. 返回值不能为 `null` 或 `undefined`. 未实现时, 内部 `renderInternal()` 返回空 XML.
+
+### Widget#defineAttr(name)
+
+**`Overload 1/4`**
+
+- **name** { [string](dataTypes#string) } - 自定义属性名称
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+使用同名实例属性保存值.
+
+### Widget#defineAttr(name, alias, applier?)
+
+**`Overload 2/4`**
+
+- **name** { [string](dataTypes#string) } - 自定义属性名称
+- **alias** { [string](dataTypes#string) } - 保存值的实例属性名称
+- **[ applier ]** { [Function](dataTypes#function) } - `(view, name, value, defaultSetter) => void`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+应用属性时先把值保存到 `this[alias]`, 再调用可选的 `applier`.
+
+### Widget#defineAttr(name, applier)
+
+**`Overload 3/4`**
+
+- **name** { [string](dataTypes#string) } - 自定义属性名称
+- **applier** { [Function](dataTypes#function) } - `(view, name, value, defaultSetter) => void`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+使用同名实例属性保存值, 再调用 `applier`.
+
+### Widget#defineAttr(name, getter, setter)
+
+**`Overload 4/4`**
+
+- **name** { [string](dataTypes#string) } - 自定义属性名称
+- **getter** { [Function](dataTypes#function) } - `(view, name, defaultGetter) => any`
+- **setter** { [Function](dataTypes#function) } - `(view, name, value, defaultSetter) => void`
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+完整定义属性读取和写入逻辑.
+
+### Widget#hasAttr(name)
+
+- **name** { [string](dataTypes#string) } - 属性名称
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+检查自定义属性表中是否存在该名称.
+
+### Widget#setAttr(view, name, value, defaultSetter)
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 根视图
+- **name** { [string](dataTypes#string) } - 属性名称
+- **value** { [string](dataTypes#string) } - 属性值
+- **defaultSetter** { [Function](dataTypes#function) | [undefined](dataTypes#undefined) } - 根视图的默认属性写入函数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+调用 `defineAttr` 保存的 setter. 主要由布局器内部调用.
+
+### Widget#getAttr(view, name, defaultGetter)
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 根视图
+- **name** { [string](dataTypes#string) } - 属性名称
+- **defaultGetter** { [Function](dataTypes#function) | [undefined](dataTypes#undefined) } - 根视图的默认属性读取函数
+- <ins>**returns**</ins> { [any](dataTypes#any) }
+
+调用 `defineAttr` 保存的 getter. 主要由 NativeView `attr(name)` 内部调用.
+
+### Widget#onViewCreated(view)
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 已创建的根视图
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+可选生命周期方法. 根视图创建并安装自定义属性委托后调用. 此时后代布局可能尚未全部完成.
+
+### Widget#onFinishInflation(view)
+
+- **view** { [View](https://developer.android.com/reference/android/view/View) } - 已完成渲染的根视图
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+可选生命周期方法. 自定义控件作为其他布局的一部分完成渲染后调用.
+
+`notifyViewCreated(view)` 和 `notifyAfterInflation(view)` 是分别触发上述生命周期方法的内部入口.

@@ -16,7 +16,7 @@
 
 如需创建通知渠道, 可使用 [notice.channel.create](notice#m-create) 方法.
 
-> 注: 渠道的大致创建过程, 是构建一个具有唯一渠道 ID且用户可见名称和重要性级别的 NotificationChannel 对象, 然后通过 createNotificationChannel 注册这个通知渠道.
+> 注: 渠道的大致创建过程, 是构建一个具有唯一渠道 ID 且用户可见名称和重要性级别的 NotificationChannel 对象, 然后通过 createNotificationChannel 注册这个通知渠道.
 
 通常, 每种不同类型的通知, 均建议创建各自的渠道. 创建时, 可自定义渠道的默认通知行为, 如指示灯颜色及是否振动等.
 

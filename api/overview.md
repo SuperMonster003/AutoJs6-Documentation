@@ -4,8 +4,8 @@
 
 [AutoJs6](http://project.autojs6.com): 安卓平台 JavaScript 自动化工具.
 
-- 脚本语言: [JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/)  
-- 脚本引擎: [Rhino](https://github.com/mozilla/rhino/)  
+- 脚本语言: [JavaScript](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/)<br>
+- 脚本引擎: [Rhino](https://github.com/mozilla/rhino/)<br>
 - 支持特性: [ES5](https://262.ecma-international.org/5.1/) (全部), [ES6](https://262.ecma-international.org/6.0/) (部分)
 
 ---
@@ -37,7 +37,7 @@
   - 点击首页右上方 "搜索" 图标 - 在当前页面检索内容
   - 文档页面左上方的导航链接可实现页面跳转:
     - 点击 "索引" - 跳转至章节索引页面
-    - 点击 "查看全部" - 所有章节内容在同一页面列出
+    - 点击 "搜索文档" - 展开全部离线文档的搜索控件
   - 阅读文档时, "文档" 标签可作为快捷按钮使用:
     - 点击 "文档" 标签 - 返回至当前页面顶部
     - 长按 "文档" 标签 - 跳转至章节索引页面

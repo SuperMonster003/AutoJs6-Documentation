@@ -1,0 +1,791 @@
+{
+  "source": "..\\api\\tts.md",
+  "modules": [
+    {
+      "textRaw": "文本转语音 (TTS)",
+      "name": "文本转语音_(tts)",
+      "desc": "<p>tts 模块用于通过 Android 文本转语音引擎播放文本, 插入静音, 合成音频文件, 查询引擎和语音, 以及监听单次任务的执行事件.</p>\n<p><code>tts</code> 与 <code>$tts</code> 指向同一个可调用模块对象.</p>\n<p>tts 服务属于当前脚本运行时. 脚本退出时, 未完成的请求会停止, 相关引擎资源会释放.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">tts</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] tts",
+          "name": "[@]_tts",
+          "methods": [
+            {
+              "textRaw": "tts(text, options?)",
+              "type": "method",
+              "name": "tts",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待朗读文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 朗读选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsresult\">TtsResult</a></li>\n</ul>\n<p>朗读文本.</p>\n<p>此调用与 <a href=\"#m-speak\">tts.speak(text, options?)</a> 等价.</p>\n<pre><code class=\"lang-js\">tts(&#39;Hello from AutoJs6&#39;).then((result) =&gt; {\n    console.log(result.status);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] tts"
+        },
+        {
+          "textRaw": "[p] maxInputLength",
+          "name": "[p]_maxinputlength",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>初始值为 <code>3999</code>, 表示单次 Android 文本转语音请求的安全文本长度上限, 单位为 UTF-16 code unit.</p>\n<p><a href=\"#m-speak\">speak</a> 默认会将更长文本拆分为多个请求, 因此此值不是朗读方法允许的总文本长度上限.</p>\n",
+          "type": "module",
+          "displayName": "[p] maxInputLength"
+        },
+        {
+          "textRaw": "[p] maxSynthesisFileSize",
+          "name": "[p]_maxsynthesisfilesize",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>初始值为 <code>536870912</code>, 表示文件合成结果的最大字节数, 即 <code>512 MiB</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] maxSynthesisFileSize"
+        },
+        {
+          "textRaw": "[p] QUEUE_FLUSH",
+          "name": "[p]_queue_flush",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>初始值为 <code>&#39;flush&#39;</code>, 表示替换当前队列的队列模式.</p>\n",
+          "type": "module",
+          "displayName": "[p] QUEUE_FLUSH"
+        },
+        {
+          "textRaw": "[p] QUEUE_ADD",
+          "name": "[p]_queue_add",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>初始值为 <code>&#39;add&#39;</code>, 表示追加到当前队列的队列模式.</p>\n",
+          "type": "module",
+          "displayName": "[p] QUEUE_ADD"
+        },
+        {
+          "textRaw": "[m] speak",
+          "name": "[m]_speak",
+          "methods": [
+            {
+              "textRaw": "speak(text, options?)",
+              "type": "method",
+              "name": "speak",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待朗读文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 朗读选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsresult\">TtsResult</a></li>\n</ul>\n<p>将文本加入文本转语音服务.</p>\n<p>默认队列模式为 <code>flush</code>, 会替换等待中的任务. 文本默认按最多 <code>3999</code> 个 UTF-16 code unit 自动拆分.</p>\n<p>输入文本不能为空白, 总长度不能超过 <code>1000000</code> 个 UTF-16 code unit.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] speak"
+        },
+        {
+          "textRaw": "[m] enqueue",
+          "name": "[m]_enqueue",
+          "methods": [
+            {
+              "textRaw": "enqueue(text, options?)",
+              "type": "method",
+              "name": "enqueue",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待朗读文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 朗读选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsresult\">TtsResult</a></li>\n</ul>\n<p>将文本追加到文本转语音队列.</p>\n<p>此方法强制使用 <code>add</code> 队列模式, <code>options.queue</code> 不会覆盖该模式.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] enqueue"
+        },
+        {
+          "textRaw": "[m] utterance",
+          "name": "[m]_utterance",
+          "methods": [
+            {
+              "textRaw": "utterance(text, options?)",
+              "type": "method",
+              "name": "utterance",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待朗读文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 朗读选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 可监听的朗读任务</li>\n</ul>\n<p>创建可监听事件和主动停止的朗读任务.</p>\n<p><code>utterance</code> 也可写作 <code>speakTask</code>.</p>\n<p>任务的 <code>result</code> 属性是与 <a href=\"#m-speak\">speak</a> 返回值等价的 Promise.</p>\n<pre><code class=\"lang-js\">let task = tts.utterance(&#39;This task can be observed&#39;);\n\ntask\n    .on(&#39;start&#39;, (info) =&gt; {\n        console.log(info.id);\n    })\n    .on(&#39;done&#39;, (result) =&gt; {\n        console.log(result.duration);\n    });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] utterance"
+        },
+        {
+          "textRaw": "[m] enqueueUtterance",
+          "name": "[m]_enqueueutterance",
+          "methods": [
+            {
+              "textRaw": "enqueueUtterance(text, options?)",
+              "type": "method",
+              "name": "enqueueUtterance",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待朗读文本</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 朗读选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 可监听的朗读任务</li>\n</ul>\n<p>创建可监听的朗读任务, 并强制追加到当前队列.</p>\n<p><code>enqueueUtterance</code> 也可写作 <code>enqueueTask</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] enqueueUtterance"
+        },
+        {
+          "textRaw": "[m] synthesize",
+          "name": "[m]_synthesize",
+          "methods": [
+            {
+              "textRaw": "synthesize(text, path, options?)",
+              "type": "method",
+              "name": "synthesize",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待合成文本</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsfileoptions\">TtsFileOptions</a> } - 合成选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsresult\">TtsResult</a></li>\n</ul>\n<p>将文本合成为音频文件.</p>\n<p><code>synthesize</code> 也可写作 <code>synthesizeToFile</code>.</p>\n<p>文件合成只执行一次平台请求, 文本长度不能超过 <code>3999</code> 个 UTF-16 code unit. <code>autoSplit</code> 不会拆分文件输出.</p>\n<p>默认先写入临时文件, 成功后再原子替换目标文件. <code>overwrite</code> 为 <code>false</code> 时要求严格的原子不替换发布, 某些共享存储文件系统不支持该操作并会使 Promise 拒绝.</p>\n<pre><code class=\"lang-js\">tts.synthesize(&#39;Saved speech&#39;, &#39;./speech.wav&#39;).then((result) =&gt; {\n    console.log(result.path);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] synthesize"
+        },
+        {
+          "textRaw": "[m] synthesis",
+          "name": "[m]_synthesis",
+          "methods": [
+            {
+              "textRaw": "synthesis(text, path, options?)",
+              "type": "method",
+              "name": "synthesis",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待合成文本</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsfileoptions\">TtsFileOptions</a> } - 合成选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 可监听的文件合成任务</li>\n</ul>\n<p>创建可监听事件和主动停止的文件合成任务.</p>\n<p><code>synthesis</code> 也可写作 <code>synthesizeTask</code> 或 <code>synthesisTask</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] synthesis"
+        },
+        {
+          "textRaw": "[m] silence",
+          "name": "[m]_silence",
+          "methods": [
+            {
+              "textRaw": "silence(duration, options?)",
+              "type": "method",
+              "name": "silence",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>duration</strong> { <a href=\"dataTypes#number\">number</a> } - 静音时长, 单位为毫秒</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 队列和引擎选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsresult\">TtsResult</a></li>\n</ul>\n<p>将静音任务加入文本转语音队列.</p>\n<p><code>duration</code> 必须是 <code>0..86400000</code> 范围内的整数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "duration"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] silence"
+        },
+        {
+          "textRaw": "[m] silenceTask",
+          "name": "[m]_silencetask",
+          "methods": [
+            {
+              "textRaw": "silenceTask(duration, options?)",
+              "type": "method",
+              "name": "silenceTask",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>duration</strong> { <a href=\"dataTypes#number\">number</a> } - 静音时长, 单位为毫秒</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 队列和引擎选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 可监听的静音任务</li>\n</ul>\n<p>创建可监听事件和主动停止的静音任务.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "duration"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] silenceTask"
+        },
+        {
+          "textRaw": "[m] ready",
+          "name": "[m]_ready",
+          "methods": [
+            {
+              "textRaw": "ready(engineOrOptions?)",
+              "type": "method",
+              "name": "ready",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsreadyinfo\">TtsReadyInfo</a></li>\n</ul>\n<p>初始化或取得指定文本转语音引擎, 并返回其就绪信息.</p>\n<p>省略参数时使用 <a href=\"#m-defaults\">defaults</a> 中的引擎.<br>\n传入 <code>null</code> 时使用系统默认引擎.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ready"
+        },
+        {
+          "textRaw": "[m] engines",
+          "name": "[m]_engines",
+          "methods": [
+            {
+              "textRaw": "engines(engineOrOptions?)",
+              "type": "method",
+              "name": "engines",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 请求使用的引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsengineinfo\">TtsEngineInfo</a> 数组</li>\n</ul>\n<p>返回系统可用文本转语音引擎.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] engines"
+        },
+        {
+          "textRaw": "[m] voices",
+          "name": "[m]_voices",
+          "methods": [
+            {
+              "textRaw": "voices(filter?)",
+              "type": "method",
+              "name": "voices",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ filter = <code>{}</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsvoicefilter\">TtsVoiceFilter</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或语音过滤条件</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttsvoiceinfo\">TtsVoiceInfo</a> 数组</li>\n</ul>\n<p>返回指定引擎的语音列表.</p>\n<p>字符串参数视为引擎名称.<br>\n对象参数可按引擎, 区域, 离线能力和安装状态过滤.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] voices"
+        },
+        {
+          "textRaw": "[m] languages",
+          "name": "[m]_languages",
+          "methods": [
+            {
+              "textRaw": "languages(engineOrOptions?)",
+              "type": "method",
+              "name": "languages",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"dataTypes#string\">string</a> 数组</li>\n</ul>\n<p>返回指定引擎报告的 IETF 语言标签.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] languages"
+        },
+        {
+          "textRaw": "[m] isLanguageAvailable",
+          "name": "[m]_islanguageavailable",
+          "methods": [
+            {
+              "textRaw": "isLanguageAvailable(locale, engineOrOptions?)",
+              "type": "method",
+              "name": "isLanguageAvailable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>locale</strong> { <a href=\"dataTypes#string\">string</a> } - IETF 语言标签</li>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"dataTypes#boolean\">boolean</a> 类型的可用状态</li>\n</ul>\n<p>检查指定引擎是否支持语言.</p>\n<p>区域标签中的 <code>_</code> 会转换为 <code>-</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "locale"
+                    },
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isLanguageAvailable"
+        },
+        {
+          "textRaw": "[m] languageAvailability",
+          "name": "[m]_languageavailability",
+          "methods": [
+            {
+              "textRaw": "languageAvailability(locale, engineOrOptions?)",
+              "type": "method",
+              "name": "languageAvailability",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>locale</strong> { <a href=\"dataTypes#string\">string</a> } - IETF 语言标签</li>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#ttslanguageavailability\">TtsLanguageAvailability</a></li>\n</ul>\n<p>返回指定引擎对语言的详细支持状态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "locale"
+                    },
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] languageAvailability"
+        },
+        {
+          "textRaw": "[m] stop",
+          "name": "[m]_stop",
+          "methods": [
+            {
+              "textRaw": "stop()",
+              "type": "method",
+              "name": "stop",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 接受停止请求时尚未结束的任务数</li>\n</ul>\n<p>请求停止当前运行时的全部文本转语音任务.</p>\n<p><code>stop</code> 也可写作 <code>stopAll</code>.</p>\n<p>停止命令会异步交给文本转语音调度线程. 返回值是调用时的任务数量.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] stop"
+        },
+        {
+          "textRaw": "[m] reset",
+          "name": "[m]_reset",
+          "methods": [
+            {
+              "textRaw": "reset()",
+              "type": "method",
+              "name": "reset",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 接受重置请求时尚未结束的任务数</li>\n</ul>\n<p>恢复初始默认选项, 停止全部任务, 并关闭当前引擎实例.</p>\n<p>控制命令异步执行. 返回值是调用时的任务数量.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] reset"
+        },
+        {
+          "textRaw": "[m] isSpeaking",
+          "name": "[m]_isspeaking",
+          "methods": [
+            {
+              "textRaw": "isSpeaking()",
+              "type": "method",
+              "name": "isSpeaking",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前是否正在朗读文本</li>\n</ul>\n<p>仅当当前活动任务是已开始的朗读任务时返回 <code>true</code>.</p>\n<p>静音和文件合成任务不会使此方法返回 <code>true</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isSpeaking"
+        },
+        {
+          "textRaw": "[m] isBusy",
+          "name": "[m]_isbusy",
+          "methods": [
+            {
+              "textRaw": "isBusy()",
+              "type": "method",
+              "name": "isBusy",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前是否存在活动任务</li>\n</ul>\n<p>活动任务可以是朗读, 静音或文件合成.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isBusy"
+        },
+        {
+          "textRaw": "[m] status",
+          "name": "[m]_status",
+          "methods": [
+            {
+              "textRaw": "status()",
+              "type": "method",
+              "name": "status",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsstatus\">TtsStatus</a> } - 当前服务状态快照</li>\n</ul>\n<p>返回同步状态快照.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] status"
+        },
+        {
+          "textRaw": "[m] defaults",
+          "name": "[m]_defaults",
+          "methods": [
+            {
+              "textRaw": "defaults()",
+              "type": "method",
+              "name": "defaults",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsdefaults\">TtsDefaults</a> } - 当前默认选项</li>\n</ul>\n<p>返回当前运行时的文本转语音默认选项.</p>\n<p><code>defaults</code> 也可写作 <code>config</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] defaults"
+        },
+        {
+          "textRaw": "[m] configure",
+          "name": "[m]_configure",
+          "methods": [
+            {
+              "textRaw": "configure(options)",
+              "type": "method",
+              "name": "configure",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#ttsoptions\">TtsOptions</a> } - 待合并的默认选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsdefaults\">TtsDefaults</a> } - 合并后的默认选项</li>\n</ul>\n<p>修改当前脚本运行时后续任务使用的默认选项.</p>\n<p>未指定的属性保持原值. 文件专用选项 <code>overwrite</code> 和 <code>createDirectories</code> 不可用于此方法.</p>\n<pre><code class=\"lang-js\">let defaults = tts.configure({\n    rate: 1.1,\n    locale: &#39;en-US&#39;,\n});\nconsole.log(defaults.rate);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] configure"
+        },
+        {
+          "textRaw": "[m] getMaxInputLength",
+          "name": "[m]_getmaxinputlength",
+          "methods": [
+            {
+              "textRaw": "getMaxInputLength()",
+              "type": "method",
+              "name": "getMaxInputLength",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - <code>3999</code></li>\n</ul>\n<p>返回单次平台文本转语音请求的安全文本长度上限.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getMaxInputLength"
+        },
+        {
+          "textRaw": "[m] openSettings",
+          "name": "[m]_opensettings",
+          "methods": [
+            {
+              "textRaw": "openSettings()",
+              "type": "method",
+              "name": "openSettings",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否成功打开系统文本转语音设置</li>\n</ul>\n<p>尝试打开 Android 文本转语音设置页面.</p>\n<p>设备没有可处理该 Intent 的界面, 或启动失败时返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] openSettings"
+        },
+        {
+          "textRaw": "[m] installData",
+          "name": "[m]_installdata",
+          "methods": [
+            {
+              "textRaw": "installData(engineOrOptions?)",
+              "type": "method",
+              "name": "installData",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ engineOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#ttsenginequeryoptions\">TtsEngineQueryOptions</a> | <a href=\"dataTypes#null\">null</a> } - 引擎名称或查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否成功打开语音数据安装界面</li>\n</ul>\n<p>尝试打开指定引擎的语音数据安装界面.</p>\n<p>设备没有可处理该 Intent 的界面, 或启动失败时返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "engineOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] installData"
+        },
+        {
+          "textRaw": "选项",
+          "name": "选项",
+          "modules": [
+            {
+              "textRaw": "TtsOptions",
+              "name": "ttsoptions",
+              "desc": "<p>每次调用中未指定的选项继承 <a href=\"#m-defaults\">defaults</a> 的当前值. 初始默认值如下:</p>\n<ul>\n<li><strong>[ engine = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 引擎包名, <code>null</code> 表示系统默认引擎</li>\n<li><strong>[ locale = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - IETF 语言标签</li>\n<li><strong>[ voice = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 语音名称</li>\n<li><strong>[ rate = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 语速, 范围为 <code>0.1..4</code></li>\n<li><strong>[ pitch = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 音高, 范围为 <code>0.1..4</code></li>\n<li><strong>[ volume = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 音量, 范围为 <code>0..1</code></li>\n<li><strong>[ pan = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 左右声道位置, 范围为 <code>-1..1</code></li>\n<li><strong>[ queue = <code>&#39;flush&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 队列模式</li>\n<li><strong>[ autoSplit = <code>true</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否自动拆分长文本</li>\n<li><strong>[ offlineOnly = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否仅选择离线语音</li>\n<li><strong>[ audioEvents = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否接收音频数据事件</li>\n<li><strong>[ usage = <code>&#39;media&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - Android 音频用途</li>\n<li><strong>[ timeout = <code>&#39;auto&#39;</code> ]</strong> { <a href=\"dataTypes#number\">number</a> | <code>&#39;auto&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 任务超时, 单位为毫秒</li>\n<li><strong>[ parameters = <code>{}</code> ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 传给文本转语音引擎的额外参数</li>\n</ul>\n<p>兼容属性名称:</p>\n<ul>\n<li><code>locale</code>: <code>language</code>, <code>lang</code>.</li>\n<li><code>rate</code>: <code>speechRate</code>.</li>\n<li><code>autoSplit</code>: <code>split</code>.</li>\n<li><code>offlineOnly</code>: <code>offline</code>.</li>\n<li><code>audioEvents</code>: <code>emitAudio</code>.</li>\n<li><code>usage</code>: <code>audioUsage</code>.</li>\n<li><code>timeout</code>: <code>timeoutMillis</code>, <code>timeoutMs</code>.</li>\n<li><code>parameters</code>: <code>params</code>.</li>\n</ul>\n<p><code>locale</code> 和 <code>voice</code> 不能在同一组选项中同时指定为非 <code>null</code>.<br>\n队列模式可使用 <code>flush</code>, <code>replace</code>, <code>add</code>, <code>enqueue</code>, <code>append</code>, <code>0</code> 或 <code>1</code>.<br>\n音频用途支持 <code>media</code>, <code>accessibility</code>, <code>assistant</code>, <code>navigation</code>, <code>alarm</code>, <code>notification</code> 和 <code>voiceCommunication</code>.</p>\n<p><code>timeout</code> 为 <code>0</code> 时禁用任务超时.<br>\n<code>timeout</code> 为 <code>null</code> 或 <code>auto</code> 时根据操作类型和文本长度自动计算.<br>\n其他超时值必须是 <code>1000..86400000</code> 范围内的整数.</p>\n<p><code>parameters</code> 最多包含 32 项. 属性值只能是字符串, 布尔值或有限数值. <code>rate</code>, <code>engine</code>, <code>pitch</code>, <code>volume</code>, <code>pan</code> 和 <code>utteranceId</code> 等已有专用选项的名称不能重复用于 <code>parameters</code>.</p>\n<p>未知选项会使调用抛出异常.</p>\n",
+              "type": "module",
+              "displayName": "TtsOptions"
+            },
+            {
+              "textRaw": "TtsFileOptions",
+              "name": "ttsfileoptions",
+              "desc": "<p>TtsFileOptions 包含全部 <a href=\"#ttsoptions\">TtsOptions</a>, 并增加:</p>\n<ul>\n<li><strong>[ overwrite = <code>true</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否替换已存在的目标文件</li>\n<li><strong>[ createDirectories = <code>true</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否创建缺失的父目录</li>\n</ul>\n<p><code>mkdirs</code> 可作为 <code>createDirectories</code> 的别名.</p>\n",
+              "type": "module",
+              "displayName": "TtsFileOptions"
+            },
+            {
+              "textRaw": "TtsEngineQueryOptions",
+              "name": "TtsEngineQueryOptions",
+              "desc": "<ul>\n<li><strong>[ engine ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 引擎包名</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TtsVoiceFilter"
+            },
+            {
+              "textRaw": "TtsVoiceFilter",
+              "name": "ttsvoicefilter",
+              "desc": "<ul>\n<li><strong>[ engine ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 引擎包名</li>\n<li><strong>[ locale ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - IETF 语言标签</li>\n<li><strong>[ offlineOnly = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否仅返回离线语音</li>\n<li><strong>[ installedOnly = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否仅返回已安装语音</li>\n</ul>\n<p>兼容属性名称:</p>\n<ul>\n<li><code>locale</code>: <code>language</code>, <code>lang</code>.</li>\n<li><code>offlineOnly</code>: <code>offline</code>.</li>\n<li><code>installedOnly</code>: <code>installed</code>.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TtsVoiceFilter"
+            }
+          ],
+          "type": "module",
+          "displayName": "选项"
+        },
+        {
+          "textRaw": "返回对象",
+          "name": "返回对象",
+          "modules": [
+            {
+              "textRaw": "TtsStatus",
+              "name": "TtsStatus",
+              "desc": "<ul>\n<li><strong>state</strong> { <code>&#39;idle&#39;</code> | <code>&#39;initializing&#39;</code> | <code>&#39;working&#39;</code> | <code>&#39;ready&#39;</code> | <code>&#39;failed&#39;</code> | <code>&#39;closed&#39;</code> } - 服务状态</li>\n<li><strong>engine</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 最近实际使用的引擎</li>\n<li><strong>requestedEngine</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 当前请求的引擎</li>\n<li><strong>activeId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 活动任务 ID</li>\n<li><strong>operation</strong> { <code>&#39;speech&#39;</code> | <code>&#39;silence&#39;</code> | <code>&#39;file&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 活动操作类型</li>\n<li><strong>queued</strong> { <a href=\"dataTypes#number\">number</a> } - 等待任务数量</li>\n<li><strong>isSpeaking</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否正在朗读</li>\n<li><strong>isBusy</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否存在活动任务</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TtsDefaults"
+            },
+            {
+              "textRaw": "TtsDefaults",
+              "name": "ttsdefaults",
+              "desc": "<ul>\n<li><strong>engine</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 默认引擎包名</li>\n<li><strong>locale</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 默认语言标签</li>\n<li><strong>voice</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 默认语音名称</li>\n<li><strong>rate</strong> { <a href=\"dataTypes#number\">number</a> } - 默认语速</li>\n<li><strong>pitch</strong> { <a href=\"dataTypes#number\">number</a> } - 默认音高</li>\n<li><strong>volume</strong> { <a href=\"dataTypes#number\">number</a> } - 默认音量</li>\n<li><strong>pan</strong> { <a href=\"dataTypes#number\">number</a> } - 默认声道位置</li>\n<li><strong>queue</strong> { <code>&#39;flush&#39;</code> | <code>&#39;add&#39;</code> } - 默认队列模式</li>\n<li><strong>autoSplit</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否自动拆分文本</li>\n<li><strong>offlineOnly</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否仅使用离线语音</li>\n<li><strong>audioEvents</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否接收音频事件</li>\n<li><strong>usage</strong> { <a href=\"dataTypes#string\">string</a> } - 默认音频用途</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> | <code>&#39;auto&#39;</code> } - 默认超时</li>\n<li><strong>parameters</strong> { <a href=\"dataTypes#object\">Object</a> } - 默认引擎参数</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TtsDefaults"
+            }
+          ],
+          "type": "module",
+          "displayName": "返回对象"
+        },
+        {
+          "textRaw": "TtsUtterance",
+          "name": "ttsutterance",
+          "desc": "<ul>\n<li><ins><strong>extends</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> }</li>\n</ul>\n<p>TtsUtterance 表示一个可监听和停止的文本转语音任务. 它不能由脚本直接构造.</p>\n<p>它继承 <a href=\"eventEmitterType\">EventEmitter</a> 的 <code>addListener</code>, <code>eventNames</code>, <code>listenerCount</code>, <code>listeners</code>, <code>prependListener</code>, <code>prependOnceListener</code>, <code>removeAllListeners</code>, <code>removeListener</code> 和 <code>setMaxListeners</code> 等方法.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[p#] TtsUtterance#id",
+              "name": "[p#]_ttsutterance#id",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>任务 ID.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#id"
+            },
+            {
+              "textRaw": "[p#] TtsUtterance#operation",
+              "name": "[p#]_ttsutterance#operation",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <code>&#39;speech&#39;</code> | <code>&#39;silence&#39;</code> | <code>&#39;file&#39;</code> }</li>\n</ul>\n<p>任务操作类型.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#operation"
+            },
+            {
+              "textRaw": "[p#] TtsUtterance#text",
+              "name": "[p#]_ttsutterance#text",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>任务输入文本. 静音任务为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#text"
+            },
+            {
+              "textRaw": "[p#] TtsUtterance#result",
+              "name": "[p#]_ttsutterance#result",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> }</li>\n</ul>\n<p>任务结果 Promise, 兑现值为 <a href=\"#ttsresult\">TtsResult</a>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#result"
+            },
+            {
+              "textRaw": "[p#] TtsUtterance#state",
+              "name": "[p#]_ttsutterance#state",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <code>&#39;created&#39;</code> | <code>&#39;queued&#39;</code> | <code>&#39;running&#39;</code> | <code>&#39;done&#39;</code> | <code>&#39;stopped&#39;</code> | <code>&#39;error&#39;</code> | <code>&#39;cancelled&#39;</code> }</li>\n</ul>\n<p>任务当前状态.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#state"
+            },
+            {
+              "textRaw": "[p#] TtsUtterance#isDone",
+              "name": "[p#]_ttsutterance#isdone",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>任务是否已经进入终止状态.</p>\n",
+              "type": "module",
+              "displayName": "[p#] TtsUtterance#isDone"
+            },
+            {
+              "textRaw": "[m#] TtsUtterance#on(eventName, listener)",
+              "name": "[m#]_ttsutterance#on(eventname,_listener)",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>eventName</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 当前任务</li>\n</ul>\n<p>注册持续事件监听器.</p>\n",
+              "type": "module",
+              "displayName": "[m#] TtsUtterance#on(eventName, listener)"
+            },
+            {
+              "textRaw": "[m#] TtsUtterance#once(eventName, listener)",
+              "name": "[m#]_ttsutterance#once(eventname,_listener)",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>eventName</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 单次事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 当前任务</li>\n</ul>\n<p>注册仅执行一次的事件监听器.</p>\n",
+              "type": "module",
+              "displayName": "[m#] TtsUtterance#once(eventName, listener)"
+            },
+            {
+              "textRaw": "[m#] TtsUtterance#stop()",
+              "name": "[m#]_ttsutterance#stop()",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 当前任务</li>\n</ul>\n<p>请求停止此任务.</p>\n<p>已结束或已经请求停止时不重复提交停止命令.</p>\n",
+              "type": "module",
+              "displayName": "[m#] TtsUtterance#stop()"
+            },
+            {
+              "textRaw": "[m#] TtsUtterance#cancel()",
+              "name": "[m#]_ttsutterance#cancel()",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#ttsutterance\">TtsUtterance</a> } - 当前任务</li>\n</ul>\n<p><code>TtsUtterance#stop()</code> 的别名.</p>\n",
+              "type": "module",
+              "displayName": "[m#] TtsUtterance#cancel()"
+            }
+          ],
+          "type": "module",
+          "displayName": "TtsUtterance"
+        },
+        {
+          "textRaw": "TtsUtterance 事件",
+          "name": "ttsutterance_事件",
+          "desc": "<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>监听器参数</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>queued</code></td>\n<td><code>info</code> { <a href=\"#ttsqueuedevent\">TtsQueuedEvent</a> }</td>\n<td>任务已进入服务</td>\n</tr>\n<tr>\n<td><code>start</code></td>\n<td><code>info</code> { <a href=\"#ttsstartevent\">TtsStartEvent</a> }</td>\n<td>任务开始执行</td>\n</tr>\n<tr>\n<td><code>chunk</code></td>\n<td><code>info</code> { <a href=\"#ttschunkevent\">TtsChunkEvent</a> }</td>\n<td>开始朗读一个文本块</td>\n</tr>\n<tr>\n<td><code>range</code></td>\n<td><code>info</code> { <a href=\"#ttsrangeevent\">TtsRangeEvent</a> }</td>\n<td>引擎报告当前文本范围</td>\n</tr>\n<tr>\n<td><code>synthesis</code></td>\n<td><code>info</code> { <a href=\"#ttssynthesisevent\">TtsSynthesisEvent</a> }</td>\n<td>引擎报告音频格式</td>\n</tr>\n<tr>\n<td><code>audio</code></td>\n<td><code>info</code> { <a href=\"#ttsaudioevent\">TtsAudioEvent</a> }</td>\n<td>引擎提供音频数据</td>\n</tr>\n<tr>\n<td><code>done</code></td>\n<td><code>result</code> { <a href=\"#ttsresult\">TtsResult</a> }</td>\n<td>任务正常完成</td>\n</tr>\n<tr>\n<td><code>stop</code></td>\n<td><code>info</code> { <a href=\"#ttsstopevent\">TtsStopEvent</a> }</td>\n<td>任务停止</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><code>error</code> { <a href=\"#ttserror\">TtsError</a> }</td>\n<td>任务失败</td>\n</tr>\n<tr>\n<td><code>cancelled</code></td>\n<td><code>info</code> { <a href=\"#ttsstopevent\">TtsStopEvent</a> }</td>\n<td>任务被取消</td>\n</tr>\n</tbody>\n</table>\n<p>调用任务的 <code>stop</code> 或 <code>cancel</code> 后, 会依次触发 <code>stop</code> 和 <code>cancelled</code>.<br>\n由队列替换导致的平台停止会触发 <code>stop</code>, 但不会触发 <code>cancelled</code>.</p>\n<p>只有 <code>audioEvents</code> 为 <code>true</code> 时才接收 <code>audio</code> 事件.</p>\n",
+          "modules": [
+            {
+              "textRaw": "TtsAudioEvent",
+              "name": "TtsAudioEvent",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 任务 ID</li>\n<li><strong>data</strong> { <a href=\"dataTypes#bytearray\">ByteArray</a> } - 音频字节数组</li>\n<li><strong>chunk</strong> { <a href=\"dataTypes#number\">number</a> } - 当前块序号</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TtsStopEvent"
+            },
+            {
+              "textRaw": "TtsStopEvent",
+              "name": "ttsstopevent",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 任务 ID</li>\n<li><strong>operation</strong> { <code>&#39;speech&#39;</code> | <code>&#39;silence&#39;</code> | <code>&#39;file&#39;</code> } - 操作类型</li>\n<li><strong>status</strong> { <code>&#39;stopped&#39;</code> } - 停止状态</li>\n<li><strong>reason</strong> { <a href=\"dataTypes#string\">string</a> } - 停止原因</li>\n</ul>\n<p>常见停止原因为 <code>cancelled</code>, <code>flushed</code>, <code>interrupted</code>, <code>stopped</code> 或 <code>reset</code>.</p>\n",
+              "type": "module",
+              "displayName": "TtsStopEvent"
+            },
+            {
+              "textRaw": "TtsError",
+              "name": "ttserror",
+              "desc": "<ul>\n<li><strong>code</strong> { <a href=\"dataTypes#string\">string</a> } - TTS 错误代码</li>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 错误消息</li>\n<li><strong>errorCode</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - Android 文本转语音错误码</li>\n<li><strong>reason</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 中断原因</li>\n</ul>\n<p>只有中断错误包含 <code>reason</code>.</p>\n",
+              "type": "module",
+              "displayName": "TtsError"
+            }
+          ],
+          "type": "module",
+          "displayName": "TtsUtterance 事件"
+        }
+      ],
+      "type": "module",
+      "displayName": "文本转语音 (TTS)"
+    }
+  ]
+}

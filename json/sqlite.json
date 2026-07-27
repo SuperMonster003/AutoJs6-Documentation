@@ -1,0 +1,2859 @@
+{
+  "source": "..\\api\\sqlite.md",
+  "modules": [
+    {
+      "textRaw": "SQLite",
+      "name": "sqlite",
+      "desc": "<p><code>sqlite</code> 模块用于在脚本中以较低门槛操作 SQLite 数据库文件, 支持常见的建表 / 增删改查 / 原生 SQL 查询, 以及事务封装与游标结果的便捷转换.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">sqlite</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] sqlite",
+          "name": "[@]_sqlite",
+          "desc": "<p>sqlite 可作为全局对象使用:</p>\n<pre><code class=\"lang-js\">log(typeof sqlite); // &quot;function&quot;\nlog(typeof sqlite.open); // &quot;function&quot;\n</code></pre>\n",
+          "methods": [
+            {
+              "textRaw": "sqlite(databaseFilePath, options?, callback?)",
+              "type": "method",
+              "name": "sqlite",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Overload [1-3]/3</code></strong></p>\n<ul>\n<li><strong>databaseFilePath</strong> { <a href=\"dataTypes#string\">string</a> } - 数据库文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"#sqliteopenoptions\">SQLiteOpenOptions</a> } - 打开选项</li>\n<li><strong>[ callback ]</strong> { <a href=\"#i-databasecallback\">DatabaseCallback</a> } - 生命周期回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-database\">Database</a> } - 数据库对象</li>\n</ul>\n<p>打开或创建数据库, 并返回 Database 对象. 相对路径按当前脚本工作目录解析. 空路径会使调用抛出异常.</p>\n<p>等价调用:</p>\n<ul>\n<li><code>sqlite(databaseFilePath, options?, callback?)</code></li>\n<li><a href=\"#m-open\">sqlite.open(databaseFilePath, options?, callback?)</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "databaseFilePath"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "callback?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] sqlite"
+        },
+        {
+          "textRaw": "[m] open",
+          "name": "[m]_open",
+          "methods": [
+            {
+              "textRaw": "open(databaseFilePath, options?, callback?)",
+              "type": "method",
+              "name": "open",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Overload [1-3]/3</code></strong></p>\n<ul>\n<li><strong>databaseFilePath</strong> { <a href=\"dataTypes#string\">string</a> } - 数据库文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"#sqliteopenoptions\">SQLiteOpenOptions</a> } - 打开选项</li>\n<li><strong>[ callback ]</strong> { <a href=\"#i-databasecallback\">DatabaseCallback</a> } - 生命周期回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-database\">Database</a> } - 数据库对象</li>\n</ul>\n<p>功能与 <a href=\"#sqlite-databasefilepath-options-callback\">sqlite</a> 相同.</p>\n<p><code>options</code> 和 <code>callback</code> 按位置解析. 需要传入回调但不设置选项时, 第二个参数应使用 <code>null</code>, <code>undefined</code> 或 <code>{}</code>.</p>\n<p>打开操作是同步的. Database 构造期间会取得可读或可写数据库句柄, 并在此方法返回前触发适用的生命周期回调.</p>\n<blockquote>\n<p>提示: Database, Cursor 和 SQLiteStatement 都持有系统资源. 使用完毕后应及时调用各自的 <code>close()</code> 方法.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "databaseFilePath"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "callback?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] open"
+        },
+        {
+          "textRaw": "SQLiteOpenOptions",
+          "name": "sqliteopenoptions",
+          "desc": "<ul>\n<li><strong>[ version = 1 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 数据库架构版本, 先转换为 32 位整数, 结果必须不小于 <code>1</code></li>\n<li><strong>[ readOnly = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用 Android <code>getReadableDatabase()</code> 打开</li>\n</ul>\n<p><code>version</code> 高于现有数据库版本时触发 <code>onUpgrade</code>. 首次创建数据库时触发 <code>onCreate</code>. 版本低于现有数据库版本时, 当前实现没有自定义 <code>onDowngrade</code>, Android 默认行为会抛出异常.</p>\n<p><code>readOnly</code> 为 <code>false</code> 时使用 <code>getWritableDatabase()</code>. 为 <code>true</code> 时使用 <code>getReadableDatabase()</code>. Android 的 <code>getReadableDatabase()</code> 在可写句柄可用时仍可能返回可写数据库, 因此此选项不是强制只读保证. 实际状态应通过 <a href=\"#m-database-isreadonly\">Database#isReadOnly</a> 检查.</p>\n",
+          "type": "module",
+          "displayName": "SQLiteOpenOptions"
+        },
+        {
+          "textRaw": "[I] DatabaseCallback",
+          "name": "[i]_databasecallback",
+          "desc": "<p>DatabaseCallback 是由 JavaScript 对象适配的生命周期接口. 对象应实现本节列出的 4 个方法.</p>\n<p>回调在 <code>sqlite</code> 或 <code>sqlite.open</code> 返回前同步执行. 此时外部接收返回值的变量尚未赋值, 应使用回调参数中的 Database.</p>\n<p>未提供回调时, 新数据库不会自动建表, 升级时也不会自动迁移架构.</p>\n",
+          "type": "module",
+          "displayName": "[I] DatabaseCallback"
+        },
+        {
+          "textRaw": "DatabaseCallback 示例",
+          "name": "databasecallback_示例",
+          "desc": "<pre><code class=\"lang-js\">let db = sqlite(&quot;./data/app.db&quot;, {\n    version: 1,\n    readOnly: false,\n}, {\n    onCorruption(rawDatabase) {\n        console.error(&quot;Database corrupted: &quot; + rawDatabase.getPath());\n    },\n    onCreate(database) {\n        database.execSQL(\n            &quot;CREATE TABLE IF NOT EXISTS notes (&quot; +\n            &quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot; +\n            &quot;title TEXT NOT NULL, &quot; +\n            &quot;done INTEGER NOT NULL DEFAULT 0)&quot;\n        );\n    },\n    onOpen(database) {\n        console.log(&quot;Opened: &quot; + database.getPath());\n    },\n    onUpgrade(database, oldVersion, newVersion) {\n        console.log(&quot;Upgrade: &quot; + oldVersion + &quot; -&gt; &quot; + newVersion);\n    },\n});\n\ntry {\n    db.insert(&quot;notes&quot;, {\n        title: &quot;Read SQLite documentation&quot;,\n        done: false,\n    });\n    let rows = db.rawQuery(\n        &quot;SELECT id, title, done FROM notes ORDER BY id&quot;,\n        []\n    ).all();\n    console.log(rows);\n} finally {\n    db.close();\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "DatabaseCallback 示例"
+        },
+        {
+          "textRaw": "[m!] DatabaseCallback#onCorruption",
+          "name": "[m!]_databasecallback#oncorruption",
+          "methods": [
+            {
+              "textRaw": "onCorruption(database)",
+              "type": "method",
+              "name": "onCorruption",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) } - 检测到损坏的底层数据库 ",
+                      "name": "**database**",
+                      "type": " [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) ",
+                      "desc": "检测到损坏的底层数据库"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>Android 检测到数据库损坏时调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!] DatabaseCallback#onCorruption"
+        },
+        {
+          "textRaw": "[m!] DatabaseCallback#onCreate",
+          "name": "[m!]_databasecallback#oncreate",
+          "methods": [
+            {
+              "textRaw": "onCreate(database)",
+              "type": "method",
+              "name": "onCreate",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [Database](#c-database) } - 当前数据库 ",
+                      "name": "**database**",
+                      "type": " [Database](#c-database) ",
+                      "desc": "当前数据库"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>首次创建数据库时调用. 通常在此创建表, 索引和初始数据.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!] DatabaseCallback#onCreate"
+        },
+        {
+          "textRaw": "[m!] DatabaseCallback#onOpen",
+          "name": "[m!]_databasecallback#onopen",
+          "methods": [
+            {
+              "textRaw": "onOpen(database)",
+              "type": "method",
+              "name": "onOpen",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [Database](#c-database) } - 当前数据库 ",
+                      "name": "**database**",
+                      "type": " [Database](#c-database) ",
+                      "desc": "当前数据库"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>每次成功打开数据库后调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!] DatabaseCallback#onOpen"
+        },
+        {
+          "textRaw": "[m!] DatabaseCallback#onUpgrade",
+          "name": "[m!]_databasecallback#onupgrade",
+          "methods": [
+            {
+              "textRaw": "onUpgrade(database, oldVersion, newVersion)",
+              "type": "method",
+              "name": "onUpgrade",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [Database](#c-database) } - 当前数据库 ",
+                      "name": "**database**",
+                      "type": " [Database](#c-database) ",
+                      "desc": "当前数据库"
+                    },
+                    {
+                      "textRaw": "**oldVersion** { [number](dataTypes#number) } - 旧版本 ",
+                      "name": "**oldVersion**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "旧版本"
+                    },
+                    {
+                      "textRaw": "**newVersion** { [number](dataTypes#number) } - 新版本 ",
+                      "name": "**newVersion**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新版本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    },
+                    {
+                      "name": "oldVersion"
+                    },
+                    {
+                      "name": "newVersion"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求版本高于现有数据库版本时调用. 此回调在 Android 管理的事务内执行, 抛出异常会回滚升级.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Database</p>\n\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m!] DatabaseCallback#onUpgrade"
+        },
+        {
+          "textRaw": "[C] Database",
+          "name": "[c]_database",
+          "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>extends</strong></ins> { <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteOpenHelper\">android.database.sqlite.SQLiteOpenHelper</a> }</li>\n</ul>\n<p>Database 包装一个已经打开的 Android SQLiteDatabase. 本节列出的 Database 自有公开成员均自 AutoJs6 6.6.0 起可用.</p>\n<p>Database 在创建时注册到当前脚本的资源管理器, 脚本运行时回收时会尝试自动关闭. 仍应在业务操作完成后显式调用 <a href=\"#m-database-close\">Database#close</a>, 避免长时间持有文件句柄和锁.</p>\n",
+          "type": "module",
+          "displayName": "[C] Database"
+        },
+        {
+          "textRaw": "SQLiteValues",
+          "name": "sqlitevalues",
+          "desc": "<p>Database 的 <code>insert</code>, <code>replace</code> 和 <code>update</code> 系列方法把 JavaScript 对象转换为 Android ContentValues. 属性值支持:</p>\n<ul>\n<li><code>null</code> 或 <code>undefined</code>, 存储为 SQL <code>NULL</code>.</li>\n<li>JavaScript 整数, 存储为 64 位整数.</li>\n<li>JavaScript 非整数, 存储为双精度浮点数.</li>\n<li><a href=\"dataTypes#boolean\">boolean</a>.</li>\n<li><a href=\"dataTypes#string\">string</a>.</li>\n<li><a href=\"dataTypes#bytearray\">ByteArray</a>, 存储为 BLOB.</li>\n</ul>\n<p>对象属性名会转换为字符串. 数组, 嵌套对象及其他未列出的值类型会使调用抛出异常.</p>\n",
+          "type": "module",
+          "displayName": "SQLiteValues"
+        },
+        {
+          "textRaw": "SQLiteRow",
+          "name": "sqliterow",
+          "desc": "<p>Cursor 便捷方法返回的行是以列名为属性名的 JavaScript 对象. 列值映射:</p>\n<ul>\n<li>SQL <code>NULL</code> -&gt; <a href=\"dataTypes#null\">null</a>.</li>\n<li>INTEGER -&gt; <a href=\"dataTypes#number\">number</a>.</li>\n<li>FLOAT -&gt; <a href=\"dataTypes#number\">number</a>.</li>\n<li>TEXT -&gt; <a href=\"dataTypes#string\">string</a>.</li>\n<li>BLOB -&gt; <a href=\"dataTypes#bytearray\">ByteArray</a>.</li>\n</ul>\n<p>同名列会写入同一属性, 后出现的列值覆盖先前值.</p>\n",
+          "type": "module",
+          "displayName": "SQLiteRow"
+        },
+        {
+          "textRaw": "冲突算法",
+          "name": "冲突算法",
+          "desc": "<p><code>insertWithOnConflict</code> 和 <code>updateWithOnConflict</code> 的 <code>conflictAlgorithm</code> 使用 Android SQLiteDatabase 常量:</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_NONE</code></td>\n<td><code>0</code></td>\n</tr>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_ROLLBACK</code></td>\n<td><code>1</code></td>\n</tr>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_ABORT</code></td>\n<td><code>2</code></td>\n</tr>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_FAIL</code></td>\n<td><code>3</code></td>\n</tr>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_IGNORE</code></td>\n<td><code>4</code></td>\n</tr>\n<tr>\n<td><code>SQLiteDatabase.CONFLICT_REPLACE</code></td>\n<td><code>5</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "冲突算法"
+        },
+        {
+          "textRaw": "[m#] Database#execSQL",
+          "name": "[m#]_database#execsql",
+          "methods": [
+            {
+              "textRaw": "execSQL(sql)",
+              "type": "method",
+              "name": "execSQL",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行 SQL</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "execSQL(sql, bindArgs)",
+              "type": "method",
+              "name": "execSQL",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - 含 <code>?</code> 占位符的 SQL</li>\n<li><strong>bindArgs</strong> { <a href=\"dataTypes#any\">any</a><a href=\"dataTypes#array\">[]</a> } - 按位置绑定的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>执行不返回结果集的 SQL, 包括 <code>CREATE TABLE</code>, <code>ALTER TABLE</code>, <code>DROP TABLE</code>, <code>INSERT</code>, <code>UPDATE</code> 和 <code>DELETE</code>.</p>\n<p>不要使用此方法执行 <code>SELECT</code>. 查询应使用 <a href=\"#m-database-rawquery\">rawQuery</a> 或 <a href=\"#m-database-query\">query</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "bindArgs"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#execSQL"
+        },
+        {
+          "textRaw": "[m#] Database#compileStatement",
+          "name": "[m#]_database#compilestatement",
+          "methods": [
+            {
+              "textRaw": "compileStatement(sql)",
+              "type": "method",
+              "name": "compileStatement",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**sql** { [string](dataTypes#string) } - 待编译 SQL ",
+                      "name": "**sql**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "待编译 SQL"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.database.sqlite.SQLiteStatement](https://developer.android.com/reference/android/database/sqlite/SQLiteStatement) } - 编译后的语句 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.database.sqlite.SQLiteStatement](https://developer.android.com/reference/android/database/sqlite/SQLiteStatement) ",
+                      "desc": "编译后的语句"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>编译可重复绑定和执行的 SQL 语句. SQLiteStatement 使用完毕后必须调用 <code>close()</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#compileStatement"
+        },
+        {
+          "textRaw": "[m#] Database#insert",
+          "name": "[m#]_database#insert",
+          "methods": [
+            {
+              "textRaw": "insert(table, values)",
+              "type": "method",
+              "name": "insert",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>values</strong> { <a href=\"#sqlitevalues\">SQLiteValues</a> } - 待插入列和值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 新行 ID, 失败时为 <code>-1</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "values"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "insert(table, nullColumnHack, values)",
+              "type": "method",
+              "name": "insert",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>nullColumnHack</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 空 values 时显式插入 <code>NULL</code> 的列名</li>\n<li><strong>values</strong> { <a href=\"#sqlitevalues\">SQLiteValues</a> } - 待插入列和值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 新行 ID, 失败时为 <code>-1</code></li>\n</ul>\n<p>插入一行. 第一个重载把 <code>nullColumnHack</code> 设为 <code>null</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "nullColumnHack"
+                    },
+                    {
+                      "name": "values"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#insert"
+        },
+        {
+          "textRaw": "[m#] Database#insertOrThrow",
+          "name": "[m#]_database#insertorthrow",
+          "methods": [
+            {
+              "textRaw": "insertOrThrow(table, nullColumnHack, values)",
+              "type": "method",
+              "name": "insertOrThrow",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**nullColumnHack** { [string](dataTypes#string) | [null](dataTypes#null) } - 空 values 时显式插入 `NULL` 的列名 ",
+                      "name": "**nullColumnHack**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "空 values 时显式插入 `NULL` 的列名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待插入列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待插入列和值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 新行 ID ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新行 ID"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "nullColumnHack"
+                    },
+                    {
+                      "name": "values"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>插入一行. 与 <a href=\"#m-database-insert\">insert</a> 不同, 数据库错误会抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#insertOrThrow"
+        },
+        {
+          "textRaw": "[m#] Database#insertWithOnConflict",
+          "name": "[m#]_database#insertwithonconflict",
+          "methods": [
+            {
+              "textRaw": "insertWithOnConflict(table, nullColumnHack, values, conflictAlgorithm)",
+              "type": "method",
+              "name": "insertWithOnConflict",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**nullColumnHack** { [string](dataTypes#string) | [null](dataTypes#null) } - 空 values 时显式插入 `NULL` 的列名 ",
+                      "name": "**nullColumnHack**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "空 values 时显式插入 `NULL` 的列名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待插入列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待插入列和值"
+                    },
+                    {
+                      "textRaw": "**conflictAlgorithm** { [number](dataTypes#number) } - 冲突算法常量 ",
+                      "name": "**conflictAlgorithm**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "冲突算法常量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 新行 ID, 失败时为 `-1` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新行 ID, 失败时为 `-1`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "nullColumnHack"
+                    },
+                    {
+                      "name": "values"
+                    },
+                    {
+                      "name": "conflictAlgorithm"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用指定冲突算法插入一行.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#insertWithOnConflict"
+        },
+        {
+          "textRaw": "[m#] Database#replace",
+          "name": "[m#]_database#replace",
+          "methods": [
+            {
+              "textRaw": "replace(table, nullColumnHack, values)",
+              "type": "method",
+              "name": "replace",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**nullColumnHack** { [string](dataTypes#string) | [null](dataTypes#null) } - 空 values 时显式插入 `NULL` 的列名 ",
+                      "name": "**nullColumnHack**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "空 values 时显式插入 `NULL` 的列名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待写入列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待写入列和值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 新行 ID, 失败时为 `-1` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新行 ID, 失败时为 `-1`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "nullColumnHack"
+                    },
+                    {
+                      "name": "values"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 <code>CONFLICT_REPLACE</code> 语义写入一行.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#replace"
+        },
+        {
+          "textRaw": "[m#] Database#replaceOrThrow",
+          "name": "[m#]_database#replaceorthrow",
+          "methods": [
+            {
+              "textRaw": "replaceOrThrow(table, nullColumnHack, values)",
+              "type": "method",
+              "name": "replaceOrThrow",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**nullColumnHack** { [string](dataTypes#string) | [null](dataTypes#null) } - 空 values 时显式插入 `NULL` 的列名 ",
+                      "name": "**nullColumnHack**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "空 values 时显式插入 `NULL` 的列名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待写入列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待写入列和值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 新行 ID ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新行 ID"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "nullColumnHack"
+                    },
+                    {
+                      "name": "values"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 <code>CONFLICT_REPLACE</code> 语义写入一行. 数据库错误会抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#replaceOrThrow"
+        },
+        {
+          "textRaw": "[m#] Database#update",
+          "name": "[m#]_database#update",
+          "methods": [
+            {
+              "textRaw": "update(table, values, whereClause, whereArgs)",
+              "type": "method",
+              "name": "update",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待更新列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待更新列和值"
+                    },
+                    {
+                      "textRaw": "**whereClause** { [string](dataTypes#string) | [null](dataTypes#null) } - WHERE 条件, 不含 `WHERE` ",
+                      "name": "**whereClause**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "WHERE 条件, 不含 `WHERE`"
+                    },
+                    {
+                      "textRaw": "**whereArgs** { [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) } - 条件占位符参数 ",
+                      "name": "**whereArgs**",
+                      "type": " [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) ",
+                      "desc": "条件占位符参数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 受影响行数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "受影响行数"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "values"
+                    },
+                    {
+                      "name": "whereClause"
+                    },
+                    {
+                      "name": "whereArgs"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>更新符合条件的行. <code>whereClause</code> 为 <code>null</code> 时更新整张表.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#update"
+        },
+        {
+          "textRaw": "[m#] Database#updateWithOnConflict",
+          "name": "[m#]_database#updatewithonconflict",
+          "methods": [
+            {
+              "textRaw": "updateWithOnConflict(table, values, whereClause, whereArgs, conflictAlgorithm)",
+              "type": "method",
+              "name": "updateWithOnConflict",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**values** { [SQLiteValues](#sqlitevalues) } - 待更新列和值 ",
+                      "name": "**values**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "待更新列和值"
+                    },
+                    {
+                      "textRaw": "**whereClause** { [string](dataTypes#string) | [null](dataTypes#null) } - WHERE 条件, 不含 `WHERE` ",
+                      "name": "**whereClause**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "WHERE 条件, 不含 `WHERE`"
+                    },
+                    {
+                      "textRaw": "**whereArgs** { [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) } - 条件占位符参数 ",
+                      "name": "**whereArgs**",
+                      "type": " [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) ",
+                      "desc": "条件占位符参数"
+                    },
+                    {
+                      "textRaw": "**conflictAlgorithm** { [number](dataTypes#number) } - 冲突算法常量 ",
+                      "name": "**conflictAlgorithm**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "冲突算法常量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 受影响行数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "受影响行数"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "values"
+                    },
+                    {
+                      "name": "whereClause"
+                    },
+                    {
+                      "name": "whereArgs"
+                    },
+                    {
+                      "name": "conflictAlgorithm"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用指定冲突算法更新符合条件的行.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#updateWithOnConflict"
+        },
+        {
+          "textRaw": "[m#] Database#delete",
+          "name": "[m#]_database#delete",
+          "methods": [
+            {
+              "textRaw": "delete(table, whereClause, whereArgs)",
+              "type": "method",
+              "name": "delete",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**table** { [string](dataTypes#string) } - 表名 ",
+                      "name": "**table**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "表名"
+                    },
+                    {
+                      "textRaw": "**whereClause** { [string](dataTypes#string) | [null](dataTypes#null) } - WHERE 条件, 不含 `WHERE` ",
+                      "name": "**whereClause**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "WHERE 条件, 不含 `WHERE`"
+                    },
+                    {
+                      "textRaw": "**whereArgs** { [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) } - 条件占位符参数 ",
+                      "name": "**whereArgs**",
+                      "type": " [string](dataTypes#string)[[]](dataTypes#array) | [null](dataTypes#null) ",
+                      "desc": "条件占位符参数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 删除行数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "删除行数"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "whereClause"
+                    },
+                    {
+                      "name": "whereArgs"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>删除符合条件的行. <code>whereClause</code> 为 <code>null</code> 时删除整张表中的全部行.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#delete"
+        },
+        {
+          "textRaw": "[m#] Database#query",
+          "name": "[m#]_database#query",
+          "methods": [
+            {
+              "textRaw": "query(table, columns, selection, selectionArgs, groupBy, having, orderBy)",
+              "type": "method",
+              "name": "query",
+              "desc": "<p><strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)",
+              "type": "method",
+              "name": "query",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><strong>limit</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - LIMIT 子句, 不含 <code>LIMIT</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)",
+              "type": "method",
+              "name": "query",
+              "desc": "<p><strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>distinct</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否去除重复行</li>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><strong>limit</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - LIMIT 子句, 不含 <code>LIMIT</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "distinct"
+                    },
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "query(distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, cancellationSignal)",
+              "type": "method",
+              "name": "query",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>distinct</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否去除重复行</li>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><strong>limit</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - LIMIT 子句, 不含 <code>LIMIT</code></li>\n<li><strong>cancellationSignal</strong> { <a href=\"https://developer.android.com/reference/android/os/CancellationSignal\">android.os.CancellationSignal</a> | <a href=\"dataTypes#null\">null</a> } - 查询取消信号</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n<p>构造并执行表查询. <code>selectionArgs</code> 依次绑定 <code>selection</code> 中的 <code>?</code> 占位符. 取消查询时, 带 <code>cancellationSignal</code> 的重载会抛出 Android OperationCanceledException.</p>\n<p>返回的 Cursor 必须由调用方关闭. 如果需要一次读取全部行并立即释放游标, 可直接调用 <a href=\"#m-cursor-all\">Cursor#all</a>.</p>\n<pre><code class=\"lang-js\">let cursor = db.query(\n    &quot;notes&quot;,\n    [&quot;id&quot;, &quot;title&quot;],\n    &quot;done = ?&quot;,\n    [&quot;0&quot;],\n    null,\n    null,\n    &quot;id DESC&quot;,\n    &quot;20&quot;\n);\n\ntry {\n    while (cursor.moveToNext()) {\n        console.log(cursor.getByColumn(&quot;title&quot;));\n    }\n} finally {\n    cursor.close();\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "distinct"
+                    },
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "cancellationSignal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#query"
+        },
+        {
+          "textRaw": "[m#] Database#queryWithFactory",
+          "name": "[m#]_database#querywithfactory",
+          "methods": [
+            {
+              "textRaw": "queryWithFactory(cursorFactory, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit)",
+              "type": "method",
+              "name": "queryWithFactory",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>cursorFactory</strong> { <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.CursorFactory\">android.database.sqlite.SQLiteDatabase.CursorFactory</a> | <a href=\"dataTypes#null\">null</a> } - 游标工厂, <code>null</code> 使用默认工厂</li>\n<li><strong>distinct</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否去除重复行</li>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><strong>limit</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - LIMIT 子句, 不含 <code>LIMIT</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cursorFactory"
+                    },
+                    {
+                      "name": "distinct"
+                    },
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    },
+                    {
+                      "name": "limit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "queryWithFactory(cursorFactory, distinct, table, columns, selection, selectionArgs, groupBy, having, orderBy, limit, cancellationSignal)",
+              "type": "method",
+              "name": "queryWithFactory",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>cursorFactory</strong> { <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.CursorFactory\">android.database.sqlite.SQLiteDatabase.CursorFactory</a> | <a href=\"dataTypes#null\">null</a> } - 游标工厂, <code>null</code> 使用默认工厂</li>\n<li><strong>distinct</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否去除重复行</li>\n<li><strong>table</strong> { <a href=\"dataTypes#string\">string</a> } - 表名</li>\n<li><strong>columns</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 返回列名, <code>null</code> 表示全部列</li>\n<li><strong>selection</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - WHERE 条件, 不含 <code>WHERE</code></li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 条件占位符参数</li>\n<li><strong>groupBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - GROUP BY 子句, 不含 <code>GROUP BY</code></li>\n<li><strong>having</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - HAVING 子句, 不含 <code>HAVING</code></li>\n<li><strong>orderBy</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - ORDER BY 子句, 不含 <code>ORDER BY</code></li>\n<li><strong>limit</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - LIMIT 子句, 不含 <code>LIMIT</code></li>\n<li><strong>cancellationSignal</strong> { <a href=\"https://developer.android.com/reference/android/os/CancellationSignal\">android.os.CancellationSignal</a> | <a href=\"dataTypes#null\">null</a> } - 查询取消信号</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n<p>功能与 <a href=\"#m-database-query\">Database#query</a> 相同, 但允许指定 Android CursorFactory.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cursorFactory"
+                    },
+                    {
+                      "name": "distinct"
+                    },
+                    {
+                      "name": "table"
+                    },
+                    {
+                      "name": "columns"
+                    },
+                    {
+                      "name": "selection"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "groupBy"
+                    },
+                    {
+                      "name": "having"
+                    },
+                    {
+                      "name": "orderBy"
+                    },
+                    {
+                      "name": "limit"
+                    },
+                    {
+                      "name": "cancellationSignal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#queryWithFactory"
+        },
+        {
+          "textRaw": "[m#] Database#rawQuery",
+          "name": "[m#]_database#rawquery",
+          "methods": [
+            {
+              "textRaw": "rawQuery(sql, selectionArgs)",
+              "type": "method",
+              "name": "rawQuery",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - SQL 查询, 不含结尾分号</li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - SQL 占位符参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rawQuery(sql, selectionArgs, cancellationSignal)",
+              "type": "method",
+              "name": "rawQuery",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - SQL 查询, 不含结尾分号</li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - SQL 占位符参数</li>\n<li><strong>cancellationSignal</strong> { <a href=\"https://developer.android.com/reference/android/os/CancellationSignal\">android.os.CancellationSignal</a> | <a href=\"dataTypes#null\">null</a> } - 查询取消信号</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n<p>执行原生查询. <code>selectionArgs</code> 按顺序绑定 SQL 中的 <code>?</code> 占位符, 并作为字符串传递. 返回的 Cursor 必须由调用方关闭.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "cancellationSignal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#rawQuery"
+        },
+        {
+          "textRaw": "[m#] Database#rawQueryWithFactory",
+          "name": "[m#]_database#rawquerywithfactory",
+          "methods": [
+            {
+              "textRaw": "rawQueryWithFactory(cursorFactory, sql, selectionArgs, editTable)",
+              "type": "method",
+              "name": "rawQueryWithFactory",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>cursorFactory</strong> { <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.CursorFactory\">android.database.sqlite.SQLiteDatabase.CursorFactory</a> | <a href=\"dataTypes#null\">null</a> } - 游标工厂, <code>null</code> 使用默认工厂</li>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - SQL 查询, 不含结尾分号</li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - SQL 占位符参数</li>\n<li><strong>editTable</strong> { <a href=\"dataTypes#string\">string</a> } - 查询中第一个可编辑表的名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cursorFactory"
+                    },
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "editTable"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rawQueryWithFactory(cursorFactory, sql, selectionArgs, editTable, cancellationSignal)",
+              "type": "method",
+              "name": "rawQueryWithFactory",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>cursorFactory</strong> { <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.CursorFactory\">android.database.sqlite.SQLiteDatabase.CursorFactory</a> | <a href=\"dataTypes#null\">null</a> } - 游标工厂, <code>null</code> 使用默认工厂</li>\n<li><strong>sql</strong> { <a href=\"dataTypes#string\">string</a> } - SQL 查询, 不含结尾分号</li>\n<li><strong>selectionArgs</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - SQL 占位符参数</li>\n<li><strong>editTable</strong> { <a href=\"dataTypes#string\">string</a> } - 查询中第一个可编辑表的名称</li>\n<li><strong>cancellationSignal</strong> { <a href=\"https://developer.android.com/reference/android/os/CancellationSignal\">android.os.CancellationSignal</a> | <a href=\"dataTypes#null\">null</a> } - 查询取消信号</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-cursor\">Cursor</a> } - 位于第一行之前的查询游标</li>\n</ul>\n<p>功能与 <a href=\"#m-database-rawquery\">Database#rawQuery</a> 相同, 但允许指定 Android CursorFactory 和可编辑表名.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cursorFactory"
+                    },
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "selectionArgs"
+                    },
+                    {
+                      "name": "editTable"
+                    },
+                    {
+                      "name": "cancellationSignal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#rawQueryWithFactory"
+        },
+        {
+          "textRaw": "[m#] Database#transaction",
+          "name": "[m#]_database#transaction",
+          "methods": [
+            {
+              "textRaw": "transaction(callback)",
+              "type": "method",
+              "name": "transaction",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 接收 <a href=\"#c-transaction\">Transaction</a> 的事务回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> } - 事务事件发射器</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "transaction(callback, exclusive)",
+              "type": "method",
+              "name": "transaction",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 接收 <a href=\"#c-transaction\">Transaction</a> 的事务回调</li>\n<li><strong>exclusive</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - <code>true</code> 使用独占事务, <code>false</code> 使用非独占事务</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> } - 事务事件发射器</li>\n</ul>\n<p>同步执行事务. 第一个重载的 <code>exclusive</code> 默认为 <code>true</code>. 回调正常返回时自动将事务标记为成功并提交. 回调抛出 Exception 时捕获异常并回滚, 异常通过 <code>error</code> 事件传递, 不由此方法重新抛出.</p>\n<p>返回值支持以下粘性事件:</p>\n<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>参数</th>\n<th>触发条件</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>begin</code></td>\n<td><a href=\"#c-transaction\">Transaction</a></td>\n<td>事务开始</td>\n</tr>\n<tr>\n<td><code>commit</code></td>\n<td><a href=\"#c-transaction\">Transaction</a></td>\n<td>事务提交</td>\n</tr>\n<tr>\n<td><code>rollback</code></td>\n<td><a href=\"#c-transaction\">Transaction</a></td>\n<td>事务回滚</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/Exception\">java.lang.Exception</a></td>\n<td>回调抛出 Exception</td>\n</tr>\n<tr>\n<td><code>end</code></td>\n<td><a href=\"#c-transaction\">Transaction</a></td>\n<td>提交或回滚后</td>\n</tr>\n</tbody>\n</table>\n<p>事务在方法返回前已经结束. 这些事件使用粘性发送, 因此可在取得返回值后注册监听器并接收已经发生的事件.</p>\n<p>回调的返回值会被忽略. 包装器会自动调用 <a href=\"#m-transaction-succeed\">Transaction#succeed</a> 和 <a href=\"#m-transaction-end\">Transaction#end</a>, 回调中通常不应再次调用这两个方法.</p>\n<pre><code class=\"lang-js\">let result = db.transaction(function () {\n    db.insert(&quot;notes&quot;, {\n        title: &quot;First note&quot;,\n        done: false,\n    });\n    db.insert(&quot;notes&quot;, {\n        title: &quot;Second note&quot;,\n        done: false,\n    });\n});\n\nresult.on(&quot;commit&quot;, function () {\n    console.log(&quot;Committed&quot;);\n});\nresult.on(&quot;error&quot;, function (error) {\n    console.error(error);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "exclusive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#transaction"
+        },
+        {
+          "textRaw": "[m#] Database#beginTransaction",
+          "name": "[m#]_database#begintransaction",
+          "methods": [
+            {
+              "textRaw": "beginTransaction()",
+              "type": "method",
+              "name": "beginTransaction",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>开始独占事务. 手动事务必须与 <a href=\"#m-database-settransactionsuccessful\">setTransactionSuccessful</a> 和 <a href=\"#m-database-endtransaction\">endTransaction</a> 配对. 一般业务代码优先使用 <a href=\"#m-database-transaction\">transaction</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#beginTransaction"
+        },
+        {
+          "textRaw": "[m#] Database#beginTransactionNonExclusive",
+          "name": "[m#]_database#begintransactionnonexclusive",
+          "methods": [
+            {
+              "textRaw": "beginTransactionNonExclusive()",
+              "type": "method",
+              "name": "beginTransactionNonExclusive",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>开始非独占事务. 在 WAL 模式下, 读取可与事务中的写入并发.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#beginTransactionNonExclusive"
+        },
+        {
+          "textRaw": "[m#] Database#beginTransactionWithListener",
+          "name": "[m#]_database#begintransactionwithlistener",
+          "methods": [
+            {
+              "textRaw": "beginTransactionWithListener(listener)",
+              "type": "method",
+              "name": "beginTransactionWithListener",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**listener** { [android.database.sqlite.SQLiteTransactionListener](https://developer.android.com/reference/android/database/sqlite/SQLiteTransactionListener) } - 事务生命周期监听器 ",
+                      "name": "**listener**",
+                      "type": " [android.database.sqlite.SQLiteTransactionListener](https://developer.android.com/reference/android/database/sqlite/SQLiteTransactionListener) ",
+                      "desc": "事务生命周期监听器"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用监听器开始独占事务.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#beginTransactionWithListener"
+        },
+        {
+          "textRaw": "[m#] Database#beginTransactionWithListenerNonExclusive",
+          "name": "[m#]_database#begintransactionwithlistenernonexclusive",
+          "methods": [
+            {
+              "textRaw": "beginTransactionWithListenerNonExclusive(listener)",
+              "type": "method",
+              "name": "beginTransactionWithListenerNonExclusive",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**listener** { [android.database.sqlite.SQLiteTransactionListener](https://developer.android.com/reference/android/database/sqlite/SQLiteTransactionListener) } - 事务生命周期监听器 ",
+                      "name": "**listener**",
+                      "type": " [android.database.sqlite.SQLiteTransactionListener](https://developer.android.com/reference/android/database/sqlite/SQLiteTransactionListener) ",
+                      "desc": "事务生命周期监听器"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用监听器开始非独占事务.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#beginTransactionWithListenerNonExclusive"
+        },
+        {
+          "textRaw": "[m#] Database#setTransactionSuccessful",
+          "name": "[m#]_database#settransactionsuccessful",
+          "methods": [
+            {
+              "textRaw": "setTransactionSuccessful()",
+              "type": "method",
+              "name": "setTransactionSuccessful",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>将当前手动事务标记为成功. 随后调用 <a href=\"#m-database-endtransaction\">endTransaction</a> 时提交事务. 未标记成功时结束事务会回滚.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setTransactionSuccessful"
+        },
+        {
+          "textRaw": "[m#] Database#endTransaction",
+          "name": "[m#]_database#endtransaction",
+          "methods": [
+            {
+              "textRaw": "endTransaction()",
+              "type": "method",
+              "name": "endTransaction",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>结束当前手动事务, 并根据成功标记提交或回滚.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#endTransaction"
+        },
+        {
+          "textRaw": "[m#] Database#inTransaction",
+          "name": "[m#]_database#intransaction",
+          "methods": [
+            {
+              "textRaw": "inTransaction()",
+              "type": "method",
+              "name": "inTransaction",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否处于事务中 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前线程是否处于事务中"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#inTransaction"
+        },
+        {
+          "textRaw": "[m#] Database#yieldIfContendedSafely",
+          "name": "[m#]_database#yieldifcontendedsafely",
+          "methods": [
+            {
+              "textRaw": "yieldIfContendedSafely()",
+              "type": "method",
+              "name": "yieldIfContendedSafely",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否让出并重新开始事务</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "yieldIfContendedSafely(sleepAfterYieldDelay)",
+              "type": "method",
+              "name": "yieldIfContendedSafely",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>sleepAfterYieldDelay</strong> { <a href=\"dataTypes#number\">number</a> } - 让出事务后休眠的毫秒数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否让出并重新开始事务</li>\n</ul>\n<p>当前事务存在竞争时, 暂时结束并重新开始事务. 仅应在事务内部调用.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sleepAfterYieldDelay"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#yieldIfContendedSafely"
+        },
+        {
+          "textRaw": "[m#] Database#close",
+          "name": "[m#]_database#close",
+          "methods": [
+            {
+              "textRaw": "close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>关闭底层 SQLiteDatabase, 并从脚本资源管理器中移除当前 Database.</p>\n<p>关闭 Database 前应先关闭其 Cursor 和 SQLiteStatement. 关闭后不要继续使用该对象. 建议使用 <code>try...finally</code> 确保释放资源.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#close"
+        },
+        {
+          "textRaw": "[m#] Database#enableWriteAheadLogging",
+          "name": "[m#]_database#enablewriteaheadlogging",
+          "methods": [
+            {
+              "textRaw": "enableWriteAheadLogging()",
+              "type": "method",
+              "name": "enableWriteAheadLogging",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否成功启用 WAL ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否成功启用 WAL"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>启用 write-ahead logging, 允许多个连接上的读取与写入并发. 只读数据库, 内存数据库或附加了其他数据库时可能无法启用并返回 <code>false</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#enableWriteAheadLogging"
+        },
+        {
+          "textRaw": "[m#] Database#disableWriteAheadLogging",
+          "name": "[m#]_database#disablewriteaheadlogging",
+          "methods": [
+            {
+              "textRaw": "disableWriteAheadLogging()",
+              "type": "method",
+              "name": "disableWriteAheadLogging",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>禁用 write-ahead logging.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#disableWriteAheadLogging"
+        },
+        {
+          "textRaw": "[m#] Database#isWriteAheadLoggingEnabled",
+          "name": "[m#]_database#iswriteaheadloggingenabled",
+          "methods": [
+            {
+              "textRaw": "isWriteAheadLoggingEnabled()",
+              "type": "method",
+              "name": "isWriteAheadLoggingEnabled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已启用 WAL ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否已启用 WAL"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#isWriteAheadLoggingEnabled"
+        },
+        {
+          "textRaw": "[m#] Database#getPath",
+          "name": "[m#]_database#getpath",
+          "methods": [
+            {
+              "textRaw": "getPath()",
+              "type": "method",
+              "name": "getPath",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 数据库文件路径 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "数据库文件路径"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回底层 SQLiteDatabase 使用的路径. <code>sqlite</code> 接受相对路径时, 此处通常返回解析后的路径.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getPath"
+        },
+        {
+          "textRaw": "[m#] Database#isOpen",
+          "name": "[m#]_database#isopen",
+          "methods": [
+            {
+              "textRaw": "isOpen()",
+              "type": "method",
+              "name": "isOpen",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 数据库是否仍处于打开状态 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "数据库是否仍处于打开状态"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#isOpen"
+        },
+        {
+          "textRaw": "[m#] Database#isReadOnly",
+          "name": "[m#]_database#isreadonly",
+          "methods": [
+            {
+              "textRaw": "isReadOnly()",
+              "type": "method",
+              "name": "isReadOnly",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 底层数据库是否以只读方式打开 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "底层数据库是否以只读方式打开"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>此结果反映实际打开状态, 比 SQLiteOpenOptions 的 <code>readOnly</code> 请求值更适合判断句柄是否只读.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#isReadOnly"
+        },
+        {
+          "textRaw": "[m#] Database#getVersion",
+          "name": "[m#]_database#getversion",
+          "methods": [
+            {
+              "textRaw": "getVersion()",
+              "type": "method",
+              "name": "getVersion",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前数据库架构版本 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前数据库架构版本"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>读取 SQLite <code>user_version</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getVersion"
+        },
+        {
+          "textRaw": "[m#] Database#setVersion",
+          "name": "[m#]_database#setversion",
+          "methods": [
+            {
+              "textRaw": "setVersion(version)",
+              "type": "method",
+              "name": "setVersion",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**version** { [number](dataTypes#number) } - 新数据库架构版本 ",
+                      "name": "**version**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新数据库架构版本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "version"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>直接设置 SQLite <code>user_version</code>. 此方法不会执行 <a href=\"#m-databasecallback-onupgrade\">DatabaseCallback#onUpgrade</a>, 也不会自动迁移表结构. 常规版本迁移应通过重新打开数据库时的 <code>version</code> 选项和 <code>onUpgrade</code> 回调完成.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setVersion"
+        },
+        {
+          "textRaw": "[m#] Database#needUpgrade",
+          "name": "[m#]_database#needupgrade",
+          "methods": [
+            {
+              "textRaw": "needUpgrade(newVersion)",
+              "type": "method",
+              "name": "needUpgrade",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**newVersion** { [number](dataTypes#number) } - 待比较版本 ",
+                      "name": "**newVersion**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "待比较版本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - `newVersion` 是否大于当前版本 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "`newVersion` 是否大于当前版本"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "newVersion"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#needUpgrade"
+        },
+        {
+          "textRaw": "[m#] Database#getMaximumSize",
+          "name": "[m#]_database#getmaximumsize",
+          "methods": [
+            {
+              "textRaw": "getMaximumSize()",
+              "type": "method",
+              "name": "getMaximumSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 数据库最大容量, 单位为字节 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "数据库最大容量, 单位为字节"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getMaximumSize"
+        },
+        {
+          "textRaw": "[m#] Database#setMaximumSize",
+          "name": "[m#]_database#setmaximumsize",
+          "methods": [
+            {
+              "textRaw": "setMaximumSize(numBytes)",
+              "type": "method",
+              "name": "setMaximumSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**numBytes** { [number](dataTypes#number) } - 请求的最大容量, 单位为字节 ",
+                      "name": "**numBytes**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "请求的最大容量, 单位为字节"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 实际设置的最大容量, 单位为字节 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "实际设置的最大容量, 单位为字节"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "numBytes"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>最大容量不能小于数据库当前大小. 返回值按数据库页大小向上取整, 因此可能大于 <code>numBytes</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setMaximumSize"
+        },
+        {
+          "textRaw": "[m#] Database#getPageSize",
+          "name": "[m#]_database#getpagesize",
+          "methods": [
+            {
+              "textRaw": "getPageSize()",
+              "type": "method",
+              "name": "getPageSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 数据库页大小, 单位为字节 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "数据库页大小, 单位为字节"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getPageSize"
+        },
+        {
+          "textRaw": "[m#] Database#setPageSize",
+          "name": "[m#]_database#setpagesize",
+          "methods": [
+            {
+              "textRaw": "setPageSize(numBytes)",
+              "type": "method",
+              "name": "setPageSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**numBytes** { [number](dataTypes#number) } - 页大小, 单位为字节 ",
+                      "name": "**numBytes**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "页大小, 单位为字节"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "numBytes"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置 SQLite 页大小. 值必须是 2 的幂, 且此设置应在新数据库写入任何数据之前完成.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setPageSize"
+        },
+        {
+          "textRaw": "[m#] Database#getAttachedDbs",
+          "name": "[m#]_database#getattacheddbs",
+          "methods": [
+            {
+              "textRaw": "getAttachedDbs()",
+              "type": "method",
+              "name": "getAttachedDbs",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [java.util.List](https://developer.android.com/reference/java/util/List) | [null](dataTypes#null) } - 已附加数据库信息, 数据库关闭时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [java.util.List](https://developer.android.com/reference/java/util/List) | [null](dataTypes#null) ",
+                      "desc": "已附加数据库信息, 数据库关闭时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回 <code>android.util.Pair&lt;string, string&gt;</code> 列表. 每一项的 <code>first</code> 是数据库名称, <code>second</code> 是完整文件路径, 列表包含主数据库 <code>main</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getAttachedDbs"
+        },
+        {
+          "textRaw": "[m#] Database#isDatabaseIntegrityOk",
+          "name": "[m#]_database#isdatabaseintegrityok",
+          "methods": [
+            {
+              "textRaw": "isDatabaseIntegrityOk()",
+              "type": "method",
+              "name": "isDatabaseIntegrityOk",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 主数据库及所有附加数据库是否通过完整性检查 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "主数据库及所有附加数据库是否通过完整性检查"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>运行 SQLite <code>integrity_check</code>. 对大型数据库可能耗时较长.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#isDatabaseIntegrityOk"
+        },
+        {
+          "textRaw": "[m#] Database#isDbLockedByCurrentThread",
+          "name": "[m#]_database#isdblockedbycurrentthread",
+          "methods": [
+            {
+              "textRaw": "isDbLockedByCurrentThread()",
+              "type": "method",
+              "name": "isDbLockedByCurrentThread",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否持有数据库活动连接 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前线程是否持有数据库活动连接"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>名称中的 <code>Locked</code> 是历史命名. 当前 Android 实现检查的是当前线程是否持有活动连接, 不表示传统意义上的数据库文件锁.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#isDbLockedByCurrentThread"
+        },
+        {
+          "textRaw": "[m#] Database#setForeignKeyConstraintsEnabled",
+          "name": "[m#]_database#setforeignkeyconstraintsenabled",
+          "methods": [
+            {
+              "textRaw": "setForeignKeyConstraintsEnabled(enable)",
+              "type": "method",
+              "name": "setForeignKeyConstraintsEnabled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**enable** { [boolean](dataTypes#boolean) } - 是否启用外键约束 ",
+                      "name": "**enable**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否启用外键约束"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "enable"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>为当前打开会话启用或禁用 SQLite 外键约束. 不得在事务进行中调用. 如需每次打开都启用, 可在 <code>DatabaseCallback.onOpen</code> 中调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setForeignKeyConstraintsEnabled"
+        },
+        {
+          "textRaw": "[m#] Database#setLocale",
+          "name": "[m#]_database#setlocale",
+          "methods": [
+            {
+              "textRaw": "setLocale(locale)",
+              "type": "method",
+              "name": "setLocale",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**locale** { [java.util.Locale](https://developer.android.com/reference/java/util/Locale) } - 新区域设置 ",
+                      "name": "**locale**",
+                      "type": " [java.util.Locale](https://developer.android.com/reference/java/util/Locale) ",
+                      "desc": "新区域设置"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "locale"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置数据库本地化排序使用的区域. 只读数据库或使用 <code>NO_LOCALIZED_COLLATORS</code> 标志时不生效.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setLocale"
+        },
+        {
+          "textRaw": "[m#] Database#setMaxSqlCacheSize",
+          "name": "[m#]_database#setmaxsqlcachesize",
+          "methods": [
+            {
+              "textRaw": "setMaxSqlCacheSize(cacheSize)",
+              "type": "method",
+              "name": "setMaxSqlCacheSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**cacheSize** { [number](dataTypes#number) } - 编译 SQL 语句缓存条目上限 ",
+                      "name": "**cacheSize**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "编译 SQL 语句缓存条目上限"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "cacheSize"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>调整底层数据库的预编译语句缓存容量. 超出 Android 允许范围或违反底层容量约束时抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#setMaxSqlCacheSize"
+        },
+        {
+          "textRaw": "[m#] Database#validateSql",
+          "name": "[m#]_database#validatesql",
+          "methods": [
+            {
+              "textRaw": "validateSql(sql, cancellationSignal)",
+              "type": "method",
+              "name": "validateSql",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**sql** { [string](dataTypes#string) } - 待验证的 SELECT 语句 ",
+                      "name": "**sql**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "待验证的 SELECT 语句"
+                    },
+                    {
+                      "textRaw": "**cancellationSignal** { [android.os.CancellationSignal](https://developer.android.com/reference/android/os/CancellationSignal) | [null](dataTypes#null) } - 验证取消信号 ",
+                      "name": "**cancellationSignal**",
+                      "type": " [android.os.CancellationSignal](https://developer.android.com/reference/android/os/CancellationSignal) | [null](dataTypes#null) ",
+                      "desc": "验证取消信号"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "sql"
+                    },
+                    {
+                      "name": "cancellationSignal"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>通过编译验证 SELECT 语句. SQL 无效时抛出 SQLiteException, 操作被取消时抛出 OperationCanceledException.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#validateSql"
+        },
+        {
+          "textRaw": "[m#] Database#acquireReference",
+          "name": "[m#]_database#acquirereference",
+          "methods": [
+            {
+              "textRaw": "acquireReference()",
+              "type": "method",
+              "name": "acquireReference",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>增加底层 SQLiteDatabase 的引用计数. 这是高级资源管理接口, 每次成功调用都必须与 <a href=\"#m-database-releasereference\">releaseReference</a> 配对.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#acquireReference"
+        },
+        {
+          "textRaw": "[m#] Database#releaseReference",
+          "name": "[m#]_database#releasereference",
+          "methods": [
+            {
+              "textRaw": "releaseReference()",
+              "type": "method",
+              "name": "releaseReference",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>减少底层 SQLiteDatabase 的引用计数. 引用计数归零时会释放底层资源. 不要在未成功调用 <a href=\"#m-database-acquirereference\">acquireReference</a> 时单独调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#releaseReference"
+        },
+        {
+          "textRaw": "[m#] Database#getTypeAdapter",
+          "name": "[m#]_database#gettypeadapter",
+          "methods": [
+            {
+              "textRaw": "getTypeAdapter()",
+              "type": "method",
+              "name": "getTypeAdapter",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Database.TypeAdapter](#i-database-typeadapter) } - 当前数据库使用的类型适配器 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Database.TypeAdapter](#i-database-typeadapter) ",
+                      "desc": "当前数据库使用的类型适配器"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回 AutoJs6 为 SQLite 模块创建的 JavaScript 类型适配器. 常规脚本无需直接调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#getTypeAdapter"
+        },
+        {
+          "textRaw": "[m#] Database#onCreate",
+          "name": "[m#]_database#oncreate",
+          "methods": [
+            {
+              "textRaw": "onCreate(database)",
+              "type": "method",
+              "name": "onCreate",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) } - 底层数据库 ",
+                      "name": "**database**",
+                      "type": " [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) ",
+                      "desc": "底层数据库"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>SQLiteOpenHelper 生命周期方法. 它更新 Database 的底层句柄, 然后转发到 <code>DatabaseCallback.onCreate</code>. 脚本不应主动调用此方法.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#onCreate"
+        },
+        {
+          "textRaw": "[m#] Database#onOpen",
+          "name": "[m#]_database#onopen",
+          "methods": [
+            {
+              "textRaw": "onOpen(database)",
+              "type": "method",
+              "name": "onOpen",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) } - 底层数据库 ",
+                      "name": "**database**",
+                      "type": " [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) ",
+                      "desc": "底层数据库"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>SQLiteOpenHelper 生命周期方法. 它更新 Database 的底层句柄, 然后转发到 <code>DatabaseCallback.onOpen</code>. 脚本不应主动调用此方法.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#onOpen"
+        },
+        {
+          "textRaw": "[m#] Database#onUpgrade",
+          "name": "[m#]_database#onupgrade",
+          "methods": [
+            {
+              "textRaw": "onUpgrade(database, oldVersion, newVersion)",
+              "type": "method",
+              "name": "onUpgrade",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**database** { [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) } - 底层数据库 ",
+                      "name": "**database**",
+                      "type": " [android.database.sqlite.SQLiteDatabase](https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase) ",
+                      "desc": "底层数据库"
+                    },
+                    {
+                      "textRaw": "**oldVersion** { [number](dataTypes#number) } - 旧版本 ",
+                      "name": "**oldVersion**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "旧版本"
+                    },
+                    {
+                      "textRaw": "**newVersion** { [number](dataTypes#number) } - 新版本 ",
+                      "name": "**newVersion**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新版本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "database"
+                    },
+                    {
+                      "name": "oldVersion"
+                    },
+                    {
+                      "name": "newVersion"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>SQLiteOpenHelper 生命周期方法. 它更新 Database 的底层句柄, 然后转发到 <code>DatabaseCallback.onUpgrade</code>. 脚本不应主动调用此方法.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Database#onUpgrade"
+        },
+        {
+          "textRaw": "继承的 SQLiteOpenHelper 成员",
+          "name": "继承的_sqliteopenhelper_成员",
+          "desc": "<p>Database 还继承以下 Android SQLiteOpenHelper 公开成员. <a href=\"#m-database-close\">close</a>, <a href=\"#m-database-oncreate\">onCreate</a>, <a href=\"#m-database-onopen\">onOpen</a> 和 <a href=\"#m-database-onupgrade\">onUpgrade</a> 已由 Database 覆盖并在上文说明.</p>\n<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>getDatabaseName()</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>返回构造 SQLiteOpenHelper 时使用的数据库名称</td>\n</tr>\n<tr>\n<td><code>getReadableDatabase()</code></td>\n<td><a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase\">android.database.sqlite.SQLiteDatabase</a></td>\n<td>返回可读数据库句柄, 可写句柄可用时仍可能返回可写句柄</td>\n</tr>\n<tr>\n<td><code>getWritableDatabase()</code></td>\n<td><a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase\">android.database.sqlite.SQLiteDatabase</a></td>\n<td>返回可读写数据库句柄</td>\n</tr>\n<tr>\n<td><code>setWriteAheadLoggingEnabled(enabled)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置 SQLiteOpenHelper 的 WAL 开关</td>\n</tr>\n<tr>\n<td><code>onConfigure(database)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>打开后且创建或升级前调用的配置钩子, Database 没有覆盖此方法</td>\n</tr>\n<tr>\n<td><code>onDowngrade(database, oldVersion, newVersion)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>降级钩子, Database 没有覆盖, Android 默认实现抛出 SQLiteException</td>\n</tr>\n<tr>\n<td><code>setLookasideConfig(slotSize, slotCount)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>API&gt;=27!</code></strong> 设置 lookaside 内存参数</td>\n</tr>\n<tr>\n<td><code>setIdleConnectionTimeout(idleConnectionTimeoutMs)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>API&gt;=27!</code></strong> <strong><code>DEPRECATED</code></strong> 设置空闲连接超时</td>\n</tr>\n<tr>\n<td><code>setOpenParams(openParams)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>API&gt;=28!</code></strong> 设置 <a href=\"https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.OpenParams\">SQLiteDatabase.OpenParams</a></td>\n</tr>\n</tbody>\n</table>\n<p><code>sqlite</code> 在返回 Database 之前已经打开数据库. <code>setLookasideConfig</code>, <code>setIdleConnectionTimeout</code> 和 <code>setOpenParams</code> 要求在打开前配置, 因而对 <code>sqlite</code> 返回的对象调用时会抛出 IllegalStateException.</p>\n<p><code>getReadableDatabase()</code> 和 <code>getWritableDatabase()</code> 返回未包装的 Android SQLiteDatabase, 不提供 <a href=\"#c-cursor\">Cursor</a> 的 JavaScript 便捷方法. 常规脚本应使用 Database 自有查询方法.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Database.TypeAdapter</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "继承的 SQLiteOpenHelper 成员"
+        },
+        {
+          "textRaw": "[C] Transaction",
+          "name": "[c]_transaction",
+          "desc": "<p><strong><code>6.6.0</code></strong></p>\n<p>Transaction 是 <a href=\"#m-database-transaction\">Database#transaction</a> 传给回调和事务事件的对象.</p>\n",
+          "type": "module",
+          "displayName": "[C] Transaction"
+        },
+        {
+          "textRaw": "[p#] Transaction#database",
+          "name": "[p#]_transaction#database",
+          "desc": "<ul>\n<li>{ <a href=\"#c-database\">Database</a> }</li>\n</ul>\n<p>当前事务所属的 Database.</p>\n",
+          "type": "module",
+          "displayName": "[p#] Transaction#database"
+        },
+        {
+          "textRaw": "[m#] Transaction#succeed",
+          "name": "[m#]_transaction#succeed",
+          "methods": [
+            {
+              "textRaw": "succeed()",
+              "type": "method",
+              "name": "succeed",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>调用 <a href=\"#m-database-settransactionsuccessful\">Database#setTransactionSuccessful</a>. <code>Database#transaction</code> 在回调正常返回后自动调用此方法, 回调中通常不应再次调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Transaction#succeed"
+        },
+        {
+          "textRaw": "[m#] Transaction#end",
+          "name": "[m#]_transaction#end",
+          "methods": [
+            {
+              "textRaw": "end()",
+              "type": "method",
+              "name": "end",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>调用 <a href=\"#m-database-endtransaction\">Database#endTransaction</a>. <code>Database#transaction</code> 在回调结束后自动调用此方法, 回调中通常不应再次调用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Cursor</p>\n\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Transaction#end"
+        },
+        {
+          "textRaw": "[C] Cursor",
+          "name": "[c]_cursor",
+          "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>implements</strong></ins> { <a href=\"https://developer.android.com/reference/android/database/Cursor\">android.database.Cursor</a> }</li>\n</ul>\n<p>Cursor 是 AutoJs6 对 Android Cursor 的包装对象. 它增加 JavaScript 行对象转换方法, 并将 Android Cursor 的全部公开接口成员委托给底层游标.</p>\n<p>查询返回的 Cursor 初始位置为 <code>-1</code>, 即第一行之前. Cursor 不由脚本资源管理器自动登记, 必须通过 <a href=\"#m-cursor-close\">close</a>, <a href=\"#m-cursor-all\">all</a> 或 <a href=\"#m-cursor-single\">single</a> 及时释放.</p>\n<p>Cursor 不是线程安全对象. 多线程共享时应由脚本自行同步.</p>\n",
+          "type": "module",
+          "displayName": "[C] Cursor"
+        },
+        {
+          "textRaw": "[m#] Cursor#get",
+          "name": "[m#]_cursor#get",
+          "methods": [
+            {
+              "textRaw": "get(index)",
+              "type": "method",
+              "name": "get",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**index** { [number](dataTypes#number) } - 从 `0` 开始的列索引 ",
+                      "name": "**index**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "从 `0` 开始的列索引"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [null](dataTypes#null) | [number](dataTypes#number) | [string](dataTypes#string) | [ByteArray](dataTypes#bytearray) } - 当前行的列值 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [null](dataTypes#null) | [number](dataTypes#number) | [string](dataTypes#string) | [ByteArray](dataTypes#bytearray) ",
+                      "desc": "当前行的列值"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "index"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>按底层字段类型读取当前行的指定列. 类型映射与 <a href=\"#sqliterow\">SQLiteRow</a> 相同. 游标不位于有效行, 索引越界或底层字段类型未知时抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#get"
+        },
+        {
+          "textRaw": "[m#] Cursor#getByColumn",
+          "name": "[m#]_cursor#getbycolumn",
+          "methods": [
+            {
+              "textRaw": "getByColumn(column)",
+              "type": "method",
+              "name": "getByColumn",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**column** { [string](dataTypes#string) } - 列名 ",
+                      "name": "**column**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "列名"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [null](dataTypes#null) | [number](dataTypes#number) | [string](dataTypes#string) | [ByteArray](dataTypes#bytearray) } - 当前行的列值 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [null](dataTypes#null) | [number](dataTypes#number) | [string](dataTypes#string) | [ByteArray](dataTypes#bytearray) ",
+                      "desc": "当前行的列值"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "column"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>先通过 <code>getColumnIndexOrThrow(column)</code> 查找列索引, 再调用 <a href=\"#m-cursor-get\">get</a>. 列不存在时抛出 IllegalArgumentException.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#getByColumn"
+        },
+        {
+          "textRaw": "[m#] Cursor#all",
+          "name": "[m#]_cursor#all",
+          "methods": [
+            {
+              "textRaw": "all(close = true)",
+              "type": "method",
+              "name": "all",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ close = true ]** { [any](dataTypes#any) } - JavaScript 真值表示读取完成后关闭游标 ",
+                      "name": "**[",
+                      "desc": "close = true ]** { [any](dataTypes#any) } - JavaScript 真值表示读取完成后关闭游标",
+                      "default": " true"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [SQLiteRow](#sqliterow)[[]](dataTypes#array) } - 剩余行数组 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [SQLiteRow](#sqliterow)[[]](dataTypes#array) ",
+                      "desc": "剩余行数组"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "close ",
+                      "default": " true"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从当前位置开始反复调用 <code>moveToNext()</code>, 将随后到达的每一行转换为 SQLiteRow. 新查询的游标位于第一行之前, 因而直接调用 <code>all()</code> 会读取全部行.</p>\n<p>如果游标已经位于某一行, 当前行不会再次加入结果, 只读取其后的行. 正常读取完成后, <code>close</code> 为 JavaScript 真值时关闭游标, 默认值为 <code>true</code>.</p>\n<p>行转换期间抛出异常时不保证自动关闭. 需要严格保证释放时, 应由调用方使用 <code>try...finally</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#all"
+        },
+        {
+          "textRaw": "[m#] Cursor#pick",
+          "name": "[m#]_cursor#pick",
+          "methods": [
+            {
+              "textRaw": "pick()",
+              "type": "method",
+              "name": "pick",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [SQLiteRow](#sqliterow) } - 当前行对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [SQLiteRow](#sqliterow) ",
+                      "desc": "当前行对象"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>将游标当前行转换为 SQLiteRow, 不移动也不关闭游标. 游标必须已位于有效行.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#pick"
+        },
+        {
+          "textRaw": "[m#] Cursor#next",
+          "name": "[m#]_cursor#next",
+          "methods": [
+            {
+              "textRaw": "next()",
+              "type": "method",
+              "name": "next",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [SQLiteRow](#sqliterow) | [null](dataTypes#null) } - 下一行对象, 没有下一行时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [SQLiteRow](#sqliterow) | [null](dataTypes#null) ",
+                      "desc": "下一行对象, 没有下一行时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>先调用 <code>moveToNext()</code>. 移动成功时返回该行, 否则返回 <code>null</code>. 此方法不关闭游标.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#next"
+        },
+        {
+          "textRaw": "[m#] Cursor#single",
+          "name": "[m#]_cursor#single",
+          "methods": [
+            {
+              "textRaw": "single()",
+              "type": "method",
+              "name": "single",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [SQLiteRow](#sqliterow) | [null](dataTypes#null) } - 下一行对象, 没有下一行时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [SQLiteRow](#sqliterow) | [null](dataTypes#null) ",
+                      "desc": "下一行对象, 没有下一行时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>调用 <a href=\"#m-cursor-next\">next</a> 读取一行, 然后关闭游标. 此方法不检查结果集是否只有一行, 其含义是 &quot;读取下一行并关闭&quot;.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#single"
+        },
+        {
+          "textRaw": "[m#] Cursor#close",
+          "name": "[m#]_cursor#close",
+          "methods": [
+            {
+              "textRaw": "close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>关闭游标并释放其资源. 关闭后游标完全失效, <code>requery()</code> 也不能使其恢复.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#close"
+        },
+        {
+          "textRaw": "[m#] Cursor#isClosed",
+          "name": "[m#]_cursor#isclosed",
+          "methods": [
+            {
+              "textRaw": "isClosed()",
+              "type": "method",
+              "name": "isClosed",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 游标是否已关闭 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "游标是否已关闭"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] Cursor#isClosed"
+        },
+        {
+          "textRaw": "Cursor 字段类型常量",
+          "name": "cursor_字段类型常量",
+          "desc": "<p><code>Cursor.getType(columnIndex)</code> 返回以下 Android Cursor 常量:</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>字段类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>Cursor.FIELD_TYPE_NULL</code></td>\n<td><code>0</code></td>\n<td>SQL <code>NULL</code></td>\n</tr>\n<tr>\n<td><code>Cursor.FIELD_TYPE_INTEGER</code></td>\n<td><code>1</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>Cursor.FIELD_TYPE_FLOAT</code></td>\n<td><code>2</code></td>\n<td>浮点数</td>\n</tr>\n<tr>\n<td><code>Cursor.FIELD_TYPE_STRING</code></td>\n<td><code>3</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>Cursor.FIELD_TYPE_BLOB</code></td>\n<td><code>4</code></td>\n<td>BLOB</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "Cursor 字段类型常量"
+        },
+        {
+          "textRaw": "Cursor 位置与移动成员",
+          "name": "cursor_位置与移动成员",
+          "desc": "<p>以下成员直接委托给 Android Cursor:</p>\n<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>getCount()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>结果集总行数</td>\n</tr>\n<tr>\n<td><code>getPosition()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>当前从 <code>0</code> 开始的位置, 第一行之前为 <code>-1</code>, 最后一行之后为 <code>getCount()</code></td>\n</tr>\n<tr>\n<td><code>move(offset)</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>相对移动 <code>offset</code> 行, 返回是否到达请求位置</td>\n</tr>\n<tr>\n<td><code>moveToPosition(position)</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>移动到绝对位置, 返回是否到达请求位置</td>\n</tr>\n<tr>\n<td><code>moveToFirst()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>移动到第一行, 空结果集返回 <code>false</code></td>\n</tr>\n<tr>\n<td><code>moveToLast()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>移动到最后一行, 空结果集返回 <code>false</code></td>\n</tr>\n<tr>\n<td><code>moveToNext()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>移动到下一行</td>\n</tr>\n<tr>\n<td><code>moveToPrevious()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>移动到上一行</td>\n</tr>\n<tr>\n<td><code>isFirst()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>当前是否位于第一行</td>\n</tr>\n<tr>\n<td><code>isLast()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>当前是否位于最后一行</td>\n</tr>\n<tr>\n<td><code>isBeforeFirst()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>当前是否位于第一行之前</td>\n</tr>\n<tr>\n<td><code>isAfterLast()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>当前是否位于最后一行之后</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "Cursor 位置与移动成员"
+        },
+        {
+          "textRaw": "Cursor 列与值成员",
+          "name": "cursor_列与值成员",
+          "desc": "<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>getColumnIndex(columnName)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回从 <code>0</code> 开始的列索引, 不存在时为 <code>-1</code></td>\n</tr>\n<tr>\n<td><code>getColumnIndexOrThrow(columnName)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回列索引, 不存在时抛出 IllegalArgumentException</td>\n</tr>\n<tr>\n<td><code>getColumnName(columnIndex)</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>返回列名</td>\n</tr>\n<tr>\n<td><code>getColumnNames()</code></td>\n<td><a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a></td>\n<td>按查询顺序返回全部列名</td>\n</tr>\n<tr>\n<td><code>getColumnCount()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回列数</td>\n</tr>\n<tr>\n<td><code>getBlob(columnIndex)</code></td>\n<td><a href=\"dataTypes#bytearray\">ByteArray</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>以字节数组读取列</td>\n</tr>\n<tr>\n<td><code>getString(columnIndex)</code></td>\n<td><a href=\"dataTypes#string\">string</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>以字符串读取列</td>\n</tr>\n<tr>\n<td><code>copyStringToBuffer(columnIndex, buffer)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>把列文本复制到 <a href=\"https://developer.android.com/reference/android/database/CharArrayBuffer\">android.database.CharArrayBuffer</a></td>\n</tr>\n<tr>\n<td><code>getShort(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>以 Java <code>short</code> 读取列</td>\n</tr>\n<tr>\n<td><code>getInt(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>以 Java <code>int</code> 读取列</td>\n</tr>\n<tr>\n<td><code>getLong(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>以 Java <code>long</code> 读取列</td>\n</tr>\n<tr>\n<td><code>getFloat(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>以 Java <code>float</code> 读取列</td>\n</tr>\n<tr>\n<td><code>getDouble(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>以 Java <code>double</code> 读取列</td>\n</tr>\n<tr>\n<td><code>getType(columnIndex)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回字段类型常量</td>\n</tr>\n<tr>\n<td><code>isNull(columnIndex)</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>列值是否为 SQL <code>NULL</code></td>\n</tr>\n</tbody>\n</table>\n<p>Android Cursor 的类型专用读取方法可能转换值. 对 <code>NULL</code>, 类型不匹配或数值越界的具体结果由底层实现决定. 需要保持 SQLite 原始类型映射时, 使用 <a href=\"#m-cursor-get\">Cursor#get</a>.</p>\n",
+          "type": "module",
+          "displayName": "Cursor 列与值成员"
+        },
+        {
+          "textRaw": "Cursor 观察与元数据成员",
+          "name": "cursor_观察与元数据成员",
+          "desc": "<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>deactivate()</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>DEPRECATED</code></strong> 停用游标</td>\n</tr>\n<tr>\n<td><code>requery()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td><strong><code>DEPRECATED</code></strong> 重新执行查询</td>\n</tr>\n<tr>\n<td><code>registerContentObserver(observer)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>注册 <a href=\"https://developer.android.com/reference/android/database/ContentObserver\">android.database.ContentObserver</a></td>\n</tr>\n<tr>\n<td><code>unregisterContentObserver(observer)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>注销 ContentObserver</td>\n</tr>\n<tr>\n<td><code>registerDataSetObserver(observer)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>注册 <a href=\"https://developer.android.com/reference/android/database/DataSetObserver\">android.database.DataSetObserver</a></td>\n</tr>\n<tr>\n<td><code>unregisterDataSetObserver(observer)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>注销 DataSetObserver</td>\n</tr>\n<tr>\n<td><code>setNotificationUri(contentResolver, uri)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置一个内容变更通知 URI</td>\n</tr>\n<tr>\n<td><code>setNotificationUris(contentResolver, uris)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>API&gt;=29!</code></strong> 设置多个内容变更通知 URI</td>\n</tr>\n<tr>\n<td><code>getNotificationUri()</code></td>\n<td><a href=\"https://developer.android.com/reference/android/net/Uri\">android.net.Uri</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>返回通知 URI</td>\n</tr>\n<tr>\n<td><code>getNotificationUris()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/util/List\">java.util.List</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td><strong><code>API&gt;=29!</code></strong> 返回通知 URI 列表</td>\n</tr>\n<tr>\n<td><code>getWantsAllOnMoveCalls()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>跨进程使用时是否希望每次移动都触发 <code>onMove()</code></td>\n</tr>\n<tr>\n<td><code>setExtras(extras)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置 <a href=\"https://developer.android.com/reference/android/os/Bundle\">android.os.Bundle</a> 元数据, <code>null</code> 表示空 Bundle</td>\n</tr>\n<tr>\n<td><code>getExtras()</code></td>\n<td><a href=\"https://developer.android.com/reference/android/os/Bundle\">android.os.Bundle</a></td>\n<td>返回游标元数据, 无数据时返回空 Bundle</td>\n</tr>\n<tr>\n<td><code>respond(extras)</code></td>\n<td><a href=\"https://developer.android.com/reference/android/os/Bundle\">android.os.Bundle</a></td>\n<td>向游标发送由实现定义的附加请求并返回结果</td>\n</tr>\n</tbody>\n</table>\n<p>这些委托成员的参数约束, 异常和线程语义与 <a href=\"https://developer.android.com/reference/android/database/Cursor\">Android Cursor</a> 一致.</p>\n",
+          "type": "module",
+          "displayName": "Cursor 观察与元数据成员"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "[I] Database.TypeAdapter",
+          "name": "TypeAdapter",
+          "desc": "<p><strong><code>6.6.0</code></strong></p>\n<p>Database.TypeAdapter 是 Database 在 JavaScript 值与 Android SQLite 类型之间使用的内部接口. SQLite 模块自动提供实现, 常规脚本无需自行实现.</p>\n"
+        },
+        {
+          "textRaw": "[m!] Database.TypeAdapter#toContentValues",
+          "name": "TypeAdapter#toContentValues",
+          "methods": [
+            {
+              "textRaw": "toContentValues(value)",
+              "type": "method",
+              "name": "toContentValues",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**value** { [SQLiteValues](#sqlitevalues) } - JavaScript 键值对象 ",
+                      "name": "**value**",
+                      "type": " [SQLiteValues](#sqlitevalues) ",
+                      "desc": "JavaScript 键值对象"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.content.ContentValues](https://developer.android.com/reference/android/content/ContentValues) } - Android ContentValues ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.content.ContentValues](https://developer.android.com/reference/android/content/ContentValues) ",
+                      "desc": "Android ContentValues"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "[m!] Database.TypeAdapter#wrapCursor",
+          "name": "TypeAdapter#wrapCursor",
+          "methods": [
+            {
+              "textRaw": "wrapCursor(cursor)",
+              "type": "method",
+              "name": "wrapCursor",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**cursor** { [android.database.Cursor](https://developer.android.com/reference/android/database/Cursor) } - Android 游标 ",
+                      "name": "**cursor**",
+                      "type": " [android.database.Cursor](https://developer.android.com/reference/android/database/Cursor) ",
+                      "desc": "Android 游标"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Cursor](#c-cursor) } - AutoJs6 Cursor 包装对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Cursor](#c-cursor) ",
+                      "desc": "AutoJs6 Cursor 包装对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "cursor"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Transaction</p>\n\n<hr>\n"
+            }
+          ]
+        }
+      ],
+      "type": "module",
+      "displayName": "SQLite"
+    }
+  ]
+}

@@ -1,223 +1,330 @@
 # 按键 (Keys)
 
+本章包含按键代码属性, 无障碍全局动作和 Shell 按键指令.
+
+- `keys` 与 `$keys` 指向同一个按键代码对象.
+- 小写动作同时挂载在 `automator` 对象和全局作用域, 依赖无障碍服务.
+- 大写动作以及 `KeyCode`, `Text` 和 `Input` 是全局 Shell 指令.
+
+大写按键动作和 `KeyCode` 从 AutoJs6 6.7.1 起优先通过可用的 Shizuku 服务执行. Shizuku 不可用时回退到 Root Shell. 这些方法不返回命令执行状态.
+
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">keys</p>
 
 ---
 
-按键模拟部分提供了一些模拟物理按键的全局函数, 包括Home、音量键、照相键等, 有的函数依赖于无障碍服务, 有的函数依赖于root权限.
+`keys` 中的初始值来自 Android `KeyEvent.KEYCODE_*` 常量, 可用于 [按键事件监听](events#事件-key).
 
-一般来说, 以大写字母开头的函数都依赖于root权限. 执行此类函数时, 如果没有root权限, 则函数执行后没有效果, 并会在控制台输出一个警告.
+这些属性在当前实现中不可删除, 但没有设置为只读, 因此脚本仍可覆盖属性值. 通常应仅将它们作为按键代码查询表使用.
 
-## back()
+## [p] home
 
-* 返回 {boolean}
+- [ `3` ] { [number](dataTypes#number) } - 主屏幕键代码
 
-模拟按下返回键. 返回是否执行成功.
-此函数依赖于无障碍服务.
+## [p] HOME
 
-## home()
+- [ `3` ] { [number](dataTypes#number) } - [home](#p-home) 的大写别名
 
-* 返回 {boolean}
+## [p] menu
 
-模拟按下Home键. 返回是否执行成功.
-此函数依赖于无障碍服务.
+- [ `82` ] { [number](dataTypes#number) } - 菜单键代码
 
-## powerDialog()
+## [p] MENU
 
-* 返回 {boolean}
+- [ `82` ] { [number](dataTypes#number) } - [menu](#p-menu) 的大写别名
 
-弹出电源键菜单. 返回是否执行成功.
-此函数依赖于无障碍服务.
+## [p] back
 
-## notifications()
+- [ `4` ] { [number](dataTypes#number) } - 返回键代码
 
-* 返回 {boolean}
+## [p] BACK
 
-拉出通知栏. 返回是否执行成功.
-此函数依赖于无障碍服务.
+- [ `4` ] { [number](dataTypes#number) } - [back](#p-back) 的大写别名
 
-## quickSettings()
+## [p] volumeUp
 
-* 返回 {boolean}
+- [ `24` ] { [number](dataTypes#number) } - 音量上键代码
 
-显示快速设置(下拉通知栏到底). 返回是否执行成功.
-此函数依赖于无障碍服务.
+## [p] volume_up
 
-## recents()
+- [ `24` ] { [number](dataTypes#number) } - [volumeUp](#p-volumeup) 的下划线别名
 
-* 返回 {boolean}
+## [p] VOLUME_UP
 
-显示最近任务. 返回是否执行成功.
-此函数依赖于无障碍服务.
+- [ `24` ] { [number](dataTypes#number) } - [volumeUp](#p-volumeup) 的大写下划线别名
 
-## splitScreen()
+## [p] volumeDown
 
-* 返回 {boolean}
+- [ `25` ] { [number](dataTypes#number) } - 音量下键代码
 
-分屏. 返回是否执行成功.
-此函数依赖于无障碍服务, 并且需要系统自身功能的支持.
+## [p] volume_down
 
-## Home()
+- [ `25` ] { [number](dataTypes#number) } - [volumeDown](#p-volumedown) 的下划线别名
 
-模拟按下Home键.
-此函数依赖于root权限.
+## [p] VOLUME_DOWN
 
-## Back()
+- [ `25` ] { [number](dataTypes#number) } - [volumeDown](#p-volumedown) 的大写下划线别名
 
-模拟按下返回键.
-此函数依赖于root权限.
+---
 
-## Power()
+<p style="font: bold 2em sans-serif; color: #FF7043">automator</p>
 
-模拟按下电源键.
-此函数依赖于root权限.
+---
 
-## Menu()
+以下方法调用 Android 无障碍服务的全局动作. 返回值表示无障碍服务是否接受了对应动作. 无障碍服务不可用, 系统不支持该动作或系统拒绝执行时返回 `false`.
 
-模拟按下菜单键.
-此函数依赖于root权限.
+## [m] back
 
-## VolumeUp()
+### automator.back()
 
-按下音量上键.
-此函数依赖于root权限.
+**`Global`** **`A11Y`**
 
-## VolumeDown()
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
 
-按键音量上键.
-此函数依赖于root权限.
+执行系统返回动作.
 
-## Camera()
+```js
+if (!back()) {
+    console.warn('Back action was not accepted');
+}
+```
 
-模拟按下照相键.
+## [m] home
 
-## Up()
+### automator.home()
 
-模拟按下物理按键上.
-此函数依赖于root权限.
+**`Global`** **`A11Y`**
 
-## Down()
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
 
-模拟按下物理按键下.
-此函数依赖于root权限.
+执行系统主屏幕动作.
 
-## Left()
+## [m] powerDialog
 
-模拟按下物理按键左.
-此函数依赖于root权限.
+### automator.powerDialog()
 
-## Right()
+**`Global`** **`A11Y`**
 
-模拟按下物理按键右.
-此函数依赖于root权限.
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
 
-## OK()
+打开系统电源菜单.
 
-模拟按下物理按键确定.
-此函数依赖于root权限.
+## [m] notifications
 
-## Text(text)
+### automator.notifications()
 
-* text {string} 要输入的文字, 只能为英文或英文符号
-  输入文字text. 例如`Text("aaa");`
+**`Global`** **`A11Y`**
 
-## KeyCode(code)
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
 
-* code {number} | <String> 要按下的按键的数字代码或名称. 参见下表.
-  模拟物理按键. 例如`KeyCode(29)`和`KeyCode("KEYCODE_A")`是按下A键.
+展开系统通知栏.
 
-# 附录: KeyCode对照表
+## [m] quickSettings
 
-KeyCode KeyEvent Value
+### automator.quickSettings()
 
-* KEYCODE_MENU 1
-* KEYCODE_SOFT_RIGHT 2
-* KEYCODE_HOME 3
-* KEYCODE_BACK 4
-* KEYCODE_CALL 5
-* KEYCODE_ENDCALL 6
-* KEYCODE_0 7
-* KEYCODE_1 8
-* KEYCODE_2 9
-* KEYCODE_3 10
-* KEYCODE_4 11
-* KEYCODE_5 12
-* KEYCODE_6 13
-* KEYCODE_7 14
-* KEYCODE_8 15
-* KEYCODE_9 16
-* KEYCODE_STAR 17
-* KEYCODE_POUND 18
-* KEYCODE_DPAD_UP 19
-* KEYCODE_DPAD_DOWN 20
-* KEYCODE_DPAD_LEFT 21
-* KEYCODE_DPAD_RIGHT 22
-* KEYCODE_DPAD_CENTER 23
-* KEYCODE_VOLUME_UP 24
-* KEYCODE_VOLUME_DOWN 25
-* KEYCODE_POWER 26
-* KEYCODE_CAMERA 27
-* KEYCODE_CLEAR 28
-* KEYCODE_A 29
-* KEYCODE_B 30
-* KEYCODE_C 31
-* KEYCODE_D 32
-* KEYCODE_E 33
-* KEYCODE_F 34
-* KEYCODE_G 35
-* KEYCODE_H 36
-* KEYCODE_I 37
-* KEYCODE_J 38
-* KEYCODE_K 39
-* KEYCODE_L 40
-* KEYCODE_M 41
-* KEYCODE_N 42
-* KEYCODE_O 43
-* KEYCODE_P 44
-* KEYCODE_Q 45
-* KEYCODE_R 46
-* KEYCODE_S 47
-* KEYCODE_T 48
-* KEYCODE_U 49
-* KEYCODE_V 50
-* KEYCODE_W 51
-* KEYCODE_X 52
-* KEYCODE_Y 53
-* KEYCODE_Z 54
-* KEYCODE_COMMA 55
-* KEYCODE_PERIOD 56
-* KEYCODE_ALT_LEFT 57
-* KEYCODE_ALT_RIGHT 58
-* KEYCODE_SHIFT_LEFT 59
-* KEYCODE_SHIFT_RIGHT 60
-* KEYCODE_TAB 61
-* KEYCODE_SPACE 62
-* KEYCODE_SYM 63
-* KEYCODE_EXPLORER 64
-* KEYCODE_ENVELOPE 65
-* KEYCODE_ENTER 66
-* KEYCODE_DEL 67
-* KEYCODE_GRAVE 68
-* KEYCODE_MINUS 69
-* KEYCODE_EQUALS 70
-* KEYCODE_LEFT_BRACKET 71
-* KEYCODE_RIGHT_BRACKET 72
-* KEYCODE_BACKSLASH 73
-* KEYCODE_SEMICOLON 74
-* KEYCODE_APOSTROPHE 75
-* KEYCODE_SLASH 76
-* KEYCODE_AT 77
-* KEYCODE_NUM 78
-* KEYCODE_HEADSETHOOK 79
-* KEYCODE_FOCUS 80
-* KEYCODE_PLUS 81
-* KEYCODE_MENU 82
-* KEYCODE_NOTIFICATION 83
-* KEYCODE_SEARCH 84
-* TAG_LAST_ KEYCODE 85  
+**`Global`** **`A11Y`**
 
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
 
+展开系统快速设置面板.
 
+## [m] recents
+
+### automator.recents()
+
+**`Global`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
+
+打开系统最近任务界面.
+
+## [m] splitScreen
+
+### automator.splitScreen()
+
+**`Global`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否执行成功
+
+执行系统切换分屏动作. 实际结果还取决于设备系统和当前界面是否支持分屏.
+
+---
+
+## Shell 按键指令
+
+以下大写方法分别向 Android `input keyevent` 发送固定键码. Shizuku 可用时通过 Shizuku 执行, 否则通过 Root Shell 执行.
+
+## [m] Menu
+
+### Menu()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送菜单键, 键码为 `82`.
+
+## [m] Home
+
+### Home()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送主屏幕键, 键码为 `3`.
+
+## [m] Back
+
+### Back()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送返回键, 键码为 `4`.
+
+## [m] Up
+
+### Up()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送方向上键, 键码为 `19`.
+
+## [m] Down
+
+### Down()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送方向下键, 键码为 `20`.
+
+## [m] Left
+
+### Left()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送方向左键, 键码为 `21`.
+
+## [m] Right
+
+### Right()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送方向右键, 键码为 `22`.
+
+## [m] OK
+
+### OK()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送方向中心键, 键码为 `23`.
+
+## [m] VolumeUp
+
+### VolumeUp()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送音量上键, 键码为 `24`.
+
+## [m] VolumeDown
+
+### VolumeDown()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送音量下键, 键码为 `25`.
+
+## [m] Power
+
+### Power()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送电源键, 键码为 `26`.
+
+## [m] Camera
+
+### Camera()
+
+**`Global`** **`[6.7.1]`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送相机键, 键码为 `27`.
+
+## [m] KeyCode
+
+### KeyCode(code)
+
+**`Global`** **`[6.7.1]`**
+
+- **code** { [number](dataTypes#number) | [string](dataTypes#string) } - 按键代码或名称
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+使用 Shizuku 或 Root Shell 发送一个按键事件.
+
+**code** 支持下列形式, 字母不区分大小写:
+
+- 十进制键码, 如 `29` 或 `"29"`.
+- 十六进制键码字符串, 如 `"0x1D"`.
+- 完整按键名称, 如 `"KEYCODE_A"`.
+- 省略 `KEYCODE_` 前缀的按键名称, 如 `"A"`.
+
+无法识别的名称, `KEYCODE_UNKNOWN` 或无法解析的数值会导致异常.
+
+```js
+KeyCode(29);
+KeyCode('A');
+KeyCode('KEYCODE_A');
+KeyCode('0x1D');
+```
+
+## [m] Text
+
+### Text(text)
+
+**`Global`**
+
+- **text** { [string](dataTypes#string) } - 传给 `input text` 的文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过 Root Shell 执行 `input text`. 参数会直接拼接到 Shell 命令, 不会自动进行引号包裹或 Shell 转义.
+
+## [m] Input
+
+### Input(text)
+
+**`Global`**
+
+- **text** { [string](dataTypes#string) } - 传给 `input text` 的文本
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[Text](#m-text) 的同义方法.
+
+## 参阅
+
+- [Android KeyEvent 常量](https://developer.android.com/reference/android/view/KeyEvent)

@@ -12,7 +12,7 @@ UiObjectCollection 代表 [控件节点 (UiObject)](uiObjectType) 的对象集�
 
 **`Global`**
 
-AutoJs6 中几乎所有 UiObjectCollection 实例均已借助 Rhino 引擎将其包装为了 NativeArray 类型.  
+AutoJs6 中几乎所有 UiObjectCollection 实例均已借助 Rhino 引擎将其包装为了 NativeArray 类型.<br>
 因此 JavaScript 的 Array 原型方法在 UiObjectCollection 实例上可以直接使用:
 
 ```js
@@ -106,7 +106,7 @@ for (let w of wc) {
 }
 ```
 
-控件集合支持 [控件行为 (UiObject Action)](uiObjectActionsType).  
+控件集合支持 [控件行为 (UiObject Action)](uiObjectActionsType).<br>
 如 [ click / longClick / imeEnter / setText / focus ] 等.
 
 performAction 源码摘要:
@@ -310,7 +310,7 @@ console.log(wc.find(clickable(true)).length); // 9
 
 筛选一个控件.
 
-以集合中每一个元素为根节点, 遍历其所有后代节点, 当满足选择器的筛选条件时, 返回此控件并停止筛选.  
+以集合中每一个元素为根节点, 遍历其所有后代节点, 当满足选择器的筛选条件时, 返回此控件并停止筛选.<br>
 无满足筛选条件的控件时返回 null.
 
 ```js

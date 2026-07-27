@@ -1,30 +1,30 @@
 # 异常 (Exceptions)
 
-当运行时发生错误, 新创建的 Error 对象会被抛出.  
+当运行时发生错误, 新创建的 Error 对象会被抛出.<br>
 除通用的 Error 构造器外, JavaScript 还有其它类型的错误构造器, 详见下述 [JavaScript 错误类型](#javascript) 小节.
 
-> 注: Java 有 Error (错误) 和 Exception (异常) 之分, 它们都扩展自 Throwable 类.  
-> JavaScript 有 Error (错误) 全局对象, 以及一系列细分 Error 对象 (如 TypeError 等).  
+> 注: Java 有 Error (错误) 和 Exception (异常) 之分, 它们都扩展自 Throwable 类.<br>
+> JavaScript 有 Error (错误) 全局对象, 以及一系列细分 Error 对象 (如 TypeError 等).<br>
 > 虽然 JavaScript 没有 Exception (异常) 对象, 但章节标题依然采用 "异常" (而非 "错误").
 
 用 `try...catch` 语句可以捕获并处理异常, 详见下述 [异常处理](#trycatch-语句) 小节.
 
-在 `catch {}` (即 `catch 块`) 中, `e` 对象可用于获取异常相关信息,  
-而 Rhino 引擎重新包装了 `e` 对象, 通过 [`e.javaException`](#p-javaexception) 和 [`e.rhinoException`](#p-rhinoexception) 可获取更多异常信息,  
+在 `catch {}` (即 `catch 块`) 中, `e` 对象可用于获取异常相关信息,<br>
+而 Rhino 引擎重新包装了 `e` 对象, 通过 [`e.javaException`](#p-javaexception) 和 [`e.rhinoException`](#p-rhinoexception) 可获取更多异常信息,<br>
 详见下述 [catch 块](#catch-块) 小节.
 
 # 错误类型
 
 ## JavaScript
 
-以下内置错误类型在 Rhino 引擎中均得以实现, 在 AutoJs6 支持全局调用.  
+以下内置错误类型在 Rhino 引擎中均得以实现, 在 AutoJs6 支持全局调用.<br>
 如需创建自定义错误类型, 参阅下述 [自定义错误类型](#自定义) 小节.
 
 ### Error
 
 通用 Error 构造器.
 
-内置错误类型 TypeError, RangeError 等均扩展自 Error 构造器.  
+内置错误类型 TypeError, RangeError 等均扩展自 Error 构造器.<br>
 例如, 如果一个对象是 TypeError 的实例, 则也一定是 Error 的实例.
 
 Error 实例的属性及方法可参阅 [Error 对象](#error-对象) 章节.
@@ -71,9 +71,9 @@ let a = Array(-1);
 
 /* 复现 (Number 部分实例方法参数不合法). */
 
-// RangeError: Precision -1 out of range. 
+// RangeError: Precision -1 out of range.
 let n = (23).toExponential(-1);
-// RangeError: Precision -2 out of range. 
+// RangeError: Precision -2 out of range.
 let n = (23).toFixed(-2);
 // RangeError: Precision -3 out of range.
 let n = (23).toPrecision(-3);
@@ -130,13 +130,13 @@ try {
 ??
 ```
 
-> 注: Rhino 内置了 token 解析器,  
-> 因此多数语法错误会被重新解析后再抛出,  
+> 注: Rhino 内置了 token 解析器,<br>
+> 因此多数语法错误会被重新解析后再抛出,<br>
 > 而其他多数 JavaScript 引擎则直接抛出 SyntaxError.
 
-> Rhino 相关类或文件:  
-> [org.mozilla.javascript.Parser](https://github.com/mozilla/rhino/blob/master/src/org/mozilla/javascript/Parser.java)  
-> [org.mozilla.javascript.TokenStream](https://github.com/mozilla/rhino/blob/master/src/org/mozilla/javascript/TokenStream.java)  
+> Rhino 相关类或文件:<br>
+> [org.mozilla.javascript.Parser](https://github.com/mozilla/rhino/blob/master/src/org/mozilla/javascript/Parser.java)<br>
+> [org.mozilla.javascript.TokenStream](https://github.com/mozilla/rhino/blob/master/src/org/mozilla/javascript/TokenStream.java)<br>
 > [Messages.properties](https://github.com/mozilla/rhino/blob/master/src/org/mozilla/javascript/resources/Messages.properties)
 
 ### TypeError
@@ -253,7 +253,7 @@ eval("hello()");
 eval("throw EvalError('test')");
 ```
 
-> 注: EvalError 不在当前 (2022/07) ECMAScript 规范中使用, 因此不会被运行时抛出.  
+> 注: EvalError 不在当前 (2022/07) ECMAScript 规范中使用, 因此不会被运行时抛出.<br>
 > 但是对象本身仍然与规范的早期版本向后兼容.
 
 ## DOM
@@ -319,7 +319,7 @@ Exception
 
 ## Rhino
 
-Rhino 异常可以视为特殊的 [Java 异常](#java), 由 Rhino [运行时 (Runtime)](runtime) 包装为对象, 指向 catch 块中异常对象的 [rhinoException](#p-rhinoexception) 属性. 
+Rhino 异常可以视为特殊的 [Java 异常](#java), 由 Rhino [运行时 (Runtime)](runtime) 包装为对象, 指向 catch 块中异常对象的 [rhinoException](#p-rhinoexception) 属性.
 
 ## 自定义
 
@@ -371,7 +371,7 @@ function ensureFruitName(name) {
 
 ```js
 function CustomError(foo, message, fileName, lineNumber) {
-    var instance = new Error(message, fileName, lineNumber);
+    let instance = new Error(message, fileName, lineNumber);
     instance.foo = foo;
     Object.setPrototypeOf(instance, CustomError.prototype);
     if (Error.captureStackTrace) {
@@ -400,7 +400,7 @@ try {
 
 ## throw 语句
 
-使用 throw 语句抛出一个异常.  
+使用 throw 语句抛出一个异常.<br>
 此异常可以是一个含有值的表达式, 包括 [ 数字 / 字符串 / 布尔 / 对象 ] 等多种类型.
 
 不同语言的语法存在差异:
@@ -417,7 +417,7 @@ throw new Exception("foo");
 
 /* Kotlin 语言无 new 关键字. */
 throw Exception("foo");
-``` 
+```
 
 ```js
 /* JavaScript. */
@@ -469,7 +469,7 @@ try...catch 语句必须有 try 代码块, 最多 1 个 catch 代码块 (catch �
 
 又名 "捕捉块".
 
-使用 catch 块处理在 try 代码块中产生的异常.  
+使用 catch 块处理在 try 代码块中产生的异常.<br>
 catch 块中的语句只有 try 代码块中抛出异常时才会执行.
 
 ```js
@@ -560,7 +560,7 @@ function f() {
     console.log(5); /* 不可达. */
 }
 
-let res = f(); // 控制台打印 0, 1, 3
+let res = f(); // 控制台打印 0, 1, 3.
 console.log(res); // false
 ```
 
@@ -626,7 +626,7 @@ try {
 
 stack 属性描述了 Error 对象的 [栈追踪 (Stack Trace)](https://zh.wikipedia.org/wiki/%E6%A0%88%E8%BF%BD%E8%B8%AA) 信息.
 
-栈追踪描述了程序运行过程中某个时间点上的活跃栈帧信息.  
+栈追踪描述了程序运行过程中某个时间点上的活跃栈帧信息.<br>
 用户在日志中可以查看程序出错时的栈追踪信息, 用以自行排查代码异常或将栈追踪信息反馈给开发者.
 
 ```js
@@ -656,8 +656,8 @@ ReferenceError: FAIL is not defined
    at deltaBlue (deltablue.js:879:2)
 ```
 
-栈追踪的信息量由栈帧数量体现, 通过 [Error.stackTraceLimit](#p-stacktracelimit) 可设置栈帧数量.  
-栈追踪信息可通过 [Error.captureStackTrace](#m-capturestacktrace) 附加到一个 JavaScript 对象 (如 obj) 上, 通过访问 obj.stack 可随时查看栈追踪信息.  
+栈追踪的信息量由栈帧数量体现, 通过 [Error.stackTraceLimit](#p-stacktracelimit) 可设置栈帧数量.<br>
+栈追踪信息可通过 [Error.captureStackTrace](#m-capturestacktrace) 附加到一个 JavaScript 对象 (如 obj) 上, 通过访问 obj.stack 可随时查看栈追踪信息.<br>
 [Error.prepareStackTrace](#m-preparestacktrace) 还可以自定义栈追踪信息的输出格式.
 
 stack 属性默认返回 string 类型, 如果设置了 prepareStackTrace 格式函数, 则 stack 类型将与格式函数的返回值类型一致:
@@ -767,7 +767,7 @@ try {
     console.log(e.rhinoException instanceof java.lang.Exception); // true
     console.log(e.rhinoException instanceof org.mozilla.javascript.EcmaError); // true
     console.log(e.rhinoException instanceof Error); // false
-    
+
     /* 因为 try 代码块没有触发 Java 异常, 因此 e.javaException 是 undefined. */
     console.log(e.javaException); // undefined
 }

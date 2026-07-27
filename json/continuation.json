@@ -2,11 +2,171 @@
   "source": "..\\api\\continuation.md",
   "modules": [
     {
-      "textRaw": "协程 (Continuation)",
-      "name": "协程_(continuation)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n",
+      "textRaw": "续体 (Continuation)",
+      "name": "续体_(continuation)",
+      "desc": "<p><code>continuation</code> 模块用于捕获和恢复 Rhino 脚本执行状态.</p>\n<p>此模块仅在脚本项目配置的 <code>useFeatures</code> 数组包含 <code>&quot;continuation&quot;</code> 时可用:</p>\n<pre><code class=\"lang-json\">{\n  &quot;scripts&quot;: {},\n  &quot;useFeatures&quot;: [ &quot;continuation&quot; ]\n}\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">continuation</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p] enabled",
+          "name": "[p]_enabled",
+          "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>当前脚本引擎是否启用了 <code>continuation</code> 特性.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p] enabled"
+        },
+        {
+          "textRaw": "[m] create",
+          "name": "[m]_create",
+          "methods": [
+            {
+              "textRaw": "create(scope?)",
+              "type": "method",
+              "name": "create",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ scope ]** { [Object](dataTypes#object) } - 捕获续体时使用的 Rhino 作用域 ",
+                      "name": "**[",
+                      "desc": "scope ]** { [Object](dataTypes#object) } - 捕获续体时使用的 Rhino 作用域"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ContinuationCreator](#continuationcreator) } - 续体控制对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ContinuationCreator](#continuationcreator) ",
+                      "desc": "续体控制对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "scope?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建续体控制对象. 省略 <strong>scope</strong> 时使用当前脚本作用域.</p>\n<p>未启用 <code>continuation</code> 特性时, 调用返回对象的 <a href=\"#m-await\">await</a> 将抛出异常.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] create"
+        },
+        {
+          "textRaw": "ContinuationCreator",
+          "name": "continuationcreator",
+          "desc": "<p><code>continuation.create()</code> 返回的续体控制对象.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[m] await",
+              "name": "[m]_await",
+              "methods": [
+                {
+                  "textRaw": "await()",
+                  "type": "method",
+                  "name": "await",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 恢复续体时提供的结果 ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "恢复续体时提供的结果"
+                        }
+                      ]
+                    },
+                    {
+                      "params": []
+                    }
+                  ],
+                  "desc": "<p>挂起当前执行并等待 <a href=\"#m-resume\">resume</a> 或 <a href=\"#m-resumeerror\">resumeError</a> 恢复.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] await"
+            },
+            {
+              "textRaw": "[m] resume",
+              "name": "[m]_resume",
+              "methods": [
+                {
+                  "textRaw": "resume(result?)",
+                  "type": "method",
+                  "name": "resume",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ result ]** { [any](dataTypes#any) } - 恢复结果, 默认为 `undefined` ",
+                          "name": "**[",
+                          "desc": "result ]** { [any](dataTypes#any) } - 恢复结果, 默认为 `undefined`"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [void](dataTypes#void) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "result?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>成功恢复续体. <strong>result</strong> 将成为 <a href=\"#m-await\">await</a> 的返回值.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] resume"
+            },
+            {
+              "textRaw": "[m] resumeError",
+              "name": "[m]_resumeerror",
+              "methods": [
+                {
+                  "textRaw": "resumeError(error)",
+                  "type": "method",
+                  "name": "resumeError",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**error** { [any](dataTypes#any) } - 非 `null` 且非 `undefined` 的失败结果 ",
+                          "name": "**error**",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "非 `null` 且非 `undefined` 的失败结果"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [void](dataTypes#void) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "error"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>以失败结果恢复续体. <a href=\"#m-await\">await</a> 将按 Rhino 续体错误语义处理 <strong>error</strong>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] resumeError"
+            }
+          ],
+          "type": "module",
+          "displayName": "ContinuationCreator"
+        }
+      ],
       "type": "module",
-      "displayName": "协程 (Continuation)"
+      "displayName": "续体 (Continuation)"
     }
   ]
 }

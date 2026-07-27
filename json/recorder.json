@@ -4,27 +4,69 @@
     {
       "textRaw": "记录器 (Recorder)",
       "name": "记录器_(recorder)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>记录器用于计时.</p>\n<blockquote>\n<p>注: 为避免与 Timers (定时器) 混淆, 本条目不采用 &quot;计时器&quot; 定义.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">recorder</p>\n\n<hr>\n",
+      "desc": "<p><code>recorder</code> 模块用于保存时间戳, 计算时间差, 以及测量同步函数的运行时间.</p>\n<p><code>recorder</code> 与 <code>$recorder</code> 引用同一个可调用模块对象.</p>\n<p>记录数据只保存在当前脚本引擎的内存中. 不同脚本引擎之间不共享记录, 脚本引擎结束后记录随之丢失.</p>\n",
       "modules": [
+        {
+          "textRaw": "记录模型",
+          "name": "记录模型",
+          "desc": "<p>记录器包含 2 类相互独立的记录:</p>\n<ul>\n<li>命名记录以字符串作为键. 同名记录只保留最后一次保存的时间戳.</li>\n<li>匿名记录保存在后进先出栈中. <code>save()</code> 压入一条记录, <code>load()</code> 弹出最近的一条记录.</li>\n</ul>\n<p>时间戳和时间差的单位均为毫秒. <code>save</code> 和 <code>load</code> 的时间戳被省略, 或传入 <code>null</code> 或 <code>undefined</code> 时, 使用 <code>System.currentTimeMillis()</code> 取得当前系统时间.</p>\n<p><code>save</code> 和 <code>load</code> 的显式时间戳, 以及 <code>isLessThan</code> 和 <code>isGreaterThan</code> 的比较值, 会转换为有符号 64 位整数. 小数部分向 <code>0</code> 截断. <code>NaN</code>, 无穷值及超出 64 位整数范围的值会导致异常.</p>\n<p><code>save</code>, <code>load</code>, <code>isLessThan</code>, <code>isGreaterThan</code>, <code>has</code> 和 <code>remove</code> 是 Java 方法. 对这些方法显式传入 <code>undefined</code> 作为 <code>key</code> 时, Rhino 会将其转换为字符串 <code>&#39;undefined&#39;</code>, 而不是匿名记录. 在需要同时指定匿名记录和其他参数时, 应将 <code>key</code> 显式设为 <code>null</code>.</p>\n<blockquote>\n<p>注: 记录器使用系统墙上时钟, 而非单调时钟. 脚本运行期间调整系统时间可能导致时间差跳变或出现负值.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">recorder</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "记录模型"
+        },
         {
           "textRaw": "[@] recorder",
           "name": "[@]_recorder",
           "methods": [
             {
-              "textRaw": "recorder(func)",
+              "textRaw": "recorder()",
               "type": "method",
               "name": "recorder",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 1/5</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存的时间戳或经过的毫秒数</li>\n</ul>\n<p>访问匿名记录的快捷方式.</p>\n<p>匿名记录栈为空时, 保存当前时间戳并返回该时间戳. 栈不为空时, 弹出最近的匿名记录, 返回当前时间戳与记录时间戳之差.</p>\n<p><code>recorder(null)</code> 和 <code>recorder(undefined)</code> 与 <code>recorder()</code> 等价. 当第 1 个参数为 <code>null</code> 或 <code>undefined</code> 时, 第 2 个参数不会被使用.</p>\n<pre><code class=\"lang-js\">recorder();\n\nsleep(200);\n\nlet elapsed = recorder();\nconsole.log(elapsed);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "recorder(key)",
+              "type": "method",
+              "name": "recorder",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 记录名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存的时间戳或经过的毫秒数</li>\n</ul>\n<p>访问命名记录的快捷方式.</p>\n<p><code>key</code> 不存在时, 保存当前时间戳并返回该时间戳. <code>key</code> 已存在时, 返回当前时间戳与记录时间戳之差.</p>\n<p>读取不会删除命名记录. 如需重新开始计时, 可再次调用 <a href=\"#m-save\">save(key)</a>. 如需让下一次快捷调用重新创建记录, 可先调用 <a href=\"#m-remove\">remove(key)</a>.</p>\n<pre><code class=\"lang-js\">recorder(&#39;download&#39;);\n\nsleep(200);\n\nconsole.log(recorder(&#39;download&#39;));\nrecorder.remove(&#39;download&#39;);\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "func"
-                    },
-                    {
-                      "name": "thisType"
+                      "name": "key"
                     }
                   ]
-                },
+                }
+              ]
+            },
+            {
+              "textRaw": "recorder(key, timestamp)",
+              "type": "method",
+              "name": "recorder",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.6.0]</code></strong> <strong><code>Overload 3/5</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 记录名称</li>\n<li><strong>timestamp</strong> { <a href=\"dataTypes#any\">any</a> } - 兼容参数, 当前实现不使用此参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存的当前时间戳或经过的毫秒数</li>\n</ul>\n<p>访问命名记录.</p>\n<p>从 AutoJs6 6.6.0 起, 当前实现忽略 <code>timestamp</code>. 此重载与 <a href=\"#recorderkey\">recorder(key)</a> 等价: <code>key</code> 不存在时保存当前系统时间, <code>key</code> 已存在时以当前系统时间计算时间差.</p>\n<p>如需保存或读取显式时间戳, 使用 <a href=\"#savekey-timestamp\">save(key, timestamp)</a> 和 <a href=\"#loadkey-timestamp\">load(key, timestamp)</a>.</p>\n<pre><code class=\"lang-js\">let supplied = 1000;\nlet saved = recorder(&#39;manual&#39;, supplied);\n\nconsole.log(saved === supplied); // false\n\nrecorder.remove(&#39;manual&#39;);\nrecorder.save(&#39;manual&#39;, 1000);\nconsole.log(recorder.load(&#39;manual&#39;, 1450)); // 450\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "timestamp"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "recorder(func)",
+              "type": "method",
+              "name": "recorder",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 4/5</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"dataTypes#function\">() =&gt;</a> <a href=\"dataTypes#void\">void</a> } - 待测量的函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 函数调用经过的毫秒数</li>\n</ul>\n<p>同步调用一次 <code>func</code>, 并返回本次调用经过的时间.</p>\n<p>调用时不传入参数, 函数返回值会被忽略. <code>func</code> 抛出的异常会继续向外传播, 此时本次调用不返回耗时.</p>\n<pre><code class=\"lang-js\">function task() {\n    sleep(200);\n}\n\nlet elapsed = recorder(task);\nconsole.log(elapsed);\n</code></pre>\n<blockquote>\n<p>注: 此重载只测量函数调用本身. 如果函数启动了异步任务, 返回值不包含异步任务后续执行的时间.</p>\n</blockquote>\n<blockquote>\n<p>参阅: <a href=\"#recorderfunc-thistype\">recorder(func, thisType)</a></p>\n</blockquote>\n",
+              "signatures": [
                 {
                   "params": [
                     {
@@ -38,6 +80,7 @@
               "textRaw": "recorder(func, thisType)",
               "type": "method",
               "name": "recorder",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 5/5</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"dataTypes#function\">() =&gt;</a> <a href=\"dataTypes#void\">void</a> } - 待测量的函数</li>\n<li><strong>thisType</strong> { <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 调用 <code>func</code> 时使用的 <code>this</code> 值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 函数调用经过的毫秒数</li>\n</ul>\n<p>使用指定 <code>this</code> 值同步调用一次 <code>func</code>, 并返回本次调用经过的时间.</p>\n<pre><code class=\"lang-js\">let worker = {\n    delay: 200,\n    run: function () {\n        sleep(this.delay);\n    },\n};\n\nlet elapsed = recorder(worker.run, worker);\nconsole.log(elapsed);\n</code></pre>\n<p>从 AutoJs6 6.8.0 起, <code>func</code> 接受 Rhino <code>Callable</code> 实例. <code>thisType</code> 只有在它是非函数 JavaScript 对象时才会作为 <code>this</code> 值传入. <code>null</code>, <code>undefined</code> 及其他值均按未指定 <code>this</code> 处理.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -60,20 +103,22 @@
           "name": "[m]_save",
           "methods": [
             {
+              "textRaw": "save()",
+              "type": "method",
+              "name": "save",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存的当前时间戳</li>\n</ul>\n<p>将当前时间戳压入匿名记录栈.</p>\n<pre><code class=\"lang-js\">let timestamp = recorder.save();\n\nsleep(200);\n\nconsole.log(timestamp);\nconsole.log(recorder.load());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
               "textRaw": "save(key)",
               "type": "method",
               "name": "save",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存的当前时间戳</li>\n</ul>\n<p>以 <code>key</code> 保存当前时间戳并返回该时间戳.</p>\n<p>保存已存在的 <code>key</code> 会覆盖原时间戳. <code>key</code> 为 <code>null</code> 时, 此重载按匿名记录处理, 等价于 <a href=\"#save\">save()</a>. 显式传入 <code>undefined</code> 时, 使用名称 <code>&#39;undefined&#39;</code>.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;parse&#39;);\n\nsleep(200);\n\nconsole.log(recorder.load(&#39;parse&#39;));\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "key"
-                    },
-                    {
-                      "name": "timestamp"
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -87,6 +132,7 @@
               "textRaw": "save(key, timestamp)",
               "type": "method",
               "name": "save",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><strong>timestamp</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 待保存的时间戳</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 保存后的时间戳</li>\n</ul>\n<p>以 <code>key</code> 保存指定时间戳并返回保存结果.</p>\n<p><code>key</code> 为 <code>null</code> 时, 时间戳会压入匿名记录栈. 显式传入 <code>undefined</code> 时, 使用名称 <code>&#39;undefined&#39;</code>. <code>timestamp</code> 为 <code>null</code> 或 <code>undefined</code> 时, 使用当前系统时间.</p>\n<pre><code class=\"lang-js\">console.log(recorder.save(&#39;manual&#39;, 1000)); // 1000\nconsole.log(recorder.load(&#39;manual&#39;, 1450)); // 450\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -109,20 +155,22 @@
           "name": "[m]_load",
           "methods": [
             {
+              "textRaw": "load()",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 经过的毫秒数, 无匿名记录时为 <code>NaN</code></li>\n</ul>\n<p>弹出最近的匿名记录, 返回当前时间戳与记录时间戳之差.</p>\n<p>匿名记录按后进先出顺序读取. 栈为空时不抛出异常, 而是返回 <code>NaN</code>.</p>\n<pre><code class=\"lang-js\">recorder.save();\n\nsleep(200);\n\nconsole.log(recorder.load());\nconsole.log(isNaN(recorder.load())); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
               "textRaw": "load(key)",
               "type": "method",
               "name": "load",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 经过的毫秒数, 无匿名记录时为 <code>NaN</code></li>\n</ul>\n<p>返回当前时间戳与 <code>key</code> 对应时间戳之差.</p>\n<p>读取命名记录不会删除该记录. 从 AutoJs6 6.8.0 起, 指定的命名记录不存在时抛出 <code>java.util.NoSuchElementException</code>.</p>\n<p><code>key</code> 为 <code>null</code> 时, 此重载按匿名记录处理, 等价于 <a href=\"#load\">load()</a>. 显式传入 <code>undefined</code> 时, 读取名称 <code>&#39;undefined&#39;</code>.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;render&#39;);\n\nsleep(200);\n\nlet elapsed = recorder.load(&#39;render&#39;);\nconsole.log(elapsed);\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "key"
-                    },
-                    {
-                      "name": "timestamp"
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -136,6 +184,7 @@
               "textRaw": "load(key, timestamp)",
               "type": "method",
               "name": "load",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><strong>timestamp</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 计算时间差时使用的结束时间戳</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 计算得到的毫秒数, 无匿名记录时为 <code>NaN</code></li>\n</ul>\n<p>返回 <code>timestamp</code> 与 <code>key</code> 对应时间戳之差.</p>\n<p>读取命名记录不会删除该记录. 从 AutoJs6 6.8.0 起, 指定的命名记录不存在时抛出 <code>java.util.NoSuchElementException</code>.</p>\n<p><code>key</code> 为 <code>null</code> 时, 弹出最近的匿名记录. 显式传入 <code>undefined</code> 时, 读取名称 <code>&#39;undefined&#39;</code>. <code>timestamp</code> 为 <code>null</code> 或 <code>undefined</code> 时, 使用当前系统时间.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;manual&#39;, 1200);\n\nconsole.log(recorder.load(&#39;manual&#39;, 1800)); // 600\nconsole.log(recorder.has(&#39;manual&#39;)); // true\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -161,6 +210,7 @@
               "textRaw": "isLessThan(key, compare)",
               "type": "method",
               "name": "isLessThan",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><strong>compare</strong> { <a href=\"dataTypes#number\">number</a> } - 待比较的毫秒数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前时间差是否小于 <code>compare</code></li>\n</ul>\n<p>计算当前时间戳与记录时间戳之差, 并执行严格小于比较.</p>\n<p>命名记录不存在时抛出 <code>java.util.NoSuchElementException</code>. <code>key</code> 为 <code>null</code> 时会弹出最近的匿名记录; 匿名记录不存在时, 计算结果为 <code>NaN</code>, 因而返回 <code>false</code>. 显式传入 <code>undefined</code> 时, 使用名称 <code>&#39;undefined&#39;</code>.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;timeout&#39;);\n\nwhile (recorder.isLessThan(&#39;timeout&#39;, 1000)) {\n    sleep(50);\n}\n\nconsole.log(&#39;timeout&#39;);\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -186,6 +236,7 @@
               "textRaw": "isGreaterThan(key, compare)",
               "type": "method",
               "name": "isGreaterThan",
+              "desc": "<p><strong><code>6.0.3</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><strong>compare</strong> { <a href=\"dataTypes#number\">number</a> } - 待比较的毫秒数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前时间差是否大于 <code>compare</code></li>\n</ul>\n<p>计算当前时间戳与记录时间戳之差, 并执行严格大于比较.</p>\n<p>命名记录不存在时抛出 <code>java.util.NoSuchElementException</code>. <code>key</code> 为 <code>null</code> 时会弹出最近的匿名记录; 匿名记录不存在时, 计算结果为 <code>NaN</code>, 因而返回 <code>false</code>. 显式传入 <code>undefined</code> 时, 使用名称 <code>&#39;undefined&#39;</code>.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;request&#39;);\n\nsleep(200);\n\nif (recorder.isGreaterThan(&#39;request&#39;, 100)) {\n    console.log(&#39;slow request&#39;);\n}\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -211,6 +262,7 @@
               "textRaw": "has(key)",
               "type": "method",
               "name": "has",
+              "desc": "<p><strong><code>6.0.3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 命名记录是否存在</li>\n</ul>\n<p>检查命名记录 <code>key</code> 是否存在.</p>\n<p>此方法不检查匿名记录. <code>key</code> 为 <code>null</code> 时返回 <code>false</code>. 显式传入 <code>undefined</code> 时, 检查名称 <code>&#39;undefined&#39;</code>.</p>\n<pre><code class=\"lang-js\">console.log(recorder.has(&#39;task&#39;)); // false\n\nrecorder.save(&#39;task&#39;);\n\nconsole.log(recorder.has(&#39;task&#39;)); // true\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -233,6 +285,7 @@
               "textRaw": "remove(key)",
               "type": "method",
               "name": "remove",
+              "desc": "<p><strong><code>6.0.3</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 记录名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否删除了命名记录</li>\n</ul>\n<p>删除命名记录 <code>key</code>.</p>\n<p>记录存在且已删除时返回 <code>true</code>. 记录不存在或 <code>key</code> 为 <code>null</code> 时返回 <code>false</code>. 显式传入 <code>undefined</code> 时, 删除名称 <code>&#39;undefined&#39;</code>. 此方法不删除匿名记录.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;temporary&#39;);\n\nconsole.log(recorder.remove(&#39;temporary&#39;)); // true\nconsole.log(recorder.remove(&#39;temporary&#39;)); // false\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -255,6 +308,7 @@
               "textRaw": "clear()",
               "type": "method",
               "name": "clear",
+              "desc": "<p><strong><code>6.0.3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>删除当前记录器中的全部命名记录和匿名记录.</p>\n<pre><code class=\"lang-js\">recorder.save(&#39;named&#39;);\nrecorder.save();\nrecorder.clear();\n\nconsole.log(recorder.has(&#39;named&#39;)); // false\nconsole.log(isNaN(recorder.load())); // true\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []

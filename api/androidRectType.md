@@ -228,8 +228,8 @@ console.log(rectB.exactCenterY()); // 200.5
 - **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-返回是否包含另一个矩形.  
-参照矩形的所有边均在当前矩形内 (包含边重叠情况) 则满足包含条件.  
+返回是否包含另一个矩形.<br>
+参照矩形的所有边均在当前矩形内 (包含边重叠情况) 则满足包含条件.<br>
 空矩形与任何矩形不存在包含关系.
 
 ```js
@@ -252,7 +252,7 @@ console.log(rectThis.contains(rectRefC)); // false
 - **rect** { [android.graphics.Rect](#c-androidgraphicsrect) } - 参照矩形
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-返回是否与参展矩形相交 (不包括边界或点重叠的情况).  
+返回是否与参展矩形相交 (不包括边界或点重叠的情况).<br>
 如果相交, 则返回 true, **且当前矩形被设置为相交部分的矩形**.
 
 ```js
@@ -262,7 +262,7 @@ let rectRef = new android.graphics.Rect(200, 0, 800, 800);
 console.log(rectThis.intersect(rectRef)); // true
 
 /* rectThis 被修改. */
-console.log(rectThis); // Rect(200, 0 - 600, 600) 
+console.log(rectThis); // Rect(200, 0 - 600, 600)
 ```
 
 如果不相交, 则返回 false, 当前矩形不会被修改:

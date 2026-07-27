@@ -20,6 +20,22 @@ sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 
 ---
 
+## [p#] name
+
+**`6.6.0`** **`READONLY`**
+
+- { [string](dataTypes#string) }
+
+本地存储名称.
+
+## [p#] size
+
+**`6.6.0`** **`Getter`**
+
+- { [number](dataTypes#number) }
+
+本地存储当前包含的键值对数量.
+
 ## [m#] put
 
 ### put(key, value)
@@ -42,16 +58,16 @@ sto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true
 - [Object](dataTypes#object)
 - ... ...
 
-理论上, 除 [undefined](dataTypes#undefined) 和 [bigint](glossaries#bigint) 外的任意类型数据均可存入本地存储,  
+理论上, 除 [undefined](dataTypes#undefined) 和 [bigint](glossaries#bigint) 外的任意类型数据均可存入本地存储,<br>
 试图存入不支持类型的数据时, 将抛出异常.
 
-存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,  
+存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,<br>
 因此数据转换时遵循 JSON 序列化规则 (如 NaN 将被转换为 null 等).
 
 ```js
 let sto = storages.create('fruit');
 sto.put('total', 500); /* 存入数字. */
-sto.put('products', [ 'apple', 'banana' ]); /* 存入数组时将被 JSON 序列化.  */
+sto.put('products', [ 'apple', 'banana' ]); /* 存入数组时将被 JSON 序列化. */
 ```
 
 链式调用:
@@ -60,6 +76,18 @@ sto.put('products', [ 'apple', 'banana' ]); /* 存入数组时将被 JSON 序列
 let sto = storages.create('test');
 sto.put('a', 1).put('b', 2).put('c', 3).put('d', 4);
 ```
+
+## [m#] putSync
+
+### putSync(key, value)
+
+**`6.6.0`**
+
+- **key** { [string](dataTypes#string) } - 待存入键名
+- **value** { [AnyBut](dataTypes#anybut)[<](dataTypes#generic)[undefined](dataTypes#undefined), [bigint](glossaries#bigint)[>](dataTypes#generic) } - 待存入数据
+- <ins>**returns**</ins> { [Storage](storageType) } - 当前 Storage 实例
+
+同步写入键值对并等待数据写入存储文件. 序列化规则与 [put](#m-put) 相同.
 
 ## [m#] get
 
@@ -87,7 +115,7 @@ sto.put('fruits', [ 'apple', 'banana' ]); /* 原始数据是字符串数组. */
 sto.get('fruits'); /* 获取的数据还原为同类型的字符串数组, 即 ['apple', 'banana']. */
 ```
 
-存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,  
+存入时, 由 [JSON.stringify](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify) 序列化数据为 [string](dataTypes#string) 类型后再存入,<br>
 读取时, 由 [JSON.parse](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse) 还原为原本的数据类型.
 
 因此部分数据受 JSON 序列化的影响, 可能导致读取数据与原始数据存在差距:
@@ -127,6 +155,17 @@ let sto = storages.create('fruit');
 sto.remove('apple').remove('banana').remove('cherry');
 ```
 
+## [m#] removeSync
+
+### removeSync(key)
+
+**`6.6.0`**
+
+- **key** { [string](dataTypes#string) } - 键名
+- <ins>**returns**</ins> { [Storage](storageType) } - 当前 Storage 实例
+
+同步移除指定键值对并等待数据写入存储文件.
+
 ## [m#] clear
 
 ### clear()
@@ -142,3 +181,33 @@ sto.get('apple'); // 10
 sto.clear();
 sto.get('apple'); // undefined
 ```
+
+## [m#] clearSync
+
+### clearSync()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+同步清除本地存储的全部数据并等待数据写入存储文件.
+
+## [m#] selfRemove
+
+### selfRemove()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [Storage](storageType) } - 当前 Storage 实例
+
+异步清除当前本地存储的全部数据.
+
+## [m#] selfRemoveSync
+
+### selfRemoveSync()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [Storage](storageType) } - 当前 Storage 实例
+
+同步清除当前本地存储的全部数据并等待数据写入存储文件.

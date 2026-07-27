@@ -1,0 +1,481 @@
+{
+  "source": "..\\api\\uiAttributes.md",
+  "modules": [
+    {
+      "textRaw": "UI 布局属性 (UI Attributes)",
+      "name": "ui_布局属性_(ui_attributes)",
+      "desc": "<p>本页列出 AutoJs6 动态布局器支持的布局标签属性. 属性实现来自 <code>core/ui/attribute</code>, <code>core/ui/inflater</code> 和 <code>core/ui/xml</code>, 适用于 <a href=\"ui\">UI</a> 及其他复用同一动态布局器的布局 API.</p>\n<p>属性按 Android 视图继承关系叠加. 例如 <code>&lt;checkbox&gt;</code> 同时具有 View, TextView, CompoundButton 和 CheckBox 对应的属性. 本页各控件表只列出相对于父类新增的属性.</p>\n",
+      "modules": [
+        {
+          "textRaw": "应用规则",
+          "name": "应用规则",
+          "desc": "<ul>\n<li>属性名称区分大小写.</li>\n<li>括号内名称为等效别名, 如 <code>background</code> (<code>bg</code>).</li>\n<li>未注册的属性会被忽略, 不会交给 Android 平台自动处理.</li>\n<li><a href=\"#明确不支持的属性\">明确不支持的属性</a> 会抛出 <code>UnsupportedOperationException</code>.</li>\n<li>属性处理器保存最近一次应用的原始字符串. <code>view.attr(name)</code> 返回该字符串, 不一定是视图的实时 Android 属性值.</li>\n<li>同一属性的多个别名共享保存值和 setter.</li>\n<li>自定义控件通过 <code>ui.Widget#defineAttr</code> 注册的属性优先于根视图属性.</li>\n</ul>\n<p>完整类名标签会选择该类或其最近已注册父类的属性处理器. 因此 <code>&lt;android.widget.TextView&gt;</code> 可使用 TextView 属性, 但一个没有专用处理器的第三方 <code>ViewGroup</code> 通常只能使用 View 和 ViewGroup 属性.</p>\n",
+          "type": "module",
+          "displayName": "应用规则"
+        },
+        {
+          "textRaw": "属性值格式",
+          "name": "属性值格式",
+          "modules": [
+            {
+              "textRaw": "布尔值",
+              "name": "布尔值",
+              "desc": "<p>布尔属性使用字符串 <code>true</code> 或 <code>false</code>. Kotlin <code>String.toBoolean()</code> 仅将不区分大小写的 <code>true</code> 解析为真, 其他字符串均解析为假.</p>\n",
+              "type": "module",
+              "displayName": "布尔值"
+            },
+            {
+              "textRaw": "数字",
+              "name": "数字",
+              "desc": "<p>整数和浮点数属性分别使用十进制整数或浮点数字符串. 无法由 <code>toInt</code>, <code>toLong</code> 或 <code>toFloat</code> 解析时会抛出异常.</p>\n",
+              "type": "module",
+              "displayName": "数字"
+            },
+            {
+              "textRaw": "尺寸",
+              "name": "尺寸",
+              "desc": "<p>尺寸支持以下单位:</p>\n<table>\n<thead>\n<tr>\n<th>单位</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>px</code></td>\n<td>像素</td>\n</tr>\n<tr>\n<td><code>dp</code>, <code>dip</code></td>\n<td>密度无关像素</td>\n</tr>\n<tr>\n<td><code>sp</code></td>\n<td>字体缩放像素</td>\n</tr>\n<tr>\n<td><code>pt</code></td>\n<td>磅</td>\n</tr>\n<tr>\n<td><code>in</code></td>\n<td>英寸</td>\n</tr>\n<tr>\n<td><code>mm</code></td>\n<td>毫米</td>\n</tr>\n</tbody>\n</table>\n<p>未写单位时按 <code>dp</code> 解析. <code>?attrName</code> 可读取当前主题中的尺寸属性.</p>\n<p><code>width</code> 和 <code>height</code> 另外接受 <code>wrap_content</code>, <code>match_parent</code> 和 <code>fill_parent</code>. 在 AutoJs6 简写转换模式中, <code>w</code> 或 <code>h</code> 的值 <code>auto</code> 转换为 <code>wrap_content</code>, <code>*</code> 转换为 <code>match_parent</code>.</p>\n<p>宽高还可使用百分比, 如 <code>w=&quot;50%&quot;</code>. 只有渲染时传入父视图且父视图已有测量尺寸时才可计算, 否则百分比无法可靠使用.</p>\n<p><code>padding</code>, <code>layout_margin</code> 和 <code>contentPadding</code> 等四边属性使用:</p>\n<ul>\n<li>1 个值 - 四边相同.</li>\n<li>2 个值 - 第 1 个用于 left 和 right, 第 2 个用于 top 和 bottom.</li>\n<li>4 个值 - 依次为 left, top, right, bottom.</li>\n</ul>\n<p>当前底层数组解析器没有完整定义 3 个值的语义, 不应使用 3 值形式.</p>\n",
+              "type": "module",
+              "displayName": "尺寸"
+            },
+            {
+              "textRaw": "多值",
+              "name": "多值",
+              "desc": "<p>多数枚举组合和数组属性使用 <code>|</code>, <code>,</code>, <code>;</code>, <code>/</code> 或空白分隔. 具体属性可能只接受其中一种分隔方式:</p>\n<ul>\n<li><code>gravity</code>, <code>scrollbars</code> 和 <code>requiresFadingEdge</code> 只使用 <code>|</code>.</li>\n<li><code>spinner.entries</code> 和 <code>tint</code> 等控件实现按各自规则解析.</li>\n<li><code>@color/name</code> 等资源引用中的 <code>/</code> 会作为资源引用的一部分保留.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "多值"
+            },
+            {
+              "textRaw": "Gravity",
+              "name": "gravity",
+              "desc": "<p>Gravity 可使用以下值并以 <code>|</code> 组合:</p>\n<p><code>left</code>, <code>start</code>, <code>textStart</code>, <code>top</code>, <code>right</code>, <code>end</code>, <code>textEnd</code>, <code>bottom</code>, <code>center_horizontal</code>, <code>center_vertical</code>, <code>center</code>.</p>\n",
+              "type": "module",
+              "displayName": "Gravity"
+            },
+            {
+              "textRaw": "颜色",
+              "name": "颜色",
+              "desc": "<p>颜色属性接受 <a href=\"omniTypes#omnicolor\">OmniColor</a> 可解析的字符串, 包括十六进制颜色, 命名颜色和颜色资源. 状态颜色属性通常接受单个颜色或由分隔符组成的颜色列表.</p>\n",
+              "type": "module",
+              "displayName": "颜色"
+            },
+            {
+              "textRaw": "Drawable",
+              "name": "drawable",
+              "desc": "<p>Drawable 属性可使用:</p>\n<ul>\n<li><code>#...</code> 或 <code>@color/...</code> 颜色.</li>\n<li><code>?attrName</code> 主题 Drawable.</li>\n<li>应用 Drawable 资源名称.</li>\n<li><code>file://...</code> 或存在的本地文件路径.</li>\n<li>可由 AutoJs6 颜色工具解析的命名颜色.</li>\n</ul>\n<p><code>background</code> 另外支持 <code>http://</code> 和 <code>https://</code> 图片. <code>ImageView</code> 的 <code>src</code> 支持网络 URL 和 <code>data:...;base64,...</code>; <code>path</code> 优先按本地路径处理; <code>url</code> 会把没有协议的值补为 <code>http://</code>.</p>\n",
+              "type": "module",
+              "displayName": "Drawable"
+            },
+            {
+              "textRaw": "ID, 字符串和样式",
+              "name": "id,_字符串和样式",
+              "desc": "<ul>\n<li>ID 可写为 <code>name</code>, <code>@id/name</code> 或 <code>@+id/name</code>.</li>\n<li>字符串属性可写为普通文本或 <code>@string/name</code>.</li>\n<li><code>style</code> 可写为 <code>name</code> 或 <code>@style/name</code>, 仅查找 AutoJs6 应用资源.</li>\n<li><code>videoPath</code> 支持本地文件或 <code>@raw/name</code>.</li>\n<li>动画资源可写为 <code>@anim/name</code> 或 <code>@android:anim/name</code>.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "ID, 字符串和样式"
+            }
+          ],
+          "type": "module",
+          "displayName": "属性值格式"
+        },
+        {
+          "textRaw": "AutoJs6 简写转换",
+          "name": "autojs6_简写转换",
+          "desc": "<p>下列名称由 <code>XmlConverter</code> 在简写模式中转换. 强制保留原 XML 时, 应改用目标名称.</p>\n<table>\n<thead>\n<tr>\n<th>简写</th>\n<th>目标</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>w</code>, <code>h</code></td>\n<td><code>width</code>, <code>height</code></td>\n</tr>\n<tr>\n<td><code>size</code></td>\n<td><code>textSize</code></td>\n</tr>\n<tr>\n<td><code>margin</code></td>\n<td><code>layout_margin</code></td>\n</tr>\n<tr>\n<td><code>marginLeft</code>, <code>marginRight</code>, <code>marginTop</code>, <code>marginBottom</code></td>\n<td>对应 <code>layout_margin...</code></td>\n</tr>\n<tr>\n<td><code>marginStart</code>, <code>marginEnd</code></td>\n<td>对应 <code>layout_margin...</code></td>\n</tr>\n<tr>\n<td><code>marginVertical</code>, <code>marginHorizontal</code></td>\n<td>对应 <code>layout_margin...</code></td>\n</tr>\n<tr>\n<td><code>align</code></td>\n<td><code>layout_gravity</code></td>\n</tr>\n<tr>\n<td><code>alignParentBottom</code>, <code>alignParentTop</code>, <code>alignParentLeft</code>, <code>alignParentStart</code>, <code>alignParentRight</code>, <code>alignParentEnd</code></td>\n<td>对应 <code>layout_...</code> 相对布局规则</td>\n</tr>\n<tr>\n<td><code>centerHorizontal</code>, <code>centerVertical</code>, <code>centerInParent</code></td>\n<td>对应 <code>layout_...</code> 相对布局规则</td>\n</tr>\n<tr>\n<td><code>below</code>, <code>above</code>, <code>toLeftOf</code>, <code>toRightOf</code></td>\n<td>对应 <code>layout_...</code> 相对布局规则</td>\n</tr>\n<tr>\n<td><code>alignBottom</code>, <code>alignTop</code>, <code>alignLeft</code>, <code>alignStart</code>, <code>alignRight</code>, <code>alignEnd</code></td>\n<td>对应 <code>layout_...</code> 相对布局规则</td>\n</tr>\n<tr>\n<td><code>vertical=&quot;true&quot;</code></td>\n<td><code>orientation=&quot;vertical&quot;</code></td>\n</tr>\n<tr>\n<td><code>vertical=&quot;false&quot;</code></td>\n<td><code>orientation=&quot;horizontal&quot;</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "AutoJs6 简写转换"
+        },
+        {
+          "textRaw": "View 属性",
+          "name": "view_属性",
+          "desc": "<p>以下属性适用于所有视图.</p>\n",
+          "modules": [
+            {
+              "textRaw": "标识与尺寸",
+              "name": "标识与尺寸",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>id</code></td>\n<td>ID</td>\n<td>视图 ID</td>\n</tr>\n<tr>\n<td><code>width</code> (<code>w</code>, <code>layout_width</code>, <code>layoutWidth</code>)</td>\n<td>尺寸或布局尺寸</td>\n<td>视图宽度</td>\n</tr>\n<tr>\n<td><code>height</code> (<code>h</code>, <code>layout_height</code>, <code>layoutHeight</code>)</td>\n<td>尺寸或布局尺寸</td>\n<td>视图高度</td>\n</tr>\n<tr>\n<td><code>minWidth</code></td>\n<td>尺寸</td>\n<td>最小宽度</td>\n</tr>\n<tr>\n<td><code>minHeight</code></td>\n<td>尺寸</td>\n<td>最小高度</td>\n</tr>\n<tr>\n<td><code>tag</code></td>\n<td>字符串</td>\n<td>Android View tag</td>\n</tr>\n<tr>\n<td><code>contentDescription</code></td>\n<td>字符串</td>\n<td>无障碍内容描述</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "标识与尺寸"
+            },
+            {
+              "textRaw": "父布局参数",
+              "name": "父布局参数",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>layout_gravity</code> (<code>layoutGravity</code>)</td>\n<td>Gravity</td>\n<td>视图在父布局中的位置. 支持 LinearLayout, FrameLayout 及具有 <code>gravity</code> 布局参数字段的父布局</td>\n</tr>\n<tr>\n<td><code>layout_weight</code> (<code>layoutWeight</code>)</td>\n<td>浮点数</td>\n<td>LinearLayout 权重</td>\n</tr>\n<tr>\n<td><code>layout_margin</code> (<code>layoutMargin</code>)</td>\n<td>尺寸列表</td>\n<td>外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginLeft</code> (<code>layoutMarginLeft</code>)</td>\n<td>尺寸</td>\n<td>左外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginRight</code> (<code>layoutMarginRight</code>)</td>\n<td>尺寸</td>\n<td>右外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginTop</code> (<code>layoutMarginTop</code>)</td>\n<td>尺寸</td>\n<td>上外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginBottom</code> (<code>layoutMarginBottom</code>)</td>\n<td>尺寸</td>\n<td>下外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginStart</code> (<code>layoutMarginStart</code>)</td>\n<td>尺寸</td>\n<td>起始外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginEnd</code> (<code>layoutMarginEnd</code>)</td>\n<td>尺寸</td>\n<td>结束外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginVertical</code> (<code>layoutMarginVertical</code>)</td>\n<td>尺寸</td>\n<td>上下外边距</td>\n</tr>\n<tr>\n<td><code>layout_marginHorizontal</code> (<code>layoutMarginHorizontal</code>)</td>\n<td>尺寸</td>\n<td>起始和结束外边距</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "父布局参数"
+            },
+            {
+              "textRaw": "RelativeLayout 子视图规则",
+              "name": "relativelayout_子视图规则",
+              "desc": "<p>以下规则只在父视图为 <code>RelativeLayout</code> 时应用.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>layout_alignParentBottom</code> (<code>layoutAlignParentBottom</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_alignParentTop</code> (<code>layoutAlignParentTop</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_alignParentLeft</code> (<code>layoutAlignParentLeft</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_alignParentStart</code> (<code>layoutAlignParentStart</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_alignParentRight</code> (<code>layoutAlignParentRight</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_alignParentEnd</code> (<code>layoutAlignParentEnd</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_centerHorizontal</code> (<code>layoutCenterHorizontal</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_centerVertical</code> (<code>layoutCenterVertical</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_centerInParent</code> (<code>layoutCenterInParent</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>layout_below</code> (<code>layoutBelow</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_above</code> (<code>layoutAbove</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_toLeftOf</code> (<code>layoutToLeftOf</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_toRightOf</code> (<code>layoutToRightOf</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignBottom</code> (<code>layoutAlignBottom</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignTop</code> (<code>layoutAlignTop</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignLeft</code> (<code>layoutAlignLeft</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignStart</code> (<code>layoutAlignStart</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignRight</code> (<code>layoutAlignRight</code>)</td>\n<td>ID</td>\n</tr>\n<tr>\n<td><code>layout_alignEnd</code> (<code>layoutAlignEnd</code>)</td>\n<td>ID</td>\n</tr>\n</tbody>\n</table>\n<p>布尔规则只有值严格解析为真时才添加. 目标规则使用指定视图 ID.</p>\n",
+              "type": "module",
+              "displayName": "RelativeLayout 子视图规则"
+            },
+            {
+              "textRaw": "背景, 前景与内边距",
+              "name": "背景,_前景与内边距",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>background</code> (<code>bg</code>)</td>\n<td>Drawable</td>\n<td>背景, 支持网络图片</td>\n</tr>\n<tr>\n<td><code>backgroundColor</code> (<code>bgColor</code>)</td>\n<td>颜色</td>\n<td>纯色背景</td>\n</tr>\n<tr>\n<td><code>backgroundTint</code> (<code>bgTint</code>)</td>\n<td>颜色</td>\n<td>背景着色</td>\n</tr>\n<tr>\n<td><code>backgroundTintMode</code> (<code>bgTintMode</code>)</td>\n<td>枚举</td>\n<td>背景着色模式</td>\n</tr>\n<tr>\n<td><code>foreground</code> (<code>fg</code>)</td>\n<td>Drawable</td>\n<td>前景</td>\n</tr>\n<tr>\n<td><code>foregroundGravity</code> (<code>fgGravity</code>)</td>\n<td>Gravity</td>\n<td>前景位置</td>\n</tr>\n<tr>\n<td><code>foregroundTint</code> (<code>fgTint</code>)</td>\n<td>颜色</td>\n<td>前景着色</td>\n</tr>\n<tr>\n<td><code>foregroundTintMode</code> (<code>fgTintMode</code>)</td>\n<td>枚举</td>\n<td>前景着色模式</td>\n</tr>\n<tr>\n<td><code>padding</code></td>\n<td>尺寸列表</td>\n<td>四边内边距</td>\n</tr>\n<tr>\n<td><code>paddingLeft</code>, <code>paddingRight</code>, <code>paddingTop</code>, <code>paddingBottom</code></td>\n<td>尺寸</td>\n<td>指定方向内边距</td>\n</tr>\n<tr>\n<td><code>paddingStart</code>, <code>paddingEnd</code></td>\n<td>尺寸</td>\n<td>起始或结束内边距</td>\n</tr>\n</tbody>\n</table>\n<p>着色模式可用值: <code>add</code>, <code>multiply</code>, <code>screen</code>, <code>src_atop</code>, <code>src_in</code>, <code>src_over</code>.</p>\n<p><code>paddingHorizontal</code> 和 <code>paddingVertical</code> 在当前实现中被明确标记为不支持, 即使同一源文件中存在早期 setter 注册.</p>\n",
+              "type": "module",
+              "displayName": "背景, 前景与内边距"
+            },
+            {
+              "textRaw": "状态与交互",
+              "name": "状态与交互",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>alpha</code></td>\n<td>浮点数</td>\n</tr>\n<tr>\n<td><code>isClickable</code> (<code>clickable</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isContextClickable</code> (<code>contextClickable</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isLongClickable</code> (<code>longClickable</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isFocusable</code> (<code>focusable</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isFocusableInTouchMode</code> (<code>focusableInTouchMode</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isDuplicateParentStateEnabled</code> (<code>duplicateParentStateEnabled</code>, <code>duplicateParentState</code>, <code>enableDuplicateParentState</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>filterTouchesWhenObscured</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>fitsSystemWindows</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>forceHasOverlappingRendering</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isHapticFeedbackEnabled</code> (<code>hapticFeedbackEnabled</code>, <code>enableHapticFeedback</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isScrollContainer</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>keepScreenOn</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isSaveEnabled</code> (<code>saveEnabled</code>, <code>enableSave</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isSoundEffectsEnabled</code> (<code>soundEffectsEnabled</code>, <code>enableSoundEffects</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>visibility</code></td>\n<td><code>visible</code>, <code>invisible</code>, <code>gone</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>onClick</code> XML 属性不受支持. 使用 <code>view.on(&#39;click&#39;, listener)</code> 或 <code>view.click(listener)</code>.</p>\n",
+              "type": "module",
+              "displayName": "状态与交互"
+            },
+            {
+              "textRaw": "变换与绘制",
+              "name": "变换与绘制",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>elevation</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>rotation</code>, <code>rotationX</code>, <code>rotationY</code></td>\n<td>浮点数</td>\n</tr>\n<tr>\n<td><code>scaleX</code>, <code>scaleY</code></td>\n<td>浮点数</td>\n</tr>\n<tr>\n<td><code>transformPivotX</code>, <code>transformPivotY</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>translationX</code>, <code>translationY</code>, <code>translationZ</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>transitionName</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>drawingCacheQuality</code></td>\n<td><code>auto</code>, <code>high</code>, <code>low</code></td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "变换与绘制"
+            },
+            {
+              "textRaw": "滚动与边缘",
+              "name": "滚动与边缘",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>isScrollbarFadingEnabled</code> (<code>scrollbarFadingEnabled</code>, <code>fadeScrollbars</code>, <code>enableFadeScrollbars</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>fadingEdgeLength</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>requiresFadingEdge</code></td>\n<td><code>horizontal</code>, <code>vertical</code>, 可用 `</td>\n<td>` 组合</td>\n</tr>\n<tr>\n<td><code>scrollX</code>, <code>scrollY</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>scrollIndicators</code></td>\n<td><code>bottom</code>, <code>end</code>, <code>left</code>, <code>none</code>, <code>right</code>, <code>start</code>, <code>top</code></td>\n</tr>\n<tr>\n<td><code>scrollbarDefaultDelayBeforeFade</code></td>\n<td>整数, ms</td>\n</tr>\n<tr>\n<td><code>scrollbarFadeDuration</code></td>\n<td>整数, ms</td>\n</tr>\n<tr>\n<td><code>scrollbarSize</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>scrollbarStyle</code></td>\n<td><code>insideInset</code>, <code>insideOverlay</code>, <code>outsideInset</code>, <code>outsideOverlay</code></td>\n</tr>\n<tr>\n<td><code>scrollbars</code></td>\n<td><code>horizontal</code>, <code>vertical</code>, 可用 `</td>\n<td>` 组合</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "滚动与边缘"
+            },
+            {
+              "textRaw": "文本方向与无障碍",
+              "name": "文本方向与无障碍",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>gravity</code></td>\n<td>Gravity. 仅当具体视图类提供 <code>setGravity(int)</code> 时生效</td>\n</tr>\n<tr>\n<td><code>importantForAccessibility</code></td>\n<td><code>auto</code>, <code>no</code>, <code>noHideDescendants</code>, <code>yes</code></td>\n</tr>\n<tr>\n<td><code>layoutDirection</code></td>\n<td><code>inherit</code>, <code>locale</code>, <code>ltr</code>, <code>rtl</code></td>\n</tr>\n<tr>\n<td><code>textAlignment</code></td>\n<td><code>center</code>, <code>gravity</code>, <code>inherit</code>, <code>textEnd</code>, <code>textStart</code>, <code>viewEnd</code>, <code>viewStart</code></td>\n</tr>\n<tr>\n<td><code>textDirection</code></td>\n<td><code>anyRtl</code>, <code>firstStrong</code>, <code>firstStrongLtr</code>, <code>firstStrongRtl</code>, <code>inherit</code>, <code>locale</code>, <code>ltr</code>, <code>rtl</code></td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "文本方向与无障碍"
+            }
+          ],
+          "type": "module",
+          "displayName": "View 属性"
+        },
+        {
+          "textRaw": "ViewGroup 属性",
+          "name": "viewgroup_属性",
+          "desc": "<p>所有 ViewGroup 在 View 属性之外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>addStatesFromChildren</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>animateLayoutChanges</code></td>\n<td>boolean. 真值创建 <code>LayoutTransition</code>, 假值清除</td>\n</tr>\n<tr>\n<td><code>clipChildren</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>clipToPadding</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>descendantFocusability</code></td>\n<td><code>afterDescendants</code>, <code>beforeDescendants</code>, <code>blocksDescendants</code></td>\n</tr>\n<tr>\n<td><code>layoutMode</code></td>\n<td><code>clipBounds</code>, <code>opticalBounds</code></td>\n</tr>\n<tr>\n<td><code>isMotionEventSplittingEnabled</code> (<code>motionEventSplittingEnabled</code>, <code>enableMotionEventSplitting</code>, <code>splitMotionEvents</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>persistentDrawingCache</code></td>\n<td><code>all</code>, <code>animation</code>, <code>none</code>, <code>scrolling</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "ViewGroup 属性"
+        },
+        {
+          "textRaw": "TextView 属性",
+          "name": "textview_属性",
+          "desc": "<p><code>text</code>, <code>button</code>, <code>btn</code>, <code>input</code>, <code>edittext</code>, <code>checkedtext</code>, <code>chronometer</code>, <code>textclock</code>, <code>checkbox</code>, <code>radio</code>, <code>radiobutton</code>, <code>switch</code> 和 <code>togglebutton</code> 均继承本组.</p>\n",
+          "modules": [
+            {
+              "textRaw": "内容与排版",
+              "name": "内容与排版",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>text</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>hint</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>textColor</code> (<code>color</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>hintTextColor</code> (<code>textColorHint</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>linkTextColor</code> (<code>textColorLink</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>highlightTextColor</code> (<code>textColorHighlight</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>textSize</code> (<code>size</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>textStyle</code></td>\n<td><code>bold</code>, <code>italic</code>, <code>normal</code>, 可组合</td>\n</tr>\n<tr>\n<td><code>typeface</code></td>\n<td>字体系列名称</td>\n</tr>\n<tr>\n<td><code>fontFamily</code></td>\n<td>字体系列名称. 设置后优先于 <code>typeface</code></td>\n</tr>\n<tr>\n<td><code>fontFeatureSettings</code></td>\n<td>OpenType 特性字符串</td>\n</tr>\n<tr>\n<td><code>textAppearance</code></td>\n<td>样式资源</td>\n</tr>\n<tr>\n<td><code>textScaleX</code></td>\n<td>当前实现按尺寸解析</td>\n</tr>\n<tr>\n<td><code>letterSpacing</code></td>\n<td>浮点数</td>\n</tr>\n<tr>\n<td><code>gravity</code></td>\n<td>Gravity</td>\n</tr>\n<tr>\n<td><code>includeFontPadding</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isElegantTextHeight</code> (<code>elegantTextHeight</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isAllCaps</code> (<code>allCaps</code>, <code>textAllCaps</code>)</td>\n<td>boolean</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "内容与排版"
+            },
+            {
+              "textRaw": "行数与尺寸",
+              "name": "行数与尺寸",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>lines</code>, <code>minLines</code>, <code>maxLines</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>ems</code>, <code>minEms</code>, <code>maxEms</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>minWidth</code>, <code>maxWidth</code>, <code>minHeight</code>, <code>maxHeight</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>maxLength</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>lineSpacingExtra</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>lineSpacingMultiplier</code></td>\n<td>当前实现按尺寸解析后传给 multiplier</td>\n</tr>\n<tr>\n<td><code>isSingleLine</code> (<code>singleLine</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>scrollHorizontally</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>ellipsize</code></td>\n<td><code>end</code>, <code>marquee</code>, <code>none</code>, <code>start</code>, <code>middle</code></td>\n</tr>\n<tr>\n<td><code>marqueeRepeatLimit</code></td>\n<td>整数或 <code>marquee_forever</code></td>\n</tr>\n<tr>\n<td><code>hyphenationFrequency</code></td>\n<td><code>full</code>, <code>none</code>, <code>normal</code></td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "行数与尺寸"
+            },
+            {
+              "textRaw": "输入与选择",
+              "name": "输入与选择",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>inputType</code></td>\n<td>见下方输入类型</td>\n</tr>\n<tr>\n<td><code>imeOptions</code></td>\n<td>见下方 IME 值</td>\n</tr>\n<tr>\n<td><code>imeActionId</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>imeActionLabel</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>privateImeOptions</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>autoText</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>capitalize</code></td>\n<td><code>characters</code>, <code>none</code>, <code>sentences</code>, <code>words</code></td>\n</tr>\n<tr>\n<td><code>digit</code></td>\n<td><code>true</code>, <code>false</code> 或允许字符组成的字符串</td>\n</tr>\n<tr>\n<td><code>numeric</code></td>\n<td><code>decimal</code>, <code>number</code>, <code>signed</code>, 可组合</td>\n</tr>\n<tr>\n<td><code>password</code></td>\n<td>boolean. 只有字符串 <code>true</code> 会添加密码 variation</td>\n</tr>\n<tr>\n<td><code>phoneNumber</code></td>\n<td>boolean. 当前实现添加 <code>TYPE_TEXT_VARIATION_PHONETIC</code>, 不等效于 <code>inputType=&quot;phone&quot;</code></td>\n</tr>\n<tr>\n<td><code>selectAllOnFocus</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>textIsSelectable</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isCursorVisible</code> (<code>cursorVisible</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>freezesText</code></td>\n<td>boolean</td>\n</tr>\n</tbody>\n</table>\n<p><code>inputType</code> 可用值:</p>\n<p><code>date</code>, <code>datetime</code>, <code>none</code>, <code>number</code>, <code>numberDecimal</code>, <code>numberPassword</code>, <code>numberSigned</code>, <code>phone</code>, <code>text</code>, <code>textAutoComplete</code>, <code>textAutoCorrect</code>, <code>textCapCharacters</code>, <code>textCapSentences</code>, <code>textCapWords</code>, <code>textEmailAddress</code>, <code>textEmailSubject</code>, <code>textFilter</code>, <code>textImeMultiLine</code>, <code>textLongMessage</code>, <code>textMultiLine</code>, <code>textNoSuggestions</code>, <code>textPassword</code>, <code>textPersonName</code>, <code>textPhonetic</code>, <code>textPostalAddress</code>, <code>textShortMessage</code>, <code>textUri</code>, <code>textVisiblePassword</code>, <code>textWebEditText</code>, <code>textWebEmailAddress</code>, <code>textWebPassword</code>, <code>time</code>.</p>\n<p>多个输入类型可使用分隔符组合.</p>\n<p><code>imeOptions</code> 接受 <code>actionDone</code>, <code>actionGo</code>, <code>actionNext</code>, <code>actionNone</code>, <code>actionPrevious</code>, <code>actionSearch</code>, <code>actionSend</code>, <code>actionUnspecified</code>. 当前源代码将所有这些值映射为 <code>IME_ACTION_DONE</code>.</p>\n",
+              "type": "module",
+              "displayName": "输入与选择"
+            },
+            {
+              "textRaw": "链接, Drawable 与阴影",
+              "name": "链接,_drawable_与阴影",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autoLink</code></td>\n<td><code>all</code>, <code>email</code>, <code>map</code>, <code>none</code>, <code>phone</code>, <code>web</code></td>\n</tr>\n<tr>\n<td><code>linksClickable</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>drawableLeft</code>, <code>drawableTop</code>, <code>drawableRight</code>, <code>drawableBottom</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>drawables</code></td>\n<td>1, 2, 3 或 4 个 Drawable. 4 值顺序为 left, top, right, bottom</td>\n</tr>\n<tr>\n<td><code>drawablePadding</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>shadowColor</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>shadowDx</code>, <code>shadowDy</code>, <code>shadowRadius</code></td>\n<td>尺寸</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "链接, Drawable 与阴影"
+            }
+          ],
+          "type": "module",
+          "displayName": "TextView 属性"
+        },
+        {
+          "textRaw": "输入框附加属性",
+          "name": "输入框附加属性",
+          "desc": "<p><code>input</code> 和 <code>edittext</code> 在 TextView 属性之外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>selectAll</code></td>\n<td>boolean</td>\n<td>文本非空且为真时请求焦点并全选</td>\n</tr>\n<tr>\n<td><code>extendsSelection</code></td>\n<td>整数</td>\n<td>文本非空时扩展选择到指定索引</td>\n</tr>\n<tr>\n<td><code>setSelection</code></td>\n<td>整数或 <code>start,end</code></td>\n<td>文本非空时设置光标或选择范围</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "输入框附加属性"
+        },
+        {
+          "textRaw": "ImageView 属性",
+          "name": "imageview_属性",
+          "desc": "<p><code>imagebutton</code>, <code>quickcontactbadge</code> 和 <code>fab</code> 继承本组. <code>image</code> 和 <code>img</code> 还继承 <a href=\"#圆角图片属性\">圆角图片属性</a>.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>adjustViewBounds</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>baseline</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>baselineAlignBottom</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>cropToPadding</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>maxHeight</code>, <code>maxWidth</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>path</code></td>\n<td>本地图片路径</td>\n</tr>\n<tr>\n<td><code>src</code></td>\n<td>Drawable, 本地路径, URL 或 Base64 data URI</td>\n</tr>\n<tr>\n<td><code>url</code></td>\n<td>URL</td>\n</tr>\n<tr>\n<td><code>scaleType</code></td>\n<td><code>center</code>, <code>centerCrop</code>, <code>centerInside</code>, <code>fitCenter</code>, <code>fitEnd</code>, <code>fitStart</code>, <code>fitXY</code>, <code>matrix</code></td>\n</tr>\n<tr>\n<td><code>tint</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>tintMode</code></td>\n<td><code>add</code>, <code>multiply</code>, <code>screen</code>, <code>src_atop</code>, <code>src_in</code>, <code>src_over</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "圆角图片属性",
+              "name": "圆角图片属性",
+              "desc": "<p><code>image</code> 和 <code>img</code> 实际创建 <code>RoundedImageView</code> 子类:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>cornerRadius</code> (<code>radius</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>cornerRadiusTopLeft</code> (<code>radiusTopLeft</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>cornerRadiusTopRight</code> (<code>radiusTopRight</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>cornerRadiusBottomLeft</code> (<code>radiusBottomLeft</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>cornerRadiusBottomRight</code> (<code>radiusBottomRight</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>isOval</code> (<code>oval</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>tileX</code> (<code>tileModeX</code>)</td>\n<td><code>clamp</code>, <code>mirror</code>, <code>repeat</code></td>\n</tr>\n<tr>\n<td><code>tileY</code> (<code>tileModeY</code>)</td>\n<td><code>clamp</code>, <code>mirror</code>, <code>repeat</code></td>\n</tr>\n<tr>\n<td><code>borderWidth</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>borderColor</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>circle</code> (<code>isCircle</code>)</td>\n<td>动作属性. 当前实现只要出现就设为圆形, 不检查值</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "圆角图片属性"
+            }
+          ],
+          "type": "module",
+          "displayName": "ImageView 属性"
+        },
+        {
+          "textRaw": "ProgressBar 与 SeekBar 属性",
+          "name": "progressbar_与_seekbar_属性",
+          "desc": "<p><code>progressbar</code> 支持 View 属性及以下属性:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>isIndeterminate</code> (<code>indeterminate</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>indeterminateDrawable</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>indeterminateTint</code>, <code>progressBackgroundTint</code>, <code>progressTint</code>, <code>secondaryProgressTint</code></td>\n<td>颜色状态列表</td>\n</tr>\n<tr>\n<td><code>indeterminateTintMode</code>, <code>progressBackgroundTintMode</code>, <code>progressTintMode</code>, <code>secondaryProgressTintMode</code></td>\n<td>着色模式</td>\n</tr>\n<tr>\n<td><code>min</code></td>\n<td>整数. Android API 级别低于 <code>26</code> 时抛出异常</td>\n</tr>\n<tr>\n<td><code>max</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>minHeight</code>, <code>minWidth</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>progress</code>, <code>secondaryProgress</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>progressDrawable</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>tint</code></td>\n<td>1 至 3 个颜色</td>\n</tr>\n</tbody>\n</table>\n<p><code>tint</code> 的值含义:</p>\n<ul>\n<li>1 个颜色 - 应用于 progress, background, secondary, indeterminate.</li>\n<li>2 个颜色 - 第 1 个用于 progress, secondary, indeterminate, 第 2 个用于 background.</li>\n<li>3 个颜色 - 依次用于 progress, background, secondary, 第 1 个同时用于 indeterminate.</li>\n</ul>\n<p><code>seekbar</code> 和 <code>ratingbar</code> 继续增加 AbsSeekBar 属性:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>keyProgressIncrement</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>splitTrack</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>thumb</code>, <code>tickMark</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>thumbOffset</code></td>\n<td>整数 px</td>\n</tr>\n<tr>\n<td><code>thumbTintList</code>, <code>tickMarkTintList</code></td>\n<td>颜色状态列表</td>\n</tr>\n</tbody>\n</table>\n<p><code>ratingbar</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>isIndicator</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>numStars</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>rating</code>, <code>stepSize</code></td>\n<td>浮点数</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "ProgressBar 与 SeekBar 属性"
+        },
+        {
+          "textRaw": "布局控件属性",
+          "name": "布局控件属性",
+          "modules": [
+            {
+              "textRaw": "LinearLayout",
+              "name": "linearlayout",
+              "desc": "<p><code>linear</code>, <code>horizontal</code>, <code>vertical</code>, <code>radiogroup</code>, <code>radios</code>, <code>numberpicker</code>, <code>search</code>, <code>appbar</code> 和 <code>actionmenu</code> 继承:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>isBaselineAligned</code> (<code>baselineAligned</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>baselineAlignedChildIndex</code></td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>divider</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>gravity</code></td>\n<td>Gravity</td>\n</tr>\n<tr>\n<td><code>isMeasureWithLargestChildEnabled</code> (<code>measureWithLargestChildEnabled</code>, <code>measureWithLargestChild</code>, <code>enableMeasureWithLargestChild</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>orientation</code></td>\n<td><code>vertical</code>, <code>horizontal</code></td>\n</tr>\n<tr>\n<td><code>showDividers</code></td>\n<td><code>beginning</code>, <code>middle</code>, <code>end</code>, <code>none</code>, 可组合</td>\n</tr>\n<tr>\n<td><code>weightSum</code></td>\n<td>浮点数</td>\n</tr>\n</tbody>\n</table>\n<p><code>horizontal</code> 和 <code>linear</code> 默认横向, <code>vertical</code> 默认纵向. <code>orientation</code> 可覆盖默认值.</p>\n",
+              "type": "module",
+              "displayName": "LinearLayout"
+            },
+            {
+              "textRaw": "FrameLayout",
+              "name": "framelayout",
+              "desc": "<p><code>frame</code> 没有新的通用属性. <code>JsFrameLayout</code> 额外支持 <code>gravity</code>, 并在子视图完成渲染后把该 Gravity 应用于所有直接子视图的布局参数.</p>\n<p><code>card</code>, <code>scroll</code>, <code>calendar</code>, <code>datepicker</code>, <code>timepicker</code>, <code>tabs</code>, <code>viewflipper</code>, <code>viewswitcher</code>, <code>textswitcher</code> 和 <code>console</code> 通过各自父类继承 FrameLayout 和 ViewGroup 属性.</p>\n",
+              "type": "module",
+              "displayName": "FrameLayout"
+            },
+            {
+              "textRaw": "RelativeLayout",
+              "name": "relativelayout",
+              "desc": "<p><code>relative</code> 另外支持:</p>\n<ul>\n<li><code>gravity</code></li>\n<li><code>horizontalGravity</code></li>\n<li><code>verticalGravity</code></li>\n</ul>\n<p>三个属性均使用 Gravity 值.</p>\n",
+              "type": "module",
+              "displayName": "RelativeLayout"
+            },
+            {
+              "textRaw": "ScrollView",
+              "name": "scrollview",
+              "desc": "<p><code>scroll</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>isFillViewport</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isSmoothScrollingEnabled</code> (<code>isSmoothScrolling</code>, <code>smoothScrollingEnabled</code>, <code>enableSmoothScrolling</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>topEdgeEffectColor</code>, <code>bottomEdgeEffectColor</code>, <code>edgeEffectColor</code></td>\n<td>颜色. Android API 级别低于 <code>29</code> 时不执行操作</td>\n</tr>\n</tbody>\n</table>\n<p>完整类名或短类名 <code>&lt;HorizontalScrollView&gt;</code> 另外支持:</p>\n<ul>\n<li><code>isFillViewport</code> (<code>fillViewport</code>)</li>\n<li><code>smoothScrollingEnabled</code> (<code>enableSmoothScrolling</code>, <code>isSmoothScrollingEnabled</code>, <code>isSmoothScrolling</code>)</li>\n<li><code>leftEdgeEffectColor</code></li>\n<li><code>rightEdgeEffectColor</code></li>\n<li><code>setEdgeEffectColor</code></li>\n</ul>\n<p>三个边缘颜色属性在 Android API 级别低于 <code>29</code> 时不执行操作.</p>\n",
+              "type": "module",
+              "displayName": "ScrollView"
+            },
+            {
+              "textRaw": "CardView",
+              "name": "cardview",
+              "desc": "<p><code>card</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>cardBackgroundColor</code> (<code>cardBgColor</code>, <code>cardBg</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>radius</code> (<code>cardCornerRadius</code>, <code>cornerRadius</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>cardElevation</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>maxCardElevation</code> (<code>cardMaxElevation</code>)</td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>preventCornerOverlap</code> (<code>cardPreventCornerOverlap</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>useCompatPadding</code> (<code>cardUseCompatPadding</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>contentPadding</code></td>\n<td>尺寸列表</td>\n</tr>\n<tr>\n<td><code>contentPaddingLeft</code>, <code>contentPaddingTop</code>, <code>contentPaddingRight</code>, <code>contentPaddingBottom</code></td>\n<td>尺寸</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "CardView"
+            },
+            {
+              "textRaw": "AppBarLayout",
+              "name": "appbarlayout",
+              "desc": "<p><code>appbar</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>expanded</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isLifted</code> (<code>lifted</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>statusBarForegroundColor</code> (<code>statusBarFgColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>elevation</code></td>\n<td>尺寸. 写入 Material AppBar 的 target elevation</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "AppBarLayout"
+            },
+            {
+              "textRaw": "Toolbar",
+              "name": "toolbar",
+              "desc": "<p><code>toolbar</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>collapseContentDescription</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>collapseIcon</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>logo</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>logoDescription</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>navigationContentDescription</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>navigationIcon</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>overflowIcon</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>popupTheme</code></td>\n<td><code>dark</code>, <code>light</code></td>\n</tr>\n<tr>\n<td><code>subtitle</code>, <code>title</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>subtitleTextColor</code>, <code>titleTextColor</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>titleMargin</code>, <code>titleMarginBottom</code>, <code>titleMarginTop</code>, <code>titleMarginStart</code>, <code>titleMarginEnd</code></td>\n<td>尺寸</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "Toolbar"
+            },
+            {
+              "textRaw": "ViewPager 与 TabLayout",
+              "name": "viewpager_与_tablayout",
+              "desc": "<p><code>viewpager</code> 另外支持:</p>\n<ul>\n<li><code>pageMargin</code> - 尺寸.</li>\n<li><code>pageMarginDrawable</code> - Drawable.</li>\n<li><code>titles</code> - 页面标题列表.</li>\n</ul>\n<p><code>tabs</code> 和 <code>tab</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>tabGravity</code></td>\n<td>Gravity</td>\n</tr>\n<tr>\n<td><code>selectedTabIndicatorColor</code> (<code>tabIndicatorColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>tabMode</code></td>\n<td><code>fixed</code>, <code>scrollable</code></td>\n</tr>\n<tr>\n<td><code>tabRippleColor</code>, <code>tabIconTint</code></td>\n<td>颜色状态列表</td>\n</tr>\n<tr>\n<td><code>selectedTabIndicatorGravity</code> (<code>tabIndicatorGravity</code>)</td>\n<td>Gravity</td>\n</tr>\n<tr>\n<td><code>selectedTabIndicator</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>tabSelectedTextColor</code>, <code>tabTextColor</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>isTabIndicatorFullWidth</code> (<code>tabIndicatorFullWidth</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isInlineLabel</code> (<code>inlineLabel</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>tabIndicatorHeight</code></td>\n<td>尺寸</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "ViewPager 与 TabLayout"
+            },
+            {
+              "textRaw": "ViewAnimator",
+              "name": "viewanimator",
+              "desc": "<p><code>viewflipper</code>, <code>viewswitcher</code> 和 <code>textswitcher</code> 继承:</p>\n<ul>\n<li><code>animateFirstView</code> - boolean.</li>\n<li><code>displayedChild</code> - 整数索引.</li>\n</ul>\n<p><code>viewflipper</code> 另外支持:</p>\n<ul>\n<li><code>isAutoStart</code> (<code>autoStart</code>) - boolean.</li>\n<li><code>flipInterval</code> - 整数, ms.</li>\n</ul>\n<p><code>textswitcher</code> 另外支持 TextView 的全部文本属性, 属性会同时应用到内部两个 <code>JsTextView</code>. 它还支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型或可用值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>text</code> (<code>nextText</code>)</td>\n<td>字符串. 使用切换动画显示下一文本</td>\n</tr>\n<tr>\n<td><code>currentText</code></td>\n<td>字符串. 不使用切换动画设置当前文本</td>\n</tr>\n<tr>\n<td><code>anim</code> (<code>animation</code>)</td>\n<td><code>from left</code>, <code>from right</code>, <code>from top</code>, <code>from bottom</code>, <code>micro</code>, <code>fade</code>, <code>fast fade</code>, <code>shrink</code> 等内置模式</td>\n</tr>\n<tr>\n<td><code>animIn</code> (<code>inAnim</code>, <code>inAnimation</code>)</td>\n<td>动画资源</td>\n</tr>\n<tr>\n<td><code>animOut</code> (<code>outAnim</code>, <code>outAnimation</code>)</td>\n<td>动画资源</td>\n</tr>\n</tbody>\n</table>\n<p>完整类名或短类名 <code>&lt;ImageSwitcher&gt;</code> 支持:</p>\n<ul>\n<li><code>imageDrawable</code> (<code>drawable</code>) - Drawable.</li>\n<li><code>imageResource</code> (<code>resource</code>) - 整数资源 ID.</li>\n<li><code>imageURI</code> (<code>uri</code>) - URI 字符串.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "ViewAnimator"
+            }
+          ],
+          "type": "module",
+          "displayName": "布局控件属性"
+        },
+        {
+          "textRaw": "选择与输入控件属性",
+          "name": "选择与输入控件属性",
+          "modules": [
+            {
+              "textRaw": "CompoundButton",
+              "name": "compoundbutton",
+              "desc": "<p><code>checkbox</code>, <code>radio</code>, <code>radiobutton</code>, <code>switch</code> 和 <code>togglebutton</code> 继承:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>checked</code> (<code>check</code>, <code>isChecked</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>buttonDrawable</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>buttonTint</code> (<code>tint</code>)</td>\n<td>1 个颜色, 或依次表示未选中和选中的 2 个颜色</td>\n</tr>\n</tbody>\n</table>\n<p><code>radiogroup</code> 和 <code>radios</code> 另外支持 <code>checkedButton</code>, 值为待选中子按钮 ID.</p>\n<p><code>switch</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>showText</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>textOff</code>, <code>textOn</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>thumbDrawable</code>, <code>trackDrawable</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>thumbTextPadding</code>, <code>switchMinWidth</code>, <code>switchPadding</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>thumbTint</code>, <code>trackTint</code></td>\n<td>1 个颜色, 或未选中和选中的 2 个颜色</td>\n</tr>\n<tr>\n<td><code>splitTrack</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>switchTypeface</code></td>\n<td>字体系列名称</td>\n</tr>\n</tbody>\n</table>\n<p><code>togglebutton</code> 另外支持 <code>textOff</code> 和 <code>textOn</code>.</p>\n<p><code>checkedtext</code> 另外支持:</p>\n<ul>\n<li><code>checkMarkDrawable</code> - Drawable.</li>\n<li><code>checkMarkTintList</code> (<code>checkMarkTint</code>) - 颜色状态列表.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "CompoundButton"
+            },
+            {
+              "textRaw": "Spinner",
+              "name": "spinner",
+              "desc": "<p><code>spinner</code> 继承 ViewGroup 和 AdapterView 属性, 其中 AdapterView 提供 <code>selection</code> 整数索引. Spinner 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>dropDownHorizontalOffset</code>, <code>dropDownVerticalOffset</code>, <code>dropDownWidth</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>gravity</code></td>\n<td>Gravity</td>\n</tr>\n<tr>\n<td><code>popupBackgroundDrawable</code> (<code>popupBgDrawable</code>, <code>popupBackground</code>, <code>popupBg</code>)</td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>prompt</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>entries</code></td>\n<td>使用 `</td>\n<td>` 分隔的项目文本</td>\n</tr>\n<tr>\n<td><code>entryTextColor</code>, <code>textColor</code></td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>entryTextSize</code>, <code>textSize</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>entryTextStyle</code>, <code>textStyle</code></td>\n<td><code>bold</code>, <code>italic</code>, <code>normal</code>, 可组合</td>\n</tr>\n</tbody>\n</table>\n<p>创建时属性 <code>spinnerMode</code> 接受 <code>dialog</code> 或 <code>dropdown</code>.</p>\n",
+              "type": "module",
+              "displayName": "Spinner"
+            },
+            {
+              "textRaw": "NumberPicker",
+              "name": "numberpicker",
+              "desc": "<p><code>numberpicker</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>maxValue</code> (<code>max</code>), <code>minValue</code> (<code>min</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>onLongPressUpdateInterval</code> (<code>longPressUpdateInterval</code>)</td>\n<td>整数, ms</td>\n</tr>\n<tr>\n<td><code>wrapSelectorWheel</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>value</code> (<code>selectedIndex</code>, <code>currentIndex</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>displayedValues</code> (<code>values</code>)</td>\n<td>字符串列表</td>\n</tr>\n<tr>\n<td><code>distinctDisplayedValues</code> (<code>distinctValues</code>)</td>\n<td>去重后的字符串列表</td>\n</tr>\n<tr>\n<td><code>textColor</code> (<code>color</code>)</td>\n<td>颜色. Android API 级别低于 <code>29</code> 时不执行操作</td>\n</tr>\n<tr>\n<td><code>textSize</code> (<code>size</code>)</td>\n<td>尺寸. Android API 级别低于 <code>29</code> 时不执行操作</td>\n</tr>\n<tr>\n<td><code>selectionDividerHeight</code></td>\n<td>整数 px. Android API 级别低于 <code>29</code> 时不执行操作</td>\n</tr>\n</tbody>\n</table>\n<p>显示值数量与 <code>maxValue - minValue + 1</code> 不同时, 实现会把范围重置为 <code>0</code> 至 <code>values.length - 1</code>.</p>\n",
+              "type": "module",
+              "displayName": "NumberPicker"
+            },
+            {
+              "textRaw": "Calendar 与 DatePicker",
+              "name": "calendar_与_datepicker",
+              "desc": "<p><code>calendar</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>date</code></td>\n<td>Unix epoch ms</td>\n</tr>\n<tr>\n<td><code>firstDayOfWeek</code></td>\n<td><code>MON</code>, <code>MONDAY</code> 等英文星期名, 或 Java <code>Calendar</code> 星期整数</td>\n</tr>\n<tr>\n<td><code>minDate</code>, <code>maxDate</code></td>\n<td><code>yyyy/MM/dd</code> 或 <code>MM/dd/yyyy</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>datepicker</code> 另外支持:</p>\n<ul>\n<li><code>minDate</code>, <code>maxDate</code></li>\n<li><code>firstDayOfWeek</code></li>\n<li><code>spinnersShown</code></li>\n<li><code>calendarViewShown</code></li>\n</ul>\n<p>后两个属性为已弃用 Android API 的兼容入口.</p>\n",
+              "type": "module",
+              "displayName": "Calendar 与 DatePicker"
+            },
+            {
+              "textRaw": "TimePicker",
+              "name": "timepicker",
+              "desc": "<p><code>timepicker</code> 另外支持:</p>\n<ul>\n<li><code>hour</code> (<code>hh</code>) - 整数.</li>\n<li><code>minute</code> (<code>mm</code>) - 整数.</li>\n<li><code>is24HourView</code> (<code>is24Hour</code>, <code>is24H</code>, <code>is24</code>) - boolean.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TimePicker"
+            },
+            {
+              "textRaw": "SearchView",
+              "name": "searchview",
+              "desc": "<p><code>search</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>imeOptions</code></td>\n<td>与 TextView 相同</td>\n</tr>\n<tr>\n<td><code>inputType</code></td>\n<td>与 TextView 相同</td>\n</tr>\n<tr>\n<td><code>maxWidth</code></td>\n<td>尺寸</td>\n</tr>\n<tr>\n<td><code>queryHint</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>isIconified</code> (<code>iconified</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isIconifiedByDefault</code> (<code>iconifiedByDefault</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isQueryRefinementEnabled</code> (<code>queryRefinementEnabled</code>, <code>isQueryRefinement</code>, <code>enableQueryRefinement</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>isSubmitButtonEnabled</code> (<code>submitButtonEnabled</code>, <code>isSubmitButton</code>, <code>enableSubmitButton</code>)</td>\n<td>boolean</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "SearchView"
+            }
+          ],
+          "type": "module",
+          "displayName": "选择与输入控件属性"
+        },
+        {
+          "textRaw": "媒体与专用控件属性",
+          "name": "媒体与专用控件属性",
+          "modules": [
+            {
+              "textRaw": "FloatingActionButton",
+              "name": "floatingactionbutton",
+              "desc": "<p><code>fab</code> 在 ImageView 属性之外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>customSize</code> (<code>fabCustomSize</code>)</td>\n<td>尺寸</td>\n<td>自定义直径</td>\n</tr>\n<tr>\n<td><code>size</code> (<code>fabSize</code>)</td>\n<td>当前实现按尺寸转为整数</td>\n<td>直接写入 Material FAB size 字段</td>\n</tr>\n<tr>\n<td><code>elevation</code></td>\n<td>尺寸</td>\n<td>compat elevation</td>\n</tr>\n<tr>\n<td><code>useCompatPadding</code></td>\n<td>boolean</td>\n<td>兼容阴影内边距</td>\n</tr>\n<tr>\n<td><code>rippleColor</code></td>\n<td>颜色</td>\n<td>波纹颜色</td>\n</tr>\n<tr>\n<td><code>backgroundTint</code> (<code>bgTint</code>)</td>\n<td>颜色状态列表</td>\n<td>背景着色</td>\n</tr>\n<tr>\n<td><code>ensureMinTouchTargetSize</code></td>\n<td>boolean</td>\n<td>最小触摸区域</td>\n</tr>\n<tr>\n<td><code>maxImageSize</code></td>\n<td>整数 px</td>\n<td>最大图标尺寸</td>\n</tr>\n<tr>\n<td><code>excludeFromNavigationBar</code></td>\n<td>动作属性</td>\n<td>只要应用即执行排除逻辑, 不检查属性值</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "FloatingActionButton"
+            },
+            {
+              "textRaw": "QuickContactBadge",
+              "name": "quickcontactbadge",
+              "desc": "<p><code>quickcontactbadge</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>overlay</code></td>\n<td>Drawable</td>\n</tr>\n<tr>\n<td><code>phone</code></td>\n<td>电话号码</td>\n</tr>\n<tr>\n<td><code>email</code></td>\n<td>邮箱地址</td>\n</tr>\n<tr>\n<td><code>prioritizedMimeType</code></td>\n<td>联系人 MIME 类型枚举</td>\n</tr>\n</tbody>\n</table>\n<p><code>prioritizedMimeType</code> 可用值:</p>\n<p><code>aggregationExceptions</code>, <code>contacts</code>, <code>directory</code>, <code>email</code>, <code>event</code>, <code>groupMembership</code>, <code>groups</code>, <code>identity</code>, <code>im</code>, <code>nickname</code>, <code>note</code>, <code>organization</code>, <code>phone</code>, <code>photo</code>, <code>rawContacts</code>, <code>relation</code>, <code>settings</code>, <code>sipAddress</code>, <code>statusUpdates</code>, <code>structuredName</code>, <code>structuredPostal</code>, <code>website</code>.</p>\n",
+              "type": "module",
+              "displayName": "QuickContactBadge"
+            },
+            {
+              "textRaw": "Chronometer 与 TextClock",
+              "name": "chronometer_与_textclock",
+              "desc": "<p><code>chronometer</code> 另外支持:</p>\n<ul>\n<li><code>base</code> - <code>SystemClock.elapsedRealtime()</code> 时间基准值, 单位为 ms.</li>\n<li><code>isCountDown</code> (<code>countDown</code>) - boolean.</li>\n<li><code>format</code> - 字符串.</li>\n<li><code>autoStart</code> (<code>isAutoStart</code>) - boolean. 只有真值会调用 <code>start()</code>.</li>\n</ul>\n<p><code>textclock</code> 另外支持:</p>\n<ul>\n<li><code>format12Hour</code></li>\n<li><code>format24Hour</code></li>\n<li><code>timeZone</code></li>\n</ul>\n<p>三个值均按字符串处理.</p>\n",
+              "type": "module",
+              "displayName": "Chronometer 与 TextClock"
+            },
+            {
+              "textRaw": "ConsoleView",
+              "name": "consoleview",
+              "desc": "<p><code>console</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>textSize</code></td>\n<td>浮点数, sp</td>\n</tr>\n<tr>\n<td><code>textColors</code></td>\n<td>最多 6 个颜色, 依次为 verbose, debug, info, warn, error, assert</td>\n</tr>\n<tr>\n<td><code>verboseTextColor</code> (<code>verboseColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>debugTextColor</code> (<code>debugColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>infoTextColor</code> (<code>infoColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>warnTextColor</code> (<code>warnColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>errorTextColor</code> (<code>errorColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>assertTextColor</code> (<code>assertColor</code>)</td>\n<td>颜色</td>\n</tr>\n<tr>\n<td><code>isPinchToZoomEnabled</code> (<code>pinchToZoomEnabled</code>, <code>enablePinchToZoom</code>)</td>\n<td>boolean</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "ConsoleView"
+            },
+            {
+              "textRaw": "CanvasView",
+              "name": "canvasview",
+              "desc": "<p><code>canvas</code> 基于 TextureView, 另外支持 <code>isOpaque</code> (<code>opaque</code>) boolean. 绘制方法和事件参阅 <a href=\"ui#canvas-视图\">UI Canvas 视图</a> 及 <a href=\"canvas\">画布</a>.</p>\n",
+              "type": "module",
+              "displayName": "CanvasView"
+            },
+            {
+              "textRaw": "SurfaceView 与 VideoView",
+              "name": "surfaceview_与_videoview",
+              "desc": "<p>完整类名或短类名 <code>&lt;SurfaceView&gt;</code> 支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>clipBounds</code></td>\n<td><code>left,top,right,bottom</code> 四个整数 px</td>\n</tr>\n<tr>\n<td><code>secure</code> (<code>isSecure</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>zOrderOnTop</code> (<code>isZOrderOnTop</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>zOrderMediaOverlay</code> (<code>isZOrderMediaOverlay</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>visibility</code></td>\n<td><code>visible</code>, <code>invisible</code>, <code>gone</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>video</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>videoPath</code> (<code>path</code>, <code>src</code>)</td>\n<td>本地路径或 <code>@raw/name</code></td>\n</tr>\n<tr>\n<td><code>controller</code> (<code>mediaController</code>, <code>isControllerEnabled</code>, <code>controllerEnabled</code>, <code>enableController</code>, <code>isMediaControllerEnabled</code>, <code>mediaControllerEnabled</code>, <code>enableMediaController</code>)</td>\n<td><code>true</code> 重置 MediaController, <code>false</code> 或 <code>null</code> 清除</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "SurfaceView 与 VideoView"
+            },
+            {
+              "textRaw": "WebView",
+              "name": "webview",
+              "desc": "<p><code>webview</code> 和 <code>web</code> 另外支持:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>url</code></td>\n<td>URL 或本地文件路径</td>\n</tr>\n<tr>\n<td><code>scale</code> (<code>initialScale</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>enableNetwork</code> (<code>networkAvailable</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>blockNetworkImage</code>, <code>blockNetworkLoads</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>enableBuiltInZoomControls</code> (<code>builtInZoomControls</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>enableDatabase</code> (<code>databaseEnabled</code>, <code>isDatabaseEnabled</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>fontSize</code> (<code>defaultFontSize</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>fixedFontSize</code> (<code>defaultFixedFontSize</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>textEncodingName</code> (<code>defaultTextEncodingName</code>)</td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>jsAutoOpenWindows</code> (<code>javaScriptAutoOpenWindows</code>, <code>javaScriptCanOpenWindowsAutomatically</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>enableJs</code> (<code>enableJavaScript</code>, <code>javaScriptEnabled</code>, <code>isJavaScriptEnabled</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>autoLoadImages</code> (<code>autoLoadsImages</code>, <code>loadsImagesAutomatically</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>minFontSize</code> (<code>minimumFontSize</code>)</td>\n<td>整数</td>\n</tr>\n<tr>\n<td><code>sansSerifFontFamily</code>, <code>serifFontFamily</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>fontFamily</code> (<code>standardFontFamily</code>)</td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>multiWindows</code> (<code>multipleWindows</code>, <code>supportMultipleWindows</code>)</td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>userAgent</code> (<code>userAgentString</code>)</td>\n<td>字符串</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "WebView"
+            }
+          ],
+          "type": "module",
+          "displayName": "媒体与专用控件属性"
+        },
+        {
+          "textRaw": "List 与 Grid 属性",
+          "name": "list_与_grid_属性",
+          "desc": "<p><code>list</code> 基于 RecyclerView, 在 ViewGroup 属性之外支持:</p>\n<ul>\n<li><code>orientation</code> - <code>vertical</code> 或 <code>horizontal</code>.</li>\n</ul>\n<p><code>grid</code> 继续支持:</p>\n<ul>\n<li><code>spanCount</code> - 整数.</li>\n<li><code>isUsingSpansToEstimateScrollbarDimensions</code> (<code>usingSpansToEstimateScrollbarDimensions</code>) - boolean.</li>\n<li><code>orientation</code> - <code>vertical</code> 或 <code>horizontal</code>.</li>\n</ul>\n<p>列表项目模板, 数据源和事件参阅 <a href=\"ui#列表与网格\">列表与网格</a>.</p>\n",
+          "type": "module",
+          "displayName": "List 与 Grid 属性"
+        },
+        {
+          "textRaw": "创建阶段专用属性",
+          "name": "创建阶段专用属性",
+          "desc": "<p>以下属性在视图构造时读取. 它们不是普通可重复应用属性, <code>view.attr(name, value)</code> 不应作为修改方式.</p>\n<table>\n<thead>\n<tr>\n<th>视图</th>\n<th>属性</th>\n<th>值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>通用动态类</td>\n<td><code>style</code></td>\n<td>应用样式资源. 类必须具有 <code>(Context, AttributeSet, int, int)</code> 构造方法</td>\n</tr>\n<tr>\n<td><code>button</code>, <code>btn</code></td>\n<td><code>isBorderless</code>, <code>isColored</code>, <code>isBorderlessColored</code>, <code>isColoredBorderless</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>progressbar</code></td>\n<td><code>isHorizontal</code>, <code>horizontal</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>seekbar</code></td>\n<td><code>isMaterial</code>, <code>materialStyle</code>, <code>isMaterialStyle</code></td>\n<td>boolean</td>\n</tr>\n<tr>\n<td><code>spinner</code></td>\n<td><code>spinnerMode</code></td>\n<td><code>dialog</code>, <code>dropdown</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>style</code> 对 button, progressbar 和 seekbar 优先于其快捷布尔样式.</p>\n",
+          "type": "module",
+          "displayName": "创建阶段专用属性"
+        },
+        {
+          "textRaw": "AndroidX 与 Material 短类名",
+          "name": "androidx_与_material_短类名",
+          "desc": "<p>动态布局器可解析以下短类名:</p>\n<p><code>CardView</code>, <code>ConstraintLayout</code>, <code>CoordinatorLayout</code>, <code>NestedScrollView</code>, <code>DrawerLayout</code>, <code>FragmentContainerView</code>, <code>RecyclerView</code>, <code>SwipeRefreshLayout</code>, <code>ViewPager</code>, <code>ViewPager2</code>, <code>AppBarLayout</code>, <code>MaterialToolbar</code>, <code>BottomNavigationView</code>, <code>MaterialButton</code>, <code>Chip</code>, <code>MaterialCalendarGridView</code>, <code>FloatingActionButton</code>, <code>BaselineLayout</code>, <code>CheckableImageButton</code>, <code>ClippableRoundedCornerLayout</code>, <code>NavigationMenuItemView</code>, <code>NavigationMenuView</code>, <code>TouchObserverFrameLayout</code>, <code>VisibilityAwareImageButton</code>, <code>NavigationView</code>, <code>TabLayout</code>, <code>TextInputEditText</code>, <code>TextInputLayout</code>, <code>ChipTextInputComboView</code>, <code>ClockFaceView</code>, <code>ClockHandView</code>, <code>TimePickerView</code>.</p>\n<p><code>BottomSheetDialog</code> 和 <code>Snackbar</code> 也存在于共享类名映射中, 但它们不是 Android <code>View</code>, 不能作为布局节点.</p>\n<p>短类名只负责类名解析. 例如 <code>&lt;ConstraintLayout&gt;</code> 可以创建视图, 但当前没有 ConstraintLayout 专用属性处理器, 因此只保证 ViewGroup 和 View 属性. 需要未注册的第三方属性时, 应在脚本中通过原生 Java 方法设置.</p>\n<p>没有点号且不在上述映射中的大写标签会尝试解析为 <code>android.widget.&lt;TagName&gt;</code>, 如 <code>&lt;ImageSwitcher&gt;</code> 或 <code>&lt;HorizontalScrollView&gt;</code>.</p>\n",
+          "type": "module",
+          "displayName": "AndroidX 与 Material 短类名"
+        },
+        {
+          "textRaw": "明确不支持的属性",
+          "name": "明确不支持的属性",
+          "desc": "<p>这些属性不是静默忽略, 而是在应用时抛出异常.</p>\n",
+          "modules": [
+            {
+              "textRaw": "View",
+              "name": "view",
+              "desc": "<p><code>accessibilityLiveRegion</code>, <code>accessibilityTraversalAfter</code>, <code>accessibilityTraversalBefore</code>, <code>autofillHints</code>, <code>autofilledHighlight</code>, <code>defaultFocusHighlightEnabled</code>, <code>focusedByDefault</code>, <code>importantForAutofill</code>, <code>keyboardNavigationCluster</code>, <code>layerType</code>, <code>nextClusterForward</code>, <code>nextFocusDown</code>, <code>nextFocusForward</code>, <code>nextFocusLeft</code>, <code>nextFocusRight</code>, <code>nextFocusUp</code>, <code>onClick</code>, <code>paddingHorizontal</code>, <code>paddingVertical</code>, <code>scrollbarAlwaysDrawHorizontalTrack</code>, <code>scrollbarAlwaysDrawVerticalTrack</code>, <code>scrollbarThumbHorizontal</code>, <code>scrollbarThumbVertical</code>, <code>scrollbarTrackHorizontal</code>, <code>scrollbarTrackVertical</code>, <code>stateListAnimator</code>, <code>tooltipText</code>.</p>\n",
+              "type": "module",
+              "displayName": "View"
+            },
+            {
+              "textRaw": "ViewGroup",
+              "name": "viewgroup",
+              "desc": "<p><code>layoutAnimation</code>.</p>\n",
+              "type": "module",
+              "displayName": "ViewGroup"
+            },
+            {
+              "textRaw": "TextView 与 TextSwitcher",
+              "name": "textview_与_textswitcher",
+              "desc": "<p><code>drawableStart</code>, <code>drawableEnd</code>, <code>editable</code>, <code>editorExtras</code>, <code>inputMethod</code>.</p>\n",
+              "type": "module",
+              "displayName": "TextView 与 TextSwitcher"
+            },
+            {
+              "textRaw": "ProgressBar",
+              "name": "progressbar",
+              "desc": "<p><code>animationResolution</code>, <code>mirrorForRtl</code>, <code>maxWidth</code>, <code>maxHeight</code>, <code>interpolator</code>, <code>indeterminateOnly</code>, <code>indeterminateDuration</code>, <code>indeterminateBehavior</code>.</p>\n",
+              "type": "module",
+              "displayName": "ProgressBar"
+            },
+            {
+              "textRaw": "DatePicker",
+              "name": "datepicker",
+              "desc": "<p><code>startYear</code>, <code>endYear</code>, <code>calendarTextColor</code>, <code>dayOfWeekBackground</code>, <code>dayOfWeekTextAppearance</code>, <code>headerBackground</code>, <code>headerDayOfMonthTextAppearance</code>, <code>headerMonthTextAppearance</code>, <code>headerYearTextAppearance</code>, <code>yearListItemTextAppearance</code>, <code>yearListSelectorColor</code>.</p>\n",
+              "type": "module",
+              "displayName": "DatePicker"
+            },
+            {
+              "textRaw": "Spinner 不支持属性",
+              "name": "spinner_不支持属性",
+              "desc": "<p><code>dropDownSelector</code>.</p>\n",
+              "type": "module",
+              "displayName": "Spinner 不支持属性"
+            }
+          ],
+          "type": "module",
+          "displayName": "明确不支持的属性"
+        }
+      ],
+      "type": "module",
+      "displayName": "UI 布局属性 (UI Attributes)"
+    }
+  ]
+}

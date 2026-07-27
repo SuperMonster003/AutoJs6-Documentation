@@ -38,6 +38,40 @@
 
 ******
 
+### 开发与发布
+
+******
+
+`api/*.md` 是在线与离线文档的唯一内容源.
+在线 Docsify 站点是随 `master` 更新的滚动文档; `project.json` 中的
+`targetAutoJs6Version` 用于固定可复现的离线 HTML 版本.
+
+编辑完成后, 执行一条命令即可全量生成离线 HTML, 应用离线插件的规范化规则,
+并安全同步到 `AutoJs6-Plugin-Offline-Docs`. 同步成功后, 两个项目的
+`versionName` 会与 `targetAutoJs6Version` 对齐, 各自的
+`versionCode` / `VERSION_BUILD` 增加 1:
+
+```powershell
+generator\auto-generate-for-autojs6.bat
+```
+
+离线插件的本机路径配置位于不纳入版本控制的
+`generator/local-config.json`. 配置示例见
+`generator/local-config.example.json`.
+
+在线站点由 `.github/workflows/pages.yml` 直接将 `api/` 部署到 GitHub Pages.
+在仓库 Pages Settings 中将 Source 一次性改为 `GitHub Actions` 后,
+日常只需提交并推送 `master`, 不再同步或提交 `gh-pages`.
+自定义域名仍由 Pages Settings 中的 `docs.autojs6.com` 管理.
+上述脚本只更新两个本地工作树, 不会代替版本控制操作: 在线文档提交到
+本仓库 `master`; 离线文档还需在 `AutoJs6-Plugin-Offline-Docs` 中审查,
+提交并按该插件的流程发版.
+
+更多生成, 检查, 增量构建和插件校验命令参阅
+[`generator/README.md`](generator/README.md).
+
+******
+
 ### 说明
 
 ******
@@ -63,6 +97,16 @@
 
 [comment]: <> "Version history only shows last 3 versions"
 
+## v6.8.0
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/07/25</p>
+
+- `新增` AI, TTS, Power Manager, Settings, Work Manager, SysProps, SQLite, Zip 等 16 个模块文档
+- `更新` 根据 AutoJs6 6.8.0 Augmentable API 修订模块签名, 重载, 默认值, 版本和运行条件
+- `更新` 补充双开应用, 异步截图, 引擎事件, OCR Rapid 模式和插件运行条件
+- `优化` 统一 API 参考格式, 内部类型链接和存疑内容处理
+- `优化` 全量生成离线 HTML, JSON 和纯本地搜索索引
+
 ## v1.1.8
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2023/12/01</p>
@@ -87,12 +131,6 @@
 - `优化` 完善 [颜色 (Color)](https://docs.autojs6.com/#/color) 章节
 - `优化` 完善 [光学字符识别 (OCR)](https://docs.autojs6.com/#/ocr) 章节
 
-## v1.1.6
-
-<p style="font: bold 0.8em sans-serif; color: #888888">2023/07/21</p>
-
-- `优化` 完善 [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节
-
 ##### 更多版本历史可参阅
 
-* [CHANGELOG.md](http://docs-project.autojs6.com/blob/master/api/changelog.md)
+- [CHANGELOG.md](http://docs-project.autojs6.com/blob/master/api/changelog.md)

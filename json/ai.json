@@ -1,0 +1,319 @@
+{
+  "source": "..\\api\\ai.md",
+  "modules": [
+    {
+      "textRaw": "人工智能 (AI)",
+      "name": "人工智能_(ai)",
+      "desc": "<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求.</p>\n<p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>\n<p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ai</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] ai",
+          "name": "[@]_ai",
+          "methods": [
+            {
+              "textRaw": "ai(input, options?)",
+              "type": "method",
+              "name": "ai",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为生成文本</li>\n</ul>\n<p>发起文本生成请求.</p>\n<p>此调用与 <a href=\"#m-ask\">ai.ask(input, options?)</a> 等价.</p>\n<pre><code class=\"lang-js\">ai(&#39;Reply with OK&#39;).then((text) =&gt; {\n    console.log(text);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] ai"
+        },
+        {
+          "textRaw": "[m] ask",
+          "name": "[m]_ask",
+          "methods": [
+            {
+              "textRaw": "ask(input, options?)",
+              "type": "method",
+              "name": "ask",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"dataTypes#string\">string</a> 类型的生成文本</li>\n</ul>\n<p>发起非流式请求, 并仅返回响应中的文本结果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ask"
+        },
+        {
+          "textRaw": "[m] chat",
+          "name": "[m]_chat",
+          "methods": [
+            {
+              "textRaw": "chat(input, options?)",
+              "type": "method",
+              "name": "chat",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#airesponse\">AiResponse</a></li>\n</ul>\n<p>发起非流式请求, 并返回提供商无关的完整响应.</p>\n<p>返回对象中的 <code>message</code> 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.</p>\n<pre><code class=\"lang-js\">let messages = [\n    { role: &#39;user&#39;, content: &#39;Return one short greeting&#39; },\n];\n\nai.chat(messages).then((response) =&gt; {\n    console.log(response.text);\n    console.log(response.usage);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] chat"
+        },
+        {
+          "textRaw": "[m] stream",
+          "name": "[m]_stream",
+          "methods": [
+            {
+              "textRaw": "stream(input, options?)",
+              "type": "method",
+              "name": "stream",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 流式请求对象</li>\n</ul>\n<p>发起流式请求并立即返回事件对象.</p>\n<pre><code class=\"lang-js\">let stream = ai.stream(&#39;Count from 1 to 3&#39;);\n\nstream\n    .on(&#39;delta&#39;, (text) =&gt; {\n        console.log(text);\n    })\n    .on(&#39;done&#39;, (response) =&gt; {\n        console.log(response.finishReason);\n    })\n    .on(&#39;error&#39;, (error) =&gt; {\n        console.error(error.message);\n    });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] stream"
+        },
+        {
+          "textRaw": "[m] profiles",
+          "name": "[m]_profiles",
+          "methods": [
+            {
+              "textRaw": "profiles()",
+              "type": "method",
+              "name": "profiles",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprofile\">AiProfile</a><a href=\"dataTypes#array\">[]</a> } - AI 配置档案检查结果</li>\n</ul>\n<p>返回全部 AI 配置档案的可公开信息.</p>\n<p>API 密钥不会出现在返回结果中. <code>hasApiKey</code> 仅表示档案是否保存了密钥.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] profiles"
+        },
+        {
+          "textRaw": "[m] providers",
+          "name": "[m]_providers",
+          "methods": [
+            {
+              "textRaw": "providers()",
+              "type": "method",
+              "name": "providers",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprovider\">AiProvider</a><a href=\"dataTypes#array\">[]</a> } - 内置提供商定义</li>\n</ul>\n<p>返回 AutoJs6 支持的提供商协议及默认服务地址.</p>\n<p>内置提供商 ID:</p>\n<ul>\n<li><code>openai</code></li>\n<li><code>anthropic</code></li>\n<li><code>gemini</code></li>\n<li><code>deepseek</code></li>\n<li><code>openrouter</code></li>\n<li><code>openai-compatible</code></li>\n</ul>\n<p><code>openai-compatible</code> 没有默认服务地址.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] providers"
+        },
+        {
+          "textRaw": "[m] defaultProfile",
+          "name": "[m]_defaultprofile",
+          "methods": [
+            {
+              "textRaw": "defaultProfile()",
+              "type": "method",
+              "name": "defaultProfile",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprofile\">AiProfile</a> | <a href=\"dataTypes#null\">null</a> } - 默认档案检查结果</li>\n</ul>\n<p>返回当前默认 AI 配置档案.</p>\n<p>没有默认档案时返回 <code>null</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] defaultProfile"
+        },
+        {
+          "textRaw": "[m] isConfigured",
+          "name": "[m]_isconfigured",
+          "methods": [
+            {
+              "textRaw": "isConfigured()",
+              "type": "method",
+              "name": "isConfigured",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否存在可直接使用的默认档案</li>\n</ul>\n<p>检查是否存在模型名称有效且凭据条件满足的默认档案.</p>\n<p>此方法不发起网络请求, 也不保证远程服务当前可用.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isConfigured"
+        },
+        {
+          "textRaw": "请求输入",
+          "name": "请求输入",
+          "modules": [
+            {
+              "textRaw": "AiMessage",
+              "name": "aimessage",
+              "desc": "<p>AiMessage 是可进行 JSON 序列化的消息对象.</p>\n<ul>\n<li><strong>role</strong> { <a href=\"dataTypes#string\">string</a> } - 消息角色</li>\n<li><strong>content</strong> { <a href=\"dataTypes#any\">any</a> } - 消息内容</li>\n</ul>\n<p>常用角色为 <code>system</code>, <code>developer</code>, <code>user</code>, <code>assistant</code> 和 <code>tool</code>. 具体支持范围由所选提供商协议决定.</p>\n<p>消息可包含提供商原生字段. 工具结果消息还可使用 <code>toolCallId</code>, <code>tool_call_id</code>, <code>toolUseId</code>, <code>tool_use_id</code> 或 <code>id</code> 指定对应工具调用.</p>\n",
+              "type": "module",
+              "displayName": "AiMessage"
+            },
+            {
+              "textRaw": "AiRequest",
+              "name": "airequest",
+              "desc": "<ul>\n<li><strong>messages</strong> { <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> } - 非空消息数组</li>\n<li><strong>options</strong> { <a href=\"#aioptions\">AiOptions</a> } - 除 <code>messages</code> 外的内联请求选项</li>\n</ul>\n<p>AiRequest 是至少包含 <code>messages</code> 属性的可进行 JSON 序列化对象. <code>messages</code> 之外的属性会作为内联 <a href=\"#aioptions\">AiOptions</a>.</p>\n<p>当同时传入第二个 <code>options</code> 参数时, 第二个参数中的同名属性覆盖内联选项.</p>\n<p>以下输入会被转换为消息数组:</p>\n<ul>\n<li>字符串转换为一条 <code>role</code> 为 <code>user</code> 的消息.</li>\n<li>单个包含 <code>role</code> 和 <code>content</code> 的对象转换为单元素消息数组.</li>\n<li>数组直接作为消息数组.</li>\n<li>包含 <code>messages</code> 的对象使用其 <code>messages</code> 属性.</li>\n</ul>\n<p>输入必须可由 <code>JSON.stringify</code> 序列化, 消息数组不能为空.</p>\n",
+              "type": "module",
+              "displayName": "AiRequest"
+            },
+            {
+              "textRaw": "AiOptions",
+              "name": "aioptions",
+              "desc": "<p>以下属性由 ai 模块直接处理:</p>\n<ul>\n<li><strong>[ profile ]</strong> { <a href=\"dataTypes#string\">string</a> } - 档案 ID 或名称</li>\n<li><strong>[ provider ]</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>[ baseUrl ]</strong> { <a href=\"dataTypes#string\">string</a> } - 服务基础 URL</li>\n<li><strong>[ model ]</strong> { <a href=\"dataTypes#string\">string</a> } - 模型名称</li>\n<li><strong>[ apiKey ]</strong> { <a href=\"dataTypes#string\">string</a> } - 仅用于本次请求的 API 密钥</li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 请求超时, 单位为毫秒</li>\n</ul>\n<p>兼容属性名称:</p>\n<ul>\n<li><code>profile</code>: <code>profileId</code>, <code>profile_id</code>.</li>\n<li><code>provider</code>: <code>providerId</code>, <code>provider_id</code>.</li>\n<li><code>baseUrl</code>: <code>baseURL</code>, <code>base_url</code>.</li>\n<li><code>apiKey</code>: <code>api_key</code>.</li>\n<li><code>timeout</code>: <code>timeoutMillis</code>, <code>timeoutMs</code>, <code>timeout_millis</code>.</li>\n</ul>\n<p><code>timeout</code> 必须是 <code>1000..600000</code> 范围内的整数.<br>\n<a href=\"#m-ask\">ask</a> 和 <a href=\"#m-chat\">chat</a> 的默认超时为 <code>120000</code> 毫秒.<br>\n<a href=\"#m-stream\">stream</a> 的默认超时为 <code>600000</code> 毫秒.</p>\n<p>未指定 <code>profile</code> 和 <code>provider</code> 时使用默认档案.<br>\n指定 <code>profile</code> 时按档案 ID 或名称选择档案.<br>\n仅指定 <code>provider</code> 时按提供商选择档案.</p>\n<p>不依赖已保存档案的独立调用至少需要 <code>provider</code> 和 <code>model</code>. 通常还需要 <code>apiKey</code>.<br>\n仅当 <code>openai-compatible</code> 使用严格的本机回环地址时, 才允许省略 API 密钥.</p>\n<p>以下提供商无关的请求属性会映射到对应提供商协议:</p>\n<ul>\n<li><strong>[ system ]</strong> { <a href=\"dataTypes#any\">any</a> } - 系统指令</li>\n<li><strong>[ temperature ]</strong> { <a href=\"dataTypes#number\">number</a> } - 采样温度</li>\n<li><strong>[ maxTokens ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最大输出 token 数</li>\n<li><strong>[ topP ]</strong> { <a href=\"dataTypes#number\">number</a> } - top-p 采样参数</li>\n<li><strong>[ topK ]</strong> { <a href=\"dataTypes#number\">number</a> } - top-k 采样参数</li>\n<li><strong>[ stopSequences ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 停止序列</li>\n<li><strong>[ tools ]</strong> { <a href=\"dataTypes#any\">any</a><a href=\"dataTypes#array\">[]</a> } - 工具定义</li>\n<li><strong>[ toolChoice ]</strong> { <a href=\"dataTypes#any\">any</a> } - 工具选择策略</li>\n</ul>\n<p>提供商原生请求属性也会保留. 当原生属性与提供商无关别名同时存在时, 原生属性优先.</p>\n<p><code>headers</code>, <code>callbacks</code>, <code>signal</code>, <code>abortSignal</code>, <code>returnRaw</code>, <code>raw</code> 以及 <code>onText</code> 等回调属性不会转发到提供商.</p>\n",
+              "type": "module",
+              "displayName": "AiOptions"
+            }
+          ],
+          "type": "module",
+          "displayName": "请求输入"
+        },
+        {
+          "textRaw": "返回对象",
+          "name": "返回对象",
+          "modules": [
+            {
+              "textRaw": "AiProviderError",
+              "name": "AiProviderError",
+              "desc": "<ul>\n<li><strong>type</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误类型</li>\n<li><strong>code</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误代码</li>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误消息</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "AiProfileReference"
+            },
+            {
+              "textRaw": "AiProfileReference",
+              "name": "aiprofilereference",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案 ID</li>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案名称</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>baseUrl</strong> { <a href=\"dataTypes#string\">string</a> } - 服务基础 URL</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> } - 模型名称</li>\n</ul>\n<p>独立调用没有已保存档案, 因此 <code>id</code> 和 <code>name</code> 为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "AiProfileReference"
+            },
+            {
+              "textRaw": "AiProfile",
+              "name": "aiprofile",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 档案 ID</li>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案名称</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商 ID</li>\n<li><strong>baseUrl</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 服务基础 URL</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 模型名称</li>\n<li><strong>hasApiKey</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否保存了 API 密钥</li>\n<li><strong>isDefault</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否为默认档案</li>\n<li><strong>status</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 档案是否可用</li>\n<li><strong>errorCode</strong> { <code>&#39;missing_entry&#39;</code> | <code>&#39;decryption_failed&#39;</code> | <code>&#39;invalid_data&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 档案不可用原因代码</li>\n</ul>\n<p>无法解密或解析的档案仍会出现在列表中, 此时部分字段为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "AiProfile"
+            },
+            {
+              "textRaw": "AiProvider",
+              "name": "aiprovider",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>defaultBaseUrl</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 默认服务基础 URL</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "AiProvider"
+            }
+          ],
+          "type": "module",
+          "displayName": "返回对象"
+        },
+        {
+          "textRaw": "AiStream",
+          "name": "aistream",
+          "desc": "<ul>\n<li><ins><strong>extends</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> }</li>\n</ul>\n<p>AiStream 是单次流式 AI 请求的事件对象.</p>\n<p>它继承 <a href=\"eventEmitterType\">EventEmitter</a> 的 <code>addListener</code>, <code>eventNames</code>, <code>listenerCount</code>, <code>listeners</code>, <code>prependListener</code>, <code>prependOnceListener</code>, <code>removeAllListeners</code>, <code>removeListener</code> 和 <code>setMaxListeners</code> 等方法.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[p#] AiStream#state",
+              "name": "[p#]_aistream#state",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <code>&#39;created&#39;</code> | <code>&#39;open&#39;</code> | <code>&#39;done&#39;</code> | <code>&#39;error&#39;</code> | <code>&#39;cancelled&#39;</code> }</li>\n</ul>\n<p>当前流状态.</p>\n",
+              "type": "module",
+              "displayName": "[p#] AiStream#state"
+            },
+            {
+              "textRaw": "[p#] AiStream#isDone",
+              "name": "[p#]_aistream#isdone",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>流是否已经结束.</p>\n",
+              "type": "module",
+              "displayName": "[p#] AiStream#isDone"
+            },
+            {
+              "textRaw": "[m#] AiStream#on(eventName, listener)",
+              "name": "[m#]_aistream#on(eventname,_listener)",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>eventName</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 当前流对象</li>\n</ul>\n<p>注册持续事件监听器.</p>\n",
+              "type": "module",
+              "displayName": "[m#] AiStream#on(eventName, listener)"
+            },
+            {
+              "textRaw": "[m#] AiStream#once(eventName, listener)",
+              "name": "[m#]_aistream#once(eventname,_listener)",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>eventName</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 单次事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 当前流对象</li>\n</ul>\n<p>注册仅执行一次的事件监听器.</p>\n",
+              "type": "module",
+              "displayName": "[m#] AiStream#once(eventName, listener)"
+            },
+            {
+              "textRaw": "[m#] AiStream#cancel()",
+              "name": "[m#]_aistream#cancel()",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 当前流对象</li>\n</ul>\n<p>取消网络请求并终止流.</p>\n<p>重复调用不会再次取消. 成功接受取消操作后触发 <code>cancelled</code> 事件.</p>\n",
+              "type": "module",
+              "displayName": "[m#] AiStream#cancel()"
+            }
+          ],
+          "type": "module",
+          "displayName": "AiStream"
+        },
+        {
+          "textRaw": "AiStream 事件",
+          "name": "aistream_事件",
+          "desc": "<p>事件监听器参数:</p>\n<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>监听器参数</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>open</code></td>\n<td><code>profile</code> { <a href=\"#aiprofilereference\">AiProfileReference</a> }</td>\n<td>请求已打开</td>\n</tr>\n<tr>\n<td><code>delta</code></td>\n<td><code>text</code> { <a href=\"dataTypes#string\">string</a> }, <code>chunk</code> { <a href=\"#aistreamchunk\">AiStreamChunk</a> }</td>\n<td>收到文本或推理增量</td>\n</tr>\n<tr>\n<td><code>chunk</code></td>\n<td><code>chunk</code> { <a href=\"#aistreamchunk\">AiStreamChunk</a> }</td>\n<td>收到提供商响应块</td>\n</tr>\n<tr>\n<td><code>toolCall</code></td>\n<td><code>toolCall</code> { <a href=\"#aitoolcall\">AiToolCall</a> }</td>\n<td>收到工具调用或工具调用增量</td>\n</tr>\n<tr>\n<td><code>usage</code></td>\n<td><code>usage</code> { <a href=\"#aiusage\">AiUsage</a> }</td>\n<td>收到用量信息</td>\n</tr>\n<tr>\n<td><code>done</code></td>\n<td><code>response</code> { <a href=\"#airesponse\">AiResponse</a> }</td>\n<td>流正常完成</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><code>error</code> { <a href=\"#aistreamerror\">AiStreamError</a> }</td>\n<td>流失败</td>\n</tr>\n<tr>\n<td><code>cancelled</code></td>\n<td>无</td>\n<td>流被调用方取消</td>\n</tr>\n</tbody>\n</table>\n<p><code>delta</code> 的 <code>text</code> 参数对应 <code>chunk.text</code>. 当事件只包含推理增量时, <code>text</code> 可能为空字符串, 此时使用 <code>chunk.reasoning</code>.</p>\n",
+          "modules": [
+            {
+              "textRaw": "AiStreamError",
+              "name": "aistreamerror",
+              "desc": "<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 异常类名称</li>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 错误消息</li>\n<li><strong>[ provider ]</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>[ statusCode ]</strong> { <a href=\"dataTypes#number\">number</a> } - HTTP 状态码</li>\n<li><strong>[ code ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误代码</li>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误类型</li>\n<li><strong>[ requestId ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商请求 ID</li>\n</ul>\n<p>只有 HTTP 提供商错误包含 <code>provider</code>, <code>statusCode</code>, <code>code</code>, <code>type</code> 和 <code>requestId</code>.</p>\n",
+              "type": "module",
+              "displayName": "AiStreamError"
+            }
+          ],
+          "type": "module",
+          "displayName": "AiStream 事件"
+        }
+      ],
+      "type": "module",
+      "displayName": "人工智能 (AI)"
+    }
+  ]
+}

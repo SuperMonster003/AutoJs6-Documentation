@@ -4,14 +4,91 @@
     {
       "textRaw": "HttpRequestBuilderOptions",
       "name": "httprequestbuilderoptions",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 21, 2023.</p>\n\n<hr>\n<p>HttpRequestBuilderOptions 是一个构建 HTTP 请求时用于传递构建选项的接口.<br>这些选项将影响 HTTP 请求的构建.</p>\n<p>常见相关方法或属性:</p>\n<ul>\n<li><a href=\"http#m-buildRequest\">http.buildRequest</a>(url, <strong>options</strong>)</li>\n<li><a href=\"http#m-request\">http.request</a>(url, <strong>options</strong>, callback)</li>\n<li><a href=\"http#m-get\">http.get</a>(url, <strong>options</strong>, callback)</li>\n<li><a href=\"http#m-post\">http.post</a>(url, data, <strong>options</strong>, callback)</li>\n<li><a href=\"http#m-postJson\">http.postJson</a>(url, data, <strong>options</strong>, callback)</li>\n<li><a href=\"http#m-postMultipart\">http.postMultipart</a>(url, files, <strong>options</strong>, callback)</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpRequestBuilderOptions</p>\n\n<hr>\n",
+      "desc": "<p>HttpRequestBuilderOptions 是 <code>http</code> 模块用于构建请求和配置当前脚本 HTTP 运行时的选项对象.</p>\n<p>选项分为两类:</p>\n<ul>\n<li><code>method</code>, <code>headers</code>, <code>contentType</code>, <code>body</code> 和 <code>files</code> 参与构建 <a href=\"okhttp3RequestType\">Okhttp3Request</a>.</li>\n<li><code>timeout</code>, <code>maxRetries</code>, <code>cacheBody</code>, <code>bodyCacheThresholdBytes</code>, <code>isInsecure</code>, <code>insecure</code> 和 <code>client</code> 在执行请求时生效.</li>\n</ul>\n<p><a href=\"http#m-buildrequest\">http.buildRequest</a> 只构建请求, 不应用第二类运行时选项.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">HttpRequestBuilderOptions</p>\n\n<hr>\n",
       "modules": [
+        {
+          "textRaw": "[p?] method",
+          "name": "[p?]_method",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>HTTP 请求方法, 如 <code>&quot;GET&quot;</code>, <code>&quot;POST&quot;</code>, <code>&quot;PUT&quot;</code>, <code>&quot;DELETE&quot;</code> 或 <code>&quot;PATCH&quot;</code>.</p>\n<p>直接调用 <a href=\"http#m-buildrequest\">http.buildRequest</a>, <a href=\"http#m-request\">http.request</a> 或 <a href=\"http#m-requestasync\">http.requestAsync</a> 时必须提供此属性. <code>get</code>, <code>head</code>, <code>post</code>, <code>postJson</code>, <code>postMultipart</code>, <code>put</code>, <code>delete</code>, <code>del</code> 及其异步版本会覆盖它.</p>\n",
+          "type": "module",
+          "displayName": "[p?] method"
+        },
+        {
+          "textRaw": "[p?] headers",
+          "name": "[p?]_headers",
+          "desc": "<ul>\n<li>{ <a href=\"httpRequestHeadersType\">HttpRequestHeaders</a> }</li>\n</ul>\n<p>请求头 JavaScript 对象. 属性名为请求头名称, 属性值为字符串或字符串数组.</p>\n<p>数组中的值会依次传给 OkHttp <code>Request.Builder.header</code> 方法. 该方法替换同名请求头, 因此同一属性最终保留最后一个数组元素.</p>\n",
+          "type": "module",
+          "displayName": "[p?] headers"
+        },
+        {
+          "textRaw": "[p?] contentType",
+          "name": "[p?]_contenttype",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>请求体媒体类型, 如 <code>&quot;text/plain&quot;</code> 或 <code>&quot;application/json&quot;</code>.</p>\n<p>此属性用于字符串或函数形式的 <a href=\"#p-body\">body</a>. <code>post</code>, <code>put</code> 和 <code>delete</code> 默认使用 <code>&quot;application/x-www-form-urlencoded&quot;</code>, <code>postJson</code> 固定使用 <code>&quot;application/json&quot;</code>, <code>postMultipart</code> 固定使用 <code>&quot;multipart/form-data&quot;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] contentType"
+        },
+        {
+          "textRaw": "[p?] body",
+          "name": "[p?]_body",
+          "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li>{ <a href=\"https://square.github.io/okhttp/4.x/okhttp/okhttp3/-request-body/\">okhttp3.RequestBody</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#function\">Function</a> }</li>\n</ul>\n<p>请求体. 支持以下形式:</p>\n<ul>\n<li>OkHttp <code>RequestBody</code> 对象.</li>\n<li>字符串. 使用 <a href=\"#p-contenttype\">contentType</a> 作为媒体类型.</li>\n<li>接收一个 <a href=\"https://square.github.io/okio/3.x/okio/okio/okio.-buffered-sink/\">okio.BufferedSink</a> 参数的可调用函数. 函数负责向 sink 写入请求体.</li>\n</ul>\n<p><code>body</code> 与 <a href=\"#p-files\">files</a> 同时存在时, <code>body</code> 优先.</p>\n<p>自 AutoJs6 6.8.0 起, 函数形式也接受 Rhino 可调用代理, 并在函数的声明作用域中执行.</p>\n",
+          "type": "module",
+          "displayName": "[p?] body"
+        },
+        {
+          "textRaw": "[p?] files",
+          "name": "[p?]_files",
+          "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>用于构建 <code>&quot;multipart/form-data&quot;</code> 请求体的对象. 每个属性名是表单字段名, 属性值支持:</p>\n<ul>\n<li>字符串或数字, 作为普通表单字段.</li>\n<li>文件对象, 使用文件名和按扩展名推断的媒体类型.</li>\n<li><code>[ fileName, path ]</code>, 使用指定文件名和按扩展名推断的媒体类型.</li>\n<li><code>[ fileName, mimeType, path ]</code>, 使用指定文件名和媒体类型.</li>\n</ul>\n<p>仅当 <a href=\"#p-body\">body</a> 不存在时使用此属性.</p>\n",
+          "type": "module",
+          "displayName": "[p?] files"
+        },
         {
           "textRaw": "[p?] timeout",
           "name": "[p?]_timeout",
-          "desc": "<ul>\n<li>[ <code>30000</code> ] { <a href=\"dataTypes#number\">number</a> } - 超时时间, 单位为秒</li>\n</ul>\n",
+          "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li>[ <code>30000</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>连接, 读取和写入超时时间, 单位为毫秒.</p>\n<p>执行请求时, 此值先应用到当前 <code>OkHttpClient.Builder</code>. 随后 <a href=\"#p-client\">client</a> 中的同名 Builder 配置可以覆盖对应超时.</p>\n",
           "type": "module",
           "displayName": "[p?] timeout"
+        },
+        {
+          "textRaw": "[p?] maxRetries",
+          "name": "[p?]_maxretries",
+          "desc": "<ul>\n<li>[ <code>3</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>HTTP 非成功响应的最大重试次数. 默认最多执行 <code>1 + 3</code> 次请求.</p>\n<p>重试条件是已经收到的响应状态码不在 <code>200</code> 到 <code>299</code> 范围内. 传输阶段直接抛出的 I/O 异常不由此选项重试.</p>\n<p>此值在每次请求执行前写入当前脚本的共享 HTTP 运行时. 后续请求未指定时会恢复默认值 <code>3</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] maxRetries"
+        },
+        {
+          "textRaw": "[p?] cacheBody",
+          "name": "[p?]_cachebody",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否缓存通过 <a href=\"httpResponseBodyType#m-string\">HttpResponseBody.string</a> 或 <a href=\"httpResponseBodyType#m-bytes\">HttpResponseBody.bytes</a> 完整读取的结果.</p>\n<p>默认不缓存, 完整读取后响应体会关闭且不能再次读取. 启用缓存时, 字符串缓存和字节缓存仍相互独立.</p>\n",
+          "type": "module",
+          "displayName": "[p?] cacheBody"
+        },
+        {
+          "textRaw": "[p?] bodyCacheThresholdBytes",
+          "name": "[p?]_bodycachethresholdbytes",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li>[ <code>8388608</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>已知响应体长度允许缓存的最大值, 单位为字节. 默认值为 <code>8388608</code>, 即 8 MiB.</p>\n<p>仅在 <code>cacheBody</code> 为 <code>true</code> 时生效. 服务端未声明内容长度或无法取得长度时, 实现会缓存完整读取结果而不使用此阈值预先限制.</p>\n",
+          "type": "module",
+          "displayName": "[p?] bodyCacheThresholdBytes"
+        },
+        {
+          "textRaw": "[p?] isInsecure",
+          "name": "[p?]_isinsecure",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否信任所有 TLS 证书并接受所有主机名. <a href=\"#p-insecure\">insecure</a> 是此属性的别名.</p>\n<p>此选项会关闭关键的 HTTPS 身份校验, 仅应在受控测试环境中使用.</p>\n<p>启用后生成的客户端会成为当前脚本共享客户端, 后续请求会继承该客户端配置.</p>\n<p>不安全 TLS 配置在 <a href=\"#p-client\">client</a> 配置之后应用, 因此会替换 Builder 中已有的 SSL Socket Factory 和主机名验证器.</p>\n",
+          "type": "module",
+          "displayName": "[p?] isInsecure"
+        },
+        {
+          "textRaw": "[p?] insecure",
+          "name": "[p?]_insecure",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><a href=\"#p-isinsecure\">isInsecure</a> 的别名.</p>\n",
+          "type": "module",
+          "displayName": "[p?] insecure"
+        },
+        {
+          "textRaw": "[p?] client",
+          "name": "[p?]_client",
+          "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>应用到当前 <a href=\"https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/-builder/\">okhttp3.OkHttpClient.Builder</a> 的配置对象.</p>\n<p>每个属性名必须是 Builder 的公共方法名. 属性值按方法形参转换:</p>\n<ul>\n<li>单参数 Builder 方法直接使用属性值.</li>\n<li>存在双参数重载且属性值是长度为 <code>2</code> 的数组时, 两个数组元素分别作为方法参数.</li>\n<li><code>TimeUnit</code> 参数可使用 <code>java.util.concurrent.TimeUnit</code> 对象, 或不区分大小写的字符串, 如 <code>&quot;SECONDS&quot;</code>.</li>\n<li>布尔值, 整数, 长整数, 浮点数和字符串会转换为对应的 Java 类型.</li>\n<li>Java 对象参数必须与 Builder 方法要求的类型兼容.</li>\n</ul>\n<p>零参数方法, 未知方法, 不支持的参数数量和无法转换的值会使调用抛出异常.</p>\n<p>配置以当前共享客户端的 <code>newBuilder()</code> 为基础. 请求执行后, 构建的新客户端替换当前脚本的共享客户端, 因而未被后续请求覆盖的配置会继续生效.</p>\n<pre><code class=\"lang-js\">let response = http.get(&quot;https://example.com&quot;, {\n    timeout: 10000,\n    client: {\n        followRedirects: false,\n        readTimeout: [ 5, &quot;SECONDS&quot; ],\n    },\n});\nconsole.log(response.statusCode);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] client"
         }
       ],
       "type": "module",

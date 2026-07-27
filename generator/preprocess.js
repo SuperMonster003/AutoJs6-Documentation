@@ -20,6 +20,12 @@ function stripComments(input) {
     return input.replace(/^@\/\/.*$/gmi, '');
 }
 
+function replaceInclude(input, include, replacement) {
+    const escaped = include.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const completeLine = new RegExp(`^${escaped}(?=\\r?$)`, 'gmi');
+    return input.replace(completeLine, () => replacement);
+}
+
 function processIncludes(inputFile, input, cb) {
     const includes = input.match(includeExpr);
     if (includes === null) return cb(null, input);
@@ -31,11 +37,12 @@ function processIncludes(inputFile, input, cb) {
         if (!fname.match(/\.md$/)) fname += '.md';
 
         if (includeData.hasOwnProperty(fname)) {
-            input = input.split(include).join(includeData[fname]);
+            input = replaceInclude(input, include, includeData[fname] + '\n');
             incCount--;
             if (incCount === 0) {
                 return cb(null, input);
             }
+            return;
         }
 
         const fullFname = path.resolve(path.dirname(inputFile), fname);
@@ -51,7 +58,11 @@ function processIncludes(inputFile, input, cb) {
                 // headings should look like.
                 includeData[fname] = `<!-- [start-include:${fname}] -->\n` +
                     inc + `\n<!-- [end-include:${fname}] -->\n`;
-                input = input.split(include).join(includeData[fname] + '\n');
+                input = replaceInclude(
+                    input,
+                    include,
+                    includeData[fname] + '\n',
+                );
                 if (incCount === 0) {
                     return cb(null, input);
                 }

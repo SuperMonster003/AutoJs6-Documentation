@@ -4,7 +4,241 @@
     {
       "textRaw": "模块 (Module)",
       "name": "模块_(module)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>Auto.js 有一个简单的模块加载系统.  在 Auto.js 中, 文件和模块是一一对应的（每个文件被视为一个独立的模块）.</p>\n<p>例子, 假设有一个名为 foo.js 的文件：</p>\n<pre><code>var circle = require(&#39;circle.js&#39;);\nconsole.log(&quot;半径为 4 的圆的面积是 %d&quot;, circle.area(4));\n</code></pre><p>在第一行中, foo.js 加载了同一目录下的 circle.js 模块.</p>\n<p>circle.js 文件的内容为：</p>\n<pre><code>const PI = Math.PI;\n\nvar circle = {};\n\ncircle.area = function (r) {\n  return PI * r * r;\n};\n\ncircle.circumference = (r) =&gt; 2 * PI * r;\n\nmodule.exports = circle;\n</code></pre><p>circle.js 模块导出了 area() 和 circumference() 两个函数.  通过在特殊的 exports 对象上指定额外的属性, 函数和对象可以被添加到模块的根部.</p>\n<p>模块内的本地变量是私有的.  在这个例子中, 变量 PI 是 circle.js 私有的, 不会影响到加载他的脚本的变量环境.</p>\n<p>module.exports属性可以被赋予一个新的值（例如函数或对象）.</p>\n<p>如下, bar.js 会用到 square 模块, square 导出一个构造函数：</p>\n<pre><code>const square = require(&#39;square.js&#39;);\nconst mySquare = square(2);\nconsole.log(&quot;正方形的面积是 %d&quot;, mySquare.area());\nsquare 模块定义在 square.js 中：\n\n// 赋值给 `exports` 不会修改模块, 必须使用 `module.exports`\nmodule.exports = function(width) {\n  return {\n    area: () =&gt; width ** 2\n  };\n};\n</code></pre>",
+      "desc": "<hr>\n<p>AutoJs6 使用 CommonJS 风格的模块加载器. 每个 JavaScript 或 JSON 文件是一个独立模块, JavaScript 模块通过 <code>module.exports</code> 导出值, 其他脚本通过 <code>require()</code> 加载该值.</p>\n<p>模块加载器支持:</p>\n<ul>\n<li>内置资源模块.</li>\n<li>本地 <code>.js</code>, <code>.mjs</code> 和 <code>.json</code> 文件.</li>\n<li>包含 <code>package.json</code> 或 <code>index.js</code> 的目录.</li>\n<li>当前目录及上级目录中的 <code>node_modules</code>.</li>\n<li><code>NODE_PATH</code> 指定的搜索目录.</li>\n<li>由原生加载器处理的 <code>http://</code> 和 <code>https://</code> 地址.</li>\n</ul>\n<p><code>.mjs</code> 仅作为可解析的文件扩展名处理, 文件仍在 CommonJS 包装函数中执行, 并不启用原生 ECMAScript 模块语义.</p>\n",
+      "modules": [
+        {
+          "textRaw": "模块示例",
+          "name": "模块示例",
+          "desc": "<p><code>circle.js</code>:</p>\n<pre><code class=\"lang-js\">let PI = Math.PI;\n\nmodule.exports = {\n    area(radius) {\n        return PI * radius * radius;\n    },\n    circumference(radius) {\n        return 2 * PI * radius;\n    },\n};\n</code></pre>\n<p>同一目录中的 <code>main.js</code>:</p>\n<pre><code class=\"lang-js\">let circle = require(&#39;./circle&#39;);\n\nconsole.log(circle.area(4));\nconsole.log(circle.circumference(4));\n</code></pre>\n<p>模块中的局部变量不会自动写入加载方的作用域. 上例中的 <code>PI</code> 仅属于 <code>circle.js</code>.</p>\n",
+          "type": "module",
+          "displayName": "模块示例"
+        },
+        {
+          "textRaw": "[m] require",
+          "name": "[m]_require",
+          "methods": [
+            {
+              "textRaw": "require(id)",
+              "type": "method",
+              "name": "require",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 模块标识或路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 模块导出值</li>\n</ul>\n<p>解析并加载模块.</p>\n<p>模块标识按以下顺序处理:</p>\n<ol>\n<li>移除可选的 <code>node:</code> 前缀.</li>\n<li>对内置模块及 HTTP(S) 地址调用原生加载器.</li>\n<li>从当前模块目录或 <a href=\"#p-root\">require.root</a> 开始解析本地文件或目录.</li>\n<li>搜索 <a href=\"#m-paths\">require.paths</a> 返回的目录.</li>\n<li>逐级搜索 <code>node_modules</code>.</li>\n</ol>\n<p>没有已知扩展名时, 解析器依次尝试 <code>.js</code>, <code>.mjs</code> 和 <code>.json</code>. 无法解析且原生加载器也不能提供模块时, 抛出代码为 <code>MODULE_NOT_FOUND</code> 的错误.</p>\n<pre><code class=\"lang-js\">let path = require(&#39;node:path&#39;);\nlet config = require(&#39;./config.json&#39;);\nlet helper = require(&#39;./lib/helper&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "模块缓存",
+              "name": "模块缓存",
+              "desc": "<p>模块在执行前写入缓存, 因此循环引用可以取得尚未执行完毕的模块对象. JavaScript 模块执行成功后, 后续加载返回同一个 <code>module.exports</code>; 执行抛出异常时, 对应缓存条目会被删除.</p>\n<p>JSON 模块会被解析后直接写入缓存.</p>\n",
+              "type": "module",
+              "displayName": "模块缓存"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] require"
+        },
+        {
+          "textRaw": "[m] resolve",
+          "name": "[m]_resolve",
+          "methods": [
+            {
+              "textRaw": "require.resolve(id)",
+              "type": "method",
+              "name": "resolve",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [string](dataTypes#string) } - 模块标识或路径 ",
+                      "name": "**id**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "模块标识或路径"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | {{ path: [string](dataTypes#string); core: [boolean](dataTypes#boolean) }} | [false](dataTypes#boolean) } - 解析结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | {{ path: [string](dataTypes#string); core: [boolean](dataTypes#boolean) ",
+                      "desc": "} | [false](dataTypes#boolean) } - 解析结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>解析模块但不执行模块代码.</p>\n<ul>\n<li>普通文件返回规范化后的文件路径.</li>\n<li>内置资源模块返回包含 <strong>path</strong> 和 <code>core: true</code> 的对象.</li>\n<li>无法解析时返回 <code>false</code>.</li>\n</ul>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] resolve"
+        },
+        {
+          "textRaw": "[m] paths",
+          "name": "[m]_paths",
+          "methods": [
+            {
+              "textRaw": "require.paths()",
+              "type": "method",
+              "name": "paths",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string)[] } - 附加模块搜索目录 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string)[] ",
+                      "desc": "附加模块搜索目录"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回附加搜索目录. 结果始终包含:</p>\n<ul>\n<li><code>&lt;user.home&gt;/.node_modules</code></li>\n<li><code>&lt;user.home&gt;/.node_libraries</code></li>\n</ul>\n<p>如果进程环境变量 <code>NODE_PATH</code> 已设置, 其中的路径也会追加到结果. Windows 使用 <code>;</code> 分隔路径, 其他系统使用 <code>:</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] paths"
+        },
+        {
+          "textRaw": "[p] root",
+          "name": "[p]_root",
+          "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 顶层模块解析根目录</li>\n</ul>\n<p>读取或设置没有父模块时使用的模块解析根目录. 初始值来自脚本运行时的当前工作目录.</p>\n",
+          "type": "module",
+          "displayName": "[p] root"
+        },
+        {
+          "textRaw": "[p+] cache",
+          "name": "[p+]_cache",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - 模块缓存</li>\n</ul>\n<p>缓存键通常是解析后的文件路径, 值为模块对象或 JSON 解析结果. 删除某个键可使对应模块在下次 <code>require()</code> 时重新加载.</p>\n<p>直接修改缓存可能破坏模块间的共享状态或循环引用关系.</p>\n",
+          "type": "module",
+          "displayName": "[p+] cache"
+        },
+        {
+          "textRaw": "[p+] extensions",
+          "name": "[p+]_extensions",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>保留的扩展名对象. 当前 AutoJs6 加载器不从此对象读取自定义扩展名处理函数.</p>\n",
+          "type": "module",
+          "displayName": "[p+] extensions"
+        },
+        {
+          "textRaw": "[p] main",
+          "name": "[p]_main",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"#c-module\">Module</a> | <a href=\"dataTypes#null\">null</a> } - 主模块</li>\n</ul>\n<p>返回由模块加载器的 <code>runMain</code> 流程登记的主模块. 尚未登记时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] main"
+        },
+        {
+          "textRaw": "[C] Module",
+          "name": "[c]_module",
+          "desc": "<p>模块加载器使用的 CommonJS 模块记录. 普通模块代码可通过局部变量 <code>module</code> 访问当前记录.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[p#] filename",
+              "name": "[p#] filename",
+              "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 模块文件名</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "[p#] exports"
+            },
+            {
+              "textRaw": "[p#] exports",
+              "name": "[p#]_exports",
+              "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#any\">any</a> } - 模块导出值</li>\n</ul>\n<p>读取或替换模块导出值.</p>\n<pre><code class=\"lang-js\">module.exports = function (width) {\n    return {\n        area() {\n            return width * width;\n        },\n    };\n};\n</code></pre>\n<p>JavaScript 模块的包装函数最初把 <code>exports</code> 和 <code>module.exports</code> 指向同一个对象. 给 <code>exports</code> 增加属性会导出该属性, 但重新赋值局部变量 <code>exports</code> 不会替换 <code>module.exports</code>:</p>\n<pre><code class=\"lang-js\">exports.answer = 42; // 有效.\nexports = { answer: 7 }; // 不会替换 module.exports.\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[p#] exports"
+            },
+            {
+              "textRaw": "[p#] loaded",
+              "name": "[p#]_loaded",
+              "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> } - 模块是否执行完毕</li>\n</ul>\n<p>模块创建时为 <code>false</code>, 包装函数成功执行后变为 <code>true</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] loaded"
+            },
+            {
+              "textRaw": "[p#] parent",
+              "name": "[p#] parent",
+              "desc": "<ul>\n<li>{ <a href=\"#c-module\">Module</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 父模块</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "[p#] children"
+            },
+            {
+              "textRaw": "[p#] children",
+              "name": "[p#]_children",
+              "desc": "<ul>\n<li>{ <a href=\"#c-module\">Module</a>[] } - 直接子模块记录</li>\n</ul>\n<p>创建模块时会把模块记录追加到父模块的 <strong>children</strong>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] children"
+            },
+            {
+              "textRaw": "[m#] require",
+              "name": "[m#]_require",
+              "methods": [
+                {
+                  "textRaw": "Module#require(id)",
+                  "type": "method",
+                  "name": "Module#require",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**id** { [string](dataTypes#string) } - 模块标识或路径 ",
+                          "name": "**id**",
+                          "type": " [string](dataTypes#string) ",
+                          "desc": "模块标识或路径"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 模块导出值 ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [any](dataTypes#any) ",
+                          "desc": "模块导出值"
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "id"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>以当前模块作为父模块加载依赖. 模块代码中的局部变量 <code>require</code> 已绑定到此方法, 并提供 <code>resolve</code>, <code>paths</code>, <code>cache</code> 和 <code>extensions</code> 属性.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m#] require"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] Module"
+        },
+        {
+          "textRaw": "模块包装变量",
+          "name": "模块包装变量",
+          "desc": "<p>JavaScript 模块代码在以下包装函数参数中执行:</p>\n<pre><code class=\"lang-js\">function (exports, require, module, __filename,__dirname) {\n    // 模块代码.\n}\n</code></pre>\n<ul>\n<li><strong>exports</strong> - <code>module.exports</code> 的初始别名.</li>\n<li><strong>require</strong> - 绑定到当前模块的加载函数.</li>\n<li><strong>module</strong> - 当前 <a href=\"#c-module\">Module</a> 记录.</li>\n<li><strong>__filename</strong> - 当前模块文件名.</li>\n<li><strong>__dirname</strong> - 当前模块所在目录. 位于资源根目录的内置模块使用空字符串.</li>\n</ul>\n<p>文件以 <code>#!</code> 开头时, 加载器会先把该行开头改为 JavaScript 注释再执行.</p>\n",
+          "type": "module",
+          "displayName": "模块包装变量"
+        },
+        {
+          "textRaw": "内置模块",
+          "name": "内置模块",
+          "desc": "<p>模块加载器显式识别以下 Node.js 兼容名称:</p>\n<ul>\n<li><code>buffer</code></li>\n<li><code>events</code></li>\n<li><code>fs</code></li>\n<li><code>lodash</code></li>\n<li><code>nodejs</code></li>\n<li><code>os</code></li>\n<li><code>path</code></li>\n<li><code>process</code></li>\n</ul>\n<p>AutoJs6 还可通过相同解析机制加载 APK 资源中的其他模块, 例如 <code>axios</code>, <code>banana-i18n</code>, <code>cheerio</code>, <code>continuation</code>, <code>dayjs</code>, <code>i18n</code>, <code>jvm-npm</code>, <code>promise</code> 和 <code>result-adapter</code>. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.</p>\n",
+          "type": "module",
+          "displayName": "内置模块"
+        }
+      ],
       "type": "module",
       "displayName": "模块 (Module)"
     }

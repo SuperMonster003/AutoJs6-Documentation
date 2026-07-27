@@ -13,7 +13,7 @@ toast 模块用于 [消息浮动框](https://developer.android.com/guide/topics/
 
 可能依赖上述权限的设备及操作系统:
 
-- 小米 (XiaoMi / Redmi / BlackShark) - MIUI
+- 小米 (Xiaomi / Redmi / BlackShark) - MIUI / HyperOS
 - 维沃 (VIVO / IQOO) - Funtouch OS / OriginOS
 - 欧珀 (OPPO / Realme) - ColorOS
 
@@ -69,7 +69,7 @@ toast("hello", 'long'); /* 显示消息框 3.5 秒钟. */
 toast("hello", true); /* 同上. */
 ```
 
-> 注: 仅有 [ 长 / 短 ] 两种时长, 此时长由安卓系统决定.  
+> 注: 仅有 [ 长 / 短 ] 两种时长, 此时长由安卓系统决定.<br>
 > 通常, 短时为 2 秒, 长时为 3.5 秒.
 
 ### toast(text, isLong, isForcible)

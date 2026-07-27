@@ -4,26 +4,151 @@
     {
       "textRaw": "包装图像类 (ImageWrapper)",
       "name": "包装图像类_(imagewrapper)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Mar 24, 2023.</p>\n\n<hr>\n<p>包装图像类用于 AutoJs6 的图像处理.</p>\n<p>包装后的图像类隐藏了内部复杂的图像处理细节, 便于图像数据的 [ 生成 / 访问 / 传递 / 交互 ].</p>\n<pre><code class=\"lang-js\">util.getClassName(ImageWrapper); // org.autojs.autojs.core.image.ImageWrapper\nimages.read(&#39;./picture.jpg&#39;) instanceof ImageWrapper; /* ImageWrapper 实例判断. */\nImageWrapper.ofBitmap(bitmap); /* 将 Bitmap 包装为 ImageWrapper. */\n</code></pre>\n<p>在 [ <a href=\"image\">images</a> / <a href=\"ocr\">ocr</a> / <a href=\"canvas\">canvas</a> ] 等模块的方法中, 均或多或少地涉及 <code>ImageWrapper</code> 类型参数或返回值.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImageWrapper</p>\n\n<hr>\n",
+      "desc": "<p><code>ImageWrapper</code> 是 AutoJs6 图像数据的包装类. <a href=\"image\"><code>images</code></a>, <a href=\"ocr\"><code>ocr</code></a> 和 <a href=\"canvas\"><code>canvas</code></a> 等模块使用它传递位图, OpenCV 矩阵或屏幕捕获数据.</p>\n<p>通常应通过 <code>images.read()</code>, <code>images.captureScreen()</code> 或其他模块方法取得实例. <code>ImageWrapper</code> 的公开构造方法和 <code>ofBitmap()</code> 等工厂方法需要内部 <code>ScriptRuntime</code>, 不属于普通脚本的便捷构造接口.</p>\n<pre><code class=\"lang-js\">let image = images.read(&quot;./picture.jpg&quot;);\nif (image !== null) {\n    try {\n        console.log(`${image.width} x ${image.height}`);\n    } finally {\n        image.recycle();\n    }\n}\n</code></pre>\n<p>除 <a href=\"image#m-images-capturescreen\"><code>images.captureScreen()</code></a> 返回的受截图模块管理的图片外, 不再使用的实例应及时调用 <a href=\"#m-recycle\"><code>recycle()</code></a>. 回收后访问像素数据, 尺寸或内部载体会抛出异常.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImageWrapper</p>\n\n<hr>\n",
       "modules": [
         {
-          "textRaw": "[m#] oneShot",
-          "name": "[m#]_oneshot",
-          "methods": [
+          "textRaw": "属性",
+          "name": "属性",
+          "modules": [
             {
-              "textRaw": "oneShot()",
-              "type": "method",
-              "name": "oneShot",
-              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> }</li>\n</ul>\n<p>//// -=-= PENDING =-=- ////</p>\n",
-              "signatures": [
-                {
-                  "params": []
-                }
-              ]
+              "textRaw": "[p#] width",
+              "name": "[p#]_width",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 图片宽度</li>\n</ul>\n<p>也可通过 JVM getter <code>getWidth()</code> 读取.</p>\n",
+              "type": "module",
+              "displayName": "[p#] width"
+            },
+            {
+              "textRaw": "[p#] height",
+              "name": "[p#]_height",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 图片高度</li>\n</ul>\n<p>也可通过 JVM getter <code>getHeight()</code> 读取.</p>\n",
+              "type": "module",
+              "displayName": "[p#] height"
+            },
+            {
+              "textRaw": "[p#] size",
+              "name": "[p#]_size",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"opencvSizeType\">OpenCVSize</a> } - 图片尺寸</li>\n</ul>\n<p>也可通过 JVM getter <code>getSize()</code> 读取.</p>\n",
+              "type": "module",
+              "displayName": "[p#] size"
+            },
+            {
+              "textRaw": "[p#] bitmap",
+              "name": "[p#]_bitmap",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - Android 位图</li>\n</ul>\n<p>也可通过 <code>getBitmap()</code> 读取. 若实例当前仅持有 OpenCV 矩阵, 首次访问会按需初始化 OpenCV, 转换位图并缓存结果.</p>\n",
+              "type": "module",
+              "displayName": "[p#] bitmap"
+            },
+            {
+              "textRaw": "[p#] mat",
+              "name": "[p#]_mat",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html\">Mat</a> } - AutoJs6 OpenCV 矩阵</li>\n</ul>\n<p>也可通过 <code>getMat()</code> 读取. 若实例当前仅持有位图, 首次访问会按需初始化 OpenCV, 转换矩阵并缓存结果.</p>\n<p>返回的矩阵由当前 <code>ImageWrapper</code> 管理. 回收图片时矩阵也会释放, 不应独立释放或在图片回收后继续使用.</p>\n",
+              "type": "module",
+              "displayName": "[p#] mat"
+            },
+            {
+              "textRaw": "[p#] bgrMat",
+              "name": "[p#]_bgrmat",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html\">Mat</a> } - 3 通道 BGR 矩阵</li>\n</ul>\n<p>也可通过 <code>getBgrMat()</code> 读取. 首次访问会将 <code>mat</code> 转换为 BGR 并缓存结果. 该矩阵与图片一起回收.</p>\n",
+              "type": "module",
+              "displayName": "[p#] bgrMat"
+            },
+            {
+              "textRaw": "[p#] plane",
+              "name": "[p#]_plane",
+              "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.android.com/reference/android/media/Image.Plane\">android.media.Image.Plane</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>也可通过 <code>getPlane()</code> 读取. 当前屏幕捕获路径会立即复制像素并关闭原始 <code>android.media.Image</code>, 因此此属性通常为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] plane"
             }
           ],
           "type": "module",
-          "displayName": "[m#] oneShot"
+          "displayName": "属性"
+        },
+        {
+          "textRaw": "保存与像素",
+          "name": "保存与像素",
+          "modules": [
+            {
+              "textRaw": "[m#] saveTo(path)",
+              "name": "[m#]_saveto(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 保存路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否保存成功</li>\n</ul>\n<p>按当前脚本运行路径解析相对路径, 并按需创建父目录. 已有文件会被覆盖.</p>\n<p>若实例只有 OpenCV 矩阵, 使用 OpenCV <code>imwrite</code> 保存, 编码格式由文件扩展名决定. 否则以 PNG, 质量 <code>100</code> 保存位图数据, 即使路径使用其他扩展名.</p>\n<p>无法创建父目录时抛出异常. 位图写入失败通常返回 <code>false</code>; OpenCV 写入结果直接作为返回值.</p>\n<pre><code class=\"lang-js\">let image = images.read(&quot;./picture.jpg&quot;);\nif (image !== null) {\n    try {\n        image.saveTo(&quot;./output/picture.png&quot;);\n    } finally {\n        image.recycle();\n    }\n}\n</code></pre>\n<p>需要明确指定格式和质量时, 使用 <a href=\"image#m-images-save-image-path-format-quality\"><code>images.save()</code></a>.</p>\n",
+              "type": "module",
+              "displayName": "[m#] saveTo(path)"
+            },
+            {
+              "textRaw": "[m#] pixel(x, y)",
+              "name": "[m#]_pixel(x,_y)",
+              "desc": "<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 横坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> } - ARGB 颜色整数</li>\n</ul>\n<p>坐标原点位于左上角. 坐标越界时抛出异常.</p>\n<p>单通道矩阵会返回不透明灰度色, 3 通道矩阵会返回不透明 RGB 色, 4 个或更多通道按 RGBA 的前 4 个通道转换为 ARGB.</p>\n",
+              "type": "module",
+              "displayName": "[m#] pixel(x, y)"
+            }
+          ],
+          "type": "module",
+          "displayName": "保存与像素"
+        },
+        {
+          "textRaw": "生命周期",
+          "name": "生命周期",
+          "modules": [
+            {
+              "textRaw": "[m#] recycle()",
+              "name": "[m#]_recycle()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>立即回收位图, OpenCV 矩阵和屏幕捕获资源. 重复调用是安全的.</p>\n<p>回收后, <code>isRecycled()</code> 返回 <code>true</code>. 除资源状态方法外, 再次访问图片会抛出 &quot;image has been recycled&quot; 异常.</p>\n",
+              "type": "module",
+              "displayName": "[m#] recycle()"
+            },
+            {
+              "textRaw": "[m#] isRecycled()",
+              "name": "[m#]_isrecycled()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已回收</li>\n</ul>\n<p>返回当前资源状态, 不会访问已释放的像素数据.</p>\n",
+              "type": "module",
+              "displayName": "[m#] isRecycled()"
+            },
+            {
+              "textRaw": "[m#] ensureNotRecycled()",
+              "name": "[m#]_ensurenotrecycled()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>检查对象是否仍可使用. 已回收时抛出异常.</p>\n",
+              "type": "module",
+              "displayName": "[m#] ensureNotRecycled()"
+            },
+            {
+              "textRaw": "[m#] setOneShot(enabled)",
+              "name": "[m#]_setoneshot(enabled)",
+              "desc": "<ul>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否标记为一次性对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 当前对象</li>\n</ul>\n<p>一次性对象被支持 <code>Shootable</code> 语义的图像方法使用后会自动回收. 普通脚本通常无需直接使用此机制.</p>\n",
+              "type": "module",
+              "displayName": "[m#] setOneShot(enabled)"
+            },
+            {
+              "textRaw": "[m#] oneShot()",
+              "name": "[m#]_oneshot()",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 当前对象</li>\n</ul>\n<p>等价于 <code>setOneShot(true)</code>.</p>\n<pre><code class=\"lang-js\">let color = images.pixel(images.read(&quot;./picture.png&quot;).oneShot(), 0, 0);\n</code></pre>\n<p>上述临时图片会在 <code>images.pixel()</code> 完成后自动回收.</p>\n",
+              "type": "module",
+              "displayName": "[m#] oneShot()"
+            },
+            {
+              "textRaw": "[m#] shoot()",
+              "name": "[m#]_shoot()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>若对象已标记为一次性对象, 则调用 <code>recycle()</code>. 否则不执行操作. 此方法主要供图像模块内部使用.</p>\n",
+              "type": "module",
+              "displayName": "[m#] shoot()"
+            }
+          ],
+          "type": "module",
+          "displayName": "生命周期"
+        },
+        {
+          "textRaw": "复制",
+          "name": "复制",
+          "modules": [
+            {
+              "textRaw": "[m#] clone()",
+              "name": "[m#]_clone()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 独立的新图片</li>\n</ul>\n<p>深拷贝当前图片. 新图片具有独立的像素存储和生命周期, 回收任一对象不会回收另一个对象.</p>\n<p>也可使用 <a href=\"image#m-images-copy-image\"><code>images.copy()</code></a>.</p>\n",
+              "type": "module",
+              "displayName": "[m#] clone()"
+            }
+          ],
+          "type": "module",
+          "displayName": "复制"
         }
       ],
       "type": "module",

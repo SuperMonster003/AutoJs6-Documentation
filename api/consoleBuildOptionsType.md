@@ -1,6 +1,6 @@
 # ConsoleBuildOptions
 
-ConsoleBuildOptions 是一个显示控制台浮动窗口时用于设置窗口选项的接口.  
+ConsoleBuildOptions 是一个显示控制台浮动窗口时用于设置窗口选项的接口.<br>
 这些选项将影响控制台浮动窗口的 [ 日志内容样式 / 标题样式 / 窗口尺寸 / 窗口位置 ] 等.
 
 常见相关方法或属性:
@@ -41,6 +41,16 @@ console.build({ position: [ 150, 100 ] }).show();
 console.build({ position: [ 0.2, 0.1 ] }).show();
 ```
 
+## [p?] gravity
+
+- { [string](dataTypes#string) | [number](dataTypes#number) } - 浮动窗口重力
+
+按重力将窗口贴靠到屏幕指定位置. 字符串可使用 `left`, `top`, `right`, `bottom`, `start`, `end`, `center`, `center_horizontal` 和 `center_vertical`, 并可使用 `|` 组合. 数字形式对应 `android.view.Gravity` 常量.
+
+```js
+console.build({ gravity: 'right|bottom' }).show();
+```
+
 ## [p?] exitOnClose
 
 - [ `false` ] { [number](dataTypes#number) | [boolean](dataTypes#boolean) } - 浮动窗口自动关闭的超时时间或启用状态
@@ -74,6 +84,16 @@ console.build({ touchable: false }).show();
 ```
 
 当设置 `touchable` 为 `false` 时, 浮动窗口顶部的关闭按钮将无法通过点击触发, 此时可借助 [hide](console#m-hide) 或 [setExitOnClose](console#m-setexitonclose) 等代码方式实现浮动窗口关闭. 详见 [console.setTouchable](console#m-settouchable) 小节.
+
+## [p?] touchThrough
+
+- [ `false` ] { [boolean](dataTypes#boolean) } - 是否让触摸事件穿透窗口
+
+此选项与 [touchable](#p-touchable) 的布尔值语义相反.
+
+```js
+console.build({ touchThrough: true }).show();
+```
 
 ## [p?] title
 
@@ -128,6 +148,16 @@ console.build({
 }).show();
 ```
 
+## [p?] titleBackgroundTint
+
+- { [OmniColor](omniTypes#omnicolor) | [null](dataTypes#null) } - 浮动窗口标题显示区域背景着色, `null` 表示清除着色
+
+设置背景着色并保留原有透明度.
+
+```js
+console.build({ titleBackgroundTint: 'dark-blue' }).show();
+```
+
 ## [p?] titleBackgroundAlpha
 
 - { [number](dataTypes#number) } - 浮动窗口标题显示区域背景颜色透明度
@@ -143,6 +173,12 @@ console.build({
     titleBackgroundColor: 'dark-blue',
     titleBackgroundAlpha: 0.5,
 }).show();
+```
+
+使用 `-1` 可重置标题区域的透明度 (为 `0.8`):
+
+```js
+console.build({ titleBackgroundAlpha: -1 }).show();
 ```
 
 ## [p?] titleIconsTint
@@ -243,6 +279,16 @@ console.build({
 }).show();
 ```
 
+## [p?] contentBackgroundTint
+
+- { [OmniColor](omniTypes#omnicolor) | [null](dataTypes#null) } - 浮动窗口日志显示区域背景着色, `null` 表示清除着色
+
+设置背景着色并保留原有透明度.
+
+```js
+console.build({ contentBackgroundTint: 'dark-blue' }).show();
+```
+
 ## [p?] contentBackgroundAlpha
 
 - { [number](dataTypes#number) } - 浮动窗口日志显示区域背景颜色透明度
@@ -258,6 +304,12 @@ console.build({
     contentBackgroundColor: 'dark-blue',
     contentBackgroundAlpha: 0.5,
 }).show();
+```
+
+使用 `-1` 可重置日志区域的透明度 (为 `0.6`):
+
+```js
+console.build({ contentBackgroundAlpha: -1 }).show();
 ```
 
 ## [p?] textSize
@@ -316,6 +368,16 @@ console.build({
 }).show();
 ```
 
+## [p?] backgroundTint
+
+- { [OmniColor](omniTypes#omnicolor) } - 浮动窗口标题及日志区域背景着色
+
+同时设置标题和日志显示区域的背景着色, 并分别保留原有透明度.
+
+```js
+console.build({ backgroundTint: 'light-yellow' }).show();
+```
+
 ## [p?] backgroundAlpha
 
 - { [number](dataTypes#number) } - 浮动窗口标题及日志显示区域背景颜色透明度
@@ -333,4 +395,10 @@ console.build({
     backgroundColor: 'light-yellow',
     backgroundAlpha: 0.5,
 }).show();
+```
+
+使用 `-1` 可同时重置标题区域的透明度 (为 `0.8`), 以及日志区域的透明度 (为 `0.6`):
+
+```js
+console.build({ backgroundAlpha: -1 }).show();
 ```

@@ -1,22 +1,22 @@
 # 全局对象 (Global)
 
-在 JavaScript 中, [几乎一切都是对象](https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object/).  
-此处的全局 "对象" 包括 [ 变量 / 方法 / 构造器 ] 等.  
+在 JavaScript 中, [几乎一切都是对象](https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object/).<br>
+此处的全局 "对象" 包括 [ 变量 / 方法 / 构造器 ] 等.<br>
 全局对象随处可用, 包括 ECMA 标准内置对象 (如 [ Number / RegExp / String ] 等).
 
 AutoJs6 的内置模块均支持全局使用, 如 `app`, `images`, `device` 等.
 
-为便于使用, 一些 AutoJs6 模块中的方法也被全局化,  
-如 `images.captureScreen()`, `dialogs.alert()`, `app.launch()` 等.  
+为便于使用, 一些 AutoJs6 模块中的方法也被全局化,<br>
+如 `images.captureScreen()`, `dialogs.alert()`, `app.launch()` 等.<br>
 全局化方法均以 `Global` 标签标注.
 
-脚本文件可直接运行使用, 也可作为模块被导入使用 (`require` 方法).  
-当作为模块使用时, `exports` 和 `module` 可作为全局对象使用.  
+脚本文件可直接运行使用, 也可作为模块被导入使用 (`require` 方法).<br>
+当作为模块使用时, `exports` 和 `module` 可作为全局对象使用.<br>
 另在 UI 模式下也有一些专属全局对象, 如 `activity`.
 
 ## 覆写保护
 
-AutoJs6 对部分全局对象及内置模块增加了覆写保护.  
+AutoJs6 对部分全局对象及内置模块增加了覆写保护.<br>
 以下全局声明或赋值将导致异常或非预期结果:
 
 ```js
@@ -97,7 +97,7 @@ global = 3;
 typeof global; // "number"
 ```
 
-如果 global 对象被意外重写 (虽然概率很低),  
+如果 global 对象被意外重写 (虽然概率很低),<br>
 可通过 `runtime.topLevelScope` 访问或还原:
 
 ```js
@@ -110,6 +110,205 @@ global = runtime.topLevelScope; /* 还原 global 对象. */
 typeof global; // "object"
 typeof global.sleep; // "function"
 ```
+
+## [p] isAutoJs6
+
+**`Global`**
+
+- [ `true` ] { [boolean](dataTypes#boolean) }
+
+用于识别当前脚本运行环境是否为 AutoJs6.
+
+## [p+] axios
+
+**`Global`** **`Getter`**
+
+- { [Function](dataTypes#function) | [Object](dataTypes#object) }
+
+返回运行时内置的 Axios 模块对象.
+
+## [p+] cheerio
+
+**`Global`** **`Getter`**
+
+- { [Function](dataTypes#function) | [Object](dataTypes#object) }
+
+返回运行时内置的 Cheerio 模块对象.
+
+## [p+] dayjs
+
+**`Global`** **`Getter`**
+
+- { [Function](dataTypes#function) | [Object](dataTypes#object) }
+
+返回运行时内置的 Day.js 模块对象.
+
+## [p+] i18n
+
+**`Global`** **`Getter`**
+
+- { [Object](dataTypes#object) }
+
+返回运行时内置的国际化模块对象.
+
+## [m] toString
+
+### global.toString()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+返回固定字符串 `[object global]`.
+
+## [m] TODO
+
+### TODO(reason?)
+
+**`Global`**
+
+- **[ reason ]** { [string](dataTypes#string) } - 未实现原因
+- <ins>**returns**</ins> { [never](dataTypes#never) }
+
+始终抛出 `NotImplementedError`. `reason` 为空或省略时使用 AutoJs6 内置的未实现提示.
+
+```js
+function featureUnderDevelopment() {
+    TODO("This feature has not been implemented");
+}
+```
+
+## [m] err
+
+### err(...args)
+
+**`Global`**
+
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 控制台格式化参数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[console.error](console#m-error) 的全局别名.
+
+## [m] openConsole
+
+### openConsole(isReset?)
+
+**`Global`**
+
+- **[ isReset = `false` ]** { [boolean](dataTypes#boolean) } - 显示前是否清除窗口状态并重置控制台
+- <ins>**returns**</ins> { [Console](console) }
+
+[console.show](console#m-show) 的全局别名, 用于显示控制台浮动窗口.
+
+## [m] showConsole
+
+### showConsole(isReset?)
+
+**`Global`**
+
+- **[ isReset = `false` ]** { [boolean](dataTypes#boolean) } - 显示前是否清除窗口状态并重置控制台
+- <ins>**returns**</ins> { [Console](console) }
+
+[console.show](console#m-show) 的全局别名. 与 [openConsole](#m-openconsole) 等效.
+
+## [m] clearConsole
+
+### clearConsole()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [Console](console) }
+
+[console.clear](console#m-clear) 的全局别名, 用于清空控制台日志内容.
+
+## [m] launchConsole
+
+### launchConsole()
+
+**`6.1.0`** **`Global`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[console.launch](console#m-launch) 的全局别名, 用于启动控制台 Activity.
+
+## [m] isUiThread
+
+### isUiThread()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否为 Android UI 线程
+
+## [m] isInteger
+
+### isInteger(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为整数
+
+## [m] isPrimitive
+
+### isPrimitive(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否不是引用类型
+
+此方法是 [isReference(o)](#isreference-o) 的逻辑取反.
+
+## [m] isReference
+
+### isReference(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为非空 JavaScript 对象或函数
+
+## [m] isEmptyObject
+
+### isEmptyObject(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为不含自有属性的 JavaScript 对象
+
+## [m] unwrapJavaObject
+
+### unwrapJavaObject(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待解包的值
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 解包或规范化后的值
+
+递归解包 Rhino `Wrapper` 对象. 字符串, 数字和布尔值会规范化为对应的 JavaScript 值, Kotlin `Unit` 会转换为 `undefined`.
+
+## [m] isNullish
+
+### isNullish(o?)
+
+**`[6.8.0]`** **`Global`**
+
+- **[ o ]** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为 `null` 或 `undefined`
+
+省略参数时返回 `true`. 多余参数会被忽略.
+
+## [m] isObjectSpecies
+
+### isObjectSpecies(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 待判断的值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否为非空 JavaScript 对象
+
+此兼容方法按 JavaScript 的 `typeof` 结果判断对象, 并排除 `null` 和函数. 它与 [species.isObject(o)](#isobject-o) 的严格种类判断不同, 数组和日期等对象也会返回 `true`.
 
 ## [m] sleep
 
@@ -152,7 +351,7 @@ sleep(3e3, 5e3);
 - **bounds** { [NumberString](dataTypes#NumberString) | [string](dataTypes#string) } - 浮动值
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-使当前线程休眠一段时间, 该时间随机落在 millis ± bounds 之间.  
+使当前线程休眠一段时间, 该时间随机落在 millis ± bounds 之间.<br>
 bounds 参数为 [数字字符串](dataTypes#NumberString) 类型 (如 "12"), 或在字符串开头附加 "±" 明确参数含义 (如 "±12").
 
 ```js
@@ -165,59 +364,74 @@ sleep(4e3, "±1e3"); /* 同上. */
 
 toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块章节.
 
+## [m] toastVerbose
+
+### toastVerbose(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+显示消息浮动框, 并将 `text` 传给 `console.verbose`. `toastverbose` 是此方法的全小写别名.
+
 ## [m] toastLog
 
-显示消息浮动框并在控制台打印消息.  
-相当于以下代码组合:
+### toastLog(text?, isLong?, isForcible?)
 
-```js
-toast(text, ...args);
-console.log(text);
-```
+**`Global`**
 
-因此, 方法重载与 [toast](#m-toast) 完全一致.
-
-> 注: 虽然 toast 方法异步, 但 console.log 方法同步, 因此 toastLog 方法也为同步.
-
-### toastLog(text)
-
-**`Global`** **`Overload 1/4`**
-
-- **text** { [string](dataTypes#string) } - 消息内容
+- **[ text ]** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-> 参阅: [toast(text)](toast#toasttext)
+显示消息浮动框, 并将 `text` 传给 `console.log`. 省略全部参数时显示字符串 `undefined`, 同时执行无参数的 `console.log()`.
 
-### toastLog(text, isLong)
+`toastlog` 是此方法的全小写别名.
 
-**`Global`** **`Overload 2/4`**
+虽然消息浮动框由异步队列显示, 但控制台输出同步执行.
 
-- **text** { [string](dataTypes#string) } - 消息内容
-  **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
+## [m] toastInfo
+
+### toastInfo(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-> 参阅: [toast(text, isLong)](toast#toasttext-islong)
+显示消息浮动框, 并将 `text` 传给 `console.info`. `toastinfo` 是此方法的全小写别名.
 
-### toastLog(text, isLong, isForcible)
+## [m] toastWarn
 
-**`Global`** **`Overload 3/4`**
+### toastWarn(text, isLong?, isForcible?)
 
-- **text** { [string](dataTypes#string) } - 消息内容
-  **isLong = false** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) } - 是否以较长时间显示
-  **isForcible = false** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) } - 是否强制覆盖显示
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-> 参阅: [toast(text, isLong, isForcible)](toast#toasttext-islong-isforcible)
+显示消息浮动框, 并将 `text` 传给 `console.warn`. `toastwarn` 是此方法的全小写别名.
 
-### toastLog(text, isForcible)
+## [m] toastError
 
-**`Global`** **`Overload 4/4`**
+### toastError(text, isLong?, isForcible?)
 
-- **text** { [string](dataTypes#string) } - 消息内容
-- **isForcible** { `'forcible'` | `'f'` } - 强制覆盖显示 (字符标识)
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-> 参阅: [toast(text, isForcible)](toast#toasttext-isforcible)
+显示消息浮动框, 并将 `text` 传给 `console.error`. `toasterror` 是此方法的全小写别名.
 
 ## [m+] notice
 
@@ -227,15 +441,24 @@ notice 模块的全局化对象, 参阅 [消息通知 (Notice)](notice) 模块�
 
 ### random()
 
-**`Global`** **`Overload 1/2`**
+**`Global`** **`Overload 1/3`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
 与 Math.random() 相同, 返回落在 [0, 1) 区间的随机数字.
 
+### random(value)
+
+**`Global`** **`Overload 2/3`**
+
+- **value** { [any](dataTypes#any) } - 未使用
+- <ins>**returns**</ins> { [number](dataTypes#number) } - `NaN`
+
+单参数调用固定返回 `NaN`. 如需生成指定范围内的随机整数, 必须同时提供下限和上限.
+
 ### random(min, max)
 
-**`Global`** **`Overload 2/2`**
+**`Global`** **`Overload 3/3`**
 
 - **min** { [number](dataTypes#number) } - 随机数下限
 - **max** { [number](dataTypes#number) } - 随机数上限
@@ -254,13 +477,13 @@ notice 模块的全局化对象, 参阅 [消息通知 (Notice)](notice) 模块�
 - **condition** { [(() => any)](dataTypes#function) | [PickupSelector](dataTypes#pickupselector) } - 结束等待条件
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-阻塞等待, 直到条件满足.  
-默认等待时间为 10 秒, 条件检查间隔为 200 毫秒.  
-若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).  
+阻塞等待, 直到条件满足.<br>
+默认等待时间为 10 秒, 条件检查间隔为 200 毫秒.<br>
+若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>
 若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).
 
-> 注: 不同于 while 和 for 等循环语句的 "条件",  
-> 该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.  
+> 注: 不同于 while 和 for 等循环语句的 "条件",<br>
+> 该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>
 > 而循环语句的条件, 是只要满足条件, 就一直循环.
 
 等待条件支持函数及选择器.
@@ -303,11 +526,11 @@ wait('立即开始') && toast('OK');
 wait('立即开始') ? toast('√') : toast('×');
 ```
 
-等待条件的满足与否, 与函数返回值有关.  
+等待条件的满足与否, 与函数返回值有关.<br>
 例如当函数返回 true 时, 等待条件即满足.
 
-下面列出不满足条件的几种返回值:  
-[ [false](dataTypes#boolean) / [null](dataTypes#null) / [undefined](dataTypes#undefined) / [NaN](https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/) ]  
+下面列出不满足条件的几种返回值:<br>
+[ [false](dataTypes#boolean) / [null](dataTypes#null) / [undefined](dataTypes#undefined) / [NaN](https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/) ]<br>
 除此之外的返回值均视为满足条件 (包括空字符串和数字 0 等).
 
 一种常见的错误用例, 即函数条件缺少返回值:
@@ -343,8 +566,8 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-[wait(condition)](#waitcondition) 增加条件检测限制.  
-达到限制后, 表示等待超时, 并放弃等待.  
+[wait(condition)](#wait-condition) 增加条件检测限制.<br>
+达到限制后, 表示等待超时, 并放弃等待.<br>
 限制分为 "次数限制" (limit < 100) 和 "时间限制" (limit >= 100).
 
 ```js
@@ -363,8 +586,8 @@ wait(() => device.isScreenOff(), 5e3); /* limit >= 100, 视为时间限制. */
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-[wait(condition, limit)](#waitcondition-limit) 增加条件检测间隔.  
-只要条件不满足, wait() 方法会持续检测, 直到条件满足或达到检测限制.  
+[wait(condition, limit)](#wait-condition-limit) 增加条件检测间隔.<br>
+只要条件不满足, wait() 方法会持续检测, 直到条件满足或达到检测限制.<br>
 interval 参数用于设置条件检测之间的间歇时长, 默认为 200 毫秒.
 
 ```text
@@ -378,10 +601,10 @@ wait(() => device.isScreenOff(), 20, 3e3);
 wait(() => device.isScreenOff(), 20, 0);
 ```
 
-> 注: 在最后一次条件检查之后, 将不再发生间歇.  
+> 注: 在最后一次条件检查之后, 将不再发生间歇.<br>
 > 包括条件满足或达到检测限制.
 >
-> 例如在第三次检查时, 条件满足:  
+> 例如在第三次检查时, 条件满足:<br>
 > 检查 (×) - 间歇 - 检查 (×) - 间歇 - 检查 (√) - 立即结束 wait()
 
 ### wait(condition, callback)
@@ -396,7 +619,7 @@ wait(() => device.isScreenOff(), 20, 0);
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-[wait(condition)](#waitcondition) 增加回调对象.
+[wait(condition)](#wait-condition) 增加回调对象.
 
 回调对象集合了两个方法, then 与 else 分别对应等待成功与等待失败的情况:
 
@@ -424,13 +647,13 @@ wait(() => {
 });
 ```
 
-> 注: else 回调方法的参数只能是 [ [false](dataTypes#boolean) / [null](dataTypes#null) / [undefined](dataTypes#undefined) / [NaN](https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/) ],  
+> 注: else 回调方法的参数只能是 [ [false](dataTypes#boolean) / [null](dataTypes#null) / [undefined](dataTypes#undefined) / [NaN](https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/) ],<br>
 > 因此 else 的参数几乎不会用到.
 
-需特别注意, 回调方法的返回值具有穿透性.  
+需特别注意, 回调方法的返回值具有穿透性.<br>
 在回调方法内使用 return 语句, 将直接影响 wait() 的返回值 (undefined 除外).
 
-上述示例中, then 和 else 回调都没有返回值, 因此 wait() 返回值是 boolean 类型, 表示等待条件是否满足.  
+上述示例中, then 和 else 回调都没有返回值, 因此 wait() 返回值是 boolean 类型, 表示等待条件是否满足.<br>
 下述示例在回调函数中增加了返回值 (非 undefined), 则 wait() 也将返回这个值.
 
 ```js
@@ -450,7 +673,7 @@ let result = wait(() => {
 result; /* 一个数字 (如 99.99732126036437) 或 NaN. */
 ```
 
-上述示例如果等待条件满足, 则返回 then 的返回值 (number 类型),  
+上述示例如果等待条件满足, 则返回 then 的返回值 (number 类型),<br>
 等待条件超时, 则返回 else 的返回值 (NaN, 也为 number 类型).
 
 如果去掉 else 的返回语句, 则等待条件超时后, wait() 将返回 false (boolean 类型).
@@ -485,9 +708,9 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-[wait(condition, callback)](#waitcondition-callback) 增加条件检测限制.
+[wait(condition, callback)](#wait-condition-callback) 增加条件检测限制.
 
-> 参阅: [wait(condition, limit)](#waitcondition-limit)
+> 参阅: [wait(condition, limit)](#wait-condition-limit)
 
 ### wait(condition, limit, interval, callback)
 
@@ -503,15 +726,15 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-[wait(condition, limit, callback)](#waitcondition-callback) 增加条件检测间隔.
+[wait(condition, limit, callback)](#wait-condition-limit-callback) 增加条件检测间隔.
 
-> 参阅: [wait(condition, limit, interval)](#waitcondition-limit-interval)
+> 参阅: [wait(condition, limit, interval)](#wait-condition-limit-interval)
 
 ## [m] waitForActivity
 
-等待指定名称的 Activity 出现 (前置).  
-此方法相当于 `wait(() => currentActivity() === activityName, ...args)`,  
-因此其所有重载方法的结构与 wait 一致.  
+等待指定名称的 Activity 出现 (前置).<br>
+此方法相当于 `wait(() => currentActivity() === activityName, ...args)`,<br>
+因此其所有重载方法的结构与 wait 一致.<br>
 为节约篇幅, 将仅列出方法签名等重要信息.
 
 ### waitForActivity(activityName)
@@ -521,7 +744,7 @@ wait(() => {
 - **activityName** { [string](dataTypes#string) } - 目标活动名称
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition)](#waitcondition)
+> 参阅: [wait(condition)](#wait-condition)
 
 ### waitForActivity(activityName, limit)
 
@@ -531,7 +754,7 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition, limit)](#waitcondition-limit)
+> 参阅: [wait(condition, limit)](#wait-condition-limit)
 
 ### waitForActivity(activityName, limit, interval)
 
@@ -542,7 +765,7 @@ wait(() => {
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition, limit, interval)](#waitcondition-limit-interval)
+> 参阅: [wait(condition, limit, interval)](#wait-condition-limit-interval)
 
 ### waitForActivity(activityName, callback)
 
@@ -556,7 +779,7 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, callback)](#waitcondition-callback)
+> 参阅: [wait(condition, callback)](#wait-condition-callback)
 
 ### waitForActivity(activityName, limit, callback)
 
@@ -571,7 +794,7 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, limit, callback)](#waitcondition-limit-callback)
+> 参阅: [wait(condition, limit, callback)](#wait-condition-limit-callback)
 
 ### waitForActivity(activityName, limit, interval, callback)
 
@@ -587,13 +810,13 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, limit, interval, callback)](#waitcondition-limit-interval-callback)
+> 参阅: [wait(condition, limit, interval, callback)](#wait-condition-limit-interval-callback)
 
 ## [m] waitForPackage
 
-等待指定包名的应用出现 (前置).  
-此方法相当于 `wait(() => currentPackage() === packageName, ...args)`,  
-因此其所有重载方法的结构与 wait 一致.  
+等待指定包名的应用出现 (前置).<br>
+此方法相当于 `wait(() => currentPackage() === packageName, ...args)`,<br>
+因此其所有重载方法的结构与 wait 一致.<br>
 为节约篇幅, 将仅列出方法签名等重要信息.
 
 ### waitForPackage(packageName)
@@ -603,7 +826,7 @@ wait(() => {
 - **packageName** { [string](dataTypes#string) } - 目标应用包名
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition)](#waitcondition)
+> 参阅: [wait(condition)](#wait-condition)
 
 ### waitForPackage(packageName, limit)
 
@@ -613,7 +836,7 @@ wait(() => {
 - **limit** { [number](dataTypes#number) } - 等待条件检测限制
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition, limit)](#waitcondition-limit)
+> 参阅: [wait(condition, limit)](#wait-condition-limit)
 
 ### waitForPackage(packageName, limit, interval)
 
@@ -624,7 +847,7 @@ wait(() => {
 - **interval** { [number](dataTypes#number) } - 等待条件检测间隔
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-> 参阅:[wait(condition, limit, interval)](#waitcondition-limit-interval)
+> 参阅: [wait(condition, limit, interval)](#wait-condition-limit-interval)
 
 ### waitForPackage(packageName, callback)
 
@@ -638,7 +861,7 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, callback)](#waitcondition-callback)
+> 参阅: [wait(condition, callback)](#wait-condition-callback)
 
 ### waitForPackage(packageName, limit, callback)
 
@@ -653,7 +876,7 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, limit, callback)](#waitcondition-limit-callback)
+> 参阅: [wait(condition, limit, callback)](#wait-condition-limit-callback)
 
 ### waitForPackage(packageName, limit, interval, callback)
 
@@ -669,7 +892,7 @@ wait(() => {
 - <ins>**returns**</ins> { [R](dataTypes#generic) extends [void](dataTypes#void) ? [boolean](dataTypes#boolean) : [R](dataTypes#generic) }
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
-> 参阅: [wait(condition, limit, interval, callback)](#waitcondition-limit-interval-callback)
+> 参阅: [wait(condition, limit, interval, callback)](#wait-condition-limit-interval-callback)
 
 ## [m] exit
 
@@ -681,7 +904,7 @@ wait(() => {
 
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-通过抛出 `ScriptInterruptedException` 异常实现脚本停止.  
+通过抛出 `ScriptInterruptedException` 异常实现脚本停止.<br>
 因此用 `try` 包裹 `exit()` 语句将会使脚本继续运行片刻:
 
 ```js
@@ -695,8 +918,8 @@ try {
 while (true) log("hello"); /* 控制台将打印一定数量的 "hello". */
 ```
 
-如果编写的脚本对 "是否停止" 的状态十分敏感,  
-即要求 exit() 之后的代码一定不被执行,  
+如果编写的脚本对 "是否停止" 的状态十分敏感,<br>
+即要求 exit() 之后的代码一定不被执行,<br>
 则可通过附加状态判断实现上述需求:
 
 ```js
@@ -722,7 +945,7 @@ if (!isStopped()) {
 }
 ```
 
-除了 [isStopped](#isstopped), 还可通过 `threads` 或 `engines` 模块获取停止状态:
+除了 [isStopped](#m-isstopped), 还可通过 `threads` 或 `engines` 模块获取停止状态:
 
 ```js
 /* threads. */
@@ -775,7 +998,7 @@ if (!pickup(buttonText)) {
 
 [exit()](#exit) 的别名方法.
 
-> 注: stop 方法不存在 [exit(e)](#exite) 对应的重载方法.
+> 注: stop 方法不存在 [exit(e)](#exit-e) 对应的重载方法.
 
 ## [m] isStopped
 
@@ -845,7 +1068,7 @@ requiresApi(android.os.Build.VERSION_CODES.R); /* 同上. */
 
 > 参阅:
 > - [Android API Level - 安卓 API 级别](apiLevel)
-> - [util.versionCodes](util#versioncodes)
+> - [util.versionCodes](util#p-versioncodes)
 
 ## [m] requiresAutojsVersion
 
@@ -904,7 +1127,7 @@ importPackage(java.lang);
 importPackage(java.util);
 
 importPackage(java.io, java.lang, java.util); /* 同上. */
-``` 
+```
 
 > 参阅: [访问 Java 包和类](scriptingJava#访问-Java-包和类)
 
@@ -933,29 +1156,51 @@ importClass(
     java.lang.Integer,
     java.util.HashMap,
 ); /* 同上. */
-``` 
+```
 
 > 参阅: [访问 Java 包和类](scriptingJava#访问-Java-包和类)
 
 ## [m] currentPackage
 
-### currentPackage()
+### currentPackage(mode?)
 
-**`Global`** **`A11Y`**
+**`Global`** **`A11Y?`**
 
-- <ins>**returns**</ins> { [string](dataTypes#string) }
+- **[ mode = "auto" ]** { `'auto'` | `'a11y'` | `'shizuku'` | `'root'` | {{ by?: [string](dataTypes#string); mode?: [string](dataTypes#string) }} } - 信息获取方式
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 前台应用包名, 获取失败时为空字符串
 
-获取最近一次监测到的应用包名, 并视为当前正在运行的应用包名.
+获取当前前台应用的包名.
+
+模式名称忽略大小写, 并支持以下别名:
+
+- `auto`, `automatic`, `automatism`: 依次尝试 Shizuku, Root 和无障碍服务, 返回首个非空结果.
+- `a11y`, `accessibility`: 使用无障碍服务最近监测到的信息.
+- `shizuku`: 使用 Shizuku 服务.
+- `root`: 使用 Root Shell.
+
+模式也可写为 `{ by: "shizuku" }` 或 `{ mode: "root" }`.
 
 ## [m] currentActivity
 
-### currentActivity()
+### currentActivity(mode?)
 
-**`Global`** **`A11Y`**
+**`Global`** **`A11Y?`**
 
-- <ins>**returns**</ins> { [string](dataTypes#string) }
+- **[ mode = "auto" ]** { `'auto'` | `'a11y'` | `'shizuku'` | `'root'` | {{ by?: [string](dataTypes#string); mode?: [string](dataTypes#string) }} } - 信息获取方式
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 前台活动名称, 获取失败时为空字符串
 
-获取最近一次监测到的活动名称, 并视为当前正在运行的活动名称.
+获取当前前台活动名称. 模式及别名与 [currentPackage(mode?)](#currentpackage-mode) 相同.
+
+## [m] currentComponent
+
+### currentComponent(mode?)
+
+**`Global`** **`A11Y?`**
+
+- **[ mode = "auto" ]** { `'auto'` | `'a11y'` | `'shizuku'` | `'root'` | {{ by?: [string](dataTypes#string); mode?: [string](dataTypes#string) }} } - 信息获取方式
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 前台组件名称, 获取失败时为空字符串
+
+获取当前前台组件, 通常采用 `packageName/activityName` 形式. 模式及别名与 [currentPackage(mode?)](#currentpackage-mode) 相同.
 
 ## [m] setClip
 
@@ -1001,7 +1246,7 @@ console.log(getClip());
 
 ## [m] pickup
 
-拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.  
+拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.<br>
 支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.
 
 参阅 [UiSelector.pickup](uiSelectorType#m-pickup).
@@ -1082,13 +1327,95 @@ console.log(contentMatch(/^开始.*/).exists()
     || content('点击继续').exists()); /* e.g. true */
 ```
 
+## [m] setScreenMetrics
+
+### setScreenMetrics(width, height)
+
+**`Global`**
+
+- **width** { [number](dataTypes#number) } - 脚本设计时的屏幕宽度 (像素)
+- **height** { [number](dataTypes#number) } - 脚本设计时的屏幕高度 (像素)
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置基于坐标的触摸操作所使用的设计分辨率. 实际点击, 长按和滑动坐标会按当前设备尺寸缩放.
+
+某一维度为 `0` 时, 该方向的自动缩放不生效.
+
+> 参阅: [setScreenMetrics(width, height)](automator#setscreenmetrics-width-height)
+
+## [m] getScaleBases
+
+### getScaleBases()
+
+**`Global`**
+
+- <ins>**returns**</ins> {{ x: [number](dataTypes#number); y: [number](dataTypes#number) }} - 当前横向和纵向标度基数
+
+默认返回 `{ x: 720, y: 1280 }`.
+
+## [m] getScaleBaseX
+
+### getScaleBaseX()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前横向标度基数
+
+默认值为 `720`.
+
+## [m] getScaleBaseY
+
+### getScaleBaseY()
+
+**`Global`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前纵向标度基数
+
+默认值为 `1280`.
+
+## [m] setScaleBases
+
+### setScaleBases(baseX, baseY)
+
+**`Global`**
+
+- **baseX** { [number](dataTypes#number) } - 横向标度基数
+- **baseY** { [number](dataTypes#number) } - 纵向标度基数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+同时设置 [cX](#m-cx), [cY](#m-cy), [cYx](#m-cyx) 和 [cXy](#m-cxy) 使用的标度基数. 两个参数必须为正整数.
+
+每个方向的基数在同一个脚本运行时中最多设置一次.
+
+## [m] setScaleBaseX
+
+### setScaleBaseX(baseX)
+
+**`Global`**
+
+- **baseX** { [number](dataTypes#number) } - 横向标度基数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置横向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.
+
+## [m] setScaleBaseY
+
+### setScaleBaseY(baseY)
+
+**`Global`**
+
+- **baseY** { [number](dataTypes#number) } - 纵向标度基数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置纵向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.
+
 ## [m] cX
 
 横坐标标度.
 
 ### cX()
 
-**`6.2.0`** **`Global`** **`Overload 1/5`**
+**`6.2.0`** **`Global`** **`Overload 1/4`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
@@ -1098,15 +1425,18 @@ console.log(contentMatch(/^开始.*/).exists()
 console.log(cX() === device.width); // true
 ```
 
-### cX(x, base)
+### cX(x, base, isRatio?)
 
 **`6.2.0`** **`Global`** **`Overload 2/4`**
 
 - **x** { [number](dataTypes#number) } - 绝对坐标值
-- **[ base = 720 ]** { [number](dataTypes#number) } - 坐标值基数
+- **base** { [number](dataTypes#number) } - 坐标值基数
+- **[ isRatio = false ]** { [boolean](dataTypes#boolean) } - 是否强制将 `x` 作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
 由基数换算后得到的横坐标值.
+
+`isRatio` 为 `true` 时, `x` 强制作为屏幕宽度百分比, 此时 `base` 不参与计算.
 
 例如在一个设备宽度为 `1096` 的设备上的 `100` 像素, 在其他不同宽度的设备上将转换为不同的值:
 
@@ -1127,9 +1457,9 @@ cX(100, 1096); // 49
 上述示例的 `1096` 为基数, 默认基数为 `720`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cX(100); /* 相当于 cX(100, 720) . */
+cX(100); /* 相当于 cX(100, 720). */
 setScaleBaseX(1096);
-cX(100); /* 相当于 cX(100, 1096) . */
+cX(100); /* 相当于 cX(100, 1096). */
 ```
 
 默认基数只能修改最多一次.
@@ -1142,7 +1472,7 @@ cX(100); /* 相当于 cX(100, 1096) . */
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,  
+`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,<br>
 即当参数 `x` 满足 `-1 < x < 1` 时, `x` 将视为屏幕宽度百分比, 否则将视为绝对坐标值.
 
 `isRatio` 参数为 `true` 时, `x` 参数将强制视为百分比, 如 `cX(2, true)` 意味着两倍屏幕宽度, `2` 的意义不再是像素值.
@@ -1162,29 +1492,32 @@ cX(100); /* 相当于 cX(100, 1096) . */
 
 ## [m] cY
 
-横坐标标度.
+纵坐标标度.
 
 ### cY()
 
-**`6.2.0`** **`Global`** **`Overload 1/5`**
+**`6.2.0`** **`Global`** **`Overload 1/4`**
 
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
 无参时, 返回当前设备高度.
 
 ```js
-console.log(cY() === device.width); // true
+console.log(cY() === device.height); // true
 ```
 
-### cY(y, base)
+### cY(y, base, isRatio?)
 
 **`6.2.0`** **`Global`** **`Overload 2/4`**
 
 - **y** { [number](dataTypes#number) } - 绝对坐标值
-- **[ base = 1280 ]** { [number](dataTypes#number) } - 坐标值基数
+- **base** { [number](dataTypes#number) } - 坐标值基数
+- **[ isRatio = false ]** { [boolean](dataTypes#boolean) } - 是否强制将 `y` 作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
 由基数换算后得到的纵坐标值.
+
+`isRatio` 为 `true` 时, `y` 强制作为屏幕高度百分比, 此时 `base` 不参与计算.
 
 例如在一个设备高度为 `2560` 的设备上的 `100` 像素, 在其他不同高度的设备上将转换为不同的值:
 
@@ -1205,9 +1538,9 @@ cY(100, 2560); // 38
 上述示例的 `2560` 为基数, 默认基数为 `1280`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cY(100); /* 相当于 cY(100, 1280) . */
+cY(100); /* 相当于 cY(100, 1280). */
 setScaleBaseY(2560);
-cY(100); /* 相当于 cY(100, 2560) . */
+cY(100); /* 相当于 cY(100, 2560). */
 ```
 
 默认基数只能修改最多一次.
@@ -1220,7 +1553,7 @@ cY(100); /* 相当于 cY(100, 2560) . */
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,  
+`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,<br>
 即当参数 `y` 满足 `-1 < y < 1` 时, `y` 将视为屏幕高度百分比, 否则将视为绝对坐标值.
 
 `isRatio` 参数为 `true` 时, `y` 参数将强制视为百分比, 如 `cY(2, true)` 意味着两倍屏幕高度, `2` 的意义不再是像素值.
@@ -1262,10 +1595,10 @@ cY(100); /* 相当于 cY(100, 2560) . */
 1080 * 0.5 * 16 / 9; // 960
 ```
 
-设想如下场景, 某个应用页面是可以向下滚动窗口显示更多内容的, 在屏幕上半部分有一个按钮 `BTN`, 距离屏幕上边缘 `H` 距离, 另一台设备与当前设备屏幕宽度相同, 但高度更大, 相当于屏幕纵向变长, 此时按钮 `BTN` 距离屏幕上边缘依然是 `H` 距离, 仅仅是屏幕下方显示了更多内容.  
+设想如下场景, 某个应用页面是可以向下滚动窗口显示更多内容的, 在屏幕上半部分有一个按钮 `BTN`, 距离屏幕上边缘 `H` 距离, 另一台设备与当前设备屏幕宽度相同, 但高度更大, 相当于屏幕纵向变长, 此时按钮 `BTN` 距离屏幕上边缘依然是 `H` 距离, 仅仅是屏幕下方显示了更多内容.<br>
 因此可使用 `cYx` 标度表示按钮 `BTN` 的位置, 如 `cYx(0.2, 1080 / 1920)` 或 `cYx(0.2, 9 / 16)` 或 `cYx(0.2, '9:16')`.
 
-上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕高度的, 因此第 2 个参数对应设备宽高比例值.  
+上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕高度的, 因此第 2 个参数对应设备宽高比例值.<br>
 如果使用绝对坐标值 (`Y` 坐标值), 如 `384`, 则第 2 个参数对应的是设备屏幕宽度值:
 
 | 第 1 个参数 | 第 2 个参数 |        示例        |
@@ -1302,9 +1635,9 @@ cYx(512, 1096); // 252
 上述示例的 `1096` 为基数, 默认基数为 `720`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cYx(512); /* 相当于 cYx(512, 720) . */
+cYx(512); /* 相当于 cYx(512, 720). */
 setScaleBaseX(1096);
-cYx(512); /* 相当于 cYx(512, 1096) . */
+cYx(512); /* 相当于 cYx(512, 1096). */
 ```
 
 默认基数只能修改最多一次.
@@ -1338,9 +1671,9 @@ cYx(0.2, 1096 / 2560); // 252
 上述示例的 `1096 / 2560` 为基数, 默认基数为 `720 / 1280`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cYx(0.2); /* 相当于 cYx(0.2, 720 / 1280) . */
+cYx(0.2); /* 相当于 cYx(0.2, 720 / 1280). */
 setScaleBases(1096, 2560);
-cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560) . */
+cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560). */
 ```
 
 默认基数只能修改最多一次.
@@ -1353,7 +1686,7 @@ cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560) . */
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,  
+`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,<br>
 即当参数 `y` 满足 `-1 < y < 1` 时, `y` 将视为屏幕高度百分比, 否则将视为绝对坐标值.
 
 `isRatio` 参数为 `true` 时, `y` 参数将强制视为百分比, 如 `cYx(2, true)` 意味着两倍屏幕高度, `2` 的意义不再是像素值.
@@ -1367,13 +1700,13 @@ cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560) . */
 - **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-当参数 `y` 满足 `-1 < y < 1` 时, 相当于 `cY(y, /* isRatio = */ true)`, 即 `y` 将视为屏幕高度百分比.
+当参数 `y` 满足 `-1 < y < 1` 时, 相当于 `cYx(y, /* isRatio = */ true)`, 即 `y` 将视为屏幕高度百分比.
 
-当参数 `y` 满足 `y <= -1 | y >= 1` 时, 相当于 `cY(y, /* base = */ 720)`, 即 `y` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseX` 等方法修改, `720` 为其默认值.
+当参数 `y` 满足 `y <= -1 | y >= 1` 时, 相当于 `cYx(y, /* base = */ 720)`, 即 `y` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseX` 等方法修改, `720` 为其默认值.
 
 ```js
-cYx(0.3); /* 相当于 cYx(0.3, '9:16') . */
-cYx(384); /* 相当于 cYx(384, 720) . */
+cYx(0.3); /* 相当于 cYx(0.3, '9:16'). */
+cYx(384); /* 相当于 cYx(384, 720). */
 ```
 
 ## [m] cXy
@@ -1400,10 +1733,10 @@ cYx(384); /* 相当于 cYx(384, 720) . */
 1920 * 0.5 * 9 / 16; // 540
 ```
 
-设想如下场景, 某个应用页面是可以向右滚动窗口显示更多内容的, 在屏幕左半部分有一个按钮 `BTN`, 距离屏幕左边缘 `W` 距离, 另一台设备与当前设备屏幕高度相同, 但宽度更大, 相当于屏幕横向变长, 此时按钮 `BTN` 距离屏幕左边缘依然是 `W` 距离, 仅仅是屏幕右方显示了更多内容.  
+设想如下场景, 某个应用页面是可以向右滚动窗口显示更多内容的, 在屏幕左半部分有一个按钮 `BTN`, 距离屏幕左边缘 `W` 距离, 另一台设备与当前设备屏幕高度相同, 但宽度更大, 相当于屏幕横向变长, 此时按钮 `BTN` 距离屏幕左边缘依然是 `W` 距离, 仅仅是屏幕右方显示了更多内容.<br>
 因此可使用 `cXy` 标度表示按钮 `BTN` 的位置, 如 `cXy(0.2, 1080 / 1920)` 或 `cXy(0.2, 9 / 16)` 或 `cXy(0.2, '9:16')`.
 
-上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕宽度的, 因此第 2 个参数对应设备宽高比例值.  
+上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕宽度的, 因此第 2 个参数对应设备宽高比例值.<br>
 如果使用绝对坐标值 (`X` 坐标值), 如 `384`, 则第 2 个参数对应的是设备屏幕高度值:
 
 | 第 1 个参数 | 第 2 个参数 |        示例        |
@@ -1440,9 +1773,9 @@ cXy(512, 2560); // 192
 上述示例的 `2560` 为基数, 默认基数为 `1280`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cXy(512); /* 相当于 cXy(512, 1280) . */
+cXy(512); /* 相当于 cXy(512, 1280). */
 setScaleBaseY(2560);
-cXy(512); /* 相当于 cXy(512, 2560) . */
+cXy(512); /* 相当于 cXy(512, 2560). */
 ```
 
 默认基数只能修改最多一次.
@@ -1476,9 +1809,9 @@ cXy(0.5, 1096 / 2560); // 206
 上述示例的 `1096 / 2560` 为基数, 默认基数为 `720 / 1280`, 如需设置默认基数, 可使用以下方法:
 
 ```js
-cXy(0.5); /* 相当于 cXy(0.5, 720 / 1280) . */
+cXy(0.5); /* 相当于 cXy(0.5, 720 / 1280). */
 setScaleBases(1096, 2560);
-cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
+cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560). */
 ```
 
 默认基数只能修改最多一次.
@@ -1491,7 +1824,7 @@ cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
 - **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,  
+`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,<br>
 即当参数 `x` 满足 `-1 < x < 1` 时, `x` 将视为屏幕宽度百分比, 否则将视为绝对坐标值.
 
 `isRatio` 参数为 `true` 时, `x` 参数将强制视为百分比, 如 `cXy(2, true)` 意味着两倍屏幕宽度, `2` 的意义不再是像素值.
@@ -1505,16 +1838,18 @@ cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560) . */
 - **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-当参数 `x` 满足 `-1 < x < 1` 时, 相当于 `cY(x, /* isRatio = */ true)`, 即 `x` 将视为屏幕宽度百分比.
+当参数 `x` 满足 `-1 < x < 1` 时, 相当于 `cXy(x, /* isRatio = */ true)`, 即 `x` 将视为屏幕宽度百分比.
 
-当参数 `x` 满足 `x <= -1 | x >= 1` 时, 相当于 `cY(x, /* base = */ 720)`, 即 `x` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseX` 等方法修改, `720` 为其默认值.
+当参数 `x` 满足 `x <= -1 | x >= 1` 时, 相当于 `cXy(x, /* base = */ 1280)`, 即 `x` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseY` 等方法修改, `1280` 为其默认值.
 
 ```js
-cXy(0.3); /* 相当于 cXy(0.3, '9:16') . */
-cXy(384); /* 相当于 cXy(384, 720) . */
+cXy(0.3); /* 相当于 cXy(0.3, '9:16'). */
+cXy(384); /* 相当于 cXy(384, 1280). */
 ```
 
 ## [m+] species
+
+`species` 与 `$species` 指向同一个可调用对象.
 
 ### species(o)
 
@@ -1582,6 +1917,8 @@ species.isRegExp(/test$/); // true
 ### [m] isBigInt
 
 #### isBigInt(o)
+
+**`Global`**
 
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
@@ -1664,6 +2001,8 @@ species.isRegExp(/test$/); // true
 
 #### isHTMLDocument(o)
 
+**`6.8.0`**
+
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -1700,19 +2039,38 @@ species.isRegExp(/test$/); // true
 
 #### isJavaObject(o)
 
+**`Global`**
+
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 判断对象的 "种类" 是否为 `JavaObject`.
 
+### [m] isJavaClass
+
+#### isJavaClass(o)
+
+**`Global`**
+
+- **o** { [any](dataTypes#any) } - 任意对象
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断对象的 "种类" 是否为 `JavaClass`.
+
+可省略 `species` 对象直接调用 `isJavaClass(o)`.
+
 ### [m] isJavaPackage
 
 #### isJavaPackage(o)
+
+**`Global`**
 
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 判断对象的 "种类" 是否为 `JavaPackage`.
+
+可省略 `species` 对象直接调用 `isJavaPackage(o)`.
 
 ### [m] isMap
 
@@ -1754,10 +2112,14 @@ species.isRegExp(/test$/); // true
 
 #### isObject(o)
 
+**`Global`**
+
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 判断对象的 "种类" 是否为 `Object`.
+
+可省略 `species` 对象直接调用 `isObject(o)`.
 
 ### [m] isQName
 
@@ -1862,6 +2224,8 @@ species.isRegExp(/test$/); // true
 
 #### isWindow(o)
 
+**`6.8.0`**
+
 - **o** { [any](dataTypes#any) } - 任意对象
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -1889,7 +2253,7 @@ species.isRegExp(/test$/); // true
 
 **`6.2.0`** **`Global`** **`Getter`**
 
-- **&lt;get&gt;** [number](dataTypes#number)
+- { [number](dataTypes#number) }
 
 [device.width](device#p-width) 的别名属性.
 
@@ -1897,9 +2261,210 @@ species.isRegExp(/test$/); // true
 
 **`6.2.0`** **`Global`** **`Getter`**
 
-- **&lt;get&gt;** [number](dataTypes#number)
+- { [number](dataTypes#number) }
 
 [device.height](device#p-height) 的别名属性.
+
+## 全局 Java 类代理
+
+AutoJs6 将一组常用 Java 类作为惰性全局属性公开. 首次访问名称时, 属性解析为 Rhino `NativeJavaClass`, 可直接访问静态成员或调用构造方法.
+
+当前 Android SDK 类代理:
+
+```text
+Manifest
+GestureResultCallback
+Notification
+NotificationManager
+PendingIntent
+ComponentName
+Context
+Intent
+PackageManager
+ColorStateList
+Bitmap
+BitmapFactory
+Paint
+PorterDuff
+Typeface
+ColorDrawable
+Uri
+Build
+Handler
+Looper
+Settings
+TextToSpeech
+InputType
+TextWatcher
+Linkify
+Base64
+Log
+TypedValue
+ContextThemeWrapper
+Gravity
+KeyEvent
+MotionEvent
+ScaleGestureDetector
+WindowManager
+LayoutParams
+MimeTypeMap
+WebChromeClient
+WebView
+WebViewClient
+Toast
+```
+
+其中 `LayoutParams` 对应 `android.view.WindowManager.LayoutParams`.
+
+当前 AndroidX 及第三方类代理:
+
+```text
+BigTextStyle
+NotificationCompat
+FileProvider
+ImageViewCompat
+Snackbar
+MaterialDialog
+LogConfigurator
+Version
+```
+
+当前 Java 标准库类代理:
+
+```text
+ByteArrayOutputStream
+File
+Runnable
+SecurityException
+System
+Thread
+Throwable
+URI
+StandardCharsets
+TimeUnit
+Locale
+AtomicLong
+ReentrantLock
+```
+
+当前 OkHttp 和 Log4j 类代理:
+
+```text
+Callback
+FormBody
+MediaType
+MultipartBody
+OkHttpClient
+Request
+RequestBody
+Level
+LogManager
+```
+
+当前 AutoJs6 类代理:
+
+```text
+GlobalAppContext
+AccessibilityBridge
+UiSelector
+ApkBuilder
+UiObject
+UiObjectCollection
+Crypto
+EventEmitter
+MutableOkHttp
+ColorDetector
+ColorTable
+ImageWrapper
+Mat
+DynamicLayoutInflater
+ContinuationResult
+ContinuationCreator
+JavaScriptEngine
+PFile
+Pref
+ProxyJavaObject
+ProxyObject
+ScriptRuntime
+AppUtils
+ScreenMetrics
+Shell
+ScriptInterruptedException
+JavaScriptSource
+ThemeColor
+App
+AndroidUtils
+ArrayUtils
+ColorUtils
+ConsoleUtils
+DeviceUtils
+DisplayUtils
+IntentUtils
+JavaUtils
+NetworkUtils
+NotificationUtils
+RhinoUtils
+RootMode
+RootUtils
+StringUtils
+TextUtils
+BuildConfig
+VolatileBox
+TopLevelScope
+ScriptEngineService
+```
+
+当前 OpenCV, Rhino 和兼容别名类代理:
+
+```text
+Imgproc
+Imgcodecs
+CvType
+EvaluatorException
+Image
+```
+
+`Image` 是 `ImageWrapper` 的兼容别名.
+
+当前 UI 控件类代理:
+
+```text
+JsAppBarLayout
+JsButton
+JsCanvasView
+JsCardView
+JsCheckBox
+JsConsoleView
+JsDatePicker
+JsDrawerLayout
+JsEditText
+JsFloatingActionButton
+JsFrameLayout
+JsGridView
+JsImageButton
+JsImageView
+JsLinearLayout
+JsListView
+JsProgressBar
+JsRadioButton
+JsRadioGroup
+JsRatingBar
+JsRelativeLayout
+JsScrollView
+JsSeekBar
+JsSpinner
+JsSwitch
+JsTabLayout
+JsTextClock
+JsTextView
+JsTimePicker
+JsToggleButton
+JsToolbar
+JsViewPager
+JsWebView
+```
+
+`JsTextView` 在 Android API 级别低于 `26` 时解析为兼容实现 `JsTextViewLegacy`, 其他版本解析为 `JsTextView`.
 
 ## [p+] R
 
@@ -1911,8 +2476,8 @@ species.isRegExp(/test$/); // true
 
 动画资源.
 
-定义了预先确定的动画.  
-补间动画保存在 `res/anim/` 中, 可通过 `R.anim` 属性访问.  
+定义了预先确定的动画.<br>
+补间动画保存在 `res/anim/` 中, 可通过 `R.anim` 属性访问.<br>
 帧动画保存在 `res/drawable/` 中, 可通过 `R.drawable` 属性访问.
 
 ```js
@@ -1992,7 +2557,7 @@ console.log(context.getResources().getDimensionPixelSize(R.dimen.textSize_item_p
 
 可绘制资源.
 
-使用位图或 XML 定义各种图形.  
+使用位图或 XML 定义各种图形.<br>
 保存在 `res/drawable/` 中, 可通过 `R.drawable` 属性访问.
 
 ```js
@@ -2044,7 +2609,7 @@ console.log(context.getResources().getInteger(R.integer.layout_node_info_view_de
 
 布局资源.
 
-定义应用界面的布局.  
+定义应用界面的布局.<br>
 保存在 `res/layout/` 中, 可通过 `R.layout` 属性访问.
 
 ```js
@@ -2059,7 +2624,7 @@ activity.setContentView(R.layout.activity_log);
 
 菜单资源.
 
-定义应用菜单的内容.  
+定义应用菜单的内容.<br>
 保存在 `res/menu/` 中, 可通过 `R.menu` 属性访问.
 
 ```js
@@ -2104,7 +2669,7 @@ console.log(context.getResources().getQuantityString(
 
 字符串资源.
 
-定义字符串.  
+定义字符串.<br>
 保存在 `res/values/` 中, 可通过 `R.string` 属性访问.
 
 ```js
@@ -2117,7 +2682,7 @@ console.log(context.getString(R.string.app_name)); // AutoJs6
 
 字符串资源.
 
-同 [R.string](#p-string).  
+同 [R.string](#p-string).<br>
 因 `TypeScript Declarations (TS 声明文件)` 中, `string` 为保留关键字, 不能作为类名使用, 为了使 `IDE` 实现智能补全, 特提供 `R.strings` 别名类.
 
 ```js
@@ -2131,7 +2696,7 @@ console.log(context.getString(R.string.app_name)); /* 同上, 但 IDE 无法智�
 
 样式资源.
 
-定义界面元素的外观和格式.  
+定义界面元素的外观和格式.<br>
 保存在 `res/values/` 中, 可通过 `R.style` 属性访问.
 
 ```js

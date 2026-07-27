@@ -2,8 +2,8 @@
 
 <!-- type=misc -->
 
-AutoJs6 文档, 包含模块 API 使用方法及用例.  
-项目复刻 (Fork) 自 [hyb1996/AutoJs-Docs](https://github.com/hyb1996/AutoJs-Docs/) (GitHub).  
+AutoJs6 文档, 包含模块 API 使用方法及用例.<br>
+项目复刻 (Fork) 自 [hyb1996/AutoJs-Docs](https://github.com/hyb1996/AutoJs-Docs/) (GitHub).<br>
 项目地址: [SuperMonster003/AutoJs6-Documentation](http://docs-project.autojs6.com) (GitHub).
 
 ---
@@ -14,14 +14,14 @@ AutoJs6 文档, 包含模块 API 使用方法及用例.
 
 #### device.height
 
-device 表示全局对象 (这里同时也是一个模块).  
-".height" 表示访问 device 对象的 height 成员变量.  
+device 表示全局对象 (这里同时也是一个模块).<br>
+".height" 表示访问 device 对象的 height 成员变量.<br>
 如 console.log(device.height) 表示在控制台打印当前设备的高度数值.
 
 #### colors.rgb(red, green, blue)
 
-colors 与 device 类似, 表示全局对象.  
-"rgb" 表示方法名称, ".rgb()" 表示调用 colors 的 rgb 方法, 括号内的 red 等表示方法参数.  
+colors 与 device 类似, 表示全局对象.<br>
+"rgb" 表示方法名称, ".rgb()" 表示调用 colors 的 rgb 方法, 括号内的 red 等表示方法参数.<br>
 如 console.log(colors.rgb(255, 128, 64)) 表示在控制台打印一个 RGB 分别为 255, 128 和 64 的颜色数值.
 
 > 注: 绝大多数情况, 文档不对 "[函数](https://developer.mozilla.org/zh-CN/docs/Glossary/Function/)" 与 "[方法](https://developer.mozilla.org/zh-CN/docs/Glossary/Method/)" 做明确区分.
@@ -30,8 +30,8 @@ colors 与 device 类似, 表示全局对象.
 
 通常每个章节都以某个对象作为主题.
 
-例如上述 `colors.rgb(red, green, blue)` 位于 [Color - 颜色](color) 这个章节.  
-其中 colors 称为此章节的 "临时作用域对象",  
+例如上述 `colors.rgb(red, green, blue)` 位于 [Color - 颜色](color) 这个章节.<br>
+其中 colors 称为此章节的 "临时作用域对象",<br>
 它可能是一个对象, 函数, 甚至 "类", 在文档中使用 __`橙色粗体`__ 表示.
 
 列举其后续的相关方法及属性时, 将不再重复书写对象本身:
@@ -46,6 +46,17 @@ rgb(red, green, blue)
 
 上述 `rgb` 表示 `colors.rgb`.
 
+### 模块对象的 `$` 别名
+
+多数由 AutoJs6 Augmentable API 提供的模块对象还会挂载一个以 `$` 开头的全局别名. 主名称与别名指向同一个对象:
+
+```js
+console === $console; // true
+images === $images; // true
+```
+
+文档默认使用不带 `$` 的主名称. 别名是否存在由对象的源码挂载配置决定; 类构造函数, 嵌套对象及明确关闭美元前缀的对象不一定具有此类别名, 因此不能仅根据名称推断 `$` 别名.
+
 ### 参数类型
 
 #### colors.rgb(red, green, blue)
@@ -54,8 +65,8 @@ rgb(red, green, blue)
 - **green** { [number](dataTypes#number) }
 - **blue** { [number](dataTypes#number) }
 
-参数后的 "{}" 内包含其类型.  
-上述示例表示需要传入三个 [number](dataTypes#number) 类型的参数.  
+参数后的 "{}" 内包含其类型.<br>
+上述示例表示需要传入三个 [number](dataTypes#number) 类型的参数.<br>
 如 colors.rgb(255, 128, 64) 合法, 而 colors.rgb("abc", 128, 64) 将可能导致非预期结果或出现异常.
 
 > 注: 点击类型对应的超链接 (如有) 可跳转至类型详情页面.
@@ -69,7 +80,7 @@ rgb(red, green, blue)
 - **blue** { [number](dataTypes#number) }
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-returns 后的 "{}" 内包含返回值类型.  
+returns 后的 "{}" 内包含返回值类型.<br>
 上述示例表示 colors.rgb 方法调用后将返回 [number](dataTypes#number) 类型数据.
 
 ### 属性类型
@@ -78,7 +89,7 @@ returns 后的 "{}" 内包含返回值类型.
 
 - { [number](dataTypes#number) }
 
-属性类型包裹在一对花括号中.  
+属性类型包裹在一对花括号中.<br>
 上述示例表示 colors 的 RED 属性是 [number](dataTypes#number) 类型数据.
 
 对象字面量形式的类型则用一对双花括号表示:
@@ -113,7 +124,7 @@ let o = { name: "David", age: 13 };
 
 ### 方法签名
 
-形如上述 [返回值类型](#返回值类型) 小节的示例,  
+形如上述 [返回值类型](#返回值类型) 小节的示例,<br>
 包含 [ 方法名称 + 参数类型 + 返回值类型 ] 的标志符, 称为 "方法签名".
 
 > 注: 上述 "方法签名" 定义只用于辅助读者对文档的理解, 并不保证名词解释的合理性.
@@ -122,10 +133,10 @@ let o = { name: "David", age: 13 };
 
 #### colors.rgb(red, green, blue)
 
-- __red__ - R (红色) 通道数值  [ A ]
-- __green__ - G (绿色) 通道数值  [ A ]
-- __blue__ - B (蓝色) 通道数值  [ A ]
-- __@return__ - 颜色数值  [ B ]
+- __red__ - R (红色) 通道数值 [ A ]
+- __green__ - G (绿色) 通道数值 [ A ]
+- __blue__ - B (蓝色) 通道数值 [ A ]
+- __@return__ - 颜色数值 [ B ]
 
 获取 R/G/B 通道组合后的颜色数值. [ C ]
 
@@ -148,14 +159,14 @@ colors.rgb(255, 128, 64) === colors.toInt("#FF8040"); // true
 
 #### files.join(parent, ...child)
 
-上述示例的 child 参数是 "可变参数", 也称为 "可变长参数" 或 "变长参数".  
+上述示例的 child 参数是 "可变参数", 也称为 "可变长参数" 或 "变长参数".<br>
 可变参数可传入任意个 (包括 0 个) 参数:
 
 ```js
 let p = files.getSdcardPath();
-files.join(p); /* 0 个可变参数 */
-files.join(p, 'a'); /* 1 个可变参数 */
-files.join(p, 'a', 'b', 'c', 'd'); /* 4 个可变参数 */
+files.join(p); /* 0 个可变参数. */
+files.join(p, 'a'); /* 1 个可变参数. */
+files.join(p, 'a', 'b', 'c', 'd'); /* 4 个可变参数. */
 ```
 
 文档采用 JSDoc 标准标注可变参数, 需额外注意 JSDoc 的尾数组标识代表容器, 用于容纳展开后的参数:
@@ -197,7 +208,7 @@ function sum(x, y, others) {
 }
 ```
 
-上述示例 others 的参数类型标识方法 "...number" 也是合法的, 它其实是 "...number[]" 的省略形式.  
+上述示例 others 的参数类型标识方法 "...number" 也是合法的, 它其实是 "...number[]" 的省略形式.<br>
 文档为了避免歧义, 将全部采用完整写法.
 
 作为强调, "...(SomeType)[]" 这样的可变参数表示方法, 需要把 "..." 和 "[]" 视为一个整体, 中间部分才是期望的参数类型.
@@ -206,7 +217,7 @@ function sum(x, y, others) {
 
 #### device.vibrate(text, delay?)
 
-上述示例的 delay 参数是可选的 (以 "?" 标注).  
+上述示例的 delay 参数是可选的 (以 "?" 标注).<br>
 因此以下调用方式均被支持:
 
 ```js
@@ -232,7 +243,7 @@ device.vibrate("hello"); /* 无延迟. */
 - **[ delay = 0 ]** { [number](dataTypes#number) } - 振动延迟
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-上述示例的 delay 参数是可选的 (以 "?" 标注) 且包含默认值 (以 "=" 标注).  
+上述示例的 delay 参数是可选的 (以 "?" 标注) 且包含默认值 (以 "=" 标注).<br>
 因此以下两种调用方式等效:
 
 ```js
@@ -242,7 +253,7 @@ device.vibrate("hello", 0);
 
 > 注: 上述示例的方法签名 (含默认值标注) 在 TypeScript 中并不合法, 此类签名仅限在文档中使用.
 >
-> 注: 以 "=" 标注的参数一定是可选的, 此时参数的 "?" 标注可能被省略, 尤其在重载签名拆写的情况下.  
+> 注: 以 "=" 标注的参数一定是可选的, 此时参数的 "?" 标注可能被省略, 尤其在重载签名拆写的情况下.<br>
 > 详情参阅下文的 "方法重载".
 
 ### 方法重载
@@ -269,9 +280,9 @@ __`Overload 17/17`__
 
 #### pickup()
 
-包含 "Overload m/n" 标签的方法, 表示重载方法的序数及总量.  
-如 "Overload 2/3" 表示当前方法签名描述第 2 个重载方法, 总计 3 个,  
-而 "Overload 5-6/17" 表示当前方法签名涵盖第 5 及 第 6 个重载方法, 总计 17 个.
+包含 "Overload m/n" 标签的方法, 表示重载方法的序数及总量.<br>
+如 "Overload 2/3" 表示当前方法签名描述第 2 个重载方法, 总计 3 个,<br>
+而 "Overload 5-6/17" 表示当前方法签名涵盖第 5 及第 6 个重载方法, 总计 17 个.
 
 重载方法可被简化:
 
@@ -300,7 +311,7 @@ __`Global`__
 
 #### images.requestScreenCapture(landscape)
 
-包含 "Global" 标签的方法, 表示支持全局化使用, 可省略模块对象调用.  
+包含 "Global" 标签的方法, 表示支持全局化使用, 可省略模块对象调用.<br>
 因此以下两种调用方式等效:
 
 ```js
@@ -389,8 +400,8 @@ requestScreenCapture(false);
 
 ### 成员访问
 
-成员访问用 "." 表示调用关系, 包括 "类" 静态成员访问, 对象成员访问等.  
-而实例成员访问则需要 "类" 的实例才能访问, 用 "#" 表示调用关系.  
+成员访问用 "." 表示调用关系, 包括 "类" 静态成员访问, 对象成员访问等.<br>
+而实例成员访问则需要 "类" 的实例才能访问, 用 "#" 表示调用关系.<br>
 例如 JavaScript 的 Number 本身是一个 "类", 可用的成员访问方式如下:
 
 ```js
@@ -407,14 +418,14 @@ new Number(2).toFixed(0); /* 实例成员访问, 用 "Number#toFixed(number)" �
 [m#] bounds()
 
 ```js
-/* 正确访问示例 */
+/* 正确访问示例. */
 
 let w = pickup(/.+/); /* w 是 UiObject 的实例. */
 if (w !== null) {
     console.log(w.bounds()); /* 访问 UiObject 实例的 bounds 方法. */
 }
 
-/* 错误访问示例 */
+/* 错误访问示例. */
 
 importClass(org.autojs.autojs.core.automator.UiObject);
 console.log(UiObject.bounds()); /* 访问的是类 UiObject 的静态方法 bounds. */
@@ -443,8 +454,8 @@ typeof foo.bar('hello', 3); // string
 
 ## 声明
 
-当前项目 (文档) 及 [AutoJs6](http://project.autojs6.com) (App) 均为二次开发.  
-相对于 [原始 App](https://github.com/hyb1996/Auto.js/), 二次开发的 App 中会增加或修改部分模块功能.  
-相对于 [原始文档](https://github.com/hyb1996/AutoJs-Docs/), 二次开发的文档将进行部分增删或重新编写.  
-开发者无法保证对 API 的完全理解及文档的无纰漏撰写.  
-如有任何不当之处, 欢迎提交 [Issue](http://docs-issues.autojs6.com) 或 [PR](http://docs-pr.autojs6.com).  
+当前项目 (文档) 及 [AutoJs6](http://project.autojs6.com) (App) 均为二次开发.<br>
+相对于 [原始 App](https://github.com/hyb1996/Auto.js/), 二次开发的 App 中会增加或修改部分模块功能.<br>
+相对于 [原始文档](https://github.com/hyb1996/AutoJs-Docs/), 二次开发的文档将进行部分增删或重新编写.<br>
+开发者无法保证对 API 的完全理解及文档的无纰漏撰写.<br>
+如有任何不当之处, 欢迎提交 [Issue](http://docs-issues.autojs6.com) 或 [PR](http://docs-pr.autojs6.com).<br>

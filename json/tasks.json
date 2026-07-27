@@ -4,7 +4,840 @@
     {
       "textRaw": "任务 (Tasks)",
       "name": "任务_(tasks)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n",
+      "desc": "<p><code>tasks</code> 模块用于创建, 查询, 更新和删除持久化定时任务与广播触发任务. 定时任务由 AutoJs6 的任务调度后端执行, 不同于仅在当前脚本进程内生效的 <a href=\"timers\">timers</a> 定时器.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">tasks</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "定时任务选项",
+          "name": "定时任务选项",
+          "desc": "<p>所有创建定时任务的方法均使用一个选项对象:</p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>path: <a href=\"dataTypes#string\">string</a>;</li>\n<li>time?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a>;</li>\n<li>date?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a>;</li>\n<li>delay?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>interval?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>loopTimes?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>callback?(task: <a href=\"#timedtask\">TimedTask</a>): <a href=\"dataTypes#any\">any</a>;</li>\n<li>isAsync?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>字段含义:</p>\n<ul>\n<li><strong>path</strong> - 必需. 要执行的脚本路径, 相对路径按当前脚本运行目录解析.</li>\n<li><strong>[ time ]</strong> - 执行时刻或每日执行时间. 数字, <code>Date</code> 和可解析的日期时间字符串均可用.</li>\n<li><strong>[ date ]</strong> - <code>time</code> 的备用字段. 两者同时存在时使用 <code>time</code>.</li>\n<li><strong>[ delay = 0 ]</strong> - 脚本执行配置的启动延迟, 单位为毫秒.</li>\n<li><strong>[ interval = 0 ]</strong> - 多次执行脚本时的循环间隔, 单位为毫秒.</li>\n<li><strong>[ loopTimes = 1 ]</strong> - 每次任务触发后执行脚本的次数.</li>\n<li><strong>[ callback ]</strong> - 数据库操作完成后的回调. 回调接收任务对象, <code>this</code> 指向选项对象.</li>\n<li><strong>[ isAsync = false ]</strong> - 是否在线程中执行回调. 兼容字段名为 <code>async</code>.</li>\n</ul>\n<p>未指定回调时, 创建方法返回新增的 <code>TimedTask</code>. 指定回调时返回回调结果; <code>isAsync</code> 为 <code>true</code> 时返回运行回调的线程对象.</p>\n",
+          "modules": [
+            {
+              "textRaw": "重复结束条件",
+              "name": "重复结束条件",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>每日, 每周, 每月和每年任务可附加重复结束条件:</p>\n<ul>\n<li><strong>[ endMode = &quot;forever&quot; ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 结束模式</li>\n<li><strong>[ untilDate ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 最后允许执行的日期</li>\n<li><strong>[ times ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最大执行次数, 必须大于 <code>0</code></li>\n</ul>\n<p><code>endMode</code> 兼容字段名为 <code>ends</code>, <code>end</code> 和 <code>repeatEnd</code>. 支持以下值:</p>\n<ul>\n<li><code>forever</code>, <code>always</code>, <code>never</code> 或 <code>0</code> - 永久重复.</li>\n<li><code>untilDate</code>, <code>until</code>, <code>date</code> 或 <code>1</code> - 重复至 <code>untilDate</code>. 兼容字段名为 <code>until</code> 和 <code>endDate</code>.</li>\n<li><code>count</code>, <code>times</code>, <code>number</code>, <code>numberOfEvents</code>, <code>forNumberOfEvents</code> 或 <code>2</code> - 重复指定次数. <code>times</code> 兼容字段名为 <code>endCount</code> 和 <code>count</code>.</li>\n</ul>\n<p>省略 <code>endMode</code> 时, 存在日期结束字段则自动使用日期模式, 存在次数字段则自动使用次数模式. 一次性任务和倒计时任务忽略重复结束条件.</p>\n",
+              "type": "module",
+              "displayName": "重复结束条件"
+            },
+            {
+              "textRaw": "倒计时持续时间",
+              "name": "倒计时持续时间",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>倒计时时长可直接使用正数毫秒值, 或使用以下对象字段:</p>\n<ul>\n<li><strong>duration</strong> {{<ul>\n<li>days?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>hours?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>minutes?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>seconds?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>milliseconds?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p><code>duration</code> 兼容字段名为 <code>after</code>, <code>countdown</code>, <code>timeOffset</code> 和 <code>runAfter</code>. 各时间单位也接受常用单复数及缩写, 如 <code>day</code>, <code>h</code>, <code>min</code>, <code>sec</code> 和 <code>ms</code>. 所有分量必须为非负数, 合计结果必须大于 <code>0</code>.</p>\n",
+              "type": "module",
+              "displayName": "倒计时持续时间"
+            }
+          ],
+          "type": "module",
+          "displayName": "定时任务选项"
+        },
+        {
+          "textRaw": "[m] addTask",
+          "name": "[m]_addtask",
+          "methods": [
+            {
+              "textRaw": "addTask(task)",
+              "type": "method",
+              "name": "addTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**task** { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } - 尚未保存的任务对象 ",
+                      "name": "**task**",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) ",
+                      "desc": "尚未保存的任务对象"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } - 原任务对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) ",
+                      "desc": "原任务对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "task"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将任务同步写入数据库. 参数为 <code>null</code> 时不执行操作并返回 <code>null</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addTask"
+        },
+        {
+          "textRaw": "[m] addTimedTask",
+          "name": "[m]_addtimedtask",
+          "methods": [
+            {
+              "textRaw": "addTimedTask(options)",
+              "type": "method",
+              "name": "addTimedTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#定时任务选项\">定时任务选项</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 新任务, 回调结果或线程对象</li>\n</ul>\n<p>按 <code>options.repeatMode</code> 创建定时任务. <code>repeatMode</code> 兼容字段名为 <code>repeat</code>, <code>type</code> 和 <code>mode</code>, 支持:</p>\n<ul>\n<li><code>disposable</code>, <code>once</code>, <code>onetime</code>, <code>oneoff</code> 或 <code>0</code>.</li>\n<li><code>daily</code>, <code>day</code> 或 <code>1</code>.</li>\n<li><code>weekly</code>, <code>week</code> 或 <code>2</code>.</li>\n<li><code>monthly</code>, <code>month</code> 或 <code>3</code>.</li>\n<li><code>yearly</code>, <code>year</code>, <code>annually</code>, <code>annual</code> 或 <code>4</code>.</li>\n<li><code>countdown</code>, <code>after</code>, <code>runafter</code>, <code>later</code> 或 <code>5</code>.</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addTimedTask"
+        },
+        {
+          "textRaw": "[m] addDailyTask",
+          "name": "[m]_adddailytask",
+          "methods": [
+            {
+              "textRaw": "addDailyTask(options)",
+              "type": "method",
+              "name": "addDailyTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**options** { [Object](dataTypes#object) } - [定时任务选项](#定时任务选项) ",
+                      "name": "**options**",
+                      "type": " [Object](dataTypes#object) ",
+                      "desc": "[定时任务选项](#定时任务选项)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 新任务, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新任务, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建每日任务. <code>time</code> 和 <code>date</code> 均省略时使用当前时间.</p>\n<pre><code class=\"lang-js\">let task = tasks.addDailyTask({\n    path: &quot;./daily.js&quot;,\n    time: &quot;08:30&quot;,\n});\nconsole.log(task.id);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDailyTask"
+        },
+        {
+          "textRaw": "[m] addWeeklyTask",
+          "name": "[m]_addweeklytask",
+          "methods": [
+            {
+              "textRaw": "addWeeklyTask(options)",
+              "type": "method",
+              "name": "addWeeklyTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**options** { [Object](dataTypes#object) } - [定时任务选项](#定时任务选项), 另支持 `daysOfWeek` ",
+                      "name": "**options**",
+                      "type": " [Object](dataTypes#object) ",
+                      "desc": "[定时任务选项](#定时任务选项), 另支持 `daysOfWeek`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 新任务, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新任务, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建每周任务. <code>daysOfWeek</code> 是星期数组, 数字使用 <code>0</code> 或 <code>7</code> 表示星期日, <code>1</code> 至 <code>6</code> 表示星期一至星期六. 也可使用英文全称, 英文缩写或 <code>一</code> 至 <code>日</code>. 默认使用今天.</p>\n<pre><code class=\"lang-js\">tasks.addWeeklyTask({\n    path: &quot;./workday.js&quot;,\n    time: &quot;09:00&quot;,\n    daysOfWeek: [ 1, 2, 3, 4, 5 ],\n});\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addWeeklyTask"
+        },
+        {
+          "textRaw": "[m] addMonthlyTask",
+          "name": "[m]_addmonthlytask",
+          "methods": [
+            {
+              "textRaw": "addMonthlyTask(options)",
+              "type": "method",
+              "name": "addMonthlyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#定时任务选项\">定时任务选项</a>, 另支持 <code>dayOfMonth</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 新任务, 回调结果或线程对象</li>\n</ul>\n<p>创建每月任务. <code>dayOfMonth</code> 取值为 <code>1</code> 至 <code>31</code>, 兼容字段名为 <code>day</code>. 也可通过 <code>date</code> 提供日期, 默认使用今天的日号. 当目标月份没有指定日号时, 使用该月最后一天.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addMonthlyTask"
+        },
+        {
+          "textRaw": "[m] addYearlyTask",
+          "name": "[m]_addyearlytask",
+          "methods": [
+            {
+              "textRaw": "addYearlyTask(options)",
+              "type": "method",
+              "name": "addYearlyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#定时任务选项\">定时任务选项</a>, 另支持 <code>monthOfYear</code> 和 <code>dayOfMonth</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 新任务, 回调结果或线程对象</li>\n</ul>\n<p>创建每年任务. <code>monthOfYear</code> 取值为 <code>1</code> 至 <code>12</code>, <code>dayOfMonth</code> 取值为 <code>1</code> 至 <code>31</code>; 兼容字段名分别为 <code>month</code> 和 <code>day</code>. 也可通过 <code>date</code> 同时提供月份和日号, 默认使用今天. 当目标年月没有指定日号时, 使用该月最后一天.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addYearlyTask"
+        },
+        {
+          "textRaw": "[m] addDisposableTask",
+          "name": "[m]_adddisposabletask",
+          "methods": [
+            {
+              "textRaw": "addDisposableTask(options)",
+              "type": "method",
+              "name": "addDisposableTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**options** { [Object](dataTypes#object) } - [定时任务选项](#定时任务选项) ",
+                      "name": "**options**",
+                      "type": " [Object](dataTypes#object) ",
+                      "desc": "[定时任务选项](#定时任务选项)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 新任务, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新任务, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建一次性任务. <code>time</code> 和 <code>date</code> 均省略时使用当前时刻. 也可使用 <a href=\"#倒计时持续时间\">倒计时持续时间</a> 字段指定相对时长.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDisposableTask"
+        },
+        {
+          "textRaw": "[m] addCountdownTask",
+          "name": "[m]_addcountdowntask",
+          "methods": [
+            {
+              "textRaw": "addCountdownTask(options)",
+              "type": "method",
+              "name": "addCountdownTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#定时任务选项\">定时任务选项</a> 及 <a href=\"#倒计时持续时间\">倒计时持续时间</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 新任务, 回调结果或线程对象</li>\n</ul>\n<p>创建从当前时刻开始计时的一次性倒计时任务.</p>\n<pre><code class=\"lang-js\">tasks.addCountdownTask({\n    path: &quot;./later.js&quot;,\n    after: { minutes: 10 },\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addCountdownTask"
+        },
+        {
+          "textRaw": "[m] addIntentTask",
+          "name": "[m]_addintenttask",
+          "methods": [
+            {
+              "textRaw": "addIntentTask(options)",
+              "type": "method",
+              "name": "addIntentTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**options** {{ ",
+                      "options": [
+                        {
+                          "textRaw": "path: [string](dataTypes#string); ",
+                          "name": "path",
+                          "desc": "[string](dataTypes#string);"
+                        },
+                        {
+                          "textRaw": "action?: [string](dataTypes#string); ",
+                          "name": "action?",
+                          "desc": "[string](dataTypes#string);"
+                        },
+                        {
+                          "textRaw": "category?: [string](dataTypes#string); ",
+                          "name": "category?",
+                          "desc": "[string](dataTypes#string);"
+                        },
+                        {
+                          "textRaw": "dataType?: [string](dataTypes#string); ",
+                          "name": "dataType?",
+                          "desc": "[string](dataTypes#string);"
+                        },
+                        {
+                          "textRaw": "isLocal?: [boolean](dataTypes#boolean); ",
+                          "name": "isLocal?",
+                          "desc": "[boolean](dataTypes#boolean);"
+                        },
+                        {
+                          "textRaw": "callback?(task: [IntentTask](#intenttask)): [any](dataTypes#any); ",
+                          "name": "callback?(task",
+                          "desc": "[IntentTask](#intenttask)): [any](dataTypes#any);"
+                        },
+                        {
+                          "textRaw": "isAsync?: [boolean](dataTypes#boolean); ",
+                          "name": "isAsync?",
+                          "desc": "[boolean](dataTypes#boolean);"
+                        }
+                      ],
+                      "name": "**options**",
+                      "desc": "{{"
+                    },
+                    {
+                      "textRaw": "}} ",
+                      "name": "}}"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 新任务, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新任务, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建由匹配的广播 Intent 触发的任务. <code>isLocal</code> 兼容字段名为 <code>local</code>. AutoJs6 启动广播默认使用本地广播, 但显式指定的 <code>isLocal</code> 仍具有最终优先级.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addIntentTask"
+        },
+        {
+          "textRaw": "[m] addBroadcastIntentTask",
+          "name": "[m]_addbroadcastintenttask",
+          "methods": [
+            {
+              "textRaw": "addBroadcastIntentTask(options)",
+              "type": "method",
+              "name": "addBroadcastIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#m-addintenttask\">tasks.addIntentTask</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p><a href=\"#m-addintenttask\">tasks.addIntentTask</a> 的兼容别名.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addBroadcastIntentTask"
+        },
+        {
+          "textRaw": "[m] getTimedTask",
+          "name": "[m]_gettimedtask",
+          "methods": [
+            {
+              "textRaw": "getTimedTask(id)",
+              "type": "method",
+              "name": "getTimedTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 任务 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "任务 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [TimedTask](#timedtask) | [null](dataTypes#null) } - 匹配的任务 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [TimedTask](#timedtask) | [null](dataTypes#null) ",
+                      "desc": "匹配的任务"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getTimedTask"
+        },
+        {
+          "textRaw": "[m] getIntentTask",
+          "name": "[m]_getintenttask",
+          "methods": [
+            {
+              "textRaw": "getIntentTask(id)",
+              "type": "method",
+              "name": "getIntentTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 任务 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "任务 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [IntentTask](#intenttask) | [null](dataTypes#null) } - 匹配的任务 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [IntentTask](#intenttask) | [null](dataTypes#null) ",
+                      "desc": "匹配的任务"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIntentTask"
+        },
+        {
+          "textRaw": "[m] removeTask",
+          "name": "[m]_removetask",
+          "methods": [
+            {
+              "textRaw": "removeTask(task)",
+              "type": "method",
+              "name": "removeTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**task** { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } ",
+                      "name": "**task**",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) "
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } - 原任务对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) ",
+                      "desc": "原任务对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "task"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>同步删除任务. 参数为 <code>null</code> 时不执行操作并返回 <code>null</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeTask"
+        },
+        {
+          "textRaw": "[m] removeTimedTask",
+          "name": "[m]_removetimedtask",
+          "methods": [
+            {
+              "textRaw": "removeTimedTask(id, options?)",
+              "type": "method",
+              "name": "removeTimedTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 任务 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "任务 ID"
+                    },
+                    {
+                      "textRaw": "**[ options = {} ]** {{ ",
+                      "options": [
+                        {
+                          "textRaw": "callback?(task: [TimedTask](#timedtask) | [null](dataTypes#null)): [any](dataTypes#any); ",
+                          "name": "callback?(task",
+                          "desc": "[TimedTask](#timedtask) | [null](dataTypes#null)): [any](dataTypes#any);"
+                        },
+                        {
+                          "textRaw": "isAsync?: [boolean](dataTypes#boolean); ",
+                          "name": "isAsync?",
+                          "desc": "[boolean](dataTypes#boolean);"
+                        }
+                      ],
+                      "name": "**[",
+                      "desc": "options = {} ]** {{"
+                    },
+                    {
+                      "textRaw": "}} ",
+                      "name": "}}"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 被删除的任务, `null`, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "被删除的任务, `null`, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeTimedTask"
+        },
+        {
+          "textRaw": "[m] removeIntentTask",
+          "name": "[m]_removeintenttask",
+          "methods": [
+            {
+              "textRaw": "removeIntentTask(id, options?)",
+              "type": "method",
+              "name": "removeIntentTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 任务 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "任务 ID"
+                    },
+                    {
+                      "textRaw": "**[ options = {} ]** {{ ",
+                      "options": [
+                        {
+                          "textRaw": "callback?(task: [IntentTask](#intenttask) | [null](dataTypes#null)): [any](dataTypes#any); ",
+                          "name": "callback?(task",
+                          "desc": "[IntentTask](#intenttask) | [null](dataTypes#null)): [any](dataTypes#any);"
+                        },
+                        {
+                          "textRaw": "isAsync?: [boolean](dataTypes#boolean); ",
+                          "name": "isAsync?",
+                          "desc": "[boolean](dataTypes#boolean);"
+                        }
+                      ],
+                      "name": "**[",
+                      "desc": "options = {} ]** {{"
+                    },
+                    {
+                      "textRaw": "}} ",
+                      "name": "}}"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 被删除的任务, `null`, 回调结果或线程对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "被删除的任务, `null`, 回调结果或线程对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeIntentTask"
+        },
+        {
+          "textRaw": "[m] updateTask",
+          "name": "[m]_updatetask",
+          "methods": [
+            {
+              "textRaw": "updateTask(task)",
+              "type": "method",
+              "name": "updateTask",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**task** { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } ",
+                      "name": "**task**",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) "
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) } - 原任务对象 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [TimedTask](#timedtask) | [IntentTask](#intenttask) | [null](dataTypes#null) ",
+                      "desc": "原任务对象"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "task"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>同步保存任务对象上的修改. 更新 <code>TimedTask</code> 时会先清除其已调度状态, 以便调度后端重新安排任务.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] updateTask"
+        },
+        {
+          "textRaw": "[m] queryTimedTasks",
+          "name": "[m]_querytimedtasks",
+          "methods": [
+            {
+              "textRaw": "queryTimedTasks(options?)",
+              "type": "method",
+              "name": "queryTimedTasks",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ options = {} ]** {{ path?: [string](dataTypes#string) }} ",
+                      "name": "**[",
+                      "desc": "options = {} ]** {{ path?: [string](dataTypes#string) }}"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [TimedTask](#timedtask)[] } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [TimedTask](#timedtask)[] "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>查询所有定时任务. 指定 <code>path</code> 时仅返回脚本路径匹配的任务.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryTimedTasks"
+        },
+        {
+          "textRaw": "[m] queryIntentTasks",
+          "name": "[m]_queryintenttasks",
+          "methods": [
+            {
+              "textRaw": "queryIntentTasks(options?)",
+              "type": "method",
+              "name": "queryIntentTasks",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ options = {} ]** {{ ",
+                      "options": [
+                        {
+                          "textRaw": "path?: [string](dataTypes#string); ",
+                          "name": "path?",
+                          "desc": "[string](dataTypes#string);"
+                        },
+                        {
+                          "textRaw": "action?: [string](dataTypes#string); ",
+                          "name": "action?",
+                          "desc": "[string](dataTypes#string);"
+                        }
+                      ],
+                      "name": "**[",
+                      "desc": "options = {} ]** {{"
+                    },
+                    {
+                      "textRaw": "}} ",
+                      "name": "}}"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [IntentTask](#intenttask)[] } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [IntentTask](#intenttask)[] "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>查询广播触发任务. 同时指定 <code>path</code> 和 <code>action</code> 时必须全部匹配.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryIntentTasks"
+        },
+        {
+          "textRaw": "[m] timeFlagToDays",
+          "name": "[m]_timeflagtodays",
+          "methods": [
+            {
+              "textRaw": "timeFlagToDays(flag)",
+              "type": "method",
+              "name": "timeFlagToDays",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**flag** { [number](dataTypes#number) } - 星期位标志 ",
+                      "name": "**flag**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "星期位标志"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number)[] } - 已启用的星期编号 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number)[] ",
+                      "desc": "已启用的星期编号"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "flag"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将星期位标志转换为编号数组. 编号 <code>0</code> 至 <code>6</code> 依次表示星期日到星期六.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] timeFlagToDays"
+        },
+        {
+          "textRaw": "[m] daysToTimeFlag",
+          "name": "[m]_daystotimeflag",
+          "methods": [
+            {
+              "textRaw": "daysToTimeFlag(days)",
+              "type": "method",
+              "name": "daysToTimeFlag",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**days** { [number](dataTypes#number)[] } - 星期编号数组 ",
+                      "name": "**days**",
+                      "type": " [number](dataTypes#number)[] ",
+                      "desc": "星期编号数组"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 星期位标志 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "星期位标志"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "days"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将星期编号数组转换为位标志. 仅编号 <code>0</code> 至 <code>6</code> 参与计算.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] daysToTimeFlag"
+        },
+        {
+          "textRaw": "TimedTask",
+          "name": "timedtask",
+          "desc": "<p>由定时任务创建和查询方法返回的 Java 对象. 常用属性包括:</p>\n<ul>\n<li><code>id</code>, <code>millis</code>, <code>scriptPath</code>, <code>timeFlag</code>.</li>\n<li><code>delay</code>, <code>interval</code>, <code>loopTimes</code>.</li>\n<li><code>repeatMode</code>, <code>endMode</code>, <code>endValue</code>, <code>finishedTimes</code>.</li>\n<li><code>dayOfMonth</code>, <code>monthOfYear</code>, <code>scheduled</code>.</li>\n</ul>\n<p>常用方法包括 <code>getNextTime()</code>, <code>isDisposable()</code>, <code>isDaily()</code>, <code>isWeekly()</code>, <code>isMonthly()</code>, <code>isYearly()</code> 和 <code>isCountdown()</code>.</p>\n",
+          "type": "module",
+          "displayName": "TimedTask"
+        },
+        {
+          "textRaw": "IntentTask",
+          "name": "intenttask",
+          "desc": "<p>由广播任务创建和查询方法返回的 Java 对象. 常用属性包括 <code>id</code>, <code>scriptPath</code>, <code>action</code>, <code>category</code>, <code>dataType</code> 和 <code>local</code>.</p>\n",
+          "type": "module",
+          "displayName": "IntentTask"
+        }
+      ],
       "type": "module",
       "displayName": "任务 (Tasks)"
     }

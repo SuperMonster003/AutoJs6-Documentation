@@ -4,208 +4,496 @@
     {
       "textRaw": "定时器 (Timers)",
       "name": "定时器_(timers)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>timers 模块暴露了一个全局的 API, 用于在某个未来时间段调用调度函数.  因为定时器函数是全局的, 所以使用该 API 无需调用 timers.***</p>\n<p>Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API, 除了它使用了一个不同的内部实现, 它是基于 Android Looper-Handler消息循环机制构建的. 其实现机制与Node.js比较相似.</p>\n<p>例如, 要在5秒后发出消息&quot;hello&quot;:</p>\n<pre><code>setTimeout(function(){\n    toast(&quot;hello&quot;)\n}, 5000);\n</code></pre><p>需要注意的是, 这些定时器仍然是单线程的. 如果脚本主体有耗时操作或死循环, 则设定的定时器不能被及时执行, 例如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句会在15秒后执行而不是5秒后\n    toast(&quot;hello&quot;)\n}, 5000);\n//暂停10秒\nsleep(10000);\n</code></pre><p>再如：</p>\n<pre><code>setTimeout(function(){\n    //这里的语句永远不会被执行\n    toast(&quot;hello&quot;)\n}, 5000);\n//死循环\nwhile(true);\n</code></pre>",
+      "desc": "<p><code>timers</code> 模块提供当前脚本进程内的事件循环定时器, 并提供一组与 <a href=\"workManager\">workManager</a> 兼容的持久化任务入口.</p>\n<p>脚本内定时器是单线程的. 当前脚本长时间阻塞时, 回调只能在事件循环恢复后执行.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">timers</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] setTimeout",
+          "name": "[m]_settimeout",
+          "methods": [
+            {
+              "textRaw": "setTimeout(callback, delay?, ...args)",
+              "type": "method",
+              "name": "setTimeout",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 定时器到期时执行的函数</li>\n<li><strong>[ delay = 1 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 等待时间, 单位为毫秒</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 传给回调的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 定时器 ID</li>\n</ul>\n<p>创建单次定时器.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "delay?"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTimeout"
+        },
+        {
+          "textRaw": "[m] setInterval",
+          "name": "[m]_setinterval",
+          "methods": [
+            {
+              "textRaw": "setInterval(callback, delay?, ...args)",
+              "type": "method",
+              "name": "setInterval",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 每次定时器到期时执行的函数</li>\n<li><strong>[ delay = 1 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 间隔时间, 单位为毫秒</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 传给回调的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 定时器 ID</li>\n</ul>\n<p>创建重复定时器.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "delay?"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setInterval"
+        },
+        {
+          "textRaw": "[m] setImmediate",
+          "name": "[m]_setimmediate",
+          "methods": [
+            {
+              "textRaw": "setImmediate(callback, ...args)",
+              "type": "method",
+              "name": "setImmediate",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 当前事件循环结束后执行的函数</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 传给回调的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 定时器 ID</li>\n</ul>\n<p>创建立即定时器.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setImmediate"
+        },
+        {
+          "textRaw": "[m] clearTimeout",
+          "name": "[m]_cleartimeout",
+          "methods": [
+            {
+              "textRaw": "clearTimeout(id)",
+              "type": "method",
+              "name": "clearTimeout",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - <a href=\"#m-settimeout\">setTimeout</a> 返回的定时器 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否取消了匹配的定时器</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clearTimeout"
+        },
+        {
+          "textRaw": "[m] clearInterval",
+          "name": "[m]_clearinterval",
+          "methods": [
+            {
+              "textRaw": "clearInterval(id)",
+              "type": "method",
+              "name": "clearInterval",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - <a href=\"#m-setinterval\">setInterval</a> 返回的定时器 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否取消了匹配的定时器</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clearInterval"
+        },
+        {
+          "textRaw": "[m] clearImmediate",
+          "name": "[m]_clearimmediate",
+          "methods": [
+            {
+              "textRaw": "clearImmediate(id)",
+              "type": "method",
+              "name": "clearImmediate",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - <a href=\"#m-setimmediate\">setImmediate</a> 返回的定时器 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否取消了匹配的定时器</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clearImmediate"
+        },
+        {
+          "textRaw": "[m] setIntervalExt",
+          "name": "[m]_setintervalext",
+          "methods": [
+            {
+              "textRaw": "setIntervalExt(listener, interval?, timeoutOrCondition?, callback?)",
+              "type": "method",
+              "name": "setIntervalExt",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**listener** { [Function](dataTypes#function) } - 每次间隔到期时执行的函数 ",
+                      "name": "**listener**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "每次间隔到期时执行的函数"
+                    },
+                    {
+                      "textRaw": "**[ interval = 200 ]** { [number](dataTypes#number) } - 间隔时间, 单位为毫秒 ",
+                      "name": "**[",
+                      "desc": "interval = 200 ]** { [number](dataTypes#number) } - 间隔时间, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "**[ timeoutOrCondition ]** { [number](dataTypes#number) | [Function](dataTypes#function) } - 总超时时间或结束条件 ",
+                      "name": "**[",
+                      "desc": "timeoutOrCondition ]** { [number](dataTypes#number) | [Function](dataTypes#function) } - 总超时时间或结束条件"
+                    },
+                    {
+                      "textRaw": "**[ callback ]** { [Function](dataTypes#function) } - 结束时执行的回调 ",
+                      "name": "**[",
+                      "desc": "callback ]** { [Function](dataTypes#function) } - 结束时执行的回调"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 首次调度的定时器 ID ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "首次调度的定时器 ID"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "listener"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "timeoutOrCondition?"
+                    },
+                    {
+                      "name": "callback?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>重复执行 <code>listener</code>. 第 3 个参数为正数时, 从调用开始经过指定毫秒数后结束; 为函数时, 每次执行 <code>listener</code> 后计算结束条件. 条件结果不是 <code>null</code>, <code>undefined</code> 或 <code>false</code> 时结束, 并将该结果传给 <code>callback</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setIntervalExt"
+        },
+        {
+          "textRaw": "[m] keepAlive",
+          "name": "[m]_keepalive",
+          "methods": [
+            {
+              "textRaw": "keepAlive(timeout?)",
+              "type": "method",
+              "name": "keepAlive",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>[ timeout = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 保持脚本存活的时间, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 定时器 ID</li>\n</ul>\n<p><code>timeout</code> 大于 <code>0</code> 时创建对应时长的空定时器. 省略或不大于 <code>0</code> 时创建每 <code>10000</code> 毫秒执行一次的空定时器, 使脚本持续运行.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] keepAlive"
+        },
+        {
+          "textRaw": "持久化任务兼容入口",
+          "name": "持久化任务兼容入口",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>以下方法委托给 <a href=\"workManager\">workManager</a>. 创建操作始终同步执行, 会忽略 <code>callback</code>, <code>condition</code>, <code>isAsync</code> 和 <code>async</code> 选项. 删除操作返回数据库布尔结果, 与 <a href=\"tasks#m-removetimedtask\">tasks.removeTimedTask</a> 和 <a href=\"tasks#m-removeintenttask\">tasks.removeIntentTask</a> 返回任务对象的语义不同.</p>\n",
+          "type": "module",
+          "displayName": "持久化任务兼容入口"
+        },
+        {
+          "textRaw": "[m] addDailyTask",
+          "name": "[m]_adddailytask",
+          "methods": [
+            {
+              "textRaw": "addDailyTask(options)",
+              "type": "method",
+              "name": "addDailyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"tasks#m-adddailytask\">每日任务选项</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#timedtask\">TimedTask</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDailyTask"
+        },
+        {
+          "textRaw": "[m] addWeeklyTask",
+          "name": "[m]_addweeklytask",
+          "methods": [
+            {
+              "textRaw": "addWeeklyTask(options)",
+              "type": "method",
+              "name": "addWeeklyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"tasks#m-addweeklytask\">每周任务选项</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#timedtask\">TimedTask</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addWeeklyTask"
+        },
+        {
+          "textRaw": "[m] addDisposableTask",
+          "name": "[m]_adddisposabletask",
+          "methods": [
+            {
+              "textRaw": "addDisposableTask(options)",
+              "type": "method",
+              "name": "addDisposableTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"tasks#m-adddisposabletask\">一次性任务选项</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#timedtask\">TimedTask</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDisposableTask"
+        },
+        {
+          "textRaw": "[m] addIntentTask",
+          "name": "[m]_addintenttask",
+          "methods": [
+            {
+              "textRaw": "addIntentTask(options)",
+              "type": "method",
+              "name": "addIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"tasks#m-addintenttask\">广播任务选项</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#intenttask\">IntentTask</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addIntentTask"
+        },
+        {
+          "textRaw": "[m] getTimedTask",
+          "name": "[m]_gettimedtask",
+          "methods": [
+            {
+              "textRaw": "getTimedTask(id)",
+              "type": "method",
+              "name": "getTimedTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#timedtask\">TimedTask</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getTimedTask"
+        },
+        {
+          "textRaw": "[m] getIntentTask",
+          "name": "[m]_getintenttask",
+          "methods": [
+            {
+              "textRaw": "getIntentTask(id)",
+              "type": "method",
+              "name": "getIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#intenttask\">IntentTask</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIntentTask"
+        },
+        {
+          "textRaw": "[m] removeTimedTask",
+          "name": "[m]_removetimedtask",
+          "methods": [
+            {
+              "textRaw": "removeTimedTask(id)",
+              "type": "method",
+              "name": "removeTimedTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 删除结果, 任务不存在时返回 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeTimedTask"
+        },
+        {
+          "textRaw": "[m] removeIntentTask",
+          "name": "[m]_removeintenttask",
+          "methods": [
+            {
+              "textRaw": "removeIntentTask(id)",
+              "type": "method",
+              "name": "removeIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 删除结果, 任务不存在时返回 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeIntentTask"
+        },
+        {
+          "textRaw": "[m] queryTimedTasks",
+          "name": "[m]_querytimedtasks",
+          "methods": [
+            {
+              "textRaw": "queryTimedTasks(options?)",
+              "type": "method",
+              "name": "queryTimedTasks",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{ path?: <a href=\"dataTypes#string\">string</a> }}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#timedtask\">TimedTask</a>[] }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryTimedTasks"
+        },
+        {
+          "textRaw": "[m] queryIntentTasks",
+          "name": "[m]_queryintenttasks",
+          "methods": [
+            {
+              "textRaw": "queryIntentTasks(options?)",
+              "type": "method",
+              "name": "queryIntentTasks",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>path?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>action?: <a href=\"dataTypes#string\">string</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"tasks#intenttask\">IntentTask</a>[] }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryIntentTasks"
+        }
+      ],
       "methods": [
         {
-          "textRaw": "setInterval(callback, delay\\[, ...args\\])",
+          "textRaw": "loop()",
           "type": "method",
-          "name": "setInterval",
+          "name": "loop",
+          "desc": "<p><strong><code>Global</code></strong> <strong><code>ABANDONED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>此兼容方法不再提供事件循环控制功能, 调用时仅输出废弃警告.</p>\n<hr>\n",
           "signatures": [
             {
-              "params": [
-                {
-                  "textRaw": "`callback` {Function} 当定时器到点时要调用的函数. ",
-                  "name": "callback",
-                  "type": "Function",
-                  "desc": "当定时器到点时要调用的函数."
-                },
-                {
-                  "textRaw": "`delay` {number} 调用 callback 之前要等待的毫秒数. ",
-                  "name": "delay",
-                  "type": "number",
-                  "desc": "调用 callback 之前要等待的毫秒数."
-                },
-                {
-                  "textRaw": "`...args` {any} 当调用 callback 时要传入的可选参数. ",
-                  "name": "...args",
-                  "type": "any",
-                  "desc": "当调用 callback 时要传入的可选参数.",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "callback"
-                },
-                {
-                  "name": "delay\\"
-                },
-                {
-                  "name": "...args\\",
-                  "optional": true
-                }
-              ]
+              "params": []
             }
-          ],
-          "desc": "<p>预定每隔 delay 毫秒重复执行的 callback.  返回一个用于 clearInterval() 的 id.</p>\n<p>当 delay 小于 0 时, delay 会被设为 0.</p>\n"
-        },
-        {
-          "textRaw": "setTimeout(callback, delay\\[, ...args\\])",
-          "type": "method",
-          "name": "setTimeout",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`callback` {Function} 当定时器到点时要调用的函数. ",
-                  "name": "callback",
-                  "type": "Function",
-                  "desc": "当定时器到点时要调用的函数."
-                },
-                {
-                  "textRaw": "`delay` {number} 调用 callback 之前要等待的毫秒数. ",
-                  "name": "delay",
-                  "type": "number",
-                  "desc": "调用 callback 之前要等待的毫秒数."
-                },
-                {
-                  "textRaw": "`...args` {any} 当调用 callback 时要传入的可选参数. ",
-                  "name": "...args",
-                  "type": "any",
-                  "desc": "当调用 callback 时要传入的可选参数.",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "callback"
-                },
-                {
-                  "name": "delay\\"
-                },
-                {
-                  "name": "...args\\",
-                  "optional": true
-                }
-              ]
-            }
-          ],
-          "desc": "<p>预定在 delay 毫秒之后执行的单次 callback.  返回一个用于 clearTimeout() 的 id.</p>\n<p>callback 可能不会精确地在 delay 毫秒被调用.  Auto.js 不能保证回调被触发的确切时间, 也不能保证它们的顺序.  回调会在尽可能接近所指定的时间上调用.</p>\n<p>当 delay 小于 0 时, delay 会被设为 0.</p>\n"
-        },
-        {
-          "textRaw": "setImmediate(callback[, ...args])",
-          "type": "method",
-          "name": "setImmediate",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`callback` {Function} 在Looper循环的当前回合结束时要调用的函数. ",
-                  "name": "callback",
-                  "type": "Function",
-                  "desc": "在Looper循环的当前回合结束时要调用的函数."
-                },
-                {
-                  "textRaw": "`...args` {any} 当调用 callback 时要传入的可选参数. ",
-                  "name": "...args",
-                  "type": "any",
-                  "desc": "当调用 callback 时要传入的可选参数.",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "callback"
-                },
-                {
-                  "name": "...args",
-                  "optional": true
-                }
-              ]
-            }
-          ],
-          "desc": "<p>预定立即执行的 callback, 它是在 I/O 事件的回调之后被触发.  返回一个用于 clearImmediate() 的 id.</p>\n<p>当多次调用 setImmediate() 时, callback 函数会按照它们被创建的顺序依次执行.  每次事件循环迭代都会处理整个回调队列.  如果一个立即定时器是被一个正在执行的回调排入队列的, 则该定时器直到下一次事件循环迭代才会被触发.</p>\n<p>setImmediate()、setInterval() 和 setTimeout() 方法每次都会返回表示预定的计时器的id.  它们可用于取消定时器并防止触发.</p>\n"
-        },
-        {
-          "textRaw": "clearInterval(id)",
-          "type": "method",
-          "name": "clearInterval",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`id` {number} 一个 setInterval() 返回的 id. ",
-                  "name": "id",
-                  "type": "number",
-                  "desc": "一个 setInterval() 返回的 id."
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>取消一个由 setInterval() 创建的循环定时任务.</p>\n<p>例如：</p>\n<pre><code>//每5秒就发出一次hello\nvar id = setInterval(function(){\n    toast(&quot;hello&quot;);\n}, 5000);\n//1分钟后取消循环\nsetTimeout(function(){\n    clearInterval(id);\n}, 60 * 1000);\n</code></pre>"
-        },
-        {
-          "textRaw": "clearTimeout(id)",
-          "type": "method",
-          "name": "clearTimeout",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`id` {number} 一个 setTimeout() 返回的 id. ",
-                  "name": "id",
-                  "type": "number",
-                  "desc": "一个 setTimeout() 返回的 id."
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>取消一个由 setTimeout() 创建的定时任务.</p>\n"
-        },
-        {
-          "textRaw": "clearImmediate(id)",
-          "type": "method",
-          "name": "clearImmediate",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`id` {number} 一个 setImmediate() 返回的 id. ",
-                  "name": "id",
-                  "type": "number",
-                  "desc": "一个 setImmediate() 返回的 id."
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>取消一个由 setImmediate() 创建的 Immediate 对象.</p>\n"
+          ]
         }
       ],
       "type": "module",

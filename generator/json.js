@@ -37,7 +37,7 @@ renderer.heading = function (text, level) {
 marked.setOptions({ renderer });
 
 function doJSON(input, filename, cb) {
-    const root = { source: filename };
+    const root = { source: filename.replace(/\//g, '\\') };
     const stack = [ root ];
     var depth = 0;
     var current = root;

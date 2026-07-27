@@ -4,7 +4,335 @@
     {
       "textRaw": "国际化 (Internationalization)",
       "name": "国际化_(internationalization)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n",
+      "desc": "<hr>\n<p><code>i18n</code> 是基于内置 <code>banana-i18n</code> 模块的本地化函数对象. 它从 JSON 文件或 JavaScript 对象加载不同区域设置的消息, 并按当前区域设置完成消息查找和参数替换.</p>\n<p>脚本运行时会自动执行 <code>i18n.loadAll()</code> 并将当前区域设置设为 <code>default</code>. 默认消息目录为 <code>i18n</code>; 如果该相对路径不是目录, <a href=\"#m-getpath\">i18n.getPath</a> 会尝试使用 <code>assets/i18n</code>.</p>\n<pre><code class=\"lang-text\">project/\n|-- main.js\n`-- i18n/\n    |-- default.json\n    `-- zh-CN.json\n</code></pre>\n<p><code>i18n/zh-CN.json</code>:</p>\n<pre><code class=\"lang-json\">{\n  &quot;welcome&quot;: &quot;你好, $1!&quot;\n}\n</code></pre>\n<p><code>main.js</code>:</p>\n<pre><code class=\"lang-js\">i18n.setLocale(&#39;zh-CN&#39;);\nconsole.log(i18n(&#39;welcome&#39;, &#39;AutoJs6&#39;)); // 你好, AutoJs6!\n</code></pre>\n<blockquote>\n<p><code>i18n</code> 的消息语法, 复数规则及回退规则由内置 <code>banana-i18n</code> 实现.</p>\n</blockquote>\n",
+      "modules": [
+        {
+          "textRaw": "[@] i18n",
+          "name": "[@]_i18n",
+          "methods": [
+            {
+              "textRaw": "i18n(key, ...parameters)",
+              "type": "method",
+              "name": "i18n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 消息键</li>\n<li><strong>...parameters</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 消息替换参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 本地化消息</li>\n</ul>\n<p>按当前区域设置查找并格式化消息. <code>i18n</code> 是可调用对象, 同时包含本章列出的属性和方法.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "...parameters"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] i18n"
+        },
+        {
+          "textRaw": "[p] banana",
+          "name": "[p]_banana",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - 内置 <code>banana-i18n</code> 实例</li>\n</ul>\n<p>返回底层本地化实例. 此属性可用于调用 <code>banana-i18n</code> 提供但本章未封装的能力.</p>\n",
+          "type": "module",
+          "displayName": "[p] banana"
+        },
+        {
+          "textRaw": "[m] setPath",
+          "name": "[m]_setpath",
+          "methods": [
+            {
+              "textRaw": "setPath(relativePath)",
+              "type": "method",
+              "name": "setPath",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**relativePath** { [string](dataTypes#string) } - 消息目录路径 ",
+                      "name": "**relativePath**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "消息目录路径"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "relativePath"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置 <a href=\"#m-load\">i18n.load</a> 和 <a href=\"#m-loadall\">i18n.loadAll</a> 使用的消息目录. 路径必须在调用时已经是目录, 否则抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setPath"
+        },
+        {
+          "textRaw": "[m] setLocale",
+          "name": "[m]_setlocale",
+          "methods": [
+            {
+              "textRaw": "setLocale(locale)",
+              "type": "method",
+              "name": "setLocale",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**locale** { [string](dataTypes#string) } - 区域设置标识 ",
+                      "name": "**locale**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "区域设置标识"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "locale"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置后续消息查找使用的区域设置.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setLocale"
+        },
+        {
+          "textRaw": "[m] getFallbackLocales",
+          "name": "[m]_getfallbacklocales",
+          "methods": [
+            {
+              "textRaw": "getFallbackLocales()",
+              "type": "method",
+              "name": "getFallbackLocales",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string)[] } - 回退区域设置列表 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string)[] ",
+                      "desc": "回退区域设置列表"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前区域设置对应的回退区域设置列表.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getFallbackLocales"
+        },
+        {
+          "textRaw": "[m] getParser",
+          "name": "[m]_getparser",
+          "methods": [
+            {
+              "textRaw": "getParser()",
+              "type": "method",
+              "name": "getParser",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Object](dataTypes#object) } - `banana-i18n` 消息解析器 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Object](dataTypes#object) ",
+                      "desc": "`banana-i18n` 消息解析器"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回底层消息解析器对象.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getParser"
+        },
+        {
+          "textRaw": "[m] getPath",
+          "name": "[m]_getpath",
+          "methods": [
+            {
+              "textRaw": "getPath()",
+              "type": "method",
+              "name": "getPath",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 消息目录路径 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "消息目录路径"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前消息目录. 当前配置不是目录时, 先尝试将其解析为 <code>assets</code> 下的相对路径; 回退路径存在时会同时更新当前配置.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getPath"
+        },
+        {
+          "textRaw": "[m] getLocale",
+          "name": "[m]_getlocale",
+          "methods": [
+            {
+              "textRaw": "getLocale()",
+              "type": "method",
+              "name": "getLocale",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 当前区域设置标识 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前区域设置标识"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前区域设置.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getLocale"
+        },
+        {
+          "textRaw": "[m] getFinalFallback",
+          "name": "[m]_getfinalfallback",
+          "methods": [
+            {
+              "textRaw": "getFinalFallback()",
+              "type": "method",
+              "name": "getFinalFallback",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 最终回退区域设置 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "最终回退区域设置"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回找不到消息时使用的最终回退区域设置. AutoJs6 创建此模块时将其设为 <code>default</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getFinalFallback"
+        },
+        {
+          "textRaw": "[m] load",
+          "name": "[m]_load",
+          "methods": [
+            {
+              "textRaw": "load(messageSource, locale)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>messageSource</strong> { <a href=\"dataTypes#object\">Object</a> } - 消息键值对象</li>\n<li><strong>locale</strong> { <a href=\"dataTypes#string\">string</a> } - 消息所属的区域设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>把消息对象加载到底层消息存储.</p>\n<pre><code class=\"lang-js\">i18n.load({\n    greeting: &#39;Hello, $1!&#39;,\n}, &#39;en&#39;);\ni18n.setLocale(&#39;en&#39;);\nconsole.log(i18n(&#39;greeting&#39;, &#39;AutoJs6&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "messageSource"
+                    },
+                    {
+                      "name": "locale"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "load(messageSource, locale?)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>messageSource</strong> { <a href=\"dataTypes#string\">string</a> } - 区域设置名称或 JSON 文件路径</li>\n<li><strong>[ locale ]</strong> { <a href=\"dataTypes#string\">string</a> } - 消息所属的区域设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>从 JSON 文件加载消息.</p>\n<ul>\n<li><strong>messageSource</strong> 不含系统路径分隔符时, 文件解析为 <code>&lt;消息目录&gt;/&lt;messageSource&gt;.json</code>.</li>\n<li><strong>messageSource</strong> 含系统路径分隔符时, 将其作为文件路径解析.</li>\n<li>省略 <strong>locale</strong> 时, 同时使用 <strong>messageSource</strong> 作为区域设置标识.</li>\n</ul>\n<p>文件不存在, 文件不是普通文件或 JSON 解析失败时抛出异常. JSON 解析失败时还会向控制台写入警告.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "messageSource"
+                    },
+                    {
+                      "name": "locale?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] load"
+        },
+        {
+          "textRaw": "[m] loadAll",
+          "name": "[m]_loadall",
+          "methods": [
+            {
+              "textRaw": "loadAll()",
+              "type": "method",
+              "name": "loadAll",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>加载消息目录第一层的全部 <code>.json</code> 文件. 每个文件的不含扩展名部分作为区域设置标识. 此方法不会递归扫描子目录.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] loadAll"
+        }
+      ],
       "type": "module",
       "displayName": "国际化 (Internationalization)"
     }

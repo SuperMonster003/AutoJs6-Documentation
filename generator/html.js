@@ -29,6 +29,7 @@ const preprocess = require('./preprocess.js');
 const typeParser = require('./type-parser.js');
 
 let options = {};
+let linkFilenameStack = [];
 
 // @Overwrite by SuperMonster003 on Jul 27, 2022.
 marked.Renderer.prototype.link = function (href, title, text) {
@@ -85,16 +86,31 @@ marked.Renderer.prototype.link = function (href, title, text) {
         // #m-select
         // #uiobjectactionstype_m_select
 
-        let fileName = options.filename.replace(/.+?(\w+)\.md$/, '$1');
-        href = '#' + fileName.toLowerCase() + '_' + href.replace(/^#|\.html$/g, '').replaceAll('-', '_');
-    } else if (href.includes('.html#')) {
+        const activeFilename = linkFilenameStack[0] || options.filename;
+        const fileName = path.basename(activeFilename, '.md');
+        href = '#' + resolveHeadingId(
+            fileName,
+            href.replace(/^#|\.html$/g, ''),
+            options.linkMaps,
+        );
+    } else if (
+        !/^[a-z][a-z0-9+.-]*:/i.test(href) &&
+        !href.startsWith('//') &&
+        href.includes('.html#')
+    ) {
 
         // uiObjectActionsType.html#m-select
         // uiObjectActionsType.html#uiobjectactionstype_m_select
 
-        let [ fileName, anchor ] = href.split('.html#');
-        href = fileName + '.html#' + fileName.toLowerCase() + '_' + anchor;
-        href = href.replace(/\.html$/, '').replaceAll('-', '_');
+        const separatorIndex = href.indexOf('.html#');
+        const fileName = href.slice(0, separatorIndex);
+        const anchor = href.slice(separatorIndex + '.html#'.length);
+        const targetName = path.basename(fileName);
+        href = fileName + '.html#' + resolveHeadingId(
+            targetName,
+            anchor,
+            options.linkMaps,
+        );
     }
     var out = '<a href="' + href + '"';
     if (title) {
@@ -104,7 +120,19 @@ marked.Renderer.prototype.link = function (href, title, text) {
     return out;
 };
 
+const originalHtmlRenderer = marked.Renderer.prototype.html;
+marked.Renderer.prototype.html = function (html) {
+    const startInclude = html.match(/^\s*<!-- \[start-include:(.+)\] -->\s*$/);
+    if (startInclude) {
+        linkFilenameStack.unshift(startInclude[1]);
+    } else if (/^\s*<!-- \[end-include:(.+)\] -->\s*$/.test(html)) {
+        linkFilenameStack.shift();
+    }
+    return originalHtmlRenderer.call(this, html);
+};
+
 module.exports = toHTML;
+module.exports.buildLinkMaps = buildLinkMaps;
 
 const STABILITY_TEXT_REG_EXP = /(.*:)\s*(\d)([\s\S]*)/;
 
@@ -202,6 +230,8 @@ function render(opts, cb) {
     const section = getSection(lexed);
 
     filename = path.basename(filename, '.md');
+    linkFilenameStack = [];
+    resetHeadingIds();
 
     parseText(lexed);
     lexed = parseLists(lexed);
@@ -233,7 +263,10 @@ function render(opts, cb) {
         // content has to be the last thing we do with
         // the lexed tokens, because it's destructive.
         const content = marked.parser(lexed);
-        template = template.replace(/__CONTENT__/g, content);
+        // A replacement function keeps `$&`, `$'`, and similar text in
+        // generated examples literal instead of interpreting it as a
+        // String.replace substitution token.
+        template = template.replace(/__CONTENT__/g, () => content);
 
         cb(null, template);
     });
@@ -533,18 +566,222 @@ function buildToc(lexed, filename, cb) {
 }
 
 const idCounters = {};
+const usedIds = new Set();
 
-function getId(text) {
+function resetHeadingIds() {
+    Object.keys(idCounters).forEach(function (key) {
+        delete idCounters[key];
+    });
+    usedIds.clear();
+}
+
+function normalizeGeneratedId(text) {
     text = text.toLowerCase();
     text = text.replace(/[^a-z0-9]+/g, '_');
     text = text.replace(/^_+|_+$/, '');
     text = text.replace(/^([^a-z])/, '_$1');
-    if (idCounters.hasOwnProperty(text)) {
-        text += '_' + (++idCounters[text]);
-    } else {
-        idCounters[text] = 0;
-    }
     return text;
+}
+
+function allocateHeadingId(text, counters, ids) {
+    const base = normalizeGeneratedId(text);
+    let counter = counters[base] || 0;
+    let candidate = counter ? base + '_' + counter : base;
+    while (ids.has(candidate)) {
+        counter += 1;
+        candidate = base + '_' + counter;
+    }
+    counters[base] = counter + 1;
+    ids.add(candidate);
+    return candidate;
+}
+
+function getId(text) {
+    return allocateHeadingId(text, idCounters, usedIds);
+}
+
+function decodeFragment(fragment) {
+    try {
+        return decodeURIComponent(fragment);
+    } catch (_) {
+        return fragment;
+    }
+}
+
+function cleanHeadingText(text) {
+    return String(text)
+        .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+        .replace(/`([^`]*)`/g, '$1')
+        .replace(/<[^>]*>/g, ' ')
+        .replace(/\\([\\`*{}\[\]()#+\-.!_>])/g, '$1')
+        .trim();
+}
+
+function anchorKey(value) {
+    return cleanHeadingText(decodeFragment(String(value)))
+        .normalize('NFKC')
+        .toLowerCase()
+        .replace(/[^\p{L}\p{N}]+/gu, '');
+}
+
+function stripMemberLabel(text) {
+    return text.replace(
+        /^\s*\[(?:@|[A-Za-z]+[+!#=]?)\]\s*/,
+        '',
+    );
+}
+
+function withoutCallSignature(text) {
+    return text.replace(/\s*\([\s\S]*$/, '').trim();
+}
+
+function stripScopePrefix(text, filename) {
+    const escapedFilename = filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replace(
+        new RegExp('^' + escapedFilename + '[.#\\s]+', 'i'),
+        '',
+    );
+}
+
+function stripLastQualifier(text) {
+    const signatureIndex = text.indexOf('(');
+    const memberPart = signatureIndex < 0
+        ? text
+        : text.slice(0, signatureIndex);
+    const qualifierIndex = Math.max(
+        memberPart.lastIndexOf('.'),
+        memberPart.lastIndexOf('#'),
+    );
+    return qualifierIndex < 0
+        ? text
+        : text.slice(qualifierIndex + 1);
+}
+
+function ensureLinkMap(linkMaps, filename) {
+    const key = path.basename(filename, '.md').toLowerCase();
+    if (!linkMaps[key]) {
+        linkMaps[key] = {
+            exact: Object.create(null),
+            aliases: Object.create(null),
+        };
+    }
+    return linkMaps[key];
+}
+
+function addHeadingAliases(linkMap, filename, headingText, id) {
+    linkMap.exact[id.toLowerCase()] = id;
+
+    const cleanText = cleanHeadingText(headingText);
+    const labelMatch = cleanText.match(
+        /^\s*\[(@|[A-Za-z]+[+!#=]?)\]\s*/,
+    );
+    const label = labelMatch ? labelMatch[1] : '';
+    const withoutLabel = stripMemberLabel(cleanText);
+    const variants = new Set([
+        cleanText,
+        withoutLabel,
+        stripScopePrefix(withoutLabel, filename),
+        stripLastQualifier(withoutLabel),
+        id,
+        id.replace(
+            new RegExp(
+                '^' + filename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '_',
+                'i',
+            ),
+            '',
+        ),
+    ]);
+
+    Array.from(variants).forEach(function (variant) {
+        variants.add(withoutCallSignature(variant));
+        if (label) {
+            variants.add(label + ' ' + variant);
+            variants.add(label + ' ' + withoutCallSignature(variant));
+        }
+    });
+
+    variants.forEach(function (variant) {
+        const key = anchorKey(variant);
+        if (key && !Object.prototype.hasOwnProperty.call(linkMap.aliases, key)) {
+            linkMap.aliases[key] = id;
+        }
+    });
+}
+
+function buildLinkMaps(entries) {
+    const linkMaps = Object.create(null);
+    const startIncludeRefRE =
+        /^\s*<!-- \[start-include:(.+)\] -->\s*$/;
+    const endIncludeRefRE =
+        /^\s*<!-- \[end-include:(.+)\] -->\s*$/;
+
+    entries.forEach(function (entry) {
+        const documentFilename = path.basename(entry.filename, '.md');
+        const realFilenames = [ documentFilename ];
+        const counters = Object.create(null);
+        const ids = new Set();
+        const lexed = marked.lexer(entry.input);
+        parseText(lexed);
+
+        lexed.forEach(function (tok) {
+            if (tok.type === 'html') {
+                const startMatch = tok.text.match(startIncludeRefRE);
+                if (startMatch) {
+                    realFilenames.unshift(startMatch[1]);
+                } else if (tok.text.match(endIncludeRefRE)) {
+                    realFilenames.shift();
+                }
+            }
+            if (tok.type !== 'heading') return;
+
+            const realFilename = path.basename(realFilenames[0], '.md');
+            const id = allocateHeadingId(
+                realFilename + '_' + tok.text.trim(),
+                counters,
+                ids,
+            );
+            addHeadingAliases(
+                ensureLinkMap(linkMaps, realFilename),
+                realFilename,
+                tok.text,
+                id,
+            );
+        });
+    });
+
+    return linkMaps;
+}
+
+function resolveHeadingId(filename, fragment, linkMaps) {
+    const targetFilename = path.basename(filename, '.md');
+    const decodedFragment = decodeFragment(fragment).replace(/^#/, '');
+    const linkMap = linkMaps && linkMaps[targetFilename.toLowerCase()];
+
+    if (linkMap) {
+        const exact = linkMap.exact[decodedFragment.toLowerCase()];
+        if (exact) return exact;
+
+        const candidates = [ decodedFragment ];
+        const escapedFilename =
+            targetFilename.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const withoutFilename = decodedFragment.replace(
+            new RegExp('^' + escapedFilename + '[_-]+', 'i'),
+            '',
+        );
+        if (withoutFilename !== decodedFragment) {
+            candidates.push(withoutFilename);
+        }
+
+        for (const candidate of candidates) {
+            const resolved = linkMap.aliases[anchorKey(candidate)];
+            if (resolved) return resolved;
+        }
+    }
+
+    return normalizeGeneratedId(
+        targetFilename + '_' + decodedFragment,
+    );
 }
 
 const numberRe = /^(\d*)/;

@@ -28,16 +28,77 @@
             <h1>AutoJs6 文档 - __VERSION__</h1>
             <div id="gtoc">
                 <p class="index">
-                    <a href="index.html" name="toc">索引</a> |
-                    <a href="all.html">查看全部</a>
+                    <a href="index.html" name="toc">索引</a>
+                    <span class="offline-search-entry"> |
+                        <button type="button"
+                                class="offline-search-toggle"
+                                aria-controls="offline-search-panel"
+                                aria-expanded="false"
+                                data-offline-search-toggle>搜索文档</button>
+                    </span>
                 </p>
             </div>
             <hr>
         </header>
 
+        <section id="offline-search-panel"
+                 class="offline-search"
+                 aria-labelledby="offline-search-title"
+                 data-offline-search
+                 data-index-src="assets/offline-search-index.js"
+                 data-state="idle"
+                 hidden>
+            <div class="offline-search-heading">
+                <h2 id="offline-search-title">搜索文档</h2>
+                <button type="button"
+                        class="offline-search-icon-button offline-search-close"
+                        aria-label="关闭搜索文档"
+                        data-offline-search-close>
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false">
+                        <path d="M6 6L18 18M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="offline-search-control">
+                <input id="offline-search-input"
+                       type="search"
+                       role="combobox"
+                       inputmode="search"
+                       autocomplete="off"
+                       spellcheck="false"
+                       placeholder="搜索文档内容"
+                       aria-labelledby="offline-search-title"
+                       aria-controls="offline-search-results"
+                       aria-autocomplete="list"
+                       aria-expanded="false"
+                       data-offline-search-input>
+                <button type="button"
+                        class="offline-search-icon-button offline-search-clear"
+                        aria-label="清除搜索内容"
+                        data-offline-search-clear
+                        hidden>
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false">
+                        <path d="M6 6L18 18M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+            <p class="offline-search-status"
+               aria-live="polite"
+               data-offline-search-status>输入关键词搜索全部离线文档</p>
+            <div id="offline-search-results"
+                 class="offline-search-results"
+                 role="listbox"
+                 hidden
+                 data-offline-search-results></div>
+        </section>
+
         <div id="toc">
             <h2>目录</h2>
-            __TOC__
+__TOC__
         </div>
 
         <div id="apicontent">
@@ -49,6 +110,7 @@
 <script src="assets/sh_javascript.js"></script>
 <script src="assets/sh_java.js"></script>
 <script src="assets/sh_main.js"></script>
+<script src="assets/offline-search.js"></script>
 
 <script src="plugins/docsify-copy-code@2.js"></script>
 <script src="plugins/zoom-image.js"></script>

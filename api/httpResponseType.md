@@ -1,25 +1,18 @@
 # HttpResponse
 
----
-
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Mar 21, 2023.</p>
-
----
-
-HTTP 请求回应类 HttpResponse 是一个虚拟类, 实例通常由 [http](http) 全局模块产生:
+HttpResponse 是 `http` 模块返回的 HTTP 响应对象. 它是文档类型, 不是可直接构造的全局类.
 
 ```js
-/* HttpResponse 为虚拟类, 并非真实存在. */
-typeof global.HttpResponse; // "undefined"
+let response = http.get("https://example.com");
+console.log(response.statusCode);
 ```
 
-常见相关方法或属性:
+常见相关方法:
 
+- [http.request](http#m-request)
 - [http.get](http#m-get)
 - [http.post](http#m-post)
-- [http.postMultipart](http#m-postmultipart)
-- [http.request](http#m-request)
+- [http.requestAsync](http#m-requestasync)
 
 ---
 
@@ -31,109 +24,55 @@ typeof global.HttpResponse; // "undefined"
 
 - { [number](dataTypes#number) }
 
-...
+HTTP 状态码, 如 `200` 或 `404`.
+
+HTTP 非成功状态仍会生成 HttpResponse. 它本身不会使回调进入错误分支或使异步方法返回的 Promise 拒绝.
 
 ## [p#] statusMessage
 
 - { [string](dataTypes#string) }
 
-...
+HTTP 状态消息, 如 `"OK"` 或 `"Not Found"`.
 
 ## [p#] body
 
 - { [HttpResponseBody](httpResponseBodyType) }
 
-...
-
-## [p#] method
-
-- { [string](dataTypes#string) }
-
-...
-
-## [p#] url
-
-- { [Okhttp3HttpUrl](okhttp3HttpUrlType) }
-
-...
-
-## [p#] request
-
-- { [Okhttp3Request](okhttp3RequestType) }
-
-当前响应对应的请求, 是一个 [Okhttp3Request](okhttp3RequestType) 实例.
-
-```js
-http.get('https://www.msn.com').request.method(); // GET
-```
+响应体. 完整读取, 流式读取和资源关闭规则参见 [HttpResponseBody](httpResponseBodyType).
 
 ## [p#] headers
 
 - { [HttpResponseHeaders](httpResponseHeadersType) }
 
-当前响应的 [响应标头](httpHeaderGlossary#响应标头) 信息, 是一个 JavaScript 对象.
-
-该对象的 `键 (Key)` 是响应头名称, `值 (Value)` 是对应的响应头数据.
-
-所有响应头名称均为小写形式.
+响应头 JavaScript 对象. 属性名统一转换为小写. 同名响应头只有一个值时, 属性值为字符串; 有多个值时, 属性值为字符串数组.
 
 ```js
-Object.entries(http.get('https://www.msn.com').headers).forEach((entry) => {
-    let [ key, value ] = entry;
-    console.log(`${key}: ${value}`);
+let response = http.get("https://example.com");
+Object.entries(response.headers).forEach((entry) => {
+    let [ name, value ] = entry;
+    console.log(name + ": " + value);
 });
 ```
 
-# ResponseLegacy
+## [p#] request
 
-HTTP请求的响应.
+- { [Okhttp3Request](okhttp3RequestType) }
 
-## Response.statusCode
+产生当前响应的 OkHttp 请求对象.
 
-* {number}
-
-当前响应的HTTP状态码. 例如200(OK), 404(Not Found)等.
-
-有关HTTP状态码的信息, 参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html).
-
-## Response.statusMessage
-
-* {string}
-
-当前响应的HTTP状态信息. 例如"OK", "Bad Request", "Forbidden".
-
-有关HTTP状态码的信息, 参见[菜鸟教程：HTTP状态码](http://www.runoob.com/http/http-status-codes.html).
-
-例子：
-
-```
-var res = http.get("www.baidu.com");
-if(res.statusCode >= 200 && res.statusCode < 300){
-	toast("页面获取成功!");
-}else if(res.statusCode == 404){
-	toast("页面没找到哦...");
-}else{
-	toast("错误: " + res.statusCode + " " + res.statusMessage);
-}
+```js
+let response = http.get("https://example.com");
+console.log(response.request.method()); // GET
 ```
 
-## Response.body
+## [p#] url
 
-* {Object}
+- { [Okhttp3HttpUrl](okhttp3HttpUrlType) }
 
-当前响应的内容. 他有以下属性和函数：
+产生当前响应的请求 URL.
 
-* bytes() {Array} 以字节数组形式返回响应内容
-* string() {string} 以字符串形式返回响应内容
-* json() {Object} 把响应内容作为JSON格式的数据并调用JSON.parse, 返回解析后的对象
-* contentType {string} 当前响应的内容类型
+## [p#] method
 
-## Response.url
+- { [string](dataTypes#string) }
 
-* {number}
-  当前响应所对应的请求URL.
-
-## Response.method
-
-* {string}
-  当前响应所对应的HTTP请求的方法. 例如"GET", "POST", "PUT"等.
+产生当前响应的 HTTP 请求方法, 如 `"GET"`, `"POST"` 或 `"DELETE"`.

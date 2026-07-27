@@ -4,140 +4,276 @@
     {
       "textRaw": "线程 (Threads)",
       "name": "线程_(threads)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>threads模块提供了多线程支持, 可以启动新线程来运行脚本.</p>\n<p>脚本主线程会等待所有子线程执行完成后才停止执行, 因此如果子线程中有死循环, 请在必要的时候调用<code>exit()</code>来直接停止脚本或<code>threads.shutDownAll()</code>来停止所有子线程.</p>\n<p>通过<code>threads.start()</code>启动的所有线程会在脚本被强制停止时自动停止.</p>\n<p>由于JavaScript自身没有多线程的支持, 因此您可能会遇到意料之外的问题.</p>\n",
-      "methods": [
+      "desc": "<p><code>threads</code> 模块在同一个 Rhino 脚本运行环境中创建和管理 Java 线程.\n由不同线程执行的函数共享脚本作用域和 Java 对象, 但普通读写, 复合运算以及\nJavaScript 容器并不会因此自动成为线程安全操作.</p>\n<p>脚本主线程会等待仍在运行的子线程, 线程池任务和定时器. 脚本退出时, AutoJs6\n会中断由当前运行环境创建的子线程, 并立即关闭其管理的线程池.</p>\n<blockquote>\n<p>注: 本页描述 Rhino 脚本中的 <code>threads</code> API. <code>&quot;nodejs&quot;</code> 模式不提供此模块.</p>\n</blockquote>\n<blockquote>\n<p>注: <code>join()</code>, <code>blockedGet()</code> 以及锁等待都会阻塞调用线程. 不应在 Android\nUI 线程中等待依赖 UI 线程完成的任务, 否则可能造成界面冻结或死锁.</p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">threads</p>\n\n<hr>\n",
+      "modules": [
         {
-          "textRaw": "threads.start(action)",
-          "type": "method",
-          "name": "start",
-          "signatures": [
+          "textRaw": "[m] start",
+          "name": "[m]_start",
+          "methods": [
             {
-              "params": [
+              "textRaw": "threads.start(action)",
+              "type": "method",
+              "name": "start",
+              "signatures": [
                 {
-                  "textRaw": "`action` {Function} 要在新线程执行的函数 ",
-                  "name": "action",
-                  "type": "Function",
-                  "desc": "要在新线程执行的函数"
+                  "params": [
+                    {
+                      "textRaw": "**action** { [Function](dataTypes#function) | [java.lang.Runnable](https://developer.android.com/reference/java/lang/Runnable) } - 在线程中执行的任务 ",
+                      "name": "**action**",
+                      "type": " [Function](dataTypes#function) | [java.lang.Runnable](https://developer.android.com/reference/java/lang/Runnable) ",
+                      "desc": "在线程中执行的任务"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Thread](#thread) | [undefined](dataTypes#undefined) } - 已经启动的 TimerThread, 或未能启动时的 `undefined` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Thread](#thread) | [undefined](dataTypes#undefined) ",
+                      "desc": "已经启动的 TimerThread, 或未能启动时的 `undefined`"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "返回 [Thread](#threads_thread) ",
-                  "name": "返回",
-                  "desc": "[Thread](#threads_thread)"
+                  "params": [
+                    {
+                      "name": "action"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "action"
-                }
-              ]
+              ],
+              "desc": "<p>创建一个 TimerThread, 将其加入当前脚本运行环境的子线程集合, 然后立即启动.\n线程名称采用当前脚本主线程名称加 <code>(Spawn-N)</code> 后缀, 其中 <code>N</code> 从 <code>0</code> 递增.</p>\n<p>JavaScript 函数会在新线程的 Rhino 上下文中执行, 且不接收参数. 函数抛出的\n未捕获异常会写入控制台并结束该线程. 脚本正在退出或启动过程因中断而终止时,\n此方法返回 <code>undefined</code>; 其他启动异常会继续抛出.</p>\n<pre><code class=\"lang-js\">let worker = threads.start(() =&gt; {\n    log(&quot;worker: &quot; + threads.currentThread());\n});\n\nif (worker !== undefined) {\n    worker.join();\n}\n</code></pre>\n"
             }
           ],
-          "desc": "<p>启动一个新线程并执行action.</p>\n<p>例如:</p>\n<pre><code>threads.start(function(){\n    //在新线程执行的代码\n    while(true){\n        log(&quot;子线程&quot;);\n    }\n});\nwhile(true){\n    log(&quot;脚本主线程&quot;);\n}\n</code></pre><p>通过该函数返回的<a href=\"#threads_thread\">Thread</a>对象可以获取该线程的状态, 控制该线程的运行中. 例如:</p>\n<pre><code>var thread = threads.start(function(){\n    while(true){\n        log(&quot;子线程&quot;);\n    }\n});\n//停止线程执行\nthread.interrupt();\n</code></pre><p>更多信息参见<a href=\"#threads_thread\">Thread</a>.</p>\n"
+          "type": "module",
+          "displayName": "[m] start"
         },
         {
-          "textRaw": "threads.shutDownAll()",
-          "type": "method",
-          "name": "shutDownAll",
-          "desc": "<p>停止所有通过<code>threads.start()</code>启动的子线程.</p>\n",
-          "signatures": [
+          "textRaw": "[m] interrupt",
+          "name": "[m]_interrupt",
+          "methods": [
             {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "threads.currentThread()",
-          "type": "method",
-          "name": "currentThread",
-          "signatures": [
-            {
-              "params": [
+              "textRaw": "threads.interrupt(thread)",
+              "type": "method",
+              "name": "interrupt",
+              "signatures": [
                 {
-                  "textRaw": "返回 [Thread](#threads_thread) ",
-                  "name": "返回",
-                  "desc": "[Thread](#threads_thread)"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回当前线程.</p>\n"
-        },
-        {
-          "textRaw": "threads.disposable()",
-          "type": "method",
-          "name": "disposable",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 [Disposable](#threads_disposable) ",
-                  "name": "返回",
-                  "desc": "[Disposable](#threads_disposable)"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>新建一个Disposable对象, 用于等待另一个线程的某个一次性结果. 更多信息参见<a href=\"#threads_线程通信\">线程通信</a>以及<a href=\"#threads_disposable\">Disposable</a>.</p>\n"
-        },
-        {
-          "textRaw": "threads.atomic([initialValue])",
-          "type": "method",
-          "name": "atomic",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`initialValue` {number} 初始整数值, 默认为0 ",
-                  "name": "initialValue",
-                  "type": "number",
-                  "desc": "初始整数值, 默认为0",
-                  "optional": true
+                  "params": [
+                    {
+                      "textRaw": "**thread** { [any](dataTypes#any) } - 待中断的对象 ",
+                      "name": "**thread**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "待中断的对象"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "返回[AtomicLong](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html) ",
-                  "name": "返回[AtomicLong](https",
-                  "desc": "//docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html)"
+                  "params": [
+                    {
+                      "name": "thread"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "initialValue",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>当 <code>thread</code> 是仍存活的 AutoJs6 TimerThread 时调用其\n<a href=\"#threadinterrupt\"><code>interrupt()</code></a>. 其他对象, 已结束的线程以及主线程代理均被忽略.</p>\n<p>此方法也可中断由 <a href=\"#m-pool\"><code>threads.pool()</code></a> 创建的 TimerThread, 但调用方需要\n先在线程池任务内部取得相应线程句柄.</p>\n"
             }
           ],
-          "desc": "<p>新建一个整数原子变量. 更多信息参见<a href=\"#threads_线程安全\">线程安全</a>以及<a href=\"https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/atomic/AtomicLong.html\">AtomicLong</a>.</p>\n"
+          "type": "module",
+          "displayName": "[m] interrupt"
         },
         {
-          "textRaw": "threads.lock()",
-          "type": "method",
-          "name": "lock",
-          "signatures": [
+          "textRaw": "[m] pool",
+          "name": "[m]_pool",
+          "methods": [
             {
-              "params": [
+              "textRaw": "threads.pool(options?)",
+              "type": "method",
+              "name": "pool",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>corePoolSize?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxPoolSize?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>keepAliveTime?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/java/util/concurrent/ThreadPoolExecutor\">java.util.concurrent.ThreadPoolExecutor</a> } - 由当前脚本运行环境管理的线程池</li>\n</ul>\n<p>创建使用 AutoJs6 TimerThread 作为工作线程的 <code>ThreadPoolExecutor</code>. 线程池任务\n与创建它的脚本共享 Rhino 运行环境. 脚本退出时, 运行环境会对仍登记的线程池调用\n<code>shutdownNow()</code>.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th style=\"text-align:right\">默认值</th>\n<th>约束与含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>corePoolSize</code></td>\n<td style=\"text-align:right\"><code>0</code></td>\n<td>核心线程数, 转换为 Java <code>int</code>, 且不得小于 <code>0</code></td>\n</tr>\n<tr>\n<td><code>maxPoolSize</code></td>\n<td style=\"text-align:right\"><code>0</code></td>\n<td>最大线程数, 转换为 Java <code>int</code>, <code>0</code> 会传给执行器作为 <code>2147483647</code></td>\n</tr>\n<tr>\n<td><code>keepAliveTime</code></td>\n<td style=\"text-align:right\"><code>60000</code></td>\n<td>非核心线程空闲存活时间, 单位为毫秒, 且不得小于 <code>0</code></td>\n</tr>\n</tbody>\n</table>\n<p>当前实现使用无界 <code>LinkedBlockingQueue</code>. 因此核心线程忙碌后, 新任务通常进入队列,\n而不会为了接近 <code>maxPoolSize</code> 而继续创建工作线程. 默认配置会按需创建一个工作线程\n并顺序消费队列.</p>\n<p>当前参数校验要求 <code>corePoolSize &lt;= maxPoolSize</code> 时仍使用选项中的原始\n<code>maxPoolSize</code>. 因此显式或默认使用 <code>maxPoolSize: 0</code> 时,\n<code>corePoolSize</code> 也必须为 <code>0</code>. 若需要多个核心工作线程, 应同时指定不小于它的正数\n<code>maxPoolSize</code>.</p>\n<pre><code class=\"lang-js\">let pool = threads.pool({\n    corePoolSize: 2,\n    maxPoolSize: 2,\n    keepAliveTime: 60000,\n});\n\npool.execute(() =&gt; log(&quot;pool-1: &quot; + threads.currentThread()));\npool.execute(() =&gt; log(&quot;pool-2: &quot; + threads.currentThread()));\npool.shutdown();\npool.awaitTermination(5, TimeUnit.SECONDS);\n</code></pre>\n<p>调用者仍可使用返回对象的 <code>execute()</code>, <code>submit()</code>, <code>shutdown()</code> 和\n<code>shutdownNow()</code> 等 Java API. 主动关闭线程池后, 该线程池会从当前脚本运行环境的\n线程池集合中移除. 如果脚本主线程还需要等待已经提交的任务, 应像示例一样显式调用\n<code>awaitTermination()</code>, 或等待各任务返回的 Future.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回[ReentrantLock](https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html) ",
-                  "name": "返回[ReentrantLock](https",
-                  "desc": "//docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html)"
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
                 }
               ]
-            },
-            {
-              "params": []
             }
           ],
-          "desc": "<p>新建一个可重入锁. 更多信息参见<a href=\"#threads_线程安全\">线程安全</a>以及<a href=\"https://docs.oracle.com/javase/7/docs/api/java/util/concurrent/locks/ReentrantLock.html\">ReentrantLock</a>.</p>\n"
+          "type": "module",
+          "displayName": "[m] pool"
+        },
+        {
+          "textRaw": "[m] shutDownAll",
+          "name": "[m]_shutdownall",
+          "methods": [
+            {
+              "textRaw": "threads.shutDownAll()",
+              "type": "method",
+              "name": "shutDownAll",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>中断所有仍登记在当前脚本运行环境中, 且由 <a href=\"#m-start\"><code>threads.start()</code></a> 创建的\n子线程, 随后清空子线程集合.</p>\n<p>此方法不关闭由 <a href=\"#m-pool\"><code>threads.pool()</code></a> 创建的线程池. 如需关闭线程池, 应对\n返回的 <code>ThreadPoolExecutor</code> 调用 <code>shutdown()</code> 或 <code>shutdownNow()</code>. 脚本整体退出时,\n运行环境会自动对仍登记的线程池调用 <code>shutdownNow()</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] shutDownAll"
+        },
+        {
+          "textRaw": "[m] currentThread",
+          "name": "[m]_currentthread",
+          "methods": [
+            {
+              "textRaw": "threads.currentThread()",
+              "type": "method",
+              "name": "currentThread",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Thread](#thread) } - 当前调用线程的句柄 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Thread](#thread) ",
+                      "desc": "当前调用线程的句柄"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前执行此调用的线程. 具体对象取决于调用位置:</p>\n<table>\n<thead>\n<tr>\n<th>调用位置</th>\n<th>返回对象</th>\n<th>AutoJs6 扩展能力</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>脚本主线程</td>\n<td>MainThreadProxy</td>\n<td>标准 Thread 兼容方法和主线程定时器委托</td>\n</tr>\n<tr>\n<td><code>threads.start()</code> 任务</td>\n<td>TimerThread</td>\n<td>标准 Thread 方法, <code>safeJoin()</code>, <code>waitFor()</code> 和线程定时器委托</td>\n</tr>\n<tr>\n<td><code>threads.pool()</code> 任务</td>\n<td>TimerThread</td>\n<td>与 <code>threads.start()</code> 线程相同</td>\n</tr>\n<tr>\n<td>Android UI 线程或其他 Java 线程</td>\n<td>实际的 <code>java.lang.Thread</code></td>\n<td>仅该 Java 线程本身提供的方法</td>\n</tr>\n</tbody>\n</table>\n<p>主线程返回代理对象, 是为了让 <code>setTimeout()</code>, <code>setInterval()</code> 和\n<code>setImmediate()</code> 委托到当前脚本的主定时器. 如需把当前线程交给\n<a href=\"events\"><code>events.emitter()</code></a>, 应直接使用此方法的返回值.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentThread"
+        },
+        {
+          "textRaw": "[m] disposable",
+          "name": "[m]_disposable",
+          "methods": [
+            {
+              "textRaw": "threads.disposable()",
+              "type": "method",
+              "name": "disposable",
+              "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#disposable\">Disposable</a> } - 可阻塞等待通知的值容器</li>\n</ul>\n<p>创建一个初始值为 <code>null</code> 的 Disposable. 它提供\n<a href=\"#m-blockedget\"><code>blockedGet()</code></a>, <a href=\"#m-blockedgetorthrow\"><code>blockedGetOrThrow()</code></a>\n和 <a href=\"#m-setandnotify\"><code>setAndNotify()</code></a>, 适合在线程间传递一个结果或通知.</p>\n<p>Disposable 的等待是阻塞式的, 不是 Promise. 当前实现也不限制\n<code>setAndNotify()</code> 的调用次数.</p>\n<p>从 AutoJs6 6.7.0 起, 返回值改为原生 JavaScript 对象, 避免 Rhino 在存取值时\n对结果进行意外的 Java 装箱. 方法名称保持不变, 但等待细节以本页\n<a href=\"#disposable\"><code>Disposable</code></a> 章节为准.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] disposable"
+        },
+        {
+          "textRaw": "[m] atomic",
+          "name": "[m]_atomic",
+          "methods": [
+            {
+              "textRaw": "threads.atomic(initialValue?)",
+              "type": "method",
+              "name": "atomic",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ initialValue = 0 ]** { [number](dataTypes#number) } - 初始值, 按 Java `long` 转换 ",
+                      "name": "**[",
+                      "desc": "initialValue = 0 ]** { [number](dataTypes#number) } - 初始值, 按 Java `long` 转换"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [java.util.concurrent.atomic.AtomicLong](https://developer.android.com/reference/java/util/concurrent/atomic/AtomicLong) } - 64 位原子整数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [java.util.concurrent.atomic.AtomicLong](https://developer.android.com/reference/java/util/concurrent/atomic/AtomicLong) ",
+                      "desc": "64 位原子整数"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "initialValue?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>创建 <code>AtomicLong</code>. 使用其 <code>get()</code>, <code>set()</code>, <code>incrementAndGet()</code>,\n<code>getAndIncrement()</code>, <code>compareAndSet()</code> 等 Java 方法执行原子整数操作.</p>\n<pre><code class=\"lang-js\">let counter = threads.atomic();\nlet worker = threads.start(() =&gt; {\n    for (let i = 0; i &lt; 1000; i += 1) {\n        counter.incrementAndGet();\n    }\n});\n\nfor (let i = 0; i &lt; 1000; i += 1) {\n    counter.incrementAndGet();\n}\n\nworker.join();\nlog(counter.get()); // 2000\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] atomic"
+        },
+        {
+          "textRaw": "[m] lock",
+          "name": "[m]_lock",
+          "methods": [
+            {
+              "textRaw": "threads.lock()",
+              "type": "method",
+              "name": "lock",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [java.util.concurrent.locks.ReentrantLock](https://developer.android.com/reference/java/util/concurrent/locks/ReentrantLock) } - 新的非公平可重入锁 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [java.util.concurrent.locks.ReentrantLock](https://developer.android.com/reference/java/util/concurrent/locks/ReentrantLock) ",
+                      "desc": "新的非公平可重入锁"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>创建使用默认构造参数的 <code>ReentrantLock</code>. 默认锁不是公平锁. 需要在 <code>finally</code>\n中释放已经取得的锁, 避免异常路径永久占用锁.</p>\n<pre><code class=\"lang-js\">let lock = threads.lock();\nlet values = [];\n\nfunction append(value) {\n    lock.lock();\n    try {\n        values.push(value);\n    } finally {\n        lock.unlock();\n    }\n}\n\nlet worker = threads.start(() =&gt; append(&quot;worker&quot;));\nappend(&quot;main&quot;);\nworker.join();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">globalThis</p>\n\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] lock"
+        },
+        {
+          "textRaw": "[m] sync",
+          "name": "[m]_sync",
+          "methods": [
+            {
+              "textRaw": "globalThis.sync(func, lock?)",
+              "type": "method",
+              "name": "sync",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"dataTypes#function\">Function</a> } - 待同步的函数</li>\n<li><strong>[ lock ]</strong> { <a href=\"dataTypes#any\">any</a> } - 作为 Java 监视器的共享锁对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#function\">Function</a> } - Rhino <code>Synchronizer</code> 包装函数</li>\n</ul>\n<p>返回对 <code>func</code> 的同步包装. 每次调用包装函数时, Rhino 会先进入指定对象的 Java\n监视器, 再调用原函数, 最后退出监视器. 多个包装函数传入同一个 <code>lock</code> 时会互斥.</p>\n<p>省略 <code>lock</code> 时, 监视器取决于每次调用包装函数时的 <code>this</code> 值. 如果需要稳定地在\n多个调用点之间互斥, 应显式传入同一个 Java 或 JavaScript 对象.</p>\n<pre><code class=\"lang-js\">let monitor = {};\nlet count = 0;\nlet increment = sync(() =&gt; {\n    count += 1;\n    return count;\n}, monitor);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "func"
+                    },
+                    {
+                      "name": "lock?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sync"
         }
       ],
       "type": "module",
@@ -146,234 +282,680 @@
     {
       "textRaw": "Thread",
       "name": "thread",
-      "desc": "<p>线程对象, <code>threads.start()</code>返回的对象, 用于获取和控制线程的状态, 与其他线程交互等.</p>\n<p>Thread对象提供了和timers模块一样的API, 例如<code>setTimeout()</code>, <code>setInterval()</code>等, 用于在该线程执行相应的定时回调, 从而使线程之间可以直接交互. 例如：</p>\n<pre><code>var thread = threads.start(function(){\n    //在子线程执行的定时器\n    setInterval(function(){\n        log(&quot;子线程:&quot; + threads.currentThread());\n    }, 1000);\n});\n\nlog(&quot;当前线程为主线程:&quot; + threads.currentThread());\n\n//等待子线程启动\nthread.waitFor();\n//在子线程执行的定时器\nthread.setTimeout(function(){\n    //这段代码会在子线程执行\n    log(&quot;当前线程为子线程:&quot; + threads.currentThread());\n}, 2000);\n\nsleep(30 * 1000);\nthread.interrupt();\n</code></pre>",
-      "methods": [
+      "desc": "<p>本页的 Thread 表示 <code>threads.start()</code> 返回的 TimerThread,\n<code>threads.currentThread()</code> 返回的 MainThreadProxy, 或其他实际\n<code>java.lang.Thread</code> 对象. 三者并不具有完全相同的方法:</p>\n<ul>\n<li>标准线程状态与元数据方法由 TimerThread 和 MainThreadProxy 共同提供.</li>\n<li><code>safeJoin()</code>, <code>waitFor()</code> 和 <code>getLooper()</code> 仅由 AutoJs6 TimerThread 提供.</li>\n<li>定时器委托由 TimerThread 和 MainThreadProxy 提供, 普通 Java Thread 不提供.</li>\n<li><code>threads.start()</code> 返回线程前已经调用了 Java <code>start()</code>. 不应再次调用句柄的\n<code>start()</code> 或直接调用 <code>run()</code>.</li>\n</ul>\n",
+      "modules": [
         {
-          "textRaw": "Thread.interrupt()",
-          "type": "method",
-          "name": "interrupt",
-          "desc": "<p>中断线程运行.</p>\n",
-          "signatures": [
+          "textRaw": "[m#] interrupt",
+          "name": "[m#]_interrupt",
+          "methods": [
             {
-              "params": []
+              "textRaw": "Thread#interrupt()",
+              "type": "method",
+              "name": "Thread#interrupt",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>请求中断线程. 对 TimerThread 调用时, AutoJs6 还会退出该线程的 Android Looper,\n使其不再执行后续定时器回调.</p>\n<p>中断不是任意代码的强制终止机制. 正在执行的 JavaScript 代码仍需到达可响应中断\n的位置. <code>sleep()</code>, <code>join()</code>, <code>waitFor()</code> 和其他可中断等待可能抛出\n<code>InterruptedException</code>, 并由 AutoJs6 转换为脚本中断流程.</p>\n"
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] interrupt"
         },
         {
-          "textRaw": "Thread.join([timeout])",
-          "type": "method",
-          "name": "join",
-          "signatures": [
+          "textRaw": "[m#] isInterrupted",
+          "name": "[m#]_isinterrupted",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#isInterrupted()",
+              "type": "method",
+              "name": "Thread#isInterrupted",
+              "signatures": [
                 {
-                  "textRaw": "`timeout` {number} 等待时间, 单位毫秒 ",
-                  "name": "timeout",
-                  "type": "number",
-                  "desc": "等待时间, 单位毫秒",
-                  "optional": true
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 线程是否已被中断 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "线程是否已被中断"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
+              ],
+              "desc": "<p>读取目标线程的中断状态, 但不清除该状态. TimerThread 还会检查 AutoJs6\n<code>ThreadCompat</code> 记录的兼容中断状态.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isInterrupted"
+        },
+        {
+          "textRaw": "[m#] isAlive",
+          "name": "[m#]_isalive",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#isAlive()",
+              "type": "method",
+              "name": "Thread#isAlive",
+              "signatures": [
                 {
-                  "name": "timeout",
-                  "optional": true
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 线程是否已经启动且尚未结束 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "线程是否已经启动且尚未结束"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>等待线程执行完成. 如果timeout为0, 则会一直等待直至该线程执行完成；否则最多等待timeout毫秒的时间.</p>\n<p>例如:</p>\n<pre><code>var sum = 0;\n//启动子线程计算1加到10000\nvar thread = threads.start(function(){\n    for(var i = 0; i &lt; 10000; i++){\n        sum += i;\n    }\n});\n//等待该线程完成\nthread.join();\ntoast(&quot;sum = &quot; + sum);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m#] isAlive"
         },
         {
-          "textRaw": "isAlive()",
-          "type": "method",
-          "name": "isAlive",
-          "signatures": [
+          "textRaw": "[m#] join",
+          "name": "[m#]_join",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#join()",
+              "type": "method",
+              "name": "Thread#join",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>阻塞当前调用线程, 直到目标线程结束.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": []
                 }
               ]
             },
             {
-              "params": []
+              "textRaw": "Thread#join(millis)",
+              "type": "method",
+              "name": "Thread#join",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 最长等待时间, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p><code>millis</code> 为 <code>0</code> 时无限等待, 大于 <code>0</code> 时最多等待指定时间.\n对 TimerThread 传入负数时, Java <code>Thread.join()</code> 会抛出\n<code>IllegalArgumentException</code>. MainThreadProxy 会先把负数调整为 <code>0</code>, 因而会无限等待.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Thread#join(millis, nanos)",
+              "type": "method",
+              "name": "Thread#join",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 毫秒部分</li>\n<li><strong>nanos</strong> { <a href=\"dataTypes#number\">number</a> } - 附加纳秒部分, Java Thread 要求位于 <code>0</code> 到 <code>999999</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>阻塞至线程结束或指定时间到期. MainThreadProxy 会先把两个负参数分别调整为 <code>0</code>;\nTimerThread 使用 Java Thread 的原始参数校验.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    },
+                    {
+                      "name": "nanos"
+                    }
+                  ]
+                }
+              ]
             }
           ],
-          "desc": "<p>返回线程是否存活. 如果线程仍未开始或已经结束, 返回<code>false</code>; 如果线程已经开始或者正在运行中, 返回<code>true</code>.</p>\n"
+          "type": "module",
+          "displayName": "[m#] join"
         },
         {
-          "textRaw": "waitFor()",
-          "type": "method",
-          "name": "waitFor",
-          "desc": "<p>等待线程开始执行. 调用<code>threads.start()</code>以后线程仍然需要一定时间才能开始执行, 因此调用此函数会等待线程开始执行；如果线程已经处于执行状态则立即返回.</p>\n<pre><code>var thread = threads.start(function(){\n    //do something\n});\nthread.waitFor();\nthread.setTimeout(function(){\n    //do something\n}, 1000);\n</code></pre>",
-          "signatures": [
+          "textRaw": "[m#] safeJoin",
+          "name": "[m#]_safejoin",
+          "methods": [
             {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "Thread.setTimeout(callback, delay\\[, ...args\\])",
-          "type": "method",
-          "name": "setTimeout",
-          "desc": "<p>参见<a href=\"timers.html#timers_settimeout_callback_delay_args\">timers.setTimeout()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n<pre><code>log(&quot;当前线程(主线程):&quot; + threads.currentThread());\n\nvar thread = threads.start(function(){\n    //设置一个空的定时来保持线程的运行状态\n    setInterval(function(){}, 1000);\n});\n\nsleep(1000);\nthread.setTimeout(function(){\n    log(&quot;当前线程(子线程):&quot; + threads.currentThread());\n    exit();\n}, 1000);\n</code></pre>",
-          "signatures": [
-            {
-              "params": [
+              "textRaw": "Thread#safeJoin()",
+              "type": "method",
+              "name": "Thread#safeJoin",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅 TimerThread 提供. 与无参数 <a href=\"#m-join\"><code>join()</code></a> 相同, 等待线程结束.</p>\n",
+              "signatures": [
                 {
-                  "name": "callback"
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "Thread#safeJoin(millis)",
+              "type": "method",
+              "name": "Thread#safeJoin",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 最长等待时间, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅当 <code>millis &gt; 0</code> 时调用 Java <code>join(millis)</code>. <code>millis &lt;= 0</code> 时立即返回,\n不会无限等待, 也不会因负数抛出参数异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Thread#safeJoin(millis, nanos)",
+              "type": "method",
+              "name": "Thread#safeJoin",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 毫秒部分</li>\n<li><strong>nanos</strong> { <a href=\"dataTypes#number\">number</a> } - 附加纳秒部分</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅当 <code>millis &gt; 0</code> 时调用 Java <code>join(millis, nanos)</code>. <code>millis &lt;= 0</code> 时忽略\n<code>nanos</code> 并立即返回.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    },
+                    {
+                      "name": "nanos"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] safeJoin"
+        },
+        {
+          "textRaw": "[m#] waitFor",
+          "name": "[m#]_waitfor",
+          "methods": [
+            {
+              "textRaw": "Thread#waitFor()",
+              "type": "method",
+              "name": "Thread#waitFor",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "name": "delay\\"
+                  "params": []
+                }
+              ],
+              "desc": "<p>仅 TimerThread 提供. 阻塞调用线程, 直到目标线程已经准备 Rhino 上下文和线程定时器.\n此时任务函数不一定已经开始执行. 等待过程被中断时会抛出\n<code>InterruptedException</code>.</p>\n<p>在调用 TimerThread 的定时器委托前, 可先调用此方法避免\n<code>Thread is not alive</code> 异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] waitFor"
+        },
+        {
+          "textRaw": "Thread 定时器委托",
+          "name": "thread_定时器委托",
+          "desc": "<p>TimerThread 把定时器操作委托给该线程自己的 Timer. MainThreadProxy 把相同操作\n委托给脚本主 Timer. 定时器回调会在对应线程的 Looper 上执行.</p>\n<p>普通 <code>java.lang.Thread</code> 不具有这些方法. TimerThread 尚未完成启动或已经退出时,\n访问其 Timer 会抛出 <code>IllegalStateException</code>.</p>\n<p>取消方法接收的 ID 应由同一个 Thread Timer 创建. TimerThread 收到其他 Timer\n编码的 ID 时会抛出 <code>IllegalArgumentException</code>.</p>\n",
+          "type": "module",
+          "displayName": "Thread 定时器委托"
+        },
+        {
+          "textRaw": "[m#] setTimeout",
+          "name": "[m#]_settimeout",
+          "methods": [
+            {
+              "textRaw": "Thread#setTimeout(callback)",
+              "type": "method",
+              "name": "Thread#setTimeout",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 到期时执行的函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 线程 Timer 的定时器 ID</li>\n</ul>\n<p>仅 TimerThread 提供此单参数重载, 延迟默认为 <code>1</code> 毫秒.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Thread#setTimeout(callback, delay, ...args)",
+              "type": "method",
+              "name": "Thread#setTimeout",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 到期时执行的函数</li>\n<li><strong>delay</strong> { <a href=\"dataTypes#number\">number</a> } - 延迟时间, 单位为毫秒</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 传给回调的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 线程 Timer 的定时器 ID</li>\n</ul>\n<p>创建一次性定时器. TimerThread 和 MainThreadProxy 均提供此重载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "delay"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setTimeout"
+        },
+        {
+          "textRaw": "[m#] clearTimeout",
+          "name": "[m#]_cleartimeout",
+          "methods": [
+            {
+              "textRaw": "Thread#clearTimeout(id)",
+              "type": "method",
+              "name": "Thread#clearTimeout",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 同一 Thread Timer 创建的定时器 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "同一 Thread Timer 创建的定时器 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的回调 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否取消了匹配的回调"
+                    }
+                  ]
                 },
                 {
-                  "name": "...args\\",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] clearTimeout"
         },
         {
-          "textRaw": "Thread.setInterval(callback, delay\\[, ...args\\])",
-          "type": "method",
-          "name": "setInterval",
-          "desc": "<p>参见<a href=\"timers.html#timers_setinterval_callback_delay_args\">timers.setInterval()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n",
-          "signatures": [
+          "textRaw": "[m#] setInterval",
+          "name": "[m#]_setinterval",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#setInterval(callback)",
+              "type": "method",
+              "name": "Thread#setInterval",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 每次到期时执行的函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 线程 Timer 的定时器 ID</li>\n</ul>\n<p>仅 TimerThread 提供此单参数重载, 间隔默认为 <code>1</code> 毫秒.</p>\n",
+              "signatures": [
                 {
-                  "name": "callback"
+                  "params": [
+                    {
+                      "name": "callback"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Thread#setInterval(callback, interval, ...args)",
+              "type": "method",
+              "name": "Thread#setInterval",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>callback</strong> { <a href=\"dataTypes#function\">Function</a> } - 每次到期时执行的函数</li>\n<li><strong>interval</strong> { <a href=\"dataTypes#number\">number</a> } - 间隔时间, 单位为毫秒</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - 传给回调的参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 线程 Timer 的定时器 ID</li>\n</ul>\n<p>创建重复定时器. TimerThread 和 MainThreadProxy 均提供此重载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "interval"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setInterval"
+        },
+        {
+          "textRaw": "[m#] clearInterval",
+          "name": "[m#]_clearinterval",
+          "methods": [
+            {
+              "textRaw": "Thread#clearInterval(id)",
+              "type": "method",
+              "name": "Thread#clearInterval",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 同一 Thread Timer 创建的定时器 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "同一 Thread Timer 创建的定时器 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的回调 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否取消了匹配的回调"
+                    }
+                  ]
                 },
                 {
-                  "name": "delay\\"
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearInterval"
+        },
+        {
+          "textRaw": "[m#] setImmediate",
+          "name": "[m#]_setimmediate",
+          "methods": [
+            {
+              "textRaw": "Thread#setImmediate(callback, ...args)",
+              "type": "method",
+              "name": "Thread#setImmediate",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**callback** { [Function](dataTypes#function) } - 当前事件循环结束后执行的函数 ",
+                      "name": "**callback**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "当前事件循环结束后执行的函数"
+                    },
+                    {
+                      "textRaw": "**...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 传给回调的参数 ",
+                      "name": "**...args**",
+                      "type": " [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) ",
+                      "desc": "传给回调的参数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 线程 Timer 的定时器 ID ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "线程 Timer 的定时器 ID"
+                    }
+                  ]
                 },
                 {
-                  "name": "...args\\",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "callback"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
                 }
-              ]
+              ],
+              "desc": "<p>TimerThread 和 MainThreadProxy 均提供此方法.</p>\n"
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] setImmediate"
         },
         {
-          "textRaw": "Thread.setImmediate(callback[, ...args])",
-          "type": "method",
-          "name": "setImmediate",
-          "desc": "<p>参见<a href=\"timers.html#timers_setimmediate_callback_delay_args\">timers.setImmediate()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n",
-          "signatures": [
+          "textRaw": "[m#] clearImmediate",
+          "name": "[m#]_clearimmediate",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#clearImmediate(id)",
+              "type": "method",
+              "name": "Thread#clearImmediate",
+              "signatures": [
                 {
-                  "name": "callback"
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 同一 Thread Timer 创建的定时器 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "同一 Thread Timer 创建的定时器 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的回调 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否取消了匹配的回调"
+                    }
+                  ]
                 },
                 {
-                  "name": "...args",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] clearImmediate"
         },
         {
-          "textRaw": "Thread.clearInterval(id)",
-          "type": "method",
-          "name": "clearInterval",
-          "desc": "<p>参见<a href=\"timers.html#timers_clearinterval_id\">timers.clearInterval()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n",
-          "signatures": [
+          "textRaw": "[m#] getLooper",
+          "name": "[m#]_getlooper",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Thread#getLooper()",
+              "type": "method",
+              "name": "Thread#getLooper",
+              "signatures": [
                 {
-                  "name": "id"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.os.Looper](https://developer.android.com/reference/android/os/Looper) | [null](dataTypes#null) } - TimerThread 的 Looper ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.os.Looper](https://developer.android.com/reference/android/os/Looper) | [null](dataTypes#null) ",
+                      "desc": "TimerThread 的 Looper"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
+              ],
+              "desc": "<p>仅 TimerThread 提供. 在线程完成 Looper 准备前可能返回 <code>null</code>. 此对象属于底层\nAndroid 线程基础设施, 普通脚本通常不需要直接操作.</p>\n"
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] getLooper"
         },
         {
-          "textRaw": "Thread.clearTimeout(id)",
-          "type": "method",
-          "name": "clearTimeout",
-          "desc": "<p>参见<a href=\"timers.html#timers_cleartimeout_id\">timers.clearTimeout()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ]
+          "textRaw": "Java Thread 兼容实例成员",
+          "name": "java_thread_兼容实例成员",
+          "desc": "<p>TimerThread 继承 <code>java.lang.Thread</code>, MainThreadProxy 则逐项委托到脚本主线程.\n下列方法可用于读取或配置线程. 对 <code>threads.start()</code> 返回的句柄而言, 线程已经启动,\n因此再次启动或修改只能在启动前设置的属性会失败.</p>\n<table>\n<thead>\n<tr>\n<th>签名</th>\n<th>返回值</th>\n<th>行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>Thread#getId()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回 Java 线程 ID</td>\n</tr>\n<tr>\n<td><code>Thread#getName()</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>返回线程名称</td>\n</tr>\n<tr>\n<td><code>Thread#setName(name)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置线程名称</td>\n</tr>\n<tr>\n<td><code>Thread#getPriority()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>返回 Java 线程优先级</td>\n</tr>\n<tr>\n<td><code>Thread#setPriority(priority)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置线程优先级</td>\n</tr>\n<tr>\n<td><code>Thread#getState()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/Thread.State\">java.lang.Thread.State</a></td>\n<td>返回 Java 线程状态</td>\n</tr>\n<tr>\n<td><code>Thread#getThreadGroup()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/ThreadGroup\">java.lang.ThreadGroup</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>返回线程组</td>\n</tr>\n<tr>\n<td><code>Thread#getStackTrace()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/StackTraceElement\">java.lang.StackTraceElement</a>[]</td>\n<td>返回线程当前栈快照</td>\n</tr>\n<tr>\n<td><code>Thread#isDaemon()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>返回是否为守护线程</td>\n</tr>\n<tr>\n<td><code>Thread#setDaemon(on)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置守护状态, 已启动线程会抛出 <code>IllegalThreadStateException</code></td>\n</tr>\n<tr>\n<td><code>Thread#getContextClassLoader()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/ClassLoader\">java.lang.ClassLoader</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>返回上下文类加载器</td>\n</tr>\n<tr>\n<td><code>Thread#setContextClassLoader(loader)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置上下文类加载器</td>\n</tr>\n<tr>\n<td><code>Thread#getUncaughtExceptionHandler()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/Thread.UncaughtExceptionHandler\">java.lang.Thread.UncaughtExceptionHandler</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>返回未捕获异常处理器</td>\n</tr>\n<tr>\n<td><code>Thread#setUncaughtExceptionHandler(handler)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置未捕获异常处理器</td>\n</tr>\n<tr>\n<td><code>Thread#toString()</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>返回线程描述</td>\n</tr>\n<tr>\n<td><code>Thread#checkAccess()</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td><strong><code>DEPRECATED</code></strong>, 执行 Java 线程访问检查</td>\n</tr>\n</tbody>\n</table>\n<p>以下 Java 兼容成员同样可见, 但不应用于 <code>threads.start()</code> 或\n<code>threads.currentThread()</code> 返回的已运行句柄:</p>\n<table>\n<thead>\n<tr>\n<th>签名</th>\n<th>状态与说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>Thread#start()</code></td>\n<td>已运行句柄再次调用会抛出 <code>IllegalThreadStateException</code></td>\n</tr>\n<tr>\n<td><code>Thread#run()</code></td>\n<td>在调用者线程同步执行底层 <code>run()</code>, 不会创建新线程</td>\n</tr>\n<tr>\n<td><code>Thread#stop()</code></td>\n<td><strong><code>DEPRECATED</code></strong>, Java 强制停止线程, 不安全且不应使用</td>\n</tr>\n</tbody>\n</table>\n<p>TimerThread 还会从 Android 的 <code>java.lang.Thread</code> 继承以下已弃用成员.\nMainThreadProxy 刻意不委托这些成员:</p>\n<table>\n<thead>\n<tr>\n<th>签名</th>\n<th>状态与说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>Thread#stop(throwable)</code></td>\n<td><strong><code>DEPRECATED</code></strong>, Android 实现不支持并抛出 <code>UnsupportedOperationException</code></td>\n</tr>\n<tr>\n<td><code>Thread#destroy()</code></td>\n<td><strong><code>DEPRECATED</code></strong>, Android 实现不支持并抛出 <code>UnsupportedOperationException</code></td>\n</tr>\n<tr>\n<td><code>Thread#suspend()</code></td>\n<td><strong><code>DEPRECATED</code></strong>, Android 实现不支持并抛出 <code>UnsupportedOperationException</code></td>\n</tr>\n<tr>\n<td><code>Thread#resume()</code></td>\n<td><strong><code>DEPRECATED</code></strong>, Android 实现不支持并抛出 <code>UnsupportedOperationException</code></td>\n</tr>\n<tr>\n<td><code>Thread#countStackFrames()</code></td>\n<td><strong><code>DEPRECATED</code></strong>, 已弃用的栈帧计数入口</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "Java Thread 兼容实例成员"
         },
         {
-          "textRaw": "Thread.clearImmediate(id)",
-          "type": "method",
-          "name": "clearImmediate",
-          "desc": "<p>参见<a href=\"timers.html#timers_clearimmediate_id\">timers.clearImmediate()</a>.</p>\n<p>区别在于, 该定时器会在该线程执行. 如果当前线程仍未开始执行或已经执行结束, 则抛出<code>IllegalStateException</code>.</p>\n",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ]
+          "textRaw": "Java Thread 静态兼容成员",
+          "name": "java_thread_静态兼容成员",
+          "desc": "<p>Rhino 的 Java 成员解析允许通过线程对象访问该类型的静态方法. 为避免把静态行为误解\n为针对接收对象, 普通代码通常应通过全局 Java 类 <code>Thread</code> 调用这些方法.\n其中 TimerThread 或 MainThreadProxy 句柄上的 <code>interrupted()</code> 会使用 AutoJs6\n<code>ThreadCompat</code> 实现, 同时清除其兼容中断记录; 全局 Java 类的同名方法只处理标准\nJava 中断标志.</p>\n<table>\n<thead>\n<tr>\n<th>签名</th>\n<th>返回值</th>\n<th>行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>Thread.currentThread()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/Thread\">java.lang.Thread</a></td>\n<td>返回原始当前 Java 线程, 不创建 MainThreadProxy</td>\n</tr>\n<tr>\n<td><code>Thread.interrupted()</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>读取并清除当前调用线程的中断状态</td>\n</tr>\n<tr>\n<td><code>Thread.sleep(millis)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>使当前调用线程休眠</td>\n</tr>\n<tr>\n<td><code>Thread.sleep(millis, nanos)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>使当前调用线程按毫秒和纳秒休眠</td>\n</tr>\n<tr>\n<td><code>Thread.yield()</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>向调度器提示当前线程可让出执行机会</td>\n</tr>\n<tr>\n<td><code>Thread.activeCount()</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>估算当前线程组及子组中的活动线程数</td>\n</tr>\n<tr>\n<td><code>Thread.enumerate(array)</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>把活动线程复制到 Java Thread 数组</td>\n</tr>\n<tr>\n<td><code>Thread.dumpStack()</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>把当前线程栈输出到标准错误流</td>\n</tr>\n<tr>\n<td><code>Thread.holdsLock(object)</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>当前线程是否持有对象监视器</td>\n</tr>\n<tr>\n<td><code>Thread.getAllStackTraces()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/util/Map\">java.util.Map</a></td>\n<td>返回所有活动线程的栈快照</td>\n</tr>\n<tr>\n<td><code>Thread.getDefaultUncaughtExceptionHandler()</code></td>\n<td><a href=\"https://developer.android.com/reference/java/lang/Thread.UncaughtExceptionHandler\">java.lang.Thread.UncaughtExceptionHandler</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>返回默认未捕获异常处理器</td>\n</tr>\n<tr>\n<td><code>Thread.setDefaultUncaughtExceptionHandler(handler)</code></td>\n<td><a href=\"dataTypes#void\">void</a></td>\n<td>设置默认未捕获异常处理器</td>\n</tr>\n</tbody>\n</table>\n<p>全局 Java 类 <code>Thread</code> 还提供常量 <code>MIN_PRIORITY</code>, <code>NORM_PRIORITY</code> 和\n<code>MAX_PRIORITY</code>. TimerThread 可通过 Java 静态成员回退解析这些常量,\n但 MainThreadProxy 不提供相应字段.</p>\n",
+          "type": "module",
+          "displayName": "Java Thread 静态兼容成员"
         }
       ],
       "type": "module",
       "displayName": "Thread"
     },
     {
-      "textRaw": "线程安全",
-      "name": "线程安全",
-      "desc": "<p>线程安全问题是一个相对专业的编程问题, 本章节只提供给有需要的用户.</p>\n<p>引用维基百科的解释：</p>\n<blockquote>\n<p>线程安全是编程中的术语, 指某个函数、函数库在多线程环境中被调用时, 能够正确地处理多个线程之间的共享变量, 使程序功能正确完成.</p>\n</blockquote>\n<p>在Auto.js中, 线程间变量在符合JavaScript变量作用域规则的前提下是共享的, 例如全局变量在所有线程都能访问, 并且保证他们在所有线程的可见性. 但是, 不保证任何操作的原子性. 例如经典的自增&quot;i++&quot;将不是原子性操作.</p>\n<p>Rhino和Auto.js提供了一些简单的设施来解决简单的线程安全问题, 如锁<code>threads.lock()</code>, 函数同步锁<code>sync()</code>, 整数原子变量<code>threads.atomic()</code>等.</p>\n<p>例如, 对于多线程共享下的整数的自增操作(自增操作会导致问题, 是因为自增操作实际上为<code>i = i + 1</code>, 也就是先读取i的值, 把他加1, 再赋值给i, 如果两个线程同时进行自增操作, 可能出现i的值只增加了1的情况), 应该使用<code>threads.atomic()</code>函数来新建一个整数原子变量, 或者使用锁<code>threads.lock()</code>来保证操作的原子性, 或者用<code>sync()</code>来增加同步锁.</p>\n<p>线程不安全的代码如下：</p>\n<pre><code>var i = 0;\nthreads.start(function(){\n    while(true){\n        log(i++);\n    }\n});\nwhile(true){\n    log(i++);\n}\n</code></pre><p>此段代码运行后打开日志, 可以看到日志中有重复的值出现.</p>\n<p>使用<code>threads.atomic()</code>的线程安全的代码如下:</p>\n<pre><code>//atomic返回的对象保证了自增的原子性\nvar i = threads.atomic();\nthreads.start(function(){\n    while(true){\n        log(i.getAndIncrement());\n    }\n});\nwhile(true){\n    log(i.getAndIncrement());\n}\n</code></pre><p>或者:</p>\n<pre><code>//锁保证了操作的原子性\nvar lock = threads.lock();\nvar i = 0;\nthreads.start(function(){\n    while(true){\n        lock.lock();\n        log(i++);\n        lock.unlock();\n    }\n});\nwhile(true){\n    lock.lock();\n    log(i++);\n    lock.unlock();\n}\n</code></pre><p>或者:</p>\n<pre><code>//sync函数会把里面的函数加上同步锁, 使得在同一时刻最多只能有一个线程执行这个函数\nvar i = 0;\nvar getAndIncrement = sync(function(){\n    return i++;\n});\nthreads.start(function(){\n    while(true){\n        log(getAndIncrement());\n    }\n});\nwhile(true){\n    log(getAndIncrement());\n}\n</code></pre><p>另外, 数组Array不是线程安全的, 如果有这种复杂的需求, 请用Android和Java相关API来实现. 例如<code>CopyOnWriteList</code>, <code>Vector</code>等都是代替数组的线程安全的类, 用于不同的场景. 例如:</p>\n<pre><code>var nums = new java.util.Vector();\nnums.add(123);\nnums.add(456);\ntoast(&quot;长度为&quot; + nums.size());\ntoast(&quot;第一个元素为&quot; + nums.get(0));\n</code></pre><p>但很明显的是, 这些类不像数组那样简便易用, 也不能使用诸如<code>slice()</code>之类的方便的函数. 在未来可能会加入线程安全的数组来解决这个问题. 当然您也可以为每个数组的操作加锁来解决线程安全问题：</p>\n<pre><code>var nums = [];\nvar numsLock = threads.lock();\nthreads.start(function(){\n    //向数组添加元素123\n    numsLock.lock();\n    nums.push(123);\n    log(&quot;线程: %s, 数组: %s&quot;, threads.currentThread(), nums);\n    numsLock.unlock();\n});\n\nthreads.start(function(){\n    //向数组添加元素456\n    numsLock.lock();\n    nums.push(456);\n    log(&quot;线程: %s, 数组: %s&quot;, threads.currentThread(), nums);\n    numsLock.unlock();\n});\n\n//删除数组最后一个元素\nnumsLock.lock();\nnums.pop();\nlog(&quot;线程: %s, 数组: %s&quot;, threads.currentThread(), nums);\nnumsLock.unlock();\n</code></pre>",
-      "methods": [
+      "textRaw": "Disposable",
+      "name": "disposable",
+      "desc": "<p>Disposable 是 <code>threads.disposable()</code> 创建的原生 JavaScript 对象. 它内部使用\n<code>ReentrantLock</code>, <code>Condition</code> 和一个 <code>volatile</code> 值. 初始值为 <code>null</code>.</p>\n<p>当前实现的等待语义需要特别留意:</p>\n<ul>\n<li>每次 <code>blockedGet()</code> 或 <code>blockedGetOrThrow()</code> 都会先进入等待, 不会因容器中已经有\n非 <code>null</code> 值而立即返回.</li>\n<li><code>timeout &lt;= 0</code> 时等待下一次 <code>setAndNotify()</code> 信号.</li>\n<li><code>timeout &gt; 0</code> 时会持续等待到完整超时时长, 即使期间收到信号, 然后返回最后保存的值.</li>\n<li>在等待开始前发出的信号不会被保存为待处理通知. 无超时等待可能因此永久阻塞.</li>\n</ul>\n",
+      "modules": [
         {
-          "textRaw": "sync(func)",
-          "type": "method",
-          "name": "sync",
-          "signatures": [
+          "textRaw": "[m#] blockedGet",
+          "name": "[m#]_blockedget",
+          "methods": [
             {
-              "params": [
+              "textRaw": "Disposable#blockedGet(timeout?)",
+              "type": "method",
+              "name": "Disposable#blockedGet",
+              "signatures": [
                 {
-                  "textRaw": "`func` {Function} 函数 ",
-                  "name": "func",
-                  "type": "Function",
-                  "desc": "函数"
+                  "params": [
+                    {
+                      "textRaw": "**[ timeout = 0 ]** { [number](dataTypes#number) } - 等待时间, 单位为毫秒 ",
+                      "name": "**[",
+                      "desc": "timeout = 0 ]** { [number](dataTypes#number) } - 等待时间, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 等待结束时保存的值, 初始或显式空值为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "等待结束时保存的值, 初始或显式空值为 `null`"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "返回 {Function} ",
-                  "name": "返回",
-                  "type": "Function"
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "func"
-                }
-              ]
+              ],
+              "desc": "<p><code>timeout &lt;= 0</code> 时等待一次条件通知. <code>timeout &gt; 0</code> 时等待完整指定时长.\n等待线程被中断时, 此方法抛出一个以 <code>InterruptedException</code> 为原因的\n<code>RuntimeException</code>.</p>\n"
             }
           ],
-          "desc": "<p>给函数func加上同步锁并作为一个新函数返回.</p>\n<pre><code>var i = 0;\nfunction add(x){\n    i += x;\n}\n\nvar syncAdd = sync(add);\nsyncAdd(10);\ntoast(i);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m#] blockedGet"
+        },
+        {
+          "textRaw": "[m#] blockedGetOrThrow",
+          "name": "[m#]_blockedgetorthrow",
+          "methods": [
+            {
+              "textRaw": "Disposable#blockedGetOrThrow(exception, timeout?, defaultValue?)",
+              "type": "method",
+              "name": "Disposable#blockedGetOrThrow",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**exception** { [java.lang.Class](https://developer.android.com/reference/java/lang/Class) } - `RuntimeException` 子类的 Java Class, 且应具有可访问的无参数构造方法 ",
+                      "name": "**exception**",
+                      "type": " [java.lang.Class](https://developer.android.com/reference/java/lang/Class) ",
+                      "desc": "`RuntimeException` 子类的 Java Class, 且应具有可访问的无参数构造方法"
+                    },
+                    {
+                      "textRaw": "**[ timeout = 0 ]** { [number](dataTypes#number) } - 等待时间, 单位为毫秒 ",
+                      "name": "**[",
+                      "desc": "timeout = 0 ]** { [number](dataTypes#number) } - 等待时间, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "**[ defaultValue = null ]** { [T](dataTypes#generic) } - 等待结束后保存值为 `null` 时返回的值 ",
+                      "name": "**[",
+                      "desc": "defaultValue = null ]** { [T](dataTypes#generic) } - 等待结束后保存值为 `null` 时返回的值"
+                    },
+                    {
+                      "textRaw": "<ins>**template**</ins> { [T](dataTypes#generic) } ",
+                      "name": "<ins>**template**</ins>",
+                      "type": " [T](dataTypes#generic) "
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) | [T](dataTypes#generic) } - 保存的非空值, 或 `defaultValue` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) | [T](dataTypes#generic) ",
+                      "desc": "保存的非空值, 或 `defaultValue`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "exception"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "defaultValue?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>等待语义与 <a href=\"#m-blockedget\"><code>blockedGet()</code></a> 相同. 区别在于等待线程被中断时,\n此方法创建并抛出 <code>exception</code> 指定的异常. 实例化失败时抛出包装反射异常的\n<code>RuntimeException</code>.</p>\n<p>当前实现只在调用时检查 <strong>exception</strong> 是否为 Java <code>Class</code>, 不会预先检查它是否继承\n<code>RuntimeException</code> 或是否存在可访问的无参数构造方法. 不符合要求的类可能在等待开始时\n被接受, 直到线程中断并尝试实例化时才抛出包装异常.</p>\n<p>超时本身不会抛出 <code>exception</code>. 等待结束后值仍为 <code>null</code> 时返回\n<code>defaultValue</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] blockedGetOrThrow"
+        },
+        {
+          "textRaw": "[m#] setAndNotify",
+          "name": "[m#]_setandnotify",
+          "methods": [
+            {
+              "textRaw": "Disposable#setAndNotify(value)",
+              "type": "method",
+              "name": "Disposable#setAndNotify",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**value** { [any](dataTypes#any) } - 要保存的值 ",
+                      "name": "**value**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "要保存的值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在内部锁保护下替换当前值, 然后对当前所有等待者调用条件变量的 <code>signalAll()</code>.\n允许保存 <code>null</code> 和 <code>undefined</code>, 也允许多次调用.</p>\n<p>信号只会唤醒调用时已经在等待的线程. 此方法不会记录一个可供未来\n<code>blockedGet()</code> 消费的通知.</p>\n<pre><code class=\"lang-js\">let result = threads.disposable();\n\nthreads.start(() =&gt; {\n    result.setAndNotify(6 * 7);\n});\n\n// 正超时模式会等待完整 100 毫秒, 然后读取期间保存的最后一个值.\nlog(result.blockedGet(100));\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setAndNotify"
         }
       ],
       "type": "module",
-      "displayName": "线程安全"
+      "displayName": "Disposable"
     },
     {
-      "textRaw": "线程通信",
-      "name": "线程通信",
-      "desc": "<p>Auto.js提供了一些简单的设施来支持简单的线程通信. <code>threads.disposable()</code>用于一个线程等待另一个线程的(一次性)结果, 同时<code>Lock.newCondition()</code>提供了Condition对象用于一般的线程通信(await, signal). 另外, <code>events</code>模块也可以用于线程通信, 通过指定<code>EventEmiiter</code>的回调执行的线程来实现.</p>\n<p>使用<code>threads.disposable()</code>可以简单地等待和获取某个线程的执行结果. 例如要等待某个线程计算&quot;1+.....+10000&quot;:</p>\n<pre><code>var sum = threads.disposable();\n//启动子线程计算\nthreads.start(function(){\n    var s = 0;\n    //从1加到10000\n    for(var i = 1; i &lt;= 10000; i++){\n        s += i;\n    }\n    //通知主线程接收结果\n    sum.setAndNotify(s);\n});\n//blockedGet()用于等待结果\ntoast(&quot;sum = &quot; + sum.blockedGet());\n</code></pre><p>如果上述代码用<code>Condition</code>实现：</p>\n<pre><code>//新建一个锁\nvar lock = threads.lock();\n//新建一个条件, 即&quot;计算完成&quot;\nvar complete = lock.newCondition();\nvar sum = 0;\nthreads.start(function(){\n    //从1加到10000\n    for(var i = 1; i &lt;= 10000; i++){\n        sum += i;\n    }\n    //通知主线程接收结果\n    lock.lock();\n    complete.signal();\n    lock.unlock();\n});\n//等待计算完成\nlock.lock();\ncomplete.await();\nlock.unlock();\n//打印结果\ntoast(&quot;sum = &quot; + sum);\n</code></pre><p>如果上诉代码用<code>events</code>模块实现：</p>\n<pre><code>//新建一个emitter, 并指定回调执行的线程为当前线程\nvar sum = events.emitter(threads.currentThread());\nthreads.start(function(){\n    var s = 0;\n    //从1加到10000\n    for(var i = 1; i &lt;= 10000; i++){\n        s += i;\n    }\n    //发送事件result通知主线程接收结果\n    sum.emit(&#39;result&#39;, s);\n});\nsum.on(&#39;result&#39;, function(s){\n    toastLog(&quot;sum = &quot; + s + &quot;, 当前线程: &quot; + threads.currentThread());\n});\n</code></pre><p>有关线程的其他问题, 例如生产者消费者等问题, 请用Java相关方法解决, 例如<code>java.util.concurrent.BlockingQueue</code>.</p>\n",
+      "textRaw": "线程安全",
+      "name": "线程安全",
+      "desc": "<p>不同线程可以访问同一脚本作用域, 但 <code>value += 1</code>, <code>array.push()</code> 和对象属性更新\n等操作不是自动原子的. 简单整数计数优先使用 <a href=\"#m-atomic\"><code>threads.atomic()</code></a>.\n需要把多个操作组成临界区时使用 <a href=\"#m-lock\"><code>threads.lock()</code></a>, 或用全局\n<a href=\"#m-sync\"><code>sync()</code></a> 包装函数.</p>\n<p>使用 <code>ReentrantLock</code> 时, 应始终在 <code>finally</code> 中解锁. 使用\n<code>Condition.await()</code> 时, 应在持锁状态下循环检查共享条件, 并在修改条件后调用\n<code>signal()</code> 或 <code>signalAll()</code>. JavaScript Array 和普通对象不保证并发修改安全;\n需要并发容器时可使用 <code>java.util.concurrent</code> 中的相应 Java 类型.</p>\n",
       "type": "module",
-      "displayName": "线程通信"
+      "displayName": "线程安全"
     }
   ]
 }

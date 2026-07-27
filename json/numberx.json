@@ -9,7 +9,7 @@
         {
           "textRaw": "启用内置扩展",
           "name": "启用内置扩展",
-          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Number&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Numberx</p>\n\n<hr>\n",
+          "desc": "<p>内置扩展默认被禁用, 以下任一方式可启用内置扩展:</p>\n<ul>\n<li>在脚本中加入代码片段: <code>plugins.extendAll();</code> 或 <code>plugins.extend(&#39;Number&#39;);</code></li>\n<li>AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]</li>\n</ul>\n<p>当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>\n当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>\n内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Numberx</p>\n\n<hr>\n",
           "type": "module",
           "displayName": "启用内置扩展"
         },
@@ -42,6 +42,61 @@
           ],
           "type": "module",
           "displayName": "[m] ensureNumber"
+        },
+        {
+          "textRaw": "[m] ensureNumberLike",
+          "name": "[m]_ensurenumberlike",
+          "methods": [
+            {
+              "textRaw": "ensureNumberLike(value, allowNaN?)",
+              "type": "method",
+              "name": "ensureNumberLike",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>value</strong> { <a href=\"dataTypes#any\">any</a> } - 待转换和检查的值</li>\n<li><strong>[ allowNaN = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否允许实际的 <code>NaN</code> 值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 转换后的数值</li>\n</ul>\n<p>使用 <a href=\"#m-parseany\"><code>Numberx.parseAny()</code></a> 的规则将 <code>value</code> 转换为数值. <code>null</code>, <code>undefined</code> 以及不能转换为数值的参数会抛出异常.</p>\n<p><code>allowNaN</code> 仅允许参数本身为 <code>NaN</code>. 即使它为 <code>true</code>, 无法转换为数值的其他参数仍会抛出异常.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.ensureNumberLike(&quot;50%&quot;)); // 0.5\nconsole.log(Numberx.ensureNumberLike(&quot;3:2&quot;)); // 1.5\nNumberx.ensureNumberLike(NaN); /* 抛出异常. */\nconsole.log(Numberx.ensureNumberLike(NaN, true)); // NaN\n\n/* 启用内置对象扩展后. */\nconsole.log(Number.ensureNumberLike(&quot;12&quot;)); // 12\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "value"
+                    },
+                    {
+                      "name": "allowNaN?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureNumberLike"
+        },
+        {
+          "textRaw": "[m] ensureNumbersLike",
+          "name": "[m]_ensurenumberslike",
+          "methods": [
+            {
+              "textRaw": "ensureNumbersLike(values, allowNaN?, containsNaN?)",
+              "type": "method",
+              "name": "ensureNumbersLike",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>values</strong> { <a href=\"dataTypes#any\">any</a><a href=\"dataTypes#array\">[]</a> } - 待转换和检查的数组</li>\n<li><strong>[ allowNaN = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否允许数组中出现实际的 <code>NaN</code> 值</li>\n<li><strong>[ containsNaN = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在返回数组中保留允许的 <code>NaN</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 转换后的数值数组</li>\n</ul>\n<p>逐项使用 <a href=\"#m-parseany\"><code>Numberx.parseAny()</code></a> 的规则转换 <code>values</code>. 参数不是 JavaScript 数组, 元素为 <code>null</code> 或 <code>undefined</code>, 或元素不能转换为数值时抛出异常.</p>\n<p>当遇到实际的 <code>NaN</code> 时, <code>allowNaN</code> 为 <code>false</code> 会抛出异常. <code>allowNaN</code> 为 <code>true</code> 且 <code>containsNaN</code> 为 <code>false</code> 时会忽略该元素; 两者均为 <code>true</code> 时会在结果中保留 <code>NaN</code>.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.ensureNumbersLike([ &quot;25%&quot;, &quot;3:2&quot;, 4 ])); // [ 0.25, 1.5, 4 ]\nconsole.log(Numberx.ensureNumbersLike([ 1, NaN, 2 ], true)); // [ 1, 2 ]\nconsole.log(Numberx.ensureNumbersLike([ 1, NaN, 2 ], true, true)); // [ 1, NaN, 2 ]\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "values"
+                    },
+                    {
+                      "name": "allowNaN?"
+                    },
+                    {
+                      "name": "containsNaN?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ensureNumbersLike"
         },
         {
           "textRaw": "[m] check",
@@ -84,7 +139,7 @@
               "textRaw": "check(...numberOrOperator)",
               "type": "method",
               "name": "check",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#联合类型\">|</a> <a href=\"dataTypes#comparisonoperatorstring\">ComparisonOperatorString</a>)<a href=\"documentation#可变参数\">[]</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检查数字与操作符字符串的逻辑关系.</p>\n<p>对于参数索引 [0, 1, 2 ... n],<br>索引 [0, 2, 4 ...] 需为 <code>number</code> 类型,<br>索引 [1, 3, 5 ...] 需为 <code>string</code> 类型.</p>\n<p>参数不满足上述类型需求时将抛出异常.</p>\n<pre><code class=\"lang-js\">let a = 0.5;\nlet b = 5;\nlet c = 23;\nlet d = 2011;\n\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Numberx.check(a, c, d)); /* 抛出异常. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Number.check(a, c, d)); /* 抛出异常. */\n</code></pre>\n<p>逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.<br>例如对于 <code>check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b)</code>, 仅检查 <code>a &lt; d</code> 与 <code>d &gt; b</code>, 而不会检查 <code>a</code> 与 <code>b</code> 的关系.</p>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> <a href=\"dataTypes#联合类型\">|</a> <a href=\"dataTypes#comparisonoperatorstring\">ComparisonOperatorString</a>)<a href=\"documentation#可变参数\">[]</a> } - 任意对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>检查数字与操作符字符串的逻辑关系.</p>\n<p>对于参数索引 [0, 1, 2 ... n],<br>\n索引 [0, 2, 4 ...] 需为 <code>number</code> 类型,<br>\n索引 [1, 3, 5 ...] 需为 <code>string</code> 类型.</p>\n<p>参数不满足上述类型需求时将抛出异常.</p>\n<pre><code class=\"lang-js\">let a = 0.5;\nlet b = 5;\nlet c = 23;\nlet d = 2011;\n\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Numberx.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Numberx.check(a, c, d)); /* 抛出异常. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.check(a, &#39;&lt;&#39;, b)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, b, &#39;&lt;=&#39;, c)); // true\nconsole.log(Number.check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b, &#39;&lt;&#39;, c, &#39;&gt;&#39;, a)); // true\nconsole.log(Number.check(a, c, d)); /* 抛出异常. */\n</code></pre>\n<p>逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.<br>\n例如对于 <code>check(a, &#39;&lt;&#39;, d, &#39;&gt;&#39;, b)</code>, 仅检查 <code>a &lt; d</code> 与 <code>d &gt; b</code>, 而不会检查 <code>a</code> 与 <code>b</code> 的关系.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -107,7 +162,7 @@
               "textRaw": "clamp(num, ...clamps)",
               "type": "method",
               "name": "clamp",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>clamps</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 限制范围</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回限制在指定范围内的数字.<br>当给定数字不在限制范围内时, 则就近返回一个范围边界值.</p>\n<p>通常限制范围用两个大小不同的数字数组表示,<br>如范围 10 - 30 可用 <code>[ 10, 30 ]</code> 表示.<br>范围参数会根据给定参数排序后挑选出最大值与最小值作为限制上限及下限,<br>因此 <code>[ 30, 10 ]</code> 与 <code>[ 10, 30 ]</code> 效果相同,<br>而与 <code>[ 10, 11, 15, 22, 30 ]</code> 或 <code>[ 20, 30, 25, 10 ]</code> 等效果也相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, [ 10, 12, 30, 22, 20 ])); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp([ 10, 12, 30, 22, 20 ])); /* 同上. */\n</code></pre>\n<p>因范围参数 clamps 是 <a href=\"documentation#可变参数\">可变参数</a>, 因此以下两种调用方式效果相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, 10, 30)); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp(10, 30)); /* 同上. */\n</code></pre>\n<p>当限制范围参数是 1 个数字时, 相当于 <code>[ x, x ]</code>, 则一定返回 x 本身;<br>当限制范围参数是 0 个数字时 (省略或空数组), 则返回 num 本身:</p>\n<pre><code class=\"lang-js\">let num = 307;\nconsole.log(Numberx.clamp(num, 523)); // 523\nconsole.log(Numberx.clamp(num)); // 307\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp(523)); // 523\nconsole.log(num.clamp()); // 307\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>clamps</strong> { <a href=\"documentation#可变参数\">...</a>(<a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a>)<a href=\"documentation#可变参数\">[]</a> } - 限制范围</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回限制在指定范围内的数字.<br>\n当给定数字不在限制范围内时, 则就近返回一个范围边界值.</p>\n<p>通常限制范围用两个大小不同的数字数组表示,<br>\n如范围 10 - 30 可用 <code>[ 10, 30 ]</code> 表示.<br>\n范围参数会根据给定参数排序后挑选出最大值与最小值作为限制上限及下限,<br>\n因此 <code>[ 30, 10 ]</code> 与 <code>[ 10, 30 ]</code> 效果相同,<br>\n而与 <code>[ 10, 11, 15, 22, 30 ]</code> 或 <code>[ 20, 30, 25, 10 ]</code> 等效果也相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, [ 10, 12, 30, 22, 20 ])); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp([ 10, 12, 30, 22, 20 ])); /* 同上. */\n</code></pre>\n<p>因范围参数 clamps 是 <a href=\"documentation#可变参数\">可变参数</a>, 因此以下两种调用方式效果相同:</p>\n<pre><code class=\"lang-js\">let num = Math.random() * 50;\nconsole.log(Numberx.clamp(num, [ 10, 30 ]));\nconsole.log(Numberx.clamp(num, 10, 30)); /* 同上. */\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp([ 10, 30 ])); /* 同上. */\nconsole.log(num.clamp(10, 30)); /* 同上. */\n</code></pre>\n<p>当限制范围参数是 1 个数字时, 相当于 <code>[ x, x ]</code>, 则一定返回 x 本身;<br>\n当限制范围参数是 0 个数字时 (省略或空数组), 则返回 num 本身:</p>\n<pre><code class=\"lang-js\">let num = 307;\nconsole.log(Numberx.clamp(num, 523)); // 523\nconsole.log(Numberx.clamp(num)); // 307\n\n/* 启用内置对象扩展后. */\n\nconsole.log(num.clamp(523)); // 523\nconsole.log(num.clamp()); // 307\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -133,7 +188,7 @@
               "textRaw": "clampTo(num, range, cycle?)",
               "type": "method",
               "name": "clampTo",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>range</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 限制范围</li>\n<li><strong>[ cycle = <code>maxOf(range) - minOf(range)</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 周期, 默认为 range 参数的跨度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回按周期限制在指定范围内的数字.</p>\n<p>在数学中, 周期函数是无论任何独立变量上经过一个确定的周期之后数值皆能重复的函数.  </p>\n<p>如果在函数 _f_ 中所有的位置 _x_ 都满足 _f_ ( _x_ + _T_ ) = _f_ ( _x_ ), 那么, _f_ 就是周期为 _T_ 的周期函数.<br>如果周期函数 _f_ 的周期为 _T_ , 那么对于 _f_ 中任意 _x_ 及任意整数 _n_, 有 _f_ ( _x_ + _Tn_ ) = _f_ ( _x_ ).</p>\n<p>三角函数正弦函数与余弦函数都是常见的周期函数, 如 _f_ ( _x_ ) = sin _x_ 与 _f_ ( _x_ ) = cos _x_ 等, 其周期为 <code>2π</code>.</p>\n<p><code>clampTo</code> 方法的作用是将数字通过周期变换回落到指定范围内:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(30, [ 0, 360 ]); // 30\nNumberx.clampTo(390, [ 0, 360 ]); // 30\nNumberx.clampTo(30 + 10 * 360, [ 0, 360 ]); // 30\nNumberx.clampTo(30 - 10 * 360, [ 0, 360 ]); // 30\n\n/* 启用内置对象扩展后. */\n\n(30).clampTo([ 0, 360 ]); // 30\n(390).clampTo([ 0, 360 ]); // 30\n(30 + 10 * 360).clampTo([ 0, 360 ]); // 30\n(30 - 10 * 360).clampTo([ 0, 360 ]); // 30\n</code></pre>\n<p><code>cycle</code> 参数默认是范围的跨度, 即范围的两个极值差, 当极值为 <code>0</code> 时, 将抛出异常:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(30, [0, 0]); /* 抛出异常. */\n\n/* 启用内置对象扩展后. */\n\n(30).clampTo([0, 0]); /* 抛出异常. */\n</code></pre>\n<p>指定一个周期:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(372, [0, 360], 10); // 352\n\n/* 启用内置对象扩展后. */\n\n(372).clampTo([0, 360], 10); // 352\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>range</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> } - 限制范围</li>\n<li><strong>[ cycle = <code>maxOf(range) - minOf(range)</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 周期, 默认为 range 参数的跨度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回按周期限制在指定范围内的数字.</p>\n<p>在数学中, 周期函数是无论任何独立变量上经过一个确定的周期之后数值皆能重复的函数.<br></p>\n<p>如果在函数 _f_ 中所有的位置 _x_ 都满足 _f_(_x_ + _T_) = _f_(_x_), 那么, _f_ 就是周期为 _T_ 的周期函数.<br>\n如果周期函数 _f_ 的周期为 _T_, 那么对于 _f_ 中任意 _x_ 及任意整数 _n_, 有 _f_(_x_ + _Tn_) = _f_(_x_).</p>\n<p>三角函数正弦函数与余弦函数都是常见的周期函数, 如 _f_(_x_) = sin _x_ 与 _f_(_x_) = cos _x_ 等, 其周期为 <code>2π</code>.</p>\n<p><code>clampTo</code> 方法的作用是将数字通过周期变换回落到指定范围内:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(30, [ 0, 360 ]); // 30\nNumberx.clampTo(390, [ 0, 360 ]); // 30\nNumberx.clampTo(30 + 10 * 360, [ 0, 360 ]); // 30\nNumberx.clampTo(30 - 10 * 360, [ 0, 360 ]); // 30\n\n/* 启用内置对象扩展后. */\n\n(30).clampTo([ 0, 360 ]); // 30\n(390).clampTo([ 0, 360 ]); // 30\n(30 + 10 * 360).clampTo([ 0, 360 ]); // 30\n(30 - 10 * 360).clampTo([ 0, 360 ]); // 30\n</code></pre>\n<p><code>cycle</code> 参数默认是范围的跨度, 即范围的两个极值差, 当极值为 <code>0</code> 时, 将抛出异常:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(30, [0, 0]); /* 抛出异常. */\n\n/* 启用内置对象扩展后. */\n\n(30).clampTo([0, 0]); /* 抛出异常. */\n</code></pre>\n<p>指定一个周期:</p>\n<pre><code class=\"lang-js\">Numberx.clampTo(372, [0, 360], 10); // 352\n\n/* 启用内置对象扩展后. */\n\n(372).clampTo([0, 360], 10); // 352\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -188,7 +243,7 @@
               "textRaw": "padStart(num, targetLength, pad?)",
               "type": "method",
               "name": "padStart",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot; (U+0030).</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>填充从当前数字对应字符串的开头开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padStart(5, 2, 0)); // &quot;05&quot;\nconsole.log(Numberx.padStart(5, 2)); // &quot;05&quot;\nconsole.log(Numberx.padStart(3, 3)); // &quot;003&quot;\nconsole.log(Numberx.padStart(99, 5, &quot;AB&quot;)); // &quot;ABA99&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padStart(2, 0)); // &quot;05&quot;\nconsole.log((5).padStart(2)); // &quot;05&quot;\nconsole.log((3).padStart(3)); // &quot;003&quot;\nconsole.log((99).padStart(5, &quot;AB&quot;)); // &quot;ABA99&quot;\n</code></pre>\n<p>格式化日期与时间:</p>\n<pre><code class=\"lang-js\">let pad = x =&gt; Numberx.padStart(x, 2, 0); /* 启用内置对象扩展后: `x.padStart(2, 0)`. */\nlet now = new Date();\nlet date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;\nlet time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;\nconsole.log(`${date} ${time}`); /* e.g. &quot;2022-11-01 08:47:15&quot; */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot; (U+0030).</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>\n填充从当前数字对应字符串的开头开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padStart(5, 2, 0)); // &quot;05&quot;\nconsole.log(Numberx.padStart(5, 2)); // &quot;05&quot;\nconsole.log(Numberx.padStart(3, 3)); // &quot;003&quot;\nconsole.log(Numberx.padStart(99, 5, &quot;AB&quot;)); // &quot;ABA99&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padStart(2, 0)); // &quot;05&quot;\nconsole.log((5).padStart(2)); // &quot;05&quot;\nconsole.log((3).padStart(3)); // &quot;003&quot;\nconsole.log((99).padStart(5, &quot;AB&quot;)); // &quot;ABA99&quot;\n</code></pre>\n<p>格式化日期与时间:</p>\n<pre><code class=\"lang-js\">let pad = x =&gt; Numberx.padStart(x, 2, 0); /* 启用内置对象扩展后: `x.padStart(2, 0)`. */\nlet now = new Date();\nlet date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;\nlet time = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;\nconsole.log(`${date} ${time}`); /* e.g. &quot;2022-11-01 08:47:15&quot; */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -217,7 +272,7 @@
               "textRaw": "padEnd(num, targetLength, pad?)",
               "type": "method",
               "name": "padEnd",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot; (U+0030).</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>填充从当前数字对应字符串的末尾开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padEnd(5, 2, 0)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(5, 2)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(3, 3)); // &quot;300&quot;\nconsole.log(Numberx.padEnd(99.1, 5)); // &quot;99.10&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padEnd(2, 0)); // &quot;50&quot;\nconsole.log((5).padEnd(2)); // &quot;50&quot;\nconsole.log((3).padEnd(3)); // &quot;300&quot;\nconsole.log((99.1).padEnd(5)); // &quot;99.10&quot;\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xProto</code></strong></p>\n<ul>\n<li><strong>num</strong> { <a href=\"dataTypes#number\">number</a> } - 待处理数字</li>\n<li><strong>targetLength</strong> { <a href=\"dataTypes#number\">number</a> } - 当前数字需要填充到的目标字符串长度. 如果此长度小于 num 参数的字符串长度, 则返回 num 参数的字符串本身.</li>\n<li><strong>[ pad = &#39;0&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 &quot;0&quot; (U+0030).</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>\n填充从当前数字对应字符串的末尾开始.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.padEnd(5, 2, 0)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(5, 2)); // &quot;50&quot;\nconsole.log(Numberx.padEnd(3, 3)); // &quot;300&quot;\nconsole.log(Numberx.padEnd(99.1, 5)); // &quot;99.10&quot;\n\n/* 启用内置对象扩展后. */\n\nconsole.log((5).padEnd(2, 0)); // &quot;50&quot;\nconsole.log((5).padEnd(2)); // &quot;50&quot;\nconsole.log((3).padEnd(3)); // &quot;300&quot;\nconsole.log((99.1).padEnd(5)); // &quot;99.10&quot;\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -272,7 +327,7 @@
               "textRaw": "parsePercent(percentage)",
               "type": "method",
               "name": "parsePercent",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>percentage</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 百分数字符串或任意数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>此方法用于解析一个百分数字符串 (如 <code>&quot;5%&quot;</code>) 并返回其代表的数值.<br>如果 percentage 是一个 number 基本类型值, 则直接返回.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Numberx.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Numberx.parsePercent(&#39;2%%&#39;)); // 0.0002\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Number.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Number.parsePercent(&#39;2%%&#39;)); // 0.0002\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>percentage</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 百分数字符串或任意数字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>此方法用于解析一个百分数字符串 (如 <code>&quot;5%&quot;</code>) 并返回其代表的数值.<br>\n如果 percentage 是一个 number 基本类型值, 则直接返回.</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Numberx.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Numberx.parsePercent(&#39;2%%&#39;)); // 0.0002\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parsePercent(&#39;1%&#39;)); // 0.01\nconsole.log(Number.parsePercent(&#39;50.00%&#39;)); // 0.5\nconsole.log(Number.parsePercent(&#39;2%%&#39;)); // 0.0002\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [

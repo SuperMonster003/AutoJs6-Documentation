@@ -16,29 +16,143 @@
         {
           "textRaw": "模块作用",
           "name": "模块作用",
-          "desc": "<p>console 模块的主要作用:</p>\n<ul>\n<li>控制台日志内容的管理 - [ 按分级显示内容 / 内容清空 / 时间跟踪 / 栈追踪 / 存入文件 ] 等<ul>\n<li><a href=\"#m-log\">console.log</a></li>\n<li><a href=\"#m-setgloballogconfig\">console.setGlobalLogConfig</a></li>\n</ul>\n</li>\n<li>控制台浮动窗口的管理 - [ 窗口样式 / 文字样式 / 窗口显示与隐藏 / 窗口位置与尺寸 ] 等<ul>\n<li><a href=\"#m-show\">console.show</a></li>\n</ul>\n</li>\n<li>控制台 Activity 活动窗口管理<ul>\n<li><a href=\"#m-launch\">console.launch</a></li>\n</ul>\n</li>\n</ul>\n<p>控制台浮动窗口的相关方法仅对浮动窗口有效, 而对 Activity 活动窗口无效:</p>\n<pre><code class=\"lang-js\">/* 浮动窗口日志文本字体大小修改为 23sp, */\n/* 但 Activity 活动窗口的日志字体不受影响. */\n\nconsole.setContentTextSize(23);\nconsole.show(); /* 浮动窗口日志字体 23sp. */\n\nconsole.launch(); /* Activity 活动窗口的日志字体仍为默认大小. */\n</code></pre>\n",
+          "desc": "<p>console 模块的主要作用:</p>\n<ul>\n<li>控制台日志内容的管理 - [ 按分级显示内容 / 内容清空 / 时间跟踪 / 栈追踪 / 存入文件 ] 等<ul>\n<li><a href=\"#m-log\">console.log</a></li>\n<li><a href=\"#m-warn\">console.warn</a></li>\n<li><a href=\"#m-clear\">console.clear</a></li>\n<li><a href=\"#m-time\">console.time</a></li>\n<li><a href=\"#m-timeend\">console.timeEnd</a></li>\n<li><a href=\"#m-printallstacktrace\">console.printAllStackTrace</a></li>\n<li><a href=\"#m-setgloballogconfig\">console.setGlobalLogConfig</a></li>\n<li>... ...</li>\n</ul>\n</li>\n<li>控制台浮动窗口的管理 - [ 窗口样式 / 文字样式 / 窗口显示与隐藏 / 窗口位置与尺寸 ] 等<ul>\n<li><a href=\"#m-setbackgroundcolor\">console.setBackgroundColor</a></li>\n<li><a href=\"#m-setbackgroundtint\">console.setBackgroundTint</a></li>\n<li><a href=\"#m-setbackgroundalpha\">console.setBackgroundAlpha</a></li>\n<li><a href=\"#m-settouchable\">console.setTouchable</a></li>\n<li><a href=\"#m-settitle\">console.setTitle</a></li>\n<li><a href=\"#m-settextcolor\">console.setTextColor</a></li>\n<li><a href=\"#m-settextsize\">console.setTextSize</a></li>\n<li><a href=\"#m-show\">console.show</a></li>\n<li><a href=\"#m-hide\">console.hide</a></li>\n<li><a href=\"#m-collapse\">console.collapse</a></li>\n<li><a href=\"#m-expand\">console.expand</a></li>\n<li><a href=\"#m-setsize\">console.setSize</a></li>\n<li><a href=\"#m-setposition\">console.setPosition</a></li>\n<li><a href=\"#m-setgravity\">console.setGravity</a></li>\n<li>... ...</li>\n</ul>\n</li>\n<li>控制台 Activity 活动窗口管理<ul>\n<li><a href=\"#m-launch\">console.launch</a></li>\n</ul>\n</li>\n</ul>\n<p>控制台浮动窗口的相关方法仅对浮动窗口有效, 而对 Activity 活动窗口无效:</p>\n<pre><code class=\"lang-js\">/* 浮动窗口日志文本字体大小修改为 23sp, */\n/* 但 Activity 活动窗口的日志字体不受影响. */\n\nconsole.setContentTextSize(23);\nconsole.show(); /* 浮动窗口日志字体 23sp. */\n\nconsole.launch(); /* Activity 活动窗口的日志字体仍为默认大小. */\n</code></pre>\n",
           "type": "module",
           "displayName": "模块作用"
         },
         {
           "textRaw": "浮动窗口",
           "name": "浮动窗口",
-          "desc": "<p>使用 <a href=\"#m-show\">console.show</a> 可显示控制台的浮动窗口.</p>\n<ul>\n<li>浮动窗口右上区域有三个操作按钮<ul>\n<li>最小化按钮 - 收起浮动窗口并显示一个浮动按钮</li>\n<li>空间状态配置按钮 - 显示或隐藏空间状态 (位置及尺寸) 配置按钮</li>\n<li>关闭按钮 - 隐藏浮动窗口</li>\n</ul>\n</li>\n<li>拖动标题栏区域也可实现浮动窗口的位置移动</li>\n<li>日志显示区域支持双指缩放改变文本字体大小</li>\n</ul>\n<p>如需使用代码配置浮动窗口的外观与样式, 参阅 <a href=\"#m-build\">console.build</a> 小节.</p>\n<p>一个简单的浮动窗口配置示例, 以便快速了解浮动窗口的配置方式:</p>\n<ul>\n<li>尺寸 - 宽 80% 屏幕宽度, 高 60% 屏幕高度</li>\n<li>位置 - X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度</li>\n<li>标题 - HELLO WORLD</li>\n<li>标题字号 - 18sp</li>\n<li>标题背景颜色 - 900 号深橙色, 80% 透明度</li>\n<li>日志字号 - 16sp</li>\n<li>日志背景颜色 - 与标题背景颜色相同, 50% 透明度</li>\n<li>浮动窗口在脚本结束后 6 秒钟自动隐藏</li>\n</ul>\n<pre><code class=\"lang-js\">/* 使用构建器方式. */\n\nconsole.build({\n    size: [ 0.8, 0.6 ],\n    position: [ 0.1, 0.15 ],\n    title: &#39;HELLO WORLD&#39;,\n    titleTextSize: 18,\n    contentTextSize: 16,\n    backgroundColor: &#39;deep-orange-900&#39;,\n    titleBackgroundAlpha: 0.8,\n    contentBackgroundAlpha: 0.5,\n    exitOnClose: 6e3,\n}).show();\n\n/* 使用链式配置方式. */\n\nconsole\n    .setSize(0.8, 0.6)\n    .setPosition(0.1, 0.15)\n    .setTitle(&#39;HELLO WORLD&#39;)\n    .setTitleTextSize(18)\n    .setContentTextSize(16)\n    .setBackgroundColor(&#39;deep-orange-900&#39;)\n    .setTitleBackgroundAlpha(0.8)\n    .setContentBackgroundAlpha(0.5)\n    .setExitOnClose(6e3)\n    .show();\n\n/* 使用传统分步配置方式. */\n\nconsole.setSize(0.8, 0.6);\nconsole.setPosition(0.1, 0.15);\nconsole.setTitle(&#39;HELLO WORLD&#39;);\nconsole.setTitleTextSize(18);\nconsole.setContentTextSize(16);\nconsole.setBackgroundColor(&#39;deep-orange-900&#39;);\nconsole.setTitleBackgroundAlpha(0.8);\nconsole.setContentBackgroundAlpha(0.5);\nconsole.setExitOnClose(6e3);\nconsole.show();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">console</p>\n\n<hr>\n",
+          "desc": "<p>使用 <a href=\"#m-show\">console.show</a> 可显示控制台的浮动窗口.</p>\n<ul>\n<li>浮动窗口右上区域有三个操作按钮<ul>\n<li>最小化按钮 - 收起浮动窗口并显示一个浮动按钮</li>\n<li>空间状态配置按钮 - 显示或隐藏空间状态 (位置及尺寸) 配置按钮</li>\n<li>关闭按钮 - 隐藏浮动窗口</li>\n</ul>\n</li>\n<li>拖动标题栏区域也可实现浮动窗口的位置移动</li>\n<li>日志显示区域支持双指缩放改变文本字体大小</li>\n</ul>\n<p>如需使用代码配置浮动窗口的外观与样式, 参阅 <a href=\"#m-build\">console.build</a> 小节.</p>\n<p>一个简单的浮动窗口配置示例, 以便快速了解浮动窗口的配置方式:</p>\n<ul>\n<li>尺寸 - 宽 80% 屏幕宽度, 高 60% 屏幕高度</li>\n<li>位置 - X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度</li>\n<li>标题 - HELLO WORLD</li>\n<li>标题字号 - 18sp</li>\n<li>标题背景颜色 - 900 号深橙色, 80% 透明度</li>\n<li>日志字号 - 16sp</li>\n<li>日志背景颜色 - 与标题背景颜色相同, 50% 透明度</li>\n<li>浮动窗口在脚本结束后 6 秒钟自动隐藏</li>\n</ul>\n<pre><code class=\"lang-js\">/* 使用构建器方式. */\n\nconsole.build({\n    size: [ 0.8, 0.6 ],\n    position: [ 0.1, 0.15 ],\n    title: &#39;HELLO WORLD&#39;,\n    titleTextSize: 18,\n    contentTextSize: 16,\n    backgroundColor: &#39;deep-orange-900&#39;,\n    titleBackgroundAlpha: 0.8,\n    contentBackgroundAlpha: 0.5,\n    exitOnClose: 6e3,\n}).show();\n\n/* 使用链式配置方式. */\n\nconsole\n    .setSize(0.8, 0.6)\n    .setPosition(0.1, 0.15)\n    .setTitle(&#39;HELLO WORLD&#39;)\n    .setTitleTextSize(18)\n    .setContentTextSize(16)\n    .setBackgroundColor(&#39;deep-orange-900&#39;)\n    .setTitleBackgroundAlpha(0.8)\n    .setContentBackgroundAlpha(0.5)\n    .setExitOnClose(6e3)\n    .show();\n\n/* 使用传统分步配置方式. */\n\nconsole.setSize(0.8, 0.6);\nconsole.setPosition(0.1, 0.15);\nconsole.setTitle(&#39;HELLO WORLD&#39;);\nconsole.setTitleTextSize(18);\nconsole.setContentTextSize(16);\nconsole.setBackgroundColor(&#39;deep-orange-900&#39;);\nconsole.setTitleBackgroundAlpha(0.8);\nconsole.setContentBackgroundAlpha(0.5);\nconsole.setExitOnClose(6e3);\nconsole.show();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">globalThis</p>\n\n<hr>\n<p>以下名称仅作为全局方法挂载, 不会成为 <code>console</code> 对象的同名成员.</p>\n",
           "type": "module",
           "displayName": "浮动窗口"
+        },
+        {
+          "textRaw": "[m] err",
+          "name": "[m]_err",
+          "methods": [
+            {
+              "textRaw": "err(data, ...args)",
+              "type": "method",
+              "name": "err",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>xAlias</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> } - 可包含占位符的待格式化对象</li>\n<li><strong>...args</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#any\">any</a><a href=\"documentation#可变参数\">[]</a> } - <a href=\"glossaries#占位符替换参数\">占位符替换参数</a></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p><a href=\"#m-error\">console.error</a> 的全局别名.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    },
+                    {
+                      "name": "...args"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] err"
+        },
+        {
+          "textRaw": "[m] openConsole",
+          "name": "[m]_openconsole",
+          "methods": [
+            {
+              "textRaw": "openConsole(isReset?)",
+              "type": "method",
+              "name": "openConsole",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>xAlias</code></strong></p>\n<ul>\n<li><strong>[ isReset = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在显示前清空已保存的状态并重置控制台</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p><a href=\"#m-show\">console.show</a> 的全局别名.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isReset?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] openConsole"
+        },
+        {
+          "textRaw": "[m] showConsole",
+          "name": "[m]_showconsole",
+          "methods": [
+            {
+              "textRaw": "showConsole(isReset?)",
+              "type": "method",
+              "name": "showConsole",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>xAlias</code></strong></p>\n<ul>\n<li><strong>[ isReset = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在显示前清空已保存的状态并重置控制台</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p><a href=\"#m-show\">console.show</a> 的全局别名.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isReset?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] showConsole"
+        },
+        {
+          "textRaw": "[m] clearConsole",
+          "name": "[m]_clearconsole",
+          "methods": [
+            {
+              "textRaw": "clearConsole()",
+              "type": "method",
+              "name": "clearConsole",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>xAlias</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p><a href=\"#m-clear\">console.clear</a> 的全局别名.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clearConsole"
+        },
+        {
+          "textRaw": "[m] launchConsole",
+          "name": "[m]_launchconsole",
+          "methods": [
+            {
+              "textRaw": "launchConsole()",
+              "type": "method",
+              "name": "launchConsole",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>xAlias</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p><a href=\"#m-launch\">console.launch</a> 的全局别名.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">console</p>\n\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] launchConsole"
         },
         {
           "textRaw": "[m] show",
           "name": "[m]_show",
           "methods": [
             {
-              "textRaw": "show()",
+              "textRaw": "show(isReset?)",
               "type": "method",
               "name": "show",
-              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>显示控制台浮动窗口.</p>\n<p>窗口显示之前或之后, 均可设置浮动窗口的样式及空间状态.<br>如将窗口尺寸设置为 <code>500</code> × <code>800</code>:</p>\n<pre><code class=\"lang-js\">/* 在 show 之前设置尺寸. */\n\nconsole.setSize(500, 800);\nconsole.show();\n\n/* 在 show 之后设置尺寸. */\n\nconsole.show();\nconsole.setSize(500, 800);\n\n/* 上述两个示例均支持链式调用. */\nconsole.show().setSize(500, 800);\nconsole.setSize(500, 800).show();\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>[ isReset = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在显示前清空已保存的状态并重置控制台</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>显示控制台浮动窗口.</p>\n<p>窗口显示之前或之后, 均可设置浮动窗口的样式及空间状态.<br>\n如将窗口尺寸设置为 <code>500</code> × <code>800</code>:</p>\n<pre><code class=\"lang-js\">/* 在 show 之前设置尺寸. */\n\nconsole.setSize(500, 800);\nconsole.show();\n\n/* 在 show 之后设置尺寸. */\n\nconsole.show();\nconsole.setSize(500, 800);\n\n/* 上述两个示例均支持链式调用. */\nconsole.show().setSize(500, 800);\nconsole.setSize(500, 800).show();\n</code></pre>\n",
               "signatures": [
                 {
-                  "params": []
+                  "params": [
+                    {
+                      "name": "isReset?"
+                    }
+                  ]
                 }
               ]
             }
@@ -168,7 +282,7 @@
               "textRaw": "build(options)",
               "type": "method",
               "name": "build",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> } - 构建器选项</li>\n<li><ins><strong>returns</strong></ins> {{ show(): <a href=\"dataTypes#void\">void</a> }}</li>\n</ul>\n<p>构建控制台浮动窗口的配置.</p>\n<p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>\n<p>构建器支持一次性配置多个浮动窗口样式选项:</p>\n<pre><code class=\"lang-js\">console.build({\n    size: [ 0.8, 0.6 ], /* 窗口大小, 80% 屏幕宽度 × 60% 屏幕高度. */\n    position: [ 0.1, 0.15 ], /* 窗口位置, X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度. */\n    title: &#39;HELLO WORLD&#39;, /* 窗口标题文本. */\n    titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */\n    contentTextSize: 16, /* 窗口日志字号, 单位 sp. */\n    backgroundColor: &#39;deep-orange-900&#39;, /* 窗口标题及日志区域的背景色, 900 号深橙色. */\n    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */\n    contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */\n    exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */\n    touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */\n}).show(); /* 使用 show 方法显示浮动窗口. */\n</code></pre>\n<p>更多构建参数及使用方法, 参阅 <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> 类型章节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> } - 构建器选项</li>\n<li><ins><strong>returns</strong></ins> {{ show(): <a href=\"dataTypes#void\">void</a> }}</li>\n</ul>\n<p>构建控制台浮动窗口的配置.</p>\n<p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>\n<p>构建器支持一次性配置多个浮动窗口样式选项:</p>\n<pre><code class=\"lang-js\">console.build({\n    size: [ 0.8, 0.6 ], /* 窗口大小, 80% 屏幕宽度 × 60% 屏幕高度. */\n    position: [ 0.1, 0.15 ], /* 窗口位置, X 坐标 10% 屏幕宽度, Y 坐标 15% 屏幕高度. */\n    title: &#39;HELLO WORLD&#39;, /* 窗口标题文本. */\n    titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */\n    contentTextSize: 16, /* 窗口日志字号, 单位 sp. */\n    backgroundColor: &#39;deep-orange-900&#39;, /* 窗口标题及日志区域的背景色, 900 号深橙色. */\n    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 80%. */\n    contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */\n    exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */\n    touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */\n}).show(); /* 使用 show 方法显示浮动窗口. */\n</code></pre>\n<p>更多构建参数及使用方法, 参阅 <a href=\"consoleBuildOptionsType\">ConsoleBuildOptions</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -191,7 +305,7 @@
               "textRaw": "setSize(width, height)",
               "type": "method",
               "name": "setSize",
-              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口宽度值 (像素值/百分数)</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口高度值 (像素值/百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的尺寸.</p>\n<pre><code class=\"lang-js\">console.setSize(0.8, 700).show(); /* 80% 屏幕宽度, 700 像素高度. */\nconsole.build({ size: [ 0.8, 700 ] }).show(); /* 效果同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口宽度值 (像素值 / 百分数)</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口高度值 (像素值 / 百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的尺寸.</p>\n<pre><code class=\"lang-js\">console.setSize(0.8, 700).show(); /* 80% 屏幕宽度, 700 像素高度. */\nconsole.build({ size: [ 0.8, 700 ] }).show(); /* 效果同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -217,7 +331,7 @@
               "textRaw": "setPosition(x, y)",
               "type": "method",
               "name": "setPosition",
-              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 X 坐标 (像素值/百分数)</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 Y 坐标 (像素值/百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的位置.</p>\n<pre><code class=\"lang-js\">console.setPosition(0.1, 0.15).show(); /* X: 10% 屏幕宽度, Y: 15% 屏幕高度. */\nconsole.build({ position: [ 0.1, 0.15 ] }).show(); /* 效果同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 X 坐标 (像素值 / 百分数)</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口位置 Y 坐标 (像素值 / 百分数)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的位置.</p>\n<pre><code class=\"lang-js\">console.setPosition(0.1, 0.15).show(); /* X: 10% 屏幕宽度, Y: 15% 屏幕高度. */\nconsole.build({ position: [ 0.1, 0.15 ] }).show(); /* 效果同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -234,6 +348,29 @@
           ],
           "type": "module",
           "displayName": "[m] setPosition"
+        },
+        {
+          "textRaw": "[m] setGravity",
+          "name": "[m]_setgravity",
+          "methods": [
+            {
+              "textRaw": "setGravity(gravity)",
+              "type": "method",
+              "name": "setGravity",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>gravity</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 窗口重力</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>按重力将控制台浮动窗口贴靠到屏幕指定位置. 字符串可使用 <code>left</code>, <code>top</code>, <code>right</code>, <code>bottom</code>, <code>start</code>, <code>end</code>, <code>center</code>, <code>center_horizontal</code> 和 <code>center_vertical</code>, 并可使用 <code>|</code> 组合.</p>\n<p>数字形式对应 <code>android.view.Gravity</code> 常量.</p>\n<pre><code class=\"lang-js\">console.setGravity(&#39;right|bottom&#39;);\nconsole.show();\n\nconsole.build({ gravity: android.view.Gravity.CENTER }).show();\n</code></pre>\n<p>调用 <a href=\"#m-setposition\">setPosition</a> 会清除已保存的重力设置.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "gravity"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setGravity"
         },
         {
           "textRaw": "[m] setExitOnClose",
@@ -295,6 +432,29 @@
           ],
           "type": "module",
           "displayName": "[m] setTouchable"
+        },
+        {
+          "textRaw": "[m] setTouchThrough",
+          "name": "[m]_settouchthrough",
+          "methods": [
+            {
+              "textRaw": "setTouchThrough(touchThrough?)",
+              "type": "method",
+              "name": "setTouchThrough",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>[ touchThrough = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否让触摸事件穿透窗口</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置控制台浮动窗口是否让触摸事件穿透. 此方法与 <a href=\"#m-settouchable\">setTouchable</a> 的布尔值语义相反.</p>\n<pre><code class=\"lang-js\">console.setTouchThrough(true);\nconsole.show();\n\nconsole.build({ touchThrough: true }).show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "touchThrough?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTouchThrough"
         },
         {
           "textRaw": "[m] setTitle",
@@ -373,7 +533,7 @@
               "textRaw": "setTitleBackgroundColor(color)",
               "type": "method",
               "name": "setTitleBackgroundColor",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题显示区域背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为深蓝色. */\nconsole.setTitleBackgroundColor(&#39;dark-blue&#39;).show();\nconsole.build({ titleBackgroundColor: &#39;dark-blue&#39; }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole.setTitleBackgroundColor(Color(&#39;dark-blue&#39;).setAlpha(0.5)).show();\nconsole.setTitleBackgroundColor(&#39;#8000008B&#39;).show(); /* 效果同上. */\n\n/* 透明度也可使用 setTitleBackgroundAlpha 单独设置. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题显示区域背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为深蓝色. */\nconsole.setTitleBackgroundColor(&#39;dark-blue&#39;).show();\nconsole.build({ titleBackgroundColor: &#39;dark-blue&#39; }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole.setTitleBackgroundColor(Color(&#39;dark-blue&#39;).setAlpha(0.5)).show();\nconsole.setTitleBackgroundColor(&#39;#8000008B&#39;).show(); /* 效果同上. */\n\n/* 透明度也可使用 setTitleBackgroundAlpha 单独设置. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n<p>如需在设置颜色时保留原有的背景透明度值, 可使用 <a href=\"#m-settitlebackgroundtint\">setTitleBackgroundTint</a> 方法:</p>\n<pre><code class=\"lang-js\">/* 深蓝色背景, 透明度丢失, 即完全不透明. */\nconsole.setTitleBackgroundColor(&#39;dark-blue&#39;).show();\n\n/* 深蓝色背景, 透明度保留. */\nconsole.setTitleBackgroundTint(&#39;dark-blue&#39;).show();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -389,6 +549,29 @@
           "displayName": "[m] setTitleBackgroundColor"
         },
         {
+          "textRaw": "[m] setTitleBackgroundTint",
+          "name": "[m]_settitlebackgroundtint",
+          "methods": [
+            {
+              "textRaw": "setTitleBackgroundTint(color)",
+              "type": "method",
+              "name": "setTitleBackgroundTint",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> | <a href=\"dataTypes#null\">null</a> } - 浮动窗口标题显示区域背景颜色, <code>null</code> 表示清除着色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景着色, 保留原有透明度值.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景着色为深蓝色. */\nconsole.setTitleBackgroundTint(&#39;dark-blue&#39;).show();\nconsole.build({ titleBackgroundTint: &#39;dark-blue&#39; }).show(); /* 效果同上. */\n</code></pre>\n<p>与 <a href=\"#m-settitlebackgroundcolor\">setTitleBackgroundColor</a> 的区别:</p>\n<pre><code class=\"lang-js\">/* 深蓝色背景, 透明度保留. */\nconsole.setTitleBackgroundTint(&#39;dark-blue&#39;).show();\n\n/* 深蓝色背景, 透明度丢失, 即完全不透明. */\nconsole.setTitleBackgroundColor(&#39;dark-blue&#39;).show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setTitleBackgroundTint"
+        },
+        {
           "textRaw": "[m] setTitleBackgroundAlpha",
           "name": "[m]_settitlebackgroundalpha",
           "methods": [
@@ -396,7 +579,7 @@
               "textRaw": "setTitleBackgroundAlpha(alpha)",
               "type": "method",
               "name": "setTitleBackgroundAlpha",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为半透明. */\nconsole.setTitleBackgroundAlpha(0.5).show();\nconsole.build({ titleBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置标题显示区域背景颜色为半透明. */\nconsole.setTitleBackgroundAlpha(0.5).show();\nconsole.build({ titleBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setTitleBackgroundColor(&#39;dark-blue&#39;)\n    .setTitleBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n<p>使用 <code>-1</code> 可重置标题区域的透明度 (为 <code>0.8</code>):</p>\n<pre><code class=\"lang-js\">console.setTitleBackgroundAlpha(-1).show();\nconsole.resetTitleBackgroundAlpha().show(); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -410,6 +593,25 @@
           ],
           "type": "module",
           "displayName": "[m] setTitleBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] resetTitleBackgroundAlpha",
+          "name": "[m]_resettitlebackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "resetTitleBackgroundAlpha()",
+              "type": "method",
+              "name": "resetTitleBackgroundAlpha",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>重置控制台浮动窗口的标题显示区域背景颜色透明度, 默认值为 <code>0.8</code>.</p>\n<pre><code class=\"lang-js\">console.resetTitleBackgroundAlpha().show();\nconsole.setTitleBackgroundAlpha(-1).show(); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] resetTitleBackgroundAlpha"
         },
         {
           "textRaw": "[m] setTitleIconsTint",
@@ -496,6 +698,29 @@
           "displayName": "[m] setContentTextColor"
         },
         {
+          "textRaw": "[m] setContentTextColors",
+          "name": "[m]_setcontenttextcolors",
+          "methods": [
+            {
+              "textRaw": "setContentTextColors(...colors)",
+              "type": "method",
+              "name": "setContentTextColors",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>...colors</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"omniTypes#omnicolor\">OmniColor</a><a href=\"documentation#可变参数\">[]</a> } - 各日志等级的文字颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p><a href=\"#m-setcontenttextcolor\">setContentTextColor</a> 的兼容别名. 传入多个颜色时依次对应 <code>verbose</code>, <code>log</code>, <code>info</code>, <code>warn</code>, <code>error</code> 和 <code>assert</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...colors"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentTextColors"
+        },
+        {
           "textRaw": "[m] setContentBackgroundColor",
           "name": "[m]_setcontentbackgroundcolor",
           "methods": [
@@ -519,6 +744,29 @@
           "displayName": "[m] setContentBackgroundColor"
         },
         {
+          "textRaw": "[m] setContentBackgroundTint",
+          "name": "[m]_setcontentbackgroundtint",
+          "methods": [
+            {
+              "textRaw": "setContentBackgroundTint(color)",
+              "type": "method",
+              "name": "setContentBackgroundTint",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> | <a href=\"dataTypes#null\">null</a> } - 浮动窗口日志显示区域背景着色, <code>null</code> 表示清除着色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置日志显示区域背景着色并保留原有透明度. 传入 <code>null</code> 可清除着色.</p>\n<pre><code class=\"lang-js\">console.setContentBackgroundTint(&#39;dark-blue&#39;).show();\nconsole.build({ contentBackgroundTint: &#39;dark-blue&#39; }).show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentBackgroundTint"
+        },
+        {
           "textRaw": "[m] setContentBackgroundAlpha",
           "name": "[m]_setcontentbackgroundalpha",
           "methods": [
@@ -526,7 +774,7 @@
               "textRaw": "setContentBackgroundAlpha(alpha)",
               "type": "method",
               "name": "setContentBackgroundAlpha",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置日志显示区域背景颜色为半透明. */\nconsole.setContentBackgroundAlpha(0.5).show();\nconsole.build({ contentBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置日志显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setContentBackgroundColor(&#39;dark-blue&#39;)\n    .setContentBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的日志显示区域背景颜色透明度.</p>\n<pre><code class=\"lang-js\">/* 设置日志显示区域背景颜色为半透明. */\nconsole.setContentBackgroundAlpha(0.5).show();\nconsole.build({ contentBackgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置日志显示区域背景颜色为半透明深蓝色. */\nconsole\n    .setContentBackgroundColor(&#39;dark-blue&#39;)\n    .setContentBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n<p>使用 <code>-1</code> 可重置日志区域的透明度 (为 <code>0.6</code>):</p>\n<pre><code class=\"lang-js\">console.setContentBackgroundAlpha(-1).show();\nconsole.resetContentBackgroundAlpha().show(); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -540,6 +788,25 @@
           ],
           "type": "module",
           "displayName": "[m] setContentBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] resetContentBackgroundAlpha",
+          "name": "[m]_resetcontentbackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "resetContentBackgroundAlpha()",
+              "type": "method",
+              "name": "resetContentBackgroundAlpha",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>重置控制台浮动窗口的日志显示区域背景颜色透明度, 默认值为 <code>0.6</code>.</p>\n<pre><code class=\"lang-js\">console.resetContentBackgroundAlpha().show();\nconsole.setContentBackgroundAlpha(-1).show(); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] resetContentBackgroundAlpha"
         },
         {
           "textRaw": "[m] setTextSize",
@@ -572,7 +839,7 @@
               "textRaw": "setTextColor(color)",
               "type": "method",
               "name": "setTextColor",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题及日志文本字体颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志文本字体颜色.</p>\n<p>对于日志文本, 不区分等级, 统一设置字体颜色.</p>\n<p>相当于 <a href=\"#m-settitletextcolor\">setTitleTextColor</a> 和 <a href=\"#m-setcontenttextcolor\">setContentTextColor</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 所有标题及日志本文的颜色统一设置为浅蓝色. */\nconsole.setTextColor(&#39;light-blue&#39;).show();\n[ &#39;verbose&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39; ].forEach((fName) =&gt; {\n    console[fName].call(console, ` text color test for console.${fName}`);\n});\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题及日志文本字体颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志文本字体颜色.</p>\n<p>对于日志文本, 不区分等级, 统一设置字体颜色.</p>\n<p>相当于 <a href=\"#m-settitletextcolor\">setTitleTextColor</a> 和 <a href=\"#m-setcontenttextcolor\">setContentTextColor</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 所有标题及日志本文的颜色统一设置为浅蓝色. */\nconsole.setTextColor(&#39;light-blue&#39;).show();\n[ &#39;verbose&#39;, &#39;log&#39;, &#39;info&#39;, &#39;warn&#39;, &#39;error&#39; ].forEach((fName) =&gt; {\n    console[fName].call(console, ` text color test for console.${fName}`);\n});\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -611,6 +878,29 @@
           "displayName": "[m] setBackgroundColor"
         },
         {
+          "textRaw": "[m] setBackgroundTint",
+          "name": "[m]_setbackgroundtint",
+          "methods": [
+            {
+              "textRaw": "setBackgroundTint(color)",
+              "type": "method",
+              "name": "setBackgroundTint",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 浮动窗口标题及日志区域背景着色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>同时设置标题和日志显示区域的背景着色, 并分别保留原有透明度.</p>\n<pre><code class=\"lang-js\">console.setBackgroundTint(&#39;light-yellow&#39;).show();\nconsole.build({ backgroundTint: &#39;light-yellow&#39; }).show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setBackgroundTint"
+        },
+        {
           "textRaw": "[m] setBackgroundAlpha",
           "name": "[m]_setbackgroundalpha",
           "methods": [
@@ -618,7 +908,7 @@
               "textRaw": "setBackgroundAlpha(alpha)",
               "type": "method",
               "name": "setBackgroundAlpha",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题及日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志显示区域背景颜色透明度.</p>\n<p>相当于 <a href=\"#m-settitlebackgroundalpha\">setTitleBackgroundAlpha</a> 和 <a href=\"#m-setcontentbackgroundalpha\">setContentBackgroundAlpha</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 设置标题及日志显示区域背景颜色为半透明. */\nconsole.setBackgroundAlpha(0.5).show();\nconsole.build({ backgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题及日志显示区域背景颜色为半透明浅黄色. */\nconsole\n    .setBackgroundColor(&#39;light-yellow&#39;)\n    .setBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 浮动窗口标题及日志显示区域背景颜色透明度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>设置控制台浮动窗口的标题及日志显示区域背景颜色透明度.</p>\n<p>相当于 <a href=\"#m-settitlebackgroundalpha\">setTitleBackgroundAlpha</a> 和 <a href=\"#m-setcontentbackgroundalpha\">setContentBackgroundAlpha</a> 的集成.</p>\n<pre><code class=\"lang-js\">/* 设置标题及日志显示区域背景颜色为半透明. */\nconsole.setBackgroundAlpha(0.5).show();\nconsole.build({ backgroundAlpha: 0.5 }).show(); /* 效果同上. */\n\n/* 设置标题及日志显示区域背景颜色为半透明浅黄色. */\nconsole\n    .setBackgroundColor(&#39;light-yellow&#39;)\n    .setBackgroundAlpha(0.5)\n    .show();\n</code></pre>\n<p>使用 <code>-1</code> 可同时重置标题区域的透明度 (为 <code>0.8</code>), 以及日志区域的透明度 (为 <code>0.6</code>):</p>\n<pre><code class=\"lang-js\">console.setBackgroundAlpha(-1).show();\nconsole.resetBackgroundAlpha().show(); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -632,6 +922,25 @@
           ],
           "type": "module",
           "displayName": "[m] setBackgroundAlpha"
+        },
+        {
+          "textRaw": "[m] resetBackgroundAlpha",
+          "name": "[m]_resetbackgroundalpha",
+          "methods": [
+            {
+              "textRaw": "resetBackgroundAlpha()",
+              "type": "method",
+              "name": "resetBackgroundAlpha",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"console\">this</a> }</li>\n</ul>\n<p>重置控制台浮动窗口的标题及日志显示区域背景颜色透明度, 分别为 <code>0.8</code> 及 <code>0.6</code>.</p>\n<p>相当于 <a href=\"#m-resettitlebackgroundalpha\">resetTitleBackgroundAlpha</a> 和 <a href=\"#m-resetcontentbackgroundalpha\">resetContentBackgroundAlpha</a> 的集成.</p>\n<pre><code class=\"lang-js\">console.resetBackgroundAlpha().show();\nconsole.setBackgroundAlpha(-1).show(); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] resetBackgroundAlpha"
         },
         {
           "textRaw": "[m] verbose",
@@ -831,7 +1140,7 @@
               "textRaw": "assert(func, message?)",
               "type": "method",
               "name": "assert",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"#function\">() =&gt;</a> <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>func</code> 参数的执行结果为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个函数</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(function () {\n    return new Date().getSeconds() &lt; 30;\n}, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [3-4]/4</code></strong></p>\n<ul>\n<li><strong>func</strong> { <a href=\"dataTypes#function\">() =&gt;</a> <a href=\"dataTypes#boolean\">boolean</a> } - 断言值</li>\n<li><strong>[ message ]</strong> { <a href=\"dataTypes#string\">string</a> } - 断言失败时的消息</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>断言 <code>func</code> 参数的执行结果为真.</p>\n<p>断言失败时, 脚本停止运行, 输出失败消息及调用栈信息到控制台.</p>\n<p>主要用途: 断言一个函数</p>\n<p>优先级: verbose &lt; log &lt; info &lt; warn &lt; error &lt; <strong>assert</strong></p>\n<p>字体颜色:</p>\n<ul>\n<li>浮动窗口 - [ <span style=\"color: #FCE4EC\">◑</span> ] - #FCE4EC</li>\n<li>Activity 活动窗口 - [ <span style=\"color: #E254FF\">◑</span> ] - #E254FF</li>\n</ul>\n<pre><code class=\"lang-js\">console.assert(function () {\n    return new Date().getSeconds() &lt; 30;\n}, &#39;断言失败, 当前时间秒数不小于 30&#39;);\n</code></pre>\n<blockquote>\n<p>注: 此方法将自动在控制台消息中添加末尾换行符.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [

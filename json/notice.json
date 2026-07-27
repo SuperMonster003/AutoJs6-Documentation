@@ -9,7 +9,7 @@
         {
           "textRaw": "简单操作",
           "name": "简单操作",
-          "desc": "<p>显示一条通知:</p>\n<pre><code class=\"lang-js\">/* 内容为 hello (标题为空). */\nnotice(&#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice(&#39;new message&#39;, &#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice({ title: &#39;new message&#39;, content: &#39;hello&#39; });\n\n/* 标题为 new message, 内容为 hello. */\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;new message&#39;)\n    .setContentText(&#39;hello&#39;));\n</code></pre>\n<p>显示两条独立的通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\nnotice(&#39;world&#39;);\n</code></pre>\n<p>显示两条可覆盖的通知:</p>\n<pre><code class=\"lang-js\">/* 方法 A: 通过指定相同的通知 ID 实现通知覆盖. */\n\nlet id = 5; /* 任意 ID 均可, 用于区分不同的通知. */\n\nnotice(&#39;hello&#39;, { notificationId: id }); /* 指定一个通知 ID. */\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;, { notificationId: id }); /* 通知 ID 相同, 因此 1 秒后上一条通知被替代 (覆盖). */\n\n/* 方法 B: 通过 notice.config 配置 notice 的默认选项. */\n\nnotice.config({ useDynamicDefaultNotificationId: false }); /* 禁用动态通知 ID 选项. */\nnotice(&#39;hello&#39;);\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;); /* 1 秒后上一条通知被替代 (覆盖). */\n</code></pre>\n<p>显示一条定制通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n\n/* 更多配置选项, 可参阅本章节后续内容. */\n</code></pre>\n<p>如果需要发送多条上述定制通知, 可将上述定制选项提取出来:</p>\n<pre><code class=\"lang-js\">/* 定义一个定制通知选项变量. */\nlet options = {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n};\n\n/* 以上述定制选项发送三条通知. */\n\nnotice(&#39;hello&#39;, options);\nnotice(&#39;world&#39;, options);\nnotice(&#39;tour&#39;, options);\n</code></pre>\n<p>上述示例指定通知 ID 可实现通知覆盖:</p>\n<pre><code class=\"lang-js\">/* 指定一个通知 ID 为固定值. */\noptions.notificationId = 20;\n\n/* 以上述定制选项发送三条可覆盖的通知. */\n\nnotice(&#39;hello&#39;, options);\nsleep(1e3);\nnotice(&#39;world&#39;, options); /* 1 秒后覆盖 &#39;hello&#39;. */\nsleep(1e3);\nnotice(&#39;tour&#39;, options); /* 1 秒后覆盖 &#39;world&#39;. */\n\n/* options 可随时进行定制修改. */\n\ndelete options.bigContent; /* 删除长内容. */\nsleep(1e3);\nnotice(&#39;movie&#39;, options); /* 1 秒后覆盖 &#39;tour&#39; */\n\noptions.intent = &#39;home&#39;; /* 修改 intent 属性. */\nsleep(1e3);\nnotice(&#39;here&#39;, options); /* 1 秒后覆盖 &#39;movie&#39; */\n</code></pre>\n",
+          "desc": "<p>显示一条通知:</p>\n<pre><code class=\"lang-js\">/* 内容为 hello (标题为空). */\nnotice(&#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice(&#39;new message&#39;, &#39;hello&#39;);\n\n/* 标题为 new message, 内容为 hello. */\nnotice({ title: &#39;new message&#39;, content: &#39;hello&#39; });\n\n/* 标题为 new message, 内容为 hello. */\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;new message&#39;)\n    .setContentText(&#39;hello&#39;));\n</code></pre>\n<p>显示两条独立的通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;);\nnotice(&#39;world&#39;);\n</code></pre>\n<p>显示两条可覆盖的通知:</p>\n<pre><code class=\"lang-js\">/* 方法 A: 通过指定相同的通知 ID 实现通知覆盖. */\n\nlet id = 5; /* 任意 ID 均可, 用于区分不同的通知. */\n\nnotice(&#39;hello&#39;, { notificationId: id }); /* 指定一个通知 ID. */\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;, { notificationId: id }); /* 通知 ID 相同, 因此 1 秒后上一条通知被替代 (覆盖). */\n\n/* 方法 B: 通过 notice.config 配置 notice 的默认选项. */\n\nnotice.config({ useDynamicDefaultNotificationId: false }); /* 禁用动态通知 ID 选项. */\nnotice(&#39;hello&#39;);\nsleep(1e3); /* 阻塞 1 秒. */\nnotice(&#39;world&#39;); /* 1 秒后上一条通知被替代 (覆盖). */\n</code></pre>\n<p>显示一条定制通知:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n});\n\n/* 更多配置选项, 可参阅本章节后续内容. */\n</code></pre>\n<p>如果需要发送多条上述定制通知, 可将上述定制选项提取出来:</p>\n<pre><code class=\"lang-js\">/* 定义一个定制通知选项变量. */\nlet options = {\n    bigContent: &#39;This is a message which says &quot;hello&quot;\\n-- from AutoJs6&#39;, /* 设置长内容. */\n    isSilent: true, /* 静音模式. */\n    appendScriptName: &#39;content&#39;, /* 附加脚本名称到内容结尾. */\n    intent: &#39;docs&#39;, /* 点击通知后跳转到 AutoJs6 的文档页面. */\n    autoCancel: true, /* 点击通知后自动移除通知. */\n};\n\n/* 以上述定制选项发送三条通知. */\n\nnotice(&#39;hello&#39;, options);\nnotice(&#39;world&#39;, options);\nnotice(&#39;tour&#39;, options);\n</code></pre>\n<p>上述示例指定通知 ID 可实现通知覆盖:</p>\n<pre><code class=\"lang-js\">/* 指定一个通知 ID 为固定值. */\noptions.notificationId = 20;\n\n/* 以上述定制选项发送三条可覆盖的通知. */\n\nnotice(&#39;hello&#39;, options);\nsleep(1e3);\nnotice(&#39;world&#39;, options); /* 1 秒后覆盖 &#39;hello&#39;. */\nsleep(1e3);\nnotice(&#39;tour&#39;, options); /* 1 秒后覆盖 &#39;world&#39;. */\n\n/* options 可随时进行定制修改. */\n\ndelete options.bigContent; /* 删除长内容. */\nsleep(1e3);\nnotice(&#39;movie&#39;, options); /* 1 秒后覆盖 &#39;tour&#39;. */\n\noptions.intent = &#39;home&#39;; /* 修改 intent 属性. */\nsleep(1e3);\nnotice(&#39;here&#39;, options); /* 1 秒后覆盖 &#39;movie&#39;. */\n</code></pre>\n",
           "type": "module",
           "displayName": "简单操作"
         },
@@ -92,7 +92,7 @@
               "textRaw": "notice()",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/8</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 主要用于测试.</p>\n<p>该测试通知包含标题及内容.</p>\n<pre><code class=\"lang-js\">// 以 AutoJs6 语言为 English 为例, \n// 标题为 Script notification, \n// 内容为 Notification from script.\nnotice();\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/8</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 主要用于测试.</p>\n<p>该测试通知包含标题及内容.</p>\n<pre><code class=\"lang-js\">// 以 AutoJs6 语言为 English 为例,\n// 标题为 Script notification,\n// 内容为 Notification from script.\nnotice();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -118,7 +118,7 @@
               "textRaw": "notice(content, options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.content &gt; content</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 5/8</code></strong></p>\n<ul>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 内容参数可能重复指定.<br>\n出现重复指定时, 按以下优先级处理:<br>\noptions.content &gt; content</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -136,7 +136,7 @@
               "textRaw": "notice(title, content, options)",
               "type": "method",
               "name": "notice",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含标题及内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>title</code> 和 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 标题参数与内容参数可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.title &gt; title\noptions.content &gt; content</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 6/8</code></strong></p>\n<ul>\n<li><strong>title</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的标题</li>\n<li><strong>content</strong> { <a href=\"dataTypes#string\">string</a> } - 通知消息的内容</li>\n<li><strong>options</strong> { <a href=\"noticeOptionsType\">NoticeOptions</a> } - 通知选项配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 通知 ID</li>\n</ul>\n<p>发送通知, 包含标题及内容, 并进行选项配置.</p>\n<p>与 <code>notice(options)</code> 类似, 但增加 <code>title</code> 和 <code>content</code> 参数.</p>\n<pre><code class=\"lang-js\">notice(&#39;message&#39;, &#39;hello&#39;, { isSilent: true });\n</code></pre>\n<blockquote>\n<p>注: 标题参数与内容参数可能重复指定.<br>\n出现重复指定时, 按以下优先级处理:<br>\noptions.title &gt; title\noptions.content &gt; content</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -271,6 +271,13 @@
           "displayName": "[m] cancel"
         },
         {
+          "textRaw": "[p] builder",
+          "name": "[p]_builder",
+          "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"noticeBuilderType\">NoticeBuilder</a> } - 简单通知构建器</li>\n</ul>\n<p>每次读取均创建一个新的简单通知构建器, 相当于调用 <a href=\"#m-getbuilder\">notice.getBuilder()</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] builder"
+        },
+        {
           "textRaw": "[m] getBuilder",
           "name": "[m]_getbuilder",
           "methods": [
@@ -278,7 +285,7 @@
               "textRaw": "getBuilder()",
               "type": "method",
               "name": "getBuilder",
-              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"noticeBuilderType\">NoticeBuilder</a> }</li>\n</ul>\n<p>获取一个简单通知构建器.</p>\n<p>简单通知构建器包含以下默认设置:</p>\n<ul>\n<li><code>setSmallIcon(R.drawable.autojs6_material)</code> # AutoJs6 应用图标作为 smallIcon</li>\n<li><code>setPriority(NotificationCompat.PRIORITY_HIGH)</code> # 高优先级 (仅针对 Android 7.1 及以下)</li>\n</ul>\n<p>构建器通常配合 <code>notice</code> 方法作为 第 1 个 (索引 0) 参数使用, 即 <code>notice(notice.getBuilder())</code>:</p>\n<pre><code class=\"lang-js\">let builder = notice.getBuilder();\nbuilder.setContentTitle(&#39;Weather condition&#39;);\nbuilder.setContentText(&#39;The sky is getting dark&#39;);\nnotice(builder);\n\n/* 链式调用使代码更简洁. */\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;Weather condition&#39;)\n    .setContentText(&#39;The sky is getting dark&#39;));\n</code></pre>\n<p>构建器可用于设置更多通知行为, 如 <a href=\"noticeBuilderType#m-setstyle\">setStyle</a>, <a href=\"noticeBuilderType#m-settimeoutafter\">setTimeoutAfter</a>, <a href=\"noticeBuilderType#m-setprogress\">setProgress</a> 等.</p>\n<p>但需要注意参数类型需严格符合要求, AutoJs6 内置的 <a href=\"omniTypes\">全能类型</a> 是不可用的.</p>\n<p>关于通知构建器的更多用法, 参阅 <a href=\"noticeBuilderType\">NoticeBuilder</a> 类型章节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"noticeBuilderType\">NoticeBuilder</a> }</li>\n</ul>\n<p>获取一个简单通知构建器.</p>\n<p>简单通知构建器包含以下默认设置:</p>\n<ul>\n<li><code>setSmallIcon(R.drawable.autojs6_material)</code> # AutoJs6 应用图标作为 smallIcon</li>\n<li><code>setPriority(NotificationCompat.PRIORITY_HIGH)</code> # 高优先级 (仅针对 Android 7.1 及以下)</li>\n</ul>\n<p>构建器通常配合 <code>notice</code> 方法作为第 1 个 (索引 0) 参数使用, 即 <code>notice(notice.getBuilder())</code>:</p>\n<pre><code class=\"lang-js\">let builder = notice.getBuilder();\nbuilder.setContentTitle(&#39;Weather condition&#39;);\nbuilder.setContentText(&#39;The sky is getting dark&#39;);\nnotice(builder);\n\n/* 链式调用使代码更简洁. */\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;Weather condition&#39;)\n    .setContentText(&#39;The sky is getting dark&#39;));\n</code></pre>\n<p>构建器可用于设置更多通知行为, 如 <a href=\"noticeBuilderType#m-setstyle\">setStyle</a>, <a href=\"noticeBuilderType#m-settimeoutafter\">setTimeoutAfter</a>, <a href=\"noticeBuilderType#m-setprogress\">setProgress</a> 等.</p>\n<p>但需要注意参数类型需严格符合要求, AutoJs6 内置的 <a href=\"omniTypes\">全能类型</a> 是不可用的.</p>\n<p>关于通知构建器的更多用法, 参阅 <a href=\"noticeBuilderType\">NoticeBuilder</a> 类型章节.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -292,7 +299,7 @@
         {
           "textRaw": "[m] config",
           "name": "[m]_config",
-          "desc": "<p>config 方法用于修改默认配置, 即用于配置通知渠道与通知发送的默认行为.</p>\n<p>例如 <code>notice(&#39;hello&#39;)</code> 会发送一个内容为 &quot;hello&quot; 的通知, 但其中隐含了许多默认的通知行为.</p>\n<blockquote>\n<p>注: 初次使用 notice 模块时, 建议先跳过此小节内容, 待了解包括 <a href=\"#p-channel\">channel</a> 等在内的相关内容后再继续阅读当前小节.</p>\n</blockquote>\n<p>例如, <code>isSilent</code> 默认为 <code>false</code>, 表示不进行强制静音.<br>通过 <code>notice.config</code> 可配置所有通知发送时, 默认启用强制静音:</p>\n<pre><code class=\"lang-js\">notice.config({ defaultIsSilent: true }); /* 通知发送时, 默认强制静音. */\n</code></pre>\n<p>执行上述示例代码后, <code>notice(&#39;hello&#39;)</code> 将会静音发送通知.</p>\n<p>如果不执行上述代码, 则需要在每一个 notice 方法中加入 <code>isSilent</code> 选项设置:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\nnotice(&#39;message&#39;, { isSilent: true });\nnotice(&#39;finished&#39;, { isSilent: true });\n/* ... ... */\n</code></pre>\n<p>因此, <code>notice.config</code> 适用于在同一个脚本或项目中, 有多次使用 <code>notice</code> 需求的场景.</p>\n<blockquote>\n<p>注: notice.config 配置的是默认行为, 当通过参数明确指定了某个行为时, 默认行为将不会生效.</p>\n</blockquote>\n",
+          "desc": "<p>config 方法用于修改默认配置, 即用于配置通知渠道与通知发送的默认行为.</p>\n<p>例如 <code>notice(&#39;hello&#39;)</code> 会发送一个内容为 &quot;hello&quot; 的通知, 但其中隐含了许多默认的通知行为.</p>\n<blockquote>\n<p>注: 初次使用 notice 模块时, 建议先跳过此小节内容, 待了解包括 <a href=\"#p-channel\">channel</a> 等在内的相关内容后再继续阅读当前小节.</p>\n</blockquote>\n<p>例如, <code>isSilent</code> 默认为 <code>false</code>, 表示不进行强制静音.<br>\n通过 <code>notice.config</code> 可配置所有通知发送时, 默认启用强制静音:</p>\n<pre><code class=\"lang-js\">notice.config({ defaultIsSilent: true }); /* 通知发送时, 默认强制静音. */\n</code></pre>\n<p>执行上述示例代码后, <code>notice(&#39;hello&#39;)</code> 将会静音发送通知.</p>\n<p>如果不执行上述代码, 则需要在每一个 notice 方法中加入 <code>isSilent</code> 选项设置:</p>\n<pre><code class=\"lang-js\">notice(&#39;hello&#39;, { isSilent: true });\nnotice(&#39;message&#39;, { isSilent: true });\nnotice(&#39;finished&#39;, { isSilent: true });\n/* ... ... */\n</code></pre>\n<p>因此, <code>notice.config</code> 适用于在同一个脚本或项目中, 有多次使用 <code>notice</code> 需求的场景.</p>\n<blockquote>\n<p>注: notice.config 配置的是默认行为, 当通过参数明确指定了某个行为时, 默认行为将不会生效.</p>\n</blockquote>\n",
           "methods": [
             {
               "textRaw": "config(preset)",
@@ -341,7 +348,7 @@
                   "textRaw": "create(channelId, options)",
                   "type": "method",
                   "name": "create",
-                  "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><strong>options</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 指定渠道 ID 并进行渠道配置.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;, /* 渠道名称. */\n    description: &#39;Messages from David&#39;, /* 渠道描述. */\n    importance: 3, /* 渠道优先级. */\n    enableLights: true, /* 启用指示灯. */\n    lightColor: &#39;blue&#39;, /* 设置指示灯颜色. */\n    enableVibration: true, /* 启用振动. */\n});\n</code></pre>\n<p>更多渠道配置相关信息, 参阅 <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> 类型章节.</p>\n<blockquote>\n<p>注: 渠道 ID 可能重复指定.<br>出现重复指定时, 按以下优先级处理:<br>options.id &gt; channelId</p>\n</blockquote>\n",
+                  "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><strong>options</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 渠道 ID</li>\n</ul>\n<p>创建通知渠道, 指定渠道 ID 并进行渠道配置.</p>\n<pre><code class=\"lang-js\">notice.channel.create(&#39;my_channel_id&#39;, {\n    name: &#39;New message&#39;, /* 渠道名称. */\n    description: &#39;Messages from David&#39;, /* 渠道描述. */\n    importance: 3, /* 渠道优先级. */\n    enableLights: true, /* 启用指示灯. */\n    lightColor: &#39;blue&#39;, /* 设置指示灯颜色. */\n    enableVibration: true, /* 启用振动. */\n});\n</code></pre>\n<p>更多渠道配置相关信息, 参阅 <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> 类型章节.</p>\n<p>当同时指定位置参数 <strong>channelId</strong> 和 <code>options.id</code> 时, 使用位置参数 <strong>channelId</strong>.</p>\n",
                   "signatures": [
                     {
                       "params": [
@@ -373,6 +380,47 @@
               ],
               "type": "module",
               "displayName": "[m] create"
+            },
+            {
+              "textRaw": "[m] createIfNeeded",
+              "name": "[m]_createifneeded",
+              "methods": [
+                {
+                  "textRaw": "createIfNeeded(channelId, options?)",
+                  "type": "method",
+                  "name": "createIfNeeded",
+                  "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>channelId</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> } - 渠道 ID</li>\n<li><strong>[ options ]</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅当指定渠道不存在时创建渠道. 已存在的渠道不会被修改.</p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "channelId"
+                        },
+                        {
+                          "name": "options?"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "createIfNeeded(options)",
+                  "type": "method",
+                  "name": "createIfNeeded",
+                  "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"noticeChannelOptionsType\">NoticeChannelOptions</a> } - 渠道创建选项, 使用 <code>channelId</code> 属性指定渠道 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅当 <code>options.channelId</code> 对应的渠道不存在时创建渠道. 未指定 <code>channelId</code> 时使用当前脚本的默认渠道 ID.</p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "options"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] createIfNeeded"
             },
             {
               "textRaw": "[m] contains",

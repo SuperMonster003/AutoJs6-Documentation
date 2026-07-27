@@ -57,8 +57,8 @@ let verB = new Version('5.2.3');
 补丁版本号和次版本号及版本后缀全部是可选的, 以下构造器均是合法的:
 
 ```js
-let verA = new Version('5'); /* 相当于 '5.0.0' . */
-let verB = new Version('5.2'); /* 相当于 '5.2.0' . */
+let verA = new Version('5'); /* 相当于 '5.0.0'. */
+let verB = new Version('5.2'); /* 相当于 '5.2.0'. */
 let verC = new Version('5.2.3');
 let verD = new Version('5.2.3-alpha11'); /* alpha11 为后缀. */
 ```
@@ -66,8 +66,8 @@ let verD = new Version('5.2.3-alpha11'); /* alpha11 为后缀. */
 特别地, 数字 (包含正整数及正小数) 也支持作为版本号参数使用, 它将被隐式转换为字符串类型:
 
 ```js
-let verA = new Version(5); /* 相当于 '5.0.0' . */
-let verB = new Version(5.2); /* 相当于 '5.2.0' . */
+let verA = new Version(5); /* 相当于 '5.0.0'. */
+let verB = new Version(5.2); /* 相当于 '5.2.0'. */
 ```
 
 版本号结构样例:
@@ -195,7 +195,7 @@ console.log(new Version(11.9).getPatch()); // 0
 获取版本号后缀.
 
 ```js
-console.log(new Version('5.2.3').getSuffix()); /* "" (空字符串) */
+console.log(new Version('5.2.3').getSuffix()); /* "" (空字符串). */
 
 console.log(new Version('5.2.3-beta2').getSuffix()); // -beta2
 console.log(new Version('5.2.3_beta2').getSuffix()); // _beta2
@@ -316,10 +316,10 @@ console.log(new Version('2.3.5').getSubversionNumbers()); // [2, 3, 5]
 /* 后缀将被忽略. */
 console.log(new Version('2.3.5-alpha9').getSubversionNumbers()); // [2, 3, 5]
 
-/* 
+/*
  * 注意虽然 '2' 与 '2.0.0' 版本比较等同,
  * 即 new Version('2').isEqual('2.0.0') 为 true,
- * 但两者 getSubversionNumbers() 不同. 
+ * 但两者 getSubversionNumbers() 不同.
  */
 console.log(new Version('2.0.0').getSubversionNumbers()); // [2, 0, 0]
 console.log(new Version('2').getSubversionNumbers()); // [2]
@@ -340,7 +340,7 @@ console.log(new Version('2.3.5').getOriginalString()); // 2.3.5
 console.log(new Version('2.3').getOriginalString()); // 2.3
 console.log(new Version('2.3-alpha5').getOriginalString()); // 2.3-alpha5
 console.log(new Version('2.0.0').getOriginalString()); // 2.0.0
-console.log(new Version(2).getOriginalString()); /* 2 (字符串类型) */
+console.log(new Version(2).getOriginalString()); /* 2 (字符串类型). */
 ```
 
 ## [m#] compareTo

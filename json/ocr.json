@@ -4,7 +4,7 @@
     {
       "textRaw": "光学字符识别 (OCR)",
       "name": "光学字符识别_(ocr)",
-      "desc": "<p>ocr 模块用于识别图像中的文本.</p>\n<p>AutoJs6 的 OCR 特性是基于 <a href=\"https://developers.google.com/ml-kit?hl=zh-cn\">Google ML Kit</a> 的 <a href=\"https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn\">文字识别 API</a> 及 <a href=\"https://www.paddlepaddle.org.cn/\">Baidu PaddlePaddle</a> 的 <a href=\"https://github.com/PaddlePaddle/Paddle-Lite\">Paddle Lite</a> 实现的.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ocr</p>\n\n<hr>\n",
+      "desc": "<p>ocr 模块用于识别图像中的文本.</p>\n<p>AutoJs6 支持 ML Kit, Paddle 和 Rapid OCR 引擎.</p>\n<p>从 AutoJs6 6.8.0 起, 普通应用中的 OCR 引擎由外部 OCR 插件提供. 调用前需在插件中心安装, 启用并授权兼容插件; 无可用引擎时识别方法会抛出插件加载异常. <code>engine</code>, <code>variant</code> 和 <code>profile</code> 选项可用于选择插件实现.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ocr</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] ocr",
@@ -63,7 +63,7 @@
               "textRaw": "ocr(img, region)",
               "type": "method",
               "name": "ocr",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 6/9</code></strong></p>\n<ul>\n<li><strong>img</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 包装图像对象</li>\n<li><strong>region</strong> { <a href=\"omniTypes#omniregion\">OmniRegion</a> } - OCR 识别区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>识别指定区域内图像包含的所有文本, 返回文本数组.</p>\n<p><a href=\"#-ocr\">ocr(img, { region: region })</a> 的便捷方法.</p>\n<p><a href=\"#m-recognizetext\">ocr.recognizeText(img, region)</a> 的别名方法.</p>\n<pre><code class=\"lang-js\">/* 申请屏幕截图权限. */\nimages.requestScreenCapture();\n\n/* 截屏并获取包装图像对象. */\nlet img = images.captureScreen();\n\n/* 在区域 [ 0, 0, 100, 150 ] 内进行 OCR 识别并获取结果, 结果为字符串数组. */\nlet results = ocr(img, [ 0, 0, 100, 150 ]);\n\n/* 结果过滤, 筛选出文本中可部分匹配 &quot;app&quot; 的结果, 如 &quot;apple&quot;, &quot;disappear&quot; 等. */\nresults.filter(text =&gt; text.includes(&#39;app&#39;)); \n</code></pre>\n<p>关于 OCR 区域参数 <code>region</code> 的更多用法, 参阅 <a href=\"ocrOptionsType#p-region\">OcrOptions#region</a> 小节.</p>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 6/9</code></strong></p>\n<ul>\n<li><strong>img</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 包装图像对象</li>\n<li><strong>region</strong> { <a href=\"omniTypes#omniregion\">OmniRegion</a> } - OCR 识别区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>识别指定区域内图像包含的所有文本, 返回文本数组.</p>\n<p><a href=\"#-ocr\">ocr(img, { region: region })</a> 的便捷方法.</p>\n<p><a href=\"#m-recognizetext\">ocr.recognizeText(img, region)</a> 的别名方法.</p>\n<pre><code class=\"lang-js\">/* 申请屏幕截图权限. */\nimages.requestScreenCapture();\n\n/* 截屏并获取包装图像对象. */\nlet img = images.captureScreen();\n\n/* 在区域 [ 0, 0, 100, 150 ] 内进行 OCR 识别并获取结果, 结果为字符串数组. */\nlet results = ocr(img, [ 0, 0, 100, 150 ]);\n\n/* 结果过滤, 筛选出文本中可部分匹配 &quot;app&quot; 的结果, 如 &quot;apple&quot;, &quot;disappear&quot; 等. */\nresults.filter(text =&gt; text.includes(&#39;app&#39;));\n</code></pre>\n<p>关于 OCR 区域参数 <code>region</code> 的更多用法, 参阅 <a href=\"ocrOptionsType#p-region\">OcrOptions#region</a> 小节.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -120,14 +120,14 @@
         {
           "textRaw": "[p] mode",
           "name": "[p]_mode",
-          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li><strong>[ &lt;get&gt; = <code>&#39;mlkit&#39;</code> ]</strong> { <a href=\"dataTypes#ocrModeName\">OcrModeName</a> }</li>\n<li><strong>&lt;set&gt;</strong> { <a href=\"dataTypes#ocrModeName\">OcrModeName</a> }</li>\n</ul>\n<p>获取或设置 OCR 的工作模式名称.</p>\n<pre><code class=\"lang-js\">/* AutoJs6 OCR 默认采用 MLKit 工作模式. */\nconsole.log(ocr.mode); // &quot;mlkit&quot;\n\nocr.mode = &#39;paddle&#39;; /* 切换到 Paddle 工作模式. */\nconsole.log(ocr.mode); // &quot;paddle&quot;\n\nocr.mode = &#39;mlkit&#39;; /* 再次切换到 MLKit 工作模式. */\nconsole.log(ocr.mode); // &quot;mlkit&quot;\n</code></pre>\n<p>当使用不同的工作模式名称时, <code>ocr</code> 全局方法及其相关方法 (如 <a href=\"#m-detect\">ocr.detect</a>) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.</p>\n<blockquote>\n<p>注: 使用 Paddle 工作模式时, 建议开启 AutoJs6 的 &quot;忽略电池优化&quot; 开关, 并降低对 AutoJs6 节电及后台运行等方面的限制, 否则可能导致应用崩溃.</p>\n</blockquote>\n",
+          "desc": "<p><strong><code>6.3.4</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li><strong>[ &lt;get&gt; = <code>&#39;mlkit&#39;</code> ]</strong> { <a href=\"dataTypes#ocrModeName\">OcrModeName</a> }</li>\n<li><strong>&lt;set&gt;</strong> { <a href=\"dataTypes#ocrModeName\">OcrModeName</a> }</li>\n</ul>\n<p>获取或设置 OCR 的工作模式名称.</p>\n<pre><code class=\"lang-js\">/* AutoJs6 OCR 默认采用 MLKit 工作模式. */\nconsole.log(ocr.mode); // &quot;mlkit&quot;\n\nocr.mode = &#39;paddle&#39;; /* 切换到 Paddle 工作模式. */\nconsole.log(ocr.mode); // &quot;paddle&quot;\n\nocr.mode = &#39;mlkit&#39;; /* 再次切换到 MLKit 工作模式. */\nconsole.log(ocr.mode); // &quot;mlkit&quot;\n\nocr.mode = &#39;rapid&#39;; /* 切换到 Rapid OCR 工作模式. */\nconsole.log(ocr.mode); // &quot;rapid&quot;\n</code></pre>\n<p>当使用不同的工作模式名称时, <code>ocr</code> 全局方法及其相关方法 (如 <a href=\"#m-detect\">ocr.detect</a>) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.</p>\n",
           "type": "module",
           "displayName": "[p] mode"
         },
         {
           "textRaw": "[m] recognizeText",
           "name": "[m]_recognizetext",
-          "desc": "<p>用于识别图像中的全部文本.</p>\n<p><code>recognizeText</code> 方法与工作模式有关, 例如当工作模式为 <code>paddle</code> 时, <code>ocr.recognizeText(...)</code> 与 <code>ocr.paddle.recognizeText(...)</code> 等价.</p>\n<p><code>ocr.recognizeText(...)</code> 相关方法均可简写为 <code>ocr(...)</code>.</p>\n",
+          "desc": "<p>用于识别图像中的全部文本.</p>\n<p><code>recognizeText</code> 方法与工作模式有关. 例如工作模式为 <code>rapid</code> 时, <code>ocr.recognizeText(...)</code> 与 <code>ocr.rapid.recognizeText(...)</code> 等价.</p>\n<p><code>ocr.recognizeText(...)</code> 相关方法均可简写为 <code>ocr(...)</code>.</p>\n",
           "methods": [
             {
               "textRaw": "recognizeText(options?)",
@@ -238,7 +238,7 @@
         {
           "textRaw": "[m] detect",
           "name": "[m]_detect",
-          "desc": "<p>用于识别图像中的全部文本.</p>\n<p><code>detect</code> 方法与工作模式有关, 例如当工作模式为 <code>paddle</code> 时, <code>ocr.detect(...)</code> 与 <code>ocr.paddle.detect(...)</code> 等价.</p>\n<p>与 <a href=\"#m-recognizetext\">recognizeText</a> 不同, <code>detect</code> 返回的结果包含更多信息, 包括 [ 文本标签, 置信度, 位置矩形 ] 等, <code>recognizeText</code> 精简了 <code>detect</code> 返回的结果, 仅包含文本标签数据.</p>\n",
+          "desc": "<p>用于识别图像中的全部文本.</p>\n<p><code>detect</code> 方法与工作模式有关. 例如工作模式为 <code>rapid</code> 时, <code>ocr.detect(...)</code> 与 <code>ocr.rapid.detect(...)</code> 等价.</p>\n<p>与 <a href=\"#m-recognizetext\">recognizeText</a> 不同, <code>detect</code> 返回的结果包含更多信息, 包括 [ 文本标签, 置信度, 位置矩形 ] 等, <code>recognizeText</code> 精简了 <code>detect</code> 返回的结果, 仅包含文本标签数据.</p>\n",
           "methods": [
             {
               "textRaw": "detect(options?)",
@@ -347,6 +347,68 @@
           "displayName": "[m] detect"
         },
         {
+          "textRaw": "[m+] rapid",
+          "name": "[m+]_rapid",
+          "methods": [
+            {
+              "textRaw": "rapid(input?, optionsOrRegion?)",
+              "type": "method",
+              "name": "rapid",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ input ]</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"ocrOptionsType\">OcrOptions</a> | <a href=\"omniTypes#omniregion\">OmniRegion</a> }</li>\n<li><strong>[ optionsOrRegion ]</strong> { <a href=\"ocrOptionsType\">OcrOptions</a> | <a href=\"omniTypes#omniregion\">OmniRegion</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a>[] }</li>\n</ul>\n<p>固定使用 Rapid OCR 引擎识别文本, 不受 <a href=\"#p-mode\">ocr.mode</a> 影响. 参数重载与 <a href=\"#m-recognizetext\">ocr.recognizeText</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input?"
+                    },
+                    {
+                      "name": "optionsOrRegion?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rapid.recognizeText(input?, optionsOrRegion?)",
+              "type": "method",
+              "name": "recognizeText",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a>[] }</li>\n</ul>\n<p><a href=\"#m-rapid\">ocr.rapid</a> 的显式方法形式.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input?"
+                    },
+                    {
+                      "name": "optionsOrRegion?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rapid.detect(input?, optionsOrRegion?)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#ocrresult\">OcrResult</a>[] }</li>\n</ul>\n<p>固定使用 Rapid OCR 引擎并返回完整识别结果. 参数重载与 <a href=\"#m-detect\">ocr.detect</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "input?"
+                    },
+                    {
+                      "name": "optionsOrRegion?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m+] rapid"
+        },
+        {
           "textRaw": "[m] tap",
           "name": "[m]_tap",
           "methods": [
@@ -377,7 +439,7 @@
               "textRaw": "summary()",
               "type": "method",
               "name": "summary",
-              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<p>获取 AutoJs6 OCR 功能的摘要.</p>\n<p>摘要中表述了 OCR 功能当前使用的工作模式, 以及全部可用的工作模式.</p>\n<pre><code class=\"lang-js\">/* e.g. [ OCR summary ]\n * Current mode: mlkit\n * Available modes: [ mlkit, paddle ]\n */\nconsole.log(ocr.summary());\n</code></pre>\n",
+              "desc": "<p><strong><code>6.4.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - OCR 工作模式摘要</li>\n</ul>\n<p>获取 AutoJs6 OCR 功能的摘要.</p>\n<p>摘要中表述了 OCR 功能当前使用的工作模式, 以及全部可用的工作模式.</p>\n<pre><code class=\"lang-js\">/* e.g. [ OCR summary ]\n * Current mode: mlkit\n * Available modes: [ mlkit, paddle, rapid ]\n */\nconsole.log(ocr.summary());\n</code></pre>\n",
               "signatures": [
                 {
                   "params": []
@@ -389,9 +451,28 @@
           "displayName": "[m] summary"
         },
         {
+          "textRaw": "[m] toString",
+          "name": "[m]_tostring",
+          "methods": [
+            {
+              "textRaw": "toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - OCR 工作模式摘要</li>\n</ul>\n<p>返回与 <code>ocr.summary()</code> 相同的文本.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toString"
+        },
+        {
           "textRaw": "工作模式与代码形式",
           "name": "工作模式与代码形式",
-          "desc": "<p>截止 2023 年 9 月, AutoJs6 的 ocr 支持两种工作模式, <code>mlkit</code> (默认) 及 <code>paddle</code>.</p>\n<p>工作模式的获取或设置可通过 <a href=\"#p-mode\">ocr.mode</a> 实现.</p>\n<p>下面以 <code>mlkit</code> 为例, 总结 <code>mlkit</code> 工作模式可用的全部代码形式.</p>\n<ol>\n<li>ocr.mlkit.detect(...)</li>\n<li>ocr.mlkit.recognizeText(...)</li>\n<li>ocr.mlkit(...)</li>\n<li><a href=\"#m-detect\">ocr.detect(...)</a></li>\n<li><a href=\"#m-recognizetext\">ocr.recognizeText(...)</a></li>\n<li><a href=\"#-ocr\">ocr(...)</a></li>\n</ol>\n<p>上述 6 种代码形式均可实现使用 <code>mlkit</code> 引擎进行光学字符识别.</p>\n<p>其中, [ 3 ] 是 [ 2 ] 的简便写法, [ 6 ] 是 [ 5 ] 的简便写法.</p>\n<p>另外, [ 4, 5, 6 ] 三种形式的条件, 是 OCR 工作模式为 <code>mlkit</code>, 即 <code>ocr.mode</code> 返回 <code>mlkit</code>. 否则需要调用 <code>ocr.mode = &#39;mlkit&#39;</code> 切换工作模式.</p>\n<p>下面再以 <code>paddle</code> 为例, 总结 <code>paddle</code> 工作模式可用的全部代码形式.</p>\n<ol>\n<li>ocr.paddle.detect(...)</li>\n<li>ocr.paddle.recognizeText(...)</li>\n<li>ocr.paddle(...)</li>\n<li><a href=\"#m-detect\">ocr.detect(...)</a></li>\n<li><a href=\"#m-recognizetext\">ocr.recognizeText(...)</a></li>\n<li><a href=\"#-ocr\">ocr(...)</a></li>\n</ol>\n<p>同样, [ 4, 5, 6 ] 三种形式的条件, 是 OCR 工作模式为 <code>paddle</code>, 即 <code>ocr.mode</code> 返回 <code>paddle</code>. 否则需要调用 <code>ocr.mode = &#39;paddle&#39;</code> 切换工作模式.</p>\n<p>由此可见, <code>ocr(...)</code> 和 <code>ocr.detect(...)</code> 等方法是动态变化的, 其功能取决于工作模式. 这种形式的优点是写法简单, 但可读性相对较差, 可能难以辨识 OCR 的具体工作引擎. 如需兼顾可读性, 则可使用 <code>ocr.mlkit(...)</code> 和 <code>ocr.mlkit.detect(...)</code> 等形式.</p>\n",
+          "desc": "<p>AutoJs6 6.8.0 支持 <code>mlkit</code>, <code>paddle</code> 和 <code>rapid</code> 3 种 OCR 工作模式, 默认模式为 <code>mlkit</code>. 工作模式可通过 <a href=\"#p-mode\">ocr.mode</a> 或 <a href=\"#m-tap\">ocr.tap</a> 设置.</p>\n<p>每个引擎对象均可直接调用, 也提供 <code>recognizeText</code> 和 <code>detect</code>:</p>\n<pre><code class=\"lang-js\">ocr.mlkit(image);\nocr.paddle.recognizeText(image);\nocr.rapid.detect(image);\n</code></pre>\n<p>直接调用 <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 或 <code>ocr.detect(...)</code> 时使用当前工作模式. 使用 <code>ocr.mlkit</code>, <code>ocr.paddle</code> 或 <code>ocr.rapid</code> 时固定选择对应引擎, 更适合需要明确引擎的脚本.</p>\n",
           "type": "module",
           "displayName": "工作模式与代码形式"
         }

@@ -2,15 +2,14 @@
 
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Feb 22, 2023.</p>
+<aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2023-02-22">
+<p><strong>文档状态:</strong> 此章节仍在补充或完善中.</p>
+</aside>
 
----
-
-数据类型是用来约束数据的解释.  
+数据类型是用来约束数据的解释.<br>
 本章节的数据类型包括 [ number / void / any / object / 泛型 / 交叉类型 ] 等.
 
-> 注: 此章节的类型概念 与 JavaScript 数据类型 (如 [基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive/)) 以及 TypeScript 数据类型 (如 [基础类型](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)) 在概念上可能存在出入, 因此仅适用于对文档内容的辅助理解, 不适用于严格的概念参考.
+> 注: 此章节的类型概念与 JavaScript 数据类型 (如 [基本类型](https://developer.mozilla.org/zh-CN/docs/Glossary/Primitive/)) 以及 TypeScript 数据类型 (如 [基础类型](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html)) 在概念上可能存在出入, 因此仅适用于对文档内容的辅助理解, 不适用于严格的概念参考.
 
 ---
 
@@ -100,7 +99,7 @@ JavaScript 的所有数字都是浮点数, 因此 number 类型对 Double, Float
 typeof new java.lang.Double(5.23).doubleValue(); // "number"
 ```
 
-> 注: 如需表示一个很大的数 (超过 `2^53 - 1`), 需要用 [BigInt](glossaries#bigint) 表示.  
+> 注: 如需表示一个很大的数 (超过 `2^53 - 1`), 需要用 [BigInt](glossaries#bigint) 表示.<br>
 > 文档中通常不会出现 `bigint` 类型的数据, 包括 `number | bigint` 这样的 [联合类型](#联合类型) 数据.
 
 ## String
@@ -128,11 +127,34 @@ foo(`3e3 equals to ${3000}`); /* 符合预期. */
 foo(NaN.toString()); /* 符合预期. */
 ```
 
+## Symbol
+
+符号类型.
+
+Symbol 是一种不可变的基本类型, 每个 Symbol 值都具有唯一性, 常用于创建不会与其他属性名冲突的对象属性键.
+
+**foo(bar)**
+
+- **bar** { [symbol](#symbol) }
+
+```js
+let key = Symbol("id");
+let anotherKey = Symbol("id");
+
+foo(key); /* 符合预期. */
+foo("id"); /* 不符合预期. */
+console.log(key === anotherKey); // false
+```
+
+> 注: Symbol 是基本类型, 不能使用 `new Symbol()` 创建实例.
+
+> 参阅: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures#Symbol_type)
+
 ## Array
 
 数组类型.
 
-后缀 "[]" 代表数组类型.  
+后缀 "[]" 代表数组类型.<br>
 如 `number[]` 代表一个数组, 其中的元素全部为 [number](#number) 类型, 且元素数量不限 (包括 0, 即空数组).
 
 > 注: `number[]` 与 `[number]` 不同, 后者表示 [元组类型](#tuple).
@@ -150,16 +172,113 @@ foo([ "3", 3 ]); /* 不符合预期. */
 foo([]); /* 符合预期. */
 ```
 
+## ArrayBuffer
+
+二进制数据缓冲区类型.
+
+ArrayBuffer 表示一段具有固定字节长度的连续内存. 它只负责存储原始字节, 不能直接按元素读取或写入, 通常需借助 [DataView](#dataview) 或 [TypedArray](#typedarray) 访问其内容.
+
+**foo(bar)**
+
+- **bar** { [ArrayBuffer](#arraybuffer) }
+
+```js
+let buffer = new ArrayBuffer(4);
+let bytes = new Uint8Array(buffer);
+
+foo(buffer); /* 符合预期. */
+foo(bytes); /* 不符合预期. */
+console.log(buffer.byteLength); // 4
+```
+
+> 注: 由同一 ArrayBuffer 创建的多个视图共享底层数据, 创建视图不会复制缓冲区内容.
+
+> 参阅: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer)
+
+## DataView
+
+二进制数据视图类型.
+
+DataView 可在 ArrayBuffer 的任意字节偏移处, 按指定数值类型和字节序读取或写入数据.
+
+**foo(bar)**
+
+- **bar** { [DataView](#dataview) }
+
+```js
+let buffer = new ArrayBuffer(4);
+let view = new DataView(buffer);
+
+view.setUint16(0, 0x1234, false);
+foo(view); /* 符合预期. */
+foo(buffer); /* 不符合预期. */
+console.log(view.getUint16(0, false)); // 4660
+```
+
+> 注: DataView 是 ArrayBuffer 视图, 但不是 TypedArray.
+
+> 参阅: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView)
+
+## TypedArray
+
+类型化数组类型.
+
+TypedArray 是 Int8Array, Uint8Array, Float32Array 等具体类型化数组的统称. 类型化数组具有固定元素数量, 所有元素使用同一种数值类型, 并通过 ArrayBuffer 存储底层二进制数据.
+
+**foo(bar)**
+
+- **bar** { [TypedArray](#typedarray) }
+
+```js
+let integers = new Int16Array([ 1, 2 ]);
+let bytes = new Uint8Array([ 3, 4 ]);
+let view = new DataView(new ArrayBuffer(2));
+
+foo(integers); /* 符合预期. */
+foo(bytes); /* 符合预期. */
+foo(view); /* 不符合预期. */
+```
+
+> 注: TypedArray 是文档对具体类型化数组的统称, 不能使用 `new TypedArray()` 直接创建实例.
+
+> 参阅: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray)
+
+## Uint8Array
+
+无符号 8 位整数数组类型.
+
+Uint8Array 是一种 TypedArray, 每个元素占用 1 字节, 取值范围为 0 到 255.
+
+**foo(bar)**
+
+- **bar** { [Uint8Array](#uint8array) }
+
+```js
+let bytes = new Uint8Array([ 0, 255 ]);
+let signedBytes = new Int8Array([ 0, 127 ]);
+
+foo(bytes); /* 符合预期. */
+foo(signedBytes); /* 不符合预期. */
+
+bytes[0] = 256;
+bytes[1] = -1;
+console.log([ bytes[0], bytes[1] ]); // [0, 255]
+```
+
+> 注: 超出 0 到 255 的赋值会按无符号 8 位整数规则转换. Uint8Array 不会像 Uint8ClampedArray 一样执行钳制.
+
+> 参阅: [MDN](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)
+
 ## Tuple
 
 元组类型.
 
-元组类型严格限制数组的对应类型及元素数量.  
-如 `[ number, number, string, number ]` 有如下限制:  
-&#45; &#45; 数组有且必有 4 个元素;  
+元组类型严格限制数组的对应类型及元素数量.<br>
+如 `[ number, number, string, number ]` 有如下限制:<br>
+&#45; &#45; 数组有且必有 4 个元素;<br>
 &#45; &#45; 元素类型依次为 number, number, string, number.
 
-> 注: 需额外注意元组类型与 JSDoc 表示数组方法的异同.  
+> 注: 需额外注意元组类型与 JSDoc 表示数组方法的异同.<br>
 > 另外 JavaScript 中没有元组的概念.
 
 **foo(bar)**
@@ -230,6 +349,19 @@ foo(function (a, b) {
 
 > 参阅: [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp)
 
+## Date
+
+JavaScript 日期和时间对象.
+
+`Date` 实例表示自 `1970-01-01T00:00:00Z` 起经过的毫秒数所对应的时间点.
+
+```js
+let date = new Date("2026-07-25T00:00:00Z");
+console.log(date.getTime());
+```
+
+> 参阅: [MDN](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Date)
+
 ## Any
 
 任意类型.
@@ -283,8 +415,8 @@ function foo() {
 
 - **bar** { [() =>](#function) [void](#void) }
 
-上述 [方法签名](documentation#方法签名) 中, bar 为函数参数,  
-void 并非表示要求其返回值为 void,  
+上述 [方法签名](documentation#方法签名) 中, bar 为函数参数,<br>
+void 并非表示要求其返回值为 void,<br>
 它表示 bar 返回的所有值均被忽略 (即不被关心).
 
 ```js
@@ -300,7 +432,7 @@ console.log(arr);
 - **bar** { [string](#string) }
 - <ins>**returns**</ins> { [void](#void) }
 
-在 JavaScript 中, 没有 return 语句的函数将默认返回 [undefined](#undefined).  
+在 JavaScript 中, 没有 return 语句的函数将默认返回 [undefined](#undefined).<br>
 因此对于函数体, 返回值为 void 相当于 undefined:
 
 ```js
@@ -326,8 +458,8 @@ foo(() => {
 - **bar** { [() =>](#function) [void](#void) }
 - **baz** { [() =>](#function) [undefined](#undefined) }
 
-对于函数参数, 返回值 void 与 返回值 undefined 意义不同.  
-void 表示返回的所有值均被忽略 (参阅 [作为参数返回值](#作为参数返回值)),  
+对于函数参数, 返回值 void 与返回值 undefined 意义不同.<br>
+void 表示返回的所有值均被忽略 (参阅 [作为参数返回值](#作为参数返回值)),<br>
 而 undefined 表示返回值必须为 undefined 类型.
 
 ```js
@@ -368,8 +500,8 @@ foo(
 );
 ```
 
-> 注: 上述方法签名如果将 void 替换为 any, 就 bar 参数是否符合预期方面而言, 效果是相同的.  
-> 然而两者在语义上有明确不同, void 表示不关心 bar 的返回值, 而 any 表示任意返回值类型均可接受.  
+> 注: 上述方法签名如果将 void 替换为 any, 就 bar 参数是否符合预期方面而言, 效果是相同的.<br>
+> 然而两者在语义上有明确不同, void 表示不关心 bar 的返回值, 而 any 表示任意返回值类型均可接受.<br>
 > 在设计自定义 API 或设计 TS 声明文件时, 上述区分将显得尤为重要.
 
 ## Never
@@ -439,28 +571,28 @@ foo("1.3"); /* 不符合预期. */
 
 **Uppercase&lt;T>: string**
 
-通常用于输出转换.  
+通常用于输出转换.<br>
 接受 string 类型并生成所有字母大写的同类型数据.
 
 ## Lowercase
 
 **Lowercase&lt;T>: string**
 
-通常用于输出转换.  
+通常用于输出转换.<br>
 接受 string 类型并生成所有字母小写的同类型数据.
 
 ## Capitalize
 
 **Capitalize&lt;T>: string**
 
-通常用于输出转换.  
+通常用于输出转换.<br>
 接受 string 类型并生成首字母大写的同类型数据.
 
 ## IgnoreCase
 
 **IgnoreCase&lt;T extends string>: T**
 
-通常用于参数值的输入转换.  
+通常用于参数值的输入转换.<br>
 接受 string 类型并生成忽略大小写的同类型数据.
 
 例如, 对于 IgnoreCase<"webUrl">, 以下数据均符合预期:
@@ -469,14 +601,14 @@ foo("1.3"); /* 不符合预期. */
 [ "webUrl", "WEBURL", "WebUrl", "WEBurl" ];
 ```
 
-但不能在字符串前后或内部插入其他字符,  
+但不能在字符串前后或内部插入其他字符,<br>
 如 [ "WEB_URL" / "web-url" / "#WebUrl" ] 等.
 
 ## Pattern
 
 **Pattern&lt;[T](#generic) [extends](#extends) [RegExPattern](#regexpattern)>: [string](#string)**
 
-通常用于输入检查.  
+通常用于输入检查.<br>
 接受 [正则表达式字面量](glossaries#正则表达式) 并生成通过测试的 [string](#string) 类型数据.
 
 Pattern 的泛型通配符 T 在文档中也称作 [字符串模式](glossaries#字符串模式).
@@ -507,8 +639,8 @@ foo("heroes"); /* 不符合预期. */
 
 为便于理解或重复引用, 有些 Pattern 类型会被重新定义为自定义类型, 如 [NumberString](dataTypes#numberstring).
 
-> 注: 目前 (2022/08) 在 JSDoc 及 TypeScript 中,  
-> 均不存在使用正则表达式字面量检查字符串的类型检查 (参阅 [StackOverflow](https://stackoverflow.com/questions/51445767/how-to-define-a-regex-matched-string-type-in-typescript)),  
+> 注: 目前 (2022/08) 在 JSDoc 及 TypeScript 中,<br>
+> 均不存在使用正则表达式字面量检查字符串的类型检查 (参阅 [StackOverflow](https://stackoverflow.com/questions/51445767/how-to-define-a-regex-matched-string-type-in-typescript)),<br>
 > 上述 Pattern 类型仅适用于对文档内容的辅助理解.
 
 ## AnyBut
@@ -649,6 +781,32 @@ console.log(arrList.length); // 0
 "1.5e3";
 ```
 
+## IntentShortFormForActivity
+
+AutoJs6 内置 Activity 简称字符串类型.
+
+支持以下值:
+
+- `settings`, `preferences`, `pref`
+- `documentation`, `docs`, `doc`
+- `console`, `log`
+- `homepage`, `home`
+- `about`
+- `build`
+
+这些简称可传入 [app.startActivity](app#m-startactivity) 或 [app.startDualActivity](app#m-startdualactivity).
+
+## IntentUriString
+
+可作为 Activity 启动目标的 URI 字符串类型.
+
+字符串包含 `://` 时直接作为 URI 使用. 字符串符合网站地址格式但不包含协议时, AutoJs6 自动添加 `http://` 前缀.
+
+```js
+app.startActivity("https://docs.autojs6.com");
+app.startActivity("docs.autojs6.com");
+```
+
 ## ComparisonOperatorString
 
 比较操作符字符串.
@@ -660,7 +818,7 @@ console.log(arrList.length); // 0
 ">=";
 "<";
 "<=";
-"="; /* 对应全等操作符 "===" . */
+"="; /* 对应全等操作符 "===". */
 ```
 
 ## ScreenMetricNumberX
@@ -677,10 +835,10 @@ console.log(arrList.length); // 0
 
 **bottom** { [ScreenMetricNumberX](dataTypes#screenmetricnumberx) }
 
-bottom 赋值为 50, 表示 X 坐标为 50.  
-bottom 赋值为 -80, 表示 X 坐标为 -80.  
-bottom 赋值为 0.5, 表示 X 坐标为 50% 横向屏幕宽度, 即 `0.5 * device.width`.  
-bottom 赋值为 -0.1, 表示 X 坐标为 -10% 横向屏幕宽度, 即 `-0.1 * device.width`.  
+bottom 赋值为 50, 表示 X 坐标为 50.<br>
+bottom 赋值为 -80, 表示 X 坐标为 -80.<br>
+bottom 赋值为 0.5, 表示 X 坐标为 50% 横向屏幕宽度, 即 `0.5 * device.width`.<br>
+bottom 赋值为 -0.1, 表示 X 坐标为 -10% 横向屏幕宽度, 即 `-0.1 * device.width`.<br>
 bottom 赋值为 -1, 表示 X 坐标为横向屏幕宽度的代指值, 即 `device.width`.
 
 ## ScreenMetricNumberY
@@ -697,10 +855,10 @@ bottom 赋值为 -1, 表示 X 坐标为横向屏幕宽度的代指值, 即 `devi
 
 **top** { [ScreenMetricNumberY](dataTypes#screenmetricnumbery) }
 
-top 赋值为 50, 表示 Y 坐标为 50.  
-top 赋值为 -80, 表示 Y 坐标为 -80.  
-top 赋值为 0.5, 表示 Y 坐标为 50% 纵向屏幕高度, 即 `0.5 * device.height`.  
-top 赋值为 -0.1, 表示 Y 坐标为 -10% 纵向屏幕高度, 即 `-0.1 * device.height`.  
+top 赋值为 50, 表示 Y 坐标为 50.<br>
+top 赋值为 -80, 表示 Y 坐标为 -80.<br>
+top 赋值为 0.5, 表示 Y 坐标为 50% 纵向屏幕高度, 即 `0.5 * device.height`.<br>
+top 赋值为 -0.1, 表示 Y 坐标为 -10% 纵向屏幕高度, 即 `-0.1 * device.height`.<br>
 top 赋值为 -1, 表示 Y 坐标为纵向屏幕高度的代指值, 即 `device.height`.
 
 ## ScriptExecuteActivity
@@ -828,13 +986,13 @@ detect(w, (w) => {
 
 #### 内容选择器
 
-字符串 `'abc'` 或正则表达式 `/abc/`.  
+字符串 `'abc'` 或正则表达式 `/abc/`.<br>
 相当于 `content('abc')` 及 `contentMatch(/abc/)`.
 
 #### 对象选择器
 
-将选择器名称作为 `键 (key)`, 选择器参数作为 `值 (value)`.  
-若参数多于 1 个, 使用数组包含所有参数; 若无参数, 使用 `[]` (空数组) 或 `null`, 或默认值 (如 `true`).  
+将选择器名称作为 `键 (key)`, 选择器参数作为 `值 (value)`.<br>
+若参数多于 1 个, 使用数组包含所有参数; 若无参数, 使用 `[]` (空数组) 或 `null`, 或默认值 (如 `true`).<br>
 虽然一个参数也可使用数组, 但通常无必要.
 
 ```js
@@ -844,7 +1002,7 @@ let selClassic = text('abc').clickable().centerX(0.5).boundsInside(0.2, 0.05, -1
 /* 对象选择器. */
 let selObject = {
     text: 'abc',
-    clickable: [], /* 或 clickable: true . */
+    clickable: [], /* 或 clickable: true. */
     centerX: 0.5,
     boundsInside: [ 0.2, 0.05, -1, -1 ],
     action: [ 'CLICK', 'SET_TEXT', 'LONG_CLICK' ],
@@ -997,11 +1155,11 @@ A: 255 -> 0xFF
 
 > 扩展阅读:
 >
-> 反向转换, 即 '#FF780EE0' 转换为 RGBA 分量:  
+> 反向转换, 即 '#FF780EE0' 转换为 RGBA 分量:<br>
 > colors.toRgba('#FF780EE0'); // [ 120, 14, 224, 255 ]
 >
-> 获取单独的分量:  
-> let [r, g, b, a] = colors.toRgba('#FF780EE0');  
+> 获取单独的分量:<br>
+> let [r, g, b, a] = colors.toRgba('#FF780EE0');<br>
 > console.log(r); // 120
 
 ### #RRGGBB
@@ -1042,8 +1200,8 @@ colors.alpha('#BF3') === 255; // true
 
 颜色整数 (Color Integer).
 
-多数情况下, 使用颜色整数代表一个颜色.  
-在安卓源码中, 颜色整数用 `ColorInt` 表示, 其值的范围由 `Java` 的 `Integer` 类型决定, 即 `[-2^31..2^31-1]`.  
+多数情况下, 使用颜色整数代表一个颜色.<br>
+在安卓源码中, 颜色整数用 `ColorInt` 表示, 其值的范围由 `Java` 的 `Integer` 类型决定, 即 `[-2^31..2^31-1]`.<br>
 例如数字 `0xBF110523` 对应十进制的 `3205563683`, 超出了上述 `ColorInt` 的范围, 因此相关方法 (如 [colors.toInt](color#m-toint)) 会将此数值通过 `2^32` 偏移量移动至合适的范围内, 最终得到结果 `-1089403613`.
 
 ```js
@@ -1058,8 +1216,8 @@ console.log(0xBF110523 - 2 ** 32); // -1089403613
 
 当 `ColorInt` 作为返回值类型时, 其返回值一定位于 `[-2^31..2^31-1]` 范围内. 如 `colors.toInt(0xFFFF3300)` 返回 `-52480`, 此返回值缺乏可读性, 通常只用于作为新的参数传入其他方法.
 
-> 注:  
-> 事实上, `-52480` 是 `0xFFFF3300 - 2 ** 32` 的结果.  
+> 注:<br>
+> 事实上, `-52480` 是 `0xFFFF3300 - 2 ** 32` 的结果.<br>
 > 如需将 `-52480` 这样的值还原为具有可读性的颜色代码, 可使用 [colors.toHex](color#m-tohex) 等方法.
 
 ## ColorName
@@ -1088,7 +1246,7 @@ colors.toHex('CREAM');
 
 当使用 `颜色名称 (ColorName)` 作为参数时, 同一个名称可能同时出现在不同的 [颜色列表](colorTable) 中, 如 `CYAN` 在所有列表中均有出现, 且 [Material 颜色列表](colorTable#material-颜色列表) 中的 `CYAN` 与其它列表中的 `CYAN` 颜色不同.
 
-为避免上述冲突, 按如下命名空间优先级查找并使用颜色名称对应的颜色:
+针对上述冲突, 按如下命名空间优先级查找并使用颜色名称对应的颜色:
 
 ```text
 android > css > web > material
@@ -1125,7 +1283,7 @@ colors.toInt('light-grey');
 
 ### 分量表示法
 
-通常使用整数表示一个颜色分量, 如 `colors.rgb(10, 20, 30)`.  
+通常使用整数表示一个颜色分量, 如 `colors.rgb(10, 20, 30)`.<br>
 RGB 系列色彩模式范围为 `[0..255]`, HSX 系列色彩模式范围为 `[0..100]`.
 
 除上述整数分量表示法, AutoJs6 还支持百分数等方式表示一个颜色分量 (如 `0.2`, `"20%"` 等).
@@ -1184,8 +1342,8 @@ colors.hsva(180, 50, 50, 128); /* 同上. */
 分量表示法支持组合使用:
 
 ```js
-colors.rgb(0.5, '25%', 32); /* 相当于 colors.rgb(128, 64, 32) . */
-colors.rgba(0.5, '25%', 32, '50%'); /* 相当于 colors.rgba(128, 64, 32, 128) . */
+colors.rgb(0.5, '25%', 32); /* 相当于 colors.rgb(128, 64, 32). */
+colors.rgba(0.5, '25%', 32, '50%'); /* 相当于 colors.rgba(128, 64, 32, 128). */
 ```
 
 ### 灵活的 1
@@ -1195,19 +1353,19 @@ colors.rgba(0.5, '25%', 32, '50%'); /* 相当于 colors.rgba(128, 64, 32, 128) .
 对于非 `RGB` 分量, 如 `A (alpha)`, `S (saturation)`, `V (value)`, `L (lightness)` 等, `1` 一律解释为 `100%`.
 
 ```js
-colors.argb(1, 255, 255, 255); /* 相当于 argb(255, 255, 255, 255), 1 解释为 100% . */
-colors.hsv(60, 1, 0.5); /* S 分量相当于 100, 1 解释为 100% . */
-colors.hsla(0, 1, 1, 1); /* 相当于 hsla(0, 100, 100, 255) . */
+colors.argb(1, 255, 255, 255); /* 相当于 argb(255, 255, 255, 255), 1 解释为 100%. */
+colors.hsv(60, 1, 0.5); /* S 分量相当于 100, 1 解释为 100%. */
+colors.hsla(0, 1, 1, 1); /* 相当于 hsla(0, 100, 100, 255). */
 ```
 
 而对于 `RGB` 分量, 只有当 `R` / `G` / `B` 三个分量全部满足 `c <= 1` 且不全为 `1` 时, 解释为百分数 `1` (即 `100%`), 其他情况, 解释为整数 `1`.
 
 ```js
-colors.rgb(1, 0.2, 0.5); /* 相当于 rgb(255, 51, 128), 1 解释为 100%, 得到 255 . */
-colors.rgb(1, 0.2, 224); /* 相当于 rgb(1, 51, 224), 1 解释为 1 . */
-colors.rgb(1, 160, 224); /* 无特殊转换, 1 解释为 1 . */
-colors.rgb(1, 1, 1); /* 相当于 rgb(1, 1, 1), 颜色代码为 #010101, 1 全部解释为 1 . */
-colors.rgb(1, 1, 0.5); /* 相当于 rgb(255, 255, 128), 1 全部解释为 100% . */
+colors.rgb(1, 0.2, 0.5); /* 相当于 rgb(255, 51, 128), 1 解释为 100%, 得到 255. */
+colors.rgb(1, 0.2, 224); /* 相当于 rgb(1, 51, 224), 1 解释为 1. */
+colors.rgb(1, 160, 224); /* 无特殊转换, 1 解释为 1. */
+colors.rgb(1, 1, 1); /* 相当于 rgb(1, 1, 1), 颜色代码为 #010101, 1 全部解释为 1. */
+colors.rgb(1, 1, 0.5); /* 相当于 rgb(255, 255, 128), 1 全部解释为 100%. */
 ```
 
 由此可见, 对于 `RGB` 分量, 只要有一个分量使用了 `0.x` 的百分数表示法, `1` 将全部解释为 `255 (100%)`.
@@ -1224,7 +1382,7 @@ colors.rgb(1.0, 1.0, 0.5); /* 同上. */
 因此当使用 `1` 表示 `100%` 传入一个颜色分量参数时, 建议使用 `1.0` 以增加可读性:
 
 ```js
-colors.hsla(120, 0.32, 1.0, 0.5); /* 使用 1.0 代表 100% . */
+colors.hsla(120, 0.32, 1.0, 0.5); /* 使用 1.0 代表 100%. */
 ```
 
 ## ColorComponents
@@ -1267,7 +1425,7 @@ colors.toRgba('blue-grey', { maxAlpha: 1 })[3]; /* A 分量为 1. */
 
 颜色检测算法, 用于检测两个颜色之间的差异程度, 即颜色差异.
 
-[颜色差异](https://zh.wikipedia.org/wiki/%E9%A2%9C%E8%89%B2%E5%B7%AE%E5%BC%82) ([Color Difference](https://en.wikipedia.org/wiki/Color_difference)), 也称为颜色距离, 是色彩学领域的一个参量.  
+[颜色差异](https://zh.wikipedia.org/wiki/%E9%A2%9C%E8%89%B2%E5%B7%AE%E5%BC%82) ([Color Difference](https://en.wikipedia.org/wiki/Color_difference)), 也称为颜色距离, 是色彩学领域的一个参量.<br>
 颜色差异将一个抽象概念进行了量化, 例如可以通过色彩空间内的 [欧氏距离](https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%B0%8F%E8%B7%9D%E7%A6%BB) ([Euclidean Distance](https://en.wikipedia.org/wiki/Euclidean_distance)) 计算出一个具体的差异量.
 
 量化颜色差异时, 存在多种不同的量化方法, 通常使用颜色检测算法计算欧式距离, 由此距离进行颜色差异的量化.
@@ -1313,8 +1471,8 @@ AutoJs6 内置了几种不同的颜色检测算法, 这些算法通常作为参�
     <img src="images/weighted-rgb-distance-color-detection.png" alt="weighted-rgb-distance-color-detection" width="1070">
 </picture>
 
-> 参阅:   
-> [Colour metric (from compuphase.com)](https://www.compuphase.com/cmetric.htm)  
+> 参阅:<br>
+> [Colour metric (from compuphase.com)](https://www.compuphase.com/cmetric.htm)<br>
 > [CIELAB Delta E* (from Wikipedia)](https://en.wikipedia.org/wiki/Color_difference#CIELAB_%CE%94E*)
 
 ### H 距离检测
@@ -1380,7 +1538,7 @@ StandardCharset 类型支持 Java 字符集 (Charset 类) 形式及字符串形�
 | UTF_16BE   | "UTF_16BE" / "utf-16be"     |                  [英](https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes)                   |
 | UTF_16LE   | "UTF_16LE" / "utf-16le"     |                  [英](https://en.wikipedia.org/wiki/UTF-16#Byte-order_encoding_schemes)                   |
 
-Charset 类可由 StandardCharsets 的静态常量获取, 如 `StandardCharsets.UTF_8`.  
+Charset 类可由 StandardCharsets 的静态常量获取, 如 `StandardCharsets.UTF_8`.<br>
 字符串表示 StandardCharset 类型时, 支持与上述静态常量同名的大写形式, 如 `'UTF_8'`, 以及带连字符的小写形式, 如 `'utf-8'`.
 
 Typescript declaration (TS 声明):
@@ -1417,9 +1575,9 @@ AutoJs6 [内置扩展插件](plugins#内置扩展插件) 的插件名称.
 
 支持的字符串常量:
 
-- `'Arrayx'`' 或 `'Array'`
-- `'Numberx'`' 或 `'Number'`
-- `'Mathx'`' 或 `'Math'`
+- `'Arrayx'` 或 `'Array'`
+- `'Numberx'` 或 `'Number'`
+- `'Mathx'` 或 `'Math'`
 
 ```js
 /* 启用 Array 内置扩展插件. */
@@ -1483,6 +1641,7 @@ AutoJs6 的 OCR 模式名称.
 
 - `mlkit` - 代表 MLKit 引擎
 - `paddle` - 代表 Paddle Lite 引擎
+- `rapid` - 代表 Rapid OCR 引擎
 
 ## OcrResult
 
@@ -1722,7 +1881,7 @@ Cipher 实例的初始化使用的是 `Cipher.getInstance(transformation: String
 转换名称 `transformation` 参数的格式有两种:
 
 - 算法名称 (algorithm)
-- 算法名称/工作模式/填充方式 (algorithm/mode/padding)
+- 算法名称 / 工作模式 / 填充方式 (algorithm / mode / padding)
 
 ```js
 /* 转换名称格式为 "算法名称" 的 Cipher 实例. */

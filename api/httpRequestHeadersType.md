@@ -60,7 +60,7 @@ accept: text/html, application/xhtml+xml, application/xml;q=0.9, */*;q=0.8
 
 | 指令                                     | 含义                                                                        |
 |----------------------------------------|---------------------------------------------------------------------------|
-| &lt;MIME_type&gt;/&lt;MIME_subtype&gt; | 单一精确的 [MIME 类型](mimeTypeGlossary), 如text/html                             |
+| &lt;MIME_type&gt;/&lt;MIME_subtype&gt; | 单一精确的 [MIME 类型](mimeTypeGlossary), 如 text/html                            |
 | &lt;MIME_type&gt;/*                    | 未指明子类的一类 MIME 类型. 如 image/* 可用于指代 image/png, image/svg, image/gif 等任何图片类型 |
 | */*                                    | 任意类型的 MIME 类型                                                             |
 | &lt;quality-value&gt;                  | 相对质量价值, 又称作权重, 表示优先顺序, 范围 [0..1], 默认为 1                                   |
@@ -189,7 +189,7 @@ host: developer.mozilla.org
 
 - { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) }
 
-referer 请求头包含了当前请求来源页面的地址. 
+referer 请求头包含了当前请求来源页面的地址.
 
 服务端一般使用 referer 头识别访问来源, 以此进行统计分析, 日志记录及缓存优化等.
 
@@ -211,7 +211,7 @@ referer: https://developer.mozilla.org/en-US/docs/Web/JavaScript
 
 - { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) }
 
-user-agent 首部包含了一个特征字符串, 用于让网络协议的对端识别发起请求的用户代理软件的应用类型, 操作系统, 软件开发商以及版本号. 
+user-agent 首部包含了一个特征字符串, 用于让网络协议的对端识别发起请求的用户代理软件的应用类型, 操作系统, 软件开发商以及版本号.
 
 ```text
 # 语法

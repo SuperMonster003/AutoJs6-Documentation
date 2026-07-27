@@ -5,8 +5,8 @@ UiObject 通常被称为 [ 控件 / 节点 / 控件节点 ], 可看做是一个�
 应用界面通常由控件构成, 如 [ImageView](https://developer.android.com/reference/android/widget/ImageView) 构成图像控件, [TextView](https://developer.android.com/reference/android/widget/TextView) 构成文本控件. 通过不同的布局可决定不同控件的位置, 如 [LinearLayout (线性布局)](https://developer.android.com/reference/android/widget/LinearLayout) 按水平或垂直方式排布及显示控件, [AbsListView (列表布局)](https://developer.android.com/reference/android/widget/AbsListView) 按列表方式排布及显示控件.
 不同的布局方式形成了 [控件层级](glossaries#控件层级).
 
-控件拥有特定的属性, 可分为两种类型, 状态型及行为型.  
-行为型属性可参阅章节 [控件节点行为 (UiObjectActions)](uiObjectActionsType).  
+控件拥有特定的属性, 可分为两种类型, 状态型及行为型.<br>
+行为型属性可参阅章节 [控件节点行为 (UiObjectActions)](uiObjectActionsType).<br>
 状态型属性访问均被封装为方法调用的形式, 如访问控件的类名, 需使用 `w.className()` 而非 `w.className`.
 
 > 注: 在 AutoJs6 中, 由 [UiObject](uiObjectType) 代表一个控件节点, 它继承自 [AccessibilityNodeInfoCompat](https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat), 而并非一个 [View](https://developer.android.com/reference/android/view/View).
@@ -55,8 +55,8 @@ w.parent().parent().parent().child(2);
 
 当指定级数 `i` 时, 返回其对应级数的父控件.
 
-`i` 为 `0` 时, 返回控件自身,  
-`i` 为正整数时, 返回第 `i` 级父控件,  
+`i` 为 `0` 时, 返回控件自身,<br>
+`i` 为正整数时, 返回第 `i` 级父控件,<br>
 `i` 为负数时, 将抛出异常.
 
 ```js
@@ -83,8 +83,8 @@ detect(w, 'p3'); /* 同上. */
 
 返回其索引为 `i` 的子控件.
 
-`i` 为正整数或 `0`, 返回正数索引子控件,  
-`i` 为负整数, 返回倒数索引子控件,  
+`i` 为正整数或 `0`, 返回正数索引子控件,<br>
+`i` 为负整数, 返回倒数索引子控件,<br>
 
 ```js
 let w = pickup(/.+/);
@@ -192,8 +192,8 @@ console.log(w.find().length); /* e.g. 20 */
 
 返回其索引为 `i` 的兄弟控件.
 
-`i` 为正整数或 `0`, 返回正数索引兄弟控件,  
-`i` 为负整数, 返回倒数索引兄弟控件,  
+`i` 为正整数或 `0`, 返回正数索引兄弟控件,<br>
+`i` 为负整数, 返回倒数索引兄弟控件,<br>
 
 当 `i` 与 [indexInParent()](#m-indexinparent) 相同时, 返回其自身.
 
@@ -245,9 +245,9 @@ detect(w, 's-2'); /* 同上. */
 
 返回其索引偏移量为 `i` 的兄弟控件.
 
-`i` 为正整数, 返回后向兄弟控件,  
-`i` 为负整数, 返回前向兄弟控件,  
-`i` 为 `0`, 返回当前控件自身. 
+`i` 为正整数, 返回后向兄弟控件,<br>
+`i` 为负整数, 返回前向兄弟控件,<br>
+`i` 为 `0`, 返回当前控件自身.
 
 ```js
 let w = pickup(/.+/);
@@ -333,7 +333,7 @@ detect(w, 's<2'); /* 同上. */
 ```js
 /* 例如 p 控件有 3 个子控件 (a, b, c). */
 
-a.indexInParent(); // 0 
+a.indexInParent(); // 0
 p.child(0); /* 对应 a. */
 
 console.log(c.indexInParent()); // 2
@@ -363,6 +363,52 @@ b.compass('s<2'); /* 使用罗盘方法, 效果同上. */
 ```js
 let p = pickup({ filter: w => w.depth() > 0 && w.parent().indexInParent() > 0 });
 console.log(p.parent().indexInParent()); // e.g. 2
+```
+
+## [m#] snapshot
+
+### snapshot()
+
+**`6.7.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) } - 当前控件状态的副本
+
+复制当前控件节点及其已缓存状态. 返回的 UiObject 与原对象相互独立, 对副本执行 `refresh()` 不会刷新原对象.
+
+```js
+let w = pickup(/.+/);
+let copied = w.snapshot();
+
+console.log(copied.bounds());
+```
+
+## [m#] isShifted
+
+### isShifted(tolerance?)
+
+**`6.7.0`** **`A11Y`**
+
+- **[ tolerance = 0 ]** { [number](dataTypes#number) } - 允许的边界坐标偏移阈值
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 控件边界是否已偏移
+
+比较当前对象已缓存的边界与刷新后的边界. 任一边界坐标的偏移量大于阈值时返回 `true`; 控件无法刷新时同样返回 `true`.
+
+`tolerance` 按以下规则解释:
+
+- `0 <= tolerance < 1` 时使用相对阈值. 左右边界阈值为 `tolerance * width()`, 上下边界阈值为 `tolerance * height()`
+- `tolerance >= 1` 时使用绝对像素阈值
+- `tolerance < 0` 时参数无效并抛出异常
+
+默认值 `0` 表示任一边界坐标发生变化即视为偏移.
+
+```js
+let w = text('提交').findOne();
+
+/* 允许不超过控件宽高 5% 的边界坐标变化. */
+console.log(w.isShifted(0.05));
+
+/* 允许不超过 8 px 的边界坐标变化. */
+console.log(w.isShifted(8));
 ```
 
 ## [m#] find
@@ -621,11 +667,11 @@ console.log(wA.boundsCenterX()); // e.g. 56
 
 let wB = pickup(/.+/);
 console.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 20)
-console.log(wB.boundsCenterX()); // e.g. 5 (5.5 向下取整得 5)
+console.log(wB.boundsCenterX()); // e.g. 5 (5.5 向下取整得 5).
 
 let wC = pickup(/.+/);
 console.log(wC.bounds()); // e.g. Rect(0, 0 - -11, 20)
-console.log(wC.boundsCenterX()); // e.g. -6 (-5.5 向下取整得 -6)
+console.log(wC.boundsCenterX()); // e.g. -6 (-5.5 向下取整得 -6).
 ```
 
 ## [m#] boundsExactCenterX
@@ -677,11 +723,11 @@ console.log(wA.boundsCenterY()); // e.g. 104
 
 let wB = pickup(/.+/);
 console.log(wB.bounds()); // e.g. Rect(0, 0 - 11, 33)
-console.log(wB.boundsCenterY()); // e.g. 16 (16.5 向下取整得 16)
+console.log(wB.boundsCenterY()); // e.g. 16 (16.5 向下取整得 16).
 
 let wC = pickup(/.+/);
 console.log(wC.bounds()); // e.g. Rect(0, 0 - 11, -33)
-console.log(wC.boundsCenterY()); // e.g. -17 (-16.5 向下取整得 -17)
+console.log(wC.boundsCenterY()); // e.g. -17 (-16.5 向下取整得 -17).
 ```
 
 ## [m#] boundsExactCenterY
@@ -920,13 +966,13 @@ let w = pickup(/.+/);
 
 console.log(w.bounds()); // e.g. Rect(0, 60 - 100, 200)
 
-w.clickBounds(); /* 相当于 click(50, 130) . */
+w.clickBounds(); /* 相当于 click(50, 130). */
 click(w.centerX(), w.centerY()); /* 效果同上. */
 
-w.clickBounds(10); /* X 坐标偏移量为 10 像素, 相当于 click(50 + 10, 130) . */
-w.clickBounds(10, 15); /* X 与 Y 坐标偏移量分别为 10 和 15 像素, 相当于 click(50 + 10, 130 + 15) . */
-w.clickBounds(0, -15); /* Y 坐标偏移量为 -15 像素, 相当于 click(50, 130 - 15) . */
-w.clickBounds(0.2); /* X 坐标偏移量为 20% 屏幕宽度, 相当于 click(50 + 0.2 * device.width, 130) . */
+w.clickBounds(10); /* X 坐标偏移量为 10 像素, 相当于 click(50 + 10, 130). */
+w.clickBounds(10, 15); /* X 与 Y 坐标偏移量分别为 10 和 15 像素, 相当于 click(50 + 10, 130 + 15). */
+w.clickBounds(0, -15); /* Y 坐标偏移量为 -15 像素, 相当于 click(50, 130 - 15). */
+w.clickBounds(0.2); /* X 坐标偏移量为 20% 屏幕宽度, 相当于 click(50 + 0.2 * device.width, 130). */
 w.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5% 屏幕高度. */
 ```
 
@@ -942,8 +988,8 @@ w.clickBounds(0.2, -0.05); /* X 与 Y 坐标偏移量为 20% 屏幕宽度和 -5%
 
 若 ID 不存在, 返回 null.
 
-安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.  
-ID 资源全称的 `类型` 为 `id`.  
+安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.<br>
+ID 资源全称的 `类型` 为 `id`.<br>
 一个有效的 ID 资源全称: `com.test:id/some_entry`.
 
 ```js
@@ -991,7 +1037,7 @@ let peculiarId = "hello_world"; /* 仅含资源项, 无包名及类型标识. */
 
 返回节点的 ID 资源项名称 (ID Resource Entry Name).
 
-安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.  
+安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.<br>
 例如对于 ID 资源全称 `com.test:id/some_entry`, 其 ID 资源项名称为 `some_entry`.
 
 ```js
@@ -1075,7 +1121,7 @@ console.log(textMatch(/.+/).findOnce().text()); /* e.g. hello */
 
 若内容描述标签容不存在, 返回 null.
 
-内容描述标签可以帮助需要无障碍服务的用户 (如视力障碍人群等) 理解当前控件的用途或说明.  
+内容描述标签可以帮助需要无障碍服务的用户 (如视力障碍人群等) 理解当前控件的用途或说明.<br>
 如 [TalkBack](https://support.google.com/accessibility/android/topic/10601570?hl=zh-Hans) 开启后可以朗读控件的内容描述标签, 对于理解那些没有文本内容的控件尤其重要.
 
 ```js
@@ -1497,7 +1543,7 @@ console.log(contentMatch(/.+/).depth()); /* e.g. 5 */
 
 返回节点的视图绘制次序.
 
-此次序由其父节点决定, 是一个相对于其兄弟节点的索引值.  
+此次序由其父节点决定, 是一个相对于其兄弟节点的索引值.<br>
 在某些情况下, 视图 (View) 绘制的过程本质上是同时发生的, 两个兄弟节点可能返回同一个索引值, 甚至此索引值可能被忽略 (返回默认值 0).
 
 ```js
@@ -1523,7 +1569,7 @@ console.log(w.actionNames());
 
 上述示例, 数组中的三个元素代表控件可以执行对应的行为, 即 `w.click()`, `w.setSelection(...)` 及 `w.focus()`.
 
-数组中的元素均为 "ACTION_" 开头的控件行为 ID 的字符串形式.  
+数组中的元素均为 "ACTION_" 开头的控件行为 ID 的字符串形式.<br>
 更多控件行为 ID 可参阅 [控件节点行为](uiObjectActionsType) 章节的 `行为 ID` 表格.
 
 如需判断一个控件是否支持一个或多个行为, 可使用 [hasAction](#m-hasaction) 方法.
@@ -1557,7 +1603,7 @@ console.log(w.hasAction("CLICK", "FOCUS", "SET_TEXT")); /* ACTION_ 前缀可省�
 
 ## [m#] performAction
 
-用于执行指定的控件行为.  
+用于执行指定的控件行为.<br>
 在 [控件节点行为](uiObjectActionsType) 章节已详细描述相关内容, 此处仅注明几个重载方法的签名, 相关内容将不再赘述.
 
 ### performAction(action, ...arguments)
@@ -2111,7 +2157,7 @@ console.log(w.compass('p40')); // null
 罗盘 `p` 跟随负数时将抛出异常:
 
 ```js
-/* e.g. java.lang.IllegalArgumentException: 无效的剩余罗盘参数: -2 */
+/* e.g. java.lang.IllegalArgumentException: 无效的剩余罗盘参数: -2. */
 console.log(w.compass('p-2'));
 ```
 
@@ -2134,7 +2180,7 @@ w.compass('c0');
 罗盘 `c` 可跟随一个整数, 表示子控件索引:
 
 ```js
-/* 索引 2 子控件 */
+/* 索引 2 子控件. */
 w.child(2);
 w.compass('c2');
 
@@ -2155,7 +2201,7 @@ w.compass('c1>1>0>5>2>3'); /* 同上. */
 
 访问兄弟控件.
 
-例如一个控件有 10 个子控件, 这些子控件互为兄弟控件, 它们拥有同一个父控件.  
+例如一个控件有 10 个子控件, 这些子控件互为兄弟控件, 它们拥有同一个父控件.<br>
 10 个子控件中, 索引为 n (n > 0 且 n < 9) 的子控件有两个相邻兄弟控件节点, 即索引为 n - 1 的左邻兄弟和索引为 n + 1 的右邻兄弟.
 
 ```js

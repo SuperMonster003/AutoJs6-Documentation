@@ -1,0 +1,225 @@
+{
+  "source": "..\\api\\fmt.md",
+  "modules": [
+    {
+      "textRaw": "格式化 (Formatter)",
+      "name": "格式化_(formatter)",
+      "desc": "<p><code>fmt</code> 模块用于将数据格式化为字符串.</p>\n<p>当前模块提供字节数据格式化. <code>fmt</code> 与 <code>$fmt</code> 引用同一个对象.</p>\n<pre><code class=\"lang-js\">fmt.bytes(1536); // &quot;1.50 KB&quot;\nfmt.bytes.strict(1000, &#39;B&#39;, &#39;KB&#39;); // &quot;1.00 KB&quot;\nfmt.bytes.strict(1024, &#39;B&#39;, &#39;KiB&#39;); // &quot;1.00 KiB&quot;\n</code></pre>\n<p>字节单位支持 <code>B</code>, <code>KB</code> 到 <code>QB</code>, 以及严格模式下对应的 IEC 单位 <code>KiB</code> 到 <code>QiB</code>. 当目标单位为 <code>AUTO</code> 时, 模块会根据数值自动选择单位.</p>\n",
+      "modules": [
+        {
+          "textRaw": "严格模式与宽松模式",
+          "name": "严格模式与宽松模式",
+          "desc": "<p>常规调用默认使用宽松模式.</p>\n<table>\n<thead>\n<tr>\n<th>模式</th>\n<th>单位解析</th>\n<th style=\"text-align:right\">换算基数</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>宽松</td>\n<td>不区分大小写, 并将 <code>KiB</code> 等 IEC 写法归一化为 <code>KB</code></td>\n<td style=\"text-align:right\">1024</td>\n</tr>\n<tr>\n<td>严格</td>\n<td>区分 SI 单位与 IEC 单位, 如 <code>KB</code> 与 <code>KiB</code></td>\n<td style=\"text-align:right\"><code>KB</code> 为 1000, <code>KiB</code> 为 1024</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><a href=\"#m-strict\">fmt.bytes.strict</a> 强制使用严格模式.</li>\n<li><a href=\"#m-loose\">fmt.bytes.loose</a> 强制使用宽松模式.</li>\n<li>常规调用可通过 <code>options.strict</code> 选择模式.</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">fmt</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "严格模式与宽松模式"
+        },
+        {
+          "textRaw": "[m+] bytes",
+          "name": "[m+]_bytes",
+          "desc": "<p><code>fmt.bytes</code> 是可调用的字节格式化对象, 同时包含严格模式, 宽松模式和单位常量.</p>\n",
+          "methods": [
+            {
+              "textRaw": "fmt.bytes(source)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Overload 1/5</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>格式化 <code>source</code>, 并自动选择目标单位.</p>\n<p>默认源单位为 <code>B</code>, 默认目标单位为 <code>AUTO</code>, 默认保留 2 位小数.</p>\n<pre><code class=\"lang-js\">fmt.bytes(1536); // &quot;1.50 KB&quot;\nfmt.bytes(&#39;1536 B&#39;); // &quot;1.50 KB&quot;\nfmt.bytes(&#39;1.5 MiB&#39;); // &quot;1.50 MB&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "fmt.bytes(source, toUnit)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Overload 2/5</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>toUnit</strong> { <a href=\"dataTypes#string\">string</a> } - 目标单位</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>将 <code>source</code> 格式化为 <code>toUnit</code>.</p>\n<pre><code class=\"lang-js\">fmt.bytes(1536, &#39;KB&#39;); // &quot;1.50 KB&quot;\nfmt.bytes(&#39;1.5 MB&#39;, &#39;KB&#39;); // &quot;1536.00 KB&quot;\nfmt.bytes(&#39;1 KiB&#39;, &#39;B&#39;); // &quot;1024.00 B&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "toUnit"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "fmt.bytes(source, options)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Overload 3/5</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>options</strong> { <a href=\"#fmtbytesoptions\">FmtBytesOptions</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 格式化选项, 数值表示 <code>fractionDigits</code>, 布尔值表示 <code>useIecIdentifier</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>使用选项格式化 <code>source</code>.</p>\n<pre><code class=\"lang-js\">fmt.bytes(1536, {\n    toUnit: &#39;KB&#39;,\n    fractionDigits: 3,\n    useSpace: false,\n}); // &quot;1.500KB&quot;\n\nfmt.bytes(1536, 0); // &quot;2 KB&quot;\nfmt.bytes(1536, true); // &quot;1.50 KiB&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "fmt.bytes(source, toUnit, options)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Overload 4/5</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>toUnit</strong> { <a href=\"dataTypes#string\">string</a> } - 目标单位</li>\n<li><strong>options</strong> { <a href=\"#fmtbytesoptions\">FmtBytesOptions</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 格式化选项, 数值表示 <code>fractionDigits</code>, 布尔值表示 <code>useIecIdentifier</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>将 <code>source</code> 格式化为 <code>toUnit</code>, 并应用 <code>options</code>.</p>\n<p><code>options.toUnit</code> 存在时优先于位置参数 <code>toUnit</code>.</p>\n<pre><code class=\"lang-js\">fmt.bytes(1536, &#39;KB&#39;, 3); // &quot;1.500 KB&quot;\nfmt.bytes(1536, &#39;KB&#39;, true); // &quot;1.50 KiB&quot;\nfmt.bytes(1536, &#39;MB&#39;, { toUnit: &#39;KB&#39; }); // &quot;1.50 KB&quot;\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "toUnit"
+                    },
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "fmt.bytes(source, fromUnit, toUnit, options?)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Overload 5/5</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>fromUnit</strong> { <a href=\"dataTypes#string\">string</a> } - 源单位</li>\n<li><strong>toUnit</strong> { <a href=\"dataTypes#string\">string</a> } - 目标单位</li>\n<li><strong>[ options ]</strong> { <a href=\"#fmtbytesoptions\">FmtBytesOptions</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 格式化选项, 数值表示 <code>fractionDigits</code>, 布尔值表示 <code>useIecIdentifier</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>将数值从 <code>fromUnit</code> 格式化为 <code>toUnit</code>.</p>\n<p><code>options.fromUnit</code> 和 <code>options.toUnit</code> 存在时分别优先于位置参数.</p>\n<pre><code class=\"lang-js\">fmt.bytes(2, &#39;MB&#39;, &#39;KB&#39;); // &quot;2048.00 KB&quot;\nfmt.bytes.strict(2, &#39;MB&#39;, &#39;KB&#39;); // &quot;2000.00 KB&quot;\nfmt.bytes.strict(2, &#39;MiB&#39;, &#39;KiB&#39;); // &quot;2048.00 KiB&quot;\n</code></pre>\n<p>当字符串 <code>source</code> 已包含单位时, 该单位必须与显式 <code>fromUnit</code> 一致, 否则抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "fromUnit"
+                    },
+                    {
+                      "name": "toUnit"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "[m] strict",
+              "name": "[m]_strict",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.strict(source, ...args)",
+                  "name": "fmt.bytes.strict(source,_...args)",
+                  "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>...args</strong> { ...(<a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"#fmtbytesoptions\">FmtBytesOptions</a>)[] } - 与 <code>fmt.bytes</code> 相同的位置参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>以严格模式格式化字节数据.</p>\n<p>严格模式区分 SI 单位与 IEC 单位. SI 单位使用 1000 作为换算基数, IEC 单位使用 1024 作为换算基数.</p>\n<pre><code class=\"lang-js\">fmt.bytes.strict(&#39;1 KB&#39;, &#39;B&#39;); // &quot;1000.00 B&quot;\nfmt.bytes.strict(&#39;1 KiB&#39;, &#39;B&#39;); // &quot;1024.00 B&quot;\nfmt.bytes.strict(1000, &#39;B&#39;, &#39;KB&#39;); // &quot;1.00 KB&quot;\nfmt.bytes.strict(1024, &#39;B&#39;, &#39;KiB&#39;); // &quot;1.00 KiB&quot;\n</code></pre>\n<p>调用此方法时, <code>options.strict</code> 和 <code>options.useIecIdentifier</code> 必须省略或为 <code>null</code> / <code>undefined</code>. 输出单位标识由严格模式下的目标单位决定.</p>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.strict(source, ...args)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] strict"
+            },
+            {
+              "textRaw": "[m] loose",
+              "name": "[m]_loose",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.loose(source, ...args)",
+                  "name": "fmt.bytes.loose(source,_...args)",
+                  "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 待格式化数值, 字符串可包含单位</li>\n<li><strong>...args</strong> { ...(<a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"#fmtbytesoptions\">FmtBytesOptions</a>)[] } - 与 <code>fmt.bytes</code> 相同的位置参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 格式化结果</li>\n</ul>\n<p>以宽松模式格式化字节数据.</p>\n<p>宽松模式不区分 <code>KB</code> 与 <code>KiB</code>, 并统一使用 1024 作为换算基数. <code>useIecIdentifier</code> 只控制结果是否使用 <code>KiB</code> 等 IEC 标识.</p>\n<pre><code class=\"lang-js\">fmt.bytes.loose(&#39;1 KB&#39;, &#39;B&#39;); // &quot;1024.00 B&quot;\nfmt.bytes.loose(1024, &#39;KB&#39;); // &quot;1.00 KB&quot;\nfmt.bytes.loose(1024, &#39;KB&#39;, true); // &quot;1.00 KiB&quot;\n</code></pre>\n<p>调用此方法时, <code>options.strict</code> 必须省略或为 <code>null</code> / <code>undefined</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.loose(source, ...args)"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] loose"
+            },
+            {
+              "textRaw": "[p] UNITS",
+              "name": "[p]_units",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.UNITS",
+                  "name": "fmt.bytes.units",
+                  "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;KMGTPEZYRQ&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>字节单位前缀字符, 按从小到大的顺序排列.</p>\n<p>完整单位范围为 <code>B</code>, <code>KB</code> 到 <code>QB</code>, 严格模式还支持 <code>KiB</code> 到 <code>QiB</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.UNITS"
+                }
+              ],
+              "type": "module",
+              "displayName": "[p] UNITS"
+            },
+            {
+              "textRaw": "[p] AUTO",
+              "name": "[p]_auto",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.AUTO",
+                  "name": "fmt.bytes.auto",
+                  "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>&#39;AUTO&#39;</code> ]] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>自动目标单位标识.</p>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.AUTO"
+                }
+              ],
+              "type": "module",
+              "displayName": "[p] AUTO"
+            },
+            {
+              "textRaw": "[p] IEC_DIV",
+              "name": "[p]_iec_div",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.IEC_DIV",
+                  "name": "fmt.bytes.iec_div",
+                  "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>1024</code> ]] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>IEC 字节单位换算基数.</p>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.IEC_DIV"
+                }
+              ],
+              "type": "module",
+              "displayName": "[p] IEC_DIV"
+            },
+            {
+              "textRaw": "[p] SI_DIV",
+              "name": "[p]_si_div",
+              "modules": [
+                {
+                  "textRaw": "fmt.bytes.SI_DIV",
+                  "name": "fmt.bytes.si_div",
+                  "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>CONSTANT</code></strong></p>\n<ul>\n<li>[[ <code>1000</code> ]] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>SI 字节单位换算基数.</p>\n<hr>\n",
+                  "type": "module",
+                  "displayName": "fmt.bytes.SI_DIV"
+                }
+              ],
+              "type": "module",
+              "displayName": "[p] SI_DIV"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m+] bytes"
+        },
+        {
+          "textRaw": "FmtBytesOptions",
+          "name": "fmtbytesoptions",
+          "desc": "<ul>\n<li>{{<ul>\n<li>fromUnit?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>toUnit?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>useIecIdentifier?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>useSpace?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>fractionDigits?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>trimTrailingZero?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>autoCarryThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>strict?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p><code>fmt.bytes</code> 的选项对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th style=\"text-align:right\">默认值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>fromUnit</code></td>\n<td style=\"text-align:right\"><code>&#39;B&#39;</code></td>\n<td>源单位</td>\n</tr>\n<tr>\n<td><code>toUnit</code></td>\n<td style=\"text-align:right\"><code>&#39;AUTO&#39;</code></td>\n<td>目标单位</td>\n</tr>\n<tr>\n<td><code>useIecIdentifier</code></td>\n<td style=\"text-align:right\"><code>false</code></td>\n<td>宽松模式是否使用 <code>KiB</code> 等 IEC 单位标识</td>\n</tr>\n<tr>\n<td><code>useSpace</code></td>\n<td style=\"text-align:right\"><code>true</code></td>\n<td>数值与单位之间是否插入空格</td>\n</tr>\n<tr>\n<td><code>fractionDigits</code></td>\n<td style=\"text-align:right\"><code>2</code></td>\n<td>小数位数, 必须为非负整数</td>\n</tr>\n<tr>\n<td><code>trimTrailingZero</code></td>\n<td style=\"text-align:right\"><code>false</code></td>\n<td>是否移除小数末尾的 <code>0</code></td>\n</tr>\n<tr>\n<td><code>autoCarryThreshold</code></td>\n<td style=\"text-align:right\"><code>1024</code></td>\n<td>自动进位阈值, 必须为正数且仅可在 <code>toUnit</code> 为 <code>AUTO</code> 时使用</td>\n</tr>\n<tr>\n<td><code>strict</code></td>\n<td style=\"text-align:right\"><code>false</code></td>\n<td>是否使用严格模式</td>\n</tr>\n</tbody>\n</table>\n<p><code>source</code> 必须为非负数值. 字符串形式由数值和可选单位组成, 如 <code>&#39;1536&#39;</code>, <code>&#39;1536 B&#39;</code> 或 <code>&#39;1.5 MiB&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "FmtBytesOptions"
+        }
+      ],
+      "type": "module",
+      "displayName": "格式化 (Formatter)"
+    }
+  ]
+}

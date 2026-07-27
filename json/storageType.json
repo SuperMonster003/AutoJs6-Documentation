@@ -7,6 +7,20 @@
       "desc": "<p>存储类 Storage 是一个虚拟类, 实例通常由 <a href=\"storages\">storages</a> 全局模块产生:</p>\n<pre><code class=\"lang-js\">/* Storage 为虚拟类, 并非真实存在. */\ntypeof global.Storage; // &quot;undefined&quot;\n\nlet sto = storages.create(&#39;test&#39;);\nsto._storage instanceof org.autojs.autojs.core.storage.LocalStorage; // true\n</code></pre>\n<p>常见相关方法或属性:</p>\n<ul>\n<li><a href=\"storages#m-create\">storages.create</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Storage</p>\n\n<hr>\n",
       "modules": [
         {
+          "textRaw": "[p#] name",
+          "name": "[p#]_name",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>本地存储名称.</p>\n",
+          "type": "module",
+          "displayName": "[p#] name"
+        },
+        {
+          "textRaw": "[p#] size",
+          "name": "[p#]_size",
+          "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>本地存储当前包含的键值对数量.</p>\n",
+          "type": "module",
+          "displayName": "[p#] size"
+        },
+        {
           "textRaw": "[m#] put",
           "name": "[m#]_put",
           "methods": [
@@ -14,7 +28,7 @@
               "textRaw": "put(key, value)",
               "type": "method",
               "name": "put",
-              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 待存入键名</li>\n<li><strong>value</strong> { <a href=\"dataTypes#anybut\">AnyBut</a><a href=\"dataTypes#generic\">&lt;</a><a href=\"dataTypes#undefined\">undefined</a>, <a href=\"glossaries#bigint\">bigint</a><a href=\"dataTypes#generic\">&gt;</a> } - 待存入数据</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> }</li>\n</ul>\n<p>将 <code>value</code> 参数经 JSON 序列化后, 与 <code>key</code> 参数以键值对形式存入本地存储.</p>\n<p>支持存入的数据类型:</p>\n<ul>\n<li><a href=\"dataTypes#number\">number</a></li>\n<li><a href=\"dataTypes#boolean\">boolean</a></li>\n<li><a href=\"dataTypes#string\">string</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#array\">Array</a></li>\n<li><a href=\"dataTypes#object\">Object</a></li>\n<li>... ...</li>\n</ul>\n<p>理论上, 除 <a href=\"dataTypes#undefined\">undefined</a> 和 <a href=\"glossaries#bigint\">bigint</a> 外的任意类型数据均可存入本地存储,<br>试图存入不支持类型的数据时, 将抛出异常.</p>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>因此数据转换时遵循 JSON 序列化规则 (如 NaN 将被转换为 null 等).</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;total&#39;, 500); /* 存入数字. */\nsto.put(&#39;products&#39;, [ &#39;apple&#39;, &#39;banana&#39; ]); /* 存入数组时将被 JSON 序列化.  */\n</code></pre>\n<p>链式调用:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;test&#39;);\nsto.put(&#39;a&#39;, 1).put(&#39;b&#39;, 2).put(&#39;c&#39;, 3).put(&#39;d&#39;, 4);\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.3.0]</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 待存入键名</li>\n<li><strong>value</strong> { <a href=\"dataTypes#anybut\">AnyBut</a><a href=\"dataTypes#generic\">&lt;</a><a href=\"dataTypes#undefined\">undefined</a>, <a href=\"glossaries#bigint\">bigint</a><a href=\"dataTypes#generic\">&gt;</a> } - 待存入数据</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> }</li>\n</ul>\n<p>将 <code>value</code> 参数经 JSON 序列化后, 与 <code>key</code> 参数以键值对形式存入本地存储.</p>\n<p>支持存入的数据类型:</p>\n<ul>\n<li><a href=\"dataTypes#number\">number</a></li>\n<li><a href=\"dataTypes#boolean\">boolean</a></li>\n<li><a href=\"dataTypes#string\">string</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#array\">Array</a></li>\n<li><a href=\"dataTypes#object\">Object</a></li>\n<li>... ...</li>\n</ul>\n<p>理论上, 除 <a href=\"dataTypes#undefined\">undefined</a> 和 <a href=\"glossaries#bigint\">bigint</a> 外的任意类型数据均可存入本地存储,<br>\n试图存入不支持类型的数据时, 将抛出异常.</p>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>\n因此数据转换时遵循 JSON 序列化规则 (如 NaN 将被转换为 null 等).</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;total&#39;, 500); /* 存入数字. */\nsto.put(&#39;products&#39;, [ &#39;apple&#39;, &#39;banana&#39; ]); /* 存入数组时将被 JSON 序列化. */\n</code></pre>\n<p>链式调用:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;test&#39;);\nsto.put(&#39;a&#39;, 1).put(&#39;b&#39;, 2).put(&#39;c&#39;, 3).put(&#39;d&#39;, 4);\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -33,6 +47,32 @@
           "displayName": "[m#] put"
         },
         {
+          "textRaw": "[m#] putSync",
+          "name": "[m#]_putsync",
+          "methods": [
+            {
+              "textRaw": "putSync(key, value)",
+              "type": "method",
+              "name": "putSync",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 待存入键名</li>\n<li><strong>value</strong> { <a href=\"dataTypes#anybut\">AnyBut</a><a href=\"dataTypes#generic\">&lt;</a><a href=\"dataTypes#undefined\">undefined</a>, <a href=\"glossaries#bigint\">bigint</a><a href=\"dataTypes#generic\">&gt;</a> } - 待存入数据</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> } - 当前 Storage 实例</li>\n</ul>\n<p>同步写入键值对并等待数据写入存储文件. 序列化规则与 <a href=\"#m-put\">put</a> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] putSync"
+        },
+        {
           "textRaw": "[m#] get",
           "name": "[m#]_get",
           "methods": [
@@ -40,7 +80,7 @@
               "textRaw": "get(key, defaultValue?)",
               "type": "method",
               "name": "get",
-              "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 数据的键名</li>\n<li><strong>[ defaultValue ]</strong> { <a href=\"dataTypes#any\">any</a> } - 数据默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>读取本地存储中键值与 <code>key</code> 参数对应的数据.</p>\n<p>当本地存储中不存在键值 <code>key</code> 时, 返回 <a href=\"dataTypes#undefined\">undefined</a>.</p>\n<p>本地存储中返回的数据, 来源于 put 方法的 value 参数:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;test&#39;);\n\nsto.put(&#39;apple&#39;, 10); /* 原始数据是 number 类型的 10. */\nsto.get(&#39;apple&#39;); /* 获取的数据依然是 number 类型的 10. */\n\nsto.put(&#39;fruits&#39;, [ &#39;apple&#39;, &#39;banana&#39; ]); /* 原始数据是字符串数组. */\nsto.get(&#39;fruits&#39;); /* 获取的数据还原为同类型的字符串数组, 即 [&#39;apple&#39;, &#39;banana&#39;]. */\n</code></pre>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>读取时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse\">JSON.parse</a> 还原为原本的数据类型.</p>\n<p>因此部分数据受 JSON 序列化的影响, 可能导致读取数据与原始数据存在差距:</p>\n<pre><code class=\"lang-js\">sto.put(&#39;apple&#39;, NaN); /* 原始数据是 number 类型的 NaN. */\nsto.get(&#39;apple&#39;); /* 获取的数据是 null. */\n</code></pre>\n",
+              "desc": "<p><strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 数据的键名</li>\n<li><strong>[ defaultValue ]</strong> { <a href=\"dataTypes#any\">any</a> } - 数据默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>读取本地存储中键值与 <code>key</code> 参数对应的数据.</p>\n<p>当本地存储中不存在键值 <code>key</code> 时, 返回 <a href=\"dataTypes#undefined\">undefined</a>.</p>\n<p>本地存储中返回的数据, 来源于 put 方法的 value 参数:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;test&#39;);\n\nsto.put(&#39;apple&#39;, 10); /* 原始数据是 number 类型的 10. */\nsto.get(&#39;apple&#39;); /* 获取的数据依然是 number 类型的 10. */\n\nsto.put(&#39;fruits&#39;, [ &#39;apple&#39;, &#39;banana&#39; ]); /* 原始数据是字符串数组. */\nsto.get(&#39;fruits&#39;); /* 获取的数据还原为同类型的字符串数组, 即 [&#39;apple&#39;, &#39;banana&#39;]. */\n</code></pre>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>\n读取时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse\">JSON.parse</a> 还原为原本的数据类型.</p>\n<p>因此部分数据受 JSON 序列化的影响, 可能导致读取数据与原始数据存在差距:</p>\n<pre><code class=\"lang-js\">sto.put(&#39;apple&#39;, NaN); /* 原始数据是 number 类型的 NaN. */\nsto.get(&#39;apple&#39;); /* 获取的数据是 null. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -135,6 +175,29 @@
           "displayName": "[m#] remove"
         },
         {
+          "textRaw": "[m#] removeSync",
+          "name": "[m#]_removesync",
+          "methods": [
+            {
+              "textRaw": "removeSync(key)",
+              "type": "method",
+              "name": "removeSync",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 键名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> } - 当前 Storage 实例</li>\n</ul>\n<p>同步移除指定键值对并等待数据写入存储文件.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] removeSync"
+        },
+        {
           "textRaw": "[m#] clear",
           "name": "[m#]_clear",
           "methods": [
@@ -161,6 +224,63 @@
           ],
           "type": "module",
           "displayName": "[m#] clear"
+        },
+        {
+          "textRaw": "[m#] clearSync",
+          "name": "[m#]_clearsync",
+          "methods": [
+            {
+              "textRaw": "clearSync()",
+              "type": "method",
+              "name": "clearSync",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>同步清除本地存储的全部数据并等待数据写入存储文件.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clearSync"
+        },
+        {
+          "textRaw": "[m#] selfRemove",
+          "name": "[m#]_selfremove",
+          "methods": [
+            {
+              "textRaw": "selfRemove()",
+              "type": "method",
+              "name": "selfRemove",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> } - 当前 Storage 实例</li>\n</ul>\n<p>异步清除当前本地存储的全部数据.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] selfRemove"
+        },
+        {
+          "textRaw": "[m#] selfRemoveSync",
+          "name": "[m#]_selfremovesync",
+          "methods": [
+            {
+              "textRaw": "selfRemoveSync()",
+              "type": "method",
+              "name": "selfRemoveSync",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a> } - 当前 Storage 实例</li>\n</ul>\n<p>同步清除当前本地存储的全部数据并等待数据写入存储文件.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] selfRemoveSync"
         }
       ],
       "type": "module",

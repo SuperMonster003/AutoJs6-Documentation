@@ -22,7 +22,7 @@
 | DIANPING         | 大众点评           | Dianping          | com.dianping.v1                    | dianping         |
 | DIGICAL          | DigiCal        | ~                 | com.digibites.calendar             | digical          |
 | DRIVE            | 云端硬盘           | Drive             | com.google.android.apps.docs       | drive            |
-| ES               | ES文件浏览器        | ES File Explorer  | com.estrongs.android.pop           | es               |
+| ES               | ES 文件浏览器       | ES File Explorer  | com.estrongs.android.pop           | es               |
 | EUDIC            | 欧路词典           | Eudic             | com.qianyan.eudic                  | eudic            |
 | EXCEL            | Excel          | ~                 | com.microsoft.office.excel         | excel            |
 | FIREFOX          | Firefox        | ~                 | org.mozilla.firefox                | firefox          |
@@ -36,16 +36,16 @@
 | KEEPNOTES        | Keep 记事        | Keep Notes        | com.google.android.keep            | keepnotes        |
 | MAGISK           | Magisk         | ~                 | com.topjohnwu.magisk               | magisk           |
 | MEITUAN          | 美团             | Meituan           | com.sankuai.meituan                | meituan          |
-| MT               | MT管理器          | MT Manager        | bin.mt.plus                        | mt               |
+| MT               | MT 管理器         | MT Manager        | bin.mt.plus                        | mt               |
 | MXPRO            | MX 播放器专业版      | MX Player Pro     | com.mxtech.videoplayer.pro         | mxpro            |
 | ONEDRIVE         | OneDrive       | ~                 | com.microsoft.skydrive             | onedrive         |
 | PACKETCAPTURE    | Packet Capture | ~                 | app.greyshirts.sslcapture          | packetcapture    |
-| PARALLELSPACE    | 平行空间(原双开大师)    | Parallel Space    | com.lbe.parallel.intl              | parallelspace    |
+| PARALLELSPACE    | 平行空间 (原双开大师)   | Parallel Space    | com.lbe.parallel.intl              | parallelspace    |
 | POWERPOINT       | PowerPoint     | ~                 | com.microsoft.office.powerpoint    | powerpoint       |
 | PULSARPLUS       | Pulsar+        | ~                 | com.rhmsoft.pulsar.pro             | pulsarplus       |
-| PUREWEATHER      | Pure天气         | ~                 | hanjie.app.pureweather             | pureweather      |
+| PUREWEATHER      | Pure 天气        | ~                 | hanjie.app.pureweather             | pureweather      |
 | QQ               | QQ             | ~                 | com.tencent.mobileqq               | qq               |
-| QQMUSIC          | QQ音乐           | QQMusic           | com.tencent.qqmusic                | qqmusic          |
+| QQMUSIC          | QQ 音乐          | QQMusic           | com.tencent.qqmusic                | qqmusic          |
 | SDMAID           | SD Maid        | ~                 | eu.thedarken.sdm                   | sdmaid           |
 | SHIZUKU          | Shizuku        | ~                 | moe.shizuku.privileged.api         | shizuku          |
 | STOPAPP          | 小黑屋            | ~                 | web1n.stopapp                      | stopapp          |
@@ -59,11 +59,11 @@
 | WORD             | Word           | ~                 | com.microsoft.office.word          | word             |
 | ZHIHU            | 知乎             | ~                 | com.zhihu.android                  | zhihu            |
 
-通常 "别名" 字段取自 "枚举实例名" 字段的名称小写形式.  
+通常 "别名" 字段取自 "枚举实例名" 字段的名称小写形式.<br>
 表列 "英文名" 中波浪符号表示与 "中文名" 对应字段名称相同.
 
-> 注: 上述信息可能发生变更.  
-> 例如一些应用在某个时间点开始去除了 "英文名" 并统一使用 "中文名" 字段, 甚至部分应用会在每个版本均变更其应用名.  
+> 注: 上述信息可能发生变更.<br>
+> 例如一些应用在某个时间点开始去除了 "英文名" 并统一使用 "中文名" 字段, 甚至部分应用会在每个版本均变更其应用名.<br>
 > 如果用户编写的脚本对应用名十分敏感, 建议使用 App#getAppName 或 app.getAppName 等方式获取设备中已安装应用的真实应用名.
 
 ---

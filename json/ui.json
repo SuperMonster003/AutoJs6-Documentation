@@ -4,1152 +4,1455 @@
     {
       "textRaw": "用户界面 (UI)",
       "name": "用户界面_(ui)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>ui模块提供了编写用户界面的支持.</p>\n<pre><code>给Android开发者或者高阶用户的提醒, Auto.js的UI系统来自于Android, 所有属性和方法都能在Android源码中找到. 如果某些代码或属性没有出现在Auto.js的文档中, 可以参考Android的文档.\nView: https://developer.android.google.cn/reference/android/view/View?hl=cn\nWidget: https://developer.android.google.cn/reference/android/widget/package-summary?hl=cn\n</code></pre><p>带有ui的脚本的的最前面必须使用<code>&quot;ui&quot;;</code>指定ui模式, 否则脚本将不会以ui模式运行. 正确示范:s</p>\n<pre><code>&quot;ui&quot;;\n\n//脚本的其他代码\n</code></pre><p>字符串&quot;ui&quot;的前面可以有注释、空行和空格<strong>[v4.1.0新增]</strong>, 但是不能有其他代码.</p>\n<p>界面是由视图(View)组成的. View分成两种, 控件(Widget)和布局(Layout). 控件(Widget)用来具体显示文字、图片、网页等, 比如文本控件(text)用来显示文字, 按钮控件(button)则可以显示一个按钮并提供点击效果, 图片控件(img)则用来显示来自网络或者文件的图片, 除此之外还有输入框控件(input)、进度条控件(progressbar)、单选复选框控件(checkbox)等；布局(Layout)则是装着一个或多个控件的&quot;容器&quot;, 用于控制在他里面的控件的位置, 比如垂直布局(vertical)会把他里面的控件从上往下依次显示(即纵向排列), 水平布局(horizontal)则会把他里面的控件从左往右依次显示(即横向排列), 以及帧布局(frame), 他会把他里面的控件直接在左上角显示, 如果有多个控件, 后面的控件会重叠在前面的控件上.</p>\n<p>我们使用xml来编写界面, 并通过<code>ui.layout()</code>函数指定界面的布局xml. 举个例子：</p>\n<pre><code>&quot;ui&quot;;\n$ui.layout(\n    &lt;vertical&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个例子中, 第3~6行的部分就是xml, 指定了界面的具体内容. 代码的第3行的标签<code>&lt;vertical&gt; ... &lt;/vertical&gt;</code>表示垂直布局, 布局的标签通常以<code>&lt;...&gt;</code>开始, 以<code>&lt;/...&gt;</code>结束, 两个标签之间的内容就是布局里面的内容, 例如<code>&lt;frame&gt; ... &lt;/frame&gt;</code>. 在这个例子中第4, 5行的内容就是垂直布局(vertical)里面的内容. 代码的第4行是一个按钮控件(button), 控件的标签通常以<code>&lt;...</code>开始, 以<code>/&gt;</code>结束, 他们之间是控件的具体属性, 例如<code>&lt;text ... /&gt;</code>. 在这个例子中<code>text=&quot;第一个按钮&quot;</code>的部分就是按钮控件(button)的属性, 这个属性指定了这个按钮控件的文本内容(text)为&quot;第一个按钮&quot;.</p>\n<p>代码的第5行和第4行一样, 也是一个按钮控件, 只不过他的文本内容为&quot;第二个按钮&quot;. 这两个控件在垂直布局中, 因此会纵向排列, 效果如图：</p>\n<p><img src=\"images/ex1.png\" alt=\"ex1\"></p>\n<p>如果我们把这个例子的垂直布局(vertical)改成水平布局(horizontal), 也即：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button text=&quot;第一个按钮&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>则这两个按钮会横向排列, 效果如图：</p>\n<p><img src=\"images/ex1-horizontal.png\" alt=\"ex1-horizontal\"></p>\n<p>一个控件可以指定多个属性(甚至可以不指定任何属性), 用空格隔开即可；布局同样也可以指定属性, 例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical bg=&quot;#ff0000&quot;&gt;\n        &lt;button text=&quot;第一个按钮&quot; textSize=&quot;20sp&quot;/&gt;\n        &lt;button text=&quot;第二个按钮&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>第三行<code>bg=&quot;#ff0000&quot;</code>指定了垂直布局的背景色(bg)为&quot;#ff0000&quot;, 这是一个RGB颜色, 表示红色(有关RGB的相关知识参见<a href=\"http://tool.oschina.net/commons?type=3\">RGB颜色对照表</a>). 第四行的<code>textSize=&quot;20sp&quot;</code>则指定了按钮控件的字体大小(textSize)为&quot;20sp&quot;, sp是一个字体单位, 暂时不用深入理会. 上述代码的效果如图：</p>\n<p><img src=\"images/ex1-properties.png\" alt=\"ex-properties\"></p>\n<p>一个界面便由一些布局和控件组成. 为了便于文档阅读, 我们再说明一下以下术语：</p>\n<ul>\n<li>子视图, 子控件: 布局里面的控件是这个布局的子控件/子视图. 实际上布局里面不仅仅只能有控件, 还可以是嵌套的布局. 因此用子视图(Child View)更准确一些. 在上面的例子中, 按钮便是垂直布局的子控件.</li>\n<li>父视图, 父布局：直接包含一个控件的布局是这个控件的父布局/父视图(Parent View). 在上面的例子中, 垂直布局便是按钮的父布局.</li>\n</ul>\n",
+      "desc": "<p>UI 模式用于在独立的 <code>ScriptExecuteActivity</code> 中运行脚本并显示 Android 视图. 布局采用声明式 XML, 外观与 JSX 或 React 组件树相似, 但运行时由 Rhino 按 <a href=\"e4x\">E4X</a> XML 处理, 不是浏览器 DOM, JSX 或 React.</p>\n<p><code>ui</code> 模块提供布局渲染, 视图查询, UI 线程调度, 自定义控件和系统栏控制等功能. <code>$ui</code> 是 <code>ui</code> 的等效别名.</p>\n<p>布局标签及属性的完整清单参阅 <a href=\"uiAttributes\">UI 布局属性</a>.</p>\n",
+      "modules": [
+        {
+          "textRaw": "UI 模式",
+          "name": "ui_模式",
+          "desc": "<p>脚本的第一个有效语句使用字符串指令 <code>&#39;ui&#39;;</code> 可启用 UI 模式. 注释和空行可以位于指令之前. 指令必须位于其他有效语句之前.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nui.layout(\n    &lt;vertical padding=&quot;16&quot;&gt;\n        &lt;text id=&quot;title&quot; text=&quot;AutoJs6&quot; textSize=&quot;24sp&quot;/&gt;\n        &lt;button id=&quot;ok&quot; text=&quot;确定&quot;/&gt;\n    &lt;/vertical&gt;,\n);\n\nui.ok.on(&#39;click&#39;, function () {\n    ui.title.attr(&#39;text&#39;, &#39;已点击&#39;);\n});\n</code></pre>\n<p>UI 模式脚本的 JavaScript 主线程就是 Android UI 线程. 不应在该线程执行耗时计算, 阻塞 I/O 或 <code>sleep</code>. 可在线程中完成耗时任务, 再通过 <a href=\"#m-post\">ui.post</a> 或 <a href=\"#m-run\">ui.run</a> 更新视图.</p>\n",
+          "type": "module",
+          "displayName": "UI 模式"
+        },
+        {
+          "textRaw": "布局 XML",
+          "name": "布局_xml",
+          "desc": "<p>布局必须有一个根元素. 属性值最终会转换为字符串并交给对应的视图属性处理器. 标签和属性名称区分大小写.</p>\n<pre><code class=\"lang-js\">let xml = (\n    &lt;frame w=&quot;*&quot; h=&quot;*&quot;&gt;\n        &lt;text id=&quot;message&quot;\n              w=&quot;auto&quot;\n              h=&quot;auto&quot;\n              layout_gravity=&quot;center&quot;\n              text=&quot;Hello&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nui.layout(xml);\n</code></pre>\n<p>在 AutoJs6 简写布局中:</p>\n<ul>\n<li><code>w=&quot;*&quot;</code> 和 <code>h=&quot;*&quot;</code> 分别转换为 <code>match_parent</code>.</li>\n<li><code>w=&quot;auto&quot;</code> 和 <code>h=&quot;auto&quot;</code> 分别转换为 <code>wrap_content</code>.</li>\n<li>未写单位的简写尺寸会补充 <code>dp</code>.</li>\n<li><code>id=&quot;name&quot;</code> 会转换为 <code>@+id/name</code>.</li>\n<li><code>vertical</code>, <code>horizontal</code>, <code>frame</code> 等小写标签会转换为对应的 Android 视图类.</li>\n<li><code>text</code>, <code>button</code> 和 <code>input</code> 元素的直接文本内容会转换为 <code>text</code> 属性. 其他元素的直接文本内容不会成为视图内容.</li>\n</ul>\n<p>原生名称形式可使用 <code>android:layout_width=&quot;match_parent&quot;</code> 等属性. 详细差异参阅 <a href=\"#布局转换模式\">布局转换模式</a>.</p>\n",
+          "modules": [
+            {
+              "textRaw": "内置标签",
+              "name": "内置标签",
+              "desc": "<p>以下表格列出 AutoJs6 简写布局的全部内置标签. 同一行中的标签互为别名.</p>\n<table>\n<thead>\n<tr>\n<th>标签</th>\n<th>实际视图</th>\n<th>用途</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>view</code></td>\n<td><code>android.view.View</code></td>\n<td>基础视图</td>\n</tr>\n<tr>\n<td><code>space</code></td>\n<td><code>android.widget.Space</code></td>\n<td>空白占位视图</td>\n</tr>\n<tr>\n<td><code>linear</code>, <code>horizontal</code></td>\n<td><code>JsLinearLayout</code></td>\n<td>默认水平方向的线性布局</td>\n</tr>\n<tr>\n<td><code>vertical</code></td>\n<td><code>JsLinearLayout</code></td>\n<td>垂直方向的线性布局</td>\n</tr>\n<tr>\n<td><code>frame</code></td>\n<td><code>JsFrameLayout</code></td>\n<td>帧布局</td>\n</tr>\n<tr>\n<td><code>relative</code></td>\n<td><code>JsRelativeLayout</code></td>\n<td>相对布局</td>\n</tr>\n<tr>\n<td><code>scroll</code></td>\n<td><code>JsScrollView</code></td>\n<td>垂直滚动布局</td>\n</tr>\n<tr>\n<td><code>drawer</code></td>\n<td><code>JsDrawerLayout</code></td>\n<td>抽屉布局</td>\n</tr>\n<tr>\n<td><code>appbar</code></td>\n<td><code>JsAppBarLayout</code></td>\n<td>Material AppBar 布局</td>\n</tr>\n<tr>\n<td><code>toolbar</code></td>\n<td><code>JsToolbar</code></td>\n<td>工具栏</td>\n</tr>\n<tr>\n<td><code>actionmenu</code></td>\n<td><code>JsActionMenuView</code></td>\n<td>工具栏菜单布局</td>\n</tr>\n<tr>\n<td><code>card</code></td>\n<td><code>JsCardView</code></td>\n<td>卡片布局</td>\n</tr>\n<tr>\n<td><code>text</code></td>\n<td><code>JsTextView</code></td>\n<td>文本视图. Android API 级别低于 <code>26</code> 时使用兼容实现</td>\n</tr>\n<tr>\n<td><code>button</code>, <code>btn</code></td>\n<td><code>JsButton</code></td>\n<td>按钮</td>\n</tr>\n<tr>\n<td><code>input</code>, <code>edittext</code></td>\n<td><code>JsEditText</code></td>\n<td>文本输入框</td>\n</tr>\n<tr>\n<td><code>checkedtext</code></td>\n<td><code>JsCheckedTextView</code></td>\n<td>可勾选文本</td>\n</tr>\n<tr>\n<td><code>chronometer</code></td>\n<td><code>JsChronometer</code></td>\n<td>计时文本</td>\n</tr>\n<tr>\n<td><code>textclock</code></td>\n<td><code>JsTextClock</code></td>\n<td>时钟文本</td>\n</tr>\n<tr>\n<td><code>textswitcher</code></td>\n<td><code>JsTextSwitcher</code></td>\n<td>带切换动画的文本</td>\n</tr>\n<tr>\n<td><code>checkbox</code></td>\n<td><code>JsCheckBox</code></td>\n<td>复选框</td>\n</tr>\n<tr>\n<td><code>radio</code>, <code>radiobutton</code></td>\n<td><code>JsRadioButton</code></td>\n<td>单选按钮</td>\n</tr>\n<tr>\n<td><code>radiogroup</code>, <code>radios</code></td>\n<td><code>JsRadioGroup</code></td>\n<td>单选按钮组</td>\n</tr>\n<tr>\n<td><code>switch</code></td>\n<td><code>JsSwitch</code></td>\n<td>开关</td>\n</tr>\n<tr>\n<td><code>togglebutton</code></td>\n<td><code>JsToggleButton</code></td>\n<td>切换按钮</td>\n</tr>\n<tr>\n<td><code>spinner</code></td>\n<td><code>JsSpinner</code></td>\n<td>下拉选择器</td>\n</tr>\n<tr>\n<td><code>numberpicker</code></td>\n<td><code>JsNumberPicker</code></td>\n<td>数值选择器</td>\n</tr>\n<tr>\n<td><code>datepicker</code></td>\n<td><code>JsDatePicker</code></td>\n<td>日期选择器</td>\n</tr>\n<tr>\n<td><code>timepicker</code></td>\n<td><code>JsTimePicker</code></td>\n<td>时间选择器</td>\n</tr>\n<tr>\n<td><code>calendar</code></td>\n<td><code>JsCalendarView</code></td>\n<td>日历</td>\n</tr>\n<tr>\n<td><code>search</code></td>\n<td><code>JsSearchView</code></td>\n<td>搜索框</td>\n</tr>\n<tr>\n<td><code>progressbar</code></td>\n<td><code>JsProgressBar</code></td>\n<td>进度条</td>\n</tr>\n<tr>\n<td><code>seekbar</code></td>\n<td><code>JsSeekBar</code></td>\n<td>拖动条</td>\n</tr>\n<tr>\n<td><code>ratingbar</code></td>\n<td><code>JsRatingBar</code></td>\n<td>评分条</td>\n</tr>\n<tr>\n<td><code>image</code>, <code>img</code></td>\n<td><code>JsImageView</code></td>\n<td>支持圆角的图片视图</td>\n</tr>\n<tr>\n<td><code>imagebutton</code></td>\n<td><code>JsImageButton</code></td>\n<td>图片按钮</td>\n</tr>\n<tr>\n<td><code>quickcontactbadge</code></td>\n<td><code>JsQuickContactBadge</code></td>\n<td>联系人快捷入口</td>\n</tr>\n<tr>\n<td><code>fab</code></td>\n<td><code>JsFloatingActionButton</code></td>\n<td>Material 浮动操作按钮</td>\n</tr>\n<tr>\n<td><code>video</code></td>\n<td><code>JsVideoView</code></td>\n<td>视频视图</td>\n</tr>\n<tr>\n<td><code>webview</code>, <code>web</code></td>\n<td><code>JsWebView</code></td>\n<td>WebView</td>\n</tr>\n<tr>\n<td><code>canvas</code></td>\n<td><code>JsCanvasView</code></td>\n<td>可持续绘制的 Canvas 视图</td>\n</tr>\n<tr>\n<td><code>console</code></td>\n<td><code>JsConsoleView</code></td>\n<td>控制台日志视图</td>\n</tr>\n<tr>\n<td><code>list</code></td>\n<td><code>JsListView</code></td>\n<td>基于 RecyclerView 的列表</td>\n</tr>\n<tr>\n<td><code>grid</code></td>\n<td><code>JsGridView</code></td>\n<td>基于 RecyclerView 的网格</td>\n</tr>\n<tr>\n<td><code>viewpager</code></td>\n<td><code>JsViewPager</code></td>\n<td>分页视图</td>\n</tr>\n<tr>\n<td><code>tabs</code>, <code>tab</code></td>\n<td><code>JsTabLayout</code></td>\n<td>Material 标签栏</td>\n</tr>\n<tr>\n<td><code>viewflipper</code></td>\n<td><code>JsViewFlipper</code></td>\n<td>自动或手动切换子视图</td>\n</tr>\n<tr>\n<td><code>viewswitcher</code></td>\n<td><code>JsViewSwitcher</code></td>\n<td>两个子视图之间切换</td>\n</tr>\n</tbody>\n</table>\n<p>也可将完整类名作为标签, 如 <code>&lt;android.widget.TextView&gt;</code>. 常用 AndroidX 和 Material 类还支持短类名, 如 <code>&lt;ConstraintLayout&gt;</code>, <code>&lt;RecyclerView&gt;</code>, <code>&lt;NavigationView&gt;</code> 和 <code>&lt;TextInputLayout&gt;</code>. 这些类仍由 AutoJs6 的动态布局器创建, 可用属性取决于 <a href=\"uiAttributes\">UI 布局属性</a> 中与其最近父类匹配的属性处理器. 未列出的 Android XML 属性不会因此自动获得支持.</p>\n<p><code>menu</code>, <code>item</code>, <code>shape</code>, <code>paths</code>, <code>set</code>, <code>selector</code>, <code>merge</code> 和小写 <code>view</code> 之外的保留节点不能作为动态类名使用. 其中小写 <code>view</code> 由 AutoJs6 显式映射为 <code>android.view.View</code>.</p>\n",
+              "type": "module",
+              "displayName": "内置标签"
+            },
+            {
+              "textRaw": "布局转换模式",
+              "name": "布局转换模式",
+              "desc": "<p>默认情况下, <code>ui.useAndroidLayout(null)</code> 使用自动模式:</p>\n<ul>\n<li>XML 包含命名空间声明, 或包含 <code>android:</code> 或 <code>app:</code> 属性时, 保留原 XML.</li>\n<li>其他 XML 先经过 AutoJs6 简写标签及属性转换.</li>\n</ul>\n<p><code>ui.useAndroidLayout(true)</code> 可强制保留原 XML, <code>ui.useAndroidLayout(false)</code> 可强制执行 AutoJs6 简写转换.</p>\n<p>这里的 &quot;保留原 XML&quot; 只表示跳过 <code>XmlConverter</code> 的标签及属性改写. 布局仍由 AutoJs6 <code>DynamicLayoutInflater</code> 创建, 不会改用 Android 平台 <code>LayoutInflater</code>, 也不会自动支持完整的 Android XML 属性集.</p>\n<pre><code class=\"lang-js\">ui.useAndroidLayout(true);\n\nlet view = ui.inflate(\n    &#39;&lt;android.widget.TextView &#39; +\n    &#39;xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot; &#39; +\n    &#39;android:layout_width=&quot;match_parent&quot; &#39; +\n    &#39;android:layout_height=&quot;wrap_content&quot; &#39; +\n    &#39;android:text=&quot;Hello&quot;/&gt;&#39;,\n);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "布局转换模式"
+            },
+            {
+              "textRaw": "动态属性表达式",
+              "name": "动态属性表达式",
+              "desc": "<p>属性字符串中的 <code>{{ expression }}</code> 会在应用属性时执行. 普通布局的求值上下文默认为脚本全局作用域. 一个属性可包含多个表达式.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet name = &#39;AutoJs6&#39;;\n\nui.layout(\n    &lt;vertical&gt;\n        &lt;text text=&quot;Hello, {{name}}&quot;/&gt;\n    &lt;/vertical&gt;,\n);\n</code></pre>\n<p>普通布局中的表达式只在布局或属性被应用时求值, 不提供 React 式的自动重渲染. 变量改变后应使用视图方法或 <code>attr</code> 主动更新. <code>&lt;list&gt;</code> 和 <code>&lt;grid&gt;</code> 会在项目绑定时以项目对象为上下文重新应用动态属性.</p>\n<p>表达式结果的转换规则:</p>\n<ul>\n<li>字符串保持原值.</li>\n<li>AutoJs6 颜色对象转换为十六进制颜色字符串.</li>\n<li><code>ThemeColor</code> 转换为主题主色.</li>\n<li>其他值使用字符串形式拼接到属性值.</li>\n</ul>\n<p>表达式会执行 JavaScript 代码. 不应把不可信文本直接拼接为 <code>{{ ... }}</code> 表达式.</p>\n",
+              "type": "module",
+              "displayName": "动态属性表达式"
+            },
+            {
+              "textRaw": "视图 ID 与访问",
+              "name": "视图_id_与访问",
+              "desc": "<p>设置内容视图后, <code>ui.&lt;id&gt;</code> 会从 <code>ui.view</code> 开始递归查找对应 ID:</p>\n<pre><code class=\"lang-js\">ui.layout(\n    &lt;vertical id=&quot;panel&quot;&gt;\n        &lt;text id=&quot;message&quot; text=&quot;Hello&quot;/&gt;\n    &lt;/vertical&gt;,\n);\n\nui.message.attr(&#39;text&#39;, &#39;World&#39;);\nui.panel.message.attr(&#39;textColor&#39;, &#39;#ff5722&#39;);\n</code></pre>\n<p>包装后的任意父视图也支持以 <code>parent.&lt;id&gt;</code> 递归查找后代视图.</p>\n<p>若名称与 <code>ui</code> 已有成员冲突, 应使用 <code>ui.findById(id)</code>. 给 <code>ui.someName</code> 赋值会保存自定义属性并遮蔽同名 ID 查询; 赋值为 <code>null</code> 或 <code>undefined</code> 会移除遮蔽值.</p>\n",
+              "type": "module",
+              "displayName": "视图 ID 与访问"
+            },
+            {
+              "textRaw": "列表与网格",
+              "name": "列表与网格",
+              "desc": "<p><code>&lt;list&gt;</code> 和 <code>&lt;grid&gt;</code> 的第一个元素子节点是项目模板, 不是普通子视图. 数据源必须是 Rhino JavaScript 数组. <code>setDataSource(array)</code> 设置数据源后, 模板中的动态表达式以当前项目对象为求值上下文.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nui.layout(\n    &lt;list id=&quot;people&quot;&gt;\n        &lt;horizontal padding=&quot;8&quot;&gt;\n            &lt;text id=&quot;label&quot;\n                  layout_weight=&quot;1&quot;\n                  text=&quot;{{name}}: {{age}}&quot;/&gt;\n            &lt;button id=&quot;remove&quot; text=&quot;删除&quot;/&gt;\n        &lt;/horizontal&gt;\n    &lt;/list&gt;,\n);\n\nlet people = [\n    { name: &#39;Alice&#39;, age: 18 },\n    { name: &#39;Bob&#39;, age: 20 },\n];\n\nui.people.setDataSource(people);\n\nui.people.on(&#39;item_click&#39;, function (item, position) {\n    toast(item.name + &#39;, index=&#39; + position);\n});\n\nui.people.on(&#39;item_bind&#39;, function (itemView, holder) {\n    itemView.remove.on(&#39;click&#39;, function () {\n        people.splice(holder.position, 1);\n    });\n});\n</code></pre>\n<p>AutoJs6 使用 <code>Array.observe</code> 监听数组本身的 <code>splice</code> 和索引更新, 并通知 RecyclerView. 修改 <code>people[0].name</code> 这类嵌套对象属性不会触发数组更新; 可替换整个数组元素, 或重新设置数据源.</p>\n<p><code>item_bind</code> 在 ViewHolder 创建时触发一次, 此时项目可能尚未写入 holder. <code>holder.item</code> 和 <code>holder.position</code> 是动态 getter, 应在之后发生的点击等回调中读取, 如上例所示.</p>\n<p>列表事件参阅 <a href=\"#nativeview-事件\">NativeView 事件</a>. <code>&lt;grid&gt;</code> 另外支持 <code>spanCount</code> 和布局方向等属性.</p>\n",
+              "type": "module",
+              "displayName": "列表与网格"
+            },
+            {
+              "textRaw": "分页, 标签栏和抽屉",
+              "name": "分页,_标签栏和抽屉",
+              "desc": "<p><code>&lt;viewpager&gt;</code> 的直接子视图会成为页面. <code>titles</code> 属性提供以分隔符拆分的页面标题. Material <code>TabLayout</code> 的原生方法可将标签栏与分页视图关联:</p>\n<pre><code class=\"lang-js\">ui.layout(\n    &lt;vertical&gt;\n        &lt;tabs id=&quot;tabs&quot;/&gt;\n        &lt;viewpager id=&quot;pages&quot; titles=&quot;首页|设置&quot; layout_weight=&quot;1&quot;&gt;\n            &lt;frame&gt;&lt;text text=&quot;首页&quot;/&gt;&lt;/frame&gt;\n            &lt;frame&gt;&lt;text text=&quot;设置&quot;/&gt;&lt;/frame&gt;\n        &lt;/viewpager&gt;\n    &lt;/vertical&gt;,\n);\n\nui.tabs.setupWithViewPager(ui.pages);\n</code></pre>\n<p><code>JsToolbar#setupWithDrawer(drawer)</code> 可安装 <code>ActionBarDrawerToggle</code> 并监听抽屉状态:</p>\n<pre><code class=\"lang-js\">ui.toolbar.setupWithDrawer(ui.drawer);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "分页, 标签栏和抽屉"
+            },
+            {
+              "textRaw": "Canvas 视图",
+              "name": "canvas_视图",
+              "desc": "<p><code>&lt;canvas&gt;</code> 是基于 <code>TextureView</code> 的持续绘制视图. <code>draw</code> 事件在专用单线程绘制循环中触发, 回调参数为 <code>(canvas, view)</code>. <code>setMaxFps(fps)</code> 设置最大帧率; <code>fps &lt;= 0</code> 表示不主动限制帧间隔.</p>\n<pre><code class=\"lang-js\">ui.layout(&lt;canvas id=&quot;board&quot; w=&quot;*&quot; h=&quot;*&quot;/&gt;);\n\nui.board.setMaxFps(30);\nui.board.on(&#39;draw&#39;, function (canvas) {\n    canvas.drawColor(&#39;#ffffff&#39;);\n});\n</code></pre>\n<p>Canvas 绘图 API 参阅 <a href=\"canvas\">画布</a>.</p>\n",
+              "type": "module",
+              "displayName": "Canvas 视图"
+            },
+            {
+              "textRaw": "WebView 视图",
+              "name": "webview_视图",
+              "desc": "<p><code>&lt;webview&gt;</code> 创建 <code>JsWebView</code>. 视图创建后, AutoJs6 会附加:</p>\n<ul>\n<li><code>webview.events</code> - WebView 原生事件发射器.</li>\n<li><code>webview.jsBridge</code> - 页面 JavaScript 与脚本之间的消息桥.</li>\n</ul>\n<p><code>jsBridge</code> 提供 <code>send(event, ...args)</code>, <code>handle(channel, handler)</code>, <code>invoke(channel, ...args)</code> 和 <code>eval(code)</code>. <code>invoke</code> 和 <code>eval</code> 返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>. WebView 同时保留 Android <code>WebView</code> 的原生方法.</p>\n",
+              "type": "module",
+              "displayName": "WebView 视图"
+            }
+          ],
+          "type": "module",
+          "displayName": "布局 XML"
+        },
+        {
+          "textRaw": "控件扩展方法",
+          "name": "控件扩展方法",
+          "desc": "<p>内置标签返回的对象可调用对应 Android 类的原生方法. 下表列出 AutoJs6 控件类在 Android 父类之外新增的公开方法.</p>\n<table>\n<thead>\n<tr>\n<th>控件</th>\n<th>方法</th>\n<th>返回值及行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>text</code>, <code>button</code>, <code>btn</code>, <code>input</code>, <code>edittext</code></td>\n<td><code>text()</code></td>\n<td>返回当前文本的 JavaScript 字符串</td>\n</tr>\n<tr>\n<td><code>text</code>, <code>button</code>, <code>btn</code>, <code>input</code>, <code>edittext</code></td>\n<td><code>text(value)</code></td>\n<td>调用 <code>setText(value)</code>, 无返回值</td>\n</tr>\n<tr>\n<td><code>frame</code>, <code>linear</code>, <code>horizontal</code>, <code>vertical</code>, <code>relative</code></td>\n<td><code>id(id)</code></td>\n<td>从自身递归查找 ID, 返回 Android View 或 <code>null</code></td>\n</tr>\n<tr>\n<td><code>checkbox</code>, <code>switch</code></td>\n<td><code>setChecked(checked, notify)</code></td>\n<td>设置勾选状态. <code>notify=false</code> 时抑制本次 <code>check</code> 回调</td>\n</tr>\n<tr>\n<td><code>checkbox</code>, <code>switch</code></td>\n<td><code>toggle(notify)</code></td>\n<td>切换勾选状态. <code>notify=false</code> 时抑制本次 <code>check</code> 回调</td>\n</tr>\n<tr>\n<td><code>image</code>, <code>img</code></td>\n<td><code>setSource(uri)</code></td>\n<td>使用该视图的 Drawable 加载器设置 URI 或路径</td>\n</tr>\n<tr>\n<td><code>image</code>, <code>img</code></td>\n<td><code>setSource(image)</code></td>\n<td>使用 <a href=\"imageWrapperType\">ImageWrapper</a> 的位图</td>\n</tr>\n<tr>\n<td><code>list</code>, <code>grid</code></td>\n<td><code>setDataSource(array)</code></td>\n<td>设置 Rhino JavaScript 数组数据源</td>\n</tr>\n<tr>\n<td><code>list</code>, <code>grid</code></td>\n<td><code>getDataSource()</code></td>\n<td>返回当前数据源</td>\n</tr>\n<tr>\n<td><code>viewpager</code></td>\n<td><code>setTitles(titles)</code></td>\n<td>设置字符串数组标题. 直接调用后可再调用 <code>getAdapter().notifyDataSetChanged()</code></td>\n</tr>\n<tr>\n<td><code>toolbar</code></td>\n<td><code>setupWithDrawer(drawer)</code></td>\n<td>安装并同步 <code>ActionBarDrawerToggle</code></td>\n</tr>\n<tr>\n<td><code>canvas</code></td>\n<td><code>setMaxFps(fps)</code></td>\n<td>设置绘制循环最大帧率</td>\n</tr>\n<tr>\n<td><code>video</code></td>\n<td><code>clearMediaController()</code></td>\n<td>清除 MediaController</td>\n</tr>\n<tr>\n<td><code>video</code></td>\n<td><code>resetMediaController()</code></td>\n<td>恢复视图创建时生成的默认 MediaController</td>\n</tr>\n<tr>\n<td><code>video</code></td>\n<td><code>setCustomMediaController(controller)</code></td>\n<td>设置自定义 MediaController 或 <code>null</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>list</code> 和 <code>grid</code> 还有供布局器使用的 <code>setItemTemplate</code>, <code>setDataSourceAdapter</code> 和 <code>initWithScriptRuntime</code>. 常规脚本不应替换这些内部协作对象.</p>\n",
+          "type": "module",
+          "displayName": "控件扩展方法"
+        },
+        {
+          "textRaw": "NativeView 包装",
+          "name": "nativeview_包装",
+          "desc": "<p>由 <code>ui.inflate</code>, <code>ui.findById</code> 或 ID 属性访问返回的对象是 Android <code>View</code> 的 Rhino 包装对象. 它既可调用实际 Java 视图的方法, 也附加属性访问, 后代 ID 查询和事件方法.</p>\n",
+          "methods": [
+            {
+              "textRaw": "attr(name)",
+              "type": "method",
+              "name": "attr",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) | [undefined](dataTypes#undefined) } - 最近一次通过布局器设置的原始属性字符串 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) | [undefined](dataTypes#undefined) ",
+                      "desc": "最近一次通过布局器设置的原始属性字符串"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>返回已注册属性保存的最近值. 此值不保证反映之后通过 Android 原生方法修改的实时状态. 未注册的属性返回 <code>undefined</code>.</p>\n"
+            },
+            {
+              "textRaw": "attr(name, value)",
+              "type": "method",
+              "name": "attr",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "**value** { [any](dataTypes#any) } - 转换为字符串后应用的属性值 ",
+                      "name": "**value**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "转换为字符串后应用的属性值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>应用一个已注册属性. 未知属性不执行操作. 明确列为不支持的属性会抛出异常.</p>\n<pre><code class=\"lang-js\">ui.message.attr(&#39;text&#39;, &#39;Ready&#39;);\nui.message.attr(&#39;visibility&#39;, &#39;gone&#39;);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "attrReset(name)",
+              "type": "method",
+              "name": "attrReset",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>重新应用 <a href=\"#attr-name\">attr(name)</a> 当前保存的属性字符串. 此方法不是恢复 Android 默认值.</p>\n"
+            },
+            {
+              "textRaw": "click()",
+              "type": "method",
+              "name": "click",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>调用 Android <code>View#performClick()</code>.</p>\n"
+            },
+            {
+              "textRaw": "click(listener)",
+              "type": "method",
+              "name": "click",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**listener** { [Function](dataTypes#function) } - `(view) => void` ",
+                      "name": "**listener**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "`(view) => void`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>注册 <code>click</code> 事件监听器, 等效于 <code>view.on(&#39;click&#39;, listener)</code>.</p>\n"
+            },
+            {
+              "textRaw": "longClick()",
+              "type": "method",
+              "name": "longClick",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>调用 Android <code>View#performLongClick()</code>.</p>\n"
+            },
+            {
+              "textRaw": "longClick(listener)",
+              "type": "method",
+              "name": "longClick",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**listener** { [Function](dataTypes#function) } - `(event, view) => void` ",
+                      "name": "**listener**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "`(event, view) => void`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>注册 <code>long_click</code> 事件监听器.</p>\n"
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "EventEmitter 方法",
+              "name": "eventemitter_方法",
+              "desc": "<p>NativeView 转发以下 <a href=\"events#eventemitter\">EventEmitter</a> 方法:</p>\n<ul>\n<li><code>once(eventName, listener)</code></li>\n<li><code>on(eventName, listener)</code></li>\n<li><code>addListener(eventName, listener)</code></li>\n<li><code>emit(eventName, ...args)</code></li>\n<li><code>eventNames()</code></li>\n<li><code>listenerCount(eventName)</code></li>\n<li><code>listeners(eventName)</code></li>\n<li><code>prependListener(eventName, listener)</code></li>\n<li><code>prependOnceListener(eventName, listener)</code></li>\n<li><code>removeAllListeners()</code></li>\n<li><code>removeAllListeners(eventName)</code></li>\n<li><code>removeListener(eventName, listener)</code></li>\n<li><code>setMaxListeners(number)</code></li>\n</ul>\n<p><code>maxListeners</code> 是当前最大监听器数量属性. 包装原型的 <code>defaultMaxListeners()</code> 返回全局默认值.</p>\n",
+              "type": "module",
+              "displayName": "EventEmitter 方法"
+            },
+            {
+              "textRaw": "widget",
+              "name": "widget",
+              "desc": "<p>自定义控件根视图的 <code>widget</code> 属性指向该 <a href=\"#c-widget\">ui.Widget</a> 实例. 普通视图的该属性为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "widget"
+            },
+            {
+              "textRaw": "NativeView 事件",
+              "name": "nativeview_事件",
+              "desc": "<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>回调参数</th>\n<th>适用视图及说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>click</code></td>\n<td><code>(view)</code></td>\n<td>所有 View</td>\n</tr>\n<tr>\n<td><code>long_click</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. <code>event.consumed = true</code> 可消费长按</td>\n</tr>\n<tr>\n<td><code>touch</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. 每个触摸事件触发</td>\n</tr>\n<tr>\n<td><code>touch_down</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. <code>ACTION_DOWN</code></td>\n</tr>\n<tr>\n<td><code>touch_up</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. <code>ACTION_UP</code></td>\n</tr>\n<tr>\n<td><code>touch_move</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. <code>ACTION_MOVE</code></td>\n</tr>\n<tr>\n<td><code>key</code></td>\n<td><code>(keyCode, event, view)</code></td>\n<td>所有 View. 每个按键事件触发</td>\n</tr>\n<tr>\n<td><code>key_down</code></td>\n<td><code>(keyCode, event, view)</code></td>\n<td>所有 View. 按键按下</td>\n</tr>\n<tr>\n<td><code>key_up</code></td>\n<td><code>(keyCode, event, view)</code></td>\n<td>所有 View. 按键抬起</td>\n</tr>\n<tr>\n<td><code>scroll_change</code></td>\n<td><code>(event, view)</code></td>\n<td>所有 View. <code>event</code> 含 <code>scrollX</code>, <code>scrollY</code>, <code>oldScrollX</code>, <code>oldScrollY</code></td>\n</tr>\n<tr>\n<td><code>check</code></td>\n<td><code>(isChecked, buttonView)</code></td>\n<td><code>CompoundButton</code>, 如 checkbox, radio, switch 和 togglebutton</td>\n</tr>\n<tr>\n<td><code>item_click</code></td>\n<td><code>(item, position, itemView, listView)</code></td>\n<td>list 和 grid</td>\n</tr>\n<tr>\n<td><code>item_long_click</code></td>\n<td><code>(event, item, position, itemView, listView)</code></td>\n<td>list 和 grid. <code>event.consumed = true</code> 可消费长按</td>\n</tr>\n<tr>\n<td><code>item_bind</code></td>\n<td><code>(itemView, holder)</code></td>\n<td>list 和 grid. <code>holder.item</code> 和 <code>holder.position</code> 指向当前项目</td>\n</tr>\n</tbody>\n</table>\n<p>为 <code>touch</code>, <code>long_click</code>, <code>key</code> 或 <code>item_long_click</code> 的 <code>event.consumed</code> 赋值为 <code>true</code>, 会使对应 Android 监听器返回已消费.</p>\n",
+              "type": "module",
+              "displayName": "NativeView 事件"
+            }
+          ],
+          "type": "module",
+          "displayName": "NativeView 包装"
+        },
+        {
+          "textRaw": "自定义控件",
+          "name": "自定义控件",
+          "desc": "<p>自定义控件构造函数继承 <code>ui.Widget</code>, <code>render()</code> 返回根布局, 再通过 <code>ui.registerWidget(name, constructor)</code> 注册为 XML 标签.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet LabeledInput = (function () {\n    util.extend(LabeledInput, ui.Widget);\n\n    function LabeledInput() {\n        ui.Widget.call(this);\n        this.defineAttr(&#39;label&#39;, function (view, name, value) {\n            view.caption.attr(&#39;text&#39;, value);\n        });\n    }\n\n    LabeledInput.prototype.render = function () {\n        return (\n            &lt;vertical&gt;\n                &lt;text id=&quot;caption&quot;/&gt;\n                &lt;input id=&quot;editor&quot;/&gt;\n            &lt;/vertical&gt;\n        );\n    };\n\n    LabeledInput.prototype.getText = function () {\n        return String(this.view.editor.getText());\n    };\n\n    ui.registerWidget(&#39;labeled-input&#39;, LabeledInput);\n    return LabeledInput;\n})();\n\nui.layout(\n    &lt;vertical&gt;\n        &lt;labeled-input id=&quot;name&quot; label=&quot;姓名&quot;/&gt;\n        &lt;button id=&quot;read&quot; text=&quot;读取&quot;/&gt;\n    &lt;/vertical&gt;,\n);\n\nui.read.on(&#39;click&#39;, function () {\n    toast(ui.name.widget.getText());\n});\n</code></pre>\n<p>自定义标签的普通属性仍会交给 <code>render()</code> 返回的根视图处理. 由 <code>defineAttr</code> 声明的同名属性会优先交给自定义控件.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">globalThis</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "自定义控件"
+        },
+        {
+          "textRaw": "[p] view",
+          "name": "[p]_view",
+          "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.android.com/reference/android/view/View\">View</a> | <a href=\"dataTypes#null\">null</a> } - 当前内容视图</li>\n</ul>\n<p><a href=\"#m-setcontentview\">ui.setContentView</a> 会同步设置此属性. <code>ui.findById</code> 和 <code>ui.&lt;id&gt;</code> 从此视图开始查找.</p>\n<p>直接给 <code>ui.view</code> 赋值只改变查找起点, 不会调用 Activity 的 <code>setContentView</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] view"
+        },
+        {
+          "textRaw": "[p] bindingContext",
+          "name": "[p]_bindingcontext",
+          "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 动态属性表达式的求值上下文</li>\n</ul>\n<p>初始值为脚本全局作用域. 列表绑定项目期间, AutoJs6 会临时替换为当前项目对象, 完成后恢复.</p>\n<p>此属性供高级动态布局使用. 修改后只影响之后应用的动态属性, 不会自动刷新现有视图.</p>\n",
+          "type": "module",
+          "displayName": "[p] bindingContext"
+        },
+        {
+          "textRaw": "[p] layoutInflater",
+          "name": "[p]_layoutinflater",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"https://github.com/SuperMonster003/AutoJs6\">DynamicLayoutInflater</a> } - 当前运行时的动态布局器</li>\n</ul>\n<p>供需要直接使用 <code>InflateContext</code> 或布局器标志的高级场景使用. 常规布局应使用 <a href=\"#m-inflate\">ui.inflate</a> 或 <a href=\"#m-layout\">ui.layout</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] layoutInflater"
+        },
+        {
+          "textRaw": "[p+] R",
+          "name": "[p+]_r",
+          "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> } - AutoJs6 应用资源对象</li>\n</ul>\n<p><a href=\"global#p-r\">global.R</a> 的别名. 可通过 <code>ui.R.string</code>, <code>ui.R.drawable</code> 等下级属性访问资源 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p+] R"
+        },
+        {
+          "textRaw": "[p] root",
+          "name": "[p]_root",
+          "desc": "<p><strong><code>6.6.3</code></strong> <strong><code>UI</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"https://developer.android.com/reference/android/view/ViewGroup\">ViewGroup</a> | <a href=\"dataTypes#null\">null</a> } - Activity 中 ID 为 <code>android.R.id.content</code> 的窗口根容器</li>\n</ul>\n<p>当前 Activity 不是脚本 UI Activity 时返回 <code>null</code>. <code>root</code> 与 <a href=\"#p-view\">ui.view</a> 不同, 前者是 Activity 的外层内容容器.</p>\n",
+          "type": "module",
+          "displayName": "[p] root"
+        },
+        {
+          "textRaw": "[p] emitter",
+          "name": "[p]_emitter",
+          "desc": "<p><strong><code>UI</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"events#eventemitter\">EventEmitter</a> | <a href=\"dataTypes#null\">null</a> } - 脚本 UI Activity 的事件发射器</li>\n</ul>\n<p>当前 Activity 不是脚本 UI Activity 时返回 <code>null</code>.</p>\n<p>常用事件:</p>\n<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>参数</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>create</code></td>\n<td><code>(savedInstanceState)</code></td>\n</tr>\n<tr>\n<td><code>pause</code></td>\n<td><code>()</code></td>\n</tr>\n<tr>\n<td><code>resume</code></td>\n<td><code>()</code></td>\n</tr>\n<tr>\n<td><code>save_instance_state</code></td>\n<td><code>(outState)</code></td>\n</tr>\n<tr>\n<td><code>restore_instance_state</code></td>\n<td><code>(savedInstanceState)</code></td>\n</tr>\n<tr>\n<td><code>back_pressed</code></td>\n<td><code>(event)</code></td>\n</tr>\n<tr>\n<td><code>key_down</code></td>\n<td><code>(keyCode, keyEvent, event)</code></td>\n</tr>\n<tr>\n<td><code>generic_motion_event</code></td>\n<td><code>(motionEvent, event)</code></td>\n</tr>\n<tr>\n<td><code>activity_result</code></td>\n<td><code>(requestCode, resultCode, data)</code></td>\n</tr>\n<tr>\n<td><code>create_options_menu</code></td>\n<td><code>(menu)</code></td>\n</tr>\n<tr>\n<td><code>options_item_selected</code></td>\n<td><code>(event, menuItem)</code></td>\n</tr>\n</tbody>\n</table>\n<p><code>back_pressed</code>, <code>key_down</code> 和 <code>options_item_selected</code> 的控制事件支持 <code>event.consumed = true</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p] emitter"
+        },
+        {
+          "textRaw": "[p] statusBarHeight",
+          "name": "[p]_statusbarheight",
+          "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>[6.7.0]</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 状态栏稳定高度, 单位为 px</li>\n</ul>\n<p>等效于使用默认选项调用 <a href=\"#m-getstatusbarheight\">ui.getStatusBarHeight</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] statusBarHeight"
+        },
+        {
+          "textRaw": "[p] visibleStatusBarHeight",
+          "name": "[p]_visiblestatusbarheight",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 当前可见状态栏高度, 单位为 px</li>\n</ul>\n<p>等效于使用默认选项调用 <a href=\"#m-getvisiblestatusbarheight\">ui.getVisibleStatusBarHeight</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] visibleStatusBarHeight"
+        },
+        {
+          "textRaw": "[p] navigationBarHeight",
+          "name": "[p]_navigationbarheight",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 导航栏稳定厚度, 单位为 px</li>\n</ul>\n<p>等效于使用默认选项调用 <a href=\"#m-getnavigationbarheight\">ui.getNavigationBarHeight</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] navigationBarHeight"
+        },
+        {
+          "textRaw": "[p] visibleNavigationBarHeight",
+          "name": "[p]_visiblenavigationbarheight",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 当前可见导航栏厚度, 单位为 px</li>\n</ul>\n<p>等效于使用默认选项调用 <a href=\"#m-getvisiblenavigationbarheight\">ui.getVisibleNavigationBarHeight</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] visibleNavigationBarHeight"
+        },
+        {
+          "textRaw": "[m] useAndroidLayout",
+          "name": "[m]_useandroidlayout",
+          "methods": [
+            {
+              "textRaw": "useAndroidLayout(enabled?)",
+              "type": "method",
+              "name": "useAndroidLayout",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ enabled = true ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 布局转换模式 ",
+                      "name": "**[",
+                      "desc": "enabled = true ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 布局转换模式"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "enabled?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>控制后续 XML 是否经过 AutoJs6 简写转换:</p>\n<ul>\n<li><code>true</code> - 保留原 XML.</li>\n<li><code>false</code> - 强制执行 AutoJs6 简写转换.</li>\n<li><code>null</code> - 根据命名空间和带前缀属性自动判断.</li>\n</ul>\n<p>该设置不会改用 Android 平台 <code>LayoutInflater</code>. 参阅 <a href=\"#布局转换模式\">布局转换模式</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] useAndroidLayout"
+        },
+        {
+          "textRaw": "[m] layout",
+          "name": "[m]_layout",
+          "methods": [
+            {
+              "textRaw": "layout(xml)",
+              "type": "method",
+              "name": "layout",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>xml</strong> { <a href=\"e4x\">XML</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"https://developer.android.com/reference/org/w3c/dom/Document\">Document</a> } - 布局</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>渲染布局并将根视图设置为当前 UI Activity 的内容视图. 非 UI 模式调用时抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "xml"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] layout"
+        },
+        {
+          "textRaw": "[m] layoutFile",
+          "name": "[m]_layoutfile",
+          "methods": [
+            {
+              "textRaw": "layoutFile(path)",
+              "type": "method",
+              "name": "layoutFile",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - XML 文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>读取文件内容并调用 <a href=\"#m-layout\">ui.layout</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] layoutFile"
+        },
+        {
+          "textRaw": "[m] inflate",
+          "name": "[m]_inflate",
+          "methods": [
+            {
+              "textRaw": "inflate(xml, parent?, isAttachedToParent?)",
+              "type": "method",
+              "name": "inflate",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**xml** { [XML](e4x) | [string](dataTypes#string) | [Document](https://developer.android.com/reference/org/w3c/dom/Document) } - 布局 ",
+                      "name": "**xml**",
+                      "type": " [XML](e4x) | [string](dataTypes#string) | [Document](https://developer.android.com/reference/org/w3c/dom/Document) ",
+                      "desc": "布局"
+                    },
+                    {
+                      "textRaw": "**[ parent = null ]** { [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup) | [null](dataTypes#null) } - 父视图 ",
+                      "name": "**[",
+                      "desc": "parent = null ]** { [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup) | [null](dataTypes#null) } - 父视图"
+                    },
+                    {
+                      "textRaw": "**[ isAttachedToParent = false ]** { [boolean](dataTypes#boolean) } - 是否立即附加到父视图 ",
+                      "name": "**[",
+                      "desc": "isAttachedToParent = false ]** { [boolean](dataTypes#boolean) } - 是否立即附加到父视图"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) } - NativeView 包装后的根视图 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "NativeView 包装后的根视图"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "xml"
+                    },
+                    {
+                      "name": "parent?"
+                    },
+                    {
+                      "name": "isAttachedToParent?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>动态渲染并返回视图. 在非 UI 模式下, 使用带 <code>ScriptTheme</code> 的应用上下文; 在 UI 模式下使用当前脚本 Activity.</p>\n<p>传入 <code>parent</code> 可使依赖父布局参数的属性在渲染时正确应用. <code>isAttachedToParent</code> 为 <code>true</code> 时, 布局器会把结果直接附加到 <code>parent</code>.</p>\n<pre><code class=\"lang-js\">let child = ui.inflate(\n    &lt;text text=&quot;动态视图&quot;/&gt;,\n    ui.container,\n    false,\n);\nui.container.addView(child);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] inflate"
+        },
+        {
+          "textRaw": "[m] setContentView",
+          "name": "[m]_setcontentview",
+          "methods": [
+            {
+              "textRaw": "setContentView(view)",
+              "type": "method",
+              "name": "setContentView",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>view</strong> { <a href=\"https://developer.android.com/reference/android/view/View\">View</a> } - 内容视图</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>在 UI 线程调用 Activity 的 <code>setContentView</code>, 并同步更新 <a href=\"#p-view\">ui.view</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setContentView"
+        },
+        {
+          "textRaw": "[m] registerWidget",
+          "name": "[m]_registerwidget",
+          "methods": [
+            {
+              "textRaw": "registerWidget(name, widget)",
+              "type": "method",
+              "name": "registerWidget",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 非空 XML 标签名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "非空 XML 标签名称"
+                    },
+                    {
+                      "textRaw": "**widget** { [Function](dataTypes#function) } - `ui.Widget` 子类构造函数 ",
+                      "name": "**widget**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "`ui.Widget` 子类构造函数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "widget"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>注册自定义控件. 同名注册会替换当前运行时中的旧构造函数.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] registerWidget"
+        },
+        {
+          "textRaw": "[m] findById",
+          "name": "[m]_findbyid",
+          "methods": [
+            {
+              "textRaw": "findById(id)",
+              "type": "method",
+              "name": "findById",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID ",
+                      "name": "**id**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "视图 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) } - NativeView 包装后的匹配视图 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) ",
+                      "desc": "NativeView 包装后的匹配视图"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从 <a href=\"#p-view\">ui.view</a> 开始递归查找. 尚未设置内容视图或没有匹配项时返回 <code>null</code>.</p>\n<p>ID 可写为普通名称或资源 ID 形式, 如 <code>title</code>, <code>@id/title</code> 或 <code>@+id/title</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findById"
+        },
+        {
+          "textRaw": "[m] findView",
+          "name": "[m]_findview",
+          "methods": [
+            {
+              "textRaw": "findView(id)",
+              "type": "method",
+              "name": "findView",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID ",
+                      "name": "**id**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "视图 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p><a href=\"#m-findbyid\">ui.findById</a> 的等效方法.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findView"
+        },
+        {
+          "textRaw": "[m] findByStringId",
+          "name": "[m]_findbystringid",
+          "methods": [
+            {
+              "textRaw": "findByStringId(view, id)",
+              "type": "method",
+              "name": "findByStringId",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**view** { [View](https://developer.android.com/reference/android/view/View) } - 查找起点 ",
+                      "name": "**view**",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "查找起点"
+                    },
+                    {
+                      "textRaw": "**id** { [string](dataTypes#string) | [null](dataTypes#null) } - 视图 ID ",
+                      "name": "**id**",
+                      "type": " [string](dataTypes#string) | [null](dataTypes#null) ",
+                      "desc": "视图 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) | [null](dataTypes#null) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    },
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从指定视图开始递归查找并返回 NativeView 包装对象.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findByStringId"
+        },
+        {
+          "textRaw": "[m] post",
+          "name": "[m]_post",
+          "methods": [
+            {
+              "textRaw": "post(action, delay?)",
+              "type": "method",
+              "name": "post",
+              "desc": "<p><strong><code>Async</code></strong></p>\n<ul>\n<li><strong>action</strong> { <a href=\"dataTypes#function\">Function</a> } - 无参数回调</li>\n<li><strong>[ delay ]</strong> { <a href=\"dataTypes#number\">number</a> } - 延迟时间, 单位为 ms</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - Android Handler 是否成功加入任务</li>\n</ul>\n<p>将回调加入 UI 线程消息队列. 省略或传入 <code>null</code> 时立即加入, 否则使用 <code>postDelayed</code>. 延迟只表示最早调度时间, 不保证精确执行时刻.</p>\n<pre><code class=\"lang-js\">threads.start(function () {\n    let result = performLongTask();\n    ui.post(function () {\n        ui.message.attr(&#39;text&#39;, String(result));\n    });\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "delay?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] post"
+        },
+        {
+          "textRaw": "[m] run",
+          "name": "[m]_run",
+          "methods": [
+            {
+              "textRaw": "run(action)",
+              "type": "method",
+              "name": "run",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**action** { [Function](dataTypes#function) } - 无参数回调 ",
+                      "name": "**action**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "无参数回调"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 回调结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "回调结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在 UI 线程执行回调. 当前已在 UI 线程时立即执行; 否则加入 UI 线程并阻塞调用线程直到完成. 回调抛出的异常会在调用线程重新抛出.</p>\n<p>不要从持有 UI 线程所需锁的线程调用此方法, 以免死锁.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] run"
+        },
+        {
+          "textRaw": "[m] finish",
+          "name": "[m]_finish",
+          "methods": [
+            {
+              "textRaw": "finish()",
+              "type": "method",
+              "name": "finish",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>结束当前脚本 UI Activity. Activity 已结束或已销毁时不重复操作.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] finish"
+        },
+        {
+          "textRaw": "[m] keepScreenOn",
+          "name": "[m]_keepscreenon",
+          "methods": [
+            {
+              "textRaw": "keepScreenOn()",
+              "type": "method",
+              "name": "keepScreenOn",
+              "desc": "<p><strong><code>6.6.3</code></strong> <strong><code>UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>为窗口添加 <code>FLAG_KEEP_SCREEN_ON</code>. 此标志不会阻止用户主动锁定屏幕.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] keepScreenOn"
+        },
+        {
+          "textRaw": "[m] backgroundColor",
+          "name": "[m]_backgroundcolor",
+          "methods": [
+            {
+              "textRaw": "backgroundColor(color)",
+              "type": "method",
+              "name": "backgroundColor",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 窗口背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>将颜色强制转换为完全不透明色, 并设置为当前窗口背景.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] backgroundColor"
+        },
+        {
+          "textRaw": "[m] statusBarColor",
+          "name": "[m]_statusbarcolor",
+          "methods": [
+            {
+              "textRaw": "statusBarColor(color)",
+              "type": "method",
+              "name": "statusBarColor",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 状态栏背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置当前 UI Activity 的状态栏背景颜色.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] statusBarColor"
+        },
+        {
+          "textRaw": "[m] statusBarIconLight",
+          "name": "[m]_statusbariconlight",
+          "methods": [
+            {
+              "textRaw": "statusBarIconLight(isLight?)",
+              "type": "method",
+              "name": "statusBarIconLight",
+              "desc": "<p><strong><code>6.6.4</code></strong> <strong><code>UI</code></strong></p>\n<ul>\n<li><strong>[ isLight = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用浅色图标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置状态栏图标明暗.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isLight?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] statusBarIconLight"
+        },
+        {
+          "textRaw": "[m] statusBarIconLightBy",
+          "name": "[m]_statusbariconlightby",
+          "methods": [
+            {
+              "textRaw": "statusBarIconLightBy(refColor)",
+              "type": "method",
+              "name": "statusBarIconLightBy",
+              "desc": "<p><strong><code>6.6.4</code></strong> <strong><code>UI</code></strong></p>\n<ul>\n<li><strong>refColor</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 参考背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>根据参考颜色亮度选择状态栏图标. 深色背景使用浅色图标, 浅色背景使用深色图标.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "refColor"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] statusBarIconLightBy"
+        },
+        {
+          "textRaw": "[m] navigationBarColor",
+          "name": "[m]_navigationbarcolor",
+          "methods": [
+            {
+              "textRaw": "navigationBarColor(color)",
+              "type": "method",
+              "name": "navigationBarColor",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>UI</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 导航栏背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置当前 UI Activity 的导航栏背景颜色.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] navigationBarColor"
+        },
+        {
+          "textRaw": "[m] navigationBarIconLight",
+          "name": "[m]_navigationbariconlight",
+          "methods": [
+            {
+              "textRaw": "navigationBarIconLight(isLight?)",
+              "type": "method",
+              "name": "navigationBarIconLight",
+              "desc": "<p><strong><code>6.6.4</code></strong> <strong><code>UI</code></strong> <strong><code>API&gt;=26!</code></strong></p>\n<ul>\n<li><strong>[ isLight = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用浅色图标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置导航栏图标明暗. Android API 级别低于 <code>26</code> 时抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isLight?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] navigationBarIconLight"
+        },
+        {
+          "textRaw": "[m] navigationBarIconLightBy",
+          "name": "[m]_navigationbariconlightby",
+          "methods": [
+            {
+              "textRaw": "navigationBarIconLightBy(refColor)",
+              "type": "method",
+              "name": "navigationBarIconLightBy",
+              "desc": "<p><strong><code>6.6.4</code></strong> <strong><code>UI</code></strong> <strong><code>API&gt;=26!</code></strong></p>\n<ul>\n<li><strong>refColor</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 参考背景颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>根据参考颜色亮度选择导航栏图标. Android API 级别低于 <code>26</code> 时抛出异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "refColor"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] navigationBarIconLightBy"
+        },
+        {
+          "textRaw": "[m] getStatusBarHeight",
+          "name": "[m]_getstatusbarheight",
+          "methods": [
+            {
+              "textRaw": "getStatusBarHeight(options?)",
+              "type": "method",
+              "name": "getStatusBarHeight",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>withComputed?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>withDimen?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>ignoreVisibility?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 状态栏高度, 单位为 px</li>\n</ul>\n<p>三个选项均默认为 <code>true</code>.</p>\n<ul>\n<li><code>withComputed</code> - 允许使用显示尺寸差值估算.</li>\n<li><code>withDimen</code> - 允许使用 Android 内部尺寸资源回退.</li>\n<li><code>ignoreVisibility</code> - 忽略当前可见性并返回稳定高度. 为 <code>false</code> 时, 不可见或无法确定则返回 <code>0</code>.</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getStatusBarHeight"
+        },
+        {
+          "textRaw": "[m] getVisibleStatusBarHeight",
+          "name": "[m]_getvisiblestatusbarheight",
+          "methods": [
+            {
+              "textRaw": "getVisibleStatusBarHeight(options?)",
+              "type": "method",
+              "name": "getVisibleStatusBarHeight",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>withComputed?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>withDimen?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前可见状态栏高度, 单位为 px</li>\n</ul>\n<p>强制使用可见性模式. 状态栏不可见或无法确定时返回 <code>0</code>. 当前实现不会在可见性模式中使用估算或内部尺寸资源回退.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getVisibleStatusBarHeight"
+        },
+        {
+          "textRaw": "[m] getNavigationBarHeight",
+          "name": "[m]_getnavigationbarheight",
+          "methods": [
+            {
+              "textRaw": "getNavigationBarHeight(options?)",
+              "type": "method",
+              "name": "getNavigationBarHeight",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>withComputed?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>withDimen?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>ignoreVisibility?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 导航栏厚度, 单位为 px</li>\n</ul>\n<p>三个选项均默认为 <code>true</code>. 横屏导航栏位于侧边时, 返回 bottom, left 和 right 三个方向中的最大值.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getNavigationBarHeight"
+        },
+        {
+          "textRaw": "[m] getVisibleNavigationBarHeight",
+          "name": "[m]_getvisiblenavigationbarheight",
+          "methods": [
+            {
+              "textRaw": "getVisibleNavigationBarHeight(options?)",
+              "type": "method",
+              "name": "getVisibleNavigationBarHeight",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>[ options = {} ]</strong> {{<ul>\n<li>withComputed?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>withDimen?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前可见导航栏厚度, 单位为 px</li>\n</ul>\n<p>强制使用可见性模式. 导航栏不可见或无法确定时返回 <code>0</code>. 当前实现不会在可见性模式中使用估算或内部尺寸资源回退.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getVisibleNavigationBarHeight"
+        },
+        {
+          "textRaw": "[C] Widget",
+          "name": "[c]_widget",
+          "ctors": [
+            {
+              "textRaw": "new Widget()",
+              "type": "ctor",
+              "name": "Widget",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [Object](dataTypes#object) } - 自定义控件基类实例 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [Object](dataTypes#object) ",
+                      "desc": "自定义控件基类实例"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>构造实例并为其创建独立的自定义属性表. 通常通过 <code>util.extend(CustomWidget, ui.Widget)</code> 建立继承, 并在子类构造函数中调用 <code>ui.Widget.call(this)</code>.</p>\n"
+            }
+          ],
+          "methods": [
+            {
+              "textRaw": "Widget#render()",
+              "type": "method",
+              "name": "Widget#render",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [XML](e4x) | [string](dataTypes#string) } - 自定义控件根布局 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [XML](e4x) | [string](dataTypes#string) ",
+                      "desc": "自定义控件根布局"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>由子类实现. 返回值不能为 <code>null</code> 或 <code>undefined</code>. 未实现时, 内部 <code>renderInternal()</code> 返回空 XML.</p>\n"
+            },
+            {
+              "textRaw": "Widget#defineAttr(name)",
+              "type": "method",
+              "name": "Widget#defineAttr",
+              "desc": "<p><strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 自定义属性名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用同名实例属性保存值.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Widget#defineAttr(name, alias, applier?)",
+              "type": "method",
+              "name": "Widget#defineAttr",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 自定义属性名称</li>\n<li><strong>alias</strong> { <a href=\"dataTypes#string\">string</a> } - 保存值的实例属性名称</li>\n<li><strong>[ applier ]</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(view, name, value, defaultSetter) =&gt; void</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>应用属性时先把值保存到 <code>this[alias]</code>, 再调用可选的 <code>applier</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "alias"
+                    },
+                    {
+                      "name": "applier?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Widget#defineAttr(name, applier)",
+              "type": "method",
+              "name": "Widget#defineAttr",
+              "desc": "<p><strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 自定义属性名称</li>\n<li><strong>applier</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(view, name, value, defaultSetter) =&gt; void</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用同名实例属性保存值, 再调用 <code>applier</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "applier"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Widget#defineAttr(name, getter, setter)",
+              "type": "method",
+              "name": "Widget#defineAttr",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 自定义属性名称</li>\n<li><strong>getter</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(view, name, defaultGetter) =&gt; any</code></li>\n<li><strong>setter</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(view, name, value, defaultSetter) =&gt; void</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>完整定义属性读取和写入逻辑.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "getter"
+                    },
+                    {
+                      "name": "setter"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "Widget#hasAttr(name)",
+              "type": "method",
+              "name": "Widget#hasAttr",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>检查自定义属性表中是否存在该名称.</p>\n"
+            },
+            {
+              "textRaw": "Widget#setAttr(view, name, value, defaultSetter)",
+              "type": "method",
+              "name": "Widget#setAttr",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**view** { [View](https://developer.android.com/reference/android/view/View) } - 根视图 ",
+                      "name": "**view**",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "根视图"
+                    },
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "**value** { [string](dataTypes#string) } - 属性值 ",
+                      "name": "**value**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性值"
+                    },
+                    {
+                      "textRaw": "**defaultSetter** { [Function](dataTypes#function) | [undefined](dataTypes#undefined) } - 根视图的默认属性写入函数 ",
+                      "name": "**defaultSetter**",
+                      "type": " [Function](dataTypes#function) | [undefined](dataTypes#undefined) ",
+                      "desc": "根视图的默认属性写入函数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    },
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "value"
+                    },
+                    {
+                      "name": "defaultSetter"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>调用 <code>defineAttr</code> 保存的 setter. 主要由布局器内部调用.</p>\n"
+            },
+            {
+              "textRaw": "Widget#getAttr(view, name, defaultGetter)",
+              "type": "method",
+              "name": "Widget#getAttr",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**view** { [View](https://developer.android.com/reference/android/view/View) } - 根视图 ",
+                      "name": "**view**",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "根视图"
+                    },
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 属性名称 ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性名称"
+                    },
+                    {
+                      "textRaw": "**defaultGetter** { [Function](dataTypes#function) | [undefined](dataTypes#undefined) } - 根视图的默认属性读取函数 ",
+                      "name": "**defaultGetter**",
+                      "type": " [Function](dataTypes#function) | [undefined](dataTypes#undefined) ",
+                      "desc": "根视图的默认属性读取函数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    },
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "defaultGetter"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>调用 <code>defineAttr</code> 保存的 getter. 主要由 NativeView <code>attr(name)</code> 内部调用.</p>\n"
+            },
+            {
+              "textRaw": "Widget#onViewCreated(view)",
+              "type": "method",
+              "name": "Widget#onViewCreated",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**view** { [View](https://developer.android.com/reference/android/view/View) } - 已创建的根视图 ",
+                      "name": "**view**",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "已创建的根视图"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可选生命周期方法. 根视图创建并安装自定义属性委托后调用. 此时后代布局可能尚未全部完成.</p>\n"
+            },
+            {
+              "textRaw": "Widget#onFinishInflation(view)",
+              "type": "method",
+              "name": "Widget#onFinishInflation",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**view** { [View](https://developer.android.com/reference/android/view/View) } - 已完成渲染的根视图 ",
+                      "name": "**view**",
+                      "type": " [View](https://developer.android.com/reference/android/view/View) ",
+                      "desc": "已完成渲染的根视图"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "view"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可选生命周期方法. 自定义控件作为其他布局的一部分完成渲染后调用.</p>\n<p><code>notifyViewCreated(view)</code> 和 <code>notifyAfterInflation(view)</code> 是分别触发上述生命周期方法的内部入口.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] Widget"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "[m] globalThis.isUiThread",
+          "name": "isUiThread",
+          "methods": [
+            {
+              "textRaw": "globalThis.isUiThread()",
+              "type": "method",
+              "name": "isUiThread",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前线程是否为 Android UI 线程</li>\n</ul>\n<p><code>ui.isUiThread()</code> 与全局 <code>isUiThread()</code> 等效.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ui</p>\n\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] ui.isUiThread",
+          "name": "isUiThread",
+          "methods": [
+            {
+              "textRaw": "ui.isUiThread()",
+              "type": "method",
+              "name": "isUiThread",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前线程是否为 Android UI 线程 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前线程是否为 Android UI 线程"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>全局 <a href=\"#m-isuithread\">isUiThread</a> 的模块形式.</p>\n"
+            }
+          ]
+        }
+      ],
       "type": "module",
       "displayName": "用户界面 (UI)"
-    },
-    {
-      "textRaw": "视图: View",
-      "name": "视图:_view",
-      "desc": "<p>控件和布局都属于视图(View). 在这个章节中将介绍所有控件和布局的共有的属性和函数. 例如属性背景, 宽高等(所有控件和布局都能设置背景和宽高), 函数<code>click()</code>设置视图(View)被点击时执行的动作.</p>\n",
-      "methods": [
-        {
-          "textRaw": "attr(name, value)",
-          "type": "method",
-          "name": "attr",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`name` {string} 属性名称 ",
-                  "name": "name",
-                  "type": "string",
-                  "desc": "属性名称"
-                },
-                {
-                  "textRaw": "`value` {string} 属性的值 ",
-                  "name": "value",
-                  "type": "string",
-                  "desc": "属性的值"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "name"
-                },
-                {
-                  "name": "value"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>设置属性的值. 属性指定是View在xml中的属性. 例如可以通过语句<code>attr(&quot;text&quot;, &quot;文本&quot;)</code>来设置文本控件的文本值.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;example&quot; text=&quot;Hello&quot;/&gt;\n    &lt;/frame&gt;\n);\n\n// 5秒后执行\n$ui.post(() =&gt; {\n    // 修改文本\n    $ui.example.attr(&quot;text&quot;, &quot;Hello, Auto.js UI&quot;);\n    // 修改背景\n    $ui.example.attr(&quot;bg&quot;, &quot;#ff00ff&quot;);\n    // 修改高度\n    $ui.example.attr(&quot;h&quot;, &quot;500dp&quot;);\n}, 5000);\n</code></pre>\n<p><strong>注意：</strong>并不是所有属性都能在js代码设置, 有一些属性只能在布局创建时设置, 例如style属性；还有一些属性虽然能在代码中设置, 但是还没支持；对于这些情况, 在Auto.js Pro 8.1.0+会抛出异常, 其他版本则不会抛出异常.</p>\n"
-        },
-        {
-          "textRaw": "attr(name)",
-          "type": "method",
-          "name": "attr",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`name` {string} 属性名称 ",
-                  "name": "name",
-                  "type": "string",
-                  "desc": "属性名称"
-                },
-                {
-                  "textRaw": "返回 {string} ",
-                  "name": "返回",
-                  "type": "string"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "name"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>获取属性的值.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;example&quot; text=&quot;1&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nplusOne();\n\nfunction plusOne() {\n    // 获取文本\n    let text = $ui.example.attr(&quot;text&quot;);\n    // 解析为数字\n    let num = parseInt(text);\n    // 数字加1\n    num++;\n    // 设置文本\n    $ui.example.attr(&quot;text&quot;, String(num));\n    // 1秒后继续\n    $ui.post(plusOne, 1000);\n}\n\n</code></pre>\n"
-        }
-      ],
-      "modules": [
-        {
-          "textRaw": "w",
-          "name": "w",
-          "desc": "<p>View的宽度, 是属性<code>width</code>的缩写形式. 可以设置的值为<code>*</code>, <code>auto</code>和具体数值. 其中<code>*</code>表示宽度<strong>尽量</strong>填满父布局, 而<code>auto</code>表示宽度将根据View的内容自动调整(自适应宽度). 例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button w=&quot;auto&quot; text=&quot;自适应宽度&quot;/&gt;\n        &lt;button w=&quot;*&quot; text=&quot;填满父布局&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>在这个例子中, 第一个按钮为自适应宽度, 第二个按钮为填满父布局, 显示效果为：</p>\n<p><img src=\"images/ex-w.png\" alt=\"ex-w\"></p>\n<p>如果不设置该属性, 则不同的控件和布局有不同的默认宽度, 大多数为<code>auto</code>.</p>\n<p>宽度属性也可以指定一个具体数值. 例如<code>w=&quot;20&quot;</code>, <code>w=&quot;20px&quot;</code>等. 不加单位的情况下默认单位为dp, 其他单位包括px(像素), mm(毫米), in(英寸). 有关尺寸单位的更多内容, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button w=&quot;200&quot; text=&quot;宽度200dp&quot;/&gt;\n        &lt;button w=&quot;100&quot; text=&quot;宽度100dp&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre>",
-          "type": "module",
-          "displayName": "w"
-        },
-        {
-          "textRaw": "h",
-          "name": "h",
-          "desc": "<p>View的高度, 是属性<code>height</code>的缩写形式. 可以设置的值为<code>*</code>, <code>auto</code>和具体数值. 其中<code>*</code>表示宽度<strong>尽量</strong>填满父布局, 而<code>auto</code>表示宽度将根据View的内容自动调整(自适应宽度).</p>\n<p>如果不设置该属性, 则不同的控件和布局有不同的默认高度, 大多数为<code>auto</code>.</p>\n<p>宽度属性也可以指定一个具体数值. 例如<code>h=&quot;20&quot;</code>, <code>h=&quot;20px&quot;</code>等. 不加单位的情况下默认单位为dp, 其他单位包括px(像素), mm(毫米), in(英寸). 有关尺寸单位的更多内容, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "h"
-        },
-        {
-          "textRaw": "id",
-          "name": "id",
-          "desc": "<p>View的id, 用来区分一个界面下的不同控件和布局, 一个界面的id在同一个界面下通常是唯一的, 也就是一般不存在两个View有相同的id. id属性也是连接xml布局和JavaScript代码的桥梁, 在代码中可以通过一个View的id来获取到这个View, 并对他进行操作(设置点击动作、设置属性、获取属性等). 例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;button id=&quot;ok&quot; text=&quot;确定&quot;/&gt;\n    &lt;/frame&gt;\n);\n//通过ui.ok获取到按钮控件\ntoast(ui.ok.getText());\n</code></pre><p>这个例子中有一个按钮控件&quot;确定&quot;, id属性为&quot;ok&quot;, 那么我们可以在代码中使用<code>ui.ok</code>来获取他, 再通过<code>getText()</code>函数获取到这个按钮控件的文本内容.\n另外这个例子中使用帧布局(frame)是因为, 我们只有一个控件, 因此用于最简单的布局帧布局.</p>\n",
-          "type": "module",
-          "displayName": "id"
-        },
-        {
-          "textRaw": "gravity",
-          "name": "gravity",
-          "desc": "<p>View的&quot;重力&quot;. 用于决定View的内容相对于View的位置, 可以设置的值为:</p>\n<ul>\n<li><code>left</code> 靠左</li>\n<li><code>right</code> 靠右</li>\n<li><code>top</code> 靠顶部</li>\n<li><code>bottom</code> 靠底部</li>\n<li><code>center</code> 居中</li>\n<li><code>center_vertical</code> 垂直居中</li>\n<li><code>center_horizontal</code> 水平居中</li>\n</ul>\n<p>例如对于一个按钮控件, <code>gravity=&quot;right&quot;</code>会使其中的文本内容靠右显示. 例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;button gravity=&quot;right&quot; w=&quot;*&quot; h=&quot;auto&quot; text=&quot;靠右的文字&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>显示效果为:</p>\n<p><img src=\"images/ex-gravity.png\" alt=\"ex-gravity\"></p>\n<p>这些属性是可以组合的, 例如<code>gravity=&quot;right|bottom&quot;</code>的View他的内容会在右下角.</p>\n",
-          "type": "module",
-          "displayName": "gravity"
-        },
-        {
-          "textRaw": "layout_gravity",
-          "name": "layout_gravity",
-          "desc": "<p>View在布局中的&quot;重力&quot;, 用于决定View本身在他的<strong>父布局</strong>的位置, 可以设置的值和gravity属性相同. 注意把这个属性和gravity属性区分开来.</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame w=&quot;*&quot; h=&quot;*&quot;&gt;\n        &lt;button layout_gravity=&quot;center&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;居中的按钮&quot;/&gt;\n        &lt;button layout_gravity=&quot;right|bottom&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;右下角的按钮&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>在这个例子中, 我们让帧布局(frame)的大小占满整个屏幕, 通过给第一个按钮设置属性<code>layout_gravity=&quot;center&quot;</code>来使得按钮在帧布局中居中, 通过给第二个按钮设置属性<code>layout_gravity=&quot;right|bottom&quot;</code>使得他在帧布局中位于右下角. 效果如图：</p>\n<p><img src=\"images/ex-layout-gravity.png\" alt=\"ex-layout-gravity\"></p>\n<p>要注意的是, layout_gravity的属性不一定总是生效的, 具体取决于布局的类别. 例如不能让水平布局中的第一个子控件靠底部显示(否则和水平布局本身相违背).</p>\n",
-          "type": "module",
-          "displayName": "layout_gravity"
-        },
-        {
-          "textRaw": "margin",
-          "name": "margin",
-          "desc": "<p>margin为View和其他View的间距, 即外边距. margin属性包括四个值:</p>\n<ul>\n<li><code>marginLeft</code> 左外边距</li>\n<li><code>marginRight</code> 右外边距</li>\n<li><code>marginTop</code> 上外边距</li>\n<li><code>marginBottom</code> 下外边距</li>\n</ul>\n<p>而margin属性本身的值可以有三种格式:</p>\n<ul>\n<li><code>margin=&quot;marginAll&quot;</code> 指定各个外边距都是该值. 例如<code>margin=&quot;10&quot;</code>表示左右上下边距都是10dp.</li>\n<li><code>margin=&quot;marginLeft marginTop marginRight marginBottom&quot;</code> 分别指定各个外边距. 例如<code>margin=&quot;10 20 30 40&quot;</code>表示左边距为10dp, 上边距为20dp, 右边距为30dp, 下边距为40dp</li>\n<li><code>margin=&quot;marginHorizontal marginVertical&quot;</code> 指定水平外边距和垂直外边距. 例如<code>margin=&quot;10 20&quot;</code>表示左右边距为10dp, 上下边距为20dp.</li>\n</ul>\n<p>用一个例子来具体理解外边距的含义：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button margin=&quot;30&quot; text=&quot;距离四周30&quot;/&gt;\n        &lt;button text=&quot;普通的按钮&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>第一个按钮的margin属性指定了他的边距为30dp, 也就是他与水平布局以及第二个按钮的间距都是30dp, 其显示效果如图:</p>\n<p><img src=\"images/ex1-margin.png\" alt=\"ex1-margin\"></p>\n<p>如果把<code>margin=&quot;30&quot;</code>改成<code>margin=&quot;10 40&quot;</code>那么第一个按钮的左右间距为10dp, 上下间距为40dp, 效果如图:</p>\n<p><img src=\"images/ex2-margin.png\" alt=\"ex2-margin\"></p>\n<p>有关margin属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "margin"
-        },
-        {
-          "textRaw": "marginLeft",
-          "name": "marginleft",
-          "desc": "<p>View的左外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效, 例如<code>margin=&quot;20&quot; marginLeft=&quot;10&quot;</code>的左外边距为10dp, 其他外边距为20dp.</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;horizontal&gt;\n        &lt;button marginLeft=&quot;50&quot; text=&quot;距离左边50&quot;/&gt;\n        &lt;button text=&quot;普通的按钮&quot;/&gt;\n    &lt;/horizontal&gt;\n);\n</code></pre><p>第一个按钮指定了左外边距为50dp, 则他和他的父布局水平布局(horizontal)的左边的间距为50dp, 效果如图：</p>\n<p><img src=\"images/ex-marginLeft.png\" alt=\"ex-marginLeft\"></p>\n",
-          "type": "module",
-          "displayName": "marginLeft"
-        },
-        {
-          "textRaw": "marginRight",
-          "name": "marginright",
-          "desc": "<p>View的右外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "marginRight"
-        },
-        {
-          "textRaw": "marginTop",
-          "name": "margintop",
-          "desc": "<p>View的上外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "marginTop"
-        },
-        {
-          "textRaw": "marginBottom",
-          "name": "marginbottom",
-          "desc": "<p>View的下外边距. 如果该属性和margin属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "marginBottom"
-        },
-        {
-          "textRaw": "padding",
-          "name": "padding",
-          "desc": "<p>View和他的自身内容的间距, 也就是内边距. 注意和margin属性区分开来, margin属性是View之间的间距, 而padding是View和他自身内容的间距. 举个例子, 一个文本控件的padding也即文本控件的边缘和他的文本内容的间距, paddingLeft即文本控件的左边和他的文本内容的间距.</p>\n<p>paddding属性的值同样有三种格式：</p>\n<ul>\n<li><code>padding=&quot;paddingAll&quot;</code> 指定各个内边距都是该值. 例如<code>padding=&quot;10&quot;</code>表示左右上下内边距都是10dp.</li>\n<li><code>padding=&quot;paddingLeft paddingTop paddingRight paddingBottom&quot;</code> 分别指定各个内边距. 例如<code>padding=&quot;10 20 30 40&quot;</code>表示左内边距为10dp, 上内边距为20dp, 右内边距为30dp, 下内边距为40dp</li>\n<li><code>padding=&quot;paddingHorizontal paddingVertical&quot;</code> 指定水平内边距和垂直内边距. 例如<code>padding=&quot;10 20&quot;</code>表示左右内边距为10dp, 上下内边距为20dp.</li>\n</ul>\n<p>用一个例子来具体理解内边距的含义：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame w=&quot;*&quot; h=&quot;*&quot; gravity=&quot;center&quot;&gt;\n        &lt;text padding=&quot;10 20 30 40&quot; bg=&quot;#ff0000&quot; w=&quot;auto&quot; h=&quot;auto&quot; text=&quot;HelloWorld&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>这个例子是一个居中的按钮(通过父布局的<code>gravity=&quot;center&quot;</code>属性设置), 背景色为红色(<code>bg=&quot;#ff0000&quot;</code>), 文本内容为&quot;HelloWorld&quot;, 左边距为10dp, 上边距为20dp, 下边距为30dp, 右边距为40dp, 其显示效果如图：</p>\n<p><img src=\"images/ex-padding.png\" alt=\"ex-padding\"></p>\n",
-          "type": "module",
-          "displayName": "padding"
-        },
-        {
-          "textRaw": "paddingLeft",
-          "name": "paddingleft",
-          "desc": "<p>View的左内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "paddingLeft"
-        },
-        {
-          "textRaw": "paddingRight",
-          "name": "paddingright",
-          "desc": "<p>View的右内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "paddingRight"
-        },
-        {
-          "textRaw": "paddingTop",
-          "name": "paddingtop",
-          "desc": "<p>View的上内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "paddingTop"
-        },
-        {
-          "textRaw": "paddingBottom",
-          "name": "paddingbottom",
-          "desc": "<p>View的下内边距. 如果该属性和padding属性指定的值冲突, 则在后面的属性生效, 前面的属性无效.</p>\n",
-          "type": "module",
-          "displayName": "paddingBottom"
-        },
-        {
-          "textRaw": "bg",
-          "name": "bg",
-          "desc": "<p>View的背景. 其值可以是一个链接或路径指向的图片, 或者RGB格式的颜色, 或者其他背景. 具体参见<a href=\"#draw\">Drawables</a>.</p>\n<p>例如, <code>bg=&quot;#00ff00&quot;</code>设置背景为绿色, <code>bg=&quot;file:///sdcard/1.png&quot;</code>设置背景为图片&quot;1.png&quot;, <code>bg=&quot;?attr/selectableItemBackground&quot;</code>设置背景为点击时出现的波纹效果(可能需要同时设置<code>clickable=&quot;true&quot;</code>才生效).</p>\n",
-          "type": "module",
-          "displayName": "bg"
-        },
-        {
-          "textRaw": "alpha",
-          "name": "alpha",
-          "desc": "<p>View的透明度, 其值是一个0~1之间的小数, 0表示完全透明, 1表示完全不透明. 例如<code>alpha=&quot;0.5&quot;</code>表示半透明.</p>\n",
-          "type": "module",
-          "displayName": "alpha"
-        },
-        {
-          "textRaw": "foreground",
-          "name": "foreground",
-          "desc": "<p>View的前景. 前景即在一个View的内容上显示的内容, 可能会覆盖掉View本身的内容. 其值和属性bg的值类似.</p>\n",
-          "type": "module",
-          "displayName": "foreground"
-        },
-        {
-          "textRaw": "minHeight",
-          "name": "minheight",
-          "desc": "<p>View的最小高度. 该值不总是生效的, 取决于其父布局是否有足够的空间容纳.</p>\n<p>例：<code>&lt;text height=&quot;auto&quot; minHeight=&quot;50&quot;/&gt;</code></p>\n<p>有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "minHeight"
-        },
-        {
-          "textRaw": "minWidth",
-          "name": "minwidth",
-          "desc": "<p>View的最小宽度. 该值不总是生效的, 取决于其父布局是否有足够的空间容纳.</p>\n<p>例：<code>&lt;input width=&quot;auto&quot; minWidth=&quot;50&quot;/&gt;</code></p>\n<p>有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "minWidth"
-        },
-        {
-          "textRaw": "visibility",
-          "name": "visibility",
-          "desc": "<p>View的可见性, 该属性可以决定View是否显示出来. 其值可以为：</p>\n<ul>\n<li><code>gone</code> 不可见.</li>\n<li><code>visible</code> 可见. 默认情况下View都是可见的.</li>\n<li><code>invisible</code> 不可见, 但仍然占用位置.</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "visibility"
-        },
-        {
-          "textRaw": "rotation",
-          "name": "rotation",
-          "desc": "<p>View的旋转角度. 通过该属性可以让这个View顺时针旋转一定的角度. 例如<code>rotation=&quot;90&quot;</code>可以让他顺时针旋转90度.</p>\n<p>如果要设置旋转中心, 可以通过<code>transformPivotX</code>, <code>transformPivotY</code>属性设置. 默认的旋转中心为View的中心.</p>\n",
-          "type": "module",
-          "displayName": "rotation"
-        },
-        {
-          "textRaw": "transformPivotX",
-          "name": "transformpivotx",
-          "desc": "<p>View的变换中心坐标x. 用于View的旋转、放缩等变换的中心坐标. 例如<code>transformPivotX=&quot;10&quot;</code>.</p>\n<p>该坐标的坐标系以View的左上角为原点. 也就是x值为变换中心到View的左边的距离.</p>\n<p>有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "transformPivotX"
-        },
-        {
-          "textRaw": "transformPivotY",
-          "name": "transformpivoty",
-          "desc": "<p>View的变换中心坐标y. 用于View的旋转、放缩等变换的中心坐标. 例如<code>transformPivotY=&quot;10&quot;</code>.</p>\n<p>该坐标的坐标系以View的左上角为原点. 也就是y值为变换中心到View的上边的距离.</p>\n<p>有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "transformPivotY"
-        },
-        {
-          "textRaw": "style",
-          "name": "style",
-          "desc": "<p>设置View的样式. 不同控件有不同的可选的内置样式. 具体参见各个控件的说明.</p>\n<p>需要注意的是, style属性只支持安卓5.1及其以上.</p>\n",
-          "type": "module",
-          "displayName": "style"
-        }
-      ],
-      "type": "module",
-      "displayName": "视图: View"
-    },
-    {
-      "textRaw": "文本控件: text",
-      "name": "文本控件:_text",
-      "desc": "<p>文本控件用于显示文本, 可以控制文本的字体大小, 字体颜色, 字体等.</p>\n<p>以下介绍该控件的主要属性和方法, 如果要查看他的所有属性和方法, 请阅读<a href=\"http://www.zhdoc.net/android/reference/android/widget/TextView.html\">TextView</a>.</p>\n",
-      "modules": [
-        {
-          "textRaw": "text",
-          "name": "text",
-          "desc": "<p>设置文本的内容. 例如<code>text=&quot;一段文本&quot;</code>.</p>\n",
-          "type": "module",
-          "displayName": "text"
-        },
-        {
-          "textRaw": "textColor",
-          "name": "textcolor",
-          "desc": "<p>设置字体的颜色, 可以是RGB格式的颜色(例如#ff00ff), 或者颜色名称(例如red, green等), 具体参见<a href=\"#ui_颜色\">颜色</a>.</p>\n<p>示例, 红色字体：<code>&lt;text text=&quot;红色字体&quot; textColor=&quot;red&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "textColor"
-        },
-        {
-          "textRaw": "textSize",
-          "name": "textsize",
-          "desc": "<p>设置字体的大小, 单位一般是sp. 按照Material Design的规范, 正文字体大小为14sp, 标题字体大小为18sp, 次标题为16sp.</p>\n<p>示例, 超大字体: <code>&lt;text text=&quot;超大字体&quot; textSize=&quot;40sp&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "textSize"
-        },
-        {
-          "textRaw": "textStyle",
-          "name": "textstyle",
-          "desc": "<p>设置字体的样式, 比如斜体、粗体等. 可选的值为：</p>\n<ul>\n<li>bold 加粗字体</li>\n<li>italic 斜体</li>\n<li>normal 正常字体</li>\n</ul>\n<p>可以用或(&quot;|&quot;)把他们组合起来, 比如粗斜体为&quot;bold|italic&quot;.</p>\n<p>例如, 粗体：`<text textStyle=\"bold\" textSize=\"18sp\" text=\"这是粗体\"/></p>\n",
-          "type": "module",
-          "displayName": "textStyle"
-        },
-        {
-          "textRaw": "lines",
-          "name": "lines",
-          "desc": "<p>设置文本控件的行数. 即使文本内容没有达到设置的行数, 控件也会留出相应的宽度来显示空白行；如果文本内容超出了设置的行数, 则超出的部分不会显示.</p>\n<p>另外在xml中是不能设置多行文本的, 要在代码中设置. 例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical&gt;\n        &lt;text id=&quot;myText&quot; line=&quot;3&quot;&gt;\n    &lt;/vertical&gt;\n)\n//通过\\n换行\nui.myText.setText(&quot;第一行\\n第二行\\n第三行\\n第四行&quot;);\n</code></pre>",
-          "type": "module",
-          "displayName": "lines"
-        },
-        {
-          "textRaw": "maxLines",
-          "name": "maxlines",
-          "desc": "<p>设置文本控件的最大行数.</p>\n",
-          "type": "module",
-          "displayName": "maxLines"
-        },
-        {
-          "textRaw": "typeface",
-          "name": "typeface",
-          "desc": "<p>设置字体. 可选的值为：</p>\n<ul>\n<li><code>normal</code> 正常字体</li>\n<li><code>sans</code> 衬线字体</li>\n<li><code>serif</code> 非衬线字体</li>\n<li><code>monospace</code> 等宽字体</li>\n</ul>\n<p>示例, 等宽字体: <code>&lt;text text=&quot;等宽字体&quot; typeface=&quot;monospace&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "typeface"
-        },
-        {
-          "textRaw": "ellipsize",
-          "name": "ellipsize",
-          "desc": "<p>设置文本的省略号位置. 文本的省略号会在文本内容超出文本控件时显示. 可选的值为：</p>\n<ul>\n<li><code>end</code>   在文本末尾显示省略号</li>\n<li><code>marquee</code>   跑马灯效果, 文本将滚动显示</li>\n<li><code>middle</code>    在文本中间显示省略号</li>\n<li><code>none</code>    不显示省略号</li>\n<li><code>start</code>    在文本开头显示省略号</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "ellipsize"
-        },
-        {
-          "textRaw": "ems",
-          "name": "ems",
-          "desc": "<p>当设置该属性后,TextView显示的字符长度（单位是em）,超出的部分将不显示, 或者根据ellipsize属性的设置显示省略号.</p>\n<p>例如, 限制文本最长为5em: `<text ems=\"5\" ellipsize=\"end\" text=\"很长很长很长很长很长很长很长的文本\"/></p>\n",
-          "type": "module",
-          "displayName": "ems"
-        },
-        {
-          "textRaw": "autoLink",
-          "name": "autolink",
-          "desc": "<p>控制是否自动找到url和电子邮件地址等链接, 并转换为可点击的链接. 默认值为“none”.</p>\n<p>设置该值可以让文本中的链接、电话等变成可点击状态.</p>\n<p>可选的值为以下的值以其通过或(&quot;|&quot;)的组合：</p>\n<ul>\n<li><code>all</code>    匹配所有连接、邮件、地址、电话</li>\n<li><code>email</code>    匹配电子邮件地址</li>\n<li><code>map</code>    匹配地图地址</li>\n<li><code>none</code>    不匹配 (默认)</li>\n<li><code>phone</code>    匹配电话号码</li>\n<li><code>web</code>    匹配URL地址</li>\n</ul>\n<p>示例：<code>&lt;text autoLink=&quot;web|phone&quot; text=&quot;百度: http://www.baidu.com 电信电话: 10000&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "autoLink"
-        }
-      ],
-      "type": "module",
-      "displayName": "文本控件: text"
-    },
-    {
-      "textRaw": "按钮控件: button",
-      "name": "按钮控件:_button",
-      "desc": "<p>按钮控件是一个特殊的文本控件, 因此所有文本控件的函数的属性都适用于按钮控件.</p>\n<p>除此之外, 按钮控件有一些内置的样式, 通过<code>style</code>属性设置, 包括：</p>\n<ul>\n<li>Widget.AppCompat.Button.Colored 带颜色的按钮</li>\n<li>Widget.AppCompat.Button.Borderless 无边框按钮</li>\n<li>Widget.AppCompat.Button.Borderless.Colored 带颜色的无边框按钮</li>\n</ul>\n<p>这些样式的具体效果参见&quot;示例/界面控件/按钮控件.js&quot;.</p>\n<p>例如：<code>&lt;button style=&quot;Widget.AppCompat.Button.Colored&quot; text=&quot;漂亮的按钮&quot;/&gt;</code></p>\n",
-      "type": "module",
-      "displayName": "按钮控件: button"
-    },
-    {
-      "textRaw": "输入框控件: input",
-      "name": "输入框控件:_input",
-      "desc": "<p>输入框控件也是一个特殊的文本控件, 因此所有文本控件的函数的属性和函数都适用于按钮控件. 输入框控件有自己的属性和函数, 要查看所有这些内容, 阅读<a href=\"http://www.zhdoc.net/android/reference/android/widget/EditText.html\">EditText</a>.</p>\n<p>对于一个输入框控件, 我们可以通过text属性设置他的内容, 通过lines属性指定输入框的行数；在代码中通过<code>getText()</code>函数获取输入的内容. 例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical padding=&quot;16&quot;&gt;\n        &lt;text textSize=&quot;16sp&quot; textColor=&quot;black&quot; text=&quot;请输入姓名&quot;/&gt;\n        &lt;input id=&quot;name&quot; text=&quot;小明&quot;/&gt;\n        &lt;button id=&quot;ok&quot; text=&quot;确定&quot;/&gt;\n    &lt;/vertical&gt;\n);\n//指定确定按钮点击时要执行的动作\nui.ok.click(function(){\n    //通过getText()获取输入的内容\n    var name = ui.name.getText();\n    toast(name + &quot;您好!&quot;);\n});\n</code></pre><p>效果如图：</p>\n<p><img src=\"ex-input.png\" alt=\"ex-input\"></p>\n<p>除此之外, 输入框控件有另外一些主要属性(虽然这些属性对于文本控件也是可用的但一般只用于输入框控件)：</p>\n",
-      "modules": [
-        {
-          "textRaw": "hint",
-          "name": "hint",
-          "desc": "<p>输入提示. 这个提示会在输入框为空的时候显示出来. 如图所示:</p>\n<p><img src=\"images/ex-hint.png\" alt=\"ex-hint\"></p>\n<p>上面图片效果的代码为：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical&gt;\n        &lt;input hint=&quot;请输入姓名&quot;/&gt;\n    &lt;/vertical&gt;\n)\n</code></pre>",
-          "type": "module",
-          "displayName": "hint"
-        },
-        {
-          "textRaw": "textColorHint",
-          "name": "textcolorhint",
-          "desc": "<p>指定输入提示的字体颜色.</p>\n",
-          "type": "module",
-          "displayName": "textColorHint"
-        },
-        {
-          "textRaw": "textSizeHint",
-          "name": "textsizehint",
-          "desc": "<p>指定输入提示的字体大小.</p>\n",
-          "type": "module",
-          "displayName": "textSizeHint"
-        },
-        {
-          "textRaw": "inputType",
-          "name": "inputtype",
-          "desc": "<p>指定输入框可以输入的文本类型. 可选的值为以下值及其用&quot;|&quot;的组合:</p>\n<ul>\n<li><code>date</code>    用于输入日期.</li>\n<li><code>datetime</code>    用于输入日期和时间.</li>\n<li><code>none</code>    没有内容类型. 此输入框不可编辑.</li>\n<li><code>number</code>    仅可输入数字.</li>\n<li><code>numberDecimal</code>    可以与number和它的其他选项组合, 以允许输入十进制数(包括小数).</li>\n<li><code>numberPassword</code>    仅可输入数字密码.</li>\n<li><code>numberSigned</code>    可以与number和它的其他选项组合, 以允许输入有符号的数.</li>\n<li><code>phone</code>    用于输入一个电话号码.</li>\n<li><code>text</code>    只是普通文本.</li>\n<li><code>textAutoComplete</code>    可以与text和它的其他选项结合, 以指定此字段将做自己的自动完成, 并适当地与输入法交互.</li>\n<li><code>textAutoCorrect</code>    可以与text和它的其他选项结合, 以请求自动文本输入纠错.</li>\n<li><code>textCapCharacters</code>    可以与text和它的其他选项结合, 以请求大写所有字符.</li>\n<li><code>textCapSentences</code>    可以与text和它的其他选项结合, 以请求大写每个句子里面的第一个字符.</li>\n<li><code>textCapWords</code>    可以与text和它的其他选项结合, 以请求大写每个单词里面的第一个字符.</li>\n<li><code>textEmailAddress</code>    用于输入一个电子邮件地址.</li>\n<li><code>textEmailSubject</code>    用于输入电子邮件的主题.</li>\n<li><code>textImeMultiLine</code>    可以与text和它的其他选项结合, 以指示虽然常规文本视图不应为多行, 但如果可以, 则IME应提供多行支持.</li>\n<li><code>textLongMessage</code>    用于输入长消息的内容.</li>\n<li><code>textMultiLine</code>    可以与text和它的其他选项结合, 以便在该字段中允许多行文本. 如果未设置此标志, 则文本字段将被限制为单行.</li>\n<li><code>textNoSuggestions</code>    可以与text及它的其他选项结合, 以指示输入法不应显示任何基于字典的单词建议.</li>\n<li><code>textPassword</code>    用于输入密码.</li>\n<li><code>textPersonName</code>    用于输入人名.</li>\n<li><code>textPhonetic</code>    用于输入拼音发音的文本, 如联系人条目中的拼音名称字段.</li>\n<li><code>textPostalAddress</code>    用于输入邮寄地址.</li>\n<li><code>textShortMessage</code>    用于输入短的消息内容.</li>\n<li><code>textUri</code>    用于输入一个URI.</li>\n<li><code>textVisiblePassword</code>    用于输入可见的密码.</li>\n<li><code>textWebEditText</code>    用于输入在web表单中的文本.</li>\n<li><code>textWebEmailAddress</code>    用于在web表单里输入一个电子邮件地址.</li>\n<li><code>textWebPassword</code>    用于在web表单里输入一个密码.</li>\n<li><code>time</code>    用于输入时间.</li>\n</ul>\n<p>例如, 想指定一个输入框的输入类型为小数数字, 为: <code>&lt;input inputType=&quot;number|numberDecimal&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "inputType"
-        },
-        {
-          "textRaw": "password",
-          "name": "password",
-          "desc": "<p>指定输入框输入框是否为密码输入框. 默认为<code>false</code>.</p>\n<p>例如：<code>&lt;input password=&quot;true&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "password"
-        },
-        {
-          "textRaw": "numeric",
-          "name": "numeric",
-          "desc": "<p>指定输入框输入框是否为数字输入框. 默认为<code>false</code>.</p>\n<p>例如：<code>&lt;input numeric=&quot;true&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "numeric"
-        },
-        {
-          "textRaw": "phoneNumber",
-          "name": "phonenumber",
-          "desc": "<p>指定输入框输入框是否为电话号码输入框. 默认为<code>false</code>.</p>\n<p>例如：<code>&lt;input phoneNumber=&quot;true&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "phoneNumber"
-        },
-        {
-          "textRaw": "digits",
-          "name": "digits",
-          "desc": "<p>指定输入框可以输入的字符. 例如, 要指定输入框只能输入&quot;1234567890+-&quot;, 为<code>&lt;input digits=&quot;1234567890+-&quot;/&gt;</code>.</p>\n",
-          "type": "module",
-          "displayName": "digits"
-        },
-        {
-          "textRaw": "singleLine",
-          "name": "singleline",
-          "desc": "<p>指定输入框是否为单行输入框. 默认为<code>false</code>. 您也可以通过<code>lines=&quot;1&quot;</code>来指定单行输入框.</p>\n<p>例如：<code>&lt;input singleLine=&quot;true&quot;/&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "singleLine"
-        }
-      ],
-      "type": "module",
-      "displayName": "输入框控件: input"
-    },
-    {
-      "textRaw": "图片控件: img",
-      "name": "图片控件:_img",
-      "desc": "<p>图片控件用于显示来自网络、本地或者内嵌数据的图片, 并可以指定图片以圆角矩形、圆形等显示. 但是不能用于显示gif动态图.</p>\n<p>这里只介绍他的主要方法和属性, 如果要查看他的所有方法和属性, 阅读<a href=\"http://www.zhdoc.net/android/reference/android/widget/ImageView.html\">ImageView</a>.</p>\n",
-      "modules": [
-        {
-          "textRaw": "src",
-          "name": "src",
-          "desc": "<p>使用一个Uri指定图片的来源. 可以是图片的地址(http://....), 本地路径(file://....)或者base64数据(&quot;data:image/png;base64,...&quot;).</p>\n<p>如果使用图片地址或本地路径, Auto.js会自动使用适当的缓存来储存这些图片, 减少下次加载的时间.</p>\n<p>例如, 显示百度的logo:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img src=&quot;https://www.baidu.com/img/bd_logo1.png&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre><p>再例如, 显示文件/sdcard/1.png的图片为 <code>&lt;img src=&quot;file:///sdcard/1.png&quot;/&gt;</code>.\n再例如, 使base64显示一张钱包小图片为：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;frame&gt;\n        &lt;img w=&quot;40&quot; h=&quot;40&quot; src=&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAEu0lEQVRoge3bW4iVVRQH8N+ZnDKxvJUGCSWUlXYle/ChiKAkIiu7UXQjonwNIopM8cHoAhkRGQXdfIiE0Ep8KalQoptRTiFFZiRlOo6TPuSk4zk97G9w5vidc77LPjNi84f1MN+391rrf9a+rL32N4xiFMcUjouo5zyciYPYH0FnBadiNiZiD2oR9JbGRdgiOFPDIXRhCWYU0Dcj6duV6BrQuyWxNaLowBcOO1Uv+7EKc4WINUIlabMq6dNI35eJzRHDWOzS2MEB6cd6XI/OQf07k2frkzat9HQnNkcUG7R2dECq2I53EtmePMvaf+MwcWqKu+RzuqhUcfcwcWqKTvmiXFQ2GDodRhQz0aN9ZHsSG0cVrkGf+GT7MG8YeeTCHeKS7sOdMR1stjcWxY2YH0nXh1gdSdf/E+2I8KVYigkl9ewVUsxNpT1qMzaKN4ejJxrtyEt7IuraE1EX2jOkp+JBnFxSzz68KuTqoyiK2BHuxDO4NpK+j/GoOAWF6BiH98Q/SHyCycPIIxMm4FPZCPTj30SynIFr+A7ThotMK4wXopA1Ym9gSiKv5Oj3bdKnFMpuS514E1fm6NMnbF098s3NS4QS0Ik5+hyBsoSXYkGO9jvxy6C/t+IPIYJZcBWW57AXFfMNrSo2kqqw2l4hvSzcIRTw1sm24FVxb5s4NcR0/JXBuUNYJttI6sDjsi1kvTgrGpsMjq3O4FQNa+SbNhWsyKj7I4wpzSYDbpFtKB/EOSn9ZwpRfx5Xp7yfhN0Z9FdxXxxKjTEe2zI4U8NnKf3PNrT2VcWTKe1eyGjjT+Eapm14IqMjNTyd0n9JSrsDwhmaEN2H8GMOO8viUjyMSfJVJh9O0bGoQdt1eFm2oVwve7UpC1ssX568KEXH6fghp54s8lRkrk7CjpxOrGqg6wQ8IKSKWXPpVtIt8ly+v4ATf2t+yqlgDl5SbCjXy8JIXFXweQEHqngxo43JeEw54l+JVLKaJeypRZzoFxavrIWG6cKPW2SO9+PCMkQHsLiA8fpIv5/DmUn4qaCtpWWIEiLzdUHj9XJA2H5uFRbBZriuoI1NSpatpio+nJtFvFvYd2c1sDsGvxfQ3a/knrwgMtm0qD8rPSprCuq8uRmhVqvanBbvm+EQfsNKIcnvTmnTiUdwQcq73oJ2L2v2stXx6vyCRr8RDuk/C8OMUK24J6VtBaekPG81zxuh0TTJhC7FhtUOHF+n61whGalvu8uRWVJFvgPEYOkqQzhLVSPPXLoYa4Xh3Stcls1NaTdb8Xx7ZxnCvSUIfy/kzWno0Pyzx3dL2C0695Hto7NGUhXy5Lzp3kLZKiqNpNTl2+YShgdIvyXbVck44TB/oKTNzWUIv13S+IDsFmpY84QvZAcwTbh4e04o18SwtbIM4dsiOTFYVgzSv7wN+m9vRqjV/PrA0JuCox1bhYNKQ7Qi3CcU1fpiedRG9AkLXhRfbxCnKlET0s21ifwaSWcPbopBdDDOwGtClTD2vCsq+/C68K8HmVDk7DhFyIsvFzKnGThN+689+oU9dptwQb5B+LB8dx4lMb7xqAhkJwo/xljhFFSfSdUc3mPrcbwj15P+pP0/QiR7hYSkGsHnUYziWMF/mXV4JVcZ8G0AAAAASUVORK5CYII=&quot;/&gt;\n    &lt;/frame&gt;\n);\n</code></pre>",
-          "type": "module",
-          "displayName": "src"
-        },
-        {
-          "textRaw": "tint",
-          "name": "tint",
-          "desc": "<p>图片着色, 其值是一个颜色名称或RGB颜色值. 使用该属性会将图片中的非透明区域都涂上同一颜色. 可以用于改变图片的颜色.</p>\n<p>例如, 对于上面的base64的图片: <code>&lt;img w=&quot;40&quot; h=&quot;40&quot; tint=&quot;red&quot; src=&quot;data:image/png;base64,...&quot;/&gt;</code>, 则钱包图标颜色会变成红色.</p>\n",
-          "type": "module",
-          "displayName": "tint"
-        },
-        {
-          "textRaw": "scaleType",
-          "name": "scaletype",
-          "desc": "<p>控制图片根据图片控件的宽高放缩时的模式. 可选的值为：</p>\n<ul>\n<li><code>center</code>    在控件中居中显示图像, 但不执行缩放.</li>\n<li><code>centerCrop</code>    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 等于或大于控件的相应尺寸 (不包括内边距padding)并且使图像在控件中居中显示.</li>\n<li><code>centerInside</code>    保持图像的长宽比缩放图片, 使图像的尺寸 (宽度和高度) 小于视图的相应尺寸 (不包括内边距padding)并且图像在控件中居中显示.</li>\n<li><code>fitCenter</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件中居中显示</li>\n<li><code>fitEnd</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件中靠右下角显示</li>\n<li><code>fitStart</code>    保持图像的长宽比缩放图片, 使图片的宽<strong>或</strong>高和控件的宽高相同并使图片在控件靠左上角显示</li>\n<li><code>fitXY</code>    使图片和宽高和控件的宽高完全匹配, 但图片的长宽比可能不能保持一致</li>\n<li><code>matrix</code>    绘制时使用图像矩阵进行缩放. 需要在代码中使用<code>setImageMatrix(Matrix)</code>函数才能生效.</li>\n</ul>\n<p>默认的scaleType为<code>fitCenter</code>；除此之外最常用的是<code>fitXY</code>,  他能使图片放缩到控件一样的大小, 但图片可能会变形.</p>\n",
-          "type": "module",
-          "displayName": "scaleType"
-        },
-        {
-          "textRaw": "radius",
-          "name": "radius",
-          "desc": "<p>图片控件的半径. 如果设置为控件宽高的一半并且控件的宽高相同则图片将剪切为圆形显示；否则图片为圆角矩形显示, 半径即为四个圆角的半径, 也可以通过<code>radiusTopLeft</code>, <code>radiusTopRight</code>, <code>radiusBottomLeft</code>, <code>radiusBottomRight</code>等属性分别设置四个圆角的半径.</p>\n<p>例如, 圆角矩形的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; radius=&quot;20&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>\n<p>有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "radius"
-        },
-        {
-          "textRaw": "radiusTopLeft",
-          "name": "radiustopleft",
-          "desc": "<p>图片控件的左上角圆角的半径. 有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "radiusTopLeft"
-        },
-        {
-          "textRaw": "radiusTopRight",
-          "name": "radiustopright",
-          "desc": "<p>图片控件的右上角圆角的半径. 有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "radiusTopRight"
-        },
-        {
-          "textRaw": "radiusBottomLeft",
-          "name": "radiusbottomleft",
-          "desc": "<p>图片控件的左下角圆角的半径. 有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "radiusBottomLeft"
-        },
-        {
-          "textRaw": "radiusBottomRight",
-          "name": "radiusbottomright",
-          "desc": "<p>图片控件的右下角圆角的半径. 有关该属性的单位, 参见<a href=\"#ui_尺寸的单位_Dimension\">尺寸的单位: Dimension</a>.</p>\n",
-          "type": "module",
-          "displayName": "radiusBottomRight"
-        },
-        {
-          "textRaw": "borderWidth",
-          "name": "borderwidth",
-          "desc": "<p>图片控件的边框宽度. 用于在图片外面显示一个边框, 边框会随着图片控件的外形(圆角等)改变而相应变化.\n例如, 圆角矩形带灰色边框的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; radius=&quot;20&quot; borderWidth=&quot;5&quot; borderColor=&quot;gray&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "borderWidth"
-        },
-        {
-          "textRaw": "borderColor",
-          "name": "bordercolor",
-          "desc": "<p>图片控件的边框颜色.</p>\n",
-          "type": "module",
-          "displayName": "borderColor"
-        },
-        {
-          "textRaw": "circle",
-          "name": "circle",
-          "desc": "<p>指定该图片控件的图片是否剪切为圆形显示. 如果为<code>true</code>, 则图片控件会使其宽高保持一致(如果宽高不一致, 则保持高度等于宽度)并使圆形的半径为宽度的一半.</p>\n<p>例如, 圆形的Auto.js图标：<code>&lt;img w=&quot;100&quot; h=&quot;100&quot; circle=&quot;true&quot; bg=&quot;white&quot; src=&quot;http://www.autojs.org/assets/uploads/profile/3-profileavatar.png&quot; /&gt;</code></p>\n",
-          "type": "module",
-          "displayName": "circle"
-        }
-      ],
-      "type": "module",
-      "displayName": "图片控件: img"
-    },
-    {
-      "textRaw": "垂直布局: vertical",
-      "name": "垂直布局:_vertical",
-      "desc": "<p>垂直布局是一种比较简单的布局, 会把在它里面的控件按照垂直方向依次摆放, 如下图所示：</p>\n<p>垂直布局:</p>\n<p>—————</p>\n<p>| 控件1 |</p>\n<p>| 控件2 |</p>\n<p>| 控件3 |</p>\n<p>| ............ |</p>\n<p>——————</p>\n",
-      "modules": [
-        {
-          "textRaw": "layout_weight",
-          "name": "layout_weight",
-          "desc": "<p>垂直布局中的控件可以通过<code>layout_weight</code>属性来控制控件高度占垂直布局高度的比例. 如果为一个控件指定<code>layout_weight</code>, 则这个控件的高度=垂直布局剩余高度 * layout_weight / weightSum；如果不指定weightSum, 则weightSum为所有子控件的layout_weight之和. 所谓&quot;剩余高度&quot;, 指的是垂直布局中减去没有指定layout_weight的控件的剩余高度.\n例如:</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中, 三个控件的layout_weight都是1, 也就是他们的高度都会占垂直布局高度的1/3, 都是33.3dp.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中, 第一个控件高度为1/4, 第二个控件为2/4, 第三个控件为1/4.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot; weightSum=&quot;5&quot;&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中, 因为指定了weightSum为5, 因此第一个控件高度为1/5, 第二个控件为2/5, 第三个控件为1/5.\n再例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text layout_weight=&quot;2&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中, 第一个控件并没有指定layout_weight, 而是指定高度为40dp, 因此不加入比例计算, 此时布局剩余高度为60dp. 第二个控件高度为剩余高度的2/3, 也就是40dp, 第三个控件高度为剩余高度的1/3, 也就是20dp.</p>\n<p>垂直布局的layout_weight属性还可以用于控制他的子控件高度占满剩余空间, 例如：</p>\n<pre><code>&quot;ui&quot;;\nui.layout(\n    &lt;vertical h=&quot;100dp&quot;&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件1&quot; bg=&quot;#ff0000&quot;/&gt;\n        &lt;text h=&quot;40dp&quot; text=&quot;控件2&quot; bg=&quot;#00ff00&quot;/&gt;\n        &lt;text layout_weight=&quot;1&quot; text=&quot;控件3&quot; bg=&quot;#0000ff&quot;/&gt;\n    &lt;/vertical&gt;\n);\n</code></pre><p>在这个布局中, 第三个控件的高度会占满除去控件1和控件2的剩余空间.</p>\n",
-          "type": "module",
-          "displayName": "layout_weight"
-        }
-      ],
-      "type": "module",
-      "displayName": "垂直布局: vertical"
-    },
-    {
-      "textRaw": "水平布局: horizontal",
-      "name": "水平布局:_horizontal",
-      "desc": "<p>水平布局是一种比较简单的布局, 会把在它里面的控件按照水平方向依次摆放, 如下图所示：\n水平布局:\n————————————————————————————</p>\n<p>| 控件1 | 控件2 | 控件3 | ... |</p>\n<p>————————————————————————————</p>\n",
-      "modules": [
-        {
-          "textRaw": "layout_weight",
-          "name": "layout_weight",
-          "desc": "<p>水平布局中也可以使用layout_weight属性来控制子控件的<strong>宽度</strong>占父布局的比例. 和垂直布局中类似, 不再赘述.</p>\n",
-          "type": "module",
-          "displayName": "layout_weight"
-        }
-      ],
-      "type": "module",
-      "displayName": "水平布局: horizontal"
-    },
-    {
-      "textRaw": "线性布局: linear",
-      "name": "线性布局:_linear",
-      "desc": "<p>实际上, 垂直布局和水平布局都属于线性布局. 线性布局有一个orientation的属性, 用于指定布局的方向, 可选的值为<code>vertical</code>和<code>horizontal</code>.</p>\n<p>例如<code>&lt;linear orientation=&quot;vertical&quot;&gt;&lt;/linear&gt;</code>相当于<code>&lt;vertical&gt;&lt;/vertical&gt;</code>.</p>\n<p>线性布局的默认方向是横向的, 因此, 一个没有指定orientation属性的线性布局就是横向布局.</p>\n",
-      "type": "module",
-      "displayName": "线性布局: linear"
-    },
-    {
-      "textRaw": "帧布局: frame",
-      "name": "帧布局:_frame",
-      "desc": "<p>帧布局</p>\n",
-      "type": "module",
-      "displayName": "帧布局: frame"
-    },
-    {
-      "textRaw": "选择框布局: radiogroup",
-      "name": "选择框布局: radiogroup",
-      "desc": "<p>开关控件用于表示一个选项是否被选中.</p>\n",
-      "modules": [
-        {
-          "textRaw": "checked",
-          "name": "checked",
-          "desc": "<p>表示开关是否被选中. 可选的值为：</p>\n<ul>\n<li><code>true</code> 打开开关</li>\n<li><code>false</code> 关闭开关</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "checked"
-        },
-        {
-          "textRaw": "text",
-          "name": "text",
-          "desc": "<p>对开关进行描述的文字.</p>\n",
-          "type": "module",
-          "displayName": "text"
-        }
-      ],
-      "type": "module",
-      "displayName": "开关控件: Switch"
-    },
-    {
-      "textRaw": "开关控件: Switch",
-      "name": "开关控件:_switch",
-      "desc": "<p>开关控件用于表示一个选项是否被选中.</p>\n",
-      "modules": [
-        {
-          "textRaw": "checked",
-          "name": "checked",
-          "desc": "<p>表示开关是否被选中. 可选的值为：</p>\n<ul>\n<li><code>true</code> 打开开关</li>\n<li><code>false</code> 关闭开关</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "checked"
-        },
-        {
-          "textRaw": "text",
-          "name": "text",
-          "desc": "<p>对开关进行描述的文字.</p>\n",
-          "type": "module",
-          "displayName": "text"
-        }
-      ],
-      "type": "module",
-      "displayName": "开关控件: Switch"
-    },
-    {
-      "textRaw": "标题栏控件: toolbar",
-      "name": "标题栏控件: toolbar",
-      "desc": "<p>卡片控件是一个拥有圆角、阴影的控件.</p>\n",
-      "modules": [
-        {
-          "textRaw": "cardBackgroundColor",
-          "name": "cardbackgroundcolor",
-          "desc": "<p>卡片的背景颜色.</p>\n",
-          "type": "module",
-          "displayName": "cardBackgroundColor"
-        },
-        {
-          "textRaw": "cardCornerRadius",
-          "name": "cardcornerradius",
-          "desc": "<p>卡片的圆角半径.</p>\n",
-          "type": "module",
-          "displayName": "cardCornerRadius"
-        },
-        {
-          "textRaw": "cardElevation",
-          "name": "cardelevation",
-          "desc": "<p>设置卡片在z轴上的高度, 来控制阴影的大小.</p>\n",
-          "type": "module",
-          "displayName": "cardElevation"
-        },
-        {
-          "textRaw": "contentPadding",
-          "name": "contentpadding",
-          "desc": "<p>设置卡片的内边距. 该属性包括四个值：</p>\n<ul>\n<li><code>contentPaddingLeft</code> 左内边距</li>\n<li><code>contentPaddingRight</code> 右内边距</li>\n<li><code>contentPaddingTop</code> 上内边距</li>\n<li><code>contentPaddingBottom</code> 下内边距</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "contentPadding"
-        },
-        {
-          "textRaw": "foreground",
-          "name": "foreground",
-          "desc": "<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果.</p>\n",
-          "type": "module",
-          "displayName": "foreground"
-        }
-      ],
-      "type": "module",
-      "displayName": "卡片: card"
-    },
-    {
-      "textRaw": "卡片: card",
-      "name": "卡片:_card",
-      "desc": "<p>卡片控件是一个拥有圆角、阴影的控件.</p>\n",
-      "modules": [
-        {
-          "textRaw": "cardBackgroundColor",
-          "name": "cardbackgroundcolor",
-          "desc": "<p>卡片的背景颜色.</p>\n",
-          "type": "module",
-          "displayName": "cardBackgroundColor"
-        },
-        {
-          "textRaw": "cardCornerRadius",
-          "name": "cardcornerradius",
-          "desc": "<p>卡片的圆角半径.</p>\n",
-          "type": "module",
-          "displayName": "cardCornerRadius"
-        },
-        {
-          "textRaw": "cardElevation",
-          "name": "cardelevation",
-          "desc": "<p>设置卡片在z轴上的高度, 来控制阴影的大小.</p>\n",
-          "type": "module",
-          "displayName": "cardElevation"
-        },
-        {
-          "textRaw": "contentPadding",
-          "name": "contentpadding",
-          "desc": "<p>设置卡片的内边距. 该属性包括四个值：</p>\n<ul>\n<li><code>contentPaddingLeft</code> 左内边距</li>\n<li><code>contentPaddingRight</code> 右内边距</li>\n<li><code>contentPaddingTop</code> 上内边距</li>\n<li><code>contentPaddingBottom</code> 下内边距</li>\n</ul>\n",
-          "type": "module",
-          "displayName": "contentPadding"
-        },
-        {
-          "textRaw": "foreground",
-          "name": "foreground",
-          "desc": "<p>使用<code>foreground=&quot;?selectableItemBackground&quot;</code>属性可以为卡片添加点击效果.</p>\n",
-          "type": "module",
-          "displayName": "foreground"
-        }
-      ],
-      "type": "module",
-      "displayName": "卡片: card"
-    },
-    {
-      "textRaw": "Tab: tab",
-      "name": "Tab: tab",
-      "methods": [
-        {
-          "textRaw": "ui.layout(xml)",
-          "type": "method",
-          "name": "layout",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {XML} | {string} 布局XML或者XML字符串 ",
-                  "name": "xml",
-                  "type": "XML",
-                  "desc": "| {string} 布局XML或者XML字符串"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xml"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将布局XML渲染为视图（View）对象,  并设置为当前视图.</p>\n"
-        },
-        {
-          "textRaw": "ui.layoutFile(xmlFile)",
-          "type": "method",
-          "name": "layoutFile",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {string} 布局XML文件的路径 ",
-                  "name": "xml",
-                  "type": "string",
-                  "desc": "布局XML文件的路径"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xmlFile"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>此函数和<code>ui.layout</code>相似, 只不过允许传入一个xml文件路径来渲染布局.</p>\n"
-        },
-        {
-          "textRaw": "ui.inflate(xml[, parent = null, attachToParent = false])",
-          "type": "method",
-          "name": "inflate",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {string} | {XML} 布局XML或者XML字符串 ",
-                  "name": "xml",
-                  "type": "string",
-                  "desc": "| {XML} 布局XML或者XML字符串"
-                },
-                {
-                  "textRaw": "`parent` {View} 父视图 ",
-                  "name": "parent",
-                  "type": "View",
-                  "desc": "父视图",
-                  "optional": true,
-                  "default": " null"
-                },
-                {
-                  "textRaw": "`attachToParent` {boolean} 是否渲染的View加到父视图中, 默认为false ",
-                  "name": "attachToParent",
-                  "type": "boolean",
-                  "desc": "是否渲染的View加到父视图中, 默认为false",
-                  "optional": true,
-                  "default": " false"
-                },
-                {
-                  "textRaw": "返回 {View} ",
-                  "name": "返回",
-                  "type": "View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xml"
-                },
-                {
-                  "name": "parent ",
-                  "optional": true,
-                  "default": " null"
-                },
-                {
-                  "name": "attachToParent ",
-                  "optional": true,
-                  "default": " false"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将布局XML渲染为视图（View）对象. 如果该View将作为某个View的子View, 我们建议传入<code>parent</code>参数, 这样在渲染时依赖于父视图的一些布局属性能够正确应用.</p>\n<p>此函数用于动态创建、显示View.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;linear id=&quot;container&quot;&gt;\n    &lt;/linear&gt;\n);\n\n// 动态创建3个文本控件, 并加到container容器中\n// 这里仅为实例, 实际上并不推荐这种做法, 如果要展示列表, \n// 使用list组件；动态创建十几个、几十个View会让界面卡顿\nfor (let i = 0; i &lt; 3; i++) {\n    let textView = $ui.inflate(\n        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;\n    , $ui.container);\n    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);\n    $ui.container.addView(textView);\n}\n</code></pre>\n"
-        }
-      ],
-      "type": "module",
-      "displayName": "ui"
-    },
-    {
-      "textRaw": "ui",
-      "name": "ui",
-      "methods": [
-        {
-          "textRaw": "ui.layout(xml)",
-          "type": "method",
-          "name": "layout",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {XML} | {string} 布局XML或者XML字符串 ",
-                  "name": "xml",
-                  "type": "XML",
-                  "desc": "| {string} 布局XML或者XML字符串"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xml"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将布局XML渲染为视图（View）对象,  并设置为当前视图.</p>\n"
-        },
-        {
-          "textRaw": "ui.layoutFile(xmlFile)",
-          "type": "method",
-          "name": "layoutFile",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {string} 布局XML文件的路径 ",
-                  "name": "xml",
-                  "type": "string",
-                  "desc": "布局XML文件的路径"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xmlFile"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>此函数和<code>ui.layout</code>相似, 只不过允许传入一个xml文件路径来渲染布局.</p>\n"
-        },
-        {
-          "textRaw": "ui.inflate(xml[, parent = null, attachToParent = false])",
-          "type": "method",
-          "name": "inflate",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`xml` {string} | {XML} 布局XML或者XML字符串 ",
-                  "name": "xml",
-                  "type": "string",
-                  "desc": "| {XML} 布局XML或者XML字符串"
-                },
-                {
-                  "textRaw": "`parent` {View} 父视图 ",
-                  "name": "parent",
-                  "type": "View",
-                  "desc": "父视图",
-                  "optional": true,
-                  "default": " null"
-                },
-                {
-                  "textRaw": "`attachToParent` {boolean} 是否渲染的View加到父视图中, 默认为false ",
-                  "name": "attachToParent",
-                  "type": "boolean",
-                  "desc": "是否渲染的View加到父视图中, 默认为false",
-                  "optional": true,
-                  "default": " false"
-                },
-                {
-                  "textRaw": "返回 {View} ",
-                  "name": "返回",
-                  "type": "View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "xml"
-                },
-                {
-                  "name": "parent ",
-                  "optional": true,
-                  "default": " null"
-                },
-                {
-                  "name": "attachToParent ",
-                  "optional": true,
-                  "default": " false"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将布局XML渲染为视图（View）对象. 如果该View将作为某个View的子View, 我们建议传入<code>parent</code>参数, 这样在渲染时依赖于父视图的一些布局属性能够正确应用.</p>\n<p>此函数用于动态创建、显示View.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\n$ui.layout(\n    &lt;linear id=&quot;container&quot;&gt;\n    &lt;/linear&gt;\n);\n\n// 动态创建3个文本控件, 并加到container容器中\n// 这里仅为实例, 实际上并不推荐这种做法, 如果要展示列表, \n// 使用list组件；动态创建十几个、几十个View会让界面卡顿\nfor (let i = 0; i &lt; 3; i++) {\n    let textView = $ui.inflate(\n        &lt;text textColor=&quot;#000000&quot; textSize=&quot;14sp&quot;/&gt;\n    , $ui.container);\n    textView.attr(&quot;text&quot;, &quot;文本控件&quot; + i);\n    $ui.container.addView(textView);\n}\n</code></pre>\n"
-        }
-      ],
-      "type": "module",
-      "displayName": "ui"
-    },
-    {
-      "textRaw": "Drawables",
-      "name": "Drawables",
-      "desc": "<p><strong>(完善中...)</strong></p>\n",
-      "type": "module",
-      "displayName": "颜色"
-    },
-    {
-      "textRaw": "颜色",
-      "name": "颜色",
-      "desc": "<p><strong>(完善中...)</strong></p>\n",
-      "type": "module",
-      "displayName": "颜色"
-    }
-  ],
-  "methods": [
-    {
-      "textRaw": "ui.registerWidget(name, widget)",
-      "type": "method",
-      "name": "registerWidget",
-      "signatures": [
-        {
-          "params": [
-            {
-              "textRaw": "`name` {string} 组件名称 ",
-              "name": "name",
-              "type": "string",
-              "desc": "组件名称"
-            },
-            {
-              "textRaw": "`widget` {Function} 组件 ",
-              "name": "widget",
-              "type": "Function",
-              "desc": "组件"
-            }
-          ]
-        },
-        {
-          "params": [
-            {
-              "name": "name"
-            },
-            {
-              "name": "widget"
-            }
-          ]
-        }
-      ],
-      "desc": "<p>注册一个自定义组件. 参考示例-&gt;界面控件-&gt;自定义控件.</p>\n"
-    },
-    {
-      "textRaw": "ui.isUiThread()",
-      "type": "method",
-      "name": "isUiThread",
-      "signatures": [
-        {
-          "params": [
-            {
-              "textRaw": "返回 {boolean} ",
-              "name": "返回",
-              "type": "boolean"
-            }
-          ]
-        },
-        {
-          "params": []
-        }
-      ],
-      "desc": "<p>返回当前线程是否是UI线程.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\nlog($ui.isUiThread()); // =&gt; true\n\n$threads.start(function () {\n    log($ui.isUiThread()); // =&gt; false\n});\n\n</code></pre>\n",
-      "methods": [
-        {
-          "textRaw": "ui.findView(id)",
-          "type": "method",
-          "name": "findView",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`id` {string} View的ID ",
-                  "name": "id",
-                  "type": "string",
-                  "desc": "View的ID"
-                },
-                {
-                  "textRaw": "返回 {View} ",
-                  "name": "返回",
-                  "type": "View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "id"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>在当前视图中根据ID查找相应的视图对象并返回. 如果当前未设置视图或找不到此ID的视图时返回<code>null</code>.</p>\n<p>一般我们都是通过<code>ui.xxx</code>来获取id为xxx的控件, 如果xxx是一个ui已经有的属性, 就可以通过<code>$ui.findView()</code>来获取这个控件.</p>\n"
-        },
-        {
-          "textRaw": "ui.finish()",
-          "type": "method",
-          "name": "finish",
-          "desc": "<p>结束当前活动并销毁界面.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "ui.setContentView(view)",
-          "type": "method",
-          "name": "setContentView",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`view` {View} ",
-                  "name": "view",
-                  "type": "View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "view"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将视图对象设置为当前视图.</p>\n"
-        },
-        {
-          "textRaw": "ui.post(callback[, delay = 0])",
-          "type": "method",
-          "name": "post",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`callback` {Function} 回调函数 ",
-                  "name": "callback",
-                  "type": "Function",
-                  "desc": "回调函数"
-                },
-                {
-                  "textRaw": "`delay` {number} 延迟, 单位毫秒 ",
-                  "name": "delay",
-                  "type": "number",
-                  "desc": "延迟, 单位毫秒",
-                  "optional": true,
-                  "default": " 0"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "callback"
-                },
-                {
-                  "name": "delay ",
-                  "optional": true,
-                  "default": " 0"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将<code>callback</code>加到UI线程的消息循环中, 并延迟delay毫秒后执行（不能准确保证一定在delay毫秒后执行）.</p>\n<p>此函数可以用于UI线程中延时执行动作（sleep不能在UI线程中使用）, 也可以用于子线程中更新UI.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\n\nui.layout(\n    &lt;frame&gt;\n        &lt;text id=&quot;result&quot;/&gt;\n    &lt;/frame&gt;\n);\n\nui.result.attr(&quot;text&quot;, &quot;计算中&quot;);\n// 在子线程中计算1+ ... + 10000000\nthreads.start({\n    let sum = 0;\n    for (let i = 0; i &lt; 1000000; i++) {\n        sum += i;\n    }\n    // 由于不能在子线程操作UI, 所以要抛到UI线程执行\n    ui.post(() =&gt; {\n        ui.result.attr(&quot;text&quot;, String(sum));\n    });\n});\n</code></pre>\n"
-        },
-        {
-          "textRaw": "ui.run(callback)",
-          "type": "method",
-          "name": "run",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`callback` {Function} 回调函数 ",
-                  "name": "callback",
-                  "type": "Function",
-                  "desc": "回调函数"
-                },
-                {
-                  "textRaw": "返回 callback的执行结果 ",
-                  "name": "返回",
-                  "desc": "callback的执行结果"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "callback"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>将<code>callback</code>在UI线程中执行. 如果当前已经在UI线程中, 则直接执行<code>callback</code>\b\b；否则将<code>callback</code>抛到UI线程中执行（加到UI线程的消息循环的末尾）, <strong>并等待callback执行结束(阻塞当前线程)</strong>.</p>\n"
-        },
-        {
-          "textRaw": "ui.statusBarColor(color)",
-          "type": "method",
-          "name": "statusBarColor",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "color {string} | {number} 颜色 ",
-                  "name": "color",
-                  "type": "string",
-                  "desc": "| {number} 颜色"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "color"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>设置当前界面的状态栏颜色.</p>\n<pre><code class=\"lang-javascript\">&quot;ui&quot;;\nui.statusBarColor(&quot;#000000&quot;);\n</code></pre>\n"
-        },
-        {
-          "textRaw": "ui.useAndroidResources()",
-          "type": "method",
-          "name": "useAndroidResources",
-          "desc": "<p>启用使用Android的布局(layout)、绘图(drawable)、动画(anim)、样式(style)等资源的特性. 启用该特性后, 在project.json中进行以下配置, 就可以像写Android原生一样写界面：</p>\n<pre><code class=\"lang-json\">{\n    // ...\n    androidResources: {\n        &quot;resDir&quot;: &quot;res&quot;,  // 资源文件夹\n        &quot;manifest&quot;: &quot;AndroidManifest.xml&quot; // AndroidManifest文件路径\n    }\n}\n</code></pre>\n<p>res文件夹通常为以下结构：</p>\n<pre><code>- res\n    - layout  // 布局资源\n    - drawable // 图片、形状等资源\n    - menu // 菜单资源\n    - values // 样式、字符串等资源\n    // ...\n</code></pre><p>可参考示例-&gt;复杂界面-&gt;Android原生界面.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        }
-      ]
     }
   ]
 }

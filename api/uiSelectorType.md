@@ -100,7 +100,7 @@ console.log(selector().text("立即开始").exists()); // e.g. true
 
 ### id(str)
 
-**`[6.2.0]`** **`Global`**
+**`[6.2.0]`** **`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -110,9 +110,9 @@ ID 资源选择器.
 - 筛选条件说明: ID 资源全称或 ID 资源项名称完全匹配指定字符串
 - 关联控件属性: [id](uiObjectType#m-id)
 
-安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.  
-ID 资源全称的 `类型` 为 `id`.  
-一个有效的 ID 资源全称: `com.test:id/some_entry`.  
+安卓资源全称格式为 `package:type/entry`, 即 `包名:类型/资源项`.<br>
+ID 资源全称的 `类型` 为 `id`.<br>
+一个有效的 ID 资源全称: `com.test:id/some_entry`.<br>
 其中 `com.test` 为包名, `some_entry` 为 ID 资源项名称, `com.test:id/some_entry` 为 ID 资源全称.
 
 在 AutoJs6 中, ID 资源选择器支持两种方式作为筛选条件:
@@ -133,9 +133,9 @@ wD.id(); // com.test.xyz:id/some_entry
 
 `id('com.test.xyz:id/some_entry')` 同样是 ID 资源全称筛选器, 可以匹配控件 `wD`.
 
-`id('some_entry')` 则是一个 ID 资源项名称筛选器.  
-它不包含包名信息, 匹配时只关心资源项名称, 因此 `wA`, `wC` 和 `wD` 均可匹配.  
-需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本筛选时会考虑前台活动应用的包名.  
+`id('some_entry')` 则是一个 ID 资源项名称筛选器.<br>
+它不包含包名信息, 匹配时只关心资源项名称, 因此 `wA`, `wC` 和 `wD` 均可匹配.<br>
+需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本筛选时会考虑前台活动应用的包名.<br>
 如果编写的代码需兼容不同的 Auto.js 版本, 建议使用 [idEndsWith](#m-idendswith) (如 `idEndsWith('some_entry')`) 或 [idMatches](#m-idmatches) (如 `idMatches(/.*some_entry/)`).
 
 [拾取选择器](#m-pickup) 示例:
@@ -148,6 +148,25 @@ pickup({ id: [ 'some_entry' ] }, '@');
 
 > 方法变更记录
 > - 6.2.0 - 筛选条件为 ID 资源项 (非 ID 资源全称) 时, 忽略包名匹配.
+
+### id(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+ID 资源正则等价选择器.
+
+- 筛选条件说明: ID 资源全称完全匹配指定正则表达式
+- 关联控件属性: [id](uiObjectType#m-id)
+
+与字符串重载不同, 正则表达式直接匹配完整的 `package:id/entry` 字符串, 不会单独提取 ID 资源项名称. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+pickup(id(/com\.test\..+:id\/some_entry/i), '@');
+pickup({ id: /com\.test\..+:id\/some_entry/i }, '@');
+```
 
 ## [m#] idStartsWith
 
@@ -181,9 +200,9 @@ wD.id(); // com.test.xyz:id/some_entry
 
 `idStartsWith('com.test.xyz:id/some_')` 同样是一个包含包名的 ID 前缀匹配筛选器, 可以匹配控件 `wD`.
 
-`idStartsWith('some_')` 则是一个仅包含 ID 资源项名称的前缀匹配筛选器.  
-它不包含包名信息, 匹配时只关心资源项名称, 因此 `wA`, `wB`, `wC` 和 `wD` 均可匹配.  
-需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本筛选时会考虑前台活动应用的包名.  
+`idStartsWith('some_')` 则是一个仅包含 ID 资源项名称的前缀匹配筛选器.<br>
+它不包含包名信息, 匹配时只关心资源项名称, 因此 `wA`, `wB`, `wC` 和 `wD` 均可匹配.<br>
+需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本筛选时会考虑前台活动应用的包名.<br>
 如果编写的代码需兼容不同的 Auto.js 版本, 建议使用 [idMatches](#m-idmatches) (如 `idMatches(/.*some_.*/)`).
 
 [拾取选择器](#m-pickup) 示例:
@@ -238,7 +257,7 @@ pickup({ idEndsWith: [ '_entry' ] }, '@');
 
 ### idContains(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -273,6 +292,19 @@ wD.id(); // com.test.xyz:id/some_entry
 pickup(idContains('some_'), '@');
 pickup({ idContains: 'some_' }, '@');
 pickup({ idContains: [ 'some_' ] }, '@');
+```
+
+### idContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+ID 资源正则包含选择器. ID 资源全称中存在符合正则表达式的连续子串时匹配, 无需在表达式两侧添加 `.*`.
+
+```js
+idContains(/:id\/some_/i);
 ```
 
 ## [m#] idMatches
@@ -382,7 +414,7 @@ console.log(idHex('0x7f090117').findOnce().idEntry()); /* e.g. explorer_item_lis
 
 ### text(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -403,7 +435,7 @@ wD.text(); // Coconuts
 
 `text('Coconuts')` 是一个文本选择器, 可以匹配控件 `wD`.
 
-`text('start')` 同样是一个文本选择器, 可以匹配控件 `wA`.  
+`text('start')` 同样是一个文本选择器, 可以匹配控件 `wA`.<br>
 但 `text('START')` 不能匹配上述任何控件, 因为文本匹配是大小写敏感的.
 
 [拾取选择器](#m-pickup) 示例:
@@ -412,6 +444,19 @@ wD.text(); // Coconuts
 pickup(text('start'), '@');
 pickup({ text: 'start' }, '@');
 pickup({ text: [ 'start' ] }, '@');
+```
+
+### text(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+文本正则等价选择器. 文本必须完全匹配指定正则表达式. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+text(/^service notification$/i);
 ```
 
 ## [m#] textStartsWith
@@ -488,7 +533,7 @@ pickup({ textEndsWith: [ 'ts' ] }, '@');
 
 ### textContains(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -517,6 +562,19 @@ wD.text(); // Coconuts
 pickup(textContains('on'), '@');
 pickup({ textContains: 'on' }, '@');
 pickup({ textContains: [ 'on' ] }, '@');
+```
+
+### textContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+文本正则包含选择器. 文本中存在符合正则表达式的连续子串时匹配.
+
+```js
+textContains(/service\s+notification/i);
 ```
 
 ## [m#] textMatches
@@ -607,7 +665,7 @@ pickup({ textMatch: [ /t\w{0,3}/ ] }, '@');
 
 ### desc(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -628,7 +686,7 @@ wD.desc(); // Coconuts
 
 `desc('Coconuts')` 是一个内容描述标签选择器, 可以匹配控件 `wD`.
 
-`desc('start')` 同样是一个内容描述标签选择器, 可以匹配控件 `wA`.  
+`desc('start')` 同样是一个内容描述标签选择器, 可以匹配控件 `wA`.<br>
 但 `desc('START')` 不能匹配上述任何控件, 因为内容描述标签匹配是大小写敏感的.
 
 [拾取选择器](#m-pickup) 示例:
@@ -637,6 +695,19 @@ wD.desc(); // Coconuts
 pickup(desc('start'), '@');
 pickup({ desc: 'start' }, '@');
 pickup({ desc: [ 'start' ] }, '@');
+```
+
+### desc(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+内容描述标签正则等价选择器. 内容描述标签必须完全匹配指定正则表达式. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+desc(/^service notification$/i);
 ```
 
 ## [m#] descStartsWith
@@ -713,7 +784,7 @@ pickup({ descEndsWith: [ 'ts' ] }, '@');
 
 ### descContains(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -742,6 +813,19 @@ wD.desc(); // Coconuts
 pickup(descContains('on'), '@');
 pickup({ descContains: 'on' }, '@');
 pickup({ descContains: [ 'on' ] }, '@');
+```
+
+### descContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+内容描述标签正则包含选择器. 内容描述标签中存在符合正则表达式的连续子串时匹配.
+
+```js
+descContains(/service\s+notification/i);
 ```
 
 ## [m#] descMatches
@@ -832,7 +916,7 @@ pickup({ descMatch: [ /t\w{0,3}/ ] }, '@');
 
 ### content(str)
 
-**`6.2.0`** **`Global`**
+**`6.2.0`** **`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -853,7 +937,7 @@ wD.content(); // Coconuts
 
 `content('Coconuts')` 是一个内容选择器, 可以匹配控件 `wD`.
 
-`content('start')` 同样是一个内容选择器, 可以匹配控件 `wA`.  
+`content('start')` 同样是一个内容选择器, 可以匹配控件 `wA`.<br>
 但 `content('START')` 不能匹配上述任何控件, 因为内容匹配是大小写敏感的.
 
 [拾取选择器](#m-pickup) 示例:
@@ -862,6 +946,19 @@ wD.content(); // Coconuts
 pickup(content('start'), '@');
 pickup({ content: 'start' }, '@');
 pickup({ content: [ 'start' ] }, '@');
+```
+
+### content(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+内容正则等价选择器. 控件文本或内容描述标签至少有一项完全匹配指定正则表达式时匹配. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+content(/^service notification$/i);
 ```
 
 ## [m#] contentStartsWith
@@ -938,7 +1035,7 @@ pickup({ contentEndsWith: [ 'ts' ] }, '@');
 
 ### contentContains(str)
 
-**`6.2.0`** **`Global`**
+**`6.2.0`** **`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -967,6 +1064,19 @@ wD.content(); // Coconuts
 pickup(contentContains('on'), '@');
 pickup({ contentContains: 'on' }, '@');
 pickup({ contentContains: [ 'on' ] }, '@');
+```
+
+### contentContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+内容正则包含选择器. 控件文本或内容描述标签至少有一项存在符合正则表达式的连续子串时匹配.
+
+```js
+contentContains(/service\s+notification/i);
 ```
 
 ## [m#] contentMatches
@@ -1057,7 +1167,7 @@ pickup({ contentMatch: [ /t\w{0,3}/ ] }, '@');
 
 ### className(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -1081,10 +1191,10 @@ wC.className(); // android.widget.EditText
 wD.className(); // androidx.recyclerview.widget.RecyclerView
 ```
 
-`className('android.widget.Button')` 是一个类名选择器, 可以匹配控件 `wB`.  
+`className('android.widget.Button')` 是一个类名选择器, 可以匹配控件 `wB`.<br>
 `className('Button')` 与上述选择器效果相同, 它使用安卓控件类名简称作为筛选条件.
 
-`className('androidx.recyclerview.widget.RecyclerView')` 同样是一个类名选择器, 可以匹配控件 `wD`.  
+`className('androidx.recyclerview.widget.RecyclerView')` 同样是一个类名选择器, 可以匹配控件 `wD`.<br>
 但 `className('RecyclerView')` 不能匹配上述任何控件, 因为只有 `android.widget.` 开头的类名才能使用简称形式进行筛选.
 
 [拾取选择器](#m-pickup) 示例:
@@ -1093,6 +1203,19 @@ wD.className(); // androidx.recyclerview.widget.RecyclerView
 pickup(className('Button'), '@');
 pickup({ className: 'Button' }, '@');
 pickup({ className: [ 'Button' ] }, '@');
+```
+
+### className(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+类名正则等价选择器. 完整类名必须完全匹配指定正则表达式. 此重载不会将控件类名简称展开为完整类名. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+className(/^android\.widget\.button$/i);
 ```
 
 ## [m#] classNameStartsWith
@@ -1123,13 +1246,13 @@ wC.className(); // android.widget.EditText
 wD.className(); // androidx.recyclerview.widget.RecyclerView
 ```
 
-`classNameStartsWith('android.widget.Bu')` 是一个类名前缀选择器, 可以匹配控件 `wB`.  
+`classNameStartsWith('android.widget.Bu')` 是一个类名前缀选择器, 可以匹配控件 `wB`.<br>
 `classNameStartsWith('Bu')` 与上述选择器效果相同, 它使用安卓控件类名简称作为筛选条件.
 
-`classNameStartsWith('androidx.recyclerview.widget.Rec')` 同样是一个类名前缀选择器, 可以匹配控件 `wD`.  
+`classNameStartsWith('androidx.recyclerview.widget.Rec')` 同样是一个类名前缀选择器, 可以匹配控件 `wD`.<br>
 但 `classNameStartsWith('Rec')` 不能匹配上述任何控件, 因为只有 `android.widget.` 开头的类名才能使用简称形式进行前缀筛选.
 
-需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本在做类名前缀筛选时, 不支持简称形式.  
+需额外留意上述匹配方式与 Auto.js 4.x 版本不同, 4.x 版本在做类名前缀筛选时, 不支持简称形式.<br>
 如果编写的代码需兼容不同的 Auto.js 版本, 建议使用 [classNameEndsWith](#m-classnameendswith) (如 `classNameEndsWith('RecyclerView')`) 或 [classNameMatches](#m-classnamematches) (如 `classNameMatches(/.*Rec.*/)`).
 
 [拾取选择器](#m-pickup) 示例:
@@ -1166,7 +1289,7 @@ wC.className(); // android.widget.EditText
 wD.className(); // androidx.recyclerview.widget.RecyclerView
 ```
 
-`classNameEndsWith('View')` 可以匹配控件 `wA` 和 `wD`.  
+`classNameEndsWith('View')` 可以匹配控件 `wA` 和 `wD`.<br>
 而 `classNameEndsWith('view')` 不可匹配上述任何控件, 因为类名匹配是大小写敏感的.
 
 `classNameEndsWith('Button')` 可以匹配控件 `wB`.
@@ -1183,7 +1306,7 @@ pickup({ classNameEndsWith: [ 'Button' ] }, '@');
 
 ### classNameContains(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -1212,6 +1335,19 @@ wD.className(); // androidx.recyclerview.widget.RecyclerView
 pickup(classNameContains('Button'), '@');
 pickup({ classNameContains: 'Button' }, '@');
 pickup({ classNameContains: [ 'Button' ] }, '@');
+```
+
+### classNameContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+类名正则包含选择器. 完整类名中存在符合正则表达式的连续子串时匹配.
+
+```js
+classNameContains(/widget\.(button|edittext)$/i);
 ```
 
 ## [m#] classNameMatches
@@ -1282,7 +1418,7 @@ wC.className(); // android.widget.EditText
 wD.className(); // androidx.recyclerview.widget.RecyclerView
 ```
 
-`classNameMatch(/EditText/)` 或 `classNameMatch('EditText')` 可以匹配 `wC` 控件.  
+`classNameMatch(/EditText/)` 或 `classNameMatch('EditText')` 可以匹配 `wC` 控件.<br>
 `classNameMatch(/Edit/)` 或 `classNameMatch('Edit')` 也可以匹配 `wC` 控件.
 
 `classNameMatch(/^android/)` 或 `classNameMatch('^android')` 可以匹配 `wA`, `wB`, `wC` 和 `wD` 控件.
@@ -1301,7 +1437,7 @@ pickup({ classNameMatch: [ /V\w{0,3}$/ ] }, '@');
 
 ### packageName(str)
 
-**`Overload 1/2`** **`Global`**
+**`Overload 1/3`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -1322,19 +1458,32 @@ wD.packageName(); // com.accuweather.android
 
 `packageName('com.twitter.android')` 是一个包名选择器, 可以匹配控件 `wC`.
 
-`packageName('com.microsoft.office.word)` 同样是一个包名选择器, 可以匹配控件 `wB`.
+`packageName('com.microsoft.office.word')` 同样是一个包名选择器, 可以匹配控件 `wB`.
 
 [拾取选择器](#m-pickup) 示例:
 
 ```js
-pickup(packageName(com.microsoft.office.word), '@');
-pickup({ packageName: com.microsoft.office.word }, '@');
-pickup({ packageName: [ com.microsoft.office.word ] }, '@');
+pickup(packageName('com.microsoft.office.word'), '@');
+pickup({ packageName: 'com.microsoft.office.word' }, '@');
+pickup({ packageName: [ 'com.microsoft.office.word' ] }, '@');
+```
+
+### packageName(regex)
+
+**`6.7.0`** **`Overload 2/3`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+包名正则等价选择器. 包名必须完全匹配指定正则表达式. 匹配规则和标志语义参阅 [正则表达式参数](#regexp).
+
+```js
+packageName(/^com\.microsoft\.office\.\w+$/i);
 ```
 
 ### packageName(app)
 
-**`6.2.0`** **`Overload 2/2`** **`Global`**
+**`6.2.0`** **`Overload 3/3`** **`Global`**
 
 - **app** { [App](appType) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -1423,7 +1572,7 @@ wC.packageName(); // com.twitter.android
 wD.packageName(); // com.accuweather.android
 ```
 
-`packageNameEndsWith('android')` 可以匹配控件 `wC` 和 `wD`.  
+`packageNameEndsWith('android')` 可以匹配控件 `wC` 和 `wD`.<br>
 而 `packageNameEndsWith('Android')` 不可匹配上述任何控件, 因为包名匹配是大小写敏感的.
 
 `packageNameEndsWith('firefox')` 可以匹配控件 `wA`.
@@ -1440,7 +1589,7 @@ pickup({ packageNameEndsWith: [ 'firefox' ] }, '@');
 
 ### packageNameContains(str)
 
-**`Global`**
+**`Overload 1/2`** **`Global`**
 
 - **str** { [string](dataTypes#string) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
@@ -1469,6 +1618,19 @@ wD.packageName(); // com.accuweather.android
 pickup(packageNameContains('office'), '@');
 pickup({ packageNameContains: 'office' }, '@');
 pickup({ packageNameContains: [ 'office' ] }, '@');
+```
+
+### packageNameContains(regex)
+
+**`6.7.0`** **`Overload 2/2`** **`Global`**
+
+- **regex** { [RegExp](dataTypes#regexp) }
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+包名正则包含选择器. 包名中存在符合正则表达式的连续子串时匹配.
+
+```js
+packageNameContains(/microsoft\.office/i);
 ```
 
 ## [m#] packageNameMatches
@@ -1578,7 +1740,7 @@ wC.packageName(); // com.twitter.android
 wD.packageName(); // com.accuweather.android
 ```
 
-`currentApp(App.TWITTER)` 是一个应用选择器, 可以匹配控件 `wC`.  
+`currentApp(App.TWITTER)` 是一个应用选择器, 可以匹配控件 `wC`.<br>
 `packageName(App.TWITTER)` 是一个 [包名选择器](#m-packagename), 与上述选择器效果相同.
 
 `currentApp(App.WORD)` 同样是一个应用选择器, 可以匹配控件 `wB`.
@@ -1673,7 +1835,7 @@ console.log(bounds(655 / device.width, 0.1, 0.9, 0.9)); // bounds(0.606, 0.1, 0.
 ```js
 /* 设备屏幕: 1080 × 1920. */
 
-/* 对于选择器 bounds(0.606, 0.1, 0.9, 0.9) . */
+/* 对于选择器 bounds(0.606, 0.1, 0.9, 0.9). */
 
 console.log('left: ' + 0.606 * device.width); // 654.48
 console.log('top: ' + 0.1 * device.height); // 192
@@ -1738,7 +1900,7 @@ console.log(boundsInside(655 / device.width, 0.1, 0.9, 0.9)); // boundsInside(0.
 ```js
 /* 设备屏幕: 1080 × 1920. */
 
-/* 对于选择器 boundsInside(0.606, 0.1, 0.9, 0.9) . */
+/* 对于选择器 boundsInside(0.606, 0.1, 0.9, 0.9). */
 
 console.log('left: ' + 0.606 * device.width); // 654.48
 console.log('top: ' + 0.1 * device.height); // 192
@@ -1801,7 +1963,7 @@ console.log(boundsContains(655 / device.width, 0.1, 0.9, 0.9)); // boundsContain
 ```js
 /* 设备屏幕: 1080 × 1920. */
 
-/* 对于选择器 boundsContains(0.606, 0.1, 0.9, 0.9) . */
+/* 对于选择器 boundsContains(0.606, 0.1, 0.9, 0.9). */
 
 console.log('left: ' + 0.606 * device.width); // 654.48
 console.log('top: ' + 0.1 * device.height); // 192
@@ -2304,7 +2466,7 @@ pickup({ boundsCenterX: 0.142 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 例如对于以下 3 个控件:
@@ -2633,7 +2795,7 @@ pickup({ boundsMinHeight: 0.781 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 例如对于以下 3 个控件:
@@ -2925,7 +3087,7 @@ pickup({ boundsMaxHeight: 0.982 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 例如对于以下 3 个控件:
@@ -3202,7 +3364,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 [UiSelector#boundsCenterX](#boundscenterxmin-max) 的别名方法.
@@ -3345,7 +3507,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 [UiSelector#boundsMinCenterX](#boundsmincenterxmin) 的别名方法.
@@ -3473,7 +3635,7 @@ pickup({ boundsMaxCenterY: 0.469 }, '@');
 
 [控件矩形 (Rect)](androidRectType) 的中心点选择器.
 
-- 筛选条件说明:控件矩形中心点 X 坐标与指定的坐标限制相符
+- 筛选条件说明: 控件矩形中心点 X 坐标与指定的坐标限制相符
 - 关联控件属性: [ [boundsCenterX](uiObjectType#m-boundscenterx) / [bounds](uiObjectType#m-bounds) ]
 
 [UiSelector#boundsMaxCenterX](#boundsmaxcenterxmax) 的别名方法.
@@ -3520,11 +3682,11 @@ Math.abs(wA.boundsCenterX() - device.width / 2) / device.width; // 0
 
 wB.bounds(); // Rect(50, 96 - 1040, 1280)
 wB.boundsCenterX(); // 545
-Math.abs(wB.boundsCenterX() - device.width / 2) / device.width; /* 约为 0.005 . */
+Math.abs(wB.boundsCenterX() - device.width / 2) / device.width; /* 约为 0.005. */
 
 wC.bounds(); // Rect(66, 112 - 256, 1600)
 wC.boundsCenterX(); // 161
-Math.abs(wC.boundsCenterX() - device.width / 2) / device.width; /* 约为 0.351 . */
+Math.abs(wC.boundsCenterX() - device.width / 2) / device.width; /* 约为 0.351. */
 ```
 
 `screenCenterX(true, 0)` 是一个控件矩形中心点选择器, 可以匹配控件 `wA`, 参数 `0` 表示严格横向居中, 不允许丝毫误差, `true` 表示正常筛选, 如果为 `false`, 表示反向筛选, 即筛选不满足严格横向居中的控件.
@@ -3605,11 +3767,11 @@ Math.abs(wA.boundsCenterY() - device.width / 2) / device.width; // 0
 
 wB.bounds(); // Rect(150, 96 - 1020, 1820)
 wB.boundsCenterY(); // 958
-Math.abs(wB.boundsCenterY() - device.width / 2) / device.width; /* 约为 0.001 . */
+Math.abs(wB.boundsCenterY() - device.width / 2) / device.width; /* 约为 0.001. */
 
 wC.bounds(); // Rect(266, 1400 - 356, 1600)
 wC.boundsCenterY(); // 1500
-Math.abs(wC.boundsCenterY() - device.width / 2) / device.width; /* 约为 0.281 . */
+Math.abs(wC.boundsCenterY() - device.width / 2) / device.width; /* 约为 0.281. */
 ```
 
 `screenCenterY(true, 0)` 是一个控件矩形中心点选择器, 可以匹配控件 `wA`, 参数 `0` 表示严格纵向居中, 不允许丝毫误差, `true` 表示正常筛选, 如果为 `false`, 表示反向筛选, 即筛选不满足严格纵向居中的控件.
@@ -3688,16 +3850,16 @@ wA.bounds(); // Rect(0, 0 - 1080, 1896)
 (wA.width() * wA.height()) / (device.width * device.height); // 0.9875
 
 wB.bounds(); // Rect(150, 96 - 1020, 1820)
-(wB.width() * wB.height()) / (device.width * device.height); /* 约为 0.723 .*/
+(wB.width() * wB.height()) / (device.width * device.height); /* 约为 0.723. */
 
-wC.bounds(); /* Rect(-2000, -1400 - 80, 1920), 屏幕覆盖率约为 7.4% . */
-wD.bounds(); /* Rect(-200, 0 - 1080, 1920), 屏幕覆盖率为 100% . */
-wE.bounds(); /* Rect(20, 30 - 840, 4000), 屏幕覆盖率约为 74.7% . */
+wC.bounds(); /* Rect(-2000, -1400 - 80, 1920), 屏幕覆盖率约为 7.4%. */
+wD.bounds(); /* Rect(-200, 0 - 1080, 1920), 屏幕覆盖率为 100%. */
+wE.bounds(); /* Rect(20, 30 - 840, 4000), 屏幕覆盖率约为 74.7%. */
 ```
 
 `screenCoverage(0.95)` 是一个控件矩形空间选择器, 可以匹配控件 `wA` 和 `wD`, 参数 `0.95` 表示可视化部分的空间占比不小于 `95%`, `wD` 较为特殊, 它的左边界为负数, 表示左边界超出屏幕可视化区域, 因此计算时按 `0` 处理.
 
-同样特殊的, 还有 `wC` 及 `wE`.  
+同样特殊的, 还有 `wC` 及 `wE`.<br>
 `wC` 的左边界及上边界均为负数, 超出了屏幕可视化区域, 计算面积时均按 `0` 处理:
 
 ```js
@@ -4804,7 +4966,7 @@ pickup({ maxChildCount: 4 }, '@');
 
 - <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
 
-根据选择器条件筛选控件.  
+根据选择器条件筛选控件.<br>
 筛选结果为单个控件, 不存在任何符合筛选条件的控件时, 返回 null.
 
 特性:
@@ -4826,7 +4988,7 @@ let w = sel.findOnce();
 - **index** { [number](dataTypes#number) } - 控件索引
 - <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
 
-根据选择器条件筛选控件.  
+根据选择器条件筛选控件.<br>
 筛选结果为索引参数指定的单个控件, 不存在时返回 null.
 
 特性:
@@ -4841,7 +5003,7 @@ let wB = sel.findOnce(0);
 let wC = sel.findOnce(4);
 ```
 
-上述示例中, `wB` 与 `wA` 等价, 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null).  
+上述示例中, `wB` 与 `wA` 等价, 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null).<br>
 `wC` 表示第 5 个符合筛选条件的控件 (可能为 null).
 
 ## [m#] exists
@@ -4864,7 +5026,7 @@ let wC = sel.findOnce(4);
 
 - <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
 
-根据选择器条件筛选全部符合筛选条件的控件.  
+根据选择器条件筛选全部符合筛选条件的控件.<br>
 筛选结果为 [控件集合](uiObjectCollectionType), 不存在任何符合筛选条件的控件时, 返回空集合.
 
 特性:
@@ -4888,7 +5050,7 @@ wc.forEach(w => console.log(w.centerY()));
 
 - <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
 
-根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.  
+根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.<br>
 筛选结果为单个控件, 指定时限内不存在任何符合筛选条件的控件时, 返回 null.
 
 特性:
@@ -4910,8 +5072,8 @@ console.log(w.centerY());
 
 - <ins>**returns**</ins> { [UiObject](uiObjectType) }
 
-根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.  
-意味着此方法可能导致脚本 **永久阻塞**.  
+根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>
+意味着此方法可能导致脚本 **永久阻塞**.<br>
 筛选结果为单个控件.
 
 特性:
@@ -4919,7 +5081,7 @@ console.log(w.centerY());
 - 阻塞筛选 - [ √ ]
 - 集合结果 - [ × ]
 
-此方法相当于 `UiSelector#findOne(-1)`.  
+此方法相当于 `UiSelector#findOne(-1)`.<br>
 因 `findOne()` 易造成歧义及混淆, 因此被弃用, 建议使用 `findOne(-1)` 或 `untilFindOne()` 替代.
 
 ```js
@@ -4928,7 +5090,7 @@ let w = sel.findOne();
 console.log(w.centerY());
 ```
 
-上述示例中, `w` 表示符合筛选条件的首个控件.  
+上述示例中, `w` 表示符合筛选条件的首个控件.<br>
 第三行 `console.log(w.centerY());` 可能永远无法执行, 除非 `sel.findOne()` 筛选成功解除阻塞.
 
 ## [m#] untilFindOne
@@ -4939,8 +5101,8 @@ console.log(w.centerY());
 
 - <ins>**returns**</ins> { [UiObject](uiObjectType) }
 
-根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.  
-意味着此方法可能导致脚本 **永久阻塞**.  
+根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>
+意味着此方法可能导致脚本 **永久阻塞**.<br>
 筛选结果为单个控件.
 
 特性:
@@ -4956,7 +5118,7 @@ let w = sel.untilFindOne();
 console.log(w.centerY());
 ```
 
-上述示例中, `w` 表示符合筛选条件的首个控件.  
+上述示例中, `w` 表示符合筛选条件的首个控件.<br>
 第三行 `console.log(w.centerY());` 可能永远无法执行, 除非 `sel.untilFindOne()` 筛选成功解除阻塞.
 
 ## [m#] untilFind
@@ -4967,8 +5129,8 @@ console.log(w.centerY());
 
 - <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
 
-根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.  
-意味着此方法可能导致脚本 **永久阻塞**.  
+根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>
+意味着此方法可能导致脚本 **永久阻塞**.<br>
 筛选结果为控件集合.
 
 特性:
@@ -4982,7 +5144,7 @@ let wc = sel.untilFind();
 console.log(wc.length);
 ```
 
-上述示例中, `w` 表示符合筛选条件的首个控件.  
+上述示例中, `w` 表示符合筛选条件的首个控件.<br>
 第三行 `console.log(wc.length);` 可能永远无法执行, 除非 `sel.untilFind()` 筛选成功解除阻塞.
 
 ## [m#] waitFor
@@ -4993,8 +5155,8 @@ console.log(wc.length);
 
 - <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
 
-根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.  
-意味着此方法可能导致脚本 **永久阻塞**.  
+根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>
+意味着此方法可能导致脚本 **永久阻塞**.<br>
 筛选结果为控件集合.
 
 特性:
@@ -5008,7 +5170,7 @@ console.log(wc.length);
 
 ## [m#] performAction
 
-用于执行指定的控件行为.  
+用于执行指定的控件行为.<br>
 在 [控件节点行为](uiObjectActionsType) 章节已详细描述相关内容, 此处仅注明方法签名, 相关内容将不再赘述.
 
 ### performAction(action, ...arguments)
@@ -5365,13 +5527,13 @@ console.log(wc.length);
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 粘贴文本 ] 行为](uiObjectActionsType#m-paste).
 
-当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合, 集合中的所有控件将全部执行一次 `paste()`.  
-然而实际执行全局方法 `paste()` 时, 往往只有一个控件执行了粘贴行为, 并非所有控件都执行一遍.  
-这是因为控件 `w` 完成粘贴行为的前提, 是它处于聚焦状态 (`w.focused()` 为 `true`).  
-在一个活动窗口中, 往往最多只有一个控件处于聚焦状态, 因此只有该控件可以完成粘贴行为.  
+当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合, 集合中的所有控件将全部执行一次 `paste()`.<br>
+然而实际执行全局方法 `paste()` 时, 往往只有一个控件执行了粘贴行为, 并非所有控件都执行一遍.<br>
+这是因为控件 `w` 完成粘贴行为的前提, 是它处于聚焦状态 (`w.focused()` 为 `true`).<br>
+在一个活动窗口中, 往往最多只有一个控件处于聚焦状态, 因此只有该控件可以完成粘贴行为.<br>
 如果需要所有的文本编辑控件全部完成粘贴行为, 可参考如下代码:
 
-```js 
+```js
 let wc = className('EditText').find();
 wc.forEach((w) => {
     w.focus();
@@ -5651,7 +5813,7 @@ console.log(selA); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
 
 ## [m] pickup
 
-拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.  
+拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.<br>
 支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.
 
 部分特性:
@@ -5691,7 +5853,7 @@ pickup(selClassic);
 /* 对象选择器参数. */
 let selObject = {
     text: 'abc',
-    clickable: [], /* 或 clickable: true . */
+    clickable: [], /* 或 clickable: true. */
     centerX: 0.5,
     boundsInside: [ 0.2, 0.05, -1, -1 ],
     action: [ 'CLICK', 'SET_TEXT', 'LONG_CLICK' ],
@@ -5700,7 +5862,7 @@ pickup(selObject);
 
 /* 混合型选择器参数. */
 pickup([ 'abc', {
-    clickable: [], /* 或 clickable: true . */
+    clickable: [], /* 或 clickable: true. */
     centerX: 0.5,
     boundsInside: [ 0.2, 0.05, -1, -1 ],
     action: [ 'CLICK', 'SET_TEXT', 'LONG_CLICK' ],
@@ -5720,14 +5882,14 @@ pickup([ 'abc', {
 ```js
 /* 结果筛选 - 文本. */
 
-pickup(textMatch(/ab?.+/), 'text'); /* 返回符合筛选条件控件的文本, 无符合条件的控件时返回空字符串 ("") . */
+pickup(textMatch(/ab?.+/), 'text'); /* 返回符合筛选条件控件的文本, 无符合条件的控件时返回空字符串 (""). */
 
 /* 结果筛选 - 点. */
 
-pickup(clickable(true), 'point'); /* 返回符合筛选条件控件的坐标, 无符合条件的控件时返回 null . */
+pickup(clickable(true), 'point'); /* 返回符合筛选条件控件的坐标, 无符合条件的控件时返回 null. */
 pickup(clickable(true), '.'); /* 同上. */
 
-/* 参化调用 - 获取控件矩形 (Rect) . */
+/* 参化调用 - 获取控件矩形 (Rect). */
 
 pickup(clickable(true), 'bounds'); /* 空指针安全. */
 clickable(true).findOnce().bounds(); /* 效果同上, 但存在潜在的空指针异常. */
@@ -5863,7 +6025,7 @@ pickup(w, 'xyz', 'p2', 'width'); /* 在 w 控件的所有子孙节点中筛选�
 ```js
 pickup(text('abc'), (o) => {
     if (o !== null) {
-        console.log(`已找到所需控件, 其文本为${o.text()}`);
+        console.log(`已找到所需控件, 其文本为 ${o.text()}`);
         return o.text();
     } else {
         console.warn(`未找到所需控件`);
@@ -5886,11 +6048,11 @@ pickup(text('abc'), (o) => {
 ```js
 pickup(clickable(true), 'point', (o) => {
     if (o !== null) {
-        console.log(`已找到控件, 其中心位于坐标${o}`);
+        console.log(`已找到控件, 其中心位于坐标 ${o}`);
         return o;
     }
     return org.opencv.core.Point();
-}); /* pickup 返回控件真实坐标点或坐标点 (0, 0) . */
+}); /* pickup 返回控件真实坐标点或坐标点 (0, 0). */
 ```
 
 ### pickup(selector, compass, callback)
@@ -5942,7 +6104,7 @@ let w = descMatch(/hello?.+/).findOnce();
 
 pickup(w, text('abc'), (o) => {
     if (o !== null) {
-        console.log(`已找到所需控件, 其文本为${o.text()}`);
+        console.log(`已找到所需控件, 其文本为 ${o.text()}`);
         return o.text();
     } else {
         console.warn(`未找到所需控件`);
@@ -5970,11 +6132,11 @@ let w = descMatch(/hello?.+/).findOnce();
 
 pickup(w, clickable(true), 'point', (o) => {
     if (o !== null) {
-        console.log(`已找到控件, 其中心位于坐标${o}`);
+        console.log(`已找到控件, 其中心位于坐标 ${o}`);
         return o;
     }
     return org.opencv.core.Point();
-}); /* pickup 返回控件真实坐标点或坐标点 (0, 0) . */
+}); /* pickup 返回控件真实坐标点或坐标点 (0, 0). */
 ```
 
 ### pickup(root, selector, compass, callback)
@@ -6054,19 +6216,49 @@ pickup(w, text('abc'), 's>1', 'bounds', (o) => {
 
 1. **潜在的永久阻塞风险**
 
-   因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.  
+   因 `untilFind` 方法具有阻塞特性, 意味着此方法可能导致脚本 **永久阻塞**.<br>
    如上述示例, `text('abc')` 不存在时, 脚本将持续阻塞.
 
 2. **全局行为缺少针对性**
 
-   以 `paste()` 为例.  
-   当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合.  
-   这样的集合往往有几十甚至几百个控件, 再执行 `paste()` 时, 集合中的所有控件全部执行一次 `paste()`.  
+   以 `paste()` 为例.<br>
+   当使用全局方法 `paste()` 时, 相当于 `untilFind().paste()`, `untilFind()` 前无筛选条件, 因此 `untilFind()` 将得到窗口全部控件的集合.<br>
+   这样的集合往往有几十甚至几百个控件, 再执行 `paste()` 时, 集合中的所有控件全部执行一次 `paste()`.<br>
    这样的操作往往是非预期且耗时的, 因此不建议使用 `paste()` 这样的全局方法, 推荐使用具体且尽量可控的筛选器筛选出特定的控件或集合, 再有针对性地执行 `paste()` 操作.
 
 ---
 
 # 筛选器类型
+
+## RegExp
+
+**`[6.7.0]`**
+
+选择器的 [RegExp](dataTypes#regexp) 参数由 AutoJs6 转换为 Java 正则表达式并在控件树遍历期间复用. 以下选择器支持 RegExp 参数:
+
+- 等价系列: `id`, `text`, `desc`, `content`, `className`, `packageName`
+- 包含系列: `idContains`, `textContains`, `descContains`, `contentContains`, `classNameContains`, `packageNameContains`
+- 正则系列: `idMatches`, `textMatches`, `descMatches`, `contentMatches`, `classNameMatches`, `packageNameMatches` 及对应的 `xxxMatch`
+
+等价系列和 `xxxMatches` 要求整个属性字符串匹配正则表达式. 包含系列和 `xxxMatch` 只要求属性字符串中存在一个匹配子串.
+
+支持的正则表达式标志:
+
+| 标志 | 语义 |
+| --- | --- |
+| `i` | 忽略大小写 |
+| `m` | 多行模式, `^` 和 `$` 可匹配行首和行尾 |
+| `s` | 单行模式, `.` 可匹配行终止符 |
+| `u` | 启用 Java Unicode 大小写和 Unicode 字符类行为 |
+
+`u` 使用 Java `UNICODE_CASE` 和 `UNICODE_CHARACTER_CLASS`, 与 JavaScript `u` 标志并非完全等价. `g` 和 `y` 只影响 JavaScript 正则表达式的迭代或粘连状态, 在选择器中被忽略; 其他未识别标志同样被忽略.
+
+```js
+text(/^autojs6$/i);
+descMatch(/^second line$/im);
+contentContains(/first.*last/is);
+classNameMatch(/\w+/u);
+```
 
 ## xxxStartsWith
 
@@ -6096,7 +6288,7 @@ descEndsWith('diy'); /* 不可匹配 w. */
 
 包含匹配筛选器.
 
-筛选条件为 [字符串](dataTypes#string) 类型, 匹配任意长度连续的控件属性串值.
+筛选条件为 [字符串](dataTypes#string) 类型或 [正则表达式](dataTypes#regexp) 类型, 匹配任意长度连续的控件属性串值.
 
 ```js
 w.desc(); // splendid
@@ -6105,6 +6297,7 @@ descContains('spl'); /* 可匹配 w. */
 descContains('len'); /* 可匹配 w. */
 descContains(''); /* 可匹配 w, 但通常无实际意义. */
 descContains('app'); /* 不可匹配 w. */
+descContains(/LEN/i); /* 可匹配 w. */
 ```
 
 ## xxxMatches
@@ -6119,60 +6312,62 @@ descContains('app'); /* 不可匹配 w. */
 
 ```js
 w.desc(); // splendid
-/* 相当于 descMatch(/^s.*did$/) . */
+/* 相当于 descMatch(/^s.*did$/). */
 descMatches(/s.*did/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches(/did/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches(/did$/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches(/^did/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^.*did.*$/) . */
+/* 相当于 descMatch(/^.*did.*$/). */
 descMatches(/.*did.*/); /* 可匹配 w. */
-/* 相当于 descMatch(/^l[ae]ng?$/) . */
+/* 相当于 descMatch(/^l[ae]ng?$/). */
 descMatches(/l[ae]ng?/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^.+$/) . */
+/* 相当于 descMatch(/^.+$/). */
 descMatches(/.+/); /* 可匹配 w. */
-/* 相当于 descMatch(/^(?:)$/) . */
+/* 相当于 descMatch(/^(?:)$/). */
 descMatches(/(?:)/); /* 不可匹配 w. */
-/* 相当于 descMatch(/^spl\.?.+$/) . */
+/* 相当于 descMatch(/^spl\.?.+$/). */
 descMatches(new RegExp('spl\\.?.+$')); /* 不可匹配 w. */
 ```
+
+正则表达式标志语义参阅 [正则表达式参数](#regexp).
 
 ### 字符串类型
 
 筛选条件为字符串类型时, 相当于 JavaScript 的 [RegExp.prototype.constructor](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp) 构造函数的 `pattern (模式)` 参数, 但依照起止位置做完全匹配, 相当于自动添加匹配起始位置的 `^` 与匹配结束位置的 `$`.
 
-如字符串 `'abc'` 按照正则表达式 `/^abc$/` 处理,  
+如字符串 `'abc'` 按照正则表达式 `/^abc$/` 处理,<br>
 字符串 `'\\d+'` 按照正则表达式 `/^\d+$/` 处理.
 
 ```js
 w.desc(); // splendid
-/* 相当于 descMatch(/^s.*did$/) . */
+/* 相当于 descMatch(/^s.*did$/). */
 descMatches('s.*did'); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches('did'); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches('did$'); /* 不可匹配 w. */
-/* 相当于 descMatch(/^did$/) . */
+/* 相当于 descMatch(/^did$/). */
 descMatches('^did'); /* 不可匹配 w. */
-/* 相当于 descMatch(/^.*did.*$/) . */
+/* 相当于 descMatch(/^.*did.*$/). */
 descMatches('.*did.*'); /* 可匹配 w. */
-/* 相当于 descMatch(/^l[ae]ng?$/) . */
+/* 相当于 descMatch(/^l[ae]ng?$/). */
 descMatches('l[ae]ng?'); /* 不可匹配 w. */
-/* 相当于 descMatch(/^.+$/) . */
+/* 相当于 descMatch(/^.+$/). */
 descMatches('.+'); /* 可匹配 w. */
-/* 相当于 descMatch(/^$/) . */
+/* 相当于 descMatch(/^$/). */
 descMatches(''); /* 不可匹配 w. */
-/* 相当于 descMatch(/^spl\.?.+$/) . */
+/* 相当于 descMatch(/^spl\.?.+$/). */
 descMatches('spl\\.?.+$'); /* 不可匹配 w. */
 ```
 
 对于 xxxMatches, 会经常出现类似如下的匹配方式:
 
 ```js
-/* 相当于 descMatch(/^.*word.*$/) . */
-xxxMatches(/.*word.*/); /* 或 xxxMatches('.*word.*') . */
+/* 相当于 descMatch(/^.*word.*$/). */
+xxxMatches(/.*word.*/); /* 或 xxxMatches('.*word.*'). */
 ```
 
 而对于 xxxMatch, 其匹配方式往往更符合 JavaScript 开发者的使用习惯:
@@ -6208,7 +6403,7 @@ descMatch(/.+/); /* 可匹配 w, 与 descMatch(/(?:)/) 效果相同. */
 descMatch(new RegExp('spl\\.?.+$')); /* 可匹配 w. */
 ```
 
-筛选条件为正则表达式类型时, 支持 [修饰符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Guide/Regular_Expressions#%E9%80%9A%E8%BF%87%E6%A0%87%E5%BF%97%E8%BF%9B%E8%A1%8C%E9%AB%98%E7%BA%A7%E6%90%9C%E7%B4%A2) (又称 `标志`):
+筛选条件为正则表达式类型时, 支持 `i`, `m`, `s` 和 `u` 标志, 具体语义参阅 [正则表达式参数](#regexp):
 
 ```js
 w.desc(); // AutoJs6
@@ -6216,30 +6411,28 @@ descMatch(/autojs6/i); /* 可匹配 w. */
 descMatch(new RegExp('autojs6', 'i')); /* 可匹配 w. */
 ```
 
-> 注: 截至 2022 年 12 月, 支持的修饰符仅包含 'i'.
-
 ### 字符串类型
 
 筛选条件为字符串类型时, 相当于 JavaScript 的 [RegExp.prototype.constructor](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/RegExp/RegExp) 构造函数的 `pattern (模式)` 参数.
 
-如字符串 `'abc'` 按照正则表达式 `/abc/` 处理,  
+如字符串 `'abc'` 按照正则表达式 `/abc/` 处理,<br>
 字符串 `'\\d+'` 按照正则表达式 `/\d+/` 处理.
 
 ```js
 w.desc(); // splendid
-/* 相当于 descMatch(/s.*did/) . */
+/* 相当于 descMatch(/s.*did/). */
 descMatch('s.*did'); /* 可匹配 w. */
-/* 相当于 descMatch(/did/) . */
+/* 相当于 descMatch(/did/). */
 descMatch('did'); /* 可匹配 w. */
-/* 相当于 descMatch(/did$/) . */
+/* 相当于 descMatch(/did$/). */
 descMatch('did$'); /* 可匹配 w. */
-/* 相当于 descMatch(/^did/) . */
+/* 相当于 descMatch(/^did/). */
 descMatch('^did'); /* 不可匹配 w. */
-/* 相当于 descMatch(/l[ae]ng?/) . */
+/* 相当于 descMatch(/l[ae]ng?/). */
 descMatch('l[ae]ng?'); /* 可匹配 w. */
-/* 相当于 descMatch(/.+/) . */
+/* 相当于 descMatch(/.+/). */
 descMatch('.+'); /* 可匹配 w, 与 descMatch('') 效果相同. */
-/* 相当于 descMatch(/spl\.?.+$/) . */
+/* 相当于 descMatch(/spl\.?.+$/). */
 descMatch('spl\\.?.+$'); /* 可匹配 w. */
 ```
 
@@ -6277,8 +6470,8 @@ console.log(sel); // text("立即开始").minHeight(0.2).clickable(true).descMat
 
 因此 `wC` 与 `wA` 虽然使用了同样赋值语句, 但它们的 `sel` 并不相同.
 
-将语句 `let wB = sel.descMatch(/\w+/).findOnce()`  
-修改为 `let wB = sel.plus(descMatch(/\w+/)).findOnce()`  
-即可保持 `sel` 变量不变.  
+将语句 `let wB = sel.descMatch(/\w+/).findOnce()`<br>
+修改为 `let wB = sel.plus(descMatch(/\w+/)).findOnce()`<br>
+即可保持 `sel` 变量不变.<br>
 
 关于选择器的拼接, 可参阅 [plus](#m-plus) 与 [append](#m-append) 方法小节.

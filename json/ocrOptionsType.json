@@ -9,7 +9,7 @@
         {
           "textRaw": "[p?] region",
           "name": "[p?]_region",
-          "desc": "<ul>\n<li>{ <a href=\"omniTypes#omniregion\">OmniRegion</a> }</li>\n</ul>\n<p>指定 OCR 识别的区域.</p>\n<p>当 <code>region</code> 值为 <code>undefined</code> 时, 表示不指定区域限制.<br>当 <code>region</code> 值为 <code>null</code> 时, 表示空区域, 此时 <a href=\"ocr\">ocr</a> 模块的相关方法将返回空结果 (如空数组).</p>\n",
+          "desc": "<ul>\n<li>{ <a href=\"omniTypes#omniregion\">OmniRegion</a> }</li>\n</ul>\n<p>指定 OCR 识别的区域.</p>\n<p>当 <code>region</code> 值为 <code>undefined</code> 时, 表示不指定区域限制.<br>\n当 <code>region</code> 值为 <code>null</code> 时, 表示空区域, 此时 <a href=\"ocr\">ocr</a> 模块的相关方法将返回空结果 (如空数组).</p>\n",
           "modules": [
             {
               "textRaw": "number[]",
@@ -21,17 +21,177 @@
             {
               "textRaw": "AndroidRect",
               "name": "androidrect",
-              "desc": "<p>也可使用 <a href=\"androidRectType\">AndroidRect</a> 表示区域:</p>\n<pre><code class=\"lang-js\">/* 识别本地 test.png 图像文件中的文本内容, 区域为文本 &quot;点击开始&quot; 所在的控件矩形. */\n\nlet bounds = pickup(&#39;点击开始&#39;, &#39;bounds&#39;); /* bounds 是一个 AndroidRect 实例. */\nocr(&#39;test.png&#39;, { region: bounds });\n</code></pre>\n",
+              "desc": "<p>也可使用 <a href=\"androidRectType\">AndroidRect</a> 表示区域:</p>\n<pre><code class=\"lang-js\">/* 识别本地 test.png 图像文件中的文本内容, 区域为文本 &quot;点击开始&quot; 所在的控件矩形. */\n\nlet bounds = pickup(&#39;点击开始&#39;, &#39;bounds&#39;); /* bounds 是一个 AndroidRect 实例. */\nocr(&#39;test.png&#39;, { region: bounds });\n</code></pre>\n<hr>\n",
               "type": "module",
               "displayName": "AndroidRect"
             }
           ],
           "type": "module",
           "displayName": "[p?] region"
+        },
+        {
+          "textRaw": "[p?] engineId",
+          "name": "[p?]_engineid",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 插件引擎标识. 空字符串不会传递给插件.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] engineId"
+        },
+        {
+          "textRaw": "[p?] engine",
+          "name": "[p?]_engine",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 插件引擎名称. 空字符串不会传递给插件.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] engine"
+        },
+        {
+          "textRaw": "[p?] variant",
+          "name": "[p?]_variant",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 引擎变体.</p>\n<p>Rapid OCR 模式会将 <code>v3</code> 和 <code>v6</code> 分别规范化为 <code>pp-ocrv3</code> 和 <code>pp-ocrv6</code>.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] variant"
+        },
+        {
+          "textRaw": "[p?] profile",
+          "name": "[p?]_profile",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 插件配置档案. 空字符串不会传递给插件.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] profile"
+        },
+        {
+          "textRaw": "[p?] useRaw",
+          "name": "[p?]_useraw",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将原始图像直接传递给 OCR 插件.</p>\n<p>此选项仅在 Android API 27 及以上生效.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] useRaw"
+        },
+        {
+          "textRaw": "[p?] raw",
+          "name": "[p?]_raw",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><a href=\"#p-useraw\">useRaw</a> 的兼容别名. <code>raw</code> 与 <code>useRaw</code> 任一为 <code>true</code> 时启用原始图像传递.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] raw"
+        },
+        {
+          "textRaw": "[p?] imageQuality",
+          "name": "[p?]_imagequality",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>-1</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定传递给 OCR 插件的图像质量. 仅当值大于 <code>0</code> 时传递.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] imageQuality"
+        },
+        {
+          "textRaw": "[p?] imageFormat",
+          "name": "[p?]_imageformat",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>&quot;&quot;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定传递给 OCR 插件的图像格式. 空字符串不会传递给插件.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] imageFormat"
         }
       ],
       "type": "module",
       "displayName": "OcrOptions"
+    },
+    {
+      "textRaw": "Paddle 与 Rapid OCR 选项",
+      "name": "paddle_与_rapid_ocr_选项",
+      "desc": "<p>以下选项同时适用于 <code>paddle</code> 和 <code>rapid</code> 模式.</p>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] detLongSize",
+          "name": "[p?]_detlongsize",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定文本检测输入图像的长边尺寸.</p>\n<p>Paddle OCR 模式的默认值为 <code>0</code>. Rapid OCR 模式将此值作为 <a href=\"#p-maxsidelen\">maxSideLen</a> 的后备值, 最终值小于等于 <code>0</code> 时采用 <code>1024</code>.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] detLongSize"
+        },
+        {
+          "textRaw": "[p?] scoreThreshold",
+          "name": "[p?]_scorethreshold",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定识别结果的置信度阈值.</p>\n<p>Paddle OCR 模式的默认值为 <code>-1</code>. Rapid OCR 模式未指定此选项时采用 <a href=\"#p-boxscorethresh\">boxScoreThresh</a> 的值.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] scoreThreshold"
+        }
+      ],
+      "type": "module",
+      "displayName": "Paddle 与 Rapid OCR 选项"
+    },
+    {
+      "textRaw": "Paddle OCR 选项",
+      "name": "paddle_ocr_选项",
+      "desc": "<p>以下选项适用于 <code>paddle</code> 模式.</p>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] cpuThreadNum",
+          "name": "[p?]_cputhreadnum",
+          "desc": "<ul>\n<li>[ <code>4</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定 OCR 使用的 CPU 线程数.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] cpuThreadNum"
+        },
+        {
+          "textRaw": "[p?] useSlim",
+          "name": "[p?]_useslim",
+          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否使用精简模型.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] useSlim"
+        },
+        {
+          "textRaw": "[p?] useOpenCL",
+          "name": "[p?]_useopencl",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用 OpenCL.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] useOpenCL"
+        },
+        {
+          "textRaw": "[p?] mergeLine",
+          "name": "[p?]_mergeline",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将同一文本行的识别结果合并.</p>\n<p>当 <a href=\"#p-splitwords\">splitWords</a> 或 <a href=\"#p-usewordsegmentation\">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] mergeLine"
+        },
+        {
+          "textRaw": "[p?] splitWords",
+          "name": "[p?]_splitwords",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否保留按词拆分的结果. 当前实现使用此选项关闭 <a href=\"#p-mergeline\">mergeLine</a>.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] splitWords"
+        },
+        {
+          "textRaw": "[p?] useWordSegmentation",
+          "name": "[p?]_usewordsegmentation",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否保留分词结果. 当前实现使用此选项关闭 <a href=\"#p-mergeline\">mergeLine</a>.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] useWordSegmentation"
+        },
+        {
+          "textRaw": "[p?] detLimitSideLen",
+          "name": "[p?]_detlimitsidelen",
+          "desc": "<ul>\n<li>[ <code>0</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定传递给 Paddle OCR 插件的文本检测边长限制. 仅当值大于 <code>0</code> 时传递.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] detLimitSideLen"
+        }
+      ],
+      "type": "module",
+      "displayName": "Paddle OCR 选项"
+    },
+    {
+      "textRaw": "Rapid OCR 选项",
+      "name": "rapid_ocr_选项",
+      "desc": "<p>以下选项适用于 <code>rapid</code> 模式.</p>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] maxSideLen",
+          "name": "[p?]_maxsidelen",
+          "desc": "<ul>\n<li>[ <code>1024</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定文本检测输入图像的最大边长.</p>\n<p>未指定时先采用 <a href=\"#p-detlongsize\">detLongSize</a> 的值. 最终值小于等于 <code>0</code> 时采用 <code>1024</code>.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] maxSideLen"
+        },
+        {
+          "textRaw": "[p?] boxScoreThresh",
+          "name": "[p?]_boxscorethresh",
+          "desc": "<ul>\n<li>[ <code>0.5</code> ] { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>指定文本框置信度阈值.</p>\n",
+          "type": "module",
+          "displayName": "[p?] boxScoreThresh"
+        }
+      ],
+      "type": "module",
+      "displayName": "Rapid OCR 选项"
     }
   ]
 }

@@ -4,12 +4,12 @@
     {
       "textRaw": "Base64",
       "name": "base64",
-      "desc": "<p>Base64 是一种编码方式, 同时可作为一种数据的存储格式, 并非严格意义上的加密与解密.</p>\n<p>base64 模块主要用于对数据进行 Base64 编码及解码.</p>\n<blockquote>\n<p>注: 与 <a href=\"crypto\">crypto</a> 模块不同, crypto 模块主要用于信息的加密与解密.</p>\n</blockquote>\n<blockquote>\n<p>参阅:<br><a href=\"https://en.wikipedia.org/wiki/Base64\">Wikipedia (英)</a> / <a href=\"https://zh.wikipedia.org/wiki/Base64\">Wikipedia (中)</a><br><a href=\"http://www.ruanyifeng.com/blog/2008/06/base64.html\">Base64 笔记 (from 阮一峰的网络日志)</a><br><a href=\"https://juejin.cn/post/6887498543494660109\">Base64 是加密算法吗 (from 稀土掘金)</a></p>\n</blockquote>\n",
+      "desc": "<p>Base64 是一种编码方式, 同时可作为一种数据的存储格式, 并非严格意义上的加密与解密.</p>\n<p>base64 模块主要用于对数据进行 Base64 编码及解码.</p>\n<blockquote>\n<p>注: 与 <a href=\"crypto\">crypto</a> 模块不同, crypto 模块主要用于信息的加密与解密.</p>\n</blockquote>\n<blockquote>\n<p>参阅:<br>\n<a href=\"https://en.wikipedia.org/wiki/Base64\">Wikipedia (英)</a> / <a href=\"https://zh.wikipedia.org/wiki/Base64\">Wikipedia (中)</a><br>\n<a href=\"http://www.ruanyifeng.com/blog/2008/06/base64.html\">Base64 笔记 (from 阮一峰的网络日志)</a><br>\n<a href=\"https://juejin.cn/post/6887498543494660109\">Base64 是加密算法吗 (from 稀土掘金)</a></p>\n</blockquote>\n",
       "modules": [
         {
           "textRaw": "可逆性",
           "name": "可逆性",
-          "desc": "<p>Base64 是一种可逆的编码方式:</p>\n<pre><code class=\"lang-js\">console.log(base64.decode(base64.encode(&#39;orange&#39;))); // orange\nconsole.log(base64.decode(base64.encode(&#39;简体中文&#39;))); // 简体中文\n</code></pre>\n<p>但需注意参数的字符编码方式 (默认为 <code>UTF-8</code>), 当存在超出编码表示范围的字符时, 可逆性将遭到破坏:</p>\n<pre><code class=\"lang-js\">/* us-ascii 编码无法表示 &quot;出&quot; 和 &quot;口&quot;. */\nconsole.log(base64.decode(base64.encode(&#39;E2 出口&#39;, &#39;us-ascii&#39;), &#39;us-ascii&#39;)); // E2 ??\n</code></pre>\n<p>编解码使用了不同的编码方式, 也可能导致可逆性失效:</p>\n<pre><code class=\"lang-js\">/* utf-16 与 utf-8 不一致. */\nconsole.log(base64.decode(base64.encode(&#39;简体中文&#39;, &#39;utf-16&#39;), &#39;utf-8&#39;)); // ��{�OSN-e�\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">base64</p>\n\n<hr>\n",
+          "desc": "<p>Base64 是一种可逆的编码方式:</p>\n<pre><code class=\"lang-js\">console.log(base64.decode(base64.encode(&#39;orange&#39;))); // orange\nconsole.log(base64.decode(base64.encode(&#39;简体中文&#39;))); // 简体中文.\n</code></pre>\n<p>但需注意参数的字符编码方式 (默认为 <code>UTF-8</code>), 当存在超出编码表示范围的字符时, 可逆性将遭到破坏:</p>\n<pre><code class=\"lang-js\">/* us-ascii 编码无法表示 &quot;出&quot; 和 &quot;口&quot;. */\nconsole.log(base64.decode(base64.encode(&#39;E2 出口&#39;, &#39;us-ascii&#39;), &#39;us-ascii&#39;)); // E2 ??\n</code></pre>\n<p>编解码使用了不同的编码方式, 也可能导致可逆性失效:</p>\n<pre><code class=\"lang-js\">/* utf-16 与 utf-8 不一致. */\nconsole.log(base64.decode(base64.encode(&#39;简体中文&#39;, &#39;utf-16&#39;), &#39;utf-8&#39;)); // ��{�OSN-e�\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">base64</p>\n\n<hr>\n",
           "type": "module",
           "displayName": "可逆性"
         },
@@ -21,27 +21,8 @@
               "textRaw": "encode(o, encoding?)",
               "type": "method",
               "name": "encode",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 待编码数据</li>\n<li><strong>[ encoding ]</strong> { <a href=\"dataTypes#standardcharset\">StandardCharset</a> } - 字符编码, 默认使用系统字符集</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>对数据进行 Base64 编码.</p>\n<p>字符集名称匹配忽略空白, 标点和大小写. 未知字符集会抛出参数异常.</p>\n<pre><code class=\"lang-js\">/* 字符串. */\n\nconsole.log(base64.encode(&#39;hello&#39;, &#39;iso-8859-1&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;us-ascii&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-8&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16&#39;)); // /v8AaABlAGwAbABv\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16be&#39;)); // AGgAZQBsAGwAbw==\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16le&#39;)); // aABlAGwAbABvAA==\n\n/* JavaScript 字节数组. */\n\nconsole.log(base64.encode([ 104, 101, 108, 108, 111 ], &#39;utf-8&#39;)); // aGVsbG8=\n\n/* Java 字节数组. */\n\nconsole.log(base64.encode(new java.lang.String(&#39;hello&#39;).getBytes(), &#39;utf-8&#39;)); // aGVsbG8=\n\nlet jsArr = [ 104, 101, 108, 108, 111 ];\nlet javaArr = util.java.array(&#39;byte&#39;, jsArr.length);\njsArr.forEach((o, i) =&gt; javaArr[i] = o);\nconsole.log(base64.encode(javaArr, &#39;utf-8&#39;)); /* 效果同上. */\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "textRaw": "**o** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待编码数据 ",
-                      "name": "**o**",
-                      "type": " [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) ",
-                      "desc": "待编码数据"
-                    },
-                    {
-                      "textRaw": "**[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码 ",
-                      "name": "**[",
-                      "desc": "encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码"
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } ",
-                      "name": "<ins>**returns**</ins>",
-                      "type": " [string](dataTypes#string) "
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -52,8 +33,7 @@
                     }
                   ]
                 }
-              ],
-              "desc": "<p>对数据进行 Base64 编码.</p>\n<pre><code class=\"lang-js\">/* 字符串. */\n\nconsole.log(base64.encode(&#39;hello&#39;, &#39;iso-8859-1&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;us-ascii&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-8&#39;)); // aGVsbG8=\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16&#39;)); // /v8AaABlAGwAbABv\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16be&#39;)); // AGgAZQBsAGwAbw==\nconsole.log(base64.encode(&#39;hello&#39;, &#39;utf-16le&#39;)); // aABlAGwAbABvAA==\n\n/* JavaScript 字节数组. */\n\nconsole.log(base64.encode([ 104, 101, 108, 108, 111 ], &#39;utf-8&#39;)); // aGVsbG8=\n\n/* Java 字节数组. */\n\nconsole.log(base64.encode(new java.lang.String(&#39;hello&#39;).getBytes(), &#39;utf-8&#39;)); // aGVsbG8=\n\nlet jsArr = [ 104, 101, 108, 108, 111 ];\nlet javaArr = util.java.array(&#39;byte&#39;, jsArr.length);\njsArr.forEach((o, i) =&gt; javaArr[i] = o);\nconsole.log(base64.encode(javaArr, &#39;utf-8&#39;)); /* 效果同上. */\n</code></pre>\n"
+              ]
             }
           ],
           "type": "module",
@@ -67,27 +47,8 @@
               "textRaw": "decode(o, encoding?)",
               "type": "method",
               "name": "decode",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>o</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#jsbytearray\">JsByteArray</a> | <a href=\"dataTypes#bytearray\">ByteArray</a> } - 待解码数据</li>\n<li><strong>[ encoding ]</strong> { <a href=\"dataTypes#standardcharset\">StandardCharset</a> } - 解码结果的字符编码, 默认使用系统字符集</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>对数据进行 Base64 解码.</p>\n<p>字符串输入固定按 US-ASCII 转换为 Base64 字节; <code>encoding</code> 只控制解码后字节到返回字符串的转换. Java 或 JavaScript 字节数组会原样作为 Base64 字节.</p>\n<p>字符集名称匹配忽略空白, 标点和大小写. 未知字符集会抛出参数异常.</p>\n<pre><code class=\"lang-js\">/* 字符串. */\n\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;iso-8859-1&#39;)); // hello\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;us-ascii&#39;)); // hello\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;utf-8&#39;)); // hello\nconsole.log(base64.decode(&#39;/v8AaABlAGwAbABv&#39;, &#39;utf-16&#39;)); // hello\nconsole.log(base64.decode(&#39;AGgAZQBsAGwAbw==&#39;, &#39;utf-16be&#39;)); // hello\nconsole.log(base64.decode(&#39;aABlAGwAbABvAA==&#39;, &#39;utf-16le&#39;)); // hello\n\n/* JavaScript 字节数组. */\n\nconsole.log(base64.decode([ 97, 71, 86, 115, 98, 71, 56, 61 ], &#39;utf-8&#39;)); // hello\n\n/* Java 字节数组. */\n\nconsole.log(base64.decode(new java.lang.String(&#39;aGVsbG8=&#39;).getBytes(), &#39;utf-8&#39;)); // hello\n\nlet jsArr = [ 97, 71, 86, 115, 98, 71, 56, 61 ];\nlet javaArr = util.java.array(&#39;byte&#39;, jsArr.length);\njsArr.forEach((o, i) =&gt; javaArr[i] = o);\nconsole.log(base64.decode(javaArr, &#39;utf-8&#39;)); /* 效果同上. */\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "textRaw": "**o** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待解码数据 ",
-                      "name": "**o**",
-                      "type": " [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) ",
-                      "desc": "待解码数据"
-                    },
-                    {
-                      "textRaw": "**[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码 ",
-                      "name": "**[",
-                      "desc": "encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码"
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } ",
-                      "name": "<ins>**returns**</ins>",
-                      "type": " [string](dataTypes#string) "
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -98,8 +59,7 @@
                     }
                   ]
                 }
-              ],
-              "desc": "<p>对数据进行 Base64 解码.</p>\n<pre><code class=\"lang-js\">/* 字符串. */\n\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;iso-8859-1&#39;)); // hello\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;us-ascii&#39;)); // hello\nconsole.log(base64.decode(&#39;aGVsbG8=&#39;, &#39;utf-8&#39;)); // hello\nconsole.log(base64.decode(&#39;/v8AaABlAGwAbABv&#39;, &#39;utf-16&#39;)); // hello\nconsole.log(base64.decode(&#39;AGgAZQBsAGwAbw==&#39;, &#39;utf-16be&#39;)); // hello\nconsole.log(base64.decode(&#39;aABlAGwAbABvAA==&#39;, &#39;utf-16le&#39;)); // hello\n\n/* JavaScript 字节数组. */\n\nconsole.log(base64.decode([ 97, 71, 86, 115, 98, 71, 56, 61 ], &#39;utf-8&#39;)); // hello\n\n/* Java 字节数组. */\n\nconsole.log(base64.decode(new java.lang.String(&#39;aGVsbG8=&#39;).getBytes(), &#39;utf-8&#39;)); // hello\n\nlet jsArr = [ 97, 71, 86, 115, 98, 71, 56, 61 ];\nlet javaArr = util.java.array(&#39;byte&#39;, jsArr.length);\njsArr.forEach((o, i) =&gt; javaArr[i] = o);\nconsole.log(base64.decode(javaArr, &#39;utf-8&#39;)); /* 效果同上. */\n</code></pre>\n"
+              ]
             }
           ],
           "type": "module",

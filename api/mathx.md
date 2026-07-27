@@ -22,8 +22,8 @@ console.log(typeof Math.sum); // "function"
 - 在脚本中加入代码片段: `plugins.extendAll();` 或 `plugins.extend('Math');`
 - AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]
 
-当上述应用设置启用时, 所有脚本均默认启用内置扩展.  
-当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.  
+当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>
+当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>
 内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.
 
 > 注: 因 Mathx 所有属性及方法均为 "针对对象的内置对象扩展", 在启用内置对象扩展时, 使用方法仅仅是 Mathx 与 Math 的差别, 故示例代码中将不再赘述相关示例, 但别名方法例外 (如 min 的别名 mini, max 的别名 maxi 等).
@@ -34,9 +34,57 @@ console.log(typeof Math.sum); // "function"
 
 ---
 
+## [m] randomInt
+
+### randomInt(...range)
+
+**`6.6.0`** **`Global`** **`xObject`**
+
+- **...range** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 随机范围
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 范围内随机整数
+
+返回范围内的随机整数, 起点和止点均包含在结果范围内. 参数中的数组会被递归展平.
+
+- 无参数时, 范围为 JavaScript 安全整数的完整范围.
+- 只有一个参数时, 以 `0` 和该参数作为范围端点.
+- 有多个参数时, 以全部有效数字的最小值和最大值作为范围端点. 下界向上取整, 上界向下取整.
+
+```js
+console.log(randomInt(1, 10));
+console.log(Mathx.randomInt([ 1, 5 ], 10));
+```
+
+启用 Math 内置扩展后也可调用 `Math.randomInt`. 旧名称 `Mathx.randInt` 仍可用, 但已弃用.
+
+## [m] randomFloat
+
+### randomFloat(...range)
+
+**`6.6.0`** **`Global`** **`xObject`**
+
+- **...range** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 随机范围
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 范围内随机浮点数
+
+返回范围内的随机浮点数. 参数中的数组会被递归展平.
+
+- 无参数时, 行为与 `Math.random()` 相同.
+- 只有一个参数时, 以 `0` 和该参数作为范围端点.
+- 有多个参数时, 以全部有效数字的最小值和最大值作为范围端点.
+
+```js
+console.log(randomFloat(1, 10));
+console.log(Mathx.randomFloat([ -1, 1 ]));
+```
+
+启用 Math 内置扩展后也可调用 `Math.randomFloat`. `Mathx.random` 是此方法的别名. 旧名称 `Mathx.randFloat` 仍可用, 但已弃用.
+
 ## [m] randInt
 
 randInt 用于返回一个指定范围内的随机整数.
+
+**`DEPRECATED`**
+
+此方法是 [randomInt](#m-randomint) 的旧名称.
 
 因 NaN 不属于整数范畴, 故 randInt 内部实现对范围数值中出现的 NaN 做了过滤处理, 进而使 NaN 失去了常见的传染性.
 
@@ -83,8 +131,8 @@ console.log(Mathx.randInt(15, 15)); // 15
 - **stop** { [number](dataTypes#number) } - 范围止点 (含)
 - <ins>**returns**</ins> { [number](dataTypes#number) } - 范围内随机整数
 
-返回一个指定范围内的随机整数, stop 参数作为止点, 0 作为起点.  
-相当于 `randInt(0, stop)`.  
+返回一个指定范围内的随机整数, stop 参数作为止点, 0 作为起点.<br>
+相当于 `randInt(0, stop)`.<br>
 当 stop 为负数时, 起止点将自动交换.
 
 ```js
@@ -247,6 +295,24 @@ console.log(Mathx.avg([ 1, 2, [ 3 ] ])); // 2
 console.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 2)); // 0.2
 console.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 10)); // 0.203
 console.log(Mathx.avg([ 0.1, 0.2, 0.309 ], 0)); // 0
+```
+
+## [m] mean
+
+### mean(...numbers)
+
+**`6.6.0`** **`xObject`**
+
+- **...numbers** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 待计算的数字
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 算术平均数
+
+返回全部参数递归展平后的算术平均数. `avg` 是此方法的兼容别名.
+
+当参数均为数组时, 最后一个独立的数字参数作为保留小数位数.
+
+```js
+console.log(Mathx.mean(1, 2, 3)); // 2
+console.log(Mathx.mean([ 1, 2, 3 ], 2)); // 2
 ```
 
 ## [m] median
@@ -460,6 +526,22 @@ console.log(Mathx.cv([ 0.1, 0.2, 0.309 ], 10)); // 0.5149373973
 console.log(Mathx.cv([ 0.1, 0.2, 0.309 ], 0)); // 1
 ```
 
+## [m] mode
+
+### mode(...numbers)
+
+**`6.6.0`** **`xObject`**
+
+- **...numbers** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 待计算的数字
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 众数
+
+返回全部参数递归展平后的第一个众数. 出现多个相同最高频次的值时, 只返回实现找到的第一个值. 任一元素转换后为 `NaN` 时返回 `NaN`.
+
+```js
+console.log(Mathx.mode(1, 2, 2, 3)); // 2
+console.log(Mathx.mode([ 4, 4 ], [ 5, 6 ])); // 4
+```
+
 ## [m] max
 
 最大值.
@@ -604,6 +686,108 @@ console.log(Mathx.min([ 0.1, 0.2, 0.309 ], 0)); // 0
 
 /* 相当于无参调用 Math.min(). */
 console.log(Mathx.min([])); // Infinity
+```
+
+## [m] logMn
+
+### logMn(base, antilogarithm, fraction?)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 对数的底数
+- **antilogarithm** { [number](dataTypes#number) } - 真数
+- **[ fraction = 13 ]** { [number](dataTypes#number) } - 保留小数位数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 对数
+
+计算以 `base` 为底的 `antilogarithm` 的对数, 并按 `fraction` 保留小数位数.
+
+```js
+console.log(Mathx.logMn(2, 8)); // 3
+console.log(Mathx.logMn(10, 2, 4)); // 0.301
+```
+
+## [m] floorLog
+
+### floorLog(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 对数的底数
+- **antilogarithm** { [number](dataTypes#number) } - 真数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 向下取整后的对数
+
+```js
+console.log(Mathx.floorLog(2, 10)); // 3
+```
+
+## [m] ceilLog
+
+### ceilLog(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 对数的底数
+- **antilogarithm** { [number](dataTypes#number) } - 真数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 向上取整后的对数
+
+```js
+console.log(Mathx.ceilLog(2, 10)); // 4
+```
+
+## [m] roundLog
+
+### roundLog(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 对数的底数
+- **antilogarithm** { [number](dataTypes#number) } - 真数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 四舍五入后的对数
+
+```js
+console.log(Mathx.roundLog(2, 10)); // 3
+```
+
+## [m] floorPow
+
+### floorPow(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 幂的底数
+- **antilogarithm** { [number](dataTypes#number) } - 参照值
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 不大于参照值的相邻整数次幂
+
+```js
+console.log(Mathx.floorPow(2, 10)); // 8
+```
+
+## [m] ceilPow
+
+### ceilPow(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 幂的底数
+- **antilogarithm** { [number](dataTypes#number) } - 参照值
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 不小于参照值的相邻整数次幂
+
+```js
+console.log(Mathx.ceilPow(2, 10)); // 16
+```
+
+## [m] roundPow
+
+### roundPow(base, antilogarithm)
+
+**`6.6.0`** **`xObject`**
+
+- **base** { [number](dataTypes#number) } - 幂的底数
+- **antilogarithm** { [number](dataTypes#number) } - 参照值
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 指数四舍五入后的相邻整数次幂
+
+```js
+console.log(Mathx.roundPow(2, 10)); // 8
 ```
 
 ## [m] dist

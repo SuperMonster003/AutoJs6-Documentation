@@ -1,232 +1,351 @@
 # 引擎 (Engines)
 
----
-
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+engines 模块用于启动, 查询和停止脚本引擎, 并监听全部脚本引擎的生命周期事件.
 
 ---
 
-engines模块包含了一些与脚本环境、脚本运行、脚本引擎有关的函数, 包括运行其他脚本, 关闭脚本等.
+<p style="font: bold 2em sans-serif; color: #FF7043">engines</p>
 
-例如, 获取脚本所在目录：
+---
 
+## 执行配置
+
+`execScript`, `execScriptFile` 和 `execAutoFile` 的 `config` 参数支持以下属性:
+
+- **[ workingDirectory = engines.myEngine().cwd() ]** { [string](dataTypes#string) } - 工作目录
+- **[ path = engines.myEngine().cwd() ]** { [string](dataTypes#string) } - `workingDirectory` 的兼容别名
+- **[ delay = 0 ]** { [number](dataTypes#number) } - 首次执行前的延迟, 单位为毫秒
+- **[ interval = 0 ]** { [number](dataTypes#number) } - 重复执行之间的间隔, 单位为毫秒
+- **[ loopTimes = 1 ]** { [number](dataTypes#number) } - 执行次数. `0` 表示持续执行
+- **[ arguments = {} ]** { [object](dataTypes#object) } - 传给新引擎的参数
+
+`arguments` 可在新引擎中通过 `engines.myEngine().execArgv` 读取.
+
+## [m] execScript
+
+### execScript(name, script, config?)
+
+- **name** { [string](dataTypes#string) } - 脚本名称
+- **script** { [string](dataTypes#string) } - JavaScript 源码
+- **[ config = {} ]** {{
+    - workingDirectory?: [string](dataTypes#string);
+    - path?: [string](dataTypes#string);
+    - delay?: [number](dataTypes#number);
+    - interval?: [number](dataTypes#number);
+    - loopTimes?: [number](dataTypes#number);
+    - arguments?: [object](dataTypes#object);
+- }} - 执行配置
+- <ins>**returns**</ins> { [ScriptExecution](#scriptexecution) } - 脚本执行对象
+
+在新引擎中执行字符串源码.
+
+```js
+let execution = engines.execScript('worker', `
+    console.log(engines.myEngine().execArgv.message);
+`, {
+    arguments: { message: 'hello' },
+});
+console.log(execution.getId());
 ```
-toast(engines.myEngine().cwd());
-```
 
-## engines.execScript(name, script[, config])
+## [m] execScriptFile
 
-* `name` {string} 要运行的脚本名称. 这个名称和文件名称无关, 只是在任务管理中显示的名称.
-* `script` {string} 要运行的脚本内容.
-* `config` {Object} 运行配置项
-    * `delay` {number} 延迟执行的毫秒数, 默认为0
-    * `loopTimes` {number} 循环运行次数, 默认为1. 0为无限循环.
-    * `interval` {number} 循环运行时两次运行之间的时间间隔, 默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录. 这些路径会用于require时寻找模块文件.
+### execScriptFile(path, config?)
 
-在新的脚本环境中运行脚本script. 返回一个[ScriptExectuion](#engines_scriptexecution)对象.
+- **path** { [string](dataTypes#string) } - JavaScript 文件路径
+- **[ config = {} ]** { [object](dataTypes#object) } - [执行配置](#执行配置)
+- <ins>**returns**</ins> { [ScriptExecution](#scriptexecution) } - 脚本执行对象
 
-所谓新的脚本环境, 指定是, 脚本中的变量和原脚本的变量是不共享的, 并且, 脚本会在新的线程中运行.
+在新引擎中执行 JavaScript 文件. 相对路径按当前脚本运行时路径解析.
 
-最简单的例子如下：
-
-```
-engines.execScript("hello world", "toast('hello world')");
-```
-
-如果要循环运行, 则：
-
-```
-//每隔3秒运行一次脚本, 循环10次
-engines.execScript("hello world", "toast('hello world')", {
-    loopTimes: 10,
-    interval: 3000
+```js
+engines.execScriptFile('./worker.js', {
+    workingDirectory: files.cwd(),
+    delay: 100,
+    loopTimes: 1,
 });
 ```
 
-用字符串来编写脚本非常不方便, 可以结合 `Function.toString()`的方法来执行特定函数:
+## [m] execAutoFile
 
-```
-function helloWorld(){
-    //注意, 这里的变量和脚本主体的变量并不共享
-    toast("hello world");
-}
-engines.execScript("hello world", "helloWorld();\n" + helloWorld.toString());
-```
+### execAutoFile(path, config?)
 
-如果要传递变量, 则可以把这些封装成一个函数：
+- **path** { [string](dataTypes#string) } - JavaScript 文件路径
+- **[ config = {} ]** { [object](dataTypes#object) } - [执行配置](#执行配置)
+- <ins>**returns**</ins> { [ScriptExecution](#scriptexecution) } - 脚本执行对象
 
-```
-function exec(action, args){
-    args = args || {};
-    engines.execScript(action.name, action.name + "(" + JSON.stringify(args) + ");\n" + action.toString());
-}
+以自动化脚本模式在新引擎中执行 JavaScript 文件. 此模式会在执行前确保无障碍服务已启动.
 
-//要执行的函数, 是一个简单的加法
-function add(args){
-    toast(args.a + args.b);
-}
+## [m] myEngine
 
-//在新的脚本环境中执行 1 + 2
-exec(add, {a: 1, b:2});
-```
+### myEngine()
 
-## engines.execScriptFile(path[, config])
+- <ins>**returns**</ins> { [ScriptEngine](#scriptengine) } - 当前脚本引擎
 
-* `path` {string} 要运行的脚本路径.
-* `config` {Object} 运行配置项
-    * `delay` {number} 延迟执行的毫秒数, 默认为0
-    * `loopTimes` {number} 循环运行次数, 默认为1. 0为无限循环.
-    * `interval` {number} 循环运行时两次运行之间的时间间隔, 默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录. 这些路径会用于require时寻找模块文件.
+## [m] all
 
-在新的脚本环境中运行脚本文件path. 返回一个[ScriptExecution](#ScriptExecution)对象.
+### all()
 
-```
-engines.execScriptFile("/sdcard/脚本/1.js");
-```
+- <ins>**returns**</ins> { [ScriptEngine](#scriptengine)[[]](dataTypes#array) } - 当前存在的脚本引擎数组
 
-## engines.execAutoFile(path[, config])
+## [m] getEngines
 
-* `path` {string} 要运行的录制文件路径.
-* `config` {Object} 运行配置项
-    * `delay` {number} 延迟执行的毫秒数, 默认为0
-    * `loopTimes` {number} 循环运行次数, 默认为1. 0为无限循环.
-    * `interval` {number} 循环运行时两次运行之间的时间间隔, 默认为0
-    * `path` {Array} | {string} 指定脚本运行的目录. 这些路径会用于require时寻找模块文件.
+### getEngines()
 
-在新的脚本环境中运行录制文件path. 返回一个[ScriptExecution](#ScriptExecution)对象.
+- <ins>**returns**</ins> { java.util.Set&lt;[ScriptEngine](#scriptengine)&gt; } - 当前存在的脚本引擎集合
 
-```
-engines.execAutoFile("/sdcard/脚本/1.auto");
-```
+`getEngines` 返回 Java 集合. 需要 JavaScript 数组时使用 [all](#m-all).
 
-## engines.stopAll()
+## [m] stopAll
 
-停止所有正在运行的脚本. 包括当前脚本自身.
+### stopAll()
 
-## engines.stopAllAndToast()
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 已请求停止的引擎数量
 
-停止所有正在运行的脚本并显示停止的脚本数量. 包括当前脚本自身.
+停止全部脚本引擎, 包括当前引擎.
 
-## engines.myEngine()
+## [m] stopAllAndToast
 
-返回当前脚本的脚本引擎对象([ScriptEngine](#engines_scriptengine))
+### stopAllAndToast()
 
-**[v4.1.0新增]**
-特别的, 该对象可以通过`execArgv`来获取他的运行参数, 包括外部参数、intent等. 例如：
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 已请求停止的引擎数量
 
-```
-log(engines.myEngine().execArgv);
+停止全部脚本引擎. 停止数量大于 `0` 时显示提示消息.
+
+## 引擎事件
+
+**`6.6.3`**
+
+engines 是一个 [EventEmitter](eventEmitterType). 生命周期事件会发送到当时存在的每个 JavaScript 引擎.
+
+### start
+
+- **engine** { [ScriptEngine](#scriptengine) } - 已启动的引擎
+
+脚本开始执行时触发.
+
+```js
+engines.on('start', (engine) => {
+    console.log(`started: ${engine.getId()}`);
+});
 ```
 
-普通脚本的运行参数通常为空, 通过定时任务的广播启动的则可以获取到启动的intent.
+### finish
 
-## engines.all()
+- **engine** { [ScriptEngine](#scriptengine) } - 已结束的引擎
 
-* 返回 {Array}
+脚本正常结束或异常处理完成时触发. 同一次结束随后还会依次触发兼容事件 `exit` 和 `stop`.
 
-返回当前所有正在运行的脚本的脚本引擎[ScriptEngine](#engines_scriptengine)的数组.
+### exit
 
-```
-log(engines.all());
-```
+- **engine** { [ScriptEngine](#scriptengine) } - 已结束的引擎
+
+`finish` 的兼容事件.
+
+### stop
+
+- **engine** { [ScriptEngine](#scriptengine) } - 已结束的引擎
+
+`finish` 的兼容事件.
+
+### exception
+
+- **engine** { [ScriptEngine](#scriptengine) } - 发生异常的引擎
+- **error** { [java.lang.Throwable](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html) } - 异常
+
+脚本发生未处理异常时触发. 随后还会触发兼容事件 `error`.
+
+### error
+
+- **engine** { [ScriptEngine](#scriptengine) } - 发生异常的引擎
+- **error** { [java.lang.Throwable](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html) } - 异常
+
+`exception` 的兼容事件.
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">ScriptExecution</p>
+
+---
 
 # ScriptExecution
 
-执行脚本时返回的对象, 可以通过他获取执行的引擎、配置等, 也可以停止这个执行.
+`execScript`, `execScriptFile` 和 `execAutoFile` 返回的脚本执行对象.
 
-要停止这个脚本的执行, 使用`exectuion.getEngine().forceStop()`.
+## [m#] ScriptExecution#getEngine
 
-## ScriptExecution.getEngine()
+### getEngine()
 
-返回执行该脚本的脚本引擎对象([ScriptEngine](#engines_scriptengine))
+- <ins>**returns**</ins> { [ScriptEngine](#scriptengine) } - 此次执行使用的脚本引擎
 
-## ScriptExecution.getConfig()
+## [m#] ScriptExecution#getSource
 
-返回该脚本的运行配置([ScriptConfig](#engines_scriptconfig))
+### getSource()
+
+- <ins>**returns**</ins> { org.autojs.autojs.script.ScriptSource } - 脚本源对象
+
+## [m#] ScriptExecution#getConfig
+
+### getConfig()
+
+- <ins>**returns**</ins> { [ExecutionConfig](#executionconfig) } - 执行配置
+
+## [m#] ScriptExecution#getListener
+
+### getListener()
+
+- <ins>**returns**</ins> { org.autojs.autojs.execution.ScriptExecutionListener } - 执行监听器
+
+## [m#] ScriptExecution#getId
+
+### getId()
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 执行 ID
+
+---
+
+<p style="font: bold 2em sans-serif; color: #FF7043">ScriptEngine</p>
+
+---
 
 # ScriptEngine
 
-脚本引擎对象.
+脚本引擎对象. `engines.myEngine()` 返回当前 JavaScript 引擎.
 
-## ScriptEngine.forceStop()
+## [m#] ScriptEngine#forceStop
 
-停止脚本引擎的执行.
+### forceStop()
 
-## ScriptEngine.cwd()
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-* 返回 {string}
+强制停止此脚本引擎.
 
-返回脚本执行的路径. 对于一个脚本文件而言为这个脚本所在的文件夹；对于其他脚本, 例如字符串脚本, 则为`null`或者执行时的设置值.
+## [m#] ScriptEngine#cwd
 
-## ScriptEngine.getSource()
+### cwd()
 
-* 返回 [ScriptSource](#engines_scriptsource)
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 工作目录
 
-返回当前脚本引擎正在执行的脚本对象.
+## [m#] ScriptEngine#getStartTime
 
+### getStartTime()
+
+**`6.7.0`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 引擎启动时间
+
+返回 Unix 时间戳, 单位为毫秒. 无法取得启动时间时返回 `0`.
+
+## [m#] ScriptEngine#getSource
+
+### getSource()
+
+- <ins>**returns**</ins> { org.autojs.autojs.script.ScriptSource | [null](dataTypes#null) } - 当前脚本源
+
+## [m#] ScriptEngine#getSourcePath
+
+### getSourcePath()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 脚本来源路径
+
+## [m#] ScriptEngine#getSourceUri
+
+### getSourceUri()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 脚本来源 URI
+
+## [m#] ScriptEngine#getSourceDirectory
+
+### getSourceDirectory()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 脚本来源目录或工作目录
+
+## [m#] ScriptEngine#getExecArgv
+
+### getExecArgv()
+
+- <ins>**returns**</ins> { [object](dataTypes#object) } - 启动参数
+
+在 JavaScript 中也可通过属性 `engine.execArgv` 读取.
+
+## [m#] ScriptEngine#getId
+
+### getId()
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 引擎 ID
+
+## [m#] ScriptEngine#isDestroyed
+
+### isDestroyed()
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 引擎是否已销毁
+
+## [m#] ScriptEngine#hasFeature
+
+### hasFeature(feature)
+
+- **feature** { [string](dataTypes#string) } - 脚本功能名称
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前脚本是否启用该功能
+
+## [m#] ScriptEngine#emit
+
+### emit(eventName, ...args)
+
+- **eventName** { [string](dataTypes#string) } - 事件名称
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 事件参数
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+向此引擎的 [events](events) 模块异步发送事件.
+
+```js
+let execution = engines.execScript('receiver', `
+    events.on('message', (value) => console.log(value));
+    setInterval(() => {}, 1000);
+`);
+setTimeout(() => execution.getEngine().emit('message', 'hello'), 100);
 ```
-log(engines.myEngine().getSource());
-```
 
-## ScriptEngine.emit(eventName[, ...args])
+---
 
-* `eventName` {string} 事件名称
-* `...args` {any} 事件参数
+<p style="font: bold 2em sans-serif; color: #FF7043">ExecutionConfig</p>
 
-向该脚本引擎发送一个事件, 该事件可以在该脚本引擎对应的脚本的events模块监听到并在脚本主线程执行事件处理.
+---
 
-例如脚本receiver.js的内容如下：
+# ExecutionConfig
 
-```
-//监听say事件
-events.on("say", function(words){
-    toastLog(words);
-});
-//保持脚本运行
-setInterval(()=>{}, 1000);
-```
+执行配置对象的常用属性.
 
-同一目录另一脚本可以启动他并发送该事件：
+## [p#] workingDirectory
 
-```
-//运行脚本
-var e = engines.execScriptFile("./receiver.js");
-//等待脚本启动
-sleep(2000);
-//向该脚本发送事件
-e.getEngine().emit("say", "你好");
-```
+- [ `""` ] { [string](dataTypes#string) } - 工作目录
 
-# ScriptConfig
+## [p#] delay
 
-脚本执行时的配置.
+- [ `0` ] { [number](dataTypes#number) } - 首次执行前的延迟, 单位为毫秒
 
-## delay
+## [p#] interval
 
-* {number}
+- [ `0` ] { [number](dataTypes#number) } - 重复执行之间的间隔, 单位为毫秒
 
-延迟执行的毫秒数
+## [p#] loopTimes
 
-## interval
+- [ `1` ] { [number](dataTypes#number) } - 执行次数. `0` 表示持续执行
 
-* {number}
+## [p#] arguments
 
-循环运行时两次运行之间的时间间隔
+- [ `{}` ] { [object](dataTypes#object) } - 启动参数
 
-## loopTimes
+## [m#] ExecutionConfig#getArgument
 
-* {number}
+### getArgument(key)
 
-循环运行次数
+- **key** { [string](dataTypes#string) } - 参数名称
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 参数值
 
-## getPath()
+## [m#] ExecutionConfig#setArgument
 
-* 返回 {Array}
+### setArgument(key, value)
 
-返回一个字符串数组表示脚本运行时模块寻找的路径.
-
-
-
+- **key** { [string](dataTypes#string) } - 参数名称
+- **value** { [any](dataTypes#any) } - 参数值
+- <ins>**returns**</ins> { [void](dataTypes#void) }

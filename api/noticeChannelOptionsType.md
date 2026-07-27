@@ -1,6 +1,6 @@
 # NoticeChannelOptions
 
-NoticeChannelOptions 是一个发送 AutoJs6 通知时用于设置 [渠道](notice#通知渠道) 的接口.  
+NoticeChannelOptions 是一个发送 AutoJs6 通知时用于设置 [渠道](notice#通知渠道) 的接口.<br>
 这些设置将一次性作为初始值应用到指定的渠道上.
 
 常见相关方法或属性:
@@ -24,7 +24,7 @@ NoticeChannelOptions 是一个发送 AutoJs6 通知时用于设置 [渠道](noti
 
 渠道 ID 不会在通知消息中体现, 也不会在 AutoJs6 的通知设置页面体现, 它仅用于在编写程序时关联唯一的通知渠道.
 
-当 `id` 不指定时, 其默认值的情况取决于 [config.useScriptNameAsDefaultChannelId](noticePresetConfigurationType#p-usescriptnameasdefaultchannelid) 配置值.  
+当 `id` 不指定时, 其默认值的情况取决于 [config.useScriptNameAsDefaultChannelId](noticePresetConfigurationType#p-usescriptnameasdefaultchannelid) 配置值.<br>
 配置值为 `true` 时, 渠道将以脚本文件全名进行创建和管理, 否则渠道将不作区分进行全局统一创建和管理.
 
 ```js
@@ -33,7 +33,7 @@ NoticeChannelOptions 是一个发送 AutoJs6 通知时用于设置 [渠道](noti
 notice.channel.create({ id: 'exercies' });
 notice('message', { channelId: 'exercise' }); /* 在 exercise 渠道上发送通知. */
 
-/* 不指定渠道 ID */
+/* 不指定渠道 ID. */
 
 /* 1. useScriptNameAsDefaultChannelId 启用 (默认). */
 notice.config({ useScriptNameAsDefaultChannelId: true });
@@ -178,6 +178,6 @@ notice.channel.create('channel_with_importance_none', {
 | 字符串           | 整形常量                                                                                       | 简述                                                           |
 |---------------|--------------------------------------------------------------------------------------------|--------------------------------------------------------------|
 | **'public'**  | <span style="white-space:nowrap">NotificationCompat.VISIBILITY_PUBLIC = 1</span>           | <span style="white-space:nowrap">显示通知完整内容.</span>            |
-| 'private'     | <span style="white-space:nowrap">NotificationCompat.VISIBILITY_PRIVATE = 0</span>          | <span style="white-space:nowrap">仅显示基本信息 (图标/内容/标题等).</span> |
+| 'private'     | <span style="white-space:nowrap">NotificationCompat.VISIBILITY_PRIVATE = 0</span>          | <span style="white-space:nowrap">仅显示基本信息 (图标 / 内容 / 标题等).</span> |
 | 'secret'      | <span style="white-space:nowrap">NotificationCompat.VISIBILITY_SECRET = -1</span>          | <span style="white-space:nowrap">不显示该通知任何部分.</span>          |
 | 'no_override' | <span style="white-space:nowrap">NotificationManager.VISIBILITY_NO_OVERRIDE = -1000</span> | <span style="white-space:nowrap">用户未指定 (由系统决定).</span>       |

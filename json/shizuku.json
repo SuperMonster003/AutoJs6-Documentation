@@ -4,7 +4,7 @@
     {
       "textRaw": "Shizuku",
       "name": "shizuku",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 30, 2023.</p>\n\n<hr>\n<p>通过 <a href=\"https://shizuku.rikka.app/introduction/\">Shizuku</a> 可以获得 ADB 特权并使用系统 API.</p>\n<p>使用 Shizuku 需满足以下全部条件</p>\n<ul>\n<li>设备已安装 <a href=\"https://github.com/RikkaApps/Shizuku/releases\">Shizuku 应用</a> (版本不低于 <code>11</code>)</li>\n<li>Shizuku 服务已启动 (参阅 <a href=\"https://shizuku.rikka.app/guide/setup/#start-shizuku\">Shizuku 用户手册</a>)</li>\n<li>AutoJs6 首页抽屉开启 Shizuku 权限开关</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">shizuku</p>\n\n<hr>\n",
+      "desc": "<p>通过 <a href=\"https://shizuku.rikka.app/introduction/\">Shizuku</a> 可以获得 ADB 特权并使用系统 API.</p>\n<p>使用 Shizuku 需满足以下全部条件:</p>\n<ul>\n<li>设备已安装 <a href=\"https://github.com/RikkaApps/Shizuku/releases\">Shizuku 应用</a> (版本不低于 <code>11</code>)</li>\n<li>Shizuku 服务已启动 (参阅 <a href=\"https://shizuku.rikka.app/guide/setup/#start-shizuku\">Shizuku 用户手册</a>)</li>\n<li>AutoJs6 首页抽屉开启 Shizuku 权限开关</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">shizuku</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] shizuku",
@@ -12,30 +12,42 @@
           "desc": "<p>shizuku 可作为全局对象使用:</p>\n<pre><code class=\"lang-js\">typeof shizuku; // &quot;function&quot;\ntypeof shizuku.execCommand; // &quot;function&quot;\n</code></pre>\n",
           "methods": [
             {
-              "textRaw": "shizuku(cmd)",
+              "textRaw": "shizuku(command, arguments?, withRoot?)",
               "type": "method",
               "name": "shizuku",
-              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>cmd</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行命令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shellResultType\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 执行命令.</p>\n<pre><code class=\"lang-js\">/* 模拟返回键. */\nshizuku(&#39;input keyevent 4&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_BACK}`); /* 同上. */\n\n/* 模拟电源键. */\nshizuku(&#39;input keyevent 26&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_POWER}`); /* 同上. */\n\n/* 点击屏幕坐标 (100, 120). */\nshizuku(&quot;input tap 100 120&quot;);\n\n/* 授予 AutoJs6 &quot;修改安全设置&quot; 权限. */\nshizuku(&#39;pm grant org.autojs.autojs6 android.permission.WRITE_SECURE_SETTINGS&#39;);\n\n/* 授予 AutoJs6 &quot;投影媒体&quot; 权限. */\nshizuku(&#39;appops set org.autojs.autojs6 PROJECT_MEDIA allow&#39;);\n\n/* 启用 AutoJs6 &quot;无障碍服务&quot;. */\nshizuku(&#39;settings put secure enabled_accessibility_services org.autojs.autojs6/org.autojs.autojs.core.accessibility.AccessibilityServiceUsher&#39;);\n\n/* 获取当前时间. */\nconsole.log(shizuku(&#39;date&#39;).result.trim());\n</code></pre>\n",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.6.0]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>command</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行命令</li>\n<li><strong>[ arguments ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 命令参数或兼容 Root 标志</li>\n<li><strong>[ withRoot = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 兼容 Root 标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shell#c-shellresult\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 同步执行命令.</p>\n<p>字符串形式的 <code>arguments</code> 使用 <code>|</code> 分隔参数, 对象形式会转换为命令行选项. 对象的特殊属性 <code>exit</code> 可在命令末尾追加退出与清理命令.</p>\n<p><code>arguments</code> 中的 <code>root</code> 和 <code>withRoot</code> 参数为与 <a href=\"shell\">shell</a> 共用签名的兼容标志. Shizuku 始终使用自身权限执行命令, 这些标志不会切换为 Root.</p>\n<pre><code class=\"lang-js\">/* 模拟返回键. */\nshizuku(&#39;input keyevent 4&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_BACK}`); /* 同上. */\n\n/* 模拟电源键. */\nshizuku(&#39;input keyevent 26&#39;);\nshizuku(`input keyevent ${KeyEvent.KEYCODE_POWER}`); /* 同上. */\n\n/* 点击屏幕坐标 (100, 120). */\nshizuku(&#39;input tap 100 120&#39;);\n\n/* 授予 AutoJs6 &quot;修改安全设置&quot; 权限. */\nshizuku(&#39;pm grant org.autojs.autojs6 android.permission.WRITE_SECURE_SETTINGS&#39;);\n\n/* 授予 AutoJs6 &quot;投影媒体&quot; 权限. */\nshizuku(&#39;appops set org.autojs.autojs6 PROJECT_MEDIA allow&#39;);\n\n/* 获取当前时间. */\nconsole.log(shizuku(&#39;date&#39;).result.trim());\n</code></pre>\n<p>使用 shizuku 启用 AutoJs6 无障碍服务 (共计 4 步):</p>\n<pre><code class=\"lang-js\">\n/* [ 1. 获取无障碍服务列表, 列表是一个字符串, 不同无障碍服务之间以 &quot;:&quot; 分隔. ] */\nlet services = shizuku(&#39;settings get secure enabled_accessibility_services&#39;).result.trim(); /* 结尾 &quot;\\n&quot; 可通过 trim() 方法去除. */\n\n/* [ 2. 确保无障碍服务列表中不存在 AutoJs6. ] */\nlet servicesWithoutAutoJs6 = services\n    .split(&#39;:&#39;) /* 通过 &quot;:&quot; 分割, 获取无障碍服务数组. */\n    .filter(it =&gt; !it.startsWith(`${autojs.packageName}/`)) /* 过滤可能的 AutoJs6 无障碍服务, 避免重复. */\n    .join(&#39;:&#39;); /* 重新组合过滤后的无障碍服务, 生成列表. */\n\n/* [ 3. 无障碍服务列表中加入 AutoJs6. ] */\nlet servicesWithAutoJs6 = (() =&gt; {\n    /* 无障碍服务格式: &quot;包名/服务类名&quot;. */\n    let serviceAutoJs6 = `${autojs.packageName}/${org.autojs.autojs.core.accessibility.AccessibilityServiceUsher.class.getName()}`;\n    return servicesWithoutAutoJs6.length &gt; 0 ? `${servicesWithoutAutoJs6}:${serviceAutoJs6}` : serviceAutoJs6;\n})();\n\n/* [ 4. 通过覆盖系统的无障碍服务列表, 使 AutoJs6 无障碍服务生效. ] */\nshizuku(`settings put secure enabled_accessibility_services ${servicesWithAutoJs6}`);\n\n/* 需特别留意, 如果只执行 shizuku(`settings put secure enabled_accessibility_services ${AutoJs6 包名}/${AutoJs6 服务类名}`), 系统将只启用 AutoJs6 无障碍服务, 其他应用的无障碍服务将全部关闭. */\n\n/* 另, 禁用 AutoJs6 无障碍服务, 只需执行上述示例的 [ 1, 2, 4 ] 步骤即可. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "cmd"
+                      "name": "command"
+                    },
+                    {
+                      "name": "arguments?"
+                    },
+                    {
+                      "name": "withRoot?"
                     }
                   ]
                 }
               ]
             },
             {
-              "textRaw": "shizuku(cmdList)",
+              "textRaw": "shizuku(commandList, arguments?, withRoot?)",
               "type": "method",
               "name": "shizuku",
-              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>cmdList</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 待执行的多行命令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shellResultType\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 一次性执行多行命令, 每行命令对应 <code>cmdList</code> 数组中的一个元素.</p>\n<pre><code class=\"lang-js\">shizuku([ &#39;cmd-a&#39;, &#39;cmd-b&#39;, &#39;cmd-c&#39; ]);\nshizuku(&#39;cmd-a\\ncmd-b\\ncmd-c&#39;); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.6.0]</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>commandList</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 待执行的多行命令</li>\n<li><strong>[ arguments ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 命令参数或兼容 Root 标志</li>\n<li><strong>[ withRoot = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 兼容 Root 标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shell#c-shellresult\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>使用 Shizuku 一次性执行多行命令. 数组元素以换行符连接后再拼接 <code>arguments</code>.</p>\n<pre><code class=\"lang-js\">shizuku([ &#39;cmd-a&#39;, &#39;cmd-b&#39;, &#39;cmd-c&#39; ]);\nshizuku(&#39;cmd-a\\ncmd-b\\ncmd-c&#39;); /* 同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "cmdList"
+                      "name": "commandList"
+                    },
+                    {
+                      "name": "arguments?"
+                    },
+                    {
+                      "name": "withRoot?"
                     }
                   ]
                 }
@@ -44,6 +56,151 @@
           ],
           "type": "module",
           "displayName": "[@] shizuku"
+        },
+        {
+          "textRaw": "[m] execCommand",
+          "name": "[m]_execcommand",
+          "methods": [
+            {
+              "textRaw": "execCommand(command, arguments?, withRoot?)",
+              "type": "method",
+              "name": "execCommand",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>command</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 命令或命令数组</li>\n<li><strong>[ arguments ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 命令参数或兼容 Root 标志</li>\n<li><strong>[ withRoot = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 兼容 Root 标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"shell#c-shellresult\">ShellResult</a> } - Shell 结果</li>\n</ul>\n<p>与直接调用 <code>shizuku(...)</code> 等价.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "command"
+                    },
+                    {
+                      "name": "arguments?"
+                    },
+                    {
+                      "name": "withRoot?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] execCommand"
+        },
+        {
+          "textRaw": "[m] getCommand",
+          "name": "[m]_getcommand",
+          "methods": [
+            {
+              "textRaw": "getCommand(command, arguments?, withRoot?)",
+              "type": "method",
+              "name": "getCommand",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>command</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 命令或命令数组</li>\n<li><strong>[ arguments ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 命令参数或兼容 Root 标志</li>\n<li><strong>[ withRoot = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 兼容 Root 标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 构造后的命令</li>\n</ul>\n<p>仅构造 Shizuku 将执行的命令字符串, 不执行命令. <code>withRoot</code> 以及 <code>arguments</code> 中的 <code>root</code> 不改变返回结果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "command"
+                    },
+                    {
+                      "name": "arguments?"
+                    },
+                    {
+                      "name": "withRoot?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getCommand"
+        },
+        {
+          "textRaw": "[m] kill",
+          "name": "[m]_kill",
+          "methods": [
+            {
+              "textRaw": "kill(app)",
+              "type": "method",
+              "name": "kill",
+              "desc": "<p><strong><code>6.6.1</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"dataTypes#string\">string</a> } - 应用名称或包名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否成功停止应用</li>\n</ul>\n<p>使用 <code>am force-stop</code> 停止应用. Shizuku 不可操作, 无法解析包名或命令退出码非 <code>0</code> 时返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] kill"
+        },
+        {
+          "textRaw": "[m] currentPackage",
+          "name": "[m]_currentpackage",
+          "methods": [
+            {
+              "textRaw": "currentPackage()",
+              "type": "method",
+              "name": "currentPackage",
+              "desc": "<p><strong><code>6.6.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 当前前台应用包名</li>\n</ul>\n<p>Shizuku 不可操作或查询失败时返回空字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentPackage"
+        },
+        {
+          "textRaw": "[m] currentActivity",
+          "name": "[m]_currentactivity",
+          "methods": [
+            {
+              "textRaw": "currentActivity()",
+              "type": "method",
+              "name": "currentActivity",
+              "desc": "<p><strong><code>6.6.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 当前前台 Activity 类名</li>\n</ul>\n<p>Shizuku 不可操作或查询失败时返回空字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentActivity"
+        },
+        {
+          "textRaw": "[m] currentComponent",
+          "name": "[m]_currentcomponent",
+          "methods": [
+            {
+              "textRaw": "currentComponent()",
+              "type": "method",
+              "name": "currentComponent",
+              "desc": "<p><strong><code>6.6.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 当前前台组件</li>\n</ul>\n<p>结果通常采用 <code>package/class</code> 形式. Shizuku 不可操作或查询失败时返回空字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] currentComponent"
+        },
+        {
+          "textRaw": "[p] state",
+          "name": "[p]_state",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>isInstalled: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>hasService: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isRunning: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>hasPermission: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isOperational: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>返回 Shizuku 状态快照. 每次读取都会创建一个新对象:</p>\n<ul>\n<li><code>isInstalled</code> 表示设备上是否存在可启动的 Shizuku 应用</li>\n<li><code>hasService</code> 表示 AutoJs6 是否已取得其 Shizuku 用户服务实例</li>\n<li><code>isRunning</code> 表示 AutoJs6 是否已收到 Shizuku Binder</li>\n<li><code>hasPermission</code> 表示 Shizuku 是否已向 AutoJs6 授权</li>\n<li><code>isOperational</code> 表示 <code>isRunning</code> 和 <code>hasPermission</code> 是否同时为 <code>true</code></li>\n</ul>\n<pre><code class=\"lang-js\">let state = shizuku.state;\nconsole.log(state.isInstalled, state.isOperational);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] state"
         }
       ],
       "type": "module",

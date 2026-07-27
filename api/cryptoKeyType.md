@@ -75,7 +75,7 @@ let specPrivateKey = new crypto.Key([
 console.log(specPrivateKey.toKeySpec('RSA'));
 ```
 
-`toKeySpec` 方法在实际应用中几乎不会用到, 它往往用于 `cipher` 对象的初始化.  
+`toKeySpec` 方法在实际应用中几乎不会用到, 它往往用于 `cipher` 对象的初始化.<br>
 为更加深入地了解 `toKeySpec` 的使用方式, 下述示例使用了非常底层的方式展示了一个使用 DES 算法的加密和解密的过程:
 
 ```js

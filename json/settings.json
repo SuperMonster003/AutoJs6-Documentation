@@ -1,0 +1,70 @@
+{
+  "source": "..\\api\\settings.md",
+  "modules": [
+    {
+      "textRaw": "应用设置 (Settings)",
+      "name": "应用设置_(settings)",
+      "desc": "<p>settings 模块用于读取和修改 AutoJs6 的布尔型偏好设置.</p>\n<p><code>settings</code> 与 <code>$settings</code> 指向同一个模块对象.</p>\n<p>此模块不是 <code>android.provider.Settings</code> 的别名.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">settings</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] isEnabled",
+          "name": "[m]_isenabled",
+          "methods": [
+            {
+              "textRaw": "isEnabled(key)",
+              "type": "method",
+              "name": "isEnabled",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 设置是否已启用</li>\n</ul>\n<p>读取指定布尔型偏好设置.</p>\n<p>当设置不存在时返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">console.log(settings.isEnabled(&#39;foreground_service&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isEnabled"
+        },
+        {
+          "textRaw": "[m] setEnabled",
+          "name": "[m]_setenabled",
+          "methods": [
+            {
+              "textRaw": "setEnabled(key, enabled)",
+              "type": "method",
+              "name": "setEnabled",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>写入指定布尔型偏好设置.</p>\n<pre><code class=\"lang-js\">let previous = settings.isEnabled(&#39;stable_mode&#39;);\nsettings.setEnabled(&#39;stable_mode&#39;, !previous);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setEnabled"
+        },
+        {
+          "textRaw": "设置键兼容别名",
+          "name": "设置键兼容别名",
+          "desc": "<p>下表中的每一组名称指向同一项 AutoJs6 设置.</p>\n<table>\n<thead>\n<tr>\n<th>设置</th>\n<th>可用名称</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>稳定模式</td>\n<td><code>stable_mode</code>, <code>key_stable_mode</code></td>\n</tr>\n<tr>\n<td>使用 Root 启用无障碍服务</td>\n<td><code>enable_accessibility_service_by_root</code>, <code>key_enable_accessibility_service_by_root</code>, <code>key_enable_a11y_service_with_root_access</code></td>\n</tr>\n<tr>\n<td>按音量上键停止全部脚本</td>\n<td><code>stop_all_on_volume_up</code>, <code>key_use_volume_control_running</code></td>\n</tr>\n<tr>\n<td>不显示控制台</td>\n<td><code>not_show_console</code>, <code>key_dont_show_main_activity</code>, <code>key_not_showing_main_activity</code></td>\n</tr>\n<tr>\n<td>前台服务</td>\n<td><code>foreground_service</code>, <code>key_foreground_service</code></td>\n</tr>\n</tbody>\n</table>\n<p>未在表中列出的名称不会被拒绝. 此类名称会作为原始偏好设置键读取或写入.</p>\n",
+          "type": "module",
+          "displayName": "设置键兼容别名"
+        }
+      ],
+      "type": "module",
+      "displayName": "应用设置 (Settings)"
+    }
+  ]
+}

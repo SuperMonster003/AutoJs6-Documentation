@@ -4,643 +4,3509 @@
     {
       "textRaw": "画布 (Canvas)",
       "name": "画布_(canvas)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>canvas提供了使用画布进行2D画图的支持, 可用于简单的小游戏开发或者图片编辑. 使用canvas可以轻松地在一张图片或一个界面上绘制各种线与图形.</p>\n<p>canvas的坐标系为平面直角坐标系, 以控件左上角为原点, 控件上边沿为x轴正方向, 控件左边沿为y轴正方向. 例如分辨率为1920*1080的屏幕上, canvas控件覆盖全屏, 画一条从屏幕左上角到屏幕右下角的线段为:</p>\n<pre><code>canvas.drawLine(0, 0, 1080, 1920, paint);\n</code></pre><p>canvas的绘制依赖于画笔Paint, 通过设置画笔的粗细、颜色、填充等可以改变绘制出来的图形. 例如绘制一个红色实心正方形为：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为填充, 则绘制出来的图形都是实心的\npaint.setStyle(Paint.STYLE.FILL);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>如果要绘制正方形的边框, 则通过设置画笔的Style来实现：</p>\n<pre><code>var paint = new Paint();\n//设置画笔为描边, 则绘制出来的图形都是轮廓\npaint.setStyle(Paint.STYLE.STROKE);\n//设置画笔颜色为红色\npaint.setColor(colors.RED);\n//绘制一个从坐标(0, 0)到坐标(100, 100)的正方形\ncanvas.drawRect(0, 0, 100, 100, paint);\n</code></pre><p>结合画笔, canvas可以绘制基本图形、图片等.</p>\n",
-      "methods": [
+      "desc": "<p><code>Canvas</code> 是 AutoJs6 提供的全局构造函数. 它创建一个对\n<a href=\"https://developer.android.com/reference/android/graphics/Canvas\"><code>android.graphics.Canvas</code></a>\n进行委托的画布对象, 可用于修改图片, 生成新图片, 或处理 UI 模式中 <code>&lt;canvas&gt;</code>\n控件的逐帧绘制.</p>\n<p>画布使用以像素为单位的二维坐标系. 默认原点位于左上角, X 轴向右, Y 轴向下.\n绘制坐标会先经过画布的当前变换矩阵, 再受当前裁剪区域限制.</p>\n<p>绘制通常需要 <a href=\"https://developer.android.com/reference/android/graphics/Paint\"><code>android.graphics.Paint</code></a>\n画笔. <code>Paint</code> 也是 AutoJs6 预先暴露的全局 Android 类:</p>\n<pre><code class=\"lang-js\">let canvas = new Canvas(400, 240);\nlet paint = new Paint(Paint.ANTI_ALIAS_FLAG);\n\npaint.setColor(colors.RED);\npaint.setStyle(Paint.Style.FILL);\ncanvas.drawRoundRect(20, 20, 380, 220, 24, 24, paint);\n\nlet image = canvas.toImage();\ntry {\n    images.save(image, &quot;./canvas.png&quot;);\n} finally {\n    image.recycle();\n}\n</code></pre>\n<blockquote>\n<p>注: <code>Paint.Style.FILL</code> 是正确的 Android 枚举访问形式. 历史文档中的\n<code>Paint.STYLE.FILL</code> 并不存在.</p>\n</blockquote>\n",
+      "modules": [
         {
-          "textRaw": "canvas.getWidth()",
-          "type": "method",
-          "name": "getWidth",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {number} ",
-                  "name": "返回",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回画布当前图层的宽度.</p>\n"
+          "textRaw": "UI 模式中的画布",
+          "name": "ui_模式中的画布",
+          "desc": "<p>UI 布局中的 <code>&lt;canvas&gt;</code> 会创建 <code>JsCanvasView</code>. 控件在独立绘制线程中反复触发\n<code>draw</code> 事件, 并向监听器传入已经绑定当前 Surface 的 Canvas 对象:</p>\n<pre><code class=\"lang-js\">&quot;ui&quot;;\n\nui.layout(\n    &lt;frame&gt;\n        &lt;canvas id=&quot;board&quot; w=&quot;*&quot; h=&quot;*&quot;/&gt;\n    &lt;/frame&gt;,\n);\n\nlet paint = new Paint(Paint.ANTI_ALIAS_FLAG);\npaint.setColor(colors.BLUE);\nui.board.setMaxFps(30);\n\nui.board.on(&quot;draw&quot;, (canvas) =&gt; {\n    canvas.drawColor(colors.WHITE);\n    canvas.drawCircle(\n        canvas.getWidth() / 2,\n        canvas.getHeight() / 2,\n        80,\n        paint,\n    );\n});\n</code></pre>\n<p>事件回调返回后, 底层 Android Canvas 会被提交并解锁. 不应保存回调中的 Canvas\n对象并在其他线程或后续异步任务中继续使用. 绘制监听器中的未捕获异常会结束当前\n脚本运行环境.</p>\n",
+          "type": "module",
+          "displayName": "UI 模式中的画布"
         },
         {
-          "textRaw": "canvas.getHeight()",
-          "type": "method",
-          "name": "getHeight",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "返回 {number} ",
-                  "name": "返回",
-                  "type": "number"
-                }
-              ]
-            },
-            {
-              "params": []
-            }
-          ],
-          "desc": "<p>返回画布当前图层的高度.</p>\n"
+          "textRaw": "Android 图形类型",
+          "name": "android_图形类型",
+          "desc": "<p>Canvas 的多数方法直接接受 Android 图形对象. 下表列出本页使用的主要类型及访问方式:</p>\n<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>AutoJs6 中的访问方式</th>\n<th>用途</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Bitmap\"><code>android.graphics.Bitmap</code></a></td>\n<td>全局 <code>Bitmap</code> 或 <code>android.graphics.Bitmap</code></td>\n<td>位图</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Paint\"><code>android.graphics.Paint</code></a></td>\n<td>全局 <code>Paint</code> 或 <code>android.graphics.Paint</code></td>\n<td>画笔</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/PorterDuff\"><code>android.graphics.PorterDuff</code></a></td>\n<td>全局 <code>PorterDuff</code> 或 <code>android.graphics.PorterDuff</code></td>\n<td>Porter-Duff 合成模式</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Rect\"><code>android.graphics.Rect</code></a></td>\n<td><code>android.graphics.Rect</code></td>\n<td>整数矩形</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/RectF\"><code>android.graphics.RectF</code></a></td>\n<td><code>android.graphics.RectF</code></td>\n<td>浮点矩形</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Matrix\"><code>android.graphics.Matrix</code></a></td>\n<td><code>android.graphics.Matrix</code></td>\n<td>3 x 3 变换矩阵</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Path\"><code>android.graphics.Path</code></a></td>\n<td><code>android.graphics.Path</code></td>\n<td>几何路径</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Picture\"><code>android.graphics.Picture</code></a></td>\n<td><code>android.graphics.Picture</code></td>\n<td>录制的绘制指令</td>\n</tr>\n</tbody>\n</table>\n<p>除表中明确标为全局的类外, Android 类型应通过完整类名访问, 或先使用\n<a href=\"global#m-importclass\"><code>importClass</code></a> 导入. Canvas 方法不会把 Java 原生类型\n自动替换为同名 JavaScript 对象.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Canvas</p>\n\n<hr>\n",
+          "type": "module",
+          "displayName": "Android 图形类型"
         },
         {
-          "textRaw": "canvas.drawRGB(r, int g, int b)",
-          "type": "method",
-          "name": "drawRGB",
-          "signatures": [
+          "textRaw": "[C] Canvas",
+          "name": "[c]_canvas",
+          "modules": [
             {
-              "params": [
-                {
-                  "textRaw": "`r` {number} 红色通道值 ",
-                  "name": "r",
-                  "type": "number",
-                  "desc": "红色通道值"
-                },
-                {
-                  "textRaw": "`g` {number} 绿色通道值 ",
-                  "name": "g",
-                  "type": "number",
-                  "desc": "绿色通道值"
-                },
-                {
-                  "textRaw": "`b` {number} 蓝色通道值 ",
-                  "name": "b",
-                  "type": "number",
-                  "desc": "蓝色通道值"
-                }
-              ]
+              "textRaw": "[c] ()",
+              "name": "[c]_()",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-canvas\">Canvas</a> } - 尚未绑定绘制目标的画布</li>\n</ul>\n<p>创建一个没有底层 Android Canvas 和位图的画布. 在调用\n<a href=\"#m-setcanvas\"><code>setCanvas()</code></a> 绑定目标前, 调用依赖绘制目标的方法会抛出异常.</p>\n<p>此重载主要用于 AutoJs6 内部为 UI <code>&lt;canvas&gt;</code> 控件准备包装对象. 普通脚本应优先\n使用其他构造重载; UI 脚本则直接使用 <code>draw</code> 事件传入的 Canvas.</p>\n",
+              "type": "module",
+              "displayName": "[c] ()"
             },
             {
-              "params": [
-                {
-                  "name": "r"
-                },
-                {
-                  "name": "int g"
-                },
-                {
-                  "name": "int b"
-                }
-              ]
+              "textRaw": "[c] (bitmap)",
+              "name": "[c]_(bitmap)",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>bitmap</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - 可变位图</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-canvas\">Canvas</a> } - 以 <code>bitmap</code> 为绘制目标的画布</li>\n</ul>\n<p>画布直接绘制到传入的 Bitmap. Bitmap 必须可变; 不可变 Bitmap 会导致构造失败.\n后续绘制会立即修改同一个 Bitmap.</p>\n",
+              "type": "module",
+              "displayName": "[c] (bitmap)"
+            },
+            {
+              "textRaw": "[c] (image)",
+              "name": "[c]_(image)",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 源图片</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-canvas\">Canvas</a> } - 以源图片副本为绘制目标的画布</li>\n</ul>\n<p>复制 <code>image</code> 的 Bitmap 并创建独立的可变绘制目标. 绘制不会修改源\nImageWrapper. 此构造过程不会回收源图片.</p>\n<p>以下示例要求脚本目录中存在 <code>source.png</code>:</p>\n<pre><code class=\"lang-js\">let source = images.read(&quot;./source.png&quot;);\nlet canvas = new Canvas(source);\nlet paint = new Paint();\npaint.setColor(colors.RED);\ncanvas.drawCircle(50, 50, 30, paint);\n\nlet result = canvas.toImage();\ntry {\n    images.save(result, &quot;./result.png&quot;);\n} finally {\n    result.recycle();\n    source.recycle();\n}\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (image)"
+            },
+            {
+              "textRaw": "[c] (width, height)",
+              "name": "[c]_(width,_height)",
+              "desc": "<p><strong><code>[6.7.0]</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 画布宽度</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 画布高度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-canvas\">Canvas</a> } - 使用 ARGB_8888 位图的画布</li>\n</ul>\n<p>创建指定尺寸的透明位图并将其设为绘制目标. <code>width</code> 和 <code>height</code> 必须是可转换为\nJava <code>int</code> 的有限正数; 小数部分向 0 截断. 尺寸为 0, 负数或超出 <code>int</code> 范围时\n构造失败.</p>\n<blockquote>\n<p>注: 从 AutoJs6 6.7.0 起, Canvas 构造函数由专用包装层校验上述 4 种调用方式.\n其他参数类型及超过 2 个参数的调用会抛出参数异常.</p>\n</blockquote>\n",
+              "type": "module",
+              "displayName": "[c] (width, height)"
             }
           ],
-          "desc": "<p>将整个可绘制区域填充为r、g、b指定的颜色. 相当于 <code>canvas.drawColor(colors.rgb(r, g, b))</code>.</p>\n"
+          "type": "module",
+          "displayName": "[C] Canvas"
         },
         {
-          "textRaw": "canvas.drawARGB(a, r, g, b)",
-          "type": "method",
-          "name": "drawARGB",
-          "signatures": [
+          "textRaw": "绘制目标与属性",
+          "name": "绘制目标与属性",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getAndroidCanvas()",
+              "type": "method",
+              "name": "getAndroidCanvas",
+              "signatures": [
                 {
-                  "textRaw": "`a` {number} 透明通道值 ",
-                  "name": "a",
-                  "type": "number",
-                  "desc": "透明通道值"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) } - 当前底层 Android Canvas, 或 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) ",
+                      "desc": "当前底层 Android Canvas, 或 `null`"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`r` {number} 红色通道值 ",
-                  "name": "r",
-                  "type": "number",
-                  "desc": "红色通道值"
-                },
-                {
-                  "textRaw": "`g` {number} 绿色通道值 ",
-                  "name": "g",
-                  "type": "number",
-                  "desc": "绿色通道值"
-                },
-                {
-                  "textRaw": "`b` {number} 蓝色通道值 ",
-                  "name": "b",
-                  "type": "number",
-                  "desc": "蓝色通道值"
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "a"
-                },
-                {
-                  "name": "r"
-                },
-                {
-                  "name": "g"
-                },
-                {
-                  "name": "b"
-                }
-              ]
+              ],
+              "desc": "<p>返回当前委托的 Android Canvas. 无参构造且尚未调用 <code>setCanvas()</code> 时返回 <code>null</code>.\n直接操作返回对象会绕过 AutoJs6 的 Canvas 包装层.</p>\n"
             }
           ],
-          "desc": "<p>将整个可绘制区域填充为a、r、g、b指定的颜色. 相当于 <code>canvas.drawColor(colors.argb(a, r, g, b))</code>.</p>\n"
+          "type": "module",
+          "displayName": "[m#] getAndroidCanvas"
         },
         {
-          "textRaw": "canvas.drawColor(color)",
-          "type": "method",
-          "name": "drawColor",
-          "signatures": [
+          "textRaw": "[m#] getAndroidCanvas",
+          "name": "[m#]_getandroidcanvas",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getAndroidCanvas()",
+              "type": "method",
+              "name": "getAndroidCanvas",
+              "signatures": [
                 {
-                  "textRaw": "`color` {number} 颜色值 ",
-                  "name": "color",
-                  "type": "number",
-                  "desc": "颜色值"
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) } - 当前底层 Android Canvas, 或 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) ",
+                      "desc": "当前底层 Android Canvas, 或 `null`"
+                    }
+                  ]
+                },
                 {
-                  "name": "color"
+                  "params": []
                 }
-              ]
+              ],
+              "desc": "<p>返回当前委托的 Android Canvas. 无参构造且尚未调用 <code>setCanvas()</code> 时返回 <code>null</code>.\n直接操作返回对象会绕过 AutoJs6 的 Canvas 包装层.</p>\n"
             }
           ],
-          "desc": "<p>将整个可绘制区域填充为color指定的颜色.</p>\n"
+          "type": "module",
+          "displayName": "[m#] getAndroidCanvas"
         },
         {
-          "textRaw": "canvas.drawColor(color, mode)",
-          "type": "method",
-          "name": "drawColor",
-          "signatures": [
+          "textRaw": "[m#] setCanvas",
+          "name": "[m#]_setcanvas",
+          "methods": [
             {
-              "params": [
+              "textRaw": "setCanvas(canvas)",
+              "type": "method",
+              "name": "setCanvas",
+              "signatures": [
                 {
-                  "textRaw": "`color` {number} 颜色值 ",
-                  "name": "color",
-                  "type": "number",
-                  "desc": "颜色值"
+                  "params": [
+                    {
+                      "textRaw": "**canvas** { [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) } - 新绘制目标, 或用于解除目标的 `null` ",
+                      "name": "**canvas**",
+                      "type": " [android.graphics.Canvas](https://developer.android.com/reference/android/graphics/Canvas) | [null](dataTypes#null) ",
+                      "desc": "新绘制目标, 或用于解除目标的 `null`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`mode` {PorterDuff.Mode} Porter-Duff操作 ",
-                  "name": "mode",
-                  "type": "PorterDuff.Mode",
-                  "desc": "Porter-Duff操作"
+                  "params": [
+                    {
+                      "name": "canvas"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "color"
-                },
-                {
-                  "name": "mode"
-                }
-              ]
+              ],
+              "desc": "<p>替换当前委托的 Android Canvas. <code>null</code> 会解除当前目标, 此后依赖绘制目标的方法\n会抛出异常. 此方法供 UI Canvas 桥接使用.</p>\n<p><code>setCanvas()</code> 只替换委托目标, 不会更新 Canvas 包装对象内部记录的位图. 因此不要在\n调用此方法后依赖 <a href=\"#m-toimage\"><code>toImage()</code></a> 获取新目标的内容.</p>\n"
             }
           ],
-          "desc": "<p>将整个可绘制区域填充为color指定的颜色.</p>\n"
+          "type": "module",
+          "displayName": "[m#] setCanvas"
         },
         {
-          "textRaw": "canvas.drawPaint(paint)",
-          "type": "method",
-          "name": "drawPaint",
-          "signatures": [
+          "textRaw": "[m#] toImage",
+          "name": "[m#]_toimage",
+          "methods": [
             {
-              "params": [
+              "textRaw": "toImage()",
+              "type": "method",
+              "name": "toImage",
+              "signatures": [
                 {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 当前内部位图的独立副本 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImageWrapper](imageWrapperType) ",
+                      "desc": "当前内部位图的独立副本"
+                    }
+                  ]
+                },
                 {
-                  "name": "paint"
+                  "params": []
                 }
-              ]
+              ],
+              "desc": "<p>复制构造 Canvas 时创建或传入的内部 Bitmap, 并将副本包装为 ImageWrapper.\n返回图片不再使用时必须调用 <code>recycle()</code>.</p>\n<p>此方法仅适用于通过 <code>Canvas(bitmap)</code>, <code>Canvas(image)</code> 或\n<code>Canvas(width, height)</code> 创建且未替换目标的画布. 无参构造的 Canvas 没有内部\n位图; <code>setCanvas()</code> 和 <code>setBitmap()</code> 也不会更新该内部引用.</p>\n"
             }
           ],
-          "desc": "<p>将整个可绘制区域用paint指定的画笔填充. 相当于绘制一个无限大的矩形, 但是更快.\n通过该方法可以绘制一个指定的着色器的图案.</p>\n"
+          "type": "module",
+          "displayName": "[m#] toImage"
         },
         {
-          "textRaw": "canvas.drawPoint(x, y, paint)",
-          "type": "method",
-          "name": "drawPoint",
-          "signatures": [
+          "textRaw": "[m#] isHardwareAccelerated",
+          "name": "[m#]_ishardwareaccelerated",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isHardwareAccelerated()",
+              "type": "method",
+              "name": "isHardwareAccelerated",
+              "signatures": [
                 {
-                  "textRaw": "`x` {number} x坐标 ",
-                  "name": "x",
-                  "type": "number",
-                  "desc": "x坐标"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前画布是否使用硬件加速 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前画布是否使用硬件加速"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`y` {number} y坐标 ",
-                  "name": "y",
-                  "type": "number",
-                  "desc": "y坐标"
-                },
-                {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "paint"
-                }
-              ]
+              ],
+              "desc": "<p>返回底层 Android Canvas 的硬件加速状态. Bitmap 支持的离屏 Canvas 通常不是\n硬件加速画布; 实际结果以当前绘制目标为准.</p>\n"
             }
           ],
-          "desc": "<p>在可绘制区域绘制由坐标(x, y)指定的点.\n点的形状由画笔的线帽决定（参见paint.setStrokeCap(cap)）.\n点的大小由画笔的宽度决定（参见paint.setStrokeWidth(width)）.</p>\n<blockquote>\n<p>如果画笔宽度为0, 则也会绘制1个像素至4个（若抗锯齿启用）.</p>\n</blockquote>\n<p>相当于 <code>canvas.drawPoints([x, y], paint)</code>.</p>\n"
+          "type": "module",
+          "displayName": "[m#] isHardwareAccelerated"
         },
         {
-          "textRaw": "canvas.drawPoints(pts, paint)",
-          "type": "method",
-          "name": "drawPoints",
-          "signatures": [
+          "textRaw": "[m#] setBitmap",
+          "name": "[m#]_setbitmap",
+          "methods": [
             {
-              "params": [
+              "textRaw": "setBitmap(bitmap)",
+              "type": "method",
+              "name": "setBitmap",
+              "signatures": [
                 {
-                  "textRaw": "`pts` {Array<number>} 点坐标数组 [x0, y0, x1, y1, x2, y2, ...] ",
-                  "name": "pts",
-                  "type": "Array<number>",
-                  "desc": "点坐标数组 [x0, y0, x1, y1, x2, y2, ...]"
+                  "params": [
+                    {
+                      "textRaw": "**bitmap** { [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [null](dataTypes#null) } - 新的可变位图, 或用于解除目标的 `null` ",
+                      "name": "**bitmap**",
+                      "type": " [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) | [null](dataTypes#null) ",
+                      "desc": "新的可变位图, 或用于解除目标的 `null`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    }
+                  ]
                 }
-              ]
-            },
+              ],
+              "desc": "<p>调用底层 Android Canvas 的 <code>setBitmap()</code> 更换绘制位图. 新 Bitmap 必须可变.\n硬件加速画布不支持此操作. 更换目标会重置底层画布的状态栈, 图层和过滤器;\n在 Android API 26 及以上系统中也会重置矩阵和裁剪.</p>\n<p>此方法不会更新 AutoJs6 Canvas 包装对象供 <code>toImage()</code> 使用的内部位图引用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setBitmap"
+        },
+        {
+          "textRaw": "[m#] isOpaque",
+          "name": "[m#]_isopaque",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isOpaque()",
+              "type": "method",
+              "name": "isOpaque",
+              "signatures": [
                 {
-                  "name": "pts"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前绘制图层是否不支持逐像素透明度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前绘制图层是否不支持逐像素透明度"
+                    }
+                  ]
                 },
                 {
-                  "name": "paint"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>在可绘制区域绘制由坐标数组指定的多个点.</p>\n"
+          "type": "module",
+          "displayName": "[m#] isOpaque"
         },
         {
-          "textRaw": "canvas.drawLine(startX, startY, stopX, stopY, paint)",
-          "type": "method",
-          "name": "drawLine",
-          "signatures": [
+          "textRaw": "[m#] getWidth",
+          "name": "[m#]_getwidth",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getWidth()",
+              "type": "method",
+              "name": "getWidth",
+              "signatures": [
                 {
-                  "textRaw": "`startX` {number} 起点x坐标 ",
-                  "name": "startX",
-                  "type": "number",
-                  "desc": "起点x坐标"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前绘制图层宽度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前绘制图层宽度"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`startY` {number} 起点y坐标 ",
-                  "name": "startY",
-                  "type": "number",
-                  "desc": "起点y坐标"
-                },
-                {
-                  "textRaw": "`endX` {number} 终点x坐标 ",
-                  "name": "endX",
-                  "type": "number",
-                  "desc": "终点x坐标"
-                },
-                {
-                  "textRaw": "`endY` {number} 终点y坐标 ",
-                  "name": "endY",
-                  "type": "number",
-                  "desc": "终点y坐标"
-                },
-                {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "startX"
-                },
-                {
-                  "name": "startY"
-                },
-                {
-                  "name": "stopX"
-                },
-                {
-                  "name": "stopY"
-                },
-                {
-                  "name": "paint"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>在可绘制区域绘制由起点坐标(startX, startY)和终点坐标(endX, endY)指定的线.\n绘制时会忽略画笔的样式(Style). 也就是说, 即使样式设为“仅填充(FILL)”也会绘制.\n退化为点的线（长度为0）不会被绘制.</p>\n"
+          "type": "module",
+          "displayName": "[m#] getWidth"
         },
         {
-          "textRaw": "canvas.drawRect(r, paint)",
-          "type": "method",
-          "name": "drawRect",
-          "signatures": [
+          "textRaw": "[m#] getHeight",
+          "name": "[m#]_getheight",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getHeight()",
+              "type": "method",
+              "name": "getHeight",
+              "signatures": [
                 {
-                  "textRaw": "`r` {Rect} 矩形边界 ",
-                  "name": "r",
-                  "type": "Rect",
-                  "desc": "矩形边界"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前绘制图层高度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前绘制图层高度"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "r"
-                },
-                {
-                  "name": "paint"
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>在可绘制区域绘制由矩形边界r指定的矩形.\n绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形.</p>\n"
+          "type": "module",
+          "displayName": "[m#] getHeight"
         },
         {
-          "textRaw": "canvas.drawRect(left, top, right, bottom, android.graphics.Paint paint)",
-          "type": "method",
-          "name": "drawRect",
-          "signatures": [
+          "textRaw": "[m#] getDensity",
+          "name": "[m#]_getdensity",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getDensity()",
+              "type": "method",
+              "name": "getDensity",
+              "signatures": [
                 {
-                  "textRaw": "`left` {number} 矩形左边界x坐标 ",
-                  "name": "left",
-                  "type": "number",
-                  "desc": "矩形左边界x坐标"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前目标密度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前目标密度"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`top` {number} 矩形上边界y坐标 ",
-                  "name": "top",
-                  "type": "number",
-                  "desc": "矩形上边界y坐标"
+                  "params": []
+                }
+              ],
+              "desc": "<p>目标密度用于决定绘制不同密度 Bitmap 时的自动缩放比例. 没有位图目标时通常为\n<code>Bitmap.DENSITY_NONE</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getDensity"
+        },
+        {
+          "textRaw": "[m#] setDensity",
+          "name": "[m#]_setdensity",
+          "methods": [
+            {
+              "textRaw": "setDensity(density)",
+              "type": "method",
+              "name": "setDensity",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**density** { [number](dataTypes#number) } - 新目标密度 ",
+                      "name": "**density**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新目标密度"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`right` {number} 矩形右边界x坐标 ",
-                  "name": "right",
-                  "type": "number",
-                  "desc": "矩形右边界x坐标"
+                  "params": [
+                    {
+                      "name": "density"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置画布目标密度. 若底层 Android Canvas 当前持有 Bitmap, 还会同时设置该\nBitmap 的密度. 使用 <code>Bitmap.DENSITY_NONE</code> 可关闭基于密度的位图缩放.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setDensity"
+        },
+        {
+          "textRaw": "[m#] getMaximumBitmapWidth",
+          "name": "[m#]_getmaximumbitmapwidth",
+          "methods": [
+            {
+              "textRaw": "getMaximumBitmapWidth()",
+              "type": "method",
+              "name": "getMaximumBitmapWidth",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前画布允许绘制的最大 Bitmap 宽度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前画布允许绘制的最大 Bitmap 宽度"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`bottom` {number} 矩形下边界y坐标 ",
-                  "name": "bottom",
-                  "type": "number",
-                  "desc": "矩形下边界y坐标"
+                  "params": []
+                }
+              ],
+              "desc": "<p>尝试绘制超过此宽度的 Bitmap 会失败. 限制值取决于当前 Android Canvas 实现.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getMaximumBitmapWidth"
+        },
+        {
+          "textRaw": "[m#] getMaximumBitmapHeight",
+          "name": "[m#]_getmaximumbitmapheight",
+          "methods": [
+            {
+              "textRaw": "getMaximumBitmapHeight()",
+              "type": "method",
+              "name": "getMaximumBitmapHeight",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前画布允许绘制的最大 Bitmap 高度 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前画布允许绘制的最大 Bitmap 高度"
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`paint` {Paint} 画笔 ",
-                  "name": "paint",
-                  "type": "Paint",
-                  "desc": "画笔"
+                  "params": []
+                }
+              ],
+              "desc": "<p>尝试绘制超过此高度的 Bitmap 会失败. 限制值取决于当前 Android Canvas 实现.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getMaximumBitmapHeight"
+        },
+        {
+          "textRaw": "状态栈与图层",
+          "name": "状态栈与图层",
+          "desc": "<p>Canvas 的当前变换矩阵和裁剪区域属于画布状态. <code>save()</code> 将状态压入栈,\n<code>restore()</code> 或 <code>restoreToCount()</code> 将状态恢复. 绘制内容本身不会因恢复状态而撤销.</p>\n",
+          "type": "module",
+          "displayName": "状态栈与图层"
+        },
+        {
+          "textRaw": "[m#] save",
+          "name": "[m#]_save",
+          "methods": [
+            {
+              "textRaw": "save()",
+              "type": "method",
+              "name": "save",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 可传给 `restoreToCount()` 的保存计数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "可传给 `restoreToCount()` 的保存计数"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>保存当前变换矩阵和裁剪区域.</p>\n<pre><code class=\"lang-js\">let checkpoint = canvas.save();\ncanvas.translate(100, 0);\ncanvas.drawCircle(0, 0, 20, paint);\ncanvas.restoreToCount(checkpoint);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] save"
+        },
+        {
+          "textRaw": "[m#] saveLayer",
+          "name": "[m#]_savelayer",
+          "methods": [
+            {
+              "textRaw": "saveLayer(bounds, paint, saveFlags)",
+              "type": "method",
+              "name": "saveLayer",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>bounds</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> | <a href=\"dataTypes#null\">null</a> } - 离屏图层最大边界, <code>null</code> 表示当前裁剪边界</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 恢复图层时使用的画笔</li>\n<li><strong>saveFlags</strong> { <a href=\"dataTypes#number\">number</a> } - Android Canvas 保存标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n<p>保存状态并把后续绘制重定向到离屏图层. 调用 <code>restore()</code> 时, 离屏内容使用\n<code>paint</code> 的 alpha, ColorFilter 和 Xfermode 等配置合成回原目标.</p>\n<p>带 <code>saveFlags</code> 的 Android 重载已弃用. 在 Android API 28 及以上系统中,\n仅 <code>android.graphics.Canvas.ALL_SAVE_FLAG</code> 有效, 其他值会抛出异常.\n应使用不带此参数的重载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bounds"
+                    },
+                    {
+                      "name": "paint"
+                    },
+                    {
+                      "name": "saveFlags"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "saveLayer(bounds, paint)",
+              "type": "method",
+              "name": "saveLayer",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>bounds</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> | <a href=\"dataTypes#null\">null</a> } - 离屏图层最大边界</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 恢复图层时使用的画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "left"
-                },
+                  "params": [
+                    {
+                      "name": "bounds"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "saveLayer(left, top, right, bottom, paint, saveFlags)",
+              "type": "method",
+              "name": "saveLayer",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 图层左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 图层上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 图层右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 图层下边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 恢复图层时使用的画笔</li>\n<li><strong>saveFlags</strong> { <a href=\"dataTypes#number\">number</a> } - Android Canvas 保存标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n<p>此重载等价于使用 RectF 边界的已弃用重载.</p>\n",
+              "signatures": [
                 {
-                  "name": "top"
-                },
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "paint"
+                    },
+                    {
+                      "name": "saveFlags"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "saveLayer(left, top, right, bottom, paint)",
+              "type": "method",
+              "name": "saveLayer",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 图层左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 图层上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 图层右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 图层下边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 恢复图层时使用的画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n<p><code>saveLayer()</code> 会分配额外离屏绘制目标, 开销明显高于 <code>save()</code>. 应限制图层边界,\n并在无需离屏合成时使用 <code>save()</code>.</p>\n",
+              "signatures": [
                 {
-                  "name": "right"
-                },
-                {
-                  "name": "bottom"
-                },
-                {
-                  "name": "android.graphics.Paint paint"
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>在可绘制区域绘制由矩形边界(left, top, right, bottom)指定的矩形.\n绘制时画笔的样式(Style)决定了是否绘制矩形界线和填充矩形.</p>\n"
+          "type": "module",
+          "displayName": "[m#] saveLayer"
         },
         {
-          "textRaw": "canvas.drawTextOnPath(java.lang.String text, android.graphics.Path path, float hOffset, float vOffset, android.graphics.Paint paint)",
-          "type": "method",
-          "name": "drawTextOnPath",
-          "signatures": [
+          "textRaw": "[m#] saveLayerAlpha",
+          "name": "[m#]_savelayeralpha",
+          "methods": [
             {
-              "params": [
+              "textRaw": "saveLayerAlpha(bounds, alpha, saveFlags)",
+              "type": "method",
+              "name": "saveLayerAlpha",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>bounds</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> | <a href=\"dataTypes#null\">null</a> } - 离屏图层最大边界</li>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 恢复图层时应用的 alpha, 取值按 <code>[0..255]</code> 限制</li>\n<li><strong>saveFlags</strong> { <a href=\"dataTypes#number\">number</a> } - Android Canvas 保存标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n<p>保存状态并创建带整体透明度的离屏图层. 带 <code>saveFlags</code> 的 Android 重载已弃用,\n并受与 <code>saveLayer(bounds, paint, saveFlags)</code> 相同的 Android API 28 限制.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`dx` {number} 向x轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "dx",
-                  "type": "number",
-                  "desc": "向x轴正方向平移的距离, 负数表示反方向平移"
-                },
-                {
-                  "textRaw": "`dy` {number} 向y轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "dy",
-                  "type": "number",
-                  "desc": "向y轴正方向平移的距离, 负数表示反方向平移"
+                  "params": [
+                    {
+                      "name": "bounds"
+                    },
+                    {
+                      "name": "alpha"
+                    },
+                    {
+                      "name": "saveFlags"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "saveLayerAlpha(bounds, alpha)",
+              "type": "method",
+              "name": "saveLayerAlpha",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>bounds</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> | <a href=\"dataTypes#null\">null</a> } - 离屏图层最大边界</li>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 恢复图层时应用的 alpha, 取值按 <code>[0..255]</code> 限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "dx"
-                },
-                {
-                  "name": "dy"
+                  "params": [
+                    {
+                      "name": "bounds"
+                    },
+                    {
+                      "name": "alpha"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "saveLayerAlpha(left, top, right, bottom, alpha, saveFlags)",
+              "type": "method",
+              "name": "saveLayerAlpha",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 图层左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 图层上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 图层右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 图层下边界 Y 坐标</li>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 恢复图层时应用的 alpha, 取值按 <code>[0..255]</code> 限制</li>\n<li><strong>saveFlags</strong> { <a href=\"dataTypes#number\">number</a> } - Android Canvas 保存标志</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "java.lang.String text"
-                },
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "alpha"
+                    },
+                    {
+                      "name": "saveFlags"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "saveLayerAlpha(left, top, right, bottom, alpha)",
+              "type": "method",
+              "name": "saveLayerAlpha",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 图层左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 图层上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 图层右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 图层下边界 Y 坐标</li>\n<li><strong>alpha</strong> { <a href=\"dataTypes#number\">number</a> } - 恢复图层时应用的 alpha, 取值按 <code>[0..255]</code> 限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 可传给 <code>restoreToCount()</code> 的保存计数</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "android.graphics.Path path"
-                },
-                {
-                  "name": "float hOffset"
-                },
-                {
-                  "name": "float vOffset"
-                },
-                {
-                  "name": "android.graphics.Paint paint"
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "alpha"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>平移指定距离.</p>\n"
+          "type": "module",
+          "displayName": "[m#] saveLayerAlpha"
         },
         {
-          "textRaw": "canvas.translate(dx, dy)",
-          "type": "method",
-          "name": "translate",
-          "signatures": [
+          "textRaw": "[m#] restore",
+          "name": "[m#]_restore",
+          "methods": [
             {
-              "params": [
+              "textRaw": "restore()",
+              "type": "method",
+              "name": "restore",
+              "signatures": [
                 {
-                  "textRaw": "`dx` {number} 向x轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "dx",
-                  "type": "number",
-                  "desc": "向x轴正方向平移的距离, 负数表示反方向平移"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`dy` {number} 向y轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "dy",
-                  "type": "number",
-                  "desc": "向y轴正方向平移的距离, 负数表示反方向平移"
+                  "params": []
+                }
+              ],
+              "desc": "<p>恢复最近一次 <code>save()</code>, <code>saveLayer()</code> 或 <code>saveLayerAlpha()</code> 前的状态. 恢复次数超过\n保存次数时抛出异常.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] restore"
+        },
+        {
+          "textRaw": "[m#] getSaveCount",
+          "name": "[m#]_getsavecount",
+          "methods": [
+            {
+              "textRaw": "getSaveCount()",
+              "type": "method",
+              "name": "getSaveCount",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前状态栈保存计数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前状态栈保存计数"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回值至少为 1. 初始状态本身占用一个栈层级.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getSaveCount"
+        },
+        {
+          "textRaw": "[m#] restoreToCount",
+          "name": "[m#]_restoretocount",
+          "methods": [
+            {
+              "textRaw": "restoreToCount(saveCount)",
+              "type": "method",
+              "name": "restoreToCount",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**saveCount** { [number](dataTypes#number) } - 目标保存计数 ",
+                      "name": "**saveCount**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "目标保存计数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "saveCount"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>连续恢复状态, 直至状态栈达到 <code>saveCount</code>. 通常传入 <code>save()</code>,\n<code>saveLayer()</code> 或 <code>saveLayerAlpha()</code> 的返回值.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] restoreToCount"
+        },
+        {
+          "textRaw": "坐标变换",
+          "name": "坐标变换",
+          "desc": "<p>变换方法修改当前变换矩阵, 不会改写已经绘制的像素. 需要局部变换时, 应使用\n<code>save()</code> 和 <code>restore()</code> 包围相关操作.</p>\n",
+          "type": "module",
+          "displayName": "坐标变换"
+        },
+        {
+          "textRaw": "[m#] translate",
+          "name": "[m#]_translate",
+          "methods": [
+            {
+              "textRaw": "translate(dx, dy)",
+              "type": "method",
+              "name": "translate",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**dx** { [number](dataTypes#number) } - X 轴平移量 ",
+                      "name": "**dx**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "X 轴平移量"
+                    },
+                    {
+                      "textRaw": "**dy** { [number](dataTypes#number) } - Y 轴平移量 ",
+                      "name": "**dy**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "Y 轴平移量"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "dx"
+                    },
+                    {
+                      "name": "dy"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将当前坐标系平移指定距离.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] translate"
+        },
+        {
+          "textRaw": "[m#] scale",
+          "name": "[m#]_scale",
+          "methods": [
+            {
+              "textRaw": "scale(sx, sy)",
+              "type": "method",
+              "name": "scale",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>sx</strong> { <a href=\"dataTypes#number\">number</a> } - X 轴缩放系数</li>\n<li><strong>sy</strong> { <a href=\"dataTypes#number\">number</a> } - Y 轴缩放系数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>以当前原点为中心缩放坐标系. 负系数会同时产生镜像效果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "sx"
+                    },
+                    {
+                      "name": "sy"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "scale(sx, sy, px, py)",
+              "type": "method",
+              "name": "scale",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>sx</strong> { <a href=\"dataTypes#number\">number</a> } - X 轴缩放系数</li>\n<li><strong>sy</strong> { <a href=\"dataTypes#number\">number</a> } - Y 轴缩放系数</li>\n<li><strong>px</strong> { <a href=\"dataTypes#number\">number</a> } - 缩放中心 X 坐标</li>\n<li><strong>py</strong> { <a href=\"dataTypes#number\">number</a> } - 缩放中心 Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "dx"
-                },
-                {
-                  "name": "dy"
+                  "params": [
+                    {
+                      "name": "sx"
+                    },
+                    {
+                      "name": "sy"
+                    },
+                    {
+                      "name": "px"
+                    },
+                    {
+                      "name": "py"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>平移指定距离.</p>\n"
+          "type": "module",
+          "displayName": "[m#] scale"
         },
         {
-          "textRaw": "canvas.scale(sx, sy)",
-          "type": "method",
-          "name": "scale",
-          "signatures": [
+          "textRaw": "[m#] rotate",
+          "name": "[m#]_rotate",
+          "methods": [
             {
-              "params": [
+              "textRaw": "rotate(degrees)",
+              "type": "method",
+              "name": "rotate",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>degrees</strong> { <a href=\"dataTypes#number\">number</a> } - 顺时针旋转角度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>以当前原点为中心旋转坐标系.</p>\n",
+              "signatures": [
                 {
-                  "textRaw": "`sx` {number} 向x轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "sx",
-                  "type": "number",
-                  "desc": "向x轴正方向平移的距离, 负数表示反方向平移"
-                },
-                {
-                  "textRaw": "`sy` {number} 向y轴正方向平移的距离, 负数表示反方向平移 ",
-                  "name": "sy",
-                  "type": "number",
-                  "desc": "向y轴正方向平移的距离, 负数表示反方向平移"
+                  "params": [
+                    {
+                      "name": "degrees"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "rotate(degrees, px, py)",
+              "type": "method",
+              "name": "rotate",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>degrees</strong> { <a href=\"dataTypes#number\">number</a> } - 顺时针旋转角度</li>\n<li><strong>px</strong> { <a href=\"dataTypes#number\">number</a> } - 旋转中心 X 坐标</li>\n<li><strong>py</strong> { <a href=\"dataTypes#number\">number</a> } - 旋转中心 Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "sx"
-                },
-                {
-                  "name": "sy"
+                  "params": [
+                    {
+                      "name": "degrees"
+                    },
+                    {
+                      "name": "px"
+                    },
+                    {
+                      "name": "py"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>以原点为中心, 将坐标系平移缩放指定倍数.</p>\n"
+          "type": "module",
+          "displayName": "[m#] rotate"
         },
         {
-          "textRaw": "canvas.rotate(float degrees, float px, float py)",
-          "type": "method",
-          "name": "rotate",
-          "signatures": [
+          "textRaw": "[m#] skew",
+          "name": "[m#]_skew",
+          "methods": [
             {
-              "params": [
+              "textRaw": "skew(sx, sy)",
+              "type": "method",
+              "name": "skew",
+              "signatures": [
                 {
-                  "name": "float sx"
+                  "params": [
+                    {
+                      "textRaw": "**sx** { [number](dataTypes#number) } - X 轴错切系数 ",
+                      "name": "**sx**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "X 轴错切系数"
+                    },
+                    {
+                      "textRaw": "**sy** { [number](dataTypes#number) } - Y 轴错切系数 ",
+                      "name": "**sy**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "Y 轴错切系数"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "name": "float sy"
+                  "params": [
+                    {
+                      "name": "sx"
+                    },
+                    {
+                      "name": "sy"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] skew"
+        },
+        {
+          "textRaw": "[m#] concat",
+          "name": "[m#]_concat",
+          "methods": [
+            {
+              "textRaw": "concat(matrix)",
+              "type": "method",
+              "name": "concat",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**matrix** { [android.graphics.Matrix](https://developer.android.com/reference/android/graphics/Matrix) | [null](dataTypes#null) } - 要前乘到当前矩阵的变换矩阵 ",
+                      "name": "**matrix**",
+                      "type": " [android.graphics.Matrix](https://developer.android.com/reference/android/graphics/Matrix) | [null](dataTypes#null) ",
+                      "desc": "要前乘到当前矩阵的变换矩阵"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "matrix"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将 <code>matrix</code> 前乘到当前变换矩阵. <code>matrix</code> 为 <code>null</code> 时不执行操作.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] concat"
+        },
+        {
+          "textRaw": "[m#] setMatrix",
+          "name": "[m#]_setmatrix",
+          "methods": [
+            {
+              "textRaw": "setMatrix(matrix)",
+              "type": "method",
+              "name": "setMatrix",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**matrix** { [android.graphics.Matrix](https://developer.android.com/reference/android/graphics/Matrix) | [null](dataTypes#null) } - 新变换矩阵 ",
+                      "name": "**matrix**",
+                      "type": " [android.graphics.Matrix](https://developer.android.com/reference/android/graphics/Matrix) | [null](dataTypes#null) ",
+                      "desc": "新变换矩阵"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "matrix"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>完全替换当前变换矩阵. <code>matrix</code> 为 <code>null</code> 时重置为单位矩阵. 通常应优先使用\n<code>concat()</code>, <code>translate()</code>, <code>scale()</code> 和 <code>rotate()</code> 进行相对变换.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setMatrix"
+        },
+        {
+          "textRaw": "[m#] getMatrix",
+          "name": "[m#]_getmatrix",
+          "methods": [
+            {
+              "textRaw": "getMatrix(ctm)",
+              "type": "method",
+              "name": "getMatrix",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>ctm</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Matrix\">android.graphics.Matrix</a> } - 接收当前矩阵副本的对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>把当前变换矩阵复制到 <code>ctm</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "ctm"
+                    }
+                  ]
                 }
               ]
             },
             {
-              "params": [
+              "textRaw": "getMatrix()",
+              "type": "method",
+              "name": "getMatrix",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/graphics/Matrix\">android.graphics.Matrix</a> } - 当前矩阵的副本</li>\n</ul>\n<p>Android 已弃用读取 Canvas 当前矩阵的接口. 硬件加速画布的矩阵可能由调用环境决定,\n不适合据此推断屏幕坐标. 脚本应自行保存传入 Canvas 的变换矩阵.</p>\n",
+              "signatures": [
                 {
-                  "name": "float degrees"
-                },
-                {
-                  "name": "float px"
-                },
-                {
-                  "name": "float py"
+                  "params": []
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] getMatrix"
         },
         {
-          "textRaw": "canvas.skew(float sx, float sy)",
-          "type": "method",
-          "name": "skew",
-          "signatures": [
+          "textRaw": "裁剪与快速排除",
+          "name": "裁剪与快速排除",
+          "desc": "<p>裁剪区域属于 Canvas 状态, 并受当前变换矩阵影响. 不带 <code>op</code> 的裁剪方法使用\n<code>Region.Op.INTERSECT</code>, 即只保留当前裁剪与新几何区域的交集.</p>\n",
+          "type": "module",
+          "displayName": "裁剪与快速排除"
+        },
+        {
+          "textRaw": "[m#] clipRect",
+          "name": "[m#]_cliprect",
+          "methods": [
             {
-              "params": [
+              "textRaw": "clipRect(rect, op)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/7</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点裁剪矩形</li>\n<li><strong>op</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Region.Op\">android.graphics.Region.Op</a> } - 裁剪运算</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 运算后的裁剪区域是否非空</li>\n</ul>\n",
+              "signatures": [
                 {
-                  "name": "float sx"
-                },
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "op"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipRect(rect, op)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 2/7</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数裁剪矩形</li>\n<li><strong>op</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Region.Op\">android.graphics.Region.Op</a> } - 裁剪运算</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 运算后的裁剪区域是否非空</li>\n</ul>\n<p>带 <code>op</code> 的 Android 裁剪重载已弃用. 在 Android API 28 及以上系统中,\n<code>op</code> 仅允许 <code>Region.Op.INTERSECT</code> 或 <code>Region.Op.DIFFERENCE</code>; 其他值会抛出异常.</p>\n",
+              "signatures": [
                 {
-                  "name": "float sy"
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "op"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipRect(rect)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>Overload 3/7</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点裁剪矩形</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 相交后的裁剪区域是否非空</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipRect(rect)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>Overload 4/7</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数裁剪矩形</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 相交后的裁剪区域是否非空</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipRect(left, top, right, bottom, op)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 5/7</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形下边界 Y 坐标</li>\n<li><strong>op</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Region.Op\">android.graphics.Region.Op</a> } - 裁剪运算</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 运算后的裁剪区域是否非空</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "op"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipRect(left, top, right, bottom)",
+              "type": "method",
+              "name": "clipRect",
+              "desc": "<p><strong><code>Overload [6-7]/7</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 裁剪矩形下边界 Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 相交后的裁剪区域是否非空</li>\n</ul>\n<p>此 JavaScript 签名覆盖底层的浮点和整数坐标重载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    }
+                  ]
                 }
               ]
             }
-          ]
+          ],
+          "type": "module",
+          "displayName": "[m#] clipRect"
+        },
+        {
+          "textRaw": "[m#] clipPath",
+          "name": "[m#]_clippath",
+          "methods": [
+            {
+              "textRaw": "clipPath(path, op)",
+              "type": "method",
+              "name": "clipPath",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Path\">android.graphics.Path</a> } - 裁剪路径</li>\n<li><strong>op</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Region.Op\">android.graphics.Region.Op</a> } - 裁剪运算</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 运算后的裁剪区域是否非空</li>\n</ul>\n<p>带 <code>op</code> 的 Android 裁剪重载已弃用, 并受与 <code>clipRect(rect, op)</code> 相同的\nAndroid API 28 运算限制.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "op"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clipPath(path)",
+              "type": "method",
+              "name": "clipPath",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Path\">android.graphics.Path</a> } - 要与当前裁剪区域求交集的路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 相交后的裁剪区域是否非空</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clipPath"
+        },
+        {
+          "textRaw": "[m#] getDrawFilter",
+          "name": "[m#]_getdrawfilter",
+          "methods": [
+            {
+              "textRaw": "getDrawFilter()",
+              "type": "method",
+              "name": "getDrawFilter",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [android.graphics.DrawFilter](https://developer.android.com/reference/android/graphics/DrawFilter) | [null](dataTypes#null) } - 当前绘制过滤器 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [android.graphics.DrawFilter](https://developer.android.com/reference/android/graphics/DrawFilter) | [null](dataTypes#null) ",
+                      "desc": "当前绘制过滤器"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getDrawFilter"
+        },
+        {
+          "textRaw": "[m#] setDrawFilter",
+          "name": "[m#]_setdrawfilter",
+          "methods": [
+            {
+              "textRaw": "setDrawFilter(filter)",
+              "type": "method",
+              "name": "setDrawFilter",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**filter** { [android.graphics.DrawFilter](https://developer.android.com/reference/android/graphics/DrawFilter) | [null](dataTypes#null) } - 新绘制过滤器, 或用于清除过滤器的 `null` ",
+                      "name": "**filter**",
+                      "type": " [android.graphics.DrawFilter](https://developer.android.com/reference/android/graphics/DrawFilter) | [null](dataTypes#null) ",
+                      "desc": "新绘制过滤器, 或用于清除过滤器的 `null`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "filter"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制过滤器可在绘制时修改 Paint 标志. Android 提供的常用实现为\n<a href=\"https://developer.android.com/reference/android/graphics/PaintFlagsDrawFilter\"><code>PaintFlagsDrawFilter</code></a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setDrawFilter"
+        },
+        {
+          "textRaw": "[m#] quickReject",
+          "name": "[m#]_quickreject",
+          "methods": [
+            {
+              "textRaw": "quickReject(rect, type)",
+              "type": "method",
+              "name": "quickReject",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 待检测矩形</li>\n<li><strong>type</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Canvas.EdgeType\">android.graphics.Canvas.EdgeType</a> } - 历史边缘类型参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 矩形是否完全位于当前裁剪区域之外</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "type"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "quickReject(path, type)",
+              "type": "method",
+              "name": "quickReject",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Path\">android.graphics.Path</a> } - 待检测路径</li>\n<li><strong>type</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Canvas.EdgeType\">android.graphics.Canvas.EdgeType</a> } - 历史边缘类型参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 路径是否可确定完全位于当前裁剪区域之外</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "type"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "quickReject(left, top, right, bottom, type)",
+              "type": "method",
+              "name": "quickReject",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 待检测矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 待检测矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 待检测矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 待检测矩形下边界 Y 坐标</li>\n<li><strong>type</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Canvas.EdgeType\">android.graphics.Canvas.EdgeType</a> } - 历史边缘类型参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 矩形是否完全位于当前裁剪区域之外</li>\n</ul>\n<p><code>quickReject()</code> 用于跳过必然不可见的绘制. 返回 <code>true</code> 表示可以安全跳过;\n返回 <code>false</code> 只表示无法快速排除, 不保证几何对象一定与裁剪区域相交.</p>\n<p>这些由 ScriptCanvas 暴露的重载均包含已被 Android 弃用的 <code>EdgeType</code> 参数.\n较新 Android 系统会忽略该参数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "type"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] quickReject"
+        },
+        {
+          "textRaw": "[m#] getClipBounds",
+          "name": "[m#]_getclipbounds",
+          "methods": [
+            {
+              "textRaw": "getClipBounds(bounds)",
+              "type": "method",
+              "name": "getClipBounds",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>bounds</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 接收当前裁剪边界的非空矩形</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前裁剪区域是否非空</li>\n</ul>\n<p>将当前局部坐标系中的裁剪边界写入 <code>bounds</code>. 虽然 ScriptCanvas 源码保留了可空\n注解, 底层 Android Canvas 要求此参数非空.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bounds"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "getClipBounds()",
+              "type": "method",
+              "name": "getClipBounds",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"androidRectType\">AndroidRect</a> } - 当前裁剪边界</li>\n</ul>\n<p>裁剪区域为空时返回 <code>Rect(0, 0 - 0, 0)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getClipBounds"
+        },
+        {
+          "textRaw": "颜色与基本图形",
+          "name": "颜色与基本图形",
+          "methods": [
+            {
+              "textRaw": "drawRGB(r, g, b)",
+              "type": "method",
+              "name": "drawRGB",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**r** { [number](dataTypes#number) } - 红色通道, 期望范围 `[0..255]` ",
+                      "name": "**r**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "红色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**g** { [number](dataTypes#number) } - 绿色通道, 期望范围 `[0..255]` ",
+                      "name": "**g**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "绿色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**b** { [number](dataTypes#number) } - 蓝色通道, 期望范围 `[0..255]` ",
+                      "name": "**b**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "蓝色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "r"
+                    },
+                    {
+                      "name": "g"
+                    },
+                    {
+                      "name": "b"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用完全不透明的 RGB 颜色和 <code>PorterDuff.Mode.SRC_OVER</code> 填充当前裁剪区域.\n等价于 <code>drawColor(colors.rgb(r, g, b))</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawRGB"
+        },
+        {
+          "textRaw": "[m#] drawRGB",
+          "name": "[m#]_drawrgb",
+          "methods": [
+            {
+              "textRaw": "drawRGB(r, g, b)",
+              "type": "method",
+              "name": "drawRGB",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**r** { [number](dataTypes#number) } - 红色通道, 期望范围 `[0..255]` ",
+                      "name": "**r**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "红色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**g** { [number](dataTypes#number) } - 绿色通道, 期望范围 `[0..255]` ",
+                      "name": "**g**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "绿色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**b** { [number](dataTypes#number) } - 蓝色通道, 期望范围 `[0..255]` ",
+                      "name": "**b**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "蓝色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "r"
+                    },
+                    {
+                      "name": "g"
+                    },
+                    {
+                      "name": "b"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用完全不透明的 RGB 颜色和 <code>PorterDuff.Mode.SRC_OVER</code> 填充当前裁剪区域.\n等价于 <code>drawColor(colors.rgb(r, g, b))</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawRGB"
+        },
+        {
+          "textRaw": "[m#] drawARGB",
+          "name": "[m#]_drawargb",
+          "methods": [
+            {
+              "textRaw": "drawARGB(a, r, g, b)",
+              "type": "method",
+              "name": "drawARGB",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**a** { [number](dataTypes#number) } - Alpha 通道, 期望范围 `[0..255]` ",
+                      "name": "**a**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "Alpha 通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**r** { [number](dataTypes#number) } - 红色通道, 期望范围 `[0..255]` ",
+                      "name": "**r**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "红色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**g** { [number](dataTypes#number) } - 绿色通道, 期望范围 `[0..255]` ",
+                      "name": "**g**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "绿色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**b** { [number](dataTypes#number) } - 蓝色通道, 期望范围 `[0..255]` ",
+                      "name": "**b**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "蓝色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "a"
+                    },
+                    {
+                      "name": "r"
+                    },
+                    {
+                      "name": "g"
+                    },
+                    {
+                      "name": "b"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 ARGB 颜色和 <code>PorterDuff.Mode.SRC_OVER</code> 填充当前裁剪区域.\n等价于 <code>drawColor(colors.argb(a, r, g, b))</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawARGB"
+        },
+        {
+          "textRaw": "[m#] drawColor",
+          "name": "[m#]_drawcolor",
+          "methods": [
+            {
+              "textRaw": "drawColor(color)",
+              "type": "method",
+              "name": "drawColor",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"dataTypes#colorint\">ColorInt</a> } - 填充颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 <code>PorterDuff.Mode.SRC_OVER</code> 填充当前裁剪区域.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawColor(color, mode)",
+              "type": "method",
+              "name": "drawColor",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"dataTypes#colorint\">ColorInt</a> } - 填充颜色</li>\n<li><strong>mode</strong> { <a href=\"https://developer.android.com/reference/android/graphics/PorterDuff.Mode\">android.graphics.PorterDuff.Mode</a> } - Porter-Duff 合成模式</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用指定合成模式填充当前裁剪区域. 例如 <code>PorterDuff.Mode.CLEAR</code> 可清除\nBitmap 支持的离屏画布区域:</p>\n<pre><code class=\"lang-js\">canvas.drawColor(colors.TRANSPARENT, PorterDuff.Mode.CLEAR);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "mode"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawColor"
+        },
+        {
+          "textRaw": "[m#] drawPaint",
+          "name": "[m#]_drawpaint",
+          "methods": [
+            {
+              "textRaw": "drawPaint(paint)",
+              "type": "method",
+              "name": "drawPaint",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 填充画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "填充画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 <code>paint</code> 填充当前裁剪区域. 此方法相当于绘制一个无限大的矩形, 但效率更高.\n画笔可包含 Shader, ColorFilter 和其他绘制效果.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPaint"
+        },
+        {
+          "textRaw": "[m#] drawPoint",
+          "name": "[m#]_drawpoint",
+          "methods": [
+            {
+              "textRaw": "drawPoint(x, y, paint)",
+              "type": "method",
+              "name": "drawPoint",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 点的 X 坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "点的 X 坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 点的 Y 坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "点的 Y 坐标"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制一个点. 点的尺寸由 <code>paint.getStrokeWidth()</code> 决定, 形状由\n<code>paint.getStrokeCap()</code> 决定. 线宽为 0 时至少绘制 1 个像素.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPoint"
+        },
+        {
+          "textRaw": "[m#] drawPoints",
+          "name": "[m#]_drawpoints",
+          "methods": [
+            {
+              "textRaw": "drawPoints(pts, offset, count, paint)",
+              "type": "method",
+              "name": "drawPoints",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>pts</strong> { <a href=\"dataTypes#number\">number</a>[] } - 坐标数组, 格式为 <code>[x0, y0, x1, y1, ...]</code></li>\n<li><strong>offset</strong> { <a href=\"dataTypes#number\">number</a> } - 跳过的数组元素数</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 从 <code>offset</code> 起处理的数组元素数</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>每 2 个连续数值表示一个点. <code>count / 2</code> 的整数部分为实际处理的点数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pts"
+                    },
+                    {
+                      "name": "offset"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPoints(pts, paint)",
+              "type": "method",
+              "name": "drawPoints",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>pts</strong> { <a href=\"dataTypes#number\">number</a>[] } - 坐标数组, 格式为 <code>[x0, y0, x1, y1, ...]</code></li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>绘制数组中的全部点.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pts"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPoints"
+        },
+        {
+          "textRaw": "[m#] drawLine",
+          "name": "[m#]_drawline",
+          "methods": [
+            {
+              "textRaw": "drawLine(startX, startY, stopX, stopY, paint)",
+              "type": "method",
+              "name": "drawLine",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**startX** { [number](dataTypes#number) } - 起点 X 坐标 ",
+                      "name": "**startX**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起点 X 坐标"
+                    },
+                    {
+                      "textRaw": "**startY** { [number](dataTypes#number) } - 起点 Y 坐标 ",
+                      "name": "**startY**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起点 Y 坐标"
+                    },
+                    {
+                      "textRaw": "**stopX** { [number](dataTypes#number) } - 终点 X 坐标 ",
+                      "name": "**stopX**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终点 X 坐标"
+                    },
+                    {
+                      "textRaw": "**stopY** { [number](dataTypes#number) } - 终点 Y 坐标 ",
+                      "name": "**stopY**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终点 Y 坐标"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "startX"
+                    },
+                    {
+                      "name": "startY"
+                    },
+                    {
+                      "name": "stopX"
+                    },
+                    {
+                      "name": "stopY"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制线段. 线段始终按描边处理, 因此忽略 <code>Paint.Style</code>. 长度为 0 的线段不绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawLine"
+        },
+        {
+          "textRaw": "[m#] drawLines",
+          "name": "[m#]_drawlines",
+          "methods": [
+            {
+              "textRaw": "drawLines(pts, offset, count, paint)",
+              "type": "method",
+              "name": "drawLines",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>pts</strong> { <a href=\"dataTypes#number\">number</a>[] } - 线段坐标数组, 格式为 <code>[x0, y0, x1, y1, ...]</code></li>\n<li><strong>offset</strong> { <a href=\"dataTypes#number\">number</a> } - 跳过的数组元素数</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 从 <code>offset</code> 起处理的数组元素数</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>每 4 个连续数值表示一条独立线段. <code>count / 4</code> 的整数部分为实际绘制的线段数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pts"
+                    },
+                    {
+                      "name": "offset"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawLines(pts, paint)",
+              "type": "method",
+              "name": "drawLines",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>pts</strong> { <a href=\"dataTypes#number\">number</a>[] } - 线段坐标数组, 格式为 <code>[x0, y0, x1, y1, ...]</code></li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>绘制数组中的全部完整线段.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pts"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawLines"
+        },
+        {
+          "textRaw": "[m#] drawRect",
+          "name": "[m#]_drawrect",
+          "methods": [
+            {
+              "textRaw": "drawRect(rect, paint)",
+              "type": "method",
+              "name": "drawRect",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点矩形</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawRect(rect, paint)",
+              "type": "method",
+              "name": "drawRect",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数矩形</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawRect(left, top, right, bottom, paint)",
+              "type": "method",
+              "name": "drawRect",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形下边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>矩形按 <code>paint.getStyle()</code> 填充, 描边, 或同时填充并描边.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawRect"
+        },
+        {
+          "textRaw": "[m#] drawOval",
+          "name": "[m#]_drawoval",
+          "methods": [
+            {
+              "textRaw": "drawOval(oval, paint)",
+              "type": "method",
+              "name": "drawOval",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>oval</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 椭圆外接矩形</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "oval"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawOval(left, top, right, bottom, paint)",
+              "type": "method",
+              "name": "drawOval",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形下边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>绘制适配外接矩形的椭圆.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawOval"
+        },
+        {
+          "textRaw": "[m#] drawCircle",
+          "name": "[m#]_drawcircle",
+          "methods": [
+            {
+              "textRaw": "drawCircle(cx, cy, radius, paint)",
+              "type": "method",
+              "name": "drawCircle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**cx** { [number](dataTypes#number) } - 圆心 X 坐标 ",
+                      "name": "**cx**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "圆心 X 坐标"
+                    },
+                    {
+                      "textRaw": "**cy** { [number](dataTypes#number) } - 圆心 Y 坐标 ",
+                      "name": "**cy**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "圆心 Y 坐标"
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径 ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "cx"
+                    },
+                    {
+                      "name": "cy"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>半径小于或等于 0 时不绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawCircle"
+        },
+        {
+          "textRaw": "[m#] drawArc",
+          "name": "[m#]_drawarc",
+          "methods": [
+            {
+              "textRaw": "drawArc(oval, startAngle, sweepAngle, useCenter, paint)",
+              "type": "method",
+              "name": "drawArc",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>oval</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 圆弧外接椭圆</li>\n<li><strong>startAngle</strong> { <a href=\"dataTypes#number\">number</a> } - 起始角度</li>\n<li><strong>sweepAngle</strong> { <a href=\"dataTypes#number\">number</a> } - 顺时针扫过角度</li>\n<li><strong>useCenter</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否连接椭圆中心并形成扇形</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "oval"
+                    },
+                    {
+                      "name": "startAngle"
+                    },
+                    {
+                      "name": "sweepAngle"
+                    },
+                    {
+                      "name": "useCenter"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawArc(left, top, right, bottom, startAngle, sweepAngle, useCenter, paint)",
+              "type": "method",
+              "name": "drawArc",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 外接矩形下边界 Y 坐标</li>\n<li><strong>startAngle</strong> { <a href=\"dataTypes#number\">number</a> } - 起始角度</li>\n<li><strong>sweepAngle</strong> { <a href=\"dataTypes#number\">number</a> } - 顺时针扫过角度</li>\n<li><strong>useCenter</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否连接椭圆中心并形成扇形</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>角度 0 位于椭圆右侧的 3 点钟方向, 正角度按顺时针方向增加.\n<code>sweepAngle &gt;= 360</code> 时绘制完整椭圆. <code>useCenter</code> 为 <code>true</code> 时绘制扇形,\n否则绘制弧段.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "startAngle"
+                    },
+                    {
+                      "name": "sweepAngle"
+                    },
+                    {
+                      "name": "useCenter"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawArc"
+        },
+        {
+          "textRaw": "[m#] drawRoundRect",
+          "name": "[m#]_drawroundrect",
+          "methods": [
+            {
+              "textRaw": "drawRoundRect(rect, rx, ry, paint)",
+              "type": "method",
+              "name": "drawRoundRect",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>rect</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 圆角矩形边界</li>\n<li><strong>rx</strong> { <a href=\"dataTypes#number\">number</a> } - 圆角椭圆 X 半径</li>\n<li><strong>ry</strong> { <a href=\"dataTypes#number\">number</a> } - 圆角椭圆 Y 半径</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "rect"
+                    },
+                    {
+                      "name": "rx"
+                    },
+                    {
+                      "name": "ry"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawRoundRect(left, top, right, bottom, rx, ry, paint)",
+              "type": "method",
+              "name": "drawRoundRect",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形上边界 Y 坐标</li>\n<li><strong>right</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形右边界 X 坐标</li>\n<li><strong>bottom</strong> { <a href=\"dataTypes#number\">number</a> } - 矩形下边界 Y 坐标</li>\n<li><strong>rx</strong> { <a href=\"dataTypes#number\">number</a> } - 圆角椭圆 X 半径</li>\n<li><strong>ry</strong> { <a href=\"dataTypes#number\">number</a> } - 圆角椭圆 Y 半径</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "right"
+                    },
+                    {
+                      "name": "bottom"
+                    },
+                    {
+                      "name": "rx"
+                    },
+                    {
+                      "name": "ry"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawRoundRect"
+        },
+        {
+          "textRaw": "[m#] drawPath",
+          "name": "[m#]_drawpath",
+          "methods": [
+            {
+              "textRaw": "drawPath(path, paint)",
+              "type": "method",
+              "name": "drawPath",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**path** { [android.graphics.Path](https://developer.android.com/reference/android/graphics/Path) } - 待绘制路径 ",
+                      "name": "**path**",
+                      "type": " [android.graphics.Path](https://developer.android.com/reference/android/graphics/Path) ",
+                      "desc": "待绘制路径"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>路径按 <code>paint.getStyle()</code> 填充, 描边, 或同时填充并描边.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPath"
+        },
+        {
+          "textRaw": "Bitmap 与 ImageWrapper",
+          "name": "bitmap_与_imagewrapper",
+          "desc": "<p>Bitmap 方法接受 Android 原生 Bitmap; <code>drawImage()</code> 是 AutoJs6 为\n<a href=\"imageWrapperType\">ImageWrapper</a> 增加的对应接口. 绘制操作不会回收传入的\nBitmap 或 ImageWrapper.</p>\n",
+          "type": "module",
+          "displayName": "Bitmap 与 ImageWrapper"
+        },
+        {
+          "textRaw": "[m#] drawBitmap",
+          "name": "[m#]_drawbitmap",
+          "methods": [
+            {
+              "textRaw": "drawBitmap(bitmap, left, top, paint)",
+              "type": "method",
+              "name": "drawBitmap",
+              "desc": "<p><strong><code>Overload 1/6</code></strong></p>\n<ul>\n<li><strong>bitmap</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - 待绘制位图</li>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 位图左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 位图上边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔, <code>null</code> 表示使用默认绘制配置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>在指定左上角绘制整张 Bitmap. 此重载会根据 Bitmap 与 Canvas 的密度差异自动缩放.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    },
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawBitmap(bitmap, src, dst, paint)",
+              "type": "method",
+              "name": "drawBitmap",
+              "desc": "<p><strong><code>Overload 2/6</code></strong></p>\n<ul>\n<li><strong>bitmap</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - 待绘制位图</li>\n<li><strong>src</strong> { <a href=\"androidRectType\">AndroidRect</a> | <a href=\"dataTypes#null\">null</a> } - 源像素区域, <code>null</code> 表示整张位图</li>\n<li><strong>dst</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点目标区域</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>把源区域缩放并平移到目标区域. 此类显式源和目标矩形重载忽略 Bitmap 密度.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    },
+                    {
+                      "name": "src"
+                    },
+                    {
+                      "name": "dst"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawBitmap(bitmap, src, dst, paint)",
+              "type": "method",
+              "name": "drawBitmap",
+              "desc": "<p><strong><code>Overload 3/6</code></strong></p>\n<ul>\n<li><strong>bitmap</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - 待绘制位图</li>\n<li><strong>src</strong> { <a href=\"androidRectType\">AndroidRect</a> | <a href=\"dataTypes#null\">null</a> } - 源像素区域, <code>null</code> 表示整张位图</li>\n<li><strong>dst</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数目标区域</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    },
+                    {
+                      "name": "src"
+                    },
+                    {
+                      "name": "dst"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawBitmap(colors, offset, stride, x, y, width, height, hasAlpha, paint)",
+              "type": "method",
+              "name": "drawBitmap",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload [4-5]/6</code></strong></p>\n<ul>\n<li><strong>colors</strong> { <a href=\"dataTypes#colorint\">ColorInt</a>[] } - 按行存储的像素颜色</li>\n<li><strong>offset</strong> { <a href=\"dataTypes#number\">number</a> } - 第一个像素在数组中的偏移</li>\n<li><strong>stride</strong> { <a href=\"dataTypes#number\">number</a> } - 相邻行起点之间的数组元素数</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绘制起点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绘制起点 Y 坐标</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 像素区域宽度</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 像素区域高度</li>\n<li><strong>hasAlpha</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用颜色数组中的 Alpha 通道</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>把 ColorInt 数组直接视为 Bitmap 像素并绘制. 此 JavaScript 签名覆盖底层使用\n浮点或整数 <code>x</code> 和 <code>y</code> 的两个重载. <code>stride</code> 的绝对值必须不小于 <code>width</code>,\n数组范围必须足以容纳请求的全部像素.</p>\n<p>这些重载在硬件加速画布上需要复制像素缓冲区, Android 已将其弃用.\n应先创建 Bitmap, 再使用其他 <code>drawBitmap()</code> 重载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "colors"
+                    },
+                    {
+                      "name": "offset"
+                    },
+                    {
+                      "name": "stride"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    },
+                    {
+                      "name": "hasAlpha"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawBitmap(bitmap, matrix, paint)",
+              "type": "method",
+              "name": "drawBitmap",
+              "desc": "<p><strong><code>Overload 6/6</code></strong></p>\n<ul>\n<li><strong>bitmap</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Bitmap\">android.graphics.Bitmap</a> } - 待绘制位图</li>\n<li><strong>matrix</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Matrix\">android.graphics.Matrix</a> } - 位图局部变换矩阵</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 <code>matrix</code> 变换 Bitmap 后进行绘制. 结果仍会继续经过 Canvas 的当前变换矩阵.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    },
+                    {
+                      "name": "matrix"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawBitmap"
+        },
+        {
+          "textRaw": "[m#] drawBitmapMesh",
+          "name": "[m#]_drawbitmapmesh",
+          "methods": [
+            {
+              "textRaw": "drawBitmapMesh(bitmap, meshWidth, meshHeight, verts, vertOffset, colors, colorOffset, paint)",
+              "type": "method",
+              "name": "drawBitmapMesh",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**bitmap** { [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) } - 待变形位图 ",
+                      "name": "**bitmap**",
+                      "type": " [android.graphics.Bitmap](https://developer.android.com/reference/android/graphics/Bitmap) ",
+                      "desc": "待变形位图"
+                    },
+                    {
+                      "textRaw": "**meshWidth** { [number](dataTypes#number) } - 网格横向单元数 ",
+                      "name": "**meshWidth**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "网格横向单元数"
+                    },
+                    {
+                      "textRaw": "**meshHeight** { [number](dataTypes#number) } - 网格纵向单元数 ",
+                      "name": "**meshHeight**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "网格纵向单元数"
+                    },
+                    {
+                      "textRaw": "**verts** { [number](dataTypes#number)[] } - 网格顶点坐标数组 ",
+                      "name": "**verts**",
+                      "type": " [number](dataTypes#number)[] ",
+                      "desc": "网格顶点坐标数组"
+                    },
+                    {
+                      "textRaw": "**vertOffset** { [number](dataTypes#number) } - 顶点数组偏移 ",
+                      "name": "**vertOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "顶点数组偏移"
+                    },
+                    {
+                      "textRaw": "**colors** { [ColorInt](dataTypes#colorint)[] | [null](dataTypes#null) } - 可选顶点颜色数组 ",
+                      "name": "**colors**",
+                      "type": " [ColorInt](dataTypes#colorint)[] | [null](dataTypes#null) ",
+                      "desc": "可选顶点颜色数组"
+                    },
+                    {
+                      "textRaw": "**colorOffset** { [number](dataTypes#number) } - 颜色数组偏移 ",
+                      "name": "**colorOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "颜色数组偏移"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) | [null](dataTypes#null) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) | [null](dataTypes#null) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "bitmap"
+                    },
+                    {
+                      "name": "meshWidth"
+                    },
+                    {
+                      "name": "meshHeight"
+                    },
+                    {
+                      "name": "verts"
+                    },
+                    {
+                      "name": "vertOffset"
+                    },
+                    {
+                      "name": "colors"
+                    },
+                    {
+                      "name": "colorOffset"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>按均匀分布在源 Bitmap 上的网格变形并绘制. <code>verts</code> 至少需要\n<code>(meshWidth + 1) * (meshHeight + 1) * 2 + vertOffset</code> 个数值.\n非空 <code>colors</code> 至少需要\n<code>(meshWidth + 1) * (meshHeight + 1) + colorOffset</code> 个颜色.\n顶点颜色会与对应的 Bitmap 颜色相乘. 此方法不支持抗锯齿.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawBitmapMesh"
+        },
+        {
+          "textRaw": "[m#] drawVertices",
+          "name": "[m#]_drawvertices",
+          "methods": [
+            {
+              "textRaw": "drawVertices(mode, vertexCount, verts, vertOffset, texs, texOffset, colors, colorOffset, indices, indexOffset, indexCount, paint)",
+              "type": "method",
+              "name": "drawVertices",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**mode** { [android.graphics.Canvas.VertexMode](https://developer.android.com/reference/android/graphics/Canvas.VertexMode) } - 三角形解释模式 ",
+                      "name": "**mode**",
+                      "type": " [android.graphics.Canvas.VertexMode](https://developer.android.com/reference/android/graphics/Canvas.VertexMode) ",
+                      "desc": "三角形解释模式"
+                    },
+                    {
+                      "textRaw": "**vertexCount** { [number](dataTypes#number) } - 从 `verts` 处理的数值数量 ",
+                      "name": "**vertexCount**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "从 `verts` 处理的数值数量"
+                    },
+                    {
+                      "textRaw": "**verts** { [number](dataTypes#number)[] } - 顶点坐标数组 ",
+                      "name": "**verts**",
+                      "type": " [number](dataTypes#number)[] ",
+                      "desc": "顶点坐标数组"
+                    },
+                    {
+                      "textRaw": "**vertOffset** { [number](dataTypes#number) } - 顶点数组偏移 ",
+                      "name": "**vertOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "顶点数组偏移"
+                    },
+                    {
+                      "textRaw": "**texs** { [number](dataTypes#number)[] | [null](dataTypes#null) } - Shader 纹理坐标数组 ",
+                      "name": "**texs**",
+                      "type": " [number](dataTypes#number)[] | [null](dataTypes#null) ",
+                      "desc": "Shader 纹理坐标数组"
+                    },
+                    {
+                      "textRaw": "**texOffset** { [number](dataTypes#number) } - 纹理坐标数组偏移 ",
+                      "name": "**texOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纹理坐标数组偏移"
+                    },
+                    {
+                      "textRaw": "**colors** { [ColorInt](dataTypes#colorint)[] | [null](dataTypes#null) } - 顶点颜色数组 ",
+                      "name": "**colors**",
+                      "type": " [ColorInt](dataTypes#colorint)[] | [null](dataTypes#null) ",
+                      "desc": "顶点颜色数组"
+                    },
+                    {
+                      "textRaw": "**colorOffset** { [number](dataTypes#number) } - 颜色数组偏移 ",
+                      "name": "**colorOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "颜色数组偏移"
+                    },
+                    {
+                      "textRaw": "**indices** { [number](dataTypes#number)[] | [null](dataTypes#null) } - 顶点索引数组 ",
+                      "name": "**indices**",
+                      "type": " [number](dataTypes#number)[] | [null](dataTypes#null) ",
+                      "desc": "顶点索引数组"
+                    },
+                    {
+                      "textRaw": "**indexOffset** { [number](dataTypes#number) } - 索引数组偏移 ",
+                      "name": "**indexOffset**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "索引数组偏移"
+                    },
+                    {
+                      "textRaw": "**indexCount** { [number](dataTypes#number) } - 使用的索引数量 ",
+                      "name": "**indexCount**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "使用的索引数量"
+                    },
+                    {
+                      "textRaw": "**paint** { [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) } - 画笔 ",
+                      "name": "**paint**",
+                      "type": " [android.graphics.Paint](https://developer.android.com/reference/android/graphics/Paint) ",
+                      "desc": "画笔"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "mode"
+                    },
+                    {
+                      "name": "vertexCount"
+                    },
+                    {
+                      "name": "verts"
+                    },
+                    {
+                      "name": "vertOffset"
+                    },
+                    {
+                      "name": "texs"
+                    },
+                    {
+                      "name": "texOffset"
+                    },
+                    {
+                      "name": "colors"
+                    },
+                    {
+                      "name": "colorOffset"
+                    },
+                    {
+                      "name": "indices"
+                    },
+                    {
+                      "name": "indexOffset"
+                    },
+                    {
+                      "name": "indexCount"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把 <code>verts</code> 解释为三角形并绘制. <code>texs</code> 非空时, Paint 必须配置 Shader;\n<code>colors</code> 非空时, 颜色会在三角形内插值. <code>indices</code> 可用于复用顶点.\n此方法不支持抗锯齿.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawVertices"
+        },
+        {
+          "textRaw": "[m#] drawImage",
+          "name": "[m#]_drawimage",
+          "methods": [
+            {
+              "textRaw": "drawImage(image, left, top, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 1/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 图片左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 图片上边界 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>在指定左上角绘制整张 ImageWrapper.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawImage(image, left, top, width, height, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 2/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 目标左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 目标上边界 Y 坐标</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 目标宽度</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 目标高度</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>缩放整张图片以填充指定目标区域.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawImage(image, sx, sy, swidth, sheight, left, top, width, height, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 3/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>sx</strong> { <a href=\"dataTypes#number\">number</a> } - 源区域左边界 X 坐标</li>\n<li><strong>sy</strong> { <a href=\"dataTypes#number\">number</a> } - 源区域上边界 Y 坐标</li>\n<li><strong>swidth</strong> { <a href=\"dataTypes#number\">number</a> } - 源区域宽度</li>\n<li><strong>sheight</strong> { <a href=\"dataTypes#number\">number</a> } - 源区域高度</li>\n<li><strong>left</strong> { <a href=\"dataTypes#number\">number</a> } - 目标左边界 X 坐标</li>\n<li><strong>top</strong> { <a href=\"dataTypes#number\">number</a> } - 目标上边界 Y 坐标</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 目标宽度</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 目标高度</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>把源图片的指定像素区域缩放并平移到目标区域.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "sx"
+                    },
+                    {
+                      "name": "sy"
+                    },
+                    {
+                      "name": "swidth"
+                    },
+                    {
+                      "name": "sheight"
+                    },
+                    {
+                      "name": "left"
+                    },
+                    {
+                      "name": "top"
+                    },
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawImage(image, src, dst, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 4/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>src</strong> { <a href=\"androidRectType\">AndroidRect</a> | <a href=\"dataTypes#null\">null</a> } - 源像素区域, <code>null</code> 表示整张图片</li>\n<li><strong>dst</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点目标区域</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "src"
+                    },
+                    {
+                      "name": "dst"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawImage(image, src, dst, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 5/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>src</strong> { <a href=\"androidRectType\">AndroidRect</a> | <a href=\"dataTypes#null\">null</a> } - 源像素区域, <code>null</code> 表示整张图片</li>\n<li><strong>dst</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数目标区域</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "src"
+                    },
+                    {
+                      "name": "dst"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawImage(image, matrix, paint)",
+              "type": "method",
+              "name": "drawImage",
+              "desc": "<p><strong><code>Overload 6/6</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 待绘制图片</li>\n<li><strong>matrix</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Matrix\">android.graphics.Matrix</a> } - 图片局部变换矩阵</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> | <a href=\"dataTypes#null\">null</a> } - 画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>使用 <code>matrix</code> 变换 ImageWrapper 的 Bitmap 后进行绘制.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "matrix"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawImage"
+        },
+        {
+          "textRaw": "文本",
+          "name": "文本",
+          "desc": "<p>文本的 <code>x</code> 坐标会按 <code>paint.getTextAlign()</code> 解释, <code>y</code> 坐标表示文本基线,\n不是字符外接矩形的顶部. 字号, 字体, 字距和抗锯齿等行为由 Paint 决定.</p>\n",
+          "type": "module",
+          "displayName": "文本"
+        },
+        {
+          "textRaw": "[m#] drawText",
+          "name": "[m#]_drawtext",
+          "methods": [
+            {
+              "textRaw": "drawText(text, index, count, x, y, paint)",
+              "type": "method",
+              "name": "drawText",
+              "desc": "<p><strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#javaarray\">JavaArray</a> } - Java <code>char[]</code> 字符数组</li>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 首个字符索引</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 字符数量</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "index"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawText(text, x, y, paint)",
+              "type": "method",
+              "name": "drawText",
+              "desc": "<p><strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>绘制完整字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawText(text, start, end, x, y, paint)",
+              "type": "method",
+              "name": "drawText",
+              "desc": "<p><strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 首个字符索引</li>\n<li><strong>end</strong> { <a href=\"dataTypes#number\">number</a> } - 结束索引, 不包含此位置</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawText(text, start, end, x, y, paint)",
+              "type": "method",
+              "name": "drawText",
+              "desc": "<p><strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"https://developer.android.com/reference/java/lang/CharSequence\">java.lang.CharSequence</a> } - Java 字符序列</li>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 首个字符索引</li>\n<li><strong>end</strong> { <a href=\"dataTypes#number\">number</a> } - 结束索引, 不包含此位置</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawText"
+        },
+        {
+          "textRaw": "[m#] drawTextRun",
+          "name": "[m#]_drawtextrun",
+          "methods": [
+            {
+              "textRaw": "drawTextRun(text, index, count, contextIndex, contextCount, x, y, isRtl, paint)",
+              "type": "method",
+              "name": "drawTextRun",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#javaarray\">JavaArray</a> } - Java <code>char[]</code> 字符数组</li>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 待绘制文本起始索引</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 待绘制字符数量</li>\n<li><strong>contextIndex</strong> { <a href=\"dataTypes#number\">number</a> } - 文本塑形上下文起始索引</li>\n<li><strong>contextCount</strong> { <a href=\"dataTypes#number\">number</a> } - 上下文字符数量</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>isRtl</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 文本运行方向是否从右向左</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "index"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "contextIndex"
+                    },
+                    {
+                      "name": "contextCount"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "isRtl"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawTextRun(text, start, end, contextStart, contextEnd, x, y, isRtl, paint)",
+              "type": "method",
+              "name": "drawTextRun",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"https://developer.android.com/reference/java/lang/CharSequence\">java.lang.CharSequence</a> } - Java 字符序列</li>\n<li><strong>start</strong> { <a href=\"dataTypes#number\">number</a> } - 待绘制文本起始索引</li>\n<li><strong>end</strong> { <a href=\"dataTypes#number\">number</a> } - 待绘制文本结束索引, 不包含此位置</li>\n<li><strong>contextStart</strong> { <a href=\"dataTypes#number\">number</a> } - 文本塑形上下文起始索引</li>\n<li><strong>contextEnd</strong> { <a href=\"dataTypes#number\">number</a> } - 上下文结束索引, 不包含此位置</li>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 文本原点 X 坐标</li>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 文本基线 Y 坐标</li>\n<li><strong>isRtl</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 文本运行方向是否从右向左</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>绘制单一方向的文本运行, 并使用更大范围的文本作为复杂文字塑形上下文.\n绘制范围必须完全位于上下文范围内.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "start"
+                    },
+                    {
+                      "name": "end"
+                    },
+                    {
+                      "name": "contextStart"
+                    },
+                    {
+                      "name": "contextEnd"
+                    },
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "isRtl"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawTextRun"
+        },
+        {
+          "textRaw": "[m#] drawPosText",
+          "name": "[m#]_drawpostext",
+          "methods": [
+            {
+              "textRaw": "drawPosText(text, index, count, pos, paint)",
+              "type": "method",
+              "name": "drawPosText",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#javaarray\">JavaArray</a> } - Java <code>char[]</code> 字符数组</li>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 首个字符索引</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 字符数量</li>\n<li><strong>pos</strong> { <a href=\"dataTypes#number\">number</a>[] } - 每个字符的 <code>[x, y]</code> 原点数组</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "index"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "pos"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPosText(text, pos, paint)",
+              "type": "method",
+              "name": "drawPosText",
+              "desc": "<p><strong><code>DEPRECATED</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><strong>pos</strong> { <a href=\"dataTypes#number\">number</a>[] } - 每个字符的 <code>[x, y]</code> 原点数组</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>Android 已弃用逐字符定位文本. 此方法不支持字形组合, 分解, 补充字符或复杂文字.\n应使用 <code>drawText()</code> 或先构造 Path 再使用 <code>drawTextOnPath()</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "pos"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPosText"
+        },
+        {
+          "textRaw": "[m#] drawTextOnPath",
+          "name": "[m#]_drawtextonpath",
+          "methods": [
+            {
+              "textRaw": "drawTextOnPath(text, index, count, path, hOffset, vOffset, paint)",
+              "type": "method",
+              "name": "drawTextOnPath",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#javaarray\">JavaArray</a> } - Java <code>char[]</code> 字符数组</li>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 首个字符索引</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 字符数量</li>\n<li><strong>path</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Path\">android.graphics.Path</a> } - 文本基线路径</li>\n<li><strong>hOffset</strong> { <a href=\"dataTypes#number\">number</a> } - 沿路径方向的起始偏移</li>\n<li><strong>vOffset</strong> { <a href=\"dataTypes#number\">number</a> } - 相对路径的垂直偏移, 负数位于路径上方</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "index"
+                    },
+                    {
+                      "name": "count"
+                    },
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "hOffset"
+                    },
+                    {
+                      "name": "vOffset"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawTextOnPath(text, path, hOffset, vOffset, paint)",
+              "type": "method",
+              "name": "drawTextOnPath",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n<li><strong>path</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Path\">android.graphics.Path</a> } - 文本基线路径</li>\n<li><strong>hOffset</strong> { <a href=\"dataTypes#number\">number</a> } - 沿路径方向的起始偏移</li>\n<li><strong>vOffset</strong> { <a href=\"dataTypes#number\">number</a> } - 相对路径的垂直偏移, 负数位于路径上方</li>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 文本画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>文本沿 <code>path</code> 绘制. Paint 的文本对齐方式决定文本起点相对路径的位置.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "hOffset"
+                    },
+                    {
+                      "name": "vOffset"
+                    },
+                    {
+                      "name": "paint"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawTextOnPath"
+        },
+        {
+          "textRaw": "Picture",
+          "name": "Picture",
+          "methods": [
+            {
+              "textRaw": "drawPicture(picture)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>结束 Picture 的录制并回放其内容. 此方法会自行保存和恢复 Canvas 状态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPicture(picture, dst)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><strong>dst</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点目标区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>缩放 Picture 以填充目标区域, 并自动保存和恢复 Canvas 状态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    },
+                    {
+                      "name": "dst"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPicture(picture, dst)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><strong>dst</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数目标区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:\n<a href=\"https://developer.android.com/reference/android/graphics/Canvas\"><code>android.graphics.Canvas</code></a></p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Paint</p>\n\n<hr>\n<p><code>Paint</code> 是 AutoJs6 预先暴露的\n<a href=\"https://developer.android.com/reference/android/graphics/Paint\"><code>android.graphics.Paint</code></a>\n类, 不是独立实现的 JavaScript 画笔. 除下述 AutoJs6 适配外, 构造函数,\n方法, 属性和常量遵循当前设备 Android Framework 的 Paint API.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    },
+                    {
+                      "name": "dst"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPicture"
+        },
+        {
+          "textRaw": "[m#] drawPicture",
+          "name": "[m#]_drawpicture",
+          "methods": [
+            {
+              "textRaw": "drawPicture(picture)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>结束 Picture 的录制并回放其内容. 此方法会自行保存和恢复 Canvas 状态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPicture(picture, dst)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><strong>dst</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 浮点目标区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>缩放 Picture 以填充目标区域, 并自动保存和恢复 Canvas 状态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    },
+                    {
+                      "name": "dst"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "drawPicture(picture, dst)",
+              "type": "method",
+              "name": "drawPicture",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>picture</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Picture\">android.graphics.Picture</a> } - 待回放的绘制指令</li>\n<li><strong>dst</strong> { <a href=\"androidRectType\">AndroidRect</a> } - 整数目标区域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<blockquote>\n<p>参阅:\n<a href=\"https://developer.android.com/reference/android/graphics/Canvas\"><code>android.graphics.Canvas</code></a></p>\n</blockquote>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Paint</p>\n\n<hr>\n<p><code>Paint</code> 是 AutoJs6 预先暴露的\n<a href=\"https://developer.android.com/reference/android/graphics/Paint\"><code>android.graphics.Paint</code></a>\n类, 不是独立实现的 JavaScript 画笔. 除下述 AutoJs6 适配外, 构造函数,\n方法, 属性和常量遵循当前设备 Android Framework 的 Paint API.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "picture"
+                    },
+                    {
+                      "name": "dst"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] drawPicture"
+        },
+        {
+          "textRaw": "[C] Paint",
+          "name": "[c]_paint",
+          "modules": [
+            {
+              "textRaw": "[c] ()",
+              "name": "[c]_()",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 默认画笔</li>\n</ul>\n<p>创建使用 Android 默认标志和默认绘制属性的画笔. 默认不会启用抗锯齿.</p>\n",
+              "type": "module",
+              "displayName": "[c] ()"
+            },
+            {
+              "textRaw": "[c] (flags)",
+              "name": "[c]_(flags)",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>flags</strong> { <a href=\"dataTypes#number\">number</a> } - Paint 标志位组合</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 新画笔</li>\n</ul>\n<p>常用标志包括 <code>Paint.ANTI_ALIAS_FLAG</code>, <code>Paint.DITHER_FLAG</code> 和\n<code>Paint.FILTER_BITMAP_FLAG</code>. 多个标志使用按位或组合:</p>\n<pre><code class=\"lang-js\">let flags = Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG;\nlet paint = new Paint(flags);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[c] (flags)"
+            },
+            {
+              "textRaw": "[c] (paint)",
+              "name": "[c]_(paint)",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 源画笔</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 配置副本</li>\n</ul>\n<p>复制源 Paint 的全部原生配置.</p>\n",
+              "type": "module",
+              "displayName": "[c] (paint)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] Paint"
+        },
+        {
+          "textRaw": "[p#] color",
+          "name": "[p#]_color",
+          "desc": "<p><strong><code>Getter/Setter</code></strong> <strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#colorint\">ColorInt</a> } - 画笔颜色</li>\n</ul>\n<p>属性写入等价于 <a href=\"#m-setcolor\"><code>setColor()</code></a>. Android API 29 及以上系统中的\n写入会经过 AutoJs6 Paint 代理, 以消除 Java <code>int</code> 与 <code>long</code> 重载歧义.</p>\n<pre><code class=\"lang-js\">let paint = new Paint();\npaint.color = colors.toInt(&quot;#2196F3&quot;);\nconsole.log(colors.toHex(paint.color)); // #2196F3\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] color"
+        },
+        {
+          "textRaw": "[m#] setColor",
+          "name": "[m#]_setcolor",
+          "methods": [
+            {
+              "textRaw": "setColor(color)",
+              "type": "method",
+              "name": "setColor",
+              "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"dataTypes#colorint\">ColorInt</a> } - 画笔颜色</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 Paint 颜色.</p>\n<p>Android API 29 增加了 <code>setColor(long)</code> ColorLong 重载. Rhino 的 JavaScript\n数值没有 <code>int</code> 与 <code>long</code> 类型区分, 原本可能把 ColorInt 错误分派到 ColorLong\n重载. AutoJs6 6.7.0 及以上版本在 Android API 29 及以上系统中使用\n<code>PaintProxyObject</code> 拦截此方法:</p>\n<ul>\n<li>可表示为有符号 32 位整数的数值按 ColorInt 处理.</li>\n<li>具有 ColorLong 高位信息的数值保留 ColorLong 语义.</li>\n<li>非数值参数在代理路径中通过 AutoJs6 颜色转换器处理.</li>\n<li>代理只适配 <code>setColor</code> 和 <code>color</code> 属性写入, 其他 Paint 成员仍委托原对象.</li>\n</ul>\n<p>为保证 Android API 24 至 28 与更高版本行为一致, 跨版本脚本应传入\n<code>colors.toInt(color)</code> 的结果:</p>\n<pre><code class=\"lang-js\">paint.setColor(colors.toInt(&quot;deep-orange&quot;));\n</code></pre>\n<p>直接使用大于 <code>0x7FFFFFFF</code> 的无符号颜色字面量可能被识别为 ColorLong.\n需要 ColorInt 时应先调用 <code>colors.toInt()</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setColor"
+        },
+        {
+          "textRaw": "[m#] setARGB",
+          "name": "[m#]_setargb",
+          "methods": [
+            {
+              "textRaw": "setARGB(a, r, g, b)",
+              "type": "method",
+              "name": "setARGB",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**a** { [number](dataTypes#number) } - Alpha 通道, 期望范围 `[0..255]` ",
+                      "name": "**a**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "Alpha 通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**r** { [number](dataTypes#number) } - 红色通道, 期望范围 `[0..255]` ",
+                      "name": "**r**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "红色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**g** { [number](dataTypes#number) } - 绿色通道, 期望范围 `[0..255]` ",
+                      "name": "**g**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "绿色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "**b** { [number](dataTypes#number) } - 蓝色通道, 期望范围 `[0..255]` ",
+                      "name": "**b**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "蓝色通道, 期望范围 `[0..255]`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "a"
+                    },
+                    {
+                      "name": "r"
+                    },
+                    {
+                      "name": "g"
+                    },
+                    {
+                      "name": "b"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用 4 个颜色通道设置 Paint 颜色. 此原生 Android 方法不存在 ColorInt 与\nColorLong 重载歧义. Android 不检查通道范围; 超出 <code>[0..255]</code> 时结果未定义.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setARGB"
+        },
+        {
+          "textRaw": "常用 Paint 配置",
+          "name": "常用_paint_配置",
+          "desc": "<p>下列成员均来自 Android Paint, 并非 Canvas 包装层额外实现:</p>\n<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>作用</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>setStyle(Paint.Style)</code></td>\n<td>设置 <code>FILL</code>, <code>STROKE</code> 或 <code>FILL_AND_STROKE</code></td>\n</tr>\n<tr>\n<td><code>setStrokeWidth(number)</code></td>\n<td>设置描边宽度</td>\n</tr>\n<tr>\n<td><code>setStrokeCap(Paint.Cap)</code></td>\n<td>设置线端样式</td>\n</tr>\n<tr>\n<td><code>setStrokeJoin(Paint.Join)</code></td>\n<td>设置线段连接样式</td>\n</tr>\n<tr>\n<td><code>setAntiAlias(boolean)</code></td>\n<td>设置抗锯齿</td>\n</tr>\n<tr>\n<td><code>setAlpha(number)</code></td>\n<td>设置画笔整体 Alpha</td>\n</tr>\n<tr>\n<td><code>setTextSize(number)</code></td>\n<td>设置文字大小</td>\n</tr>\n<tr>\n<td><code>setTextAlign(Paint.Align)</code></td>\n<td>设置文字原点对齐方式</td>\n</tr>\n<tr>\n<td><code>setTypeface(Typeface)</code></td>\n<td>设置字体</td>\n</tr>\n<tr>\n<td><code>setShader(Shader)</code></td>\n<td>设置着色器</td>\n</tr>\n<tr>\n<td><code>setColorFilter(ColorFilter)</code></td>\n<td>设置颜色过滤器</td>\n</tr>\n<tr>\n<td><code>setMaskFilter(MaskFilter)</code></td>\n<td>设置遮罩过滤器</td>\n</tr>\n<tr>\n<td><code>setPathEffect(PathEffect)</code></td>\n<td>设置路径效果</td>\n</tr>\n<tr>\n<td><code>setXfermode(Xfermode)</code></td>\n<td>设置旧式像素合成对象</td>\n</tr>\n</tbody>\n</table>\n<blockquote>\n<p>参阅:\n<a href=\"https://developer.android.com/reference/android/graphics/Paint\"><code>android.graphics.Paint</code></a></p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "常用 Paint 配置"
+        },
+        {
+          "textRaw": "矩阵, 路径与绘制效果",
+          "name": "矩阵,_路径与绘制效果",
+          "desc": "<p>历史页面把变换矩阵, 路径, Porter-Duff, 着色器及多类过滤器列为空标题.\n这些对象实际来自 Android Framework, 不由 AutoJs6 Canvas 模块重新定义.</p>\n<ul>\n<li><a href=\"https://developer.android.com/reference/android/graphics/Matrix\">Matrix</a> 用于平移,\n缩放, 旋转, 错切和透视变换. 使用 <code>new android.graphics.Matrix()</code> 创建.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/Path\">Path</a> 用于组合直线,\n曲线, 圆弧和闭合轮廓. 使用 <code>new android.graphics.Path()</code> 创建.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/PorterDuff.Mode\">PorterDuff.Mode</a>\n用于 <code>drawColor(color, mode)</code>. 旧式 Paint 合成可使用\n<a href=\"https://developer.android.com/reference/android/graphics/PorterDuffXfermode\">PorterDuffXfermode</a>.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/Shader\">Shader</a> 的常见实现包括\n<code>LinearGradient</code>, <code>RadialGradient</code>, <code>SweepGradient</code>, <code>BitmapShader</code> 和\n<code>ComposeShader</code>.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/MaskFilter\">MaskFilter</a> 的实现包括\n<code>BlurMaskFilter</code> 和 <code>EmbossMaskFilter</code>.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/ColorFilter\">ColorFilter</a> 的实现包括\n<code>ColorMatrixColorFilter</code>, <code>LightingColorFilter</code> 和 <code>PorterDuffColorFilter</code>.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/PathEffect\">PathEffect</a> 的实现包括\n<code>CornerPathEffect</code>, <code>DashPathEffect</code>, <code>DiscretePathEffect</code>,\n<code>PathDashPathEffect</code>, <code>ComposePathEffect</code> 和 <code>SumPathEffect</code>.</li>\n<li><a href=\"https://developer.android.com/reference/android/graphics/Region\">Region</a> 及其 <code>Op</code>\n枚举用于旧式裁剪重载. Android API 28 及以上仅允许裁剪收缩操作.</li>\n</ul>\n<p>这些类未全部注册为全局类. 例如:</p>\n<pre><code class=\"lang-js\">let path = new android.graphics.Path();\npath.moveTo(20, 180);\npath.quadTo(200, 20, 380, 180);\n\nlet effect = new android.graphics.DashPathEffect([20, 10], 0);\npaint.setStyle(Paint.Style.STROKE);\npaint.setStrokeWidth(6);\npaint.setPathEffect(effect);\ncanvas.drawPath(path, paint);\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">JsCanvasView</p>\n\n<hr>\n<p>本节只记录 UI <code>&lt;canvas&gt;</code> 相对普通 <code>TextureView</code> 增加的绘制接口.\n通用 UI 属性和 View 方法由 <a href=\"ui\">UI</a> 章节说明.</p>\n",
+          "type": "module",
+          "displayName": "矩阵, 路径与绘制效果"
+        },
+        {
+          "textRaw": "[m#] on",
+          "name": "[m#]_on",
+          "methods": [
+            {
+              "textRaw": "on(\"draw\", listener)",
+              "type": "method",
+              "name": "on",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 绘制监听器, 形式为 <code>(canvas, view) =&gt; void</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"eventEmitterType\">EventEmitter</a> } - 控件内部事件发射器</li>\n</ul>\n<p>注册每帧绘制监听器. <code>listener</code> 接收以下参数:</p>\n<ul>\n<li><strong>canvas</strong> { <a href=\"#c-canvas\">Canvas</a> } - 已绑定当前 Surface 的画布</li>\n<li><strong>view</strong> { <a href=\"https://developer.android.com/reference/android/view/TextureView\">android.view.TextureView</a> } - 当前 JsCanvasView</li>\n</ul>\n<p>Canvas 控件还直接委托 <code>once</code>, <code>addListener</code>, <code>prependListener</code>,\n<code>prependOnceListener</code>, <code>removeListener</code>, <code>removeAllListeners</code>, <code>eventNames</code>,\n<code>listenerCount</code>, <code>listeners</code>, <code>emit</code>, <code>setMaxListeners</code> 和 <code>maxListeners</code>\n等 EventEmitter 成员. 绘制循环应使用 <code>on(&quot;draw&quot;, listener)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "\"draw\""
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on"
+        },
+        {
+          "textRaw": "[m#] setMaxFps",
+          "name": "[m#]_setmaxfps",
+          "methods": [
+            {
+              "textRaw": "setMaxFps(maxFps)",
+              "type": "method",
+              "name": "setMaxFps",
+              "desc": "<p><strong><code>UI</code></strong> <strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li><strong>maxFps</strong> { <a href=\"dataTypes#number\">number</a> } - 期望的最大每秒绘制次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置绘制循环的最短帧间隔. 默认值为 30 FPS. 正整数使用\n<code>1000 / maxFps</code> 的整数毫秒结果作为目标间隔; 实际帧率还受监听器耗时,\n线程调度和 Surface 状态影响.</p>\n<p><code>maxFps &lt;= 0</code> 时不主动等待下一帧, 并不表示暂停绘制. 要停止可见区域的绘制,\n应通过 UI 生命周期隐藏或移除控件.</p>\n<p>AutoJs6 6.7.0 修正了此方法的帧间隔计算.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "maxFps"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setMaxFps"
         }
       ],
       "type": "module",
       "displayName": "画布 (Canvas)"
-    },
-    {
-      "textRaw": "路径特效",
-      "name": "路径特效",
-      "type": "module",
-      "displayName": "区域"
-    },
-    {
-      "textRaw": "区域",
-      "name": "区域",
-      "type": "module",
-      "displayName": "区域"
     }
   ]
 }

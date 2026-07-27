@@ -3,6 +3,19 @@ const nodeDocUrl = '';
 const jsDocPrefix = 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/';
 const jsDocUrl = jsDocPrefix + 'Reference/Global_Objects/';
 const jsPrimitiveUrl = jsDocPrefix + 'Data_structures';
+const internalTypeMap = {
+    'boolean': 'dataTypes.html#datatypes_boolean',
+    'number': 'dataTypes.html#datatypes_number',
+    'string': 'dataTypes.html#datatypes_string',
+    'symbol': 'dataTypes.html#datatypes_symbol',
+    'Function': 'dataTypes.html#datatypes_function',
+    'Array': 'dataTypes.html#datatypes_array',
+    'Object': 'dataTypes.html#datatypes_object',
+    'ArrayBuffer': 'dataTypes.html#datatypes_arraybuffer',
+    'DataView': 'dataTypes.html#datatypes_dataview',
+    'TypedArray': 'dataTypes.html#datatypes_typedarray',
+    'Uint8Array': 'dataTypes.html#datatypes_uint8array',
+};
 const jsPrimitives = {
     'boolean': 'Boolean',
     'integer': 'Number', // not a primitive, used for clarification
@@ -77,8 +90,16 @@ module.exports = {
                 }
 
                 const primitive = jsPrimitives[typeText.toLowerCase()];
+                const internalTypeUrl = internalTypeMap[typeText] ||
+                    internalTypeMap[typeText.toLowerCase()];
 
-                if (primitive !== undefined) {
+                if (internalTypeUrl) {
+                    typeLinks.push(
+                        '<span class="type"><a href="' + internalTypeUrl + '">' +
+                        typeTextFull + '</a></span>',
+                    );
+                    return;
+                } else if (primitive !== undefined) {
                     typeUrl = `${jsPrimitiveUrl}#${primitive}_type`;
                 } else if (jsGlobalTypes.indexOf(typeText) !== -1) {
                     typeUrl = jsDocUrl + typeText;

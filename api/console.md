@@ -16,9 +16,29 @@ console 模块的主要作用:
 
 - 控制台日志内容的管理 - [ 按分级显示内容 / 内容清空 / 时间跟踪 / 栈追踪 / 存入文件 ] 等
     - [console.log](#m-log)
+    - [console.warn](#m-warn)
+    - [console.clear](#m-clear)
+    - [console.time](#m-time)
+    - [console.timeEnd](#m-timeend)
+    - [console.printAllStackTrace](#m-printallstacktrace)
     - [console.setGlobalLogConfig](#m-setgloballogconfig)
+    - ... ...
 - 控制台浮动窗口的管理 - [ 窗口样式 / 文字样式 / 窗口显示与隐藏 / 窗口位置与尺寸 ] 等
+    - [console.setBackgroundColor](#m-setbackgroundcolor)
+    - [console.setBackgroundTint](#m-setbackgroundtint)
+    - [console.setBackgroundAlpha](#m-setbackgroundalpha)
+    - [console.setTouchable](#m-settouchable)
+    - [console.setTitle](#m-settitle)
+    - [console.setTextColor](#m-settextcolor)
+    - [console.setTextSize](#m-settextsize)
     - [console.show](#m-show)
+    - [console.hide](#m-hide)
+    - [console.collapse](#m-collapse)
+    - [console.expand](#m-expand)
+    - [console.setSize](#m-setsize)
+    - [console.setPosition](#m-setposition)
+    - [console.setGravity](#m-setgravity)
+    - ... ...
 - 控制台 Activity 活动窗口管理
     - [console.launch](#m-launch)
 
@@ -103,21 +123,84 @@ console.show();
 
 ---
 
+<p style="font: bold 2em sans-serif; color: #FF7043">globalThis</p>
+
+---
+
+以下名称仅作为全局方法挂载, 不会成为 `console` 对象的同名成员.
+
+## [m] err
+
+### err(data, ...args)
+
+**`Global`** **`xAlias`**
+
+- **data** { [string](dataTypes#string) } - 可包含占位符的待格式化对象
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[console.error](#m-error) 的全局别名.
+
+## [m] openConsole
+
+### openConsole(isReset?)
+
+**`Global`** **`xAlias`**
+
+- **[ isReset = false ]** { [boolean](dataTypes#boolean) } - 是否在显示前清空已保存的状态并重置控制台
+- <ins>**returns**</ins> { [this](console) }
+
+[console.show](#m-show) 的全局别名.
+
+## [m] showConsole
+
+### showConsole(isReset?)
+
+**`Global`** **`xAlias`**
+
+- **[ isReset = false ]** { [boolean](dataTypes#boolean) } - 是否在显示前清空已保存的状态并重置控制台
+- <ins>**returns**</ins> { [this](console) }
+
+[console.show](#m-show) 的全局别名.
+
+## [m] clearConsole
+
+### clearConsole()
+
+**`Global`** **`xAlias`**
+
+- <ins>**returns**</ins> { [this](console) }
+
+[console.clear](#m-clear) 的全局别名.
+
+## [m] launchConsole
+
+### launchConsole()
+
+**`Global`** **`xAlias`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[console.launch](#m-launch) 的全局别名.
+
+---
+
 <p style="font: bold 2em sans-serif; color: #FF7043">console</p>
 
 ---
 
 ## [m] show
 
-### show()
+### show(isReset?)
 
 **`[6.3.0]`**
 
+- **[ isReset = false ]** { [boolean](dataTypes#boolean) } - 是否在显示前清空已保存的状态并重置控制台
 - <ins>**returns**</ins> { [this](console) }
 
 显示控制台浮动窗口.
 
-窗口显示之前或之后, 均可设置浮动窗口的样式及空间状态.  
+窗口显示之前或之后, 均可设置浮动窗口的样式及空间状态.<br>
 如将窗口尺寸设置为 `500` × `800`:
 
 ```js
@@ -269,7 +352,7 @@ console.build({
     titleTextSize: 18, /* 窗口标题字号, 单位为 sp. */
     contentTextSize: 16, /* 窗口日志字号, 单位 sp. */
     backgroundColor: 'deep-orange-900', /* 窗口标题及日志区域的背景色, 900 号深橙色. */
-    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 90%. */
+    titleBackgroundAlpha: 0.8, /* 窗口标题区域背景透明度, 80%. */
     contentBackgroundAlpha: 0.5, /* 窗口日志区域背景透明度, 50%. */
     exitOnClose: 6e3, /* 脚本运行结束时 6 秒钟后自动关闭窗口. */
     touchable: true, /* true: 窗口正常响应点击事件; false: 点击将穿透窗口. */
@@ -284,8 +367,8 @@ console.build({
 
 **`[6.3.0]`**
 
-- **width** { [number](dataTypes#number) } - 浮动窗口宽度值 (像素值/百分数)
-- **height** { [number](dataTypes#number) } - 浮动窗口高度值 (像素值/百分数)
+- **width** { [number](dataTypes#number) } - 浮动窗口宽度值 (像素值 / 百分数)
+- **height** { [number](dataTypes#number) } - 浮动窗口高度值 (像素值 / 百分数)
 - <ins>**returns**</ins> { [this](console) }
 
 设置控制台浮动窗口的尺寸.
@@ -301,8 +384,8 @@ console.build({ size: [ 0.8, 700 ] }).show(); /* 效果同上. */
 
 **`[6.3.0]`**
 
-- **x** { [number](dataTypes#number) } - 浮动窗口位置 X 坐标 (像素值/百分数)
-- **y** { [number](dataTypes#number) } - 浮动窗口位置 Y 坐标 (像素值/百分数)
+- **x** { [number](dataTypes#number) } - 浮动窗口位置 X 坐标 (像素值 / 百分数)
+- **y** { [number](dataTypes#number) } - 浮动窗口位置 Y 坐标 (像素值 / 百分数)
 - <ins>**returns**</ins> { [this](console) }
 
 设置控制台浮动窗口的位置.
@@ -311,6 +394,28 @@ console.build({ size: [ 0.8, 700 ] }).show(); /* 效果同上. */
 console.setPosition(0.1, 0.15).show(); /* X: 10% 屏幕宽度, Y: 15% 屏幕高度. */
 console.build({ position: [ 0.1, 0.15 ] }).show(); /* 效果同上. */
 ```
+
+## [m] setGravity
+
+### setGravity(gravity)
+
+**`6.6.0`**
+
+- **gravity** { [string](dataTypes#string) | [number](dataTypes#number) } - 窗口重力
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+按重力将控制台浮动窗口贴靠到屏幕指定位置. 字符串可使用 `left`, `top`, `right`, `bottom`, `start`, `end`, `center`, `center_horizontal` 和 `center_vertical`, 并可使用 `|` 组合.
+
+数字形式对应 `android.view.Gravity` 常量.
+
+```js
+console.setGravity('right|bottom');
+console.show();
+
+console.build({ gravity: android.view.Gravity.CENTER }).show();
+```
+
+调用 [setPosition](#m-setposition) 会清除已保存的重力设置.
 
 ## [m] setExitOnClose
 
@@ -391,6 +496,24 @@ events.on('volume_down', () => {
 });
 ```
 
+## [m] setTouchThrough
+
+### setTouchThrough(touchThrough?)
+
+**`6.6.0`**
+
+- **[ touchThrough = false ]** { [boolean](dataTypes#boolean) } - 是否让触摸事件穿透窗口
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置控制台浮动窗口是否让触摸事件穿透. 此方法与 [setTouchable](#m-settouchable) 的布尔值语义相反.
+
+```js
+console.setTouchThrough(true);
+console.show();
+
+console.build({ touchThrough: true }).show();
+```
+
 ## [m] setTitle
 
 ### setTitle(title)
@@ -466,6 +589,43 @@ console
     .show();
 ```
 
+如需在设置颜色时保留原有的背景透明度值, 可使用 [setTitleBackgroundTint](#m-settitlebackgroundtint) 方法:
+
+```js
+/* 深蓝色背景, 透明度丢失, 即完全不透明. */
+console.setTitleBackgroundColor('dark-blue').show();
+
+/* 深蓝色背景, 透明度保留. */
+console.setTitleBackgroundTint('dark-blue').show();
+```
+
+## [m] setTitleBackgroundTint
+
+### setTitleBackgroundTint(color)
+
+**`6.6.0`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) | [null](dataTypes#null) } - 浮动窗口标题显示区域背景颜色, `null` 表示清除着色
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口的标题显示区域背景着色, 保留原有透明度值.
+
+```js
+/* 设置标题显示区域背景着色为深蓝色. */
+console.setTitleBackgroundTint('dark-blue').show();
+console.build({ titleBackgroundTint: 'dark-blue' }).show(); /* 效果同上. */
+```
+
+与 [setTitleBackgroundColor](#m-settitlebackgroundcolor) 的区别:
+
+```js
+/* 深蓝色背景, 透明度保留. */
+console.setTitleBackgroundTint('dark-blue').show();
+
+/* 深蓝色背景, 透明度丢失, 即完全不透明. */
+console.setTitleBackgroundColor('dark-blue').show();
+```
+
 ## [m] setTitleBackgroundAlpha
 
 ### setTitleBackgroundAlpha(alpha)
@@ -487,6 +647,28 @@ console
     .setTitleBackgroundColor('dark-blue')
     .setTitleBackgroundAlpha(0.5)
     .show();
+```
+
+使用 `-1` 可重置标题区域的透明度 (为 `0.8`):
+
+```js
+console.setTitleBackgroundAlpha(-1).show();
+console.resetTitleBackgroundAlpha().show(); /* 同上. */
+```
+
+## [m] resetTitleBackgroundAlpha
+
+### resetTitleBackgroundAlpha()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [this](console) }
+
+重置控制台浮动窗口的标题显示区域背景颜色透明度, 默认值为 `0.8`.
+
+```js
+console.resetTitleBackgroundAlpha().show();
+console.setTitleBackgroundAlpha(-1).show(); /* 同上. */
 ```
 
 ## [m] setTitleIconsTint
@@ -581,6 +763,17 @@ console.setContentTextColor('dark-green').show();
 });
 ```
 
+## [m] setContentTextColors
+
+### setContentTextColors(...colors)
+
+**`6.6.0`**
+
+- **...colors** { [...](documentation#可变参数)[OmniColor](omniTypes#omnicolor)[[]](documentation#可变参数) } - 各日志等级的文字颜色
+- <ins>**returns**</ins> { [this](console) }
+
+[setContentTextColor](#m-setcontenttextcolor) 的兼容别名. 传入多个颜色时依次对应 `verbose`, `log`, `info`, `warn`, `error` 和 `assert`.
+
 ## [m] setContentBackgroundColor
 
 ### setContentBackgroundColor(color)
@@ -608,6 +801,22 @@ console
     .show();
 ```
 
+## [m] setContentBackgroundTint
+
+### setContentBackgroundTint(color)
+
+**`6.6.0`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) | [null](dataTypes#null) } - 浮动窗口日志显示区域背景着色, `null` 表示清除着色
+- <ins>**returns**</ins> { [this](console) }
+
+设置日志显示区域背景着色并保留原有透明度. 传入 `null` 可清除着色.
+
+```js
+console.setContentBackgroundTint('dark-blue').show();
+console.build({ contentBackgroundTint: 'dark-blue' }).show();
+```
+
 ## [m] setContentBackgroundAlpha
 
 ### setContentBackgroundAlpha(alpha)
@@ -629,6 +838,28 @@ console
     .setContentBackgroundColor('dark-blue')
     .setContentBackgroundAlpha(0.5)
     .show();
+```
+
+使用 `-1` 可重置日志区域的透明度 (为 `0.6`):
+
+```js
+console.setContentBackgroundAlpha(-1).show();
+console.resetContentBackgroundAlpha().show(); /* 同上. */
+```
+
+## [m] resetContentBackgroundAlpha
+
+### resetContentBackgroundAlpha()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [this](console) }
+
+重置控制台浮动窗口的日志显示区域背景颜色透明度, 默认值为 `0.6`.
+
+```js
+console.resetContentBackgroundAlpha().show();
+console.setContentBackgroundAlpha(-1).show(); /* 同上. */
 ```
 
 ## [m] setTextSize
@@ -656,7 +887,7 @@ console.build({ textSize: 18 }).show(); /* 效果同上. */
 
 **`6.3.0`**
 
-- **color** [OmniColor](omniTypes#omnicolor) } - 浮动窗口标题及日志文本字体颜色
+- **color** { [OmniColor](omniTypes#omnicolor) } - 浮动窗口标题及日志文本字体颜色
 - <ins>**returns**</ins> { [this](console) }
 
 设置控制台浮动窗口的标题及日志文本字体颜色.
@@ -702,6 +933,22 @@ console
     .show();
 ```
 
+## [m] setBackgroundTint
+
+### setBackgroundTint(color)
+
+**`6.6.0`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 浮动窗口标题及日志区域背景着色
+- <ins>**returns**</ins> { [this](console) }
+
+同时设置标题和日志显示区域的背景着色, 并分别保留原有透明度.
+
+```js
+console.setBackgroundTint('light-yellow').show();
+console.build({ backgroundTint: 'light-yellow' }).show();
+```
+
 ## [m] setBackgroundAlpha
 
 ### setBackgroundAlpha(alpha)
@@ -725,6 +972,30 @@ console
     .setBackgroundColor('light-yellow')
     .setBackgroundAlpha(0.5)
     .show();
+```
+
+使用 `-1` 可同时重置标题区域的透明度 (为 `0.8`), 以及日志区域的透明度 (为 `0.6`):
+
+```js
+console.setBackgroundAlpha(-1).show();
+console.resetBackgroundAlpha().show(); /* 同上. */
+```
+
+## [m] resetBackgroundAlpha
+
+### resetBackgroundAlpha()
+
+**`6.6.0`**
+
+- <ins>**returns**</ins> { [this](console) }
+
+重置控制台浮动窗口的标题及日志显示区域背景颜色透明度, 分别为 `0.8` 及 `0.6`.
+
+相当于 [resetTitleBackgroundAlpha](#m-resettitlebackgroundalpha) 和 [resetContentBackgroundAlpha](#m-resetcontentbackgroundalpha) 的集成.
+
+```js
+console.resetBackgroundAlpha().show();
+console.setBackgroundAlpha(-1).show(); /* 同上. */
 ```
 
 ## [m] verbose
@@ -875,7 +1146,7 @@ console.assert(new Date().getSeconds() < 30, '断言失败, 当前时间秒数�
 
 **`6.3.0`** **`Overload [3-4]/4`**
 
-- **func** { [() =>](#function) [boolean](dataTypes#boolean) } - 断言值
+- **func** { [() =>](dataTypes#function) [boolean](dataTypes#boolean) } - 断言值
 - **[ message ]** { [string](dataTypes#string) } - 断言失败时的消息
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 

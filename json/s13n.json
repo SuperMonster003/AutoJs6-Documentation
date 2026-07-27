@@ -4,7 +4,7 @@
     {
       "textRaw": "标准化 (Standardization)",
       "name": "标准化_(standardization)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Apr 9, 2023.</p>\n\n<hr>\n<p>s13n 模块用于将多种不同类型的数据统一转换为标准类型.</p>\n<p>例如在 AutoJs6 中, 一个颜色参数通常可接受 [ <a href=\"dataTypes#colorhex\">ColorHex</a> / <a href=\"dataTypes#colorint\">ColorInt</a> / <a href=\"dataTypes#colorname\">ColorName</a> / <a href=\"colorType\">Color</a> / <a href=\"dataTypes#themecolor\">ThemeColor</a> ] 等多种类型:</p>\n<pre><code class=\"lang-js\">console.setBackgroundColor(&#39;orange&#39;);\nconsole.setBackgroundColor(&#39;#663399&#39;);\nconsole.setBackgroundColor(autojs.themeColor);\nconsole.setBackgroundColor(Color(&#39;blue&#39;).setAlpha(0.75));\n</code></pre>\n<p>上述这些颜色设置方式均有效.<br>但安卓 API 中涉及颜色的参数往往只接受 <code>ColorInt</code> 类型:</p>\n<pre><code class=\"lang-js\">activity.window.setStatusBarColor(&#39;orange&#39;); /* 抛出异常. */\nactivity.window.setStatusBarColor(Color(&#39;orange&#39;)); /* 抛出异常. */\nactivity.window.setStatusBarColor(Color(&#39;orange&#39;).toInt()); /* 正常. */\nactivity.window.setStatusBarColor(colors.toInt(&#39;orange&#39;)); /* 效果同上. */\n</code></pre>\n<p>上述示例的颜色参数只能使用 <code>ColorInt</code>, 对应 JavaScript 的 <code>number</code> 类型.</p>\n<p>s13n 模块对颜色参数统一转换为 <code>ColorInt</code>:</p>\n<pre><code class=\"lang-js\">s13n.color(&#39;red&#39;); /* 相当于 colors.toInt(&#39;red&#39;) . */\n</code></pre>\n<p>因此对于上述设置通知栏颜色的示例, 使用 s13n 模块即可不必关心参数原本的类型:</p>\n<pre><code class=\"lang-js\">activity.window.setStatusBarColor(s13n.color(&#39;orange&#39;)); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;))); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;).toInt())); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;).toHex())); /* 正常. */\n</code></pre>\n<p>不过对于 AutoJs6 内置模块 (colors, device, images 等), 传参时无需使用 s13n 进行标准化.<br>因为在模块内部的实现代码中, 已经借助 s13n 进行了标准化操作.<br>例如以下代码片段是 <code>console.setBackgroundColor</code> 的内部实现代码:</p>\n<pre><code class=\"lang-js\">function setBackgroundColor(c) {\n    return runtime.console.setBackgroundColor(s13n.color(c));\n}\n</code></pre>\n<p>上述示例可以看出, s13n 模块对参数 <code>c</code> 进行了颜色标准化操作.</p>\n<p>下表列出了 s13n 模块中不同方法接受类型与输出类型:</p>\n<table>\n<thead>\n<tr>\n<th>方法名称</th>\n<th>描述</th>\n<th>接受类型</th>\n<th>输出类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"#m-color\">color</a></td>\n<td>颜色</td>\n<td><a href=\"omniTypes#omnicolor\">OmniColor</a></td>\n<td><a href=\"dataTypes#colorint\">ColorInt</a></td>\n</tr>\n</tbody>\n</table>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">s13n</p>\n\n<hr>\n",
+      "desc": "<p>s13n 模块用于将多种不同类型的数据统一转换为标准类型.</p>\n<p>例如在 AutoJs6 中, 一个颜色参数通常可接受 [ <a href=\"dataTypes#colorhex\">ColorHex</a> / <a href=\"dataTypes#colorint\">ColorInt</a> / <a href=\"dataTypes#colorname\">ColorName</a> / <a href=\"colorType\">Color</a> / <a href=\"dataTypes#themecolor\">ThemeColor</a> ] 等多种类型:</p>\n<pre><code class=\"lang-js\">console.setBackgroundColor(&#39;orange&#39;);\nconsole.setBackgroundColor(&#39;#663399&#39;);\nconsole.setBackgroundColor(autojs.themeColor);\nconsole.setBackgroundColor(Color(&#39;blue&#39;).setAlpha(0.75));\n</code></pre>\n<p>上述这些颜色设置方式均有效.<br>\n但安卓 API 中涉及颜色的参数往往只接受 <code>ColorInt</code> 类型:</p>\n<pre><code class=\"lang-js\">activity.window.setStatusBarColor(&#39;orange&#39;); /* 抛出异常. */\nactivity.window.setStatusBarColor(Color(&#39;orange&#39;)); /* 抛出异常. */\nactivity.window.setStatusBarColor(Color(&#39;orange&#39;).toInt()); /* 正常. */\nactivity.window.setStatusBarColor(colors.toInt(&#39;orange&#39;)); /* 效果同上. */\n</code></pre>\n<p>上述示例的颜色参数只能使用 <code>ColorInt</code>, 对应 JavaScript 的 <code>number</code> 类型.</p>\n<p>s13n 模块对颜色参数统一转换为 <code>ColorInt</code>:</p>\n<pre><code class=\"lang-js\">s13n.color(&#39;red&#39;); /* 相当于 colors.toInt(&#39;red&#39;). */\n</code></pre>\n<p>因此对于上述设置通知栏颜色的示例, 使用 s13n 模块即可不必关心参数原本的类型:</p>\n<pre><code class=\"lang-js\">activity.window.setStatusBarColor(s13n.color(&#39;orange&#39;)); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;))); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;).toInt())); /* 正常. */\nactivity.window.setStatusBarColor(s13n.color(Color(&#39;orange&#39;).toHex())); /* 正常. */\n</code></pre>\n<p>AutoJs6 内置 API 通常会在实现中自行完成参数标准化. 例如 <code>console.setBackgroundColor</code> 会将颜色参数交给 <code>s13n.color</code> 转换, 因此调用这些 API 时通常不需要预先调用 s13n.</p>\n<p>下表列出了 s13n 模块中不同方法接受类型与输出类型:</p>\n<table>\n<thead>\n<tr>\n<th>方法名称</th>\n<th>描述</th>\n<th>输出类型</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"#m-bytes\">bytes</a></td>\n<td>字节数</td>\n<td><a href=\"dataTypes#number\">number</a> 或 <a href=\"glossaries#bigint\">bigint</a></td>\n</tr>\n<tr>\n<td><a href=\"#m-color\">color</a></td>\n<td>颜色</td>\n<td><a href=\"dataTypes#colorint\">ColorInt</a></td>\n</tr>\n<tr>\n<td><a href=\"#m-point\">point</a></td>\n<td>坐标点</td>\n<td><a href=\"https://developer.android.com/reference/android/graphics/Point\">android.graphics.Point</a></td>\n</tr>\n<tr>\n<td><a href=\"#m-throwable\">throwable</a></td>\n<td>可抛异常</td>\n<td><a href=\"exceptions#java\">java.lang.Throwable</a></td>\n</tr>\n<tr>\n<td><a href=\"#m-time\">time</a></td>\n<td>时间值</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n</tr>\n</tbody>\n</table>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">s13n</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[m] color",
@@ -42,6 +42,87 @@
           ],
           "type": "module",
           "displayName": "[m] color"
+        },
+        {
+          "textRaw": "[m] point",
+          "name": "[m]_point",
+          "methods": [
+            {
+              "textRaw": "point(source, y?)",
+              "type": "method",
+              "name": "point",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Point\">android.graphics.Point</a> | <a href=\"opencvPointType\">OpenCVPoint</a> | <a href=\"dataTypes#number\">number</a>[] | {{ x: <a href=\"dataTypes#number\">number</a>; y: <a href=\"dataTypes#number\">number</a> }} | <a href=\"dataTypes#number\">number</a> } - 坐标点参数或 X 坐标</li>\n<li><strong>[ y ]</strong> { <a href=\"dataTypes#number\">number</a> } - Y 坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/graphics/Point\">android.graphics.Point</a> } - Android 坐标点</li>\n</ul>\n<p>将坐标参数标准化为 <code>android.graphics.Point</code>.</p>\n<p>当 <strong>source</strong> 为单个数值且省略 <strong>y</strong> 时, X 和 Y 坐标均采用 <strong>source</strong>.</p>\n<pre><code class=\"lang-js\">s13n.point([ 10, 20 ]);\ns13n.point({ x: 10, y: 20 });\ns13n.point(10, 20);\ns13n.point(10); // Point(10, 10)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "y?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] point"
+        },
+        {
+          "textRaw": "[m] time",
+          "name": "[m]_time",
+          "methods": [
+            {
+              "textRaw": "time(source, fromUnit?, toUnit?)",
+              "type": "method",
+              "name": "time",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#date\">Date</a> } - 时间值</li>\n<li><strong>[ fromUnit ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html\">java.util.concurrent.TimeUnit</a> | {{ fromUnit?: <a href=\"dataTypes#string\">string</a>; toUnit?: <a href=\"dataTypes#string\">string</a> }} } - 源单位或选项对象</li>\n<li><strong>[ toUnit ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/TimeUnit.html\">java.util.concurrent.TimeUnit</a> } - 目标单位</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 标准化或换算后的时间值</li>\n</ul>\n<p>标准化时间值并按需进行单位换算. 源单位和目标单位默认均为毫秒.</p>\n<p>字符串单位不区分大小写, 支持纳秒, 微秒, 毫秒, 秒, 分钟, 小时和天的常用英文名称及缩写. 包含年, 月, 日, 时, 分, 秒 6 个数值部分的日期时间字符串会先转换为时间戳.</p>\n<pre><code class=\"lang-js\">s13n.time(2, &#39;seconds&#39;); // 2000\ns13n.time(120000, { fromUnit: &#39;ms&#39;, toUnit: &#39;minutes&#39; }); // 2\ns13n.time(new Date()); // 当前时间戳.\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "fromUnit?"
+                    },
+                    {
+                      "name": "toUnit?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] time"
+        },
+        {
+          "textRaw": "[m] bytes",
+          "name": "[m]_bytes",
+          "methods": [
+            {
+              "textRaw": "bytes(source, fromUnit?)",
+              "type": "method",
+              "name": "bytes",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 字节数值, 字符串可包含单位</li>\n<li><strong>[ fromUnit ]</strong> { <a href=\"dataTypes#string\">string</a> } - 源单位, 默认为 <code>B</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> | <a href=\"glossaries#bigint\">bigint</a> } - 换算后的整数 Byte 数</li>\n</ul>\n<p>将字节单位参数标准化为 Byte 数. 单位解析规则与 <a href=\"cvt#m-bytes\">cvt.bytes</a> 的宽松模式一致.</p>\n<pre><code class=\"lang-js\">s13n.bytes(&#39;1.5 KiB&#39;); // 1536\ns13n.bytes(2, &#39;MB&#39;); // 2097152\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "fromUnit?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] bytes"
         },
         {
           "textRaw": "[m] throwable",

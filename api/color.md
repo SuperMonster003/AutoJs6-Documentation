@@ -1,6 +1,6 @@
 # 颜色 (Color)
 
-colors 模块可用于 [ 颜色模式转换 / 色彩空间转换 / 颜色分量合成及分解 ] 等.  
+colors 模块可用于 [ 颜色模式转换 / 色彩空间转换 / 颜色分量合成及分解 ] 等.<br>
 同时包含一些颜色相关的工具, 如 [ 计算亮度值 / 相似度比较 ] 等.
 
 colors 模块与 [images](image) 模块配合使用, 可完成更多图色方面的功能.
@@ -81,6 +81,33 @@ AutoJs6 支持以下方式表示一个颜色:
 
 ---
 
+## [p] all
+
+**`6.8.0`** **`Getter`**
+
+- { [object](dataTypes#object) } - 颜色名称到 [ColorInt](dataTypes#colorint) 的映射对象
+
+获取全部内置颜色表融合后的对象. 对象以颜色常量名称为属性名, 以对应的颜色整数为属性值.
+
+当不同颜色表含有同名常量时, 按 Android, CSS, Web, Material 的顺序保留第一个值.
+
+```js
+console.log(colors.all.RED === colors.android.RED); // true
+console.log(colors.all.ORANGE_300 === colors.material.ORANGE_300); // true
+```
+
+## [p] themeColor
+
+**`6.7.0`** **`Getter`**
+
+- { [ThemeColor](dataTypes#themecolor) } - 当前 AutoJs6 主题颜色实例
+
+获取当前主题颜色. 此属性是 [`autojs.themeColor`](autojs#p-themecolor) 的别名, 两者返回同一个 `ThemeColor` 实例.
+
+```js
+console.log(colors.themeColor === autojs.themeColor); // true
+```
+
 ## [m] toInt
 
 ### toInt(color)
@@ -134,7 +161,7 @@ colors.toHex('BURNT_ORANGE'); // #CC5500
 colors.toHex('burnt-orange'); // #CC5500
 ```
 
-当 `A (alpha)` 分量为 `100% (255/255;100/100)` 时, `FF` 会自动省略,  
+当 `A (alpha)` 分量为 `100% (255/255;100/100)` 时, `FF` 会自动省略,<br>
 如 `#FFC0C0C0` 将自动转换为 `#C0C0C0`, 此方法相当于 `toHex(color, 'auto')`.
 
 ### toHex(color, alpha)
@@ -151,8 +178,8 @@ colors.toHex('burnt-orange'); // #CC5500
 
 | 取值                                                     | 含义                                                                  | 默认 |
 |--------------------------------------------------------|---------------------------------------------------------------------|:--:|
-| <span style="white-space:nowrap">'keep' / true</span>  | <span style="white-space:nowrap">强制显示 A 分量, 不论 A 分量是否为 0xFF</span>  |    |      
-| <span style="white-space:nowrap">'none' / false</span> | <span style="white-space:nowrap">强制去除 A 分量, 只保留 R / G / B 分量</span> |    |      
+| <span style="white-space:nowrap">'keep' / true</span>  | <span style="white-space:nowrap">强制显示 A 分量, 不论 A 分量是否为 0xFF</span>  |    |
+| <span style="white-space:nowrap">'none' / false</span> | <span style="white-space:nowrap">强制去除 A 分量, 只保留 R / G / B 分量</span> |    |
 | <span style="white-space:nowrap">'auto'</span>         | <span style="white-space:nowrap">根据 A 分量是否为 0xFF 自动决定显示状态</span>    | √  |
 
 ```js
@@ -191,9 +218,9 @@ Hex 代码长度参数取值表:
 
 | <span style="white-space:nowrap">取值</span> | 含义                                                                 |
 |:------------------------------------------:|--------------------------------------------------------------------|
-|                     8                      | <span style="white-space:nowrap">强制显示 A 分量, 结果格式为 #AARRGGBB</span> |        
-|                     6                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RRGGBB</span>   |        
-|                     3                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RGB</span>      |  
+|                     8                      | <span style="white-space:nowrap">强制显示 A 分量, 结果格式为 #AARRGGBB</span> |
+|                     6                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RRGGBB</span>   |
+|                     3                      | <span style="white-space:nowrap">强制去除 A 分量, 结果格式为 #RGB</span>      |
 
 ```js
 let cA = '#AA9966CC';
@@ -250,7 +277,7 @@ colors.toFullHex('#CC5500'); // #FFCC5500
 构建一个 [Color](colorType) 实例, 相当于 `new Color(color?)` 或 `Color(color?)`.
 
 ```js
-colors.build('dark-orange') /* 以深橙色构建 Color 实例 */
+colors.build('dark-orange') /* 以深橙色构建 Color 实例. */
     .setAlpha(0.85) /* 设置透明度 85%. */
     .removeBlue() /* 移除 B (blue) 分量. */
     .toHex(); // #D9FF8C00
@@ -326,7 +353,7 @@ colors.build('dark-blue').setAlpha(100).summary();
 
 将颜色参数转换为 [颜色整数 (ColorInt)](dataTypes#colorint).
 
-类似 [toInt](#m-toint), 但参数接受范围相对狭小且类型及数值要求更加严格.    
+类似 [toInt](#m-toint), 但参数接受范围相对狭小且类型及数值要求更加严格.<br>
 parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜色名称.
 
 支持的颜色名称 (不区分大小写):
@@ -336,7 +363,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 >
 > 'lightgrey', 'lime', 'magenta', 'maroon', 'navy', 'olive',
 >
-> 'purple', 'red', 'silver', 'teal', 'white', 'yellow'`.
+> 'purple', 'red', 'silver', 'teal', 'white', 'yellow'.
 
 下表列出部分 toInt 与 parseColor 传参后的结果对照:
 
@@ -347,7 +374,7 @@ parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜
 | '#FFCC5500'             | -3386112  | -3386112   |
 | '#CC5500'               | -3386112  | -3386112   |
 | '#C50'                  | -3386112  | # 抛出异常 #   |
-| 0xFFCC5500              | -3386112  | # 抛出异常 #   | 
+| 0xFFCC5500              | -3386112  | # 抛出异常 #   |
 | colors.web.BURNT_ORANGE | -3386112  | # 抛出异常 #   |
 
 除非需要考虑多版本兼容, 否则建议始终使用 toInt 替代 parseColor.
@@ -1146,7 +1173,7 @@ colors.rgb([ 1, 0.5, '3.53%' ]); /* 同上. */
 | #AARRGGBB | -                  |
 
 ```js
-colors.argb('#663399'); /* 相当于 argb('#FF663399') . */
+colors.argb('#663399'); /* 相当于 argb('#FF663399'). */
 colors.argb('#DE663399'); /* 结果不同上. */
 ```
 
@@ -1202,7 +1229,7 @@ colors.argb([ 0.25, 1, 0.5, '3.53%' ]); /* 同上. */
 | #RRGGBBAA | -                  |
 
 ```js
-colors.rgba('#663399'); /* 相当于 rgba('#663399FF') . */
+colors.rgba('#663399'); /* 相当于 rgba('#663399FF'). */
 colors.rgba('#663399FF'); /* 结果同上. */
 colors.rgba('#FF663399'); /* 结果不同上. */
 ```
@@ -1210,8 +1237,8 @@ colors.rgba('#FF663399'); /* 结果不同上. */
 注意区分 `colors.rgba` 与 `colors.argb`:
 
 ```js
-colors.rgba('#11335577'); /* A (alpha) 分量为 0x77 . */
-colors.argb('#11335577'); /* A (alpha) 分量为 0x11 . */
+colors.rgba('#11335577'); /* A (alpha) 分量为 0x77. */
+colors.argb('#11335577'); /* A (alpha) 分量为 0x11. */
 ```
 
 ### rgba(red, green, blue, alpha)
@@ -1442,10 +1469,10 @@ console.log(`R: ${r}, G: ${g}, B: ${b}, A: ${a}`);
 
 ```js
 let [ r1, g1, b1, a1 ] = colors.toRgba('#DE663399');
-console.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255] . */
+console.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255]. */
 
 let [ r2, g2, b2, a2 ] = colors.toRgba('#DE663399', { maxAlpha: 1 });
-console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1] . */
+console.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1]. */
 ```
 
 ## [m] toArgb
@@ -1478,10 +1505,10 @@ console.log(`A: ${a}, R: ${r}, G: ${g}, B: ${b}`);
 
 ```js
 let [ a1, r1, g1, b1 ] = colors.toArgb('#DE663399');
-console.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255] . */
+console.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255]. */
 
 let [ a2, r2, g2, b2 ] = colors.toArgb('#DE663399', { maxAlpha: 1 });
-console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1] . */
+console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1]. */
 ```
 
 ## [m] toHsv
@@ -1620,6 +1647,158 @@ console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
 ```js
 let [ h, s, l, a ] = colors.toHsla(102, 51, 153, 191);
 console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
+```
+
+## [m] toRgbString
+
+### toRgbString(color)
+
+**`6.6.2`** **`Overload 1/2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `rgb(r, g, b)` 格式的颜色字符串
+
+将颜色转换为 RGB 字符串. 各分量会四舍五入并限制在 `0` 至 `255`.
+
+```js
+console.log(colors.toRgbString("#663399")); // rgb(102, 51, 153)
+```
+
+### toRgbString(red, green, blue)
+
+**`6.6.2`** **`Overload 2/2`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `rgb(r, g, b)` 格式的颜色字符串
+
+```js
+console.log(colors.toRgbString(102, 51, 153)); // rgb(102, 51, 153)
+```
+
+## [m] toRgbaString
+
+### toRgbaString(color, options?)
+
+**`6.6.2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ options = true ]** { [boolean](dataTypes#boolean) | [object](dataTypes#object) } - 是否为完全不透明的 A 分量保留末尾 `.0`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `rgba(r, g, b, a)` 格式的颜色字符串
+
+将颜色转换为 RGBA 字符串. A 分量范围为 `0` 至 `1`, 保留 1 位小数后移除无意义的末尾 `0`.
+
+`options` 为对象时, 使用其 `keepTrailingZeroForFullAlpha` 属性. 默认值为 `true`, 因此完全不透明的 A 分量表示为 `1.0`; 设为 `false` 时表示为 `1`.
+
+```js
+console.log(colors.toRgbaString("#80663399")); // rgba(102, 51, 153, 0.5)
+console.log(colors.toRgbaString("#663399")); // rgba(102, 51, 153, 1.0)
+console.log(colors.toRgbaString("#663399", false)); // rgba(102, 51, 153, 1)
+```
+
+## [m] toArgbString
+
+### toArgbString(color, options?)
+
+**`6.6.2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ options = true ]** { [boolean](dataTypes#boolean) | [object](dataTypes#object) } - 是否为完全不透明的 A 分量保留末尾 `.0`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `argb(a, r, g, b)` 格式的颜色字符串
+
+将颜色转换为 ARGB 字符串. `options` 的布尔值或对象属性 `keepTrailingZeroForFullAlpha` 与 [`toRgbaString()`](#m-torgbastring) 相同.
+
+```js
+console.log(colors.toArgbString("#80663399")); // argb(0.5, 102, 51, 153)
+```
+
+## [m] toHsvString
+
+### toHsvString(color)
+
+**`6.6.2`** **`Overload 1/2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsv(h, s, v)` 格式的颜色字符串
+
+将颜色转换为 HSV 字符串. H 分量四舍五入为整数, S 和 V 分量使用百分比并保留至多 1 位小数.
+
+```js
+console.log(colors.toHsvString("#663399")); // hsv(270, 66.7%, 60%)
+```
+
+### toHsvString(red, green, blue)
+
+**`6.6.2`** **`Overload 2/2`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsv(h, s, v)` 格式的颜色字符串
+
+```js
+console.log(colors.toHsvString(102, 51, 153)); // hsv(270, 66.7%, 60%)
+```
+
+## [m] toHsvaString
+
+### toHsvaString(color, options?)
+
+**`6.6.2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ options = true ]** { [boolean](dataTypes#boolean) | [object](dataTypes#object) } - 是否为完全不透明的 A 分量保留末尾 `.0`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsva(h, s, v, a)` 格式的颜色字符串
+
+将颜色转换为 HSVA 字符串. H, S 和 V 的格式与 [`toHsvString()`](#m-tohsvstring) 相同. `options` 的布尔值或对象属性 `keepTrailingZeroForFullAlpha` 与 [`toRgbaString()`](#m-torgbastring) 相同.
+
+```js
+console.log(colors.toHsvaString("#80663399")); // hsva(270, 66.7%, 60%, 0.5)
+```
+
+## [m] toHslString
+
+### toHslString(color)
+
+**`6.6.2`** **`Overload 1/2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsl(h, s, l)` 格式的颜色字符串
+
+将颜色转换为 HSL 字符串. H 分量四舍五入为整数, S 和 L 分量使用百分比并保留至多 1 位小数.
+
+```js
+console.log(colors.toHslString("#663399")); // hsl(270, 50%, 40%)
+```
+
+### toHslString(red, green, blue)
+
+**`6.6.2`** **`Overload 2/2`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - B (blue)
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsl(h, s, l)` 格式的颜色字符串
+
+```js
+console.log(colors.toHslString(102, 51, 153)); // hsl(270, 50%, 40%)
+```
+
+## [m] toHslaString
+
+### toHslaString(color, options?)
+
+**`6.6.2`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ options = true ]** { [boolean](dataTypes#boolean) | [object](dataTypes#object) } - 是否为完全不透明的 A 分量保留末尾 `.0`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - `hsla(h, s, l, a)` 格式的颜色字符串
+
+将颜色转换为 HSLA 字符串. H, S 和 L 的格式与 [`toHslString()`](#m-tohslstring) 相同. `options` 的布尔值或对象属性 `keepTrailingZeroForFullAlpha` 与 [`toRgbaString()`](#m-torgbastring) 相同.
+
+```js
+console.log(colors.toHslaString("#80663399")); // hsla(270, 50%, 40%, 0.5)
 ```
 
 ## [m] isSimilar
@@ -1811,10 +1990,10 @@ setColor(@ColorInt int color): void
 setColor(@ColorLong long color): void
 ```
 
-JavaScript 语言不区分 `int` 和 `long`, 即只有 `setColor(color: number)`,  
+JavaScript 语言不区分 `int` 和 `long`, 即只有 `setColor(color: number)`,<br>
 它会优先匹配 Java 的 `setColor(@ColorLong long color): void`.
 
-`ColorLong` 颜色与 `ColorInt` 颜色不同在于, 前者包含了额外的 `ColorSpace` (颜色空间) 信息,  
+`ColorLong` 颜色与 `ColorInt` 颜色不同在于, 前者包含了额外的 `ColorSpace` (颜色空间) 信息,<br>
 原有的 `ColorInt` 被当做 `ColorLong` 来解析, 导致颜色解析异常.
 
 除上述 `colors.setPaintColor` 的方法外, 还有其他一些解决方案:

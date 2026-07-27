@@ -4,7 +4,37 @@
     {
       "textRaw": "上下文 (Context)",
       "name": "上下文_(context)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>一个 android.content.Context 子类实例.</p>\n<p>该对象为 ApplicationContext, 因此不能用于创建 [ 界面 / 对话框 ] 等.</p>\n<p><a href=\"https://developer.android.com/reference/android/content/Context#getApplicationContext(\">android.content.Context#getApplicationContext</a>)</p>\n",
+      "desc": "<p><code>context</code> 是 AutoJs6 向脚本引擎注入的全局 Java 对象, 类型为 <a href=\"https://developer.android.com/reference/android/content/Context\">android.content.Context</a>.</p>\n<p>该对象来自当前脚本宿主的应用上下文. 在 AutoJs6 中运行脚本时, 它表示 AutoJs6 应用. 在打包应用中运行脚本时, 它表示对应的打包应用.</p>\n<p>AutoJs6 不为 <code>context</code> 添加自定义成员. 它的字段, 方法, 重载, 参数类型, Android API 级别及权限要求均由当前设备的 Android 框架决定.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">context</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] context",
+          "name": "[@]_context",
+          "desc": "<ul>\n<li>{ <a href=\"https://developer.android.com/reference/android/content/Context\">android.content.Context</a> }</li>\n</ul>\n<p>返回当前脚本宿主的应用上下文.</p>\n<p><code>context</code> 在普通脚本和 UI 模式脚本中均可用. 它的生命周期与宿主应用一致, 不依赖某个 Activity 是否存在.</p>\n<pre><code class=\"lang-js\">let packageName = context.getPackageName();\nlet filesDir = context.getFilesDir();\n\nconsole.log(packageName);\nconsole.log(filesDir.getAbsolutePath());\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[@] context"
+        },
+        {
+          "textRaw": "Android 成员",
+          "name": "android_成员",
+          "desc": "<p><code>context</code> 直接通过 Java 互操作公开 <a href=\"https://developer.android.com/reference/android/content/Context\">android.content.Context</a> 的公共成员. AutoJs6 不改变这些成员的签名和返回值.</p>\n<p>常用成员如下. 此表只提供导航, 完整成员及各 Android 版本的行为以 Android 官方参考为准.</p>\n<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>返回类型</th>\n<th>用途</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getApplicationContext%28%29\">getApplicationContext()</a></td>\n<td><code>android.content.Context</code></td>\n<td>获取应用上下文</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getPackageName%28%29\">getPackageName()</a></td>\n<td><code>string</code></td>\n<td>获取脚本宿主的包名</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getResources%28%29\">getResources()</a></td>\n<td><code>android.content.res.Resources</code></td>\n<td>获取宿主应用资源</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getString%28int%29\">getString(int)</a></td>\n<td><code>string</code></td>\n<td>按资源 ID 获取字符串</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getSystemService%28java.lang.String%29\">getSystemService(string)</a></td>\n<td><code>java.lang.Object</code> 或 <code>null</code></td>\n<td>按服务名称获取 Android 系统服务</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getContentResolver%28%29\">getContentResolver()</a></td>\n<td><code>android.content.ContentResolver</code></td>\n<td>获取内容解析器</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getPackageManager%28%29\">getPackageManager()</a></td>\n<td><code>android.content.pm.PackageManager</code></td>\n<td>获取包管理器</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getFilesDir%28%29\">getFilesDir()</a></td>\n<td><code>java.io.File</code></td>\n<td>获取应用内部文件目录</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getCacheDir%28%29\">getCacheDir()</a></td>\n<td><code>java.io.File</code></td>\n<td>获取应用内部缓存目录</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#getSharedPreferences%28java.lang.String,int%29\">getSharedPreferences(string, int)</a></td>\n<td><code>android.content.SharedPreferences</code></td>\n<td>获取应用级键值存储</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#startActivity%28android.content.Intent%29\">startActivity(Intent)</a></td>\n<td><code>void</code></td>\n<td>启动 Activity</td>\n</tr>\n<tr>\n<td><a href=\"https://developer.android.com/reference/android/content/Context#sendBroadcast%28android.content.Intent%29\">sendBroadcast(Intent)</a></td>\n<td><code>void</code></td>\n<td>发送广播</td>\n</tr>\n</tbody>\n</table>\n<p>Java 重载由 Rhino 根据参数数量和运行时类型选择. 参数和返回值中的 Android 类型是原生 Java 对象, 不会自动转换为 AutoJs6 模块对象.</p>\n<p>访问静态常量时, 建议写出声明类:</p>\n<pre><code class=\"lang-js\">let serviceName = android.content.Context.POWER_SERVICE;\nlet powerService = context.getSystemService(serviceName);\n\nconsole.log(powerService.isInteractive());\n</code></pre>\n",
+          "type": "module",
+          "displayName": "Android 成员"
+        },
+        {
+          "textRaw": "应用上下文与 Activity",
+          "name": "应用上下文与_activity",
+          "desc": "<p><code>context</code> 是应用上下文, 不是 <a href=\"activity\">activity</a>. 它不携带当前 Activity 的窗口令牌, 可视区域, Activity 主题或生命周期.</p>\n<p>需要 Activity 上下文的窗口和对话框 API 应在 UI 模式下使用 <code>activity</code>. 即使 UI 模式提供了 <code>activity</code>, 全局 <code>context</code> 仍然保持为应用上下文.</p>\n<p>通过 <code>context</code> 注册的广播接收器或绑定的服务与应用级生命周期关联. Android 不会在某个 Activity 销毁时自动解除这些注册, 脚本应按对应 API 的要求调用 <code>unregisterReceiver</code> 或 <code>unbindService</code>.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nconsole.log(util.getClassName(context));\nconsole.log(util.getClassName(activity));\n</code></pre>\n<p>从应用上下文直接启动 Activity 时, <code>Intent</code> 必须包含 <code>FLAG_ACTIVITY_NEW_TASK</code>:</p>\n<pre><code class=\"lang-js\">let intent = new android.content.Intent(\n    android.provider.Settings.ACTION_SETTINGS\n);\nintent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK);\n\ncontext.startActivity(intent);\n</code></pre>\n<p>对于应用启动, 页面跳转和广播等常见操作, 优先使用 <a href=\"app\">app</a> 模块. 该模块会处理 AutoJs6 支持的简称, 参数转换及部分兼容逻辑.</p>\n",
+          "type": "module",
+          "displayName": "应用上下文与 Activity"
+        },
+        {
+          "textRaw": "运行条件",
+          "name": "运行条件",
+          "desc": "<ul>\n<li>Android 框架成员可能受设备 API 级别限制. 调用较新的成员前应检查 <code>device.sdkInt</code>.</li>\n<li>需要危险权限, 特殊权限或系统授权的成员不会因通过 <code>context</code> 调用而自动获得权限.</li>\n<li>普通脚本不保证运行在 Android 主线程. 只允许主线程调用的框架成员应切换到 UI 线程, 或改用对应的 AutoJs6 模块.</li>\n<li>文件目录, 资源, SharedPreferences 和包名均属于当前脚本宿主. 在 AutoJs6 与打包应用之间, 这些值可能不同.</li>\n<li>Android 框架方法抛出的 <code>SecurityException</code>, <code>ActivityNotFoundException</code> 及其他异常会通过 Java 互操作继续向脚本传播.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "运行条件"
+        }
+      ],
       "type": "module",
       "displayName": "上下文 (Context)"
     }

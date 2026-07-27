@@ -4,86 +4,988 @@
     {
       "textRaw": "运行时 (Runtime)",
       "name": "运行时_(runtime)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 31, 2022.</p>\n\n<hr>\n",
-      "methods": [
+      "desc": "<p><code>runtime</code> 表示当前 JavaScript 脚本引擎的运行时对象. 每个脚本引擎都有独立的 <code>runtime</code>, 用于访问当前脚本的作用域, 生命周期状态, 动态类加载器和部分底层运行能力.</p>\n<p>通常应优先使用对应的顶层模块或全局函数. 例如使用 <a href=\"shell\">shell</a> 而非 <code>runtime.shell()</code>, 使用 <a href=\"continuation\">continuation</a> 而非 <code>runtime.createContinuation()</code>. <code>runtime</code> 主要适用于兼容旧脚本和需要直接访问底层能力的场景.</p>\n<p>本章节只记录面向脚本公开且行为稳定的成员. 运行时对象上还可能看到用于引擎初始化, 模块装配和资源回收的 Java 成员, 这些成员属于实现细节, 不应作为脚本 API 使用.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">runtime</p>\n\n<hr>\n",
+      "modules": [
         {
-          "textRaw": "runtime.requestPermissions(permissions)",
-          "type": "method",
-          "name": "requestPermissions",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`permissions` {Array} 权限的字符串数组 ",
-                  "name": "permissions",
-                  "type": "Array",
-                  "desc": "权限的字符串数组"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "permissions"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>动态申请安卓的权限. 例如：</p>\n<pre><code>//请求GPS权限\nruntime.requestPermissions([&quot;access_fine_location&quot;]);\n</code></pre><p>尽管安卓有很多权限, 但必须写入Manifest才能动态申请, 为了防止权限的滥用, 目前Auto.js只能额外申请两个权限：</p>\n<ul>\n<li><code>access_fine_location</code> GPS权限</li>\n<li><code>record_audio</code> 录音权限</li>\n</ul>\n<p>您可以通过APK编辑器来增加Auto.js以及Auto.js打包的应用的权限.</p>\n<p>安卓所有的权限列表参见<a href=\"https://developer.android.com/guide/topics/permissions/overview/\">Permissions Overview</a>. （并没有用）</p>\n"
+          "textRaw": "[@] runtime",
+          "name": "[@]_runtime",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>当前脚本的 <code>org.autojs.autojs.runtime.ScriptRuntime</code> 实例.</p>\n<p><code>runtime</code> 与当前脚本引擎绑定. 不同脚本中的 <code>runtime</code> 对象及其属性存储区彼此独立.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[@] runtime"
         },
         {
-          "textRaw": "runtime.loadJar(path)",
-          "type": "method",
-          "name": "loadJar",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`path` {string} jar文件路径 ",
-                  "name": "path",
-                  "type": "string",
-                  "desc": "jar文件路径"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "path"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>加载目标jar文件, 加载成功后将可以使用该Jar文件的类.</p>\n<pre><code>// 加载jsoup.jar\nruntime.loadJar(&quot;./jsoup.jar&quot;);\n// 使用jsoup解析html\nimportClass(org.jsoup.Jsoup);\nlog(Jsoup.parse(files.read(&quot;./test.html&quot;)));\n</code></pre><p>(jsoup是一个Java实现的解析Html DOM的库, 可以在<a href=\"https://jsoup.org/download/\">Jsoup</a>下载/)</p>\n"
+          "textRaw": "[p] topLevelScope",
+          "name": "[p]_toplevelscope",
+          "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>当前脚本的 Rhino 顶层作用域, 与全局对象 <a href=\"global\">global</a> 指向同一对象.</p>\n<pre><code class=\"lang-js\">console.log(runtime.topLevelScope === global); // true\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p] topLevelScope"
         },
         {
-          "textRaw": "runtime.loadDex(path)",
-          "type": "method",
-          "name": "loadDex",
-          "signatures": [
+          "textRaw": "[p] clip",
+          "name": "[p]_clip",
+          "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>读取或写入系统剪贴板文本. 剪贴板没有文本内容时读取结果为空字符串.</p>\n<p>此属性与全局函数 <a href=\"global#m-getclip\">getClip</a> 和 <a href=\"global#m-setclip\">setClip</a> 使用相同的底层实现.</p>\n<pre><code class=\"lang-js\">runtime.clip = &quot;AutoJs6&quot;;\nconsole.log(runtime.clip);\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p] clip"
+        },
+        {
+          "textRaw": "[m] isStopped",
+          "name": "[m]_isstopped",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isStopped()",
+              "type": "method",
+              "name": "isStopped",
+              "signatures": [
                 {
-                  "textRaw": "`path` {string} dex文件路径 ",
-                  "name": "path",
-                  "type": "string",
-                  "desc": "dex文件路径"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前脚本线程是否已收到中断标记 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前脚本线程是否已收到中断标记"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
+              ],
+              "desc": "<p>返回当前脚本线程的中断状态.</p>\n<p>通常应使用全局函数 <a href=\"global#m-isstopped\">isStopped</a>.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isStopped"
+        },
+        {
+          "textRaw": "[m] isExiting",
+          "name": "[m]_isexiting",
+          "methods": [
             {
-              "params": [
+              "textRaw": "isExiting()",
+              "type": "method",
+              "name": "isExiting",
+              "signatures": [
                 {
-                  "name": "path"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前运行时是否已进入退出清理阶段 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "当前运行时是否已进入退出清理阶段"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回运行时的退出状态. 此状态由脚本引擎维护, 在执行退出回收流程时变为 <code>true</code>.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isExiting"
+        },
+        {
+          "textRaw": "[p] screenMetrics",
+          "name": "[p]_screenmetrics",
+          "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"#screenmetrics\">ScreenMetrics</a> }</li>\n</ul>\n<p>当前运行时的屏幕坐标缩放器.</p>\n<p>自动化模块会使用此对象将脚本设计分辨率中的坐标缩放到当前设备分辨率. 通常应通过全局函数 <a href=\"global#m-setscreenmetrics\">setScreenMetrics</a> 设置设计分辨率.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p] screenMetrics"
+        },
+        {
+          "textRaw": "[p] rootShell",
+          "name": "[p]_rootshell",
+          "desc": "<p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"shell\">Shell</a> }</li>\n</ul>\n<p>当前运行时延迟创建并复用的 Root Shell 实例.</p>\n<p>首次读取此属性时会尝试启动 Root Shell. 设备未获得 Root 权限或授权被拒绝时可能失败. 实例会在当前脚本退出时自动关闭.</p>\n<p>通常应使用 <a href=\"shell\">shell</a> 模块提供的命令执行方法或 Root 快捷方法.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p] rootShell"
+        },
+        {
+          "textRaw": "[m] requestPermissions",
+          "name": "[m]_requestpermissions",
+          "methods": [
+            {
+              "textRaw": "requestPermissions(permissions)",
+              "type": "method",
+              "name": "requestPermissions",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**permissions** { [string](dataTypes#string)[[]](dataTypes#array) } - Android 运行时权限名称 ",
+                      "name": "**permissions**",
+                      "type": " [string](dataTypes#string)[[]](dataTypes#array) ",
+                      "desc": "Android 运行时权限名称"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "permissions"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求当前未授予的 Android 运行时权限.</p>\n<p>权限名称可使用完整形式, 如 <code>&quot;android.permission.RECORD_AUDIO&quot;</code>, 也可省略 <code>android.permission.</code> 前缀, 如 <code>&quot;record_audio&quot;</code>. 省略前缀时, 名称会转换为大写并自动补全前缀.</p>\n<pre><code class=\"lang-js\">runtime.requestPermissions([\n    &quot;record_audio&quot;,\n    &quot;android.permission.ACCESS_FINE_LOCATION&quot;,\n]);\n</code></pre>\n<p>此方法会启动系统权限请求界面并立即返回, 不提供授权结果回调. 已授予的权限会被跳过. 请求能否成功还取决于权限是否已在当前 AutoJs6 应用或打包应用的 Manifest 中声明, 以及当前 Android 版本的权限策略.</p>\n<blockquote>\n<p>参阅: <a href=\"https://developer.android.com/training/permissions/requesting\">Android 运行时权限</a></p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] requestPermissions"
+        },
+        {
+          "textRaw": "[m] sleep",
+          "name": "[m]_sleep",
+          "methods": [
+            {
+              "textRaw": "sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**millis** { [number](dataTypes#number) } - 休眠时长, 单位为毫秒 ",
+                      "name": "**millis**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "休眠时长, 单位为毫秒"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>阻塞当前脚本线程指定时长. 线程在休眠期间被中断时抛出脚本中断异常.</p>\n<p>通常应使用支持更多重载的全局函数 <a href=\"global#m-sleep\">sleep</a>. 不应在 UI 线程中调用此方法, 否则会阻塞界面.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sleep"
+        },
+        {
+          "textRaw": "[m] shell",
+          "name": "[m]_shell",
+          "methods": [
+            {
+              "textRaw": "shell(command, withRoot)",
+              "type": "method",
+              "name": "shell",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**command** { [string](dataTypes#string) } - Shell 命令 ",
+                      "name": "**command**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "Shell 命令"
+                    },
+                    {
+                      "textRaw": "**withRoot** { [number](dataTypes#number) } - 是否使用 Root 权限, `0` 表示不使用, 非 `0` 表示使用 ",
+                      "name": "**withRoot**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "是否使用 Root 权限, `0` 表示不使用, 非 `0` 表示使用"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ShellResult](shell#c-shellresult) } - 命令执行结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ShellResult](shell#c-shellresult) ",
+                      "desc": "命令执行结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "command"
+                    },
+                    {
+                      "name": "withRoot"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>同步执行一条 Shell 命令.</p>\n<p>这是保留在运行时对象上的底层兼容接口. 新脚本应使用 <a href=\"shell\">shell</a> 或 <a href=\"shell#m-execcommand\">shell.execCommand</a>, 它们提供布尔形式的 Root 参数和更完整的命令参数处理.</p>\n<pre><code class=\"lang-js\">let result = runtime.shell(&quot;id&quot;, 0);\nconsole.log(result.code);\nconsole.log(result.result);\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] shell"
+        },
+        {
+          "textRaw": "[m] selector",
+          "name": "[m]_selector",
+          "methods": [
+            {
+              "textRaw": "selector()",
+              "type": "method",
+              "name": "selector",
+              "desc": "<p><strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> } - 空选择器</li>\n</ul>\n<p>创建一个与当前运行时无障碍桥接器绑定的空选择器.</p>\n<p>创建对象本身不要求无障碍服务已启用, 但使用选择器查找或操作界面通常依赖无障碍服务. 通常应使用全局函数 <a href=\"global#m-selector\">selector</a>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
                 }
               ]
             }
           ],
-          "desc": "<p>加载目标dex文件, 加载成功后将可以使用该dex文件的类.</p>\n<p>因为加载jar实际上是把jar转换为dex再加载的, 因此加载dex文件会比jar文件快得多. 可以使用Android SDK的build tools的dx工具把jar转换为dex.</p>\n"
+          "type": "module",
+          "displayName": "[m] selector"
+        },
+        {
+          "textRaw": "[m] requiresApi",
+          "name": "[m]_requiresapi",
+          "methods": [
+            {
+              "textRaw": "requiresApi(api)",
+              "type": "method",
+              "name": "requiresApi",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**api** { [number](dataTypes#number) } - 要求的最低 Android API 级别 ",
+                      "name": "**api**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "要求的最低 Android API 级别"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "api"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>检查当前 Android API 级别. 当前值小于 <strong>api</strong> 时抛出脚本异常, 否则不执行任何操作.</p>\n<p>通常应使用全局函数 <a href=\"global#m-requiresapi\">requiresApi</a>.</p>\n<pre><code class=\"lang-js\">runtime.requiresApi(29);\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"apiLevel\">Android API 级别</a></p>\n</blockquote>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] requiresApi"
+        },
+        {
+          "textRaw": "[m] load",
+          "name": "[m]_load",
+          "methods": [
+            {
+              "textRaw": "load(...paths)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>[6.3.2]</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>...paths</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#string\">string</a><a href=\"documentation#可变参数\">[]</a> } - JAR, DEX, AAR 文件或目录路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>按扩展名自动加载一个或多个 <code>.jar</code>, <code>.dex</code> 或 <code>.aar</code> 文件. 扩展名不区分大小写.</p>\n<p>参数也可以是目录路径. 此重载只扫描目录的直接子项, 不递归进入子目录.</p>\n<p>相对路径按照当前脚本引擎的工作目录解析.</p>\n<pre><code class=\"lang-js\">runtime.load(&quot;./libs/library.jar&quot;, &quot;./libs/classes.dex&quot;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...paths"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "load(directory, isRecursive)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>directory</strong> { <a href=\"dataTypes#string\">string</a> } - 待扫描的目录路径</li>\n<li><strong>isRecursive</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用源码中的子目录筛选开关</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>扫描目录并按扩展名自动加载其中的 <code>.jar</code>, <code>.dex</code> 和 <code>.aar</code> 文件.</p>\n<p>AutoJs6 6.8.0 的通用加载实现只处理目录中的直接文件. <strong>isRecursive</strong> 为 <code>true</code> 时, 普通子目录虽然会通过文件筛选, 但不会继续交给加载器处理, 因此不应依赖此重载进行递归遍历.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directory"
+                    },
+                    {
+                      "name": "isRecursive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] load"
+        },
+        {
+          "textRaw": "[m] loadDex",
+          "name": "[m]_loaddex",
+          "methods": [
+            {
+              "textRaw": "loadDex(...paths)",
+              "type": "method",
+              "name": "loadDex",
+              "desc": "<p><strong><code>[6.3.2]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>...paths</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#string\">string</a><a href=\"documentation#可变参数\">[]</a> } - DEX 文件或目录路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>加载一个或多个 <code>.dex</code> 文件.</p>\n<p>参数为目录路径时只加载目录直接包含的 <code>.dex</code> 文件. 相对路径按照当前脚本引擎的工作目录解析.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...paths"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "loadDex(directory, isRecursive)",
+              "type": "method",
+              "name": "loadDex",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>directory</strong> { <a href=\"dataTypes#string\">string</a> } - 待扫描的目录路径</li>\n<li><strong>isRecursive</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否同时扫描直接子目录</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>扫描目录并加载其中的 <code>.dex</code> 文件.</p>\n<p><strong>isRecursive</strong> 为 <code>true</code> 时还会扫描一层直接子目录, 但不会继续进入更深层级.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directory"
+                    },
+                    {
+                      "name": "isRecursive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] loadDex"
+        },
+        {
+          "textRaw": "[m] loadJar",
+          "name": "[m]_loadjar",
+          "methods": [
+            {
+              "textRaw": "loadJar(...paths)",
+              "type": "method",
+              "name": "loadJar",
+              "desc": "<p><strong><code>[6.3.2]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>...paths</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#string\">string</a><a href=\"documentation#可变参数\">[]</a> } - JAR 文件或目录路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>加载一个或多个 <code>.jar</code> 文件中的 Java 类.</p>\n<p>JAR 中的 JVM 字节码会先转换为 Android 可加载的 DEX 产物, 然后加入当前脚本使用的类加载器. 参数为目录路径时只加载目录直接包含的 <code>.jar</code> 文件. 相对路径按照当前脚本引擎的工作目录解析.</p>\n<pre><code class=\"lang-js\">runtime.loadJar(&quot;./libs/jsoup.jar&quot;);\nimportClass(org.jsoup.Jsoup);\n\nlet document = Jsoup.parse(&quot;&lt;p&gt;AutoJs6&lt;/p&gt;&quot;);\nconsole.log(document.text());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...paths"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "loadJar(directory, isRecursive)",
+              "type": "method",
+              "name": "loadJar",
+              "desc": "<p><strong><code>6.3.2</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>directory</strong> { <a href=\"dataTypes#string\">string</a> } - 待扫描的目录路径</li>\n<li><strong>isRecursive</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否同时扫描直接子目录</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>扫描目录并加载其中的 <code>.jar</code> 文件.</p>\n<p><strong>isRecursive</strong> 为 <code>true</code> 时还会扫描一层直接子目录, 但不会继续进入更深层级.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directory"
+                    },
+                    {
+                      "name": "isRecursive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] loadJar"
+        },
+        {
+          "textRaw": "[m] loadAar",
+          "name": "[m]_loadaar",
+          "methods": [
+            {
+              "textRaw": "loadAar(...paths)",
+              "type": "method",
+              "name": "loadAar",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>...paths</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#string\">string</a><a href=\"documentation#可变参数\">[]</a> } - AAR 文件或目录路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>加载一个或多个 <code>.aar</code> 文件中的 Java 或 Kotlin 类.</p>\n<p>AutoJs6 会合并 AAR 根目录中的 <code>classes.jar</code> 和 <code>libs/*.jar</code> 内可加载的条目, 再按 JAR 加载流程转换并加载. AAR 中的 Android Manifest, <code>res/</code> 资源和原生库不会被安装或注册. 因此此方法适用于不依赖 AAR Android 资源注册过程的类库.</p>\n<p>参数为目录路径时只加载目录直接包含的 <code>.aar</code> 文件. 相对路径按照当前脚本引擎的工作目录解析.</p>\n<pre><code class=\"lang-js\">runtime.loadAar(&quot;./libs/example.aar&quot;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...paths"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "loadAar(directory, isRecursive)",
+              "type": "method",
+              "name": "loadAar",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>directory</strong> { <a href=\"dataTypes#string\">string</a> } - 待扫描的目录路径</li>\n<li><strong>isRecursive</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否同时扫描直接子目录</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>扫描目录并加载其中的 <code>.aar</code> 文件.</p>\n<p><strong>isRecursive</strong> 为 <code>true</code> 时还会扫描一层直接子目录, 但不会继续进入更深层级.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directory"
+                    },
+                    {
+                      "name": "isRecursive"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] loadAar"
+        },
+        {
+          "textRaw": "动态加载注意事项",
+          "name": "动态加载注意事项",
+          "desc": "<ul>\n<li>明确交给 DEX, JAR 或 AAR 加载器的文件不存在, 不可读, 格式无效或字节码转换失败时会抛出异常. <code>load()</code> 会忽略扩展名不受支持的普通文件; 无法列出内容的目录也不会产生加载结果.</li>\n<li>同一运行环境中已加载类的解析结果可能受类名冲突和类加载顺序影响. 应避免多个文件声明同名类.</li>\n<li><code>loadJar()</code> 和 <code>loadAar()</code> 只能转换当前设备和转换器支持的字节码. 类库仍需兼容 Android 运行环境及当前设备 API 级别.</li>\n<li>加载完成后可通过完整包名访问类, 或使用全局函数 <a href=\"global#m-importclass\">importClass</a> 和 <a href=\"global#m-importpackage\">importPackage</a>.</li>\n<li>需要任意深度扫描时, 应先使用 <a href=\"files\">files</a> 枚举目标文件, 再把明确的文件路径传给可变参数重载.</li>\n</ul>\n<hr>\n",
+          "type": "module",
+          "displayName": "动态加载注意事项"
+        },
+        {
+          "textRaw": "[m] isJavaPrimitiveWrap",
+          "name": "[m]_isjavaprimitivewrap",
+          "methods": [
+            {
+              "textRaw": "isJavaPrimitiveWrap()",
+              "type": "method",
+              "name": "isJavaPrimitiveWrap",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否包装 Java 原始类型</li>\n</ul>\n<p>返回当前 Rhino 上下文的 Java 原始类型包装策略.</p>\n<p>启用时, 从 Java 返回的原始类型保留为 Java 包装对象. 禁用时, 这些值转换为对应的 JavaScript 原始值.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isJavaPrimitiveWrap"
+        },
+        {
+          "textRaw": "[m] setJavaPrimitiveWrap",
+          "name": "[m]_setjavaprimitivewrap",
+          "methods": [
+            {
+              "textRaw": "setJavaPrimitiveWrap(enabled)",
+              "type": "method",
+              "name": "setJavaPrimitiveWrap",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否包装 Java 原始类型</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置当前 Rhino 上下文的 Java 原始类型包装策略.</p>\n<p>该设置会影响 Java 与 JavaScript 之间的值转换. 依赖具体 Java 包装类型的代码应在修改后自行恢复原设置.</p>\n<pre><code class=\"lang-js\">let original = runtime.isJavaPrimitiveWrap();\n\ntry {\n    runtime.setJavaPrimitiveWrap(false);\n    // 执行需要 JavaScript 原始值的 Java 互操作代码.\n} finally {\n    runtime.setJavaPrimitiveWrap(original);\n}\n</code></pre>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setJavaPrimitiveWrap"
+        },
+        {
+          "textRaw": "[m] exit",
+          "name": "[m]_exit",
+          "methods": [
+            {
+              "textRaw": "exit(error?)",
+              "type": "method",
+              "name": "exit",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ error = null ]** { [java.lang.Throwable](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html) } - 退出前报告给当前脚本引擎的异常 ",
+                      "name": "**[",
+                      "desc": "error = null ]** { [java.lang.Throwable](https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html) } - 退出前报告给当前脚本引擎的异常"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "error?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求当前脚本引擎停止, 中断脚本线程并启动资源回收流程.</p>\n<p>提供 <strong>error</strong> 时, 异常会先作为当前脚本的未捕获异常报告. JavaScript 错误对象应优先交给全局函数 <a href=\"global#m-exit\">exit</a>, 由其转换为运行时可处理的异常.</p>\n<p>从后台脚本线程调用时会抛出脚本中断异常. 如果脚本捕获并忽略该异常, 后续代码仍可能在引擎完全停止前短暂执行.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] exit"
+        },
+        {
+          "textRaw": "[m] stop",
+          "name": "[m]_stop",
+          "methods": [
+            {
+              "textRaw": "stop()",
+              "type": "method",
+              "name": "stop",
+              "desc": "<p><strong><code>DEPRECATED</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>停止当前脚本. 此方法已弃用, 请使用 <a href=\"#m-exit\">runtime.exit</a> 或全局函数 <a href=\"global#m-exit\">exit</a>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] stop"
+        },
+        {
+          "textRaw": "[m] setScreenMetrics",
+          "name": "[m]_setscreenmetrics",
+          "methods": [
+            {
+              "textRaw": "setScreenMetrics(width, height)",
+              "type": "method",
+              "name": "setScreenMetrics",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**width** { [number](dataTypes#number) } - 脚本设计时的屏幕宽度, 单位为像素 ",
+                      "name": "**width**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "脚本设计时的屏幕宽度, 单位为像素"
+                    },
+                    {
+                      "textRaw": "**height** { [number](dataTypes#number) } - 脚本设计时的屏幕高度, 单位为像素 ",
+                      "name": "**height**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "脚本设计时的屏幕高度, 单位为像素"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置当前运行时的设计分辨率.</p>\n<p>某一维度为 <code>0</code> 时, 该方向不执行自动缩放. 通常应使用全局函数 <a href=\"global#m-setscreenmetrics\">setScreenMetrics</a>.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setScreenMetrics"
+        },
+        {
+          "textRaw": "[m] getProperty",
+          "name": "[m]_getproperty",
+          "methods": [
+            {
+              "textRaw": "getProperty(key)",
+              "type": "method",
+              "name": "getProperty",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**key** { [string](dataTypes#string) } - 属性键 ",
+                      "name": "**key**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性键"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) | [null](dataTypes#null) } - 属性值, 不存在时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) | [null](dataTypes#null) ",
+                      "desc": "属性值, 不存在时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>读取当前运行时属性存储区中的值.</p>\n<p>此存储区仅属于当前脚本运行时, 不会在脚本重新运行后保留. AutoJs6 内部也会使用该存储区, 自定义键应添加不易冲突的前缀.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getProperty"
+        },
+        {
+          "textRaw": "[m] putProperty",
+          "name": "[m]_putproperty",
+          "methods": [
+            {
+              "textRaw": "putProperty(key, value)",
+              "type": "method",
+              "name": "putProperty",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**key** { [string](dataTypes#string) } - 属性键 ",
+                      "name": "**key**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性键"
+                    },
+                    {
+                      "textRaw": "**value** { [any](dataTypes#any) } - 非 `null` 的属性值 ",
+                      "name": "**value**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "非 `null` 的属性值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) | [null](dataTypes#null) } - 此前关联的值, 不存在时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) | [null](dataTypes#null) ",
+                      "desc": "此前关联的值, 不存在时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    },
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在当前运行时属性存储区中保存一个值.</p>\n<p>底层存储区不接受 <code>null</code> 值. 如需删除属性, 使用 <a href=\"#m-removeproperty\">removeProperty</a>.</p>\n<pre><code class=\"lang-js\">let key = &quot;example.counter&quot;;\nruntime.putProperty(key, 1);\nconsole.log(runtime.getProperty(key)); // 1\nruntime.removeProperty(key);\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] putProperty"
+        },
+        {
+          "textRaw": "[m] removeProperty",
+          "name": "[m]_removeproperty",
+          "methods": [
+            {
+              "textRaw": "removeProperty(key)",
+              "type": "method",
+              "name": "removeProperty",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**key** { [string](dataTypes#string) } - 属性键 ",
+                      "name": "**key**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "属性键"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) | [null](dataTypes#null) } - 被移除的值, 不存在时为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) | [null](dataTypes#null) ",
+                      "desc": "被移除的值, 不存在时为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "key"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从当前运行时属性存储区中移除属性.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeProperty"
+        },
+        {
+          "textRaw": "[m] createContinuation",
+          "name": "[m]_createcontinuation",
+          "methods": [
+            {
+              "textRaw": "createContinuation()",
+              "type": "method",
+              "name": "createContinuation",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - Rhino 底层续体对象</li>\n</ul>\n<p>使用当前脚本的顶层作用域创建 Rhino 续体对象.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "createContinuation(scope)",
+              "type": "method",
+              "name": "createContinuation",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>scope</strong> { <code>org.mozilla.javascript.Scriptable</code> } - Rhino 脚本作用域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - Rhino 底层续体对象</li>\n</ul>\n<p>将指定作用域传给 Rhino 续体工厂. AutoJs6 6.8.0 的工厂实现从 <strong>scope</strong> 的 <code>parentScope</code> 继续解析续体作用域, 而不是直接使用 <strong>scope</strong>. 顶层作用域的 <code>parentScope</code> 可能为空, 因此不应把此重载作为普通续体创建入口.</p>\n<p>这些方法是 <a href=\"continuation#m-create\">continuation.create</a> 使用的底层接口. 新脚本应使用 <code>continuation</code> 模块, 并在脚本项目的 <code>useFeatures</code> 中启用 <code>&quot;continuation&quot;</code>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "scope"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] createContinuation"
         }
       ],
       "type": "module",
       "displayName": "运行时 (Runtime)"
+    },
+    {
+      "textRaw": "ScreenMetrics",
+      "name": "screenmetrics",
+      "desc": "<p><code>runtime.screenMetrics</code> 返回的坐标缩放器.</p>\n<p><code>scaleX()</code> 和 <code>scaleY()</code> 将设计分辨率坐标转换为当前设备坐标. <code>rescaleX()</code> 和 <code>rescaleY()</code> 执行反向转换. 计算结果使用整数运算.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ScreenMetrics</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m#] setScreenMetrics",
+          "name": "[m#]_setscreenmetrics",
+          "methods": [
+            {
+              "textRaw": "setScreenMetrics(width, height)",
+              "type": "method",
+              "name": "setScreenMetrics",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**width** { [number](dataTypes#number) } - 设计宽度, 单位为像素 ",
+                      "name": "**width**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "设计宽度, 单位为像素"
+                    },
+                    {
+                      "textRaw": "**height** { [number](dataTypes#number) } - 设计高度, 单位为像素 ",
+                      "name": "**height**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "设计高度, 单位为像素"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置此缩放器使用的设计分辨率.</p>\n<hr>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setScreenMetrics"
+        },
+        {
+          "textRaw": "[m#] scaleX",
+          "name": "[m#]_scalex",
+          "methods": [
+            {
+              "textRaw": "scaleX(x)",
+              "type": "method",
+              "name": "scaleX",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的横坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的横坐标</li>\n</ul>\n<p>使用已设置的设计宽度缩放横坐标.</p>\n<p>设计宽度为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>x</strong>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "scaleX(x, width)",
+              "type": "method",
+              "name": "scaleX",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的横坐标</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 本次换算使用的设计宽度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的横坐标</li>\n</ul>\n<p>使用指定设计宽度缩放横坐标.</p>\n<p><strong>width</strong> 为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>x</strong>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "width"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scaleX"
+        },
+        {
+          "textRaw": "[m#] scaleY",
+          "name": "[m#]_scaley",
+          "methods": [
+            {
+              "textRaw": "scaleY(y)",
+              "type": "method",
+              "name": "scaleY",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的纵坐标</li>\n</ul>\n<p>使用已设置的设计高度缩放纵坐标.</p>\n<p>设计高度为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>y</strong>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "scaleY(y, height)",
+              "type": "method",
+              "name": "scaleY",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的纵坐标</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 本次换算使用的设计高度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的纵坐标</li>\n</ul>\n<p>使用指定设计高度缩放纵坐标.</p>\n<p><strong>height</strong> 为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>y</strong>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scaleY"
+        },
+        {
+          "textRaw": "[m#] rescaleX",
+          "name": "[m#]_rescalex",
+          "methods": [
+            {
+              "textRaw": "rescaleX(x)",
+              "type": "method",
+              "name": "rescaleX",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的横坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的横坐标</li>\n</ul>\n<p>使用已设置的设计宽度反向换算横坐标.</p>\n<p>设计宽度为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>x</strong>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rescaleX(x, width)",
+              "type": "method",
+              "name": "rescaleX",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的横坐标</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 本次换算使用的设计宽度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的横坐标</li>\n</ul>\n<p>使用指定设计宽度反向换算横坐标.</p>\n<p><strong>width</strong> 为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>x</strong>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "width"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] rescaleX"
+        },
+        {
+          "textRaw": "[m#] rescaleY",
+          "name": "[m#]_rescaley",
+          "methods": [
+            {
+              "textRaw": "rescaleY(y)",
+              "type": "method",
+              "name": "rescaleY",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的纵坐标</li>\n</ul>\n<p>使用已设置的设计高度反向换算纵坐标.</p>\n<p>设计高度为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>y</strong>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "rescaleY(y, height)",
+              "type": "method",
+              "name": "rescaleY",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 当前设备中的纵坐标</li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 本次换算使用的设计高度</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 设计分辨率中的纵坐标</li>\n</ul>\n<p>使用指定设计高度反向换算纵坐标.</p>\n<p><strong>height</strong> 为 <code>0</code> 或屏幕尺寸尚未初始化时, 返回 <strong>y</strong>.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] rescaleY"
+        }
+      ],
+      "type": "module",
+      "displayName": "ScreenMetrics"
+    },
+    {
+      "textRaw": "模块后端对象",
+      "name": "模块后端对象",
+      "desc": "<p><code>runtime</code> 上的 <code>app</code>, <code>console</code>, <code>device</code>, <code>engines</code>, <code>files</code>, <code>images</code>, <code>media</code>, <code>recorder</code>, <code>sensors</code>, <code>threads</code>, <code>timers</code> 等属性是顶层模块使用的 Java 后端对象.</p>\n<p>这些对象不一定具有与同名顶层模块完全相同的成员, 参数归一化和返回值转换. 除非某个章节明确要求传入运行时后端对象, 脚本应使用对应的顶层模块.</p>\n<p><code>initPrologue()</code>, <code>initEpilogue()</code>, <code>onExit()</code>, <code>cancelScriptJobs()</code> 以及协程, Handler, Looper, 桥接器和资源管理器相关成员属于脚本引擎实现细节, 不属于稳定文档 API.</p>\n",
+      "type": "module",
+      "displayName": "模块后端对象"
     }
   ]
 }

@@ -31,10 +31,10 @@ const path = require('path');
 
 let format = 'html';
 let template = path.join('..', 'template.html');
-let inputFile = path.join('..', 'api', 'all.md');
+let inputFile = null;
 let nodeVersion = null;
 let analytics = null;
-let out = path.join('..', 'docs', 'all.html');
+let out = null;
 
 process.argv.slice(2).forEach(function (arg) {
     if (!arg.startsWith('--')) {
@@ -82,23 +82,13 @@ function processIncludesCallback(er, input) {
         case 'html':
             let o = { input, filename: inputFile, template, nodeVersion, analytics };
             require('./html.js')(o, function (er, html) {
-                    if (er) throw er;
-                    if (out) {
-
-                        // FIXME by SuperMonster003 on Mar 2, 2023.
-                        //  ! A better idea is needed.
-                        if (html.match('__CONTENT__')) {
-                            html = html
-                                .replace(/__CONTENT__#39;/g, `$$'`)
-                                .replace(/__CONTENT__quot/g, `$$"`);
-                        }
-
-                        fs.writeFileSync(out, html);
-                    } else {
-                        console.log(html);
-                    }
-                },
-            );
+                if (er) throw er;
+                if (out) {
+                    fs.writeFileSync(out, html);
+                } else {
+                    console.log(html);
+                }
+            });
             break;
         default:
             throw new Error(`Invalid format: ${format}`);

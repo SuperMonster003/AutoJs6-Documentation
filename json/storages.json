@@ -4,7 +4,7 @@
     {
       "textRaw": "存储 (Storages)",
       "name": "存储_(storages)",
-      "desc": "<p>storages 模块可用于保存 [ 简单数据 / 配置信息 / 列表清单 ] 等.<br>保存的数据在脚本间共享, 因此不适于敏感数据的存储.</p>\n<p>保存数据时, 需要一个名称, 类似命名空间.<br>一个名称对应一个独立的本地存储.<br>但无法像 Web 开发中 LocalStorage 一样提供域名独立的存储, 因为脚本路径可能随时改变.</p>\n<p>保存的数据仅在以下情况下会被删除:</p>\n<ul>\n<li>AutoJs6 应用被卸载或清除数据</li>\n<li>使用 <a href=\"#m-remove\">storages.remove</a> / <a href=\"storageType#m-remove\">Storage#remove</a> / <a href=\"storageType#m-clear\">Storage#clear</a> 等方法删除</li>\n</ul>\n<p>支持存入的数据类型:</p>\n<ul>\n<li><a href=\"dataTypes#number\">number</a></li>\n<li><a href=\"dataTypes#boolean\">boolean</a></li>\n<li><a href=\"dataTypes#string\">string</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#array\">Array</a></li>\n<li><a href=\"dataTypes#object\">Object</a></li>\n<li>... ...</li>\n</ul>\n<p>具体的存入规则详见 <a href=\"storageType#m-put\">Storage#put</a> 小节.</p>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>读取时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse\">JSON.parse</a> 还原为原本的数据类型.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">storages</p>\n\n<hr>\n",
+      "desc": "<p>storages 模块可用于保存 [ 简单数据 / 配置信息 / 列表清单 ] 等.<br>\n保存的数据在脚本间共享, 因此不适于敏感数据的存储.</p>\n<p>保存数据时, 需要一个名称, 类似命名空间.<br>\n一个名称对应一个独立的本地存储.<br>\n但无法像 Web 开发中 LocalStorage 一样提供域名独立的存储, 因为脚本路径可能随时改变.</p>\n<p>保存的数据仅在以下情况下会被删除:</p>\n<ul>\n<li>AutoJs6 应用被卸载或清除数据</li>\n<li>使用 <a href=\"#m-remove\">storages.remove</a> / <a href=\"storageType#m-remove\">Storage#remove</a> / <a href=\"storageType#m-clear\">Storage#clear</a> 等方法删除</li>\n</ul>\n<p>支持存入的数据类型:</p>\n<ul>\n<li><a href=\"dataTypes#number\">number</a></li>\n<li><a href=\"dataTypes#boolean\">boolean</a></li>\n<li><a href=\"dataTypes#string\">string</a></li>\n<li><a href=\"dataTypes#null\">null</a></li>\n<li><a href=\"dataTypes#array\">Array</a></li>\n<li><a href=\"dataTypes#object\">Object</a></li>\n<li>... ...</li>\n</ul>\n<p>具体的存入规则详见 <a href=\"storageType#m-put\">Storage#put</a> 小节.</p>\n<p>存入时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify\">JSON.stringify</a> 序列化数据为 <a href=\"dataTypes#string\">string</a> 类型后再存入,<br>\n读取时, 由 <a href=\"https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse\">JSON.parse</a> 还原为原本的数据类型.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">storages</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[m] create",
@@ -38,7 +38,7 @@
                   ]
                 }
               ],
-              "desc": "<p>以 <code>name</code> 参数为名称创建一个本地存储, 并返回 <a href=\"storageType\">Storage</a> 实例:</p>\n<pre><code class=\"lang-js\">/* 创建一个名为 fruit 的本地存储. */\nlet sto = storages.create(&#39;fruit&#39;);\n\n/* 存入 &quot;键值对&quot; 数据. */\nsto.put(&#39;apple&#39;, 10);\nsto.put(&#39;banana&#39;, 20);\n\n/* 访问数据. */\nsto.get(&#39;apple&#39;); // 10\nsto.get(&#39;banana&#39;); // 20\nsto.get(&#39;cherry&#39;); // undefined\n</code></pre>\n<p>不同的 <code>name</code> 参数可以创建不同的本地存储:</p>\n<pre><code class=\"lang-js\">let stoFruit = storages.create(&#39;fruit&#39;);\nlet stoPhone = storages.create(&#39;phone&#39;);\n\n/* &quot;键&quot; 名均为 apple, 不同的本地存储之间数据独立. */\nstoFruit.put(&#39;apple&#39;, 7);\nstoPhone.put(&#39;apple&#39;, 3);\n\n/* 访问数据 */\nstoFruit.get(&#39;apple&#39;) // 7\nstoPhone.get(&#39;apple&#39;) // 3\n</code></pre>\n<p>如果 <code>name</code> 参数对应的本地存储已存在, 则返回一个本地存储副本:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\n\n/* 名为 fruit 的本地存储已创建, 因此返回的是存储副本. */\nlet stoCopied = storages.create(&#39;fruit&#39;);\n\n/* 虽然 stoCopied 没有存入 apple 数据, 但 fruit 本地存储中存在. */\nstoCopied.get(&#39;apple&#39;); // 10\n\n/* 副本与原始的本地存储并非引用关系. */\nsto === stoCopied; // false\n</code></pre>\n<p>为保证数据安全及唯一性, <code>name</code> 参数应尽量具体:</p>\n<pre><code class=\"lang-js\">storages.create(&#39;project-publishing-schedule&#39;);\n</code></pre>\n"
+              "desc": "<p>以 <code>name</code> 参数为名称创建一个本地存储, 并返回 <a href=\"storageType\">Storage</a> 实例:</p>\n<pre><code class=\"lang-js\">/* 创建一个名为 fruit 的本地存储. */\nlet sto = storages.create(&#39;fruit&#39;);\n\n/* 存入 &quot;键值对&quot; 数据. */\nsto.put(&#39;apple&#39;, 10);\nsto.put(&#39;banana&#39;, 20);\n\n/* 访问数据. */\nsto.get(&#39;apple&#39;); // 10\nsto.get(&#39;banana&#39;); // 20\nsto.get(&#39;cherry&#39;); // undefined\n</code></pre>\n<p>不同的 <code>name</code> 参数可以创建不同的本地存储:</p>\n<pre><code class=\"lang-js\">let stoFruit = storages.create(&#39;fruit&#39;);\nlet stoPhone = storages.create(&#39;phone&#39;);\n\n/* &quot;键&quot; 名均为 apple, 不同的本地存储之间数据独立. */\nstoFruit.put(&#39;apple&#39;, 7);\nstoPhone.put(&#39;apple&#39;, 3);\n\n/* 访问数据. */\nstoFruit.get(&#39;apple&#39;) // 7\nstoPhone.get(&#39;apple&#39;) // 3\n</code></pre>\n<p>如果 <code>name</code> 参数对应的本地存储已存在, 则返回一个本地存储副本:</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\n\n/* 名为 fruit 的本地存储已创建, 因此返回的是存储副本. */\nlet stoCopied = storages.create(&#39;fruit&#39;);\n\n/* 虽然 stoCopied 没有存入 apple 数据, 但 fruit 本地存储中存在. */\nstoCopied.get(&#39;apple&#39;); // 10\n\n/* 副本与原始的本地存储并非引用关系. */\nsto === stoCopied; // false\n</code></pre>\n<p>为保证数据安全及唯一性, <code>name</code> 参数应尽量具体:</p>\n<pre><code class=\"lang-js\">storages.create(&#39;project-publishing-schedule&#39;);\n</code></pre>\n"
             }
           ],
           "type": "module",
@@ -52,23 +52,8 @@
               "textRaw": "remove(name)",
               "type": "method",
               "name": "remove",
+              "desc": "<p><strong><code>[6.6.0]</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 存储名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>清除名为 <code>name</code> 的本地存储包含的全部数据.</p>\n<p>此方法使用异步提交, 不等待数据写入存储文件.</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\nsto.get(&#39;apple&#39;); // 10\n\n/* 相当于执行 storages.create(&#39;fruit&#39;).clear(). */\nstorages.remove(&#39;fruit&#39;);\n\n/* 执行 remove 方法后, sto 对象将不存在任何存储数据. */\nsto.get(&#39;apple&#39;); // undefined\n\n/* 但 sto 依然可以存放新的数据. */\nsto.put(&#39;banana&#39;, 20);\nsto.get(&#39;banana&#39;); // 20\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "textRaw": "**name** { [string](dataTypes#string) } - 存储名称 ",
-                      "name": "**name**",
-                      "type": " [string](dataTypes#string) ",
-                      "desc": "存储名称"
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - name 参数对应的本地存储是否存在 ",
-                      "name": "<ins>**returns**</ins>",
-                      "type": " [boolean](dataTypes#boolean) ",
-                      "desc": "name 参数对应的本地存储是否存在"
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -76,12 +61,72 @@
                     }
                   ]
                 }
-              ],
-              "desc": "<p>清除名为 <code>name</code> 的本地存储包含的全部数据.</p>\n<p>如果名为 <code>name</code> 的本地存储已存在, 返回 <code>true</code>, 否则返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let sto = storages.create(&#39;fruit&#39;);\nsto.put(&#39;apple&#39;, 10);\nsto.get(&#39;apple&#39;); // 10\n\n/* 相当于 storages.create(&#39;fruit&#39;).clear(); . */\nstorages.remove(&#39;fruit&#39;); // true\n\n/* 执行 remove 方法后, sto 对象将不存在任何存储数据. */\nsto.get(&#39;apple&#39;); // undefined\n\n/* 但 sto 依然可以存放新的数据. */\nsto.put(&#39;banana&#39;, 20);\nsto.get(&#39;banana&#39;); // 20\n</code></pre>\n"
+              ]
             }
           ],
           "type": "module",
           "displayName": "[m] remove"
+        },
+        {
+          "textRaw": "[m] removeSync",
+          "name": "[m]_removesync",
+          "methods": [
+            {
+              "textRaw": "removeSync(name)",
+              "type": "method",
+              "name": "removeSync",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 存储名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>同步清除指定本地存储的全部数据, 并等待数据写入存储文件.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeSync"
+        },
+        {
+          "textRaw": "[m] all",
+          "name": "[m]_all",
+          "methods": [
+            {
+              "textRaw": "all()",
+              "type": "method",
+              "name": "all",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"storageType\">Storage</a>[] } - 所有非空本地存储</li>\n</ul>\n<p>返回所有当前包含数据的本地存储.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] all"
+        },
+        {
+          "textRaw": "[m] names",
+          "name": "[m]_names",
+          "methods": [
+            {
+              "textRaw": "names()",
+              "type": "method",
+              "name": "names",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a>[] } - 所有非空本地存储名称</li>\n</ul>\n<p>返回所有当前包含数据的本地存储名称.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] names"
         }
       ],
       "type": "module",

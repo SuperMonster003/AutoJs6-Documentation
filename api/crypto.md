@@ -14,9 +14,9 @@ crypto 模块提供 [ 对称加密 (如 AES) / 非对称加密 (如 RSA) / 消�
 
 ### digest(message, algorithm)
 
-**`6.3.2`** **`Overload 1/4`**
+**`6.3.2`** **`[6.8.0]`** **`Overload 1/4`**
 
-- **message** { [string](dataTypes#string) } - 待获取摘要的消息
+- **message** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待获取摘要的数据
 - **algorithm** { [CryptoDigestAlgorithm](dataTypes#cryptodigestalgorithm) } - 消息摘要算法
 - <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) }
 
@@ -32,9 +32,9 @@ console.log(crypto.digest('hello', 'SHA-1')); // aaf4c61ddcc5e8a2dabede0f3b482cd
 
 ### digest(message)
 
-**`6.3.2`** **`Overload 2/4`**
+**`6.3.2`** **`[6.8.0]`** **`Overload 2/4`**
 
-- **message** { [string](dataTypes#string) } - 待获取摘要的消息
+- **message** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待获取摘要的数据
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 获取 `消息 (message)` 的 MD5 `消息摘要 (message digest)`.
@@ -49,9 +49,9 @@ console.log(crypto.digest('hello', 'MD5')); /* 同上. */
 
 ### digest(message, algorithm, options)
 
-**`6.3.2`** **`Overload 3/4`**
+**`6.3.2`** **`[6.8.0]`** **`Overload 3/4`**
 
-- **message** { [string](dataTypes#string) } - 待获取摘要的消息
+- **message** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待获取摘要的数据
 - **algorithm** { [CryptoDigestAlgorithm](dataTypes#cryptodigestalgorithm) } - 消息摘要算法
 - **options** { [CryptoDigestOptions](dataTypes#cryptodigestoptions) } - 选项参数
 - <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) }
@@ -81,10 +81,9 @@ files.remove(path);
 
 ### digest(message, options)
 
-**`6.3.2`** **`Overload 4/4`**
+**`6.3.2`** **`[6.8.0]`** **`Overload 4/4`**
 
-- **message** { [string](dataTypes#string) } - 待获取摘要的消息
-- **algorithm** { [CryptoDigestAlgorithm](dataTypes#cryptodigestalgorithm) } - 消息摘要算法
+- **message** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待获取摘要的数据
 - **options** { [CryptoDigestOptions](dataTypes#cryptodigestoptions) } - 选项参数
 - <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) }
 
@@ -114,13 +113,13 @@ files.remove(path);
 
 ### encrypt(data, key, transformation, options?)
 
-**`6.3.2`** **`Overload [1-2]/2`**
+**`6.3.2`** **`[6.8.0]`** **`Overload [1-2]/2`**
 
 - **data** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待加密数据
 - **key** { [crypto.Key](#c-key) | [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) } - 加密密钥
 - **transformation** { [CryptoCipherTransformation](dataTypes#cryptociphertransformation) } - 密码转换名称
 - **[ options ]** { [CryptoCipherOptions](cryptoCipherOptionsType) } - 选项参数
-- <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) }
+- <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [void](dataTypes#void) }
 
 数据加密.
 
@@ -134,7 +133,7 @@ files.remove(path);
 
 `options.output` 指定输出的数据格式, 详见 [CryptoCipherOptions#output](cryptoCipherOptionsType#p-output).
 
-特别地, 当 `options.output` 为 `'file'` 时, 输出格式为十六进制值. 因为加密后写入文件的数据通常是不可读的 (常被视作乱码), 因此最终的返回值类型没有采用 `'string'`, 而是 `'hex'`.
+当 `options.output` 为 `'file'` 时, 加密结果的原始字节写入 `options.dest` 指定的文件, 方法返回 `undefined`. 文件输出流会在操作完成或发生异常时关闭.
 
 `options.output` 影响的其实仅仅是加密结果的表现形式, 这些形式之前通常可以互相转换. 真正影响加密结果的, 是加密过程.
 
@@ -194,13 +193,13 @@ console.log(crypto.decrypt(encrypted, key, 'AES', { output: 'string' }));
 
 ### decrypt(data, key, transformation, options?)
 
-**`6.3.2`** **`Overload [1-2]/2`**
+**`6.3.2`** **`[6.8.0]`** **`Overload [1-2]/2`**
 
 - **data** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待解密数据
 - **key** { [crypto.Key](#c-key) | [java.security.Key](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html) } - 解密密钥
 - **transformation** { [CryptoCipherTransformation](dataTypes#cryptociphertransformation) } - 密码转换名称
 - **[ options ]** { [CryptoCipherOptions](cryptoCipherOptionsType) } - 选项参数
-- <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) }
+- <ins>**returns**</ins> { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [void](dataTypes#void) }
 
 数据解密.
 
@@ -214,7 +213,7 @@ console.log(crypto.decrypt(encrypted, key, 'AES', { output: 'string' }));
 
 `options.output` 指定输出的数据格式, 详见 [CryptoCipherOptions#output](cryptoCipherOptionsType#p-output).
 
-特别地, 当 `options.output` 为 `'file'` 时, 输出格式为十六进制值. 因为解密后写入文件的数据通常是不可读的 (常被视作乱码), 因此最终的返回值类型没有采用 `'string'`, 而是 `'hex'`.
+当 `options.output` 为 `'file'` 时, 解密结果的原始字节写入 `options.dest` 指定的文件, 方法返回 `undefined`. 文件输出流会在操作完成或发生异常时关闭.
 
 `options.output` 影响的其实仅仅是解密结果的表现形式, 这些形式之前通常可以互相转换. 真正影响解密结果的, 是解密过程.
 
@@ -278,15 +277,24 @@ console.log(dc === message); // true
 
 ## [m] generateKeyPair
 
-### generateKeyPair(algorithm, length?)
+### generateKeyPair(algorithm)
 
-**`6.3.2`** **`Overload [1-2]/2`**
+**`6.3.2`** **`[6.8.0]`** **`Overload 1/2`**
 
 - **algorithm** { [CryptoKeyPairGeneratorAlgorithm](dataTypes#cryptokeypairgeneratoralgorithm) } - 密钥对生成器算法
-- **[ length = `256` ]** { [number](dataTypes#number) } - 密钥长度
 - <ins>**returns**</ins> { [CryptoKeyPair](cryptoKeyPairType) } - 密钥对
 
-生成指定算法及长度的随机密钥对.
+使用安全提供程序为指定算法选择的默认参数生成随机密钥对.
+
+### generateKeyPair(algorithm, length)
+
+**`6.3.2`** **`[6.8.0]`** **`Overload 2/2`**
+
+- **algorithm** { [CryptoKeyPairGeneratorAlgorithm](dataTypes#cryptokeypairgeneratoralgorithm) } - 密钥对生成器算法
+- **length** { [number](dataTypes#number) } - 密钥长度
+- <ins>**returns**</ins> { [CryptoKeyPair](cryptoKeyPairType) } - 密钥对
+
+使用指定算法及密钥长度生成随机密钥对.
 
 > 注: 不同算法对密钥长度有不同的要求.
 
@@ -313,12 +321,12 @@ console.log(dc === message); // true
 
 但需额外注意, 某些算法生成的密钥对, 仅仅用作密钥交换, 密钥交换后将确定一个对称密钥, 最终使用一个对称密钥算法 (如 DES) 进行加解密. 因此密钥对不一定参与非对称加解密过程.
 
-上述情况典型的样例, 当属 Diffie-Hellman（迪菲-赫尔曼) 算法:
+上述情况典型的样例, 当属 Diffie-Hellman (迪菲-赫尔曼) 算法:
 
 ```js
 let message = 'hello';
 
-/* 生成 Diffie-Hellman（迪菲-赫尔曼) 密钥对. */
+/* 生成 Diffie-Hellman (迪菲-赫尔曼) 密钥对. */
 let keyPair = crypto.generateKeyPair('DiffieHellman');
 
 /* 借助 Diffie-Hellman 密钥对, 使用 DES 算法生成一个确定的密钥. */

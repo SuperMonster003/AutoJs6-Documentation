@@ -23,8 +23,8 @@ console.log(typeof [].union); // "function"
 - 在脚本中加入代码片段: `plugins.extendAll();` 或 `plugins.extend('Array');`
 - AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]
 
-当上述应用设置启用时, 所有脚本均默认启用内置扩展.  
-当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.  
+当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>
+当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>
 内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.
 
 ## 排序稳定性
@@ -37,8 +37,8 @@ Arrayx 的诸多排序方法, 如 [ sortBy / sortDescending / sortByDescending /
 
 ## 排序方式
 
-Arrayx 排序方法中的 selector (条件选择器) 使用的 compareFn (比较函数) 与默认的稍有不同.  
-默认的比较函数按照转换为字符串的诸个字符的 Unicode 位点进行 **升序** 排序, 例如 80 会被排列到 9 之前.  
+Arrayx 排序方法中的 selector (条件选择器) 使用的 compareFn (比较函数) 与默认的稍有不同.<br>
+默认的比较函数按照转换为字符串的诸个字符的 Unicode 位点进行 **升序** 排序, 例如 80 会被排列到 9 之前.<br>
 而 Arrayx 排序方法的 selector 则采用简单的直接比较方法:
 
 ```js
@@ -142,6 +142,48 @@ console.log(Arrayx.union(arrC, arrD)); // [ 7, 8, 9, 10 ]
 console.log(arrC.union(arrD)); /* 同上. */
 ```
 
+## [m] subtract
+
+### subtract(arr, other)
+
+**`6.6.0`** **`xProto`**
+
+- **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 被减数组
+- **other** { [U](dataTypes#generic)[[]](dataTypes#array) } - 要移除元素的数组
+- <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) } - 差集数组
+
+返回 `arr` 中未出现在 `other` 中的元素, 不修改任一输入数组. `other` 中出现的元素会从结果中全部移除.
+
+```js
+let arrA = [ 1, 2, 2, 3 ];
+let arrB = [ 2, 4 ];
+console.log(Arrayx.subtract(arrA, arrB)); // [ 1, 3 ]
+
+/* 启用内置对象扩展后. */
+console.log(arrA.subtract(arrB)); // [ 1, 3 ]
+```
+
+## [m] differ
+
+### differ(arr, other)
+
+**`6.6.0`** **`xProto`**
+
+- **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 第一个数组
+- **other** { [U](dataTypes#generic)[[]](dataTypes#array) } - 第二个数组
+- <ins>**returns**</ins> { ([T](dataTypes#generic) | [U](dataTypes#generic))[[]](dataTypes#array) } - 对称差集数组
+
+返回仅出现在其中一个输入数组中的元素, 不修改任一输入数组. 结果会去重, 并依次保留 `arr` 独有元素和 `other` 独有元素的顺序.
+
+```js
+let arrA = [ 1, 2, 3 ];
+let arrB = [ 2, 4 ];
+console.log(Arrayx.differ(arrA, arrB)); // [ 1, 3, 4 ]
+
+/* 启用内置对象扩展后. */
+console.log(arrA.differ(arrB)); // [ 1, 3, 4 ]
+```
+
 ## [m] distinct
 
 ### distinct(arr)
@@ -214,7 +256,7 @@ console.log(arrC.distinctBy(e => e.count)); /* 同上. */
 - **selector** { [(](dataTypes#function)e: [T](dataTypes#generic)[)](dataTypes#function) [=>](dataTypes#function) [U](dataTypes#generic) } - 条件选择器
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地排序, 并返回排序后的新数组.  
+按一定条件原地排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将发生改变.
 
 ```js
@@ -258,7 +300,7 @@ console.log(arrC.sortBy(e => e.count)); /* 结果同上. */
 - **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 待处理数组
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地 **降序** 排序, 并返回排序后的新数组.  
+按一定条件原地 **降序** 排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将发生改变.
 
 ```js
@@ -309,7 +351,7 @@ console.log(arrC.sortDescending(e => e.count)); /* 结果同上. */
 - **selector** { [(](dataTypes#function)e: [T](dataTypes#generic)[)](dataTypes#function) [=>](dataTypes#function) [U](dataTypes#generic) } - 条件选择器
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地 **降序** 排序, 并返回排序后的新数组.  
+按一定条件原地 **降序** 排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将发生改变.
 
 > 参阅: [sortBy](#m-sortby)
@@ -323,13 +365,13 @@ console.log(arrC.sortDescending(e => e.count)); /* 结果同上. */
 - **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 待处理数组
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按简单比较方式原地排序, 并返回排序后的新数组.  
+按简单比较方式原地排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将 **不** 发生改变.
 
 ```js
 let arr = [ 2, 3, 1, 20, 10 ];
 
-console.log(Arrayx.sorted(arr)); // [ 1, 2, 3, 10, 20 ] 
+console.log(Arrayx.sorted(arr)); // [ 1, 2, 3, 10, 20 ]
 
 /* 启用内置对象扩展后. */
 console.log(arr.sorted()); /* 同上. */
@@ -348,7 +390,7 @@ console.log(arr); // [ 2, 3, 1, 20, 10 ]
 - **selector** { [(](dataTypes#function)e: [T](dataTypes#generic)[)](dataTypes#function) [=>](dataTypes#function) [U](dataTypes#generic) } - 条件选择器
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地排序, 并返回排序后的新数组.  
+按一定条件原地排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将 **不** 发生改变.
 
 > 参阅: [sortBy](#m-sortby)
@@ -362,7 +404,7 @@ console.log(arr); // [ 2, 3, 1, 20, 10 ]
 - **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 待处理数组
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地 **降序** 排序, 并返回排序后的新数组.  
+按一定条件原地 **降序** 排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将 **不** 发生改变.
 
 > 参阅: [sortDescending](#m-sortdescending)
@@ -377,7 +419,7 @@ console.log(arr); // [ 2, 3, 1, 20, 10 ]
 - **selector** { [(](dataTypes#function)e: [T](dataTypes#generic)[)](dataTypes#function) [=>](dataTypes#function) [U](dataTypes#generic) } - 条件选择器
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按一定条件原地 **降序** 排序, 并返回排序后的新数组.  
+按一定条件原地 **降序** 排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将 **不** 发生改变.
 
 > 参阅: [sortByDescending](#m-sortbydescending)
@@ -391,7 +433,7 @@ console.log(arr); // [ 2, 3, 1, 20, 10 ]
 - **arr** { [T](dataTypes#generic)[[]](dataTypes#array) } - 待处理数组
 - <ins>**returns**</ins> { [T](dataTypes#generic)[[]](dataTypes#array) }
 
-按随机乱序方式原地排序, 并返回排序后的新数组.  
+按随机乱序方式原地排序, 并返回排序后的新数组.<br>
 方法调用后, 原数组将发生改变.
 
 ```js

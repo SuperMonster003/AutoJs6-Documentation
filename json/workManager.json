@@ -1,0 +1,368 @@
+{
+  "source": "..\\api\\workManager.md",
+  "modules": [
+    {
+      "textRaw": "计划任务兼容接口 (WorkManager)",
+      "name": "计划任务兼容接口_(workmanager)",
+      "desc": "<p>workManager 模块用于创建, 查询和移除持久化计划任务.</p>\n<p><code>workManager</code>, <code>$workManager</code>, <code>work_manager</code> 与 <code>$work_manager</code> 指向同一个模块对象.</p>\n<p>此模块是面向脚本的 Auto.js Pro 兼容接口, 不是 <code>androidx.work.WorkManager</code> 的 JavaScript 映射.</p>\n<p>workManager 与 <a href=\"tasks\">tasks</a> 使用同一任务数据库, 但两者的返回约定不同:</p>\n<ul>\n<li>workManager 的创建操作始终同步返回任务对象.</li>\n<li>workManager 的移除操作返回数据库操作结果.</li>\n<li>tasks 的部分操作支持回调或异步执行, 移除操作返回被移除的任务对象.</li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">workManager</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] addDailyTask",
+          "name": "[m]_adddailytask",
+          "methods": [
+            {
+              "textRaw": "addDailyTask(options)",
+              "type": "method",
+              "name": "addDailyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#dailytaskoptions\">DailyTaskOptions</a> } - 每日任务选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#timedtask\">TimedTask</a> } - 已保存的定时任务</li>\n</ul>\n<p>创建每天运行的定时任务.</p>\n<pre><code class=\"lang-js\">let task = workManager.addDailyTask({\n    path: &#39;./daily.js&#39;,\n    time: &#39;08:30&#39;,\n});\nconsole.log(task.id);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDailyTask"
+        },
+        {
+          "textRaw": "[m] addWeeklyTask",
+          "name": "[m]_addweeklytask",
+          "methods": [
+            {
+              "textRaw": "addWeeklyTask(options)",
+              "type": "method",
+              "name": "addWeeklyTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#weeklytaskoptions\">WeeklyTaskOptions</a> } - 每周任务选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#timedtask\">TimedTask</a> } - 已保存的定时任务</li>\n</ul>\n<p>创建每周运行的定时任务.</p>\n<pre><code class=\"lang-js\">let task = workManager.addWeeklyTask({\n    path: &#39;./weekly.js&#39;,\n    time: &#39;09:00&#39;,\n    daysOfWeek: [ &#39;Monday&#39;, &#39;Friday&#39; ],\n});\nconsole.log(task.id);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addWeeklyTask"
+        },
+        {
+          "textRaw": "[m] addDisposableTask",
+          "name": "[m]_adddisposabletask",
+          "methods": [
+            {
+              "textRaw": "addDisposableTask(options)",
+              "type": "method",
+              "name": "addDisposableTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#disposabletaskoptions\">DisposableTaskOptions</a> } - 单次任务选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#timedtask\">TimedTask</a> } - 已保存的定时任务</li>\n</ul>\n<p>创建仅运行一次的定时任务.</p>\n<p>可指定绝对时间, 也可指定从当前时刻开始计算的倒计时.</p>\n<pre><code class=\"lang-js\">let task = workManager.addDisposableTask({\n    path: &#39;./later.js&#39;,\n    after: {\n        minutes: 10,\n    },\n});\nconsole.log(task.id);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addDisposableTask"
+        },
+        {
+          "textRaw": "[m] addIntentTask",
+          "name": "[m]_addintenttask",
+          "methods": [
+            {
+              "textRaw": "addIntentTask(options)",
+              "type": "method",
+              "name": "addIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#intenttaskoptions\">IntentTaskOptions</a> } - Intent 任务选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#intenttask\">IntentTask</a> } - 已保存的 Intent 任务</li>\n</ul>\n<p>创建由 Android Intent 触发的任务.</p>\n<pre><code class=\"lang-js\">let task = workManager.addIntentTask({\n    path: &#39;./on-boot.js&#39;,\n    action: &#39;android.intent.action.BOOT_COMPLETED&#39;,\n});\nconsole.log(task.id);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addIntentTask"
+        },
+        {
+          "textRaw": "[m] addBroadcastIntentTask",
+          "name": "[m]_addbroadcastintenttask",
+          "methods": [
+            {
+              "textRaw": "addBroadcastIntentTask(options)",
+              "type": "method",
+              "name": "addBroadcastIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"#intenttaskoptions\">IntentTaskOptions</a> } - Intent 任务选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#intenttask\">IntentTask</a> } - 已保存的 Intent 任务</li>\n</ul>\n<p>创建广播 Intent 任务.</p>\n<p>此方法与 <a href=\"#m-addintenttask\">addIntentTask(options)</a> 使用相同实现和选项.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] addBroadcastIntentTask"
+        },
+        {
+          "textRaw": "[m] getTimedTask",
+          "name": "[m]_gettimedtask",
+          "methods": [
+            {
+              "textRaw": "getTimedTask(id)",
+              "type": "method",
+              "name": "getTimedTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 定时任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#timedtask\">TimedTask</a> | <a href=\"dataTypes#null\">null</a> } - 定时任务, 不存在时为 <code>null</code></li>\n</ul>\n<p>按 ID 查询定时任务.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getTimedTask"
+        },
+        {
+          "textRaw": "[m] getIntentTask",
+          "name": "[m]_getintenttask",
+          "methods": [
+            {
+              "textRaw": "getIntentTask(id)",
+              "type": "method",
+              "name": "getIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - Intent 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#intenttask\">IntentTask</a> | <a href=\"dataTypes#null\">null</a> } - Intent 任务, 不存在时为 <code>null</code></li>\n</ul>\n<p>按 ID 查询 Intent 任务.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getIntentTask"
+        },
+        {
+          "textRaw": "[m] removeTimedTask",
+          "name": "[m]_removetimedtask",
+          "methods": [
+            {
+              "textRaw": "removeTimedTask(id)",
+              "type": "method",
+              "name": "removeTimedTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - 定时任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 数据库移除结果, 任务不存在时为 <code>null</code></li>\n</ul>\n<p>按 ID 移除定时任务.</p>\n<pre><code class=\"lang-js\">let task = workManager.getTimedTask(10);\nif (task !== null) {\n    console.log(workManager.removeTimedTask(task.id));\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeTimedTask"
+        },
+        {
+          "textRaw": "[m] removeIntentTask",
+          "name": "[m]_removeintenttask",
+          "methods": [
+            {
+              "textRaw": "removeIntentTask(id)",
+              "type": "method",
+              "name": "removeIntentTask",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#number\">number</a> } - Intent 任务 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 数据库移除结果, 任务不存在时为 <code>null</code></li>\n</ul>\n<p>按 ID 移除 Intent 任务.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] removeIntentTask"
+        },
+        {
+          "textRaw": "[m] queryTimedTasks",
+          "name": "[m]_querytimedtasks",
+          "methods": [
+            {
+              "textRaw": "queryTimedTasks(options?)",
+              "type": "method",
+              "name": "queryTimedTasks",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#timedtaskqueryoptions\">TimedTaskQueryOptions</a> } - 查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#timedtask\">TimedTask</a><a href=\"dataTypes#array\">[]</a> } - 符合条件的定时任务</li>\n</ul>\n<p>查询定时任务.</p>\n<p>不指定 <code>path</code> 时返回全部定时任务.</p>\n<pre><code class=\"lang-js\">let tasksForFile = workManager.queryTimedTasks({\n    path: &#39;./daily.js&#39;,\n});\nconsole.log(tasksForFile.length);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryTimedTasks"
+        },
+        {
+          "textRaw": "[m] queryIntentTasks",
+          "name": "[m]_queryintenttasks",
+          "methods": [
+            {
+              "textRaw": "queryIntentTasks(options?)",
+              "type": "method",
+              "name": "queryIntentTasks",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#intenttaskqueryoptions\">IntentTaskQueryOptions</a> } - 查询选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#intenttask\">IntentTask</a><a href=\"dataTypes#array\">[]</a> } - 符合条件的 Intent 任务</li>\n</ul>\n<p>查询 Intent 任务.</p>\n<p><code>path</code> 与 <code>action</code> 同时存在时, 两个条件必须同时匹配.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] queryIntentTasks"
+        },
+        {
+          "textRaw": "任务选项",
+          "name": "任务选项",
+          "desc": "<p>workManager 会忽略创建选项中的 <code>callback</code>, <code>condition</code>, <code>isAsync</code> 和 <code>async</code>, 并同步返回任务对象.</p>\n<p>所有脚本路径都通过当前脚本运行时的文件路径规则解析.</p>\n",
+          "modules": [
+            {
+              "textRaw": "TimedTaskExecutionOptions",
+              "name": "timedtaskexecutionoptions",
+              "desc": "<p>定时任务共享以下执行选项:</p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行脚本的路径</li>\n<li><strong>[ delay = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本执行前的延迟, 单位为毫秒</li>\n<li><strong>[ interval = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 循环执行间隔, 单位为毫秒</li>\n<li><strong>[ loopTimes = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本循环执行次数</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "TimedTaskExecutionOptions"
+            },
+            {
+              "textRaw": "RepeatEndOptions",
+              "name": "repeatendoptions",
+              "desc": "<p>每日和每周任务可使用以下重复结束选项:</p>\n<ul>\n<li><strong>[ endMode = <code>&#39;forever&#39;</code> ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 结束模式</li>\n<li><strong>[ untilDate ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 截止日期</li>\n<li><strong>[ times ]</strong> { <a href=\"dataTypes#number\">number</a> } - 总运行次数</li>\n</ul>\n<p><code>endMode</code> 也可写作 <code>ends</code>, <code>end</code> 或 <code>repeatEnd</code>.</p>\n<p>结束模式字符串支持:</p>\n<ul>\n<li>永久运行: <code>forever</code>, <code>always</code>, <code>never</code>.</li>\n<li>截止日期: <code>untilDate</code>, <code>until</code>, <code>date</code>.</li>\n<li>固定次数: <code>count</code>, <code>times</code>, <code>number</code>, <code>numberOfEvents</code>, <code>forNumberOfEvents</code>.</li>\n</ul>\n<p>结束模式数值 <code>0</code>, <code>1</code> 和 <code>2</code> 分别表示永久运行, 截止日期和固定次数.</p>\n<p><code>untilDate</code> 也可写作 <code>until</code> 或 <code>endDate</code>.<br>\n<code>times</code> 也可写作 <code>endCount</code>. 显式选择固定次数模式时还可写作 <code>count</code>.</p>\n",
+              "type": "module",
+              "displayName": "RepeatEndOptions"
+            },
+            {
+              "textRaw": "DailyTaskOptions",
+              "name": "dailytaskoptions",
+              "desc": "<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行脚本的路径</li>\n<li><strong>[ time = 当前本地时间 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 每日运行时间</li>\n<li><strong>[ delay = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本执行前的延迟, 单位为毫秒</li>\n<li><strong>[ interval = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 循环执行间隔, 单位为毫秒</li>\n<li><strong>[ loopTimes = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本循环执行次数</li>\n<li><strong>[ endMode = <code>&#39;forever&#39;</code> ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 重复结束模式</li>\n<li><strong>[ untilDate ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 截止日期</li>\n<li><strong>[ times ]</strong> { <a href=\"dataTypes#number\">number</a> } - 总运行次数</li>\n</ul>\n<p><code>date</code> 可作为 <code>time</code> 的别名.</p>\n<p>时间字符串由 <code>org.joda.time.LocalTime.parse</code> 解析, 例如 <code>&#39;08:30&#39;</code>.</p>\n",
+              "type": "module",
+              "displayName": "DailyTaskOptions"
+            },
+            {
+              "textRaw": "WeeklyTaskOptions",
+              "name": "weeklytaskoptions",
+              "desc": "<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行脚本的路径</li>\n<li><strong>[ time = 当前本地时间 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 每周运行时间</li>\n<li><strong>[ daysOfWeek = 当前本地星期 ]</strong> { <a href=\"dataTypes#number\">number</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 每周运行日</li>\n<li><strong>[ delay = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本执行前的延迟, 单位为毫秒</li>\n<li><strong>[ interval = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 循环执行间隔, 单位为毫秒</li>\n<li><strong>[ loopTimes = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本循环执行次数</li>\n<li><strong>[ endMode = <code>&#39;forever&#39;</code> ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 重复结束模式</li>\n<li><strong>[ untilDate ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 截止日期</li>\n<li><strong>[ times ]</strong> { <a href=\"dataTypes#number\">number</a> } - 总运行次数</li>\n</ul>\n<p><code>date</code> 可作为 <code>time</code> 的别名.</p>\n<p>星期字符串支持完整英文名称, 3 字母英文缩写, 以及中文数字名称.<br>\n星期数值支持 <code>0..6</code> 和 <code>1..7</code>, 其中 <code>0</code> 或 <code>7</code> 表示星期日.</p>\n",
+              "type": "module",
+              "displayName": "WeeklyTaskOptions"
+            },
+            {
+              "textRaw": "DisposableTaskOptions",
+              "name": "disposabletaskoptions",
+              "desc": "<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行脚本的路径</li>\n<li><strong>[ time = 当前本地日期和时间 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#string\">string</a> } - 绝对运行时间</li>\n<li><strong>[ after ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"#durationoptions\">DurationOptions</a> } - 从当前时刻开始计算的延迟</li>\n<li><strong>[ delay = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本执行前的延迟, 单位为毫秒</li>\n<li><strong>[ interval = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 循环执行间隔, 单位为毫秒</li>\n<li><strong>[ loopTimes = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 脚本循环执行次数</li>\n</ul>\n<p><code>date</code> 可作为 <code>time</code> 的别名.</p>\n<p><code>after</code> 也可写作 <code>countdown</code>, <code>timeOffset</code>, <code>duration</code> 或 <code>runAfter</code>.<br>\n延迟为数值时, 单位为毫秒. 延迟必须大于 <code>0</code>.</p>\n<p>当绝对时间和延迟同时存在时, 延迟优先.</p>\n",
+              "type": "module",
+              "displayName": "DisposableTaskOptions"
+            },
+            {
+              "textRaw": "DurationOptions",
+              "name": "durationoptions",
+              "desc": "<ul>\n<li><strong>[ days = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 天数</li>\n<li><strong>[ hours = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 小时数</li>\n<li><strong>[ minutes = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 分钟数</li>\n<li><strong>[ seconds = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 秒数</li>\n<li><strong>[ milliseconds = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 毫秒数</li>\n</ul>\n<p>各字段必须为非负整数, 总时长必须大于 <code>0</code>.</p>\n<p>字段还支持以下短名称:</p>\n<ul>\n<li><code>days</code>: <code>day</code>, <code>d</code>, <code>delayDays</code>.</li>\n<li><code>hours</code>: <code>hour</code>, <code>hr</code>, <code>h</code>, <code>delayHours</code>.</li>\n<li><code>minutes</code>: <code>minute</code>, <code>min</code>, <code>m</code>, <code>delayMinutes</code>.</li>\n<li><code>seconds</code>: <code>second</code>, <code>sec</code>, <code>s</code>, <code>delaySeconds</code>.</li>\n<li><code>milliseconds</code>: <code>millisecond</code>, <code>millis</code>, <code>ms</code>, <code>delayMillis</code>.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "DurationOptions"
+            },
+            {
+              "textRaw": "IntentTaskOptions",
+              "name": "intenttaskoptions",
+              "desc": "<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 待执行脚本的路径</li>\n<li><strong>[ action ]</strong> { <a href=\"dataTypes#string\">string</a> } - Intent action</li>\n<li><strong>[ category ]</strong> { <a href=\"dataTypes#string\">string</a> } - Intent category</li>\n<li><strong>[ dataType ]</strong> { <a href=\"dataTypes#string\">string</a> } - Intent MIME 类型</li>\n<li><strong>[ isLocal = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否使用本地广播</li>\n</ul>\n<p><code>local</code> 可作为 <code>isLocal</code> 的别名.</p>\n<p>AutoJs6 启动事件对应的 action 会默认使用本地广播. 显式设置 <code>isLocal</code> 或 <code>local</code> 时, 显式值优先.</p>\n",
+              "type": "module",
+              "displayName": "IntentTaskOptions"
+            },
+            {
+              "textRaw": "TimedTaskQueryOptions",
+              "name": "TimedTaskQueryOptions",
+              "desc": "<ul>\n<li><strong>[ path ]</strong> { <a href=\"dataTypes#string\">string</a> } - 脚本路径过滤条件</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "IntentTaskQueryOptions"
+            },
+            {
+              "textRaw": "IntentTaskQueryOptions",
+              "name": "intenttaskqueryoptions",
+              "desc": "<ul>\n<li><strong>[ path ]</strong> { <a href=\"dataTypes#string\">string</a> } - 脚本路径过滤条件</li>\n<li><strong>[ action ]</strong> { <a href=\"dataTypes#string\">string</a> } - Intent action 过滤条件</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "IntentTaskQueryOptions"
+            }
+          ],
+          "type": "module",
+          "displayName": "任务选项"
+        },
+        {
+          "textRaw": "返回对象",
+          "name": "返回对象",
+          "modules": [
+            {
+              "textRaw": "TimedTask",
+              "name": "timedtask",
+              "desc": "<p>workManager 的定时任务对象由 <a href=\"tasks\">tasks</a> 模块共用的 <code>org.autojs.autojs.timing.TimedTask</code> 提供.</p>\n<p>常用公开属性包括 <code>id</code>, <code>scriptPath</code>, <code>millis</code>, <code>repeatMode</code>, <code>timeFlag</code>, <code>scheduled</code>, <code>endMode</code> 和 <code>endValue</code>.</p>\n",
+              "type": "module",
+              "displayName": "TimedTask"
+            },
+            {
+              "textRaw": "IntentTask",
+              "name": "intenttask",
+              "desc": "<p>workManager 的 Intent 任务对象由 <a href=\"tasks\">tasks</a> 模块共用的 <code>org.autojs.autojs.timing.IntentTask</code> 提供.</p>\n<p>常用公开属性包括 <code>id</code>, <code>scriptPath</code>, <code>action</code>, <code>category</code>, <code>dataType</code> 和 <code>local</code>.</p>\n",
+              "type": "module",
+              "displayName": "IntentTask"
+            }
+          ],
+          "type": "module",
+          "displayName": "返回对象"
+        },
+        {
+          "textRaw": "timers 兼容入口",
+          "name": "timers_兼容入口",
+          "desc": "<p>以下方法也可通过 <a href=\"timers\">timers</a> 模块调用, 其参数和返回值与 workManager 对应方法相同:</p>\n<ul>\n<li><code>timers.addDailyTask</code></li>\n<li><code>timers.addWeeklyTask</code></li>\n<li><code>timers.addDisposableTask</code></li>\n<li><code>timers.addIntentTask</code></li>\n<li><code>timers.getTimedTask</code></li>\n<li><code>timers.getIntentTask</code></li>\n<li><code>timers.removeTimedTask</code></li>\n<li><code>timers.removeIntentTask</code></li>\n<li><code>timers.queryTimedTasks</code></li>\n<li><code>timers.queryIntentTasks</code></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "timers 兼容入口"
+        }
+      ],
+      "type": "module",
+      "displayName": "计划任务兼容接口 (WorkManager)"
+    }
+  ]
+}

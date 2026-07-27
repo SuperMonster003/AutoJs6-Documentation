@@ -2,7 +2,7 @@
 
 UiObjectActions 是一个 Java 接口, 代表 [控件节点 (UiObject)](uiObjectType) 的行为集合.
 
-该接口有一个抽象方法 [performAction](#m-performaction) 是执行具体的控件节点行为的核心.  
+该接口有一个抽象方法 [performAction](#m-performaction) 是执行具体的控件节点行为的核心.<br>
 诸如 [ click / copy / paste ] 等方法均是对 performAction 的封装, 因此用户也可利用 performAction 实现自定义控件节点行为的封装.
 
 下表列出了部分行为 ID 名称, 及对应已实现封装的方法名称 (星号表示 AutoJs6 新增方法):
@@ -56,7 +56,7 @@ UiObjectActions 是一个 Java 接口, 代表 [控件节点 (UiObject)](uiObject
 若当前设备不满足列表中最低 API 等级要求, 使用对应方法时不会抛出异常, 会静默返回 false:
 
 ```js
-/* 
+/*
     例如 ACTION_IME_ENTER 要求设备运行条件不低于 Android API 30 (11) [R].
     在 API < 30 的设备上一定返回 false 且 IME ENTER 无效果 (但不会抛出异常).
  */
@@ -78,7 +78,7 @@ console.log(pickup({
 
 ## [m!] performAction
 
-用于执行指定的控件行为.  
+用于执行指定的控件行为.<br>
 是一个无默认实现的抽象方法.
 
 ### performAction(action, ...arguments)
@@ -145,7 +145,7 @@ override fun performAction(action: Int, vararg arguments: ActionArgument): Boole
 
 由此可见, [UiSelector](uiSelectorType) 与 [UiObjectCollection](uiObjectCollectionType) 最终都调用了 [UiObject](uiObjectType) 的 `performAction` 方法, 而 `UiObject` 的 `performAction` 则调用了 Android 系统的 [AccessibilityNodeInfoCompat#performAction](https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat#performAction(int,android.os.Bundle)) 方法
 
-`UiObjectCollection` 相当于对控件集合中的每一个控件执行 `UiObject#performAction` 方法.  
+`UiObjectCollection` 相当于对控件集合中的每一个控件执行 `UiObject#performAction` 方法.<br>
 `UiSelector` 相当于先执行 [untilFind](uiSelectorType#m-untilfind) 找到当前窗口中所有控件, 将其作为集合执行 `UiObjectCollection#performAction` 方法.
 
 因全局的 `untilFind()` 是 "无条件" 筛选, 会把窗口中所有控件 (往往会有几十甚至成百上千个控件) 全部加入集合中, 此时执行任何 `行为 (Action)`, 都相当于集合中所有控件执行一遍上述行为, 这样的操作往往是无意义的, 很可能造成非预期结果甚至不可控的操作, 因此不建议使用 `UiSelector` 提供的 `行为 (Action)` 方法.
@@ -153,7 +153,7 @@ override fun performAction(action: Int, vararg arguments: ActionArgument): Boole
 下面列举一个 `UiSelector` 提供的行为, 再次强调不建议使用:
 
 ```js
-/* ACTION_SET_TEXT 行为 */
+/* ACTION_SET_TEXT 行为. */
 
 /* 对当前窗口中所有支持设置文本的控件, 将内容设置为 "hello". */
 selector().setText("hello");
@@ -295,7 +295,7 @@ console.log(pickup(w, 'k3', 'click'));
 - [劣] 部分控件执行 `click` 行为后无响应
 - [劣] 无法完全适应控件属性或层级关系改变的情况
 
-鉴于上述优劣项, 控件的 `click` 方法通常与 [ [global.click](global#m-click) ([automator.click](automator#m-click)) / [UiObject#clickByBounds](uiObjectType#m-clickbybounds) ] 等方法配合使用.
+鉴于上述优劣项, 控件的 `click` 方法通常与 [ [global.click](automator#m-click) ([automator.click](automator#m-click)) / [UiObject#clickBounds](uiObjectType#m-clickbounds) ] 等方法配合使用.
 
 ## [m=] longClick
 
@@ -370,7 +370,7 @@ console.log(pickup(idEndsWith('fab'), 'clearAccessibilityFocus')); /* boolean �
 
 控件节点执行 [ 获取焦点 ] 行为.
 
-在当前设备连接外置键盘等输入设备时, 按下 TAB 或 方向键可在控件之间 "切换", 这些控件都是 focusable (可被聚焦) 的.
+在当前设备连接外置键盘等输入设备时, 按下 TAB 或方向键可在控件之间 "切换", 这些控件都是 focusable (可被聚焦) 的.
 
 ```js
 /* 查看控件是否可被聚焦. */
@@ -378,7 +378,7 @@ console.log(w.focusable());
 console.log(w.isFocusable()); /* 同上. */
 ```
 
-当控件被聚焦 (即获取焦点) 后, 可使用输入设备的 ENTER 或 OK 等表示确认的按键激活此控件.  
+当控件被聚焦 (即获取焦点) 后, 可使用输入设备的 ENTER 或 OK 等表示确认的按键激活此控件.<br>
 如果此控件支持文本输入 (例如常见的 EditText 类型控件), 在被聚焦后, 将出现输入光标, 且可能会弹出软键盘用于用户输入内容.
 
 ```js
@@ -422,7 +422,7 @@ console.log(w.clearFocus()); // false
 
 控件节点执行 [ 拖放开始 ] 行为.
 
-此操作将初始化系统内部的拖放 (Drag & Drop) 功能.  
+此操作将初始化系统内部的拖放 (Drag & Drop) 功能.<br>
 支持拖放的内容将在拖放行为开始前完成准备.
 
 ## [m=] dragDrop
@@ -461,7 +461,7 @@ console.log(w.clearFocus()); // false
 
 此操作通常只对获得焦点且可编辑的控件有效.
 
-通常 imeEnter 用来模拟回车键在文本控件实现换行功能.  
+通常 imeEnter 用来模拟回车键在文本控件实现换行功能.<br>
 另外也可以模拟某些表示确认的操作, 如 [ 搜索 / 发送 / 下一步 / 立即前往 / 开始执行 ] 等.
 
 ```js
@@ -535,7 +535,7 @@ console.log(w.nextHtmlElement("BUTTON"));
 
 控件节点执行 [ 使视窗左移的翻页 ] 行为.
 
-此操作使视窗向左移动, 以便将可翻页控件左侧的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向左移动, 以便将可翻页控件左侧的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向右拖动视图.
 
 - 新可视化内容: 左.
@@ -552,7 +552,7 @@ console.log(w.nextHtmlElement("BUTTON"));
 
 控件节点执行 [ 使视窗上移的翻页 ] 行为.
 
-此操作使视窗向上移动, 以便将可翻页控件上方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向上移动, 以便将可翻页控件上方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向下拖动视图.
 
 - 新可视化内容: 上.
@@ -569,7 +569,7 @@ console.log(w.nextHtmlElement("BUTTON"));
 
 控件节点执行 [ 使视窗右移的翻页 ] 行为.
 
-此操作使视窗向右移动, 以便将可翻页控件右侧的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向右移动, 以便将可翻页控件右侧的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向左拖动视图.
 
 - 新可视化内容: 右.
@@ -586,7 +586,7 @@ console.log(w.nextHtmlElement("BUTTON"));
 
 控件节点执行 [ 使视窗下移的翻页 ] 行为.
 
-此操作使视窗向下移动, 以便将可翻页控件下方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向下移动, 以便将可翻页控件下方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向上拖动视图.
 
 - 新可视化内容: 下.
@@ -603,9 +603,9 @@ console.log(w.nextHtmlElement("BUTTON"));
 
 控件节点执行 [ 按住 ] 行为.
 
-按住即按下并保持, 与 ACTION_LONG_CLICK (长按) 不同.  
-如果控件的单一行为响应是为 "长按" 设计的, 则应该使用封装的 longClick 方法, 而非 pressAndHold 方法.  
-只有控件存在对 "按住" 行为的响应, 才会使 pressAndHold 有效.  
+按住即按下并保持, 与 ACTION_LONG_CLICK (长按) 不同.<br>
+如果控件的单一行为响应是为 "长按" 设计的, 则应该使用封装的 longClick 方法, 而非 pressAndHold 方法.<br>
+只有控件存在对 "按住" 行为的响应, 才会使 pressAndHold 有效.<br>
 通常控件不会同时存在上述两种行为的响应.
 
 ## [m=] previousAtMovementGranularity
@@ -695,7 +695,7 @@ console.log(w.previousHtmlElement("BUTTON"));
 
 控件节点执行 [ 显示在视窗内 ] 行为.
 
-此操作使控件的所有边界全部出现在视窗内部.  
+此操作使控件的所有边界全部出现在视窗内部.<br>
 如有需要, 页面会发生滚动.
 
 ```js
@@ -763,7 +763,7 @@ console.log(w.isDismissable()); /* 同上. */
 
 此操作将剪贴板的文本内容粘贴到控件的可编辑文本区域.
 
-需额外留意, 自 [Android API 29 (10) [Q]](apiLevel) 起, 剪贴板数据的访问将受到限制.  
+需额外留意, 自 [Android API 29 (10) [Q]](apiLevel) 起, 剪贴板数据的访问将受到限制.<br>
 详情参阅 [getClip](global#m-getclip).
 
 ## [m=] select
@@ -819,7 +819,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗左移的滚动 ] 行为.
 
-此操作使视窗向左移动, 以便将可滚动控件左侧的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向左移动, 以便将可滚动控件左侧的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向右拖动视图.
 
 - 新可视化内容: 左.
@@ -836,7 +836,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗上移的滚动 ] 行为.
 
-此操作使视窗向上移动, 以便将可滚动控件上方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向上移动, 以便将可滚动控件上方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向下拖动视图.
 
 - 新可视化内容: 上.
@@ -853,7 +853,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗右移的滚动 ] 行为.
 
-此操作使视窗向右移动, 以便将可滚动控件右侧的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向右移动, 以便将可滚动控件右侧的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向左拖动视图.
 
 - 新可视化内容: 右.
@@ -870,7 +870,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗下移的滚动 ] 行为.
 
-此操作使视窗向下移动, 以便将可滚动控件下方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向下移动, 以便将可滚动控件下方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向上拖动视图.
 
 - 新可视化内容: 下.
@@ -887,7 +887,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗前移的滚动 ] 行为.
 
-此操作使视窗向前移动, 以便将可滚动控件前方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向前移动, 以便将可滚动控件前方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向后拖动视图.
 
 - 新可视化内容: 前.
@@ -906,7 +906,7 @@ console.log(w.isSelected()); /* 同上. */
 
 控件节点执行 [ 使视窗后移的滚动 ] 行为.
 
-此操作使视窗向后移动, 以便将可滚动控件后方的更多内容 (如有) 展示在视窗内.  
+此操作使视窗向后移动, 以便将可滚动控件后方的更多内容 (如有) 展示在视窗内.<br>
 对于触屏设备, 此操作相当于按住屏幕并向前拖动视图.
 
 - 新可视化内容: 后.
@@ -935,13 +935,13 @@ scrollable().find().some((w) => {
     if (info !== null) {
         console.log(info.getRowCount()); /* e.g. 17 */
         console.log(info.getColumnCount()); /* e.g. 2 */
-        
+
         let randRow = Mathx.randInt(info.getRowCount() - 1);
         let randColumn = Mathx.randInt(info.getColumnCount() - 1);
         console.log(`${randRow},${randColumn}`); /* e.g. 10,1 */
-        
+
         console.log(w.scrollTo(randRow, randColumn)); /* e.g. false */
-        
+
         return /* @some */ true;
     }
 });
@@ -1051,12 +1051,12 @@ pickup({ action: ['SET_PROGRESS'] }, '[]').some((w) => {
 
 ## [I] ActionArgument
 
-控件的行为参数接口.  
+控件的行为参数接口.<br>
 主要用于自定义控件行为的 [performAction](#m-performaction) 抽象方法内.
 
 ### [C] IntActionArgument
 
-ActionArgument 的具体类.  
+ActionArgument 的具体类.<br>
 用于传递 Int 类型的行为参数.
 
 #### [c] (name, value)
@@ -1080,7 +1080,7 @@ function scrollTo(x, y) {
 
 ### [C] BooleanActionArgument
 
-ActionArgument 的具体类.  
+ActionArgument 的具体类.<br>
 用于传递 Boolean 类型的行为参数.
 
 #### [c] (name, value)
@@ -1104,7 +1104,7 @@ function nextAtMovementGranularity(granularity, isExtendSelection) {
 
 ### [C] CharSequenceActionArgument
 
-ActionArgument 的具体类.  
+ActionArgument 的具体类.<br>
 用于传递 CharSequence 类型的行为参数.
 
 #### [c] (name, value)
@@ -1127,7 +1127,7 @@ function setText(text) {
 
 ### [C] StringActionArgument
 
-ActionArgument 的具体类.  
+ActionArgument 的具体类.<br>
 用于传递 String 类型的行为参数.
 
 #### [c] (name, value)
@@ -1150,7 +1150,7 @@ function nextHtmlElement(element) {
 
 ### [C] FloatActionArgument
 
-ActionArgument 的具体类.  
+ActionArgument 的具体类.<br>
 用于传递 Float 类型的行为参数.
 
 #### [c] (name, value)
@@ -1173,13 +1173,13 @@ function nextHtmlElement(progress) {
 
 # 全局行为重定向
 
-本章节所有控件行为对应的方法 **名称** 均已全局化, 即支持 [ `click()` / `paste()` / `scrollDown()` / `show()` ] 等全局直接调用的方式来使用.  
+本章节所有控件行为对应的方法 **名称** 均已全局化, 即支持 [ `click()` / `paste()` / `scrollDown()` / `show()` ] 等全局直接调用的方式来使用.<br>
 这些方法多数是 UiSelector 实例方法的直接绑定, 但有部分方法被 SimpleActionAutomator 覆盖.
 
-下表列出了控件行为方法对应的绑定源.  
+下表列出了控件行为方法对应的绑定源.<br>
 其中 AUTO 代表 SimpleActionAutomator, SEL 代表 UiSelector.
 
-| Global Actions                | AUTO | SEL |        
+| Global Actions                | AUTO | SEL |
 |-------------------------------|:----:|:---:|
 | accessibilityFocus            |      |  √  |
 | clearAccessibilityFocus       |      |  √  |
@@ -1242,5 +1242,5 @@ scrollDown(); /* 相当于 automator.scrollDown(). */
 
 通过 [performAction](#m-performaction) 小节可知, UiSelector 的控件行为方法实际是对当前窗口中所有控件全部执行一次 Action, 因此几乎所有 UiSelector 的控件行为方法均不建议使用.
 
-全局方法 [paste](#m-paste) 是使用率相对较高的控件行为, 且效果往往与预期相符.  
+全局方法 [paste](#m-paste) 是使用率相对较高的控件行为, 且效果往往与预期相符.<br>
 有关全局方法 `paste` 的执行过程及原理分析可参阅 [UiSelector#paste](uiSelectorType#m-paste) 小节.

@@ -1,106 +1,208 @@
 # 定时器 (Timers)
 
+`timers` 模块提供当前脚本进程内的事件循环定时器, 并提供一组与 [workManager](workManager) 兼容的持久化任务入口.
+
+脚本内定时器是单线程的. 当前脚本长时间阻塞时, 回调只能在事件循环恢复后执行.
+
 ---
 
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Oct 22, 2022.</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">timers</p>
 
 ---
 
-timers 模块暴露了一个全局的 API, 用于在某个未来时间段调用调度函数.  因为定时器函数是全局的, 所以使用该 API 无需调用 timers.***
+## [m] setTimeout
 
-Auto.js 中的计时器函数实现了与 Web 浏览器提供的定时器类似的 API, 除了它使用了一个不同的内部实现, 它是基于 Android Looper-Handler消息循环机制构建的. 其实现机制与Node.js比较相似.
+### setTimeout(callback, delay?, ...args)
 
-例如, 要在5秒后发出消息"hello":
+**`Global`**
 
-```
-setTimeout(function(){
-    toast("hello")
-}, 5000);
-```
+- **callback** { [Function](dataTypes#function) } - 定时器到期时执行的函数
+- **[ delay = 1 ]** { [number](dataTypes#number) } - 等待时间, 单位为毫秒
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 传给回调的参数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 定时器 ID
 
-需要注意的是, 这些定时器仍然是单线程的. 如果脚本主体有耗时操作或死循环, 则设定的定时器不能被及时执行, 例如：
+创建单次定时器.
 
-```
-setTimeout(function(){
-    //这里的语句会在15秒后执行而不是5秒后
-    toast("hello")
-}, 5000);
-//暂停10秒
-sleep(10000);
-```
+## [m] setInterval
 
-再如：
+### setInterval(callback, delay?, ...args)
 
-```
-setTimeout(function(){
-    //这里的语句永远不会被执行
-    toast("hello")
-}, 5000);
-//死循环
-while(true);
-```
+**`Global`**
 
-## setInterval(callback, delay\[, ...args\])
+- **callback** { [Function](dataTypes#function) } - 每次定时器到期时执行的函数
+- **[ delay = 1 ]** { [number](dataTypes#number) } - 间隔时间, 单位为毫秒
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 传给回调的参数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 定时器 ID
 
-* `callback` {Function} 当定时器到点时要调用的函数.
-* `delay` {number} 调用 callback 之前要等待的毫秒数.
-* `...args` {any} 当调用 callback 时要传入的可选参数.
+创建重复定时器.
 
-预定每隔 delay 毫秒重复执行的 callback.  返回一个用于 clearInterval() 的 id.
+## [m] setImmediate
 
-当 delay 小于 0 时, delay 会被设为 0.
+### setImmediate(callback, ...args)
 
-## setTimeout(callback, delay\[, ...args\])
+**`Global`**
 
-* `callback` {Function} 当定时器到点时要调用的函数.
-* `delay` {number} 调用 callback 之前要等待的毫秒数.
-* `...args` {any} 当调用 callback 时要传入的可选参数.
+- **callback** { [Function](dataTypes#function) } - 当前事件循环结束后执行的函数
+- **...args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - 传给回调的参数
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 定时器 ID
 
-预定在 delay 毫秒之后执行的单次 callback.  返回一个用于 clearTimeout() 的 id.
+创建立即定时器.
 
-callback 可能不会精确地在 delay 毫秒被调用.  Auto.js 不能保证回调被触发的确切时间, 也不能保证它们的顺序.  回调会在尽可能接近所指定的时间上调用.
+## [m] clearTimeout
 
-当 delay 小于 0 时, delay 会被设为 0.
+### clearTimeout(id)
 
-## setImmediate(callback[, ...args])
+**`Global`**
 
-* `callback` {Function} 在Looper循环的当前回合结束时要调用的函数.
-* `...args` {any} 当调用 callback 时要传入的可选参数.
+- **id** { [number](dataTypes#number) } - [setTimeout](#m-settimeout) 返回的定时器 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的定时器
 
-预定立即执行的 callback, 它是在 I/O 事件的回调之后被触发.  返回一个用于 clearImmediate() 的 id.
+## [m] clearInterval
 
-当多次调用 setImmediate() 时, callback 函数会按照它们被创建的顺序依次执行.  每次事件循环迭代都会处理整个回调队列.  如果一个立即定时器是被一个正在执行的回调排入队列的, 则该定时器直到下一次事件循环迭代才会被触发.
+### clearInterval(id)
 
-setImmediate()、setInterval() 和 setTimeout() 方法每次都会返回表示预定的计时器的id.  它们可用于取消定时器并防止触发.
+**`Global`**
 
-## clearInterval(id)
+- **id** { [number](dataTypes#number) } - [setInterval](#m-setinterval) 返回的定时器 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的定时器
 
-* `id` {number} 一个 setInterval() 返回的 id.
+## [m] clearImmediate
 
-取消一个由 setInterval() 创建的循环定时任务.
+### clearImmediate(id)
 
-例如：
+**`Global`**
 
-```
-//每5秒就发出一次hello
-var id = setInterval(function(){
-    toast("hello");
-}, 5000);
-//1分钟后取消循环
-setTimeout(function(){
-    clearInterval(id);
-}, 60 * 1000);
-```
+- **id** { [number](dataTypes#number) } - [setImmediate](#m-setimmediate) 返回的定时器 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否取消了匹配的定时器
 
-## clearTimeout(id)
+## [m] setIntervalExt
 
-* `id` {number} 一个 setTimeout() 返回的 id.
+### setIntervalExt(listener, interval?, timeoutOrCondition?, callback?)
 
-取消一个由 setTimeout() 创建的定时任务.
+- **listener** { [Function](dataTypes#function) } - 每次间隔到期时执行的函数
+- **[ interval = 200 ]** { [number](dataTypes#number) } - 间隔时间, 单位为毫秒
+- **[ timeoutOrCondition ]** { [number](dataTypes#number) | [Function](dataTypes#function) } - 总超时时间或结束条件
+- **[ callback ]** { [Function](dataTypes#function) } - 结束时执行的回调
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 首次调度的定时器 ID
 
-## clearImmediate(id)
+重复执行 `listener`. 第 3 个参数为正数时, 从调用开始经过指定毫秒数后结束; 为函数时, 每次执行 `listener` 后计算结束条件. 条件结果不是 `null`, `undefined` 或 `false` 时结束, 并将该结果传给 `callback`.
 
-* `id` {number} 一个 setImmediate() 返回的 id.
+## [m] keepAlive
 
-取消一个由 setImmediate() 创建的 Immediate 对象.
+### keepAlive(timeout?)
+
+**`Global`**
+
+- **[ timeout = 0 ]** { [number](dataTypes#number) } - 保持脚本存活的时间, 单位为毫秒
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 定时器 ID
+
+`timeout` 大于 `0` 时创建对应时长的空定时器. 省略或不大于 `0` 时创建每 `10000` 毫秒执行一次的空定时器, 使脚本持续运行.
+
+## loop()
+
+**`Global`** **`ABANDONED`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+此兼容方法不再提供事件循环控制功能, 调用时仅输出废弃警告.
+
+---
+
+## 持久化任务兼容入口
+
+**`6.8.0`**
+
+以下方法委托给 [workManager](workManager). 创建操作始终同步执行, 会忽略 `callback`, `condition`, `isAsync` 和 `async` 选项. 删除操作返回数据库布尔结果, 与 [tasks.removeTimedTask](tasks#m-removetimedtask) 和 [tasks.removeIntentTask](tasks#m-removeintenttask) 返回任务对象的语义不同.
+
+## [m] addDailyTask
+
+### addDailyTask(options)
+
+**`6.8.0`**
+
+- **options** { [Object](dataTypes#object) } - [每日任务选项](tasks#m-adddailytask)
+- <ins>**returns**</ins> { [TimedTask](tasks#timedtask) }
+
+## [m] addWeeklyTask
+
+### addWeeklyTask(options)
+
+**`6.8.0`**
+
+- **options** { [Object](dataTypes#object) } - [每周任务选项](tasks#m-addweeklytask)
+- <ins>**returns**</ins> { [TimedTask](tasks#timedtask) }
+
+## [m] addDisposableTask
+
+### addDisposableTask(options)
+
+**`6.8.0`**
+
+- **options** { [Object](dataTypes#object) } - [一次性任务选项](tasks#m-adddisposabletask)
+- <ins>**returns**</ins> { [TimedTask](tasks#timedtask) }
+
+## [m] addIntentTask
+
+### addIntentTask(options)
+
+**`6.8.0`**
+
+- **options** { [Object](dataTypes#object) } - [广播任务选项](tasks#m-addintenttask)
+- <ins>**returns**</ins> { [IntentTask](tasks#intenttask) }
+
+## [m] getTimedTask
+
+### getTimedTask(id)
+
+**`6.8.0`**
+
+- **id** { [number](dataTypes#number) } - 任务 ID
+- <ins>**returns**</ins> { [TimedTask](tasks#timedtask) | [null](dataTypes#null) }
+
+## [m] getIntentTask
+
+### getIntentTask(id)
+
+**`6.8.0`**
+
+- **id** { [number](dataTypes#number) } - 任务 ID
+- <ins>**returns**</ins> { [IntentTask](tasks#intenttask) | [null](dataTypes#null) }
+
+## [m] removeTimedTask
+
+### removeTimedTask(id)
+
+**`6.8.0`**
+
+- **id** { [number](dataTypes#number) } - 任务 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 删除结果, 任务不存在时返回 `null`
+
+## [m] removeIntentTask
+
+### removeIntentTask(id)
+
+**`6.8.0`**
+
+- **id** { [number](dataTypes#number) } - 任务 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 删除结果, 任务不存在时返回 `null`
+
+## [m] queryTimedTasks
+
+### queryTimedTasks(options?)
+
+**`6.8.0`**
+
+- **[ options = {} ]** {{ path?: [string](dataTypes#string) }}
+- <ins>**returns**</ins> { [TimedTask](tasks#timedtask)[] }
+
+## [m] queryIntentTasks
+
+### queryIntentTasks(options?)
+
+**`6.8.0`**
+
+- **[ options = {} ]** {{
+    - path?: [string](dataTypes#string);
+    - action?: [string](dataTypes#string);
+- }}
+- <ins>**returns**</ins> { [IntentTask](tasks#intenttask)[] }

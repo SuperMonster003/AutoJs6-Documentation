@@ -46,8 +46,8 @@ typeof File === 'object'; // true
 
 上述示例也可使用解构赋值方式导入 File 类: `const {File} = java.io;`
 
-> 注: 配合 TypeScript Declarations 的 IDE 可能对解构赋值变量无法进行类型识别和代码智能提示.  
-> 因此建议使用原始变量声明方式导入需要使用的类.  
+> 注: 配合 TypeScript Declarations 的 IDE 可能对解构赋值变量无法进行类型识别和代码智能提示.<br>
+> 因此建议使用原始变量声明方式导入需要使用的类.<br>
 > 对于 importClass 和 importPackage, 目前还未能实现类型识别和代码智能提示 (截至 2022 年 7 月).
 
 ## 访问扩展的包及类
@@ -55,10 +55,10 @@ typeof File === 'object'; // true
 AutoJs6 的项目扩展库及项目依赖包均可直接访问.
 
 ```js
-/* 依赖包: implementation("joda-time:joda-time:2.10.14") */
+/* 依赖包: implementation("joda-time:joda-time:2.10.14"). */
 typeof org.joda.time.LocalDateTime.now; // "function"
 
-/* 扩展库: implementation(project(":libs:org.opencv-4.5.5")) */
+/* 扩展库: implementation(project(":libs:org.opencv-4.5.5")). */
 typeof org.opencv.core.Point; // "function"
 ```
 
@@ -87,7 +87,7 @@ java.lang.Math.cos(0); // 1
 ```js
 new java.io.File("foo").listFiles.toString();
 
-/* 代码结果 (共 5 行) */
+/* 代码结果 (共 5 行). */
 
 // function listFiles() {/*
 //     java.io.File[] listFiles(java.io.FileFilter)
@@ -101,9 +101,9 @@ new java.io.File("foo").listFiles.toString();
 读写方法符合以下命名规范的类称为 JavaBean:
 
 ```java
-/* 读方法 */
+/* 读方法. */
 getXyz(): Type
-/* 写方法 */
+/* 写方法. */
 setXyz(Type value): void
 ```
 
@@ -112,13 +112,13 @@ setXyz(Type value): void
 ```java
 public class Student {
 
-    private int mAge;  
-    
-    public int getAge() { return mAge; }  
+    private int mAge;
+
+    public int getAge() { return mAge; }
     public void setAge(int anAge) { mAge = anAge; }
-      
+
     public String getSex() { return "male"; }
-      
+
 };
 ```
 
@@ -128,8 +128,8 @@ public class Student {
 
 ```js
 let stu = new Student();
-stu.sex; // "male" - 相当于 stu.getSex();
-stu.age = 33; /* 相当于 stu.setAge(33); */
+stu.sex; // "male" - 相当于调用 stu.getSex().
+stu.age = 33; /* 相当于调用 stu.setAge(33). */
 stu.age; // 33
 stu.getAge(); // 33
 ```
@@ -139,11 +139,11 @@ stu.getAge(); // 33
 ```java
 public class Student {
 
-    private boolean mMale;  
-    
-    public boolean isMale() { return mMale; }  
+    private boolean mMale;
+
+    public boolean isMale() { return mMale; }
     public String setMale(boolean value) { mMale = value; }
-      
+
 };
 ```
 
@@ -151,8 +151,8 @@ JavaScript 使用方式:
 
 ```js
 let stu = new Student();
-stu.male; // false - 相当于 stu.isMale();
-stu.male = true; /* 相当于 stu.setMale(true); */
+stu.male; // false - 相当于调用 stu.isMale().
+stu.male = true; /* 相当于调用 stu.setMale(true). */
 stu.male; // true
 stu.isMale(); // true
 ```
@@ -176,7 +176,7 @@ let listener = new android.view.View.OnClickListener(function (view) {
 ui.btn.setOnClickListener(listener);
 ```
 
-上述示例将 JavaScript 函数作为 Java 接口传入 `OnClickListener` 方法.  
+上述示例将 JavaScript 函数作为 Java 接口传入 `OnClickListener` 方法.<br>
 将函数作为接口使用的条件: 接口只有一个方法 (不可为 0 或多于 1 个) 且参数类型依次匹配.
 
 ### 对象转换
@@ -221,7 +221,7 @@ new JavaAdapter(android.view.View.OnAttachStateChangeListener, {
 ### 实现多个 Java 接口
 
 ```js
-/* 语法: new JavaAdapter(javaIntfOrClass, [javaIntf, ..., javaIntf,] javascriptObject) */
+/* 语法: new JavaAdapter(javaIntfOrClass, [javaIntf, ..., javaIntf,] javascriptObject). */
 
 new JavaAdapter(android.view.View.OnAttachStateChangeListener, java.lang.Runnable, {
     onViewAttachedToWindow(view) {

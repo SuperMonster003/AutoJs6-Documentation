@@ -4,57 +4,150 @@
     {
       "textRaw": "悬浮窗 (Floaty)",
       "name": "悬浮窗_(floaty)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>floaty模块提供了悬浮窗的相关函数, 可以在屏幕上显示自定义悬浮窗, 控制悬浮窗大小、位置等.</p>\n<p>悬浮窗在脚本停止运行时会自动关闭, 因此, 要保持悬浮窗不被关闭, 可以用一个空的setInterval来实现, 例如：</p>\n<pre><code>setInterval(()=&gt;{}, 1000);\n</code></pre>",
-      "methods": [
+      "desc": "<hr>\n<aside class=\"doc-status doc-status--incomplete\" data-marked-by=\"SuperMonster003\" data-marked-on=\"2022-10-22\">\n<p><strong>文档状态:</strong> 此章节仍在补充或完善中.</p>\n</aside>\n\n<p>floaty 模块提供了悬浮窗的相关函数, 可以在屏幕上显示自定义悬浮窗, 控制悬浮窗大小, 位置等.</p>\n<p>悬浮窗在脚本停止运行时会自动关闭, 因此, 要保持悬浮窗不被关闭, 可以用一个空的 setInterval 来实现, 例如:</p>\n<pre><code>setInterval(()=&gt;{}, 1000);\n</code></pre>",
+      "modules": [
         {
-          "textRaw": "floaty.window(layout)",
-          "type": "method",
-          "name": "window",
-          "signatures": [
+          "textRaw": "[m] window",
+          "name": "[m]_window",
+          "methods": [
             {
-              "params": [
+              "textRaw": "window(xml)",
+              "type": "method",
+              "name": "window",
+              "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li><strong>xml</strong> { <a href=\"e4x\">XML</a> | <a href=\"dataTypes#string\">string</a> } - E4X XML 布局或 XML 布局字符串</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#floatywindow\">FloatyWindow</a> } - 可调整悬浮窗对象</li>\n</ul>\n<p>根据布局创建并显示一个带关闭, 调整大小和调整位置控件的悬浮窗. 可调用 <code>setAdjustEnabled()</code> 显示或隐藏调整控件.</p>\n<p><code>xml</code> 只接受 E4X XML 对象或字符串, 不接受 Android <code>View</code> 对象. 缺少悬浮窗权限时会打开系统设置并等待授权, 最长等待 <code>60</code> 秒.</p>\n<pre><code class=\"lang-js\">let window = floaty.window(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nsetTimeout(() =&gt; {\n    window.close();\n}, 2000);\n</code></pre>\n<p>对悬浮窗控件的修改需要在 UI 线程执行, 可使用 <a href=\"ui#m-run\">ui.run</a>:</p>\n<pre><code class=\"lang-js\">ui.run(() =&gt; {\n    window.text.setText(&#39;文本&#39;);\n});\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`layout` {xml} | {View} 悬浮窗界面的XML或者View ",
-                  "name": "layout",
-                  "type": "xml",
-                  "desc": "| {View} 悬浮窗界面的XML或者View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "layout"
+                  "params": [
+                    {
+                      "name": "xml"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>指定悬浮窗的布局, 创建并<strong>显示</strong>一个悬浮窗, 返回一个<code>FloatyWindow</code>对象.</p>\n<p>该悬浮窗自带关闭、调整大小、调整位置按键, 可根据需要调用<code>setAdjustEnabled()</code>函数来显示或隐藏.</p>\n<p>其中layout参数可以是xml布局或者一个View, 更多信息参见ui模块的说明.</p>\n<p>例子：</p>\n<pre><code>var w = floaty.window(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.</p>\n<p>另外, 因为脚本运行的线程不是UI线程, 而所有对控件的修改操作需要在UI线程执行, 此时需要用<code>ui.run</code>, 例如:</p>\n<pre><code>ui.run(function(){\n    w.text.setText(&quot;文本&quot;);\n});\n</code></pre><p>有关返回的<code>FloatyWindow</code>对象的说明, 参见下面的<code>FloatyWindow</code>章节.</p>\n"
+          "type": "module",
+          "displayName": "[m] window"
         },
         {
-          "textRaw": "floaty.rawWindow(layout)",
-          "type": "method",
-          "name": "rawWindow",
-          "signatures": [
+          "textRaw": "[m] rawWindow",
+          "name": "[m]_rawwindow",
+          "methods": [
             {
-              "params": [
+              "textRaw": "rawWindow(xml)",
+              "type": "method",
+              "name": "rawWindow",
+              "desc": "<p><strong><code>[6.7.0]</code></strong></p>\n<ul>\n<li><strong>xml</strong> { <a href=\"e4x\">XML</a> | <a href=\"dataTypes#string\">string</a> } - E4X XML 布局或 XML 布局字符串</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#floatyrawwindow\">FloatyRawWindow</a> } - 原始悬浮窗对象</li>\n</ul>\n<p>根据布局创建并显示原始悬浮窗. 与 <a href=\"#m-window\">floaty.window</a> 不同, 此方法不附加关闭或调整控件, 并支持覆盖状态栏的全屏布局.</p>\n<p><code>xml</code> 只接受 E4X XML 对象或字符串, 不接受 Android <code>View</code> 对象. 缺少悬浮窗权限时会打开系统设置并等待授权, 最长等待 <code>60</code> 秒.</p>\n<pre><code class=\"lang-js\">let window = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nwindow.setPosition(500, 500);\n\nsetTimeout(() =&gt; {\n    window.close();\n}, 2000);\n</code></pre>\n",
+              "signatures": [
                 {
-                  "textRaw": "`layout` {xml} | {View} 悬浮窗界面的XML或者View ",
-                  "name": "layout",
-                  "type": "xml",
-                  "desc": "| {View} 悬浮窗界面的XML或者View"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "layout"
+                  "params": [
+                    {
+                      "name": "xml"
+                    }
+                  ]
                 }
               ]
             }
           ],
-          "desc": "<p>指定悬浮窗的布局, 创建并<strong>显示</strong>一个原始悬浮窗, 返回一个<code>FloatyRawWindow</code>对象.</p>\n<p>与<code>floaty.window()</code>函数不同的是, 该悬浮窗不会增加任何额外设施（例如调整大小、位置按钮）, 您可以根据自己需要编写任何布局.</p>\n<p>而且, 该悬浮窗支持完全全屏, 可以覆盖状态栏, 因此可以做护眼模式之类的应用.</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setPosition(500, 500);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n</code></pre><p>这段代码运行后将会在屏幕上显示悬浮文字, 并在两秒后消失.</p>\n<p>有关返回的<code>FloatyRawWindow</code>对象的说明, 参见下面的<code>FloatyRawWindow</code>章节.</p>\n"
+          "type": "module",
+          "displayName": "[m] rawWindow"
+        },
+        {
+          "textRaw": "[m] getClip",
+          "name": "[m]_getclip",
+          "methods": [
+            {
+              "textRaw": "getClip(maxDelayAfterWindowReady?)",
+              "type": "method",
+              "name": "getClip",
+              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>[ maxDelayAfterWindowReady = 500 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 临时悬浮窗就绪后剪贴板数据的最大等待时间, 单位为毫秒</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 剪贴板文本</li>\n</ul>\n<p>借助临时原始悬浮窗取得窗口焦点后读取剪贴板文本. 首次结果为空时, 在 <code>maxDelayAfterWindowReady</code> 时间内每隔约 <code>10</code> 毫秒重试. 临时窗口在读取时关闭.</p>\n<p>此方法需要悬浮窗权限. 权限缺失时会打开系统设置并等待授权, 最长等待 <code>60</code> 秒.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "maxDelayAfterWindowReady?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getClip"
+        }
+      ],
+      "methods": [
+        {
+          "textRaw": "floaty.hasPermission()",
+          "type": "method",
+          "name": "hasPermission",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已取得悬浮窗权限 ",
+                  "name": "<ins>**returns**</ins>",
+                  "type": " [boolean](dataTypes#boolean) ",
+                  "desc": "是否已取得悬浮窗权限"
+                }
+              ]
+            },
+            {
+              "params": []
+            }
+          ],
+          "desc": "<p>检查当前应用是否可以在其他应用上层显示窗口.</p>\n"
+        },
+        {
+          "textRaw": "floaty.checkPermission()",
+          "type": "method",
+          "name": "checkPermission",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已取得悬浮窗权限</li>\n</ul>\n<p><a href=\"#floaty-haspermission\">floaty.hasPermission</a> 的兼容别名.</p>\n",
+          "signatures": [
+            {
+              "params": []
+            }
+          ]
+        },
+        {
+          "textRaw": "floaty.requestPermission()",
+          "type": "method",
+          "name": "requestPermission",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                  "name": "<ins>**returns**</ins>",
+                  "type": " [void](dataTypes#void) "
+                }
+              ]
+            },
+            {
+              "params": []
+            }
+          ],
+          "desc": "<p>打开系统悬浮窗权限设置页面.</p>\n"
+        },
+        {
+          "textRaw": "floaty.ensurePermission()",
+          "type": "method",
+          "name": "ensurePermission",
+          "signatures": [
+            {
+              "params": [
+                {
+                  "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                  "name": "<ins>**returns**</ins>",
+                  "type": " [void](dataTypes#void) "
+                }
+              ]
+            },
+            {
+              "params": []
+            }
+          ],
+          "desc": "<p>确保当前应用已取得悬浮窗权限. 权限缺失时打开系统设置页面.</p>\n"
         },
         {
           "textRaw": "floaty.closeAll()",
@@ -74,7 +167,7 @@
     {
       "textRaw": "FloatyWindow",
       "name": "floatywindow",
-      "desc": "<p>悬浮窗对象, 可通过<code>FloatyWindow.{id}</code>获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件, 类似于ui.</p>\n",
+      "desc": "<p>悬浮窗对象, 可通过 <code>FloatyWindow.{id}</code> 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 <code>window.aaa</code> 即可获取到该控件, 类似于 ui.</p>\n",
       "methods": [
         {
           "textRaw": "window.setAdjustEnabled(enabled)",
@@ -84,10 +177,10 @@
             {
               "params": [
                 {
-                  "textRaw": "`enabled` {boolean} 是否启用悬浮窗调整(大小、位置) ",
-                  "name": "enabled",
-                  "type": "boolean",
-                  "desc": "是否启用悬浮窗调整(大小、位置)"
+                  "textRaw": "**enabled** { [boolean](dataTypes#boolean) } 是否启用悬浮窗调整 (大小, 位置) ",
+                  "name": "**enabled**",
+                  "type": " [boolean](dataTypes#boolean) ",
+                  "desc": "是否启用悬浮窗调整 (大小, 位置)"
                 }
               ]
             },
@@ -99,7 +192,7 @@
               ]
             }
           ],
-          "desc": "<p>如果enabled为true, 则在悬浮窗左上角、右上角显示可供位置、大小调整的标示, 就像控制台一样；\n如果enabled为false, 则隐藏上述标示.</p>\n"
+          "desc": "<p>如果 enabled 为 true, 则在悬浮窗左上角, 右上角显示可供位置, 大小调整的标示, 就像控制台一样;\n如果 enabled 为 false, 则隐藏上述标示.</p>\n"
         },
         {
           "textRaw": "window.setPosition(x, y)",
@@ -109,15 +202,15 @@
             {
               "params": [
                 {
-                  "textRaw": "`x` {number} x ",
-                  "name": "x",
-                  "type": "number",
+                  "textRaw": "**x** { [number](dataTypes#number) } x ",
+                  "name": "**x**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "x"
                 },
                 {
-                  "textRaw": "`x` {number} y ",
-                  "name": "x",
-                  "type": "number",
+                  "textRaw": "**x** { [number](dataTypes#number) } y ",
+                  "name": "**x**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "y"
                 }
               ]
@@ -139,7 +232,7 @@
           "textRaw": "window.getX()",
           "type": "method",
           "name": "getX",
-          "desc": "<p>返回悬浮窗位置的X坐标.</p>\n",
+          "desc": "<p>返回悬浮窗位置的 X 坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -150,7 +243,7 @@
           "textRaw": "window.getY()",
           "type": "method",
           "name": "getY",
-          "desc": "<p>返回悬浮窗位置的Y坐标.</p>\n",
+          "desc": "<p>返回悬浮窗位置的 Y 坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -165,15 +258,15 @@
             {
               "params": [
                 {
-                  "textRaw": "`width` {number} 宽度 ",
-                  "name": "width",
-                  "type": "number",
+                  "textRaw": "**width** { [number](dataTypes#number) } 宽度 ",
+                  "name": "**width**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "宽度"
                 },
                 {
-                  "textRaw": "`height` {number} 高度 ",
-                  "name": "height",
-                  "type": "number",
+                  "textRaw": "**height** { [number](dataTypes#number) } 高度 ",
+                  "name": "**height**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "高度"
                 }
               ]
@@ -242,7 +335,7 @@
     {
       "textRaw": "FloatyRawWindow",
       "name": "floatyrawwindow",
-      "desc": "<p>原始悬浮窗对象, 可通过<code>window.{id}</code>获取悬浮窗界面上的元素. 例如, 悬浮窗window上一个控件的id为aaa, 那么<code>window.aaa</code>即可获取到该控件, 类似于ui.</p>\n",
+      "desc": "<p>原始悬浮窗对象, 可通过 <code>window.{id}</code> 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 <code>window.aaa</code> 即可获取到该控件, 类似于 ui.</p>\n",
       "methods": [
         {
           "textRaw": "window.setTouchable(touchable)",
@@ -252,8 +345,8 @@
             {
               "params": [
                 {
-                  "textRaw": "`touchable` {Boolean} 是否可触摸 ",
-                  "name": "touchable",
+                  "textRaw": "**touchable** {Boolean} 是否可触摸 ",
+                  "name": "**touchable**",
                   "type": "Boolean",
                   "desc": "是否可触摸"
                 }
@@ -267,7 +360,7 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗是否可触摸, 如果为true, 则悬浮窗将接收到触摸、点击等事件并且无法继续传递到悬浮窗下面；如果为false, 悬浮窗上的触摸、点击等事件将被直接传递到悬浮窗下面. 处于安全考虑, 被悬浮窗接收的触摸事情无法再继续传递到下层.</p>\n<p>可以用此特性来制作护眼模式脚本.</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#44ffcc00&quot;/&gt;\n);\n\nw.setSize(-1, -1);\nw.setTouchable(false);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 4000);\n\n</code></pre>"
+          "desc": "<p>设置悬浮窗是否可触摸, 如果为 true, 则悬浮窗将接收到触摸, 点击等事件并且无法继续传递到悬浮窗下面; 如果为 false, 悬浮窗上的触摸, 点击等事件将被直接传递到悬浮窗下面. 处于安全考虑, 被悬浮窗接收的触摸事情无法再继续传递到下层.</p>\n<p>可以用此特性来制作护眼模式脚本.</p>\n<pre><code>let w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#44ffcc00&quot;/&gt;\n);\n\nw.setSize(-1, -1);\nw.setTouchable(false);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 4000);\n\n</code></pre>"
         },
         {
           "textRaw": "window.setPosition(x, y)",
@@ -277,15 +370,15 @@
             {
               "params": [
                 {
-                  "textRaw": "`x` {number} x ",
-                  "name": "x",
-                  "type": "number",
+                  "textRaw": "**x** { [number](dataTypes#number) } x ",
+                  "name": "**x**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "x"
                 },
                 {
-                  "textRaw": "`x` {number} y ",
-                  "name": "x",
-                  "type": "number",
+                  "textRaw": "**x** { [number](dataTypes#number) } y ",
+                  "name": "**x**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "y"
                 }
               ]
@@ -307,7 +400,7 @@
           "textRaw": "window.getX()",
           "type": "method",
           "name": "getX",
-          "desc": "<p>返回悬浮窗位置的X坐标.</p>\n",
+          "desc": "<p>返回悬浮窗位置的 X 坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -318,7 +411,7 @@
           "textRaw": "window.getY()",
           "type": "method",
           "name": "getY",
-          "desc": "<p>返回悬浮窗位置的Y坐标.</p>\n",
+          "desc": "<p>返回悬浮窗位置的 Y 坐标.</p>\n",
           "signatures": [
             {
               "params": []
@@ -333,15 +426,15 @@
             {
               "params": [
                 {
-                  "textRaw": "`width` {number} 宽度 ",
-                  "name": "width",
-                  "type": "number",
+                  "textRaw": "**width** { [number](dataTypes#number) } 宽度 ",
+                  "name": "**width**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "宽度"
                 },
                 {
-                  "textRaw": "`height` {number} 高度 ",
-                  "name": "height",
-                  "type": "number",
+                  "textRaw": "**height** { [number](dataTypes#number) } 高度 ",
+                  "name": "**height**",
+                  "type": " [number](dataTypes#number) ",
                   "desc": "高度"
                 }
               ]
@@ -357,7 +450,7 @@
               ]
             }
           ],
-          "desc": "<p>设置悬浮窗宽高.</p>\n<p>特别地, 如果设置为-1, 则为占满全屏；设置为-2则为根据悬浮窗内容大小而定. 例如：</p>\n<pre><code>var w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#77ff0000&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setSize(-1, -1);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n\n</code></pre>"
+          "desc": "<p>设置悬浮窗宽高.</p>\n<p>特别地, 如果设置为 -1, 则为占满全屏; 设置为 -2 则为根据悬浮窗内容大小而定. 例如:</p>\n<pre><code>let w = floaty.rawWindow(\n    &lt;frame gravity=&quot;center&quot; bg=&quot;#77ff0000&quot;&gt;\n        &lt;text id=&quot;text&quot;&gt;悬浮文字&lt;/text&gt;\n    &lt;/frame&gt;\n);\n\nw.setSize(-1, -1);\n\nsetTimeout(()=&gt;{\n    w.close();\n}, 2000);\n\n</code></pre>"
         },
         {
           "textRaw": "window.getWidth()",

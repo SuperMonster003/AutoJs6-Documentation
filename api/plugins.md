@@ -58,11 +58,11 @@ plugins.extend('Arrayx');
 plugins.extendAll();
 ```
 
-截至 2023 年 2 月, AutoJs6 内置了以下扩展插件:
+AutoJs6 预置以下 JavaScript 内置对象扩展模块:
 
-* [Arrayx - Array 扩展](arrayx)
-* [Numberx - Number 扩展](numberx)
-* [Mathx - Math 扩展](mathx)
+- [Arrayx - Array 扩展](arrayx)
+- [Numberx - Number 扩展](numberx)
+- [Mathx - Math 扩展](mathx)
 
 ---
 
@@ -95,7 +95,7 @@ plugins.load('org.autojs.autojs.plugin.demo');
 
 加载 [项目插件](#项目插件).
 
-## [m] extend
+## [m+] extend
 
 ### extend(...moduleNames)
 
@@ -113,6 +113,33 @@ plugins.extend('Arrayx');
 /* 启用 Array 和 Number 内置扩展插件. */
 plugins.extend('Arrayx', 'Numberx');
 ```
+
+## [m] extend.exclude
+
+### extend.exclude(...moduleNames)
+
+**`6.8.0`**
+
+- **...moduleNames** { [...](documentation#可变参数)[ExtendModulesNames](dataTypes#extendmodulesnames)[[]](documentation#可变参数) } - 要从批量加载中排除的扩展模块名称
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+将模块加入排除集合. 排除集合会影响后续 [plugins.extendAll](#m-extendall) 和 [plugins.extendAllBut](#m-extendallbut), 但不阻止通过 [plugins.extend](#m-extend) 显式加载模块.
+
+```js
+plugins.extend.exclude("Mathx");
+plugins.extendAll();
+```
+
+## [m] extend.registerModule
+
+### extend.registerModule(module)
+
+**`6.8.0`**
+
+- **module** { [Object](dataTypes#object) } - 以扩展模块名称为键, 以扩展实现为值的对象
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+向当前脚本的扩展注册表添加自定义模块. 对象的每个属性值必须提供可调用的 `extendJsBuildInObjects()` 方法. 注册不会立即加载模块, 可在注册后使用 [plugins.extend](#m-extend) 或 [plugins.extendAll](#m-extendall) 加载.
 
 ## [m] extendAll
 

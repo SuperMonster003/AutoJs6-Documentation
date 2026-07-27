@@ -1,15 +1,8 @@
 # 全能类型 (Omnipotent Types)
 
----
-
-<p style="font: italic 1em sans-serif; color: #78909C">此章节待补充或完善...</p>
-<p style="font: italic 1em sans-serif; color: #78909C">Marked by SuperMonster003 on Apr 9, 2023.</p>
-
----
-
 全能类型是一种聚合类型.
 
-AutoJs6 模块中, 一个参数往往接受多种不同的类型, 这些类型均可体现这个参数的含义. 这样的类型成为全能类型.
+AutoJs6 模块中, 一个参数往往接受多种不同的类型, 这些类型均可体现这个参数的含义. 这样的类型称为全能类型.
 
 如对于 `颜色 (color)`, 有 [ColorHex](dataTypes#colorhex) 和 [ColorName](dataTypes#colorname) 等多种类型可以表示, 它们都可以作为实参传入方法中:
 
@@ -96,7 +89,7 @@ Intent 聚合类型.
 | 类型                                                                 | 简述                                                 | 示例                                                                                              |
 |--------------------------------------------------------------------|----------------------------------------------------|-------------------------------------------------------------------------------------------------|
 | [Intent](intentType)                                               | <span style="white-space:nowrap">意图类</span>        | <span style="white-space:nowrap">`new Intent().setAction( ... )` / `app.intent({ ... })`</span> |
-| [IntentOptions](intentOptionsType)                                 | <span style="white-space:nowrap">意图选项</span>       | <span style="white-space:nowrap">`{ action: ... , className: ... , data: ... }`</span>          |
+| [IntentOptions](app#app-intent-options)                            | <span style="white-space:nowrap">意图选项</span>       | <span style="white-space:nowrap">`{ action: ... , className: ... , data: ... }`</span>          |
 | [IntentShortFormForActivity](dataTypes#intentshortformforactivity) | <span style="white-space:nowrap">意图活动简称</span>     | <span style="white-space:nowrap">`docs` / `home` / `settings` / `console` / `about`</span>      |
 | [IntentUriString](dataTypes#intenturistring)                       | <span style="white-space:nowrap">意图 URI 字符串</span> | <span style="white-space:nowrap">`'https://msn.com'` / `'msn.com'`</span>                       |
 

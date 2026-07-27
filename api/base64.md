@@ -6,9 +6,9 @@ base64 模块主要用于对数据进行 Base64 编码及解码.
 
 > 注: 与 [crypto](crypto) 模块不同, crypto 模块主要用于信息的加密与解密.
 
-> 参阅:  
-> [Wikipedia (英)](https://en.wikipedia.org/wiki/Base64) / [Wikipedia (中)](https://zh.wikipedia.org/wiki/Base64)  
-> [Base64 笔记 (from 阮一峰的网络日志)](http://www.ruanyifeng.com/blog/2008/06/base64.html)  
+> 参阅:<br>
+> [Wikipedia (英)](https://en.wikipedia.org/wiki/Base64) / [Wikipedia (中)](https://zh.wikipedia.org/wiki/Base64)<br>
+> [Base64 笔记 (from 阮一峰的网络日志)](http://www.ruanyifeng.com/blog/2008/06/base64.html)<br>
 > [Base64 是加密算法吗 (from 稀土掘金)](https://juejin.cn/post/6887498543494660109)
 
 ## 可逆性
@@ -17,7 +17,7 @@ Base64 是一种可逆的编码方式:
 
 ```js
 console.log(base64.decode(base64.encode('orange'))); // orange
-console.log(base64.decode(base64.encode('简体中文'))); // 简体中文
+console.log(base64.decode(base64.encode('简体中文'))); // 简体中文.
 ```
 
 但需注意参数的字符编码方式 (默认为 `UTF-8`), 当存在超出编码表示范围的字符时, 可逆性将遭到破坏:
@@ -44,11 +44,15 @@ console.log(base64.decode(base64.encode('简体中文', 'utf-16'), 'utf-8')); //
 
 ### encode(o, encoding?)
 
+**`[6.8.0]`**
+
 - **o** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待编码数据
-- **[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
+- **[ encoding ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码, 默认使用系统字符集
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 对数据进行 Base64 编码.
+
+字符集名称匹配忽略空白, 标点和大小写. 未知字符集会抛出参数异常.
 
 ```js
 /* 字符串. */
@@ -78,11 +82,17 @@ console.log(base64.encode(javaArr, 'utf-8')); /* 效果同上. */
 
 ### decode(o, encoding?)
 
+**`[6.8.0]`**
+
 - **o** { [string](dataTypes#string) | [JsByteArray](dataTypes#jsbytearray) | [ByteArray](dataTypes#bytearray) } - 待解码数据
-- **[ encoding = `'UTF_8'` ]** { [StandardCharset](dataTypes#standardcharset) } - 字符编码
+- **[ encoding ]** { [StandardCharset](dataTypes#standardcharset) } - 解码结果的字符编码, 默认使用系统字符集
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
 对数据进行 Base64 解码.
+
+字符串输入固定按 US-ASCII 转换为 Base64 字节; `encoding` 只控制解码后字节到返回字符串的转换. Java 或 JavaScript 字节数组会原样作为 Base64 字节.
+
+字符集名称匹配忽略空白, 标点和大小写. 未知字符集会抛出参数异常.
 
 ```js
 /* 字符串. */

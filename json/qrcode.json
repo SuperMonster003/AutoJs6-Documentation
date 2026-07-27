@@ -4,7 +4,352 @@
     {
       "textRaw": "二维码 (QR Code)",
       "name": "二维码_(qr_code)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 30, 2023.</p>\n\n<hr>\n<p>qrcode 模块用于识别图像中的二维码.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">qrcode</p>\n\n<hr>\n<pre><code class=\"lang-ts\">interface QrCode {\n\n    (options?: DetectOptions): string | string[] | null;\n    (isAll: boolean): string | string[] | null;\n    (img: ImageWrapper | string, options?: DetectOptions): string | string[] | null;\n    (img: ImageWrapper | string, isAll: boolean): string | string[] | null;\n\n    detect(options?: DetectOptions): QrCode.Result | QrCode.Result[] | null;\n    detect(isAll: boolean): QrCode.Result | QrCode.Result[] | null;\n    detect(img: ImageWrapper | string, options?: DetectOptions): QrCode.Result | QrCode.Result[] | null;\n    detect(img: ImageWrapper | string, isAll: boolean): QrCode.Result | QrCode.Result[] | null;\n\n    detectAll(options?: DetectOptionsWithoutIsAll): QrCode.Result[];\n    detectAll(img: ImageWrapper | string, options?: DetectOptionsWithoutIsAll): QrCode.Result[];\n\n    recognizeText(options?: DetectOptions): string | string[] | null;\n    recognizeText(isAll: boolean): string | string[] | null;\n    recognizeText(img: ImageWrapper | string, options?: DetectOptions): string | string[] | null;\n    recognizeText(img: ImageWrapper | string, isAll: boolean): string | string[] | null;\n\n    recognizeTexts(options?: DetectOptionsWithoutIsAll): string[];\n    recognizeTexts(img: ImageWrapper | string, options?: DetectOptionsWithoutIsAll): string[];\n\n}\n</code></pre>\n",
+      "desc": "<p><code>qrcode</code> 模块用于从图片或当前屏幕中同步识别二维码.</p>\n<p>从 AutoJs6 6.8.0 起, 二维码识别由外置 ML Kit Barcode 插件提供. 调用前需在插件中心安装, 启用并授权与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用, 未授权, 版本不兼容, 服务绑定失败或调用超时时, 方法会抛出异常.</p>\n<p>识别方法会阻塞当前脚本线程, 直至插件返回结果或调用失败. 单次调用最多返回 128 个结果.</p>\n<p>图片参数可为 <a href=\"imageWrapperType\">ImageWrapper</a> 或图片路径 <a href=\"dataTypes#string\">string</a>. 路径无法读取为图片时抛出异常. 省略图片时使用 <a href=\"image#m-images-capturescreen\"><code>images.captureScreen()</code></a> 获取当前屏幕; 后台脚本尚未取得截图权限时会同步请求权限, UI 线程则应提前取得权限.</p>\n<p>通过路径读取或自动截图得到的临时图片会在识别后回收. 直接传入的普通 <code>ImageWrapper</code> 不会自动回收, 但已调用 <code>oneShot()</code> 的图片会在识别后回收.</p>\n<p><code>qrcode</code> 只启用 <code>QR_CODE</code> 格式. 如需同时识别其他条码格式, 使用 <a href=\"barcode\"><code>barcode</code></a>.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">qrcode</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] qrcode",
+          "name": "[@]_qrcode",
+          "methods": [
+            {
+              "textRaw": "qrcode(options?, isAll?)",
+              "type": "method",
+              "name": "qrcode",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 首个文本, 全部文本或 <code>null</code></li>\n</ul>\n<p>识别当前屏幕. <code>isAll</code> 为 <code>false</code> 时返回首个结果的原始文本, 没有结果或该值为 <code>null</code> 时返回 <code>null</code>; 为 <code>true</code> 时返回全部非空原始文本, 未识别到文本时返回空数组.</p>\n<p>如果同时提供 <code>options.isAll</code> 和末尾的 <code>isAll</code>, 末尾参数优先.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "qrcode(isAll)",
+              "type": "method",
+              "name": "qrcode",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别当前屏幕.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "qrcode(image, options?, isAll?)",
+              "type": "method",
+              "name": "qrcode",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>识别指定图片. 末尾的 <code>isAll</code> 会覆盖 <code>options.isAll</code>.</p>\n<pre><code class=\"lang-js\">let text = qrcode(&quot;./qrcode.png&quot;);\nconsole.log(text);\n\nlet texts = qrcode(&quot;./qrcodes.png&quot;, {\n    enableAllPotentialQrCodes: true,\n    isAll: true,\n});\nconsole.log(texts);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "qrcode(image, isAll)",
+              "type": "method",
+              "name": "qrcode",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别指定图片.</p>\n<p>直接调用 <code>qrcode(...)</code> 等价于调用 <a href=\"#m-recognizetext\"><code>qrcode.recognizeText(...)</code></a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] qrcode"
+        },
+        {
+          "textRaw": "[m] detect",
+          "name": "[m]_detect",
+          "methods": [
+            {
+              "textRaw": "detect(options?, isAll?)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部结果</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a> | <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 首个结果, 全部结果或 <code>null</code></li>\n</ul>\n<p>识别当前屏幕. <code>isAll</code> 为 <code>false</code> 时返回首个结果, 没有结果时返回 <code>null</code>; 为 <code>true</code> 时返回全部结果数组.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(isAll)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部结果</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a> | <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别当前屏幕.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(image, options?, isAll?)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部结果</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a> | <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>识别指定图片. 末尾的 <code>isAll</code> 会覆盖 <code>options.isAll</code>.</p>\n<pre><code class=\"lang-js\">let result = qrcode.detect(&quot;./qrcode.png&quot;);\nif (result !== null) {\n    console.log(result.getRawValue());\n    console.log(result.getBoundingBox());\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detect(image, isAll)",
+              "type": "method",
+              "name": "detect",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部结果</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a> | <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别指定图片.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] detect"
+        },
+        {
+          "textRaw": "[m] detectAll",
+          "name": "[m]_detectall",
+          "methods": [
+            {
+              "textRaw": "detectAll(options?)",
+              "type": "method",
+              "name": "detectAll",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeoptions\">QrCodeOptions</a> } - 识别选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> } - 全部识别结果</li>\n</ul>\n<p>识别当前屏幕并始终返回数组. 没有结果时返回空数组.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "detectAll(image, options?)",
+              "type": "method",
+              "name": "detectAll",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeoptions\">QrCodeOptions</a> } - 识别选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"barcode#c-wrappedbarcode\">WrappedBarcode</a><a href=\"dataTypes#array\">[]</a> } - 全部识别结果</li>\n</ul>\n<p>识别指定图片并始终返回数组.</p>\n<pre><code class=\"lang-js\">let results = qrcode.detectAll(&quot;./qrcodes.png&quot;);\nresults.forEach((result) =&gt; {\n    console.log(result.getRawValue());\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] detectAll"
+        },
+        {
+          "textRaw": "[m] recognizeText",
+          "name": "[m]_recognizetext",
+          "methods": [
+            {
+              "textRaw": "recognizeText(options?, isAll?)",
+              "type": "method",
+              "name": "recognizeText",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> } - 首个文本, 全部文本或 <code>null</code></li>\n</ul>\n<p>识别当前屏幕并返回结果的原始文本. <code>isAll</code> 为 <code>false</code> 时, 没有结果或首个结果的原始文本为 <code>null</code> 均返回 <code>null</code>; 为 <code>true</code> 时会过滤原始文本为 <code>null</code> 的结果.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "recognizeText(isAll)",
+              "type": "method",
+              "name": "recognizeText",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别当前屏幕.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "recognizeText(image, options?, isAll?)",
+              "type": "method",
+              "name": "recognizeText",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeselectionoptions\">QrCodeSelectionOptions</a> } - 识别选项</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>识别指定图片并返回结果的原始文本. 末尾的 <code>isAll</code> 会覆盖 <code>options.isAll</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "isAll?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "recognizeText(image, isAll)",
+              "type": "method",
+              "name": "recognizeText",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>isAll</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>使用默认选项识别指定图片.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "isAll"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] recognizeText"
+        },
+        {
+          "textRaw": "[m] recognizeTexts",
+          "name": "[m]_recognizetexts",
+          "methods": [
+            {
+              "textRaw": "recognizeTexts(options?)",
+              "type": "method",
+              "name": "recognizeTexts",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeoptions\">QrCodeOptions</a> } - 识别选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 全部非空原始文本</li>\n</ul>\n<p>识别当前屏幕并始终返回数组. 原始文本为 <code>null</code> 的结果会被过滤.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "recognizeTexts(image, options?)",
+              "type": "method",
+              "name": "recognizeTexts",
+              "desc": "<p><strong><code>6.4.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#qrcodeoptions\">QrCodeOptions</a> } - 识别选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 全部非空原始文本</li>\n</ul>\n<p>识别指定图片并始终返回数组.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] recognizeTexts"
+        },
+        {
+          "textRaw": "QrCodeOptions",
+          "name": "qrcodeoptions",
+          "desc": "<ul>\n<li><strong>[ enableAllPotentialQrCodes = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回尚无可解码值的潜在二维码</li>\n<li><strong>[ enableAllPotentialBarcodes = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - <code>enableAllPotentialQrCodes</code> 的兼容别名</li>\n</ul>\n<p><code>enableAllPotentialQrCodes</code> 从 AutoJs6 6.6.0 起可用. 仅当未提供该属性时才读取兼容别名 <code>enableAllPotentialBarcodes</code>. 启用后, 结果的原始值和显示值可能为 <code>null</code>.</p>\n<p><code>format</code> 选项在此模块中无效, 识别格式始终为 <code>QR_CODE</code>.</p>\n",
+          "type": "module",
+          "displayName": "QrCodeOptions"
+        },
+        {
+          "textRaw": "QrCodeSelectionOptions",
+          "name": "qrcodeselectionoptions",
+          "desc": "<ul>\n<li><ins><strong>extends</strong></ins> { <a href=\"#qrcodeoptions\">QrCodeOptions</a> }</li>\n<li><strong>[ isAll = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否返回全部结果</li>\n</ul>\n<p><code>isAll</code> 只影响 <code>qrcode(...)</code>, <code>detect(...)</code> 和 <code>recognizeText(...)</code>. <code>detectAll(...)</code> 和 <code>recognizeTexts(...)</code> 始终返回数组.</p>\n",
+          "type": "module",
+          "displayName": "QrCodeSelectionOptions"
+        },
+        {
+          "textRaw": "识别结果",
+          "name": "识别结果",
+          "desc": "<p><code>detect()</code> 和 <code>detectAll()</code> 返回 <a href=\"barcode#c-wrappedbarcode\"><code>WrappedBarcode</code></a> 对象. 该类提供原始文本, 显示值, 外接矩形, 角点和值类型相关的结构化数据. <code>qrcode</code> 的识别请求固定使用 <code>FORMAT_QR_CODE</code>, 数值为 <code>256</code>.</p>\n",
+          "type": "module",
+          "displayName": "识别结果"
+        }
+      ],
       "type": "module",
       "displayName": "二维码 (QR Code)"
     }

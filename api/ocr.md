@@ -2,7 +2,9 @@
 
 ocr 模块用于识别图像中的文本.
 
-AutoJs6 的 OCR 特性是基于 [Google ML Kit](https://developers.google.com/ml-kit?hl=zh-cn) 的 [文字识别 API](https://developers.google.com/ml-kit/vision/text-recognition/android?hl=zh-cn) 及 [Baidu PaddlePaddle](https://www.paddlepaddle.org.cn/) 的 [Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite) 实现的.
+AutoJs6 支持 ML Kit, Paddle 和 Rapid OCR 引擎.
+
+从 AutoJs6 6.8.0 起, 普通应用中的 OCR 引擎由外部 OCR 插件提供. 调用前需在插件中心安装, 启用并授权兼容插件; 无可用引擎时识别方法会抛出插件加载异常. `engine`, `variant` 和 `profile` 选项可用于选择插件实现.
 
 ---
 
@@ -113,7 +115,7 @@ let img = images.captureScreen();
 let results = ocr(img, [ 0, 0, 100, 150 ]);
 
 /* 结果过滤, 筛选出文本中可部分匹配 "app" 的结果, 如 "apple", "disappear" 等. */
-results.filter(text => text.includes('app')); 
+results.filter(text => text.includes('app'));
 ```
 
 关于 OCR 区域参数 `region` 的更多用法, 参阅 [OcrOptions#region](ocrOptionsType#p-region) 小节.
@@ -161,7 +163,7 @@ ocr('./picture.jpg', [ 0, 0, 100, 150 ]);
 
 ## [p] mode
 
-**`6.3.4`** **`Getter/Setter`**
+**`6.3.4`** **`[6.8.0]`** **`Getter/Setter`**
 
 - **[ &lt;get&gt; = `'mlkit'` ]** { [OcrModeName](dataTypes#ocrModeName) }
 - **&lt;set&gt;** { [OcrModeName](dataTypes#ocrModeName) }
@@ -177,17 +179,18 @@ console.log(ocr.mode); // "paddle"
 
 ocr.mode = 'mlkit'; /* 再次切换到 MLKit 工作模式. */
 console.log(ocr.mode); // "mlkit"
+
+ocr.mode = 'rapid'; /* 切换到 Rapid OCR 工作模式. */
+console.log(ocr.mode); // "rapid"
 ```
 
 当使用不同的工作模式名称时, `ocr` 全局方法及其相关方法 (如 [ocr.detect](#m-detect)) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.
-
-> 注: 使用 Paddle 工作模式时, 建议开启 AutoJs6 的 "忽略电池优化" 开关, 并降低对 AutoJs6 节电及后台运行等方面的限制, 否则可能导致应用崩溃.
 
 ## [m] recognizeText
 
 用于识别图像中的全部文本.
 
-`recognizeText` 方法与工作模式有关, 例如当工作模式为 `paddle` 时, `ocr.recognizeText(...)` 与 `ocr.paddle.recognizeText(...)` 等价.
+`recognizeText` 方法与工作模式有关. 例如工作模式为 `rapid` 时, `ocr.recognizeText(...)` 与 `ocr.rapid.recognizeText(...)` 等价.
 
 `ocr.recognizeText(...)` 相关方法均可简写为 `ocr(...)`.
 
@@ -318,7 +321,7 @@ ocr.recognizeText('./picture.jpg', [ 0, 0, 100, 150 ]);
 
 用于识别图像中的全部文本.
 
-`detect` 方法与工作模式有关, 例如当工作模式为 `paddle` 时, `ocr.detect(...)` 与 `ocr.paddle.detect(...)` 等价.
+`detect` 方法与工作模式有关. 例如工作模式为 `rapid` 时, `ocr.detect(...)` 与 `ocr.rapid.detect(...)` 等价.
 
 与 [recognizeText](#m-recognizetext) 不同, `detect` 返回的结果包含更多信息, 包括 [ 文本标签, 置信度, 位置矩形 ] 等, `recognizeText` 精简了 `detect` 返回的结果, 仅包含文本标签数据.
 
@@ -453,6 +456,34 @@ result.filter(o => o.confidence >= 0.8);
 
 关于 OCR 区域参数 `region` 的更多用法, 参阅 [OcrOptions#region](ocrOptionsType#p-region) 小节.
 
+## [m+] rapid
+
+### rapid(input?, optionsOrRegion?)
+
+**`6.6.0`** **`[6.8.0]`**
+
+- **[ input ]** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [OcrOptions](ocrOptionsType) | [OmniRegion](omniTypes#omniregion) }
+- **[ optionsOrRegion ]** { [OcrOptions](ocrOptionsType) | [OmniRegion](omniTypes#omniregion) }
+- <ins>**returns**</ins> { [string](dataTypes#string)[] }
+
+固定使用 Rapid OCR 引擎识别文本, 不受 [ocr.mode](#p-mode) 影响. 参数重载与 [ocr.recognizeText](#m-recognizetext) 相同.
+
+### rapid.recognizeText(input?, optionsOrRegion?)
+
+**`6.6.0`** **`[6.8.0]`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string)[] }
+
+[ocr.rapid](#m-rapid) 的显式方法形式.
+
+### rapid.detect(input?, optionsOrRegion?)
+
+**`6.6.0`** **`[6.8.0]`**
+
+- <ins>**returns**</ins> { [OcrResult](dataTypes#ocrresult)[] }
+
+固定使用 Rapid OCR 引擎并返回完整识别结果. 参数重载与 [ocr.detect](#m-detect) 相同.
+
 ## [m] tap
 
 ### tap(mode)
@@ -475,6 +506,8 @@ ocr.mode = 'paddle'; /* 同上. */
 
 **`6.4.0`**
 
+- <ins>**returns**</ins> { [string](dataTypes#string) } - OCR 工作模式摘要
+
 获取 AutoJs6 OCR 功能的摘要.
 
 摘要中表述了 OCR 功能当前使用的工作模式, 以及全部可用的工作模式.
@@ -482,41 +515,31 @@ ocr.mode = 'paddle'; /* 同上. */
 ```js
 /* e.g. [ OCR summary ]
  * Current mode: mlkit
- * Available modes: [ mlkit, paddle ]
+ * Available modes: [ mlkit, paddle, rapid ]
  */
 console.log(ocr.summary());
 ```
 
+## [m] toString
+
+### toString()
+
+**`6.7.0`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - OCR 工作模式摘要
+
+返回与 `ocr.summary()` 相同的文本.
+
 ## 工作模式与代码形式
 
-截止 2023 年 9 月, AutoJs6 的 ocr 支持两种工作模式, `mlkit` (默认) 及 `paddle`.
+AutoJs6 6.8.0 支持 `mlkit`, `paddle` 和 `rapid` 3 种 OCR 工作模式, 默认模式为 `mlkit`. 工作模式可通过 [ocr.mode](#p-mode) 或 [ocr.tap](#m-tap) 设置.
 
-工作模式的获取或设置可通过 [ocr.mode](#p-mode) 实现.
+每个引擎对象均可直接调用, 也提供 `recognizeText` 和 `detect`:
 
-下面以 `mlkit` 为例, 总结 `mlkit` 工作模式可用的全部代码形式.
+```js
+ocr.mlkit(image);
+ocr.paddle.recognizeText(image);
+ocr.rapid.detect(image);
+```
 
-1. ocr.mlkit.detect(...)
-2. ocr.mlkit.recognizeText(...)
-3. ocr.mlkit(...)
-4. [ocr.detect(...)](#m-detect)
-5. [ocr.recognizeText(...)](#m-recognizetext)
-6. [ocr(...)](#-ocr)
-
-上述 6 种代码形式均可实现使用 `mlkit` 引擎进行光学字符识别.
-
-其中, [ 3 ] 是 [ 2 ] 的简便写法, [ 6 ] 是 [ 5 ] 的简便写法.
-
-另外, [ 4, 5, 6 ] 三种形式的条件, 是 OCR 工作模式为 `mlkit`, 即 `ocr.mode` 返回 `mlkit`. 否则需要调用 `ocr.mode = 'mlkit'` 切换工作模式.
-
-下面再以 `paddle` 为例, 总结 `paddle` 工作模式可用的全部代码形式.
-
-1. ocr.paddle.detect(...)
-2. ocr.paddle.recognizeText(...)
-3. ocr.paddle(...)
-4. [ocr.detect(...)](#m-detect)
-5. [ocr.recognizeText(...)](#m-recognizetext)
-6. [ocr(...)](#-ocr)
-
-同样, [ 4, 5, 6 ] 三种形式的条件, 是 OCR 工作模式为 `paddle`, 即 `ocr.mode` 返回 `paddle`. 否则需要调用 `ocr.mode = 'paddle'` 切换工作模式.
-
-由此可见, `ocr(...)` 和 `ocr.detect(...)` 等方法是动态变化的, 其功能取决于工作模式. 这种形式的优点是写法简单, 但可读性相对较差, 可能难以辨识 OCR 的具体工作引擎. 如需兼顾可读性, 则可使用 `ocr.mlkit(...)` 和 `ocr.mlkit.detect(...)` 等形式.
+直接调用 `ocr(...)`, `ocr.recognizeText(...)` 或 `ocr.detect(...)` 时使用当前工作模式. 使用 `ocr.mlkit`, `ocr.paddle` 或 `ocr.rapid` 时固定选择对应引擎, 更适合需要明确引擎的脚本.

@@ -8,6 +8,60 @@ autojs 全局对象主要包含与 AutoJs6 应用本身相关的属性及方法,
 
 ---
 
+## [m] isScreenPortrait
+
+### isScreenPortrait()
+
+**`6.7.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 屏幕当前是否为竖屏方向
+
+---
+
+## [m] isScreenLandscape
+
+### isScreenLandscape()
+
+**`6.7.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 屏幕当前是否为横屏方向
+
+---
+
+## [m] restart
+
+### restart(scripts?)
+
+**`6.7.0`**
+
+- **[ scripts ]** { [string](dataTypes#string) | [string](dataTypes#string)[] } - 应用重启后自动运行的脚本路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+重启 AutoJs6 应用. 指定 **scripts** 时, AutoJs6 重启后依次运行这些脚本.
+
+脚本路径会去除首尾空白, 未以 `.js` 结尾时自动补充扩展名. 特殊值 `"@"` 表示当前脚本.
+
+```js
+autojs.restart('@');
+```
+
+---
+
+## [m] exit
+
+### exit(scripts?)
+
+**`6.7.0`**
+
+- **[ scripts ]** { [string](dataTypes#string) | [string](dataTypes#string)[] } - AutoJs6 下次启动后自动运行的脚本路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+退出 AutoJs6 应用. 指定 **scripts** 时, AutoJs6 下次启动后依次运行这些脚本.
+
+脚本路径的规范化规则与 [restart](#m-restart) 相同.
+
+---
+
 ## [m] getLanguage
 
 ### getLanguage()
@@ -60,7 +114,7 @@ i18n.setLocale(autojs.getLanguageTag());
 console.log(autojs.isRootAvailable()); // e.g. true
 ```
 
-注意上述示例的检测结果取决于 AutoJs6 的 `强制 Root 权限检查` 设置.  
+注意上述示例的检测结果取决于 AutoJs6 的 `强制 Root 权限检查` 设置.<br>
 此设置可通过 AutoJs6 应用设置修改, 或 [setRootMode](#m-setrootmode) 方法携带 `isWriteIntoPreference` 参数实现修改.
 
 ## [m] getRootMode
@@ -89,7 +143,7 @@ console.log(autojs.getRootMode() === RootMode.FORCE_NON_ROOT);
 **`6.2.0`** **`Overload [1-2]/2`**
 
 - **rootMode** { [RootMode](dataTypes#rootmode) | [number](dataTypes#number) | [boolean](dataTypes#boolean) | 'auto' | 'root' | 'non-root' } - Root 模式参数
-- **[ isWriteIntoPreference = `false` ]** {  [boolean](dataTypes#boolean) } - 是否写入应用设置
+- **[ isWriteIntoPreference = `false` ]** { [boolean](dataTypes#boolean) } - 是否写入应用设置
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 设置 AutoJs6 的 Root 模式.
@@ -106,9 +160,9 @@ autojs.setRootMode(1); /* 同上. */
 autojs.setRootMode(true); /* 同上. */
 ```
 
-上述示例设置的 Root 模式, 将影响 [isRootAvailable](#m-isrootavailable) 的结果, 使其固定返回 `true`.  
-如果设置为 `RootMode.FORCE_NON_ROOT`, [isRootAvailable](#m-isrootavailable) 将固定返回 `false`.  
-如果设置为 `RootMode.AUTO_DETECT`, [isRootAvailable](#m-isrootavailable) 将根据 AutoJs6 是否具有 `su` 二进制名称特征决定其返回结果.  
+上述示例设置的 Root 模式, 将影响 [isRootAvailable](#m-isrootavailable) 的结果, 使其固定返回 `true`.<br>
+如果设置为 `RootMode.FORCE_NON_ROOT`, [isRootAvailable](#m-isrootavailable) 将固定返回 `false`.<br>
+如果设置为 `RootMode.AUTO_DETECT`, [isRootAvailable](#m-isrootavailable) 将根据 AutoJs6 是否具有 `su` 二进制名称特征决定其返回结果.<br>
 
 在没有特殊需求的情况下, 建议始终保持 Root 模式为 '自动' 模式.
 
@@ -212,6 +266,38 @@ console.log(autojs.version.code); /* 同上. */
 console.log(autojs.versionDate); // e.g. Dec 18, 2022
 console.log(autojs.version.date); /* 同上. */
 ```
+
+## [p] name
+
+**`6.6.0`** **`READONLY`**
+
+- { [string](dataTypes#string) }
+
+AutoJs6 应用名称.
+
+## [p] packageName
+
+**`6.6.0`** **`READONLY`**
+
+- { [string](dataTypes#string) }
+
+当前宿主应用包名. 在打包应用中返回打包应用的包名.
+
+## [p] rotation
+
+**`6.6.0`** **`Getter`**
+
+- { [number](dataTypes#number) }
+
+当前默认显示设备的旋转状态, 对应 Android `Surface.ROTATION_0` 至 `Surface.ROTATION_270` 常量值.
+
+## [p] orientation
+
+**`6.6.0`** **`Getter`**
+
+- { [number](dataTypes#number) }
+
+当前资源配置的屏幕方向, 对应 Android `Configuration.ORIENTATION_*` 常量值.
 
 ## [p] themeColor
 

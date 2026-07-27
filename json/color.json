@@ -4,7 +4,7 @@
     {
       "textRaw": "颜色 (Color)",
       "name": "颜色_(color)",
-      "desc": "<p>colors 模块可用于 [ 颜色模式转换 / 色彩空间转换 / 颜色分量合成及分解 ] 等.<br>同时包含一些颜色相关的工具, 如 [ 计算亮度值 / 相似度比较 ] 等.</p>\n<p>colors 模块与 <a href=\"image\">images</a> 模块配合使用, 可完成更多图色方面的功能.</p>\n<hr>\n",
+      "desc": "<p>colors 模块可用于 [ 颜色模式转换 / 色彩空间转换 / 颜色分量合成及分解 ] 等.<br>\n同时包含一些颜色相关的工具, 如 [ 计算亮度值 / 相似度比较 ] 等.</p>\n<p>colors 模块与 <a href=\"image\">images</a> 模块配合使用, 可完成更多图色方面的功能.</p>\n<hr>\n",
       "modules": [
         {
           "textRaw": "颜色表示",
@@ -19,6 +19,20 @@
           "desc": "<p>需特别留意, 黑色的颜色字符串为 <code>#000000</code>, 它是完全颜色字符串 <code>#FF000000</code> 的简写形式, 其 ARGB 分量表示为 <code>argb(255, 0, 0, 0)</code>.</p>\n<p>因此黑色的颜色整数不是 <code>0</code>, 而是 <code>-16777216</code>.</p>\n<p>颜色整数 <code>0</code> 对应的是完全透明色, 即 <code>#00000000</code>, 其 ARGB 分量表示为 <code>argb(0, 0, 0, 0)</code>.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">colors</p>\n\n<hr>\n",
           "type": "module",
           "displayName": "黑色与 0"
+        },
+        {
+          "textRaw": "[p] all",
+          "name": "[p]_all",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">object</a> } - 颜色名称到 <a href=\"dataTypes#colorint\">ColorInt</a> 的映射对象</li>\n</ul>\n<p>获取全部内置颜色表融合后的对象. 对象以颜色常量名称为属性名, 以对应的颜色整数为属性值.</p>\n<p>当不同颜色表含有同名常量时, 按 Android, CSS, Web, Material 的顺序保留第一个值.</p>\n<pre><code class=\"lang-js\">console.log(colors.all.RED === colors.android.RED); // true\nconsole.log(colors.all.ORANGE_300 === colors.material.ORANGE_300); // true\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] all"
+        },
+        {
+          "textRaw": "[p] themeColor",
+          "name": "[p]_themecolor",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#themecolor\">ThemeColor</a> } - 当前 AutoJs6 主题颜色实例</li>\n</ul>\n<p>获取当前主题颜色. 此属性是 <a href=\"autojs#p-themecolor\"><code>autojs.themeColor</code></a> 的别名, 两者返回同一个 <code>ThemeColor</code> 实例.</p>\n<pre><code class=\"lang-js\">console.log(colors.themeColor === autojs.themeColor); // true\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] themeColor"
         },
         {
           "textRaw": "[m] toInt",
@@ -51,7 +65,7 @@
               "textRaw": "toHex(color)",
               "type": "method",
               "name": "toHex",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorhex\">ColorHex</a> } - 颜色代码</li>\n</ul>\n<p>将颜色参数转换为 <a href=\"dataTypes#colorhex\">颜色代码 (ColorHex)</a>.</p>\n<pre><code class=\"lang-js\">/* ColorHex - 颜色代码. */\ncolors.toHex(&#39;#CC5500&#39;); // #CC5500\ncolors.toHex(&#39;#C50&#39;); // #CC5500\ncolors.toHex(&#39;#DECC5500&#39;); // #DECC5500\ncolors.toHex(&#39;#FFCC5500&#39;); /* #CC5500, A (alpha) 分量被省略. */\n\n/* ColorInt - 颜色整数. */\ncolors.toHex(0xFFCC5500); // #CC5500\ncolors.toHex(colors.web.BURNT_ORANGE); // #CC5500\n\n/* ColorName - 颜色名称. */\ncolors.toHex(&#39;BURNT_ORANGE&#39;); // #CC5500\ncolors.toHex(&#39;burnt-orange&#39;); // #CC5500\n</code></pre>\n<p>当 <code>A (alpha)</code> 分量为 <code>100% (255/255;100/100)</code> 时, <code>FF</code> 会自动省略,<br>如 <code>#FFC0C0C0</code> 将自动转换为 <code>#C0C0C0</code>, 此方法相当于 <code>toHex(color, &#39;auto&#39;)</code>.</p>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorhex\">ColorHex</a> } - 颜色代码</li>\n</ul>\n<p>将颜色参数转换为 <a href=\"dataTypes#colorhex\">颜色代码 (ColorHex)</a>.</p>\n<pre><code class=\"lang-js\">/* ColorHex - 颜色代码. */\ncolors.toHex(&#39;#CC5500&#39;); // #CC5500\ncolors.toHex(&#39;#C50&#39;); // #CC5500\ncolors.toHex(&#39;#DECC5500&#39;); // #DECC5500\ncolors.toHex(&#39;#FFCC5500&#39;); /* #CC5500, A (alpha) 分量被省略. */\n\n/* ColorInt - 颜色整数. */\ncolors.toHex(0xFFCC5500); // #CC5500\ncolors.toHex(colors.web.BURNT_ORANGE); // #CC5500\n\n/* ColorName - 颜色名称. */\ncolors.toHex(&#39;BURNT_ORANGE&#39;); // #CC5500\ncolors.toHex(&#39;burnt-orange&#39;); // #CC5500\n</code></pre>\n<p>当 <code>A (alpha)</code> 分量为 <code>100% (255/255;100/100)</code> 时, <code>FF</code> 会自动省略,<br>\n如 <code>#FFC0C0C0</code> 将自动转换为 <code>#C0C0C0</code>, 此方法相当于 <code>toHex(color, &#39;auto&#39;)</code>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -133,7 +147,7 @@
               "textRaw": "build(color?)",
               "type": "method",
               "name": "build",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>[ color = <code>Colors.BLACK</code> ]</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"colorType\">Color</a> } - Color 实例</li>\n</ul>\n<p>构建一个 <a href=\"colorType\">Color</a> 实例, 相当于 <code>new Color(color?)</code> 或 <code>Color(color?)</code>.</p>\n<pre><code class=\"lang-js\">colors.build(&#39;dark-orange&#39;) /* 以深橙色构建 Color 实例 */\n    .setAlpha(0.85) /* 设置透明度 85%. */\n    .removeBlue() /* 移除 B (blue) 分量. */\n    .toHex(); // #D9FF8C00\n\n/* 构建空 Color 实例, 设置 HSLA 分量并转换为 Hex 代码. */\ncolors.build().setHsla(0.25, 0.8, 0.64, 0.9).toHex(); // #E6A3ED5A\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload [1-2]/4</code></strong></p>\n<ul>\n<li><strong>[ color = <code>Colors.BLACK</code> ]</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"colorType\">Color</a> } - Color 实例</li>\n</ul>\n<p>构建一个 <a href=\"colorType\">Color</a> 实例, 相当于 <code>new Color(color?)</code> 或 <code>Color(color?)</code>.</p>\n<pre><code class=\"lang-js\">colors.build(&#39;dark-orange&#39;) /* 以深橙色构建 Color 实例. */\n    .setAlpha(0.85) /* 设置透明度 85%. */\n    .removeBlue() /* 移除 B (blue) 分量. */\n    .toHex(); // #D9FF8C00\n\n/* 构建空 Color 实例, 设置 HSLA 分量并转换为 Hex 代码. */\ncolors.build().setHsla(0.25, 0.8, 0.64, 0.9).toHex(); // #E6A3ED5A\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -228,7 +242,7 @@
                   ]
                 }
               ],
-              "desc": "<p>将颜色参数转换为 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<p>类似 <a href=\"#m-toint\">toInt</a>, 但参数接受范围相对狭小且类型及数值要求更加严格.<br>parseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜色名称.</p>\n<p>支持的颜色名称 (不区分大小写):</p>\n<blockquote>\n<p>&#39;aqua&#39;, &#39;black&#39;, &#39;blue&#39;, &#39;cyan&#39;, &#39;darkgray&#39;, &#39;darkgrey&#39;,</p>\n<p>&#39;fuchsia&#39;, &#39;gray&#39;, &#39;green&#39;, &#39;grey&#39;, &#39;lightgray&#39;,</p>\n<p>&#39;lightgrey&#39;, &#39;lime&#39;, &#39;magenta&#39;, &#39;maroon&#39;, &#39;navy&#39;, &#39;olive&#39;,</p>\n<p>&#39;purple&#39;, &#39;red&#39;, &#39;silver&#39;, &#39;teal&#39;, &#39;white&#39;, &#39;yellow&#39;`.</p>\n</blockquote>\n<p>下表列出部分 toInt 与 parseColor 传参后的结果对照:</p>\n<table>\n<thead>\n<tr>\n<th>参数</th>\n<th>toInt</th>\n<th>parseColor</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&#39;blue&#39;</td>\n<td>-16776961</td>\n<td>-16776961</td>\n</tr>\n<tr>\n<td>&#39;burnt-orange&#39;</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>&#39;#FFCC5500&#39;</td>\n<td>-3386112</td>\n<td>-3386112</td>\n</tr>\n<tr>\n<td>&#39;#CC5500&#39;</td>\n<td>-3386112</td>\n<td>-3386112</td>\n</tr>\n<tr>\n<td>&#39;#C50&#39;</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>0xFFCC5500</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>colors.web.BURNT_ORANGE</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n</tbody>\n</table>\n<p>除非需要考虑多版本兼容, 否则建议始终使用 toInt 替代 parseColor.</p>\n"
+              "desc": "<p>将颜色参数转换为 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<p>类似 <a href=\"#m-toint\">toInt</a>, 但参数接受范围相对狭小且类型及数值要求更加严格.<br>\nparseColor 的颜色参数仅支持六位数及八位数颜色代码及部分颜色名称.</p>\n<p>支持的颜色名称 (不区分大小写):</p>\n<blockquote>\n<p>&#39;aqua&#39;, &#39;black&#39;, &#39;blue&#39;, &#39;cyan&#39;, &#39;darkgray&#39;, &#39;darkgrey&#39;,</p>\n<p>&#39;fuchsia&#39;, &#39;gray&#39;, &#39;green&#39;, &#39;grey&#39;, &#39;lightgray&#39;,</p>\n<p>&#39;lightgrey&#39;, &#39;lime&#39;, &#39;magenta&#39;, &#39;maroon&#39;, &#39;navy&#39;, &#39;olive&#39;,</p>\n<p>&#39;purple&#39;, &#39;red&#39;, &#39;silver&#39;, &#39;teal&#39;, &#39;white&#39;, &#39;yellow&#39;.</p>\n</blockquote>\n<p>下表列出部分 toInt 与 parseColor 传参后的结果对照:</p>\n<table>\n<thead>\n<tr>\n<th>参数</th>\n<th>toInt</th>\n<th>parseColor</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>&#39;blue&#39;</td>\n<td>-16776961</td>\n<td>-16776961</td>\n</tr>\n<tr>\n<td>&#39;burnt-orange&#39;</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>&#39;#FFCC5500&#39;</td>\n<td>-3386112</td>\n<td>-3386112</td>\n</tr>\n<tr>\n<td>&#39;#CC5500&#39;</td>\n<td>-3386112</td>\n<td>-3386112</td>\n</tr>\n<tr>\n<td>&#39;#C50&#39;</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>0xFFCC5500</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n<tr>\n<td>colors.web.BURNT_ORANGE</td>\n<td>-3386112</td>\n<td># 抛出异常 #</td>\n</tr>\n</tbody>\n</table>\n<p>除非需要考虑多版本兼容, 否则建议始终使用 toInt 替代 parseColor.</p>\n"
             }
           ],
           "type": "module",
@@ -1172,7 +1186,7 @@
               "textRaw": "argb(colorHex)",
               "type": "method",
               "name": "argb",
-              "desc": "<p><strong><code>[6.2.0]</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>colorHex</strong> { <a href=\"dataTypes#string\">string</a> } - 颜色代码</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> }</li>\n</ul>\n<p>获取 <code>colorHex</code> 颜色代码对应的 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<table>\n<thead>\n<tr>\n<th>格式</th>\n<th>备注</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#RRGGBB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RGB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#AARRGGBB</td>\n<td>-</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">colors.argb(&#39;#663399&#39;); /* 相当于 argb(&#39;#FF663399&#39;) . */\ncolors.argb(&#39;#DE663399&#39;); /* 结果不同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.2.0]</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>colorHex</strong> { <a href=\"dataTypes#string\">string</a> } - 颜色代码</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> }</li>\n</ul>\n<p>获取 <code>colorHex</code> 颜色代码对应的 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<table>\n<thead>\n<tr>\n<th>格式</th>\n<th>备注</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#RRGGBB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RGB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#AARRGGBB</td>\n<td>-</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">colors.argb(&#39;#663399&#39;); /* 相当于 argb(&#39;#FF663399&#39;). */\ncolors.argb(&#39;#DE663399&#39;); /* 结果不同上. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -1234,7 +1248,7 @@
               "textRaw": "rgba(colorHex)",
               "type": "method",
               "name": "rgba",
-              "desc": "<p><strong><code>[6.2.0]</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>colorHex</strong> { <a href=\"dataTypes#string\">string</a> } - 颜色代码</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> }</li>\n</ul>\n<p>获取 <code>colorHex</code> 颜色代码对应的 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<table>\n<thead>\n<tr>\n<th>格式</th>\n<th>备注</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#RRGGBB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RGB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RRGGBBAA</td>\n<td>-</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">colors.rgba(&#39;#663399&#39;); /* 相当于 rgba(&#39;#663399FF&#39;) . */\ncolors.rgba(&#39;#663399FF&#39;); /* 结果同上. */\ncolors.rgba(&#39;#FF663399&#39;); /* 结果不同上. */\n</code></pre>\n<p>注意区分 <code>colors.rgba</code> 与 <code>colors.argb</code>:</p>\n<pre><code class=\"lang-js\">colors.rgba(&#39;#11335577&#39;); /* A (alpha) 分量为 0x77 . */\ncolors.argb(&#39;#11335577&#39;); /* A (alpha) 分量为 0x11 . */\n</code></pre>\n",
+              "desc": "<p><strong><code>[6.2.0]</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>colorHex</strong> { <a href=\"dataTypes#string\">string</a> } - 颜色代码</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> }</li>\n</ul>\n<p>获取 <code>colorHex</code> 颜色代码对应的 <a href=\"dataTypes#colorint\">颜色整数 (ColorInt)</a>.</p>\n<table>\n<thead>\n<tr>\n<th>格式</th>\n<th>备注</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>#RRGGBB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RGB</td>\n<td>A (alpha) 分量为 0xFF</td>\n</tr>\n<tr>\n<td>#RRGGBBAA</td>\n<td>-</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">colors.rgba(&#39;#663399&#39;); /* 相当于 rgba(&#39;#663399FF&#39;). */\ncolors.rgba(&#39;#663399FF&#39;); /* 结果同上. */\ncolors.rgba(&#39;#FF663399&#39;); /* 结果不同上. */\n</code></pre>\n<p>注意区分 <code>colors.rgba</code> 与 <code>colors.argb</code>:</p>\n<pre><code class=\"lang-js\">colors.rgba(&#39;#11335577&#39;); /* A (alpha) 分量为 0x77. */\ncolors.argb(&#39;#11335577&#39;); /* A (alpha) 分量为 0x11. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -1516,7 +1530,7 @@
               "textRaw": "toRgba(color, options)",
               "type": "method",
               "name": "toRgba",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>options</strong> {{<ul>\n<li>[ maxAlpha = <code>255</code> ]?: <code>1</code> | <code>255</code> - A (alpha) 分量的范围最大值</li>\n</ul>\n</li>\n<li>}} - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorcomponents\">ColorComponents</a> } - 颜色分量数组</li>\n</ul>\n<p>根据 <code>options</code> 选项参数获取颜色参数的 RGBA <a href=\"dataTypes#colorcomponents\">颜色分量数组</a>.</p>\n<pre><code class=\"lang-js\">let [ r1, g1, b1, a1 ] = colors.toRgba(&#39;#DE663399&#39;);\nconsole.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255] . */\n\nlet [ r2, g2, b2, a2 ] = colors.toRgba(&#39;#DE663399&#39;, { maxAlpha: 1 });\nconsole.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1] . */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>options</strong> {{<ul>\n<li>[ maxAlpha = <code>255</code> ]?: <code>1</code> | <code>255</code> - A (alpha) 分量的范围最大值</li>\n</ul>\n</li>\n<li>}} - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorcomponents\">ColorComponents</a> } - 颜色分量数组</li>\n</ul>\n<p>根据 <code>options</code> 选项参数获取颜色参数的 RGBA <a href=\"dataTypes#colorcomponents\">颜色分量数组</a>.</p>\n<pre><code class=\"lang-js\">let [ r1, g1, b1, a1 ] = colors.toRgba(&#39;#DE663399&#39;);\nconsole.log(`R: ${r1}, G: ${g1}, B: ${b1}, A: ${a1}`); /* A 分量范围为 [0..255]. */\n\nlet [ r2, g2, b2, a2 ] = colors.toRgba(&#39;#DE663399&#39;, { maxAlpha: 1 });\nconsole.log(`R: ${r2}, G: ${g2}, B: ${b2}, A: ${a2}`); /* A 分量范围为 [0..1]. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -1557,7 +1571,7 @@
               "textRaw": "toArgb(color, options)",
               "type": "method",
               "name": "toArgb",
-              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>options</strong> {{<ul>\n<li>[ maxAlpha = <code>255</code> ]?: <code>1</code> | <code>255</code> - A (alpha) 分量的范围最大值</li>\n</ul>\n</li>\n<li>}} - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorcomponents\">ColorComponents</a> } - 颜色分量数组</li>\n</ul>\n<p>根据 <code>options</code> 选项参数获取颜色参数的 ARGB <a href=\"dataTypes#colorcomponents\">颜色分量数组</a>.</p>\n<pre><code class=\"lang-js\">let [ a1, r1, g1, b1 ] = colors.toArgb(&#39;#DE663399&#39;);\nconsole.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255] . */\n\nlet [ a2, r2, g2, b2 ] = colors.toArgb(&#39;#DE663399&#39;, { maxAlpha: 1 });\nconsole.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1] . */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>options</strong> {{<ul>\n<li>[ maxAlpha = <code>255</code> ]?: <code>1</code> | <code>255</code> - A (alpha) 分量的范围最大值</li>\n</ul>\n</li>\n<li>}} - 选项参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorcomponents\">ColorComponents</a> } - 颜色分量数组</li>\n</ul>\n<p>根据 <code>options</code> 选项参数获取颜色参数的 ARGB <a href=\"dataTypes#colorcomponents\">颜色分量数组</a>.</p>\n<pre><code class=\"lang-js\">let [ a1, r1, g1, b1 ] = colors.toArgb(&#39;#DE663399&#39;);\nconsole.log(`A: ${a1}, R: ${r1}, G: ${g1}, B: ${b1}`); /* A 分量范围为 [0..255]. */\n\nlet [ a2, r2, g2, b2 ] = colors.toArgb(&#39;#DE663399&#39;, { maxAlpha: 1 });\nconsole.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..1]. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -1758,6 +1772,242 @@
           "displayName": "[m] toHsla"
         },
         {
+          "textRaw": "[m] toRgbString",
+          "name": "[m]_torgbstring",
+          "methods": [
+            {
+              "textRaw": "toRgbString(color)",
+              "type": "method",
+              "name": "toRgbString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>rgb(r, g, b)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 RGB 字符串. 各分量会四舍五入并限制在 <code>0</code> 至 <code>255</code>.</p>\n<pre><code class=\"lang-js\">console.log(colors.toRgbString(&quot;#663399&quot;)); // rgb(102, 51, 153)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toRgbString(red, green, blue)",
+              "type": "method",
+              "name": "toRgbString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>red</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - R (red)</li>\n<li><strong>green</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - G (green)</li>\n<li><strong>blue</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - B (blue)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>rgb(r, g, b)</code> 格式的颜色字符串</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(colors.toRgbString(102, 51, 153)); // rgb(102, 51, 153)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "red"
+                    },
+                    {
+                      "name": "green"
+                    },
+                    {
+                      "name": "blue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toRgbString"
+        },
+        {
+          "textRaw": "[m] toRgbaString",
+          "name": "[m]_torgbastring",
+          "methods": [
+            {
+              "textRaw": "toRgbaString(color, options?)",
+              "type": "method",
+              "name": "toRgbaString",
+              "desc": "<p><strong><code>6.6.2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>[ options = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">object</a> } - 是否为完全不透明的 A 分量保留末尾 <code>.0</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>rgba(r, g, b, a)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 RGBA 字符串. A 分量范围为 <code>0</code> 至 <code>1</code>, 保留 1 位小数后移除无意义的末尾 <code>0</code>.</p>\n<p><code>options</code> 为对象时, 使用其 <code>keepTrailingZeroForFullAlpha</code> 属性. 默认值为 <code>true</code>, 因此完全不透明的 A 分量表示为 <code>1.0</code>; 设为 <code>false</code> 时表示为 <code>1</code>.</p>\n<pre><code class=\"lang-js\">console.log(colors.toRgbaString(&quot;#80663399&quot;)); // rgba(102, 51, 153, 0.5)\nconsole.log(colors.toRgbaString(&quot;#663399&quot;)); // rgba(102, 51, 153, 1.0)\nconsole.log(colors.toRgbaString(&quot;#663399&quot;, false)); // rgba(102, 51, 153, 1)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toRgbaString"
+        },
+        {
+          "textRaw": "[m] toArgbString",
+          "name": "[m]_toargbstring",
+          "methods": [
+            {
+              "textRaw": "toArgbString(color, options?)",
+              "type": "method",
+              "name": "toArgbString",
+              "desc": "<p><strong><code>6.6.2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>[ options = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">object</a> } - 是否为完全不透明的 A 分量保留末尾 <code>.0</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>argb(a, r, g, b)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 ARGB 字符串. <code>options</code> 的布尔值或对象属性 <code>keepTrailingZeroForFullAlpha</code> 与 <a href=\"#m-torgbastring\"><code>toRgbaString()</code></a> 相同.</p>\n<pre><code class=\"lang-js\">console.log(colors.toArgbString(&quot;#80663399&quot;)); // argb(0.5, 102, 51, 153)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toArgbString"
+        },
+        {
+          "textRaw": "[m] toHsvString",
+          "name": "[m]_tohsvstring",
+          "methods": [
+            {
+              "textRaw": "toHsvString(color)",
+              "type": "method",
+              "name": "toHsvString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsv(h, s, v)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 HSV 字符串. H 分量四舍五入为整数, S 和 V 分量使用百分比并保留至多 1 位小数.</p>\n<pre><code class=\"lang-js\">console.log(colors.toHsvString(&quot;#663399&quot;)); // hsv(270, 66.7%, 60%)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toHsvString(red, green, blue)",
+              "type": "method",
+              "name": "toHsvString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>red</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - R (red)</li>\n<li><strong>green</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - G (green)</li>\n<li><strong>blue</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - B (blue)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsv(h, s, v)</code> 格式的颜色字符串</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(colors.toHsvString(102, 51, 153)); // hsv(270, 66.7%, 60%)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "red"
+                    },
+                    {
+                      "name": "green"
+                    },
+                    {
+                      "name": "blue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toHsvString"
+        },
+        {
+          "textRaw": "[m] toHsvaString",
+          "name": "[m]_tohsvastring",
+          "methods": [
+            {
+              "textRaw": "toHsvaString(color, options?)",
+              "type": "method",
+              "name": "toHsvaString",
+              "desc": "<p><strong><code>6.6.2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>[ options = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">object</a> } - 是否为完全不透明的 A 分量保留末尾 <code>.0</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsva(h, s, v, a)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 HSVA 字符串. H, S 和 V 的格式与 <a href=\"#m-tohsvstring\"><code>toHsvString()</code></a> 相同. <code>options</code> 的布尔值或对象属性 <code>keepTrailingZeroForFullAlpha</code> 与 <a href=\"#m-torgbastring\"><code>toRgbaString()</code></a> 相同.</p>\n<pre><code class=\"lang-js\">console.log(colors.toHsvaString(&quot;#80663399&quot;)); // hsva(270, 66.7%, 60%, 0.5)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toHsvaString"
+        },
+        {
+          "textRaw": "[m] toHslString",
+          "name": "[m]_tohslstring",
+          "methods": [
+            {
+              "textRaw": "toHslString(color)",
+              "type": "method",
+              "name": "toHslString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsl(h, s, l)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 HSL 字符串. H 分量四舍五入为整数, S 和 L 分量使用百分比并保留至多 1 位小数.</p>\n<pre><code class=\"lang-js\">console.log(colors.toHslString(&quot;#663399&quot;)); // hsl(270, 50%, 40%)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "toHslString(red, green, blue)",
+              "type": "method",
+              "name": "toHslString",
+              "desc": "<p><strong><code>6.6.2</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>red</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - R (red)</li>\n<li><strong>green</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - G (green)</li>\n<li><strong>blue</strong> { <a href=\"dataTypes#colorcomponent\">ColorComponent</a> } - 颜色分量 - B (blue)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsl(h, s, l)</code> 格式的颜色字符串</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(colors.toHslString(102, 51, 153)); // hsl(270, 50%, 40%)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "red"
+                    },
+                    {
+                      "name": "green"
+                    },
+                    {
+                      "name": "blue"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toHslString"
+        },
+        {
+          "textRaw": "[m] toHslaString",
+          "name": "[m]_tohslastring",
+          "methods": [
+            {
+              "textRaw": "toHslaString(color, options?)",
+              "type": "method",
+              "name": "toHslaString",
+              "desc": "<p><strong><code>6.6.2</code></strong></p>\n<ul>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><strong>[ options = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">object</a> } - 是否为完全不透明的 A 分量保留末尾 <code>.0</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - <code>hsla(h, s, l, a)</code> 格式的颜色字符串</li>\n</ul>\n<p>将颜色转换为 HSLA 字符串. H, S 和 L 的格式与 <a href=\"#m-tohslstring\"><code>toHslString()</code></a> 相同. <code>options</code> 的布尔值或对象属性 <code>keepTrailingZeroForFullAlpha</code> 与 <a href=\"#m-torgbastring\"><code>toRgbaString()</code></a> 相同.</p>\n<pre><code class=\"lang-js\">console.log(colors.toHslaString(&quot;#80663399&quot;)); // hsla(270, 50%, 40%, 0.5)\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toHslaString"
+        },
+        {
           "textRaw": "[m] isSimilar",
           "name": "[m]_issimilar",
           "methods": [
@@ -1919,7 +2169,7 @@
               "textRaw": "setPaintColor(paint, color)",
               "type": "method",
               "name": "setPaintColor",
-              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔参数</li>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>方法 <code>setPaintColor</code> 用于解决在 <code>Android API 29 (10) [Q]</code> 及以上系统中 <code>Paint#setColor(color)</code> 无法正常设置画笔颜色的问题.</p>\n<pre><code class=\"lang-js\">let paint = new android.graphics.Paint();\n\n/* 安卓 10 及以上系统无法正常设置颜色. */\n// paint.setColor(colors.toInt(&#39;blue&#39;));\n\n/* 使用 colors 模块实现原始功能. */\ncolors.setPaintColor(paint, &#39;blue&#39;);\n</code></pre>\n<p>画笔无法正常设置颜色的原因, 是 <code>Android API 29 (10) [Q]</code> 源码中 <code>setColor</code> 有以下两种方法签名:</p>\n<pre><code class=\"lang-text\">setColor(@ColorInt int color): void\nsetColor(@ColorLong long color): void\n</code></pre>\n<p>JavaScript 语言不区分 <code>int</code> 和 <code>long</code>, 即只有 <code>setColor(color: number)</code>,<br>它会优先匹配 Java 的 <code>setColor(@ColorLong long color): void</code>.</p>\n<p><code>ColorLong</code> 颜色与 <code>ColorInt</code> 颜色不同在于, 前者包含了额外的 <code>ColorSpace</code> (颜色空间) 信息,<br>原有的 <code>ColorInt</code> 被当做 <code>ColorLong</code> 来解析, 导致颜色解析异常.</p>\n<p>除上述 <code>colors.setPaintColor</code> 的方法外, 还有其他一些解决方案:</p>\n<pre><code class=\"lang-js\">/* A. 使用 paint.setArgb 方法. */\npaint.setARGB(\n    colors.alpha(color),\n    colors.red(color),\n    colors.green(color),\n    colors.blue(color),\n);\n\n/* 同上, 语法更简洁. */\npaint.setARGB.apply(paint, colors.toArgb(color));\n\n/* B. 将 ColorInt &quot;打包&quot; 为 ColorLong. */\npaint.setColor(android.graphics.Color.pack(colors.toInt(color)));\n\n/* C. 直接使用带 ColorSpace 信息的 ColorLong. */\npaint.setColor(android.graphics.Color.pack(\n    colors.redDouble(color),\n    colors.greenDouble(color),\n    colors.blueDouble(color),\n    colors.alphaDouble(color),\n    android.graphics.ColorSpace.get(android.graphics.ColorSpace.Named.SRGB),\n));\n</code></pre>\n<p><code>colors.setPaintColor</code> 的大致源码:</p>\n<pre><code class=\"lang-js\">function setPaintColor(paint, color) {\n    if (util.version.sdkInt &gt;= util.versionCodes.Q) {\n        paint.setARGB.apply(paint, colors.toArgb(color));\n    } else {\n        paint.setColor(colors.toInt(color));\n    }\n}\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong></p>\n<ul>\n<li><strong>paint</strong> { <a href=\"https://developer.android.com/reference/android/graphics/Paint\">android.graphics.Paint</a> } - 画笔参数</li>\n<li><strong>color</strong> { <a href=\"omniTypes#omnicolor\">OmniColor</a> } - 颜色参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>方法 <code>setPaintColor</code> 用于解决在 <code>Android API 29 (10) [Q]</code> 及以上系统中 <code>Paint#setColor(color)</code> 无法正常设置画笔颜色的问题.</p>\n<pre><code class=\"lang-js\">let paint = new android.graphics.Paint();\n\n/* 安卓 10 及以上系统无法正常设置颜色. */\n// paint.setColor(colors.toInt(&#39;blue&#39;));\n\n/* 使用 colors 模块实现原始功能. */\ncolors.setPaintColor(paint, &#39;blue&#39;);\n</code></pre>\n<p>画笔无法正常设置颜色的原因, 是 <code>Android API 29 (10) [Q]</code> 源码中 <code>setColor</code> 有以下两种方法签名:</p>\n<pre><code class=\"lang-text\">setColor(@ColorInt int color): void\nsetColor(@ColorLong long color): void\n</code></pre>\n<p>JavaScript 语言不区分 <code>int</code> 和 <code>long</code>, 即只有 <code>setColor(color: number)</code>,<br>\n它会优先匹配 Java 的 <code>setColor(@ColorLong long color): void</code>.</p>\n<p><code>ColorLong</code> 颜色与 <code>ColorInt</code> 颜色不同在于, 前者包含了额外的 <code>ColorSpace</code> (颜色空间) 信息,<br>\n原有的 <code>ColorInt</code> 被当做 <code>ColorLong</code> 来解析, 导致颜色解析异常.</p>\n<p>除上述 <code>colors.setPaintColor</code> 的方法外, 还有其他一些解决方案:</p>\n<pre><code class=\"lang-js\">/* A. 使用 paint.setArgb 方法. */\npaint.setARGB(\n    colors.alpha(color),\n    colors.red(color),\n    colors.green(color),\n    colors.blue(color),\n);\n\n/* 同上, 语法更简洁. */\npaint.setARGB.apply(paint, colors.toArgb(color));\n\n/* B. 将 ColorInt &quot;打包&quot; 为 ColorLong. */\npaint.setColor(android.graphics.Color.pack(colors.toInt(color)));\n\n/* C. 直接使用带 ColorSpace 信息的 ColorLong. */\npaint.setColor(android.graphics.Color.pack(\n    colors.redDouble(color),\n    colors.greenDouble(color),\n    colors.blueDouble(color),\n    colors.alphaDouble(color),\n    android.graphics.ColorSpace.get(android.graphics.ColorSpace.Named.SRGB),\n));\n</code></pre>\n<p><code>colors.setPaintColor</code> 的大致源码:</p>\n<pre><code class=\"lang-js\">function setPaintColor(paint, color) {\n    if (util.version.sdkInt &gt;= util.versionCodes.Q) {\n        paint.setARGB.apply(paint, colors.toArgb(color));\n    } else {\n        paint.setColor(colors.toInt(color));\n    }\n}\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [

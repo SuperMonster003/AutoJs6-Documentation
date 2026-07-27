@@ -2,12 +2,14 @@
 
 OpenCC, 全称 "Open Chinese Convert", 译为 "开放中文转换".
 
-opencc 模块是一个中文简繁转换模块, 支持词汇级别的转换, 异体字转换和地区习惯用词转换 (中国大陆/台湾/香港/日本新字体).
+opencc 模块是一个中文简繁转换模块, 支持词汇级别的转换, 异体字转换和地区习惯用词转换 (中国大陆 / 台湾 / 香港 / 日本新字体).
 
-> 参阅:   
-> OpenCC 官方网站: https://opencc.byvoid.com  
-> OpenCC 官方文档: https://byvoid.github.io/OpenCC  
-> OpenCC 开源项目: https://github.com/BYVoid/OpenCC  
+从 AutoJs6 6.8.0 起, OpenCC 转换由外部 OpenCC 插件提供. 调用前需在插件中心安装, 启用并授权兼容插件; 插件不可用时转换方法会抛出插件加载异常.
+
+> 参阅:<br>
+> OpenCC 官方网站: https://opencc.byvoid.com<br>
+> OpenCC 官方文档: https://byvoid.github.io/OpenCC<br>
+> OpenCC 开源项目: https://github.com/BYVoid/OpenCC<br>
 > OpenCC (Android) 开源项目: https://github.com/qichuan/android-opencc
 
 下表列举了一些简体中文的转换示例:
@@ -34,12 +36,12 @@ opencc 模块是一个中文简繁转换模块, 支持词汇级别的转换, 异
 
 > 注:
 >
-> 尖括号表示 AutoJs6 封装方法, 内部经 1 次转换.  
+> 尖括号表示 AutoJs6 封装方法, 内部经 1 次转换.<br>
 > 双尖括号表示 AutoJs6 封装方法, 内部经 2 次转换.
 >
-> 台湾正体存在惯用词.  
-> 在转换时, 如涉及到台湾正体, 方法名称将以 "twi" 体现惯用词转换.  
-> 如 twi2s 表示台湾正体转简体并应用惯用词转换.  
+> 台湾正体存在惯用词.<br>
+> 在转换时, 如涉及到台湾正体, 方法名称将以 "twi" 体现惯用词转换.<br>
+> 如 twi2s 表示台湾正体转简体并应用惯用词转换.<br>
 > 再如 hk2twi 表示香港繁体转台湾正体并应用惯用词转换.
 
 ---
@@ -159,6 +161,24 @@ console.log(opencc(str, 'S2TW')); /* 同上. */
 ```
 
 > 注: s2tw 的逆转换方法为 [tw2s](#m-tw2s).
+
+## [m] s2twp
+
+### s2twp(s)
+
+**`6.6.0`**
+
+- **s** { [string](dataTypes#string) } - 待转换字符串
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 转换结果
+
+将简体中文转换为台湾正体并转换常用词汇.
+
+相当于 `opencc(s, 'S2TWP')`.
+
+```js
+let result = opencc.s2twp('使用鼠标查看软件信息');
+console.log(result);
+```
 
 ## [m] s2twi
 
@@ -474,6 +494,24 @@ console.log(opencc(str, 'TW2S')); /* 同上. */
 ```
 
 > 注: tw2s 的逆转换方法为 [s2tw](#m-s2tw).
+
+## [m] tw2sp
+
+### tw2sp(s)
+
+**`6.6.0`**
+
+- **s** { [string](dataTypes#string) } - 待转换字符串
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 转换结果
+
+将台湾正体转换为简体中文并转换常用词汇.
+
+相当于 `opencc(s, 'TW2SP')`.
+
+```js
+let result = opencc.tw2sp('使用滑鼠檢視軟體資訊');
+console.log(result);
+```
 
 ## [m] tw2t
 

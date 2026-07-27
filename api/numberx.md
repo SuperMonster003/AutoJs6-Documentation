@@ -23,8 +23,8 @@ console.log(typeof (123).clamp); // "function"
 - 在脚本中加入代码片段: `plugins.extendAll();` 或 `plugins.extend('Number');`
 - AutoJs6 应用设置 - 扩展性 - JavaScript 内置对象扩展 - [ 启用 ]
 
-当上述应用设置启用时, 所有脚本均默认启用内置扩展.  
-当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.  
+当上述应用设置启用时, 所有脚本均默认启用内置扩展.<br>
+当上述应用设置禁用时, 只有加入上述代码片段的脚本才会启用内置扩展.<br>
 内置扩展往往是不安全的, 除非明确了解内置扩展的原理及风险, 否则不建议启用.
 
 ---
@@ -76,6 +76,51 @@ console.log(Numberx.ensureNumber(NaN, 0, Infinity)); /* 无异常. */
 console.log(Number.ensureNumber(9)); /* 无异常. */
 console.log(Number.ensureNumber(null)); /* 抛出异常. */
 console.log(Number.ensureNumber(NaN, 0, Infinity)); /* 无异常. */
+```
+
+## [m] ensureNumberLike
+
+### ensureNumberLike(value, allowNaN?)
+
+**`6.6.0`** **`xObject`**
+
+- **value** { [any](dataTypes#any) } - 待转换和检查的值
+- **[ allowNaN = false ]** { [boolean](dataTypes#boolean) } - 是否允许实际的 `NaN` 值
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 转换后的数值
+
+使用 [`Numberx.parseAny()`](#m-parseany) 的规则将 `value` 转换为数值. `null`, `undefined` 以及不能转换为数值的参数会抛出异常.
+
+`allowNaN` 仅允许参数本身为 `NaN`. 即使它为 `true`, 无法转换为数值的其他参数仍会抛出异常.
+
+```js
+console.log(Numberx.ensureNumberLike("50%")); // 0.5
+console.log(Numberx.ensureNumberLike("3:2")); // 1.5
+Numberx.ensureNumberLike(NaN); /* 抛出异常. */
+console.log(Numberx.ensureNumberLike(NaN, true)); // NaN
+
+/* 启用内置对象扩展后. */
+console.log(Number.ensureNumberLike("12")); // 12
+```
+
+## [m] ensureNumbersLike
+
+### ensureNumbersLike(values, allowNaN?, containsNaN?)
+
+**`6.6.0`** **`xObject`**
+
+- **values** { [any](dataTypes#any)[[]](dataTypes#array) } - 待转换和检查的数组
+- **[ allowNaN = false ]** { [boolean](dataTypes#boolean) } - 是否允许数组中出现实际的 `NaN` 值
+- **[ containsNaN = false ]** { [boolean](dataTypes#boolean) } - 是否在返回数组中保留允许的 `NaN`
+- <ins>**returns**</ins> { [number](dataTypes#number)[[]](dataTypes#array) } - 转换后的数值数组
+
+逐项使用 [`Numberx.parseAny()`](#m-parseany) 的规则转换 `values`. 参数不是 JavaScript 数组, 元素为 `null` 或 `undefined`, 或元素不能转换为数值时抛出异常.
+
+当遇到实际的 `NaN` 时, `allowNaN` 为 `false` 会抛出异常. `allowNaN` 为 `true` 且 `containsNaN` 为 `false` 时会忽略该元素; 两者均为 `true` 时会在结果中保留 `NaN`.
+
+```js
+console.log(Numberx.ensureNumbersLike([ "25%", "3:2", 4 ])); // [ 0.25, 1.5, 4 ]
+console.log(Numberx.ensureNumbersLike([ 1, NaN, 2 ], true)); // [ 1, 2 ]
+console.log(Numberx.ensureNumbersLike([ 1, NaN, 2 ], true, true)); // [ 1, NaN, 2 ]
 ```
 
 ## [m] check
@@ -130,8 +175,8 @@ console.log(Number.check('9', '9')); // false
 
 检查数字与操作符字符串的逻辑关系.
 
-对于参数索引 [0, 1, 2 ... n],  
-索引 [0, 2, 4 ...] 需为 `number` 类型,  
+对于参数索引 [0, 1, 2 ... n],<br>
+索引 [0, 2, 4 ...] 需为 `number` 类型,<br>
 索引 [1, 3, 5 ...] 需为 `string` 类型.
 
 参数不满足上述类型需求时将抛出异常.
@@ -155,7 +200,7 @@ console.log(Number.check(a, '<', d, '>', b, '<', c, '>', a)); // true
 console.log(Number.check(a, c, d)); /* 抛出异常. */
 ```
 
-逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.  
+逻辑关系检查时, 仅检查操作符字符串相邻的两个数字.<br>
 例如对于 `check(a, '<', d, '>', b)`, 仅检查 `a < d` 与 `d > b`, 而不会检查 `a` 与 `b` 的关系.
 
 ## [m] clamp
@@ -168,13 +213,13 @@ console.log(Number.check(a, c, d)); /* 抛出异常. */
 - **clamps** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 限制范围
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-返回限制在指定范围内的数字.  
+返回限制在指定范围内的数字.<br>
 当给定数字不在限制范围内时, 则就近返回一个范围边界值.
 
-通常限制范围用两个大小不同的数字数组表示,  
-如范围 10 - 30 可用 `[ 10, 30 ]` 表示.  
-范围参数会根据给定参数排序后挑选出最大值与最小值作为限制上限及下限,  
-因此 `[ 30, 10 ]` 与 `[ 10, 30 ]` 效果相同,  
+通常限制范围用两个大小不同的数字数组表示,<br>
+如范围 10 - 30 可用 `[ 10, 30 ]` 表示.<br>
+范围参数会根据给定参数排序后挑选出最大值与最小值作为限制上限及下限,<br>
+因此 `[ 30, 10 ]` 与 `[ 10, 30 ]` 效果相同,<br>
 而与 `[ 10, 11, 15, 22, 30 ]` 或 `[ 20, 30, 25, 10 ]` 等效果也相同:
 
 ```js
@@ -201,7 +246,7 @@ console.log(num.clamp([ 10, 30 ])); /* 同上. */
 console.log(num.clamp(10, 30)); /* 同上. */
 ```
 
-当限制范围参数是 1 个数字时, 相当于 `[ x, x ]`, 则一定返回 x 本身;  
+当限制范围参数是 1 个数字时, 相当于 `[ x, x ]`, 则一定返回 x 本身;<br>
 当限制范围参数是 0 个数字时 (省略或空数组), 则返回 num 本身:
 
 ```js
@@ -228,12 +273,12 @@ console.log(num.clamp()); // 307
 
 返回按周期限制在指定范围内的数字.
 
-在数学中, 周期函数是无论任何独立变量上经过一个确定的周期之后数值皆能重复的函数.  
+在数学中, 周期函数是无论任何独立变量上经过一个确定的周期之后数值皆能重复的函数.<br>
 
-如果在函数 _f_ 中所有的位置 _x_ 都满足 _f_ ( _x_ + _T_ ) = _f_ ( _x_ ), 那么, _f_ 就是周期为 _T_ 的周期函数.  
-如果周期函数 _f_ 的周期为 _T_ , 那么对于 _f_ 中任意 _x_ 及任意整数 _n_, 有 _f_ ( _x_ + _Tn_ ) = _f_ ( _x_ ).
+如果在函数 _f_ 中所有的位置 _x_ 都满足 _f_(_x_ + _T_) = _f_(_x_), 那么, _f_ 就是周期为 _T_ 的周期函数.<br>
+如果周期函数 _f_ 的周期为 _T_, 那么对于 _f_ 中任意 _x_ 及任意整数 _n_, 有 _f_(_x_ + _Tn_) = _f_(_x_).
 
-三角函数正弦函数与余弦函数都是常见的周期函数, 如 _f_ ( _x_ ) = sin _x_ 与 _f_ ( _x_ ) = cos _x_ 等, 其周期为 `2π`.
+三角函数正弦函数与余弦函数都是常见的周期函数, 如 _f_(_x_) = sin _x_ 与 _f_(_x_) = cos _x_ 等, 其周期为 `2π`.
 
 `clampTo` 方法的作用是将数字通过周期变换回落到指定范围内:
 
@@ -306,7 +351,7 @@ console.log((1.23456e3).toFixedNum()); // 1235
 - **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0" (U+0030).
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
-此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.  
+此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>
 填充从当前数字对应字符串的开头开始.
 
 ```js
@@ -344,7 +389,7 @@ console.log(`${date} ${time}`); /* e.g. "2022-11-01 08:47:15" */
 - **[ pad = '0' ]** { [string](dataTypes#string) | [number](dataTypes#number) } - 填充字符串. 如果字符串太长, 使填充后的字符串长度超过了目标长度, 则只保留最左侧部分, 其他部分会被截断. 此参数的默认值为 "0" (U+0030).
 - <ins>**returns**</ins> { [string](dataTypes#string) }
 
-此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.  
+此方法用一个字符串填充当前数字 (如果需要的话则重复填充), 返回填充后达到指定长度的字符串.<br>
 填充从当前数字对应字符串的末尾开始.
 
 ```js
@@ -398,7 +443,7 @@ console.log(parseFloat("0.101", 2)); // 0.625
 - **percentage** { [string](dataTypes#string) | [number](dataTypes#number) } - 百分数字符串或任意数字
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-此方法用于解析一个百分数字符串 (如 `"5%"`) 并返回其代表的数值.  
+此方法用于解析一个百分数字符串 (如 `"5%"`) 并返回其代表的数值.<br>
 如果 percentage 是一个 number 基本类型值, 则直接返回.
 
 ```js

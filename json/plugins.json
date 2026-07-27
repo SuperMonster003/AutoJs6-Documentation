@@ -23,7 +23,7 @@
         {
           "textRaw": "内置扩展插件",
           "name": "内置扩展插件",
-          "desc": "<p>内置扩展插件相当于内置的项目插件, 它们是内置于 AutoJs6 软件中的, 可通过调用 <a href=\"#m-extend\">plugins.extend</a> 等方法选择性地启用部分或全部内置扩展插件, 也称作内置扩展模块.</p>\n<p>加载方式:</p>\n<pre><code class=\"lang-js\">/* 启用 Array 内置扩展插件. */\nplugins.extend(&#39;Arrayx&#39;);\n\n/* 启用全部内置扩展插件. */\nplugins.extendAll();\n</code></pre>\n<p>截至 2023 年 2 月, AutoJs6 内置了以下扩展插件:</p>\n<ul>\n<li><a href=\"arrayx\">Arrayx - Array 扩展</a></li>\n<li><a href=\"numberx\">Numberx - Number 扩展</a></li>\n<li><a href=\"mathx\">Mathx - Math 扩展</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">plugins</p>\n\n<hr>\n",
+          "desc": "<p>内置扩展插件相当于内置的项目插件, 它们是内置于 AutoJs6 软件中的, 可通过调用 <a href=\"#m-extend\">plugins.extend</a> 等方法选择性地启用部分或全部内置扩展插件, 也称作内置扩展模块.</p>\n<p>加载方式:</p>\n<pre><code class=\"lang-js\">/* 启用 Array 内置扩展插件. */\nplugins.extend(&#39;Arrayx&#39;);\n\n/* 启用全部内置扩展插件. */\nplugins.extendAll();\n</code></pre>\n<p>AutoJs6 预置以下 JavaScript 内置对象扩展模块:</p>\n<ul>\n<li><a href=\"arrayx\">Arrayx - Array 扩展</a></li>\n<li><a href=\"numberx\">Numberx - Number 扩展</a></li>\n<li><a href=\"mathx\">Mathx - Math 扩展</a></li>\n</ul>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">plugins</p>\n\n<hr>\n",
           "type": "module",
           "displayName": "内置扩展插件"
         },
@@ -66,8 +66,8 @@
           "displayName": "[m] load"
         },
         {
-          "textRaw": "[m] extend",
-          "name": "[m]_extend",
+          "textRaw": "[m+] extend",
+          "name": "[m+]_extend",
           "methods": [
             {
               "textRaw": "extend(...moduleNames)",
@@ -86,7 +86,7 @@
             }
           ],
           "type": "module",
-          "displayName": "[m] extend"
+          "displayName": "[m+] extend"
         },
         {
           "textRaw": "[m] extendAll",
@@ -129,6 +129,50 @@
           ],
           "type": "module",
           "displayName": "[m] extendAllBut"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "[m] extend.exclude",
+          "name": "exclude",
+          "methods": [
+            {
+              "textRaw": "extend.exclude(...moduleNames)",
+              "type": "method",
+              "name": "exclude",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>...moduleNames</strong> { <a href=\"documentation#可变参数\">...</a><a href=\"dataTypes#extendmodulesnames\">ExtendModulesNames</a><a href=\"documentation#可变参数\">[]</a> } - 要从批量加载中排除的扩展模块名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>将模块加入排除集合. 排除集合会影响后续 <a href=\"#m-extendall\">plugins.extendAll</a> 和 <a href=\"#m-extendallbut\">plugins.extendAllBut</a>, 但不阻止通过 <a href=\"#m-extend\">plugins.extend</a> 显式加载模块.</p>\n<pre><code class=\"lang-js\">plugins.extend.exclude(&quot;Mathx&quot;);\nplugins.extendAll();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...moduleNames"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] extend.registerModule",
+          "name": "registerModule",
+          "methods": [
+            {
+              "textRaw": "extend.registerModule(module)",
+              "type": "method",
+              "name": "registerModule",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>module</strong> { <a href=\"dataTypes#object\">Object</a> } - 以扩展模块名称为键, 以扩展实现为值的对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>向当前脚本的扩展注册表添加自定义模块. 对象的每个属性值必须提供可调用的 <code>extendJsBuildInObjects()</code> 方法. 注册不会立即加载模块, 可在注册后使用 <a href=\"#m-extend\">plugins.extend</a> 或 <a href=\"#m-extendall\">plugins.extendAll</a> 加载.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "module"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ],
       "type": "module",

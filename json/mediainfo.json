@@ -1,0 +1,284 @@
+{
+  "source": "..\\api\\mediainfo.md",
+  "modules": [
+    {
+      "textRaw": "媒体信息 (MediaInfo)",
+      "name": "媒体信息_(mediainfo)",
+      "desc": "<p>mediainfo 模块用于读取媒体文件的容器, 视频, 音频, 字幕和其他流信息.</p>\n<p>此模块自 AutoJs6 6.7.0 起提供. <code>mediainfo</code> 与 <code>$mediainfo</code> 指向同一个可调用模块对象.</p>\n<p>自 AutoJs6 6.8.0 起, 媒体信息读取由外置 MediaInfo 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 MediaInfo 插件. 未发现可用插件引擎时, 调用将抛出异常.</p>\n<p>目标路径必须指向一个已存在的文件. 相对路径按当前脚本工作目录解析.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">mediainfo</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] mediainfo",
+          "name": "[@]_mediainfo",
+          "methods": [
+            {
+              "textRaw": "mediainfo(path)",
+              "type": "method",
+              "name": "mediainfo",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 媒体文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mediainforesult\">MediainfoResult</a> } - 媒体信息对象</li>\n</ul>\n<p>读取媒体文件信息.</p>\n<p>此调用与 <a href=\"#m-read\">mediainfo.read(path)</a> 等价.</p>\n<pre><code class=\"lang-js\">let info = mediainfo(&#39;./media/sample.mp4&#39;);\n\nconsole.log(info.path);\nconsole.log(info.general(&#39;Format&#39;));\nconsole.log(info.video(&#39;Width&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] mediainfo"
+        },
+        {
+          "textRaw": "[m] read",
+          "name": "[m]_read",
+          "methods": [
+            {
+              "textRaw": "read(path)",
+              "type": "method",
+              "name": "read",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 媒体文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mediainforesult\">MediainfoResult</a> } - 媒体信息对象</li>\n</ul>\n<p>读取媒体文件信息.</p>\n<p>此方法会立即向 MediaInfo 插件请求完整报告, 将报告解析为对象属性, 并返回可继续查询各流类型的结果对象.</p>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] read"
+        },
+        {
+          "textRaw": "MediainfoResult",
+          "name": "mediainforesult",
+          "desc": "<p>媒体信息结果对象.</p>\n<p>对象包含固定的 <code>path</code> 和 <code>inform</code> 属性, 以及 <code>general</code>, <code>video</code>, <code>audio</code>, <code>text</code>, <code>other</code>, <code>image</code>, <code>menu</code>, <code>max</code> 等可调用流查询对象.</p>\n<p>完整报告中的章节名称会转换为小写属性名. 章节内的字段名称会转换为 camelCase, 字段值均为字符串. 这些字段由目标文件和 MediaInfo 插件的报告内容动态决定.</p>\n<p>例如, 报告中的 <code>File size</code> 字段会转换为 <code>fileSize</code>:</p>\n<pre><code class=\"lang-js\">let info = mediainfo.read(&#39;./media/sample.mp4&#39;);\n\nconsole.log(info.general.fileSize);\nconsole.log(info.video.format);\n</code></pre>\n<p>动态字段同时挂载在对应的可调用流查询对象上. 因此 <code>info.video</code> 既可作为函数调用, 也可读取其解析后的字段.</p>\n",
+          "type": "module",
+          "displayName": "MediainfoResult"
+        },
+        {
+          "textRaw": "[p#] MediainfoResult#path",
+          "name": "[p#]_mediainforesult#path",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>目标媒体文件的绝对路径.</p>\n",
+          "type": "module",
+          "displayName": "[p#] MediainfoResult#path"
+        },
+        {
+          "textRaw": "[p#] MediainfoResult#inform",
+          "name": "[p#]_mediainforesult#inform",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MediaInfo 插件返回的完整文本报告.</p>\n",
+          "type": "module",
+          "displayName": "[p#] MediainfoResult#inform"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#general",
+          "name": "[m#]_mediainforesult#general",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#general(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#general",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - General 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 General 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#general"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#video",
+          "name": "[m#]_mediainforesult#video",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#video(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#video",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Video 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Video 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#video"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#audio",
+          "name": "[m#]_mediainforesult#audio",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#audio(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#audio",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Audio 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Audio 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#audio"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#text",
+          "name": "[m#]_mediainforesult#text",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#text(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#text",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Text 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询字幕或其他 Text 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#text"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#other",
+          "name": "[m#]_mediainforesult#other",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#other(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#other",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Other 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Other 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#other"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#image",
+          "name": "[m#]_mediainforesult#image",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#image(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#image",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Image 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Image 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#image"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#menu",
+          "name": "[m#]_mediainforesult#menu",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#menu(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#menu",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Menu 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Menu 流信息.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#menu"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#max",
+          "name": "[m#]_mediainforesult#max",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#max(parameter?)",
+              "type": "method",
+              "name": "MediainfoResult#max",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Max 流类型第 <code>0</code> 项的参数值</li>\n</ul>\n<p>使用 MediaInfo 的 <code>MAX</code> 流类型执行查询.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "parameter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#max"
+        },
+        {
+          "textRaw": "[m#] MediainfoResult#toString",
+          "name": "[m#]_mediainforesult#tostring",
+          "methods": [
+            {
+              "textRaw": "MediainfoResult#toString()",
+              "type": "method",
+              "name": "MediainfoResult#toString",
+              "desc": "<p><strong><code>6.7.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 结果对象的可读字符串</li>\n</ul>\n<p>返回由已解析章节和字段组成的对象描述.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] MediainfoResult#toString"
+        }
+      ],
+      "type": "module",
+      "displayName": "媒体信息 (MediaInfo)"
+    }
+  ]
+}

@@ -222,7 +222,7 @@
                   ]
                 }
               ],
-              "desc": "<p>设定通知为 &quot;正在进行中&quot; 状态.</p>\n<p>正在进行中, 意味着通知关联着一个用户正在参与的后台任务, 如 [ 播放音乐 / 下载任务 / 文件同步操作 / 网络连接激活 ] 等.<br>这样的通知不能被用户消除 (如左右滑动), 只能通过 <a href=\"notice#m-cancel\">notice.cancel</a> 或 <a href=\"noticeBuilderType#m-setautocancel\">NoticeBuilder#setAutoCancel</a> 等方式消除.</p>\n"
+              "desc": "<p>设定通知为 &quot;正在进行中&quot; 状态.</p>\n<p>正在进行中, 意味着通知关联着一个用户正在参与的后台任务, 如 [ 播放音乐 / 下载任务 / 文件同步操作 / 网络连接激活 ] 等.<br>\n这样的通知不能被用户消除 (如左右滑动), 只能通过 <a href=\"notice#m-cancel\">notice.cancel</a> 或 <a href=\"noticeBuilderType#m-setautocancel\">NoticeBuilder#setAutoCancel</a> 等方式消除.</p>\n"
             }
           ],
           "type": "module",
@@ -460,7 +460,7 @@
                   ]
                 }
               ],
-              "desc": "<p>设置是否使用通知计时秒表.</p>\n<p>参数 <code>b</code> 设为 <code>true</code> 时, 通知时间区域将显示为自动刷新的计时秒表, 每秒钟自动刷新时间.</p>\n<p>计时秒表通常用于表明通知的持续显示时间, 可应用于通话计时等场景:</p>\n<pre><code class=\"lang-js\">notice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知计时测试&#39;)\n    .setUsesChronometer(true));\n</code></pre>\n<blockquote>\n<p>注:<br>chronometer [krəˈnɒmɪtə(r)]<br>_n._ 精密记时表; 高度精确的钟表.</p>\n</blockquote>\n"
+              "desc": "<p>设置是否使用通知计时秒表.</p>\n<p>参数 <code>b</code> 设为 <code>true</code> 时, 通知时间区域将显示为自动刷新的计时秒表, 每秒钟自动刷新时间.</p>\n<p>计时秒表通常用于表明通知的持续显示时间, 可应用于通话计时等场景:</p>\n<pre><code class=\"lang-js\">notice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知计时测试&#39;)\n    .setUsesChronometer(true));\n</code></pre>\n<blockquote>\n<p>注:<br>\nchronometer [krəˈnɒmɪtə(r)]<br>\n_n._ 精密记时表; 高度精确的钟表.</p>\n</blockquote>\n"
             }
           ],
           "type": "module",
@@ -497,7 +497,7 @@
                   ]
                 }
               ],
-              "desc": "<p>设置通知计时区域的时间为倒计时而非正计时.</p>\n<p><code>setChronometerCountDown</code> 仅在 <a href=\"#m-setuseschronometer\">setUsesChronometer</a> 设置为 <code>true</code> 时才有效.</p>\n<pre><code class=\"lang-js\">/* 在通知的计时区域显示 10 秒钟倒计时. */\nnotice(notice.getBuilder()\n    .setUsesChronometer(true)\n    .setChronometerCountDown(true)\n    .setShowWhen(true)\n    .setWhen(Date.now() + 10e3)\n);\n</code></pre>\n<blockquote>\n<p>注:<br>chronometer [krəˈnɒmɪtə(r)]<br>_n._ 精密记时表; 高度精确的钟表.</p>\n</blockquote>\n"
+              "desc": "<p>设置通知计时区域的时间为倒计时而非正计时.</p>\n<p><code>setChronometerCountDown</code> 仅在 <a href=\"#m-setuseschronometer\">setUsesChronometer</a> 设置为 <code>true</code> 时才有效.</p>\n<pre><code class=\"lang-js\">/* 在通知的计时区域显示 10 秒钟倒计时. */\nnotice(notice.getBuilder()\n    .setUsesChronometer(true)\n    .setChronometerCountDown(true)\n    .setShowWhen(true)\n    .setWhen(Date.now() + 10e3)\n);\n</code></pre>\n<blockquote>\n<p>注:<br>\nchronometer [krəˈnɒmɪtə(r)]<br>\n_n._ 精密记时表; 高度精确的钟表.</p>\n</blockquote>\n"
             }
           ],
           "type": "module",
@@ -535,7 +535,7 @@
                   ]
                 }
               ],
-              "desc": "<p>添加一个通知时间戳 (毫秒), 用以表示通知发生 (或即将发生) 的具体时间.</p>\n<p>使用 <code>setWhen</code> 时, 需要设置 <a href=\"#m-setshowwhen\">setShowWhen</a> 为 <code>true</code>, 否则将无法显示时间消息. </p>\n<pre><code class=\"lang-js\">notice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知时间测试 (过去 5 分钟)&#39;)\n    .setWhen(Date.now() - 5 * 60e3)\n    .setShowWhen(true));\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知时间测试 (未来 2 分钟)&#39;)\n    .setWhen(Date.now() + 128e3)\n    .setShowWhen(true));\n</code></pre>\n"
+              "desc": "<p>添加一个通知时间戳 (毫秒), 用以表示通知发生 (或即将发生) 的具体时间.</p>\n<p>使用 <code>setWhen</code> 时, 需要设置 <a href=\"#m-setshowwhen\">setShowWhen</a> 为 <code>true</code>, 否则将无法显示时间消息.</p>\n<pre><code class=\"lang-js\">notice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知时间测试 (过去 5 分钟)&#39;)\n    .setWhen(Date.now() - 5 * 60e3)\n    .setShowWhen(true));\n\nnotice(notice.getBuilder()\n    .setContentTitle(&#39;通知测试&#39;)\n    .setContentText(&#39;通知时间测试 (未来 2 分钟)&#39;)\n    .setWhen(Date.now() + 128e3)\n    .setShowWhen(true));\n</code></pre>\n"
             }
           ],
           "type": "module",

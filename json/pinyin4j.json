@@ -1,0 +1,126 @@
+{
+  "source": "..\\api\\pinyin4j.md",
+  "modules": [
+    {
+      "textRaw": "Pinyin4j",
+      "name": "pinyin4j",
+      "desc": "<p>pinyin4j 模块用于将中文转换为拼音字符串, 并控制分隔符, 大小写, 声调和 <code>v</code> 字符格式.</p>\n<p>此模块自 AutoJs6 6.6.1 起提供. <code>pinyin4j</code> 与 <code>$pinyin4j</code> 指向同一个可调用模块对象.</p>\n<p>自 AutoJs6 6.8.0 起, pinyin4j 转换由外置 Pinyin4j 插件提供. 调用转换方法前, 必须安装并启用与当前 AutoJs6 版本兼容的 Pinyin4j 插件. 未发现可用插件引擎时, 调用将抛出异常.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">pinyin4j</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] pinyin4j",
+          "name": "[@]_pinyin4j",
+          "methods": [
+            {
+              "textRaw": "pinyin4j(source, options?)",
+              "type": "method",
+              "name": "pinyin4j",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换文本</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#pinyin4joptions\">Pinyin4jOptions</a> } - 分隔符或转换选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 拼音转换结果</li>\n</ul>\n<p>将文本转换为拼音字符串.</p>\n<p>当 <code>options</code> 是字符串时, 该字符串作为拼音分隔符. 此调用与 <a href=\"#m-of\">pinyin4j.of(source, options?)</a> 等价.</p>\n<pre><code class=\"lang-js\">console.log(pinyin4j(&#39;中国&#39;, {\n    separator: &#39; &#39;,\n    tone: &#39;WITH_TONE_NUMBER&#39;,\n})); // zhong1 guo2\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] pinyin4j"
+        },
+        {
+          "textRaw": "[m] of",
+          "name": "[m]_of",
+          "methods": [
+            {
+              "textRaw": "of(source, options?)",
+              "type": "method",
+              "name": "of",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#string\">string</a> } - 待转换文本</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#pinyin4joptions\">Pinyin4jOptions</a> } - 分隔符或转换选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 拼音转换结果</li>\n</ul>\n<p>将文本转换为拼音字符串.</p>\n<p>空字符串直接返回空字符串, 不调用插件. 当 <code>options</code> 是字符串时, 该字符串作为拼音分隔符.</p>\n<pre><code class=\"lang-js\">console.log(pinyin4j.of(&#39;中国&#39;, &#39;-&#39;)); // zhong-guo\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] of"
+        },
+        {
+          "textRaw": "[m] as",
+          "name": "[m]_as",
+          "methods": [
+            {
+              "textRaw": "as(source)",
+              "type": "method",
+              "name": "as",
+              "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>source</strong> { <a href=\"dataTypes#string\">string</a> } - 含数字声调的拼音文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 使用带声调字符的拼音文本</li>\n</ul>\n<p>将数字声调转换为带声调字符.</p>\n<pre><code class=\"lang-js\">console.log(pinyin4j.as(&#39;zhong1 guo2&#39;)); // zhōng guó\n</code></pre>\n<hr>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] as"
+        },
+        {
+          "textRaw": "Pinyin4jOptions",
+          "name": "pinyin4joptions",
+          "desc": "<p>pinyin4j 转换选项. 选项值中的名称不区分大小写, 无效名称会抛出异常.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[p] Pinyin4jOptions#separator",
+              "name": "[p]_pinyin4joptions#separator",
+              "desc": "<ul>\n<li>[ <code>&#39;&#39;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>拼音项之间的分隔符.</p>\n<p>别名为 <code>sep</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p] Pinyin4jOptions#separator"
+            },
+            {
+              "textRaw": "[p] Pinyin4jOptions#tone",
+              "name": "[p]_pinyin4joptions#tone",
+              "desc": "<ul>\n<li>[ <code>&#39;WITHOUT_TONE&#39;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>声调格式.</p>\n<p>别名为 <code>toneType</code>. 支持以下值:</p>\n<ul>\n<li><code>WITH_TONE_NUMBER</code>, <code>WITH_NUMBER</code>, <code>NUMBER</code>, <code>NUM</code>: 使用数字声调</li>\n<li><code>WITHOUT_TONE</code>, <code>NO_TONE</code>, <code>NO</code>, <code>FALSE</code>, <code>0</code>: 不标注声调</li>\n<li><code>WITH_TONE_MARK</code>, <code>WITH_MARK</code>, <code>MARK</code>, <code>TRUE</code>, <code>1</code>: 使用带声调字符</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "[p] Pinyin4jOptions#tone"
+            },
+            {
+              "textRaw": "[p] Pinyin4jOptions#case",
+              "name": "[p]_pinyin4joptions#case",
+              "desc": "<ul>\n<li>[ <code>&#39;LOWERCASE&#39;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>字母大小写格式.</p>\n<p>别名为 <code>caseType</code>. 支持以下值:</p>\n<ul>\n<li><code>LOWERCASE</code>, <code>LOW</code>, <code>L</code>, <code>0</code>: 小写</li>\n<li><code>UPPERCASE</code>, <code>UP</code>, <code>U</code>, <code>1</code>: 大写</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "[p] Pinyin4jOptions#case"
+            },
+            {
+              "textRaw": "[p] Pinyin4jOptions#v",
+              "name": "[p]_pinyin4joptions#v",
+              "desc": "<ul>\n<li>[ <code>&#39;WITH_V&#39;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>韵母 <code>v</code> 的输出格式.</p>\n<p>别名为 <code>vChar</code> 和 <code>vCharType</code>. 支持以下值:</p>\n<ul>\n<li><code>WITH_U_AND_COLON</code>, <code>U_AND_COLON</code>, <code>U_COLON</code>, <code>U:</code>: 使用 <code>u:</code></li>\n<li><code>WITH_V</code>, <code>V</code>: 使用 <code>v</code></li>\n<li><code>WITH_U_UNICODE</code>, <code>U_UNICODE</code>, <code>UNICODE</code>, <code>U</code>, <code>\\u00DC</code>: 使用 Unicode <code>U+00DC</code> 对应字符</li>\n</ul>\n<p>当 <code>tone</code> 为 <code>WITH_TONE_MARK</code> 时, 此选项的默认值改为 <code>WITH_U_UNICODE</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p] Pinyin4jOptions#v"
+            }
+          ],
+          "type": "module",
+          "displayName": "Pinyin4jOptions"
+        }
+      ],
+      "type": "module",
+      "displayName": "Pinyin4j"
+    }
+  ]
+}

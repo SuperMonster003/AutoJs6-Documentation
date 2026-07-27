@@ -4,197 +4,316 @@
     {
       "textRaw": "多媒体 (Media)",
       "name": "多媒体_(media)",
-      "desc": "<hr>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">此章节待补充或完善...</p>\n<p style=\"font: italic 1em sans-serif; color: #78909C\">Marked by SuperMonster003 on Oct 22, 2022.</p>\n\n<hr>\n<p>media模块提供多媒体编程的支持. 目前仅支持音乐播放和媒体文件扫描. 后续会结合UI加入视频播放等功能.</p>\n<p>需要注意是, 使用该模块播放音乐时是在后台异步播放的, 在脚本结束后会自动结束播放, 因此可能需要插入诸如<code>sleep()</code>的语句来使脚本保持运行. 例如：</p>\n<pre><code>//播放音乐\nmedia.playMusic(&quot;/sdcard/1.mp3&quot;);\n//让音乐播放完\nsleep(media.getMusicDuration());\n</code></pre>",
-      "methods": [
+      "desc": "<hr>\n<p><code>media</code> 提供音频文件播放和媒体库扫描能力. 音频由脚本运行时持有的 Android <code>MediaPlayer</code> 播放, 脚本运行时回收时会断开媒体扫描连接并释放播放器.</p>\n<p>播放在后台进行. 如果主脚本没有其他未完成任务, 需要使用定时器, 事件循环或其他方式让脚本保持运行.</p>\n<pre><code class=\"lang-js\">media.playMusic(&#39;/sdcard/Music/example.mp3&#39;);\nsleep(media.getMusicDuration());\n</code></pre>\n<p style=\"font: bold 1em sans-serif; color: #FF7043\">media</p>\n\n",
+      "modules": [
         {
-          "textRaw": "media.scanFile(path)",
-          "type": "method",
-          "name": "scanFile",
-          "signatures": [
+          "textRaw": "[m] scanFile",
+          "name": "[m]_scanfile",
+          "methods": [
             {
-              "params": [
+              "textRaw": "scanFile(path)",
+              "type": "method",
+              "name": "scanFile",
+              "signatures": [
                 {
-                  "textRaw": "`path` {string} 媒体文件路径 ",
-                  "name": "path",
-                  "type": "string",
-                  "desc": "媒体文件路径"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "path"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>扫描路径path的媒体文件, 将它加入媒体库中；或者如果该文件以及被删除, 则通知媒体库移除该文件.</p>\n<p>媒体库包括相册、音乐库等, 因此该函数可以用于把某个图片文件加入相册.</p>\n<pre><code>//请求截图\nrequestScreenCapture(false);\n//截图\nvar im = captureScreen();\nvar path = &quot;/sdcard/screenshot.png&quot;;\n//保存图片\nim.saveTo(path);\n//把图片加入相册\nmedia.scanFile(path);\n</code></pre>"
-        },
-        {
-          "textRaw": "media.playMusic(path[, volume, looping])",
-          "type": "method",
-          "name": "playMusic",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "`path` {string} 音乐文件路径 ",
-                  "name": "path",
-                  "type": "string",
-                  "desc": "音乐文件路径"
+                  "params": [
+                    {
+                      "textRaw": "**path** { [string](dataTypes#string) } - 媒体文件路径 ",
+                      "name": "**path**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "媒体文件路径"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`volume` {number} 播放音量, 为0~1的浮点数, 默认为1 ",
-                  "name": "volume",
-                  "type": "number",
-                  "desc": "播放音量, 为0~1的浮点数, 默认为1",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求 Android 媒体扫描器扫描文件. MIME 类型根据文件名推断, 无法识别时使用通配类型.</p>\n<p>文件新增或发生变化时, 扫描可使相册或媒体库更新对应记录. 文件已经删除时, 扫描可使媒体库移除旧记录.</p>\n<pre><code class=\"lang-js\">requestScreenCapture(false);\n\nlet image = captureScreen();\nlet path = &#39;/sdcard/Pictures/AutoJs6/screenshot.png&#39;;\nimage.saveTo(path);\nmedia.scanFile(path);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] scanFile"
+        },
+        {
+          "textRaw": "[m] playMusic",
+          "name": "[m]_playmusic",
+          "methods": [
+            {
+              "textRaw": "playMusic(path)",
+              "type": "method",
+              "name": "playMusic",
+              "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 音频文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>以音量 <code>1</code> 播放一次音频文件.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "playMusic(path, volume)",
+              "type": "method",
+              "name": "playMusic",
+              "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 音频文件路径</li>\n<li><strong>volume</strong> { <a href=\"dataTypes#number\">number</a> } - 左右声道音量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>以指定音量播放一次音频文件. Android <code>MediaPlayer</code> 的常规音量范围为 <code>0..1</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "volume"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "playMusic(path, volume, looping)",
+              "type": "method",
+              "name": "playMusic",
+              "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 音频文件路径</li>\n<li><strong>volume</strong> { <a href=\"dataTypes#number\">number</a> } - 左右声道音量</li>\n<li><strong>looping</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否循环播放</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>停止并重置此前创建的播放器, 同步准备指定文件后开始播放. 路径不存在, 文件无法读取或音频格式不受支持时抛出异常.</p>\n<pre><code class=\"lang-js\">media.playMusic(&#39;/sdcard/Music/example.mp3&#39;, 0.8, true);\n\nsetTimeout(() =&gt; {\n    media.stopMusic();\n}, media.getMusicDuration() * 3);\n</code></pre>\n<p>使用系统应用打开媒体文件可改用 <a href=\"app#viewfile\">app.viewFile</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "volume"
+                    },
+                    {
+                      "name": "looping"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] playMusic"
+        },
+        {
+          "textRaw": "[m] musicSeekTo",
+          "name": "[m]_musicseekto",
+          "methods": [
+            {
+              "textRaw": "musicSeekTo(msec)",
+              "type": "method",
+              "name": "musicSeekTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**msec** { [number](dataTypes#number) } - 目标播放位置, 单位为 ms ",
+                      "name": "**msec**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "目标播放位置, 单位为 ms"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "`looping` {boolean} 是否循环播放, 如果looping为`true`则循环播放, 默认为`false` ",
-                  "name": "looping",
-                  "type": "boolean",
-                  "desc": "是否循环播放, 如果looping为`true`则循环播放, 默认为`false`",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "msec"
+                    }
+                  ]
                 }
-              ]
-            },
+              ],
+              "desc": "<p>调整当前播放器的播放位置. 播放器尚未创建时不执行操作.</p>\n<pre><code class=\"lang-js\">media.playMusic(&#39;/sdcard/Music/example.mp3&#39;);\nmedia.musicSeekTo(30e3);\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] musicSeekTo"
+        },
+        {
+          "textRaw": "[m] pauseMusic",
+          "name": "[m]_pausemusic",
+          "methods": [
             {
-              "params": [
+              "textRaw": "pauseMusic()",
+              "type": "method",
+              "name": "pauseMusic",
+              "signatures": [
                 {
-                  "name": "path"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "name": "volume",
-                  "optional": true
+                  "params": []
+                }
+              ],
+              "desc": "<p>暂停当前播放器. 播放器尚未创建时不执行操作.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] pauseMusic"
+        },
+        {
+          "textRaw": "[m] resumeMusic",
+          "name": "[m]_resumemusic",
+          "methods": [
+            {
+              "textRaw": "resumeMusic()",
+              "type": "method",
+              "name": "resumeMusic",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "name": "looping",
-                  "optional": true
+                  "params": []
                 }
-              ]
+              ],
+              "desc": "<p>启动或继续当前播放器. 播放器尚未创建时不执行操作. 播放器处于不允许启动的状态时, Android <code>MediaPlayer</code> 会抛出状态异常.</p>\n"
             }
           ],
-          "desc": "<p>播放音乐文件path. 该函数不会显示任何音乐播放界面. 如果文件不存在或者文件不是受支持的音乐格式, 则抛出<code>UncheckedIOException</code>异常.</p>\n<pre><code>//播放音乐\nmedia.playMusic(&quot;/sdcard/1.mp3&quot;);\n//让音乐播放完\nsleep(media.getMusicDuration());\n</code></pre><p>如果要循环播放音乐, 则使用looping参数：</p>\n<pre><code>\n</code></pre><p>//传递第三个参数为true以循环播放音乐\nmedia.playMusic(&quot;/sdcard/1.mp3&quot;, 1, true);\n//等待三次播放的时间\nsleep(media.getMusicDuration() * 3);</p>\n<pre><code>\n</code></pre><p>如果要使用音乐播放器播放音乐, 调用<code>app.viewFile(path)</code>函数.</p>\n"
+          "type": "module",
+          "displayName": "[m] resumeMusic"
         },
         {
-          "textRaw": "media.musicSeekTo(msec)",
-          "type": "method",
-          "name": "musicSeekTo",
-          "signatures": [
+          "textRaw": "[m] stopMusic",
+          "name": "[m]_stopmusic",
+          "methods": [
             {
-              "params": [
+              "textRaw": "stopMusic()",
+              "type": "method",
+              "name": "stopMusic",
+              "signatures": [
                 {
-                  "textRaw": "`msec` {number} 毫秒数, 表示音乐进度 ",
-                  "name": "msec",
-                  "type": "number",
-                  "desc": "毫秒数, 表示音乐进度"
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
                 {
-                  "name": "msec"
+                  "params": []
                 }
-              ]
+              ],
+              "desc": "<p>停止当前播放器. 播放器尚未创建时不执行操作. 停止后如需再次播放, 调用 <a href=\"#m-playmusic\">media.playMusic</a> 重新设置数据源.</p>\n"
             }
           ],
-          "desc": "<p>把当前播放进度调整到时间msec的位置. 如果当前没有在播放音乐, 则调用函数没有任何效果.</p>\n<p>例如, 要把音乐调到1分钟的位置, 为<code>media.musicSeekTo(60 * 1000)</code>.</p>\n<pre><code>//播放音乐\nmedia.playMusic(&quot;/sdcard/1.mp3&quot;);\n//调整到30秒的位置\nmedia.musicSeekTo(30 * 1000);\n//等待音乐播放完成\nsleep(media.getMusicDuration() - 30 * 1000);\n</code></pre>"
+          "type": "module",
+          "displayName": "[m] stopMusic"
         },
         {
-          "textRaw": "media.pauseMusic()",
-          "type": "method",
-          "name": "pauseMusic",
-          "desc": "<p>暂停音乐播放. 如果当前没有在播放音乐, 则调用函数没有任何效果.</p>\n",
-          "signatures": [
+          "textRaw": "[m] isMusicPlaying",
+          "name": "[m]_ismusicplaying",
+          "methods": [
             {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "media.resumeMusic()",
-          "type": "method",
-          "name": "resumeMusic",
-          "desc": "<p>继续音乐播放. 如果当前没有播放过音乐, 则调用该函数没有任何效果.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "media.stopMusic()",
-          "type": "method",
-          "name": "stopMusic",
-          "desc": "<p>停止音乐播放. 如果当前没有在播放音乐, 则调用函数没有任何效果.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "media.isMusicPlaying()",
-          "type": "method",
-          "name": "isMusicPlaying",
-          "signatures": [
-            {
-              "params": [
+              "textRaw": "isMusicPlaying()",
+              "type": "method",
+              "name": "isMusicPlaying",
+              "signatures": [
                 {
-                  "textRaw": "返回 {boolean} ",
-                  "name": "返回",
-                  "type": "boolean"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否正在播放 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否正在播放"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": []
+              ],
+              "desc": "<p>播放器尚未创建时返回 <code>false</code>.</p>\n"
             }
           ],
-          "desc": "<p>返回当前是否正在播放音乐.</p>\n"
+          "type": "module",
+          "displayName": "[m] isMusicPlaying"
         },
         {
-          "textRaw": "media.getMusicDuration()",
-          "type": "method",
-          "name": "getMusicDuration",
-          "signatures": [
+          "textRaw": "[m] getMusicDuration",
+          "name": "[m]_getmusicduration",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getMusicDuration()",
+              "type": "method",
+              "name": "getMusicDuration",
+              "signatures": [
                 {
-                  "textRaw": "返回 {number} ",
-                  "name": "返回",
-                  "type": "number"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 音频时长, 单位为 ms ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "音频时长, 单位为 ms"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": []
+              ],
+              "desc": "<p>播放器尚未创建时返回 <code>0</code>.</p>\n"
             }
           ],
-          "desc": "<p>返回当前音乐的时长. 单位毫秒.</p>\n"
+          "type": "module",
+          "displayName": "[m] getMusicDuration"
         },
         {
-          "textRaw": "media.getMusicCurrentPosition()",
-          "type": "method",
-          "name": "getMusicCurrentPosition",
-          "signatures": [
+          "textRaw": "[m] getMusicCurrentPosition",
+          "name": "[m]_getmusiccurrentposition",
+          "methods": [
             {
-              "params": [
+              "textRaw": "getMusicCurrentPosition()",
+              "type": "method",
+              "name": "getMusicCurrentPosition",
+              "signatures": [
                 {
-                  "textRaw": "返回 {number} ",
-                  "name": "返回",
-                  "type": "number"
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 当前播放位置, 单位为 ms ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "当前播放位置, 单位为 ms"
+                    }
+                  ]
+                },
+                {
+                  "params": []
                 }
-              ]
-            },
-            {
-              "params": []
+              ],
+              "desc": "<p>播放器尚未创建时返回 <code>-1</code>.</p>\n"
             }
           ],
-          "desc": "<p>返回当前音乐的播放进度(已经播放的时间), 单位毫秒.</p>\n"
+          "type": "module",
+          "displayName": "[m] getMusicCurrentPosition"
         }
       ],
       "type": "module",

@@ -2,7 +2,7 @@ window.$docsify = {
     name: 'AutoJs6',
     repo: 'SuperMonster003/AutoJs6-Documentation',
     notFoundPage: true,
-    loadSidebar: true,
+    loadSidebar: 'sidebar.md',
     subMaxLevel: 3,
     coverpage: true,
     loadNavbar: false,

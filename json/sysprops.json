@@ -1,0 +1,159 @@
+{
+  "source": "..\\api\\sysprops.md",
+  "modules": [
+    {
+      "textRaw": "系统属性 (Sysprops)",
+      "name": "系统属性_(sysprops)",
+      "desc": "<p>sysprops 模块用于读取 Android 系统属性.</p>\n<p><code>sysprops</code> 与 <code>$sysprops</code> 指向同一个模块对象.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">sysprops</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] sysprops",
+          "name": "[@]_sysprops",
+          "methods": [
+            {
+              "textRaw": "sysprops(propName, defaultValue?)",
+              "type": "method",
+              "name": "sysprops",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>propName</strong> { <a href=\"dataTypes#string\">string</a> } - 系统属性名称</li>\n<li><strong>[ defaultValue = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 属性不存在或无法读取时使用的默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 系统属性值或默认值</li>\n</ul>\n<p>读取字符串形式的系统属性.</p>\n<p>此调用与 <a href=\"#m-get\">sysprops.get(propName, defaultValue?)</a> 等价.</p>\n<pre><code class=\"lang-js\">let model = sysprops(&#39;ro.product.model&#39;, &#39;unknown&#39;);\nconsole.log(model);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "propName"
+                    },
+                    {
+                      "name": "defaultValue?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] sysprops"
+        },
+        {
+          "textRaw": "[m] get",
+          "name": "[m]_get",
+          "methods": [
+            {
+              "textRaw": "get(propName, defaultValue?)",
+              "type": "method",
+              "name": "get",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>propName</strong> { <a href=\"dataTypes#string\">string</a> } - 系统属性名称</li>\n<li><strong>[ defaultValue = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 属性不存在或无法读取时使用的默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 系统属性值或默认值</li>\n</ul>\n<p>读取字符串形式的系统属性.</p>\n<p>从 AutoJs6 6.8.0 起, 此方法优先调用 Android 系统属性接口. 接口调用抛出异常时使用 <code>getprop</code> 命令读取; 接口方法不可用时返回 <code>defaultValue</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "propName"
+                    },
+                    {
+                      "name": "defaultValue?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] get"
+        },
+        {
+          "textRaw": "[m] getInt",
+          "name": "[m]_getint",
+          "methods": [
+            {
+              "textRaw": "getInt(propName, defaultValue?)",
+              "type": "method",
+              "name": "getInt",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>propName</strong> { <a href=\"dataTypes#string\">string</a> } - 系统属性名称</li>\n<li><strong>[ defaultValue = <code>null</code> ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 无法得到整数时使用的默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 整数属性值或默认值</li>\n</ul>\n<p>读取整数形式的系统属性.</p>\n<p>从 AutoJs6 6.8.0 起, 省略 <code>defaultValue</code> 且无法得到整数时返回 <code>null</code>.</p>\n<pre><code class=\"lang-js\">let apiLevel = sysprops.getInt(&#39;ro.build.version.sdk&#39;);\nconsole.log(apiLevel);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "propName"
+                    },
+                    {
+                      "name": "defaultValue?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getInt"
+        },
+        {
+          "textRaw": "[m] getBoolean",
+          "name": "[m]_getboolean",
+          "methods": [
+            {
+              "textRaw": "getBoolean(propName, defaultValue?)",
+              "type": "method",
+              "name": "getBoolean",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>propName</strong> { <a href=\"dataTypes#string\">string</a> } - 系统属性名称</li>\n<li><strong>[ defaultValue = <code>null</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 无法得到布尔值时使用的默认值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 布尔属性值或默认值</li>\n</ul>\n<p>读取布尔形式的系统属性.</p>\n<p>系统属性值 <code>1</code>, <code>true</code>, <code>y</code>, <code>yes</code> 和 <code>on</code> 解析为 <code>true</code>.<br>\n系统属性值 <code>0</code>, <code>false</code>, <code>n</code>, <code>no</code> 和 <code>off</code> 解析为 <code>false</code>.</p>\n<p>从 AutoJs6 6.8.0 起, 省略 <code>defaultValue</code> 且无法得到布尔值时返回 <code>null</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "propName"
+                    },
+                    {
+                      "name": "defaultValue?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getBoolean"
+        },
+        {
+          "textRaw": "[m] getAll",
+          "name": "[m]_getall",
+          "methods": [
+            {
+              "textRaw": "getAll(keyFilter?, valueFilter?)",
+              "type": "method",
+              "name": "getAll",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload [1-3]/4</code></strong></p>\n<ul>\n<li><strong>[ keyFilter = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a> } - 属性名称过滤器</li>\n<li><strong>[ valueFilter = <code>null</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a> } - 属性值过滤器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 系统属性名称和值组成的对象</li>\n</ul>\n<p>读取全部系统属性, 并按需过滤结果.</p>\n<p>此方法通过 <code>getprop</code> 命令读取系统属性列表.</p>\n<p>字符串过滤器执行区分大小写的包含匹配.<br>\n正则表达式过滤器调用其 <code>test</code> 方法.<br>\n<code>null</code> 和 <code>undefined</code> 不限制对应字段.</p>\n<pre><code class=\"lang-js\">let productProperties = sysprops.getAll(/^ro\\.product\\./);\nObject.keys(productProperties).forEach((key) =&gt; {\n    console.log(key + &#39;: &#39; + productProperties[key]);\n});\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "keyFilter?"
+                    },
+                    {
+                      "name": "valueFilter?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "getAll(options)",
+              "type": "method",
+              "name": "getAll",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>key: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a>;</li>\n<li>keys: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a>;</li>\n<li>value: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a>;</li>\n<li>values: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#null\">null</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 系统属性名称和值组成的对象</li>\n</ul>\n<p>使用对象形式指定过滤器.</p>\n<p><code>key</code> 与 <code>keys</code> 互为别名, <code>value</code> 与 <code>values</code> 互为别名.</p>\n<pre><code class=\"lang-js\">let versionProperties = sysprops.getAll({\n    key: /^ro\\.build\\.version\\./,\n    value: /\\S+/,\n});\nconsole.log(versionProperties);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] getAll"
+        }
+      ],
+      "type": "module",
+      "displayName": "系统属性 (Sysprops)"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 API 级别 (API Level) 是对 Android 平台版本 (SDK Platforms) 提供的框架 API 修订版进行唯一标识的整数值 (SDK INT).
 
 Android 平台提供一种框架 API, 应用可利用它与底层 Android 系统进行交互.
-每个 Android 平台版本恰好支持一个 API 级别, 但隐含对所有早期 API 级别的支持.  
+每个 Android 平台版本恰好支持一个 API 级别, 但隐含对所有早期 API 级别的支持.<br>
 Android 平台初始版本提供的是 API 级别 1, 后续版本的 API 级别则依次增加.
 
 下表列出了各 Android 平台版本所支持的 API 级别:
@@ -11,7 +11,7 @@ Android 平台初始版本提供的是 API 级别 1, 后续版本的 API 级别�
 | API 级别 | 版本名称 (Version Name)        | 版本代号 (Version Code)    | 版本号 (Version Number) | 内部代号 (Internal Codename) | 发行日期         |
 |:-------|:---------------------------|:-----------------------|:---------------------|:-------------------------|:-------------|
 | 35 (?) | Android 15                 | VANILLA_ICE_CREAM      | 15                   | Vanilla Ice Cream        | Q3, 2024 (?) |
-| 34     | Android 14                 | UPSIDE_DOWN_CAKE       | 14                   | Upside Down Cake         | Q3, 2023 (?) |
+| 34     | Android 14                 | UPSIDE_DOWN_CAKE       | 14                   | Upside Down Cake         | Oct 4, 2023  |
 | 33     | Android 13                 | TIRAMISU               | 13                   | Tiramisu                 | Aug 15, 2022 |
 | 32     | Android 12L                | S_V2                   | 12.1                 | Snow Cone v2             | Mar 7, 2022  |
 | 31     | Android 12                 | S                      | 12                   | Snow Cone                | Oct 4, 2021  |
@@ -52,9 +52,9 @@ Android 平台初始版本提供的是 API 级别 1, 后续版本的 API 级别�
 - API 30 (11) [R]
 - Android API 30 (11) [R]
 
-上述示例中,  
-`30` 表示 `API 级别`,  
-`11` 表示 `版本号 (Version Number)`,  
+上述示例中,<br>
+`30` 表示 `API 级别`,<br>
+`11` 表示 `版本号 (Version Number)`,<br>
 `R` 表示 `版本代号 (Version Code)`.
 
 查询当前设备的 API 级别:

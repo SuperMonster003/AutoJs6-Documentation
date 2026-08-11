@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask` 和 `ai.stream` 还可通过显式选择器调用兼容的本机文本生成插件.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 还可通过显式选择器调用兼容的本机文本生成插件.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -53,10 +53,12 @@ ai('Reply with OK').then((text) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
-- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiResponse](#airesponse)
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginChatOptions](#aipluginchatoptions) } - 请求选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiResponse](#airesponse) 或 [AiPluginChatResponse](#aipluginchatresponse)
 
 发起非流式请求, 并返回提供商无关的完整响应.
+
+提供 [AiPluginChatOptions](#aipluginchatoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 `user` 纯文本消息.
 
 返回对象中的 `message` 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.
 
@@ -68,6 +70,23 @@ let messages = [
 ai.chat(messages).then((response) => {
     console.log(response.text);
     console.log(response.usage);
+});
+```
+
+```js
+ai.chat('Reply with OK', {
+    plugin: {
+        component: {
+            packageName: 'io.github.supermonster003.autojs6.plugin.ai.text',
+            className: 'io.github.supermonster003.autojs6.plugin.ai.text.provider.AiTextProviderService',
+        },
+        providerId: 'autojs6.local.text',
+        // Replace this value with the exact model ID shown by the plugin.
+        modelId: 'litertlm.0123456789abcdef0123456789abcdef',
+    },
+}).then((response) => {
+    console.log(response.route, response.provider, response.model);
+    console.log(response.text);
 });
 ```
 
@@ -269,7 +288,7 @@ AiPluginAskOptions 用于为可调用模块对象 `ai` 和 [ask](#m-ask) 显式�
 
 插件路由当前仅接受一个字符串提示词, 或仅包含 `role: 'user'` 和字符串 `content` 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出或用量报告.
 
-选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 不支持 `plugin`. [stream](#m-stream) 使用独立的 [AiPluginStreamOptions](#aipluginstreamoptions) 重载.
+选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. [chat](#m-chat) 和 [stream](#m-stream) 分别使用独立的 [AiPluginChatOptions](#aipluginchatoptions) 与 [AiPluginStreamOptions](#aipluginstreamoptions) 重载.
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
@@ -290,6 +309,19 @@ ai.ask('Reply with OK', {
 });
 ```
 
+### AiPluginChatOptions
+
+AiPluginChatOptions 用于为 [chat](#m-chat) 显式选择兼容的本机文本生成插件. 此路由默认关闭.
+
+- **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
+- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
+
+`timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
+
+输入约束和选项隔离与 [AiPluginAskOptions](#aipluginaskoptions) 相同. 成功时只返回 [AiPluginChatResponse](#aipluginchatresponse) 列出的 12 个属性, 其中 `route` 固定为 `'plugin'`, `provider` 和 `model` 精确回显选择器中的固定 ID.
+
+失败时 Promise 拒绝值包含 `name`, `message`, `route: 'plugin'` 和稳定的 `code`. `code` 为 `INVALID_REQUEST`, `PROVIDER_NOT_FOUND`, `PROVIDER_REJECTED`, `BUSY`, `FUSED`, `CANCELLED`, `TIMED_OUT`, `BINDER_DIED`, `MODEL_NOT_FOUND`, `MODEL_CAPABILITY_MISMATCH`, `SESSION_REJECTED`, `PROVIDER_FAILED` 或 `INTERNAL_FAILURE`. 成功或失败均不会回退到已保存档案, 默认提供商或 HTTP 请求.
+
 ### AiPluginStreamOptions
 
 AiPluginStreamOptions 用于为 [stream](#m-stream) 显式选择兼容的本机文本生成插件. 此路由默认关闭.
@@ -299,7 +331,7 @@ AiPluginStreamOptions 用于为 [stream](#m-stream) 显式选择兼容的本机�
 
 `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
-输入约束和选项隔离与 [AiPluginAskOptions](#aipluginaskoptions) 相同. 插件流不会发出用量或工具调用事件, 也不会回退到已保存档案, 默认提供商或 HTTP 请求. `chat` 仍不支持 `plugin`.
+输入约束和选项隔离与 [AiPluginAskOptions](#aipluginaskoptions) 相同. 插件流不会发出用量或工具调用事件, 也不会回退到已保存档案, 默认提供商或 HTTP 请求. [chat](#m-chat) 使用独立的 [AiPluginChatOptions](#aipluginchatoptions) 重载.
 
 ### AiPluginSelection
 
@@ -331,6 +363,23 @@ AiPluginStreamOptions 用于为 [stream](#m-stream) 显式选择兼容的本机�
 - **profile** { [AiProfileReference](#aiprofilereference) } - 本次请求使用的档案信息
 - **provider** { [string](dataTypes#string) } - 提供商 ID
 - **model** { [string](dataTypes#string) } - 模型名称
+
+### AiPluginChatResponse
+
+本机插件 `chat` 成功响应包含以下 12 个属性:
+
+- **text** { [string](dataTypes#string) } - 生成文本
+- **reasoning** { `''` } - 固定为空字符串
+- **toolCalls** { `[]` } - 固定为空数组
+- **usage** { [null](dataTypes#null) } - 固定为 `null`
+- **finishReason** { [null](dataTypes#null) } - 固定为 `null`
+- **message** { [null](dataTypes#null) } - 固定为 `null`
+- **error** { [null](dataTypes#null) } - 固定为 `null`
+- **raw** { [null](dataTypes#null) } - 固定为 `null`
+- **profile** { [null](dataTypes#null) } - 固定为 `null`
+- **route** { `'plugin'` } - 本机插件路由标识
+- **provider** { [string](dataTypes#string) } - 选择器中的精确插件提供商 ID
+- **model** { [string](dataTypes#string) } - 选择器中的精确插件模型 ID
 
 ### AiStreamChunk
 

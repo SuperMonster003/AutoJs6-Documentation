@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai` 和 `ai.ask` 还可通过显式选择器调用兼容的本机文本生成插件.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask` 和 `ai.stream` 还可通过显式选择器调用兼容的本机文本生成插件.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -78,10 +78,12 @@ ai.chat(messages).then((response) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginStreamOptions](#aipluginstreamoptions) } - 请求选项
 - <ins>**returns**</ins> { [AiStream](#aistream) } - 流式请求对象
 
 发起流式请求并立即返回事件对象.
+
+提供 [AiPluginStreamOptions](#aipluginstreamoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 `user` 纯文本消息.
 
 ```js
 let stream = ai.stream('Count from 1 to 3');
@@ -95,6 +97,31 @@ stream
     })
     .on('error', (error) => {
         console.error(error.message);
+    });
+```
+
+```js
+let stream = ai.stream('Reply with OK', {
+    plugin: {
+        component: {
+            packageName: 'io.github.supermonster003.autojs6.plugin.ai.text',
+            className: 'io.github.supermonster003.autojs6.plugin.ai.text.provider.AiTextProviderService',
+        },
+        providerId: 'autojs6.local.text',
+        // Replace this value with the exact model ID shown by the plugin.
+        modelId: 'litertlm.0123456789abcdef0123456789abcdef',
+    },
+});
+
+stream
+    .on('open', ({ route, provider, model }) => {
+        console.log(route, provider, model);
+    })
+    .on('delta', (text) => {
+        console.log(text);
+    })
+    .on('done', (response) => {
+        console.log(response.text);
     });
 ```
 
@@ -233,16 +260,16 @@ AiRequest 是至少包含 `messages` 属性的可进行 JSON 序列化对象. `m
 
 ### AiPluginAskOptions
 
-AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 仅可调用模块对象 `ai` 和 [ask](#m-ask) 支持.
+AiPluginAskOptions 用于为可调用模块对象 `ai` 和 [ask](#m-ask) 显式选择兼容的本机文本生成插件. 此路由默认关闭.
 
 - **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
 - **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
 
 `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
-插件路由当前仅接受一个字符串提示词, 或仅包含 `role: 'user'` 和字符串 `content` 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出, 用量报告或流式输出.
+插件路由当前仅接受一个字符串提示词, 或仅包含 `role: 'user'` 和字符串 `content` 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出或用量报告.
 
-选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 和 `stream` 不支持 `plugin`.
+选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 不支持 `plugin`. [stream](#m-stream) 使用独立的 [AiPluginStreamOptions](#aipluginstreamoptions) 重载.
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
@@ -262,6 +289,17 @@ ai.ask('Reply with OK', {
     console.log(text);
 });
 ```
+
+### AiPluginStreamOptions
+
+AiPluginStreamOptions 用于为 [stream](#m-stream) 显式选择兼容的本机文本生成插件. 此路由默认关闭.
+
+- **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
+- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
+
+`timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
+
+输入约束和选项隔离与 [AiPluginAskOptions](#aipluginaskoptions) 相同. 插件流不会发出用量或工具调用事件, 也不会回退到已保存档案, 默认提供商或 HTTP 请求. `chat` 仍不支持 `plugin`.
 
 ### AiPluginSelection
 
@@ -303,6 +341,44 @@ ai.ask('Reply with OK', {
 - **finishReason** { [string](dataTypes#string) | [null](dataTypes#null) } - 完成原因
 - **done** { [boolean](dataTypes#boolean) } - 是否为终止块
 - **raw** { [any](dataTypes#any) } - 提供商原始数据
+
+### AiPluginStreamMetadata
+
+- **route** { `'plugin'` } - 本机插件路由标识
+- **provider** { [string](dataTypes#string) } - 插件提供商 ID
+- **model** { [string](dataTypes#string) } - 插件模型 ID
+
+### AiPluginStreamChunk
+
+- **text** { [string](dataTypes#string) } - 当前增量文本
+- **reasoning** { `''` } - 固定为空字符串
+- **toolCalls** { `[]` } - 固定为空数组
+- **usage** { [null](dataTypes#null) } - 固定为 `null`
+- **finishReason** { [null](dataTypes#null) } - 固定为 `null`
+- **done** { `false` } - 固定为 `false`
+- **raw** { [null](dataTypes#null) } - 固定为 `null`
+
+### AiPluginStreamResponse
+
+- **text** { [string](dataTypes#string) } - 聚合后的完整生成文本
+- **reasoning** { `''` } - 固定为空字符串
+- **toolCalls** { `[]` } - 固定为空数组
+- **usage** { [null](dataTypes#null) } - 固定为 `null`
+- **finishReason** { [null](dataTypes#null) } - 固定为 `null`
+- **message** { [null](dataTypes#null) } - 固定为 `null`
+- **error** { [null](dataTypes#null) } - 固定为 `null`
+- **raw** { [null](dataTypes#null) } - 固定为 `null`
+- **profile** { [null](dataTypes#null) } - 固定为 `null`
+- **route** { `'plugin'` } - 本机插件路由标识
+- **provider** { [string](dataTypes#string) } - 插件提供商 ID
+- **model** { [string](dataTypes#string) } - 插件模型 ID
+
+### AiPluginStreamError
+
+- **name** { [string](dataTypes#string) } - 异常类名称
+- **message** { [string](dataTypes#string) } - 错误消息
+- **route** { `'plugin'` } - 本机插件路由标识
+- **code** { [string](dataTypes#string) } - 插件路由错误代码
 
 ### AiToolCall
 
@@ -407,13 +483,15 @@ AiStream 是单次流式 AI 请求的事件对象.
 
 - <ins>**returns**</ins> { [AiStream](#aistream) } - 当前流对象
 
-取消网络请求并终止流.
+取消当前请求传输并终止流.
 
 重复调用不会再次取消. 成功接受取消操作后触发 `cancelled` 事件.
 
 ## AiStream 事件
 
-事件监听器参数:
+事件监听器参数取决于请求路由.
+
+HTTP 提供商流事件:
 
 | 事件 | 监听器参数 | 说明 |
 | --- | --- | --- |
@@ -428,15 +506,27 @@ AiStream 是单次流式 AI 请求的事件对象.
 
 `delta` 的 `text` 参数对应 `chunk.text`. 当事件只包含推理增量时, `text` 可能为空字符串, 此时使用 `chunk.reasoning`.
 
+本机插件流事件:
+
+| 事件 | 监听器参数 | 说明 |
+| --- | --- | --- |
+| `open` | `metadata` { [AiPluginStreamMetadata](#aipluginstreammetadata) } | 插件请求已打开 |
+| `delta` | `text` { [string](dataTypes#string) }, `chunk` { [AiPluginStreamChunk](#aipluginstreamchunk) } | 收到文本增量 |
+| `chunk` | `chunk` { [AiPluginStreamChunk](#aipluginstreamchunk) } | 收到插件响应块 |
+| `done` | `response` { [AiPluginStreamResponse](#aipluginstreamresponse) } | 插件流正常完成 |
+| `error` | `error` { [AiPluginStreamError](#aipluginstreamerror) } | 插件流失败 |
+| `cancelled` | 无 | 插件流被调用方取消 |
+
+插件流的 `delta` 文本对应 `chunk.text`. 插件流不发出 `toolCall` 或 `usage` 事件, 并以 `done`, `error` 或 `cancelled` 中的一个事件终止.
+
 ### AiStreamError
 
 - **name** { [string](dataTypes#string) } - 异常类名称
 - **message** { [string](dataTypes#string) } - 错误消息
-- **[ route ]** { `'plugin'` } - 插件路由错误标识
 - **[ provider ]** { [string](dataTypes#string) } - 提供商 ID
 - **[ statusCode ]** { [number](dataTypes#number) } - HTTP 状态码
 - **[ code ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商错误代码
 - **[ type ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商错误类型
 - **[ requestId ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商请求 ID
 
-只有 HTTP 提供商错误包含 `provider`, `statusCode`, `type` 和 `requestId`. 插件路由错误包含 `route: 'plugin'` 和 `code`.
+只有 HTTP 提供商错误包含 `provider`, `statusCode`, `type` 和 `requestId`. 本机插件流使用 [AiPluginStreamError](#aipluginstreamerror).

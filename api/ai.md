@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai` 和 `ai.ask` 还可通过显式选择器调用兼容的本机文本生成插件.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -19,7 +19,7 @@ ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流�
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为生成文本
 
 发起文本生成请求.
@@ -39,10 +39,12 @@ ai('Reply with OK').then((text) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [string](dataTypes#string) 类型的生成文本
 
 发起非流式请求, 并仅返回响应中的文本结果.
+
+提供 [AiPluginAskOptions](#aipluginaskoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 `user` 纯文本消息.
 
 ## [m] chat
 
@@ -229,6 +231,53 @@ AiRequest 是至少包含 `messages` 属性的可进行 JSON 序列化对象. `m
 
 `headers`, `callbacks`, `signal`, `abortSignal`, `returnRaw`, `raw` 以及 `onText` 等回调属性不会转发到提供商.
 
+### AiPluginAskOptions
+
+AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 仅可调用模块对象 `ai` 和 [ask](#m-ask) 支持.
+
+- **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
+- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
+
+`timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
+
+插件路由当前仅接受一个字符串提示词, 或仅包含 `role: 'user'` 和字符串 `content` 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出, 用量报告或流式输出.
+
+选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 和 `stream` 不支持 `plugin`.
+
+选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
+
+```js
+ai.ask('Reply with OK', {
+    plugin: {
+        component: {
+            packageName: 'io.github.supermonster003.autojs6.plugin.ai.text',
+            className: 'io.github.supermonster003.autojs6.plugin.ai.text.provider.AiTextProviderService',
+        },
+        providerId: 'autojs6.local.text',
+        // Replace this value with the exact model ID shown by the plugin.
+        modelId: 'litertlm.0123456789abcdef0123456789abcdef',
+    },
+    timeout: 30000,
+}).then((text) => {
+    console.log(text);
+});
+```
+
+### AiPluginSelection
+
+- **component** { [AiPluginComponent](#aiplugincomponent) } - Android 服务组件
+- **providerId** { [string](dataTypes#string) } - 插件声明的精确提供商 ID
+- **modelId** { [string](dataTypes#string) } - 插件列出的精确模型 ID
+
+`providerId` 和 `modelId` 必须匹配 `^[a-z0-9][a-z0-9._-]{0,127}$`. 主机不会自动选择其他提供商或模型.
+
+### AiPluginComponent
+
+- **packageName** { [string](dataTypes#string) } - 插件 APK 的精确 Android 包名
+- **className** { [string](dataTypes#string) } - 插件文本生成服务的精确类名
+
+主机仅绑定此处指定的组件, 不使用隐式服务选择.
+
 ## 返回对象
 
 ### AiResponse
@@ -383,10 +432,11 @@ AiStream 是单次流式 AI 请求的事件对象.
 
 - **name** { [string](dataTypes#string) } - 异常类名称
 - **message** { [string](dataTypes#string) } - 错误消息
+- **[ route ]** { `'plugin'` } - 插件路由错误标识
 - **[ provider ]** { [string](dataTypes#string) } - 提供商 ID
 - **[ statusCode ]** { [number](dataTypes#number) } - HTTP 状态码
 - **[ code ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商错误代码
 - **[ type ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商错误类型
 - **[ requestId ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 提供商请求 ID
 
-只有 HTTP 提供商错误包含 `provider`, `statusCode`, `code`, `type` 和 `requestId`.
+只有 HTTP 提供商错误包含 `provider`, `statusCode`, `type` 和 `requestId`. 插件路由错误包含 `route: 'plugin'` 和 `code`.

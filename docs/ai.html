@@ -292,6 +292,9 @@
 <li><span class="stability_undefined"><a href="#ai_aimessage">AiMessage</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_airequest">AiRequest</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aioptions">AiOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_aipluginaskoptions">AiPluginAskOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_aipluginselection">AiPluginSelection</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_aiplugincomponent">AiPluginComponent</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#ai_1">返回对象</a></span><ul>
@@ -325,7 +328,7 @@
 
         <div id="apicontent">
             <h1>人工智能 (AI)<span><a class="mark" href="#ai_ai" id="ai_ai">#</a></span></h1>
-<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求.</p>
+<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code> 和 <code>ai.ask</code> 还可通过显式选择器调用兼容的本机文本生成插件.</p>
 <p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>
 <p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>
 <hr>
@@ -337,7 +340,7 @@
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
 <ul>
 <li><strong>input</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="#ai_aimessage">AiMessage</a></span> | <span class="type"><a href="#ai_aimessage">AiMessage</a><a href="dataTypes.html#datatypes_array">[]</a></span> | <span class="type"><a href="#ai_airequest">AiRequest</a></span> } - 提示词, 消息或完整请求</li>
-<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#ai_aioptions">AiOptions</a></span> } - 请求选项</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#ai_aioptions">AiOptions</a></span> | <span class="type"><a href="#ai_aipluginaskoptions">AiPluginAskOptions</a></span> } - 请求选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为生成文本</li>
 </ul>
 <p>发起文本生成请求.</p>
@@ -351,10 +354,11 @@
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
 <ul>
 <li><strong>input</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="#ai_aimessage">AiMessage</a></span> | <span class="type"><a href="#ai_aimessage">AiMessage</a><a href="dataTypes.html#datatypes_array">[]</a></span> | <span class="type"><a href="#ai_airequest">AiRequest</a></span> } - 提示词, 消息或完整请求</li>
-<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#ai_aioptions">AiOptions</a></span> } - 请求选项</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#ai_aioptions">AiOptions</a></span> | <span class="type"><a href="#ai_aipluginaskoptions">AiPluginAskOptions</a></span> } - 请求选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="dataTypes.html#datatypes_string">string</a> 类型的生成文本</li>
 </ul>
 <p>发起非流式请求, 并仅返回响应中的文本结果.</p>
+<p>提供 <a href="#ai_aipluginaskoptions">AiPluginAskOptions</a> 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 <code>user</code> 纯文本消息.</p>
 <h2>[m] chat<span><a class="mark" href="#ai_m_chat" id="ai_m_chat">#</a></span></h2>
 <h3>chat(input, options?)<span><a class="mark" href="#ai_chat_input_options" id="ai_chat_input_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -500,6 +504,44 @@ stream
 </ul>
 <p>提供商原生请求属性也会保留. 当原生属性与提供商无关别名同时存在时, 原生属性优先.</p>
 <p><code>headers</code>, <code>callbacks</code>, <code>signal</code>, <code>abortSignal</code>, <code>returnRaw</code>, <code>raw</code> 以及 <code>onText</code> 等回调属性不会转发到提供商.</p>
+<h3>AiPluginAskOptions<span><a class="mark" href="#ai_aipluginaskoptions" id="ai_aipluginaskoptions">#</a></span></h3>
+<p>AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 仅可调用模块对象 <code>ai</code> 和 <a href="#ai_m_ask">ask</a> 支持.</p>
+<ul>
+<li><strong>plugin</strong> { <span class="type"><a href="#ai_aipluginselection">AiPluginSelection</a></span> } - 必需的插件, 提供商和模型固定选择器</li>
+<li><strong>[ timeout = <code>120000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 整次请求的绝对超时, 单位为毫秒</li>
+</ul>
+<p><code>timeout</code> 也接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数.</p>
+<p>插件路由当前仅接受一个字符串提示词, 或仅包含 <code>role: &#39;user&#39;</code> 和字符串 <code>content</code> 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出, 用量报告或流式输出.</p>
+<p>选项中除 <code>plugin</code> 和超时兼容属性外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与 <code>plugin</code> 混用. <code>chat</code> 和 <code>stream</code> 不支持 <code>plugin</code>.</p>
+<p>选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.</p>
+<pre><code class="lang-js">ai.ask(&#39;Reply with OK&#39;, {
+    plugin: {
+        component: {
+            packageName: &#39;io.github.supermonster003.autojs6.plugin.ai.text&#39;,
+            className: &#39;io.github.supermonster003.autojs6.plugin.ai.text.provider.AiTextProviderService&#39;,
+        },
+        providerId: &#39;autojs6.local.text&#39;,
+        // Replace this value with the exact model ID shown by the plugin.
+        modelId: &#39;litertlm.0123456789abcdef0123456789abcdef&#39;,
+    },
+    timeout: 30000,
+}).then((text) =&gt; {
+    console.log(text);
+});
+</code></pre>
+<h3>AiPluginSelection<span><a class="mark" href="#ai_aipluginselection" id="ai_aipluginselection">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>component</strong> { <span class="type"><a href="#ai_aiplugincomponent">AiPluginComponent</a></span> } - Android 服务组件</li>
+<li><strong>providerId</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件声明的精确提供商 ID</li>
+<li><strong>modelId</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件列出的精确模型 ID</li>
+</ul>
+</div><p><code>providerId</code> 和 <code>modelId</code> 必须匹配 <code>^[a-z0-9][a-z0-9._-]{0,127}$</code>. 主机不会自动选择其他提供商或模型.</p>
+<h3>AiPluginComponent<span><a class="mark" href="#ai_aiplugincomponent" id="ai_aiplugincomponent">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>packageName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件 APK 的精确 Android 包名</li>
+<li><strong>className</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件文本生成服务的精确类名</li>
+</ul>
+</div><p>主机仅绑定此处指定的组件, 不使用隐式服务选择.</p>
 <h2>返回对象<span><a class="mark" href="#ai_1" id="ai_1">#</a></span></h2>
 <h3>AiResponse<span><a class="mark" href="#ai_airesponse" id="ai_airesponse">#</a></span></h3>
 <div class="signature"><ul>
@@ -675,13 +717,14 @@ stream
 <div class="signature"><ul>
 <li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 异常类名称</li>
 <li><strong>message</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 错误消息</li>
+<li><strong>[ route ]</strong> { <code>&#39;plugin&#39;</code> } - 插件路由错误标识</li>
 <li><strong>[ provider ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 提供商 ID</li>
 <li><strong>[ statusCode ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - HTTP 状态码</li>
 <li><strong>[ code ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 提供商错误代码</li>
 <li><strong>[ type ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 提供商错误类型</li>
 <li><strong>[ requestId ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 提供商请求 ID</li>
 </ul>
-</div><p>只有 HTTP 提供商错误包含 <code>provider</code>, <code>statusCode</code>, <code>code</code>, <code>type</code> 和 <code>requestId</code>.</p>
+</div><p>只有 HTTP 提供商错误包含 <code>provider</code>, <code>statusCode</code>, <code>type</code> 和 <code>requestId</code>. 插件路由错误包含 <code>route: &#39;plugin&#39;</code> 和 <code>code</code>.</p>
 
         </div>
     </div>

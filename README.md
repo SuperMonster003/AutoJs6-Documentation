@@ -99,11 +99,12 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/07/25</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/12</p>
 
 - `新增` AI, TTS, Power Manager, Settings, Work Manager, SysProps, SQLite, Zip 等 16 个模块文档
 - `更新` 根据 AutoJs6 6.8.0 Augmentable API 修订模块签名, 重载, 默认值, 版本和运行条件
 - `更新` 补充双开应用, 异步截图, 引擎事件, OCR Rapid 模式和插件运行条件
+- `更新` 刷新引擎 API 文档, 补充 Python Runtime 插件的文件启动和失败关闭行为
 - `优化` 统一 API 参考格式, 内部类型链接和存疑内容处理
 - `优化` 全量生成离线 HTML, JSON 和纯本地搜索索引
 

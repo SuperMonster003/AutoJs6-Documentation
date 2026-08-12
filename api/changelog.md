@@ -2,12 +2,13 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/07/25</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/12</p>
 
 - `新增` [AI](https://docs.autojs6.com/#/ai), [TTS](https://docs.autojs6.com/#/tts), [电源管理](https://docs.autojs6.com/#/powerManager), [应用设置](https://docs.autojs6.com/#/settings), [持久化任务](https://docs.autojs6.com/#/workManager) 和 [系统属性](https://docs.autojs6.com/#/sysprops) 文档
 - `新增` [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [MediaInfo](https://docs.autojs6.com/#/mediainfo), [MIME](https://docs.autojs6.com/#/mime), [NanoID](https://docs.autojs6.com/#/nanoid), [Pinyin](https://docs.autojs6.com/#/pinyin), [Pinyin4j](https://docs.autojs6.com/#/pinyin4j), [SQLite](https://docs.autojs6.com/#/sqlite) 和 [Zip](https://docs.autojs6.com/#/zip) 文档
 - `更新` 根据 AutoJs6 6.8.0 Augmentable API 修订全局对象, 应用, 自动化, 设备, 引擎, 图像, HTTP, 任务, UI 和工具模块的签名, 重载, 默认值及运行条件
 - `更新` 补充双开应用, 异步截图, 引擎生命周期事件, WorkManager 兼容接口, OCR Rapid 模式和 WebSocket 字节串等现行 API
+- `更新` 刷新 [引擎](https://docs.autojs6.com/#/engines) API, 说明本地 Python 文件通过独立 Python Runtime 插件启动, 且失败时不会回退到 JavaScript
 - `更新` 标明条码, 二维码, OCR, OpenCC 和 OpenCV 相关功能的插件运行条件
 - `更新` 完成条码, 二维码, 记录器, 上下文, Shell 和运行时章节, 并按 AutoJs6 6.8.0 源码修订签名, 返回值及运行条件
 - `优化` 统一 Markdown API 参考格式, 内部类型链接和版本标签, 并将无法从源码确认的旧内容移入 [存疑内容](https://docs.autojs6.com/#/suspicious)

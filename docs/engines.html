@@ -439,12 +439,14 @@ console.log(execution.getId());
 </code></pre>
 <h2>[m] execScriptFile<span><a class="mark" href="#engines_m_execscriptfile" id="engines_m_execscriptfile">#</a></span></h2>
 <h3>execScriptFile(path, config?)<span><a class="mark" href="#engines_execscriptfile_path_config" id="engines_execscriptfile_path_config">#</a></span></h3>
-<div class="signature"><ul>
-<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - JavaScript 文件路径</li>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - JavaScript 或 Python 文件路径</li>
 <li><strong>[ config = {} ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> } - <a href="#engines">执行配置</a></li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#engines_scriptexecution">ScriptExecution</a></span> } - 脚本执行对象</li>
 </ul>
-</div><p>在新引擎中执行 JavaScript 文件. 相对路径按当前脚本运行时路径解析.</p>
+<p>在新引擎中执行本地脚本文件. 相对路径按当前脚本运行时路径解析.</p>
+<p>从 AutoJs6 6.8.0 开始, 本地 <code>.py</code> 文件由独立的 Python Runtime 插件执行. 插件不可用或已禁用时, 启动将以失败结束, 且不会回退到 JavaScript 引擎.</p>
 <pre><code class="lang-js">engines.execScriptFile(&#39;./worker.js&#39;, {
     workingDirectory: files.cwd(),
     delay: 100,
@@ -453,12 +455,14 @@ console.log(execution.getId());
 </code></pre>
 <h2>[m] execAutoFile<span><a class="mark" href="#engines_m_execautofile" id="engines_m_execautofile">#</a></span></h2>
 <h3>execAutoFile(path, config?)<span><a class="mark" href="#engines_execautofile_path_config" id="engines_execautofile_path_config">#</a></span></h3>
-<div class="signature"><ul>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - JavaScript 文件路径</li>
 <li><strong>[ config = {} ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> } - <a href="#engines">执行配置</a></li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#engines_scriptexecution">ScriptExecution</a></span> } - 脚本执行对象</li>
 </ul>
-</div><p>以自动化脚本模式在新引擎中执行 JavaScript 文件. 此模式会在执行前确保无障碍服务已启动.</p>
+<p>以自动化脚本模式在新引擎中执行 JavaScript 文件. 此方法保留 JavaScript 和原有自动化脚本语义, 并在执行前确保无障碍服务已启动.</p>
+<p>此方法拒绝 Python 文件, 不会将 <code>.py</code> 文件交给 Python Runtime 插件. 执行 Python 文件时使用 <a href="#engines_m_execscriptfile">execScriptFile</a>.</p>
 <h2>[m] myEngine<span><a class="mark" href="#engines_m_myengine" id="engines_m_myengine">#</a></span></h2>
 <h3>myEngine()<span><a class="mark" href="#engines_myengine" id="engines_myengine">#</a></span></h3>
 <div class="signature"><ul>

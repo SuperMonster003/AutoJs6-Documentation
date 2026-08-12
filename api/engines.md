@@ -52,11 +52,15 @@ console.log(execution.getId());
 
 ### execScriptFile(path, config?)
 
-- **path** { [string](dataTypes#string) } - JavaScript 文件路径
+**`[6.8.0]`**
+
+- **path** { [string](dataTypes#string) } - JavaScript 或 Python 文件路径
 - **[ config = {} ]** { [object](dataTypes#object) } - [执行配置](#执行配置)
 - <ins>**returns**</ins> { [ScriptExecution](#scriptexecution) } - 脚本执行对象
 
-在新引擎中执行 JavaScript 文件. 相对路径按当前脚本运行时路径解析.
+在新引擎中执行本地脚本文件. 相对路径按当前脚本运行时路径解析.
+
+从 AutoJs6 6.8.0 开始, 本地 `.py` 文件由独立的 Python Runtime 插件执行. 插件不可用或已禁用时, 启动将以失败结束, 且不会回退到 JavaScript 引擎.
 
 ```js
 engines.execScriptFile('./worker.js', {
@@ -70,11 +74,15 @@ engines.execScriptFile('./worker.js', {
 
 ### execAutoFile(path, config?)
 
+**`[6.8.0]`**
+
 - **path** { [string](dataTypes#string) } - JavaScript 文件路径
 - **[ config = {} ]** { [object](dataTypes#object) } - [执行配置](#执行配置)
 - <ins>**returns**</ins> { [ScriptExecution](#scriptexecution) } - 脚本执行对象
 
-以自动化脚本模式在新引擎中执行 JavaScript 文件. 此模式会在执行前确保无障碍服务已启动.
+以自动化脚本模式在新引擎中执行 JavaScript 文件. 此方法保留 JavaScript 和原有自动化脚本语义, 并在执行前确保无障碍服务已启动.
+
+此方法拒绝 Python 文件, 不会将 `.py` 文件交给 Python Runtime 插件. 执行 Python 文件时使用 [execScriptFile](#m-execscriptfile).
 
 ## [m] myEngine
 

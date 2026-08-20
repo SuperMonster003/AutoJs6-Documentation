@@ -250,10 +250,10 @@ AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路�
 ai.ask('Reply with OK', {
     plugin: {
         component: {
-            packageName: 'io.github.supermonster003.autojs6.plugin.ai.text',
-            className: 'io.github.supermonster003.autojs6.plugin.ai.text.provider.AiTextProviderService',
+            packageName: 'io.github.supermonster003.autojs6.plugin.ondeviceai',
+            className: 'io.github.supermonster003.autojs6.plugin.ondeviceai.provider.OnDeviceAiProviderService',
         },
-        providerId: 'autojs6.local.text',
+        providerId: 'autojs6.on-device-ai',
         // Replace this value with the exact model ID shown by the plugin.
         modelId: 'litertlm.0123456789abcdef0123456789abcdef',
     },

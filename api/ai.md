@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件, `ai.models` 用于枚举插件公开的模型.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -19,7 +19,7 @@ ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流�
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginOptions](#aipluginoptions) } - 请求选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为生成文本
 
 发起文本生成请求.
@@ -39,12 +39,12 @@ ai('Reply with OK').then((text) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginOptions](#aipluginoptions) } - 请求选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [string](dataTypes#string) 类型的生成文本
 
 发起非流式请求, 并仅返回响应中的文本结果.
 
-提供 [AiPluginAskOptions](#aipluginaskoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由接受纯文本 `system`, `user` 和 `assistant` 消息历史, 保留消息顺序并要求最后一条消息为 `user`.
+提供 [AiPluginOptions](#aipluginoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由接受纯文本 `system`, `user` 和 `assistant` 消息历史, 保留消息顺序并要求最后一条消息为 `user`.
 
 ## [m] chat
 
@@ -53,12 +53,12 @@ ai('Reply with OK').then((text) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
-- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiResponse](#airesponse)
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginOptions](#aipluginoptions) } - 请求选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiResponse](#airesponse) 或 [AiPluginResponse](#aipluginresponse)
 
 发起非流式请求, 并返回提供商无关的完整响应.
 
-返回对象中的 `message` 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.
+云端返回对象中的 `message` 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.
 
 本机插件路由会把精确的输入, 输出和总 token 数写入 `response.usage`, 并在 `response.usage.raw.durationMillis` 中提供插件实测生成耗时.
 
@@ -80,10 +80,12 @@ ai.chat(messages).then((response) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginOptions](#aipluginoptions) } - 请求选项
 - <ins>**returns**</ins> { [AiStream](#aistream) } - 流式请求对象
 
 发起流式请求并立即返回事件对象.
+
+使用插件路由时, `open`, `delta`, `chunk`, `usage` 和 `done` 事件分别使用插件专用的元数据, 增量, 用量及响应对象.
 
 ```js
 let stream = ai.stream('Count from 1 to 3');
@@ -98,6 +100,28 @@ stream
     .on('error', (error) => {
         console.error(error.message);
     });
+```
+
+## [m] models
+
+### models(options?)
+
+**`6.8.0`** **`Async`**
+
+- **[ options = `{}` ]** { [AiPluginModelListOptions](#aipluginmodellistoptions) | [null](dataTypes#null) } - 插件模型枚举选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiPluginModel](#aipluginmodel) 数组
+
+枚举本机文本生成插件公开的模型目录.
+
+不传选项或传入 `null` 时选择 AutoJs6 官方 On-Device AI 插件. 可通过 `options.plugin` 固定官方插件提供商, 或显式指定第三方插件组件和提供商. 此方法只读取模型目录, 不创建生成会话, 也不接受采样或最大输出 token 选项.
+
+```js
+ai.models().then((models) => {
+    models.forEach((model) => {
+        console.log(model.modelId, model.displayName);
+        console.log(model.capabilityIds);
+    });
+});
 ```
 
 ## [m] profiles
@@ -233,66 +257,60 @@ AiRequest 是至少包含 `messages` 属性的可进行 JSON 序列化对象. `m
 
 `headers`, `callbacks`, `signal`, `abortSignal`, `returnRaw`, `raw` 以及 `onText` 等回调属性不会转发到提供商.
 
-### AiPluginAskOptions
+### AiPluginOptions
 
-AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 模块对象 `ai` 及 [ask](#m-ask), [chat](#m-chat), [stream](#m-stream) 均支持该选项.
+AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 模块对象 `ai` 及 [ask](#m-ask), [chat](#m-chat), [stream](#m-stream) 均支持该选项.
 
-- **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
-- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
+- **plugin** { [AiPluginSelector](#aipluginselector) } - 必需的插件选择器
+- **[ timeout ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
 - **[ temperature ]** { [number](dataTypes#number) } - 非负有限采样温度
 - **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
 - **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
 - **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的最大输出 token 数
 
-`timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
+[ai](#ai), [ask](#m-ask) 和 [chat](#m-chat) 的默认超时为 `120000` 毫秒, [stream](#m-stream) 的默认超时为 `600000` 毫秒. `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
 插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具, 推理或结构化输出.
 
 选项中除 `plugin`, 超时兼容属性及上述采样/输出长度属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用.
 
-该插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. `durationMillis` 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. `ai.stream` 会在完成前发出累计 `usage` 事件, `done` 响应中也包含同一最终用量.
+官方 On-Device AI 插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. `durationMillis` 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. `ai.stream` 会在完成前发出累计 `usage` 事件, `done` 响应中也包含同一最终用量.
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
-```js
-let messages = [
-    { role: 'system', content: 'Answer with one short sentence.' },
-    { role: 'user', content: 'Introduce AutoJs6.' },
-];
+### AiPluginModelListOptions
 
-ai.chat(messages, {
-    plugin: {
-        component: {
-            packageName: 'io.github.supermonster003.autojs6.plugin.ondeviceai',
-            className: 'io.github.supermonster003.autojs6.plugin.ondeviceai.provider.OnDeviceAiProviderService',
-        },
-        providerId: 'autojs6.on-device-ai',
-        // Replace this value with the exact model ID shown by the plugin.
-        modelId: 'litertlm.0123456789abcdef0123456789abcdef',
-    },
-    timeout: 30000,
-    temperature: 0.7,
-    topK: 40,
-    topP: 0.9,
-    maxTokens: 128,
-}).then((response) => {
-    console.log(response.text);
-    console.log(
-        response.usage.inputTokens,
-        response.usage.outputTokens,
-        response.usage.totalTokens,
-        response.usage.raw.durationMillis,
-    );
-});
-```
+- **[ plugin = `true` ]** { [AiPluginSelector](#aipluginselector) } - 插件选择器
+- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 模型枚举的绝对超时, 单位为毫秒
+
+`timeout` 接受与 [AiPluginOptions](#aipluginoptions) 相同的兼容名称和取值范围. `temperature`, `topK`, `topP` 和 `maxTokens` 只控制生成, 不能用于模型枚举.
+
+模型枚举只使用选择器中的组件和 `providerId`. 为保持选择器结构一致而提供的 `modelId` 会被校验, 但不会过滤返回的模型目录.
+
+### AiPluginSelector
+
+AiPluginSelector 接受以下三种形式:
+
+- `true`: 选择 AutoJs6 官方 On-Device AI 插件, 使用其固定提供商 ID, 并在只有一个可用模型时自动选择该模型.
+- [AiOfficialPluginSelection](#aiofficialpluginselection): 选择官方插件, 可固定 `providerId` 或 `modelId`.
+- [AiPluginSelection](#aipluginselection): 通过精确 Android 服务组件选择插件, 必须同时固定 `providerId`, 可固定 `modelId`.
+
+`false`, `null`, 字符串及包含未知字段的对象均不是有效选择器.
+
+### AiOfficialPluginSelection
+
+- **[ providerId = `'autojs6.on-device-ai'` ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 官方插件提供商 ID
+- **[ modelId ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 插件列出的精确模型 ID
+
+此对象不能包含 `component`. 空对象 `{}` 与 `true` 等价. `providerId` 为 `null` 时使用官方默认值. 省略 `modelId` 或传入 `null` 时仅在所选提供商恰有一个符合要求的模型时自动选择; 多模型歧义会使请求失败.
 
 ### AiPluginSelection
 
 - **component** { [AiPluginComponent](#aiplugincomponent) } - Android 服务组件
 - **providerId** { [string](dataTypes#string) } - 插件声明的精确提供商 ID
-- **modelId** { [string](dataTypes#string) } - 插件列出的精确模型 ID
+- **[ modelId ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 插件列出的精确模型 ID
 
-`providerId` 和 `modelId` 必须匹配 `^[a-z0-9][a-z0-9._-]{0,127}$`. 主机不会自动选择其他提供商或模型.
+`providerId` 和非空的 `modelId` 必须匹配 `^[a-z0-9][a-z0-9._-]{0,127}$`. 省略 `modelId` 或传入 `null` 时仅允许插件为固定提供商解析出一个符合要求的模型. 主机不会改选其他组件或提供商.
 
 ### AiPluginComponent
 
@@ -301,9 +319,87 @@ ai.chat(messages, {
 
 主机仅绑定此处指定的组件, 不使用隐式服务选择.
 
+### 本机插件完整路由示例
+
+以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起多轮对话. `plugin` 对象省略 `component`, 因此仍固定选择官方插件.
+
+```js
+let messages = [
+    { role: 'system', content: 'Answer with one short sentence.' },
+    { role: 'assistant', content: 'Understood.' },
+    { role: 'user', content: 'Introduce AutoJs6.' },
+];
+
+ai.models({ timeout: 30000 }).then((models) => {
+    if (models.length === 0) {
+        throw new Error('No local AI model is available');
+    }
+    let selectedModel = models[0];
+    return ai.chat(messages, {
+        plugin: { modelId: selectedModel.modelId },
+        timeout: 30000,
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.9,
+        maxTokens: 128,
+    });
+}).then((response) => {
+    console.log(response.route, response.provider, response.model);
+    console.log(response.text);
+    console.log(
+        response.usage.inputTokens,
+        response.usage.outputTokens,
+        response.usage.totalTokens,
+    );
+    if (response.usage.raw !== null) {
+        console.log(response.usage.raw.durationMillis);
+    }
+}).catch((error) => {
+    console.error(error.route, error.code, error.message);
+});
+```
+
+需要固定精确组件时, 使用完整选择器. 以下组件是 AutoJs6 官方插件的当前服务组件; 第三方兼容插件应替换为自己的包名, 类名和提供商 ID.
+
+```js
+let plugin = {
+    component: {
+        packageName: 'io.github.supermonster003.autojs6.plugin.ondeviceai',
+        className: 'io.github.supermonster003.autojs6.plugin.ondeviceai.provider.OnDeviceAiProviderService',
+    },
+    providerId: 'autojs6.on-device-ai',
+    modelId: 'litertlm.0123456789abcdef0123456789abcdef',
+};
+
+let stream = ai.stream(messages, {
+    plugin: plugin,
+    timeout: 60000,
+    maxTokens: 128,
+});
+
+stream
+    .on('open', (metadata) => {
+        console.log(metadata.route, metadata.provider, metadata.model);
+    })
+    .on('delta', (text) => {
+        console.log(text);
+    })
+    .on('usage', (usage) => {
+        console.log(usage.inputTokens, usage.outputTokens, usage.totalTokens);
+    })
+    .on('done', (response) => {
+        console.log(response.text, response.usage);
+    })
+    .on('error', (error) => {
+        console.error(error.route, error.code, error.message);
+    });
+```
+
 ## 返回对象
 
 ### AiResponse
+
+AiResponse 是 HTTP 提供商路由的完整响应.
 
 - **text** { [string](dataTypes#string) } - 生成文本
 - **reasoning** { [string](dataTypes#string) } - 推理文本, 不可用时为空字符串
@@ -317,7 +413,26 @@ ai.chat(messages, {
 - **provider** { [string](dataTypes#string) } - 提供商 ID
 - **model** { [string](dataTypes#string) } - 模型名称
 
+### AiPluginResponse
+
+AiPluginResponse 是本机插件 [chat](#m-chat) 和 [stream](#m-stream) 完成时的响应.
+
+- **text** { [string](dataTypes#string) } - 生成文本
+- **reasoning** { `''` } - 空字符串; 本机文本插件路由不公开推理文本
+- **toolCalls** { [Array](dataTypes#array) } - 空数组; 本机文本插件路由不支持工具调用
+- **usage** { [AiPluginUsage](#aipluginusage) } - 插件最终用量
+- **finishReason** { [null](dataTypes#null) } - 固定为 `null`
+- **message** { [null](dataTypes#null) } - 固定为 `null`
+- **error** { [null](dataTypes#null) } - 固定为 `null`; 失败通过 Promise 拒绝或 `error` 事件报告
+- **raw** { [null](dataTypes#null) } - 固定为 `null`
+- **profile** { [null](dataTypes#null) } - 固定为 `null`; 插件路由不使用云端配置档案
+- **route** { `'plugin'` } - 插件路由标识
+- **provider** { [string](dataTypes#string) } - 实际提供商 ID
+- **model** { [string](dataTypes#string) | [null](dataTypes#null) } - 已知的模型 ID; 流式简写选择器可能为 `null`
+
 ### AiStreamChunk
+
+AiStreamChunk 是 HTTP 提供商路由的增量对象.
 
 - **text** { [string](dataTypes#string) } - 当前增量文本
 - **reasoning** { [string](dataTypes#string) } - 当前增量推理文本
@@ -326,6 +441,32 @@ ai.chat(messages, {
 - **finishReason** { [string](dataTypes#string) | [null](dataTypes#null) } - 完成原因
 - **done** { [boolean](dataTypes#boolean) } - 是否为终止块
 - **raw** { [any](dataTypes#any) } - 提供商原始数据
+
+### AiPluginStreamMetadata
+
+- **route** { `'plugin'` } - 插件路由标识
+- **provider** { [string](dataTypes#string) } - 提供商 ID
+- **model** { [string](dataTypes#string) | [null](dataTypes#null) } - 选择器中的模型 ID; 简写自动选模时为 `null`
+
+### AiPluginStreamChunk
+
+- **text** { [string](dataTypes#string) } - 当前文本增量
+- **reasoning** { `''` } - 空字符串
+- **toolCalls** { [Array](dataTypes#array) } - 空数组
+- **usage** { [null](dataTypes#null) } - 固定为 `null`; 用量通过独立 `usage` 事件报告
+- **finishReason** { [null](dataTypes#null) } - 固定为 `null`
+- **done** { `false` } - 固定为 `false`; 正常完成通过 `done` 事件报告
+- **raw** { [null](dataTypes#null) } - 固定为 `null`
+
+### AiPluginModel
+
+- **modelId** { [string](dataTypes#string) } - 可用于插件选择器的稳定模型 ID
+- **displayName** { [string](dataTypes#string) } - 面向用户的模型名称
+- **capabilityIds** { [string](dataTypes#string)[[]](dataTypes#array) } - 模型能力 ID
+- **maximumContextBytes** { [number](dataTypes#number) } - 最大上下文字节数
+- **maximumOutputBytes** { [number](dataTypes#number) } - 最大输出字节数
+
+模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming` 和 `usage` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
 
 ### AiToolCall
 
@@ -343,7 +484,18 @@ ai.chat(messages, {
 - **totalTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - token 总数
 - **reasoningTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 推理 token 数
 - **cachedInputTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 缓存输入 token 数
-- **raw** { [Object](dataTypes#object) | [null](dataTypes#null) } - 提供商原始用量数据; 本机插件路由包含非负的 `durationMillis`
+- **raw** { [Object](dataTypes#object) | [null](dataTypes#null) } - 提供商原始用量数据
+
+### AiPluginUsage
+
+- **inputTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 输入 token 数
+- **outputTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 输出 token 数
+- **totalTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - token 总数
+- **reasoningTokens** { [null](dataTypes#null) } - 固定为 `null`
+- **cachedInputTokens** { [null](dataTypes#null) } - 固定为 `null`
+- **raw** { [Object](dataTypes#object) | [null](dataTypes#null) } - 插件原始用量; 提供耗时时包含非负的 `durationMillis`
+
+协议要求 `inputTokens`, `outputTokens` 和 `totalTokens` 至少有一个非空. 官方 On-Device AI 插件会返回精确的输入, 输出和总 token 数, 并在 `raw.durationMillis` 中返回实测生成耗时.
 
 ### AiProviderError
 
@@ -430,7 +582,7 @@ AiStream 是单次流式 AI 请求的事件对象.
 
 - <ins>**returns**</ins> { [AiStream](#aistream) } - 当前流对象
 
-取消网络请求并终止流.
+取消当前请求并终止流.
 
 重复调用不会再次取消. 成功接受取消操作后触发 `cancelled` 事件.
 
@@ -440,16 +592,18 @@ AiStream 是单次流式 AI 请求的事件对象.
 
 | 事件 | 监听器参数 | 说明 |
 | --- | --- | --- |
-| `open` | `profile` { [AiProfileReference](#aiprofilereference) } | 请求已打开 |
-| `delta` | `text` { [string](dataTypes#string) }, `chunk` { [AiStreamChunk](#aistreamchunk) } | 收到文本或推理增量 |
-| `chunk` | `chunk` { [AiStreamChunk](#aistreamchunk) } | 收到提供商响应块 |
-| `toolCall` | `toolCall` { [AiToolCall](#aitoolcall) } | 收到工具调用或工具调用增量 |
-| `usage` | `usage` { [AiUsage](#aiusage) } | 收到用量信息 |
-| `done` | `response` { [AiResponse](#airesponse) } | 流正常完成 |
+| `open` | `metadata` { [AiProfileReference](#aiprofilereference) 或 [AiPluginStreamMetadata](#aipluginstreammetadata) } | 请求已打开 |
+| `delta` | `text` { [string](dataTypes#string) }, `chunk` { [AiStreamChunk](#aistreamchunk) 或 [AiPluginStreamChunk](#aipluginstreamchunk) } | 收到文本或推理增量 |
+| `chunk` | `chunk` { [AiStreamChunk](#aistreamchunk) 或 [AiPluginStreamChunk](#aipluginstreamchunk) } | 收到提供商响应块 |
+| `toolCall` | `toolCall` { [AiToolCall](#aitoolcall) } | HTTP 提供商路由收到工具调用或工具调用增量 |
+| `usage` | `usage` { [AiUsage](#aiusage) 或 [AiPluginUsage](#aipluginusage) } | 收到用量信息 |
+| `done` | `response` { [AiResponse](#airesponse) 或 [AiPluginResponse](#aipluginresponse) } | 流正常完成 |
 | `error` | `error` { [AiStreamError](#aistreamerror) } | 流失败 |
 | `cancelled` | 无 | 流被调用方取消 |
 
 `delta` 的 `text` 参数对应 `chunk.text`. 当事件只包含推理增量时, `text` 可能为空字符串, 此时使用 `chunk.reasoning`.
+
+插件路由不会发出 `toolCall` 事件. 插件 `chunk.usage` 固定为 `null`; 最终累计用量通过 `usage` 事件发出, 并再次出现在 `done` 响应中.
 
 ### AiStreamError
 

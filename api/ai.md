@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件, `ai.models` 用于枚举插件公开的模型.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件. `ai.session` 用于复用插件的本机 Conversation, `ai.models` 用于枚举插件公开的模型.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -100,6 +100,39 @@ stream
     .on('error', (error) => {
         console.error(error.message);
     });
+```
+
+## [m] session
+
+### session(options?)
+
+**`6.8.0`** **`Async`**
+
+- **[ options = `{}` ]** { [AiPluginSessionOptions](#aipluginsessionoptions) | [null](dataTypes#null) } - 持久本机会话选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiSession](#aisession)
+
+规划并打开一个本机插件多轮会话. 不传选项或传入 `null` 时选择 AutoJs6 官方 On-Device AI 插件.
+
+会话固定插件, 提供商, 模型, 采样参数, 输出上限和超时. 第一次生成时创建插件的本机 Conversation, 后续轮次复用其上下文和 KV cache. 每次 [ask](#m-aisessionaskprompt), [chat](#m-aisessionchatprompt) 或 [stream](#m-aisessionstreamprompt) 只接收并发送当前的新用户提示词, 不需要重新传入完整消息历史.
+
+```js
+ai.session({
+    system: 'Remember facts from earlier turns.',
+    maxTokens: 128,
+}).then((session) => {
+    return session.ask('The project code is Orion.')
+        .then((text) => {
+            console.log(text);
+            return session.chat('What is the project code?');
+        })
+        .then((response) => {
+            console.log(response.text);
+            session.close();
+        }, (error) => {
+            session.close();
+            throw error;
+        });
+});
 ```
 
 ## [m] models
@@ -278,6 +311,24 @@ AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由�
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
+### AiPluginSessionOptions
+
+AiPluginSessionOptions 用于创建 [AiSession](#aisession). 它只支持本机插件路由, 并在省略 `plugin` 时选择 AutoJs6 官方 On-Device AI 插件.
+
+- **[ plugin = `true` ]** { [AiPluginSelector](#aipluginselector) } - 插件选择器
+- **[ system ]** { [string](dataTypes#string) } - 仅在创建 Conversation 时发送的非空系统指令
+- **[ timeout = `120000` ]** { [number](dataTypes#number) } - 会话规划及每轮生成的绝对超时, 单位为毫秒
+- **[ temperature ]** { [number](dataTypes#number) } - 非负有限采样温度
+- **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
+- **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
+- **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的每轮最大输出 token 数
+
+`timeout` 接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数. 采样参数, 输出上限和超时在会话创建后不能按轮次修改.
+
+会话轮次只接受一个非空字符串并将其作为 `user` 消息. `system` 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 `profile`, `provider`, `baseUrl`, `model`, `apiKey`, 工具, 推理, 结构化输出或其他云端提供商选项.
+
+同一会话一次只允许一个活动轮次. 并发轮次以 `BUSY` 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 [ai.session](#m-session).
+
 ### AiPluginModelListOptions
 
 - **[ plugin = `true` ]** { [AiPluginSelector](#aipluginselector) } - 插件选择器
@@ -321,7 +372,7 @@ AiPluginSelector 接受以下三种形式:
 
 ### 本机插件完整路由示例
 
-以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起多轮对话. `plugin` 对象省略 `component`, 因此仍固定选择官方插件.
+以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起带有完整历史的单次对话请求. `plugin` 对象省略 `component`, 因此仍固定选择官方插件. 需要让插件在多个请求之间保留上下文时使用 [ai.session](#m-session).
 
 ```js
 let messages = [
@@ -466,7 +517,7 @@ AiStreamChunk 是 HTTP 提供商路由的增量对象.
 - **maximumContextBytes** { [number](dataTypes#number) } - 最大上下文字节数
 - **maximumOutputBytes** { [number](dataTypes#number) } - 最大输出字节数
 
-模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming` 和 `usage` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
+模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming`, `usage` 和 `persistent-session` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
 
 ### AiToolCall
 
@@ -531,6 +582,79 @@ AiStreamChunk 是 HTTP 提供商路由的增量对象.
 
 - **id** { [string](dataTypes#string) } - 提供商 ID
 - **defaultBaseUrl** { [string](dataTypes#string) | [null](dataTypes#null) } - 默认服务基础 URL
+
+## AiSession
+
+AiSession 表示一个由本机插件持有的持久 Conversation. 会话不使用 HTTP 提供商档案, 也不会在路由失败时回退到云端. 会话保持打开时会占用插件的单会话准入和模型资源, 不再使用时应调用 [close](#m-aisessionclose).
+
+### [p#] AiSession#provider
+
+**`6.8.0`** **`READONLY`**
+
+- { [string](dataTypes#string) }
+
+固定的插件提供商 ID.
+
+### [p#] AiSession#model
+
+**`6.8.0`** **`READONLY`**
+
+- { [string](dataTypes#string) }
+
+会话规划阶段解析并固定的模型 ID.
+
+### [p#] AiSession#state
+
+**`6.8.0`** **`READONLY`**
+
+- { `'ready'` | `'closed'` }
+
+当前会话状态. `ready` 表示会话可接受轮次, 但同一时间仍只允许一个活动轮次.
+
+### [p#] AiSession#isClosed
+
+**`6.8.0`** **`READONLY`**
+
+- { [boolean](dataTypes#boolean) }
+
+会话是否已经关闭或因终止错误失效.
+
+### [m#] AiSession#ask(prompt)
+
+**`6.8.0`** **`Async`**
+
+- **prompt** { [string](dataTypes#string) } - 当前轮次的新用户提示词
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [string](dataTypes#string) 类型的生成文本
+
+在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并仅返回文本结果. 此方法不接受消息数组或按轮次生成选项.
+
+### [m#] AiSession#chat(prompt)
+
+**`6.8.0`** **`Async`**
+
+- **prompt** { [string](dataTypes#string) } - 当前轮次的新用户提示词
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiPluginResponse](#aipluginresponse)
+
+在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并返回插件完整响应.
+
+### [m#] AiSession#stream(prompt)
+
+**`6.8.0`** **`Async`**
+
+- **prompt** { [string](dataTypes#string) } - 当前轮次的新用户提示词
+- <ins>**returns**</ins> { [AiStream](#aistream) } - 当前轮次的流式请求对象
+
+在保留既有 Conversation 上下文的同时发起一个流式轮次. 事件形状与普通插件流式路由相同.
+
+调用返回对象的 `cancel()` 会关闭整个 AiSession, 因为已取消生成后的插件 KV cache 不会继续复用. `error` 事件, 超时或协议错误也会使会话进入 `closed` 状态.
+
+### [m#] AiSession#close()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+关闭会话, 取消活动轮次并释放插件 Conversation, Binder 连接和模型资源. 重复调用不会产生额外效果.
 
 ## AiStream
 

@@ -273,6 +273,10 @@
 <li><span class="stability_undefined"><a href="#ai_stream_input_options">stream(input, options?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#ai_m_session">[m] session</a></span><ul>
+<li><span class="stability_undefined"><a href="#ai_session_options">session(options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ai_m_models">[m] models</a></span><ul>
 <li><span class="stability_undefined"><a href="#ai_models_options">models(options?)</a></span></li>
 </ul>
@@ -298,6 +302,7 @@
 <li><span class="stability_undefined"><a href="#ai_airequest">AiRequest</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aioptions">AiOptions</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginoptions">AiPluginOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_aipluginsessionoptions">AiPluginSessionOptions</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginmodellistoptions">AiPluginModelListOptions</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginselector">AiPluginSelector</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aiofficialpluginselection">AiOfficialPluginSelection</a></span></li>
@@ -322,6 +327,17 @@
 <li><span class="stability_undefined"><a href="#ai_aiprovider">AiProvider</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#ai_aisession">AiSession</a></span><ul>
+<li><span class="stability_undefined"><a href="#ai_p_aisession_provider">[p#] AiSession#provider</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_p_aisession_model">[p#] AiSession#model</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_p_aisession_state">[p#] AiSession#state</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_p_aisession_isclosed">[p#] AiSession#isClosed</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_m_aisession_ask_prompt">[m#] AiSession#ask(prompt)</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_m_aisession_chat_prompt">[m#] AiSession#chat(prompt)</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_m_aisession_stream_prompt">[m#] AiSession#stream(prompt)</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_m_aisession_close">[m#] AiSession#close()</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#ai_aistream">AiStream</a></span><ul>
 <li><span class="stability_undefined"><a href="#ai_p_aistream_state">[p#] AiStream#state</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_p_aistream_isdone">[p#] AiStream#isDone</a></span></li>
@@ -342,7 +358,7 @@
 
         <div id="apicontent">
             <h1>人工智能 (AI)<span><a class="mark" href="#ai_ai" id="ai_ai">#</a></span></h1>
-<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code>, <code>ai.ask</code>, <code>ai.chat</code> 和 <code>ai.stream</code> 也可通过显式选择器调用兼容的本机文本生成插件, <code>ai.models</code> 用于枚举插件公开的模型.</p>
+<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code>, <code>ai.ask</code>, <code>ai.chat</code> 和 <code>ai.stream</code> 也可通过显式选择器调用兼容的本机文本生成插件. <code>ai.session</code> 用于复用插件的本机 Conversation, <code>ai.models</code> 用于枚举插件公开的模型.</p>
 <p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>
 <p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>
 <hr>
@@ -415,6 +431,33 @@ stream
     .on(&#39;error&#39;, (error) =&gt; {
         console.error(error.message);
     });
+</code></pre>
+<h2>[m] session<span><a class="mark" href="#ai_m_session" id="ai_m_session">#</a></span></h2>
+<h3>session(options?)<span><a class="mark" href="#ai_session_options" id="ai_session_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#ai_aipluginsessionoptions">AiPluginSessionOptions</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 持久本机会话选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="#ai_aisession">AiSession</a></li>
+</ul>
+<p>规划并打开一个本机插件多轮会话. 不传选项或传入 <code>null</code> 时选择 AutoJs6 官方 On-Device AI 插件.</p>
+<p>会话固定插件, 提供商, 模型, 采样参数, 输出上限和超时. 第一次生成时创建插件的本机 Conversation, 后续轮次复用其上下文和 KV cache. 每次 <a href="#ai_m_aisession_ask_prompt">ask</a>, <a href="#ai_m_aisession_chat_prompt">chat</a> 或 <a href="#ai_m_aisession_stream_prompt">stream</a> 只接收并发送当前的新用户提示词, 不需要重新传入完整消息历史.</p>
+<pre><code class="lang-js">ai.session({
+    system: &#39;Remember facts from earlier turns.&#39;,
+    maxTokens: 128,
+}).then((session) =&gt; {
+    return session.ask(&#39;The project code is Orion.&#39;)
+        .then((text) =&gt; {
+            console.log(text);
+            return session.chat(&#39;What is the project code?&#39;);
+        })
+        .then((response) =&gt; {
+            console.log(response.text);
+            session.close();
+        }, (error) =&gt; {
+            session.close();
+            throw error;
+        });
+});
 </code></pre>
 <h2>[m] models<span><a class="mark" href="#ai_m_models" id="ai_m_models">#</a></span></h2>
 <h3>models(options?)<span><a class="mark" href="#ai_models_options" id="ai_models_options">#</a></span></h3>
@@ -551,6 +594,20 @@ stream
 <p>选项中除 <code>plugin</code>, 超时兼容属性及上述采样/输出长度属性外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与 <code>plugin</code> 混用.</p>
 <p>官方 On-Device AI 插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. <code>durationMillis</code> 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. <code>ai.stream</code> 会在完成前发出累计 <code>usage</code> 事件, <code>done</code> 响应中也包含同一最终用量.</p>
 <p>选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.</p>
+<h3>AiPluginSessionOptions<span><a class="mark" href="#ai_aipluginsessionoptions" id="ai_aipluginsessionoptions">#</a></span></h3>
+<p>AiPluginSessionOptions 用于创建 <a href="#ai_aisession">AiSession</a>. 它只支持本机插件路由, 并在省略 <code>plugin</code> 时选择 AutoJs6 官方 On-Device AI 插件.</p>
+<ul>
+<li><strong>[ plugin = <code>true</code> ]</strong> { <span class="type"><a href="#ai_aipluginselector">AiPluginSelector</a></span> } - 插件选择器</li>
+<li><strong>[ system ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 仅在创建 Conversation 时发送的非空系统指令</li>
+<li><strong>[ timeout = <code>120000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 会话规划及每轮生成的绝对超时, 单位为毫秒</li>
+<li><strong>[ temperature ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非负有限采样温度</li>
+<li><strong>[ topK ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 正整数候选 token 数</li>
+<li><strong>[ topP ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>0..1</code> 范围内的有限核采样概率</li>
+<li><strong>[ maxTokens ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>1..2147483647</code> 范围内的每轮最大输出 token 数</li>
+</ul>
+<p><code>timeout</code> 接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数. 采样参数, 输出上限和超时在会话创建后不能按轮次修改.</p>
+<p>会话轮次只接受一个非空字符串并将其作为 <code>user</code> 消息. <code>system</code> 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code>, 工具, 推理, 结构化输出或其他云端提供商选项.</p>
+<p>同一会话一次只允许一个活动轮次. 并发轮次以 <code>BUSY</code> 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 <a href="#ai_m_session">ai.session</a>.</p>
 <h3>AiPluginModelListOptions<span><a class="mark" href="#ai_aipluginmodellistoptions" id="ai_aipluginmodellistoptions">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>[ plugin = <code>true</code> ]</strong> { <span class="type"><a href="#ai_aipluginselector">AiPluginSelector</a></span> } - 插件选择器</li>
@@ -586,7 +643,7 @@ stream
 </ul>
 </div><p>主机仅绑定此处指定的组件, 不使用隐式服务选择.</p>
 <h3>本机插件完整路由示例<span><a class="mark" href="#ai_1" id="ai_1">#</a></span></h3>
-<p>以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起多轮对话. <code>plugin</code> 对象省略 <code>component</code>, 因此仍固定选择官方插件.</p>
+<p>以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起带有完整历史的单次对话请求. <code>plugin</code> 对象省略 <code>component</code>, 因此仍固定选择官方插件. 需要让插件在多个请求之间保留上下文时使用 <a href="#ai_m_session">ai.session</a>.</p>
 <pre><code class="lang-js">let messages = [
     { role: &#39;system&#39;, content: &#39;Answer with one short sentence.&#39; },
     { role: &#39;assistant&#39;, content: &#39;Understood.&#39; },
@@ -721,7 +778,7 @@ stream
 <li><strong>maximumContextBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大上下文字节数</li>
 <li><strong>maximumOutputBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大输出字节数</li>
 </ul>
-</div><p>模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 <code>streaming</code> 和 <code>usage</code> 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.</p>
+</div><p>模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 <code>streaming</code>, <code>usage</code> 和 <code>persistent-session</code> 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.</p>
 <h3>AiToolCall<span><a class="mark" href="#ai_aitoolcall" id="ai_aitoolcall">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>index</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 工具调用序号</li>
@@ -783,7 +840,61 @@ stream
 <li><strong>id</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 提供商 ID</li>
 <li><strong>defaultBaseUrl</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 默认服务基础 URL</li>
 </ul>
-</div><h2>AiStream<span><a class="mark" href="#ai_aistream" id="ai_aistream">#</a></span></h2>
+</div><h2>AiSession<span><a class="mark" href="#ai_aisession" id="ai_aisession">#</a></span></h2>
+<p>AiSession 表示一个由本机插件持有的持久 Conversation. 会话不使用 HTTP 提供商档案, 也不会在路由失败时回退到云端. 会话保持打开时会占用插件的单会话准入和模型资源, 不再使用时应调用 <a href="#ai_m_aisession_close">close</a>.</p>
+<h3>[p#] AiSession#provider<span><a class="mark" href="#ai_p_aisession_provider" id="ai_p_aisession_provider">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+<p>固定的插件提供商 ID.</p>
+<h3>[p#] AiSession#model<span><a class="mark" href="#ai_p_aisession_model" id="ai_p_aisession_model">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+<p>会话规划阶段解析并固定的模型 ID.</p>
+<h3>[p#] AiSession#state<span><a class="mark" href="#ai_p_aisession_state" id="ai_p_aisession_state">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <code>&#39;ready&#39;</code> | <code>&#39;closed&#39;</code> }</li>
+</ul>
+<p>当前会话状态. <code>ready</code> 表示会话可接受轮次, 但同一时间仍只允许一个活动轮次.</p>
+<h3>[p#] AiSession#isClosed<span><a class="mark" href="#ai_p_aisession_isclosed" id="ai_p_aisession_isclosed">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>会话是否已经关闭或因终止错误失效.</p>
+<h3>[m#] AiSession#ask(prompt)<span><a class="mark" href="#ai_m_aisession_ask_prompt" id="ai_m_aisession_ask_prompt">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>prompt</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 当前轮次的新用户提示词</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="dataTypes.html#datatypes_string">string</a> 类型的生成文本</li>
+</ul>
+<p>在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并仅返回文本结果. 此方法不接受消息数组或按轮次生成选项.</p>
+<h3>[m#] AiSession#chat(prompt)<span><a class="mark" href="#ai_m_aisession_chat_prompt" id="ai_m_aisession_chat_prompt">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>prompt</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 当前轮次的新用户提示词</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="#ai_aipluginresponse">AiPluginResponse</a></li>
+</ul>
+<p>在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并返回插件完整响应.</p>
+<h3>[m#] AiSession#stream(prompt)<span><a class="mark" href="#ai_m_aisession_stream_prompt" id="ai_m_aisession_stream_prompt">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>prompt</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 当前轮次的新用户提示词</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#ai_aistream">AiStream</a></span> } - 当前轮次的流式请求对象</li>
+</ul>
+<p>在保留既有 Conversation 上下文的同时发起一个流式轮次. 事件形状与普通插件流式路由相同.</p>
+<p>调用返回对象的 <code>cancel()</code> 会关闭整个 AiSession, 因为已取消生成后的插件 KV cache 不会继续复用. <code>error</code> 事件, 超时或协议错误也会使会话进入 <code>closed</code> 状态.</p>
+<h3>[m#] AiSession#close()<span><a class="mark" href="#ai_m_aisession_close" id="ai_m_aisession_close">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>关闭会话, 取消活动轮次并释放插件 Conversation, Binder 连接和模型资源. 重复调用不会产生额外效果.</p>
+<h2>AiStream<span><a class="mark" href="#ai_aistream" id="ai_aistream">#</a></span></h2>
 <div class="signature"><ul>
 <li><ins><strong>extends</strong></ins> { <span class="type"><a href="eventEmitterType.html">EventEmitter</a></span> }</li>
 </ul>

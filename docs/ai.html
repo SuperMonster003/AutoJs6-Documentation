@@ -359,7 +359,7 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="dataTypes.html#datatypes_string">string</a> 类型的生成文本</li>
 </ul>
 <p>发起非流式请求, 并仅返回响应中的文本结果.</p>
-<p>提供 <a href="#ai_aipluginaskoptions">AiPluginAskOptions</a> 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 <code>user</code> 纯文本消息.</p>
+<p>提供 <a href="#ai_aipluginaskoptions">AiPluginAskOptions</a> 时, 此方法使用显式选择的本机文本生成插件. 该路由接受纯文本 <code>system</code>, <code>user</code> 和 <code>assistant</code> 消息历史, 保留消息顺序并要求最后一条消息为 <code>user</code>.</p>
 <h2>[m] chat<span><a class="mark" href="#ai_m_chat" id="ai_m_chat">#</a></span></h2>
 <h3>chat(input, options?)<span><a class="mark" href="#ai_chat_input_options" id="ai_chat_input_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -512,10 +512,15 @@ stream
 <li><strong>[ timeout = <code>120000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 整次请求的绝对超时, 单位为毫秒</li>
 </ul>
 <p><code>timeout</code> 也接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数.</p>
-<p>插件路由当前仅接受一个字符串提示词, 或仅包含 <code>role: &#39;user&#39;</code> 和字符串 <code>content</code> 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出, 用量报告或流式输出.</p>
+<p>插件路由接受一个字符串提示词, 一条 <code>user</code> 纯文本消息, 或由 <code>system</code>, <code>user</code> 和 <code>assistant</code> 纯文本消息组成的非空数组. 消息顺序会原样保留, <code>content</code> 必须是非空字符串, 且最后一条消息必须为 <code>user</code>. 不支持 <code>tool</code> 消息, 工具, 推理, 结构化输出或用量报告.</p>
 <p>选项中除 <code>plugin</code> 和超时兼容属性外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与 <code>plugin</code> 混用. <code>chat</code> 和 <code>stream</code> 不支持 <code>plugin</code>.</p>
 <p>选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.</p>
-<pre><code class="lang-js">ai.ask(&#39;Reply with OK&#39;, {
+<pre><code class="lang-js">let messages = [
+    { role: &#39;system&#39;, content: &#39;Answer with one short sentence.&#39; },
+    { role: &#39;user&#39;, content: &#39;Introduce AutoJs6.&#39; },
+];
+
+ai.ask(messages, {
     plugin: {
         component: {
             packageName: &#39;io.github.supermonster003.autojs6.plugin.ondeviceai&#39;,

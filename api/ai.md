@@ -44,7 +44,7 @@ ai('Reply with OK').then((text) => {
 
 发起非流式请求, 并仅返回响应中的文本结果.
 
-提供 [AiPluginAskOptions](#aipluginaskoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由当前仅接受一条 `user` 纯文本消息.
+提供 [AiPluginAskOptions](#aipluginaskoptions) 时, 此方法使用显式选择的本机文本生成插件. 该路由接受纯文本 `system`, `user` 和 `assistant` 消息历史, 保留消息顺序并要求最后一条消息为 `user`.
 
 ## [m] chat
 
@@ -240,14 +240,19 @@ AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路�
 
 `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
-插件路由当前仅接受一个字符串提示词, 或仅包含 `role: 'user'` 和字符串 `content` 的单条消息或单元素消息数组. 不支持系统消息, 多轮消息, 工具, 推理, 结构化输出, 用量报告或流式输出.
+插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具, 推理, 结构化输出或用量报告.
 
 选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 和 `stream` 不支持 `plugin`.
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
 ```js
-ai.ask('Reply with OK', {
+let messages = [
+    { role: 'system', content: 'Answer with one short sentence.' },
+    { role: 'user', content: 'Introduce AutoJs6.' },
+];
+
+ai.ask(messages, {
     plugin: {
         component: {
             packageName: 'io.github.supermonster003.autojs6.plugin.ondeviceai',

@@ -319,6 +319,7 @@
 <li><span class="stability_undefined"><a href="#ai_aipluginstreammetadata">AiPluginStreamMetadata</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginstreamchunk">AiPluginStreamChunk</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginmodel">AiPluginModel</a></span></li>
+<li><span class="stability_undefined"><a href="#ai_aipluginbackendprofile">AiPluginBackendProfile</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aitoolcall">AiToolCall</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aiusage">AiUsage</a></span></li>
 <li><span class="stability_undefined"><a href="#ai_aipluginusage">AiPluginUsage</a></span></li>
@@ -359,7 +360,7 @@
 
         <div id="apicontent">
             <h1>人工智能 (AI)<span><a class="mark" href="#ai_ai" id="ai_ai">#</a></span></h1>
-<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code>, <code>ai.ask</code>, <code>ai.chat</code> 和 <code>ai.stream</code> 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出. <code>ai.session</code> 用于复用插件的本机 Conversation, <code>ai.models</code> 用于枚举插件公开的模型.</p>
+<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code>, <code>ai.ask</code>, <code>ai.chat</code> 和 <code>ai.stream</code> 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出和显式 CPU/GPU/NPU backend profile. <code>ai.session</code> 用于复用插件的本机 Conversation, <code>ai.models</code> 用于枚举插件公开的模型及当前设备上的 backend 可用性.</p>
 <p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>
 <p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>
 <hr>
@@ -473,6 +474,7 @@ stream
     models.forEach((model) =&gt; {
         console.log(model.modelId, model.displayName);
         console.log(model.capabilityIds);
+        console.log(model.backendProfiles);
     });
 });
 </code></pre>
@@ -589,12 +591,15 @@ stream
 <li><strong>[ topK ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 正整数候选 token 数</li>
 <li><strong>[ topP ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>0..1</code> 范围内的有限核采样概率</li>
 <li><strong>[ maxTokens ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>1..2147483647</code> 范围内的最大输出 token 数</li>
+<li><strong>[ backend = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href="dataTypes.html#datatypes_null">null</a> } - 显式 LiteRT-LM backend profile</li>
 <li><strong>[ structuredJson = <code>false</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 是否启用原生 JSON Schema 约束解码</li>
 <li><strong>[ responseSchema ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - JSON Schema 对象; 提供时会隐式启用结构化输出</li>
 </ul>
 <p><a href="#ai">ai</a>, <a href="#ai_m_ask">ask</a> 和 <a href="#ai_m_chat">chat</a> 的默认超时为 <code>120000</code> 毫秒, <a href="#ai_m_stream">stream</a> 的默认超时为 <code>600000</code> 毫秒. <code>timeout</code> 也接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数.</p>
 <p>插件路由接受一个字符串提示词, 一条 <code>user</code> 纯文本消息, 或由 <code>system</code>, <code>user</code> 和 <code>assistant</code> 纯文本消息组成的非空数组. 消息顺序会原样保留, <code>content</code> 必须是非空字符串, 且最后一条消息必须为 <code>user</code>. 不支持 <code>tool</code> 消息, 工具或推理输出.</p>
 <p><code>responseSchema</code> 必须是 JSON 对象, UTF-8 序列化后不能超过 64 KiB. 单独提供 <code>responseSchema</code> 即等价于同时启用 <code>structuredJson</code>. 启用 <code>structuredJson</code> 但省略 schema 时使用 <code>{ &quot;type&quot;: &quot;object&quot; }</code>; <code>structuredJson: false</code> 不能与非空 <code>responseSchema</code> 同时使用. 支持的 JSON Schema 关键字范围由插件内置 LiteRT-LM 和 LLGuidance 决定, 不应假设支持完整 JSON Schema 规范.</p>
+<p><code>backend</code> 省略或为 <code>null</code> 时固定使用 <code>cpu</code>. 指定 <code>gpu</code> 或 <code>npu</code> 时, 宿主会先核对所选模型由 <a href="#ai_m_models">ai.models</a> 报告的 backend profile; 不可用的 profile 会直接失败, 不会静默改用 CPU. 当前官方插件仅在受支持 ABI 且插件进程能够加载系统 <code>libOpenCL.so</code> 时将 <code>gpu</code> 报告为 <code>available</code>. 此状态表示设备运行时前置条件已满足; 特定模型仍可能在 LiteRT-LM 初始化时被设备驱动拒绝.</p>
+<p>当前官方插件会公开 <code>npu</code>, 但固定将其标记为 <code>unavailable</code> 并返回 <code>npu-runtime-not-packaged</code>: LiteRT-LM 0.15.0 的 NPU 支持仍属于 Early Access Program, 且插件没有打包所需的 dispatch/厂商运行库. 因此当前版本不声明 NPU 推理可用. GPU profile 已通过实际 ARM64/OpenCL 设备上的完整公开调用链验证.</p>
 <p>结构化模式使用插件原生约束解码并将完成结果按严格 JSON 验证. <a href="#ai">ai</a> 和 <a href="#ai_m_ask">ask</a> 仍兑现 JSON 文本字符串, <a href="#ai_m_chat">chat</a> 及流式 <code>done</code> 事件仍在 <code>response.text</code> 中提供完整 JSON 文本. <code>delta</code> 和 <code>chunk</code> 是尚未完成的文本片段, 只能在完成后解析. 如果输出 token 或字节上限在完整 JSON 生成前终止请求, 请求会失败而不会把无效 JSON 当作成功结果返回.</p>
 <p>选项中除 <code>plugin</code>, 超时兼容属性, 上述采样/输出长度属性及结构化输出属性外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与 <code>plugin</code> 混用.</p>
 <p>官方 On-Device AI 插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. <code>durationMillis</code> 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. <code>ai.stream</code> 会在完成前发出累计 <code>usage</code> 事件, <code>done</code> 响应中也包含同一最终用量.</p>
@@ -609,10 +614,11 @@ stream
 <li><strong>[ topK ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 正整数候选 token 数</li>
 <li><strong>[ topP ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>0..1</code> 范围内的有限核采样概率</li>
 <li><strong>[ maxTokens ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>1..2147483647</code> 范围内的每轮最大输出 token 数</li>
+<li><strong>[ backend = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href="dataTypes.html#datatypes_null">null</a> } - 整个 Conversation 固定使用的 backend profile</li>
 <li><strong>[ structuredJson = <code>false</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 是否为每轮启用原生 JSON Schema 约束解码</li>
 <li><strong>[ responseSchema ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 整个会话固定使用的 JSON Schema 对象</li>
 </ul>
-<p><code>timeout</code> 接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数. 采样参数, 输出上限, 超时, <code>structuredJson</code> 和 <code>responseSchema</code> 在会话创建后不能按轮次修改. <code>responseSchema</code> 的启用规则, 大小限制, 返回文本及失败语义与 <a href="#ai_aipluginoptions">AiPluginOptions</a> 相同.</p>
+<p><code>timeout</code> 接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数. 采样参数, 输出上限, 超时, <code>backend</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 在会话创建后不能按轮次修改. backend 的可用性, 禁止回退语义及 <code>responseSchema</code> 的启用规则, 大小限制, 返回文本和失败语义与 <a href="#ai_aipluginoptions">AiPluginOptions</a> 相同.</p>
 <p>会话轮次只接受一个非空字符串并将其作为 <code>user</code> 消息. <code>system</code> 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code>, 工具, 推理或其他云端提供商选项.</p>
 <p>同一会话一次只允许一个活动轮次. 并发轮次以 <code>BUSY</code> 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 <a href="#ai_m_session">ai.session</a>.</p>
 <h3>AiPluginModelListOptions<span><a class="mark" href="#ai_aipluginmodellistoptions" id="ai_aipluginmodellistoptions">#</a></span></h3>
@@ -620,7 +626,7 @@ stream
 <li><strong>[ plugin = <code>true</code> ]</strong> { <span class="type"><a href="#ai_aipluginselector">AiPluginSelector</a></span> } - 插件选择器</li>
 <li><strong>[ timeout = <code>120000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 模型枚举的绝对超时, 单位为毫秒</li>
 </ul>
-</div><p><code>timeout</code> 接受与 <a href="#ai_aipluginoptions">AiPluginOptions</a> 相同的兼容名称和取值范围. <code>temperature</code>, <code>topK</code>, <code>topP</code>, <code>maxTokens</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 只控制生成, 不能用于模型枚举.</p>
+</div><p><code>timeout</code> 接受与 <a href="#ai_aipluginoptions">AiPluginOptions</a> 相同的兼容名称和取值范围. <code>temperature</code>, <code>topK</code>, <code>topP</code>, <code>maxTokens</code>, <code>backend</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 只控制生成, 不能用于模型枚举. 每个模型的 <code>backendProfiles</code> 已包含设备探测结果.</p>
 <p>模型枚举只使用选择器中的组件和 <code>providerId</code>. 为保持选择器结构一致而提供的 <code>modelId</code> 会被校验, 但不会过滤返回的模型目录.</p>
 <h3>AiPluginSelector<span><a class="mark" href="#ai_aipluginselector" id="ai_aipluginselector">#</a></span></h3>
 <p>AiPluginSelector 接受以下三种形式:</p>
@@ -703,6 +709,9 @@ ai.models({ timeout: 30000 }).then((models) =&gt; {
         throw new Error(&#39;No local AI model is available&#39;);
     }
     let selectedModel = models[0];
+    let gpu = selectedModel.backendProfiles.find((profile) =&gt; {
+        return profile.id === &#39;gpu&#39; &amp;&amp; profile.availability === &#39;available&#39;;
+    });
     return ai.chat(messages, {
         plugin: { modelId: selectedModel.modelId },
         timeout: 30000,
@@ -710,6 +719,7 @@ ai.models({ timeout: 30000 }).then((models) =&gt; {
         topK: 40,
         topP: 0.9,
         maxTokens: 128,
+        backend: gpu ? &#39;gpu&#39; : &#39;cpu&#39;,
     });
 }).then((response) =&gt; {
     console.log(response.route, response.provider, response.model);
@@ -825,8 +835,16 @@ stream
 <li><strong>capabilityIds</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 模型能力 ID</li>
 <li><strong>maximumContextBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大上下文字节数</li>
 <li><strong>maximumOutputBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大输出字节数</li>
+<li><strong>backendProfiles</strong> { <span class="type"><a href="#ai_aipluginbackendprofile">AiPluginBackendProfile</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - backend profile 及当前设备可用性</li>
 </ul>
 </div><p>模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 <code>streaming</code>, <code>structured-json</code>, <code>usage</code> 和 <code>persistent-session</code> 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.</p>
+<h3>AiPluginBackendProfile<span><a class="mark" href="#ai_aipluginbackendprofile" id="ai_aipluginbackendprofile">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>id</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> } - 可传给 <code>backend</code> 的稳定 profile ID</li>
+<li><strong>availability</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 当前插件进程和设备的运行时前置条件状态</li>
+<li><strong>[ unavailableReason ]</strong> { <code>&#39;abi-unsupported&#39;</code> | <code>&#39;opencl-library-unavailable&#39;</code> | <code>&#39;npu-runtime-not-packaged&#39;</code> } - 仅在 <code>unavailable</code> 时存在的稳定原因</li>
+</ul>
+</div><p><code>available</code> 不是所有模型都必然能够初始化的保证. 它用于在生成前排除 ABI, 动态链接命名空间和未打包运行时等确定性问题; 最终兼容性仍由所选模型在对应 LiteRT-LM backend 上的初始化结果决定. backend 探测结果会参与模型目录 generation, 因而分页期间设备状态变化会使旧 continuation token 失效.</p>
 <h3>AiToolCall<span><a class="mark" href="#ai_aitoolcall" id="ai_aitoolcall">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>index</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 工具调用序号</li>

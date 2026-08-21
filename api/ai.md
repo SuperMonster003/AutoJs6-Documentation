@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出. `ai.session` 用于复用插件的本机 Conversation, `ai.models` 用于枚举插件公开的模型.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出和显式 CPU/GPU/NPU backend profile. `ai.session` 用于复用插件的本机 Conversation, `ai.models` 用于枚举插件公开的模型及当前设备上的 backend 可用性.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -153,6 +153,7 @@ ai.models().then((models) => {
     models.forEach((model) => {
         console.log(model.modelId, model.displayName);
         console.log(model.capabilityIds);
+        console.log(model.backendProfiles);
     });
 });
 ```
@@ -300,6 +301,7 @@ AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由�
 - **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
 - **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
 - **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的最大输出 token 数
+- **[ backend = `'cpu'` ]** { `'cpu'` | `'gpu'` | `'npu'` | [null](dataTypes#null) } - 显式 LiteRT-LM backend profile
 - **[ structuredJson = `false` ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 是否启用原生 JSON Schema 约束解码
 - **[ responseSchema ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - JSON Schema 对象; 提供时会隐式启用结构化输出
 
@@ -308,6 +310,10 @@ AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由�
 插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具或推理输出.
 
 `responseSchema` 必须是 JSON 对象, UTF-8 序列化后不能超过 64 KiB. 单独提供 `responseSchema` 即等价于同时启用 `structuredJson`. 启用 `structuredJson` 但省略 schema 时使用 `{ "type": "object" }`; `structuredJson: false` 不能与非空 `responseSchema` 同时使用. 支持的 JSON Schema 关键字范围由插件内置 LiteRT-LM 和 LLGuidance 决定, 不应假设支持完整 JSON Schema 规范.
+
+`backend` 省略或为 `null` 时固定使用 `cpu`. 指定 `gpu` 或 `npu` 时, 宿主会先核对所选模型由 [ai.models](#m-models) 报告的 backend profile; 不可用的 profile 会直接失败, 不会静默改用 CPU. 当前官方插件仅在受支持 ABI 且插件进程能够加载系统 `libOpenCL.so` 时将 `gpu` 报告为 `available`. 此状态表示设备运行时前置条件已满足; 特定模型仍可能在 LiteRT-LM 初始化时被设备驱动拒绝.
+
+当前官方插件会公开 `npu`, 但固定将其标记为 `unavailable` 并返回 `npu-runtime-not-packaged`: LiteRT-LM 0.15.0 的 NPU 支持仍属于 Early Access Program, 且插件没有打包所需的 dispatch/厂商运行库. 因此当前版本不声明 NPU 推理可用. GPU profile 已通过实际 ARM64/OpenCL 设备上的完整公开调用链验证.
 
 结构化模式使用插件原生约束解码并将完成结果按严格 JSON 验证. [ai](#ai) 和 [ask](#m-ask) 仍兑现 JSON 文本字符串, [chat](#m-chat) 及流式 `done` 事件仍在 `response.text` 中提供完整 JSON 文本. `delta` 和 `chunk` 是尚未完成的文本片段, 只能在完成后解析. 如果输出 token 或字节上限在完整 JSON 生成前终止请求, 请求会失败而不会把无效 JSON 当作成功结果返回.
 
@@ -328,10 +334,11 @@ AiPluginSessionOptions 用于创建 [AiSession](#aisession). 它只支持本机�
 - **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
 - **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
 - **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的每轮最大输出 token 数
+- **[ backend = `'cpu'` ]** { `'cpu'` | `'gpu'` | `'npu'` | [null](dataTypes#null) } - 整个 Conversation 固定使用的 backend profile
 - **[ structuredJson = `false` ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 是否为每轮启用原生 JSON Schema 约束解码
 - **[ responseSchema ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 整个会话固定使用的 JSON Schema 对象
 
-`timeout` 接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数. 采样参数, 输出上限, 超时, `structuredJson` 和 `responseSchema` 在会话创建后不能按轮次修改. `responseSchema` 的启用规则, 大小限制, 返回文本及失败语义与 [AiPluginOptions](#aipluginoptions) 相同.
+`timeout` 接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数. 采样参数, 输出上限, 超时, `backend`, `structuredJson` 和 `responseSchema` 在会话创建后不能按轮次修改. backend 的可用性, 禁止回退语义及 `responseSchema` 的启用规则, 大小限制, 返回文本和失败语义与 [AiPluginOptions](#aipluginoptions) 相同.
 
 会话轮次只接受一个非空字符串并将其作为 `user` 消息. `system` 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 `profile`, `provider`, `baseUrl`, `model`, `apiKey`, 工具, 推理或其他云端提供商选项.
 
@@ -342,7 +349,7 @@ AiPluginSessionOptions 用于创建 [AiSession](#aisession). 它只支持本机�
 - **[ plugin = `true` ]** { [AiPluginSelector](#aipluginselector) } - 插件选择器
 - **[ timeout = `120000` ]** { [number](dataTypes#number) } - 模型枚举的绝对超时, 单位为毫秒
 
-`timeout` 接受与 [AiPluginOptions](#aipluginoptions) 相同的兼容名称和取值范围. `temperature`, `topK`, `topP`, `maxTokens`, `structuredJson` 和 `responseSchema` 只控制生成, 不能用于模型枚举.
+`timeout` 接受与 [AiPluginOptions](#aipluginoptions) 相同的兼容名称和取值范围. `temperature`, `topK`, `topP`, `maxTokens`, `backend`, `structuredJson` 和 `responseSchema` 只控制生成, 不能用于模型枚举. 每个模型的 `backendProfiles` 已包含设备探测结果.
 
 模型枚举只使用选择器中的组件和 `providerId`. 为保持选择器结构一致而提供的 `modelId` 会被校验, 但不会过滤返回的模型目录.
 
@@ -442,6 +449,9 @@ ai.models({ timeout: 30000 }).then((models) => {
         throw new Error('No local AI model is available');
     }
     let selectedModel = models[0];
+    let gpu = selectedModel.backendProfiles.find((profile) => {
+        return profile.id === 'gpu' && profile.availability === 'available';
+    });
     return ai.chat(messages, {
         plugin: { modelId: selectedModel.modelId },
         timeout: 30000,
@@ -449,6 +459,7 @@ ai.models({ timeout: 30000 }).then((models) => {
         topK: 40,
         topP: 0.9,
         maxTokens: 128,
+        backend: gpu ? 'gpu' : 'cpu',
     });
 }).then((response) => {
     console.log(response.route, response.provider, response.model);
@@ -572,8 +583,17 @@ AiStreamChunk 是 HTTP 提供商路由的增量对象.
 - **capabilityIds** { [string](dataTypes#string)[[]](dataTypes#array) } - 模型能力 ID
 - **maximumContextBytes** { [number](dataTypes#number) } - 最大上下文字节数
 - **maximumOutputBytes** { [number](dataTypes#number) } - 最大输出字节数
+- **backendProfiles** { [AiPluginBackendProfile](#aipluginbackendprofile)[[]](dataTypes#array) } - backend profile 及当前设备可用性
 
 模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming`, `structured-json`, `usage` 和 `persistent-session` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
+
+### AiPluginBackendProfile
+
+- **id** { `'cpu'` | `'gpu'` | `'npu'` } - 可传给 `backend` 的稳定 profile ID
+- **availability** { `'available'` | `'unavailable'` } - 当前插件进程和设备的运行时前置条件状态
+- **[ unavailableReason ]** { `'abi-unsupported'` | `'opencl-library-unavailable'` | `'npu-runtime-not-packaged'` } - 仅在 `unavailable` 时存在的稳定原因
+
+`available` 不是所有模型都必然能够初始化的保证. 它用于在生成前排除 ABI, 动态链接命名空间和未打包运行时等确定性问题; 最终兼容性仍由所选模型在对应 LiteRT-LM backend 上的初始化结果决定. backend 探测结果会参与模型目录 generation, 因而分页期间设备状态变化会使旧 continuation token 失效.
 
 ### AiToolCall
 

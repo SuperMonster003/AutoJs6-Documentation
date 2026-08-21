@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai` 和 `ai.ask` 还可通过显式选择器调用兼容的本机文本生成插件.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -53,12 +53,14 @@ ai('Reply with OK').then((text) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [AiResponse](#airesponse)
 
 发起非流式请求, 并返回提供商无关的完整响应.
 
 返回对象中的 `message` 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.
+
+本机插件路由会把精确的输入, 输出和总 token 数写入 `response.usage`, 并在 `response.usage.raw.durationMillis` 中提供插件实测生成耗时.
 
 ```js
 let messages = [
@@ -78,7 +80,7 @@ ai.chat(messages).then((response) => {
 **`6.8.0`** **`Async`** **`Overload [1-2]/2`**
 
 - **input** { [string](dataTypes#string) | [AiMessage](#aimessage) | [AiMessage](#aimessage)[[]](dataTypes#array) | [AiRequest](#airequest) } - 提示词, 消息或完整请求
-- **[ options = `{}` ]** { [AiOptions](#aioptions) } - 请求选项
+- **[ options = `{}` ]** { [AiOptions](#aioptions) | [AiPluginAskOptions](#aipluginaskoptions) } - 请求选项
 - <ins>**returns**</ins> { [AiStream](#aistream) } - 流式请求对象
 
 发起流式请求并立即返回事件对象.
@@ -233,16 +235,22 @@ AiRequest 是至少包含 `messages` 属性的可进行 JSON 序列化对象. `m
 
 ### AiPluginAskOptions
 
-AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 仅可调用模块对象 `ai` 和 [ask](#m-ask) 支持.
+AiPluginAskOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 模块对象 `ai` 及 [ask](#m-ask), [chat](#m-chat), [stream](#m-stream) 均支持该选项.
 
 - **plugin** { [AiPluginSelection](#aipluginselection) } - 必需的插件, 提供商和模型固定选择器
 - **[ timeout = `120000` ]** { [number](dataTypes#number) } - 整次请求的绝对超时, 单位为毫秒
+- **[ temperature ]** { [number](dataTypes#number) } - 非负有限采样温度
+- **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
+- **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
+- **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的最大输出 token 数
 
 `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
-插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具, 推理, 结构化输出或用量报告.
+插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具, 推理或结构化输出.
 
-选项中除 `plugin` 和超时兼容属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用. `chat` 和 `stream` 不支持 `plugin`.
+选项中除 `plugin`, 超时兼容属性及上述采样/输出长度属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用.
+
+该插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. `durationMillis` 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. `ai.stream` 会在完成前发出累计 `usage` 事件, `done` 响应中也包含同一最终用量.
 
 选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.
 
@@ -252,7 +260,7 @@ let messages = [
     { role: 'user', content: 'Introduce AutoJs6.' },
 ];
 
-ai.ask(messages, {
+ai.chat(messages, {
     plugin: {
         component: {
             packageName: 'io.github.supermonster003.autojs6.plugin.ondeviceai',
@@ -263,8 +271,18 @@ ai.ask(messages, {
         modelId: 'litertlm.0123456789abcdef0123456789abcdef',
     },
     timeout: 30000,
-}).then((text) => {
-    console.log(text);
+    temperature: 0.7,
+    topK: 40,
+    topP: 0.9,
+    maxTokens: 128,
+}).then((response) => {
+    console.log(response.text);
+    console.log(
+        response.usage.inputTokens,
+        response.usage.outputTokens,
+        response.usage.totalTokens,
+        response.usage.raw.durationMillis,
+    );
 });
 ```
 
@@ -325,7 +343,7 @@ ai.ask(messages, {
 - **totalTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - token 总数
 - **reasoningTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 推理 token 数
 - **cachedInputTokens** { [number](dataTypes#number) | [null](dataTypes#null) } - 缓存输入 token 数
-- **raw** { [Object](dataTypes#object) | [null](dataTypes#null) } - 提供商原始用量数据
+- **raw** { [Object](dataTypes#object) | [null](dataTypes#null) } - 提供商原始用量数据; 本机插件路由包含非负的 `durationMillis`
 
 ### AiProviderError
 

@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Okhttp3Request | AutoJs6 文档 - 6.8.0</title>
+    <title>目标检测 (YOLO) | AutoJs6 文档 - 6.8.0</title>
     <link rel="stylesheet" href="assets/fonts.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/sh.css">
     <link rel="stylesheet" href="plugins/docsify-copy-code@2-styles.css">
     <link rel="stylesheet" href="plugins/zoom-image-styles.css">
-    <link rel="canonical" href="https://nodejs.org/api/okhttp3RequestType.html">
+    <link rel="canonical" href="https://nodejs.org/api/yolo.html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="user-scalable=no">
 </head>
-<body class="alt apidoc" id="api-section-okhttp3RequestType">
+<body class="alt apidoc" id="api-section-yolo">
 <div id="content" class="clearfix">
     <div id="column2" class="interior">
         <div id="intro" class="interior">
@@ -94,7 +94,7 @@
 <li><a class="nav-util" href="util.html">Util - 工具</a></li>
 <li><a class="nav-web" href="web.html">Web - 万维网</a></li>
 <li><a class="nav-workManager" href="workManager.html">WorkManager - 计划任务兼容接口</a></li>
-<li><a class="nav-yolo" href="yolo.html">YOLO - 目标检测</a></li>
+<li><a class="nav-yolo active" href="yolo.html">YOLO - 目标检测</a></li>
 <li><a class="nav-zip" href="zip.html">Zip - 压缩文件</a></li>
 </ul>
 <div class="line"></div>
@@ -165,7 +165,7 @@
 <li><a class="nav-noticeBuilderType" href="noticeBuilderType.html">NoticeBuilder</a></li>
 <li><a class="nav-okhttp3HttpUrlType" href="okhttp3HttpUrlType.html">Okhttp3HttpUrl</a></li>
 <li><a class="nav-ocrOptionsType" href="ocrOptionsType.html">OcrOptions</a></li>
-<li><a class="nav-okhttp3RequestType active" href="okhttp3RequestType.html">Okhttp3Request</a></li>
+<li><a class="nav-okhttp3RequestType" href="okhttp3RequestType.html">Okhttp3Request</a></li>
 <li><a class="nav-opencvPointType" href="opencvPointType.html">OpenCVPoint</a></li>
 <li><a class="nav-opencvRectType" href="opencvRectType.html">OpenCVRect</a></li>
 <li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpenCVSize</a></li>
@@ -180,7 +180,7 @@
 
     </div>
 
-    <div id="column1" data-id="okhttp3RequestType" class="interior">
+    <div id="column1" data-id="yolo" class="interior">
         <header>
             <h1>AutoJs6 文档 - 6.8.0</h1>
             <div id="gtoc">
@@ -256,15 +256,33 @@
         <div id="toc">
             <h2>目录</h2>
 <ul>
-<li><span class="stability_undefined"><a href="#okhttp3requesttype_okhttp3request">Okhttp3Request</a></span><ul>
-<li><span class="stability_undefined"><a href="#okhttp3requesttype_m_body">[m] body</a></span><ul>
-<li><span class="stability_undefined"><a href="#okhttp3requesttype_body">body()</a></span></li>
+<li><span class="stability_undefined"><a href="#yolo_yolo">目标检测 (YOLO)</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_m_load">[m] load</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_load_modeldir_options">load(modelDir, options)</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#okhttp3requesttype_m_cachecontrol">[m] cacheControl</a></span><ul>
-<li><span class="stability_undefined"><a href="#okhttp3requesttype_cachecontrol">cacheControl()</a></span></li>
+<li><span class="stability_undefined"><a href="#yolo">参数对象</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_yololoadoptions">YoloLoadOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#yolo_yolodetectoptions">YoloDetectOptions</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#yolo_1">返回对象</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_yolodetector">YoloDetector</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_m_yolodetector_detect">[m#] YoloDetector#detect</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_detect_image_options">detect(image, options?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#yolo_m_yolodetector_close">[m#] YoloDetector#close</a></span><ul>
+<li><span class="stability_undefined"><a href="#yolo_close">close()</a></span></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#yolo_yolodetection">YoloDetection</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#yolo_2">模型目录</a></span></li>
+<li><span class="stability_undefined"><a href="#yolo_3">错误</a></span></li>
 </ul>
 </li>
 </ul>
@@ -272,58 +290,176 @@
         </div>
 
         <div id="apicontent">
-            <h1>Okhttp3Request<span><a class="mark" href="#okhttp3requesttype_okhttp3request" id="okhttp3requesttype_okhttp3request">#</a></span></h1>
-<hr>
-<aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2023-03-02">
-<p><strong>文档状态:</strong> 此章节仍在补充或完善中.</p>
-</aside>
-
-<p><a href="https://square.github.io/okhttp/3.x/okhttp/okhttp3/Request.html">okhttp3.Request</a> 别名.</p>
-<p>Okhttp3Request 表示一个 HTTP 请求.</p>
-<pre><code class="lang-js">let request = new okhttp3.Request.Builder()
-    .url(&#39;https://www.msn.com&#39;)
-    .method(&#39;GET&#39;, null)
-    .build();
-
-// Request{method=GET, url=https://www.msn.com/}
-console.log(request);
-</code></pre>
-<p>常见相关方法或属性:</p>
+            <h1>目标检测 (YOLO)<span><a class="mark" href="#yolo_yolo" id="yolo_yolo">#</a></span></h1>
+<p><code>yolo</code> 模块通过独立的 YOLO Provider 插件加载 NCNN 模型并执行目标检测.</p>
+<p><code>yolo</code> 与 <code>$yolo</code> 指向同一个模块对象. 当前接口属于 AutoJs6 6.8.0 Preview, 仅支持显式指定 Provider 组件的 CPU 检测. 主机不会自动选择其他 Provider, 也不会在失败时回退到 OCR 或其他检测实现.</p>
+<p>使用前需要满足以下条件:</p>
 <ul>
-<li><a href="httpResponseType.html#httpresponsetype_p_request">httpResponseType#request</a></li>
-<li><a href="https://square.github.io/okhttp/3.x/okhttp/okhttp3/Request.Builder.html#build--">okhttp3.Request.Builder#build</a></li>
+<li>安装与当前 AutoJs6 版本及设备 ABI 兼容的独立 YOLO Provider APK.</li>
+<li>在插件中心显式启用并授权该插件. YOLO 插件安装后默认保持关闭.</li>
+<li>Provider APK 与 AutoJs6 APK 使用相同签名, 且 Provider 服务在独立应用进程中运行.</li>
+<li>模型目录包含可读的 <code>model.json</code>, <code>model.ncnn.param</code> 和 <code>model.ncnn.bin</code> 三个普通文件.</li>
 </ul>
-<blockquote>
-<p>注: 本章节仅列出部分属性或方法.</p>
-</blockquote>
+<p>当前主机只接受 <code>cpu</code> 设备和 <code>ultralytics-detect</code> 默认解码器. 具体模型兼容范围仍由所选 Provider 的能力及模型清单决定.</p>
 <hr>
-<p style="font: bold 2em sans-serif; color: #FF7043">okhttp3.Request</p>
+<p style="font: bold 2em sans-serif; color: #FF7043">yolo</p>
 
 <hr>
-<h2>[m] body<span><a class="mark" href="#okhttp3requesttype_m_body" id="okhttp3requesttype_m_body">#</a></span></h2>
-<h3>body()<span><a class="mark" href="#okhttp3requesttype_body" id="okhttp3requesttype_body">#</a></span></h3>
-<div class="signature"><ul>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://square.github.io/okhttp/3.x/okhttp/okhttp3/RequestBody.html">okhttp3.RequestBody</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+<h2>[m] load<span><a class="mark" href="#yolo_m_load" id="yolo_m_load">#</a></span></h2>
+<h3>load(modelDir, options)<span><a class="mark" href="#yolo_load_modeldir_options" id="yolo_load_modeldir_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>modelDir</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 模型目录路径</li>
+<li><strong>options</strong> { <span class="type"><a href="#yolo_yololoadoptions">YoloLoadOptions</a></span> } - Provider 组件及会话选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#yolo_yolodetector">YoloDetector</a></span> } - 独立检测会话</li>
 </ul>
-</div><p>获取 HTTP 请求的 &quot;请求体 (Request Body)&quot;.</p>
-<h2>[m] cacheControl<span><a class="mark" href="#okhttp3requesttype_m_cachecontrol" id="okhttp3requesttype_m_cachecontrol">#</a></span></h2>
-<h3>cacheControl()<span><a class="mark" href="#okhttp3requesttype_cachecontrol" id="okhttp3requesttype_cachecontrol">#</a></span></h3>
-<div class="signature"><ul>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://square.github.io/okhttp/3.x/okhttp/okhttp3/CacheControl.html">okhttp3.CacheControl</a></span> }</li>
-</ul>
-</div><p>获取 HTTP 请求标头字段 <a href="httpRequestHeadersType.html#httprequestheaderstype_p_cache_control">cache-control</a> 的信息.</p>
-<pre><code class="lang-js">let cacheControl = http.get(&#39;https://www.msn.com&#39;, {
-    headers: {
-        &#39;cache-control&#39;: &#39;no-transform, no-store, no-cache&#39;,
-    },
-    contentType: &#39;text/plain&#39;,
-}).request.cacheControl();
-
-console.log(cacheControl); // no-transform, no-store, no-cache
-console.log(cacheControl.noTransform()); // true
-console.log(cacheControl.noStore()); // true
-console.log(cacheControl.mustRevalidate()); // false
+<p>解析模型目录, 校验精确 Provider 组件, 通过只读文件描述符传输模型文件, 并同步打开检测会话.</p>
+<p><code>modelDir</code> 按当前脚本路径解析, 并且必须是可读目录. 目录中的三个固定文件名分别代表模型清单, NCNN 参数和 NCNN 权重. 主机不会根据其他文件名推断模型类型.</p>
+<p><code>options.component</code> 必须使用 Android 展平组件格式 <code>package/class</code>. 可使用以 <code>.</code> 开头的相对类名, 例如:</p>
+<pre><code class="lang-text">io.github.supermonster003.autojs6.plugin.yolo.ncnn/.provider.YoloProviderService
 </code></pre>
+<p>调用会验证精确服务组件, 插件启用及授权状态, APK 签名, Provider 身份, 协议, ABI 和能力. 任何步骤失败时均不会尝试其他 Provider.</p>
+<pre><code class="lang-js">let component =
+    &#39;io.github.supermonster003.autojs6.plugin.yolo.ncnn/.provider.YoloProviderService&#39;;
+let detector = null;
+let image = null;
+
+try {
+    detector = yolo.load(&#39;./models/yolo11n&#39;, {
+        component: component,
+        device: &#39;cpu&#39;,
+        threads: 4,
+        decoderId: &#39;ultralytics-detect&#39;,
+        timeoutMillis: 120000,
+    });
+
+    image = images.read(&#39;./bus.jpg&#39;, true);
+    let detections = detector.detect(image, {
+        confidence: 0.25,
+        iouThreshold: 0.45,
+        maxDetections: 100,
+        timeoutMillis: 30000,
+    });
+
+    detections.forEach((detection) =&gt; {
+        console.log(
+            `${detection.label}: ${detection.confidence}, ` +
+            `${detection.bounds.toShortString()}`,
+        );
+    });
+} finally {
+    if (image !== null) {
+        images.recycle(image);
+    }
+    if (detector !== null) {
+        detector.close();
+    }
+}
+</code></pre>
+<h2>参数对象<span><a class="mark" href="#yolo" id="yolo">#</a></span></h2>
+<h3>YoloLoadOptions<span><a class="mark" href="#yolo_yololoadoptions" id="yolo_yololoadoptions">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>component</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 精确 Android Provider 服务组件</li>
+<li><strong>[ device = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> } - 推理设备</li>
+<li><strong>[ threads = <code>4</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - CPU 线程数</li>
+<li><strong>[ decoderId = <code>&#39;ultralytics-detect&#39;</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - Provider 解码器 ID</li>
+<li><strong>[ timeoutMillis = <code>120000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 打开会话的绝对超时, 单位为毫秒</li>
+</ul>
+</div><p><code>component</code> 必需且不能为空. 当前 Preview 只接受 <code>device: &#39;cpu&#39;</code>.</p>
+<p><code>threads</code> 必须是 <code>1..64</code> 范围内的整数. <code>decoderId</code> 必须非空并由 Provider 声明支持. <code>timeoutMillis</code> 必须是 <code>1..600000</code> 范围内的整数.</p>
+<h3>YoloDetectOptions<span><a class="mark" href="#yolo_yolodetectoptions" id="yolo_yolodetectoptions">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>[ confidence = <code>0.25</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最低置信度</li>
+<li><strong>[ iouThreshold = <code>0.45</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非极大值抑制 IoU 阈值</li>
+<li><strong>[ maxDetections = <code>100</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大检测结果数</li>
+<li><strong>[ timeoutMillis = <code>30000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 单次检测的绝对超时, 单位为毫秒</li>
+</ul>
+</div><p><code>confidence</code> 和 <code>iouThreshold</code> 必须是 <code>0..1</code> 范围内的有限数值. <code>maxDetections</code> 必须是 <code>1..400</code> 范围内的整数. <code>timeoutMillis</code> 必须是 <code>1..600000</code> 范围内的整数.</p>
+<h2>返回对象<span><a class="mark" href="#yolo_1" id="yolo_1">#</a></span></h2>
+<h3>YoloDetector<span><a class="mark" href="#yolo_yolodetector" id="yolo_yolodetector">#</a></span></h3>
+<p>每个 YoloDetector 持有一个远程 Provider 会话. 不再使用时应调用 <a href="#yolo_m_yolodetector_close">close()</a>. 脚本运行时结束时, 尚未关闭的检测器会自动关闭.</p>
+<h4>[m#] YoloDetector#detect<span><a class="mark" href="#yolo_m_yolodetector_detect" id="yolo_m_yolodetector_detect">#</a></span></h4>
+<h5>detect(image, options?)<span><a class="mark" href="#yolo_detect_image_options" id="yolo_detect_image_options">#</a></span></h5>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> } - 输入图像</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#yolo_yolodetectoptions">YoloDetectOptions</a></span> } - 检测选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#yolo_yolodetection">YoloDetection</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 检测结果数组</li>
+</ul>
+<p>同步执行一次目标检测. 返回数组顺序由 Provider 确定.</p>
+<p>输入图像必须仍然有效且未回收. 此方法不会回收输入图像. Provider 返回的图像尺寸必须与输入图像一致, 否则调用失败.</p>
+<h4>[m#] YoloDetector#close<span><a class="mark" href="#yolo_m_yolodetector_close" id="yolo_m_yolodetector_close">#</a></span></h4>
+<h5>close()<span><a class="mark" href="#yolo_close" id="yolo_close">#</a></span></h5>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>关闭远程检测会话并释放相关资源. 重复调用不会产生额外效果. 关闭后再次调用 <code>detect</code> 会抛出 <code>YOLO_SESSION_CLOSED</code> 错误.</p>
+<h3>YoloDetection<span><a class="mark" href="#yolo_yolodetection" id="yolo_yolodetection">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>classId</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 模型类别索引</li>
+<li><strong>label</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 模型清单中的类别标签</li>
+<li><strong>confidence</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 检测置信度</li>
+<li><strong>bounds</strong> { <span class="type"><a href="https://developer.android.com/reference/android/graphics/RectF">android.graphics.RectF</a></span> } - 输入图像坐标系中的浮点边界</li>
+</ul>
+</div><p><code>bounds</code> 提供 <code>left</code>, <code>top</code>, <code>right</code>, <code>bottom</code>, <code>centerX()</code> 和 <code>centerY()</code> 等 Android <code>RectF</code> 成员.</p>
+<h2>模型目录<span><a class="mark" href="#yolo_2" id="yolo_2">#</a></span></h2>
+<p>模型目录必须包含以下文件:</p>
+<pre><code class="lang-text">model.json
+model.ncnn.param
+model.ncnn.bin
+</code></pre>
+<p><code>model.json</code> 是 Provider 与模型之间的兼容性清单. 当前官方 NCNN Provider 的有限配置为 YOLO11 detect, <code>640 x 640</code> RGB NCHW 输入, <code>ultralytics-detect</code> 解码器和 <code>cxcywh</code> 输出. 标签数量及输出张量形状必须与模型图一致.</p>
+<p>模型文件不会随 AutoJs6 或 Provider APK 分发. 模型及训练数据的许可和使用条件由模型提供者负责.</p>
+<h2>错误<span><a class="mark" href="#yolo_3" id="yolo_3">#</a></span></h2>
+<p>YOLO Preview 错误是带 <code>code</code> 属性的异常, <code>message</code> 以同一个稳定代码开头. 当前代码包括:</p>
+<table>
+<thead>
+<tr>
+<th>代码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>YOLO_COMPONENT_REQUIRED</code></td>
+<td>缺少精确 Provider 组件</td>
+</tr>
+<tr>
+<td><code>YOLO_INVALID_ARGUMENT</code></td>
+<td>参数或选项无效</td>
+</tr>
+<tr>
+<td><code>YOLO_MODEL_INVALID</code></td>
+<td>模型目录或固定文件无效</td>
+</tr>
+<tr>
+<td><code>YOLO_MODEL_REJECTED</code></td>
+<td>Provider 拒绝模型清单, 模型图, 权重或解码配置</td>
+</tr>
+<tr>
+<td><code>YOLO_UNSUPPORTED_CAPABILITY</code></td>
+<td>设备, 解码器, 协议或资源设置不受支持</td>
+</tr>
+<tr>
+<td><code>YOLO_PROVIDER_UNAVAILABLE</code></td>
+<td>精确 Provider 不可用, 未启用, 未授权或身份校验失败</td>
+</tr>
+<tr>
+<td><code>YOLO_SESSION_OPEN_FAILED</code></td>
+<td>远程会话无法打开</td>
+</tr>
+<tr>
+<td><code>YOLO_DETECT_FAILED</code></td>
+<td>检测调用或结果校验失败</td>
+</tr>
+<tr>
+<td><code>YOLO_SESSION_CLOSED</code></td>
+<td>检测器或远程会话已关闭</td>
+</tr>
+</tbody>
+</table>
+<p>脚本中可按 <code>error.code</code> 处理稳定分类, 但不应依赖完整错误文本.</p>
 
         </div>
     </div>

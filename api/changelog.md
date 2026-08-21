@@ -2,9 +2,10 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/12</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/21</p>
 
 - `新增` [AI](https://docs.autojs6.com/#/ai), [TTS](https://docs.autojs6.com/#/tts), [电源管理](https://docs.autojs6.com/#/powerManager), [应用设置](https://docs.autojs6.com/#/settings), [持久化任务](https://docs.autojs6.com/#/workManager) 和 [系统属性](https://docs.autojs6.com/#/sysprops) 文档
+- `新增` [YOLO 目标检测](https://docs.autojs6.com/#/yolo) 文档
 - `新增` [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [MediaInfo](https://docs.autojs6.com/#/mediainfo), [MIME](https://docs.autojs6.com/#/mime), [NanoID](https://docs.autojs6.com/#/nanoid), [Pinyin](https://docs.autojs6.com/#/pinyin), [Pinyin4j](https://docs.autojs6.com/#/pinyin4j), [SQLite](https://docs.autojs6.com/#/sqlite) 和 [Zip](https://docs.autojs6.com/#/zip) 文档
 - `更新` 根据 AutoJs6 6.8.0 Augmentable API 修订全局对象, 应用, 自动化, 设备, 引擎, 图像, HTTP, 任务, UI 和工具模块的签名, 重载, 默认值及运行条件
 - `更新` 补充双开应用, 异步截图, 引擎生命周期事件, WorkManager 兼容接口, OCR Rapid 模式和 WebSocket 字节串等现行 API

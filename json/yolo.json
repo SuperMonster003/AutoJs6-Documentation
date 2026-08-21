@@ -1,0 +1,145 @@
+{
+  "source": "..\\api\\yolo.md",
+  "modules": [
+    {
+      "textRaw": "目标检测 (YOLO)",
+      "name": "目标检测_(yolo)",
+      "desc": "<p><code>yolo</code> 模块通过独立的 YOLO Provider 插件加载 NCNN 模型并执行目标检测.</p>\n<p><code>yolo</code> 与 <code>$yolo</code> 指向同一个模块对象. 当前接口属于 AutoJs6 6.8.0 Preview, 仅支持显式指定 Provider 组件的 CPU 检测. 主机不会自动选择其他 Provider, 也不会在失败时回退到 OCR 或其他检测实现.</p>\n<p>使用前需要满足以下条件:</p>\n<ul>\n<li>安装与当前 AutoJs6 版本及设备 ABI 兼容的独立 YOLO Provider APK.</li>\n<li>在插件中心显式启用并授权该插件. YOLO 插件安装后默认保持关闭.</li>\n<li>Provider APK 与 AutoJs6 APK 使用相同签名, 且 Provider 服务在独立应用进程中运行.</li>\n<li>模型目录包含可读的 <code>model.json</code>, <code>model.ncnn.param</code> 和 <code>model.ncnn.bin</code> 三个普通文件.</li>\n</ul>\n<p>当前主机只接受 <code>cpu</code> 设备和 <code>ultralytics-detect</code> 默认解码器. 具体模型兼容范围仍由所选 Provider 的能力及模型清单决定.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">yolo</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] load",
+          "name": "[m]_load",
+          "methods": [
+            {
+              "textRaw": "load(modelDir, options)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>modelDir</strong> { <a href=\"dataTypes#string\">string</a> } - 模型目录路径</li>\n<li><strong>options</strong> { <a href=\"#yololoadoptions\">YoloLoadOptions</a> } - Provider 组件及会话选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#yolodetector\">YoloDetector</a> } - 独立检测会话</li>\n</ul>\n<p>解析模型目录, 校验精确 Provider 组件, 通过只读文件描述符传输模型文件, 并同步打开检测会话.</p>\n<p><code>modelDir</code> 按当前脚本路径解析, 并且必须是可读目录. 目录中的三个固定文件名分别代表模型清单, NCNN 参数和 NCNN 权重. 主机不会根据其他文件名推断模型类型.</p>\n<p><code>options.component</code> 必须使用 Android 展平组件格式 <code>package/class</code>. 可使用以 <code>.</code> 开头的相对类名, 例如:</p>\n<pre><code class=\"lang-text\">io.github.supermonster003.autojs6.plugin.yolo.ncnn/.provider.YoloProviderService\n</code></pre>\n<p>调用会验证精确服务组件, 插件启用及授权状态, APK 签名, Provider 身份, 协议, ABI 和能力. 任何步骤失败时均不会尝试其他 Provider.</p>\n<pre><code class=\"lang-js\">let component =\n    &#39;io.github.supermonster003.autojs6.plugin.yolo.ncnn/.provider.YoloProviderService&#39;;\nlet detector = null;\nlet image = null;\n\ntry {\n    detector = yolo.load(&#39;./models/yolo11n&#39;, {\n        component: component,\n        device: &#39;cpu&#39;,\n        threads: 4,\n        decoderId: &#39;ultralytics-detect&#39;,\n        timeoutMillis: 120000,\n    });\n\n    image = images.read(&#39;./bus.jpg&#39;, true);\n    let detections = detector.detect(image, {\n        confidence: 0.25,\n        iouThreshold: 0.45,\n        maxDetections: 100,\n        timeoutMillis: 30000,\n    });\n\n    detections.forEach((detection) =&gt; {\n        console.log(\n            `${detection.label}: ${detection.confidence}, ` +\n            `${detection.bounds.toShortString()}`,\n        );\n    });\n} finally {\n    if (image !== null) {\n        images.recycle(image);\n    }\n    if (detector !== null) {\n        detector.close();\n    }\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "modelDir"
+                    },
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] load"
+        },
+        {
+          "textRaw": "参数对象",
+          "name": "参数对象",
+          "modules": [
+            {
+              "textRaw": "YoloLoadOptions",
+              "name": "yololoadoptions",
+              "desc": "<ul>\n<li><strong>component</strong> { <a href=\"dataTypes#string\">string</a> } - 精确 Android Provider 服务组件</li>\n<li><strong>[ device = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> } - 推理设备</li>\n<li><strong>[ threads = <code>4</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - CPU 线程数</li>\n<li><strong>[ decoderId = <code>&#39;ultralytics-detect&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - Provider 解码器 ID</li>\n<li><strong>[ timeoutMillis = <code>120000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 打开会话的绝对超时, 单位为毫秒</li>\n</ul>\n<p><code>component</code> 必需且不能为空. 当前 Preview 只接受 <code>device: &#39;cpu&#39;</code>.</p>\n<p><code>threads</code> 必须是 <code>1..64</code> 范围内的整数. <code>decoderId</code> 必须非空并由 Provider 声明支持. <code>timeoutMillis</code> 必须是 <code>1..600000</code> 范围内的整数.</p>\n",
+              "type": "module",
+              "displayName": "YoloLoadOptions"
+            },
+            {
+              "textRaw": "YoloDetectOptions",
+              "name": "yolodetectoptions",
+              "desc": "<ul>\n<li><strong>[ confidence = <code>0.25</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最低置信度</li>\n<li><strong>[ iouThreshold = <code>0.45</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非极大值抑制 IoU 阈值</li>\n<li><strong>[ maxDetections = <code>100</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最大检测结果数</li>\n<li><strong>[ timeoutMillis = <code>30000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 单次检测的绝对超时, 单位为毫秒</li>\n</ul>\n<p><code>confidence</code> 和 <code>iouThreshold</code> 必须是 <code>0..1</code> 范围内的有限数值. <code>maxDetections</code> 必须是 <code>1..400</code> 范围内的整数. <code>timeoutMillis</code> 必须是 <code>1..600000</code> 范围内的整数.</p>\n",
+              "type": "module",
+              "displayName": "YoloDetectOptions"
+            }
+          ],
+          "type": "module",
+          "displayName": "参数对象"
+        },
+        {
+          "textRaw": "返回对象",
+          "name": "返回对象",
+          "modules": [
+            {
+              "textRaw": "YoloDetector",
+              "name": "yolodetector",
+              "desc": "<p>每个 YoloDetector 持有一个远程 Provider 会话. 不再使用时应调用 <a href=\"#m-yolodetector-close\">close()</a>. 脚本运行时结束时, 尚未关闭的检测器会自动关闭.</p>\n",
+              "modules": [
+                {
+                  "textRaw": "[m#] YoloDetector#detect",
+                  "name": "[m#]_yolodetector#detect",
+                  "methods": [
+                    {
+                      "textRaw": "detect(image, options?)",
+                      "type": "method",
+                      "name": "detect",
+                      "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 输入图像</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#yolodetectoptions\">YoloDetectOptions</a> } - 检测选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#yolodetection\">YoloDetection</a><a href=\"dataTypes#array\">[]</a> } - 检测结果数组</li>\n</ul>\n<p>同步执行一次目标检测. 返回数组顺序由 Provider 确定.</p>\n<p>输入图像必须仍然有效且未回收. 此方法不会回收输入图像. Provider 返回的图像尺寸必须与输入图像一致, 否则调用失败.</p>\n",
+                      "signatures": [
+                        {
+                          "params": [
+                            {
+                              "name": "image"
+                            },
+                            {
+                              "name": "options?"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "module",
+                  "displayName": "[m#] YoloDetector#detect"
+                },
+                {
+                  "textRaw": "[m#] YoloDetector#close",
+                  "name": "[m#]_yolodetector#close",
+                  "methods": [
+                    {
+                      "textRaw": "close()",
+                      "type": "method",
+                      "name": "close",
+                      "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>关闭远程检测会话并释放相关资源. 重复调用不会产生额外效果. 关闭后再次调用 <code>detect</code> 会抛出 <code>YOLO_SESSION_CLOSED</code> 错误.</p>\n",
+                      "signatures": [
+                        {
+                          "params": []
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "module",
+                  "displayName": "[m#] YoloDetector#close"
+                }
+              ],
+              "type": "module",
+              "displayName": "YoloDetector"
+            },
+            {
+              "textRaw": "YoloDetection",
+              "name": "yolodetection",
+              "desc": "<ul>\n<li><strong>classId</strong> { <a href=\"dataTypes#number\">number</a> } - 模型类别索引</li>\n<li><strong>label</strong> { <a href=\"dataTypes#string\">string</a> } - 模型清单中的类别标签</li>\n<li><strong>confidence</strong> { <a href=\"dataTypes#number\">number</a> } - 检测置信度</li>\n<li><strong>bounds</strong> { <a href=\"https://developer.android.com/reference/android/graphics/RectF\">android.graphics.RectF</a> } - 输入图像坐标系中的浮点边界</li>\n</ul>\n<p><code>bounds</code> 提供 <code>left</code>, <code>top</code>, <code>right</code>, <code>bottom</code>, <code>centerX()</code> 和 <code>centerY()</code> 等 Android <code>RectF</code> 成员.</p>\n",
+              "type": "module",
+              "displayName": "YoloDetection"
+            }
+          ],
+          "type": "module",
+          "displayName": "返回对象"
+        },
+        {
+          "textRaw": "模型目录",
+          "name": "模型目录",
+          "desc": "<p>模型目录必须包含以下文件:</p>\n<pre><code class=\"lang-text\">model.json\nmodel.ncnn.param\nmodel.ncnn.bin\n</code></pre>\n<p><code>model.json</code> 是 Provider 与模型之间的兼容性清单. 当前官方 NCNN Provider 的有限配置为 YOLO11 detect, <code>640 x 640</code> RGB NCHW 输入, <code>ultralytics-detect</code> 解码器和 <code>cxcywh</code> 输出. 标签数量及输出张量形状必须与模型图一致.</p>\n<p>模型文件不会随 AutoJs6 或 Provider APK 分发. 模型及训练数据的许可和使用条件由模型提供者负责.</p>\n",
+          "type": "module",
+          "displayName": "模型目录"
+        },
+        {
+          "textRaw": "错误",
+          "name": "错误",
+          "desc": "<p>YOLO Preview 错误是带 <code>code</code> 属性的异常, <code>message</code> 以同一个稳定代码开头. 当前代码包括:</p>\n<table>\n<thead>\n<tr>\n<th>代码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>YOLO_COMPONENT_REQUIRED</code></td>\n<td>缺少精确 Provider 组件</td>\n</tr>\n<tr>\n<td><code>YOLO_INVALID_ARGUMENT</code></td>\n<td>参数或选项无效</td>\n</tr>\n<tr>\n<td><code>YOLO_MODEL_INVALID</code></td>\n<td>模型目录或固定文件无效</td>\n</tr>\n<tr>\n<td><code>YOLO_MODEL_REJECTED</code></td>\n<td>Provider 拒绝模型清单, 模型图, 权重或解码配置</td>\n</tr>\n<tr>\n<td><code>YOLO_UNSUPPORTED_CAPABILITY</code></td>\n<td>设备, 解码器, 协议或资源设置不受支持</td>\n</tr>\n<tr>\n<td><code>YOLO_PROVIDER_UNAVAILABLE</code></td>\n<td>精确 Provider 不可用, 未启用, 未授权或身份校验失败</td>\n</tr>\n<tr>\n<td><code>YOLO_SESSION_OPEN_FAILED</code></td>\n<td>远程会话无法打开</td>\n</tr>\n<tr>\n<td><code>YOLO_DETECT_FAILED</code></td>\n<td>检测调用或结果校验失败</td>\n</tr>\n<tr>\n<td><code>YOLO_SESSION_CLOSED</code></td>\n<td>检测器或远程会话已关闭</td>\n</tr>\n</tbody>\n</table>\n<p>脚本中可按 <code>error.code</code> 处理稳定分类, 但不应依赖完整错误文本.</p>\n",
+          "type": "module",
+          "displayName": "错误"
+        }
+      ],
+      "type": "module",
+      "displayName": "目标检测 (YOLO)"
+    }
+  ]
+}

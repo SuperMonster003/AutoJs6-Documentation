@@ -86,6 +86,7 @@
 | [Util - 工具](util) | √ |
 | [Web - 万维网](web) | &gt; 80% |
 | [WorkManager - 计划任务兼容接口](workManager) | √ |
+| [YOLO - 目标检测](yolo) | √ |
 | [Zip - 压缩文件](zip) | √ |
 | [UiSelector - 选择器](uiSelectorType) | √ |
 | [UiObject - 控件节点](uiObjectType) | √ |

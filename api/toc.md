@@ -72,6 +72,7 @@
 * [Util - 工具](util)
 * [Web - 万维网](web)
 * [WorkManager - 计划任务兼容接口](workManager)
+* [YOLO - 目标检测](yolo)
 * [Zip - 压缩文件](zip)
 
 <div class="line"></div>

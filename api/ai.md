@@ -1,6 +1,6 @@
 # 人工智能 (AI)
 
-ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件. `ai.session` 用于复用插件的本机 Conversation, `ai.models` 用于枚举插件公开的模型.
+ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. `ai`, `ai.ask`, `ai.chat` 和 `ai.stream` 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出. `ai.session` 用于复用插件的本机 Conversation, `ai.models` 用于枚举插件公开的模型.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象.
 
@@ -300,12 +300,18 @@ AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由�
 - **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
 - **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
 - **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的最大输出 token 数
+- **[ structuredJson = `false` ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 是否启用原生 JSON Schema 约束解码
+- **[ responseSchema ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - JSON Schema 对象; 提供时会隐式启用结构化输出
 
 [ai](#ai), [ask](#m-ask) 和 [chat](#m-chat) 的默认超时为 `120000` 毫秒, [stream](#m-stream) 的默认超时为 `600000` 毫秒. `timeout` 也接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数.
 
-插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具, 推理或结构化输出.
+插件路由接受一个字符串提示词, 一条 `user` 纯文本消息, 或由 `system`, `user` 和 `assistant` 纯文本消息组成的非空数组. 消息顺序会原样保留, `content` 必须是非空字符串, 且最后一条消息必须为 `user`. 不支持 `tool` 消息, 工具或推理输出.
 
-选项中除 `plugin`, 超时兼容属性及上述采样/输出长度属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用.
+`responseSchema` 必须是 JSON 对象, UTF-8 序列化后不能超过 64 KiB. 单独提供 `responseSchema` 即等价于同时启用 `structuredJson`. 启用 `structuredJson` 但省略 schema 时使用 `{ "type": "object" }`; `structuredJson: false` 不能与非空 `responseSchema` 同时使用. 支持的 JSON Schema 关键字范围由插件内置 LiteRT-LM 和 LLGuidance 决定, 不应假设支持完整 JSON Schema 规范.
+
+结构化模式使用插件原生约束解码并将完成结果按严格 JSON 验证. [ai](#ai) 和 [ask](#m-ask) 仍兑现 JSON 文本字符串, [chat](#m-chat) 及流式 `done` 事件仍在 `response.text` 中提供完整 JSON 文本. `delta` 和 `chunk` 是尚未完成的文本片段, 只能在完成后解析. 如果输出 token 或字节上限在完整 JSON 生成前终止请求, 请求会失败而不会把无效 JSON 当作成功结果返回.
+
+选项中除 `plugin`, 超时兼容属性, 上述采样/输出长度属性及结构化输出属性外不能包含其他属性. `profile`, `provider`, `baseUrl`, `model`, `apiKey` 及其兼容名称不能与 `plugin` 混用.
 
 官方 On-Device AI 插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. `durationMillis` 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. `ai.stream` 会在完成前发出累计 `usage` 事件, `done` 响应中也包含同一最终用量.
 
@@ -322,10 +328,12 @@ AiPluginSessionOptions 用于创建 [AiSession](#aisession). 它只支持本机�
 - **[ topK ]** { [number](dataTypes#number) } - 正整数候选 token 数
 - **[ topP ]** { [number](dataTypes#number) } - `0..1` 范围内的有限核采样概率
 - **[ maxTokens ]** { [number](dataTypes#number) } - `1..2147483647` 范围内的每轮最大输出 token 数
+- **[ structuredJson = `false` ]** { [boolean](dataTypes#boolean) | [null](dataTypes#null) } - 是否为每轮启用原生 JSON Schema 约束解码
+- **[ responseSchema ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 整个会话固定使用的 JSON Schema 对象
 
-`timeout` 接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数. 采样参数, 输出上限和超时在会话创建后不能按轮次修改.
+`timeout` 接受 `timeoutMillis`, `timeoutMs` 和 `timeout_millis` 兼容名称, 取值必须是 `1000..600000` 范围内的整数. 采样参数, 输出上限, 超时, `structuredJson` 和 `responseSchema` 在会话创建后不能按轮次修改. `responseSchema` 的启用规则, 大小限制, 返回文本及失败语义与 [AiPluginOptions](#aipluginoptions) 相同.
 
-会话轮次只接受一个非空字符串并将其作为 `user` 消息. `system` 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 `profile`, `provider`, `baseUrl`, `model`, `apiKey`, 工具, 推理, 结构化输出或其他云端提供商选项.
+会话轮次只接受一个非空字符串并将其作为 `user` 消息. `system` 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 `profile`, `provider`, `baseUrl`, `model`, `apiKey`, 工具, 推理或其他云端提供商选项.
 
 同一会话一次只允许一个活动轮次. 并发轮次以 `BUSY` 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 [ai.session](#m-session).
 
@@ -334,7 +342,7 @@ AiPluginSessionOptions 用于创建 [AiSession](#aisession). 它只支持本机�
 - **[ plugin = `true` ]** { [AiPluginSelector](#aipluginselector) } - 插件选择器
 - **[ timeout = `120000` ]** { [number](dataTypes#number) } - 模型枚举的绝对超时, 单位为毫秒
 
-`timeout` 接受与 [AiPluginOptions](#aipluginoptions) 相同的兼容名称和取值范围. `temperature`, `topK`, `topP` 和 `maxTokens` 只控制生成, 不能用于模型枚举.
+`timeout` 接受与 [AiPluginOptions](#aipluginoptions) 相同的兼容名称和取值范围. `temperature`, `topK`, `topP`, `maxTokens`, `structuredJson` 和 `responseSchema` 只控制生成, 不能用于模型枚举.
 
 模型枚举只使用选择器中的组件和 `providerId`. 为保持选择器结构一致而提供的 `modelId` 会被校验, 但不会过滤返回的模型目录.
 
@@ -369,6 +377,54 @@ AiPluginSelector 接受以下三种形式:
 - **className** { [string](dataTypes#string) } - 插件文本生成服务的精确类名
 
 主机仅绑定此处指定的组件, 不使用隐式服务选择.
+
+### 本机结构化 JSON 示例
+
+以下示例通过官方 On-Device AI 插件执行原生 JSON Schema 约束解码. `responseSchema` 会隐式启用结构化输出, 因此可省略 `structuredJson: true`. 返回值仍是字符串, 需要在 Promise 兑现后调用 `JSON.parse`.
+
+```js
+let schema = {
+    type: 'object',
+    properties: {
+        answer: { type: 'string' },
+        ok: { type: 'boolean' },
+    },
+    required: ['answer', 'ok'],
+};
+
+ai.ask('Return answer as OK and ok as true.', {
+    plugin: true,
+    responseSchema: schema,
+    maxTokens: 64,
+}).then((text) => {
+    let value = JSON.parse(text);
+    console.log(value.answer, value.ok);
+});
+```
+
+同一 schema 需要用于多个连续轮次时, 在创建持久会话时固定它:
+
+```js
+ai.session({
+    plugin: true,
+    structuredJson: true,
+    responseSchema: schema,
+    maxTokens: 64,
+}).then((session) => {
+    return session.ask('Return the first object.')
+        .then((text) => {
+            console.log(JSON.parse(text));
+            return session.chat('Return the second object.');
+        })
+        .then((response) => {
+            console.log(JSON.parse(response.text));
+            session.close();
+        }, (error) => {
+            session.close();
+            throw error;
+        });
+});
+```
 
 ### 本机插件完整路由示例
 
@@ -452,7 +508,7 @@ stream
 
 AiResponse 是 HTTP 提供商路由的完整响应.
 
-- **text** { [string](dataTypes#string) } - 生成文本
+- **text** { [string](dataTypes#string) } - 生成文本; 结构化模式下为完整 JSON 文本
 - **reasoning** { [string](dataTypes#string) } - 推理文本, 不可用时为空字符串
 - **toolCalls** { [AiToolCall](#aitoolcall)[[]](dataTypes#array) } - 工具调用
 - **usage** { [AiUsage](#aiusage) | [null](dataTypes#null) } - token 用量
@@ -501,7 +557,7 @@ AiStreamChunk 是 HTTP 提供商路由的增量对象.
 
 ### AiPluginStreamChunk
 
-- **text** { [string](dataTypes#string) } - 当前文本增量
+- **text** { [string](dataTypes#string) } - 当前文本增量; 结构化模式下可能尚不是完整 JSON
 - **reasoning** { `''` } - 空字符串
 - **toolCalls** { [Array](dataTypes#array) } - 空数组
 - **usage** { [null](dataTypes#null) } - 固定为 `null`; 用量通过独立 `usage` 事件报告
@@ -517,7 +573,7 @@ AiStreamChunk 是 HTTP 提供商路由的增量对象.
 - **maximumContextBytes** { [number](dataTypes#number) } - 最大上下文字节数
 - **maximumOutputBytes** { [number](dataTypes#number) } - 最大输出字节数
 
-模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming`, `usage` 和 `persistent-session` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
+模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 `streaming`, `structured-json`, `usage` 和 `persistent-session` 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.
 
 ### AiToolCall
 
@@ -626,7 +682,7 @@ AiSession 表示一个由本机插件持有的持久 Conversation. 会话不使�
 - **prompt** { [string](dataTypes#string) } - 当前轮次的新用户提示词
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [string](dataTypes#string) 类型的生成文本
 
-在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并仅返回文本结果. 此方法不接受消息数组或按轮次生成选项.
+在保留既有 Conversation 上下文的同时发起一个非流式轮次, 并仅返回文本结果. 结构化会话返回完整 JSON 文本字符串. 此方法不接受消息数组或按轮次生成选项.
 
 ### [m#] AiSession#chat(prompt)
 

@@ -4,7 +4,7 @@
     {
       "textRaw": "人工智能 (AI)",
       "name": "人工智能_(ai)",
-      "desc": "<p>ai 模块用于通过已配置的 AI 提供商发起文本生成, 对话和流式请求. <code>ai</code>, <code>ai.ask</code>, <code>ai.chat</code> 和 <code>ai.stream</code> 也可通过显式选择器调用兼容的本机文本生成插件, 包括原生 JSON Schema 约束输出和显式 CPU/GPU/NPU backend profile. <code>ai.session</code> 用于复用插件的本机 Conversation, <code>ai.models</code> 用于枚举插件公开的模型及当前设备上的 backend 可用性.</p>\n<p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>\n<p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ai</p>\n\n<hr>\n",
+      "desc": "<p>ai 模块用于发起文本生成, 对话和流式请求. 请求既可使用 AutoJs6 中已配置的 HTTP 提供商, 也可通过 AI 插件目标执行. 官方 3-Stone AI 插件会在同一目录中公开本地模型和在线服务目标, 并由 <code>ai.catalog</code> 返回统一元数据. <code>ai.session</code> 用于复用插件持有的 Conversation.</p>\n<p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象.</p>\n<p>使用基于配置档案的调用前, 需要先在 AutoJs6 的 AI 提供商设置中创建可用档案. 也可在单次请求中显式提供 <code>provider</code>, <code>model</code> 和凭据等选项.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ai</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] ai",
@@ -40,7 +40,7 @@
               "textRaw": "ask(input, options?)",
               "type": "method",
               "name": "ask",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> | <a href=\"#aipluginoptions\">AiPluginOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"dataTypes#string\">string</a> 类型的生成文本</li>\n</ul>\n<p>发起非流式请求, 并仅返回响应中的文本结果.</p>\n<p>提供 <a href=\"#aipluginoptions\">AiPluginOptions</a> 时, 此方法使用显式选择的本机文本生成插件. 该路由接受纯文本 <code>system</code>, <code>user</code> 和 <code>assistant</code> 消息历史, 保留消息顺序并要求最后一条消息为 <code>user</code>.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> | <a href=\"#aipluginoptions\">AiPluginOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"dataTypes#string\">string</a> 类型的生成文本</li>\n</ul>\n<p>发起非流式请求, 并仅返回响应中的文本结果.</p>\n<p>提供 <a href=\"#aipluginoptions\">AiPluginOptions</a> 时, 此方法使用选定的插件目标. 该路由接受纯文本 <code>system</code>, <code>user</code> 和 <code>assistant</code> 消息历史, 保留消息顺序并要求最后一条消息为 <code>user</code>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -66,7 +66,7 @@
               "textRaw": "chat(input, options?)",
               "type": "method",
               "name": "chat",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> | <a href=\"#aipluginoptions\">AiPluginOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#airesponse\">AiResponse</a> 或 <a href=\"#aipluginresponse\">AiPluginResponse</a></li>\n</ul>\n<p>发起非流式请求, 并返回提供商无关的完整响应.</p>\n<p>云端返回对象中的 <code>message</code> 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.</p>\n<p>本机插件路由会把精确的输入, 输出和总 token 数写入 <code>response.usage</code>, 并在 <code>response.usage.raw.durationMillis</code> 中提供插件实测生成耗时.</p>\n<pre><code class=\"lang-js\">let messages = [\n    { role: &#39;user&#39;, content: &#39;Return one short greeting&#39; },\n];\n\nai.chat(messages).then((response) =&gt; {\n    console.log(response.text);\n    console.log(response.usage);\n});\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>\n<ul>\n<li><strong>input</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"#aimessage\">AiMessage</a> | <a href=\"#aimessage\">AiMessage</a><a href=\"dataTypes#array\">[]</a> | <a href=\"#airequest\">AiRequest</a> } - 提示词, 消息或完整请求</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aioptions\">AiOptions</a> | <a href=\"#aipluginoptions\">AiPluginOptions</a> } - 请求选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#airesponse\">AiResponse</a> 或 <a href=\"#aipluginresponse\">AiPluginResponse</a></li>\n</ul>\n<p>发起非流式请求, 并返回提供商无关的完整响应.</p>\n<p>云端返回对象中的 <code>message</code> 可在使用同一提供商时追加到后续消息数组, 以保留工具调用和提供商专用数据.</p>\n<p>插件路由会把插件报告的输入, 输出, 总计, 推理及缓存输入 token 数写入 <code>response.usage</code>, 并在 <code>response.usage.durationMillis</code> 中提供插件实测生成耗时.</p>\n<pre><code class=\"lang-js\">let messages = [\n    { role: &#39;user&#39;, content: &#39;Return one short greeting&#39; },\n];\n\nai.chat(messages).then((response) =&gt; {\n    console.log(response.text);\n    console.log(response.usage);\n});\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -118,7 +118,7 @@
               "textRaw": "session(options?)",
               "type": "method",
               "name": "session",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aipluginsessionoptions\">AiPluginSessionOptions</a> | <a href=\"dataTypes#null\">null</a> } - 持久本机会话选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#aisession\">AiSession</a></li>\n</ul>\n<p>规划并打开一个本机插件多轮会话. 不传选项或传入 <code>null</code> 时选择 AutoJs6 官方 On-Device AI 插件.</p>\n<p>会话固定插件, 提供商, 模型, 采样参数, 输出上限和超时. 第一次生成时创建插件的本机 Conversation, 后续轮次复用其上下文和 KV cache. 每次 <a href=\"#m-aisessionaskprompt\">ask</a>, <a href=\"#m-aisessionchatprompt\">chat</a> 或 <a href=\"#m-aisessionstreamprompt\">stream</a> 只接收并发送当前的新用户提示词, 不需要重新传入完整消息历史.</p>\n<pre><code class=\"lang-js\">ai.session({\n    system: &#39;Remember facts from earlier turns.&#39;,\n    maxTokens: 128,\n}).then((session) =&gt; {\n    return session.ask(&#39;The project code is Orion.&#39;)\n        .then((text) =&gt; {\n            console.log(text);\n            return session.chat(&#39;What is the project code?&#39;);\n        })\n        .then((response) =&gt; {\n            console.log(response.text);\n            session.close();\n        }, (error) =&gt; {\n            session.close();\n            throw error;\n        });\n});\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aipluginsessionoptions\">AiPluginSessionOptions</a> | <a href=\"dataTypes#null\">null</a> } - 持久插件目标会话选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#aisession\">AiSession</a></li>\n</ul>\n<p>规划并打开一个插件目标的多轮会话. 不传选项或传入 <code>null</code> 时选择官方 3-Stone AI 插件声明的默认目标.</p>\n<p>会话固定插件, 目标, 提供商, 模型, backend, 采样参数, 输出上限和超时. 后续轮次复用插件持有的 Conversation 上下文; 本地目标还可复用其 KV cache. 每次 <a href=\"#m-aisessionaskprompt\">ask</a>, <a href=\"#m-aisessionchatprompt\">chat</a> 或 <a href=\"#m-aisessionstreamprompt\">stream</a> 只接收并发送当前的新用户提示词, 不需要重新传入完整消息历史.</p>\n<pre><code class=\"lang-js\">ai.session({\n    system: &#39;Remember facts from earlier turns.&#39;,\n    maxTokens: 128,\n}).then((session) =&gt; {\n    return session.ask(&#39;The project code is Orion.&#39;)\n        .then((text) =&gt; {\n            console.log(text);\n            return session.chat(&#39;What is the project code?&#39;);\n        })\n        .then((response) =&gt; {\n            console.log(response.text);\n            session.close();\n        }, (error) =&gt; {\n            session.close();\n            throw error;\n        });\n});\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -134,14 +134,14 @@
           "displayName": "[m] session"
         },
         {
-          "textRaw": "[m] models",
-          "name": "[m]_models",
+          "textRaw": "[m] catalog",
+          "name": "[m]_catalog",
           "methods": [
             {
-              "textRaw": "models(options?)",
+              "textRaw": "catalog(options?)",
               "type": "method",
-              "name": "models",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aipluginmodellistoptions\">AiPluginModelListOptions</a> | <a href=\"dataTypes#null\">null</a> } - 插件模型枚举选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#aipluginmodel\">AiPluginModel</a> 数组</li>\n</ul>\n<p>枚举本机文本生成插件公开的模型目录.</p>\n<p>不传选项或传入 <code>null</code> 时选择 AutoJs6 官方 On-Device AI 插件. 可通过 <code>options.plugin</code> 固定官方插件提供商, 或显式指定第三方插件组件和提供商. 此方法只读取模型目录, 不创建生成会话, 也不接受采样或最大输出 token 选项.</p>\n<pre><code class=\"lang-js\">ai.models().then((models) =&gt; {\n    models.forEach((model) =&gt; {\n        console.log(model.modelId, model.displayName);\n        console.log(model.capabilityIds);\n        console.log(model.backendProfiles);\n    });\n});\n</code></pre>\n",
+              "name": "catalog",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"#aiplugincatalogoptions\">AiPluginCatalogOptions</a> | <a href=\"dataTypes#null\">null</a> } - 插件目录选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#aitargetcatalog\">AiTargetCatalog</a></li>\n</ul>\n<p>读取一个 AI 插件公开的完整目标目录. 不传选项或传入 <code>null</code> 时选择官方 3-Stone AI 插件. 此方法只读取目录, 不创建生成会话, 也不接受 <code>target</code> 或生成控制选项.</p>\n<p>目录同时描述本地模型和插件管理的在线服务. <code>defaultTarget</code> 是插件声明的默认目标 ID; 每个 <code>targets</code> 元素都可通过其完整 <code>id</code> 传给 <a href=\"#aipluginoptions\">AiPluginOptions</a> 的 <code>target</code>.</p>\n<pre><code class=\"lang-js\">ai.catalog().then((catalog) =&gt; {\n    console.log(catalog.defaultTarget);\n    catalog.targets.forEach((target) =&gt; {\n        console.log(target.id, target.displayName, target.locality);\n        console.log(target.configured, target.available);\n        console.log(target.backendProfiles);\n    });\n});\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -154,83 +154,7 @@
             }
           ],
           "type": "module",
-          "displayName": "[m] models"
-        },
-        {
-          "textRaw": "[m] profiles",
-          "name": "[m]_profiles",
-          "methods": [
-            {
-              "textRaw": "profiles()",
-              "type": "method",
-              "name": "profiles",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprofile\">AiProfile</a><a href=\"dataTypes#array\">[]</a> } - AI 配置档案检查结果</li>\n</ul>\n<p>返回全部 AI 配置档案的可公开信息.</p>\n<p>API 密钥不会出现在返回结果中. <code>hasApiKey</code> 仅表示档案是否保存了密钥.</p>\n",
-              "signatures": [
-                {
-                  "params": []
-                }
-              ]
-            }
-          ],
-          "type": "module",
-          "displayName": "[m] profiles"
-        },
-        {
-          "textRaw": "[m] providers",
-          "name": "[m]_providers",
-          "methods": [
-            {
-              "textRaw": "providers()",
-              "type": "method",
-              "name": "providers",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprovider\">AiProvider</a><a href=\"dataTypes#array\">[]</a> } - 内置提供商定义</li>\n</ul>\n<p>返回 AutoJs6 支持的提供商协议及默认服务地址.</p>\n<p>内置提供商 ID:</p>\n<ul>\n<li><code>openai</code></li>\n<li><code>anthropic</code></li>\n<li><code>gemini</code></li>\n<li><code>deepseek</code></li>\n<li><code>openrouter</code></li>\n<li><code>openai-compatible</code></li>\n</ul>\n<p><code>openai-compatible</code> 没有默认服务地址.</p>\n",
-              "signatures": [
-                {
-                  "params": []
-                }
-              ]
-            }
-          ],
-          "type": "module",
-          "displayName": "[m] providers"
-        },
-        {
-          "textRaw": "[m] defaultProfile",
-          "name": "[m]_defaultprofile",
-          "methods": [
-            {
-              "textRaw": "defaultProfile()",
-              "type": "method",
-              "name": "defaultProfile",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aiprofile\">AiProfile</a> | <a href=\"dataTypes#null\">null</a> } - 默认档案检查结果</li>\n</ul>\n<p>返回当前默认 AI 配置档案.</p>\n<p>没有默认档案时返回 <code>null</code>.</p>\n",
-              "signatures": [
-                {
-                  "params": []
-                }
-              ]
-            }
-          ],
-          "type": "module",
-          "displayName": "[m] defaultProfile"
-        },
-        {
-          "textRaw": "[m] isConfigured",
-          "name": "[m]_isconfigured",
-          "methods": [
-            {
-              "textRaw": "isConfigured()",
-              "type": "method",
-              "name": "isConfigured",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否存在可直接使用的默认档案</li>\n</ul>\n<p>检查是否存在模型名称有效且凭据条件满足的默认档案.</p>\n<p>此方法不发起网络请求, 也不保证远程服务当前可用.</p>\n",
-              "signatures": [
-                {
-                  "params": []
-                }
-              ]
-            }
-          ],
-          "type": "module",
-          "displayName": "[m] isConfigured"
+          "displayName": "[m] catalog"
         },
         {
           "textRaw": "请求输入",
@@ -260,42 +184,42 @@
             {
               "textRaw": "AiPluginOptions",
               "name": "aipluginoptions",
-              "desc": "<p>AiPluginOptions 用于显式选择兼容的本机文本生成插件. 此路由默认关闭, 模块对象 <code>ai</code> 及 <a href=\"#m-ask\">ask</a>, <a href=\"#m-chat\">chat</a>, <a href=\"#m-stream\">stream</a> 均支持该选项.</p>\n<ul>\n<li><strong>plugin</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 必需的插件选择器</li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 整次请求的绝对超时, 单位为毫秒</li>\n<li><strong>[ temperature ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非负有限采样温度</li>\n<li><strong>[ topK ]</strong> { <a href=\"dataTypes#number\">number</a> } - 正整数候选 token 数</li>\n<li><strong>[ topP ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0..1</code> 范围内的有限核采样概率</li>\n<li><strong>[ maxTokens ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>1..2147483647</code> 范围内的最大输出 token 数</li>\n<li><strong>[ backend = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 显式 LiteRT-LM backend profile</li>\n<li><strong>[ structuredJson = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否启用原生 JSON Schema 约束解码</li>\n<li><strong>[ responseSchema ]</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - JSON Schema 对象; 提供时会隐式启用结构化输出</li>\n</ul>\n<p><a href=\"#ai\">ai</a>, <a href=\"#m-ask\">ask</a> 和 <a href=\"#m-chat\">chat</a> 的默认超时为 <code>120000</code> 毫秒, <a href=\"#m-stream\">stream</a> 的默认超时为 <code>600000</code> 毫秒. <code>timeout</code> 也接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数.</p>\n<p>插件路由接受一个字符串提示词, 一条 <code>user</code> 纯文本消息, 或由 <code>system</code>, <code>user</code> 和 <code>assistant</code> 纯文本消息组成的非空数组. 消息顺序会原样保留, <code>content</code> 必须是非空字符串, 且最后一条消息必须为 <code>user</code>. 不支持 <code>tool</code> 消息, 工具或推理输出.</p>\n<p><code>responseSchema</code> 必须是 JSON 对象, UTF-8 序列化后不能超过 64 KiB. 单独提供 <code>responseSchema</code> 即等价于同时启用 <code>structuredJson</code>. 启用 <code>structuredJson</code> 但省略 schema 时使用 <code>{ &quot;type&quot;: &quot;object&quot; }</code>; <code>structuredJson: false</code> 不能与非空 <code>responseSchema</code> 同时使用. 支持的 JSON Schema 关键字范围由插件内置 LiteRT-LM 和 LLGuidance 决定, 不应假设支持完整 JSON Schema 规范.</p>\n<p><code>backend</code> 省略或为 <code>null</code> 时固定使用 <code>cpu</code>. 指定 <code>gpu</code> 或 <code>npu</code> 时, 宿主会先核对所选模型由 <a href=\"#m-models\">ai.models</a> 报告的 backend profile; 不可用的 profile 会直接失败, 不会静默改用 CPU. 当前官方插件仅在受支持 ABI 且插件进程能够加载系统 <code>libOpenCL.so</code> 时将 <code>gpu</code> 报告为 <code>available</code>. 此状态表示设备运行时前置条件已满足; 特定模型仍可能在 LiteRT-LM 初始化时被设备驱动拒绝.</p>\n<p>当前官方插件会公开 <code>npu</code>, 但固定将其标记为 <code>unavailable</code> 并返回 <code>npu-runtime-not-packaged</code>: LiteRT-LM 0.15.0 的 NPU 支持仍属于 Early Access Program, 且插件没有打包所需的 dispatch/厂商运行库. 因此当前版本不声明 NPU 推理可用. GPU profile 已通过实际 ARM64/OpenCL 设备上的完整公开调用链验证.</p>\n<p>结构化模式使用插件原生约束解码并将完成结果按严格 JSON 验证. <a href=\"#ai\">ai</a> 和 <a href=\"#m-ask\">ask</a> 仍兑现 JSON 文本字符串, <a href=\"#m-chat\">chat</a> 及流式 <code>done</code> 事件仍在 <code>response.text</code> 中提供完整 JSON 文本. <code>delta</code> 和 <code>chunk</code> 是尚未完成的文本片段, 只能在完成后解析. 如果输出 token 或字节上限在完整 JSON 生成前终止请求, 请求会失败而不会把无效 JSON 当作成功结果返回.</p>\n<p>选项中除 <code>plugin</code>, 超时兼容属性, 上述采样/输出长度属性及结构化输出属性外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与 <code>plugin</code> 混用.</p>\n<p>官方 On-Device AI 插件的新建 Conversation 通过 LiteRT-LM 的 KV cache 与 decode 计数返回 token 用量, 不按字符数估算. <code>durationMillis</code> 只覆盖插件生成调用, 不包含宿主发现, 绑定, 模型枚举或回调分发时间. <code>ai.stream</code> 会在完成前发出累计 <code>usage</code> 事件, <code>done</code> 响应中也包含同一最终用量.</p>\n<p>选择器不完整, 目标组件或固定 ID 不匹配, 插件不满足本机且无需凭据的能力约束, 模型不可用, 请求超时或插件进程失效时, 请求会失败. 插件路由不会回退到已保存档案, 默认提供商或 HTTP 请求.</p>\n",
+              "desc": "<p>AiPluginOptions 用于选择 AI 插件及其目录目标. 模块对象 <code>ai</code> 及 <a href=\"#m-ask\">ask</a>, <a href=\"#m-chat\">chat</a>, <a href=\"#m-stream\">stream</a> 均支持该选项.</p>\n<ul>\n<li><strong>[ plugin ]</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 插件选择器</li>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> } - <a href=\"#aitarget\">AiTarget</a> 的完整 <code>id</code></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 整次请求的绝对超时, 单位为毫秒</li>\n<li><strong>[ temperature ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非负有限采样温度</li>\n<li><strong>[ topK ]</strong> { <a href=\"dataTypes#number\">number</a> } - 正整数候选 token 数</li>\n<li><strong>[ topP ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0..1</code> 范围内的有限核采样概率</li>\n<li><strong>[ maxTokens ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>1..2147483647</code> 范围内的最大输出 token 数</li>\n<li><strong>[ backend ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 显式 backend profile</li>\n<li><strong>[ reasoning = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否请求推理输出</li>\n<li><strong>[ structuredJson = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否启用原生 JSON Schema 约束解码</li>\n<li><strong>[ responseSchema ]</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - JSON Schema 对象; 提供时会隐式启用结构化输出</li>\n</ul>\n<p><a href=\"#ai\">ai</a>, <a href=\"#m-ask\">ask</a> 和 <a href=\"#m-chat\">chat</a> 的默认超时为 <code>120000</code> 毫秒, <a href=\"#m-stream\">stream</a> 的默认超时为 <code>600000</code> 毫秒. <code>timeout</code> 也接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数.</p>\n<p><code>plugin</code> 和 <code>target</code> 至少需要提供一个. 只提供 <code>target</code> 时选择官方 3-Stone AI 插件; 只提供 <code>plugin</code> 时选择该插件声明的默认目标. 同时提供时, <code>target</code> 必须存在于该插件的 <a href=\"#aitargetcatalog\">AiTargetCatalog</a> 中. 目标 ID 是形如 <code>local:...</code> 或 <code>profile:...</code> 的稳定字符串, 必须完整传递, 不能从显示名称或模型名称推测.</p>\n<p>插件路由接受一个字符串提示词, 一条 <code>user</code> 纯文本消息, 或由 <code>system</code>, <code>user</code> 和 <code>assistant</code> 纯文本消息组成的非空数组. 消息顺序会原样保留, <code>content</code> 必须是非空字符串, 且最后一条消息必须为 <code>user</code>. 当前公开路由不接受 <code>tool</code> 消息或工具定义; <code>toolCalls</code> 因而为空数组.</p>\n<p><code>reasoning: true</code> 要求目标目录包含 <code>reasoning</code> 能力. 推理文本通过 <code>response.reasoning</code> 或流式块的 <code>reasoning</code> 属性返回. 不支持该能力的目标会以 <code>TARGET_CAPABILITY_MISMATCH</code> 失败, 不会静默忽略选项.</p>\n<p><code>responseSchema</code> 必须是 JSON 对象, UTF-8 序列化后不能超过 64 KiB. 单独提供 <code>responseSchema</code> 即等价于同时启用 <code>structuredJson</code>. 启用 <code>structuredJson</code> 但省略 schema 时使用 <code>{ &quot;type&quot;: &quot;object&quot; }</code>; <code>structuredJson: false</code> 不能与非空 <code>responseSchema</code> 同时使用. 目标必须同时公开 <code>structured-json</code> 能力和 <code>response-json-schema</code> 控制. 支持的 JSON Schema 关键字范围由所选目标决定, 不应假设支持完整 JSON Schema 规范.</p>\n<p><code>backend</code> 省略或为 <code>null</code> 时由目标使用其默认 backend. 显式指定时, 目标必须公开 <code>backend-profile</code> 控制, 且 <a href=\"#aitarget\">AiTarget</a> 的 <code>backendProfiles</code> 中必须包含可用的对应项. 不可用的 profile 会以 <code>BACKEND_UNAVAILABLE</code> 失败, 不会静默改用其他 backend. 在线目标通常不公开 backend profile.</p>\n<p>当前官方插件的 LiteRT-LM 本地目标会公开 CPU, GPU 和 NPU. GPU 只有在 ABI 和 OpenCL 运行时前置条件满足时可用. NPU 当前固定为 <code>unavailable</code>, 并以 <code>npu-runtime-not-packaged</code> 说明插件未打包所需运行时. 在线目标的 <code>backendProfiles</code> 为空数组.</p>\n<p>结构化模式使用插件原生约束解码并将完成结果按严格 JSON 验证. <a href=\"#ai\">ai</a> 和 <a href=\"#m-ask\">ask</a> 仍兑现 JSON 文本字符串, <a href=\"#m-chat\">chat</a> 及流式 <code>done</code> 事件仍在 <code>response.text</code> 中提供完整 JSON 文本. <code>delta</code> 和 <code>chunk</code> 是尚未完成的文本片段, 只能在完成后解析. 如果输出 token 或字节上限在完整 JSON 生成前终止请求, 请求会失败而不会把无效 JSON 当作成功结果返回.</p>\n<p>选项中除 <code>plugin</code>, <code>target</code>, 超时兼容属性及上述生成控制外不能包含其他属性. <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code> 及其兼容名称不能与插件目标路由混用.</p>\n<p>插件报告的 <code>durationMillis</code> 只覆盖生成调用, 不包含宿主发现, 绑定, 目录读取或回调分发时间. <code>ai.stream</code> 会在完成前发出累计 <code>usage</code> 事件, <code>done</code> 响应中也包含同一最终用量.</p>\n<p>选择器不完整, 目标不存在, 未配置, 不可用, 能力不匹配, backend 不可用, 请求超时或插件进程失效时, 请求会以稳定错误码失败. 插件路由不会改选其他目标, 回退到已保存档案或另行发起宿主 HTTP 请求.</p>\n",
               "type": "module",
               "displayName": "AiPluginOptions"
             },
             {
               "textRaw": "AiPluginSessionOptions",
               "name": "aipluginsessionoptions",
-              "desc": "<p>AiPluginSessionOptions 用于创建 <a href=\"#aisession\">AiSession</a>. 它只支持本机插件路由, 并在省略 <code>plugin</code> 时选择 AutoJs6 官方 On-Device AI 插件.</p>\n<ul>\n<li><strong>[ plugin = <code>true</code> ]</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 插件选择器</li>\n<li><strong>[ system ]</strong> { <a href=\"dataTypes#string\">string</a> } - 仅在创建 Conversation 时发送的非空系统指令</li>\n<li><strong>[ timeout = <code>120000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 会话规划及每轮生成的绝对超时, 单位为毫秒</li>\n<li><strong>[ temperature ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非负有限采样温度</li>\n<li><strong>[ topK ]</strong> { <a href=\"dataTypes#number\">number</a> } - 正整数候选 token 数</li>\n<li><strong>[ topP ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0..1</code> 范围内的有限核采样概率</li>\n<li><strong>[ maxTokens ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>1..2147483647</code> 范围内的每轮最大输出 token 数</li>\n<li><strong>[ backend = <code>&#39;cpu&#39;</code> ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 整个 Conversation 固定使用的 backend profile</li>\n<li><strong>[ structuredJson = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否为每轮启用原生 JSON Schema 约束解码</li>\n<li><strong>[ responseSchema ]</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 整个会话固定使用的 JSON Schema 对象</li>\n</ul>\n<p><code>timeout</code> 接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数. 采样参数, 输出上限, 超时, <code>backend</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 在会话创建后不能按轮次修改. backend 的可用性, 禁止回退语义及 <code>responseSchema</code> 的启用规则, 大小限制, 返回文本和失败语义与 <a href=\"#aipluginoptions\">AiPluginOptions</a> 相同.</p>\n<p>会话轮次只接受一个非空字符串并将其作为 <code>user</code> 消息. <code>system</code> 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持 <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code>, 工具, 推理或其他云端提供商选项.</p>\n<p>同一会话一次只允许一个活动轮次. 并发轮次以 <code>BUSY</code> 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 <a href=\"#m-session\">ai.session</a>.</p>\n",
+              "desc": "<p>AiPluginSessionOptions 用于创建 <a href=\"#aisession\">AiSession</a>. 它只支持插件目标路由, 并在省略 <code>plugin</code> 和 <code>target</code> 时选择官方 3-Stone AI 插件声明的默认目标.</p>\n<ul>\n<li><strong>[ plugin = <code>true</code> ]</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 插件选择器</li>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> } - 会话固定使用的完整目标 ID</li>\n<li><strong>[ system ]</strong> { <a href=\"dataTypes#string\">string</a> } - 仅在创建 Conversation 时发送的非空系统指令</li>\n<li><strong>[ timeout = <code>120000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 会话规划及每轮生成的绝对超时, 单位为毫秒</li>\n<li><strong>[ temperature ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非负有限采样温度</li>\n<li><strong>[ topK ]</strong> { <a href=\"dataTypes#number\">number</a> } - 正整数候选 token 数</li>\n<li><strong>[ topP ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0..1</code> 范围内的有限核采样概率</li>\n<li><strong>[ maxTokens ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>1..2147483647</code> 范围内的每轮最大输出 token 数</li>\n<li><strong>[ backend ]</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 整个 Conversation 固定使用的 backend profile</li>\n<li><strong>[ reasoning = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否在每轮请求推理输出</li>\n<li><strong>[ structuredJson = <code>false</code> ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否为每轮启用原生 JSON Schema 约束解码</li>\n<li><strong>[ responseSchema ]</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 整个会话固定使用的 JSON Schema 对象</li>\n</ul>\n<p><code>timeout</code> 接受 <code>timeoutMillis</code>, <code>timeoutMs</code> 和 <code>timeout_millis</code> 兼容名称, 取值必须是 <code>1000..600000</code> 范围内的整数. 目标, 采样参数, 输出上限, 超时, <code>backend</code>, <code>reasoning</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 在会话创建后不能按轮次修改. backend 和能力核对, 禁止回退语义及结构化输出规则与 <a href=\"#aipluginoptions\">AiPluginOptions</a> 相同. 目标还必须公开 <code>persistent-session</code> 能力.</p>\n<p>会话轮次只接受一个非空字符串并将其作为 <code>user</code> 消息. <code>system</code> 只进入首轮上下文, 后续 Binder 请求不携带系统指令或既有消息. 不支持按轮次传入 <code>profile</code>, <code>provider</code>, <code>baseUrl</code>, <code>model</code>, <code>apiKey</code>, 工具或其他生成选项.</p>\n<p>同一会话一次只允许一个活动轮次. 并发轮次以 <code>BUSY</code> 失败, 但不会关闭正在运行的轮次. 正常完成后会话保持可用; 生成失败, 超时, 协议错误, Binder 失效, 输出字节上限终止或流式取消会关闭整个会话. 关闭后需要重新调用 <a href=\"#m-session\">ai.session</a>.</p>\n",
               "type": "module",
               "displayName": "AiPluginSessionOptions"
             },
             {
-              "textRaw": "AiPluginModelListOptions",
-              "name": "aipluginmodellistoptions",
-              "desc": "<ul>\n<li><strong>[ plugin = <code>true</code> ]</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 插件选择器</li>\n<li><strong>[ timeout = <code>120000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 模型枚举的绝对超时, 单位为毫秒</li>\n</ul>\n<p><code>timeout</code> 接受与 <a href=\"#aipluginoptions\">AiPluginOptions</a> 相同的兼容名称和取值范围. <code>temperature</code>, <code>topK</code>, <code>topP</code>, <code>maxTokens</code>, <code>backend</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 只控制生成, 不能用于模型枚举. 每个模型的 <code>backendProfiles</code> 已包含设备探测结果.</p>\n<p>模型枚举只使用选择器中的组件和 <code>providerId</code>. 为保持选择器结构一致而提供的 <code>modelId</code> 会被校验, 但不会过滤返回的模型目录.</p>\n",
+              "textRaw": "AiPluginCatalogOptions",
+              "name": "aiplugincatalogoptions",
+              "desc": "<ul>\n<li><strong>[ plugin = <code>true</code> ]</strong> { <a href=\"#aipluginselector\">AiPluginSelector</a> } - 插件选择器</li>\n<li><strong>[ timeout = <code>120000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 目录读取的绝对超时, 单位为毫秒</li>\n</ul>\n<p><code>timeout</code> 接受与 <a href=\"#aipluginoptions\">AiPluginOptions</a> 相同的兼容名称和取值范围. <code>target</code>, <code>temperature</code>, <code>topK</code>, <code>topP</code>, <code>maxTokens</code>, <code>backend</code>, <code>reasoning</code>, <code>structuredJson</code> 和 <code>responseSchema</code> 只用于生成, 不能用于目录读取. 返回目录已经包含目标的配置状态, 可用性, 能力, 控制, 限制, HTTPS origins 和 backend 探测结果.</p>\n",
               "type": "module",
-              "displayName": "AiPluginModelListOptions"
+              "displayName": "AiPluginCatalogOptions"
             },
             {
               "textRaw": "AiPluginSelector",
               "name": "aipluginselector",
-              "desc": "<p>AiPluginSelector 接受以下三种形式:</p>\n<ul>\n<li><code>true</code>: 选择 AutoJs6 官方 On-Device AI 插件, 使用其固定提供商 ID, 并在只有一个可用模型时自动选择该模型.</li>\n<li><a href=\"#aiofficialpluginselection\">AiOfficialPluginSelection</a>: 选择官方插件, 可固定 <code>providerId</code> 或 <code>modelId</code>.</li>\n<li><a href=\"#aipluginselection\">AiPluginSelection</a>: 通过精确 Android 服务组件选择插件, 必须同时固定 <code>providerId</code>, 可固定 <code>modelId</code>.</li>\n</ul>\n<p><code>false</code>, <code>null</code>, 字符串及包含未知字段的对象均不是有效选择器.</p>\n",
+              "desc": "<p>AiPluginSelector 接受以下三种形式:</p>\n<ul>\n<li><code>true</code>: 选择官方 3-Stone AI 插件及其固定提供商 ID.</li>\n<li><a href=\"#aiofficialpluginselection\">AiOfficialPluginSelection</a>: 选择官方插件, 可显式固定 <code>providerId</code>.</li>\n<li><a href=\"#aipluginselection\">AiPluginSelection</a>: 通过精确 Android 服务组件选择插件, 并固定 <code>providerId</code>.</li>\n</ul>\n<p><code>false</code>, <code>null</code>, 字符串及包含未知字段的对象均不是有效选择器.</p>\n",
               "type": "module",
               "displayName": "AiPluginSelector"
             },
             {
               "textRaw": "AiOfficialPluginSelection",
               "name": "aiofficialpluginselection",
-              "desc": "<ul>\n<li><strong>[ providerId = <code>&#39;autojs6.on-device-ai&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 官方插件提供商 ID</li>\n<li><strong>[ modelId ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件列出的精确模型 ID</li>\n</ul>\n<p>此对象不能包含 <code>component</code>. 空对象 <code>{}</code> 与 <code>true</code> 等价. <code>providerId</code> 为 <code>null</code> 时使用官方默认值. 省略 <code>modelId</code> 或传入 <code>null</code> 时仅在所选提供商恰有一个符合要求的模型时自动选择; 多模型歧义会使请求失败.</p>\n",
+              "desc": "<ul>\n<li><strong>[ providerId = <code>&#39;autojs6.three-stone-ai&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 官方插件提供商 ID</li>\n</ul>\n<p>此对象不能包含 <code>component</code>. 空对象 <code>{}</code> 与 <code>true</code> 等价. <code>providerId</code> 为 <code>null</code> 时使用官方默认值. 目标不属于插件选择器; 需要精确目标时使用 <a href=\"#aipluginoptions\">AiPluginOptions</a> 的 <code>target</code>.</p>\n",
               "type": "module",
               "displayName": "AiOfficialPluginSelection"
             },
             {
               "textRaw": "AiPluginSelection",
               "name": "aipluginselection",
-              "desc": "<ul>\n<li><strong>component</strong> { <a href=\"#aiplugincomponent\">AiPluginComponent</a> } - Android 服务组件</li>\n<li><strong>providerId</strong> { <a href=\"dataTypes#string\">string</a> } - 插件声明的精确提供商 ID</li>\n<li><strong>[ modelId ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件列出的精确模型 ID</li>\n</ul>\n<p><code>providerId</code> 和非空的 <code>modelId</code> 必须匹配 <code>^[a-z0-9][a-z0-9._-]{0,127}$</code>. 省略 <code>modelId</code> 或传入 <code>null</code> 时仅允许插件为固定提供商解析出一个符合要求的模型. 主机不会改选其他组件或提供商.</p>\n",
+              "desc": "<ul>\n<li><strong>component</strong> { <a href=\"#aiplugincomponent\">AiPluginComponent</a> } - Android 服务组件</li>\n<li><strong>providerId</strong> { <a href=\"dataTypes#string\">string</a> } - 插件声明的精确提供商 ID</li>\n</ul>\n<p><code>providerId</code> 必须匹配 <code>^[a-z0-9][a-z0-9._-]{0,127}$</code>. 主机不会改选其他组件或提供商. 需要精确目标时另行传入完整 <code>target</code> ID.</p>\n",
               "type": "module",
               "displayName": "AiPluginSelection"
             },
@@ -307,18 +231,18 @@
               "displayName": "AiPluginComponent"
             },
             {
-              "textRaw": "本机结构化 JSON 示例",
-              "name": "本机结构化_json_示例",
-              "desc": "<p>以下示例通过官方 On-Device AI 插件执行原生 JSON Schema 约束解码. <code>responseSchema</code> 会隐式启用结构化输出, 因此可省略 <code>structuredJson: true</code>. 返回值仍是字符串, 需要在 Promise 兑现后调用 <code>JSON.parse</code>.</p>\n<pre><code class=\"lang-js\">let schema = {\n    type: &#39;object&#39;,\n    properties: {\n        answer: { type: &#39;string&#39; },\n        ok: { type: &#39;boolean&#39; },\n    },\n    required: [&#39;answer&#39;, &#39;ok&#39;],\n};\n\nai.ask(&#39;Return answer as OK and ok as true.&#39;, {\n    plugin: true,\n    responseSchema: schema,\n    maxTokens: 64,\n}).then((text) =&gt; {\n    let value = JSON.parse(text);\n    console.log(value.answer, value.ok);\n});\n</code></pre>\n<p>同一 schema 需要用于多个连续轮次时, 在创建持久会话时固定它:</p>\n<pre><code class=\"lang-js\">ai.session({\n    plugin: true,\n    structuredJson: true,\n    responseSchema: schema,\n    maxTokens: 64,\n}).then((session) =&gt; {\n    return session.ask(&#39;Return the first object.&#39;)\n        .then((text) =&gt; {\n            console.log(JSON.parse(text));\n            return session.chat(&#39;Return the second object.&#39;);\n        })\n        .then((response) =&gt; {\n            console.log(JSON.parse(response.text));\n            session.close();\n        }, (error) =&gt; {\n            session.close();\n            throw error;\n        });\n});\n</code></pre>\n",
+              "textRaw": "插件结构化 JSON 示例",
+              "name": "插件结构化_json_示例",
+              "desc": "<p>以下示例从官方 3-Stone AI 目录中选择支持结构化输出的可用目标. <code>responseSchema</code> 会隐式启用 <code>structuredJson</code>, 因此可省略 <code>structuredJson: true</code>. 返回值仍是字符串, 需要在 Promise 兑现后调用 <code>JSON.parse</code>.</p>\n<pre><code class=\"lang-js\">let schema = {\n    type: &#39;object&#39;,\n    properties: {\n        answer: { type: &#39;string&#39; },\n        ok: { type: &#39;boolean&#39; },\n    },\n    required: [&#39;answer&#39;, &#39;ok&#39;],\n};\n\nai.catalog().then((catalog) =&gt; {\n    let target = catalog.targets.find((item) =&gt; {\n        return item.configured &amp;&amp;\n            item.available &amp;&amp;\n            item.capabilities.includes(&#39;structured-json&#39;) &amp;&amp;\n            item.supportedControls.includes(&#39;response-json-schema&#39;);\n    });\n    if (!target) {\n        throw new Error(&#39;No structured JSON target is available&#39;);\n    }\n    return ai.ask(&#39;Return answer as OK and ok as true.&#39;, {\n        target: target.id,\n        responseSchema: schema,\n        maxTokens: 64,\n    });\n}).then((text) =&gt; {\n    let value = JSON.parse(text);\n    console.log(value.answer, value.ok);\n});\n</code></pre>\n<p>同一 schema 需要用于多个连续轮次时, 在创建持久会话时固定它:</p>\n<pre><code class=\"lang-js\">ai.catalog().then((catalog) =&gt; {\n    let target = catalog.targets.find((item) =&gt; {\n        return item.available &amp;&amp;\n            item.capabilities.includes(&#39;persistent-session&#39;) &amp;&amp;\n            item.capabilities.includes(&#39;structured-json&#39;);\n    });\n    if (!target) {\n        throw new Error(&#39;No persistent structured JSON target is available&#39;);\n    }\n    return ai.session({\n        target: target.id,\n        structuredJson: true,\n        responseSchema: schema,\n        maxTokens: 64,\n    });\n}).then((session) =&gt; {\n    return session.ask(&#39;Return the first object.&#39;)\n        .then((text) =&gt; {\n            console.log(JSON.parse(text));\n            return session.chat(&#39;Return the second object.&#39;);\n        })\n        .then((response) =&gt; {\n            console.log(JSON.parse(response.text));\n            session.close();\n        }, (error) =&gt; {\n            session.close();\n            throw error;\n        });\n});\n</code></pre>\n",
               "type": "module",
-              "displayName": "本机结构化 JSON 示例"
+              "displayName": "插件结构化 JSON 示例"
             },
             {
-              "textRaw": "本机插件完整路由示例",
-              "name": "本机插件完整路由示例",
-              "desc": "<p>以下示例先枚举官方插件模型, 再用目录返回的精确模型 ID 发起带有完整历史的单次对话请求. <code>plugin</code> 对象省略 <code>component</code>, 因此仍固定选择官方插件. 需要让插件在多个请求之间保留上下文时使用 <a href=\"#m-session\">ai.session</a>.</p>\n<pre><code class=\"lang-js\">let messages = [\n    { role: &#39;system&#39;, content: &#39;Answer with one short sentence.&#39; },\n    { role: &#39;assistant&#39;, content: &#39;Understood.&#39; },\n    { role: &#39;user&#39;, content: &#39;Introduce AutoJs6.&#39; },\n];\n\nai.models({ timeout: 30000 }).then((models) =&gt; {\n    if (models.length === 0) {\n        throw new Error(&#39;No local AI model is available&#39;);\n    }\n    let selectedModel = models[0];\n    let gpu = selectedModel.backendProfiles.find((profile) =&gt; {\n        return profile.id === &#39;gpu&#39; &amp;&amp; profile.availability === &#39;available&#39;;\n    });\n    return ai.chat(messages, {\n        plugin: { modelId: selectedModel.modelId },\n        timeout: 30000,\n        temperature: 0.7,\n        topK: 40,\n        topP: 0.9,\n        maxTokens: 128,\n        backend: gpu ? &#39;gpu&#39; : &#39;cpu&#39;,\n    });\n}).then((response) =&gt; {\n    console.log(response.route, response.provider, response.model);\n    console.log(response.text);\n    console.log(\n        response.usage.inputTokens,\n        response.usage.outputTokens,\n        response.usage.totalTokens,\n    );\n    if (response.usage.raw !== null) {\n        console.log(response.usage.raw.durationMillis);\n    }\n}).catch((error) =&gt; {\n    console.error(error.route, error.code, error.message);\n});\n</code></pre>\n<p>需要固定精确组件时, 使用完整选择器. 以下组件是 AutoJs6 官方插件的当前服务组件; 第三方兼容插件应替换为自己的包名, 类名和提供商 ID.</p>\n<pre><code class=\"lang-js\">let plugin = {\n    component: {\n        packageName: &#39;io.github.supermonster003.autojs6.plugin.ondeviceai&#39;,\n        className: &#39;io.github.supermonster003.autojs6.plugin.ondeviceai.provider.OnDeviceAiProviderService&#39;,\n    },\n    providerId: &#39;autojs6.on-device-ai&#39;,\n    modelId: &#39;litertlm.0123456789abcdef0123456789abcdef&#39;,\n};\n\nlet stream = ai.stream(messages, {\n    plugin: plugin,\n    timeout: 60000,\n    maxTokens: 128,\n});\n\nstream\n    .on(&#39;open&#39;, (metadata) =&gt; {\n        console.log(metadata.route, metadata.provider, metadata.model);\n    })\n    .on(&#39;delta&#39;, (text) =&gt; {\n        console.log(text);\n    })\n    .on(&#39;usage&#39;, (usage) =&gt; {\n        console.log(usage.inputTokens, usage.outputTokens, usage.totalTokens);\n    })\n    .on(&#39;done&#39;, (response) =&gt; {\n        console.log(response.text, response.usage);\n    })\n    .on(&#39;error&#39;, (error) =&gt; {\n        console.error(error.route, error.code, error.message);\n    });\n</code></pre>\n",
+              "textRaw": "统一目标路由示例",
+              "name": "统一目标路由示例",
+              "desc": "<p>以下示例先读取官方插件目录, 再用完整目标 ID 发起带有消息历史的单次请求. 示例优先选择已配置且可用的在线目标; 没有在线目标时使用插件声明的默认目标. 需要让插件在多个请求之间保留上下文时使用 <a href=\"#m-session\">ai.session</a>.</p>\n<pre><code class=\"lang-js\">let messages = [\n    { role: &#39;system&#39;, content: &#39;Answer with one short sentence.&#39; },\n    { role: &#39;assistant&#39;, content: &#39;Understood.&#39; },\n    { role: &#39;user&#39;, content: &#39;Introduce AutoJs6.&#39; },\n];\n\nai.catalog({ timeout: 30000 }).then((catalog) =&gt; {\n    let selectedTarget = catalog.targets.find((target) =&gt; {\n        return target.locality === &#39;remote&#39; &amp;&amp; target.configured &amp;&amp; target.available;\n    }) || catalog.targets.find((target) =&gt; {\n        return target.id === catalog.defaultTarget;\n    });\n    if (!selectedTarget) {\n        throw new Error(&#39;No default or configured online AI target is available&#39;);\n    }\n    let gpu = selectedTarget.backendProfiles.find((profile) =&gt; {\n        return profile.id === &#39;gpu&#39; &amp;&amp; profile.availability === &#39;available&#39;;\n    });\n    let options = {\n        target: selectedTarget.id,\n        timeout: 30000,\n        temperature: 0.7,\n        topK: 40,\n        topP: 0.9,\n        maxTokens: 128,\n    };\n    if (gpu) {\n        options.backend = &#39;gpu&#39;;\n    }\n    return ai.chat(messages, options);\n}).then((response) =&gt; {\n    console.log(response.route, response.target.id, response.provider, response.model);\n    console.log(response.text);\n    console.log(\n        response.usage.inputTokens,\n        response.usage.outputTokens,\n        response.usage.totalTokens,\n    );\n    console.log(response.usage.durationMillis, response.finishReason);\n}).catch((error) =&gt; {\n    console.error(error.route, error.code, error.message);\n});\n</code></pre>\n<p>需要固定精确组件时, 使用完整选择器. 以下组件是 AutoJs6 官方插件的当前服务组件; 第三方兼容插件应替换为自己的包名, 类名和提供商 ID.</p>\n<pre><code class=\"lang-js\">let plugin = {\n    component: {\n        packageName: &#39;io.github.supermonster003.autojs6.plugin.threestoneai&#39;,\n        className: &#39;io.github.supermonster003.autojs6.plugin.threestoneai.provider.ThreeStoneAiProviderService&#39;,\n    },\n    providerId: &#39;autojs6.three-stone-ai&#39;,\n};\n\nai.catalog({ plugin: plugin }).then((catalog) =&gt; {\n    if (!catalog.defaultTarget) {\n        throw new Error(&#39;The plugin has no default target&#39;);\n    }\n    return ai.stream(messages, {\n        plugin: plugin,\n        target: catalog.defaultTarget,\n        timeout: 60000,\n        maxTokens: 128,\n    });\n}).then((stream) =&gt; stream\n    .on(&#39;open&#39;, (metadata) =&gt; {\n        console.log(metadata.route, metadata.target.id, metadata.provider, metadata.model);\n    })\n    .on(&#39;delta&#39;, (text) =&gt; {\n        console.log(text);\n    })\n    .on(&#39;usage&#39;, (usage) =&gt; {\n        console.log(usage.inputTokens, usage.outputTokens, usage.totalTokens);\n    })\n    .on(&#39;done&#39;, (response) =&gt; {\n        console.log(response.text, response.usage);\n    })\n    .on(&#39;error&#39;, (error) =&gt; {\n        console.error(error.route, error.code, error.message);\n    }));\n</code></pre>\n",
               "type": "module",
-              "displayName": "本机插件完整路由示例"
+              "displayName": "统一目标路由示例"
             }
           ],
           "type": "module",
@@ -338,7 +262,7 @@
             {
               "textRaw": "AiPluginResponse",
               "name": "aipluginresponse",
-              "desc": "<p>AiPluginResponse 是本机插件 <a href=\"#m-chat\">chat</a> 和 <a href=\"#m-stream\">stream</a> 完成时的响应.</p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 生成文本</li>\n<li><strong>reasoning</strong> { <code>&#39;&#39;</code> } - 空字符串; 本机文本插件路由不公开推理文本</li>\n<li><strong>toolCalls</strong> { <a href=\"dataTypes#array\">Array</a> } - 空数组; 本机文本插件路由不支持工具调用</li>\n<li><strong>usage</strong> { <a href=\"#aipluginusage\">AiPluginUsage</a> } - 插件最终用量</li>\n<li><strong>finishReason</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>message</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>error</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code>; 失败通过 Promise 拒绝或 <code>error</code> 事件报告</li>\n<li><strong>raw</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>profile</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code>; 插件路由不使用云端配置档案</li>\n<li><strong>route</strong> { <code>&#39;plugin&#39;</code> } - 插件路由标识</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 实际提供商 ID</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 已知的模型 ID; 流式简写选择器可能为 <code>null</code></li>\n</ul>\n",
+              "desc": "<p>AiPluginResponse 是插件目标 <a href=\"#m-chat\">chat</a> 和 <a href=\"#m-stream\">stream</a> 完成时的响应.</p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 生成文本</li>\n<li><strong>reasoning</strong> { <a href=\"dataTypes#string\">string</a> } - 推理文本; 未请求或不可用时为空字符串</li>\n<li><strong>toolCalls</strong> { <a href=\"dataTypes#array\">Array</a> } - 空数组; 当前插件公开路由不接受工具调用</li>\n<li><strong>usage</strong> { <a href=\"#aipluginusage\">AiPluginUsage</a> } - 插件最终用量</li>\n<li><strong>finishReason</strong> { <code>&#39;stop&#39;</code> | <code>&#39;length&#39;</code> | <code>&#39;tool_calls&#39;</code> | <code>&#39;content_filter&#39;</code> | <code>&#39;error&#39;</code> | <code>&#39;other&#39;</code> } - 协议完成原因</li>\n<li><strong>message</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>error</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code>; 失败通过 Promise 拒绝或 <code>error</code> 事件报告</li>\n<li><strong>raw</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>profile</strong> { <a href=\"#aipluginprofilereference\">AiPluginProfileReference</a> | <a href=\"dataTypes#null\">null</a> } - 在线目标的插件管理档案引用; 本地目标为 <code>null</code></li>\n<li><strong>target</strong> { <a href=\"#aitarget\">AiTarget</a> } - 实际解析的完整目标元数据</li>\n<li><strong>plugin</strong> { <a href=\"#aipluginidentity\">AiPluginIdentity</a> } - 实际绑定的插件身份</li>\n<li><strong>route</strong> { <code>&#39;plugin&#39;</code> } - 插件路由标识</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 实际提供商 ID</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> } - 实际模型 ID</li>\n</ul>\n",
               "type": "module",
               "displayName": "AiPluginResponse"
             },
@@ -352,21 +276,35 @@
             {
               "textRaw": "AiPluginStreamChunk",
               "name": "AiPluginStreamChunk",
-              "desc": "<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 当前文本增量; 结构化模式下可能尚不是完整 JSON</li>\n<li><strong>reasoning</strong> { <code>&#39;&#39;</code> } - 空字符串</li>\n<li><strong>toolCalls</strong> { <a href=\"dataTypes#array\">Array</a> } - 空数组</li>\n<li><strong>usage</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code>; 用量通过独立 <code>usage</code> 事件报告</li>\n<li><strong>finishReason</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>done</strong> { <code>false</code> } - 固定为 <code>false</code>; 正常完成通过 <code>done</code> 事件报告</li>\n<li><strong>raw</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n</ul>\n",
+              "desc": "<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 当前文本增量; 结构化模式下可能尚不是完整 JSON</li>\n<li><strong>reasoning</strong> { <a href=\"dataTypes#string\">string</a> } - 当前推理增量; 纯推理块中 <code>text</code> 为空字符串</li>\n<li><strong>toolCalls</strong> { <a href=\"dataTypes#array\">Array</a> } - 空数组</li>\n<li><strong>usage</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code>; 用量通过独立 <code>usage</code> 事件报告</li>\n<li><strong>finishReason</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>done</strong> { <code>false</code> } - 固定为 <code>false</code>; 正常完成通过 <code>done</code> 事件报告</li>\n<li><strong>raw</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n</ul>\n",
               "type": "module",
-              "displayName": "AiPluginModel"
+              "displayName": "AiTargetCatalog"
             },
             {
-              "textRaw": "AiPluginModel",
-              "name": "aipluginmodel",
-              "desc": "<ul>\n<li><strong>modelId</strong> { <a href=\"dataTypes#string\">string</a> } - 可用于插件选择器的稳定模型 ID</li>\n<li><strong>displayName</strong> { <a href=\"dataTypes#string\">string</a> } - 面向用户的模型名称</li>\n<li><strong>capabilityIds</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 模型能力 ID</li>\n<li><strong>maximumContextBytes</strong> { <a href=\"dataTypes#number\">number</a> } - 最大上下文字节数</li>\n<li><strong>maximumOutputBytes</strong> { <a href=\"dataTypes#number\">number</a> } - 最大输出字节数</li>\n<li><strong>backendProfiles</strong> { <a href=\"#aipluginbackendprofile\">AiPluginBackendProfile</a><a href=\"dataTypes#array\">[]</a> } - backend profile 及当前设备可用性</li>\n</ul>\n<p>模型目录中的字节上限来自插件协议, 不等同于 token 上限. 当前官方插件可报告 <code>streaming</code>, <code>structured-json</code>, <code>usage</code> 和 <code>persistent-session</code> 等能力 ID; 调用方应按字符串集合判断, 不应假设能力列表固定不变.</p>\n",
+              "textRaw": "AiTargetCatalog",
+              "name": "aitargetcatalog",
+              "desc": "<ul>\n<li><strong>generation</strong> { <a href=\"dataTypes#string\">string</a> } - 当前目录快照 generation</li>\n<li><strong>plugin</strong> { <a href=\"#aipluginidentity\">AiPluginIdentity</a> } - 目录所属插件</li>\n<li><strong>defaultTarget</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件声明的默认目标 ID</li>\n<li><strong>targets</strong> { <a href=\"#aitarget\">AiTarget</a><a href=\"dataTypes#array\">[]</a> } - 完整目标列表</li>\n</ul>\n<p><code>defaultTarget</code> 与 <code>targets</code> 中唯一的 <code>isDefault: true</code> 条目一致. generation 会反映目录配置或运行时探测变化, 调用方不应跨 generation 缓存可用性判断.</p>\n",
               "type": "module",
-              "displayName": "AiPluginModel"
+              "displayName": "AiTargetCatalog"
+            },
+            {
+              "textRaw": "AiTarget",
+              "name": "aitarget",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - <code>local:...</code> 或 <code>profile:...</code> 形式的稳定目标 ID</li>\n<li><strong>displayName</strong> { <a href=\"dataTypes#string\">string</a> } - 面向用户的目标名称</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 目标提供商 ID</li>\n<li><strong>profile</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件管理的在线档案 ID; 本地目标为 <code>null</code></li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> } - 模型 ID</li>\n<li><strong>locality</strong> { <code>&#39;local&#39;</code> | <code>&#39;remote&#39;</code> | <code>&#39;hybrid&#39;</code> } - 数据处理位置</li>\n<li><strong>credentialMode</strong> { <code>&#39;none&#39;</code> | <code>&#39;plugin-managed&#39;</code> } - 凭据归属; 凭据内容不会返回宿主或脚本</li>\n<li><strong>configured</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 目标所需配置是否完整</li>\n<li><strong>available</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前是否可规划生成</li>\n<li><strong>availability</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 协议可用性状态</li>\n<li><strong>isDefault</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否为插件声明的默认目标</li>\n<li><strong>capabilities</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 目标能力 ID</li>\n<li><strong>supportedControls</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 目标接受的生成控制 ID</li>\n<li><strong>limits</strong> {{ maximumContextBytes: <a href=\"dataTypes#number\">number</a>; maximumOutputBytes: <a href=\"dataTypes#number\">number</a> }} - 协议字节上限</li>\n<li><strong>origins</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 远程或混合目标声明的 HTTPS origins; 本地目标为空数组</li>\n<li><strong>backendProfiles</strong> { <a href=\"#aipluginbackendprofile\">AiPluginBackendProfile</a><a href=\"dataTypes#array\">[]</a> } - backend profile 及当前设备可用性</li>\n</ul>\n<p>能力 ID 当前包括 <code>streaming</code>, <code>reasoning</code>, <code>tools</code>, <code>structured-json</code>, <code>usage</code> 和 <code>persistent-session</code>. 控制 ID 当前包括 <code>maximum-output-tokens</code>, <code>temperature</code>, <code>top-k</code>, <code>top-p</code>, <code>response-json-schema</code> 和 <code>backend-profile</code>. 调用方应按字符串集合判断, 不应假设每个目标都支持全部能力或控制.</p>\n<p>目录中的字节上限来自插件协议, 不等同于 token 上限. <code>configured: false</code> 的目标必然不可用; 此类目标仍保留在目录中, 便于 UI 和脚本引导用户完成配置.</p>\n",
+              "type": "module",
+              "displayName": "AiTarget"
+            },
+            {
+              "textRaw": "AiPluginProfileReference",
+              "name": "AiPluginProfileReference",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 插件管理的在线档案 ID</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 目标提供商 ID</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> } - 模型 ID</li>\n<li><strong>target</strong> { <a href=\"dataTypes#string\">string</a> } - 完整目标 ID</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "AiPluginBackendProfile"
             },
             {
               "textRaw": "AiPluginBackendProfile",
               "name": "aipluginbackendprofile",
-              "desc": "<ul>\n<li><strong>id</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> } - 可传给 <code>backend</code> 的稳定 profile ID</li>\n<li><strong>availability</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 当前插件进程和设备的运行时前置条件状态</li>\n<li><strong>[ unavailableReason ]</strong> { <code>&#39;abi-unsupported&#39;</code> | <code>&#39;opencl-library-unavailable&#39;</code> | <code>&#39;npu-runtime-not-packaged&#39;</code> } - 仅在 <code>unavailable</code> 时存在的稳定原因</li>\n</ul>\n<p><code>available</code> 不是所有模型都必然能够初始化的保证. 它用于在生成前排除 ABI, 动态链接命名空间和未打包运行时等确定性问题; 最终兼容性仍由所选模型在对应 LiteRT-LM backend 上的初始化结果决定. backend 探测结果会参与模型目录 generation, 因而分页期间设备状态变化会使旧 continuation token 失效.</p>\n",
+              "desc": "<ul>\n<li><strong>id</strong> { <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> } - 可传给 <code>backend</code> 的稳定 profile ID</li>\n<li><strong>availability</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 当前插件进程和设备的运行时前置条件状态</li>\n<li><strong>[ unavailableReason ]</strong> { <code>&#39;abi-unsupported&#39;</code> | <code>&#39;opencl-library-unavailable&#39;</code> | <code>&#39;npu-runtime-not-packaged&#39;</code> } - 仅在 <code>unavailable</code> 时存在的稳定原因</li>\n</ul>\n<p><code>available</code> 不是特定模型必然能够初始化的保证. 它用于在生成前排除 ABI, 动态链接命名空间和未打包运行时等确定性问题; 最终兼容性仍由目标在对应 backend 上的初始化结果决定. backend 探测结果会参与目录 generation.</p>\n",
               "type": "module",
               "displayName": "AiPluginBackendProfile"
             },
@@ -380,7 +318,7 @@
             {
               "textRaw": "AiPluginUsage",
               "name": "aipluginusage",
-              "desc": "<ul>\n<li><strong>inputTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输入 token 数</li>\n<li><strong>outputTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输出 token 数</li>\n<li><strong>totalTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - token 总数</li>\n<li><strong>reasoningTokens</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>cachedInputTokens</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n<li><strong>raw</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 插件原始用量; 提供耗时时包含非负的 <code>durationMillis</code></li>\n</ul>\n<p>协议要求 <code>inputTokens</code>, <code>outputTokens</code> 和 <code>totalTokens</code> 至少有一个非空. 官方 On-Device AI 插件会返回精确的输入, 输出和总 token 数, 并在 <code>raw.durationMillis</code> 中返回实测生成耗时.</p>\n",
+              "desc": "<ul>\n<li><strong>inputTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输入 token 数</li>\n<li><strong>outputTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输出 token 数</li>\n<li><strong>totalTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - token 总数</li>\n<li><strong>reasoningTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 推理 token 数</li>\n<li><strong>cachedInputTokens</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 缓存输入 token 数</li>\n<li><strong>durationMillis</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 插件实测生成耗时</li>\n<li><strong>raw</strong> { <a href=\"dataTypes#null\">null</a> } - 固定为 <code>null</code></li>\n</ul>\n<p>协议要求上述五个 token 计数至少有一个非空. 各字段均为插件报告值; 宿主不会根据字符数估算或改写.</p>\n",
               "type": "module",
               "displayName": "AiPluginUsage"
             },
@@ -397,20 +335,6 @@
               "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案 ID</li>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案名称</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>baseUrl</strong> { <a href=\"dataTypes#string\">string</a> } - 服务基础 URL</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> } - 模型名称</li>\n</ul>\n<p>独立调用没有已保存档案, 因此 <code>id</code> 和 <code>name</code> 为 <code>null</code>.</p>\n",
               "type": "module",
               "displayName": "AiProfileReference"
-            },
-            {
-              "textRaw": "AiProfile",
-              "name": "aiprofile",
-              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 档案 ID</li>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 档案名称</li>\n<li><strong>provider</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商 ID</li>\n<li><strong>baseUrl</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 服务基础 URL</li>\n<li><strong>model</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 模型名称</li>\n<li><strong>hasApiKey</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 是否保存了 API 密钥</li>\n<li><strong>isDefault</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否为默认档案</li>\n<li><strong>status</strong> { <code>&#39;available&#39;</code> | <code>&#39;unavailable&#39;</code> } - 档案是否可用</li>\n<li><strong>errorCode</strong> { <code>&#39;missing_entry&#39;</code> | <code>&#39;decryption_failed&#39;</code> | <code>&#39;invalid_data&#39;</code> | <a href=\"dataTypes#null\">null</a> } - 档案不可用原因代码</li>\n</ul>\n<p>无法解密或解析的档案仍会出现在列表中, 此时部分字段为 <code>null</code>.</p>\n",
-              "type": "module",
-              "displayName": "AiProfile"
-            },
-            {
-              "textRaw": "AiProvider",
-              "name": "aiprovider",
-              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>defaultBaseUrl</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 默认服务基础 URL</li>\n</ul>\n",
-              "type": "module",
-              "displayName": "AiProvider"
             }
           ],
           "type": "module",
@@ -419,7 +343,7 @@
         {
           "textRaw": "AiSession",
           "name": "aisession",
-          "desc": "<p>AiSession 表示一个由本机插件持有的持久 Conversation. 会话不使用 HTTP 提供商档案, 也不会在路由失败时回退到云端. 会话保持打开时会占用插件的单会话准入和模型资源, 不再使用时应调用 <a href=\"#m-aisessionclose\">close</a>.</p>\n",
+          "desc": "<p>AiSession 表示一个由 AI 插件持有的持久 Conversation. 在线目标的档案和凭据仍由插件管理; 会话不会在路由失败时改选目标或转入宿主 HTTP 路由. 会话保持打开时会占用插件的会话准入和目标资源, 不再使用时应调用 <a href=\"#m-aisessionclose\">close</a>.</p>\n",
           "modules": [
             {
               "textRaw": "[p#] AiSession#provider",
@@ -434,6 +358,27 @@
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>会话规划阶段解析并固定的模型 ID.</p>\n",
               "type": "module",
               "displayName": "[p#] AiSession#model"
+            },
+            {
+              "textRaw": "[p#] AiSession#target",
+              "name": "[p#]_aisession#target",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>会话规划阶段解析并固定的完整目标 ID.</p>\n",
+              "type": "module",
+              "displayName": "[p#] AiSession#target"
+            },
+            {
+              "textRaw": "[p#] AiSession#profile",
+              "name": "[p#]_aisession#profile",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>在线目标的插件管理档案 ID; 本地目标为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] AiSession#profile"
+            },
+            {
+              "textRaw": "[p#] AiSession#backend",
+              "name": "[p#]_aisession#backend",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <code>&#39;cpu&#39;</code> | <code>&#39;gpu&#39;</code> | <code>&#39;npu&#39;</code> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>会话固定的显式 backend profile. 未显式指定时为 <code>null</code>.</p>\n",
+              "type": "module",
+              "displayName": "[p#] AiSession#backend"
             },
             {
               "textRaw": "[p#] AiSession#state",
@@ -466,14 +411,14 @@
             {
               "textRaw": "[m#] AiSession#stream(prompt)",
               "name": "[m#]_aisession#stream(prompt)",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>prompt</strong> { <a href=\"dataTypes#string\">string</a> } - 当前轮次的新用户提示词</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 当前轮次的流式请求对象</li>\n</ul>\n<p>在保留既有 Conversation 上下文的同时发起一个流式轮次. 事件形状与普通插件流式路由相同.</p>\n<p>调用返回对象的 <code>cancel()</code> 会关闭整个 AiSession, 因为已取消生成后的插件 KV cache 不会继续复用. <code>error</code> 事件, 超时或协议错误也会使会话进入 <code>closed</code> 状态.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>prompt</strong> { <a href=\"dataTypes#string\">string</a> } - 当前轮次的新用户提示词</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#aistream\">AiStream</a> } - 当前轮次的流式请求对象</li>\n</ul>\n<p>在保留既有 Conversation 上下文的同时发起一个流式轮次. 事件形状与普通插件流式路由相同.</p>\n<p>调用返回对象的 <code>cancel()</code> 会关闭整个 AiSession, 因为取消后的插件 Conversation 不会继续复用. <code>error</code> 事件, 超时或协议错误也会使会话进入 <code>closed</code> 状态.</p>\n",
               "type": "module",
               "displayName": "[m#] AiSession#stream(prompt)"
             },
             {
               "textRaw": "[m#] AiSession#close()",
               "name": "[m#]_aisession#close()",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>关闭会话, 取消活动轮次并释放插件 Conversation, Binder 连接和模型资源. 重复调用不会产生额外效果.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>关闭会话, 取消活动轮次并释放插件 Conversation, Binder 连接和目标资源. 重复调用不会产生额外效果.</p>\n",
               "type": "module",
               "displayName": "[m#] AiSession#close()"
             }
@@ -533,9 +478,16 @@
             {
               "textRaw": "AiStreamError",
               "name": "aistreamerror",
-              "desc": "<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 异常类名称</li>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 错误消息</li>\n<li><strong>[ route ]</strong> { <code>&#39;plugin&#39;</code> } - 插件路由错误标识</li>\n<li><strong>[ provider ]</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>[ statusCode ]</strong> { <a href=\"dataTypes#number\">number</a> } - HTTP 状态码</li>\n<li><strong>[ code ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误代码</li>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误类型</li>\n<li><strong>[ requestId ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商请求 ID</li>\n</ul>\n<p>只有 HTTP 提供商错误包含 <code>provider</code>, <code>statusCode</code>, <code>type</code> 和 <code>requestId</code>. 插件路由错误包含 <code>route: &#39;plugin&#39;</code> 和 <code>code</code>.</p>\n",
+              "desc": "<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 异常类名称</li>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 错误消息</li>\n<li><strong>[ route ]</strong> { <code>&#39;plugin&#39;</code> } - 插件路由错误标识</li>\n<li><strong>[ provider ]</strong> { <a href=\"dataTypes#string\">string</a> } - 提供商 ID</li>\n<li><strong>[ statusCode ]</strong> { <a href=\"dataTypes#number\">number</a> } - HTTP 状态码</li>\n<li><strong>[ code ]</strong> { <a href=\"#aipluginerrorcode\">AiPluginErrorCode</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件稳定错误码或 HTTP 提供商错误代码</li>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商错误类型</li>\n<li><strong>[ requestId ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 提供商请求 ID</li>\n</ul>\n<p>只有 HTTP 提供商错误包含 <code>provider</code>, <code>statusCode</code>, <code>type</code> 和 <code>requestId</code>. 插件路由错误包含 <code>route: &#39;plugin&#39;</code> 和 <code>code</code>.</p>\n",
               "type": "module",
               "displayName": "AiStreamError"
+            },
+            {
+              "textRaw": "AiPluginErrorCode",
+              "name": "aipluginerrorcode",
+              "desc": "<p>插件路由 Promise 拒绝和流式 <code>error</code> 事件使用以下稳定错误码:</p>\n<table>\n<thead>\n<tr>\n<th>错误码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>INVALID_REQUEST</code></td>\n<td>输入, 选择器或选项无效</td>\n</tr>\n<tr>\n<td><code>AI_PROVIDER_UNAVAILABLE</code></td>\n<td>插件服务未安装或不可发现</td>\n</tr>\n<tr>\n<td><code>AI_PROVIDER_DISABLED</code></td>\n<td>插件组件被禁用</td>\n</tr>\n<tr>\n<td><code>AI_PROVIDER_REJECTED</code></td>\n<td>插件身份, 签名, 权限或协议协商被拒绝</td>\n</tr>\n<tr>\n<td><code>BUSY</code></td>\n<td>插件当前不接受新的并发请求</td>\n</tr>\n<tr>\n<td><code>FUSED</code></td>\n<td>插件连接因安全或协议违规被熔断</td>\n</tr>\n<tr>\n<td><code>CANCELLED</code></td>\n<td>请求被取消</td>\n</tr>\n<tr>\n<td><code>TIMED_OUT</code></td>\n<td>请求或会话轮次超时</td>\n</tr>\n<tr>\n<td><code>BINDER_DIED</code></td>\n<td>插件进程或 Binder 连接失效</td>\n</tr>\n<tr>\n<td><code>TARGET_NOT_FOUND</code></td>\n<td>完整目标 ID 不存在; 应重新读取 <code>ai.catalog()</code></td>\n</tr>\n<tr>\n<td><code>TARGET_NOT_CONFIGURED</code></td>\n<td>目标存在, 但插件管理配置不完整</td>\n</tr>\n<tr>\n<td><code>TARGET_UNAVAILABLE</code></td>\n<td>目标已配置, 但当前不可用</td>\n</tr>\n<tr>\n<td><code>TARGET_CAPABILITY_MISMATCH</code></td>\n<td>目标不满足流式, 推理, 结构化输出或持久会话等要求</td>\n</tr>\n<tr>\n<td><code>BACKEND_UNAVAILABLE</code></td>\n<td>显式 backend 不存在或当前不可用</td>\n</tr>\n<tr>\n<td><code>SESSION_CLOSED</code></td>\n<td>持久会话已经关闭</td>\n</tr>\n<tr>\n<td><code>SESSION_REJECTED</code></td>\n<td>插件拒绝创建会话或继续轮次</td>\n</tr>\n<tr>\n<td><code>PROVIDER_FAILED</code></td>\n<td>目标提供商执行失败</td>\n</tr>\n<tr>\n<td><code>INTERNAL_FAILURE</code></td>\n<td>宿主内部编排失败</td>\n</tr>\n</tbody>\n</table>\n<p>错误码不会触发自动目标替换或路由回退. 对 <code>TARGET_NOT_FOUND</code>, <code>TARGET_NOT_CONFIGURED</code>, <code>TARGET_UNAVAILABLE</code>, <code>TARGET_CAPABILITY_MISMATCH</code> 和 <code>BACKEND_UNAVAILABLE</code>, 应重新检查目录中的目标状态, 能力, 控制和 backend profile 后显式重试.</p>\n",
+              "type": "module",
+              "displayName": "AiPluginErrorCode"
             }
           ],
           "type": "module",

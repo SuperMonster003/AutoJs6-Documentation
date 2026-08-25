@@ -305,6 +305,12 @@
 <li><span class="stability_undefined"><a href="#runtime_loadjar_directory_isrecursive">loadJar(directory, isRecursive)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#runtime_m_loadjarwithr8">[m] loadJarWithR8</a></span><ul>
+<li><span class="stability_undefined"><a href="#runtime_loadjarwithr8_program_keeprules">loadJarWithR8(program, keepRules)</a></span></li>
+<li><span class="stability_undefined"><a href="#runtime_loadjarwithr8_program_keeprules_orderedclasspath">loadJarWithR8(program, keepRules, orderedClasspath)</a></span></li>
+<li><span class="stability_undefined"><a href="#runtime_loadjarwithr8_program_keeprules_orderedclasspath_consumerrules_consumerruleclasspathordinals">loadJarWithR8(program, keepRules, orderedClasspath, consumerRules, consumerRuleClasspathOrdinals)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#runtime_m_loadaar">[m] loadAar</a></span><ul>
 <li><span class="stability_undefined"><a href="#runtime_loadaar_paths">loadAar(...paths)</a></span></li>
 <li><span class="stability_undefined"><a href="#runtime_loadaar_directory_isrecursive">loadAar(directory, isRecursive)</a></span></li>
@@ -580,6 +586,54 @@ console.log(document.text());
 <p>扫描目录并加载其中的 <code>.jar</code> 文件.</p>
 <p><strong>isRecursive</strong> 为 <code>true</code> 时还会扫描一层直接子目录, 但不会继续进入更深层级.</p>
 <hr>
+<h2>[m] loadJarWithR8<span><a class="mark" href="#runtime_m_loadjarwithr8" id="runtime_m_loadjarwithr8">#</a></span></h2>
+<h3>loadJarWithR8(program, keepRules)<span><a class="mark" href="#runtime_loadjarwithr8_program_keeprules" id="runtime_loadjarwithr8_program_keeprules">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/3</code></strong></p>
+<ul>
+<li><strong>program</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待编译和加载的 program JAR 路径</li>
+<li><strong>keepRules</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 非空的显式 R8 keep-rule 文件路径数组</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>通过用户显式选择的独立 R8 provider, 以 full-release 配置编译一个 JAR, 验证完整产物事务后将其中的 DEX 加入当前脚本类加载器.</p>
+<p>此方法会执行 shrinking, optimization 和 obfuscation. 调用前必须在开发者选项的 R8 编译器设置中选择一个与宿主同签名的精确 service 组件. R8 选择默认关闭, 且 <strong>keepRules</strong> 至少包含一个非空规则文件. 未选择 provider, provider 不可用, 协议或身份不匹配, 编译失败, 产物损坏, 缓存失败及 DEX 加载失败都会直接抛出异常. 此入口没有 D8/dx 语义回退.</p>
+<pre><code class="lang-js">runtime.loadJarWithR8(
+    &quot;./libs/example.jar&quot;,
+    [&quot;./rules/example-keep.pro&quot;],
+);
+
+importClass(example.EntryPoint);
+console.log(EntryPoint.run());
+</code></pre>
+<h3>loadJarWithR8(program, keepRules, orderedClasspath)<span><a class="mark" href="#runtime_loadjarwithr8_program_keeprules_orderedclasspath" id="runtime_loadjarwithr8_program_keeprules_orderedclasspath">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/3</code></strong></p>
+<ul>
+<li><strong>program</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待编译和加载的 program JAR 路径</li>
+<li><strong>keepRules</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 非空的显式 R8 keep-rule 文件路径数组</li>
+<li><strong>orderedClasspath</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 有序的编译期 classpath JAR 路径数组</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>在显式 keep rules 之外提供有序的编译期 classpath. Classpath JAR 只参与 R8 解析, 不会被写入 program 输出或作为额外 JAR 自动加入脚本类加载器. Program 在运行时引用的外部类型仍须由当前父类加载器提供.</p>
+<h3>loadJarWithR8(program, keepRules, orderedClasspath, consumerRules, consumerRuleClasspathOrdinals)<span><a class="mark" href="#runtime_loadjarwithr8_program_keeprules_orderedclasspath_consumerrules_consumerruleclasspathordinals" id="runtime_loadjarwithr8_program_keeprules_orderedclasspath_consumerrules_consumerruleclasspathordinals">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload 3/3</code></strong></p>
+<ul>
+<li><strong>program</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待编译和加载的 program JAR 路径</li>
+<li><strong>keepRules</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 非空的显式 R8 keep-rule 文件路径数组</li>
+<li><strong>orderedClasspath</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 有序的编译期 classpath JAR 路径数组</li>
+<li><strong>consumerRules</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 显式 consumer-rule 文件路径数组</li>
+<li><strong>consumerRuleClasspathOrdinals</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a>[]</span> } - 每份 consumer rules 对应的 classpath 索引数组</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>为 classpath JAR 显式绑定 consumer rules. <strong>consumerRules</strong> 与 <strong>consumerRuleClasspathOrdinals</strong> 的长度必须相同. 每个 ordinal 必须是 <strong>orderedClasspath</strong> 的有效零基索引, 同一个 classpath JAR 可以绑定多份 consumer rules.</p>
+<pre><code class="lang-js">runtime.loadJarWithR8(
+    &quot;./libs/example.jar&quot;,
+    [&quot;./rules/example-keep.pro&quot;],
+    [&quot;./libs/example-api.jar&quot;, &quot;./libs/support-api.jar&quot;],
+    [&quot;./rules/example-api-consumer.pro&quot;, &quot;./rules/support-api-consumer.pro&quot;],
+    [0, 1],
+);
+</code></pre>
+<p>所有路径都按照当前脚本引擎的工作目录解析并由宿主先快照到无路径的 canonical 输入包. Provider 返回的 <code>DEX_ZIP</code>, <code>MAPPING_TEXT</code>, <code>SEEDS_TEXT</code>, <code>USAGE_TEXT</code> 和 <code>RETRACE_METADATA</code> 必须全部通过大小, 摘要, 协议和 DEX 完整性校验, 之后仅 <code>DEX_ZIP</code> 会进入类加载器. 该调用是阻塞操作, 不能在 Android 主线程执行. <code>runtime.loadJar()</code> 与 <code>runtime.loadJarWithClasspath()</code> 的既有行为不受 R8 选择影响.</p>
+<hr>
 <h2>[m] loadAar<span><a class="mark" href="#runtime_m_loadaar" id="runtime_m_loadaar">#</a></span></h2>
 <h3>loadAar(...paths)<span><a class="mark" href="#runtime_loadaar_paths" id="runtime_loadaar_paths">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
@@ -606,7 +660,7 @@ console.log(document.text());
 <div class="signature"><ul>
 <li>明确交给 DEX, JAR 或 AAR 加载器的文件不存在, 不可读, 格式无效或字节码转换失败时会抛出异常. <code>load()</code> 会忽略扩展名不受支持的普通文件; 无法列出内容的目录也不会产生加载结果.</li>
 <li>同一运行环境中已加载类的解析结果可能受类名冲突和类加载顺序影响. 应避免多个文件声明同名类.</li>
-<li><code>loadJar()</code> 和 <code>loadAar()</code> 只能转换当前设备和转换器支持的字节码. 类库仍需兼容 Android 运行环境及当前设备 API 级别.</li>
+<li><code>loadJar()</code>, <code>loadJarWithR8()</code> 和 <code>loadAar()</code> 只能转换当前设备和转换器支持的字节码. 类库仍需兼容 Android 运行环境及当前设备 API 级别.</li>
 <li>加载完成后可通过完整包名访问类, 或使用全局函数 <a href="global.html#global_m_importclass">importClass</a> 和 <a href="global.html#global_m_importpackage">importPackage</a>.</li>
 <li>需要任意深度扫描时, 应先使用 <a href="files.html">files</a> 枚举目标文件, 再把明确的文件路径传给可变参数重载.</li>
 </ul>

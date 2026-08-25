@@ -286,6 +286,68 @@ console.log(document.text());
 
 ---
 
+## [m] loadJarWithR8
+
+### loadJarWithR8(program, keepRules)
+
+**`6.8.0`** **`Overload 1/3`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+通过用户显式选择的独立 R8 provider, 以 full-release 配置编译一个 JAR, 验证完整产物事务后将其中的 DEX 加入当前脚本类加载器.
+
+此方法会执行 shrinking, optimization 和 obfuscation. 调用前必须在开发者选项的 R8 编译器设置中选择一个与宿主同签名的精确 service 组件. R8 选择默认关闭, 且 **keepRules** 至少包含一个非空规则文件. 未选择 provider, provider 不可用, 协议或身份不匹配, 编译失败, 产物损坏, 缓存失败及 DEX 加载失败都会直接抛出异常. 此入口没有 D8/dx 语义回退.
+
+```js
+runtime.loadJarWithR8(
+    "./libs/example.jar",
+    ["./rules/example-keep.pro"],
+);
+
+importClass(example.EntryPoint);
+console.log(EntryPoint.run());
+```
+
+### loadJarWithR8(program, keepRules, orderedClasspath)
+
+**`6.8.0`** **`Overload 2/3`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- **orderedClasspath** { [string](dataTypes#string)[] } - 有序的编译期 classpath JAR 路径数组
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+在显式 keep rules 之外提供有序的编译期 classpath. Classpath JAR 只参与 R8 解析, 不会被写入 program 输出或作为额外 JAR 自动加入脚本类加载器. Program 在运行时引用的外部类型仍须由当前父类加载器提供.
+
+### loadJarWithR8(program, keepRules, orderedClasspath, consumerRules, consumerRuleClasspathOrdinals)
+
+**`6.8.0`** **`Overload 3/3`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- **orderedClasspath** { [string](dataTypes#string)[] } - 有序的编译期 classpath JAR 路径数组
+- **consumerRules** { [string](dataTypes#string)[] } - 显式 consumer-rule 文件路径数组
+- **consumerRuleClasspathOrdinals** { [number](dataTypes#number)[] } - 每份 consumer rules 对应的 classpath 索引数组
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+为 classpath JAR 显式绑定 consumer rules. **consumerRules** 与 **consumerRuleClasspathOrdinals** 的长度必须相同. 每个 ordinal 必须是 **orderedClasspath** 的有效零基索引, 同一个 classpath JAR 可以绑定多份 consumer rules.
+
+```js
+runtime.loadJarWithR8(
+    "./libs/example.jar",
+    ["./rules/example-keep.pro"],
+    ["./libs/example-api.jar", "./libs/support-api.jar"],
+    ["./rules/example-api-consumer.pro", "./rules/support-api-consumer.pro"],
+    [0, 1],
+);
+```
+
+所有路径都按照当前脚本引擎的工作目录解析并由宿主先快照到无路径的 canonical 输入包. Provider 返回的 `DEX_ZIP`, `MAPPING_TEXT`, `SEEDS_TEXT`, `USAGE_TEXT` 和 `RETRACE_METADATA` 必须全部通过大小, 摘要, 协议和 DEX 完整性校验, 之后仅 `DEX_ZIP` 会进入类加载器. 该调用是阻塞操作, 不能在 Android 主线程执行. `runtime.loadJar()` 与 `runtime.loadJarWithClasspath()` 的既有行为不受 R8 选择影响.
+
+---
+
 ## [m] loadAar
 
 ### loadAar(...paths)
@@ -323,7 +385,7 @@ runtime.loadAar("./libs/example.aar");
 
 - 明确交给 DEX, JAR 或 AAR 加载器的文件不存在, 不可读, 格式无效或字节码转换失败时会抛出异常. `load()` 会忽略扩展名不受支持的普通文件; 无法列出内容的目录也不会产生加载结果.
 - 同一运行环境中已加载类的解析结果可能受类名冲突和类加载顺序影响. 应避免多个文件声明同名类.
-- `loadJar()` 和 `loadAar()` 只能转换当前设备和转换器支持的字节码. 类库仍需兼容 Android 运行环境及当前设备 API 级别.
+- `loadJar()`, `loadJarWithR8()` 和 `loadAar()` 只能转换当前设备和转换器支持的字节码. 类库仍需兼容 Android 运行环境及当前设备 API 级别.
 - 加载完成后可通过完整包名访问类, 或使用全局函数 [importClass](global#m-importclass) 和 [importPackage](global#m-importpackage).
 - 需要任意深度扫描时, 应先使用 [files](files) 枚举目标文件, 再把明确的文件路径传给可变参数重载.
 

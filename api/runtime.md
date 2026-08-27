@@ -290,7 +290,7 @@ console.log(document.text());
 
 ### loadJarWithR8(program, keepRules)
 
-**`6.8.0`** **`Overload 1/3`**
+**`6.8.0`** **`Overload 1/6`**
 
 - **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
 - **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
@@ -312,7 +312,7 @@ console.log(EntryPoint.run());
 
 ### loadJarWithR8(program, keepRules, orderedClasspath)
 
-**`6.8.0`** **`Overload 2/3`**
+**`6.8.0`** **`Overload 2/6`**
 
 - **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
 - **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
@@ -323,7 +323,7 @@ console.log(EntryPoint.run());
 
 ### loadJarWithR8(program, keepRules, orderedClasspath, consumerRules, consumerRuleClasspathOrdinals)
 
-**`6.8.0`** **`Overload 3/3`**
+**`6.8.0`** **`Overload 3/6`**
 
 - **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
 - **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
@@ -344,7 +344,87 @@ runtime.loadJarWithR8(
 );
 ```
 
+### loadJarWithR8(program, keepRules, exportDirectory)
+
+**`6.8.0`** **`Overload 4/6`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- **exportDirectory** { [string](dataTypes#string) } - 必须尚不存在的报告导出目录路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+完成 R8 编译和产物验证后, 将 `mapping.txt`, `seeds.txt`, `usage.txt` 和 `retrace-metadata.bin` 作为一个目录事务导出, 然后加载已验证的 DEX. 导出目录的父目录不存在时会自动创建, 但目标目录本身必须不存在.
+
+每个导出文件在隔离 staging 目录中重新校验大小和 SHA-256. 四个文件全部通过后, staging 目录才会通过同父目录重命名发布. 导出失败时不会加载 DEX, 不会留下部分目标目录, 也不会修改编译缓存. DEX 不会被隐式导出.
+
+### loadJarWithR8(program, keepRules, orderedClasspath, exportDirectory)
+
+**`6.8.0`** **`Overload 5/6`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- **orderedClasspath** { [string](dataTypes#string)[] } - 有序的编译期 classpath JAR 路径数组
+- **exportDirectory** { [string](dataTypes#string) } - 必须尚不存在的报告导出目录路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+使用有序 classpath 编译, 并按上述四文件事务导出报告.
+
+### loadJarWithR8(program, keepRules, orderedClasspath, consumerRules, consumerRuleClasspathOrdinals, exportDirectory)
+
+**`6.8.0`** **`Overload 6/6`**
+
+- **program** { [string](dataTypes#string) } - 待编译和加载的 program JAR 路径
+- **keepRules** { [string](dataTypes#string)[] } - 非空的显式 R8 keep-rule 文件路径数组
+- **orderedClasspath** { [string](dataTypes#string)[] } - 有序的编译期 classpath JAR 路径数组
+- **consumerRules** { [string](dataTypes#string)[] } - 显式 consumer-rule 文件路径数组
+- **consumerRuleClasspathOrdinals** { [number](dataTypes#number)[] } - 每份 consumer rules 对应的 classpath 索引数组
+- **exportDirectory** { [string](dataTypes#string) } - 必须尚不存在的报告导出目录路径
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+使用完整的 classpath 和 consumer-rule 绑定编译, 并按上述四文件事务导出报告.
+
+```js
+let reportDirectory = "./build/r8-reports-" + Date.now();
+
+runtime.loadJarWithR8(
+    "./libs/example.jar",
+    ["./rules/example-keep.pro"],
+    reportDirectory,
+);
+```
+
 所有路径都按照当前脚本引擎的工作目录解析并由宿主先快照到无路径的 canonical 输入包. Provider 返回的 `DEX_ZIP`, `MAPPING_TEXT`, `SEEDS_TEXT`, `USAGE_TEXT` 和 `RETRACE_METADATA` 必须全部通过大小, 摘要, 协议和 DEX 完整性校验, 之后仅 `DEX_ZIP` 会进入类加载器. 该调用是阻塞操作, 不能在 Android 主线程执行. `runtime.loadJar()` 与 `runtime.loadJarWithClasspath()` 的既有行为不受 R8 选择影响.
+
+---
+
+## [m] retraceR8Stack
+
+### retraceR8Stack(obfuscatedStackTrace, mapping, retraceMetadata)
+
+**`6.8.0`**
+
+- **obfuscatedStackTrace** { [string](dataTypes#string) } - 非空的 R8 混淆堆栈文本
+- **mapping** { [string](dataTypes#string) } - `mapping.txt` 路径
+- **retraceMetadata** { [string](dataTypes#string) } - 与 mapping 同次编译产生的 `retrace-metadata.bin` 路径
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 使用 UTF-8 和 LF 规范化的 retrace 堆栈文本
+
+通过显式选择的独立 R8 provider 执行协议 1.1 retrace. 此方法只接受同一次已验证 R8 编译导出的 mapping 和 retrace metadata. 宿主会快照两个文件和堆栈文本, 验证 mapping SHA-256, 编译器版本, mapping 格式, capability fingerprint 及完整来源 ID, 然后才把无路径输入包发送给 provider.
+
+未选择 provider, provider 只支持协议 1.0, mapping 与 metadata 不匹配, 输入或输出超限, retrace 失败, 超时及输出摘要漂移都会直接抛出异常. 此入口不会尝试本地 retrace, 其他 provider 或任何语义回退. 该调用是阻塞操作, 不能在 Android 主线程执行.
+
+```js
+let reportDirectory = "./build/r8-reports-1720000000000";
+let obfuscatedStack = "java.lang.IllegalStateException: broken\n" +
+    "    at a.a(SourceFile:7)\n";
+
+let retracedStack = runtime.retraceR8Stack(
+    obfuscatedStack,
+    files.join(reportDirectory, "mapping.txt"),
+    files.join(reportDirectory, "retrace-metadata.bin"),
+);
+
+console.log(retracedStack);
+```
 
 ---
 

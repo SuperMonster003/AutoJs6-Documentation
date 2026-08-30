@@ -459,13 +459,22 @@
         {
           "textRaw": "保存与压缩",
           "name": "保存与压缩",
-          "desc": "<p>从 AutoJs6 6.8.0 起, 本节方法在 <code>format</code> 为 <code>&quot;png&quot;</code> 且规范化后的 <code>quality</code> 不为 <code>100</code> 时, 使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.</p>\n<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常. PNG 质量为 <code>100</code> 以及其他图片格式不使用此插件.</p>\n<p><code>images.compress(image)</code> 和 <code>images.compressToBytes(image)</code> 的默认参数为 <code>&quot;png&quot;</code> 和 <code>60</code>, 因而省略 <code>format</code> 与 <code>quality</code> 时也依赖 Image Quantization 插件. <code>images.save(image, path)</code> 默认使用 PNG 质量 <code>100</code>, 不依赖此插件.</p>\n<p><span id=\"m-images-save-image-path-format-quality\"></span></p>\n",
+          "desc": "<p>从 AutoJs6 6.8.0 起, 本节方法可使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.</p>\n<p>数字 <code>quality</code> 保持原有行为: <code>format</code> 为 <code>&quot;png&quot;</code> 且规范化后的 <code>quality</code> 不为 <code>100</code> 时使用插件; PNG 质量为 <code>100</code> 以及其他图片格式不使用插件. 也可将 <a href=\"#pngquantizationoptions\"><code>PngQuantizationOptions</code></a> 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动和 posterize. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.</p>\n<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象还要求插件声明 options API version 1 或更高; 旧插件仍可继续使用数字 <code>quality</code>, 但选项对象会抛出可捕获的能力不支持异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常.</p>\n<p><code>images.compress(image)</code> 和 <code>images.compressToBytes(image)</code> 的默认参数为 <code>&quot;png&quot;</code> 和 <code>60</code>, 因而省略 <code>format</code> 与 <code>quality</code> 时也依赖 Image Quantization 插件. <code>images.save(image, path)</code> 默认使用 PNG 质量 <code>100</code>, 不依赖此插件.</p>\n",
+          "modules": [
+            {
+              "textRaw": "PngQuantizationOptions",
+              "name": "pngquantizationoptions",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ quality ]</strong> { <a href=\"dataTypes#number\">number</a> } - 兼容数字 <code>quality</code> 的快捷值, 同时作为 <code>minQuality</code> 与 <code>maxQuality</code> 的默认值</li>\n<li><strong>[ maxColors = 256 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最大调色板颜色数, 原生边界钳制到 <code>2..256</code></li>\n<li><strong>[ speed = 8 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 量化速度等级, 原生边界钳制到 <code>1..10</code>; 数值越小通常质量越高但耗时越长</li>\n<li><strong>[ minQuality = quality ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最低质量, 原生边界钳制到 <code>0..100</code></li>\n<li><strong>[ maxQuality = quality ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最高质量, 原生边界钳制到 <code>0..100</code></li>\n<li><strong>[ ditheringLevel = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 抖动强度, 有限值在原生边界钳制到 <code>0..1</code></li>\n<li><strong>[ posterizeBits = 0 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最小 posterization 位数, 原生边界钳制到 <code>0..4</code>; <code>0</code> 表示关闭</li>\n</ul>\n<p>省略 <code>quality</code>, <code>minQuality</code> 和 <code>maxQuality</code> 时, <code>images.save()</code> 使用质量 <code>100</code>, <code>images.compress()</code> 与 <code>images.compressToBytes()</code> 使用质量 <code>60</code>, 与对应数字参数的默认值一致. 求值后的 <code>minQuality</code> 大于 <code>maxQuality</code> 时抛出参数异常; <code>ditheringLevel</code> 为 <code>NaN</code> 或无穷大时也抛出参数异常.</p>\n<p><span id=\"m-images-save-image-path-format-quality\"></span></p>\n",
+              "type": "module",
+              "displayName": "PngQuantizationOptions"
+            }
+          ],
           "methods": [
             {
-              "textRaw": "[m] images.save(image, path, format?, quality?)",
+              "textRaw": "[m] images.save(image, path, format?, qualityOrOptions?)",
               "type": "method",
               "name": "save",
-              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 保存路径</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ quality = 100 ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0</code> 至 <code>100</code> 的编码质量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否保存成功</li>\n</ul>\n<p>保存图片并按需创建父目录. 已有文件会被覆盖. 支持的格式与 <a href=\"#m-images-tobytes-image-format-quality\"><code>toBytes()</code></a> 相同.</p>\n<p>PNG 的 <code>quality</code> 不为 <code>100</code> 时会使用上述外置插件执行有损量化. Android API 30 或更高版本的 <code>webp_lossless</code> 只接受质量 <code>100</code>, 否则抛出参数异常. 文件写入或父目录创建失败时抛出 I/O 异常.</p>\n",
+              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 保存路径</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ qualityOrOptions = 100 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"#pngquantizationoptions\">PngQuantizationOptions</a> } - 编码质量或 PNG 量化选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否保存成功</li>\n</ul>\n<p>保存图片并按需创建父目录. 已有文件会被覆盖. 支持的格式与 <a href=\"#m-images-tobytes-image-format-quality\"><code>toBytes()</code></a> 相同.</p>\n<p>PNG 的数字 <code>quality</code> 不为 <code>100</code> 或最后一个参数为选项对象时, 会使用上述外置插件执行有损量化. Android API 30 或更高版本的 <code>webp_lossless</code> 只接受数字质量 <code>100</code>; 其他格式不接受量化选项对象. 文件写入或父目录创建失败时抛出 I/O 异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -479,17 +488,17 @@
                       "name": "format?"
                     },
                     {
-                      "name": "quality?"
+                      "name": "qualityOrOptions?"
                     }
                   ]
                 }
               ]
             },
             {
-              "textRaw": "[m] images.saveImage(image, path, format?, quality?)",
+              "textRaw": "[m] images.saveImage(image, path, format?, qualityOrOptions?)",
               "type": "method",
               "name": "saveImage",
-              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ quality = 100 ]</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><code>images.save()</code> 的别名.</p>\n",
+              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ qualityOrOptions = 100 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"#pngquantizationoptions\">PngQuantizationOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><code>images.save()</code> 的别名.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -503,17 +512,17 @@
                       "name": "format?"
                     },
                     {
-                      "name": "quality?"
+                      "name": "qualityOrOptions?"
                     }
                   ]
                 }
               ]
             },
             {
-              "textRaw": "[m] images.compress(image, format?, quality?)",
+              "textRaw": "[m] images.compress(image, format?, qualityOrOptions?)",
               "type": "method",
               "name": "compress",
-              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ quality = 60 ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0</code> 至 <code>100</code> 的编码质量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 重新编码并解码后的图片</li>\n</ul>\n<p>压缩会改变编码体积或质量, 但不会按比例缩小图片尺寸. 默认 PNG 质量为 <code>60</code>, 因此仅传入 <code>image</code> 时会加载 Image Quantization 插件. 量化或编码后的数据无法解码为图片时抛出异常.</p>\n<p>若要降低解码分辨率和内存占用, 使用 <a href=\"#m-images-downsample-src-reqwidth-reqheight-withalpha\"><code>downsample()</code></a>.</p>\n",
+              "desc": "<p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ qualityOrOptions = 60 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"#pngquantizationoptions\">PngQuantizationOptions</a> } - 编码质量或 PNG 量化选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 重新编码并解码后的图片</li>\n</ul>\n<p>压缩会改变编码体积或质量, 但不会按比例缩小图片尺寸. 默认 PNG 质量为 <code>60</code>, 因此仅传入 <code>image</code> 时会加载 Image Quantization 插件. 量化或编码后的数据无法解码为图片时抛出异常.</p>\n<p>若要降低解码分辨率和内存占用, 使用 <a href=\"#m-images-downsample-src-reqwidth-reqheight-withalpha\"><code>downsample()</code></a>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -524,17 +533,17 @@
                       "name": "format?"
                     },
                     {
-                      "name": "quality?"
+                      "name": "qualityOrOptions?"
                     }
                   ]
                 }
               ]
             },
             {
-              "textRaw": "[m] images.compressToBytes(image, format?, quality?)",
+              "textRaw": "[m] images.compressToBytes(image, format?, qualityOrOptions?)",
               "type": "method",
               "name": "compressToBytes",
-              "desc": "<p><strong><code>6.6.3</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ quality = 60 ]</strong> { <a href=\"dataTypes#number\">number</a> } - <code>0</code> 至 <code>100</code> 的编码质量</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#bytearray\">ByteArray</a> } - 压缩后的 Java 字节数组</li>\n</ul>\n<p>默认 PNG 质量为 <code>60</code>, 因此仅传入 <code>image</code> 时会加载 Image Quantization 插件.</p>\n<p><span id=\"m-images-downsample-src-reqwidth-reqheight-withalpha\"></span></p>\n",
+              "desc": "<p><strong><code>6.6.3</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ qualityOrOptions = 60 ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"#pngquantizationoptions\">PngQuantizationOptions</a> } - 编码质量或 PNG 量化选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#bytearray\">ByteArray</a> } - 压缩后的 Java 字节数组</li>\n</ul>\n<p>默认 PNG 质量为 <code>60</code>, 因此仅传入 <code>image</code> 时会加载 Image Quantization 插件.</p>\n<pre><code class=\"lang-js\">let bytes = images.compressToBytes(image, &quot;png&quot;, {\n    maxColors: 64,\n    speed: 3,\n    minQuality: 50,\n    maxQuality: 90,\n    ditheringLevel: 0.5,\n    posterizeBits: 0,\n});\n</code></pre>\n<p><span id=\"m-images-downsample-src-reqwidth-reqheight-withalpha\"></span></p>\n",
               "signatures": [
                 {
                   "params": [
@@ -545,7 +554,7 @@
                       "name": "format?"
                     },
                     {
-                      "name": "quality?"
+                      "name": "qualityOrOptions?"
                     }
                   ]
                 }

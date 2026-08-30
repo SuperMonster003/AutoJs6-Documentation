@@ -145,63 +145,90 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 ## 保存与压缩
 
-从 AutoJs6 6.8.0 起, 本节方法在 `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时, 使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.
+从 AutoJs6 6.8.0 起, 本节方法可使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.
 
-插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常. PNG 质量为 `100` 以及其他图片格式不使用此插件.
+数字 `quality` 保持原有行为: `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时使用插件; PNG 质量为 `100` 以及其他图片格式不使用插件. 也可将 [`PngQuantizationOptions`](#pngquantizationoptions) 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动和 posterize. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.
+
+插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象还要求插件声明 options API version 1 或更高; 旧插件仍可继续使用数字 `quality`, 但选项对象会抛出可捕获的能力不支持异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常.
 
 `images.compress(image)` 和 `images.compressToBytes(image)` 的默认参数为 `"png"` 和 `60`, 因而省略 `format` 与 `quality` 时也依赖 Image Quantization 插件. `images.save(image, path)` 默认使用 PNG 质量 `100`, 不依赖此插件.
 
+### PngQuantizationOptions
+
+**`6.8.0`**
+
+- **[ quality ]** { [number](dataTypes#number) } - 兼容数字 `quality` 的快捷值, 同时作为 `minQuality` 与 `maxQuality` 的默认值
+- **[ maxColors = 256 ]** { [number](dataTypes#number) } - 最大调色板颜色数, 原生边界钳制到 `2..256`
+- **[ speed = 8 ]** { [number](dataTypes#number) } - 量化速度等级, 原生边界钳制到 `1..10`; 数值越小通常质量越高但耗时越长
+- **[ minQuality = quality ]** { [number](dataTypes#number) } - 最低质量, 原生边界钳制到 `0..100`
+- **[ maxQuality = quality ]** { [number](dataTypes#number) } - 最高质量, 原生边界钳制到 `0..100`
+- **[ ditheringLevel = 0 ]** { [number](dataTypes#number) } - 抖动强度, 有限值在原生边界钳制到 `0..1`
+- **[ posterizeBits = 0 ]** { [number](dataTypes#number) } - 最小 posterization 位数, 原生边界钳制到 `0..4`; `0` 表示关闭
+
+省略 `quality`, `minQuality` 和 `maxQuality` 时, `images.save()` 使用质量 `100`, `images.compress()` 与 `images.compressToBytes()` 使用质量 `60`, 与对应数字参数的默认值一致. 求值后的 `minQuality` 大于 `maxQuality` 时抛出参数异常; `ditheringLevel` 为 `NaN` 或无穷大时也抛出参数异常.
+
 <span id="m-images-save-image-path-format-quality"></span>
 
-### [m] images.save(image, path, format?, quality?)
+### [m] images.save(image, path, format?, qualityOrOptions?)
 
 **`[6.6.3]`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **path** { [string](dataTypes#string) } - 保存路径
 - **[ format = "png" ]** { [string](dataTypes#string) }
-- **[ quality = 100 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- **[ qualityOrOptions = 100 ]** { [number](dataTypes#number) | [PngQuantizationOptions](#pngquantizationoptions) } - 编码质量或 PNG 量化选项
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否保存成功
 
 保存图片并按需创建父目录. 已有文件会被覆盖. 支持的格式与 [`toBytes()`](#m-images-tobytes-image-format-quality) 相同.
 
-PNG 的 `quality` 不为 `100` 时会使用上述外置插件执行有损量化. Android API 30 或更高版本的 `webp_lossless` 只接受质量 `100`, 否则抛出参数异常. 文件写入或父目录创建失败时抛出 I/O 异常.
+PNG 的数字 `quality` 不为 `100` 或最后一个参数为选项对象时, 会使用上述外置插件执行有损量化. Android API 30 或更高版本的 `webp_lossless` 只接受数字质量 `100`; 其他格式不接受量化选项对象. 文件写入或父目录创建失败时抛出 I/O 异常.
 
-### [m] images.saveImage(image, path, format?, quality?)
+### [m] images.saveImage(image, path, format?, qualityOrOptions?)
 
 **`[6.6.3]`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **path** { [string](dataTypes#string) }
 - **[ format = "png" ]** { [string](dataTypes#string) }
-- **[ quality = 100 ]** { [number](dataTypes#number) }
+- **[ qualityOrOptions = 100 ]** { [number](dataTypes#number) | [PngQuantizationOptions](#pngquantizationoptions) }
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
 `images.save()` 的别名.
 
-### [m] images.compress(image, format?, quality?)
+### [m] images.compress(image, format?, qualityOrOptions?)
 
 **`[6.6.3]`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **[ format = "png" ]** { [string](dataTypes#string) }
-- **[ quality = 60 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- **[ qualityOrOptions = 60 ]** { [number](dataTypes#number) | [PngQuantizationOptions](#pngquantizationoptions) } - 编码质量或 PNG 量化选项
 - <ins>**returns**</ins> { [ImageWrapper](imageWrapperType) } - 重新编码并解码后的图片
 
 压缩会改变编码体积或质量, 但不会按比例缩小图片尺寸. 默认 PNG 质量为 `60`, 因此仅传入 `image` 时会加载 Image Quantization 插件. 量化或编码后的数据无法解码为图片时抛出异常.
 
 若要降低解码分辨率和内存占用, 使用 [`downsample()`](#m-images-downsample-src-reqwidth-reqheight-withalpha).
 
-### [m] images.compressToBytes(image, format?, quality?)
+### [m] images.compressToBytes(image, format?, qualityOrOptions?)
 
 **`6.6.3`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **[ format = "png" ]** { [string](dataTypes#string) }
-- **[ quality = 60 ]** { [number](dataTypes#number) } - `0` 至 `100` 的编码质量
+- **[ qualityOrOptions = 60 ]** { [number](dataTypes#number) | [PngQuantizationOptions](#pngquantizationoptions) } - 编码质量或 PNG 量化选项
 - <ins>**returns**</ins> { [ByteArray](dataTypes#bytearray) } - 压缩后的 Java 字节数组
 
 默认 PNG 质量为 `60`, 因此仅传入 `image` 时会加载 Image Quantization 插件.
+
+```js
+let bytes = images.compressToBytes(image, "png", {
+    maxColors: 64,
+    speed: 3,
+    minQuality: 50,
+    maxQuality: 90,
+    ditheringLevel: 0.5,
+    posterizeBits: 0,
+});
+```
 
 <span id="m-images-downsample-src-reqwidth-reqheight-withalpha"></span>
 

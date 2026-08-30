@@ -149,7 +149,7 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 数字 `quality` 保持原有行为: `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时使用插件; PNG 质量为 `100` 以及其他图片格式不使用插件. 也可将 [`PngQuantizationOptions`](#pngquantizationoptions) 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动, posterize 和 alpha. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.
 
-插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; [`images.quantize()`](#m-images-quantize-image-options) 的结果指标要求 version 2 或更高; [`images.quantizeToFile()`](#m-images-quantizetofile-image-path-options) 和 `preserveAlpha=false` 要求 version 3 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.
+插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; [`images.quantize()`](#m-images-quantize-image-options) 的结果指标要求 version 2 或更高; [`images.quantizeToFile()`](#m-images-quantizetofile-image-path-options) 和 `preserveAlpha=false` 要求 version 3 或更高; 资源预算与取消要求 version 4 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.
 
 `images.compress(image)` 和 `images.compressToBytes(image)` 的默认参数为 `"png"` 和 `60`, 因而省略 `format` 与 `quality` 时也依赖 Image Quantization 插件. `images.save(image, path)` 默认使用 PNG 质量 `100`, 不依赖此插件.
 
@@ -165,12 +165,16 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 - **[ ditheringLevel = 0 ]** { [number](dataTypes#number) } - 抖动强度, 有限值在原生边界钳制到 `0..1`
 - **[ posterizeBits = 0 ]** { [number](dataTypes#number) } - 最小 posterization 位数, 原生边界钳制到 `0..4`; `0` 表示关闭
 - **[ preserveAlpha = true ]** { [boolean](dataTypes#boolean) } - 是否保留 alpha 通道; `false` 生成完全不透明且不含 `tRNS` 块的 PNG, 并要求 options API version 3
+- **[ maxPixels = 16000000 ]** { [number](dataTypes#number) } - 允许的最大输入像素数, 必须大于 `0`; 显式设置时要求 options API version 4
+- **[ maxMemoryBytes = 268435456 ]** { [number](dataTypes#number) } - 允许量化过程使用的最大附加工作内存字节数, 必须大于 `0`; 显式设置时要求 options API version 4
 
 省略 `quality` 和 `minQuality` 时采用尽力而为策略 (`minQuality = 0`), 因而无法达到目标上限时仍返回当前颜色预算下的结果. `maxQuality` 在 `images.save()` 和 `images.quantize()` 中默认为 `100`, 在 `images.compress()` 与 `images.compressToBytes()` 中默认为 `60`. 显式提供 `quality` 会恢复严格的 `minQuality == maxQuality == quality` 语义; 也可仅显式设置 `minQuality` 建立自定义下限.
 
 求值后的 `minQuality` 大于 `maxQuality` 时抛出参数异常; `ditheringLevel` 为 `NaN` 或无穷大时也抛出参数异常. 颜色预算无法满足显式质量下限时抛出 `PngQuantBridge.QualityTooLowException`, 其 `code` 为 `"PNG_QUANTIZATION_QUALITY_TOO_LOW"`; 这与 I/O 或原生内部失败相互独立.
 
 options API version 3 会通过 Android 平台将 `ARGB_8888`, `RGB_565`, `ALPHA_8`, `RGBA_F16`, 带色域和硬件 Bitmap 自动归一化为非预乘 sRGB RGBA, 调用方无需预先转换配置. libimagequant 使用 gamma `0.0` 所代表的 sRGB 默认传递值 `0.45455`, 输出 PNG 显式包含 `sRGB` 块. `preserveAlpha=true` 时按调色板透明度写入 `tRNS`; 设为 `false` 时所有像素强制不透明.
+
+options API version 4 对数字质量和具名选项路径默认应用 `16000000` 像素与 `256 MiB` 附加工作内存上限. 内存预算覆盖量化调用新建的像素转换缓冲, libimagequant 数据, 索引行, libpng 编码状态及返回字节数组, 不包含调用前已经存在的输入 Bitmap 和宿主其他内存. 超过像素或内存预算时抛出 `PngQuantBridge.ResourceLimitException`, 其 `code` 为 `"PNG_QUANTIZATION_RESOURCE_LIMIT"`; `reason` 为 `"PIXEL_LIMIT"`, `"MEMORY_LIMIT"` 或 `"ALLOCATION_FAILED"`, 并可读取 `actualPixels`, `maxPixels`, `requiredMemoryBytes` 与 `maxMemoryBytes`. 停止脚本时, 宿主会取消该脚本仍在执行的 v4 量化并按脚本中断处理.
 
 ### PngQuantizationResult
 
@@ -180,6 +184,7 @@ options API version 3 会通过 Android 平台将 `ARGB_8888`, `RGB_565`, `ALPHA
 - **size** { [number](dataTypes#number) } - `bytes.length`
 - **quality** { [number](dataTypes#number) } - libimagequant 测得的实际质量, 范围为 `0..100`, 数值越高表示质量越好
 - **quantizationError** { [number](dataTypes#number) } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, `0` 表示无误差
+- **peakWorkingMemoryBytes** { [number](dataTypes#number) } - v4 统计的峰值附加工作内存字节数; 旧版插件返回 `-1`
 
 ### PngQuantizationFileResult
 
@@ -189,6 +194,7 @@ options API version 3 会通过 Android 平台将 `ARGB_8888`, `RGB_565`, `ALPHA
 - **size** { [number](dataTypes#number) } - 已写入的 PNG 字节数
 - **quality** { [number](dataTypes#number) } - libimagequant 测得的实际质量, 范围为 `0..100`, 数值越高表示质量越好
 - **quantizationError** { [number](dataTypes#number) } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, `0` 表示无误差
+- **peakWorkingMemoryBytes** { [number](dataTypes#number) } - v4 统计的峰值附加工作内存字节数; 旧版插件返回 `-1`
 
 <span id="m-images-quantize-image-options"></span>
 

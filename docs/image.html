@@ -558,7 +558,7 @@
 <h2>保存与压缩<span><a class="mark" href="#image_1" id="image_1">#</a></span></h2>
 <p>从 AutoJs6 6.8.0 起, 本节方法可使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.</p>
 <p>数字 <code>quality</code> 保持原有行为: <code>format</code> 为 <code>&quot;png&quot;</code> 且规范化后的 <code>quality</code> 不为 <code>100</code> 时使用插件; PNG 质量为 <code>100</code> 以及其他图片格式不使用插件. 也可将 <a href="#image_pngquantizationoptions"><code>PngQuantizationOptions</code></a> 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动, posterize 和 alpha. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.</p>
-<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; <a href="#image_m_images_quantize_image_options"><code>images.quantize()</code></a> 的结果指标要求 version 2 或更高; <a href="#image_m_images_quantizetofile_image_path_options"><code>images.quantizeToFile()</code></a> 和 <code>preserveAlpha=false</code> 要求 version 3 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.</p>
+<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; <a href="#image_m_images_quantize_image_options"><code>images.quantize()</code></a> 的结果指标要求 version 2 或更高; <a href="#image_m_images_quantizetofile_image_path_options"><code>images.quantizeToFile()</code></a> 和 <code>preserveAlpha=false</code> 要求 version 3 或更高; 资源预算与取消要求 version 4 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.</p>
 <p><code>images.compress(image)</code> 和 <code>images.compressToBytes(image)</code> 的默认参数为 <code>&quot;png&quot;</code> 和 <code>60</code>, 因而省略 <code>format</code> 与 <code>quality</code> 时也依赖 Image Quantization 插件. <code>images.save(image, path)</code> 默认使用 PNG 质量 <code>100</code>, 不依赖此插件.</p>
 <h3>PngQuantizationOptions<span><a class="mark" href="#image_pngquantizationoptions" id="image_pngquantizationoptions">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
@@ -571,10 +571,13 @@
 <li><strong>[ ditheringLevel = 0 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 抖动强度, 有限值在原生边界钳制到 <code>0..1</code></li>
 <li><strong>[ posterizeBits = 0 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最小 posterization 位数, 原生边界钳制到 <code>0..4</code>; <code>0</code> 表示关闭</li>
 <li><strong>[ preserveAlpha = true ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否保留 alpha 通道; <code>false</code> 生成完全不透明且不含 <code>tRNS</code> 块的 PNG, 并要求 options API version 3</li>
+<li><strong>[ maxPixels = 16000000 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 允许的最大输入像素数, 必须大于 <code>0</code>; 显式设置时要求 options API version 4</li>
+<li><strong>[ maxMemoryBytes = 268435456 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 允许量化过程使用的最大附加工作内存字节数, 必须大于 <code>0</code>; 显式设置时要求 options API version 4</li>
 </ul>
 <p>省略 <code>quality</code> 和 <code>minQuality</code> 时采用尽力而为策略 (<code>minQuality = 0</code>), 因而无法达到目标上限时仍返回当前颜色预算下的结果. <code>maxQuality</code> 在 <code>images.save()</code> 和 <code>images.quantize()</code> 中默认为 <code>100</code>, 在 <code>images.compress()</code> 与 <code>images.compressToBytes()</code> 中默认为 <code>60</code>. 显式提供 <code>quality</code> 会恢复严格的 <code>minQuality == maxQuality == quality</code> 语义; 也可仅显式设置 <code>minQuality</code> 建立自定义下限.</p>
 <p>求值后的 <code>minQuality</code> 大于 <code>maxQuality</code> 时抛出参数异常; <code>ditheringLevel</code> 为 <code>NaN</code> 或无穷大时也抛出参数异常. 颜色预算无法满足显式质量下限时抛出 <code>PngQuantBridge.QualityTooLowException</code>, 其 <code>code</code> 为 <code>&quot;PNG_QUANTIZATION_QUALITY_TOO_LOW&quot;</code>; 这与 I/O 或原生内部失败相互独立.</p>
 <p>options API version 3 会通过 Android 平台将 <code>ARGB_8888</code>, <code>RGB_565</code>, <code>ALPHA_8</code>, <code>RGBA_F16</code>, 带色域和硬件 Bitmap 自动归一化为非预乘 sRGB RGBA, 调用方无需预先转换配置. libimagequant 使用 gamma <code>0.0</code> 所代表的 sRGB 默认传递值 <code>0.45455</code>, 输出 PNG 显式包含 <code>sRGB</code> 块. <code>preserveAlpha=true</code> 时按调色板透明度写入 <code>tRNS</code>; 设为 <code>false</code> 时所有像素强制不透明.</p>
+<p>options API version 4 对数字质量和具名选项路径默认应用 <code>16000000</code> 像素与 <code>256 MiB</code> 附加工作内存上限. 内存预算覆盖量化调用新建的像素转换缓冲, libimagequant 数据, 索引行, libpng 编码状态及返回字节数组, 不包含调用前已经存在的输入 Bitmap 和宿主其他内存. 超过像素或内存预算时抛出 <code>PngQuantBridge.ResourceLimitException</code>, 其 <code>code</code> 为 <code>&quot;PNG_QUANTIZATION_RESOURCE_LIMIT&quot;</code>; <code>reason</code> 为 <code>&quot;PIXEL_LIMIT&quot;</code>, <code>&quot;MEMORY_LIMIT&quot;</code> 或 <code>&quot;ALLOCATION_FAILED&quot;</code>, 并可读取 <code>actualPixels</code>, <code>maxPixels</code>, <code>requiredMemoryBytes</code> 与 <code>maxMemoryBytes</code>. 停止脚本时, 宿主会取消该脚本仍在执行的 v4 量化并按脚本中断处理.</p>
 <h3>PngQuantizationResult<span><a class="mark" href="#image_pngquantizationresult" id="image_pngquantizationresult">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
@@ -582,6 +585,7 @@
 <li><strong>size</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>bytes.length</code></li>
 <li><strong>quality</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - libimagequant 测得的实际质量, 范围为 <code>0..100</code>, 数值越高表示质量越好</li>
 <li><strong>quantizationError</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, <code>0</code> 表示无误差</li>
+<li><strong>peakWorkingMemoryBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - v4 统计的峰值附加工作内存字节数; 旧版插件返回 <code>-1</code></li>
 </ul>
 <h3>PngQuantizationFileResult<span><a class="mark" href="#image_pngquantizationfileresult" id="image_pngquantizationfileresult">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
@@ -590,6 +594,7 @@
 <li><strong>size</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 已写入的 PNG 字节数</li>
 <li><strong>quality</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - libimagequant 测得的实际质量, 范围为 <code>0..100</code>, 数值越高表示质量越好</li>
 <li><strong>quantizationError</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, <code>0</code> 表示无误差</li>
+<li><strong>peakWorkingMemoryBytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - v4 统计的峰值附加工作内存字节数; 旧版插件返回 <code>-1</code></li>
 </ul>
 <p><span id="m-images-quantize-image-options"></span></p>
 <h3>[m] images.quantize(image, options?)<span><a class="mark" href="#image_m_images_quantize_image_options" id="image_m_images_quantize_image_options">#</a></span></h3>

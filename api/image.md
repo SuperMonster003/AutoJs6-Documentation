@@ -147,9 +147,9 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 从 AutoJs6 6.8.0 起, 本节方法可使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.
 
-数字 `quality` 保持原有行为: `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时使用插件; PNG 质量为 `100` 以及其他图片格式不使用插件. 也可将 [`PngQuantizationOptions`](#pngquantizationoptions) 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动和 posterize. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.
+数字 `quality` 保持原有行为: `format` 为 `"png"` 且规范化后的 `quality` 不为 `100` 时使用插件; PNG 质量为 `100` 以及其他图片格式不使用插件. 也可将 [`PngQuantizationOptions`](#pngquantizationoptions) 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动, posterize 和 alpha. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.
 
-插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; [`images.quantize()`](#m-images-quantize-image-options) 的结果指标要求 version 2 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.
+插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; [`images.quantize()`](#m-images-quantize-image-options) 的结果指标要求 version 2 或更高; [`images.quantizeToFile()`](#m-images-quantizetofile-image-path-options) 和 `preserveAlpha=false` 要求 version 3 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.
 
 `images.compress(image)` 和 `images.compressToBytes(image)` 的默认参数为 `"png"` 和 `60`, 因而省略 `format` 与 `quality` 时也依赖 Image Quantization 插件. `images.save(image, path)` 默认使用 PNG 质量 `100`, 不依赖此插件.
 
@@ -164,10 +164,13 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 - **[ maxQuality = quality ]** { [number](dataTypes#number) } - 最高质量, 原生边界钳制到 `0..100`; `quality` 省略时使用调用方法的默认质量
 - **[ ditheringLevel = 0 ]** { [number](dataTypes#number) } - 抖动强度, 有限值在原生边界钳制到 `0..1`
 - **[ posterizeBits = 0 ]** { [number](dataTypes#number) } - 最小 posterization 位数, 原生边界钳制到 `0..4`; `0` 表示关闭
+- **[ preserveAlpha = true ]** { [boolean](dataTypes#boolean) } - 是否保留 alpha 通道; `false` 生成完全不透明且不含 `tRNS` 块的 PNG, 并要求 options API version 3
 
 省略 `quality` 和 `minQuality` 时采用尽力而为策略 (`minQuality = 0`), 因而无法达到目标上限时仍返回当前颜色预算下的结果. `maxQuality` 在 `images.save()` 和 `images.quantize()` 中默认为 `100`, 在 `images.compress()` 与 `images.compressToBytes()` 中默认为 `60`. 显式提供 `quality` 会恢复严格的 `minQuality == maxQuality == quality` 语义; 也可仅显式设置 `minQuality` 建立自定义下限.
 
 求值后的 `minQuality` 大于 `maxQuality` 时抛出参数异常; `ditheringLevel` 为 `NaN` 或无穷大时也抛出参数异常. 颜色预算无法满足显式质量下限时抛出 `PngQuantBridge.QualityTooLowException`, 其 `code` 为 `"PNG_QUANTIZATION_QUALITY_TOO_LOW"`; 这与 I/O 或原生内部失败相互独立.
+
+options API version 3 会通过 Android 平台将 `ARGB_8888`, `RGB_565`, `ALPHA_8`, `RGBA_F16`, 带色域和硬件 Bitmap 自动归一化为非预乘 sRGB RGBA, 调用方无需预先转换配置. libimagequant 使用 gamma `0.0` 所代表的 sRGB 默认传递值 `0.45455`, 输出 PNG 显式包含 `sRGB` 块. `preserveAlpha=true` 时按调色板透明度写入 `tRNS`; 设为 `false` 时所有像素强制不透明.
 
 ### PngQuantizationResult
 
@@ -175,6 +178,15 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 - **bytes** { [ByteArray](dataTypes#bytearray) } - 编码后的索引色 PNG 字节
 - **size** { [number](dataTypes#number) } - `bytes.length`
+- **quality** { [number](dataTypes#number) } - libimagequant 测得的实际质量, 范围为 `0..100`, 数值越高表示质量越好
+- **quantizationError** { [number](dataTypes#number) } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, `0` 表示无误差
+
+### PngQuantizationFileResult
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 解析后的输出路径
+- **size** { [number](dataTypes#number) } - 已写入的 PNG 字节数
 - **quality** { [number](dataTypes#number) } - libimagequant 测得的实际质量, 范围为 `0..100`, 数值越高表示质量越好
 - **quantizationError** { [number](dataTypes#number) } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, `0` 表示无误差
 
@@ -225,6 +237,35 @@ try {
         throw e;
     }
 }
+```
+
+<span id="m-images-quantizetofile-image-path-options"></span>
+
+### [m] images.quantizeToFile(image, path, options?)
+
+**`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **path** { [string](dataTypes#string) } - 输出 PNG 路径
+- **[ options ]** { [PngQuantizationOptions](#pngquantizationoptions) }
+- <ins>**returns**</ins> { [PngQuantizationFileResult](#pngquantizationfileresult) }
+
+将图片量化为索引色 PNG 并直接写入文件, 同时返回解析后的路径, 输出大小, 实际质量和量化误差. 此方法要求插件声明 options API version 3 或更高. 父目录不存在时会自动创建, 已有文件会被覆盖; 文件创建或写入失败时抛出 I/O 异常.
+
+编码阶段由 libpng 直接写入文件描述符, 不构造完整 PNG `byte[]`, 因而适合不需要在脚本内持有编码字节的输出流程. 量化过程仍需要保存输入 RGBA 像素, 索引像素和调色板等工作数据, 此方法不等同于恒定内存编码.
+
+```js
+let result = images.quantizeToFile("./source.png", "./quantized.png", {
+    maxColors: 64,
+    speed: 3,
+    maxQuality: 90,
+    preserveAlpha: true,
+});
+
+console.log("path=" + result.path);
+console.log("quality=" + result.quality);
+console.log("mse=" + result.quantizationError);
+console.log("bytes=" + result.size);
 ```
 
 <span id="m-images-save-image-path-format-quality"></span>

@@ -279,6 +279,8 @@
 </li>
 <li><span class="stability_undefined"><a href="#image_1">保存与压缩</a></span><ul>
 <li><span class="stability_undefined"><a href="#image_pngquantizationoptions">PngQuantizationOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#image_pngquantizationresult">PngQuantizationResult</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_images_quantize_image_options">[m] images.quantize(image, options?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_save_image_path_format_qualityoroptions">[m] images.save(image, path, format?, qualityOrOptions?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_saveimage_image_path_format_qualityoroptions">[m] images.saveImage(image, path, format?, qualityOrOptions?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_compress_image_format_qualityoroptions">[m] images.compress(image, format?, qualityOrOptions?)</a></span></li>
@@ -554,20 +556,70 @@
 <h2>保存与压缩<span><a class="mark" href="#image_1" id="image_1">#</a></span></h2>
 <p>从 AutoJs6 6.8.0 起, 本节方法可使用外置 Image Quantization 插件执行有损调色板量化. 调用前需在插件中心安装, 启用并授权兼容插件.</p>
 <p>数字 <code>quality</code> 保持原有行为: <code>format</code> 为 <code>&quot;png&quot;</code> 且规范化后的 <code>quality</code> 不为 <code>100</code> 时使用插件; PNG 质量为 <code>100</code> 以及其他图片格式不使用插件. 也可将 <a href="#image_pngquantizationoptions"><code>PngQuantizationOptions</code></a> 对象作为最后一个参数, 显式控制颜色数, 速度, 质量区间, 抖动和 posterize. 选项对象仅支持 PNG, 并且无论质量值为何都会执行量化.</p>
-<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象还要求插件声明 options API version 1 或更高; 旧插件仍可继续使用数字 <code>quality</code>, 但选项对象会抛出可捕获的能力不支持异常. 插件已加载但量化未返回有效数据时, 方法会抛出运行时异常.</p>
+<p>插件未安装, 被禁用, 未授权, 与当前 AutoJs6 或设备 ABI 不兼容, 或原生运行时加载失败时, 方法会抛出插件加载异常. 使用选项对象要求插件声明 options API version 1 或更高; <a href="#image_m_images_quantize_image_options"><code>images.quantize()</code></a> 的结果指标要求 version 2 或更高. 旧插件仍可继续使用其支持的数字或具名参数路径, 但调用更高版本能力时会抛出可捕获的能力不支持异常.</p>
 <p><code>images.compress(image)</code> 和 <code>images.compressToBytes(image)</code> 的默认参数为 <code>&quot;png&quot;</code> 和 <code>60</code>, 因而省略 <code>format</code> 与 <code>quality</code> 时也依赖 Image Quantization 插件. <code>images.save(image, path)</code> 默认使用 PNG 质量 <code>100</code>, 不依赖此插件.</p>
 <h3>PngQuantizationOptions<span><a class="mark" href="#image_pngquantizationoptions" id="image_pngquantizationoptions">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
-<li><strong>[ quality ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 兼容数字 <code>quality</code> 的快捷值, 同时作为 <code>minQuality</code> 与 <code>maxQuality</code> 的默认值</li>
+<li><strong>[ quality ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 兼容数字 <code>quality</code> 的严格模式快捷值; 显式提供时同时作为 <code>minQuality</code> 与 <code>maxQuality</code> 的默认值</li>
 <li><strong>[ maxColors = 256 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最大调色板颜色数, 原生边界钳制到 <code>2..256</code></li>
 <li><strong>[ speed = 8 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 量化速度等级, 原生边界钳制到 <code>1..10</code>; 数值越小通常质量越高但耗时越长</li>
-<li><strong>[ minQuality = quality ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最低质量, 原生边界钳制到 <code>0..100</code></li>
-<li><strong>[ maxQuality = quality ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最高质量, 原生边界钳制到 <code>0..100</code></li>
+<li><strong>[ minQuality = 0 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最低质量, 原生边界钳制到 <code>0..100</code>; 显式提供 <code>quality</code> 时默认改用该值</li>
+<li><strong>[ maxQuality = quality ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最高质量, 原生边界钳制到 <code>0..100</code>; <code>quality</code> 省略时使用调用方法的默认质量</li>
 <li><strong>[ ditheringLevel = 0 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 抖动强度, 有限值在原生边界钳制到 <code>0..1</code></li>
 <li><strong>[ posterizeBits = 0 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最小 posterization 位数, 原生边界钳制到 <code>0..4</code>; <code>0</code> 表示关闭</li>
 </ul>
-<p>省略 <code>quality</code>, <code>minQuality</code> 和 <code>maxQuality</code> 时, <code>images.save()</code> 使用质量 <code>100</code>, <code>images.compress()</code> 与 <code>images.compressToBytes()</code> 使用质量 <code>60</code>, 与对应数字参数的默认值一致. 求值后的 <code>minQuality</code> 大于 <code>maxQuality</code> 时抛出参数异常; <code>ditheringLevel</code> 为 <code>NaN</code> 或无穷大时也抛出参数异常.</p>
+<p>省略 <code>quality</code> 和 <code>minQuality</code> 时采用尽力而为策略 (<code>minQuality = 0</code>), 因而无法达到目标上限时仍返回当前颜色预算下的结果. <code>maxQuality</code> 在 <code>images.save()</code> 和 <code>images.quantize()</code> 中默认为 <code>100</code>, 在 <code>images.compress()</code> 与 <code>images.compressToBytes()</code> 中默认为 <code>60</code>. 显式提供 <code>quality</code> 会恢复严格的 <code>minQuality == maxQuality == quality</code> 语义; 也可仅显式设置 <code>minQuality</code> 建立自定义下限.</p>
+<p>求值后的 <code>minQuality</code> 大于 <code>maxQuality</code> 时抛出参数异常; <code>ditheringLevel</code> 为 <code>NaN</code> 或无穷大时也抛出参数异常. 颜色预算无法满足显式质量下限时抛出 <code>PngQuantBridge.QualityTooLowException</code>, 其 <code>code</code> 为 <code>&quot;PNG_QUANTIZATION_QUALITY_TOO_LOW&quot;</code>; 这与 I/O 或原生内部失败相互独立.</p>
+<h3>PngQuantizationResult<span><a class="mark" href="#image_pngquantizationresult" id="image_pngquantizationresult">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>bytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_bytearray">ByteArray</a></span> } - 编码后的索引色 PNG 字节</li>
+<li><strong>size</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - <code>bytes.length</code></li>
+<li><strong>quality</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - libimagequant 测得的实际质量, 范围为 <code>0..100</code>, 数值越高表示质量越好</li>
+<li><strong>quantizationError</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 标准化均方误差 (MSE), 数值越低表示调色板误差越小, <code>0</code> 表示无误差</li>
+</ul>
+<p><span id="m-images-quantize-image-options"></span></p>
+<h3>[m] images.quantize(image, options?)<span><a class="mark" href="#image_m_images_quantize_image_options" id="image_m_images_quantize_image_options">#</a></span></h3>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
+<li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="#image_pngquantizationoptions">PngQuantizationOptions</a></span> }</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_pngquantizationresult">PngQuantizationResult</a></span> }</li>
+</ul>
+<p>将图片量化为索引色 PNG, 同时返回编码字节, 实际质量和量化误差. 此方法要求插件声明 options API version 2 或更高. 其他保存与压缩方法保持原返回类型; 需要根据质量或输出体积决定是否替换原图时应使用本方法.</p>
+<pre><code class="lang-js">let sourcePath = files.path(&quot;./source.png&quot;);
+let outputPath = files.path(&quot;./quantized.png&quot;);
+let result = images.quantize(images.read(sourcePath), {
+    maxColors: 64,
+    speed: 3,
+    maxQuality: 90,
+    ditheringLevel: 0.5,
+});
+
+console.log(&quot;quality=&quot; + result.quality);
+console.log(&quot;mse=&quot; + result.quantizationError);
+console.log(&quot;bytes=&quot; + result.size);
+
+if (result.quality &gt;= 70 &amp;&amp; result.size &lt; new java.io.File(sourcePath).length()) {
+    files.writeBytes(outputPath, result.bytes);
+}
+</code></pre>
+<p>显式严格下限可用专用异常区分:</p>
+<pre><code class="lang-js">try {
+    images.quantize(image, {
+        maxColors: 2,
+        minQuality: 100,
+        maxQuality: 100,
+    });
+} catch (e) {
+    if (e.javaException instanceof org.autojs.autojs.runtime.api.PngQuantBridge.QualityTooLowException) {
+        console.warn(e.javaException.code);
+    } else {
+        throw e;
+    }
+}
+</code></pre>
 <p><span id="m-images-save-image-path-format-quality"></span></p>
 <h3>[m] images.save(image, path, format?, qualityOrOptions?)<span><a class="mark" href="#image_m_images_save_image_path_format_qualityoroptions" id="image_m_images_save_image_path_format_qualityoroptions">#</a></span></h3>
 <p><strong><code>[6.6.3]</code></strong> <strong><code>[6.8.0]</code></strong></p>

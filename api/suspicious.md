@@ -2,12 +2,6 @@
 
 本页记录无法仅依据 AutoJs6 6.8.0 Augmentable API 源码准确还原的公开成员或历史文档内容. 在行为得到实现, 官方声明或可重复运行结果确认前, 这些内容不写入正式 API 条目.
 
-## pinyin.compare 与 pinyin.compact
-
-- **源码位置** - `runtime/api/augment/pinyin/Pinyin.kt`.
-- **当前状态** - 两个名称均作为公开方法导出, 但当前实现忽略参数并固定返回空字符串.
-- **存疑原因** - 方法名称暗示比较或压缩拼音结果, 但源码没有可验证的目标语义. 正式 [Pinyin](pinyin) 文档暂不猜测其参数和结果.
-
 ## util 的 Node.js 兼容条目
 
 - **涉及内容** - `util.callbackify`, `util.inherits`, `util.promisify`, `util.TextDecoder`, `util.TextEncoder`, `util.inspect.custom`, `util.inspect.defaultOptions`, `util._extend`, `util.debug`, `util.error`, `util.isBuffer`, `util.print` 和 `util.puts`.

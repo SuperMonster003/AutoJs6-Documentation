@@ -799,7 +799,8 @@ def validate(text: str, path: Path) -> None:
     ):
         raise ValueError(f"Legacy incomplete-section marker in {relative}")
 
-    if re.search(r"AutoJs(?!6|Pro|-Docs)", text):
+    # `callAutoJs` is the public Node bridge method name, not a product name.
+    if re.search(r"(?<!call)AutoJs(?!6|Pro|-Docs)", text):
         raise ValueError(f"Legacy bare AutoJs product name in {relative}")
     if re.search(
         r"""packageName\s*:\s*["']org\.autojs\.autojs["']""",

@@ -4,7 +4,7 @@
     {
       "textRaw": "拼音 (Pinyin)",
       "name": "拼音_(pinyin)",
-      "desc": "<p>pinyin 模块用于将汉字转换为拼音, 并支持声调格式, 姓氏模式, 地名模式, 分词和多音字等选项.</p>\n<p>此模块自 AutoJs6 6.6.1 起提供. <code>pinyin</code> 与 <code>$pinyin</code> 指向同一个可调用模块对象.</p>\n<p>自 AutoJs6 6.8.0 起, pinyin 转换由外置 Pinyin 插件提供. 调用转换方法前, 必须安装并启用与当前 AutoJs6 版本兼容的 Pinyin 插件. 未发现可用插件引擎时, 调用将抛出异常.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">pinyin</p>\n\n<hr>\n",
+      "desc": "<p>pinyin 模块用于将汉字转换为拼音, 并支持声调格式, 姓氏模式, 地名模式, 分词, 多音字和单次调用自定义词典等选项.</p>\n<p>此模块自 AutoJs6 6.6.1 起提供. <code>pinyin</code> 与 <code>$pinyin</code> 指向同一个可调用模块对象.</p>\n<p>自 AutoJs6 6.8.0 起, pinyin 转换由外置 Pinyin 插件提供. 调用转换方法前, 必须安装并启用与当前 AutoJs6 版本兼容的 Pinyin 插件. 未发现可用插件引擎时, 调用将抛出异常.</p>\n<p>同版本起, Node.js Runtime 可通过公开的 <code>autojs6:bridge</code> facade 调用相同的插件能力, 详见 <a href=\"#nodejs-runtime\">Node.js Runtime</a>.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">pinyin</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] pinyin",
@@ -158,6 +158,55 @@
           "displayName": "[m] simple"
         },
         {
+          "textRaw": "[m] compare",
+          "name": "[m]_compare",
+          "methods": [
+            {
+              "textRaw": "compare(hanA, hanB)",
+              "type": "method",
+              "name": "compare",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>hanA</strong> { <a href=\"dataTypes#string\">string</a> } - 待比较文本 A</li>\n<li><strong>hanB</strong> { <a href=\"dataTypes#string\">string</a> } - 待比较文本 B</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - A 应排在 B 前时为负数, 顺序相同时为 <code>0</code>, A 应排在 B 后时为正数</li>\n</ul>\n<p>按拼音比较两段文本, 可直接作为 <code>Array.prototype.sort</code> 的比较函数.</p>\n<p>实现使用默认 <code>STYLE_TONE</code> 选项转换两段文本, 按 JavaScript 嵌套数组的字符串形式连接候选项, 再使用设备当前 locale 的排序规则比较. 返回值只保证符号语义, 不保证固定为 <code>-1</code> 或 <code>1</code>.</p>\n<pre><code class=\"lang-js\">let names = [ &#39;张三&#39;, &#39;李四&#39;, &#39;王五&#39; ];\nnames.sort(pinyin.compare);\nconsole.log(names);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "hanA"
+                    },
+                    {
+                      "name": "hanB"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] compare"
+        },
+        {
+          "textRaw": "[m] compact",
+          "name": "[m]_compact",
+          "methods": [
+            {
+              "textRaw": "compact(matrix)",
+              "type": "method",
+              "name": "compact",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>matrix</strong> { <a href=\"#pinyinmatrix\">PinyinMatrix</a> } - 二维候选数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#pinyinmatrix\">PinyinMatrix</a> } - 各行候选项的笛卡尔组合</li>\n</ul>\n<p>展开二维候选数组的全部组合. 此顶层方法与 <a href=\"#m-pinyinresult-compact\">PinyinResult#compact</a> 使用相同实现; 参数必须是严格的二维数组.</p>\n<pre><code class=\"lang-js\">console.log(pinyin.compact([\n    [ &#39;zhòng&#39;, &#39;chóng&#39; ],\n    [ &#39;qìng&#39; ],\n]));\n// [ [ &#39;zhòng&#39;, &#39;qìng&#39; ], [ &#39;chóng&#39;, &#39;qìng&#39; ] ]\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "matrix"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] compact"
+        },
+        {
           "textRaw": "[m] fromCodePoint",
           "name": "[m]_fromcodepoint",
           "methods": [
@@ -242,17 +291,66 @@
               "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用插件的结果分组选项. 具体分组结果由当前 Pinyin 插件实现决定.</p>\n",
               "type": "module",
               "displayName": "[p] PinyinOptions#group"
+            },
+            {
+              "textRaw": "[p] PinyinOptions#customDictionary",
+              "name": "[p]_pinyinoptions#customdictionary",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>{}</code> ] { <a href=\"#pinyincustomdictionary\">PinyinCustomDictionary</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>为当前一次 <code>pinyin</code> 或 <code>pinyin.convert</code> 调用覆盖汉字和词组读音.</p>\n<p>对象 key 必须由 1 到 32 个汉字 Unicode code point 组成. value 是与 key 字位数完全一致的二维数组, 每行保存该字位的 1 到 8 个带调候选音节. 候选必须使用 NFC 规范化的小写拉丁字母及受支持的拼音声调字符, 不接受数字声调, 空白, 重复项或其他符号. v1 执行表示形式校验, 不判断候选是否是语言学上存在的普通话音节; 不带声调符号的候选可表示轻声.</p>\n<p>自定义词典使用 Unicode code point trie 做最长匹配, 优先级高于 <code>SURNAME</code>, <code>PLACE_NAME</code>, 内置词组和内置单字. 未命中部分继续使用当前转换模式. 词典只在本次调用内存在, 不写入插件词典, 不跨脚本或调用共享.</p>\n<p>v1 边界如下:</p>\n<ul>\n<li>规范化 JSON 的 UTF-8 大小不超过 64 KiB.</li>\n<li>词条数不超过 1,024.</li>\n<li>每个 key 不超过 32 个汉字 code point.</li>\n<li>每个字位不超过 8 个候选, 每个音节不超过 16 个 code point.</li>\n<li>单个词条的候选笛卡尔组合不超过 256.</li>\n</ul>\n<p>宿主和插件都会执行完整校验. 非空 <code>customDictionary</code> 只会发送给声明 <code>pinyin.customDictionary.v1</code> capability 的插件; 旧插件会收到明确的更新提示, 不会静默忽略覆盖. 省略, 传入 <code>null</code> 或传入空对象时不要求该 capability.</p>\n<pre><code class=\"lang-js\">let result = pinyin.convert(&#39;六安市&#39;, {\n    style: &#39;TONE2&#39;,\n    customDictionary: {\n        &#39;六安&#39;: [ [ &#39;liú&#39; ], [ &#39;ān&#39; ] ],\n        &#39;市&#39;: [ [ &#39;shì&#39; ] ],\n    },\n});\n\nconsole.log(result);\n// [ [ &#39;liu2&#39; ], [ &#39;an1&#39; ], [ &#39;shi4&#39; ] ]\n</code></pre>\n",
+              "type": "module",
+              "displayName": "[p] PinyinOptions#customDictionary"
             }
           ],
           "type": "module",
           "displayName": "PinyinOptions"
         },
         {
+          "textRaw": "PinyinCustomDictionary",
+          "name": "pinyincustomdictionary",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>单次调用自定义读音词典. 对象结构为 <code>Record&lt;string, string[][]&gt;</code>; key 是汉字或词组, value 按 key 的 Unicode 字位排列带调拼音候选数组. 具体格式, 优先级和资源限制见 <a href=\"#p-pinyinoptions-customdictionary\">PinyinOptions#customDictionary</a>.</p>\n",
+          "type": "module",
+          "displayName": "PinyinCustomDictionary"
+        },
+        {
+          "textRaw": "PinyinMatrix",
+          "name": "pinyinmatrix",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>二维拼音数组. 每个内层数组保存对应文本单元或分组的一个或多个拼音候选项.</p>\n",
+          "type": "module",
+          "displayName": "PinyinMatrix"
+        },
+        {
           "textRaw": "PinyinResult",
           "name": "pinyinresult",
-          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>二维拼音数组. 每个内层数组保存对应文本单元或分组的一个或多个拼音候选项.</p>\n<p>结果对象还提供不可枚举的 <code>compact()</code> 方法:</p>\n<pre><code class=\"lang-js\">let result = pinyin(&#39;海前&#39;, {\n    heteronym: true,\n    style: pinyin.STYLE_NORMAL,\n});\n\nlet combinations = result.compact();\nconsole.log(combinations);\n</code></pre>\n<p><code>compact()</code> 对各内层数组执行笛卡尔组合, 返回值仍为二维字符串数组.</p>\n",
+          "desc": "<ul>\n<li>{ <a href=\"#pinyinmatrix\">PinyinMatrix</a> }</li>\n</ul>\n<p>由 <code>pinyin</code> 或 <code>pinyin.convert</code> 返回的二维拼音数组. 除普通数组成员外, 它还带有不可枚举的 <code>compact()</code> 方法.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[m] PinyinResult#compact",
+              "name": "[m]_pinyinresult#compact",
+              "methods": [
+                {
+                  "textRaw": "compact()",
+                  "type": "method",
+                  "name": "compact",
+                  "desc": "<p><strong><code>6.6.1</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#pinyinmatrix\">PinyinMatrix</a> } - 各行候选项的笛卡尔组合</li>\n</ul>\n<p>结果对象还提供不可枚举的 <code>compact()</code> 方法:</p>\n<pre><code class=\"lang-js\">let result = pinyin(&#39;海前&#39;, {\n    heteronym: true,\n    style: pinyin.STYLE_NORMAL,\n});\n\nlet combinations = result.compact();\nconsole.log(combinations);\n</code></pre>\n<p><code>compact()</code> 对各内层数组执行笛卡尔组合, 返回值仍为二维字符串数组.</p>\n<hr>\n",
+                  "signatures": [
+                    {
+                      "params": []
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] PinyinResult#compact"
+            }
+          ],
           "type": "module",
           "displayName": "PinyinResult"
+        },
+        {
+          "textRaw": "Node.js Runtime",
+          "name": "node.js_runtime",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>Node.js 脚本不注入 Rhino 的 <code>pinyin</code> 全局对象. 请通过 Node.js Runtime 内置的公开 <code>autojs6:bridge</code> facade 调用宿主 provider, 并为每次请求显式声明 <code>pinyin</code> capability:</p>\n<pre><code class=\"lang-js\">const { callAutoJs } = require(&#39;autojs6:bridge&#39;);\n\n(async () =&gt; {\n    const result = await callAutoJs(\n        &#39;pinyin&#39;,\n        &#39;convert&#39;,\n        [ &#39;中心&#39;, { style: &#39;TONE2&#39; } ],\n        { permissions: [ &#39;pinyin&#39; ] },\n    );\n\n    console.log(result);\n    // [ [ &#39;zhong1&#39; ], [ &#39;xin1&#39; ] ]\n})();\n</code></pre>\n<p><code>pinyin</code> provider 开放下列异步桥接方法. <code>args</code> 数组中的位置参数与同名 Rhino 方法一致, 返回值会从严格 JSON 解码为普通 Node.js 值:</p>\n<table>\n<thead>\n<tr>\n<th>method</th>\n<th>args</th>\n<th>result</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>convert</code></td>\n<td><code>[ text, options? ]</code></td>\n<td><code>string[][]</code></td>\n</tr>\n<tr>\n<td><code>simple</code></td>\n<td><code>[ text, enableNumericTone?, enableSegment? ]</code></td>\n<td><code>string</code></td>\n</tr>\n<tr>\n<td><code>compare</code></td>\n<td><code>[ textA, textB ]</code></td>\n<td><code>number</code></td>\n</tr>\n<tr>\n<td><code>compact</code></td>\n<td><code>[ matrix ]</code></td>\n<td><code>string[][]</code></td>\n</tr>\n<tr>\n<td><code>fromCodePoint</code></td>\n<td><code>[ codePoint ]</code></td>\n<td>`string \\</td>\n<td>null`</td>\n</tr>\n<tr>\n<td><code>fromPhrase</code></td>\n<td><code>[ phrase ]</code></td>\n<td><code>string[][]</code></td>\n</tr>\n</tbody>\n</table>\n<p>Node.js 的 <code>convert</code> 支持相同的 <code>customDictionary</code> 格式和限制. 请求仍由宿主执行权限, JSON 大小和调用配额校验, 最终转换由当前选择的外置 Pinyin 插件完成. 未声明 <code>pinyin</code> capability, 未安装兼容插件或词典超限时, Promise 会以对应的 bridge 错误拒绝.</p>\n",
+          "type": "module",
+          "displayName": "Node.js Runtime"
         },
         {
           "textRaw": "PinyinStyle",

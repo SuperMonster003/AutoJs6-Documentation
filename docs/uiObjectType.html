@@ -55,6 +55,7 @@
 <li><a class="nav-events" href="events.html">Events - 事件监听</a></li>
 <li><a class="nav-files" href="files.html">Files - 文件</a></li>
 <li><a class="nav-floaty" href="floaty.html">Floaty - 悬浮窗</a></li>
+<li><a class="nav-flow" href="flow.html">Flow - 流程</a></li>
 <li><a class="nav-fmt" href="fmt.html">Formatter - 格式化</a></li>
 <li><a class="nav-global" href="global.html">Global - 全局对象</a></li>
 <li><a class="nav-http" href="http.html">HTTP</a></li>
@@ -104,6 +105,8 @@
 <li><a class="nav-uiObjectType active" href="uiObjectType.html">UiObject - 控件节点</a></li>
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
+<li><a class="nav-flowType" href="flowType.html">Flow - 流程对象</a></li>
+<li><a class="nav-flowErrorType" href="flowErrorType.html">FlowError - 流程错误</a></li>
 <li><a class="nav-webSocketType" href="webSocketType.html">WebSocket</a></li>
 <li><a class="nav-eventEmitterType" href="eventEmitterType.html">EventEmitter - 事件发射器</a></li>
 <li><a class="nav-imageWrapperType" href="imageWrapperType.html">ImageWrapper - 包装图像类</a></li>
@@ -543,6 +546,22 @@
 <li><span class="stability_undefined"><a href="#uiobjecttype_scrollable">scrollable()</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_contentinvalid">[m#] contentInvalid</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_contentinvalid">contentInvalid()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_contextclickable">[m#] contextClickable</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_contextclickable">contextClickable()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_multiline">[m#] multiLine</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_multiline">multiLine()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_dismissable">[m#] dismissable</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_dismissable">dismissable()</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#uiobjecttype_m_editable">[m#] editable</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjecttype_editable">editable()</a></span></li>
 </ul>
@@ -758,6 +777,30 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiobjecttype_m_setprogress">[m#] setProgress</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjecttype_setprogress_progress">setProgress(progress)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_isstale">[m#] isStale</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_isstale">isStale()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_waituntilgone">[m#] waitUntilGone</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_waituntilgone_timeout_interval">waitUntilGone(timeout?, interval?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_waitforstable">[m#] waitForStable</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_waitforstable_stablefor_timeout_interval">waitForStable(stableFor?, timeout?, interval?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_fingerprint">[m#] fingerprint</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_fingerprint">fingerprint()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_tojson">[m#] toJSON</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_tojson_key">toJSON(key?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_dumpsubtree">[m#] dumpSubtree</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_dumpsubtree_options">dumpSubtree(options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiobjecttype_m_compass">[m#] compass</a></span><ul>
@@ -1913,6 +1956,41 @@ console.log(contentMatch(/.+/).depth()); /* e.g. 5 */
 </ul>
 </li>
 </ul>
+<h2>[m#] contentInvalid<span><a class="mark" href="#uiobjecttype_m_contentinvalid" id="uiobjecttype_m_contentinvalid">#</a></span></h2>
+<h3>contentInvalid()<span><a class="mark" href="#uiobjecttype_contentinvalid" id="uiobjecttype_contentinvalid">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回控件内容是否被标记为无效 (如未通过校验的输入框), 对应 <a href="https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContentInvalid(">AccessibilityNodeInfo#isContentInvalid</a>).</p>
+<p>同名选择器筛选器 <code>contentInvalid()</code> 用于筛选此类控件.</p>
+<h2>[m#] contextClickable<span><a class="mark" href="#uiobjecttype_m_contextclickable" id="uiobjecttype_m_contextclickable">#</a></span></h2>
+<h3>contextClickable()<span><a class="mark" href="#uiobjecttype_contextclickable" id="uiobjecttype_contextclickable">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回控件是否可上下文点击 (如鼠标右键或触控笔按钮), 对应 <a href="https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContextClickable(">AccessibilityNodeInfo#isContextClickable</a>).</p>
+<blockquote>
+<p>参阅: <a href="#uiobjecttype_m_contextclick">contextClick</a> 控件行为.</p>
+</blockquote>
+<h2>[m#] multiLine<span><a class="mark" href="#uiobjecttype_m_multiline" id="uiobjecttype_m_multiline">#</a></span></h2>
+<h3>multiLine()<span><a class="mark" href="#uiobjecttype_multiline" id="uiobjecttype_multiline">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回控件是否为多行文本控件, 对应 <a href="https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isMultiLine(">AccessibilityNodeInfo#isMultiLine</a>).</p>
+<h2>[m#] dismissable<span><a class="mark" href="#uiobjecttype_m_dismissable" id="uiobjecttype_m_dismissable">#</a></span></h2>
+<h3>dismissable()<span><a class="mark" href="#uiobjecttype_dismissable" id="uiobjecttype_dismissable">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回控件是否可被关闭 (如可滑动移除的通知或提示条), 对应 <a href="https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isDismissable(">AccessibilityNodeInfo#isDismissable</a>).</p>
+<blockquote>
+<p>参阅: <a href="#uiobjecttype_m_dismiss">dismiss</a> 控件行为.</p>
+</blockquote>
 <h2>[m#] editable<span><a class="mark" href="#uiobjecttype_m_editable" id="uiobjecttype_m_editable">#</a></span></h2>
 <h3>editable()<span><a class="mark" href="#uiobjecttype_editable" id="uiobjecttype_editable">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>
@@ -2345,6 +2423,105 @@ console.log(w.hasAction(&quot;CLICK&quot;, &quot;FOCUS&quot;, &quot;SET_TEXT&quo
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否行为已执行且执行过程中无异常</li>
 </ul>
 <p>控件节点执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_setprogress">[ 设置进度值 ] 行为</a>.</p>
+<h2>[m#] isStale<span><a class="mark" href="#uiobjecttype_m_isstale" id="uiobjecttype_m_isstale">#</a></span></h2>
+<h3>isStale()<span><a class="mark" href="#uiobjecttype_isstale" id="uiobjecttype_isstale">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回控件是否已失效 (离开了窗口): 以其副本尝试刷新, 刷新失败即失效. 失效控件的属性停留在过去的值, 对它执行的行为不再作用于任何视图.</p>
+<p>控件本身不会被刷新; 需要最新状态时调用 <code>refresh()</code>.</p>
+<pre><code class="lang-js">let w = text(&#39;加载中&#39;).findOnce();
+w.click();
+sleep(2e3);
+console.log(w.isStale()); /* 控件已随页面变化消失时为 true. */
+</code></pre>
+<h2>[m#] waitUntilGone<span><a class="mark" href="#uiobjecttype_m_waituntilgone" id="uiobjecttype_m_waituntilgone">#</a></span></h2>
+<h3>waitUntilGone(timeout?, interval?)<span><a class="mark" href="#uiobjecttype_waituntilgone_timeout_interval" id="uiobjecttype_waituntilgone_timeout_interval">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>[ timeout = <code>10000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 超时 (毫秒), 0 或负数表示不限时</li>
+<li><strong>[ interval = <code>50</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 轮询间隔 (毫秒), 不能为负数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否在时限内消失</li>
+</ul>
+<p>阻塞等待控件消失: 不能再刷新, 或刷新后对用户不可见 (如已关闭的对话框, 已完成的进度条). 超时返回 <code>false</code>.</p>
+<p><code>timeout</code> 为 0 或负数时可能导致脚本 <strong>永久阻塞</strong>. 启用 <a href="automator.html#automator_m_setflags">eventAssistedPolling</a> 标志后, 两次尝试之间由无障碍事件唤醒. 不能在 UI 线程调用.</p>
+<pre><code class="lang-js">let dialog = id(&#39;progress_dialog&#39;).findOne(3e3);
+if (dialog &amp;&amp; dialog.waitUntilGone(30e3)) {
+    console.log(&#39;对话框已关闭&#39;);
+}
+</code></pre>
+<blockquote>
+<p>参阅: 不阻塞的异步形式 <a href="flow.html#flow_m_waitforhidden">flow.waitForHidden</a>.</p>
+</blockquote>
+<h2>[m#] waitForStable<span><a class="mark" href="#uiobjecttype_m_waitforstable" id="uiobjecttype_m_waitforstable">#</a></span></h2>
+<h3>waitForStable(stableFor?, timeout?, interval?)<span><a class="mark" href="#uiobjecttype_waitforstable_stablefor_timeout_interval" id="uiobjecttype_waitforstable_stablefor_timeout_interval">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>[ stableFor = <code>500</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 判定为稳定所需的无变化时长 (毫秒), 不能为负数</li>
+<li><strong>[ timeout = <code>10000</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 超时 (毫秒), 0 或负数表示不限时</li>
+<li><strong>[ interval = <code>50</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 采样间隔 (毫秒)</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否在时限内稳定</li>
+</ul>
+<p>阻塞等待控件自身状态 (边界, 文本, 描述, 类名, 子控件数与关键标志, 即 <a href="#uiobjecttype_m_fingerprint">fingerprint</a>) 连续 <code>stableFor</code> 毫秒无变化. 每次采样都会刷新本控件, 因此返回时控件反映的是稳定后的状态.</p>
+<p>超时返回 <code>false</code>; 控件在等待期间消失时立即返回 <code>false</code>. 不能在 UI 线程调用; 事件辅助同 <a href="#uiobjecttype_m_waituntilgone">waitUntilGone</a>.</p>
+<pre><code class="lang-js">let list = className(&#39;RecyclerView&#39;).findOne(5e3);
+if (list.waitForStable(800, 10e3)) {
+    console.log(list.childCount()); /* 列表已停止变化. */
+}
+</code></pre>
+<blockquote>
+<p>参阅: 不阻塞的异步形式 <a href="flow.html#flow_m_waitforstable">flow.waitForStable</a>.</p>
+</blockquote>
+<h2>[m#] fingerprint<span><a class="mark" href="#uiobjecttype_m_fingerprint" id="uiobjecttype_m_fingerprint">#</a></span></h2>
+<h3>fingerprint()<span><a class="mark" href="#uiobjecttype_fingerprint" id="uiobjecttype_fingerprint">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
+</ul>
+<p>返回控件自身状态 (边界, 文本, 描述, 类名, 子控件数, 关键布尔属性) 的哈希值, 用于低成本地判断控件在两次读取之间是否变化. <a href="#uiobjecttype_m_waitforstable">waitForStable</a> 与 <a href="flow.html">Flow</a> 的稳定检测默认以它比较.</p>
+<pre><code class="lang-js">let w = id(&#39;counter&#39;).findOnce();
+let before = w.fingerprint();
+sleep(1e3);
+w.refresh();
+console.log(w.fingerprint() !== before); /* 控件是否变化. */
+</code></pre>
+<h2>[m#] toJSON<span><a class="mark" href="#uiobjecttype_m_tojson" id="uiobjecttype_m_tojson">#</a></span></h2>
+<h3>toJSON(key?)<span><a class="mark" href="#uiobjecttype_tojson_key" id="uiobjecttype_tojson_key">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>[ key ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - <code>JSON.stringify</code> 传入的键, 忽略</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 控件自身属性构成的普通对象</li>
+</ul>
+<p>返回控件自身常用属性 (文本, 描述, 类名, 包名, 边界, 各布尔状态等) 构成的 JavaScript 对象, 不包含子控件. <code>JSON.stringify(w)</code> 会自动调用此方法.</p>
+<pre><code class="lang-js">let w = text(&#39;登录&#39;).findOnce();
+console.log(JSON.stringify(w));
+console.log(w.toJSON().bounds);
+</code></pre>
+<blockquote>
+<p>参阅: 含子控件的导出见 <a href="#uiobjecttype_m_dumpsubtree">dumpSubtree</a>.</p>
+</blockquote>
+<h2>[m#] dumpSubtree<span><a class="mark" href="#uiobjecttype_m_dumpsubtree" id="uiobjecttype_m_dumpsubtree">#</a></span></h2>
+<h3>dumpSubtree(options?)<span><a class="mark" href="#uiobjecttype_dumpsubtree_options" id="uiobjecttype_dumpsubtree_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>[ options ]</strong> { <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code> | {{<ul>
+<li>format?: <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code></li>
+<li>maxDepth?: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>properties?: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_string">string</a>[]</li>
+<li>visibleOnly?: <a href="dataTypes.html#datatypes_boolean">boolean</a></li>
+<li>maxNodes?: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>indent?: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_number">number</a></li>
+</ul>
+</li>
+<li>}} } - 格式名称或选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+<p>导出以本控件为根的子树, 选项与 <a href="automator.html#automator_m_dump">auto.dump</a> 相同 (不接受 <code>root</code>).</p>
+<pre><code class="lang-js">let panel = id(&#39;login_panel&#39;).findOnce();
+console.log(panel.dumpSubtree({ maxDepth: 2 }));
+files.write(&#39;/sdcard/panel.json&#39;, panel.dumpSubtree(&#39;json&#39;));
+</code></pre>
 <h2>[m#] compass<span><a class="mark" href="#uiobjecttype_m_compass" id="uiobjecttype_m_compass">#</a></span></h2>
 <h3>compass(compassArg)<span><a class="mark" href="#uiobjecttype_compass_compassarg" id="uiobjecttype_compass_compassarg">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>A11Y</code></strong></p>
@@ -2501,6 +2678,10 @@ if (temp !== null &amp;&amp; temp.clickable()) {
     temp.click();
 }
 </code></pre>
+<blockquote>
+<p>注: 6.8.0 起, <code>k</code> 段在给定层级内没有找到可点击控件时返回 <code>null</code> (此前返回控件自身), 因此只需判断 <code>temp !== null</code>.<br>
+更完整的 &quot;点击不可点击控件&quot; 方案 (上溯失败时回退到手势点按, 可校验结果) 见 <a href="automator.html#automator_m_smartclick">smartClick</a>.</p>
+</blockquote>
 <p>将上述示例用 <a href="uiSelectorType.html#uiselectortype_m_pickup">拾取选择器</a> 表示:</p>
 <pre><code class="lang-js">pickup(/.+/, &#39;k5&#39;, &#39;click&#39;);
 </code></pre>

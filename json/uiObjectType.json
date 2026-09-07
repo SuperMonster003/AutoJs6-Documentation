@@ -1409,6 +1409,82 @@
           "displayName": "[m#] scrollable"
         },
         {
+          "textRaw": "[m#] contentInvalid",
+          "name": "[m#]_contentinvalid",
+          "methods": [
+            {
+              "textRaw": "contentInvalid()",
+              "type": "method",
+              "name": "contentInvalid",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件内容是否被标记为无效 (如未通过校验的输入框), 对应 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContentInvalid(\">AccessibilityNodeInfo#isContentInvalid</a>).</p>\n<p>同名选择器筛选器 <code>contentInvalid()</code> 用于筛选此类控件.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] contentInvalid"
+        },
+        {
+          "textRaw": "[m#] contextClickable",
+          "name": "[m#]_contextclickable",
+          "methods": [
+            {
+              "textRaw": "contextClickable()",
+              "type": "method",
+              "name": "contextClickable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可上下文点击 (如鼠标右键或触控笔按钮), 对应 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContextClickable(\">AccessibilityNodeInfo#isContextClickable</a>).</p>\n<blockquote>\n<p>参阅: <a href=\"#m-contextclick\">contextClick</a> 控件行为.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] contextClickable"
+        },
+        {
+          "textRaw": "[m#] multiLine",
+          "name": "[m#]_multiline",
+          "methods": [
+            {
+              "textRaw": "multiLine()",
+              "type": "method",
+              "name": "multiLine",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否为多行文本控件, 对应 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isMultiLine(\">AccessibilityNodeInfo#isMultiLine</a>).</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] multiLine"
+        },
+        {
+          "textRaw": "[m#] dismissable",
+          "name": "[m#]_dismissable",
+          "methods": [
+            {
+              "textRaw": "dismissable()",
+              "type": "method",
+              "name": "dismissable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否可被关闭 (如可滑动移除的通知或提示条), 对应 <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isDismissable(\">AccessibilityNodeInfo#isDismissable</a>).</p>\n<blockquote>\n<p>参阅: <a href=\"#m-dismiss\">dismiss</a> 控件行为.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dismissable"
+        },
+        {
           "textRaw": "[m#] editable",
           "name": "[m#]_editable",
           "methods": [
@@ -2516,6 +2592,145 @@
           "displayName": "[m#] setProgress"
         },
         {
+          "textRaw": "[m#] isStale",
+          "name": "[m#]_isstale",
+          "methods": [
+            {
+              "textRaw": "isStale()",
+              "type": "method",
+              "name": "isStale",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回控件是否已失效 (离开了窗口): 以其副本尝试刷新, 刷新失败即失效. 失效控件的属性停留在过去的值, 对它执行的行为不再作用于任何视图.</p>\n<p>控件本身不会被刷新; 需要最新状态时调用 <code>refresh()</code>.</p>\n<pre><code class=\"lang-js\">let w = text(&#39;加载中&#39;).findOnce();\nw.click();\nsleep(2e3);\nconsole.log(w.isStale()); /* 控件已随页面变化消失时为 true. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isStale"
+        },
+        {
+          "textRaw": "[m#] waitUntilGone",
+          "name": "[m#]_waituntilgone",
+          "methods": [
+            {
+              "textRaw": "waitUntilGone(timeout?, interval?)",
+              "type": "method",
+              "name": "waitUntilGone",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ timeout = <code>10000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), 0 或负数表示不限时</li>\n<li><strong>[ interval = <code>50</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 轮询间隔 (毫秒), 不能为负数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在时限内消失</li>\n</ul>\n<p>阻塞等待控件消失: 不能再刷新, 或刷新后对用户不可见 (如已关闭的对话框, 已完成的进度条). 超时返回 <code>false</code>.</p>\n<p><code>timeout</code> 为 0 或负数时可能导致脚本 <strong>永久阻塞</strong>. 启用 <a href=\"automator#m-setflags\">eventAssistedPolling</a> 标志后, 两次尝试之间由无障碍事件唤醒. 不能在 UI 线程调用.</p>\n<pre><code class=\"lang-js\">let dialog = id(&#39;progress_dialog&#39;).findOne(3e3);\nif (dialog &amp;&amp; dialog.waitUntilGone(30e3)) {\n    console.log(&#39;对话框已关闭&#39;);\n}\n</code></pre>\n<blockquote>\n<p>参阅: 不阻塞的异步形式 <a href=\"flow#m-waitforhidden\">flow.waitForHidden</a>.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] waitUntilGone"
+        },
+        {
+          "textRaw": "[m#] waitForStable",
+          "name": "[m#]_waitforstable",
+          "methods": [
+            {
+              "textRaw": "waitForStable(stableFor?, timeout?, interval?)",
+              "type": "method",
+              "name": "waitForStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ stableFor = <code>500</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 判定为稳定所需的无变化时长 (毫秒), 不能为负数</li>\n<li><strong>[ timeout = <code>10000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), 0 或负数表示不限时</li>\n<li><strong>[ interval = <code>50</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 采样间隔 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在时限内稳定</li>\n</ul>\n<p>阻塞等待控件自身状态 (边界, 文本, 描述, 类名, 子控件数与关键标志, 即 <a href=\"#m-fingerprint\">fingerprint</a>) 连续 <code>stableFor</code> 毫秒无变化. 每次采样都会刷新本控件, 因此返回时控件反映的是稳定后的状态.</p>\n<p>超时返回 <code>false</code>; 控件在等待期间消失时立即返回 <code>false</code>. 不能在 UI 线程调用; 事件辅助同 <a href=\"#m-waituntilgone\">waitUntilGone</a>.</p>\n<pre><code class=\"lang-js\">let list = className(&#39;RecyclerView&#39;).findOne(5e3);\nif (list.waitForStable(800, 10e3)) {\n    console.log(list.childCount()); /* 列表已停止变化. */\n}\n</code></pre>\n<blockquote>\n<p>参阅: 不阻塞的异步形式 <a href=\"flow#m-waitforstable\">flow.waitForStable</a>.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "stableFor?"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] waitForStable"
+        },
+        {
+          "textRaw": "[m#] fingerprint",
+          "name": "[m#]_fingerprint",
+          "methods": [
+            {
+              "textRaw": "fingerprint()",
+              "type": "method",
+              "name": "fingerprint",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>返回控件自身状态 (边界, 文本, 描述, 类名, 子控件数, 关键布尔属性) 的哈希值, 用于低成本地判断控件在两次读取之间是否变化. <a href=\"#m-waitforstable\">waitForStable</a> 与 <a href=\"flow\">Flow</a> 的稳定检测默认以它比较.</p>\n<pre><code class=\"lang-js\">let w = id(&#39;counter&#39;).findOnce();\nlet before = w.fingerprint();\nsleep(1e3);\nw.refresh();\nconsole.log(w.fingerprint() !== before); /* 控件是否变化. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] fingerprint"
+        },
+        {
+          "textRaw": "[m#] toJSON",
+          "name": "[m#]_tojson",
+          "methods": [
+            {
+              "textRaw": "toJSON(key?)",
+              "type": "method",
+              "name": "toJSON",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ key ]</strong> { <a href=\"dataTypes#string\">string</a> } - <code>JSON.stringify</code> 传入的键, 忽略</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 控件自身属性构成的普通对象</li>\n</ul>\n<p>返回控件自身常用属性 (文本, 描述, 类名, 包名, 边界, 各布尔状态等) 构成的 JavaScript 对象, 不包含子控件. <code>JSON.stringify(w)</code> 会自动调用此方法.</p>\n<pre><code class=\"lang-js\">let w = text(&#39;登录&#39;).findOnce();\nconsole.log(JSON.stringify(w));\nconsole.log(w.toJSON().bounds);\n</code></pre>\n<blockquote>\n<p>参阅: 含子控件的导出见 <a href=\"#m-dumpsubtree\">dumpSubtree</a>.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "key?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toJSON"
+        },
+        {
+          "textRaw": "[m#] dumpSubtree",
+          "name": "[m#]_dumpsubtree",
+          "methods": [
+            {
+              "textRaw": "dumpSubtree(options?)",
+              "type": "method",
+              "name": "dumpSubtree",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code> | {{<ul>\n<li>format?: <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code></li>\n<li>maxDepth?: <a href=\"dataTypes#number\">number</a></li>\n<li>properties?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[]</li>\n<li>visibleOnly?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>maxNodes?: <a href=\"dataTypes#number\">number</a></li>\n<li>indent?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} } - 格式名称或选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>导出以本控件为根的子树, 选项与 <a href=\"automator#m-dump\">auto.dump</a> 相同 (不接受 <code>root</code>).</p>\n<pre><code class=\"lang-js\">let panel = id(&#39;login_panel&#39;).findOnce();\nconsole.log(panel.dumpSubtree({ maxDepth: 2 }));\nfiles.write(&#39;/sdcard/panel.json&#39;, panel.dumpSubtree(&#39;json&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dumpSubtree"
+        },
+        {
           "textRaw": "[m#] compass",
           "name": "[m#]_compass",
           "methods": [
@@ -2549,7 +2764,7 @@
                 {
                   "textRaw": "clickable (k)",
                   "name": "clickable_(k)",
-                  "desc": "<p>访问可点击控件.</p>\n<p>有些控件本身不可点击, 而是包含在一个可点击控件内部:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // true\n</code></pre>\n<p>对于上述情况的控件, 通常执行 &quot;父控件.click()&quot; 都会达到预期, 即虽然点击的是父控件, 但实际效果和点击这个控件本身是一样的.</p>\n<p>在某些情况下, 这样的可点击父控件可能需要两级甚至更多级:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // false\nconsole.log(w.parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().parent().clickable()); // true\n</code></pre>\n<p>上述示例直到 4 级父控件才是可点击的, 对于这种情况通常需要使用循环语句结合 <code>clickable</code> 的条件检测:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet max = 5;\nlet temp = w;\nwhile (max--) {\n    if (temp !== null &amp;&amp; temp.clickable()) {\n        temp.click();\n        break;\n    }\n    temp = temp.parent();\n}\n</code></pre>\n<p>上述示例的 <code>max</code> 变量表示最多尝试的层级数, 层级数过小, 可能导致错过真正可点击的父控件, 过大则可能会得到不相关的可点击控件 (这样的控件点击后将出现非预期结果), 通常这个 <code>max</code> 建议设置为 2.</p>\n<p>将上述示例用控件罗盘表示:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet temp = w.compass(&#39;k5&#39;); /* 5 表示尝试的最大层级数, 通常建议设置为 2. */\nif (temp !== null &amp;&amp; temp.clickable()) {\n    temp.click();\n}\n</code></pre>\n<p>将上述示例用 <a href=\"uiSelectorType#m-pickup\">拾取选择器</a> 表示:</p>\n<pre><code class=\"lang-js\">pickup(/.+/, &#39;k5&#39;, &#39;click&#39;);\n</code></pre>\n",
+                  "desc": "<p>访问可点击控件.</p>\n<p>有些控件本身不可点击, 而是包含在一个可点击控件内部:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // true\n</code></pre>\n<p>对于上述情况的控件, 通常执行 &quot;父控件.click()&quot; 都会达到预期, 即虽然点击的是父控件, 但实际效果和点击这个控件本身是一样的.</p>\n<p>在某些情况下, 这样的可点击父控件可能需要两级甚至更多级:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nconsole.log(w.clickable()); // false\nconsole.log(w.parent().clickable()); // false\nconsole.log(w.parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().clickable()); // false\nconsole.log(w.parent().parent().parent().parent().clickable()); // true\n</code></pre>\n<p>上述示例直到 4 级父控件才是可点击的, 对于这种情况通常需要使用循环语句结合 <code>clickable</code> 的条件检测:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet max = 5;\nlet temp = w;\nwhile (max--) {\n    if (temp !== null &amp;&amp; temp.clickable()) {\n        temp.click();\n        break;\n    }\n    temp = temp.parent();\n}\n</code></pre>\n<p>上述示例的 <code>max</code> 变量表示最多尝试的层级数, 层级数过小, 可能导致错过真正可点击的父控件, 过大则可能会得到不相关的可点击控件 (这样的控件点击后将出现非预期结果), 通常这个 <code>max</code> 建议设置为 2.</p>\n<p>将上述示例用控件罗盘表示:</p>\n<pre><code class=\"lang-js\">let w = contentMatch(/.+/).findOnce();\nlet temp = w.compass(&#39;k5&#39;); /* 5 表示尝试的最大层级数, 通常建议设置为 2. */\nif (temp !== null &amp;&amp; temp.clickable()) {\n    temp.click();\n}\n</code></pre>\n<blockquote>\n<p>注: 6.8.0 起, <code>k</code> 段在给定层级内没有找到可点击控件时返回 <code>null</code> (此前返回控件自身), 因此只需判断 <code>temp !== null</code>.<br>\n更完整的 &quot;点击不可点击控件&quot; 方案 (上溯失败时回退到手势点按, 可校验结果) 见 <a href=\"automator#m-smartclick\">smartClick</a>.</p>\n</blockquote>\n<p>将上述示例用 <a href=\"uiSelectorType#m-pickup\">拾取选择器</a> 表示:</p>\n<pre><code class=\"lang-js\">pickup(/.+/, &#39;k5&#39;, &#39;click&#39;);\n</code></pre>\n",
                   "type": "module",
                   "displayName": "clickable (k)"
                 }

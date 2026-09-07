@@ -12,7 +12,7 @@ UiObjectCollection 代表 [控件节点 (UiObject)](uiObjectType) 的对象集�
 
 **`Global`**
 
-AutoJs6 中几乎所有 UiObjectCollection 实例均已借助 Rhino 引擎将其包装为了 NativeArray 类型.<br>
+AutoJs6 把交给脚本的 UiObjectCollection 包装为一个真正的 JavaScript 数组: 数组元素为各控件节点, 集合类的全部公开方法 (如 click, each, find, at, slice) 作为绑定函数叠加在数组之上.<br>
 因此 JavaScript 的 Array 原型方法在 UiObjectCollection 实例上可以直接使用:
 
 ```js
@@ -23,14 +23,24 @@ wc.forEach(w => console.log(w.content())); /* 效果同上. */
 /* 包装后的对象 "是" 一个 JavaScript 数组. */
 console.log(Array.isArray(wc)); // true
 
-/* Array 的原型方法 slice. */
-console.log(typeof wc.slice); // 'function'
-console.log(wc.slice === Array.prototype.slice); // true
+/* filter / map / some / every / indexOf 与 for...of 都是数组自身的方法. */
+let clickableOnes = wc.filter(w => w.clickable());
 
 /* UiObjectCollection "类" 的实例方法依然全部可用 (如 size, click, each 等). */
 console.log(typeof wc.size); // 'function'
 console.log(typeof wc.click); // 'function'
 console.log(typeof wc.each); // 'function'
+```
+
+集合类声明的方法会遮蔽数组的同名方法 (6.8.0 起):
+
+- [slice](#m-slice) 返回的仍是带集合方法的控件集合, 而非普通数组
+- [find](#m-find) 接受选择器参数, 而非回调函数; 需要回调式查找时使用 `Array.prototype.find.call(wc, fn)`, 或改用 `filter`
+
+```js
+let wc = contentMatch(/.+/).find();
+console.log(wc.slice === Array.prototype.slice); // false
+console.log(typeof wc.slice(0, 2).click); // 'function'
 ```
 
 经过包装的 UiObjectCollection 将不能通过 instanceof 判断其类型, 但仍可通过 getClass 方法判断:
@@ -234,6 +244,75 @@ if (wc.length >= 2) {
 }
 ```
 
+## [m#] at
+
+### at(i)
+
+**`6.8.0`**
+
+- **i** { [number](dataTypes#number) } - 索引, 负数表示从末尾计
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) } - 对应索引的控件, 越界时为 null
+
+按索引获取集合中的控件, 支持负数索引.
+
+```js
+let wc = className('TextView').find();
+wc.at(0); /* 首个, 同 wc[0]. */
+wc.at(-1); /* 末尾. */
+wc.at(99); /* 越界为 null, 而 wc[99] 为 undefined. */
+```
+
+## [m#] first
+
+### first()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) } - 首个控件, 空集合时为 null
+
+## [m#] last
+
+### last()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) } - 末尾控件, 空集合时为 null
+
+```js
+let wc = className('TextView').find();
+if (wc.isNotEmpty()) {
+    console.log(wc.first().text(), wc.last().text());
+}
+```
+
+## [m#] nonNull
+
+### nonNull()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) } - 去掉 null 元素后的集合
+
+返回不含 null 元素的集合. 集合中没有 null 时返回自身.
+
+## [m#] slice
+
+### slice(start?, end?)
+
+**`6.8.0`**
+
+- **[ start = `0` ]** { [number](dataTypes#number) } - 起始索引 (含), 负数从末尾计
+- **[ end = `length` ]** { [number](dataTypes#number) } - 结束索引 (不含), 负数从末尾计
+- <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) } - 截取的控件集合
+
+按 `Array.prototype.slice` 的索引规则截取集合 (越界自动截断). 与数组的 slice 不同, 结果仍是带集合方法的控件集合, 因此可以继续执行控件行为.
+
+```js
+let wc = className('CheckBox').find();
+wc.slice(0, 3).click(); /* 点击前 3 个. */
+wc.slice(-2).clickEach(); /* 点击最后 2 个, 逐个返回结果. */
+```
+
 ## [m#] size
 
 ### size()
@@ -337,6 +416,78 @@ console.log(wc.findOne(clickable(true))); /* 返回一个可点击控件或 null
 > 注: 即使在执行过程中, 某一个控件执行失败, 后续控件依旧继续执行行为, 而非立即终止.
 
 > 参阅: [UiObjectActions](uiObjectActionsType) 章节.
+
+## [m#] performActionEach
+
+### performActionEach(action, ...arguments)
+
+**`6.8.0`** **`A11Y`**
+
+- **action** { [number](dataTypes#number) } - 行为的唯一标志符 (Action ID)
+- **arguments** { [...](documentation#可变参数)[ActionArgument](uiObjectActionsType#i-actionargument)[[]](documentation#可变参数) } - 行为参数
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] } - 每个控件的执行结果, 与集合索引一一对应
+
+逐个控件执行行为并返回每个控件的结果 (null 元素的结果为 false). 与 [performAction](#m-performaction) 只返回一个 "全部成功" 的布尔值不同, 此方法可以知道具体哪些控件失败了.
+
+```js
+let results = className('CheckBox').find().performActionEach(UiObject.ACTION_CLICK);
+results.forEach((ok, i) => ok || console.log(`第 ${i} 个点击失败`));
+```
+
+## [m#] clickEach
+
+### clickEach()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] } - 每个控件的点击结果
+
+逐个控件执行 [[ 点击 ] 行为](uiObjectActionsType#m-click), 返回每个控件的结果.
+
+## [m#] longClickEach
+
+### longClickEach()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] } - 每个控件的长按结果
+
+逐个控件执行 [[ 长按 ] 行为](uiObjectActionsType#m-longclick), 返回每个控件的结果.
+
+## [m#] scrollForwardEach
+
+### scrollForwardEach()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] }
+
+逐个控件执行 [[ 向前滚动 ] 行为](uiObjectActionsType#m-scrollforward), 返回每个控件的结果.
+
+## [m#] scrollBackwardEach
+
+### scrollBackwardEach()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] }
+
+逐个控件执行 [[ 向后滚动 ] 行为](uiObjectActionsType#m-scrollbackward), 返回每个控件的结果.
+
+## [m#] setTextEach
+
+### setTextEach(text)
+
+**`6.8.0`** **`A11Y`**
+
+- **text** { [string](dataTypes#string) } - 要设置的文本
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean)[] }
+
+逐个控件执行 [[ 设置文本 ] 行为](uiObjectActionsType#m-settext), 返回每个控件的结果.
+
+```js
+className('EditText').find().setTextEach('');
+```
 
 ## [m#] click
 

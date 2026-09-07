@@ -2,8 +2,13 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/21</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/07</p>
 
+- `新增` [流程 (Flow)](https://docs.autojs6.com/#/flow), [Flow](https://docs.autojs6.com/#/flowType) 与 [FlowError](https://docs.autojs6.com/#/flowErrorType) 文档, 覆盖异步等待与动作链, 全局起点函数, 等待选项与错误对象
+- `新增` [自动化](https://docs.autojs6.com/#/automator) 章节增加工具集 (smartClick, clickIfExists, clickAny, findAny, scrollUntil, typeInto, dismissPopups, collectList, launchAndWait, backUntil, backToApp, toggle, retry), 事件驱动等待 (waitForIdle, waitForEvent, waitForToast, waitForNotification) 以及 auto 的 wait, findWindows, findWindowRoots, explain, dump, stats 条目
+- `新增` [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节增加 select(syntax) 字符串选择器语法, find(max) 与 findIterator 条目; [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节增加 isStale, waitUntilGone, waitForStable, fingerprint, toJSON, dumpSubtree, contentInvalid, contextClickable, multiLine, dismissable 条目; [控件集合](https://docs.autojs6.com/#/uiObjectCollectionType) 章节增加 at, first, last, nonNull, slice 与 performActionEach 等逐个执行条目
+- `新增` [全局对象](https://docs.autojs6.com/#/global) 章节增加 waitAsync, waitThenClick, waitForStable, waitForStableThenClick, waitForVisible, waitForHidden, clickWhenStableAfter 条目
+- `更新` 按 AutoJs6 6.8.0 无障碍自动化重构修订 automator.isServiceRunning 语义, auto.setFlags (appWindowsFallback, eventAssistedPolling), auto.registerEvent 过滤选项, auto.setWindowFilter 对象形式与 auto.state 的 adoptedByEvent, 罗盘 k 段返回 null 的行为, xxxContains 字面匹配, 控件集合的数组包装方式, 并标注可能永久阻塞的方法
 - `新增` [AI](https://docs.autojs6.com/#/ai), [TTS](https://docs.autojs6.com/#/tts), [电源管理](https://docs.autojs6.com/#/powerManager), [应用设置](https://docs.autojs6.com/#/settings), [持久化任务](https://docs.autojs6.com/#/workManager) 和 [系统属性](https://docs.autojs6.com/#/sysprops) 文档
 - `新增` [YOLO 目标检测](https://docs.autojs6.com/#/yolo) 文档
 - `新增` [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [MediaInfo](https://docs.autojs6.com/#/mediainfo), [MIME](https://docs.autojs6.com/#/mime), [NanoID](https://docs.autojs6.com/#/nanoid), [Pinyin](https://docs.autojs6.com/#/pinyin), [Pinyin4j](https://docs.autojs6.com/#/pinyin4j), [SQLite](https://docs.autojs6.com/#/sqlite) 和 [Zip](https://docs.autojs6.com/#/zip) 文档

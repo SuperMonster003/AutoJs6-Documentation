@@ -31,7 +31,7 @@
 | [AI - 人工智能](ai) | √ |
 | [App - 通用应用](app) | &gt; 80% |
 | [AutoJs6 - 本体应用](autojs) | √ |
-| [Automator - 自动化](automator) | &gt; 60% |
+| [Automator - 自动化](automator) | &gt; 80% |
 | [Barcode - 条码](barcode) | √ |
 | [Base64](base64) | √ |
 | [Canvas - 画布](canvas) | √ |
@@ -47,6 +47,7 @@
 | [Events - 事件监听](events) | &gt; 80% |
 | [Files - 文件](files) | &gt; 80% |
 | [Floaty - 悬浮窗](floaty) | &gt; 70% |
+| [Flow - 流程](flow) | √ |
 | [Formatter - 格式化](fmt) | √ |
 | [Global - 全局对象](global) | √ |
 | [HTTP](http) | √ |
@@ -92,6 +93,8 @@
 | [UiObject - 控件节点](uiObjectType) | √ |
 | [UiObjectCollection - 控件集合](uiObjectCollectionType) | √ |
 | [UiObjectActions - 控件节点行为](uiObjectActionsType) | √ |
+| [Flow - 流程对象](flowType) | √ |
+| [FlowError - 流程错误](flowErrorType) | √ |
 | [WebSocket](webSocketType) | &gt; 70% |
 | [EventEmitter - 事件发射器](eventEmitterType) | √ |
 | [ImageWrapper - 包装图像类](imageWrapperType) | √ |

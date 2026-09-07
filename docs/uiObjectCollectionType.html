@@ -55,6 +55,7 @@
 <li><a class="nav-events" href="events.html">Events - 事件监听</a></li>
 <li><a class="nav-files" href="files.html">Files - 文件</a></li>
 <li><a class="nav-floaty" href="floaty.html">Floaty - 悬浮窗</a></li>
+<li><a class="nav-flow" href="flow.html">Flow - 流程</a></li>
 <li><a class="nav-fmt" href="fmt.html">Formatter - 格式化</a></li>
 <li><a class="nav-global" href="global.html">Global - 全局对象</a></li>
 <li><a class="nav-http" href="http.html">HTTP</a></li>
@@ -104,6 +105,8 @@
 <li><a class="nav-uiObjectType" href="uiObjectType.html">UiObject - 控件节点</a></li>
 <li><a class="nav-uiObjectCollectionType active" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
+<li><a class="nav-flowType" href="flowType.html">Flow - 流程对象</a></li>
+<li><a class="nav-flowErrorType" href="flowErrorType.html">FlowError - 流程错误</a></li>
 <li><a class="nav-webSocketType" href="webSocketType.html">WebSocket</a></li>
 <li><a class="nav-eventEmitterType" href="eventEmitterType.html">EventEmitter - 事件发射器</a></li>
 <li><a class="nav-imageWrapperType" href="imageWrapperType.html">ImageWrapper - 包装图像类</a></li>
@@ -286,6 +289,26 @@
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_get_i">get(i)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_at">[m#] at</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_at_i">at(i)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_first">[m#] first</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_first">first()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_last">[m#] last</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_last">last()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_nonnull">[m#] nonNull</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_nonnull">nonNull()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_slice">[m#] slice</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_slice_start_end">slice(start?, end?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_size">[m#] size</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_size">size()</a></span></li>
 </ul>
@@ -304,6 +327,30 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_performaction">[m#] performAction</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_performaction_action_arguments">performAction(action, ...arguments)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_performactioneach">[m#] performActionEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_performactioneach_action_arguments">performActionEach(action, ...arguments)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_clickeach">[m#] clickEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_clickeach">clickEach()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_longclickeach">[m#] longClickEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_longclickeach">longClickEach()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_scrollforwardeach">[m#] scrollForwardEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_scrollforwardeach">scrollForwardEach()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_scrollbackwardeach">[m#] scrollBackwardEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_scrollbackwardeach">scrollBackwardEach()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_settexteach">[m#] setTextEach</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_settexteach_text">setTextEach(text)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_click">[m#] click</a></span><ul>
@@ -497,7 +544,7 @@
 <hr>
 <h2>[@] UiObjectCollection<span><a class="mark" href="#uiobjectcollectiontype_uiobjectcollection_1" id="uiobjectcollectiontype_uiobjectcollection_1">#</a></span></h2>
 <p><strong><code>Global</code></strong></p>
-<p>AutoJs6 中几乎所有 UiObjectCollection 实例均已借助 Rhino 引擎将其包装为了 NativeArray 类型.<br>
+<p>AutoJs6 把交给脚本的 UiObjectCollection 包装为一个真正的 JavaScript 数组: 数组元素为各控件节点, 集合类的全部公开方法 (如 click, each, find, at, slice) 作为绑定函数叠加在数组之上.<br>
 因此 JavaScript 的 Array 原型方法在 UiObjectCollection 实例上可以直接使用:</p>
 <pre><code class="lang-js">let wc = contentMatch(/.+/).find();
 wc.toArray().forEach(w =&gt; console.log(w.content()));
@@ -506,14 +553,22 @@ wc.forEach(w =&gt; console.log(w.content())); /* 效果同上. */
 /* 包装后的对象 &quot;是&quot; 一个 JavaScript 数组. */
 console.log(Array.isArray(wc)); // true
 
-/* Array 的原型方法 slice. */
-console.log(typeof wc.slice); // &#39;function&#39;
-console.log(wc.slice === Array.prototype.slice); // true
+/* filter / map / some / every / indexOf 与 for...of 都是数组自身的方法. */
+let clickableOnes = wc.filter(w =&gt; w.clickable());
 
 /* UiObjectCollection &quot;类&quot; 的实例方法依然全部可用 (如 size, click, each 等). */
 console.log(typeof wc.size); // &#39;function&#39;
 console.log(typeof wc.click); // &#39;function&#39;
 console.log(typeof wc.each); // &#39;function&#39;
+</code></pre>
+<p>集合类声明的方法会遮蔽数组的同名方法 (6.8.0 起):</p>
+<ul>
+<li><a href="#uiobjectcollectiontype_m_slice">slice</a> 返回的仍是带集合方法的控件集合, 而非普通数组</li>
+<li><a href="#uiobjectcollectiontype_m_find">find</a> 接受选择器参数, 而非回调函数; 需要回调式查找时使用 <code>Array.prototype.find.call(wc, fn)</code>, 或改用 <code>filter</code></li>
+</ul>
+<pre><code class="lang-js">let wc = contentMatch(/.+/).find();
+console.log(wc.slice === Array.prototype.slice); // false
+console.log(typeof wc.slice(0, 2).click); // &#39;function&#39;
 </code></pre>
 <p>经过包装的 UiObjectCollection 将不能通过 instanceof 判断其类型, 但仍可通过 getClass 方法判断:</p>
 <pre><code class="lang-js">let wc = contentMatch(/.+/).find();
@@ -668,6 +723,56 @@ if (wc.length &gt;= 2) {
     console.log(wc[2] instanceof UiObject); // true
 }
 </code></pre>
+<h2>[m#] at<span><a class="mark" href="#uiobjectcollectiontype_m_at" id="uiobjectcollectiontype_m_at">#</a></span></h2>
+<h3>at(i)<span><a class="mark" href="#uiobjectcollectiontype_at_i" id="uiobjectcollectiontype_at_i">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>i</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 索引, 负数表示从末尾计</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 对应索引的控件, 越界时为 null</li>
+</ul>
+<p>按索引获取集合中的控件, 支持负数索引.</p>
+<pre><code class="lang-js">let wc = className(&#39;TextView&#39;).find();
+wc.at(0); /* 首个, 同 wc[0]. */
+wc.at(-1); /* 末尾. */
+wc.at(99); /* 越界为 null, 而 wc[99] 为 undefined. */
+</code></pre>
+<h2>[m#] first<span><a class="mark" href="#uiobjectcollectiontype_m_first" id="uiobjectcollectiontype_m_first">#</a></span></h2>
+<h3>first()<span><a class="mark" href="#uiobjectcollectiontype_first" id="uiobjectcollectiontype_first">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 首个控件, 空集合时为 null</li>
+</ul>
+<h2>[m#] last<span><a class="mark" href="#uiobjectcollectiontype_m_last" id="uiobjectcollectiontype_m_last">#</a></span></h2>
+<h3>last()<span><a class="mark" href="#uiobjectcollectiontype_last" id="uiobjectcollectiontype_last">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 末尾控件, 空集合时为 null</li>
+</ul>
+<pre><code class="lang-js">let wc = className(&#39;TextView&#39;).find();
+if (wc.isNotEmpty()) {
+    console.log(wc.first().text(), wc.last().text());
+}
+</code></pre>
+<h2>[m#] nonNull<span><a class="mark" href="#uiobjectcollectiontype_m_nonnull" id="uiobjectcollectiontype_m_nonnull">#</a></span></h2>
+<h3>nonNull()<span><a class="mark" href="#uiobjectcollectiontype_nonnull" id="uiobjectcollectiontype_nonnull">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectCollectionType.html">UiObjectCollection</a></span> } - 去掉 null 元素后的集合</li>
+</ul>
+<p>返回不含 null 元素的集合. 集合中没有 null 时返回自身.</p>
+<h2>[m#] slice<span><a class="mark" href="#uiobjectcollectiontype_m_slice" id="uiobjectcollectiontype_m_slice">#</a></span></h2>
+<h3>slice(start?, end?)<span><a class="mark" href="#uiobjectcollectiontype_slice_start_end" id="uiobjectcollectiontype_slice_start_end">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>[ start = <code>0</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 起始索引 (含), 负数从末尾计</li>
+<li><strong>[ end = <code>length</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 结束索引 (不含), 负数从末尾计</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectCollectionType.html">UiObjectCollection</a></span> } - 截取的控件集合</li>
+</ul>
+<p>按 <code>Array.prototype.slice</code> 的索引规则截取集合 (越界自动截断). 与数组的 slice 不同, 结果仍是带集合方法的控件集合, 因此可以继续执行控件行为.</p>
+<pre><code class="lang-js">let wc = className(&#39;CheckBox&#39;).find();
+wc.slice(0, 3).click(); /* 点击前 3 个. */
+wc.slice(-2).clickEach(); /* 点击最后 2 个, 逐个返回结果. */
+</code></pre>
 <h2>[m#] size<span><a class="mark" href="#uiobjectcollectiontype_m_size" id="uiobjectcollectiontype_m_size">#</a></span></h2>
 <h3>size()<span><a class="mark" href="#uiobjectcollectiontype_size" id="uiobjectcollectiontype_size">#</a></span></h3>
 <p><strong><code>DEPRECATED</code></strong></p>
@@ -745,6 +850,56 @@ console.log(wc.findOne(clickable(true))); /* 返回一个可点击控件或 null
 <blockquote>
 <p>参阅: <a href="uiObjectActionsType.html">UiObjectActions</a> 章节.</p>
 </blockquote>
+<h2>[m#] performActionEach<span><a class="mark" href="#uiobjectcollectiontype_m_performactioneach" id="uiobjectcollectiontype_m_performactioneach">#</a></span></h2>
+<h3>performActionEach(action, ...arguments)<span><a class="mark" href="#uiobjectcollectiontype_performactioneach_action_arguments" id="uiobjectcollectiontype_performactioneach_action_arguments">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>action</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 行为的唯一标志符 (Action ID)</li>
+<li><strong>arguments</strong> { <span class="type"><a href="documentation.html#documentation_9">...</a><a href="uiObjectActionsType.html#uiobjectactionstype_i_actionargument">ActionArgument</a><a href="documentation.html#documentation_9">[]</a></span> } - 行为参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> } - 每个控件的执行结果, 与集合索引一一对应</li>
+</ul>
+<p>逐个控件执行行为并返回每个控件的结果 (null 元素的结果为 false). 与 <a href="#uiobjectcollectiontype_m_performaction">performAction</a> 只返回一个 &quot;全部成功&quot; 的布尔值不同, 此方法可以知道具体哪些控件失败了.</p>
+<pre><code class="lang-js">let results = className(&#39;CheckBox&#39;).find().performActionEach(UiObject.ACTION_CLICK);
+results.forEach((ok, i) =&gt; ok || console.log(`第 ${i} 个点击失败`));
+</code></pre>
+<h2>[m#] clickEach<span><a class="mark" href="#uiobjectcollectiontype_m_clickeach" id="uiobjectcollectiontype_m_clickeach">#</a></span></h2>
+<h3>clickEach()<span><a class="mark" href="#uiobjectcollectiontype_clickeach" id="uiobjectcollectiontype_clickeach">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> } - 每个控件的点击结果</li>
+</ul>
+<p>逐个控件执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_click">[ 点击 ] 行为</a>, 返回每个控件的结果.</p>
+<h2>[m#] longClickEach<span><a class="mark" href="#uiobjectcollectiontype_m_longclickeach" id="uiobjectcollectiontype_m_longclickeach">#</a></span></h2>
+<h3>longClickEach()<span><a class="mark" href="#uiobjectcollectiontype_longclickeach" id="uiobjectcollectiontype_longclickeach">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> } - 每个控件的长按结果</li>
+</ul>
+<p>逐个控件执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_longclick">[ 长按 ] 行为</a>, 返回每个控件的结果.</p>
+<h2>[m#] scrollForwardEach<span><a class="mark" href="#uiobjectcollectiontype_m_scrollforwardeach" id="uiobjectcollectiontype_m_scrollforwardeach">#</a></span></h2>
+<h3>scrollForwardEach()<span><a class="mark" href="#uiobjectcollectiontype_scrollforwardeach" id="uiobjectcollectiontype_scrollforwardeach">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> }</li>
+</ul>
+<p>逐个控件执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_scrollforward">[ 向前滚动 ] 行为</a>, 返回每个控件的结果.</p>
+<h2>[m#] scrollBackwardEach<span><a class="mark" href="#uiobjectcollectiontype_m_scrollbackwardeach" id="uiobjectcollectiontype_m_scrollbackwardeach">#</a></span></h2>
+<h3>scrollBackwardEach()<span><a class="mark" href="#uiobjectcollectiontype_scrollbackwardeach" id="uiobjectcollectiontype_scrollbackwardeach">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> }</li>
+</ul>
+<p>逐个控件执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_scrollbackward">[ 向后滚动 ] 行为</a>, 返回每个控件的结果.</p>
+<h2>[m#] setTextEach<span><a class="mark" href="#uiobjectcollectiontype_m_settexteach" id="uiobjectcollectiontype_m_settexteach">#</a></span></h2>
+<h3>setTextEach(text)<span><a class="mark" href="#uiobjectcollectiontype_settexteach_text" id="uiobjectcollectiontype_settexteach_text">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 要设置的文本</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a>[]</span> }</li>
+</ul>
+<p>逐个控件执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_settext">[ 设置文本 ] 行为</a>, 返回每个控件的结果.</p>
+<pre><code class="lang-js">className(&#39;EditText&#39;).find().setTextEach(&#39;&#39;);
+</code></pre>
 <h2>[m#] click<span><a class="mark" href="#uiobjectcollectiontype_m_click" id="uiobjectcollectiontype_m_click">#</a></span></h2>
 <h3>click()<span><a class="mark" href="#uiobjectcollectiontype_click" id="uiobjectcollectiontype_click">#</a></span></h3>
 <p><strong><code>A11Y</code></strong></p>

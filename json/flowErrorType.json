@@ -1,0 +1,70 @@
+{
+  "source": "..\\api\\flowErrorType.md",
+  "modules": [
+    {
+      "textRaw": "流程错误 (FlowError)",
+      "name": "流程错误_(flowerror)",
+      "desc": "<p>FlowError 是 <a href=\"flow\">流程 (Flow)</a> 的步骤失败时产生的错误对象, 也是 <a href=\"automator#工具集-toolkit\">工具集</a> 与 <a href=\"automator#事件驱动等待\">事件驱动等待</a> 的同步函数抛出的错误类型.</p>\n<p>它是 <code>name</code> 为 <code>&#39;FlowError&#39;</code> 的 JavaScript <a href=\"exceptions#error-对象\">Error</a>, 在 <code>message</code> 之外提供结构化的字段 (<code>code</code>, <code>step</code>, <code>selector</code>, <code>elapsed</code>, <code>attempts</code>, <code>reason</code>), 便于按原因分支处理.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).click().catch(e =&gt; {\n    console.log(e.name); /* FlowError */\n    console.log(e.code); /* TIMEOUT */\n    console.log(e.step); /* wait */\n    console.log(e.message); /* Timed out after 5003 ms and 25 attempt(s) in step &quot;wait&quot; waiting for content(&quot;登录&quot;) */\n});\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">FlowError</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] FlowError",
+          "name": "[@]_flowerror",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>Flow 步骤失败时的错误对象, 是 <code>name</code> 为 <code>&#39;FlowError&#39;</code> 的 JavaScript <a href=\"exceptions#error-对象\">Error</a>. 由 <a href=\"automator#工具集-toolkit\">工具集</a> 与 <a href=\"automator#事件驱动等待\">事件驱动等待</a> 的同步函数抛出的错误也是此类型.</p>\n",
+          "type": "module",
+          "displayName": "[@] FlowError"
+        },
+        {
+          "textRaw": "[p#] code",
+          "name": "[p#]_code",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <code>&#39;TIMEOUT&#39;</code> | <code>&#39;ACTION_FAILED&#39;</code> | <code>&#39;CANCELLED&#39;</code> | <code>&#39;A11Y_UNAVAILABLE&#39;</code> | <code>&#39;INVALID_TARGET&#39;</code> }</li>\n</ul>\n<p>错误代码:</p>\n<table>\n<thead>\n<tr>\n<th>code</th>\n<th>含义</th>\n<th>典型消息</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>TIMEOUT</td>\n<td>等待超时</td>\n<td>Timed out after 5003 ms and 25 attempt(s) in step &quot;wait&quot; waiting for content(&quot;登录&quot;)</td>\n</tr>\n<tr>\n<td>ACTION_FAILED</td>\n<td>动作返回 false 或工具动作失败</td>\n<td>Action &quot;click&quot; failed</td>\n</tr>\n<tr>\n<td>CANCELLED</td>\n<td>被 <a href=\"flowType#m-cancel\">cancel</a> / <a href=\"flow#m-cancelall\">cancelAll</a> 或脚本退出取消</td>\n<td>Cancelled in step &quot;wait&quot;</td>\n</tr>\n<tr>\n<td>A11Y_UNAVAILABLE</td>\n<td>无障碍服务不可用</td>\n<td>Accessibility service unavailable for step &quot;wait&quot;</td>\n</tr>\n<tr>\n<td>INVALID_TARGET</td>\n<td>链上的值不是可作用的目标, 或工具的目标无效</td>\n<td>Invalid target for step &quot;click&quot; (null)</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "[p#] code"
+        },
+        {
+          "textRaw": "[p#] step",
+          "name": "[p#]_step",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>失败的步骤名, 如 <code>&#39;wait&#39;</code>, <code>&#39;click&#39;</code>, <code>&#39;smartClick&#39;</code>, <code>&#39;sync&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] step"
+        },
+        {
+          "textRaw": "[p#] selector",
+          "name": "[p#]_selector",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>等待的目标描述 (如 <code>content(&quot;登录&quot;)</code>), 无目标时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] selector"
+        },
+        {
+          "textRaw": "[p#] elapsed",
+          "name": "[p#]_elapsed",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>失败前已等待的毫秒数 (超时类错误), 其余为 <code>0</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] elapsed"
+        },
+        {
+          "textRaw": "[p#] attempts",
+          "name": "[p#]_attempts",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>失败前的检测次数 (超时类错误), 其余为 <code>0</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] attempts"
+        },
+        {
+          "textRaw": "[p#] reason",
+          "name": "[p#]_reason",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>细化错误代码的原因, 如 <code>&#39;chain&#39;</code> (链截止), <code>&#39;sync&#39;</code> (sync 超时), <code>&#39;noTarget&#39;</code>, <code>&#39;notClickable&#39;</code>, <code>&#39;verify&#39;</code>, <code>&#39;maxSteps&#39;</code>, <code>&#39;end&#39;</code>, <code>&#39;filtered out&#39;</code>; 无则为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] reason"
+        },
+        {
+          "textRaw": "错误处理示例",
+          "name": "错误处理示例",
+          "desc": "<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).click().then(null, e =&gt; {\n    switch (e.code) {\n        case &#39;TIMEOUT&#39;:\n            console.log(`${e.elapsed} 毫秒内未找到 ${e.selector}`);\n            break;\n        case &#39;A11Y_UNAVAILABLE&#39;:\n            auto.launchSettings();\n            break;\n        default:\n            console.error(e);\n    }\n});\n\n/* 同步形式捕获. */\ntry {\n    smartClick(&#39;不存在的按钮&#39;);\n} catch (e) {\n    console.log(e.name === &#39;FlowError&#39;, e.code); /* true TIMEOUT */\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "错误处理示例"
+        }
+      ],
+      "type": "module",
+      "displayName": "流程错误 (FlowError)"
+    }
+  ]
+}

@@ -99,8 +99,10 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/08/12</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/07</p>
 
+- `新增` 流程 (Flow), 工具集, 事件驱动等待, 字符串选择器语法, 节点等待与诊断等无障碍自动化 API 文档
+- `更新` 按 AutoJs6 6.8.0 无障碍自动化重构修订自动化, 全局对象, 选择器, 控件节点与控件集合章节
 - `新增` AI, TTS, Power Manager, Settings, Work Manager, SysProps, SQLite, Zip 等 16 个模块文档
 - `更新` 根据 AutoJs6 6.8.0 Augmentable API 修订模块签名, 重载, 默认值, 版本和运行条件
 - `更新` 补充双开应用, 异步截图, 引擎事件, OCR Rapid 模式和插件运行条件

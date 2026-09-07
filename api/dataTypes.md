@@ -2014,3 +2014,19 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## OpenCCConversion
 
 参阅 [OpenCCConversion](openCCConversionType) 类型章节.
+
+## Flow
+
+参阅 [Flow - 流程对象](flowType) 类型章节.
+
+## FlowError
+
+参阅 [FlowError - 流程错误](flowErrorType) 类型章节.
+
+## UiObjectIterator
+
+参阅 [UiSelector#findIterator](uiSelectorType#m-finditerator) 方法小节.
+
+## WindowFilter
+
+参阅 [窗口过滤器对象 (WindowFilter)](automator#窗口过滤器对象-windowfilter) 小节.

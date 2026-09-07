@@ -28,6 +28,13 @@
           "displayName": "自动化配置 (AutomatorConfiguration)"
         },
         {
+          "textRaw": "工具集与事件驱动等待",
+          "name": "工具集与事件驱动等待",
+          "desc": "<p>6.8.0 新增的 <a href=\"#工具集-toolkit\">工具集</a> 提供智能点击, 滚动查找, 文本输入, 弹窗关闭, 列表采集, 应用切换与开关切换等高阶自动化函数; <a href=\"#事件驱动等待\">事件驱动等待</a> 提供基于无障碍事件的界面空闲, 事件, Toast 与通知等待. 两者都同时具备同步形式 (全局函数与 <code>automator.*</code>) 与 <a href=\"flow\">Flow</a> 形式.</p>\n",
+          "type": "module",
+          "displayName": "工具集与事件驱动等待"
+        },
+        {
           "textRaw": "选择器 (UiSelector)",
           "name": "选择器_(uiselector)",
           "desc": "<p>UiSelector (选择器), 亦可看作是 <a href=\"uiObjectType\">控件节点</a> 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 <code>控件节点</code>, 并做进一步处理, 如 [ 执行 <a href=\"uiObjectActionsType\">控件行为</a> (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 <a href=\"glossaries#控件层级\">控件层级</a> 中进行 <a href=\"uiObjectType#m-compass\">罗盘</a> 导航 ] 等.</p>\n<p>详情参阅 <a href=\"uiSelectorType\">选择器 (UiSelector)</a> 章节.</p>\n",
@@ -61,7 +68,7 @@
           "textRaw": "automator.isServiceRunning()",
           "type": "method",
           "name": "isServiceRunning",
-          "desc": "<p><strong><code>6.1.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前进程中是否存在无障碍服务实例</li>\n</ul>\n<p>此方法只检查服务实例, 不检查系统设置中的启用状态. 如需同时检查两种状态, 使用 <a href=\"#auto-isrunning\">auto.isRunning</a>.</p>\n",
+          "desc": "<p><strong><code>6.1.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 无障碍服务是否已启用且当前进程中存在服务实例</li>\n</ul>\n<p>与 <a href=\"#auto-isrunning\">auto.isRunning</a> 语义一致: 系统设置中已启用 AutoJs6 无障碍服务, 且当前进程中存在服务实例.</p>\n<blockquote>\n<p>注: 6.8.0 之前此方法只检查服务实例, 不检查系统设置中的启用状态.</p>\n</blockquote>\n",
           "signatures": [
             {
               "params": []
@@ -1532,7 +1539,7 @@
           "textRaw": "auto.currentPackage()",
           "type": "method",
           "name": "currentPackage",
-          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 最近识别的前台应用包名, 未识别时为空字符串</li>\n</ul>\n<p>返回无障碍运行时最近记录的应用包名. 结果是否依赖无障碍服务受 <a href=\"#auto-setflags-flags\">auto.setFlags</a> 配置影响.</p>\n",
+          "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 最近识别的前台应用包名, 未识别时为空字符串</li>\n</ul>\n<p>返回无障碍运行时最近记录的应用包名. 结果是否依赖无障碍服务受 <a href=\"#m-setflags\">auto.setFlags</a> 配置影响.</p>\n",
           "signatures": [
             {
               "params": []
@@ -1598,21 +1605,6 @@
           "desc": "<p>设置无障碍模式为 mode. mode 的可选值为:</p>\n<ul>\n<li><code>fast</code> 快速模式. 该模式下会启用控件缓存, 从而选择器获取屏幕控件更快. 对于需要快速的控件查看和操作的脚本可以使用该模式, 一般脚本则没有必要使用该函数.</li>\n<li><code>normal</code> 正常模式, 默认.</li>\n</ul>\n"
         },
         {
-          "textRaw": "auto.setFlags(flags)",
-          "type": "method",
-          "name": "setFlags",
-          "desc": "<p><strong>[v4.1.0 新增]</strong></p>\n<ul>\n<li><strong>flags</strong> { <a href=\"dataTypes#string\">string</a> } | { <a href=\"dataTypes#array\">Array</a> } 一些标志, 来启用和禁用某些特性, 包括:<ul>\n<li><code>findOnUiThread</code> 使用该特性后, 选择器搜索时会在主进程进行. 该特性用于解决线程安全问题导致的次生问题, 不过目前貌似已知问题并不是线程安全问题.</li>\n<li><code>useUsageStats</code> 使用该特性后, 将会以 &quot;使用情况统计&quot; 服务的结果来检测当前正在运行的应用包名 (需要授予 &quot;查看使用情况统计&quot; 权限). 如果觉得 currentPackage() 返回的结果不太准确, 可以尝试该特性.</li>\n<li><code>useShell</code> 使用该特性后, 将使用 shell 命令获取当前正在运行的应用的包名, 活动名称, 但是需要 root 权限.</li>\n</ul>\n</li>\n</ul>\n<p>启用有关 automator 的一些特性. 例如:</p>\n<pre><code>auto.setFlags([&quot;findOnUiThread&quot;, &quot;useShell&quot;]);\n</code></pre>",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "flags"
-                }
-              ]
-            }
-          ]
-        },
-        {
           "textRaw": "auto.getWindowRoot(window)",
           "type": "method",
           "name": "getWindowRoot",
@@ -1626,28 +1618,13 @@
               ]
             }
           ]
-        },
-        {
-          "textRaw": "auto.setWindowFilter(filter)",
-          "type": "method",
-          "name": "setWindowFilter",
-          "desc": "<p><strong>[v4.1.0 新增]</strong></p>\n<ul>\n<li><strong>filter</strong> { <a href=\"dataTypes#function\">Function</a> } 参数为窗口 (<a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/\">AccessibilityWindowInfo</a>), 返回值为 Boolean 的函数.</li>\n</ul>\n<p>设置窗口过滤器. 这个过滤器可以决定哪些窗口是目标窗口, 并影响选择器的搜索. 例如, 如果想要选择器在所有窗口 (包括状态栏, 输入法等) 中搜索, 只需要使用以下代码:</p>\n<pre><code>auto.setWindowFilter(function(window){\n    // 不管是如何窗口, 都返回 true, 表示在该窗口中搜索.\n    return true;\n});\n</code></pre><p>又例如, 当前使用了分屏功能, 屏幕上有 AutoJs6 和 QQ 两个应用, 但我们只想选择器对 QQ 界面进行搜索, 则:</p>\n<pre><code>auto.setWindowFilter(function(window){\n    // 对于应用窗口, 他的 title 属性就是应用的名称, 因此可以通过 title 属性来判断一个应用.\n    return window.title == &quot;QQ&quot;;\n});\n</code></pre><p>选择器默认是在当前活跃的窗口中搜索, 不会搜索诸如悬浮窗, 状态栏之类的, 使用 WindowFilter 则可以控制搜索的窗口.</p>\n<p>需要注意的是, 如果 WindowFilter 返回的结果均为 false, 则选择器的搜索结果将为空.</p>\n<p>另外 setWindowFilter 函数也会影响 <code>auto.windowRoots</code> 的结果.</p>\n<p>该函数需要 Android 5.0 以上才有效.</p>\n",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "name": "filter"
-                }
-              ]
-            }
-          ]
         }
       ],
       "modules": [
         {
           "textRaw": "[p] state",
           "name": "[p]_state",
-          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>hasInstance: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>hasService: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isRunning: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isOperational: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>返回无障碍服务状态快照. 每次读取都会创建一个新对象:</p>\n<ul>\n<li><code>hasInstance</code> 表示当前进程中是否存在 AutoJs6 无障碍服务实例</li>\n<li><code>hasService</code> 表示系统设置中是否已启用 AutoJs6 无障碍服务</li>\n<li><code>isRunning</code> 表示 <code>hasInstance</code> 和 <code>hasService</code> 是否同时为 <code>true</code></li>\n<li><code>isOperational</code> 表示服务已运行, 且当前进程已确认服务可工作</li>\n</ul>\n<pre><code class=\"lang-js\">let state = auto.state;\nconsole.log(state.hasService, state.isOperational);\n</code></pre>\n",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>hasInstance: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>hasService: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isRunning: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isOperational: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>adoptedByEvent: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>返回无障碍服务状态快照. 每次读取都会创建一个新对象:</p>\n<ul>\n<li><code>hasInstance</code> 表示当前进程中是否存在 AutoJs6 无障碍服务实例</li>\n<li><code>hasService</code> 表示系统设置中是否已启用 AutoJs6 无障碍服务</li>\n<li><code>isRunning</code> 表示 <code>hasInstance</code> 和 <code>hasService</code> 是否同时为 <code>true</code></li>\n<li><code>isOperational</code> 表示服务已运行, 且当前进程已确认服务可工作</li>\n<li><code>adoptedByEvent</code> (<strong><code>6.8.0</code></strong>) 表示当前服务实例是否由先于连接回调到达的无障碍事件采纳而来. 正常连接时为 <code>false</code>; 为 <code>true</code> 说明系统在 <code>onServiceConnected</code> 之前就开始投递事件, 服务由事件确认为可用</li>\n</ul>\n<pre><code class=\"lang-js\">let state = auto.state;\nconsole.log(state.hasService, state.isOperational);\n</code></pre>\n",
           "type": "module",
           "displayName": "[p] state"
         },
@@ -1678,7 +1655,7 @@
               "textRaw": "registerEvent(name, listener)",
               "type": "method",
               "name": "registerEvent",
-              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 无障碍事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> | {{ onAccessibilityEvent(event: <a href=\"dataTypes#object\">Object</a>): <a href=\"dataTypes#void\">void</a> }} | <a href=\"dataTypes#null\">null</a> } - 事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>注册当前脚本的无障碍事件监听器. <code>name</code> 对应 Android <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityEvent\">AccessibilityEvent</a> 的 <code>TYPE_*</code> 常量名, 省略 <code>TYPE_</code> 前缀且不区分大小写, 如 <code>window_state_changed</code> 或 <code>view_clicked</code>.</p>\n<p>回调参数是无障碍事件包装对象, 包含 <code>raw</code>, <code>packageName</code>, <code>eventType</code>, <code>eventTime</code>, <code>action</code>, <code>isFullScreen</code>, <code>className</code> 和 <code>source</code> 属性. <code>source</code> 可用时为 <a href=\"uiObjectType\">UiObject</a>.</p>\n<p>同一脚本对同一事件再次注册会替换原监听器. <code>listener</code> 为 <code>null</code> 或 <code>undefined</code> 时移除该事件监听器. <a href=\"#m-registerevents\">auto.registerEvents</a> 是此方法的兼容别名.</p>\n<pre><code class=\"lang-js\">auto.registerEvent(&#39;view_clicked&#39;, {\n    onAccessibilityEvent(event) {\n        console.log(event.packageName, event.source);\n    },\n});\n</code></pre>\n",
+              "desc": "<p><strong><code>6.3.3</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 无障碍事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> | {{ onAccessibilityEvent(event: <a href=\"dataTypes#object\">Object</a>): <a href=\"dataTypes#void\">void</a> }} | <a href=\"dataTypes#null\">null</a> } - 事件监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>注册当前脚本的无障碍事件监听器. <code>name</code> 对应 Android <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityEvent\">AccessibilityEvent</a> 的 <code>TYPE_*</code> 常量名, 省略 <code>TYPE_</code> 前缀且不区分大小写, 如 <code>window_state_changed</code> 或 <code>view_clicked</code>.</p>\n<p>回调参数是无障碍事件包装对象, 包含 <code>raw</code>, <code>packageName</code>, <code>eventType</code>, <code>eventTime</code>, <code>action</code>, <code>isFullScreen</code>, <code>className</code> 和 <code>source</code> 属性. <code>source</code> 可用时为 <a href=\"uiObjectType\">UiObject</a>.</p>\n<p>同一脚本对同一事件再次注册会替换原监听器. <code>listener</code> 为 <code>null</code> 或 <code>undefined</code> 时移除该事件监听器. <a href=\"#m-registerevents\">auto.registerEvents</a> 是此方法的兼容别名.</p>\n<pre><code class=\"lang-js\">auto.registerEvent(&#39;view_clicked&#39;, {\n    onAccessibilityEvent(event) {\n        console.log(event.packageName, event.source);\n    },\n});\n</code></pre>\n<blockquote>\n<p>注: 在 API 33 以下的设备上, 系统会在回调返回后回收事件对象, 因此 <code>source</code> 需要在回调期间读取, 回调返回后再读取得到 <code>null</code>. API 33 及以上没有此限制.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -1687,6 +1664,27 @@
                     },
                     {
                       "name": "listener"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "registerEvent(name, listener, options)",
+              "type": "method",
+              "name": "registerEvent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 无障碍事件名称</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> | {{ onAccessibilityEvent(event: <a href=\"dataTypes#object\">Object</a>): <a href=\"dataTypes#void\">void</a> }} } - 事件监听器</li>\n<li><strong>options</strong> {{<ul>\n<li>distinct?: <code>&#39;window&#39;</code> | <code>&#39;source&#39;</code> | <code>true</code> | <a href=\"dataTypes#function\">(event) =&gt; any</a></li>\n<li>within?: <a href=\"dataTypes#number\">number</a></li>\n<li>debounce?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 过滤选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>带过滤选项的注册, 用于抑制密集重复的事件:</p>\n<ul>\n<li><code>distinct</code> - 在 <code>within</code> 毫秒内 (默认 <code>500</code>) 丢弃与上一次投递的事件 &quot;键&quot; 相同的事件. <code>&#39;window&#39;</code> 以包名 + 类名为键, <code>&#39;source&#39;</code> 另加来源节点, <code>true</code> 同 <code>&#39;window&#39;</code>, 函数则以其返回值为键</li>\n<li><code>debounce</code> - 一串密集事件在该毫秒数内没有新事件到达后, 只投递其中最后一个</li>\n</ul>\n<pre><code class=\"lang-js\">/* 同一窗口的内容变化 1 秒内只处理一次. */\nauto.registerEvent(&#39;window_content_changed&#39;, e =&gt; console.log(e.packageName), { distinct: &#39;window&#39;, within: 1e3 });\n\n/* 滚动停止 300 毫秒后处理一次. */\nauto.registerEvent(&#39;view_scrolled&#39;, e =&gt; console.log(&#39;滚动结束&#39;), { debounce: 300 });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "listener"
+                    },
+                    {
+                      "name": "options"
                     }
                   ]
                 }
@@ -1769,11 +1767,225 @@
           "displayName": "[m] removeEvents"
         },
         {
+          "textRaw": "[m] setFlags",
+          "name": "[m]_setflags",
+          "methods": [
+            {
+              "textRaw": "setFlags(flags)",
+              "type": "method",
+              "name": "setFlags",
+              "desc": "<p><strong><code>A11Y?</code></strong></p>\n<ul>\n<li><strong>flags</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] } - 一个或多个标志名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置 automator 的特性标志. 每次调用以给出的标志集合替换之前的设置, 未知的标志名抛出异常.</p>\n<ul>\n<li><code>findOnUiThread</code> - 选择器搜索在主线程进行</li>\n<li><code>useUsageStats</code> - 以 &quot;使用情况统计&quot; 服务的结果确定当前应用包名 (需要授予 &quot;查看使用情况统计&quot; 权限). 如果 <a href=\"global#m-currentpackage\">currentPackage()</a> 的结果不准确, 可尝试此标志</li>\n<li><code>useShell</code> - 以 shell 命令获取当前应用的包名与活动名称 (需要 root 权限)</li>\n<li><code>appWindowsFallback</code> (<strong><code>6.8.0</code></strong>) - 系统暂未提供活动窗口根节点时 (如服务刚绑定后; API 26 上可能持续到下一次窗口变化), 以窗口列表中应用窗口的根节点代替 (焦点窗口优先, 其次活动窗口). 默认关闭, 此时查询返回空结果</li>\n<li><code>eventAssistedPolling</code> (<strong><code>6.8.0</code></strong>) - 重复的选择器查询 (如 <a href=\"uiSelectorType#m-findone\">findOne(timeout)</a>, <a href=\"global#m-wait\">wait</a>), 节点等待 (<a href=\"uiObjectType#m-waituntilgone\">waitUntilGone</a> 等) 与 <a href=\"flow\">Flow</a> 等待在两次尝试之间休眠到无障碍事件到达为止, 而非固定间隔. 通常能更早发现目标并减少无效查询. 默认关闭</li>\n</ul>\n<pre><code class=\"lang-js\">auto.setFlags([ &#39;findOnUiThread&#39;, &#39;useShell&#39; ]);\nauto.setFlags(&#39;eventAssistedPolling&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "flags"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setFlags"
+        },
+        {
           "textRaw": "[p] services",
           "name": "[p]_services",
           "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a>[] } - 系统设置中已启用的无障碍服务组件名称</li>\n</ul>\n<p>通过可用的安全设置权限或 Root 权限读取 <code>enabled_accessibility_services</code>, 并按组件分隔符拆分为数组. 两种权限均不可用时返回空数组.</p>\n",
           "type": "module",
           "displayName": "[p] services"
+        },
+        {
+          "textRaw": "[m] setWindowFilter",
+          "name": "[m]_setwindowfilter",
+          "methods": [
+            {
+              "textRaw": "setWindowFilter(filter?)",
+              "type": "method",
+              "name": "setWindowFilter",
+              "desc": "<p><strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#function\">(window: AccessibilityWindowInfo) =&gt; boolean</a> | <a href=\"#窗口过滤器对象-windowfilter\">WindowFilter</a> | <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 窗口过滤器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置窗口过滤器. 过滤器决定哪些窗口是选择器的搜索目标, 同时影响 <a href=\"#auto-root\">auto.root</a> 与 <a href=\"#auto-windowroots\">auto.windowRoots</a> 的结果.</p>\n<ul>\n<li>函数: 参数为窗口 (<a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/\">AccessibilityWindowInfo</a>), 返回真值表示搜索该窗口</li>\n<li>对象 (<strong><code>6.8.0</code></strong>): <a href=\"#窗口过滤器对象-windowfilter\">窗口过滤器对象</a>, 按窗口类型, 包名, 标题等属性匹配</li>\n<li><code>true</code>: 搜索全部窗口 (包括状态栏, 输入法, 悬浮窗等); <code>false</code>: 不搜索任何窗口, 选择器结果为空</li>\n<li>省略或 <code>null</code>: 同 <code>true</code></li>\n</ul>\n<p>选择器默认只在当前活动窗口 (获得焦点或正在触摸的窗口) 中搜索, 不搜索悬浮窗, 状态栏等; 设置过滤器后, 在通过过滤器的全部窗口中搜索, 且 <a href=\"#auto-root\">auto.root</a> 为其中首个有根节点的窗口的根节点.</p>\n<pre><code class=\"lang-js\">/* 在全部窗口中搜索. */\nauto.setWindowFilter(window =&gt; true);\nauto.setWindowFilter(true); /* 同上. */\n\n/* 分屏时只搜索 QQ 的窗口 (应用窗口的 title 即应用名称). */\nauto.setWindowFilter(window =&gt; window.title == &#39;QQ&#39;);\nauto.setWindowFilter({ title: &#39;QQ&#39; }); /* 同上. */\n\n/* 只搜索输入法窗口. */\nauto.setWindowFilter({ type: &#39;inputMethod&#39; });\n</code></pre>\n<blockquote>\n<p>注: 只需一次性地在某些窗口中查找时, 可用 <a href=\"#m-findwindowroots\">auto.findWindowRoots</a> 取得根节点, 再用节点的 <a href=\"uiObjectType#m-find\">find</a> 等方法, 不必改变全局的窗口过滤器.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] setWindowFilter"
+        },
+        {
+          "textRaw": "窗口过滤器对象 (WindowFilter)",
+          "name": "窗口过滤器对象_(windowfilter)",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>用于 <a href=\"#m-setwindowfilter\">auto.setWindowFilter</a>, <a href=\"#m-findwindows\">auto.findWindows</a> 与 <a href=\"#m-findwindowroots\">auto.findWindowRoots</a> 的窗口匹配条件. 给出的键全部满足时窗口通过; 未知的键抛出异常.</p>\n<ul>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] } - 窗口类型名, 一个或多个: <code>&#39;application&#39;</code>, <code>&#39;inputMethod&#39;</code>, <code>&#39;system&#39;</code>, <code>&#39;accessibilityOverlay&#39;</code>, <code>&#39;splitScreenDivider&#39;</code>, <code>&#39;magnificationOverlay&#39;</code> (不区分大小写, 也接受下划线写法如 <code>&#39;input_method&#39;</code>)</li>\n<li><strong>[ packageName ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> } - 包名, 字符串整体匹配, 正则表达式搜索匹配</li>\n<li><strong>[ title ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> } - 窗口标题, 匹配规则同上</li>\n<li><strong>[ displayId ]</strong> { <a href=\"dataTypes#number\">number</a> } - 显示屏 ID</li>\n<li><strong>[ active ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否活动窗口</li>\n<li><strong>[ focused ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否焦点窗口</li>\n<li><strong>[ id ]</strong> { <a href=\"dataTypes#number\">number</a> } - 窗口 ID</li>\n<li><strong>[ layer ]</strong> { <a href=\"dataTypes#number\">number</a> } - 窗口层级</li>\n</ul>\n<pre><code class=\"lang-js\">auto.findWindows({ type: &#39;application&#39;, packageName: /settings/ });\nauto.findWindows({ type: [ &#39;system&#39;, &#39;accessibilityOverlay&#39; ] });\nauto.findWindows({ focused: true });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "窗口过滤器对象 (WindowFilter)"
+        },
+        {
+          "textRaw": "[m] findWindows",
+          "name": "[m]_findwindows",
+          "methods": [
+            {
+              "textRaw": "findWindows(filter?)",
+              "type": "method",
+              "name": "findWindows",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ filter ]</strong> { <a href=\"#窗口过滤器对象-windowfilter\">WindowFilter</a> } - 窗口过滤器对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/\">AccessibilityWindowInfo</a>[] } - 通过过滤器的窗口, 按系统给出的顺序</li>\n</ul>\n<p>按过滤器对象筛选当前全部窗口. 省略参数时返回全部窗口 (同 <a href=\"#auto-windows\">auto.windows</a>). 不受 <a href=\"#m-setwindowfilter\">auto.setWindowFilter</a> 影响.</p>\n<pre><code class=\"lang-js\">auto.findWindows({ type: &#39;application&#39; }).forEach(w =&gt; console.log(w.getTitle(), w.getId()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findWindows"
+        },
+        {
+          "textRaw": "[m] findWindowRoots",
+          "name": "[m]_findwindowroots",
+          "methods": [
+            {
+              "textRaw": "findWindowRoots(filter?)",
+              "type": "method",
+              "name": "findWindowRoots",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ filter ]</strong> { <a href=\"#窗口过滤器对象-windowfilter\">WindowFilter</a> } - 窗口过滤器对象</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a>[] } - 通过过滤器且有根节点的窗口的根节点</li>\n</ul>\n<p><a href=\"#m-findwindows\">auto.findWindows</a> 的窗口根节点数组, 没有根节点的窗口被跳过. 与 <a href=\"#auto-windowroots\">auto.windowRoots</a> 不同, 不受 <a href=\"#m-setwindowfilter\">auto.setWindowFilter</a> 影响.</p>\n<pre><code class=\"lang-js\">/* 在输入法窗口中查找候选词. */\nlet [ imeRoot ] = auto.findWindowRoots({ type: &#39;inputMethod&#39; });\nif (imeRoot) {\n    console.log(imeRoot.find(text(&#39;候选&#39;)).length);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findWindowRoots"
+        },
+        {
+          "textRaw": "[m] wait",
+          "name": "[m]_wait",
+          "methods": [
+            {
+              "textRaw": "wait(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"flow#m-wait\">flow.wait</a> 的别名: 异步等待选择器, 函数, 节点, Flow 或 Promise, 立即返回 <a href=\"flowType\">Flow</a> 对象. 参数见 <a href=\"flow\">流程 (Flow)</a>.</p>\n<blockquote>\n<p>注: 与 <a href=\"#auto-waitfor\">auto.waitFor</a> (等待无障碍服务启动) 无关.</p>\n</blockquote>\n<pre><code class=\"lang-js\">auto.wait(&#39;登录&#39;, 5e3).click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] wait"
+        },
+        {
+          "textRaw": "[m] explain",
+          "name": "[m]_explain",
+          "methods": [
+            {
+              "textRaw": "explain(selector, root?)",
+              "type": "method",
+              "name": "explain",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>selector</strong> { <a href=\"uiSelectorType\">UiSelector</a> | <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 待解释的选择器</li>\n<li><strong>[ root ]</strong> { <a href=\"uiObjectType\">UiObject</a> } - 遍历的根节点, 默认为各窗口根节点</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>selector: <a href=\"dataTypes#string\">string</a></li>\n<li>roots: <a href=\"dataTypes#number\">number</a></li>\n<li>nodes: <a href=\"dataTypes#number\">number</a></li>\n<li>truncated: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>found: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>count: <a href=\"dataTypes#number\">number</a></li>\n<li>failingIndex: <a href=\"dataTypes#number\">number</a></li>\n<li>failingFilter: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a></li>\n<li>steps: { index: <a href=\"dataTypes#number\">number</a>, filter: <a href=\"dataTypes#string\">string</a>, matched: <a href=\"dataTypes#number\">number</a>, cumulative: <a href=\"dataTypes#number\">number</a> }[]</li>\n<li>matches: <a href=\"uiObjectType\">UiObject</a>[]</li>\n<li>nearMisses: <a href=\"uiObjectType\">UiObject</a>[]</li>\n<li>text: <a href=\"dataTypes#string\">string</a></li>\n</ul>\n</li>\n<li>}} - 解释结果</li>\n</ul>\n<p>解释一个选择器为何匹配或不匹配: 遍历根节点之下的全部节点 (<code>nodes</code> 为节点数, <code>roots</code> 为根节点数, 超出预算时 <code>truncated</code> 为 <code>true</code>), 对选择器的每个过滤器分别统计单独匹配数 (<code>matched</code>) 与逐步叠加后的匹配数 (<code>cumulative</code>), 找出首个把候选集合清空的过滤器 (<code>failingIndex</code> 从 0 计, <code>-1</code> 表示没有; <code>failingFilter</code> 为其文本), 并给出前若干个匹配节点 (<code>matches</code>) 与 &quot;差一点&quot; 的节点 (<code>nearMisses</code>: 通过失败步骤之前全部过滤器的节点).</p>\n<p><code>text</code> (也是结果的 <code>toString()</code>) 为文本报告, 适合直接输出到控制台.</p>\n<pre><code class=\"lang-js\">let r = auto.explain(text(&#39;登录&#39;).clickable().depth(12));\nconsole.log(r.found, r.failingFilter); /* false clickable() */\nconsole.log(r.text);\n/*\nselector text(&quot;登录&quot;).clickable().depth(12): no match (356 node(s) in 1 root(s))\n  1. text(&quot;登录&quot;)  matched 1, cumulative 1\n  2. clickable()   matched 40, cumulative 0  &lt;- nothing left\n  3. depth(12)     matched 20, cumulative 0\nnear misses (pass step 1, fail step 2):\n  - TextView(登录) ...\n*/\n\n/* 字符串或对象选择器同样可用. */\nconsole.log(auto.explain({ text: &#39;登录&#39;, clickable: true }).text);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "selector"
+                    },
+                    {
+                      "name": "root?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] explain"
+        },
+        {
+          "textRaw": "[m] dump",
+          "name": "[m]_dump",
+          "methods": [
+            {
+              "textRaw": "dump(options?)",
+              "type": "method",
+              "name": "dump",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code> | {{<ul>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>format?: <code>&#39;text&#39;</code> | <code>&#39;json&#39;</code> | <code>&#39;xml&#39;</code></li>\n<li>maxDepth?: <a href=\"dataTypes#number\">number</a></li>\n<li>properties?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[]</li>\n<li>visibleOnly?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>maxNodes?: <a href=\"dataTypes#number\">number</a></li>\n<li>indent?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} } - 格式名称或选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 控件树文本</li>\n</ul>\n<p>导出控件树: 各窗口根节点 (或 <code>root</code>) 之下的全部节点, 以文本 (默认; 每行一个节点, 缩进表示层级), JSON (嵌套对象, 子节点在 <code>children</code> 中) 或 XML (uiautomator 风格) 输出.</p>\n<ul>\n<li><code>maxDepth</code> - 最大深度, 负数或 <code>Infinity</code> 表示不限 (默认不限)</li>\n<li><code>properties</code> - 输出的属性名称 (一个或数组), 默认为常用属性集</li>\n<li><code>visibleOnly</code> - 只输出对用户可见的节点 (默认 <code>false</code>)</li>\n<li><code>maxNodes</code> - 节点数上限, 超出时截断 (默认 <code>2000</code>, 须为正数)</li>\n<li><code>indent</code> - 缩进字符串, 或空格数 (不超过 16; 默认 2 个空格)</li>\n</ul>\n<pre><code class=\"lang-js\">console.log(auto.dump()); /* 文本格式. */\nfiles.write(&#39;/sdcard/window.xml&#39;, auto.dump(&#39;xml&#39;));\nconsole.log(auto.dump({ root: id(&#39;list&#39;).findOnce(), maxDepth: 3, properties: [ &#39;text&#39;, &#39;bounds&#39;, &#39;clickable&#39; ] }));\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"uiObjectType#m-dumpsubtree\">UiObject#dumpSubtree</a> 导出单个节点的子树.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] dump"
+        },
+        {
+          "textRaw": "[p] stats",
+          "name": "[p]_stats",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>since: <a href=\"dataTypes#number\">number</a></li>\n<li>now: <a href=\"dataTypes#number\">number</a></li>\n<li>elapsed: <a href=\"dataTypes#number\">number</a></li>\n<li>searches: { count: <a href=\"dataTypes#number\">number</a>, totalMillis: <a href=\"dataTypes#number\">number</a>, averageMillis: <a href=\"dataTypes#number\">number</a>, maxMillis: <a href=\"dataTypes#number\">number</a> }</li>\n<li>queries: { count: <a href=\"dataTypes#number\">number</a>, found: <a href=\"dataTypes#number\">number</a>, missed: <a href=\"dataTypes#number\">number</a>, attempts: <a href=\"dataTypes#number\">number</a>, totalMillis: <a href=\"dataTypes#number\">number</a>, averageMillis: <a href=\"dataTypes#number\">number</a>, maxMillis: <a href=\"dataTypes#number\">number</a> }</li>\n<li>selectors: { selector: <a href=\"dataTypes#string\">string</a>, searches: <a href=\"dataTypes#object\">Object</a>, queries: <a href=\"dataTypes#object\">Object</a>, found: <a href=\"dataTypes#number\">number</a> }[]</li>\n<li>slowest: <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a></li>\n<li>steps: { name: <a href=\"dataTypes#string\">string</a>, runs: <a href=\"dataTypes#object\">Object</a>, rejected: <a href=\"dataTypes#number\">number</a> }[]</li>\n<li>text: <a href=\"dataTypes#string\">string</a></li>\n<li>reset(): <a href=\"dataTypes#void\">void</a></li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>当前脚本的选择器与 Flow 统计快照 (每次读取生成新对象):</p>\n<ul>\n<li><code>searches</code> - 单次搜索 (一次控件树遍历) 的次数与耗时统计</li>\n<li><code>queries</code> - 查询 (一次 <code>findOne(timeout)</code> / <code>wait</code> 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计</li>\n<li><code>selectors</code> - 按最大搜索耗时降序的选择器列表, <code>slowest</code> 为其首项</li>\n<li><code>steps</code> - Flow 步骤按名称的运行次数 (<code>runs</code>, 含耗时统计) 与拒绝次数</li>\n<li><code>text</code> (也是 <code>toString()</code>) - 文本报告; <code>reset()</code> 清零统计</li>\n</ul>\n<pre><code class=\"lang-js\">/* ... 运行一段自动化后 ... */\nconsole.log(auto.stats.text);\n/*\na11y stats since 10:21:05, elapsed 32.4 s\nsearches: 128, total 1840 ms, average 14.4 ms, max 96 ms\nqueries: 12 (found 11, missed 1, attempts 57), total 1602 ms, average 133.5 ms, max 512 ms\nslowest selectors (by max search time):\n  1. text(&quot;登录&quot;).clickable()  searches 40, total 820 ms, average 20.5 ms, max 96 ms; queries 3, found 3\nflow steps (by total time):\n  wait  runs 6, total 1402 ms, average 233.7 ms, max 512 ms, rejected 1\n*/\nauto.stats.reset();\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] stats"
         }
       ],
       "properties": [
@@ -1940,6 +2152,655 @@
       ],
       "type": "module",
       "displayName": "SimpleActionAutomator"
+    },
+    {
+      "textRaw": "工具集 (Toolkit)",
+      "name": "工具集_(toolkit)",
+      "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>工具集是一组面向真实应用界面的高阶自动化函数, 把 &quot;查找目标, 处理不可点击的包装节点, 失败时回退到手势, 校验结果&quot; 这类重复代码封装为一次调用.</p>\n<p>每个函数都有三种形式:</p>\n<ul>\n<li>同步形式: 全局函数或 <code>automator.</code> 前缀, 如 <code>smartClick(&#39;登录&#39;)</code> / <code>automator.smartClick(&#39;登录&#39;)</code>. 在调用线程上运行, 不能在 UI 线程调用; 失败时抛出 <a href=\"flowErrorType\">FlowError</a></li>\n<li>Flow 起点形式: <code>flow.smartClick(&#39;登录&#39;)</code>, 返回 <a href=\"flowType\">Flow</a>, 见 <a href=\"flow#工具集起点\">工具集起点</a></li>\n<li>Flow 链式形式: <code>flow.wait(&#39;登录&#39;).smartClick()</code>, 以链上的值为目标, 见 <a href=\"flowType#工具集步骤\">工具集步骤</a></li>\n</ul>\n",
+      "modules": [
+        {
+          "textRaw": "目标参数 (target)",
+          "name": "目标参数_(target)",
+          "desc": "<p>工具函数的 <code>target</code> (以及 <code>targets</code> 数组的每一项, <code>container</code>, <code>item</code>, <code>verify</code>, <code>cond</code> 等) 接受:</p>\n<ul>\n<li><a href=\"dataTypes#pickupselector\">PickupSelector</a> - 字符串 (内容匹配), 正则表达式, 选择器实例, 对象选择器或它们的数组</li>\n<li><a href=\"uiObjectType\">UiObject</a> - 已找到的节点 (使用前会刷新, 已失效的节点视为不存在)</li>\n<li><a href=\"dataTypes#function\">Function</a> - 返回节点, 节点集合或任意真值的函数 (在工具运行的线程上调用)</li>\n</ul>\n<p>候选目标数组 (<code>targets</code>) 不能为空, 也不能含 <code>null</code> 或 <code>undefined</code>.</p>\n",
+          "type": "module",
+          "displayName": "目标参数 (target)"
+        },
+        {
+          "textRaw": "通用选项",
+          "name": "通用选项",
+          "desc": "<ul>\n<li><strong>[ timeout = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 查找目标的超时 (毫秒). 同步形式与 Flow 链式形式默认为 <code>0</code>, 即只查找一次; <code>flow.</code> 起点形式默认为 <a href=\"flow#m-defaults\">flow.defaults</a> 的超时. <code>Infinity</code> 表示不限时, 同步形式因此可能 <strong>永久阻塞</strong></li>\n<li><strong>[ interval = <code>50</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 查找目标的轮询间隔 (毫秒)</li>\n<li><strong>[ root ]</strong> { <a href=\"uiObjectType\">UiObject</a> } - 查找范围的根节点, 默认为活动窗口 (Flow 链式形式为 <a href=\"flowType#m-scope\">scope</a> 设置的根节点)</li>\n<li><strong>[ humanize ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | {{ offset?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[], delay?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[] }} } - 拟人化: 每个动作前随机暂停 <code>delay</code> 毫秒 (单个数字或 <code>[min, max]</code>), 手势点按的坐标随机偏移不超过 <code>offset</code> 像素 (单个数字对两轴生效, 或 <code>[dx, dy]</code>). <code>true</code> 使用 <a href=\"flow#m-defaults\">flow.defaults</a> 的设置, <code>false</code> 关闭. 默认取自 <code>flow.defaults</code></li>\n</ul>\n<p>不支持的选项键抛出异常, 如 <code>Unknown option &quot;timeuot&quot; for smartClick; expected one of climb, gestureFallback, ...</code>. 部分函数在选项对象的位置接受一个数字作为简写, 见各函数说明.</p>\n<p>未在超时内找到目标时抛出 <code>code</code> 为 <code>TIMEOUT</code> 的 <a href=\"flowErrorType\">FlowError</a>, 其 <code>selector</code> 为目标的描述, <code>elapsed</code> / <code>attempts</code> 为查找的耗时与次数.</p>\n",
+          "type": "module",
+          "displayName": "通用选项"
+        },
+        {
+          "textRaw": "[m] smartClick",
+          "name": "[m]_smartclick",
+          "methods": [
+            {
+              "textRaw": "smartClick(target, options?)",
+              "type": "method",
+              "name": "smartClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>climb?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>maxClimb?: <a href=\"dataTypes#number\">number</a></li>\n<li>gestureFallback?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>offset?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[]</li>\n<li>verify?: <a href=\"#目标参数-target\">Target</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>ok: <code>true</code></li>\n<li>method: <code>&#39;node&#39;</code> | <code>&#39;ancestor&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>target: <a href=\"uiObjectType\">UiObject</a></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} - 点击结果</li>\n</ul>\n<p>智能点击: 目标可点击时直接点击 (<code>method</code> 为 <code>&#39;node&#39;</code>); 不可点击时上溯到最近的可点击祖先 (<code>climb</code>, 默认 <code>true</code>, 最多 <code>maxClimb</code> 层, 默认 <code>5</code>; 相当于罗盘 <code>k</code>; <code>method</code> 为 <code>&#39;ancestor&#39;</code>); 没有可点击祖先或点击被拒绝时, 在目标中心 (加 <code>offset</code> 像素与拟人偏移) 做点按手势 (<code>gestureFallback</code>, 默认 <code>true</code>; <code>method</code> 为 <code>&#39;gesture&#39;</code>). 之后可选地等待 <code>verify</code> 条件在 <code>verifyTimeout</code> 毫秒 (默认 <code>2000</code>, 间隔 <code>verifyInterval</code>, 默认 <code>100</code>) 内成立.</p>\n<p>结果的 <code>target</code> 为实际点击的节点 (上溯时为祖先节点), <code>verified</code> 为 <code>verify</code> 条件的结果 (未指定时为 <code>null</code>).</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>:</p>\n<ul>\n<li>未找到目标: <code>TIMEOUT</code></li>\n<li>点击被拒绝: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>click</code> (节点动作) 或 <code>gesture</code> (手势)</li>\n<li><code>verify</code> 未在时限内成立: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>verify</code></li>\n<li>关闭 <code>gestureFallback</code> 且没有可点击节点: <code>INVALID_TARGET</code>, <code>reason</code> 为 <code>notClickable</code></li>\n</ul>\n<pre><code class=\"lang-js\">/* 列表项的文本本身不可点击, 自动点击其可点击的祖先. */\nlet r = smartClick(&#39;关于手机&#39;, { timeout: 5e3 });\nconsole.log(r.method); /* ancestor */\n\n/* 点击后确认新页面已出现. */\nsmartClick(&#39;设置&#39;, { verify: &#39;关于手机&#39;, verifyTimeout: 3e3 });\n\n/* 不上溯, 直接手势点按, 带拟人偏移与暂停. */\nsmartClick(id(&#39;banner&#39;), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] smartClick"
+        },
+        {
+          "textRaw": "[m] clickIfExists",
+          "name": "[m]_clickifexists",
+          "methods": [
+            {
+              "textRaw": "clickIfExists(target, options?)",
+              "type": "method",
+              "name": "clickIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"#m-smartclick\">smartClick</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 目标存在且已点击为 <code>true</code>, 不存在为 <code>false</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickIfExists(target, timeout)",
+              "type": "method",
+              "name": "clickIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>目标在时限内存在时智能点击并返回 <code>true</code>, 不存在时返回 <code>false</code> 而不报错; 点击本身失败时仍抛出 <a href=\"flowErrorType\">FlowError</a>.</p>\n<pre><code class=\"lang-js\">clickIfExists(&#39;跳过广告&#39;, 2e3); /* 最多等 2 秒. */\nif (!clickIfExists(&#39;同意&#39;)) {\n    console.log(&#39;没有同意按钮&#39;);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickIfExists"
+        },
+        {
+          "textRaw": "[m] clickAny",
+          "name": "[m]_clickany",
+          "methods": [
+            {
+              "textRaw": "clickAny(targets, options?)",
+              "type": "method",
+              "name": "clickAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标, 按优先顺序</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"#m-smartclick\">smartClick</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>index: <a href=\"dataTypes#number\">number</a></li>\n<li>target: <a href=\"dataTypes#any\">any</a></li>\n<li>node: <a href=\"uiObjectType\">UiObject</a></li>\n<li>method: <code>&#39;node&#39;</code> | <code>&#39;ancestor&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} | <a href=\"dataTypes#null\">null</a> - 被点击的候选及方式, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickAny(targets, timeout)",
+              "type": "method",
+              "name": "clickAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>每轮按顺序检查候选目标, 智能点击首个存在的. 结果的 <code>index</code> 为候选在数组中的序号, <code>target</code> 为候选本身, <code>node</code> 为找到的节点.</p>\n<pre><code class=\"lang-js\">let r = clickAny([ &#39;同意&#39;, &#39;允许&#39;, &#39;OK&#39; ], 3e3);\nif (r) {\n    console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickAny"
+        },
+        {
+          "textRaw": "[m] findAny",
+          "name": "[m]_findany",
+          "methods": [
+            {
+              "textRaw": "findAny(targets, options?)",
+              "type": "method",
+              "name": "findAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标, 按优先顺序</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 仅 <a href=\"#通用选项\">通用选项</a></li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>index: <a href=\"dataTypes#number\">number</a></li>\n<li>target: <a href=\"dataTypes#any\">any</a></li>\n<li>node: <a href=\"uiObjectType\">UiObject</a></li>\n</ul>\n</li>\n<li>}} | <a href=\"dataTypes#null\">null</a> - 首个存在的候选, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "findAny(targets, timeout)",
+              "type": "method",
+              "name": "findAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回首个存在的候选目标, 不点击. 适合 &quot;页面 A 或页面 B, 哪个先出现&quot; 的分支判断.</p>\n<pre><code class=\"lang-js\">let r = findAny([ &#39;欢迎回来&#39;, &#39;密码错误&#39; ], 10e3);\nswitch (r &amp;&amp; r.index) {\n    case 0:\n        console.log(&#39;登录成功&#39;);\n        break;\n    case 1:\n        console.log(&#39;登录失败&#39;);\n        break;\n    default:\n        console.log(&#39;超时&#39;);\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findAny"
+        },
+        {
+          "textRaw": "[m] scrollUntil",
+          "name": "[m]_scrolluntil",
+          "methods": [
+            {
+              "textRaw": "scrollUntil(target, options?)",
+              "type": "method",
+              "name": "scrollUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 查找目标</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>container?: <a href=\"#目标参数-target\">Target</a></li>\n<li>direction?: <code>&#39;up&#39;</code> | <code>&#39;down&#39;</code> | <code>&#39;left&#39;</code> | <code>&#39;right&#39;</code></li>\n<li>maxSteps?: <a href=\"dataTypes#number\">number</a></li>\n<li>method?: <code>&#39;action&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>stopAtEnd?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>settle?: <a href=\"dataTypes#number\">number</a></li>\n<li>gestureDuration?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> } - 找到的目标节点</li>\n</ul>\n<p>滚动直到目标出现: 先查找目标, 不存在时把容器向 <code>direction</code> (默认 <code>&#39;down&#39;</code>) 滚动一步, 等待 <code>settle</code> 毫秒 (默认 <code>300</code>) 后再查找, 直到找到目标, 已滚动 <code>maxSteps</code> 次 (默认 <code>20</code>), 或已到底 (连续两次滚动内容无变化; <code>stopAtEnd</code> 为 <code>false</code> 时不检测).</p>\n<ul>\n<li><code>container</code> - 滚动容器. 省略时自动使用查找范围内面积最大的可滚动节点</li>\n<li><code>method</code> - <code>&#39;action&#39;</code> (默认) 使用无障碍滚动动作; <code>&#39;gesture&#39;</code> 使用滑动手势 (从容器 80% 处滑到 20% 处, 历时 <code>gestureDuration</code> 毫秒, 默认 <code>400</code>), 没有容器时在整个查找范围或屏幕上滑动</li>\n<li><code>timeout</code> / <code>interval</code> 用于定位给定的 <code>container</code></li>\n</ul>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 滚动到上限或到底仍未出现 (<code>TIMEOUT</code>, <code>reason</code> 为 <code>maxSteps</code> / <code>end</code>); 给定的容器不存在 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>container</code>); 未给定容器且没有可滚动节点 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>noScrollable</code>); 滚动过程中容器消失 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>containerGone</code>) 或手势失败 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>swipe</code>).</p>\n<pre><code class=\"lang-js\">let w = scrollUntil(&#39;开发者选项&#39;, { maxSteps: 15 });\nw.click();\n\nscrollUntil(&#39;第一条&#39;, { direction: &#39;up&#39;, container: className(&#39;RecyclerView&#39;) });\nscrollUntil(/更多/, { method: &#39;gesture&#39; });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] scrollUntil"
+        },
+        {
+          "textRaw": "[m] typeInto",
+          "name": "[m]_typeinto",
+          "methods": [
+            {
+              "textRaw": "typeInto(target, text, options?)",
+              "type": "method",
+              "name": "typeInto",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输入框: 选择器 / 节点 / 函数; 数字为查找范围内第 n 个可编辑节点 (从 0 计, 负数从末尾计); <code>null</code> 为当前焦点所在的可编辑节点</li>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 要输入的文本</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>clear?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>submit?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>verify?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> } - 输入框节点</li>\n</ul>\n<p>向输入框输入文本: 定位可编辑节点 (选择器匹配的节点本身不可编辑时, 取其首个可编辑后代); <code>clear</code> 为 <code>true</code> (默认) 时替换全部文本, 否则追加到现有文本之后; <code>verify</code> 为 <code>true</code> (默认) 时重读节点直到其文本符合预期 (<code>verifyTimeout</code> 默认 <code>1000</code>, <code>verifyInterval</code> 默认 <code>100</code>; 密码框的文本被掩码, 跳过校验); <code>submit</code> 为 <code>true</code> 时随后发送 IME 动作 (<a href=\"uiObjectActionsType#m-imeenter\">imeEnter</a>, 必要时先聚焦).</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 选择器目标未出现 (<code>TIMEOUT</code>); <code>null</code> 目标但没有焦点输入框 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>noFocus</code>), 数字序号越界 (<code>noEditable</code>), 目标及其后代都不可编辑 (<code>notEditable</code>); 设置文本失败, 校验失败或提交失败 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>setText</code> / <code>verify</code> / <code>submit</code>).</p>\n<pre><code class=\"lang-js\">typeInto(&#39;用户名&#39;, &#39;admin&#39;);\ntypeInto(0, &#39;123456&#39;, { submit: true }); /* 第 1 个输入框, 输入后提交. */\ntypeInto(null, &#39; world&#39;, { clear: false }); /* 向焦点输入框追加. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] typeInto"
+        },
+        {
+          "textRaw": "[m] dismissPopups",
+          "name": "[m]_dismisspopups",
+          "methods": [
+            {
+              "textRaw": "dismissPopups(targets, options?)",
+              "type": "method",
+              "name": "dismissPopups",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 关闭弹窗的按钮候选, 按优先顺序</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>once?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>watch?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>settle?: <a href=\"dataTypes#number\">number</a></li>\n<li>maxRounds?: <a href=\"dataTypes#number\">number</a></li>\n<li>debounce?: <a href=\"dataTypes#number\">number</a></li>\n<li>click?: <a href=\"dataTypes#object\">Object</a></li>\n<li>onDismissed?: <a href=\"dataTypes#function\">(info: Object) =&gt; void</a></li>\n<li>onError?: <a href=\"dataTypes#function\">(error: FlowError) =&gt; void</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#object\">Object</a>[] | <a href=\"dataTypes#null\">null</a> | <a href=\"#弹窗守护句柄-popupguard\">PopupGuard</a> } - 见下文</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "dismissPopups(targets, timeout)",
+              "type": "method",
+              "name": "dismissPopups",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 首次查找的超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭弹窗. 候选项不存在不算错误; 点击使用智能点击, <code>click</code> 为传给 <a href=\"#m-smartclick\">smartClick</a> 的嵌套选项对象.</p>\n<ul>\n<li><code>once: true</code> (默认): 智能点击首个存在的候选, 返回 <code>{ index, target, node, method, verified }</code> (含义同 <a href=\"#m-clickany\">clickAny</a>); 时限内都不存在时返回 <code>null</code></li>\n<li><code>once: false</code>: 反复关闭, 直到没有候选存在或已关闭 <code>maxRounds</code> 个 (默认 <code>10</code>, 须为正数), 两轮之间等待 <code>settle</code> 毫秒 (默认 <code>300</code>); 返回上述对象的数组</li>\n<li><code>watch: true</code> (仅同步形式): 启动弹窗守护并立即返回 <a href=\"#弹窗守护句柄-popupguard\">守护句柄</a>. 守护先执行一轮 <code>once: false</code> 式的关闭, 之后每次窗口变化 (窗口状态 / 内容 / 列表变化事件, 以 <code>debounce</code> 毫秒去抖, 默认 <code>300</code>) 在后台线程再执行一轮, 直到调用 <code>stop()</code>. 守护运行期间脚本不会退出</li>\n</ul>\n<p><code>onDismissed(info)</code> 在每次关闭弹窗后调用, <code>onError(error)</code> 在某一轮出错时调用 (未提供时以 <code>console.warn</code> 输出); 两者都在创建守护的脚本线程上执行, 且都需要 <code>watch: true</code>. Flow 形式不支持 <code>watch</code>.</p>\n<pre><code class=\"lang-js\">/* 启动时关掉常见弹窗. */\ndismissPopups([ &#39;我知道了&#39;, &#39;以后再说&#39;, &#39;关闭&#39; ], { once: false });\n\n/* 整个脚本期间守护. */\nlet guard = dismissPopups([ &#39;我知道了&#39;, &#39;取消&#39;, id(&#39;btn_close&#39;) ], {\n    watch: true,\n    onDismissed: info =&gt; console.log(`已关闭: ${info.target}`),\n});\nevents.on(&#39;exit&#39;, () =&gt; guard.stop());\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] dismissPopups"
+        },
+        {
+          "textRaw": "弹窗守护句柄 (PopupGuard)",
+          "name": "弹窗守护句柄_(popupguard)",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p><a href=\"#m-dismisspopups\">dismissPopups</a> 以 <code>watch: true</code> 调用时的返回值:</p>\n<ul>\n<li><strong>stop()</strong> - 停止守护, 释放对脚本的保活</li>\n<li><strong>trigger()</strong> - 立即执行一轮关闭</li>\n<li><strong>isRunning</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否仍在守护</li>\n<li><strong>count</strong> { <a href=\"dataTypes#number\">number</a> } - 已关闭的弹窗数</li>\n<li><strong>passes</strong> { <a href=\"dataTypes#number\">number</a> } - 已执行的轮数</li>\n<li><strong>dismissed</strong> { <a href=\"dataTypes#object\">Object</a>[] } - 已关闭弹窗的信息 (<code>{ index, target, node, method, verified }</code>), 按时间顺序</li>\n<li><strong>toString()</strong> - 如 <code>PopupGuard(running, 3 dismissed)</code></li>\n</ul>\n",
+          "type": "module",
+          "displayName": "弹窗守护句柄 (PopupGuard)"
+        },
+        {
+          "textRaw": "[m] collectList",
+          "name": "[m]_collectlist",
+          "methods": [
+            {
+              "textRaw": "collectList(container, item, options?)",
+              "type": "method",
+              "name": "collectList",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>container</strong> { <a href=\"#目标参数-target\">Target</a> | <a href=\"dataTypes#null\">null</a> } - 列表容器, <code>null</code> 时自动使用查找范围内面积最大的可滚动节点</li>\n<li><strong>item</strong> { <a href=\"#目标参数-target\">Target</a> } - 列表条目</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>direction?: <code>&#39;up&#39;</code> | <code>&#39;down&#39;</code> | <code>&#39;left&#39;</code> | <code>&#39;right&#39;</code></li>\n<li>maxSteps?: <a href=\"dataTypes#number\">number</a></li>\n<li>method?: <code>&#39;action&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>resultType?: <a href=\"dataTypes#pickupresult\">PickupResult</a></li>\n<li>dedupe?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>until?: <a href=\"dataTypes#function\">(item: any) =&gt; boolean</a></li>\n<li>maxItems?: <a href=\"dataTypes#number\">number</a></li>\n<li>settle?: <a href=\"dataTypes#number\">number</a></li>\n<li>gestureDuration?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a>[] } - 采集到的条目</li>\n</ul>\n<p>采集滚动列表: 每轮在容器内查找全部 <code>item</code> 匹配项, 按 <code>resultType</code> (<a href=\"dataTypes#pickupresult\">拾取结果类型</a>, 默认 <code>&#39;$&#39;</code> 即节点内容; <code>&#39;w&#39;</code> 为节点本身, <code>&#39;txt&#39;</code> 为文本) 取值, 按节点内容指纹去重 (<code>dedupe</code>, 默认 <code>true</code>) 后加入结果; 然后把容器滚动一步 (<code>direction</code> 默认 <code>&#39;down&#39;</code>, <code>method</code> / <code>settle</code> / <code>gestureDuration</code> 同 <a href=\"#m-scrolluntil\">scrollUntil</a>) 再采集, 直到到底 (滚动后内容无变化), 已滚动 <code>maxSteps</code> 次 (默认 <code>20</code>), 已取满 <code>maxItems</code> 项 (默认不限, 须为正数), 或 <code>until</code> 对某一项返回真值 (该项仍被加入).</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 给定的容器不存在 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>container</code>), 未给定容器且没有可滚动节点 (<code>noScrollable</code>), 以及滚动失败 (同 <a href=\"#m-scrolluntil\">scrollUntil</a>).</p>\n<pre><code class=\"lang-js\">let titles = collectList(className(&#39;RecyclerView&#39;), className(&#39;TextView&#39;).depth(9), { maxSteps: 10 });\nconsole.log(titles.length, titles.slice(0, 3));\n\n/* 采集节点本身, 直到出现指定条目. */\nlet nodes = collectList(null, /^第 \\d+ 条/, { resultType: &#39;w&#39;, until: w =&gt; w.text() === &#39;第 50 条&#39; });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "container"
+                    },
+                    {
+                      "name": "item"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] collectList"
+        },
+        {
+          "textRaw": "[m] launchAndWait",
+          "name": "[m]_launchandwait",
+          "methods": [
+            {
+              "textRaw": "launchAndWait(app, options?)",
+              "type": "method",
+              "name": "launchAndWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"appType\">App</a> | <a href=\"dataTypes#string\">string</a> } - 应用: <a href=\"appType\">App</a> 枚举值, 应用别名, 包名或应用名称</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>bringToFront?: <a href=\"dataTypes#boolean\">boolean</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>packageName: <a href=\"dataTypes#string\">string</a></li>\n<li>launched: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>elapsed: <a href=\"dataTypes#number\">number</a></li>\n<li>attempts: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 启动结果</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "launchAndWait(app, timeout)",
+              "type": "method",
+              "name": "launchAndWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"appType\">App</a> | <a href=\"dataTypes#string\">string</a> } - 应用</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 等待超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>启动应用并等待其到达前台: 把 <code>app</code> 解析为包名, 启动它 (已在前台且 <code>bringToFront</code> 为 <code>false</code> 时不启动, 此时 <code>launched</code> 为 <code>false</code>), 然后每 <code>interval</code> 毫秒 (默认 <code>200</code>) 检查 <a href=\"global#m-currentpackage\">currentPackage()</a>, 直到变为该包名或超过 <code>timeout</code> 毫秒 (默认 <code>10000</code>). 此函数不使用 <code>root</code> 与 <code>humanize</code> 选项.</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 无法解析的应用 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>unknownApp</code>); 启动调用失败 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>launch</code>); 未在时限内到达前台 (<code>TIMEOUT</code>, <code>reason</code> 为 <code>package</code>).</p>\n<pre><code class=\"lang-js\">let r = launchAndWait(&#39;Settings&#39;);\nconsole.log(r.packageName, r.elapsed); /* com.android.settings 1240 */\n\nlaunchAndWait(&#39;com.tencent.mm&#39;, 15e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] launchAndWait"
+        },
+        {
+          "textRaw": "[m] backUntil",
+          "name": "[m]_backuntil",
+          "methods": [
+            {
+              "textRaw": "backUntil(cond, options?)",
+              "type": "method",
+              "name": "backUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"#目标参数-target\">Target</a> } - 停止条件: 选择器, 节点或函数</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>maxTimes?: <a href=\"dataTypes#number\">number</a></li>\n<li>delay?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - 条件成立时的值 (节点, 拾取结果或函数返回值)</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "backUntil(cond, maxTimes)",
+              "type": "method",
+              "name": "backUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"#目标参数-target\">Target</a> } - 停止条件</li>\n<li><strong>maxTimes</strong> { <a href=\"dataTypes#number\">number</a> } - 最多按返回键的次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>反复按返回键直到条件成立: 先检查一次条件; 之后每按一次返回键 (<a href=\"#back\">back</a>), 在 <code>delay</code> 毫秒 (默认 <code>500</code>) 内每 <code>interval</code> 毫秒 (默认 <code>100</code>, 须为正数) 检查条件; 最多按 <code>maxTimes</code> 次 (默认 <code>10</code>). 此函数不使用 <code>timeout</code> 选项.</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 按满次数仍不成立 (<code>TIMEOUT</code>, <code>reason</code> 为 <code>maxTimes</code>); 返回键动作失败 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>back</code>).</p>\n<pre><code class=\"lang-js\">/* 一路返回到首页. */\nbackUntil(id(&#39;home_tab&#39;), 8);\nbackUntil(() =&gt; currentActivity().endsWith(&#39;.MainActivity&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "maxTimes"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] backUntil"
+        },
+        {
+          "textRaw": "[m] backToApp",
+          "name": "[m]_backtoapp",
+          "methods": [
+            {
+              "textRaw": "backToApp(app, options?)",
+              "type": "method",
+              "name": "backToApp",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"appType\">App</a> | <a href=\"dataTypes#string\">string</a> } - 应用, 形式同 <a href=\"#m-launchandwait\">launchAndWait</a></li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"#m-backuntil\">backUntil</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 到达前台的包名</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "backToApp(app, maxTimes)",
+              "type": "method",
+              "name": "backToApp",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"appType\">App</a> | <a href=\"dataTypes#string\">string</a> } - 应用</li>\n<li><strong>maxTimes</strong> { <a href=\"dataTypes#number\">number</a> } - 最多按返回键的次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>反复按返回键直到指定应用回到前台, 行为同 <a href=\"#m-backuntil\">backUntil</a>. 无法解析的应用抛出 <code>INVALID_TARGET</code> (<code>reason</code> 为 <code>unknownApp</code>).</p>\n<pre><code class=\"lang-js\">backToApp(&#39;org.autojs.autojs6&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "maxTimes"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] backToApp"
+        },
+        {
+          "textRaw": "[m] toggle",
+          "name": "[m]_toggle",
+          "methods": [
+            {
+              "textRaw": "toggle(target, checked, options?)",
+              "type": "method",
+              "name": "toggle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 可勾选控件, 或包含它的节点 (如设置页中包着开关的整行)</li>\n<li><strong>checked</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 期望的选中状态</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n<li>click?: <a href=\"dataTypes#object\">Object</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>node: <a href=\"uiObjectType\">UiObject</a></li>\n<li>changed: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>checked: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>method: <code>&#39;node&#39;</code> | <code>&#39;ancestor&#39;</code> | <code>&#39;gesture&#39;</code> | <a href=\"dataTypes#null\">null</a></li>\n</ul>\n</li>\n<li>}} - 切换结果</li>\n</ul>\n<p>设置可勾选控件的状态: 目标不可勾选时取其首个可勾选后代; 已是期望状态时不做任何操作 (<code>changed</code> 为 <code>false</code>, <code>method</code> 为 <code>null</code>); 否则以 <code>click</code> 选项智能点击, 并在 <code>verifyTimeout</code> 毫秒 (默认 <code>1000</code>, 间隔 <code>verifyInterval</code>, 默认 <code>100</code>) 内重读直到状态符合.</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>: 目标未出现 (<code>TIMEOUT</code>); 目标及其后代都不可勾选 (<code>INVALID_TARGET</code>, <code>reason</code> 为 <code>notCheckable</code>); 点击失败 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>click</code> / <code>gesture</code>) 或状态未改变 (<code>ACTION_FAILED</code>, <code>reason</code> 为 <code>verify</code>).</p>\n<pre><code class=\"lang-js\">let r = toggle(&#39;飞行模式&#39;, true);\nconsole.log(r.changed, r.node.checked()); /* true true */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "checked"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toggle"
+        },
+        {
+          "textRaw": "[m] retry",
+          "name": "[m]_retry",
+          "methods": [
+            {
+              "textRaw": "retry(fn, options?)",
+              "type": "method",
+              "name": "retry",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">(attempt: number) =&gt; T</a> } - 要执行的函数, 参数为从 0 计的尝试序号</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>times?: <a href=\"dataTypes#number\">number</a></li>\n<li>delay?: <a href=\"dataTypes#number\">number</a></li>\n<li>backoff?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a> } - <code>fn</code> 成功时的返回值</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "retry(fn, times)",
+              "type": "method",
+              "name": "retry",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">(attempt: number) =&gt; T</a> } - 要执行的函数</li>\n<li><strong>times</strong> { <a href=\"dataTypes#number\">number</a> } - 最多重跑次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#generic\">T</a> }</li>\n<li><ins><strong>template</strong></ins> <a href=\"dataTypes#generic\">T</a></li>\n</ul>\n<p>在调用线程上执行 <code>fn</code>, 抛出异常时在 <code>delay</code> 毫秒 (默认 <code>500</code>) 后重跑, 之后每次重跑前的等待乘以 <code>backoff</code> (默认 <code>1</code>, 须不小于 <code>1</code>); 重跑 <code>times</code> 次 (默认 <code>3</code>) 仍失败时抛出最后一次的异常. 取消 (<code>CANCELLED</code> 的 <a href=\"flowErrorType\">FlowError</a>), 脚本中断与 JVM <code>Error</code> 不重试.</p>\n<p>只有同步形式. Flow 链上的 <a href=\"flowType#m-retry\">retry</a> 是重跑上一步骤的步骤, 与本函数无关.</p>\n<pre><code class=\"lang-js\">let node = retry(attempt =&gt; {\n    console.log(`第 ${attempt + 1} 次尝试`);\n    let w = text(&#39;刷新&#39;).findOnce();\n    if (!w) {\n        throw new Error(&#39;not yet&#39;);\n    }\n    return w;\n}, { times: 5, delay: 300, backoff: 2 }); /* 等待 300, 600, 1200, 2400, 4800 毫秒. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    },
+                    {
+                      "name": "times"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] retry"
+        }
+      ],
+      "type": "module",
+      "displayName": "工具集 (Toolkit)"
+    },
+    {
+      "textRaw": "事件驱动等待",
+      "name": "事件驱动等待",
+      "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>基于无障碍事件的等待: 不反复查询界面, 而是订阅无障碍服务的事件流, 直到目标事件到达或超时. 与 <a href=\"#工具集-toolkit\">工具集</a> 一样有同步形式 (全局函数与 <code>automator.</code> 前缀, 不能在 UI 线程调用) 与 Flow 形式 (<a href=\"flow#事件等待起点\">事件等待起点</a>, <a href=\"flowType#事件等待步骤\">事件等待步骤</a>).</p>\n<p><code>timeout</code> 默认取 <a href=\"flow#m-defaults\">flow.defaults</a> 的超时 (<code>10000</code>), <code>Infinity</code> 表示不限时. 超时抛出 <code>code</code> 为 <code>TIMEOUT</code> 的 <a href=\"flowErrorType\">FlowError</a>, 其 <code>selector</code> 为等待条件的描述; 等待期间无障碍服务断开时立即以 <code>A11Y_UNAVAILABLE</code> 中止.</p>\n<p>事件类型名与 <a href=\"#m-registerevent\">auto.registerEvent</a> 的 <code>name</code> 相同: Android <a href=\"https://developer.android.com/reference/android/view/accessibility/AccessibilityEvent\">AccessibilityEvent</a> 的 <code>TYPE_*</code> 常量名去掉前缀, 大小写与驼峰 / 下划线写法均可, 如 <code>&#39;window_state_changed&#39;</code> / <code>&#39;windowStateChanged&#39;</code>. 未知的类型名抛出异常.</p>\n",
+      "modules": [
+        {
+          "textRaw": "[m] waitForIdle",
+          "name": "[m]_waitforidle",
+          "methods": [
+            {
+              "textRaw": "waitForIdle(quietFor?)",
+              "type": "method",
+              "name": "waitForIdle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ quietFor = <code>500</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 判定为安静所需的无事件时长 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>quietFor: <a href=\"dataTypes#number\">number</a></li>\n<li>elapsed: <a href=\"dataTypes#number\">number</a></li>\n<li>events: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 空闲报告</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "quietFor?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForIdle(options)",
+              "type": "method",
+              "name": "waitForIdle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>quietFor?: <a href=\"dataTypes#number\">number</a></li>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>eventTypes?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[]</li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>等待界面安静: 连续 <code>quietFor</code> 毫秒内没有指定类型 (<code>eventTypes</code>, 默认为窗口状态, 窗口内容与窗口列表变化三种; <code>&#39;*&#39;</code> 表示全部类型) 的无障碍事件时返回. 结果含实际使用的 <code>quietFor</code>, 总耗时 <code>elapsed</code> 与期间观察到的事件数 <code>events</code>.</p>\n<p>界面持续变化直到超时时抛出 <code>TIMEOUT</code> (<code>reason</code> 为 <code>the screen kept changing</code>).</p>\n<pre><code class=\"lang-js\">click(&#39;提交&#39;);\nlet idle = waitForIdle(800); /* 等待页面不再变化. */\nconsole.log(idle.elapsed, idle.events);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForIdle"
+        },
+        {
+          "textRaw": "[m] waitForEvent",
+          "name": "[m]_waitforevent",
+          "methods": [
+            {
+              "textRaw": "waitForEvent(type?, filter?, timeout?)",
+              "type": "method",
+              "name": "waitForEvent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> } - 事件类型名, 省略时为任意类型</li>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#function\">(event: Object) =&gt; boolean</a> | {{ packageName?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a>, className?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a>, text?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> }} } - 事件过滤: 函数, 或按属性匹配的对象 (<code>packageName</code> / <code>className</code> 字符串整体匹配, <code>text</code> 字符串子串匹配, 正则表达式搜索匹配)</li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 事件包装对象, 同 <a href=\"#m-registerevent\">auto.registerEvent</a> 回调的参数</li>\n</ul>\n<p>等待首个符合条件的无障碍事件. <code>filter</code> 与 <code>timeout</code> 的顺序可以互换.</p>\n<pre><code class=\"lang-js\">let e = waitForEvent(&#39;view_clicked&#39;, { packageName: &#39;com.android.settings&#39; }, 10e3);\nconsole.log(e.className, e.source);\n\nlet any = waitForEvent(); /* 任意事件. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "type?"
+                    },
+                    {
+                      "name": "filter?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForEvent"
+        },
+        {
+          "textRaw": "[m] waitForToast",
+          "name": "[m]_waitfortoast",
+          "methods": [
+            {
+              "textRaw": "waitForToast(text?, timeout?)",
+              "type": "method",
+              "name": "waitForToast",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ text ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#function\">(toast: Object) =&gt; boolean</a> | {{ packageName?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a>, text?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> }} } - Toast 过滤: 字符串为文本子串, 正则表达式搜索匹配, 函数或按属性匹配的对象; 省略时为任意 Toast. 第一个参数为数字时视为 <code>timeout</code></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>packageName: <a href=\"dataTypes#string\">string</a></li>\n<li>text: <a href=\"dataTypes#string\">string</a></li>\n</ul>\n</li>\n<li>}} - Toast 对象</li>\n</ul>\n<p>等待首个符合条件的 Toast 消息.</p>\n<pre><code class=\"lang-js\">click(&#39;保存&#39;);\nlet toast = waitForToast(&#39;已保存&#39;, 5e3);\nconsole.log(toast.packageName, toast.text);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForToast"
+        },
+        {
+          "textRaw": "[m] waitForNotification",
+          "name": "[m]_waitfornotification",
+          "methods": [
+            {
+              "textRaw": "waitForNotification(filter?, timeout?)",
+              "type": "method",
+              "name": "waitForNotification",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#function\">(notification: Object) =&gt; boolean</a> | {{ packageName?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a>, title?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a>, text?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> }} } - 通知过滤: 字符串为标题或内容的子串, 正则表达式搜索匹配, 函数或按属性匹配的对象; 省略时为任意通知. 第一个参数为数字时视为 <code>timeout</code></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"events#notification\">Notification</a> } - 通知对象, 同 <a href=\"events#observenotification\">events.observeNotification</a> 的回调参数 (含 <code>packageName</code>, <code>title</code>, <code>text</code>, <code>click()</code>, <code>delete()</code>)</li>\n</ul>\n<p>等待首个符合条件的系统通知.</p>\n<pre><code class=\"lang-js\">let n = waitForNotification({ packageName: &#39;com.tencent.mm&#39;, text: /验证码/ }, 60e3);\nconsole.log(n.title, n.text);\nn.click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForNotification"
+        }
+      ],
+      "type": "module",
+      "displayName": "事件驱动等待"
     }
   ]
 }

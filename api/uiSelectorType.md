@@ -5022,7 +5022,7 @@ let wC = sel.findOnce(4);
 
 ### find()
 
-**`Global`** **`A11Y`**
+**`Global`** **`Overload 1/2`** **`A11Y`**
 
 - <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
 
@@ -5041,6 +5041,77 @@ wc.forEach(w => console.log(w.centerY()));
 ```
 
 上述示例中, `wc` 表示符合筛选条件的控件集合.
+
+### find(max)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- **max** { [number](dataTypes#number) } - 结果数量限制
+- <ins>**returns**</ins> { [UiObjectCollection](uiObjectCollectionType) }
+
+限制结果数量的单次筛选: `max` 为正数时最多保留前 `max` 个符合条件的控件, 为负数时保留最后 `-max` 个.
+
+```js
+let first3 = className('TextView').find(3); /* 至多 3 个. */
+let last1 = className('TextView').find(-1); /* 最后 1 个. */
+```
+
+## [m#] findIterator
+
+### findIterator()
+
+**`6.8.0`** **`Global`** **`A11Y`**
+
+- <ins>**returns**</ins> { [UiObjectIterator](#uiobjectiterator) }
+
+惰性筛选: 返回一个迭代器, 按 [find](#m-find) 的顺序在迭代器前进时逐步搜索控件树, 每次 `next()` 产出一个符合筛选条件的控件.<br>
+提前停止 (在 `for...of` 中 `break`, 或调用 `close()`) 时不再遍历控件树的其余部分, 因此适合 "找到第一个满足额外条件的控件就停" 的场景.
+
+特性:
+
+- 阻塞筛选 - [ × ]
+- 集合结果 - [ × ] (逐个产出)
+
+单次搜索, 不轮询, 在调用线程上执行, 不计入 [auto.stats](automator#p-stats).
+
+```js
+/* 找到第一个在屏幕下半部分且可点击的控件即停止. */
+for (let w of className('TextView').findIterator()) {
+    if (w.clickable() && w.centerY() > device.height / 2) {
+        w.click();
+        break; /* 其余节点不再遍历. */
+    }
+}
+
+/* 手动迭代. */
+let it = text('item').findIterator();
+while (it.hasNext()) {
+    let w = it.next();
+    console.log(w.bounds());
+}
+console.log(it.visited, it.produced); /* 已访问的节点数, 已产出的匹配数. */
+```
+
+#### UiObjectIterator
+
+`findIterator()` 返回的迭代器对象, 可直接用于 `for...of`:
+
+- **hasNext()** { [boolean](dataTypes#boolean) } - 是否还有下一个匹配 (需要时继续搜索)
+- **next()** { [UiObject](uiObjectType) } - 下一个匹配, 没有时抛出异常
+- **collect()** { [UiObjectCollection](uiObjectCollectionType) } - 其余全部匹配组成的控件集合 (走完搜索)
+- **toList()** { [JavaArrayList](dataTypes#javaarraylist)<[UiObject](uiObjectType)> } - 其余全部匹配组成的列表 (走完搜索)
+- **close()** - 提前结束搜索, 释放尚未到达的节点
+- **visited** { [number](dataTypes#number) } - 至今访问过的节点数
+- **produced** { [number](dataTypes#number) } - 至今产出的匹配数
+- **isClosed()** { [boolean](dataTypes#boolean) } - 是否已结束 (走完或已关闭)
+- **toString()** - 如 `UiObjectIterator(visited=120, produced=3)`
+
+```js
+let it = className('Button').findIterator();
+let firstTwo = [ it.next(), it.next() ];
+let rest = it.collect(); /* 其余按钮. */
+console.log(it.isClosed()); // true
+```
 
 ## [m#] findOne
 
@@ -5065,6 +5136,10 @@ console.log(w.centerY());
 ```
 
 上述示例中, `w` 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.
+
+> 注: `timeout` 为 0 或负数时不限时, 与 [untilFindOne](#m-untilfindone) 相同, 可能导致脚本 **永久阻塞**.<br>
+> 轮询间隔为 50 毫秒; 启用 [eventAssistedPolling](automator#m-setflags) 标志后, 两次尝试之间改为由无障碍事件唤醒.<br>
+> 不阻塞的异步形式见 [waitAsync](flow#m-wait) / [流程 (Flow)](flow).
 
 ### findOne()
 
@@ -5568,13 +5643,42 @@ pickup({
 
 ### select()
 
-**`Global`** **`A11Y`**
+**`Global`** **`Overload 1/2`** **`A11Y`**
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否行为已全部执行且执行过程中无异常
 
 根据选择器条件, 使用 [untilFind](#m-untilfind) 筛选得到控件集合, 对集合执行 [[ 选中 ] 行为](uiObjectActionsType#m-select).
 
 因 [选择器行为](#选择器行为) 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.
+
+### select(syntax)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`**
+
+- **syntax** { [string](dataTypes#string) } - 字符串选择器
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) } - 追加了条件的选择器自身
+
+字符串选择器语法: 解析 `syntax` 中的条件并追加到当前选择器, 返回选择器自身 (可继续链式调用 `findOne` 等). 全局形式 `select('...')` 以空选择器开始.
+
+语法为以空白分隔的若干条件:
+
+- `key=value` - 属性等于 `value`, 如 `text=登录`, `id=btn_ok`, `depth=3`, `checked=true`. 值含空格或特殊字符时用引号包裹 (`"..."` 或 `'...'`, 支持 `\"`, `\\`, `\n`, `\t` 转义); 多参数的键以逗号分隔值, 如 `bounds=0,0,100,200`
+- `key~=regex` 或 `key=/regex/flags` - 字符串属性的正则匹配 (对应 `keyMatch`), 如 `text~=^登.录$`, `desc=/close/i`
+- `key` / `!key` - 布尔属性为 `true` / `false`, 如 `clickable`, `!enabled`
+
+`key` 为选择器的筛选器名称 (如 `text`, `desc`, `id`, `className`, `clickable`, `depth` 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 `Invalid selector string at 8 in "text=登录 clikable": unknown key "clikable"; did you mean clickable?`.
+
+```js
+select('text=登录 clickable').findOne(5e3);
+select('className=android.widget.EditText !password').findOnce();
+select('id=/item_\\d+/ depth=8').find();
+select('desc="Open menu"').exists();
+
+/* 追加到已有选择器. */
+className('Button').select('text=确定 enabled').findOnce();
+```
+
+> 注: [pickup](#m-pickup), [wait](global#m-wait) 与 [Flow](flow) 的条件参数中, 字符串仍是内容匹配 (`content('...')`), 需要字符串选择器语法时显式传入 `select('...')`.
 
 ## [m#] expand
 
@@ -6299,6 +6403,9 @@ descContains(''); /* 可匹配 w, 但通常无实际意义. */
 descContains('app'); /* 不可匹配 w. */
 descContains(/LEN/i); /* 可匹配 w. */
 ```
+
+> 注: 字符串参数为字面子串, 不作为正则表达式解释: `textContains('.')` 只匹配含点号的文本, `textContains('(')` 不会报错, `textContains('/re/i')` 匹配字面的 `/re/i`.<br>
+> 需要正则匹配时, 传入正则表达式参数 (如 `textContains(/re/i)`) 或使用 [xxxMatches](#xxxmatches).
 
 ## xxxMatches
 

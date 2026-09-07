@@ -482,6 +482,8 @@ notice 模块的全局化对象, 参阅 [消息通知 (Notice)](notice) 模块�
 若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>
 若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).
 
+> 注: `wait` 会阻塞当前线程. 6.8.0 起提供不阻塞的异步形式 [waitAsync](#m-waitasync) (即 `wait.async`), 它立即返回一个可继续追加动作与回调的 [Flow](flowType) 对象, 详见 [流程 (Flow)](flow) 章节.
+
 > 注: 不同于 while 和 for 等循环语句的 "条件",<br>
 > 该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>
 > 而循环语句的条件, 是只要满足条件, 就一直循环.
@@ -893,6 +895,147 @@ wait(() => {
 - <ins>**template**</ins> [T](dataTypes#generic), [R](dataTypes#generic)
 
 > 参阅: [wait(condition, limit, interval, callback)](#wait-condition-limit-interval-callback)
+
+## [m] waitAsync
+
+### waitAsync(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitAsync(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[wait](#m-wait) 的异步形式, 同 [flow.wait](flow#m-wait): 不阻塞当前线程, 立即返回 [Flow](flowType) 对象; 条件满足时以匹配结果 (选择器条件为 [UiObject](uiObjectType), 函数条件为返回值) fulfill, 超时则以 [FlowError](flowErrorType) 拒绝. `wait.async` 是同一函数.
+
+参数 (条件, 超时, 间隔, 选项对象与尾随回调) 见 [流程 (Flow)](flow) 章节的 [等待选项](flow#等待选项-waitoptions).
+
+```js
+waitAsync('立即开始', 5e3).click();
+wait.async('立即开始', 5e3).then(w => console.log(w.bounds()));
+
+/* 同步等待与异步等待的对照. */
+let w = wait('立即开始', 5e3) ? pickup('立即开始') : null; /* 阻塞至多 5 秒. */
+waitAsync('立即开始', 5e3).then(w => w.click(), e => console.warn(e.code)); /* 立即返回. */
+```
+
+## [m] waitThenClick
+
+### waitThenClick(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### waitThenClick(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标出现后点击, 同 [flow.waitThenClick](flow#m-waitthenclick), 相当于 `waitAsync(cond, ...).click()`. `clickWait` 是别名.
+
+```js
+waitThenClick('登录', 5e3);
+clickWait('登录', 5e3); /* 同上. */
+```
+
+## [m] waitForStable
+
+### waitForStable(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitForStable(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标出现并连续 `stableFor` 毫秒 (默认 500) 无变化, 同 [flow.waitForStable](flow#m-waitforstable).
+
+```js
+waitForStable(className('RecyclerView'), { timeout: 10e3, stableFor: 800 }).then(list => console.log(list.childCount()));
+```
+
+## [m] waitForStableThenClick
+
+### waitForStableThenClick(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### waitForStableThenClick(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标稳定后点击, 同 [flow.waitForStableThenClick](flow#m-waitforstablethenclick). `clickWhenStable` 是别名.
+
+```js
+clickWhenStable('下一步', 8e3);
+```
+
+## [m] waitForVisible
+
+### waitForVisible(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitForVisible(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标出现, 对用户可见且保持稳定, 同 [flow.waitForVisible](flow#m-waitforvisible).
+
+## [m] waitForHidden
+
+### waitForHidden(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitForHidden(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标消失 (连续 `stableFor` 毫秒不存在或不可见), 同 [flow.waitForHidden](flow#m-waitforhidden). `waitForGone` 是别名.
+
+```js
+waitForHidden(className('ProgressBar'), 30e3).then(() => console.log('加载完成'));
+```
+
+## [m] clickWhenStableAfter
+
+### clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickWhenStableAfter(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标稳定, 随机延时 `delayMin` 至 `delayMax` 毫秒后点击, 同 [flow.clickWhenStableAfter](flow#m-clickwhenstableafter).
+
+```js
+clickWhenStableAfter('同意', 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */
+clickWhenStableAfter('同意', { delay: [ 300, 800 ] }); /* 同上, 超时与间隔取默认值. */
+```
+
+## 工具集与事件驱动等待的全局函数
+
+**`6.8.0`**
+
+以下全局函数在 [自动化 (Automator)](automator) 与 [选择器 (UiSelector)](uiSelectorType) 章节说明:
+
+- [工具集](automator#工具集-toolkit): [smartClick](automator#m-smartclick), [clickIfExists](automator#m-clickifexists), [clickAny](automator#m-clickany), [findAny](automator#m-findany), [scrollUntil](automator#m-scrolluntil), [typeInto](automator#m-typeinto), [dismissPopups](automator#m-dismisspopups), [collectList](automator#m-collectlist), [launchAndWait](automator#m-launchandwait), [backUntil](automator#m-backuntil), [backToApp](automator#m-backtoapp), [toggle](automator#m-toggle), [retry](automator#m-retry)
+- [事件驱动等待](automator#事件驱动等待): [waitForIdle](automator#m-waitforidle), [waitForEvent](automator#m-waitforevent), [waitForToast](automator#m-waitfortoast), [waitForNotification](automator#m-waitfornotification)
+- [字符串选择器语法](uiSelectorType#m-select): `select('text=登录 clickable')` 返回选择器
 
 ## [m] exit
 

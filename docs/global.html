@@ -55,6 +55,7 @@
 <li><a class="nav-events" href="events.html">Events - 事件监听</a></li>
 <li><a class="nav-files" href="files.html">Files - 文件</a></li>
 <li><a class="nav-floaty" href="floaty.html">Floaty - 悬浮窗</a></li>
+<li><a class="nav-flow" href="flow.html">Flow - 流程</a></li>
 <li><a class="nav-fmt" href="fmt.html">Formatter - 格式化</a></li>
 <li><a class="nav-global active" href="global.html">Global - 全局对象</a></li>
 <li><a class="nav-http" href="http.html">HTTP</a></li>
@@ -104,6 +105,8 @@
 <li><a class="nav-uiObjectType" href="uiObjectType.html">UiObject - 控件节点</a></li>
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
+<li><a class="nav-flowType" href="flowType.html">Flow - 流程对象</a></li>
+<li><a class="nav-flowErrorType" href="flowErrorType.html">FlowError - 流程错误</a></li>
 <li><a class="nav-webSocketType" href="webSocketType.html">WebSocket</a></li>
 <li><a class="nav-eventEmitterType" href="eventEmitterType.html">EventEmitter - 事件发射器</a></li>
 <li><a class="nav-imageWrapperType" href="imageWrapperType.html">ImageWrapper - 包装图像类</a></li>
@@ -385,6 +388,42 @@
 <li><span class="stability_undefined"><a href="#global_waitforpackage_packagename_limit_interval_callback">waitForPackage(packageName, limit, interval, callback)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#global_m_waitasync">[m] waitAsync</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitasync_cond_timeout_interval_onok_onerr">waitAsync(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitasync_cond_options_onok_onerr">waitAsync(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_waitthenclick">[m] waitThenClick</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitthenclick_cond_timeout_interval_onok_onerr">waitThenClick(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitthenclick_cond_options_onok_onerr">waitThenClick(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_waitforstable">[m] waitForStable</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitforstable_cond_timeout_interval_onok_onerr">waitForStable(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitforstable_cond_options_onok_onerr">waitForStable(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_waitforstablethenclick">[m] waitForStableThenClick</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitforstablethenclick_cond_timeout_interval_onok_onerr">waitForStableThenClick(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitforstablethenclick_cond_options_onok_onerr">waitForStableThenClick(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_waitforvisible">[m] waitForVisible</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitforvisible_cond_timeout_interval_onok_onerr">waitForVisible(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitforvisible_cond_options_onok_onerr">waitForVisible(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_waitforhidden">[m] waitForHidden</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_waitforhidden_cond_timeout_interval_onok_onerr">waitForHidden(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_waitforhidden_cond_options_onok_onerr">waitForHidden(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_m_clickwhenstableafter">[m] clickWhenStableAfter</a></span><ul>
+<li><span class="stability_undefined"><a href="#global_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#global_clickwhenstableafter_cond_options_onok_onerr">clickWhenStableAfter(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#global_1">工具集与事件驱动等待的全局函数</a></span></li>
 <li><span class="stability_undefined"><a href="#global_m_exit">[m] exit</a></span><ul>
 <li><span class="stability_undefined"><a href="#global_exit">exit()</a></span></li>
 <li><span class="stability_undefined"><a href="#global_exit_e">exit(e)</a></span></li>
@@ -1049,6 +1088,9 @@ sleep(4e3, &quot;±1e3&quot;); /* 同上. */
 若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>
 若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).</p>
 <blockquote>
+<p>注: <code>wait</code> 会阻塞当前线程. 6.8.0 起提供不阻塞的异步形式 <a href="#global_m_waitasync">waitAsync</a> (即 <code>wait.async</code>), 它立即返回一个可继续追加动作与回调的 <a href="flowType.html">Flow</a> 对象, 详见 <a href="flow.html">流程 (Flow)</a> 章节.</p>
+</blockquote>
+<blockquote>
 <p>注: 不同于 while 和 for 等循环语句的 &quot;条件&quot;,<br>
 该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>
 而循环语句的条件, 是只要满足条件, 就一直循环.</p>
@@ -1432,6 +1474,97 @@ result; /* 一个数字 (如 99.99732126036437) 或 NaN. */
 <blockquote>
 <p>参阅: <a href="#global_wait_condition_limit_interval_callback">wait(condition, limit, interval, callback)</a></p>
 </blockquote>
+<h2>[m] waitAsync<span><a class="mark" href="#global_m_waitasync" id="global_m_waitasync">#</a></span></h2>
+<h3>waitAsync(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitasync_cond_timeout_interval_onok_onerr" id="global_waitasync_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<h3>waitAsync(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitasync_cond_options_onok_onerr" id="global_waitasync_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p><a href="#global_m_wait">wait</a> 的异步形式, 同 <a href="flow.html#flow_m_wait">flow.wait</a>: 不阻塞当前线程, 立即返回 <a href="flowType.html">Flow</a> 对象; 条件满足时以匹配结果 (选择器条件为 <a href="uiObjectType.html">UiObject</a>, 函数条件为返回值) fulfill, 超时则以 <a href="flowErrorType.html">FlowError</a> 拒绝. <code>wait.async</code> 是同一函数.</p>
+<p>参数 (条件, 超时, 间隔, 选项对象与尾随回调) 见 <a href="flow.html">流程 (Flow)</a> 章节的 <a href="flow.html#flow_waitoptions">等待选项</a>.</p>
+<pre><code class="lang-js">waitAsync(&#39;立即开始&#39;, 5e3).click();
+wait.async(&#39;立即开始&#39;, 5e3).then(w =&gt; console.log(w.bounds()));
+
+/* 同步等待与异步等待的对照. */
+let w = wait(&#39;立即开始&#39;, 5e3) ? pickup(&#39;立即开始&#39;) : null; /* 阻塞至多 5 秒. */
+waitAsync(&#39;立即开始&#39;, 5e3).then(w =&gt; w.click(), e =&gt; console.warn(e.code)); /* 立即返回. */
+</code></pre>
+<h2>[m] waitThenClick<span><a class="mark" href="#global_m_waitthenclick" id="global_m_waitthenclick">#</a></span></h2>
+<h3>waitThenClick(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitthenclick_cond_timeout_interval_onok_onerr" id="global_waitthenclick_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>waitThenClick(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitthenclick_cond_options_onok_onerr" id="global_waitthenclick_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标出现后点击, 同 <a href="flow.html#flow_m_waitthenclick">flow.waitThenClick</a>, 相当于 <code>waitAsync(cond, ...).click()</code>. <code>clickWait</code> 是别名.</p>
+<pre><code class="lang-js">waitThenClick(&#39;登录&#39;, 5e3);
+clickWait(&#39;登录&#39;, 5e3); /* 同上. */
+</code></pre>
+<h2>[m] waitForStable<span><a class="mark" href="#global_m_waitforstable" id="global_m_waitforstable">#</a></span></h2>
+<h3>waitForStable(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitforstable_cond_timeout_interval_onok_onerr" id="global_waitforstable_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<h3>waitForStable(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitforstable_cond_options_onok_onerr" id="global_waitforstable_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标出现并连续 <code>stableFor</code> 毫秒 (默认 500) 无变化, 同 <a href="flow.html#flow_m_waitforstable">flow.waitForStable</a>.</p>
+<pre><code class="lang-js">waitForStable(className(&#39;RecyclerView&#39;), { timeout: 10e3, stableFor: 800 }).then(list =&gt; console.log(list.childCount()));
+</code></pre>
+<h2>[m] waitForStableThenClick<span><a class="mark" href="#global_m_waitforstablethenclick" id="global_m_waitforstablethenclick">#</a></span></h2>
+<h3>waitForStableThenClick(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitforstablethenclick_cond_timeout_interval_onok_onerr" id="global_waitforstablethenclick_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>waitForStableThenClick(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitforstablethenclick_cond_options_onok_onerr" id="global_waitforstablethenclick_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标稳定后点击, 同 <a href="flow.html#flow_m_waitforstablethenclick">flow.waitForStableThenClick</a>. <code>clickWhenStable</code> 是别名.</p>
+<pre><code class="lang-js">clickWhenStable(&#39;下一步&#39;, 8e3);
+</code></pre>
+<h2>[m] waitForVisible<span><a class="mark" href="#global_m_waitforvisible" id="global_m_waitforvisible">#</a></span></h2>
+<h3>waitForVisible(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitforvisible_cond_timeout_interval_onok_onerr" id="global_waitforvisible_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<h3>waitForVisible(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitforvisible_cond_options_onok_onerr" id="global_waitforvisible_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标出现, 对用户可见且保持稳定, 同 <a href="flow.html#flow_m_waitforvisible">flow.waitForVisible</a>.</p>
+<h2>[m] waitForHidden<span><a class="mark" href="#global_m_waitforhidden" id="global_m_waitforhidden">#</a></span></h2>
+<h3>waitForHidden(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#global_waitforhidden_cond_timeout_interval_onok_onerr" id="global_waitforhidden_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<h3>waitForHidden(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_waitforhidden_cond_options_onok_onerr" id="global_waitforhidden_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标消失 (连续 <code>stableFor</code> 毫秒不存在或不可见), 同 <a href="flow.html#flow_m_waitforhidden">flow.waitForHidden</a>. <code>waitForGone</code> 是别名.</p>
+<pre><code class="lang-js">waitForHidden(className(&#39;ProgressBar&#39;), 30e3).then(() =&gt; console.log(&#39;加载完成&#39;));
+</code></pre>
+<h2>[m] clickWhenStableAfter<span><a class="mark" href="#global_m_clickwhenstableafter" id="global_m_clickwhenstableafter">#</a></span></h2>
+<h3>clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)<span><a class="mark" href="#global_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr" id="global_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>clickWhenStableAfter(cond, options, onOk?, onErr?)<span><a class="mark" href="#global_clickwhenstableafter_cond_options_onok_onerr" id="global_clickwhenstableafter_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标稳定, 随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒后点击, 同 <a href="flow.html#flow_m_clickwhenstableafter">flow.clickWhenStableAfter</a>.</p>
+<pre><code class="lang-js">clickWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */
+clickWhenStableAfter(&#39;同意&#39;, { delay: [ 300, 800 ] }); /* 同上, 超时与间隔取默认值. */
+</code></pre>
+<h2>工具集与事件驱动等待的全局函数<span><a class="mark" href="#global_1" id="global_1">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<p>以下全局函数在 <a href="automator.html">自动化 (Automator)</a> 与 <a href="uiSelectorType.html">选择器 (UiSelector)</a> 章节说明:</p>
+<ul>
+<li><a href="automator.html#automator_toolkit">工具集</a>: <a href="automator.html#automator_m_smartclick">smartClick</a>, <a href="automator.html#automator_m_clickifexists">clickIfExists</a>, <a href="automator.html#automator_m_clickany">clickAny</a>, <a href="automator.html#automator_m_findany">findAny</a>, <a href="automator.html#automator_m_scrolluntil">scrollUntil</a>, <a href="automator.html#automator_m_typeinto">typeInto</a>, <a href="automator.html#automator_m_dismisspopups">dismissPopups</a>, <a href="automator.html#automator_m_collectlist">collectList</a>, <a href="automator.html#automator_m_launchandwait">launchAndWait</a>, <a href="automator.html#automator_m_backuntil">backUntil</a>, <a href="automator.html#automator_m_backtoapp">backToApp</a>, <a href="automator.html#automator_m_toggle">toggle</a>, <a href="automator.html#automator_m_retry">retry</a></li>
+<li><a href="automator.html#automator_4">事件驱动等待</a>: <a href="automator.html#automator_m_waitforidle">waitForIdle</a>, <a href="automator.html#automator_m_waitforevent">waitForEvent</a>, <a href="automator.html#automator_m_waitfortoast">waitForToast</a>, <a href="automator.html#automator_m_waitfornotification">waitForNotification</a></li>
+<li><a href="uiSelectorType.html#uiselectortype_m_select">字符串选择器语法</a>: <code>select(&#39;text=登录 clickable&#39;)</code> 返回选择器</li>
+</ul>
 <h2>[m] exit<span><a class="mark" href="#global_m_exit" id="global_m_exit">#</a></span></h2>
 <p>停止脚本运行.</p>
 <h3>exit()<span><a class="mark" href="#global_exit" id="global_exit">#</a></span></h3>

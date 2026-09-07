@@ -662,7 +662,7 @@
               "textRaw": "wait(condition)",
               "type": "method",
               "name": "wait",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; any)</a> | <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 结束等待条件</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>阻塞等待, 直到条件满足.<br>\n默认等待时间为 10 秒, 条件检查间隔为 200 毫秒.<br>\n若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>\n若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).</p>\n<blockquote>\n<p>注: 不同于 while 和 for 等循环语句的 &quot;条件&quot;,<br>\n该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>\n而循环语句的条件, 是只要满足条件, 就一直循环.</p>\n</blockquote>\n<p>等待条件支持函数及选择器.</p>\n<p>函数示例, 等待设备屏幕关闭:</p>\n<pre><code class=\"lang-js\">wait(function () {\n    return device.isScreenOff();\n});\n\n/* 使用箭头函数. */\nwait(() =&gt; device.isScreenOff());\n\n/* 使用 bind. */\nwait(device.isScreenOff.bind(device));\n\n/* 对结果分支处理. */\nif (wait(() =&gt; device.isScreenOff())) {\n    console.log(&quot;等待屏幕关闭成功&quot;);\n} else {\n    console.log(&quot;等待屏幕关闭超时&quot;);\n}\n</code></pre>\n<p>选择器示例, 等待文本为 &quot;立即开始&quot; 的控件出现:</p>\n<pre><code class=\"lang-js\">/* 以下三种方式为 Pickup 选择器的不同格式, 效果相同. */\nwait(&#39;立即开始&#39;);\nwait(content(&#39;立即开始&#39;)); /* 同上. */\nwait({ content: &#39;立即开始&#39; }); /* 同上. */\n\n/* 函数方式. */\nwait(() =&gt; content(&#39;立即开始&#39;).exists());\nwait(() =&gt; pickup(&#39;立即开始&#39;, &#39;?&#39;)); /* 同上. */\n\n/* wait 返回结果的简单应用. */\nwait(&#39;立即开始&#39;) &amp;&amp; toast(&#39;OK&#39;);\nwait(&#39;立即开始&#39;) ? toast(&#39;√&#39;) : toast(&#39;×&#39;);\n</code></pre>\n<p>等待条件的满足与否, 与函数返回值有关.<br>\n例如当函数返回 true 时, 等待条件即满足.</p>\n<p>下面列出不满足条件的几种返回值:<br>\n[ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ]<br>\n除此之外的返回值均视为满足条件 (包括空字符串和数字 0 等).</p>\n<p>一种常见的错误用例, 即函数条件缺少返回值:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n    }\n});\n</code></pre>\n<p>上述示例中, 等待条件永远无法满足, 因函数一直返回 undefined.</p>\n<p>添加合适的返回值即可修正:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n        return true;\n    }\n});\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"uiSelectorType#m-pickup\">pickup</a></p>\n</blockquote>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/6</code></strong> <strong><code>A11Y?</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>condition</strong> { <a href=\"dataTypes#function\">(() =&gt; any)</a> | <a href=\"dataTypes#pickupselector\">PickupSelector</a> } - 结束等待条件</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>阻塞等待, 直到条件满足.<br>\n默认等待时间为 10 秒, 条件检查间隔为 200 毫秒.<br>\n若超时, 放弃等待, 并返回特定的条件超时结果 (如 false).<br>\n若超时之前条件得以满足, 结束等待, 并返回特定的条件满足结果 (如 true).</p>\n<blockquote>\n<p>注: <code>wait</code> 会阻塞当前线程. 6.8.0 起提供不阻塞的异步形式 <a href=\"#m-waitasync\">waitAsync</a> (即 <code>wait.async</code>), 它立即返回一个可继续追加动作与回调的 <a href=\"flowType\">Flow</a> 对象, 详见 <a href=\"flow\">流程 (Flow)</a> 章节.</p>\n</blockquote>\n<blockquote>\n<p>注: 不同于 while 和 for 等循环语句的 &quot;条件&quot;,<br>\n该方法的条件是结束等待条件, 只要不满足条件, 就一直等待.<br>\n而循环语句的条件, 是只要满足条件, 就一直循环.</p>\n</blockquote>\n<p>等待条件支持函数及选择器.</p>\n<p>函数示例, 等待设备屏幕关闭:</p>\n<pre><code class=\"lang-js\">wait(function () {\n    return device.isScreenOff();\n});\n\n/* 使用箭头函数. */\nwait(() =&gt; device.isScreenOff());\n\n/* 使用 bind. */\nwait(device.isScreenOff.bind(device));\n\n/* 对结果分支处理. */\nif (wait(() =&gt; device.isScreenOff())) {\n    console.log(&quot;等待屏幕关闭成功&quot;);\n} else {\n    console.log(&quot;等待屏幕关闭超时&quot;);\n}\n</code></pre>\n<p>选择器示例, 等待文本为 &quot;立即开始&quot; 的控件出现:</p>\n<pre><code class=\"lang-js\">/* 以下三种方式为 Pickup 选择器的不同格式, 效果相同. */\nwait(&#39;立即开始&#39;);\nwait(content(&#39;立即开始&#39;)); /* 同上. */\nwait({ content: &#39;立即开始&#39; }); /* 同上. */\n\n/* 函数方式. */\nwait(() =&gt; content(&#39;立即开始&#39;).exists());\nwait(() =&gt; pickup(&#39;立即开始&#39;, &#39;?&#39;)); /* 同上. */\n\n/* wait 返回结果的简单应用. */\nwait(&#39;立即开始&#39;) &amp;&amp; toast(&#39;OK&#39;);\nwait(&#39;立即开始&#39;) ? toast(&#39;√&#39;) : toast(&#39;×&#39;);\n</code></pre>\n<p>等待条件的满足与否, 与函数返回值有关.<br>\n例如当函数返回 true 时, 等待条件即满足.</p>\n<p>下面列出不满足条件的几种返回值:<br>\n[ <a href=\"dataTypes#boolean\">false</a> / <a href=\"dataTypes#null\">null</a> / <a href=\"dataTypes#undefined\">undefined</a> / <a href=\"https://developer.mozilla.org/zh-CN/docs/Glossary/NaN/\">NaN</a> ]<br>\n除此之外的返回值均视为满足条件 (包括空字符串和数字 0 等).</p>\n<p>一种常见的错误用例, 即函数条件缺少返回值:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n    }\n});\n</code></pre>\n<p>上述示例中, 等待条件永远无法满足, 因函数一直返回 undefined.</p>\n<p>添加合适的返回值即可修正:</p>\n<pre><code class=\"lang-js\">wait(() =&gt; {\n    if (device.isScreenOff()) {\n        console.log(&quot;屏幕已成功关闭&quot;);\n        return true;\n    }\n});\n</code></pre>\n<blockquote>\n<p>参阅: <a href=\"uiSelectorType#m-pickup\">pickup</a></p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -1030,6 +1030,432 @@
           ],
           "type": "module",
           "displayName": "[m] waitForPackage"
+        },
+        {
+          "textRaw": "[m] waitAsync",
+          "name": "[m]_waitasync",
+          "methods": [
+            {
+              "textRaw": "waitAsync(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitAsync(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-wait\">wait</a> 的异步形式, 同 <a href=\"flow#m-wait\">flow.wait</a>: 不阻塞当前线程, 立即返回 <a href=\"flowType\">Flow</a> 对象; 条件满足时以匹配结果 (选择器条件为 <a href=\"uiObjectType\">UiObject</a>, 函数条件为返回值) fulfill, 超时则以 <a href=\"flowErrorType\">FlowError</a> 拒绝. <code>wait.async</code> 是同一函数.</p>\n<p>参数 (条件, 超时, 间隔, 选项对象与尾随回调) 见 <a href=\"flow\">流程 (Flow)</a> 章节的 <a href=\"flow#等待选项-waitoptions\">等待选项</a>.</p>\n<pre><code class=\"lang-js\">waitAsync(&#39;立即开始&#39;, 5e3).click();\nwait.async(&#39;立即开始&#39;, 5e3).then(w =&gt; console.log(w.bounds()));\n\n/* 同步等待与异步等待的对照. */\nlet w = wait(&#39;立即开始&#39;, 5e3) ? pickup(&#39;立即开始&#39;) : null; /* 阻塞至多 5 秒. */\nwaitAsync(&#39;立即开始&#39;, 5e3).then(w =&gt; w.click(), e =&gt; console.warn(e.code)); /* 立即返回. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitAsync"
+        },
+        {
+          "textRaw": "[m] waitThenClick",
+          "name": "[m]_waitthenclick",
+          "methods": [
+            {
+              "textRaw": "waitThenClick(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitThenClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitThenClick(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitThenClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标出现后点击, 同 <a href=\"flow#m-waitthenclick\">flow.waitThenClick</a>, 相当于 <code>waitAsync(cond, ...).click()</code>. <code>clickWait</code> 是别名.</p>\n<pre><code class=\"lang-js\">waitThenClick(&#39;登录&#39;, 5e3);\nclickWait(&#39;登录&#39;, 5e3); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitThenClick"
+        },
+        {
+          "textRaw": "[m] waitForStable",
+          "name": "[m]_waitforstable",
+          "methods": [
+            {
+              "textRaw": "waitForStable(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForStable(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标出现并连续 <code>stableFor</code> 毫秒 (默认 500) 无变化, 同 <a href=\"flow#m-waitforstable\">flow.waitForStable</a>.</p>\n<pre><code class=\"lang-js\">waitForStable(className(&#39;RecyclerView&#39;), { timeout: 10e3, stableFor: 800 }).then(list =&gt; console.log(list.childCount()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForStable"
+        },
+        {
+          "textRaw": "[m] waitForStableThenClick",
+          "name": "[m]_waitforstablethenclick",
+          "methods": [
+            {
+              "textRaw": "waitForStableThenClick(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForStableThenClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForStableThenClick(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForStableThenClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定后点击, 同 <a href=\"flow#m-waitforstablethenclick\">flow.waitForStableThenClick</a>. <code>clickWhenStable</code> 是别名.</p>\n<pre><code class=\"lang-js\">clickWhenStable(&#39;下一步&#39;, 8e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForStableThenClick"
+        },
+        {
+          "textRaw": "[m] waitForVisible",
+          "name": "[m]_waitforvisible",
+          "methods": [
+            {
+              "textRaw": "waitForVisible(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForVisible",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForVisible(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForVisible",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标出现, 对用户可见且保持稳定, 同 <a href=\"flow#m-waitforvisible\">flow.waitForVisible</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForVisible"
+        },
+        {
+          "textRaw": "[m] waitForHidden",
+          "name": "[m]_waitforhidden",
+          "methods": [
+            {
+              "textRaw": "waitForHidden(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForHidden",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForHidden(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForHidden",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标消失 (连续 <code>stableFor</code> 毫秒不存在或不可见), 同 <a href=\"flow#m-waitforhidden\">flow.waitForHidden</a>. <code>waitForGone</code> 是别名.</p>\n<pre><code class=\"lang-js\">waitForHidden(className(&#39;ProgressBar&#39;), 30e3).then(() =&gt; console.log(&#39;加载完成&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForHidden"
+        },
+        {
+          "textRaw": "[m] clickWhenStableAfter",
+          "name": "[m]_clickwhenstableafter",
+          "methods": [
+            {
+              "textRaw": "clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWhenStableAfter",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "delayMin?"
+                    },
+                    {
+                      "name": "delayMax?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickWhenStableAfter(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWhenStableAfter",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定, 随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒后点击, 同 <a href=\"flow#m-clickwhenstableafter\">flow.clickWhenStableAfter</a>.</p>\n<pre><code class=\"lang-js\">clickWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */\nclickWhenStableAfter(&#39;同意&#39;, { delay: [ 300, 800 ] }); /* 同上, 超时与间隔取默认值. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickWhenStableAfter"
+        },
+        {
+          "textRaw": "工具集与事件驱动等待的全局函数",
+          "name": "工具集与事件驱动等待的全局函数",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>以下全局函数在 <a href=\"automator\">自动化 (Automator)</a> 与 <a href=\"uiSelectorType\">选择器 (UiSelector)</a> 章节说明:</p>\n<ul>\n<li><a href=\"automator#工具集-toolkit\">工具集</a>: <a href=\"automator#m-smartclick\">smartClick</a>, <a href=\"automator#m-clickifexists\">clickIfExists</a>, <a href=\"automator#m-clickany\">clickAny</a>, <a href=\"automator#m-findany\">findAny</a>, <a href=\"automator#m-scrolluntil\">scrollUntil</a>, <a href=\"automator#m-typeinto\">typeInto</a>, <a href=\"automator#m-dismisspopups\">dismissPopups</a>, <a href=\"automator#m-collectlist\">collectList</a>, <a href=\"automator#m-launchandwait\">launchAndWait</a>, <a href=\"automator#m-backuntil\">backUntil</a>, <a href=\"automator#m-backtoapp\">backToApp</a>, <a href=\"automator#m-toggle\">toggle</a>, <a href=\"automator#m-retry\">retry</a></li>\n<li><a href=\"automator#事件驱动等待\">事件驱动等待</a>: <a href=\"automator#m-waitforidle\">waitForIdle</a>, <a href=\"automator#m-waitforevent\">waitForEvent</a>, <a href=\"automator#m-waitfortoast\">waitForToast</a>, <a href=\"automator#m-waitfornotification\">waitForNotification</a></li>\n<li><a href=\"uiSelectorType#m-select\">字符串选择器语法</a>: <code>select(&#39;text=登录 clickable&#39;)</code> 返回选择器</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "工具集与事件驱动等待的全局函数"
         },
         {
           "textRaw": "[m] exit",

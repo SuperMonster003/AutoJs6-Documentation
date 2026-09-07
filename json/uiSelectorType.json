@@ -3573,7 +3573,50 @@
               "textRaw": "find()",
               "type": "method",
               "name": "find",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>根据选择器条件筛选全部符合筛选条件的控件.<br>\n筛选结果为 <a href=\"uiObjectCollectionType\">控件集合</a>, 不存在任何符合筛选条件的控件时, 返回空集合.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ √ ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wc = sel.find();\nwc.forEach(w =&gt; console.log(w.centerY()));\n</code></pre>\n<p>上述示例中, <code>wc</code> 表示符合筛选条件的控件集合.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>根据选择器条件筛选全部符合筛选条件的控件.<br>\n筛选结果为 <a href=\"uiObjectCollectionType\">控件集合</a>, 不存在任何符合筛选条件的控件时, 返回空集合.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ √ ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wc = sel.find();\nwc.forEach(w =&gt; console.log(w.centerY()));\n</code></pre>\n<p>上述示例中, <code>wc</code> 表示符合筛选条件的控件集合.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "find(max)",
+              "type": "method",
+              "name": "find",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>max</strong> { <a href=\"dataTypes#number\">number</a> } - 结果数量限制</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>限制结果数量的单次筛选: <code>max</code> 为正数时最多保留前 <code>max</code> 个符合条件的控件, 为负数时保留最后 <code>-max</code> 个.</p>\n<pre><code class=\"lang-js\">let first3 = className(&#39;TextView&#39;).find(3); /* 至多 3 个. */\nlet last1 = className(&#39;TextView&#39;).find(-1); /* 最后 1 个. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "max"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] find"
+        },
+        {
+          "textRaw": "[m#] findIterator",
+          "name": "[m#]_finditerator",
+          "methods": [
+            {
+              "textRaw": "findIterator()",
+              "type": "method",
+              "name": "findIterator",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#uiobjectiterator\">UiObjectIterator</a> }</li>\n</ul>\n<p>惰性筛选: 返回一个迭代器, 按 <a href=\"#m-find\">find</a> 的顺序在迭代器前进时逐步搜索控件树, 每次 <code>next()</code> 产出一个符合筛选条件的控件.<br>\n提前停止 (在 <code>for...of</code> 中 <code>break</code>, 或调用 <code>close()</code>) 时不再遍历控件树的其余部分, 因此适合 &quot;找到第一个满足额外条件的控件就停&quot; 的场景.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ × ] (逐个产出)</li>\n</ul>\n<p>单次搜索, 不轮询, 在调用线程上执行, 不计入 <a href=\"automator#p-stats\">auto.stats</a>.</p>\n<pre><code class=\"lang-js\">/* 找到第一个在屏幕下半部分且可点击的控件即停止. */\nfor (let w of className(&#39;TextView&#39;).findIterator()) {\n    if (w.clickable() &amp;&amp; w.centerY() &gt; device.height / 2) {\n        w.click();\n        break; /* 其余节点不再遍历. */\n    }\n}\n\n/* 手动迭代. */\nlet it = text(&#39;item&#39;).findIterator();\nwhile (it.hasNext()) {\n    let w = it.next();\n    console.log(w.bounds());\n}\nconsole.log(it.visited, it.produced); /* 已访问的节点数, 已产出的匹配数. */\n</code></pre>\n",
+              "modules": [
+                {
+                  "textRaw": "UiObjectIterator",
+                  "name": "uiobjectiterator",
+                  "desc": "<p><code>findIterator()</code> 返回的迭代器对象, 可直接用于 <code>for...of</code>:</p>\n<ul>\n<li><strong>hasNext()</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否还有下一个匹配 (需要时继续搜索)</li>\n<li><strong>next()</strong> { <a href=\"uiObjectType\">UiObject</a> } - 下一个匹配, 没有时抛出异常</li>\n<li><strong>collect()</strong> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> } - 其余全部匹配组成的控件集合 (走完搜索)</li>\n<li><strong>toList()</strong> { <a href=\"dataTypes#javaarraylist\">JavaArrayList</a>&lt;<a href=\"uiObjectType\">UiObject</a>&gt; } - 其余全部匹配组成的列表 (走完搜索)</li>\n<li><strong>close()</strong> - 提前结束搜索, 释放尚未到达的节点</li>\n<li><strong>visited</strong> { <a href=\"dataTypes#number\">number</a> } - 至今访问过的节点数</li>\n<li><strong>produced</strong> { <a href=\"dataTypes#number\">number</a> } - 至今产出的匹配数</li>\n<li><strong>isClosed()</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否已结束 (走完或已关闭)</li>\n<li><strong>toString()</strong> - 如 <code>UiObjectIterator(visited=120, produced=3)</code></li>\n</ul>\n<pre><code class=\"lang-js\">let it = className(&#39;Button&#39;).findIterator();\nlet firstTwo = [ it.next(), it.next() ];\nlet rest = it.collect(); /* 其余按钮. */\nconsole.log(it.isClosed()); // true\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "UiObjectIterator"
+                }
+              ],
               "signatures": [
                 {
                   "params": []
@@ -3582,7 +3625,7 @@
             }
           ],
           "type": "module",
-          "displayName": "[m#] find"
+          "displayName": "[m#] findIterator"
         },
         {
           "textRaw": "[m#] findOne",
@@ -3592,7 +3635,7 @@
               "textRaw": "findOne(timeout)",
               "type": "method",
               "name": "findOne",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.<br>\n筛选结果为单个控件, 指定时限内不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOne(3e3); /* 3000 毫秒, 即 3 秒. */\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.<br>\n筛选结果为单个控件, 指定时限内不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOne(3e3); /* 3000 毫秒, 即 3 秒. */\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.</p>\n<blockquote>\n<p>注: <code>timeout</code> 为 0 或负数时不限时, 与 <a href=\"#m-untilfindone\">untilFindOne</a> 相同, 可能导致脚本 <strong>永久阻塞</strong>.<br>\n轮询间隔为 50 毫秒; 启用 <a href=\"automator#m-setflags\">eventAssistedPolling</a> 标志后, 两次尝试之间改为由无障碍事件唤醒.<br>\n不阻塞的异步形式见 <a href=\"flow#m-wait\">waitAsync</a> / <a href=\"flow\">流程 (Flow)</a>.</p>\n</blockquote>\n",
               "signatures": [
                 {
                   "params": [
@@ -4271,10 +4314,25 @@
               "textRaw": "select()",
               "type": "method",
               "name": "select",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-select\">[ 选中 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否行为已全部执行且执行过程中无异常</li>\n</ul>\n<p>根据选择器条件, 使用 <a href=\"#m-untilfind\">untilFind</a> 筛选得到控件集合, 对集合执行 <a href=\"uiObjectActionsType#m-select\">[ 选中 ] 行为</a>.</p>\n<p>因 <a href=\"#选择器行为\">选择器行为</a> 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.</p>\n",
               "signatures": [
                 {
                   "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "select(syntax)",
+              "type": "method",
+              "name": "select",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>syntax</strong> { <a href=\"dataTypes#string\">string</a> } - 字符串选择器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> } - 追加了条件的选择器自身</li>\n</ul>\n<p>字符串选择器语法: 解析 <code>syntax</code> 中的条件并追加到当前选择器, 返回选择器自身 (可继续链式调用 <code>findOne</code> 等). 全局形式 <code>select(&#39;...&#39;)</code> 以空选择器开始.</p>\n<p>语法为以空白分隔的若干条件:</p>\n<ul>\n<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\\&quot;</code>, <code>\\\\</code>, <code>\\n</code>, <code>\\t</code> 转义); 多参数的键以逗号分隔值, 如 <code>bounds=0,0,100,200</code></li>\n<li><code>key~=regex</code> 或 <code>key=/regex/flags</code> - 字符串属性的正则匹配 (对应 <code>keyMatch</code>), 如 <code>text~=^登.录$</code>, <code>desc=/close/i</code></li>\n<li><code>key</code> / <code>!key</code> - 布尔属性为 <code>true</code> / <code>false</code>, 如 <code>clickable</code>, <code>!enabled</code></li>\n</ul>\n<p><code>key</code> 为选择器的筛选器名称 (如 <code>text</code>, <code>desc</code>, <code>id</code>, <code>className</code>, <code>clickable</code>, <code>depth</code> 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 <code>Invalid selector string at 8 in &quot;text=登录 clikable&quot;: unknown key &quot;clikable&quot;; did you mean clickable?</code>.</p>\n<pre><code class=\"lang-js\">select(&#39;text=登录 clickable&#39;).findOne(5e3);\nselect(&#39;className=android.widget.EditText !password&#39;).findOnce();\nselect(&#39;id=/item_\\\\d+/ depth=8&#39;).find();\nselect(&#39;desc=&quot;Open menu&quot;&#39;).exists();\n\n/* 追加到已有选择器. */\nclassName(&#39;Button&#39;).select(&#39;text=确定 enabled&#39;).findOnce();\n</code></pre>\n<blockquote>\n<p>注: <a href=\"#m-pickup\">pickup</a>, <a href=\"global#m-wait\">wait</a> 与 <a href=\"flow\">Flow</a> 的条件参数中, 字符串仍是内容匹配 (<code>content(&#39;...&#39;)</code>), 需要字符串选择器语法时显式传入 <code>select(&#39;...&#39;)</code>.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "syntax"
+                    }
+                  ]
                 }
               ]
             }
@@ -5027,7 +5085,7 @@
         {
           "textRaw": "xxxContains",
           "name": "xxxcontains",
-          "desc": "<p>包含匹配筛选器.</p>\n<p>筛选条件为 <a href=\"dataTypes#string\">字符串</a> 类型或 <a href=\"dataTypes#regexp\">正则表达式</a> 类型, 匹配任意长度连续的控件属性串值.</p>\n<pre><code class=\"lang-js\">w.desc(); // splendid\ndescContains(&#39;did&#39;); /* 可匹配 w. */\ndescContains(&#39;spl&#39;); /* 可匹配 w. */\ndescContains(&#39;len&#39;); /* 可匹配 w. */\ndescContains(&#39;&#39;); /* 可匹配 w, 但通常无实际意义. */\ndescContains(&#39;app&#39;); /* 不可匹配 w. */\ndescContains(/LEN/i); /* 可匹配 w. */\n</code></pre>\n",
+          "desc": "<p>包含匹配筛选器.</p>\n<p>筛选条件为 <a href=\"dataTypes#string\">字符串</a> 类型或 <a href=\"dataTypes#regexp\">正则表达式</a> 类型, 匹配任意长度连续的控件属性串值.</p>\n<pre><code class=\"lang-js\">w.desc(); // splendid\ndescContains(&#39;did&#39;); /* 可匹配 w. */\ndescContains(&#39;spl&#39;); /* 可匹配 w. */\ndescContains(&#39;len&#39;); /* 可匹配 w. */\ndescContains(&#39;&#39;); /* 可匹配 w, 但通常无实际意义. */\ndescContains(&#39;app&#39;); /* 不可匹配 w. */\ndescContains(/LEN/i); /* 可匹配 w. */\n</code></pre>\n<blockquote>\n<p>注: 字符串参数为字面子串, 不作为正则表达式解释: <code>textContains(&#39;.&#39;)</code> 只匹配含点号的文本, <code>textContains(&#39;(&#39;)</code> 不会报错, <code>textContains(&#39;/re/i&#39;)</code> 匹配字面的 <code>/re/i</code>.<br>\n需要正则匹配时, 传入正则表达式参数 (如 <code>textContains(/re/i)</code>) 或使用 <a href=\"#xxxmatches\">xxxMatches</a>.</p>\n</blockquote>\n",
           "type": "module",
           "displayName": "xxxContains"
         },

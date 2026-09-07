@@ -55,6 +55,7 @@
 <li><a class="nav-events" href="events.html">Events - 事件监听</a></li>
 <li><a class="nav-files" href="files.html">Files - 文件</a></li>
 <li><a class="nav-floaty" href="floaty.html">Floaty - 悬浮窗</a></li>
+<li><a class="nav-flow" href="flow.html">Flow - 流程</a></li>
 <li><a class="nav-fmt" href="fmt.html">Formatter - 格式化</a></li>
 <li><a class="nav-global" href="global.html">Global - 全局对象</a></li>
 <li><a class="nav-http" href="http.html">HTTP</a></li>
@@ -104,6 +105,8 @@
 <li><a class="nav-uiObjectType" href="uiObjectType.html">UiObject - 控件节点</a></li>
 <li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
 <li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
+<li><a class="nav-flowType" href="flowType.html">Flow - 流程对象</a></li>
+<li><a class="nav-flowErrorType" href="flowErrorType.html">FlowError - 流程错误</a></li>
 <li><a class="nav-webSocketType" href="webSocketType.html">WebSocket</a></li>
 <li><a class="nav-eventEmitterType" href="eventEmitterType.html">EventEmitter - 事件发射器</a></li>
 <li><a class="nav-imageWrapperType" href="imageWrapperType.html">ImageWrapper - 包装图像类</a></li>
@@ -806,6 +809,14 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_find">[m#] find</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiselectortype_find">find()</a></span></li>
+<li><span class="stability_undefined"><a href="#uiselectortype_find_max">find(max)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_finditerator">[m#] findIterator</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_finditerator">findIterator()</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_uiobjectiterator">UiObjectIterator</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_findone">[m#] findOne</a></span><ul>
@@ -943,6 +954,7 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_select">[m#] select</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiselectortype_select">select()</a></span></li>
+<li><span class="stability_undefined"><a href="#uiselectortype_select_syntax">select(syntax)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_expand">[m#] expand</a></span><ul>
@@ -4736,7 +4748,7 @@ let wC = sel.findOnce(4);
 <p>相当于 <code>UiSelector#findOnce() !== null</code>.</p>
 <h2>[m#] find<span><a class="mark" href="#uiselectortype_m_find" id="uiselectortype_m_find">#</a></span></h2>
 <h3>find()<span><a class="mark" href="#uiselectortype_find" id="uiselectortype_find">#</a></span></h3>
-<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>
+<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectCollectionType.html">UiObjectCollection</a></span> }</li>
 </ul>
@@ -4752,6 +4764,64 @@ let wc = sel.find();
 wc.forEach(w =&gt; console.log(w.centerY()));
 </code></pre>
 <p>上述示例中, <code>wc</code> 表示符合筛选条件的控件集合.</p>
+<h3>find(max)<span><a class="mark" href="#uiselectortype_find_max" id="uiselectortype_find_max">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>max</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 结果数量限制</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectCollectionType.html">UiObjectCollection</a></span> }</li>
+</ul>
+<p>限制结果数量的单次筛选: <code>max</code> 为正数时最多保留前 <code>max</code> 个符合条件的控件, 为负数时保留最后 <code>-max</code> 个.</p>
+<pre><code class="lang-js">let first3 = className(&#39;TextView&#39;).find(3); /* 至多 3 个. */
+let last1 = className(&#39;TextView&#39;).find(-1); /* 最后 1 个. */
+</code></pre>
+<h2>[m#] findIterator<span><a class="mark" href="#uiselectortype_m_finditerator" id="uiselectortype_m_finditerator">#</a></span></h2>
+<h3>findIterator()<span><a class="mark" href="#uiselectortype_finditerator" id="uiselectortype_finditerator">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#uiselectortype_uiobjectiterator">UiObjectIterator</a></span> }</li>
+</ul>
+<p>惰性筛选: 返回一个迭代器, 按 <a href="#uiselectortype_m_find">find</a> 的顺序在迭代器前进时逐步搜索控件树, 每次 <code>next()</code> 产出一个符合筛选条件的控件.<br>
+提前停止 (在 <code>for...of</code> 中 <code>break</code>, 或调用 <code>close()</code>) 时不再遍历控件树的其余部分, 因此适合 &quot;找到第一个满足额外条件的控件就停&quot; 的场景.</p>
+<p>特性:</p>
+<ul>
+<li>阻塞筛选 - [ × ]</li>
+<li>集合结果 - [ × ] (逐个产出)</li>
+</ul>
+<p>单次搜索, 不轮询, 在调用线程上执行, 不计入 <a href="automator.html#automator_p_stats">auto.stats</a>.</p>
+<pre><code class="lang-js">/* 找到第一个在屏幕下半部分且可点击的控件即停止. */
+for (let w of className(&#39;TextView&#39;).findIterator()) {
+    if (w.clickable() &amp;&amp; w.centerY() &gt; device.height / 2) {
+        w.click();
+        break; /* 其余节点不再遍历. */
+    }
+}
+
+/* 手动迭代. */
+let it = text(&#39;item&#39;).findIterator();
+while (it.hasNext()) {
+    let w = it.next();
+    console.log(w.bounds());
+}
+console.log(it.visited, it.produced); /* 已访问的节点数, 已产出的匹配数. */
+</code></pre>
+<h4>UiObjectIterator<span><a class="mark" href="#uiselectortype_uiobjectiterator" id="uiselectortype_uiobjectiterator">#</a></span></h4>
+<p><code>findIterator()</code> 返回的迭代器对象, 可直接用于 <code>for...of</code>:</p>
+<ul>
+<li><strong>hasNext()</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否还有下一个匹配 (需要时继续搜索)</li>
+<li><strong>next()</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 下一个匹配, 没有时抛出异常</li>
+<li><strong>collect()</strong> { <span class="type"><a href="uiObjectCollectionType.html">UiObjectCollection</a></span> } - 其余全部匹配组成的控件集合 (走完搜索)</li>
+<li><strong>toList()</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarraylist">JavaArrayList</a>&lt;<a href="uiObjectType.html">UiObject</a>&gt;</span> } - 其余全部匹配组成的列表 (走完搜索)</li>
+<li><strong>close()</strong> - 提前结束搜索, 释放尚未到达的节点</li>
+<li><strong>visited</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 至今访问过的节点数</li>
+<li><strong>produced</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 至今产出的匹配数</li>
+<li><strong>isClosed()</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否已结束 (走完或已关闭)</li>
+<li><strong>toString()</strong> - 如 <code>UiObjectIterator(visited=120, produced=3)</code></li>
+</ul>
+<pre><code class="lang-js">let it = className(&#39;Button&#39;).findIterator();
+let firstTwo = [ it.next(), it.next() ];
+let rest = it.collect(); /* 其余按钮. */
+console.log(it.isClosed()); // true
+</code></pre>
 <h2>[m#] findOne<span><a class="mark" href="#uiselectortype_m_findone" id="uiselectortype_m_findone">#</a></span></h2>
 <h3>findOne(timeout)<span><a class="mark" href="#uiselectortype_findone_timeout" id="uiselectortype_findone_timeout">#</a></span></h3>
 <p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
@@ -4770,6 +4840,11 @@ let w = sel.findOne(3e3); /* 3000 毫秒, 即 3 秒. */
 console.log(w.centerY());
 </code></pre>
 <p>上述示例中, <code>w</code> 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.</p>
+<blockquote>
+<p>注: <code>timeout</code> 为 0 或负数时不限时, 与 <a href="#uiselectortype_m_untilfindone">untilFindOne</a> 相同, 可能导致脚本 <strong>永久阻塞</strong>.<br>
+轮询间隔为 50 毫秒; 启用 <a href="automator.html#automator_m_setflags">eventAssistedPolling</a> 标志后, 两次尝试之间改为由无障碍事件唤醒.<br>
+不阻塞的异步形式见 <a href="flow.html#flow_m_wait">waitAsync</a> / <a href="flow.html">流程 (Flow)</a>.</p>
+</blockquote>
 <h3>findOne()<span><a class="mark" href="#uiselectortype_findone" id="uiselectortype_findone">#</a></span></h3>
 <p><strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong> <strong><code>DEPRECATED</code></strong></p>
 <ul>
@@ -5123,12 +5198,37 @@ pickup({
 <p>上述示例虽然使用了集合筛选, 但得到的控件集合中往往只有一个控件.</p>
 <h2>[m#] select<span><a class="mark" href="#uiselectortype_m_select" id="uiselectortype_m_select">#</a></span></h2>
 <h3>select()<span><a class="mark" href="#uiselectortype_select" id="uiselectortype_select">#</a></span></h3>
-<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>
+<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否行为已全部执行且执行过程中无异常</li>
 </ul>
 <p>根据选择器条件, 使用 <a href="#uiselectortype_m_untilfind">untilFind</a> 筛选得到控件集合, 对集合执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_select">[ 选中 ] 行为</a>.</p>
 <p>因 <a href="#uiselectortype">选择器行为</a> 存在潜在的永久阻塞风险且全局行为缺少针对性, 因此此方法不建议使用.</p>
+<h3>select(syntax)<span><a class="mark" href="#uiselectortype_select_syntax" id="uiselectortype_select_syntax">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<ul>
+<li><strong>syntax</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 字符串选择器</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> } - 追加了条件的选择器自身</li>
+</ul>
+<p>字符串选择器语法: 解析 <code>syntax</code> 中的条件并追加到当前选择器, 返回选择器自身 (可继续链式调用 <code>findOne</code> 等). 全局形式 <code>select(&#39;...&#39;)</code> 以空选择器开始.</p>
+<p>语法为以空白分隔的若干条件:</p>
+<ul>
+<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\&quot;</code>, <code>\\</code>, <code>\n</code>, <code>\t</code> 转义); 多参数的键以逗号分隔值, 如 <code>bounds=0,0,100,200</code></li>
+<li><code>key~=regex</code> 或 <code>key=/regex/flags</code> - 字符串属性的正则匹配 (对应 <code>keyMatch</code>), 如 <code>text~=^登.录$</code>, <code>desc=/close/i</code></li>
+<li><code>key</code> / <code>!key</code> - 布尔属性为 <code>true</code> / <code>false</code>, 如 <code>clickable</code>, <code>!enabled</code></li>
+</ul>
+<p><code>key</code> 为选择器的筛选器名称 (如 <code>text</code>, <code>desc</code>, <code>id</code>, <code>className</code>, <code>clickable</code>, <code>depth</code> 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 <code>Invalid selector string at 8 in &quot;text=登录 clikable&quot;: unknown key &quot;clikable&quot;; did you mean clickable?</code>.</p>
+<pre><code class="lang-js">select(&#39;text=登录 clickable&#39;).findOne(5e3);
+select(&#39;className=android.widget.EditText !password&#39;).findOnce();
+select(&#39;id=/item_\\d+/ depth=8&#39;).find();
+select(&#39;desc=&quot;Open menu&quot;&#39;).exists();
+
+/* 追加到已有选择器. */
+className(&#39;Button&#39;).select(&#39;text=确定 enabled&#39;).findOnce();
+</code></pre>
+<blockquote>
+<p>注: <a href="#uiselectortype_m_pickup">pickup</a>, <a href="global.html#global_m_wait">wait</a> 与 <a href="flow.html">Flow</a> 的条件参数中, 字符串仍是内容匹配 (<code>content(&#39;...&#39;)</code>), 需要字符串选择器语法时显式传入 <code>select(&#39;...&#39;)</code>.</p>
+</blockquote>
 <h2>[m#] expand<span><a class="mark" href="#uiselectortype_m_expand" id="uiselectortype_m_expand">#</a></span></h2>
 <h3>expand()<span><a class="mark" href="#uiselectortype_expand" id="uiselectortype_expand">#</a></span></h3>
 <p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>
@@ -5704,6 +5804,10 @@ descContains(&#39;&#39;); /* 可匹配 w, 但通常无实际意义. */
 descContains(&#39;app&#39;); /* 不可匹配 w. */
 descContains(/LEN/i); /* 可匹配 w. */
 </code></pre>
+<blockquote>
+<p>注: 字符串参数为字面子串, 不作为正则表达式解释: <code>textContains(&#39;.&#39;)</code> 只匹配含点号的文本, <code>textContains(&#39;(&#39;)</code> 不会报错, <code>textContains(&#39;/re/i&#39;)</code> 匹配字面的 <code>/re/i</code>.<br>
+需要正则匹配时, 传入正则表达式参数 (如 <code>textContains(/re/i)</code>) 或使用 <a href="#uiselectortype_xxxmatches">xxxMatches</a>.</p>
+</blockquote>
 <h2>xxxMatches<span><a class="mark" href="#uiselectortype_xxxmatches" id="uiselectortype_xxxmatches">#</a></span></h2>
 <p>正则全匹配筛选器.</p>
 <p>筛选条件为 <a href="dataTypes.html#datatypes_string">字符串</a> 类型或 <a href="dataTypes.html#datatypes_regexp">正则表达式</a> 类型, 按正则表达式规则完全匹配控件属性串值.</p>

@@ -1459,6 +1459,52 @@ console.log(contentMatch(/.+/).depth()); /* e.g. 5 */
     - `[m#]` [scrollTo](uiObjectActionsType#m-scrollto)
     - `[m#]` [scrollUp](uiObjectActionsType#m-scrollup)
 
+## [m#] contentInvalid
+
+### contentInvalid()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回控件内容是否被标记为无效 (如未通过校验的输入框), 对应 [AccessibilityNodeInfo#isContentInvalid](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContentInvalid()).
+
+同名选择器筛选器 `contentInvalid()` 用于筛选此类控件.
+
+## [m#] contextClickable
+
+### contextClickable()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回控件是否可上下文点击 (如鼠标右键或触控笔按钮), 对应 [AccessibilityNodeInfo#isContextClickable](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isContextClickable()).
+
+> 参阅: [contextClick](#m-contextclick) 控件行为.
+
+## [m#] multiLine
+
+### multiLine()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回控件是否为多行文本控件, 对应 [AccessibilityNodeInfo#isMultiLine](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isMultiLine()).
+
+## [m#] dismissable
+
+### dismissable()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回控件是否可被关闭 (如可滑动移除的通知或提示条), 对应 [AccessibilityNodeInfo#isDismissable](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo#isDismissable()).
+
+> 参阅: [dismiss](#m-dismiss) 控件行为.
+
 ## [m#] editable
 
 ### editable()
@@ -2066,6 +2112,133 @@ console.log(w.hasAction("CLICK", "FOCUS", "SET_TEXT")); /* ACTION_ 前缀可省�
 
 控件节点执行 [[ 设置进度值 ] 行为](uiObjectActionsType#m-setprogress).
 
+## [m#] isStale
+
+### isStale()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+返回控件是否已失效 (离开了窗口): 以其副本尝试刷新, 刷新失败即失效. 失效控件的属性停留在过去的值, 对它执行的行为不再作用于任何视图.
+
+控件本身不会被刷新; 需要最新状态时调用 `refresh()`.
+
+```js
+let w = text('加载中').findOnce();
+w.click();
+sleep(2e3);
+console.log(w.isStale()); /* 控件已随页面变化消失时为 true. */
+```
+
+## [m#] waitUntilGone
+
+### waitUntilGone(timeout?, interval?)
+
+**`6.8.0`** **`A11Y`** **`Non-UI`**
+
+- **[ timeout = `10000` ]** { [number](dataTypes#number) } - 超时 (毫秒), 0 或负数表示不限时
+- **[ interval = `50` ]** { [number](dataTypes#number) } - 轮询间隔 (毫秒), 不能为负数
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否在时限内消失
+
+阻塞等待控件消失: 不能再刷新, 或刷新后对用户不可见 (如已关闭的对话框, 已完成的进度条). 超时返回 `false`.
+
+`timeout` 为 0 或负数时可能导致脚本 **永久阻塞**. 启用 [eventAssistedPolling](automator#m-setflags) 标志后, 两次尝试之间由无障碍事件唤醒. 不能在 UI 线程调用.
+
+```js
+let dialog = id('progress_dialog').findOne(3e3);
+if (dialog && dialog.waitUntilGone(30e3)) {
+    console.log('对话框已关闭');
+}
+```
+
+> 参阅: 不阻塞的异步形式 [flow.waitForHidden](flow#m-waitforhidden).
+
+## [m#] waitForStable
+
+### waitForStable(stableFor?, timeout?, interval?)
+
+**`6.8.0`** **`A11Y`** **`Non-UI`**
+
+- **[ stableFor = `500` ]** { [number](dataTypes#number) } - 判定为稳定所需的无变化时长 (毫秒), 不能为负数
+- **[ timeout = `10000` ]** { [number](dataTypes#number) } - 超时 (毫秒), 0 或负数表示不限时
+- **[ interval = `50` ]** { [number](dataTypes#number) } - 采样间隔 (毫秒)
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否在时限内稳定
+
+阻塞等待控件自身状态 (边界, 文本, 描述, 类名, 子控件数与关键标志, 即 [fingerprint](#m-fingerprint)) 连续 `stableFor` 毫秒无变化. 每次采样都会刷新本控件, 因此返回时控件反映的是稳定后的状态.
+
+超时返回 `false`; 控件在等待期间消失时立即返回 `false`. 不能在 UI 线程调用; 事件辅助同 [waitUntilGone](#m-waituntilgone).
+
+```js
+let list = className('RecyclerView').findOne(5e3);
+if (list.waitForStable(800, 10e3)) {
+    console.log(list.childCount()); /* 列表已停止变化. */
+}
+```
+
+> 参阅: 不阻塞的异步形式 [flow.waitForStable](flow#m-waitforstable).
+
+## [m#] fingerprint
+
+### fingerprint()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+返回控件自身状态 (边界, 文本, 描述, 类名, 子控件数, 关键布尔属性) 的哈希值, 用于低成本地判断控件在两次读取之间是否变化. [waitForStable](#m-waitforstable) 与 [Flow](flow) 的稳定检测默认以它比较.
+
+```js
+let w = id('counter').findOnce();
+let before = w.fingerprint();
+sleep(1e3);
+w.refresh();
+console.log(w.fingerprint() !== before); /* 控件是否变化. */
+```
+
+## [m#] toJSON
+
+### toJSON(key?)
+
+**`6.8.0`** **`A11Y`**
+
+- **[ key ]** { [string](dataTypes#string) } - `JSON.stringify` 传入的键, 忽略
+- <ins>**returns**</ins> { [Object](dataTypes#object) } - 控件自身属性构成的普通对象
+
+返回控件自身常用属性 (文本, 描述, 类名, 包名, 边界, 各布尔状态等) 构成的 JavaScript 对象, 不包含子控件. `JSON.stringify(w)` 会自动调用此方法.
+
+```js
+let w = text('登录').findOnce();
+console.log(JSON.stringify(w));
+console.log(w.toJSON().bounds);
+```
+
+> 参阅: 含子控件的导出见 [dumpSubtree](#m-dumpsubtree).
+
+## [m#] dumpSubtree
+
+### dumpSubtree(options?)
+
+**`6.8.0`** **`A11Y`**
+
+- **[ options ]** { `'text'` \| `'json'` \| `'xml'` \| {{
+    - format?: `'text'` \| `'json'` \| `'xml'`
+    - maxDepth?: [number](dataTypes#number)
+    - properties?: [string](dataTypes#string) \| [string](dataTypes#string)[]
+    - visibleOnly?: [boolean](dataTypes#boolean)
+    - maxNodes?: [number](dataTypes#number)
+    - indent?: [string](dataTypes#string) \| [number](dataTypes#number)
+- }} } - 格式名称或选项
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+导出以本控件为根的子树, 选项与 [auto.dump](automator#m-dump) 相同 (不接受 `root`).
+
+```js
+let panel = id('login_panel').findOnce();
+console.log(panel.dumpSubtree({ maxDepth: 2 }));
+files.write('/sdcard/panel.json', panel.dumpSubtree('json'));
+```
+
 ## [m#] compass
 
 ### compass(compassArg)
@@ -2277,6 +2450,9 @@ if (temp !== null && temp.clickable()) {
     temp.click();
 }
 ```
+
+> 注: 6.8.0 起, `k` 段在给定层级内没有找到可点击控件时返回 `null` (此前返回控件自身), 因此只需判断 `temp !== null`.<br>
+> 更完整的 "点击不可点击控件" 方案 (上溯失败时回退到手势点按, 可校验结果) 见 [smartClick](automator#m-smartclick).
 
 将上述示例用 [拾取选择器](uiSelectorType#m-pickup) 表示:
 

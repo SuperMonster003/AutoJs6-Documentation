@@ -18,6 +18,10 @@ RootAutomator 通过 Root 权限向设备输入系统写入触摸事件, 可执�
 
 可调用对象 `auto` 用于管理无障碍服务状态, 自动化模式, 事件配置, 窗口过滤器及窗口根节点. 本页后半部分以临时作用域对象 `auto` 列出其成员; 选择器和控件节点的独立参考见 [UiSelector](uiSelectorType) 与 [UiObject](uiObjectType).
 
+## 工具集与事件驱动等待
+
+6.8.0 新增的 [工具集](#工具集-toolkit) 提供智能点击, 滚动查找, 文本输入, 弹窗关闭, 列表采集, 应用切换与开关切换等高阶自动化函数; [事件驱动等待](#事件驱动等待) 提供基于无障碍事件的界面空闲, 事件, Toast 与通知等待. 两者都同时具备同步形式 (全局函数与 `automator.*`) 与 [Flow](flow) 形式.
+
 ## 选择器 (UiSelector)
 
 UiSelector (选择器), 亦可看作是 [控件节点](uiObjectType) 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 `控件节点`, 并做进一步处理, 如 [ 执行 [控件行为](uiObjectActionsType) (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 [控件层级](glossaries#控件层级) 中进行 [罗盘](uiObjectType#m-compass) 导航 ] 等.
@@ -40,9 +44,11 @@ UiObjectCollection 代表 [控件节点 (UiObject)](uiObjectType) 的对象集�
 
 **`6.1.0`**
 
-- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 当前进程中是否存在无障碍服务实例
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 无障碍服务是否已启用且当前进程中存在服务实例
 
-此方法只检查服务实例, 不检查系统设置中的启用状态. 如需同时检查两种状态, 使用 [auto.isRunning](#auto-isrunning).
+与 [auto.isRunning](#auto-isrunning) 语义一致: 系统设置中已启用 AutoJs6 无障碍服务, 且当前进程中存在服务实例.
+
+> 注: 6.8.0 之前此方法只检查服务实例, 不检查系统设置中的启用状态.
 
 ## automator.ensureService()
 
@@ -729,6 +735,7 @@ auto();
     - hasService: [boolean](dataTypes#boolean);
     - isRunning: [boolean](dataTypes#boolean);
     - isOperational: [boolean](dataTypes#boolean);
+    - adoptedByEvent: [boolean](dataTypes#boolean);
 - }}
 
 返回无障碍服务状态快照. 每次读取都会创建一个新对象:
@@ -737,6 +744,7 @@ auto();
 - `hasService` 表示系统设置中是否已启用 AutoJs6 无障碍服务
 - `isRunning` 表示 `hasInstance` 和 `hasService` 是否同时为 `true`
 - `isOperational` 表示服务已运行, 且当前进程已确认服务可工作
+- `adoptedByEvent` (**`6.8.0`**) 表示当前服务实例是否由先于连接回调到达的无障碍事件采纳而来. 正常连接时为 `false`; 为 `true` 说明系统在 `onServiceConnected` 之前就开始投递事件, 服务由事件确认为可用
 
 ```js
 let state = auto.state;
@@ -764,7 +772,7 @@ console.log(state.hasService, state.isOperational);
 
 - <ins>**returns**</ins> { [string](dataTypes#string) } - 最近识别的前台应用包名, 未识别时为空字符串
 
-返回无障碍运行时最近记录的应用包名. 结果是否依赖无障碍服务受 [auto.setFlags](#auto-setflags-flags) 配置影响.
+返回无障碍运行时最近记录的应用包名. 结果是否依赖无障碍服务受 [auto.setFlags](#m-setflags) 配置影响.
 
 ## auto.currentActivity()
 
@@ -812,6 +820,34 @@ auto.registerEvent('view_clicked', {
         console.log(event.packageName, event.source);
     },
 });
+```
+
+> 注: 在 API 33 以下的设备上, 系统会在回调返回后回收事件对象, 因此 `source` 需要在回调期间读取, 回调返回后再读取得到 `null`. API 33 及以上没有此限制.
+
+### registerEvent(name, listener, options)
+
+**`6.8.0`** **`A11Y`**
+
+- **name** { [string](dataTypes#string) } - 无障碍事件名称
+- **listener** { [Function](dataTypes#function) | {{ onAccessibilityEvent(event: [Object](dataTypes#object)): [void](dataTypes#void) }} } - 事件监听器
+- **options** {{
+    - distinct?: `'window'` \| `'source'` \| `true` \| [(event) => any](dataTypes#function)
+    - within?: [number](dataTypes#number)
+    - debounce?: [number](dataTypes#number)
+- }} - 过滤选项
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+带过滤选项的注册, 用于抑制密集重复的事件:
+
+- `distinct` - 在 `within` 毫秒内 (默认 `500`) 丢弃与上一次投递的事件 "键" 相同的事件. `'window'` 以包名 + 类名为键, `'source'` 另加来源节点, `true` 同 `'window'`, 函数则以其返回值为键
+- `debounce` - 一串密集事件在该毫秒数内没有新事件到达后, 只投递其中最后一个
+
+```js
+/* 同一窗口的内容变化 1 秒内只处理一次. */
+auto.registerEvent('window_content_changed', e => console.log(e.packageName), { distinct: 'window', within: 1e3 });
+
+/* 滚动停止 300 毫秒后处理一次. */
+auto.registerEvent('view_scrolled', e => console.log('滚动结束'), { debounce: 300 });
 ```
 
 ## [m] registerEvents
@@ -863,19 +899,26 @@ auto.registerEvent('view_clicked', {
 * `fast` 快速模式. 该模式下会启用控件缓存, 从而选择器获取屏幕控件更快. 对于需要快速的控件查看和操作的脚本可以使用该模式, 一般脚本则没有必要使用该函数.
 * `normal` 正常模式, 默认.
 
-## auto.setFlags(flags)
+## [m] setFlags
 
-**[v4.1.0 新增]**
+### setFlags(flags)
 
-- **flags** { [string](dataTypes#string) } | { [Array](dataTypes#array) } 一些标志, 来启用和禁用某些特性, 包括:
-    * `findOnUiThread` 使用该特性后, 选择器搜索时会在主进程进行. 该特性用于解决线程安全问题导致的次生问题, 不过目前貌似已知问题并不是线程安全问题.
-    * `useUsageStats` 使用该特性后, 将会以 "使用情况统计" 服务的结果来检测当前正在运行的应用包名 (需要授予 "查看使用情况统计" 权限). 如果觉得 currentPackage() 返回的结果不太准确, 可以尝试该特性.
-    * `useShell` 使用该特性后, 将使用 shell 命令获取当前正在运行的应用的包名, 活动名称, 但是需要 root 权限.
+**`A11Y?`**
 
-启用有关 automator 的一些特性. 例如:
+- **flags** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 一个或多个标志名
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-```
-auto.setFlags(["findOnUiThread", "useShell"]);
+设置 automator 的特性标志. 每次调用以给出的标志集合替换之前的设置, 未知的标志名抛出异常.
+
+- `findOnUiThread` - 选择器搜索在主线程进行
+- `useUsageStats` - 以 "使用情况统计" 服务的结果确定当前应用包名 (需要授予 "查看使用情况统计" 权限). 如果 [currentPackage()](global#m-currentpackage) 的结果不准确, 可尝试此标志
+- `useShell` - 以 shell 命令获取当前应用的包名与活动名称 (需要 root 权限)
+- `appWindowsFallback` (**`6.8.0`**) - 系统暂未提供活动窗口根节点时 (如服务刚绑定后; API 26 上可能持续到下一次窗口变化), 以窗口列表中应用窗口的根节点代替 (焦点窗口优先, 其次活动窗口). 默认关闭, 此时查询返回空结果
+- `eventAssistedPolling` (**`6.8.0`**) - 重复的选择器查询 (如 [findOne(timeout)](uiSelectorType#m-findone), [wait](global#m-wait)), 节点等待 ([waitUntilGone](uiObjectType#m-waituntilgone) 等) 与 [Flow](flow) 等待在两次尝试之间休眠到无障碍事件到达为止, 而非固定间隔. 通常能更早发现目标并减少无效查询. 默认关闭
+
+```js
+auto.setFlags([ 'findOnUiThread', 'useShell' ]);
+auto.setFlags('eventAssistedPolling');
 ```
 
 ## auto.service
@@ -935,37 +978,59 @@ auto.setFlags(["findOnUiThread", "useShell"]);
 
 当前活跃的窗口 (获取到焦点, 正在触摸的窗口) 的布局根元素. 如果无障碍服务未启动则为 `null`.
 
-## auto.setWindowFilter(filter)
+## [m] setWindowFilter
 
-**[v4.1.0 新增]**
+### setWindowFilter(filter?)
 
-- **filter** { [Function](dataTypes#function) } 参数为窗口 ([AccessibilityWindowInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/)), 返回值为 Boolean 的函数.
+**`A11Y`**
 
-设置窗口过滤器. 这个过滤器可以决定哪些窗口是目标窗口, 并影响选择器的搜索. 例如, 如果想要选择器在所有窗口 (包括状态栏, 输入法等) 中搜索, 只需要使用以下代码:
+- **[ filter ]** { [(window: AccessibilityWindowInfo) => boolean](dataTypes#function) \| [WindowFilter](#窗口过滤器对象-windowfilter) \| [boolean](dataTypes#boolean) \| [null](dataTypes#null) } - 窗口过滤器
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
+设置窗口过滤器. 过滤器决定哪些窗口是选择器的搜索目标, 同时影响 [auto.root](#auto-root) 与 [auto.windowRoots](#auto-windowroots) 的结果.
+
+- 函数: 参数为窗口 ([AccessibilityWindowInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/)), 返回真值表示搜索该窗口
+- 对象 (**`6.8.0`**): [窗口过滤器对象](#窗口过滤器对象-windowfilter), 按窗口类型, 包名, 标题等属性匹配
+- `true`: 搜索全部窗口 (包括状态栏, 输入法, 悬浮窗等); `false`: 不搜索任何窗口, 选择器结果为空
+- 省略或 `null`: 同 `true`
+
+选择器默认只在当前活动窗口 (获得焦点或正在触摸的窗口) 中搜索, 不搜索悬浮窗, 状态栏等; 设置过滤器后, 在通过过滤器的全部窗口中搜索, 且 [auto.root](#auto-root) 为其中首个有根节点的窗口的根节点.
+
+```js
+/* 在全部窗口中搜索. */
+auto.setWindowFilter(window => true);
+auto.setWindowFilter(true); /* 同上. */
+
+/* 分屏时只搜索 QQ 的窗口 (应用窗口的 title 即应用名称). */
+auto.setWindowFilter(window => window.title == 'QQ');
+auto.setWindowFilter({ title: 'QQ' }); /* 同上. */
+
+/* 只搜索输入法窗口. */
+auto.setWindowFilter({ type: 'inputMethod' });
 ```
-auto.setWindowFilter(function(window){
-    // 不管是如何窗口, 都返回 true, 表示在该窗口中搜索.
-    return true;
-});
+
+> 注: 只需一次性地在某些窗口中查找时, 可用 [auto.findWindowRoots](#m-findwindowroots) 取得根节点, 再用节点的 [find](uiObjectType#m-find) 等方法, 不必改变全局的窗口过滤器.
+
+## 窗口过滤器对象 (WindowFilter)
+
+**`6.8.0`**
+
+用于 [auto.setWindowFilter](#m-setwindowfilter), [auto.findWindows](#m-findwindows) 与 [auto.findWindowRoots](#m-findwindowroots) 的窗口匹配条件. 给出的键全部满足时窗口通过; 未知的键抛出异常.
+
+- **[ type ]** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 窗口类型名, 一个或多个: `'application'`, `'inputMethod'`, `'system'`, `'accessibilityOverlay'`, `'splitScreenDivider'`, `'magnificationOverlay'` (不区分大小写, 也接受下划线写法如 `'input_method'`)
+- **[ packageName ]** { [string](dataTypes#string) \| [RegExp](dataTypes#regexp) } - 包名, 字符串整体匹配, 正则表达式搜索匹配
+- **[ title ]** { [string](dataTypes#string) \| [RegExp](dataTypes#regexp) } - 窗口标题, 匹配规则同上
+- **[ displayId ]** { [number](dataTypes#number) } - 显示屏 ID
+- **[ active ]** { [boolean](dataTypes#boolean) } - 是否活动窗口
+- **[ focused ]** { [boolean](dataTypes#boolean) } - 是否焦点窗口
+- **[ id ]** { [number](dataTypes#number) } - 窗口 ID
+- **[ layer ]** { [number](dataTypes#number) } - 窗口层级
+
+```js
+auto.findWindows({ type: 'application', packageName: /settings/ });
+auto.findWindows({ type: [ 'system', 'accessibilityOverlay' ] });
+auto.findWindows({ focused: true });
 ```
-
-又例如, 当前使用了分屏功能, 屏幕上有 AutoJs6 和 QQ 两个应用, 但我们只想选择器对 QQ 界面进行搜索, 则:
-
-```
-auto.setWindowFilter(function(window){
-    // 对于应用窗口, 他的 title 属性就是应用的名称, 因此可以通过 title 属性来判断一个应用.
-    return window.title == "QQ";
-});
-```
-
-选择器默认是在当前活跃的窗口中搜索, 不会搜索诸如悬浮窗, 状态栏之类的, 使用 WindowFilter 则可以控制搜索的窗口.
-
-需要注意的是, 如果 WindowFilter 返回的结果均为 false, 则选择器的搜索结果将为空.
-
-另外 setWindowFilter 函数也会影响 `auto.windowRoots` 的结果.
-
-该函数需要 Android 5.0 以上才有效.
 
 ## auto.windowRoots
 
@@ -976,6 +1041,177 @@ auto.setWindowFilter(function(window){
 返回当前被 WindowFilter 过滤的窗口的布局根元素组成的数组.
 
 如果系统是 Android 5.0 以下, 则始终返回当前活跃的窗口的布局根元素的数组.
+
+## [m] findWindows
+
+### findWindows(filter?)
+
+**`6.8.0`** **`A11Y`**
+
+- **[ filter ]** { [WindowFilter](#窗口过滤器对象-windowfilter) } - 窗口过滤器对象
+- <ins>**returns**</ins> { [AccessibilityWindowInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityWindowInfo/)[] } - 通过过滤器的窗口, 按系统给出的顺序
+
+按过滤器对象筛选当前全部窗口. 省略参数时返回全部窗口 (同 [auto.windows](#auto-windows)). 不受 [auto.setWindowFilter](#m-setwindowfilter) 影响.
+
+```js
+auto.findWindows({ type: 'application' }).forEach(w => console.log(w.getTitle(), w.getId()));
+```
+
+## [m] findWindowRoots
+
+### findWindowRoots(filter?)
+
+**`6.8.0`** **`A11Y`**
+
+- **[ filter ]** { [WindowFilter](#窗口过滤器对象-windowfilter) } - 窗口过滤器对象
+- <ins>**returns**</ins> { [UiObject](uiObjectType)[] } - 通过过滤器且有根节点的窗口的根节点
+
+[auto.findWindows](#m-findwindows) 的窗口根节点数组, 没有根节点的窗口被跳过. 与 [auto.windowRoots](#auto-windowroots) 不同, 不受 [auto.setWindowFilter](#m-setwindowfilter) 影响.
+
+```js
+/* 在输入法窗口中查找候选词. */
+let [ imeRoot ] = auto.findWindowRoots({ type: 'inputMethod' });
+if (imeRoot) {
+    console.log(imeRoot.find(text('候选')).length);
+}
+```
+
+## [m] wait
+
+### wait(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y?`**
+
+### wait(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[flow.wait](flow#m-wait) 的别名: 异步等待选择器, 函数, 节点, Flow 或 Promise, 立即返回 [Flow](flowType) 对象. 参数见 [流程 (Flow)](flow).
+
+> 注: 与 [auto.waitFor](#auto-waitfor) (等待无障碍服务启动) 无关.
+
+```js
+auto.wait('登录', 5e3).click();
+```
+
+## [m] explain
+
+### explain(selector, root?)
+
+**`6.8.0`** **`A11Y`**
+
+- **selector** { [UiSelector](uiSelectorType) \| [PickupSelector](dataTypes#pickupselector) } - 待解释的选择器
+- **[ root ]** { [UiObject](uiObjectType) } - 遍历的根节点, 默认为各窗口根节点
+- <ins>**returns**</ins> {{
+    - selector: [string](dataTypes#string)
+    - roots: [number](dataTypes#number)
+    - nodes: [number](dataTypes#number)
+    - truncated: [boolean](dataTypes#boolean)
+    - found: [boolean](dataTypes#boolean)
+    - count: [number](dataTypes#number)
+    - failingIndex: [number](dataTypes#number)
+    - failingFilter: [string](dataTypes#string) \| [null](dataTypes#null)
+    - steps: { index: [number](dataTypes#number), filter: [string](dataTypes#string), matched: [number](dataTypes#number), cumulative: [number](dataTypes#number) }[]
+    - matches: [UiObject](uiObjectType)[]
+    - nearMisses: [UiObject](uiObjectType)[]
+    - text: [string](dataTypes#string)
+- }} - 解释结果
+
+解释一个选择器为何匹配或不匹配: 遍历根节点之下的全部节点 (`nodes` 为节点数, `roots` 为根节点数, 超出预算时 `truncated` 为 `true`), 对选择器的每个过滤器分别统计单独匹配数 (`matched`) 与逐步叠加后的匹配数 (`cumulative`), 找出首个把候选集合清空的过滤器 (`failingIndex` 从 0 计, `-1` 表示没有; `failingFilter` 为其文本), 并给出前若干个匹配节点 (`matches`) 与 "差一点" 的节点 (`nearMisses`: 通过失败步骤之前全部过滤器的节点).
+
+`text` (也是结果的 `toString()`) 为文本报告, 适合直接输出到控制台.
+
+```js
+let r = auto.explain(text('登录').clickable().depth(12));
+console.log(r.found, r.failingFilter); /* false clickable() */
+console.log(r.text);
+/*
+selector text("登录").clickable().depth(12): no match (356 node(s) in 1 root(s))
+  1. text("登录")  matched 1, cumulative 1
+  2. clickable()   matched 40, cumulative 0  <- nothing left
+  3. depth(12)     matched 20, cumulative 0
+near misses (pass step 1, fail step 2):
+  - TextView(登录) ...
+*/
+
+/* 字符串或对象选择器同样可用. */
+console.log(auto.explain({ text: '登录', clickable: true }).text);
+```
+
+## [m] dump
+
+### dump(options?)
+
+**`6.8.0`** **`A11Y`**
+
+- **[ options ]** { `'text'` \| `'json'` \| `'xml'` \| {{
+    - root?: [UiObject](uiObjectType)
+    - format?: `'text'` \| `'json'` \| `'xml'`
+    - maxDepth?: [number](dataTypes#number)
+    - properties?: [string](dataTypes#string) \| [string](dataTypes#string)[]
+    - visibleOnly?: [boolean](dataTypes#boolean)
+    - maxNodes?: [number](dataTypes#number)
+    - indent?: [string](dataTypes#string) \| [number](dataTypes#number)
+- }} } - 格式名称或选项
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 控件树文本
+
+导出控件树: 各窗口根节点 (或 `root`) 之下的全部节点, 以文本 (默认; 每行一个节点, 缩进表示层级), JSON (嵌套对象, 子节点在 `children` 中) 或 XML (uiautomator 风格) 输出.
+
+- `maxDepth` - 最大深度, 负数或 `Infinity` 表示不限 (默认不限)
+- `properties` - 输出的属性名称 (一个或数组), 默认为常用属性集
+- `visibleOnly` - 只输出对用户可见的节点 (默认 `false`)
+- `maxNodes` - 节点数上限, 超出时截断 (默认 `2000`, 须为正数)
+- `indent` - 缩进字符串, 或空格数 (不超过 16; 默认 2 个空格)
+
+```js
+console.log(auto.dump()); /* 文本格式. */
+files.write('/sdcard/window.xml', auto.dump('xml'));
+console.log(auto.dump({ root: id('list').findOnce(), maxDepth: 3, properties: [ 'text', 'bounds', 'clickable' ] }));
+```
+
+> 参阅: [UiObject#dumpSubtree](uiObjectType#m-dumpsubtree) 导出单个节点的子树.
+
+## [p] stats
+
+**`6.8.0`** **`Getter`**
+
+- {{
+    - since: [number](dataTypes#number)
+    - now: [number](dataTypes#number)
+    - elapsed: [number](dataTypes#number)
+    - searches: { count: [number](dataTypes#number), totalMillis: [number](dataTypes#number), averageMillis: [number](dataTypes#number), maxMillis: [number](dataTypes#number) }
+    - queries: { count: [number](dataTypes#number), found: [number](dataTypes#number), missed: [number](dataTypes#number), attempts: [number](dataTypes#number), totalMillis: [number](dataTypes#number), averageMillis: [number](dataTypes#number), maxMillis: [number](dataTypes#number) }
+    - selectors: { selector: [string](dataTypes#string), searches: [Object](dataTypes#object), queries: [Object](dataTypes#object), found: [number](dataTypes#number) }[]
+    - slowest: [Object](dataTypes#object) \| [null](dataTypes#null)
+    - steps: { name: [string](dataTypes#string), runs: [Object](dataTypes#object), rejected: [number](dataTypes#number) }[]
+    - text: [string](dataTypes#string)
+    - reset(): [void](dataTypes#void)
+- }}
+
+当前脚本的选择器与 Flow 统计快照 (每次读取生成新对象):
+
+- `searches` - 单次搜索 (一次控件树遍历) 的次数与耗时统计
+- `queries` - 查询 (一次 `findOne(timeout)` / `wait` 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计
+- `selectors` - 按最大搜索耗时降序的选择器列表, `slowest` 为其首项
+- `steps` - Flow 步骤按名称的运行次数 (`runs`, 含耗时统计) 与拒绝次数
+- `text` (也是 `toString()`) - 文本报告; `reset()` 清零统计
+
+```js
+/* ... 运行一段自动化后 ... */
+console.log(auto.stats.text);
+/*
+a11y stats since 10:21:05, elapsed 32.4 s
+searches: 128, total 1840 ms, average 14.4 ms, max 96 ms
+queries: 12 (found 11, missed 1, attempts 57), total 1602 ms, average 133.5 ms, max 512 ms
+slowest selectors (by max search time):
+  1. text("登录").clickable()  searches 40, total 820 ms, average 20.5 ms, max 96 ms; queries 3, found 3
+flow steps (by total time):
+  wait  runs 6, total 1402 ms, average 233.7 ms, max 512 ms, rejected 1
+*/
+auto.stats.reset();
+```
 
 # SimpleActionAutomator
 
@@ -1020,3 +1256,626 @@ SimpleActionAutomator 提供了一些模拟简单操作的函数, 例如点击�
 返回是否输入成功. 当找不到对应的文本框时返回 false.
 
 不加参数 i 则会把所有输入框的文本追加内容 text. 例如 `input("测试")`.
+
+# 工具集 (Toolkit)
+
+**`6.8.0`**
+
+工具集是一组面向真实应用界面的高阶自动化函数, 把 "查找目标, 处理不可点击的包装节点, 失败时回退到手势, 校验结果" 这类重复代码封装为一次调用.
+
+每个函数都有三种形式:
+
+- 同步形式: 全局函数或 `automator.` 前缀, 如 `smartClick('登录')` / `automator.smartClick('登录')`. 在调用线程上运行, 不能在 UI 线程调用; 失败时抛出 [FlowError](flowErrorType)
+- Flow 起点形式: `flow.smartClick('登录')`, 返回 [Flow](flowType), 见 [工具集起点](flow#工具集起点)
+- Flow 链式形式: `flow.wait('登录').smartClick()`, 以链上的值为目标, 见 [工具集步骤](flowType#工具集步骤)
+
+## 目标参数 (target)
+
+工具函数的 `target` (以及 `targets` 数组的每一项, `container`, `item`, `verify`, `cond` 等) 接受:
+
+- [PickupSelector](dataTypes#pickupselector) - 字符串 (内容匹配), 正则表达式, 选择器实例, 对象选择器或它们的数组
+- [UiObject](uiObjectType) - 已找到的节点 (使用前会刷新, 已失效的节点视为不存在)
+- [Function](dataTypes#function) - 返回节点, 节点集合或任意真值的函数 (在工具运行的线程上调用)
+
+候选目标数组 (`targets`) 不能为空, 也不能含 `null` 或 `undefined`.
+
+## 通用选项
+
+- **[ timeout = `0` ]** { [number](dataTypes#number) } - 查找目标的超时 (毫秒). 同步形式与 Flow 链式形式默认为 `0`, 即只查找一次; `flow.` 起点形式默认为 [flow.defaults](flow#m-defaults) 的超时. `Infinity` 表示不限时, 同步形式因此可能 **永久阻塞**
+- **[ interval = `50` ]** { [number](dataTypes#number) } - 查找目标的轮询间隔 (毫秒)
+- **[ root ]** { [UiObject](uiObjectType) } - 查找范围的根节点, 默认为活动窗口 (Flow 链式形式为 [scope](flowType#m-scope) 设置的根节点)
+- **[ humanize ]** { [boolean](dataTypes#boolean) \| {{ offset?: [number](dataTypes#number) \| [number](dataTypes#number)[], delay?: [number](dataTypes#number) \| [number](dataTypes#number)[] }} } - 拟人化: 每个动作前随机暂停 `delay` 毫秒 (单个数字或 `[min, max]`), 手势点按的坐标随机偏移不超过 `offset` 像素 (单个数字对两轴生效, 或 `[dx, dy]`). `true` 使用 [flow.defaults](flow#m-defaults) 的设置, `false` 关闭. 默认取自 `flow.defaults`
+
+不支持的选项键抛出异常, 如 `Unknown option "timeuot" for smartClick; expected one of climb, gestureFallback, ...`. 部分函数在选项对象的位置接受一个数字作为简写, 见各函数说明.
+
+未在超时内找到目标时抛出 `code` 为 `TIMEOUT` 的 [FlowError](flowErrorType), 其 `selector` 为目标的描述, `elapsed` / `attempts` 为查找的耗时与次数.
+
+## [m] smartClick
+
+### smartClick(target, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - climb?: [boolean](dataTypes#boolean)
+    - maxClimb?: [number](dataTypes#number)
+    - gestureFallback?: [boolean](dataTypes#boolean)
+    - offset?: [number](dataTypes#number) \| [number](dataTypes#number)[]
+    - verify?: [Target](#目标参数-target)
+    - verifyTimeout?: [number](dataTypes#number)
+    - verifyInterval?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> {{
+    - ok: `true`
+    - method: `'node'` \| `'ancestor'` \| `'gesture'`
+    - target: [UiObject](uiObjectType)
+    - verified: [any](dataTypes#any)
+- }} - 点击结果
+
+智能点击: 目标可点击时直接点击 (`method` 为 `'node'`); 不可点击时上溯到最近的可点击祖先 (`climb`, 默认 `true`, 最多 `maxClimb` 层, 默认 `5`; 相当于罗盘 `k`; `method` 为 `'ancestor'`); 没有可点击祖先或点击被拒绝时, 在目标中心 (加 `offset` 像素与拟人偏移) 做点按手势 (`gestureFallback`, 默认 `true`; `method` 为 `'gesture'`). 之后可选地等待 `verify` 条件在 `verifyTimeout` 毫秒 (默认 `2000`, 间隔 `verifyInterval`, 默认 `100`) 内成立.
+
+结果的 `target` 为实际点击的节点 (上溯时为祖先节点), `verified` 为 `verify` 条件的结果 (未指定时为 `null`).
+
+失败时抛出 [FlowError](flowErrorType):
+
+- 未找到目标: `TIMEOUT`
+- 点击被拒绝: `ACTION_FAILED`, `reason` 为 `click` (节点动作) 或 `gesture` (手势)
+- `verify` 未在时限内成立: `ACTION_FAILED`, `reason` 为 `verify`
+- 关闭 `gestureFallback` 且没有可点击节点: `INVALID_TARGET`, `reason` 为 `notClickable`
+
+```js
+/* 列表项的文本本身不可点击, 自动点击其可点击的祖先. */
+let r = smartClick('关于手机', { timeout: 5e3 });
+console.log(r.method); /* ancestor */
+
+/* 点击后确认新页面已出现. */
+smartClick('设置', { verify: '关于手机', verifyTimeout: 3e3 });
+
+/* 不上溯, 直接手势点按, 带拟人偏移与暂停. */
+smartClick(id('banner'), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });
+```
+
+## [m] clickIfExists
+
+### clickIfExists(target, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClick](#m-smartclick) 的选项
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 目标存在且已点击为 `true`, 不存在为 `false`
+
+### clickIfExists(target, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+目标在时限内存在时智能点击并返回 `true`, 不存在时返回 `false` 而不报错; 点击本身失败时仍抛出 [FlowError](flowErrorType).
+
+```js
+clickIfExists('跳过广告', 2e3); /* 最多等 2 秒. */
+if (!clickIfExists('同意')) {
+    console.log('没有同意按钮');
+}
+```
+
+## [m] clickAny
+
+### clickAny(targets, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标, 按优先顺序
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClick](#m-smartclick) 的选项
+- <ins>**returns**</ins> {{
+    - index: [number](dataTypes#number)
+    - target: [any](dataTypes#any)
+    - node: [UiObject](uiObjectType)
+    - method: `'node'` \| `'ancestor'` \| `'gesture'`
+    - verified: [any](dataTypes#any)
+- }} \| [null](dataTypes#null) - 被点击的候选及方式, 都不存在时为 `null`
+
+### clickAny(targets, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) \| [null](dataTypes#null) }
+
+每轮按顺序检查候选目标, 智能点击首个存在的. 结果的 `index` 为候选在数组中的序号, `target` 为候选本身, `node` 为找到的节点.
+
+```js
+let r = clickAny([ '同意', '允许', 'OK' ], 3e3);
+if (r) {
+    console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);
+}
+```
+
+## [m] findAny
+
+### findAny(targets, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标, 按优先顺序
+- **[ options ]** { [Object](dataTypes#object) } - 仅 [通用选项](#通用选项)
+- <ins>**returns**</ins> {{
+    - index: [number](dataTypes#number)
+    - target: [any](dataTypes#any)
+    - node: [UiObject](uiObjectType)
+- }} \| [null](dataTypes#null) - 首个存在的候选, 都不存在时为 `null`
+
+### findAny(targets, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) \| [null](dataTypes#null) }
+
+返回首个存在的候选目标, 不点击. 适合 "页面 A 或页面 B, 哪个先出现" 的分支判断.
+
+```js
+let r = findAny([ '欢迎回来', '密码错误' ], 10e3);
+switch (r && r.index) {
+    case 0:
+        console.log('登录成功');
+        break;
+    case 1:
+        console.log('登录失败');
+        break;
+    default:
+        console.log('超时');
+}
+```
+
+## [m] scrollUntil
+
+### scrollUntil(target, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 查找目标
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - container?: [Target](#目标参数-target)
+    - direction?: `'up'` \| `'down'` \| `'left'` \| `'right'`
+    - maxSteps?: [number](dataTypes#number)
+    - method?: `'action'` \| `'gesture'`
+    - stopAtEnd?: [boolean](dataTypes#boolean)
+    - settle?: [number](dataTypes#number)
+    - gestureDuration?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> { [UiObject](uiObjectType) } - 找到的目标节点
+
+滚动直到目标出现: 先查找目标, 不存在时把容器向 `direction` (默认 `'down'`) 滚动一步, 等待 `settle` 毫秒 (默认 `300`) 后再查找, 直到找到目标, 已滚动 `maxSteps` 次 (默认 `20`), 或已到底 (连续两次滚动内容无变化; `stopAtEnd` 为 `false` 时不检测).
+
+- `container` - 滚动容器. 省略时自动使用查找范围内面积最大的可滚动节点
+- `method` - `'action'` (默认) 使用无障碍滚动动作; `'gesture'` 使用滑动手势 (从容器 80% 处滑到 20% 处, 历时 `gestureDuration` 毫秒, 默认 `400`), 没有容器时在整个查找范围或屏幕上滑动
+- `timeout` / `interval` 用于定位给定的 `container`
+
+失败时抛出 [FlowError](flowErrorType): 滚动到上限或到底仍未出现 (`TIMEOUT`, `reason` 为 `maxSteps` / `end`); 给定的容器不存在 (`INVALID_TARGET`, `reason` 为 `container`); 未给定容器且没有可滚动节点 (`INVALID_TARGET`, `reason` 为 `noScrollable`); 滚动过程中容器消失 (`INVALID_TARGET`, `reason` 为 `containerGone`) 或手势失败 (`ACTION_FAILED`, `reason` 为 `swipe`).
+
+```js
+let w = scrollUntil('开发者选项', { maxSteps: 15 });
+w.click();
+
+scrollUntil('第一条', { direction: 'up', container: className('RecyclerView') });
+scrollUntil(/更多/, { method: 'gesture' });
+```
+
+## [m] typeInto
+
+### typeInto(target, text, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) \| [number](dataTypes#number) \| [null](dataTypes#null) } - 输入框: 选择器 / 节点 / 函数; 数字为查找范围内第 n 个可编辑节点 (从 0 计, 负数从末尾计); `null` 为当前焦点所在的可编辑节点
+- **text** { [string](dataTypes#string) } - 要输入的文本
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - clear?: [boolean](dataTypes#boolean)
+    - submit?: [boolean](dataTypes#boolean)
+    - verify?: [boolean](dataTypes#boolean)
+    - verifyTimeout?: [number](dataTypes#number)
+    - verifyInterval?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> { [UiObject](uiObjectType) } - 输入框节点
+
+向输入框输入文本: 定位可编辑节点 (选择器匹配的节点本身不可编辑时, 取其首个可编辑后代); `clear` 为 `true` (默认) 时替换全部文本, 否则追加到现有文本之后; `verify` 为 `true` (默认) 时重读节点直到其文本符合预期 (`verifyTimeout` 默认 `1000`, `verifyInterval` 默认 `100`; 密码框的文本被掩码, 跳过校验); `submit` 为 `true` 时随后发送 IME 动作 ([imeEnter](uiObjectActionsType#m-imeenter), 必要时先聚焦).
+
+失败时抛出 [FlowError](flowErrorType): 选择器目标未出现 (`TIMEOUT`); `null` 目标但没有焦点输入框 (`INVALID_TARGET`, `reason` 为 `noFocus`), 数字序号越界 (`noEditable`), 目标及其后代都不可编辑 (`notEditable`); 设置文本失败, 校验失败或提交失败 (`ACTION_FAILED`, `reason` 为 `setText` / `verify` / `submit`).
+
+```js
+typeInto('用户名', 'admin');
+typeInto(0, '123456', { submit: true }); /* 第 1 个输入框, 输入后提交. */
+typeInto(null, ' world', { clear: false }); /* 向焦点输入框追加. */
+```
+
+## [m] dismissPopups
+
+### dismissPopups(targets, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 关闭弹窗的按钮候选, 按优先顺序
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - once?: [boolean](dataTypes#boolean)
+    - watch?: [boolean](dataTypes#boolean)
+    - settle?: [number](dataTypes#number)
+    - maxRounds?: [number](dataTypes#number)
+    - debounce?: [number](dataTypes#number)
+    - click?: [Object](dataTypes#object)
+    - onDismissed?: [(info: Object) => void](dataTypes#function)
+    - onError?: [(error: FlowError) => void](dataTypes#function)
+- }} - 选项
+- <ins>**returns**</ins> { [Object](dataTypes#object) \| [Object](dataTypes#object)[] \| [null](dataTypes#null) \| [PopupGuard](#弹窗守护句柄-popupguard) } - 见下文
+
+### dismissPopups(targets, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选
+- **timeout** { [number](dataTypes#number) } - 首次查找的超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) \| [null](dataTypes#null) }
+
+关闭弹窗. 候选项不存在不算错误; 点击使用智能点击, `click` 为传给 [smartClick](#m-smartclick) 的嵌套选项对象.
+
+- `once: true` (默认): 智能点击首个存在的候选, 返回 `{ index, target, node, method, verified }` (含义同 [clickAny](#m-clickany)); 时限内都不存在时返回 `null`
+- `once: false`: 反复关闭, 直到没有候选存在或已关闭 `maxRounds` 个 (默认 `10`, 须为正数), 两轮之间等待 `settle` 毫秒 (默认 `300`); 返回上述对象的数组
+- `watch: true` (仅同步形式): 启动弹窗守护并立即返回 [守护句柄](#弹窗守护句柄-popupguard). 守护先执行一轮 `once: false` 式的关闭, 之后每次窗口变化 (窗口状态 / 内容 / 列表变化事件, 以 `debounce` 毫秒去抖, 默认 `300`) 在后台线程再执行一轮, 直到调用 `stop()`. 守护运行期间脚本不会退出
+
+`onDismissed(info)` 在每次关闭弹窗后调用, `onError(error)` 在某一轮出错时调用 (未提供时以 `console.warn` 输出); 两者都在创建守护的脚本线程上执行, 且都需要 `watch: true`. Flow 形式不支持 `watch`.
+
+```js
+/* 启动时关掉常见弹窗. */
+dismissPopups([ '我知道了', '以后再说', '关闭' ], { once: false });
+
+/* 整个脚本期间守护. */
+let guard = dismissPopups([ '我知道了', '取消', id('btn_close') ], {
+    watch: true,
+    onDismissed: info => console.log(`已关闭: ${info.target}`),
+});
+events.on('exit', () => guard.stop());
+```
+
+## 弹窗守护句柄 (PopupGuard)
+
+**`6.8.0`**
+
+[dismissPopups](#m-dismisspopups) 以 `watch: true` 调用时的返回值:
+
+- **stop()** - 停止守护, 释放对脚本的保活
+- **trigger()** - 立即执行一轮关闭
+- **isRunning** { [boolean](dataTypes#boolean) } - 是否仍在守护
+- **count** { [number](dataTypes#number) } - 已关闭的弹窗数
+- **passes** { [number](dataTypes#number) } - 已执行的轮数
+- **dismissed** { [Object](dataTypes#object)[] } - 已关闭弹窗的信息 (`{ index, target, node, method, verified }`), 按时间顺序
+- **toString()** - 如 `PopupGuard(running, 3 dismissed)`
+
+## [m] collectList
+
+### collectList(container, item, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **container** { [Target](#目标参数-target) \| [null](dataTypes#null) } - 列表容器, `null` 时自动使用查找范围内面积最大的可滚动节点
+- **item** { [Target](#目标参数-target) } - 列表条目
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - direction?: `'up'` \| `'down'` \| `'left'` \| `'right'`
+    - maxSteps?: [number](dataTypes#number)
+    - method?: `'action'` \| `'gesture'`
+    - resultType?: [PickupResult](dataTypes#pickupresult)
+    - dedupe?: [boolean](dataTypes#boolean)
+    - until?: [(item: any) => boolean](dataTypes#function)
+    - maxItems?: [number](dataTypes#number)
+    - settle?: [number](dataTypes#number)
+    - gestureDuration?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> { [any](dataTypes#any)[] } - 采集到的条目
+
+采集滚动列表: 每轮在容器内查找全部 `item` 匹配项, 按 `resultType` ([拾取结果类型](dataTypes#pickupresult), 默认 `'$'` 即节点内容; `'w'` 为节点本身, `'txt'` 为文本) 取值, 按节点内容指纹去重 (`dedupe`, 默认 `true`) 后加入结果; 然后把容器滚动一步 (`direction` 默认 `'down'`, `method` / `settle` / `gestureDuration` 同 [scrollUntil](#m-scrolluntil)) 再采集, 直到到底 (滚动后内容无变化), 已滚动 `maxSteps` 次 (默认 `20`), 已取满 `maxItems` 项 (默认不限, 须为正数), 或 `until` 对某一项返回真值 (该项仍被加入).
+
+失败时抛出 [FlowError](flowErrorType): 给定的容器不存在 (`INVALID_TARGET`, `reason` 为 `container`), 未给定容器且没有可滚动节点 (`noScrollable`), 以及滚动失败 (同 [scrollUntil](#m-scrolluntil)).
+
+```js
+let titles = collectList(className('RecyclerView'), className('TextView').depth(9), { maxSteps: 10 });
+console.log(titles.length, titles.slice(0, 3));
+
+/* 采集节点本身, 直到出现指定条目. */
+let nodes = collectList(null, /^第 \d+ 条/, { resultType: 'w', until: w => w.text() === '第 50 条' });
+```
+
+## [m] launchAndWait
+
+### launchAndWait(app, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **app** { [App](appType) \| [string](dataTypes#string) } - 应用: [App](appType) 枚举值, 应用别名, 包名或应用名称
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - bringToFront?: [boolean](dataTypes#boolean)
+- }} - 选项
+- <ins>**returns**</ins> {{
+    - packageName: [string](dataTypes#string)
+    - launched: [boolean](dataTypes#boolean)
+    - elapsed: [number](dataTypes#number)
+    - attempts: [number](dataTypes#number)
+- }} - 启动结果
+
+### launchAndWait(app, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **app** { [App](appType) \| [string](dataTypes#string) } - 应用
+- **timeout** { [number](dataTypes#number) } - 等待超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) }
+
+启动应用并等待其到达前台: 把 `app` 解析为包名, 启动它 (已在前台且 `bringToFront` 为 `false` 时不启动, 此时 `launched` 为 `false`), 然后每 `interval` 毫秒 (默认 `200`) 检查 [currentPackage()](global#m-currentpackage), 直到变为该包名或超过 `timeout` 毫秒 (默认 `10000`). 此函数不使用 `root` 与 `humanize` 选项.
+
+失败时抛出 [FlowError](flowErrorType): 无法解析的应用 (`INVALID_TARGET`, `reason` 为 `unknownApp`); 启动调用失败 (`ACTION_FAILED`, `reason` 为 `launch`); 未在时限内到达前台 (`TIMEOUT`, `reason` 为 `package`).
+
+```js
+let r = launchAndWait('Settings');
+console.log(r.packageName, r.elapsed); /* com.android.settings 1240 */
+
+launchAndWait('com.tencent.mm', 15e3);
+```
+
+## [m] backUntil
+
+### backUntil(cond, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **cond** { [Target](#目标参数-target) } - 停止条件: 选择器, 节点或函数
+- **[ options ]** {{
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - maxTimes?: [number](dataTypes#number)
+    - delay?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 条件成立时的值 (节点, 拾取结果或函数返回值)
+
+### backUntil(cond, maxTimes)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **cond** { [Target](#目标参数-target) } - 停止条件
+- **maxTimes** { [number](dataTypes#number) } - 最多按返回键的次数
+- <ins>**returns**</ins> { [any](dataTypes#any) }
+
+反复按返回键直到条件成立: 先检查一次条件; 之后每按一次返回键 ([back](#back)), 在 `delay` 毫秒 (默认 `500`) 内每 `interval` 毫秒 (默认 `100`, 须为正数) 检查条件; 最多按 `maxTimes` 次 (默认 `10`). 此函数不使用 `timeout` 选项.
+
+失败时抛出 [FlowError](flowErrorType): 按满次数仍不成立 (`TIMEOUT`, `reason` 为 `maxTimes`); 返回键动作失败 (`ACTION_FAILED`, `reason` 为 `back`).
+
+```js
+/* 一路返回到首页. */
+backUntil(id('home_tab'), 8);
+backUntil(() => currentActivity().endsWith('.MainActivity'));
+```
+
+## [m] backToApp
+
+### backToApp(app, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **app** { [App](appType) \| [string](dataTypes#string) } - 应用, 形式同 [launchAndWait](#m-launchandwait)
+- **[ options ]** { [Object](dataTypes#object) } - 同 [backUntil](#m-backuntil) 的选项
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 到达前台的包名
+
+### backToApp(app, maxTimes)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **app** { [App](appType) \| [string](dataTypes#string) } - 应用
+- **maxTimes** { [number](dataTypes#number) } - 最多按返回键的次数
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+反复按返回键直到指定应用回到前台, 行为同 [backUntil](#m-backuntil). 无法解析的应用抛出 `INVALID_TARGET` (`reason` 为 `unknownApp`).
+
+```js
+backToApp('org.autojs.autojs6');
+```
+
+## [m] toggle
+
+### toggle(target, checked, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 可勾选控件, 或包含它的节点 (如设置页中包着开关的整行)
+- **checked** { [boolean](dataTypes#boolean) } - 期望的选中状态
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - verifyTimeout?: [number](dataTypes#number)
+    - verifyInterval?: [number](dataTypes#number)
+    - click?: [Object](dataTypes#object)
+- }} - 选项
+- <ins>**returns**</ins> {{
+    - node: [UiObject](uiObjectType)
+    - changed: [boolean](dataTypes#boolean)
+    - checked: [boolean](dataTypes#boolean)
+    - method: `'node'` \| `'ancestor'` \| `'gesture'` \| [null](dataTypes#null)
+- }} - 切换结果
+
+设置可勾选控件的状态: 目标不可勾选时取其首个可勾选后代; 已是期望状态时不做任何操作 (`changed` 为 `false`, `method` 为 `null`); 否则以 `click` 选项智能点击, 并在 `verifyTimeout` 毫秒 (默认 `1000`, 间隔 `verifyInterval`, 默认 `100`) 内重读直到状态符合.
+
+失败时抛出 [FlowError](flowErrorType): 目标未出现 (`TIMEOUT`); 目标及其后代都不可勾选 (`INVALID_TARGET`, `reason` 为 `notCheckable`); 点击失败 (`ACTION_FAILED`, `reason` 为 `click` / `gesture`) 或状态未改变 (`ACTION_FAILED`, `reason` 为 `verify`).
+
+```js
+let r = toggle('飞行模式', true);
+console.log(r.changed, r.node.checked()); /* true true */
+```
+
+## [m] retry
+
+### retry(fn, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`Non-UI`**
+
+- **fn** { [(attempt: number) => T](dataTypes#function) } - 要执行的函数, 参数为从 0 计的尝试序号
+- **[ options ]** {{
+    - times?: [number](dataTypes#number)
+    - delay?: [number](dataTypes#number)
+    - backoff?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> { [T](dataTypes#generic) } - `fn` 成功时的返回值
+- <ins>**template**</ins> [T](dataTypes#generic)
+
+### retry(fn, times)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`Non-UI`**
+
+- **fn** { [(attempt: number) => T](dataTypes#function) } - 要执行的函数
+- **times** { [number](dataTypes#number) } - 最多重跑次数
+- <ins>**returns**</ins> { [T](dataTypes#generic) }
+- <ins>**template**</ins> [T](dataTypes#generic)
+
+在调用线程上执行 `fn`, 抛出异常时在 `delay` 毫秒 (默认 `500`) 后重跑, 之后每次重跑前的等待乘以 `backoff` (默认 `1`, 须不小于 `1`); 重跑 `times` 次 (默认 `3`) 仍失败时抛出最后一次的异常. 取消 (`CANCELLED` 的 [FlowError](flowErrorType)), 脚本中断与 JVM `Error` 不重试.
+
+只有同步形式. Flow 链上的 [retry](flowType#m-retry) 是重跑上一步骤的步骤, 与本函数无关.
+
+```js
+let node = retry(attempt => {
+    console.log(`第 ${attempt + 1} 次尝试`);
+    let w = text('刷新').findOnce();
+    if (!w) {
+        throw new Error('not yet');
+    }
+    return w;
+}, { times: 5, delay: 300, backoff: 2 }); /* 等待 300, 600, 1200, 2400, 4800 毫秒. */
+```
+
+# 事件驱动等待
+
+**`6.8.0`**
+
+基于无障碍事件的等待: 不反复查询界面, 而是订阅无障碍服务的事件流, 直到目标事件到达或超时. 与 [工具集](#工具集-toolkit) 一样有同步形式 (全局函数与 `automator.` 前缀, 不能在 UI 线程调用) 与 Flow 形式 ([事件等待起点](flow#事件等待起点), [事件等待步骤](flowType#事件等待步骤)).
+
+`timeout` 默认取 [flow.defaults](flow#m-defaults) 的超时 (`10000`), `Infinity` 表示不限时. 超时抛出 `code` 为 `TIMEOUT` 的 [FlowError](flowErrorType), 其 `selector` 为等待条件的描述; 等待期间无障碍服务断开时立即以 `A11Y_UNAVAILABLE` 中止.
+
+事件类型名与 [auto.registerEvent](#m-registerevent) 的 `name` 相同: Android [AccessibilityEvent](https://developer.android.com/reference/android/view/accessibility/AccessibilityEvent) 的 `TYPE_*` 常量名去掉前缀, 大小写与驼峰 / 下划线写法均可, 如 `'window_state_changed'` / `'windowStateChanged'`. 未知的类型名抛出异常.
+
+## [m] waitForIdle
+
+### waitForIdle(quietFor?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **[ quietFor = `500` ]** { [number](dataTypes#number) } - 判定为安静所需的无事件时长 (毫秒)
+- <ins>**returns**</ins> {{
+    - quietFor: [number](dataTypes#number)
+    - elapsed: [number](dataTypes#number)
+    - events: [number](dataTypes#number)
+- }} - 空闲报告
+
+### waitForIdle(options)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **options** {{
+    - quietFor?: [number](dataTypes#number)
+    - timeout?: [number](dataTypes#number)
+    - eventTypes?: [string](dataTypes#string) \| [string](dataTypes#string)[]
+- }} - 选项
+- <ins>**returns**</ins> { [Object](dataTypes#object) }
+
+等待界面安静: 连续 `quietFor` 毫秒内没有指定类型 (`eventTypes`, 默认为窗口状态, 窗口内容与窗口列表变化三种; `'*'` 表示全部类型) 的无障碍事件时返回. 结果含实际使用的 `quietFor`, 总耗时 `elapsed` 与期间观察到的事件数 `events`.
+
+界面持续变化直到超时时抛出 `TIMEOUT` (`reason` 为 `the screen kept changing`).
+
+```js
+click('提交');
+let idle = waitForIdle(800); /* 等待页面不再变化. */
+console.log(idle.elapsed, idle.events);
+```
+
+## [m] waitForEvent
+
+### waitForEvent(type?, filter?, timeout?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **[ type ]** { [string](dataTypes#string) } - 事件类型名, 省略时为任意类型
+- **[ filter ]** { [(event: Object) => boolean](dataTypes#function) \| {{ packageName?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp), className?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp), text?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp) }} } - 事件过滤: 函数, 或按属性匹配的对象 (`packageName` / `className` 字符串整体匹配, `text` 字符串子串匹配, 正则表达式搜索匹配)
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) } - 事件包装对象, 同 [auto.registerEvent](#m-registerevent) 回调的参数
+
+等待首个符合条件的无障碍事件. `filter` 与 `timeout` 的顺序可以互换.
+
+```js
+let e = waitForEvent('view_clicked', { packageName: 'com.android.settings' }, 10e3);
+console.log(e.className, e.source);
+
+let any = waitForEvent(); /* 任意事件. */
+```
+
+## [m] waitForToast
+
+### waitForToast(text?, timeout?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **[ text ]** { [string](dataTypes#string) \| [RegExp](dataTypes#regexp) \| [(toast: Object) => boolean](dataTypes#function) \| {{ packageName?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp), text?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp) }} } - Toast 过滤: 字符串为文本子串, 正则表达式搜索匹配, 函数或按属性匹配的对象; 省略时为任意 Toast. 第一个参数为数字时视为 `timeout`
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> {{
+    - packageName: [string](dataTypes#string)
+    - text: [string](dataTypes#string)
+- }} - Toast 对象
+
+等待首个符合条件的 Toast 消息.
+
+```js
+click('保存');
+let toast = waitForToast('已保存', 5e3);
+console.log(toast.packageName, toast.text);
+```
+
+## [m] waitForNotification
+
+### waitForNotification(filter?, timeout?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **[ filter ]** { [string](dataTypes#string) \| [RegExp](dataTypes#regexp) \| [(notification: Object) => boolean](dataTypes#function) \| {{ packageName?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp), title?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp), text?: [string](dataTypes#string) \| [RegExp](dataTypes#regexp) }} } - 通知过滤: 字符串为标题或内容的子串, 正则表达式搜索匹配, 函数或按属性匹配的对象; 省略时为任意通知. 第一个参数为数字时视为 `timeout`
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> { [Notification](events#notification) } - 通知对象, 同 [events.observeNotification](events#observenotification) 的回调参数 (含 `packageName`, `title`, `text`, `click()`, `delete()`)
+
+等待首个符合条件的系统通知.
+
+```js
+let n = waitForNotification({ packageName: 'com.tencent.mm', text: /验证码/ }, 60e3);
+console.log(n.title, n.text);
+n.click();
+```

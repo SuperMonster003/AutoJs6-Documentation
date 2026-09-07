@@ -1,0 +1,590 @@
+{
+  "source": "..\\api\\flowType.md",
+  "modules": [
+    {
+      "textRaw": "流程对象 (Flow)",
+      "name": "流程对象_(flow)",
+      "desc": "<p>Flow 对象是 <a href=\"flow\">流程 (Flow)</a> API 的核心类型, 由 <a href=\"flow#flow\">flow</a> 的起点函数 (如 <a href=\"flow#m-wait\">flow.wait</a>, 全局函数 <a href=\"flow#m-wait\">waitAsync</a>) 创建, 代表异步等待与动作链上的一个步骤及其结算状态.</p>\n<p>本章节列出 Flow 对象的属性, 可追加的步骤 (等待, 动作, 工具, 事件等待, 计时与回调) 与终结方法; 起点函数, 条件与等待选项见 <a href=\"flow\">流程 (Flow)</a>, 错误对象见 <a href=\"flowErrorType\">FlowError</a>.</p>\n<pre><code class=\"lang-js\">let f = flow.wait(&#39;登录&#39;, 5e3); /* 一个 Flow 对象. */\nf.click().then(() =&gt; console.log(&#39;已点击&#39;)); /* 追加步骤, 每次返回新的 Flow 对象. */\nconsole.log(f.sync()); /* 转回同步, 得到匹配的控件节点. */\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">Flow</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] Flow",
+          "name": "[@]_flow",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>Flow 对象由 <a href=\"flow\">flow</a> 的起点函数创建, 代表链上的一个步骤及其结算状态.<br>\n每个链式方法都返回一个新的 Flow 对象 (代表新步骤), 原对象不变, 因此一个 Flow 可以被多次分叉:</p>\n<pre><code class=\"lang-js\">let login = flow.wait(&#39;登录&#39;, 5e3);\nlogin.click(); /* 分支 1: 点击. */\nlogin.then(w =&gt; console.log(w.bounds())); /* 分支 2: 打印边界. */\n</code></pre>\n",
+          "modules": [
+            {
+              "textRaw": "取值规则",
+              "name": "取值规则",
+              "desc": "<ul>\n<li>等待步骤以匹配结果为值; 节点动作步骤成功时以其作用目标为值; 全局动作步骤, <a href=\"#m-sleep\">sleep</a>, <a href=\"#m-timeout\">timeout</a>, <a href=\"#m-scope\">scope</a>, <a href=\"#m-retry\">retry</a>, <a href=\"#m-peek\">peek</a>, <a href=\"#m-filter\">filter</a> 透传上一步的值.</li>\n<li>拒绝会沿链传播: 一个步骤拒绝后, 其后的普通步骤被跳过, 直到遇到 <a href=\"#m-catch\">catch</a> / <a href=\"#m-then\">then</a> 的 <code>onErr</code> / <a href=\"#m-retry\">retry</a>.</li>\n<li>回调返回的值成为新值; 回调返回 Flow 或 Promise 时等待其结算并采纳结果.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "线程与生命周期"
+            },
+            {
+              "textRaw": "线程与生命周期",
+              "name": "线程与生命周期",
+              "desc": "<ul>\n<li>步骤在 Flow 工作线程 (线程名 <code>flow-&lt;引擎 id&gt;-&lt;n&gt;</code>) 上执行, 同一条链的步骤按序执行, 不同的链并发执行.</li>\n<li><a href=\"#m-then\">then</a>, <a href=\"#m-catch\">catch</a>, <a href=\"#m-finally\">finally</a>, <a href=\"#m-map\">map</a>, <a href=\"#m-filter\">filter</a>, <a href=\"#m-peek\">peek</a> 的回调在创建该 Flow 的脚本线程上执行 (主线程创建的 Flow 回到主线程, <a href=\"threads#m-start\">threads.start</a> 线程创建的回到该线程), 因此回调中可以安全操作 UI 与脚本变量; 只有 <a href=\"#m-run\">run</a> 的回调与 <a href=\"flow#条件-cond\">条件函数</a> 在工作线程上执行.</li>\n<li>脚本存在待定的 Flow 时不会退出 (与定时器类似); 脚本退出时全部待定的 Flow 被取消, 工作线程停止.</li>\n<li>一个 Flow 被拒绝且既没有后续步骤也没有被 <a href=\"#m-sync\">sync</a> / <a href=\"#m-topromise\">toPromise</a> 观察时, 控制台输出警告 <code>Possible unhandled Flow rejection in step &quot;...&quot;</code>.</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "线程与生命周期"
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] Flow"
+        },
+        {
+          "textRaw": "[p#] state",
+          "name": "[p#]_state",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <code>&#39;pending&#39;</code> | <code>&#39;fulfilled&#39;</code> | <code>&#39;rejected&#39;</code> | <code>&#39;cancelled&#39;</code> }</li>\n</ul>\n<p>当前状态. 取消是一种特殊的拒绝 (错误为 <code>CANCELLED</code> 的 <a href=\"flowErrorType\">FlowError</a>), 单独显示为 <code>&#39;cancelled&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] state"
+        },
+        {
+          "textRaw": "[p#] step",
+          "name": "[p#]_step",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>本步骤的名称, 如 <code>&#39;wait&#39;</code>, <code>&#39;click&#39;</code>, <code>&#39;then&#39;</code>, <code>&#39;smartClick&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] step"
+        },
+        {
+          "textRaw": "[p#] value",
+          "name": "[p#]_value",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>已 fulfill 时为结果值, 否则为 <code>undefined</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] value"
+        },
+        {
+          "textRaw": "[p#] error",
+          "name": "[p#]_error",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"flowErrorType\">FlowError</a> | <a href=\"exceptions#error-对象\">Error</a> | <a href=\"dataTypes#undefined\">undefined</a> }</li>\n</ul>\n<p>已拒绝时为错误对象, 否则为 <code>undefined</code>.</p>\n<pre><code class=\"lang-js\">let f = flow.wait(&#39;不存在的控件&#39;, 1e3).catch(() =&gt; &#39;fallback&#39;);\nconsole.log(f.sync()); /* fallback */\nconsole.log(f.state); /* fulfilled */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] error"
+        },
+        {
+          "textRaw": "[m#] wait",
+          "name": "[m#]_wait",
+          "methods": [
+            {
+              "textRaw": "wait(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "wait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>在上一步之后追加一个等待, 参数同 <a href=\"flow#m-wait\">flow.wait</a>. 满足时链上的值变为新的匹配结果.</p>\n<p>上一步拒绝时本步骤被跳过.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).click()\n    .wait(&#39;欢迎回来&#39;, 10e3)\n    .then(w =&gt; console.log(w.text()));\n</code></pre>\n<p>同样可追加的等待还有 <code>waitUntil</code>, <code>waitWhile</code>, <code>waitForStable</code>, <code>waitForVisible</code>, <code>waitForHidden</code> (<code>waitForGone</code>), <code>waitForActivity</code>, <code>waitForPackage</code>, <code>waitThenClick</code> (<code>clickWait</code>), <code>waitThenLongClick</code>, <code>waitForStableThenClick</code> (<code>clickWhenStable</code>), <code>clickWhenStableAfter</code>, 语义与 <a href=\"flow\">flow</a> 上的同名函数一致.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] wait"
+        },
+        {
+          "textRaw": "[m#] within",
+          "name": "[m#]_within",
+          "methods": [
+            {
+              "textRaw": "within(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "within",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "within(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "within",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>与 <a href=\"#m-wait\">wait</a> 相同, 但找到的节点同时成为之后所有等待的查找根节点 (相当于随后调用 <a href=\"#m-scope\">scope({ root })</a>).</p>\n<pre><code class=\"lang-js\">/* 在设置页的列表容器内查找 &quot;关于手机&quot;. */\nflow.within(className(&#39;RecyclerView&#39;), 5e3)\n    .wait(&#39;关于手机&#39;)\n    .click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] within"
+        },
+        {
+          "textRaw": "节点动作步骤",
+          "name": "节点动作步骤",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p>对链上的值执行 <a href=\"uiObjectActionsType\">控件行为</a>, 成功时以作用目标为值继续.</p>\n<p>链上的值可以是:</p>\n<ul>\n<li><a href=\"uiObjectType\">UiObject</a> - 对该节点执行.</li>\n<li><a href=\"uiObjectCollectionType\">UiObjectCollection</a> 或 UiObject 数组 - 对每个节点执行, 全部成功才算成功; 空集合视为无效目标.</li>\n<li>坐标点 (<code>[x, y]</code>, <code>{ x, y }</code>, Android 或 OpenCV <code>Point</code>) - 仅 <code>click</code> 与 <code>longClick</code> 支持, 转为坐标点击.</li>\n</ul>\n<p>其余值 (包括 <code>null</code>) 以 <code>INVALID_TARGET</code> 拒绝. 行为返回 <code>false</code> 时, 按 <code>strictActions</code> 以 <code>ACTION_FAILED</code> 拒绝 (默认) 或以 <code>false</code> 为值继续.</p>\n<p>可用的动作及参数个数:</p>\n<table>\n<thead>\n<tr>\n<th>步骤</th>\n<th>参数</th>\n<th>对应控件行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>click()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-click\">click</a></td>\n</tr>\n<tr>\n<td>longClick()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-longclick\">longClick</a></td>\n</tr>\n<tr>\n<td>clickBounds(offsetX?, offsetY?)</td>\n<td>0 ~ 2</td>\n<td><a href=\"uiObjectType#m-clickbounds\">clickBounds</a></td>\n</tr>\n<tr>\n<td>setText(text)</td>\n<td>1</td>\n<td><a href=\"uiObjectActionsType#m-settext\">setText</a></td>\n</tr>\n<tr>\n<td>appendText(text)</td>\n<td>1</td>\n<td>UiObject#appendText</td>\n</tr>\n<tr>\n<td>clear()</td>\n<td>0</td>\n<td>UiObject#clear</td>\n</tr>\n<tr>\n<td>paste() / copy() / cut()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-paste\">paste</a> / <a href=\"uiObjectActionsType#m-copy\">copy</a> / <a href=\"uiObjectActionsType#m-cut\">cut</a></td>\n</tr>\n<tr>\n<td>select()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-select\">select</a></td>\n</tr>\n<tr>\n<td>focus() / clearFocus()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-focus\">focus</a> / <a href=\"uiObjectActionsType#m-clearfocus\">clearFocus</a></td>\n</tr>\n<tr>\n<td>scrollForward() / scrollBackward()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-scrollforward\">scrollForward</a> / <a href=\"uiObjectActionsType#m-scrollbackward\">scrollBackward</a></td>\n</tr>\n<tr>\n<td>scrollUp() / scrollDown() / scrollLeft() / scrollRight()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-scrollup\">scrollUp</a> 等</td>\n</tr>\n<tr>\n<td>expand() / collapse()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-expand\">expand</a> / <a href=\"uiObjectActionsType#m-collapse\">collapse</a></td>\n</tr>\n<tr>\n<td>dismiss() / show()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-dismiss\">dismiss</a> / <a href=\"uiObjectActionsType#m-show\">show</a></td>\n</tr>\n<tr>\n<td>contextClick()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-contextclick\">contextClick</a></td>\n</tr>\n<tr>\n<td>imeEnter()</td>\n<td>0</td>\n<td><a href=\"uiObjectActionsType#m-imeenter\">imeEnter</a></td>\n</tr>\n<tr>\n<td>performAction(action, ...args)</td>\n<td>1 ~ 2</td>\n<td><a href=\"uiObjectActionsType#m-performaction\">performAction</a></td>\n</tr>\n<tr>\n<td>clickAfter(millis) / clickAfter(min, max)</td>\n<td>1 ~ 2</td>\n<td>先休眠再 click</td>\n</tr>\n<tr>\n<td>longClickAfter(millis) / longClickAfter(min, max)</td>\n<td>1 ~ 2</td>\n<td>先休眠再 longClick</td>\n</tr>\n</tbody>\n</table>\n<p>每个动作步骤都可以追加尾随回调 <code>onOk</code> / <code>onErr</code>.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;用户名&#39;).setText(&#39;admin&#39;);\nflow.wait(className(&#39;Button&#39;).text(&#39;登录&#39;)).clickAfter(300, 800);\nflow.wait(className(&#39;Switch&#39;)).performAction(&#39;CLICK&#39;);\nflow.wait(() =&gt; text(&#39;删除&#39;).find()).click(); /* 函数条件返回控件集合 (空集合视为未找到), 点击全部匹配项. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "节点动作步骤"
+        },
+        {
+          "textRaw": "全局动作步骤",
+          "name": "全局动作步骤",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p>执行 <a href=\"automator\">automator</a> 模块的全局行为, 与链上的值无关, 成功后透传该值.</p>\n<table>\n<thead>\n<tr>\n<th>步骤</th>\n<th>参数</th>\n<th>对应方法</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>back() / home() / recents()</td>\n<td>0</td>\n<td><a href=\"automator#back\">back</a> / <a href=\"automator#home\">home</a> / <a href=\"automator#recents\">recents</a></td>\n</tr>\n<tr>\n<td>notifications() / quickSettings()</td>\n<td>0</td>\n<td><a href=\"automator#notifications\">notifications</a> / <a href=\"automator#quicksettings\">quickSettings</a></td>\n</tr>\n<tr>\n<td>powerDialog() / splitScreen() / lockScreen()</td>\n<td>0</td>\n<td><a href=\"automator#powerdialog\">powerDialog</a> / <a href=\"automator#splitscreen\">splitScreen</a> / <a href=\"automator#lockscreen\">lockScreen</a></td>\n</tr>\n<tr>\n<td>takeScreenshot() / dismissNotificationShade()</td>\n<td>0</td>\n<td><a href=\"automator#takescreenshot\">takeScreenshot</a> / <a href=\"automator#dismissnotificationshade\">dismissNotificationShade</a></td>\n</tr>\n<tr>\n<td>press(x, y, duration)</td>\n<td>1 ~ 3</td>\n<td><a href=\"automator#press\">press</a></td>\n</tr>\n<tr>\n<td>swipe(x1, y1, x2, y2, duration)</td>\n<td>2 ~ 5</td>\n<td><a href=\"automator#swipe\">swipe</a></td>\n</tr>\n<tr>\n<td>gesture(duration, [x1, y1], [x2, y2], ...)</td>\n<td>&gt;= 2</td>\n<td><a href=\"automator#gesture\">gesture</a></td>\n</tr>\n<tr>\n<td>gestures([duration, [x, y], ...], ...)</td>\n<td>&gt;= 1</td>\n<td><a href=\"automator#gestures\">gestures</a></td>\n</tr>\n</tbody>\n</table>\n<p>行为返回 <code>false</code> 时按 <code>strictActions</code> 以 <code>ACTION_FAILED</code> 拒绝或继续. 动作前会应用 <a href=\"flow#m-defaults\">flow.defaults</a> 的 <code>humanize</code> 暂停.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;设置&#39;).click().sleep(500).back().back();\nflow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执行手势. */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "全局动作步骤"
+        },
+        {
+          "textRaw": "工具集步骤",
+          "name": "工具集步骤",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#工具集-toolkit\">工具集</a> 的 9 个工具可作为链式步骤, 以链上的值为目标 (省略同步形式的首个目标参数), 结果为新值:</p>\n<table>\n<thead>\n<tr>\n<th>步骤</th>\n<th>链上的值</th>\n<th>结果</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>smartClick(options?)</td>\n<td>目标节点</td>\n<td>点击结果对象</td>\n</tr>\n<tr>\n<td>scrollUntil(target, options?)</td>\n<td>滚动容器 (给出 <code>container</code> 选项时忽略)</td>\n<td>找到的节点</td>\n</tr>\n<tr>\n<td>typeInto(text, options?)</td>\n<td>输入框 (<code>null</code> 时为焦点输入框)</td>\n<td>输入框节点</td>\n</tr>\n<tr>\n<td>dismissPopups(targets, options?)</td>\n<td>透传</td>\n<td>透传链上的值</td>\n</tr>\n<tr>\n<td>collectList(item, options?)</td>\n<td>列表容器 (<code>null</code> 时自动探测)</td>\n<td>条目数组</td>\n</tr>\n<tr>\n<td>launchAndWait(app, options?)</td>\n<td>忽略</td>\n<td>启动结果对象</td>\n</tr>\n<tr>\n<td>backUntil(cond, options?)</td>\n<td>忽略</td>\n<td>条件的值</td>\n</tr>\n<tr>\n<td>backToApp(app, options?)</td>\n<td>忽略</td>\n<td>包名</td>\n</tr>\n<tr>\n<td>toggle(checked, options?)</td>\n<td>目标节点</td>\n<td>切换结果对象</td>\n</tr>\n</tbody>\n</table>\n<p>链上的值为 <code>null</code> 而工具需要目标时, 以 <code>INVALID_TARGET</code> (<code>reason</code> 为 <code>noTarget</code>) 拒绝.<br>\n链式形式的 <code>timeout</code> 默认为 <code>0</code> (只查找一次), 与同步形式相同.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;设置项列表&#39;, 5e3)\n    .scrollUntil(&#39;开发者选项&#39;)\n    .smartClick({ verify: &#39;调试&#39; })\n    .then(r =&gt; console.log(r.method, r.verified));\n\nflow.wait(className(&#39;EditText&#39;))\n    .typeInto(&#39;hello&#39;, { submit: true });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "工具集步骤"
+        },
+        {
+          "textRaw": "事件等待步骤",
+          "name": "事件等待步骤",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#事件驱动等待\">事件驱动等待</a> 的四个函数可作为链式步骤: <code>waitForIdle</code> 透传链上的值, 其余以到达的事件, Toast 或通知为新值.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;提交&#39;).click()\n    .waitForIdle(800)\n    .waitForToast(/成功/, 5e3)\n    .then(toast =&gt; console.log(toast.text));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "事件等待步骤"
+        },
+        {
+          "textRaw": "[m#] sleep",
+          "name": "[m#]_sleep",
+          "methods": [
+            {
+              "textRaw": "sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "sleep(millisMin, millisMax)",
+              "type": "method",
+              "name": "sleep",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>休眠后透传链上的值, 参数同 <a href=\"flow#m-sleep\">flow.sleep</a>. <code>delay</code> 是别名.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;下一步&#39;).sleep(300, 600).click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millisMin"
+                    },
+                    {
+                      "name": "millisMax"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sleep"
+        },
+        {
+          "textRaw": "[m#] timeout",
+          "name": "[m#]_timeout",
+          "methods": [
+            {
+              "textRaw": "timeout(millis)",
+              "type": "method",
+              "name": "timeout",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>millis</strong> { <a href=\"dataTypes#number\">number</a> } - 截止时长 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>为链的其余部分设置一个自此刻起的总截止时间: 之后的等待被截短到该截止, 截止之后开始的步骤以 <code>TIMEOUT</code> (<code>reason</code> 为 <code>chain</code>) 拒绝. 透传链上的值.</p>\n<pre><code class=\"lang-js\">/* 整条链最多 15 秒. */\nflow.of(null).timeout(15e3)\n    .wait(&#39;步骤一&#39;).click()\n    .wait(&#39;步骤二&#39;).click()\n    .wait(&#39;完成&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] timeout"
+        },
+        {
+          "textRaw": "[m#] retry",
+          "name": "[m#]_retry",
+          "methods": [
+            {
+              "textRaw": "retry(times?, delay?)",
+              "type": "method",
+              "name": "retry",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ times = <code>1</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最多重跑次数</li>\n<li><strong>[ delay = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 每次重跑前的休眠 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>上一步骤拒绝 (取消除外) 时重跑上一步骤, 最多 <code>times</code> 次; 上一步骤成功时透传其值.</p>\n<pre><code class=\"lang-js\">/* 点击失败时最多重试 3 次, 每次间隔 500 毫秒. */\nflow.wait(&#39;提交&#39;).click().retry(3, 500);\n\n/* 等待超时后再等一轮. */\nflow.wait(&#39;结果&#39;, 5e3).retry(1).then(w =&gt; console.log(w.text()));\n</code></pre>\n<blockquote>\n<p>注: 与同步的 <a href=\"automator#retry\">retry(fn, options)</a> 不同, 本方法只重跑链上的上一个步骤.</p>\n</blockquote>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "times?"
+                    },
+                    {
+                      "name": "delay?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] retry"
+        },
+        {
+          "textRaw": "[m#] scope",
+          "name": "[m#]_scope",
+          "methods": [
+            {
+              "textRaw": "scope(options)",
+              "type": "method",
+              "name": "scope",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>compass?: <a href=\"dataTypes#string\">string</a></li>\n<li>resultType?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[]</li>\n</ul>\n</li>\n<li>}} - 作用域</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>设置之后所有等待与工具步骤的作用域 (查找根节点, 罗盘, 结果类型), 透传链上的值. 单个等待的同名选项优先.</p>\n<pre><code class=\"lang-js\">flow.wait(id(&#39;dialog&#39;), 5e3)\n    .then(dialog =&gt; flow.of(dialog).scope({ root: dialog }).wait(&#39;确定&#39;).click());\n\n/* 更简洁的写法. */\nflow.within(id(&#39;dialog&#39;), 5e3).wait(&#39;确定&#39;).click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scope"
+        },
+        {
+          "textRaw": "[m#] then",
+          "name": "[m#]_then",
+          "methods": [
+            {
+              "textRaw": "then(onOk?, onErr?)",
+              "type": "method",
+              "name": "then",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - fulfill 时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 拒绝时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>在脚本线程上处理结算结果, 语义同 Promise 的 <code>then</code>: 回调的返回值成为新值, 抛出的异常成为拒绝, 返回 Flow 或 Promise 时采纳其结果; 没有对应回调时透传.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;余额&#39;, 5e3)\n    .then(w =&gt; w.parent().child(1).text())\n    .then(balance =&gt; toast(`余额: ${balance}`), e =&gt; toast(`失败: ${e.code}`));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] then"
+        },
+        {
+          "textRaw": "[m#] catch",
+          "name": "[m#]_catch",
+          "methods": [
+            {
+              "textRaw": "catch(onErr)",
+              "type": "method",
+              "name": "catch",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>onErr</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 拒绝时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>只处理拒绝, 相当于 <code>then(null, onErr)</code>. 回调的返回值成为新值, 链恢复为 fulfill 状态.</p>\n<p><code>else</code> 是本方法的别名.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;广告关闭按钮&#39;, 3e3).click()\n    .catch(e =&gt; console.log(&#39;没有广告&#39;))\n    .wait(&#39;首页&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "onErr"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] catch"
+        },
+        {
+          "textRaw": "[m#] finally",
+          "name": "[m#]_finally",
+          "methods": [
+            {
+              "textRaw": "finally(fn)",
+              "type": "method",
+              "name": "finally",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">() =&gt; any</a> } - 结算后的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>无论 fulfill 还是拒绝都执行 <code>fn</code> (不带参数), 之后恢复原结算结果; <code>fn</code> 抛出异常 (或返回的 Flow 拒绝) 时以该错误拒绝.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] finally"
+        },
+        {
+          "textRaw": "[m#] map",
+          "name": "[m#]_map",
+          "methods": [
+            {
+              "textRaw": "map(fn)",
+              "type": "method",
+              "name": "map",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 转换函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>以 <code>fn</code> 的返回值替换链上的值, 相当于只有 <code>onOk</code> 的 <a href=\"#m-then\">then</a>.</p>\n<pre><code class=\"lang-js\">flow.wait(/\\d+ 条未读/).map(w =&gt; parseInt(w.text())).then(n =&gt; console.log(n));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] map"
+        },
+        {
+          "textRaw": "[m#] filter",
+          "name": "[m#]_filter",
+          "methods": [
+            {
+              "textRaw": "filter(fn)",
+              "type": "method",
+              "name": "filter",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; boolean</a> } - 断言函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p><code>fn</code> 返回真值时透传链上的值, 否则以 <code>INVALID_TARGET</code> (<code>reason</code> 为 <code>filtered out</code>) 拒绝.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;提交&#39;).filter(w =&gt; w.enabled()).click().catch(() =&gt; console.log(&#39;按钮不可用&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] filter"
+        },
+        {
+          "textRaw": "[m#] peek",
+          "name": "[m#]_peek",
+          "methods": [
+            {
+              "textRaw": "peek(fn)",
+              "type": "method",
+              "name": "peek",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>fn</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; void</a> } - 观察函数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>调用 <code>fn</code> 观察链上的值, 忽略其返回值并透传. 适合调试.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;).peek(w =&gt; console.log(w.bounds())).click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] peek"
+        },
+        {
+          "textRaw": "[m#] run",
+          "name": "[m#]_run",
+          "methods": [
+            {
+              "textRaw": "run(onOk?, onErr?)",
+              "type": "method",
+              "name": "run",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - fulfill 时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 拒绝时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>与 <a href=\"#m-then\">then</a> 相同, 但回调在 Flow 工作线程上执行, 可以安全地调用阻塞方法 (如 <a href=\"uiSelectorType#m-findone\">findOne</a>, <a href=\"global#m-sleep\">sleep</a>); 不能操作 UI, 也不能调用 <a href=\"#m-sync\">sync</a>.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;详情&#39;).click()\n    .run(() =&gt; text(&#39;加载完成&#39;).findOne(10e3)) /* 在工作线程阻塞等待. */\n    .then(w =&gt; console.log(w !== null));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] run"
+        },
+        {
+          "textRaw": "[m#] sync",
+          "name": "[m#]_sync",
+          "methods": [
+            {
+              "textRaw": "sync(timeout?)",
+              "type": "method",
+              "name": "sync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ timeout = <code>Infinity</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最长等待 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> } - fulfill 的值</li>\n</ul>\n<p>阻塞当前线程直到 Flow 结算: fulfill 时返回值, 拒绝时抛出错误 (<a href=\"flowErrorType\">FlowError</a> 或回调抛出的原始异常).</p>\n<p><code>timeout</code> 到期时抛出 <code>TIMEOUT</code> (<code>reason</code> 为 <code>sync</code>) 的 <a href=\"flowErrorType\">FlowError</a>, 链本身继续运行. 不传或传 <code>Infinity</code> 时不限时, 因此可能 <strong>永久阻塞</strong>.</p>\n<p>阻塞期间调用线程仍会执行属于它的 Flow 回调 (如被等待的链上的 <a href=\"#m-then\">then</a>), 不会死锁.</p>\n<p>不能在 UI 线程或 Flow 工作线程 (<a href=\"#m-run\">run</a> 回调, 条件函数) 中调用, 否则抛出异常.</p>\n<pre><code class=\"lang-js\">let w = flow.wait(&#39;登录&#39;, 5e3).sync(); /* 相当于 text(&#39;登录&#39;).findOne(5e3), 但超时抛出异常而非返回 null. */\n\ntry {\n    flow.wait(&#39;登录&#39;, 5e3).click().sync();\n} catch (e) {\n    console.error(e.name, e.code, e.step); /* FlowError TIMEOUT wait */\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sync"
+        },
+        {
+          "textRaw": "[m#] await",
+          "name": "[m#]_await",
+          "methods": [
+            {
+              "textRaw": "await()",
+              "type": "method",
+              "name": "await",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>以 <a href=\"continuation\">续体</a> 方式等待结算, 相当于 <code>toPromise().await()</code>. 仅在支持续体的环境 (如 <code>&quot;continuation&quot;</code> 模式) 中可用.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] await"
+        },
+        {
+          "textRaw": "[m#] toPromise",
+          "name": "[m#]_topromise",
+          "methods": [
+            {
+              "textRaw": "toPromise()",
+              "type": "method",
+              "name": "toPromise",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> }</li>\n</ul>\n<p>转为 Promise, 在脚本线程上结算. 用于与 <code>async</code> / <code>await</code> 或其他基于 Promise 的代码配合.</p>\n<pre><code class=\"lang-js\">(async () =&gt; {\n    let w = await flow.wait(&#39;登录&#39;, 5e3).toPromise();\n    w.click();\n})();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toPromise"
+        },
+        {
+          "textRaw": "[m#] cancel",
+          "name": "[m#]_cancel",
+          "methods": [
+            {
+              "textRaw": "cancel()",
+              "type": "method",
+              "name": "cancel",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否取消了任何步骤</li>\n</ul>\n<p>取消本 Flow: 未结算时以 <code>CANCELLED</code> 拒绝, 正在阻塞的等待被中断, 尚未运行的步骤被跳过; 同时向上取消没有其他存活分支的待定祖先 (因此取消线性链的末端会停止链首的等待). 已结算时返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let f = flow.wait(&#39;可能永远不出现&#39;, Infinity).click();\nsetTimeout(() =&gt; f.cancel(), 10e3);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cancel"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>返回 <code>Flow(&lt;step&gt;, &lt;state&gt;)</code> 形式的描述, 如 <code>Flow(wait, pending)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        }
+      ],
+      "type": "module",
+      "displayName": "流程对象 (Flow)"
+    }
+  ]
+}

@@ -1862,6 +1862,8 @@ let toast = waitForToast('已保存', 5e3);
 console.log(toast.packageName, toast.text);
 ```
 
+> 注: 观察者忽略 AutoJs6 自身显示的 Toast (如脚本调用 `toast()` 产生的), 因此只能等到其它应用的 Toast; 本应用发出的通知则可由 [waitForNotification](#m-waitfornotification) 等到.
+
 ## [m] waitForNotification
 
 ### waitForNotification(filter?, timeout?)

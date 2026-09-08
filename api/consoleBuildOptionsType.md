@@ -95,6 +95,67 @@ console.build({ touchable: false }).show();
 console.build({ touchThrough: true }).show();
 ```
 
+## [p?] avoidStatusBar
+
+**`6.8.0`**
+
+- [ `true` ] { [boolean](dataTypes#boolean) } - 是否避让状态栏
+
+设置控制台浮动窗口是否避让状态栏, 默认为 `true`. 详见 [console.setAvoidStatusBar](console#m-setavoidstatusbar) 小节.
+
+```js
+/* 窗口置于屏幕左上角并覆盖状态栏. */
+console.build({ avoidStatusBar: false, position: [ 0, 0 ] }).show();
+```
+
+## [p?] timeVisible
+
+**`6.8.0`**
+
+- [ `false` ] { [boolean](dataTypes#boolean) } - 是否显示时间前缀
+
+设置控制台浮动窗口是否在每条日志前显示时间前缀. 详见 [console.setTimeVisible](console#m-settimevisible) 小节.
+
+```js
+console.build({ timeVisible: true }).show();
+```
+
+## [p?] timeFormat
+
+**`6.8.0`**
+
+- [ `'HH:mm:ss.SSS'` ] { [string](dataTypes#string) } - 时间格式模式
+
+设置控制台浮动窗口时间前缀的格式. 详见 [console.setTimeFormat](console#m-settimeformat) 小节.
+
+```js
+console.build({ timeVisible: true, timeFormat: 'HH:mm:ss' }).show();
+```
+
+## [p?] colorful
+
+**`6.8.0`**
+
+- [ `true` ] { [boolean](dataTypes#boolean) } - 是否按日志等级着色
+
+设置控制台浮动窗口是否按日志等级使用不同的文本颜色. 详见 [console.setColorful](console#m-setcolorful) 小节.
+
+```js
+console.build({ colorful: false }).show();
+```
+
+## [p?] inputVisible
+
+**`6.8.0`**
+
+- [ `false` ] { [boolean](dataTypes#boolean) } - 是否常驻显示输入栏
+
+设置控制台浮动窗口是否常驻显示输入栏. 详见 [console.setInputVisible](console#m-setinputvisible) 小节.
+
+```js
+console.build({ inputVisible: true }).show();
+```
+
 ## [p?] title
 
 - { [string](dataTypes#string) } - 浮动窗口标题文本

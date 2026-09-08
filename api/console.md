@@ -38,7 +38,12 @@ console 模块的主要作用:
     - [console.setSize](#m-setsize)
     - [console.setPosition](#m-setposition)
     - [console.setGravity](#m-setgravity)
+    - [console.setTimeVisible](#m-settimevisible)
+    - [console.setColorful](#m-setcolorful)
     - ... ...
+- 控制台输入 - [ 读取用户在输入栏提交的文本 / 读取并求值 ] 等
+    - [console.rawInput](#m-rawinput)
+    - [console.input](#m-input)
 - 控制台 Activity 活动窗口管理
     - [console.launch](#m-launch)
 
@@ -58,12 +63,17 @@ console.launch(); /* Activity 活动窗口的日志字体仍为默认大小. */
 
 使用 [console.show](#m-show) 可显示控制台的浮动窗口.
 
-- 浮动窗口右上区域有三个操作按钮
-    - 最小化按钮 - 收起浮动窗口并显示一个浮动按钮
-    - 空间状态配置按钮 - 显示或隐藏空间状态 (位置及尺寸) 配置按钮
-    - 关闭按钮 - 隐藏浮动窗口
-- 拖动标题栏区域也可实现浮动窗口的位置移动
+- 浮动窗口标题栏右侧有一个 "更多" 按钮, 点击后弹出操作菜单
+    - 最小化 - 收起浮动窗口并显示一个浮动按钮
+    - 调整大小 - 进入尺寸调整模式, 拖动窗口右侧或底部边缘 (或右下角) 改变窗口尺寸, 点击窗口其他区域退出
+    - 输入栏 - 显示或隐藏输入栏 (脚本调用 [console.rawInput](#m-rawinput) 等待输入时会自动显示)
+    - 清空 / 复制 - 清空或复制日志内容
+    - 设置 - 时间前缀, 时间格式, 日志着色, 文字大小, 状态栏避让, 标题栏及日志区域透明度
+    - 关闭 - 隐藏浮动窗口
+- 拖动标题栏区域可移动浮动窗口
 - 日志显示区域支持双指缩放改变文本字体大小
+- 浮动窗口可紧贴屏幕边缘, 如 `console.setPosition(0, 0)` 将窗口置于屏幕左上角 (默认避让状态栏, 参阅 [console.setAvoidStatusBar](#m-setavoidstatusbar))
+- 浮动窗口的样式及空间状态设置与 [console.show](#m-show) 的调用顺序无关, 无需在两者之间等待
 
 如需使用代码配置浮动窗口的外观与样式, 参阅 [console.build](#m-build) 小节.
 
@@ -512,6 +522,99 @@ console.setTouchThrough(true);
 console.show();
 
 console.build({ touchThrough: true }).show();
+```
+
+## [m] setAvoidStatusBar
+
+### setAvoidStatusBar(avoid?)
+
+**`6.8.0`**
+
+- [ `true` ] **avoid** { [boolean](dataTypes#boolean) } - 是否避让状态栏
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口是否避让状态栏, 默认为 `true`.
+
+避让状态栏时, [setPosition](#m-setposition) 的 Y 坐标从状态栏下方开始计算, `console.setPosition(0, 0)` 将窗口置于状态栏正下方;
+不避让时, Y 坐标从屏幕顶端开始计算, 窗口可覆盖状态栏区域.
+
+```js
+console.setAvoidStatusBar(false).setPosition(0, 0).show(); /* 窗口置于屏幕左上角并覆盖状态栏. */
+console.build({ avoidStatusBar: false, position: [ 0, 0 ] }).show(); /* 效果同上. */
+```
+
+## [m] setTimeVisible
+
+### setTimeVisible(visible?)
+
+**`6.8.0`**
+
+- [ `true` ] **visible** { [boolean](dataTypes#boolean) } - 是否显示时间前缀
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口是否在每条日志前显示时间前缀 (如 `12:34:56.789/D: `), 默认为 `false`.
+
+时间前缀的格式可通过 [setTimeFormat](#m-settimeformat) 设置.
+
+```js
+console.setTimeVisible().show(); /* 显示时间前缀. */
+console.setTimeVisible(true).show(); /* 效果同上. */
+console.build({ timeVisible: true }).show(); /* 效果同上. */
+```
+
+## [m] setTimeFormat
+
+### setTimeFormat(pattern?)
+
+**`6.8.0`**
+
+- [ `'HH:mm:ss.SSS'` ] **pattern** { [string](dataTypes#string) } - 时间格式模式, 参阅 [SimpleDateFormat](https://developer.android.com/reference/java/text/SimpleDateFormat)
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口时间前缀的格式, 默认为 `'HH:mm:ss.SSS'`.
+
+省略参数或传入无效的模式时, 恢复默认格式.
+
+```js
+console.setTimeVisible().setTimeFormat('HH:mm:ss').show(); /* 时间前缀精确到秒. */
+console.build({ timeVisible: true, timeFormat: 'HH:mm:ss' }).show(); /* 效果同上. */
+```
+
+## [m] setColorful
+
+### setColorful(colorful?)
+
+**`6.8.0`**
+
+- [ `true` ] **colorful** { [boolean](dataTypes#boolean) } - 是否按日志等级着色
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口是否按日志等级 (verbose / log / info / warn / error) 使用不同的文本颜色, 默认为 `true`.
+
+设置为 `false` 时, 所有等级的日志均使用 `log` 等级的文本颜色.
+
+```js
+console.setColorful(false).show(); /* 关闭日志着色. */
+console.build({ colorful: false }).show(); /* 效果同上. */
+```
+
+## [m] setInputVisible
+
+### setInputVisible(visible?)
+
+**`6.8.0`**
+
+- [ `true` ] **visible** { [boolean](dataTypes#boolean) } - 是否常驻显示输入栏
+- <ins>**returns**</ins> { [this](console) }
+
+设置控制台浮动窗口是否常驻显示输入栏, 默认为 `false`.
+
+默认情况下, 输入栏仅在脚本调用 [rawInput](#m-rawinput) 或 [input](#m-input) 等待输入时显示, 输入完成后自动隐藏.
+设置为 `true` 后, 输入栏始终显示, 用户提交的内容将交给等待输入的脚本, 若无脚本等待则给出提示.
+
+```js
+console.setInputVisible().show(); /* 常驻显示输入栏. */
+console.build({ inputVisible: true }).show(); /* 效果同上. */
 ```
 
 ## [m] setTitle
@@ -1348,24 +1451,55 @@ console.setGlobalLogConfig({
 
 ## [m] input
 
-### input(data, ...args)
+### input(data?, ...args)
 
-**`ABANDONED`**
+**`6.8.0`**
 
-- **data** { [string](dataTypes#string) } - 可包含占位符的待格式化对象
-- **args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **[ data ]** { [string](dataTypes#string) } - 可包含占位符的待格式化对象, 作为提示信息打印
+- **[ args ]** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
+- <ins>**returns**</ins> { [any](dataTypes#any) }
 
-此方法已于 `6.3.1` 版本被废弃, 使用后将无任何效果.
+读取用户在控制台输入栏提交的一行文本, 并将其作为 JavaScript 表达式求值后返回.
+
+此方法会阻塞脚本线程直到用户提交输入, 因此不能在 UI 线程中调用.
+未显示控制台浮动窗口且没有其他界面 (如 UI 模式的 [console](ui#控制台视图) 视图) 显示当前脚本的控制台时, 浮动窗口将自动显示.
+
+```js
+let num = console.input('请输入一个数字:');
+console.log('%s 的平方是 %s', num, num * num); /* 输入 12 时, 打印 "12 的平方是 144". */
+```
+
+此方法曾于 `6.3.1` 版本被废弃, 自 `6.8.0` 版本起重新可用.
 
 ## [m] rawInput
 
-### rawInput(data, ...args)
+### rawInput(data?, ...args)
 
-**`ABANDONED`**
+**`6.8.0`**
 
-- **data** { [string](dataTypes#string) } - 可包含占位符的待格式化对象
-- **args** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
-- <ins>**returns**</ins> { [void](dataTypes#void) }
+- **[ data ]** { [string](dataTypes#string) } - 可包含占位符的待格式化对象, 作为提示信息打印
+- **[ args ]** { [...](documentation#可变参数)[any](dataTypes#any)[[]](documentation#可变参数) } - [占位符替换参数](glossaries#占位符替换参数)
+- <ins>**returns**</ins> { [string](dataTypes#string) }
 
-此方法已于 `6.3.1` 版本被废弃, 使用后将无任何效果.
+读取用户在控制台输入栏提交的一行文本并原样返回.
+
+此方法会阻塞脚本线程直到用户提交输入, 因此不能在 UI 线程中调用.
+未显示控制台浮动窗口且没有其他界面显示当前脚本的控制台时, 浮动窗口将自动显示; 输入栏在等待输入期间自动显示, 提交后自动隐藏 (除非使用 [setInputVisible](#m-setinputvisible) 常驻显示).
+
+提交的内容会以 `> ` 前缀回显到控制台.
+
+```js
+console.show();
+let name = console.rawInput('请输入你的名字:');
+console.log('你好, %s', name);
+
+/* 简单的命令循环. */
+let cmd;
+while ((cmd = console.rawInput()) !== 'exit') {
+    console.log('收到命令: %s', cmd);
+}
+```
+
+脚本运行结束时, 等待中的输入将被取消.
+
+此方法曾于 `6.3.1` 版本被废弃, 自 `6.8.0` 版本起重新可用.

@@ -267,9 +267,10 @@
 <li><span class="stability_undefined"><a href="#ui_4">分页, 标签栏和抽屉</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_canvas">Canvas 视图</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_webview">WebView 视图</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_5">控制台视图</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_5">控件扩展方法</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_6">控件扩展方法</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_nativeview">NativeView 包装</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_attr_name_value">attr(name, value)</a></span></li>
@@ -283,7 +284,7 @@
 <li><span class="stability_undefined"><a href="#ui_nativeview_1">NativeView 事件</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_6">自定义控件</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_7">自定义控件</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_m_globalthis_isuithread">[m] globalThis.isUiThread</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_globalthis_isuithread">globalThis.isUiThread()</a></span></li>
 </ul>
@@ -677,7 +678,12 @@ ui.layout(xml);
 <tr>
 <td><code>console</code></td>
 <td><code>JsConsoleView</code></td>
-<td>控制台日志视图</td>
+<td>当前脚本的控制台视图 (<code>global=&quot;true&quot;</code> 或裸属性 <code>global</code> 时显示全局控制台)</td>
+</tr>
+<tr>
+<td><code>globalconsole</code></td>
+<td><code>JsGlobalConsoleView</code></td>
+<td>全局控制台视图, 等价于 <code>&lt;console global&gt;</code></td>
 </tr>
 <tr>
 <td><code>list</code></td>
@@ -834,7 +840,23 @@ ui.board.on(&#39;draw&#39;, function (canvas) {
 <li><code>webview.jsBridge</code> - 页面 JavaScript 与脚本之间的消息桥.</li>
 </ul>
 <p><code>jsBridge</code> 提供 <code>send(event, ...args)</code>, <code>handle(channel, handler)</code>, <code>invoke(channel, ...args)</code> 和 <code>eval(code)</code>. <code>invoke</code> 和 <code>eval</code> 返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>. WebView 同时保留 Android <code>WebView</code> 的原生方法.</p>
-<h2>控件扩展方法<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h2>
+<h3>控制台视图<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<p><code>&lt;console&gt;</code> 显示当前脚本自身的控制台, 内容与 <code>console.log</code> 等方法的输出一致 (脚本的输出同时会转发到全局控制台); <code>&lt;globalconsole&gt;</code> 显示所有脚本共用的全局控制台 (即应用 &quot;日志&quot; 页面显示的内容), 与 <code>&lt;console global=&quot;true&quot;&gt;</code> 或裸属性写法 <code>&lt;console global&gt;</code> 等价. 两者默认不显示标题栏, 不显示时间前缀, 并按日志等级着色.</p>
+<pre><code class="lang-js">&quot;ui&quot;;
+
+ui.layout(
+    &lt;vertical&gt;
+        &lt;console id=&quot;con&quot; h=&quot;0&quot; layout_weight=&quot;1&quot; title=&quot;控制台&quot; titleBackgroundColor=&quot;#3F51B5&quot;/&gt;
+        &lt;globalconsole h=&quot;0&quot; layout_weight=&quot;1&quot; timeVisible=&quot;true&quot; timeFormat=&quot;HH:mm:ss&quot;/&gt;
+    &lt;/vertical&gt;
+);
+
+console.log(&quot;hello&quot;);
+</code></pre>
+<p>视图属性与 <a href="console.html">console</a> 模块的 <code>setXxx</code> 方法一一对应, 如 <code>titleBackgroundColor</code> 对应 <a href="console.html#console_m_settitlebackgroundcolor">console.setTitleBackgroundColor</a>, <code>timeVisible</code> 对应 <a href="console.html#console_m_settimevisible">console.setTimeVisible</a>. 设置 <code>title</code> 后显示标题栏, 其右侧的 &quot;更多&quot; 按钮可显示或隐藏输入栏, 清空或复制日志以及打开设置对话框. 完整属性列表参阅 <a href="uiAttributes.html#uiattributes_consoleview">UI 布局属性</a>.</p>
+<p>脚本调用 <a href="console.html#console_m_rawinput">console.rawInput</a> 或 <a href="console.html#console_m_input">console.input</a> 等待输入时, 视图底部会自动显示输入栏, 提交后自动隐藏; <code>inputVisible=&quot;true&quot;</code> 可使其常驻显示.</p>
+<h2>控件扩展方法<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h2>
 <p>内置标签返回的对象可调用对应 Android 类的原生方法. 下表列出 AutoJs6 控件类在 Android 父类之外新增的公开方法.</p>
 <table>
 <thead>
@@ -1072,7 +1094,7 @@ ui.message.attr(&#39;visibility&#39;, &#39;gone&#39;);
 </tbody>
 </table>
 <p>为 <code>touch</code>, <code>long_click</code>, <code>key</code> 或 <code>item_long_click</code> 的 <code>event.consumed</code> 赋值为 <code>true</code>, 会使对应 Android 监听器返回已消费.</p>
-<h2>自定义控件<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h2>
+<h2>自定义控件<span><a class="mark" href="#ui_7" id="ui_7">#</a></span></h2>
 <p>自定义控件构造函数继承 <code>ui.Widget</code>, <code>render()</code> 返回根布局, 再通过 <code>ui.registerWidget(name, constructor)</code> 注册为 XML 标签.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 

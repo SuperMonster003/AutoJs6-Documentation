@@ -67,6 +67,64 @@
           "displayName": "[m] read"
         },
         {
+          "textRaw": "[m] get",
+          "name": "[m]_get",
+          "methods": [
+            {
+              "textRaw": "get(path, streamKind, parameter, options?)",
+              "type": "method",
+              "name": "get",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 媒体文件路径</li>\n<li><strong>streamKind</strong> { <a href=\"dataTypes#string\">string</a> } - <code>general</code>, <code>video</code>, <code>audio</code>, <code>text</code>, <code>other</code>, <code>image</code> 或 <code>menu</code></li>\n<li><strong>parameter</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 原生参数名称, 如 <code>SamplingRate</code></li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 参数值, 单位, 说明或名称; 不存在的流或参数返回空字符串</li>\n</ul>\n<p>流序号从 <code>0</code> 开始, 同类流的第 2 条使用 <code>streamNumber: 1</code>. 缺省查询第 0 条流的 <code>TEXT</code> 值.</p>\n<pre><code class=\"lang-js\">let path = &#39;./media/movie.mkv&#39;;\nlet count = mediainfo.countGet(path, &#39;audio&#39;);\nfor (let index = 0; index &lt; count; index++) {\n    let options = { streamNumber: index };\n    console.log(mediainfo.get(path, &#39;audio&#39;, &#39;SamplingRate&#39;, options));\n    console.log(mediainfo.get(path, &#39;audio&#39;, &#39;SamplingRate&#39;, {\n        streamNumber: index,\n        infoKind: &#39;MEASURE&#39;,\n    }));\n}\n</code></pre>\n<p>该入口需要升级后的宿主. 非 <code>TEXT</code> 的查询要求插件宣告对应 <code>infoKinds</code>; 不支持时抛出包含 <code>MEDIAINFO_QUERY_UNSUPPORTED</code> 的异常. 参数值格式由 MediaInfoLib 决定.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "streamKind"
+                    },
+                    {
+                      "name": "parameter"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] get"
+        },
+        {
+          "textRaw": "[m] countGet",
+          "name": "[m]_countget",
+          "methods": [
+            {
+              "textRaw": "countGet(path, streamKind)",
+              "type": "method",
+              "name": "countGet",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 媒体文件路径</li>\n<li><strong>streamKind</strong> { <a href=\"dataTypes#string\">string</a> } - 与 <code>get</code> 相同的流类型, 不接受 <code>max</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 同类流数量; 无对应流返回 <code>0</code>, 原生文件打开失败返回 <code>-1</code></li>\n</ul>\n<p>要求 <code>mediainfo.capabilities().streamCount</code> 为 <code>true</code>. 旧插件不支持时抛出包含 <code>MEDIAINFO_QUERY_UNSUPPORTED</code> 的异常.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "streamKind"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] countGet"
+        },
+        {
           "textRaw": "[m] snapshot",
           "name": "[m]_snapshot",
           "methods": [
@@ -135,9 +193,16 @@
         {
           "textRaw": "MediainfoCapabilities",
           "name": "mediainfocapabilities",
-          "desc": "<p>当前插件的轻量能力对象.</p>\n<ul>\n<li><strong>snapshotSchemas</strong> { <a href=\"dataTypes#string\">string</a>[] } - 当前可请求的完整 schema 标识</li>\n<li><strong>defaultSnapshotSchema</strong> { <a href=\"dataTypes#string\">string</a> } - 缺省 schema, 当前为 v1</li>\n<li><strong>[ engineVersion ]</strong> { <a href=\"dataTypes#string\">string</a> } - 插件提供的简短引擎版本</li>\n</ul>\n<hr>\n",
+          "desc": "<p>当前插件的轻量能力对象.</p>\n<ul>\n<li><strong>snapshotSchemas</strong> { <a href=\"dataTypes#string\">string</a>[] } - 当前可请求的完整 schema 标识</li>\n<li><strong>defaultSnapshotSchema</strong> { <a href=\"dataTypes#string\">string</a> } - 缺省 schema, 当前为 v1</li>\n<li><strong>[ engineVersion ]</strong> { <a href=\"dataTypes#string\">string</a> } - 插件提供的简短引擎版本</li>\n<li><strong>streamNumber</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前宿主是否支持指定查询流序号</li>\n<li><strong>streamCount</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 当前插件是否支持流计数</li>\n<li><strong>infoKinds</strong> { <a href=\"dataTypes#string\">string</a>[] } - 可查询的信息种类; 旧插件至少支持 <code>TEXT</code></li>\n</ul>\n",
           "type": "module",
           "displayName": "MediainfoCapabilities"
+        },
+        {
+          "textRaw": "MediainfoQueryOptions",
+          "name": "mediainfoqueryoptions",
+          "desc": "<ul>\n<li><strong>[ streamNumber = <code>0</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 从 0 开始的同类流序号, 必须是 <code>0..2147483647</code> 内的整数</li>\n<li><strong>[ infoKind = <code>&#39;TEXT&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 信息种类, 不区分大小写</li>\n</ul>\n<p>信息种类为 <code>NAME</code>, <code>TEXT</code>, <code>MEASURE</code>, <code>OPTIONS</code>, <code>NAME_TEXT</code>, <code>MEASURE_TEXT</code>, <code>INFO</code>, <code>HOWTO</code> 和 <code>DOMAIN</code>. <code>MEASURE</code> 返回单位, <code>INFO</code> 返回说明, <code>NAME_TEXT</code> 返回可读名称. 可用性与具体值由 MediaInfoLib 决定, 不保证非空.</p>\n<p>负数, 小数, 非有限值以及字符串形式的序号会被拒绝. <code>MAX</code> 和未知信息种类会被拒绝, 不会截断或静默回退.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "MediainfoQueryOptions"
         },
         {
           "textRaw": "MediainfoResult",
@@ -156,7 +221,7 @@
         {
           "textRaw": "[p#] MediainfoResult#inform",
           "name": "[p#]_mediainforesult#inform",
-          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MediaInfo 插件返回的完整文本报告.</p>\n",
+          "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>MediaInfo 插件返回的完整文本报告.</p>\n<p><code>Complete name</code> 显示宿主所读取文件的原始路径. 插件内部的描述符路径与临时副本路径不作为文件名展示. 快照的 <code>fileName</code> 或 <code>file.name</code> 仍保留文件显示名.</p>\n",
           "type": "module",
           "displayName": "[p#] MediainfoResult#inform"
         },
@@ -165,15 +230,18 @@
           "name": "[m#]_mediainforesult#general",
           "methods": [
             {
-              "textRaw": "MediainfoResult#general(parameter?)",
+              "textRaw": "MediainfoResult#general(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#general",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - General 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 General 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - General 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 General 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -188,15 +256,18 @@
           "name": "[m#]_mediainforesult#video",
           "methods": [
             {
-              "textRaw": "MediainfoResult#video(parameter?)",
+              "textRaw": "MediainfoResult#video(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#video",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Video 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Video 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Video 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 Video 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -211,15 +282,18 @@
           "name": "[m#]_mediainforesult#audio",
           "methods": [
             {
-              "textRaw": "MediainfoResult#audio(parameter?)",
+              "textRaw": "MediainfoResult#audio(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#audio",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Audio 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Audio 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Audio 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 Audio 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -234,15 +308,18 @@
           "name": "[m#]_mediainforesult#text",
           "methods": [
             {
-              "textRaw": "MediainfoResult#text(parameter?)",
+              "textRaw": "MediainfoResult#text(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#text",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Text 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询字幕或其他 Text 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Text 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询字幕或其他 Text 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -257,15 +334,18 @@
           "name": "[m#]_mediainforesult#other",
           "methods": [
             {
-              "textRaw": "MediainfoResult#other(parameter?)",
+              "textRaw": "MediainfoResult#other(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#other",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Other 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Other 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Other 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 Other 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -280,15 +360,18 @@
           "name": "[m#]_mediainforesult#image",
           "methods": [
             {
-              "textRaw": "MediainfoResult#image(parameter?)",
+              "textRaw": "MediainfoResult#image(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#image",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Image 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Image 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Image 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 Image 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -303,15 +386,18 @@
           "name": "[m#]_mediainforesult#menu",
           "methods": [
             {
-              "textRaw": "MediainfoResult#menu(parameter?)",
+              "textRaw": "MediainfoResult#menu(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#menu",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Menu 流第 <code>0</code> 项的参数值</li>\n</ul>\n<p>查询 Menu 流信息.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Menu 流指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>查询 Menu 流信息.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }
@@ -326,15 +412,18 @@
           "name": "[m#]_mediainforesult#max",
           "methods": [
             {
-              "textRaw": "MediainfoResult#max(parameter?)",
+              "textRaw": "MediainfoResult#max(parameter?, options?)",
               "type": "method",
               "name": "MediainfoResult#max",
-              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Max 流类型第 <code>0</code> 项的参数值</li>\n</ul>\n<p>使用 MediaInfo 的 <code>MAX</code> 流类型执行查询.</p>\n",
+              "desc": "<p><strong><code>6.7.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>[ parameter = <code>&#39;&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - MediaInfo 参数名称</li>\n<li><strong>[ options ]</strong> { <a href=\"#mediainfoqueryoptions\">MediainfoQueryOptions</a> } - 流序号与信息种类</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - Max 流类型指定项的参数信息, 默认第 <code>0</code> 项</li>\n</ul>\n<p>使用 MediaInfo 的 <code>MAX</code> 流类型执行查询.</p>\n",
               "signatures": [
                 {
                   "params": [
                     {
                       "name": "parameter?"
+                    },
+                    {
+                      "name": "options?"
                     }
                   ]
                 }

@@ -68,6 +68,47 @@ console.log(info.video('Width'));
 
 `read` 属于兼容接口, 不等同于 [snapshot(path, options?)](#m-snapshot). 新代码需要稳定 JSON 快照或 v2 多流结构时, 应使用 `snapshot`.
 
+## [m] get
+
+### get(path, streamKind, parameter, options?)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 媒体文件路径
+- **streamKind** { [string](dataTypes#string) } - `general`, `video`, `audio`, `text`, `other`, `image` 或 `menu`
+- **parameter** { [string](dataTypes#string) } - MediaInfo 原生参数名称, 如 `SamplingRate`
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 参数值, 单位, 说明或名称; 不存在的流或参数返回空字符串
+
+流序号从 `0` 开始, 同类流的第 2 条使用 `streamNumber: 1`. 缺省查询第 0 条流的 `TEXT` 值.
+
+```js
+let path = './media/movie.mkv';
+let count = mediainfo.countGet(path, 'audio');
+for (let index = 0; index < count; index++) {
+    let options = { streamNumber: index };
+    console.log(mediainfo.get(path, 'audio', 'SamplingRate', options));
+    console.log(mediainfo.get(path, 'audio', 'SamplingRate', {
+        streamNumber: index,
+        infoKind: 'MEASURE',
+    }));
+}
+```
+
+该入口需要升级后的宿主. 非 `TEXT` 的查询要求插件宣告对应 `infoKinds`; 不支持时抛出包含 `MEDIAINFO_QUERY_UNSUPPORTED` 的异常. 参数值格式由 MediaInfoLib 决定.
+
+## [m] countGet
+
+### countGet(path, streamKind)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 媒体文件路径
+- **streamKind** { [string](dataTypes#string) } - 与 `get` 相同的流类型, 不接受 `max`
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 同类流数量; 无对应流返回 `0`, 原生文件打开失败返回 `-1`
+
+要求 `mediainfo.capabilities().streamCount` 为 `true`. 旧插件不支持时抛出包含 `MEDIAINFO_QUERY_UNSUPPORTED` 的异常.
+
 ## [m] snapshot
 
 ### snapshot(path, options?)
@@ -165,6 +206,18 @@ console.log(firstAudio?.attributes?.['@typeorder']);
 - **snapshotSchemas** { [string](dataTypes#string)[] } - 当前可请求的完整 schema 标识
 - **defaultSnapshotSchema** { [string](dataTypes#string) } - 缺省 schema, 当前为 v1
 - **[ engineVersion ]** { [string](dataTypes#string) } - 插件提供的简短引擎版本
+- **streamNumber** { [boolean](dataTypes#boolean) } - 当前宿主是否支持指定查询流序号
+- **streamCount** { [boolean](dataTypes#boolean) } - 当前插件是否支持流计数
+- **infoKinds** { [string](dataTypes#string)[] } - 可查询的信息种类; 旧插件至少支持 `TEXT`
+
+## MediainfoQueryOptions
+
+- **[ streamNumber = `0` ]** { [number](dataTypes#number) } - 从 0 开始的同类流序号, 必须是 `0..2147483647` 内的整数
+- **[ infoKind = `'TEXT'` ]** { [string](dataTypes#string) } - 信息种类, 不区分大小写
+
+信息种类为 `NAME`, `TEXT`, `MEASURE`, `OPTIONS`, `NAME_TEXT`, `MEASURE_TEXT`, `INFO`, `HOWTO` 和 `DOMAIN`. `MEASURE` 返回单位, `INFO` 返回说明, `NAME_TEXT` 返回可读名称. 可用性与具体值由 MediaInfoLib 决定, 不保证非空.
+
+负数, 小数, 非有限值以及字符串形式的序号会被拒绝. `MAX` 和未知信息种类会被拒绝, 不会截断或静默回退.
 
 ---
 
@@ -203,91 +256,101 @@ console.log(info.video.format);
 
 MediaInfo 插件返回的完整文本报告.
 
+`Complete name` 显示宿主所读取文件的原始路径. 插件内部的描述符路径与临时副本路径不作为文件名展示. 快照的 `fileName` 或 `file.name` 仍保留文件显示名.
+
 ## [m#] MediainfoResult#general
 
-### MediainfoResult#general(parameter?)
+### MediainfoResult#general(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - General 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - General 流指定项的参数信息, 默认第 `0` 项
 
 查询 General 流信息.
 
 ## [m#] MediainfoResult#video
 
-### MediainfoResult#video(parameter?)
+### MediainfoResult#video(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Video 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Video 流指定项的参数信息, 默认第 `0` 项
 
 查询 Video 流信息.
 
 ## [m#] MediainfoResult#audio
 
-### MediainfoResult#audio(parameter?)
+### MediainfoResult#audio(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Audio 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Audio 流指定项的参数信息, 默认第 `0` 项
 
 查询 Audio 流信息.
 
 ## [m#] MediainfoResult#text
 
-### MediainfoResult#text(parameter?)
+### MediainfoResult#text(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Text 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Text 流指定项的参数信息, 默认第 `0` 项
 
 查询字幕或其他 Text 流信息.
 
 ## [m#] MediainfoResult#other
 
-### MediainfoResult#other(parameter?)
+### MediainfoResult#other(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Other 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Other 流指定项的参数信息, 默认第 `0` 项
 
 查询 Other 流信息.
 
 ## [m#] MediainfoResult#image
 
-### MediainfoResult#image(parameter?)
+### MediainfoResult#image(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Image 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Image 流指定项的参数信息, 默认第 `0` 项
 
 查询 Image 流信息.
 
 ## [m#] MediainfoResult#menu
 
-### MediainfoResult#menu(parameter?)
+### MediainfoResult#menu(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Menu 流第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Menu 流指定项的参数信息, 默认第 `0` 项
 
 查询 Menu 流信息.
 
 ## [m#] MediainfoResult#max
 
-### MediainfoResult#max(parameter?)
+### MediainfoResult#max(parameter?, options?)
 
 **`6.7.0`** **`[6.8.0]`**
 
 - **[ parameter = `''` ]** { [string](dataTypes#string) } - MediaInfo 参数名称
-- <ins>**returns**</ins> { [string](dataTypes#string) } - Max 流类型第 `0` 项的参数值
+- **[ options ]** { [MediainfoQueryOptions](#mediainfoqueryoptions) } - 流序号与信息种类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Max 流类型指定项的参数信息, 默认第 `0` 项
 
 使用 MediaInfo 的 `MAX` 流类型执行查询.
 

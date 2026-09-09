@@ -2,8 +2,9 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/07</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/10</p>
 
+- `更新` [MediaInfo](https://docs.autojs6.com/#/mediainfo) 增加 streamNumber 多流查询, countGet 流计数, infoKind 单位与说明查询, 能力协商及 Complete name 原始路径语义
 - `新增` [流程 (Flow)](https://docs.autojs6.com/#/flow), [Flow](https://docs.autojs6.com/#/flowType) 与 [FlowError](https://docs.autojs6.com/#/flowErrorType) 文档, 覆盖异步等待与动作链, 全局起点函数, 等待选项与错误对象
 - `新增` [自动化](https://docs.autojs6.com/#/automator) 章节增加工具集 (smartClick, clickIfExists, clickAny, findAny, scrollUntil, typeInto, dismissPopups, collectList, launchAndWait, backUntil, backToApp, toggle, retry), 事件驱动等待 (waitForIdle, waitForEvent, waitForToast, waitForNotification) 以及 auto 的 wait, findWindows, findWindowRoots, explain, dump, stats 条目
 - `新增` [选择器](https://docs.autojs6.com/#/uiSelectorType) 章节增加 select(syntax) 字符串选择器语法, find(max) 与 findIterator 条目; [控件节点](https://docs.autojs6.com/#/uiObjectType) 章节增加 isStale, waitUntilGone, waitForStable, fingerprint, toJSON, dumpSubtree, contentInvalid, contextClickable, multiLine, dismissable 条目; [控件集合](https://docs.autojs6.com/#/uiObjectCollectionType) 章节增加 at, first, last, nonNull, slice 与 performActionEach 等逐个执行条目

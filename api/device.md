@@ -1,6 +1,6 @@
 # 设备 (Device)
 
-device 模块提供设备构建信息, 屏幕状态, 电量, 内存, 音量, 振动, 网络和唤醒锁等查询或操作能力.
+device 模块提供设备构建信息, 内存页大小, 屏幕状态, 电量, 内存, 音量, 振动, 网络和唤醒锁等查询或操作能力.
 
 `device` 与 `$device` 指向同一个模块对象.
 
@@ -62,6 +62,24 @@ device 模块提供设备构建信息, 屏幕状态, 电量, 内存, 音量, 振
 - { [number](dataTypes#number) } - 屏幕密度, 单位为 DPI
 
 返回当前设备显示指标中的 `densityDpi`.
+
+## [p] pageSize
+
+**`6.8.0`** **`Getter`**
+
+- { [number](dataTypes#number) } - 当前系统的内存页大小, 单位为字节
+
+返回当前运行系统的实际内存页大小, 例如 `4096` (4 KB) 或 `16384` (16 KB). 该属性只读, 与 `$device.pageSize` 等价, 无需额外权限或插件.
+
+页大小通过 `Os.sysconf(OsConstants._SC_PAGESIZE)` 查询, 并在当前进程内缓存. 查询失败时会抛出异常, 不会回退为固定的 `4096`.
+
+此值用于识别当前设备的运行环境, 不表示某个 APK 或原生库是否兼容该页大小. 判断兼容性仍需检查原生库及 APK 打包对齐, 并进行运行验证.
+
+```js
+let pageSize = device.pageSize;
+console.log('内存页大小: ' + pageSize + ' 字节');
+console.log('当前是否使用 16 KB 页: ' + (pageSize === 16384));
+```
 
 ## [m] summary
 

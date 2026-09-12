@@ -4,7 +4,7 @@
     {
       "textRaw": "设备 (Device)",
       "name": "设备_(device)",
-      "desc": "<p>device 模块提供设备构建信息, 屏幕状态, 电量, 内存, 音量, 振动, 网络和唤醒锁等查询或操作能力.</p>\n<p><code>device</code> 与 <code>$device</code> 指向同一个模块对象.</p>\n<p>设备对象由 AutoJs6 扩充成员和内部 Java <code>Device</code> 实例的 Rhino 原型共同组成. 本页记录面向脚本的稳定成员. Java 实现中的 <code>doVibrate</code> 等静态 helper 及继承自 <code>java.lang.Object</code> 的反射成员仅供内部实现使用, 不作为稳定 API.</p>\n<p>修改屏幕亮度或音量的方法需要系统的 &quot;修改系统设置&quot; 权限. 权限不足时, AutoJs6 会打开对应设置页面并抛出 <code>SecurityException</code>. IMEI, 硬件序列号和 MAC 地址还会受到 Android 版本, 应用权限及设备实现限制.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">device</p>\n\n<hr>\n",
+      "desc": "<p>device 模块提供设备构建信息, 内存页大小, 屏幕状态, 电量, 内存, 音量, 振动, 网络和唤醒锁等查询或操作能力.</p>\n<p><code>device</code> 与 <code>$device</code> 指向同一个模块对象.</p>\n<p>设备对象由 AutoJs6 扩充成员和内部 Java <code>Device</code> 实例的 Rhino 原型共同组成. 本页记录面向脚本的稳定成员. Java 实现中的 <code>doVibrate</code> 等静态 helper 及继承自 <code>java.lang.Object</code> 的反射成员仅供内部实现使用, 不作为稳定 API.</p>\n<p>修改屏幕亮度或音量的方法需要系统的 &quot;修改系统设置&quot; 权限. 权限不足时, AutoJs6 会打开对应设置页面并抛出 <code>SecurityException</code>. IMEI, 硬件序列号和 MAC 地址还会受到 Android 版本, 应用权限及设备实现限制.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">device</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[p] width",
@@ -40,6 +40,13 @@
           "desc": "<p><strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 屏幕密度, 单位为 DPI</li>\n</ul>\n<p>返回当前设备显示指标中的 <code>densityDpi</code>.</p>\n",
           "type": "module",
           "displayName": "[p] density"
+        },
+        {
+          "textRaw": "[p] pageSize",
+          "name": "[p]_pagesize",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 当前系统的内存页大小, 单位为字节</li>\n</ul>\n<p>返回当前运行系统的实际内存页大小, 例如 <code>4096</code> (4 KB) 或 <code>16384</code> (16 KB). 该属性只读, 与 <code>$device.pageSize</code> 等价, 无需额外权限或插件.</p>\n<p>页大小通过 <code>Os.sysconf(OsConstants._SC_PAGESIZE)</code> 查询, 并在当前进程内缓存. 查询失败时会抛出异常, 不会回退为固定的 <code>4096</code>.</p>\n<p>此值用于识别当前设备的运行环境, 不表示某个 APK 或原生库是否兼容该页大小. 判断兼容性仍需检查原生库及 APK 打包对齐, 并进行运行验证.</p>\n<pre><code class=\"lang-js\">let pageSize = device.pageSize;\nconsole.log(&#39;内存页大小: &#39; + pageSize + &#39; 字节&#39;);\nconsole.log(&#39;当前是否使用 16 KB 页: &#39; + (pageSize === 16384));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p] pageSize"
         },
         {
           "textRaw": "[m] summary",

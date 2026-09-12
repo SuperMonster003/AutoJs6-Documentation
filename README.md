@@ -99,8 +99,9 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/12</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
 
+- `新增` `device.pageSize` 只读属性文档, 说明以字节返回当前系统的内存页大小及 4 KB / 16 KB 用例
 - `更新` OCR 默认按已安装且启用的插件自动选择引擎, 补充动态 mode 读取, tap 重置, 单次调用选项与空状态说明
 - `新增` 流程 (Flow), 工具集, 事件驱动等待, 字符串选择器语法, 节点等待与诊断等无障碍自动化 API 文档
 - `更新` 按 AutoJs6 6.8.0 无障碍自动化重构修订自动化, 全局对象, 选择器, 控件节点与控件集合章节

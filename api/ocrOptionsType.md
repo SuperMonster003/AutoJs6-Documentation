@@ -64,6 +64,20 @@ ocr('test.png', { region: bounds });
 
 ---
 
+### [p?] mode
+
+**`6.8.0`**
+
+- { [OcrMode](dataTypes#ocrMode) }
+
+指定本次调用的 OCR 选择方式, 不修改脚本的 [ocr.mode](ocr#p-mode).
+
+省略此属性时使用脚本当前的选择方式. 显式传入 `"auto"`, `""`, `null` 或 `undefined` 时, 本次调用按 ML Kit OCR, Paddle OCR, Rapid OCR 的顺序选择当前可用且符合插件筛选条件的引擎.
+
+`ocr.mlkit(...)`, `ocr.paddle(...)` 和 `ocr.rapid(...)` 使用各自固定的工作模式, 忽略本选项.
+
+---
+
 ### [p?] engineId
 
 **`6.8.0`**

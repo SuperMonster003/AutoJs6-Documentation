@@ -430,23 +430,37 @@ ocr(&#39;./picture.jpg&#39;, [ 0, 0, 100, 150 ]);
 <h2>[p] mode<span><a class="mark" href="#ocr_p_mode" id="ocr_p_mode">#</a></span></h2>
 <p><strong><code>6.3.4</code></strong> <strong><code>[6.8.0]</code></strong> <strong><code>Getter/Setter</code></strong></p>
 <ul>
-<li><strong>[ &lt;get&gt; = <code>&#39;mlkit&#39;</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmodename">OcrModeName</a></span> }</li>
-<li><strong>&lt;set&gt;</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmodename">OcrModeName</a></span> }</li>
+<li><strong>&lt;get&gt;</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmodename">OcrModeName</a></span> } - 当前引擎名称, 无可选引擎时为空字符串</li>
+<li><strong>&lt;set&gt;</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmode">OcrMode</a></span> } - 固定引擎或自动选择模式</li>
 </ul>
-<p>获取或设置 OCR 的工作模式名称.</p>
-<pre><code class="lang-js">/* AutoJs6 OCR 默认采用 MLKit 工作模式. */
-console.log(ocr.mode); // &quot;mlkit&quot;
-
-ocr.mode = &#39;paddle&#39;; /* 切换到 Paddle 工作模式. */
+<p>获取当前 OCR 引擎名称, 或设置当前脚本的引擎选择方式.</p>
+<p>AutoJs6 6.8.0 默认采用隐含的自动选择模式. 每次读取此属性时, 按 <code>mlkit</code>, <code>paddle</code>, <code>rapid</code> 的顺序检查当前已安装, 启用且已授权的 OCR 插件. 同一引擎的不同变体不影响此顺序; 具体插件变体仍按插件中心的优先级选择. 已知要求更高宿主版本的插件不会参与自动选择.</p>
+<p>读取结果为 <code>&quot;mlkit&quot;</code>, <code>&quot;paddle&quot;</code>, <code>&quot;rapid&quot;</code> 或 <code>&quot;&quot;</code>, 不会返回 <code>&quot;auto&quot;</code>. 插件被安装, 卸载, 启用或禁用后, 正在运行的脚本在下次读取属性时即可看到变化. 读取属性不会启动或绑定 OCR 插件服务.</p>
+<p>显式设置 <code>&quot;mlkit&quot;</code>, <code>&quot;paddle&quot;</code>, <code>&quot;rapid&quot;</code> 或对应引擎对象后, 当前脚本固定使用该模式. 即使对应插件被禁用或卸载, 读取属性仍返回指定的名称, 识别调用会报告插件不可用, 不会自动切换引擎.</p>
+<p>设置 <code>&quot;auto&quot;</code>, <code>&quot;&quot;</code>, <code>null</code> 或 <code>undefined</code> 可恢复自动选择. 模式名称不区分大小写. 无效模式会抛出异常并保留原来的选择方式. <a href="#ocr_m_tap">ocr.tap(mode)</a> 使用相同规则.</p>
+<pre><code class="lang-js">/* 假设已安装并启用 Paddle v4 和 Rapid v6, 且未安装 ML Kit OCR. */
 console.log(ocr.mode); // &quot;paddle&quot;
 
-ocr.mode = &#39;mlkit&#39;; /* 再次切换到 MLKit 工作模式. */
-console.log(ocr.mode); // &quot;mlkit&quot;
+/* 在插件中心禁用 Paddle 后, 同一脚本下次读取将得到 &quot;rapid&quot;. */
+ocr.mode = &#39;paddle&#39;;
+console.log(ocr.mode); // &quot;paddle&quot;, 显式模式保持固定.
 
-ocr.mode = &#39;rapid&#39;; /* 切换到 Rapid OCR 工作模式. */
-console.log(ocr.mode); // &quot;rapid&quot;
+ocr.mode = &#39;auto&#39;;
+console.log(ocr.mode); // &quot;rapid&quot;, 恢复自动选择.
+
+/* 以下写法也会恢复自动选择. */
+ocr.mode = &#39;&#39;;
+ocr.mode = null;
+ocr.mode = undefined;
 </code></pre>
-<p>当使用不同的工作模式名称时, <code>ocr</code> 全局方法及其相关方法 (如 <a href="#ocr_m_detect">ocr.detect</a>) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.</p>
+<pre><code class="lang-js">/* 持续观察插件中心的启用状态变化. */
+while (true) {
+    console.log(ocr.mode);
+    sleep(300);
+}
+</code></pre>
+<p>自动模式下没有可选插件时, 读取属性返回空字符串, 识别方法则抛出说明所需 OCR 插件的异常. 不会把插件不可用当作识别结果为空.</p>
+<p>打包应用中的自动选择会检查实际包含的 Paddle/Rapid 模型和原生库, 并保留 ML Kit OCR 的外部插件调用路径. 模型检测不会初始化原生 OCR 引擎.</p>
 <h2>[m] recognizeText<span><a class="mark" href="#ocr_m_recognizetext" id="ocr_m_recognizetext">#</a></span></h2>
 <p>用于识别图像中的全部文本.</p>
 <p><code>recognizeText</code> 方法与工作模式有关. 例如工作模式为 <code>rapid</code> 时, <code>ocr.recognizeText(...)</code> 与 <code>ocr.rapid.recognizeText(...)</code> 等价.</p>
@@ -658,14 +672,18 @@ result.filter(o =&gt; o.confidence &gt;= 0.8);
 <p>固定使用 Rapid OCR 引擎并返回完整识别结果. 参数重载与 <a href="#ocr_m_detect">ocr.detect</a> 相同.</p>
 <h2>[m] tap<span><a class="mark" href="#ocr_m_tap" id="ocr_m_tap">#</a></span></h2>
 <h3>tap(mode)<span><a class="mark" href="#ocr_tap_mode" id="ocr_tap_mode">#</a></span></h3>
-<p><strong><code>6.3.4</code></strong></p>
+<p><strong><code>6.3.4</code></strong> <strong><code>[6.8.0]</code></strong></p>
 <ul>
-<li><strong>mode</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmodename">OcrModeName</a></span> } - OCR 工作模式</li>
+<li><strong>mode</strong> { <span class="type"><a href="dataTypes.html#datatypes_ocrmode">OcrMode</a></span> } - 固定引擎或自动选择模式</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>用于切换 OCR 工作模式, 相当于 <a href="#ocr_p_mode">ocr.mode</a> 的 setter 形式.</p>
-<pre><code class="lang-js">ocr.tap(&#39;paddle&#39;);
-ocr.mode = &#39;paddle&#39;; /* 同上. */
+<p>设置当前脚本的 OCR 引擎选择方式, 与 <a href="#ocr_p_mode">ocr.mode</a> 的 setter 完全等价. 必须传入一个参数; <code>tap(undefined)</code> 恢复自动选择, 不带参数的 <code>tap()</code> 会抛出异常.</p>
+<pre><code class="lang-js">ocr.tap(&#39;paddle&#39;); // 固定为 Paddle OCR.
+ocr.tap(ocr.rapid); // 固定为 Rapid OCR.
+ocr.tap(&#39;auto&#39;); // 恢复自动选择.
+ocr.tap(&#39;&#39;); // 同上.
+ocr.tap(null); // 同上.
+ocr.tap(undefined); // 同上.
 </code></pre>
 <h2>[m] summary<span><a class="mark" href="#ocr_m_summary" id="ocr_m_summary">#</a></span></h2>
 <h3>summary()<span><a class="mark" href="#ocr_summary" id="ocr_summary">#</a></span></h3>
@@ -674,9 +692,10 @@ ocr.mode = &#39;paddle&#39;; /* 同上. */
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - OCR 工作模式摘要</li>
 </ul>
 <p>获取 AutoJs6 OCR 功能的摘要.</p>
-<p>摘要中表述了 OCR 功能当前使用的工作模式, 以及全部可用的工作模式.</p>
+<p>摘要包含当前引擎名称, 选择方式 (<code>auto</code> 或显式模式), 以及当前可选的引擎列表.</p>
 <pre><code class="lang-js">/* e.g. [ OCR summary ]
  * Current mode: mlkit
+ * Mode selection: auto
  * Available modes: [ mlkit, paddle, rapid ]
  */
 console.log(ocr.summary());
@@ -689,13 +708,15 @@ console.log(ocr.summary());
 </ul>
 <p>返回与 <code>ocr.summary()</code> 相同的文本.</p>
 <h2>工作模式与代码形式<span><a class="mark" href="#ocr" id="ocr">#</a></span></h2>
-<p>AutoJs6 6.8.0 支持 <code>mlkit</code>, <code>paddle</code> 和 <code>rapid</code> 3 种 OCR 工作模式, 默认模式为 <code>mlkit</code>. 工作模式可通过 <a href="#ocr_p_mode">ocr.mode</a> 或 <a href="#ocr_m_tap">ocr.tap</a> 设置.</p>
+<p>AutoJs6 6.8.0 支持 <code>mlkit</code>, <code>paddle</code> 和 <code>rapid</code> 3 种 OCR 引擎, 默认按此顺序自动选择当前可用的插件. 可通过 <a href="#ocr_p_mode">ocr.mode</a> 或 <a href="#ocr_m_tap">ocr.tap</a> 固定引擎或恢复自动选择.</p>
 <p>每个引擎对象均可直接调用, 也提供 <code>recognizeText</code> 和 <code>detect</code>:</p>
 <pre><code class="lang-js">ocr.mlkit(image);
 ocr.paddle.recognizeText(image);
 ocr.rapid.detect(image);
 </code></pre>
 <p>直接调用 <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 或 <code>ocr.detect(...)</code> 时使用当前工作模式. 使用 <code>ocr.mlkit</code>, <code>ocr.paddle</code> 或 <code>ocr.rapid</code> 时固定选择对应引擎, 更适合需要明确引擎的脚本.</p>
+<p>自动模式下, <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 和 <code>ocr.detect(...)</code> 每次调用都会重新选择插件, 并让 <code>engine</code>, <code>engineId</code>, <code>variant</code> 选项参与筛选. 因此单次调用可以选择不同于 <code>ocr.mode</code> 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.</p>
+<p>显式的 <code>options.mode</code> 仅作用于本次调用. 省略该属性时沿用脚本的选择方式; 显式设置 <code>auto</code>, 空字符串或 nullish 值时, 即使脚本处于固定模式, 本次调用也会自动选择. 引擎专用入口 <code>ocr.mlkit(...)</code>, <code>ocr.paddle(...)</code> 和 <code>ocr.rapid(...)</code> 的工作模式优先于 <code>options.mode</code>.</p>
 
         </div>
     </div>

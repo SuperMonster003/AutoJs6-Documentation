@@ -165,26 +165,47 @@ ocr('./picture.jpg', [ 0, 0, 100, 150 ]);
 
 **`6.3.4`** **`[6.8.0]`** **`Getter/Setter`**
 
-- **[ &lt;get&gt; = `'mlkit'` ]** { [OcrModeName](dataTypes#ocrModeName) }
-- **&lt;set&gt;** { [OcrModeName](dataTypes#ocrModeName) }
+- **&lt;get&gt;** { [OcrModeName](dataTypes#ocrModeName) } - 当前引擎名称, 无可选引擎时为空字符串
+- **&lt;set&gt;** { [OcrMode](dataTypes#ocrMode) } - 固定引擎或自动选择模式
 
-获取或设置 OCR 的工作模式名称.
+获取当前 OCR 引擎名称, 或设置当前脚本的引擎选择方式.
+
+AutoJs6 6.8.0 默认采用隐含的自动选择模式. 每次读取此属性时, 按 `mlkit`, `paddle`, `rapid` 的顺序检查当前已安装, 启用且已授权的 OCR 插件. 同一引擎的不同变体不影响此顺序; 具体插件变体仍按插件中心的优先级选择. 已知要求更高宿主版本的插件不会参与自动选择.
+
+读取结果为 `"mlkit"`, `"paddle"`, `"rapid"` 或 `""`, 不会返回 `"auto"`. 插件被安装, 卸载, 启用或禁用后, 正在运行的脚本在下次读取属性时即可看到变化. 读取属性不会启动或绑定 OCR 插件服务.
+
+显式设置 `"mlkit"`, `"paddle"`, `"rapid"` 或对应引擎对象后, 当前脚本固定使用该模式. 即使对应插件被禁用或卸载, 读取属性仍返回指定的名称, 识别调用会报告插件不可用, 不会自动切换引擎.
+
+设置 `"auto"`, `""`, `null` 或 `undefined` 可恢复自动选择. 模式名称不区分大小写. 无效模式会抛出异常并保留原来的选择方式. [ocr.tap(mode)](#m-tap) 使用相同规则.
 
 ```js
-/* AutoJs6 OCR 默认采用 MLKit 工作模式. */
-console.log(ocr.mode); // "mlkit"
-
-ocr.mode = 'paddle'; /* 切换到 Paddle 工作模式. */
+/* 假设已安装并启用 Paddle v4 和 Rapid v6, 且未安装 ML Kit OCR. */
 console.log(ocr.mode); // "paddle"
 
-ocr.mode = 'mlkit'; /* 再次切换到 MLKit 工作模式. */
-console.log(ocr.mode); // "mlkit"
+/* 在插件中心禁用 Paddle 后, 同一脚本下次读取将得到 "rapid". */
+ocr.mode = 'paddle';
+console.log(ocr.mode); // "paddle", 显式模式保持固定.
 
-ocr.mode = 'rapid'; /* 切换到 Rapid OCR 工作模式. */
-console.log(ocr.mode); // "rapid"
+ocr.mode = 'auto';
+console.log(ocr.mode); // "rapid", 恢复自动选择.
+
+/* 以下写法也会恢复自动选择. */
+ocr.mode = '';
+ocr.mode = null;
+ocr.mode = undefined;
 ```
 
-当使用不同的工作模式名称时, `ocr` 全局方法及其相关方法 (如 [ocr.detect](#m-detect)) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.
+```js
+/* 持续观察插件中心的启用状态变化. */
+while (true) {
+    console.log(ocr.mode);
+    sleep(300);
+}
+```
+
+自动模式下没有可选插件时, 读取属性返回空字符串, 识别方法则抛出说明所需 OCR 插件的异常. 不会把插件不可用当作识别结果为空.
+
+打包应用中的自动选择会检查实际包含的 Paddle/Rapid 模型和原生库, 并保留 ML Kit OCR 的外部插件调用路径. 模型检测不会初始化原生 OCR 引擎.
 
 ## [m] recognizeText
 
@@ -488,16 +509,20 @@ result.filter(o => o.confidence >= 0.8);
 
 ### tap(mode)
 
-**`6.3.4`**
+**`6.3.4`** **`[6.8.0]`**
 
-- **mode** { [OcrModeName](dataTypes#ocrModeName) } - OCR 工作模式
+- **mode** { [OcrMode](dataTypes#ocrMode) } - 固定引擎或自动选择模式
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-用于切换 OCR 工作模式, 相当于 [ocr.mode](#p-mode) 的 setter 形式.
+设置当前脚本的 OCR 引擎选择方式, 与 [ocr.mode](#p-mode) 的 setter 完全等价. 必须传入一个参数; `tap(undefined)` 恢复自动选择, 不带参数的 `tap()` 会抛出异常.
 
 ```js
-ocr.tap('paddle');
-ocr.mode = 'paddle'; /* 同上. */
+ocr.tap('paddle'); // 固定为 Paddle OCR.
+ocr.tap(ocr.rapid); // 固定为 Rapid OCR.
+ocr.tap('auto'); // 恢复自动选择.
+ocr.tap(''); // 同上.
+ocr.tap(null); // 同上.
+ocr.tap(undefined); // 同上.
 ```
 
 ## [m] summary
@@ -510,11 +535,12 @@ ocr.mode = 'paddle'; /* 同上. */
 
 获取 AutoJs6 OCR 功能的摘要.
 
-摘要中表述了 OCR 功能当前使用的工作模式, 以及全部可用的工作模式.
+摘要包含当前引擎名称, 选择方式 (`auto` 或显式模式), 以及当前可选的引擎列表.
 
 ```js
 /* e.g. [ OCR summary ]
  * Current mode: mlkit
+ * Mode selection: auto
  * Available modes: [ mlkit, paddle, rapid ]
  */
 console.log(ocr.summary());
@@ -532,7 +558,7 @@ console.log(ocr.summary());
 
 ## 工作模式与代码形式
 
-AutoJs6 6.8.0 支持 `mlkit`, `paddle` 和 `rapid` 3 种 OCR 工作模式, 默认模式为 `mlkit`. 工作模式可通过 [ocr.mode](#p-mode) 或 [ocr.tap](#m-tap) 设置.
+AutoJs6 6.8.0 支持 `mlkit`, `paddle` 和 `rapid` 3 种 OCR 引擎, 默认按此顺序自动选择当前可用的插件. 可通过 [ocr.mode](#p-mode) 或 [ocr.tap](#m-tap) 固定引擎或恢复自动选择.
 
 每个引擎对象均可直接调用, 也提供 `recognizeText` 和 `detect`:
 
@@ -543,3 +569,7 @@ ocr.rapid.detect(image);
 ```
 
 直接调用 `ocr(...)`, `ocr.recognizeText(...)` 或 `ocr.detect(...)` 时使用当前工作模式. 使用 `ocr.mlkit`, `ocr.paddle` 或 `ocr.rapid` 时固定选择对应引擎, 更适合需要明确引擎的脚本.
+
+自动模式下, `ocr(...)`, `ocr.recognizeText(...)` 和 `ocr.detect(...)` 每次调用都会重新选择插件, 并让 `engine`, `engineId`, `variant` 选项参与筛选. 因此单次调用可以选择不同于 `ocr.mode` 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.
+
+显式的 `options.mode` 仅作用于本次调用. 省略该属性时沿用脚本的选择方式; 显式设置 `auto`, 空字符串或 nullish 值时, 即使脚本处于固定模式, 本次调用也会自动选择. 引擎专用入口 `ocr.mlkit(...)`, `ocr.paddle(...)` 和 `ocr.rapid(...)` 的工作模式优先于 `options.mode`.

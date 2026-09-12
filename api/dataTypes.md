@@ -1635,13 +1635,22 @@ app.sendBroadcast('hierarchy'); /* 同上. */
 
 ## OcrModeName
 
-AutoJs6 的 OCR 模式名称.
+[ocr.mode](ocr#p-mode) 读取时返回的 OCR 引擎名称.
 
-当使用不同的模式名称时, `ocr` 全局方法及其相关方法 (如 [ocr.detect](ocr#m-detect)) 将使用不同的引擎, 进而可能获得不同的识别速度和结果.
+- `mlkit` - ML Kit OCR 引擎.
+- `paddle` - Paddle OCR 引擎.
+- `rapid` - Rapid OCR 引擎.
+- `""` - 自动模式下没有可选引擎.
 
-- `mlkit` - 代表 MLKit 引擎
-- `paddle` - 代表 Paddle Lite 引擎
-- `rapid` - 代表 Rapid OCR 引擎
+## OcrMode
+
+设置 [ocr.mode](ocr#p-mode), 调用 [ocr.tap](ocr#m-tap) 或指定 [OcrOptions#mode](ocrOptionsType#p-mode) 时接受的模式值.
+
+- `"mlkit"`, `"paddle"`, `"rapid"` - 固定选择对应引擎, 名称不区分大小写.
+- `ocr.mlkit`, `ocr.paddle`, `ocr.rapid` - 对应引擎对象, 与同名字符串等价.
+- `"auto"`, `""`, `null`, `undefined` - 自动选择, 优先级为 ML Kit OCR, Paddle OCR, Rapid OCR.
+
+自动选择是默认行为. `"auto"` 表示选择方式, 不会作为 `ocr.mode` 的读取结果返回.
 
 ## OcrResult
 

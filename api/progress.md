@@ -2,6 +2,8 @@
 
 本表覆盖 `toc.md` 与 `sidebar.md` 中的全部站内页面. 外部项目链接不计入部署进度.
 
+2026-09-13 Runtime 增量更新: 补充 `requestPermissions` 的本地网络权限名称, Android 17 / targetSdk 37 条件, 异步授权与重试, 原生 Socket / MQTT 异常及插件权限边界.
+
 2026-09-13 Device 增量更新: 补充 `device.pageSize` 的只读数值契约, 字节单位, `$device` 别名及 4 KB / 16 KB 用例.
 
 2026-09-12 OCR 增量更新: 同步动态自动选择, 插件启停热切换, mode/tap 重置规则与单次调用选项.

@@ -4,6 +4,8 @@
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
 
+- `更新` [运行时](https://docs.autojs6.com/#/runtime) 的本地网络权限名称, Android 17 / targetSdk 37 条件, 异步授权与重试及原生 Socket / MQTT 和插件权限边界
+
 - `新增` [设备](https://docs.autojs6.com/#/device) 的 `pageSize` 只读属性, 说明当前系统页大小的字节单位及 4 KB / 16 KB 用例
 - `更新` [OCR](https://docs.autojs6.com/#/ocr) 的动态自动选择, 插件启停热切换, mode/tap 重置规则及单次调用选项
 - `更新` [MediaInfo](https://docs.autojs6.com/#/mediainfo) 增加 streamNumber 多流查询, countGet 流计数, infoKind 单位与说明查询, 能力协商及 Complete name 原始路径语义

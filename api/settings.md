@@ -23,6 +23,8 @@ settings 模块用于读取和修改 AutoJs6 的布尔型偏好设置.
 
 读取指定布尔型偏好设置.
 
+`foreground_service` 的返回值是保存的开关设置, 不是服务实时存活状态或 Android 17 while-in-use 能力查询.
+
 当设置不存在时返回 `false`.
 
 ```js
@@ -40,6 +42,8 @@ console.log(settings.isEnabled('foreground_service'));
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 写入指定布尔型偏好设置.
+
+写入 `foreground_service` 本身不直接启动或停止 Android 服务. 需要恢复 [Android 17 后台音频](media#android-17-后台音频) 时, 在应用界面操作前台服务开关, 不要将 `settings.setEnabled('foreground_service', true)` 当作获取后台播放资格的方法.
 
 ```js
 let previous = settings.isEnabled('stable_mode');

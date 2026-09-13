@@ -14,7 +14,7 @@
               "textRaw": "isEnabled(key)",
               "type": "method",
               "name": "isEnabled",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 设置是否已启用</li>\n</ul>\n<p>读取指定布尔型偏好设置.</p>\n<p>当设置不存在时返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">console.log(settings.isEnabled(&#39;foreground_service&#39;));\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 设置是否已启用</li>\n</ul>\n<p>读取指定布尔型偏好设置.</p>\n<p><code>foreground_service</code> 的返回值是保存的开关设置, 不是服务实时存活状态或 Android 17 while-in-use 能力查询.</p>\n<p>当设置不存在时返回 <code>false</code>.</p>\n<pre><code class=\"lang-js\">console.log(settings.isEnabled(&#39;foreground_service&#39;));\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -37,7 +37,7 @@
               "textRaw": "setEnabled(key, enabled)",
               "type": "method",
               "name": "setEnabled",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>写入指定布尔型偏好设置.</p>\n<pre><code class=\"lang-js\">let previous = settings.isEnabled(&#39;stable_mode&#39;);\nsettings.setEnabled(&#39;stable_mode&#39;, !previous);\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>key</strong> { <a href=\"dataTypes#string\">string</a> } - 设置键或兼容别名</li>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否启用设置</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>写入指定布尔型偏好设置.</p>\n<p>写入 <code>foreground_service</code> 本身不直接启动或停止 Android 服务. 需要恢复 <a href=\"media#android-17-后台音频\">Android 17 后台音频</a> 时, 在应用界面操作前台服务开关, 不要将 <code>settings.setEnabled(&#39;foreground_service&#39;, true)</code> 当作获取后台播放资格的方法.</p>\n<pre><code class=\"lang-js\">let previous = settings.isEnabled(&#39;stable_mode&#39;);\nsettings.setEnabled(&#39;stable_mode&#39;, !previous);\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [

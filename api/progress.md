@@ -2,6 +2,8 @@
 
 本表覆盖 `toc.md` 与 `sidebar.md` 中的全部站内页面. 外部项目链接不计入部署进度.
 
+2026-09-13 后台音频增量更新: Media / Device 说明 Android 17 运行条件, 静默抑制与可见界面恢复操作; TTS 区分宿主和实际引擎进程; Settings 区分偏好开关, 服务状态和播放资格. 设备适配证据由宿主 SDK 37 Roadmap 单独维护, 本说明不表示所有定时 / 开机 / TTS 场景已验收.
+
 2026-09-13 Runtime 增量更新: 补充 `requestPermissions` 的本地网络权限名称, Android 17 / targetSdk 37 条件, 异步授权与重试, 原生 Socket / MQTT 异常及插件权限边界.
 
 2026-09-13 Device 增量更新: 补充 `device.pageSize` 的只读数值契约, 字节单位, `$device` 别名及 4 KB / 16 KB 用例.

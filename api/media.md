@@ -4,7 +4,7 @@
 
 `media` 提供音频文件播放和媒体库扫描能力. 音频由脚本运行时持有的 Android `MediaPlayer` 播放, 脚本运行时回收时会断开媒体扫描连接并释放播放器.
 
-播放在后台进行. 如果主脚本没有其他未完成任务, 需要使用定时器, 事件循环或其他方式让脚本保持运行.
+播放是异步的. 如果主脚本没有其他未完成任务, 需要使用定时器, 事件循环或其他方式让脚本保持运行. 脚本保持运行不代表应用具备系统允许的后台音频条件.
 
 ```js
 media.playMusic('/sdcard/Music/example.mp3');
@@ -12,6 +12,14 @@ sleep(media.getMusicDuration());
 ```
 
 <p style="font: bold 1em sans-serif; color: #FF7043">media</p>
+
+## Android 17 后台音频
+
+Android 17 对播放, 音频焦点和音量调节增加了运行条件. 应用需要可见 Activity 或非 `shortService` 类型的前台服务; 应用的 `targetSdk` 达到 37 时, 后台前台服务还需要系统授予的 while-in-use 能力. 服务存活或显示通知不代表该能力已具备. 条件不满足时, 系统可能静默阻止播放或音量修改. 参阅 [Android 后台音频限制](https://developer.android.com/about/versions/17/changes/bg-audio).
+
+需要后台播放时, 先打开 AutoJs6, 在主界面侧边栏启用 "前台服务", 然后运行音频脚本. 如果服务在后台或开机时启动, 可在应用界面保持可见时关闭并重新启用该服务, 再运行脚本. 打包应用使用自身设置页的 "前台服务" 开关. 恢复条件后应重试播放, 不依赖已被抑制的播放请求自行恢复.
+
+定时任务或开机触发不保证能够无人值守播放. `media.playMusic` 不会自动启动前台服务, 也不会把普通音乐改为闹钟用途来规避限制. 播放状态和进度只能表示播放器状态, 不能证明设备实际输出了声音. 外部媒体插件在独立进程中播放时, 还需要满足该插件自身的运行条件.
 
 ## [m] scanFile
 
@@ -119,7 +127,7 @@ media.musicSeekTo(30e3);
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否正在播放
 
-播放器尚未创建时返回 `false`.
+播放器尚未创建时返回 `false`. 返回 `true` 表示 `MediaPlayer` 报告正在播放, 不保证音频未被系统抑制; 参阅 [Android 17 后台音频](#android-17-后台音频).
 
 ## [m] getMusicDuration
 

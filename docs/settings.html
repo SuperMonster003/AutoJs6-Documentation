@@ -292,6 +292,7 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 设置是否已启用</li>
 </ul>
 <p>读取指定布尔型偏好设置.</p>
+<p><code>foreground_service</code> 的返回值是保存的开关设置, 不是服务实时存活状态或 Android 17 while-in-use 能力查询.</p>
 <p>当设置不存在时返回 <code>false</code>.</p>
 <pre><code class="lang-js">console.log(settings.isEnabled(&#39;foreground_service&#39;));
 </code></pre>
@@ -304,6 +305,7 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
 <p>写入指定布尔型偏好设置.</p>
+<p>写入 <code>foreground_service</code> 本身不直接启动或停止 Android 服务. 需要恢复 <a href="media.html#media_android_17">Android 17 后台音频</a> 时, 在应用界面操作前台服务开关, 不要将 <code>settings.setEnabled(&#39;foreground_service&#39;, true)</code> 当作获取后台播放资格的方法.</p>
 <pre><code class="lang-js">let previous = settings.isEnabled(&#39;stable_mode&#39;);
 settings.setEnabled(&#39;stable_mode&#39;, !previous);
 </code></pre>

@@ -4,6 +4,9 @@
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
 
+- `更新` [多媒体](https://docs.autojs6.com/#/media), [设备](https://docs.autojs6.com/#/device), [TTS](https://docs.autojs6.com/#/tts) 和 [设置](https://docs.autojs6.com/#/settings) 的 Android 17 后台音频运行条件, 静默抑制, 可见界面恢复操作及引擎进程边界
+- `修复` 离线同步器将插件独立发行版本覆盖为文档内容版本的问题, 保留插件版本并继续核对 contentVersion 和 provenance
+
 - `更新` [运行时](https://docs.autojs6.com/#/runtime) 的本地网络权限名称, Android 17 / targetSdk 37 条件, 异步授权与重试及原生 Socket / MQTT 和插件权限边界
 
 - `新增` [设备](https://docs.autojs6.com/#/device) 的 `pageSize` 只读属性, 说明当前系统页大小的字节单位及 4 KB / 16 KB 用例

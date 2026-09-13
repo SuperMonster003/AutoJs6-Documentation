@@ -4,7 +4,7 @@
     {
       "textRaw": "文本转语音 (TTS)",
       "name": "文本转语音_(tts)",
-      "desc": "<p>tts 模块用于通过 Android 文本转语音引擎播放文本, 插入静音, 合成音频文件, 查询引擎和语音, 以及监听单次任务的执行事件.</p>\n<p><code>tts</code> 与 <code>$tts</code> 指向同一个可调用模块对象.</p>\n<p>tts 服务属于当前脚本运行时. 脚本退出时, 未完成的请求会停止, 相关引擎资源会释放.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">tts</p>\n\n<hr>\n",
+      "desc": "<p>tts 模块用于通过 Android 文本转语音引擎播放文本, 插入静音, 合成音频文件, 查询引擎和语音, 以及监听单次任务的执行事件.</p>\n<p><code>tts</code> 与 <code>$tts</code> 指向同一个可调用模块对象.</p>\n<p>tts 服务属于当前脚本运行时. 脚本退出时, 未完成的请求会停止, 相关引擎资源会释放.</p>\n<p>Android 17 的 <a href=\"media#android-17-后台音频\">后台音频限制</a> 需要结合实际 TTS 引擎判断. 此模块通过 Android <code>TextToSpeech</code> 委托所选引擎合成和播放, 实际音频可能来自引擎进程; 宿主前台服务状态不能单独代表引擎的播放资格. 播放无声时, 检查引擎, 语音数据与系统音量, 并从可见应用界面重试. 合成成功或任务完成事件不等于设备实际发声. <code>synthesizeToFile</code> 只合成文件, 不以宿主能否后台播放作为执行条件.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">tts</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[@] tts",

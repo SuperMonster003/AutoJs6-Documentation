@@ -514,6 +514,8 @@ Android 的 MAC 地址隐私限制可能使方法取得占位地址或无法取�
 
 此方法需要系统的 "修改系统设置" 权限. 可使用 [getMusicMaxVolume()](#getmusicmaxvolume) 查询设备支持的上限.
 
+Android 17 还会检查应用的 [后台音频运行条件](media#android-17-后台音频). 调用正常返回不保证音量已经改变; 需要确认实际结果时, 调用 [getMusicVolume()](#getmusicvolume) 读取当前值.
+
 ## [m] setNotificationVolume
 
 ### setNotificationVolume(volume)
@@ -523,6 +525,8 @@ Android 的 MAC 地址隐私限制可能使方法取得占位地址或无法取�
 
 此方法需要系统的 "修改系统设置" 权限. 可使用 [getNotificationMaxVolume()](#getnotificationmaxvolume) 查询设备支持的上限.
 
+Android 17 还会检查应用的 [后台音频运行条件](media#android-17-后台音频). 调用正常返回不保证音量已经改变; 需要确认实际结果时, 调用 [getNotificationVolume()](#getnotificationvolume) 读取当前值.
+
 ## [m] setAlarmVolume
 
 ### setAlarmVolume(volume)
@@ -531,6 +535,8 @@ Android 的 MAC 地址隐私限制可能使方法取得占位地址或无法取�
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 此方法需要系统的 "修改系统设置" 权限. 可使用 [getAlarmMaxVolume()](#getalarmmaxvolume) 查询设备支持的上限.
+
+Android 17 的闹钟音频例外要求精确闹钟授权与闹钟用途, 仍需满足前台运行条件. 调用正常返回不保证音量已经改变; 需要确认实际结果时, 调用 [getAlarmVolume()](#getalarmvolume) 读取当前值. 参阅 [后台音频运行条件](media#android-17-后台音频).
 
 ## [m] getBattery
 

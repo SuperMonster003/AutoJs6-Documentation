@@ -48,7 +48,7 @@ URL 未以 `"http://"` 或 `"https://"` 开头时, 自动补充 `"http://"`.
 
 - <ins>**returns**</ins> { [okhttp3.OkHttpClient](https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/) } - 当前脚本运行时使用的 OkHttp 客户端
 
-获取当前脚本共享的 OkHttp 客户端. 请求选项中的 `timeout`, `client` 和不安全 TLS 配置会基于并替换该客户端.
+获取当前脚本共享的 OkHttp 客户端. 请求选项中的 `timeout` 和 `client` 配置会基于并替换该客户端. 自 AutoJs6 6.8.0 起, `isInsecure` / `insecure` 仅作用于当前请求, 不会使后续请求继承其证书和主机名校验豁免.
 
 ## [m] buildRequest
 

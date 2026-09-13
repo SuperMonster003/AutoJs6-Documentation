@@ -4,6 +4,8 @@
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
 
+- `更新` [HTTP](https://docs.autojs6.com/#/http) 与 [HttpRequestBuilderOptions](https://docs.autojs6.com/#/httpRequestBuilderOptionsType) 的 `isInsecure` / `insecure` 请求范围, 共享客户端配置及证书信任, CT, ECH 和本地网络权限的区别
+
 - `更新` [多媒体](https://docs.autojs6.com/#/media), [设备](https://docs.autojs6.com/#/device), [TTS](https://docs.autojs6.com/#/tts) 和 [设置](https://docs.autojs6.com/#/settings) 的 Android 17 后台音频运行条件, 静默抑制, 可见界面恢复操作及引擎进程边界
 - `修复` 离线同步器将插件独立发行版本覆盖为文档内容版本的问题, 保留插件版本并继续核对 contentVersion 和 provenance
 

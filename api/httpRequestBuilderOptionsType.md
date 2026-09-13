@@ -120,9 +120,18 @@ HTTP 非成功响应的最大重试次数. 默认最多执行 `1 + 3` 次请求.
 
 此选项会关闭关键的 HTTPS 身份校验, 仅应在受控测试环境中使用.
 
-启用后生成的客户端会成为当前脚本共享客户端, 后续请求会继承该客户端配置.
+自 AutoJs6 6.8.0 起, 此选项仅对当前请求生效, 包括同步, 回调和 Promise 请求. 后续省略此选项或设为 `false` 的请求继续使用共享客户端的证书和主机名校验配置. 旧版本中, 启用此选项可能导致后续请求继承不安全客户端.
 
-不安全 TLS 配置在 [client](#p-client) 配置之后应用, 因此会替换 Builder 中已有的 SSL Socket Factory 和主机名验证器.
+不安全 TLS 配置在 [client](#p-client) 配置之后应用, 因此会替换本次请求的 SSL Socket Factory 和主机名验证器. `timeout` 和 `client` 的常规配置仍会保存到共享客户端. 显式通过 `client` 自定义 TLS 校验的行为由该配置决定, `isInsecure: false` 不会将其强制重置为系统默认值.
+
+HTTPS 连接还受不同条件约束:
+
+- 证书链必须受到客户端信任. 宿主默认配置仅信任系统 CA, 并为 `githubusercontent.com` 附加资源 CA; 安装用户 CA 不会自动令任意域的证书受信任.
+- Certificate Transparency (CT) 检查证书透明度信息. 证书链不受信任与缺少 CT 信息是不同错误, 关闭 CT 不会使未知 CA 变得可信.
+- Encrypted Client Hello (ECH) 需要网络库和服务器共同支持. 系统配置查询成功不表示本次连接已完成 ECH 协商.
+- Android 17 上 targetSdk 37 的本地网络访问需要相应权限, 参见 [runtime.requestPermissions](runtime#m-requestpermissions).
+
+`isInsecure` 使用不执行证书验证的 TrustManager, 不能用其请求成功来证明默认 CA 或 CT 检查通过, 也不能用它绕过本地网络权限. 证书信任与 CT 配置的系统规则参见 [Android Network Security Configuration](https://developer.android.com/privacy-and-security/security-config).
 
 ## [p?] insecure
 

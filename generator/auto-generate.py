@@ -327,14 +327,10 @@ def prepare_version_update_plan(
         source="offline plugin VERSION_BUILD",
     )
     next_plugin_version_code = plugin_version_code + 1
+    # The plugin can ship binary fixes independently of its bundled documentation.
+    # Preserve its release name; contentVersion and provenance track target_version.
     updated_properties = replace_java_property(
         properties_text,
-        "VERSION_NAME",
-        target_version,
-        source=properties_path,
-    )
-    updated_properties = replace_java_property(
-        updated_properties,
         "VERSION_BUILD",
         str(next_plugin_version_code),
         source=properties_path,
@@ -412,7 +408,7 @@ def print_version_update(plan: VersionUpdatePlan, *, preview: bool) -> None:
     )
     print(
         f"  Offline plugin: VERSION_NAME "
-        f"{plan.plugin_version_name} -> {plan.target_version}, "
+        f"{plan.plugin_version_name} (unchanged), "
         f"VERSION_BUILD {plan.plugin_version_code} -> "
         f"{plan.next_plugin_version_code}",
     )
@@ -936,10 +932,6 @@ def validate_offline_project(project: Path) -> tuple[Path, Path]:
 
 def validate_offline_metadata(project: Path, documentation_version: str) -> None:
     metadata_patterns = (
-        (
-            project / "version.properties",
-            re.compile(r"(?m)^[ \t]*VERSION_NAME[ \t]*=[ \t]*([^\r\n]+)"),
-        ),
         (
             project / "app" / "build.gradle.kts",
             re.compile(

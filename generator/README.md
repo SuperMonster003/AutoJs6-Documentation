@@ -43,8 +43,10 @@ npm ci
 `targetAutoJs6Version`. 临时覆盖版本可传入 `--version`, 或设置
 `AUTOJS6_DOCS_VERSION`.
 
-`project.json.versionName` 与离线插件的 `VERSION_NAME` 均以
-`targetAutoJs6Version` 为唯一名称来源.
+`project.json.versionName` 与文档内容版本以 `targetAutoJs6Version` 为来源.
+离线插件的 `VERSION_NAME` 是独立发行版本, 同步时保留原值, 避免把插件的
+二进制修复版本回退到较低的文档版本. 插件的 contentVersion 与两份 provenance
+仍必须对应本次生成的文档版本.
 
 ## 常用命令
 
@@ -104,13 +106,15 @@ project.json:
   versionCode = versionCode + 1
 
 AutoJs6-Plugin-Offline-Docs/version.properties:
-  VERSION_NAME = targetAutoJs6Version
+  VERSION_NAME = 保留原值
   VERSION_BUILD = VERSION_BUILD + 1
 ```
 
 插件的 contentVersion 与两份 provenance 版本也会同步对齐. 失败时版本文件
 会回滚; `--dry-run` 只显示预期变化. 普通
 `python generator/auto-generate.py --sync-offline` 不会自增版本号.
+提交插件前还应按该仓库的 Git 提交计数规则校验 `VERSION_BUILD`, 不把同步次数
+直接等同于提交数.
 生成器会锁定当前文档仓库, 所有离线同步还会锁定目标插件仓库; 即使不同
 文档工作副本指向同一插件, 也不会并发覆盖或丢失构建号自增. 同步使用本次
 构建的不可变快照. 完整 Gradle 校验会显式关闭插件内建的可选构建号自增,

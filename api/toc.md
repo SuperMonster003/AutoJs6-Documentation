@@ -49,6 +49,7 @@
 * [Notice - 消息通知](notice)
 * [OCR - 光学字符识别](ocr)
 * [OpenCC - 中文转换](opencc)
+- [Pangu - 文本间距](pangu)
 * [Pinyin - 拼音](pinyin)
 * [Pinyin4j](pinyin4j)
 * [Plugins - 插件](plugins)

@@ -1,0 +1,80 @@
+{
+  "source": "..\\api\\pangu.md",
+  "modules": [
+    {
+      "textRaw": "文本间距 (Pangu)",
+      "name": "文本间距_(pangu)",
+      "desc": "<p><code>pangu</code> 是 AutoJs6 内置的文本排版对象, 用于处理中文等 CJK 文本与英文, 数字和符号混排时的空格.</p>\n<p>自 AutoJs6 <code>6.8.0</code> 起可在 JavaScript (Rhino) 脚本中直接使用, 无需安装插件或调用 <code>require</code>:</p>\n<pre><code class=\"lang-js\">let text = pangu.spaceText(&#39;使用AutoJs6处理文本&#39;);\nconsole.log(text); // 使用 AutoJs6 处理文本.\nconsole.log(pangu.hasProperSpacing(text)); // true\n</code></pre>\n<p>内置版本为 <a href=\"https://github.com/vinta/pangu.js/tree/v10.1.0\">pangu.js 10.1.0</a>, 采用 MIT 许可证.</p>\n<p>AutoJs6 提供上游的纯文本 API. 浏览器 DOM 方法 (如 <code>spacePage</code>, <code>spaceNode</code>, <code>autoSpacePage</code>) 和 Node.js 文件方法 (如 <code>spaceFile</code>, <code>spaceFileSync</code>) 不属于此对象. 读取文件后可将其文本传给 <code>spaceText</code>.</p>\n<p>本对象只注册为全局名称 <code>pangu</code>, 没有 <code>$pangu</code> 别名. 也可通过 <code>require(&#39;pangu&#39;)</code> 获取同一个模块对象.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">pangu</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p] version",
+          "name": "[p]_version",
+          "properties": [
+            {
+              "textRaw": "pangu.version",
+              "name": "version",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>&quot;10.1.0&quot;</code> ] { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>上游 pangu.js 的版本号, 与 AutoJs6 应用版本号相互独立.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p] version"
+        },
+        {
+          "textRaw": "[m] spaceText",
+          "name": "[m]_spacetext",
+          "methods": [
+            {
+              "textRaw": "pangu.spaceText(text)",
+              "type": "method",
+              "name": "spaceText",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待排版的纯文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 按 pangu.js 规则处理后的文本</li>\n</ul>\n<p>同步处理文本并返回结果, 不修改原字符串. 空字符串返回空字符串.</p>\n<pre><code class=\"lang-js\">let original = &#39;今天写了10行JavaScript代码&#39;;\nlet spaced = pangu.spaceText(original);\n\nconsole.log(spaced); // 今天写了 10 行 JavaScript 代码.\nconsole.log(original); // 今天写了10行JavaScript代码.\nconsole.log(pangu.spaceText(&#39;&#39;)); // 空字符串.\n</code></pre>\n<p>方法名称遵循 pangu.js 10.x 的 <code>spaceText</code>, 不提供旧版本的 <code>spacingText</code> 名称. 该方法不是 Markdown 格式化器, 不应直接用于 Markdown 文档或程序源码.</p>\n<p>参数应为 JavaScript 字符串. 沿用上游行为, 非字符串值会记录警告并原样返回, 不会自动转换为字符串; TypeScript 声明仅接受字符串.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] spaceText"
+        },
+        {
+          "textRaw": "[m] hasProperSpacing",
+          "name": "[m]_hasproperspacing",
+          "methods": [
+            {
+              "textRaw": "pangu.hasProperSpacing(text)",
+              "type": "method",
+              "name": "hasProperSpacing",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待检查的纯文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 文本是否已经符合当前排版规则</li>\n</ul>\n<p>结果等同于 <code>pangu.spaceText(text) === text</code>. 此检查使用与 <code>spaceText</code> 相同的规则, 不修改输入.</p>\n<pre><code class=\"lang-js\">console.log(pangu.hasProperSpacing(&#39;中文JavaScript&#39;)); // false\nconsole.log(pangu.hasProperSpacing(&#39;中文 JavaScript&#39;)); // true\nconsole.log(pangu.hasProperSpacing(&#39;&#39;)); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] hasProperSpacing"
+        },
+        {
+          "textRaw": "文件文本示例",
+          "name": "文件文本示例",
+          "desc": "<pre><code class=\"lang-js\">// 前置条件: 当前工作目录中存在 UTF-8 纯文本文件 input.txt.\nlet text = files.read(&#39;input.txt&#39;);\nfiles.write(&#39;output.txt&#39;, pangu.spaceText(text));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "文件文本示例"
+        }
+      ],
+      "type": "module",
+      "displayName": "文本间距 (Pangu)"
+    }
+  ]
+}

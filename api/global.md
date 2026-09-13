@@ -151,6 +151,14 @@ typeof global.sleep; // "function"
 
 返回运行时内置的国际化模块对象.
 
+## [p+] pangu
+
+**`Global`** **`Getter`** **`6.8.0`**
+
+- { [Object](dataTypes#object) }
+
+返回内置的 [文本间距](pangu) 模块对象. 首次访问时加载, 同一脚本运行时内复用此对象.
+
 ## [m] toString
 
 ### global.toString()

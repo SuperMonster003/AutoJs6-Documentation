@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>CryptoKeyPair | AutoJs6 文档 - 6.8.0</title>
+    <title>文本间距 (Pangu) | AutoJs6 文档 - 6.8.0</title>
     <link rel="stylesheet" href="assets/fonts.css">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="stylesheet" href="assets/sh.css">
     <link rel="stylesheet" href="plugins/docsify-copy-code@2-styles.css">
     <link rel="stylesheet" href="plugins/zoom-image-styles.css">
-    <link rel="canonical" href="https://nodejs.org/api/cryptoKeyPairType.html">
+    <link rel="canonical" href="https://nodejs.org/api/pangu.html">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta name="viewport" content="user-scalable=no">
 </head>
-<body class="alt apidoc" id="api-section-cryptoKeyPairType">
+<body class="alt apidoc" id="api-section-pangu">
 <div id="content" class="clearfix">
     <div id="column2" class="interior">
         <div id="intro" class="interior">
@@ -71,7 +71,7 @@
 <li><a class="nav-notice" href="notice.html">Notice - 消息通知</a></li>
 <li><a class="nav-ocr" href="ocr.html">OCR - 光学字符识别</a></li>
 <li><a class="nav-opencc" href="opencc.html">OpenCC - 中文转换</a></li>
-<li><a class="nav-pangu" href="pangu.html">Pangu - 文本间距</a></li>
+<li><a class="nav-pangu active" href="pangu.html">Pangu - 文本间距</a></li>
 <li><a class="nav-pinyin" href="pinyin.html">Pinyin - 拼音</a></li>
 <li><a class="nav-pinyin4j" href="pinyin4j.html">Pinyin4j</a></li>
 <li><a class="nav-plugins" href="plugins.html">Plugins - 插件</a></li>
@@ -154,7 +154,7 @@
 <li><a class="nav-androidRectType" href="androidRectType.html">AndroidRect</a></li>
 <li><a class="nav-cryptoCipherOptionsType" href="cryptoCipherOptionsType.html">CryptoCipherOptions</a></li>
 <li><a class="nav-cryptoKeyType" href="cryptoKeyType.html">CryptoKey</a></li>
-<li><a class="nav-cryptoKeyPairType active" href="cryptoKeyPairType.html">CryptoKeyPair</a></li>
+<li><a class="nav-cryptoKeyPairType" href="cryptoKeyPairType.html">CryptoKeyPair</a></li>
 <li><a class="nav-consoleBuildOptionsType" href="consoleBuildOptionsType.html">ConsoleBuildOptions</a></li>
 <li><a class="nav-httpRequestBuilderOptionsType" href="httpRequestBuilderOptionsType.html">HttpRequestBuilderOptions</a></li>
 <li><a class="nav-httpRequestHeadersType" href="httpRequestHeadersType.html">HttpRequestHeaders</a></li>
@@ -184,7 +184,7 @@
 
     </div>
 
-    <div id="column1" data-id="cryptoKeyPairType" class="interior">
+    <div id="column1" data-id="pangu" class="interior">
         <header>
             <h1>AutoJs6 文档 - 6.8.0</h1>
             <div id="gtoc">
@@ -260,13 +260,20 @@
         <div id="toc">
             <h2>目录</h2>
 <ul>
-<li><span class="stability_undefined"><a href="#cryptokeypairtype_cryptokeypair">CryptoKeyPair</a></span><ul>
-<li><span class="stability_undefined"><a href="#cryptokeypairtype_p_publickey">[p] publicKey</a></span></li>
-<li><span class="stability_undefined"><a href="#cryptokeypairtype_p_privatekey">[p] privateKey</a></span></li>
-<li><span class="stability_undefined"><a href="#cryptokeypairtype_m_tokeyspec">[m] toKeySpec</a></span><ul>
-<li><span class="stability_undefined"><a href="#cryptokeypairtype_tokeyspec_transformation">toKeySpec(transformation)</a></span></li>
+<li><span class="stability_undefined"><a href="#pangu_pangu">文本间距 (Pangu)</a></span><ul>
+<li><span class="stability_undefined"><a href="#pangu_p_version">[p] version</a></span><ul>
+<li><span class="stability_undefined"><a href="#pangu_pangu_version">pangu.version</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#pangu_m_spacetext">[m] spaceText</a></span><ul>
+<li><span class="stability_undefined"><a href="#pangu_pangu_spacetext_text">pangu.spaceText(text)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#pangu_m_hasproperspacing">[m] hasProperSpacing</a></span><ul>
+<li><span class="stability_undefined"><a href="#pangu_pangu_hasproperspacing_text">pangu.hasProperSpacing(text)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#pangu">文件文本示例</a></span></li>
 </ul>
 </li>
 </ul>
@@ -274,55 +281,61 @@
         </div>
 
         <div id="apicontent">
-            <h1>CryptoKeyPair<span><a class="mark" href="#cryptokeypairtype_cryptokeypair" id="cryptokeypairtype_cryptokeypair">#</a></span></h1>
-<p>CryptoKeyPair 是 <code>org.autojs.autojs.core.crypto.Crypto.KeyPair</code> 的子类, 其实例可代表一个公私密钥对, 主要用于 <a href="crypto.html">密文</a> 模块.</p>
-<p>常见相关方法或属性:</p>
+            <h1>文本间距 (Pangu)<span><a class="mark" href="#pangu_pangu" id="pangu_pangu">#</a></span></h1>
+<p><code>pangu</code> 是 AutoJs6 内置的文本排版对象, 用于处理中文等 CJK 文本与英文, 数字和符号混排时的空格.</p>
+<p>自 AutoJs6 <code>6.8.0</code> 起可在 JavaScript (Rhino) 脚本中直接使用, 无需安装插件或调用 <code>require</code>:</p>
+<pre><code class="lang-js">let text = pangu.spaceText(&#39;使用AutoJs6处理文本&#39;);
+console.log(text); // 使用 AutoJs6 处理文本.
+console.log(pangu.hasProperSpacing(text)); // true
+</code></pre>
+<p>内置版本为 <a href="https://github.com/vinta/pangu.js/tree/v10.1.0">pangu.js 10.1.0</a>, 采用 MIT 许可证.</p>
+<p>AutoJs6 提供上游的纯文本 API. 浏览器 DOM 方法 (如 <code>spacePage</code>, <code>spaceNode</code>, <code>autoSpacePage</code>) 和 Node.js 文件方法 (如 <code>spaceFile</code>, <code>spaceFileSync</code>) 不属于此对象. 读取文件后可将其文本传给 <code>spaceText</code>.</p>
+<p>本对象只注册为全局名称 <code>pangu</code>, 没有 <code>$pangu</code> 别名. 也可通过 <code>require(&#39;pangu&#39;)</code> 获取同一个模块对象.</p>
+<hr>
+<p style="font: bold 2em sans-serif; color: #FF7043">pangu</p>
+
+<hr>
+<h2>[p] version<span><a class="mark" href="#pangu_p_version" id="pangu_p_version">#</a></span></h2>
+<h3>pangu.version<span><a class="mark" href="#pangu_pangu_version" id="pangu_pangu_version">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
 <ul>
-<li><a href="crypto.html#crypto_m_generatekeypair">crypto.generateKeyPair</a></li>
-<li><a href="crypto.html#crypto_c_keypair">crypto.KeyPair</a>::new</li>
+<li>[ <code>&quot;10.1.0&quot;</code> ] { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
 </ul>
-<blockquote>
-<p>注: 本章节仅列出 CryptoKeyPair 独有的而不包含继承的属性及方法.</p>
-</blockquote>
-<hr>
-<p style="font: bold 2em sans-serif; color: #FF7043">CryptoKeyPair</p>
+<p>上游 pangu.js 的版本号, 与 AutoJs6 应用版本号相互独立.</p>
+<h2>[m] spaceText<span><a class="mark" href="#pangu_m_spacetext" id="pangu_m_spacetext">#</a></span></h2>
+<h3>pangu.spaceText(text)<span><a class="mark" href="#pangu_pangu_spacetext_text" id="pangu_pangu_spacetext_text">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待排版的纯文本</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 按 pangu.js 规则处理后的文本</li>
+</ul>
+<p>同步处理文本并返回结果, 不修改原字符串. 空字符串返回空字符串.</p>
+<pre><code class="lang-js">let original = &#39;今天写了10行JavaScript代码&#39;;
+let spaced = pangu.spaceText(original);
 
-<hr>
-<h2>[p] publicKey<span><a class="mark" href="#cryptokeypairtype_p_publickey" id="cryptokeypairtype_p_publickey">#</a></span></h2>
-<div class="signature"><ul>
-<li>{ <span class="type"><a href="cryptoKeyType.html">CryptoKey</a></span> } - 公钥</li>
-</ul>
-</div><p>用于非对称加密的公钥.</p>
-<pre><code class="lang-js">let kp = crypto.generateKeyPair(&#39;RSA&#39;, 256);
-console.log(kp.publicKey);
+console.log(spaced); // 今天写了 10 行 JavaScript 代码.
+console.log(original); // 今天写了10行JavaScript代码.
+console.log(pangu.spaceText(&#39;&#39;)); // 空字符串.
 </code></pre>
-<h2>[p] privateKey<span><a class="mark" href="#cryptokeypairtype_p_privatekey" id="cryptokeypairtype_p_privatekey">#</a></span></h2>
-<div class="signature"><ul>
-<li>{ <span class="type"><a href="cryptoKeyType.html">CryptoKey</a></span> } - 私钥</li>
+<p>方法名称遵循 pangu.js 10.x 的 <code>spaceText</code>, 不提供旧版本的 <code>spacingText</code> 名称. 该方法不是 Markdown 格式化器, 不应直接用于 Markdown 文档或程序源码.</p>
+<p>参数应为 JavaScript 字符串. 沿用上游行为, 非字符串值会记录警告并原样返回, 不会自动转换为字符串; TypeScript 声明仅接受字符串.</p>
+<h2>[m] hasProperSpacing<span><a class="mark" href="#pangu_m_hasproperspacing" id="pangu_m_hasproperspacing">#</a></span></h2>
+<h3>pangu.hasProperSpacing(text)<span><a class="mark" href="#pangu_pangu_hasproperspacing_text" id="pangu_pangu_hasproperspacing_text">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待检查的纯文本</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 文本是否已经符合当前排版规则</li>
 </ul>
-</div><p>用于非对称加密的私钥.</p>
-<pre><code class="lang-js">let kp = crypto.generateKeyPair(&#39;DSA&#39;, 1024);
-console.log(kp.privateKey);
+<p>结果等同于 <code>pangu.spaceText(text) === text</code>. 此检查使用与 <code>spaceText</code> 相同的规则, 不修改输入.</p>
+<pre><code class="lang-js">console.log(pangu.hasProperSpacing(&#39;中文JavaScript&#39;)); // false
+console.log(pangu.hasProperSpacing(&#39;中文 JavaScript&#39;)); // true
+console.log(pangu.hasProperSpacing(&#39;&#39;)); // true
 </code></pre>
-<h2>[m] toKeySpec<span><a class="mark" href="#cryptokeypairtype_m_tokeyspec" id="cryptokeypairtype_m_tokeyspec">#</a></span></h2>
-<h3>toKeySpec(transformation)<span><a class="mark" href="#cryptokeypairtype_tokeyspec_transformation" id="cryptokeypairtype_tokeyspec_transformation">#</a></span></h3>
-<div class="signature"><ul>
-<li><strong>transformation</strong> { <span class="type"><a href="dataTypes.html#datatypes_cryptociphertransformation">CryptoCipherTransformation</a></span> } - 密码转换名称</li>
-<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/security/class-use/Key.html">java.security.Key</a></span> } Java 密钥</li>
-</ul>
-</div><p>由密码对生成一个指定算法的 Java 密钥 (Java Key).</p>
-<p><code>toKeySpec</code> 中的 &quot;spec&quot; 全称为 &quot;specification&quot;, 意为 &quot;规范&quot;. 因此, 此方法可理解为将密钥对转换为一个规范的密钥.</p>
-<p>需额外留意, 此方法不能通过构造函数生成的实例进行访问, 只能通过 <a href="crypto.html#crypto_m_generatekeypair">crypto.generateKeyPair</a> 的返回值进行访问:</p>
-<pre><code class="lang-js">/* 抛出异常. */
-new crypto.KeyPair(&#39;pub&#39;, &#39;pri&#39;).toKeySpec(&#39;DES&#39;);
-
-/* 无异常. */
-crypto.generateKeyPair(&#39;DiffieHellman&#39;).toKeySpec(&#39;DES&#39;);
+<h2>文件文本示例<span><a class="mark" href="#pangu" id="pangu">#</a></span></h2>
+<pre><code class="lang-js">// 前置条件: 当前工作目录中存在 UTF-8 纯文本文件 input.txt.
+let text = files.read(&#39;input.txt&#39;);
+files.write(&#39;output.txt&#39;, pangu.spaceText(text));
 </code></pre>
-<p><code>toKeySpec</code> 方法的实际应用, 可参考 <a href="crypto.html#crypto_m_generatekeypair">crypto.generateKeyPair</a> 小节的示例.</p>
-<blockquote>
-<p>注: 如需转换为 <code>crypto.Key</code>, 可使用 <code>new crypto.Key(key)</code>.</p>
-</blockquote>
 
         </div>
     </div>

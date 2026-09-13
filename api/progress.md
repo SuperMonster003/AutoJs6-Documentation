@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-13 Pangu 增量更新: 覆盖内置 pangu.js 10.1.0 的全局对象, 文本间距处理, 间距检查与运行环境.
+
 本表覆盖 `toc.md` 与 `sidebar.md` 中的全部站内页面. 外部项目链接不计入部署进度.
 
 2026-09-13 HTTP 增量更新: `isInsecure` / `insecure` 自 6.8.0 起仅对当前请求生效, 常规客户端选项仍可共享; 区分证书信任, CT, ECH 和本地网络权限. 当前验证基于受控 TLS 夹具, 不表示企业代理或真实 ECH 协商已经验收.
@@ -75,6 +77,7 @@
 | [Notice - 消息通知](notice) | √ |
 | [OCR - 光学字符识别](ocr) | √ |
 | [OpenCC - 中文转换](opencc) | √ |
+| [Pangu - 文本间距](pangu) | √ |
 | [Pinyin - 拼音](pinyin) | √ |
 | [Pinyin4j](pinyin4j) | √ |
 | [Plugins - 插件](plugins) | √ |

@@ -538,6 +538,22 @@
 <li><span class="stability_undefined"><a href="#color_luminance_color">luminance(color)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#color_m_distance">[m] distance</a></span><ul>
+<li><span class="stability_undefined"><a href="#color_distance_colora_colorb_algorithm">distance(colorA, colorB, algorithm?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#color_m_invert">[m] invert</a></span><ul>
+<li><span class="stability_undefined"><a href="#color_invert_color">invert(color)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#color_m_blend">[m] blend</a></span><ul>
+<li><span class="stability_undefined"><a href="#color_blend_colora_colorb_ratio">blend(colorA, colorB, ratio?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#color_m_contrast">[m] contrast</a></span><ul>
+<li><span class="stability_undefined"><a href="#color_contrast_foreground_background">contrast(foreground, background)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#color_m_tocolorstatelist">[m] toColorStateList</a></span><ul>
 <li><span class="stability_undefined"><a href="#color_tocolorstatelist_color">toColorStateList(...color)</a></span></li>
 </ul>
@@ -2214,6 +2230,62 @@ colors.luminance(colors.YELLOW); // 0.9278
 <blockquote>
 <p>参阅: <a href="https://www.w3.org/WAI/GL/wiki/Relative_luminance">W3C Wiki</a></p>
 </blockquote>
+<h2>[m] distance<span><a class="mark" href="#color_m_distance" id="color_m_distance">#</a></span></h2>
+<h3>distance(colorA, colorB, algorithm?)<span><a class="mark" href="#color_distance_colora_colorb_algorithm" id="color_distance_colora_colorb_algorithm">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>colorA</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>colorB</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>[ algorithm = <code>&#39;diff&#39;</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_colordetectionalgorithm">ColorDetectionAlgorithm</a></span> | <span class="type">{ algorithm?: <a href="dataTypes.html#datatypes_colordetectionalgorithm">ColorDetectionAlgorithm</a></span> } } - 颜色检测算法</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[0..255]</a></span> } - 颜色距离</li>
+</ul>
+<p>按指定 <a href="dataTypes.html#datatypes_colordetectionalgorithm">颜色检测算法</a> 计算两个颜色的距离, 量纲与 <a href="glossaries.html#glossaries_20">颜色匹配阈值</a> 一致, 因此 <code>colors.isSimilar(a, b, threshold, algorithm)</code> 等价于 <code>colors.distance(a, b, algorithm) &lt;= threshold</code>:</p>
+<pre><code class="lang-js">colors.distance(&#39;red&#39;, &#39;red&#39;); // 0
+colors.distance(&#39;orange&#39;, &#39;dark-orange&#39;); // 8.33
+colors.distance(&#39;orange&#39;, &#39;dark-orange&#39;) &lt;= 9; /* true, 与 colors.isSimilar(&#39;orange&#39;, &#39;dark-orange&#39;, 9) 一致. */
+colors.distance(&#39;orange&#39;, &#39;dark-orange&#39;, &#39;hs&#39;); /* 使用色相饱和度距离检测. */
+</code></pre>
+<p><code>&#39;equal&#39;</code> 算法返回各分量差值的最大值, 仅当两个颜色完全相同时为 <code>0</code>.</p>
+<h2>[m] invert<span><a class="mark" href="#color_m_invert" id="color_m_invert">#</a></span></h2>
+<h3>invert(color)<span><a class="mark" href="#color_invert_color" id="color_invert_color">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> } - 反色</li>
+</ul>
+<p>反转颜色的 <code>R (red)</code>, <code>G (green)</code>, <code>B (blue)</code> 分量, 保留 <code>A (alpha)</code> 分量:</p>
+<pre><code class="lang-js">colors.toHex(colors.invert(&#39;#FF0000&#39;)); // &quot;#00FFFF&quot;
+colors.toHex(colors.invert(&#39;#80FF0000&#39;), 8); // &quot;#8000FFFF&quot;
+</code></pre>
+<h2>[m] blend<span><a class="mark" href="#color_m_blend" id="color_m_blend">#</a></span></h2>
+<h3>blend(colorA, colorB, ratio?)<span><a class="mark" href="#color_blend_colora_colorb_ratio" id="color_blend_colora_colorb_ratio">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>colorA</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>colorB</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>[ ratio = <code>0.5</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[0..1]</a></span> | <span class="type"><a href="dataTypes.html#datatypes_percentstring">PercentString</a></span> } - 第二个颜色的权重</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> } - 混合后的颜色</li>
+</ul>
+<p>按权重线性混合两个颜色 (含 <code>A (alpha)</code> 分量), <code>ratio</code> 为 <code>0</code> 时结果为 <code>colorA</code>, 为 <code>1</code> 时结果为 <code>colorB</code>:</p>
+<pre><code class="lang-js">colors.toHex(colors.blend(&#39;black&#39;, &#39;white&#39;)); // &quot;#7F7F7F&quot;
+colors.toHex(colors.blend(&#39;black&#39;, &#39;white&#39;, 0)); // &quot;#000000&quot;
+colors.toHex(colors.blend(&#39;black&#39;, &#39;white&#39;, &#39;100%&#39;)); // &quot;#FFFFFF&quot;
+colors.toHex(colors.blend(&#39;red&#39;, &#39;blue&#39;, 0.25)); // &quot;#BF0040&quot;
+</code></pre>
+<h2>[m] contrast<span><a class="mark" href="#color_m_contrast" id="color_m_contrast">#</a></span></h2>
+<h3>contrast(foreground, background)<span><a class="mark" href="#color_contrast_foreground_background" id="color_contrast_foreground_background">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>foreground</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 前景色</li>
+<li><strong>background</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 背景色, 须为不透明颜色</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[1..21]</a></span> } - 对比度</li>
+</ul>
+<p>按 <a href="https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio">WCAG</a> 公式计算前景色与背景色的对比度, 取值范围 <code>[1..21]</code>. 前景色带透明度时先与背景色合成; 背景色带透明度时抛出异常.</p>
+<p>通常 <code>4.5</code> 以上满足普通文本的可读性要求 (AA 标准), <code>7</code> 以上满足更高要求 (AAA 标准):</p>
+<pre><code class="lang-js">colors.contrast(&#39;black&#39;, &#39;white&#39;); // 21
+colors.contrast(&#39;white&#39;, &#39;white&#39;); // 1
+colors.contrast(&#39;#777777&#39;, &#39;white&#39;) &gt;= 4.5; // true
+</code></pre>
 <h2>[m] toColorStateList<span><a class="mark" href="#color_m_tocolorstatelist" id="color_m_tocolorstatelist">#</a></span></h2>
 <h3>toColorStateList(...color)<span><a class="mark" href="#color_tocolorstatelist_color" id="color_tocolorstatelist_color">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong></p>

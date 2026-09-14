@@ -348,9 +348,9 @@ if (image !== null) {
 <h3>[p#] bgrMat<span><a class="mark" href="#imagewrappertype_p_bgrmat" id="imagewrappertype_p_bgrmat">#</a></span></h3>
 <p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>
 <ul>
-<li>{ <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> } - 3 通道 BGR 矩阵</li>
+<li>{ <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> } - 去除透明通道的矩阵</li>
 </ul>
-<p>也可通过 <code>getBgrMat()</code> 读取. 首次访问会将 <code>mat</code> 转换为 BGR 并缓存结果. 该矩阵与图片一起回收.</p>
+<p>也可通过 <code>getBgrMat()</code> 读取. 首次访问会去除 <code>mat</code> 的透明通道 (4 通道转为 3 通道) 并缓存结果, 灰度图和 3 通道图直接返回 <code>mat</code> 本身. 该矩阵与图片一起回收.</p>
 <h3>[p#] plane<span><a class="mark" href="#imagewrappertype_p_plane" id="imagewrappertype_p_plane">#</a></span></h3>
 <p><strong><code>Getter</code></strong> <strong><code>READONLY</code></strong></p>
 <ul>
@@ -364,7 +364,7 @@ if (image !== null) {
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否保存成功</li>
 </ul>
 </div><p>按当前脚本运行路径解析相对路径, 并按需创建父目录. 已有文件会被覆盖.</p>
-<p>若实例只有 OpenCV 矩阵, 使用 OpenCV <code>imwrite</code> 保存, 编码格式由文件扩展名决定. 否则以 PNG, 质量 <code>100</code> 保存位图数据, 即使路径使用其他扩展名.</p>
+<p>若实例只有 OpenCV 矩阵, 使用 OpenCV <code>imwrite</code> 保存, 编码格式由文件扩展名决定, 3 通道和 4 通道矩阵按 RGB(A) 顺序写入 (与位图一致). 否则以 PNG, 质量 <code>100</code> 保存位图数据, 即使路径使用其他扩展名.</p>
 <p>无法创建父目录时抛出异常. 位图写入失败通常返回 <code>false</code>; OpenCV 写入结果直接作为返回值.</p>
 <pre><code class="lang-js">let image = images.read(&quot;./picture.jpg&quot;);
 if (image !== null) {

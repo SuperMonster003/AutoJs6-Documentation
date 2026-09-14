@@ -71,9 +71,9 @@ if (image !== null) {
 
 **`Getter`** **`READONLY`**
 
-- { [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) } - 3 通道 BGR 矩阵
+- { [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) } - 去除透明通道的矩阵
 
-也可通过 `getBgrMat()` 读取. 首次访问会将 `mat` 转换为 BGR 并缓存结果. 该矩阵与图片一起回收.
+也可通过 `getBgrMat()` 读取. 首次访问会去除 `mat` 的透明通道 (4 通道转为 3 通道) 并缓存结果, 灰度图和 3 通道图直接返回 `mat` 本身. 该矩阵与图片一起回收.
 
 ### [p#] plane
 
@@ -92,7 +92,7 @@ if (image !== null) {
 
 按当前脚本运行路径解析相对路径, 并按需创建父目录. 已有文件会被覆盖.
 
-若实例只有 OpenCV 矩阵, 使用 OpenCV `imwrite` 保存, 编码格式由文件扩展名决定. 否则以 PNG, 质量 `100` 保存位图数据, 即使路径使用其他扩展名.
+若实例只有 OpenCV 矩阵, 使用 OpenCV `imwrite` 保存, 编码格式由文件扩展名决定, 3 通道和 4 通道矩阵按 RGB(A) 顺序写入 (与位图一致). 否则以 PNG, 质量 `100` 保存位图数据, 即使路径使用其他扩展名.
 
 无法创建父目录时抛出异常. 位图写入失败通常返回 `false`; OpenCV 写入结果直接作为返回值.
 

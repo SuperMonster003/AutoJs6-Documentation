@@ -125,9 +125,11 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 `toBase64()` 和 `toBytes()` 支持 `png`, `jpg`, `jpeg`, `webp`, `webp_lossy`, `webp-lossy`, `webp_lossless` 和 `webp-lossless`. 后 4 种显式 WebP 模式要求 Android API 30 或更高.
 
-### [m] images.readPixels(path)
+### [m] images.readPixels(image)
 
-- **path** { [string](dataTypes#string) } - 图片路径
+**`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 图片或图片路径
 - <ins>**returns**</ins> {{
     - data: [JavaArray](dataTypes#javaarray)\<[number](dataTypes#number)\>;
     - width: [number](dataTypes#number);
@@ -135,6 +137,15 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 - }}
 
 读取图片的全部 ARGB 像素. `data` 按从左到右, 从上到下的顺序排列, 长度为 `width * height`.
+
+传入路径时, 读取的临时图片在返回前自动回收; 传入 [ImageWrapper](imageWrapperType) 时, 图片保持可用, 由调用方负责回收.
+
+```js
+let img = images.captureScreen();
+let { data, width, height } = images.readPixels(img);
+console.log(colors.toHex(data[10 * width + 20])); /* 坐标 (20, 10) 处的像素. */
+img.recycle();
+```
 
 ### [m] images.matToImage(mat)
 
@@ -917,6 +928,49 @@ requestScreenCapture({
 - }}
 - <ins>**returns**</ins> { [OpenCVPoint](opencvPointType)[] } - 全部匹配模式的基准点
 
+### [m] images.countPointsByColor(image, color, options?)
+
+**`6.8.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 匹配像素的数量
+
+统计图片 (或 `region` 区域) 中与指定颜色匹配的像素数量, 匹配规则与 [findPointsByColor](#m-images-findpointsbycolor-image-color-options) 相同 (RGB 各分量差值均不超过阈值).
+
+结果直接由 OpenCV 掩码统计得到, 不会生成点数组, 适合判断某个区域是否 "大部分" 为某种颜色:
+
+```js
+let img = images.captureScreen();
+let region = [ 100, 200, 300, 40 ];
+let total = region[2] * region[3];
+let ratio = images.countPointsByColor(img, "#ffffff", { region, threshold: 8 }) / total;
+console.log(ratio > 0.9 ? "区域几乎为白色" : "区域不是白色");
+img.recycle();
+```
+
+### [m] images.getMeanColor(image, region?)
+
+**`6.8.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ region ]** { [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType) } - 统计区域, 默认为整张图片
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 平均颜色
+
+计算图片 (或 `region` 区域) 各通道的平均值并合成为颜色整数. 灰度图返回不透明灰色, 无透明通道的图片 alpha 为 `255`.
+
+```js
+let img = images.captureScreen();
+let mean = images.getMeanColor(img, [ 0, 0, 200, 100 ]);
+console.log(colors.toHex(mean), colors.luminance(mean) > 0.5 ? "偏亮" : "偏暗");
+img.recycle();
+```
+
 ## 找图与特征匹配
 
 ### [m] images.findCircles(image, options?)
@@ -1105,7 +1159,7 @@ console.log(result.best());
 - **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
 - <ins>**returns**</ins> { [number](dataTypes#number) } - 均方误差
 
-结果越小表示差异越小, 完全相同为 `0`.
+结果越小表示差异越小, 完全相同为 `0`. 8 位图像的最大值为 `65025` (即 `255 * 255`).
 
 ### [m] images.ncc(imageA, imageB)
 
@@ -1117,9 +1171,13 @@ console.log(result.best());
 
 ### [m] images.isEqual(imageA, imageB)
 
+**`[6.8.0]`**
+
 - **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 像素是否完全相同
+
+尺寸或类型不同时返回 `false`. 从 AutoJs6 6.8.0 起逐通道精确比较, 任一通道 (含 alpha) 相差 `1` 也会返回 `false`.
 
 ### [m] images.getSimilarity(imageA, imageB, options?)
 

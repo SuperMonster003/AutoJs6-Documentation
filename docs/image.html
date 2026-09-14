@@ -277,7 +277,7 @@
 <li><span class="stability_undefined"><a href="#image_m_images_tobase64_image_format_quality">[m] images.toBase64(image, format?, quality?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_frombytes_bytes">[m] images.fromBytes(bytes)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_tobytes_image_format_quality">[m] images.toBytes(image, format?, quality?)</a></span></li>
-<li><span class="stability_undefined"><a href="#image_m_images_readpixels_path">[m] images.readPixels(path)</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_images_readpixels_image">[m] images.readPixels(image)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_mattoimage_mat">[m] images.matToImage(mat)</a></span></li>
 </ul>
 </li>
@@ -352,6 +352,8 @@
 <li><span class="stability_undefined"><a href="#image_m_images_findpointbycolors_image_firstcolor_paths_options">[m] images.findPointByColors(image, firstColor, paths, options?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_findmulticolors_image_firstcolor_paths_options">[m] images.findMultiColors(image, firstColor, paths, options?)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_images_findpointsbycolors_image_firstcolor_paths_options">[m] images.findPointsByColors(image, firstColor, paths, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_images_countpointsbycolor_image_color_options">[m] images.countPointsByColor(image, color, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_images_getmeancolor_image_region">[m] images.getMeanColor(image, region?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#image_5">找图与特征匹配</a></span><ul>
@@ -541,9 +543,10 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_bytearray">ByteArray</a></span> } - 编码后的 Java 字节数组</li>
 </ul>
 </div><p><code>toBase64()</code> 和 <code>toBytes()</code> 支持 <code>png</code>, <code>jpg</code>, <code>jpeg</code>, <code>webp</code>, <code>webp_lossy</code>, <code>webp-lossy</code>, <code>webp_lossless</code> 和 <code>webp-lossless</code>. 后 4 种显式 WebP 模式要求 Android API 30 或更高.</p>
-<h3>[m] images.readPixels(path)<span><a class="mark" href="#image_m_images_readpixels_path" id="image_m_images_readpixels_path">#</a></span></h3>
-<div class="signature"><ul>
-<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 图片路径</li>
+<h3>[m] images.readPixels(image)<span><a class="mark" href="#image_m_images_readpixels_image" id="image_m_images_readpixels_image">#</a></span></h3>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
+<li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 图片或图片路径</li>
 <li><ins><strong>returns</strong></ins> {{<ul>
 <li>data: <a href="dataTypes.html#datatypes_javaarray">JavaArray</a>\&lt;<a href="dataTypes.html#datatypes_number">number</a>>;</li>
 <li>width: <a href="dataTypes.html#datatypes_number">number</a>;</li>
@@ -552,7 +555,13 @@
 </li>
 <li>}}</li>
 </ul>
-</div><p>读取图片的全部 ARGB 像素. <code>data</code> 按从左到右, 从上到下的顺序排列, 长度为 <code>width * height</code>.</p>
+<p>读取图片的全部 ARGB 像素. <code>data</code> 按从左到右, 从上到下的顺序排列, 长度为 <code>width * height</code>.</p>
+<p>传入路径时, 读取的临时图片在返回前自动回收; 传入 <a href="imageWrapperType.html">ImageWrapper</a> 时, 图片保持可用, 由调用方负责回收.</p>
+<pre><code class="lang-js">let img = images.captureScreen();
+let { data, width, height } = images.readPixels(img);
+console.log(colors.toHex(data[10 * width + 20])); /* 坐标 (20, 10) 处的像素. */
+img.recycle();
+</code></pre>
 <h3>[m] images.matToImage(mat)<span><a class="mark" href="#image_m_images_mattoimage_mat" id="image_m_images_mattoimage_mat">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>mat</strong> { <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> }</li>
@@ -1226,7 +1235,43 @@ requestScreenCapture({
 <li>}}</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="opencvPointType.html">OpenCVPoint</a>[]</span> } - 全部匹配模式的基准点</li>
 </ul>
-</div><h2>找图与特征匹配<span><a class="mark" href="#image_5" id="image_5">#</a></span></h2>
+</div><h3>[m] images.countPointsByColor(image, color, options?)<span><a class="mark" href="#image_m_images_countpointsbycolor_image_color_options" id="image_m_images_countpointsbycolor_image_color_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+<li><strong>color</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> | <span class="type"><a href="dataTypes.html#datatypes_colorhex">ColorHex</a></span> | <span class="type"><a href="dataTypes.html#datatypes_colorname">ColorName</a></span> }</li>
+<li><strong>[ options ]</strong> {{<ul>
+<li>region?: <a href="dataTypes.html#datatypes_number">number</a>[] | <a href="androidRectType.html">AndroidRect</a> | <a href="opencvRectType.html">OpenCVRect</a>;</li>
+<li>threshold?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>similarity?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+</ul>
+</li>
+<li>}}</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 匹配像素的数量</li>
+</ul>
+<p>统计图片 (或 <code>region</code> 区域) 中与指定颜色匹配的像素数量, 匹配规则与 <a href="#image_m_images_findpointsbycolor_image_color_options">findPointsByColor</a> 相同 (RGB 各分量差值均不超过阈值).</p>
+<p>结果直接由 OpenCV 掩码统计得到, 不会生成点数组, 适合判断某个区域是否 &quot;大部分&quot; 为某种颜色:</p>
+<pre><code class="lang-js">let img = images.captureScreen();
+let region = [ 100, 200, 300, 40 ];
+let total = region[2] * region[3];
+let ratio = images.countPointsByColor(img, &quot;#ffffff&quot;, { region, threshold: 8 }) / total;
+console.log(ratio &gt; 0.9 ? &quot;区域几乎为白色&quot; : &quot;区域不是白色&quot;);
+img.recycle();
+</code></pre>
+<h3>[m] images.getMeanColor(image, region?)<span><a class="mark" href="#image_m_images_getmeancolor_image_region" id="image_m_images_getmeancolor_image_region">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+<li><strong>[ region ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a>[]</span> | <span class="type"><a href="androidRectType.html">AndroidRect</a></span> | <span class="type"><a href="opencvRectType.html">OpenCVRect</a></span> } - 统计区域, 默认为整张图片</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> } - 平均颜色</li>
+</ul>
+<p>计算图片 (或 <code>region</code> 区域) 各通道的平均值并合成为颜色整数. 灰度图返回不透明灰色, 无透明通道的图片 alpha 为 <code>255</code>.</p>
+<pre><code class="lang-js">let img = images.captureScreen();
+let mean = images.getMeanColor(img, [ 0, 0, 200, 100 ]);
+console.log(colors.toHex(mean), colors.luminance(mean) &gt; 0.5 ? &quot;偏亮&quot; : &quot;偏暗&quot;);
+img.recycle();
+</code></pre>
+<h2>找图与特征匹配<span><a class="mark" href="#image_5" id="image_5">#</a></span></h2>
 <h3>[m] images.findCircles(image, options?)<span><a class="mark" href="#image_m_images_findcircles_image_options" id="image_m_images_findcircles_image_options">#</a></span></h3>
 <p><strong><code>[6.8.0]</code></strong></p>
 <ul>
@@ -1395,7 +1440,7 @@ console.log(result.best());
 <li><strong>imageB</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> }</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 均方误差</li>
 </ul>
-</div><p>结果越小表示差异越小, 完全相同为 <code>0</code>.</p>
+</div><p>结果越小表示差异越小, 完全相同为 <code>0</code>. 8 位图像的最大值为 <code>65025</code> (即 <code>255 * 255</code>).</p>
 <h3>[m] images.ncc(imageA, imageB)<span><a class="mark" href="#image_m_images_ncc_imagea_imageb" id="image_m_images_ncc_imagea_imageb">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>imageA</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> }</li>
@@ -1404,12 +1449,14 @@ console.log(result.best());
 </ul>
 </div><p>结果通常越接近 <code>1</code> 表示相关性越高.</p>
 <h3>[m] images.isEqual(imageA, imageB)<span><a class="mark" href="#image_m_images_isequal_imagea_imageb" id="image_m_images_isequal_imagea_imageb">#</a></span></h3>
-<div class="signature"><ul>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
 <li><strong>imageA</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
 <li><strong>imageB</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 像素是否完全相同</li>
 </ul>
-</div><h3>[m] images.getSimilarity(imageA, imageB, options?)<span><a class="mark" href="#image_m_images_getsimilarity_imagea_imageb_options" id="image_m_images_getsimilarity_imagea_imageb_options">#</a></span></h3>
+<p>尺寸或类型不同时返回 <code>false</code>. 从 AutoJs6 6.8.0 起逐通道精确比较, 任一通道 (含 alpha) 相差 <code>1</code> 也会返回 <code>false</code>.</p>
+<h3>[m] images.getSimilarity(imageA, imageB, options?)<span><a class="mark" href="#image_m_images_getsimilarity_imagea_imageb_options" id="image_m_images_getsimilarity_imagea_imageb_options">#</a></span></h3>
 <p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>
 <ul>
 <li><strong>imageA</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> }</li>

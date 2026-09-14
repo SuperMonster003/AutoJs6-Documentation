@@ -478,6 +478,22 @@
 <li><span class="stability_undefined"><a href="#colortype_issimilar_other_options">isSimilar(other, options)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#colortype_m_distance">[m#] distance</a></span><ul>
+<li><span class="stability_undefined"><a href="#colortype_distance_other_algorithm">distance(other, algorithm?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#colortype_m_invert">[m#] invert</a></span><ul>
+<li><span class="stability_undefined"><a href="#colortype_invert">invert()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#colortype_m_blend">[m#] blend</a></span><ul>
+<li><span class="stability_undefined"><a href="#colortype_blend_other_ratio">blend(other, ratio?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#colortype_m_contrast">[m#] contrast</a></span><ul>
+<li><span class="stability_undefined"><a href="#colortype_contrast_background">contrast(background)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#colortype_m_isequal">[m#] isEqual</a></span><ul>
 <li><span class="stability_undefined"><a href="#colortype_isequal_other_alphamatters">isEqual(other, alphaMatters?)</a></span></li>
 </ul>
@@ -1729,6 +1745,47 @@ Color(&#39;orange&#39;).isSimilar(&#39;dark-orange&#39;, 8, &#39;hs&#39;); // tr
 <p>判断实例颜与于参数颜色是否相似.</p>
 <p>此方法将非必要参数集中于 <code>options</code> 对象中.</p>
 <pre><code class="lang-js">Color(&#39;#010101&#39;).isSimilar(&#39;#020202&#39;, { similarity: 0.95 }); // true
+</code></pre>
+<h2>[m#] distance<span><a class="mark" href="#colortype_m_distance" id="colortype_m_distance">#</a></span></h2>
+<h3>distance(other, algorithm?)<span><a class="mark" href="#colortype_distance_other_algorithm" id="colortype_distance_other_algorithm">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>other</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>[ algorithm = <code>&#39;diff&#39;</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_colordetectionalgorithm">ColorDetectionAlgorithm</a></span> } - 颜色检测算法</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[0..255]</a></span> } - 颜色距离</li>
+</ul>
+<p>计算实例颜色与参数颜色的距离, 参阅 <a href="color.html#color_m_distance">colors.distance</a>:</p>
+<pre><code class="lang-js">Color(&#39;orange&#39;).distance(&#39;dark-orange&#39;); // 8.33
+</code></pre>
+<h2>[m#] invert<span><a class="mark" href="#colortype_m_invert" id="colortype_m_invert">#</a></span></h2>
+<h3>invert()<span><a class="mark" href="#colortype_invert" id="colortype_invert">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> } - 反色</li>
+</ul>
+<p>参阅 <a href="color.html#color_m_invert">colors.invert</a>. 此方法不修改实例本身:</p>
+<pre><code class="lang-js">colors.toHex(Color(&#39;#FF0000&#39;).invert()); // &quot;#00FFFF&quot;
+</code></pre>
+<h2>[m#] blend<span><a class="mark" href="#colortype_m_blend" id="colortype_m_blend">#</a></span></h2>
+<h3>blend(other, ratio?)<span><a class="mark" href="#colortype_blend_other_ratio" id="colortype_blend_other_ratio">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>other</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>[ ratio = <code>0.5</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[0..1]</a></span> | <span class="type"><a href="dataTypes.html#datatypes_percentstring">PercentString</a></span> } - 参数颜色的权重</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorint">ColorInt</a></span> } - 混合后的颜色</li>
+</ul>
+<p>参阅 <a href="color.html#color_m_blend">colors.blend</a>. 此方法不修改实例本身:</p>
+<pre><code class="lang-js">colors.toHex(Color(&#39;black&#39;).blend(&#39;white&#39;)); // &quot;#7F7F7F&quot;
+</code></pre>
+<h2>[m#] contrast<span><a class="mark" href="#colortype_m_contrast" id="colortype_m_contrast">#</a></span></h2>
+<h3>contrast(background)<span><a class="mark" href="#colortype_contrast_background" id="colortype_contrast_background">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>background</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 背景色, 须为不透明颜色</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_range">Range[1..21]</a></span> } - 对比度</li>
+</ul>
+<p>以实例颜色为前景色计算与背景色的对比度, 参阅 <a href="color.html#color_m_contrast">colors.contrast</a>:</p>
+<pre><code class="lang-js">Color(&#39;black&#39;).contrast(&#39;white&#39;); // 21
 </code></pre>
 <h2>[m#] isEqual<span><a class="mark" href="#colortype_m_isequal" id="colortype_m_isequal">#</a></span></h2>
 <h3>isEqual(other, alphaMatters?)<span><a class="mark" href="#colortype_isequal_other_alphamatters" id="colortype_isequal_other_alphamatters">#</a></span></h3>

@@ -1004,10 +1004,13 @@ img.recycle();
     - weakThreshold?: [number](dataTypes#number);
     - threshold?: [number](dataTypes#number);
     - level?: [number](dataTypes#number);
+    - scales?: [number](dataTypes#number) | [number](dataTypes#number)[];
 - }}
 - <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) } - 最佳匹配的左上角坐标
 
 默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`. `level = -1` 表示自动选择图像金字塔层数.
+
+`scales` **`6.8.0`** 指定依次尝试的模板缩放比例 (含义与 [images.matchTemplate](#m-images-matchtemplate-image-template-options) 相同), 返回所有比例中相似度最高的匹配位置. 从 AutoJs6 6.8.0 起, 返回的坐标总是在原始分辨率上精确定位.
 
 ### [m] images.findPointByImage(image, template, x?, y?, width?, height?, threshold?)
 
@@ -1052,6 +1055,8 @@ img.recycle();
 
 ### [m] images.matchTemplate(image, template, options?)
 
+**`[6.8.0]`**
+
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 待搜索图片
 - **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 模板图片
 - **[ options ]** {{
@@ -1060,6 +1065,7 @@ img.recycle();
     - threshold?: [number](dataTypes#number);
     - level?: [number](dataTypes#number);
     - max?: [number](dataTypes#number);
+    - scales?: [number](dataTypes#number) | [number](dataTypes#number)[];
     - useTransparentMask?: [boolean](dataTypes#boolean);
     - transparentMask?: [boolean](dataTypes#boolean);
 - }}
@@ -1067,18 +1073,24 @@ img.recycle();
 
 默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`, `max = 5`, `useTransparentMask = false`. `transparentMask` 是 `useTransparentMask` 的兼容别名, 仅在前者缺失时生效.
 
-`max` 限制返回结果数量. 开启透明遮罩后, 模板的透明通道参与遮罩构造.
+`max` 限制返回结果数量. 结果按相似度降序排列, 且不含区域相互重叠的重复项. 从 AutoJs6 6.8.0 起, 所有匹配都会在原始分辨率上精确定位 (此前在较粗的金字塔层级达到阈值的结果会直接返回, 坐标可能偏差数个像素).
+
+`scales` (别名 `scale`) **`6.8.0`** 指定依次尝试的模板缩放比例, 可为单个数字或数组, 例如 `[ 0.8, 1, 1.25 ]`, 用于匹配在其他分辨率下截取的模板. 匹配结果的 [scale](#templatematch), [width](#templatematch) 与 [height](#templatematch) 反映实际采用的比例与尺寸, 无法放入图片的比例会被跳过. 比例须为正数.
+
+开启透明遮罩后, 4 通道模板中 alpha 小于 `128` 的像素不参与比较, 适合带透明背景的图标模板. 图片与模板的通道数不同时 (如灰度图与彩色模板) 会自动转换为相同通道后再比较. 纯色模板 (各颜色通道几乎没有变化) 会自动改用平方差算法计算相似度, 不再因相关系数无定义而永远无法匹配.
 
 ```js
 let result = images.matchTemplate("./screen.png", "./button.png", {
     region: [ 0, 0, 1080, 1200 ],
-    weakThreshold: 0.6,
     threshold: 0.9,
-    level: -1,
     max: 5,
-    useTransparentMask: false,
+    scales: [ 0.9, 1, 1.1 ],
 });
-console.log(result.best());
+let best = result.best();
+if (best !== null) {
+    console.log(best.similarity, best.scale, best.rect);
+    click(best.center.x, best.center.y);
+}
 ```
 
 ### [m] images.detectAndComputeFeatures(image, options?)
@@ -1337,11 +1349,44 @@ console.log(result.best());
 
 - { [OpenCVPoint](opencvPointType)[] } - 匹配点数组
 
+#### [p#] MatchingResult#size
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 匹配数量
+
+#### [m#] MatchingResult#isEmpty()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否没有任何匹配
+
+#### [m#] MatchingResult#isNotEmpty()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否至少有一个匹配
+
+#### [m#] MatchingResult#filter(predicate)
+
+**`6.8.0`**
+
+- **predicate** { [Function](dataTypes#function) } - `(match: TemplateMatch) => boolean`
+- <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 仅包含使 `predicate` 返回真值的匹配的新结果
+
+原 `MatchingResult` 不会被修改:
+
+```js
+let result = images.matchTemplate(img, template, { max: 20 });
+let upperHalf = result.filter(m => m.center.y < img.height / 2);
+console.log(upperHalf.size);
+```
+
 #### [m#] MatchingResult#first()
 
 - <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
 
-返回当前顺序中的第一项.
+返回当前顺序中的第一项. 未经排序时, 结果按相似度降序排列, 第一项即最佳匹配.
 
 #### [m#] MatchingResult#last()
 
@@ -1398,17 +1443,35 @@ console.log(result.best());
 
 #### [m#] MatchingResult#sortBy(compareFn)
 
-**`Overload 2/2`**
+**`Overload 2/2`** **`[6.8.0]`**
 
 - **compareFn** { [Function](dataTypes#function) } - `(a: TemplateMatch, b: TemplateMatch) => number`
 - <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 新的排序结果
 
-原 `MatchingResult` 不会被修改.
+原 `MatchingResult` 不会被修改. 比较函数只需返回任意数字, 仅其符号有效 (从 AutoJs6 6.8.0 起, 返回小数不再抛出类型转换异常):
+
+```js
+let byX = result.sortBy((a, b) => a.point.x - b.point.x);
+```
 
 ### TemplateMatch
 
+**`[6.8.0]`**
+
 - **point** { [OpenCVPoint](opencvPointType) } - 模板左上角坐标
 - **similarity** { [number](dataTypes#number) } - 匹配相似度
+- **width** { [number](dataTypes#number) } - 匹配区域宽度 (模板在匹配比例下的宽度) **`6.8.0`**
+- **height** { [number](dataTypes#number) } - 匹配区域高度 (模板在匹配比例下的高度) **`6.8.0`**
+- **scale** { [number](dataTypes#number) } - 产生该匹配的模板缩放比例, 未指定 `scales` 时为 `1` **`6.8.0`**
+- **center** { [OpenCVPoint](opencvPointType) } - 匹配区域的中心点 **`6.8.0`**
+- **rect** { [OpenCVRect](opencvRectType) } - 匹配区域对应的矩形 **`6.8.0`**
+
+```js
+let match = images.matchTemplate(img, template).best();
+if (match !== null) {
+    click(match.center.x, match.center.y);
+}
+```
 
 ### ImageFeatures
 

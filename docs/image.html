@@ -408,6 +408,10 @@
 <li><span class="stability_undefined"><a href="#image_matchingresult">MatchingResult</a></span><ul>
 <li><span class="stability_undefined"><a href="#image_p_matchingresult_matches">[p#] MatchingResult#matches</a></span></li>
 <li><span class="stability_undefined"><a href="#image_p_matchingresult_points">[p#] MatchingResult#points</a></span></li>
+<li><span class="stability_undefined"><a href="#image_p_matchingresult_size">[p#] MatchingResult#size</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_matchingresult_isempty">[m#] MatchingResult#isEmpty()</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_matchingresult_isnotempty">[m#] MatchingResult#isNotEmpty()</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_matchingresult_filter_predicate">[m#] MatchingResult#filter(predicate)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_first">[m#] MatchingResult#first()</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_last">[m#] MatchingResult#last()</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_leftmost">[m#] MatchingResult#leftmost()</a></span></li>
@@ -1301,12 +1305,14 @@ img.recycle();
 <li>weakThreshold?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>threshold?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>level?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>scales?: <a href="dataTypes.html#datatypes_number">number</a> | <a href="dataTypes.html#datatypes_number">number</a>[];</li>
 </ul>
 </li>
 <li>}}</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="opencvPointType.html">OpenCVPoint</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 最佳匹配的左上角坐标</li>
 </ul>
 <p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>. <code>level = -1</code> 表示自动选择图像金字塔层数.</p>
+<p><code>scales</code> <strong><code>6.8.0</code></strong> 指定依次尝试的模板缩放比例 (含义与 <a href="#image_m_images_matchtemplate_image_template_options">images.matchTemplate</a> 相同), 返回所有比例中相似度最高的匹配位置. 从 AutoJs6 6.8.0 起, 返回的坐标总是在原始分辨率上精确定位.</p>
 <h3>[m] images.findPointByImage(image, template, x?, y?, width?, height?, threshold?)<span><a class="mark" href="#image_m_images_findpointbyimage_image_template_x_y_width_height_threshold" id="image_m_images_findpointbyimage_image_template_x_y_width_height_threshold">#</a></span></h3>
 <p><strong><code>Overload 2/2</code></strong></p>
 <ul>
@@ -1343,7 +1349,8 @@ img.recycle();
 </ul>
 <p>使用 <code>findPointByImage()</code> 的位置参数重载代替.</p>
 <h3>[m] images.matchTemplate(image, template, options?)<span><a class="mark" href="#image_m_images_matchtemplate_image_template_options" id="image_m_images_matchtemplate_image_template_options">#</a></span></h3>
-<div class="signature"><ul>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
 <li><strong>image</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待搜索图片</li>
 <li><strong>template</strong> { <span class="type"><a href="imageWrapperType.html">ImageWrapper</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 模板图片</li>
 <li><strong>[ options ]</strong> {{<ul>
@@ -1352,6 +1359,7 @@ img.recycle();
 <li>threshold?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>level?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>max?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>scales?: <a href="dataTypes.html#datatypes_number">number</a> | <a href="dataTypes.html#datatypes_number">number</a>[];</li>
 <li>useTransparentMask?: <a href="dataTypes.html#datatypes_boolean">boolean</a>;</li>
 <li>transparentMask?: <a href="dataTypes.html#datatypes_boolean">boolean</a>;</li>
 </ul>
@@ -1359,17 +1367,21 @@ img.recycle();
 <li>}}</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_matchingresult">MatchingResult</a></span> } - 匹配结果</li>
 </ul>
-</div><p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>, <code>max = 5</code>, <code>useTransparentMask = false</code>. <code>transparentMask</code> 是 <code>useTransparentMask</code> 的兼容别名, 仅在前者缺失时生效.</p>
-<p><code>max</code> 限制返回结果数量. 开启透明遮罩后, 模板的透明通道参与遮罩构造.</p>
+<p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>, <code>max = 5</code>, <code>useTransparentMask = false</code>. <code>transparentMask</code> 是 <code>useTransparentMask</code> 的兼容别名, 仅在前者缺失时生效.</p>
+<p><code>max</code> 限制返回结果数量. 结果按相似度降序排列, 且不含区域相互重叠的重复项. 从 AutoJs6 6.8.0 起, 所有匹配都会在原始分辨率上精确定位 (此前在较粗的金字塔层级达到阈值的结果会直接返回, 坐标可能偏差数个像素).</p>
+<p><code>scales</code> (别名 <code>scale</code>) <strong><code>6.8.0</code></strong> 指定依次尝试的模板缩放比例, 可为单个数字或数组, 例如 <code>[ 0.8, 1, 1.25 ]</code>, 用于匹配在其他分辨率下截取的模板. 匹配结果的 <a href="#image_templatematch">scale</a>, <a href="#image_templatematch">width</a> 与 <a href="#image_templatematch">height</a> 反映实际采用的比例与尺寸, 无法放入图片的比例会被跳过. 比例须为正数.</p>
+<p>开启透明遮罩后, 4 通道模板中 alpha 小于 <code>128</code> 的像素不参与比较, 适合带透明背景的图标模板. 图片与模板的通道数不同时 (如灰度图与彩色模板) 会自动转换为相同通道后再比较. 纯色模板 (各颜色通道几乎没有变化) 会自动改用平方差算法计算相似度, 不再因相关系数无定义而永远无法匹配.</p>
 <pre><code class="lang-js">let result = images.matchTemplate(&quot;./screen.png&quot;, &quot;./button.png&quot;, {
     region: [ 0, 0, 1080, 1200 ],
-    weakThreshold: 0.6,
     threshold: 0.9,
-    level: -1,
     max: 5,
-    useTransparentMask: false,
+    scales: [ 0.9, 1, 1.1 ],
 });
-console.log(result.best());
+let best = result.best();
+if (best !== null) {
+    console.log(best.similarity, best.scale, best.rect);
+    click(best.center.x, best.center.y);
+}
 </code></pre>
 <h3>[m] images.detectAndComputeFeatures(image, options?)<span><a class="mark" href="#image_m_images_detectandcomputefeatures_image_options" id="image_m_images_detectandcomputefeatures_image_options">#</a></span></h3>
 <p><strong><code>6.6.0</code></strong></p>
@@ -1584,11 +1596,37 @@ console.log(result.best());
 <ul>
 <li>{ <span class="type"><a href="opencvPointType.html">OpenCVPoint</a>[]</span> } - 匹配点数组</li>
 </ul>
+<h4>[p#] MatchingResult#size<span><a class="mark" href="#image_p_matchingresult_size" id="image_p_matchingresult_size">#</a></span></h4>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 匹配数量</li>
+</ul>
+<h4>[m#] MatchingResult#isEmpty()<span><a class="mark" href="#image_m_matchingresult_isempty" id="image_m_matchingresult_isempty">#</a></span></h4>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否没有任何匹配</li>
+</ul>
+<h4>[m#] MatchingResult#isNotEmpty()<span><a class="mark" href="#image_m_matchingresult_isnotempty" id="image_m_matchingresult_isnotempty">#</a></span></h4>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否至少有一个匹配</li>
+</ul>
+<h4>[m#] MatchingResult#filter(predicate)<span><a class="mark" href="#image_m_matchingresult_filter_predicate" id="image_m_matchingresult_filter_predicate">#</a></span></h4>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>predicate</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - <code>(match: TemplateMatch) =&gt; boolean</code></li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_matchingresult">MatchingResult</a></span> } - 仅包含使 <code>predicate</code> 返回真值的匹配的新结果</li>
+</ul>
+<p>原 <code>MatchingResult</code> 不会被修改:</p>
+<pre><code class="lang-js">let result = images.matchTemplate(img, template, { max: 20 });
+let upperHalf = result.filter(m =&gt; m.center.y &lt; img.height / 2);
+console.log(upperHalf.size);
+</code></pre>
 <h4>[m#] MatchingResult#first()<span><a class="mark" href="#image_m_matchingresult_first" id="image_m_matchingresult_first">#</a></span></h4>
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_templatematch">TemplateMatch</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
 </ul>
-</div><p>返回当前顺序中的第一项.</p>
+</div><p>返回当前顺序中的第一项. 未经排序时, 结果按相似度降序排列, 第一项即最佳匹配.</p>
 <h4>[m#] MatchingResult#last()<span><a class="mark" href="#image_m_matchingresult_last" id="image_m_matchingresult_last">#</a></span></h4>
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_templatematch">TemplateMatch</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
@@ -1633,18 +1671,31 @@ console.log(result.best());
 </ul>
 <p>方向由 <code>left</code>, <code>right</code>, <code>top</code>, <code>bottom</code>, <code>best</code>, <code>worst</code> 组成. 可使用 <code>-</code> 连接多个排序条件, 例如 <code>left-top</code>.</p>
 <h4>[m#] MatchingResult#sortBy(compareFn)<span><a class="mark" href="#image_m_matchingresult_sortby_comparefn" id="image_m_matchingresult_sortby_comparefn">#</a></span></h4>
-<p><strong><code>Overload 2/2</code></strong></p>
+<p><strong><code>Overload 2/2</code></strong> <strong><code>[6.8.0]</code></strong></p>
 <ul>
 <li><strong>compareFn</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - <code>(a: TemplateMatch, b: TemplateMatch) =&gt; number</code></li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_matchingresult">MatchingResult</a></span> } - 新的排序结果</li>
 </ul>
-<p>原 <code>MatchingResult</code> 不会被修改.</p>
+<p>原 <code>MatchingResult</code> 不会被修改. 比较函数只需返回任意数字, 仅其符号有效 (从 AutoJs6 6.8.0 起, 返回小数不再抛出类型转换异常):</p>
+<pre><code class="lang-js">let byX = result.sortBy((a, b) =&gt; a.point.x - b.point.x);
+</code></pre>
 <h3>TemplateMatch<span><a class="mark" href="#image_templatematch" id="image_templatematch">#</a></span></h3>
-<div class="signature"><ul>
+<p><strong><code>[6.8.0]</code></strong></p>
+<ul>
 <li><strong>point</strong> { <span class="type"><a href="opencvPointType.html">OpenCVPoint</a></span> } - 模板左上角坐标</li>
 <li><strong>similarity</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 匹配相似度</li>
+<li><strong>width</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 匹配区域宽度 (模板在匹配比例下的宽度) <strong><code>6.8.0</code></strong></li>
+<li><strong>height</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 匹配区域高度 (模板在匹配比例下的高度) <strong><code>6.8.0</code></strong></li>
+<li><strong>scale</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 产生该匹配的模板缩放比例, 未指定 <code>scales</code> 时为 <code>1</code> <strong><code>6.8.0</code></strong></li>
+<li><strong>center</strong> { <span class="type"><a href="opencvPointType.html">OpenCVPoint</a></span> } - 匹配区域的中心点 <strong><code>6.8.0</code></strong></li>
+<li><strong>rect</strong> { <span class="type"><a href="opencvRectType.html">OpenCVRect</a></span> } - 匹配区域对应的矩形 <strong><code>6.8.0</code></strong></li>
 </ul>
-</div><h3>ImageFeatures<span><a class="mark" href="#image_imagefeatures" id="image_imagefeatures">#</a></span></h3>
+<pre><code class="lang-js">let match = images.matchTemplate(img, template).best();
+if (match !== null) {
+    click(match.center.x, match.center.y);
+}
+</code></pre>
+<h3>ImageFeatures<span><a class="mark" href="#image_imagefeatures" id="image_imagefeatures">#</a></span></h3>
 <p><code>images.detectAndComputeFeatures()</code> 返回的特征描述对象.</p>
 <h4>[p#] ImageFeatures#scale<span><a class="mark" href="#image_p_imagefeatures_scale" id="image_p_imagefeatures_scale">#</a></span></h4>
 <div class="signature"><ul>

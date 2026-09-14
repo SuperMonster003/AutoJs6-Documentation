@@ -177,6 +177,13 @@
               "desc": "<p>需使用 &quot;项目&quot; 功能.<br>\n新建项目后, 在项目目录 <code>project.json</code> 文件中增加以下条目:</p>\n<pre><code class=\"lang-json\">{\n  &quot;launchConfig&quot;: {\n    &quot;hideLogs&quot;: true\n  }\n}\n</code></pre>\n<p>例如:</p>\n<pre><code class=\"lang-json\">{\n  &quot;name&quot;: &quot;First-Project&quot;,\n  &quot;versionName&quot;: &quot;1.0.0&quot;,\n  &quot;versionCode&quot;: 1,\n  &quot;packageName&quot;: &quot;org.autojs.example.first&quot;,\n  &quot;main&quot;: &quot;main.js&quot;,\n  &quot;launchConfig&quot;: {\n    &quot;hideLogs&quot;: true\n  }\n}\n</code></pre>\n",
               "type": "module",
               "displayName": "打包应用不显示主界面"
+            },
+            {
+              "textRaw": "打包应用的共享存储权限",
+              "name": "打包应用的共享存储权限",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p><code>project.json</code> 中的 <code>launchConfig.requiresSharedStorage</code> 是布尔值, 默认 <code>false</code>. 打包界面的 &quot;启动需要共享存储访问&quot; 选项与此字段对应, 可随打包配置保存.</p>\n<pre><code class=\"lang-json\">{\n  &quot;launchConfig&quot;: {\n    &quot;requiresSharedStorage&quot;: true\n  }\n}\n</code></pre>\n<p>此选项适用于启动后需要直接读写 <code>/sdcard/Download</code> 等共享路径的项目. 打包资源会解包到应用私有目录, 仅使用这些资源或应用专属文件的脚本无需开启. 通过系统文件选择器或 MediaStore 访问文件的项目, 应按相应接口的授权规则处理, 无需仅为这些访问开启此选项. 打包器不会分析脚本代码来推断文件访问需求.</p>\n<table>\n<thead>\n<tr>\n<th>配置或状态</th>\n<th>启动行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>requiresSharedStorage: false</code> 或未配置</td>\n<td>不在启动时申请存储权限, 直接执行脚本. 运行中的共享路径访问仍受 Android 权限限制</td>\n</tr>\n<tr>\n<td><code>requiresSharedStorage: true</code>, 已有可用授权</td>\n<td>执行脚本</td>\n</tr>\n<tr>\n<td><code>requiresSharedStorage: true</code>, 缺少授权</td>\n<td>显示存储说明并暂停启动; 取消或拒绝授权不会执行脚本</td>\n</tr>\n<tr>\n<td>从系统权限设置返回</td>\n<td>重新检查实际权限; 返回设置页本身不代表授权成功</td>\n</tr>\n<tr>\n<td>缺少 Manifest 权限声明</td>\n<td>提示作者重新打包并包含所需权限</td>\n</tr>\n</tbody>\n</table>\n<p>Android 11 及以上使用 &quot;所有文件访问&quot; 设置. Android 10 及以下申请旧存储运行时权限, 无法再次弹出授权框时进入应用设置. 旧安装仍具有可用的传统存储访问权限时, 可直接继续启动. &quot;所有文件访问&quot; 不允许访问其他应用的私有目录, 也不保证可访问不可用的卷或任意受限路径.</p>\n<p>如果自定义了打包权限列表, 跨系统支持需要保留 <code>READ_EXTERNAL_STORAGE</code>, <code>WRITE_EXTERNAL_STORAGE</code> 和 <code>MANAGE_EXTERNAL_STORAGE</code> 对应的 Android 权限声明. 勾选启动选项不会自动修改权限列表. 更新旧项目后, 作者应按其实际共享路径需求设置此字段, 并验证原有文件能否访问.</p>\n<p>同时关闭桌面入口时, 缺少必要存储权限期间会保留桌面入口供用户恢复. 授权后重新启动会应用原有隐藏设置; 也可从打包应用设置页点击 &quot;运行脚本&quot;. 开机入口缺少权限时记录停止原因, 保留恢复入口, 不自动弹出授权页面. 存储授权不会豁免开机启动, 后台服务或音频播放的其他系统限制.</p>\n",
+              "type": "module",
+              "displayName": "打包应用的共享存储权限"
             }
           ],
           "type": "module",

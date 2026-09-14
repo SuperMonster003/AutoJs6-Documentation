@@ -295,10 +295,11 @@
 <li><span class="stability_undefined"><a href="#qa_12">打包应用</a></span><ul>
 <li><span class="stability_undefined"><a href="#qa_13">图片等资源共同打包及多脚本打包</a></span></li>
 <li><span class="stability_undefined"><a href="#qa_14">打包应用不显示主界面</a></span></li>
+<li><span class="stability_undefined"><a href="#qa_15">打包应用的共享存储权限</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#qa_15">代码转换</a></span></li>
-<li><span class="stability_undefined"><a href="#qa_16">反馈</a></span></li>
+<li><span class="stability_undefined"><a href="#qa_16">代码转换</a></span></li>
+<li><span class="stability_undefined"><a href="#qa_17">反馈</a></span></li>
 </ul>
 </li>
 </ul>
@@ -523,7 +524,7 @@ AutoJs6 基于 Paddle Lite 引擎的 <a href="http://project.autojs6.com/blob/ma
 <h3>不同的 AutoJs6 版本<span><a class="mark" href="#qa_autojs6_6" id="qa_autojs6_6">#</a></span></h3>
 <p>随着 AutoJs6 版本的更新, 一些 <code>API</code> 可能出现 [ 新增 / 修改 / 废弃 / 移除 ] 等操作.</p>
 <p>当升级 AutoJs6 后, 某个或某些 <code>API</code> 出现异常时, 可查询应用文档并定位到相关章节, 根据文档的提示排查并解决上述问题.</p>
-<p>如问题仍未解决, 可在项目的 GitHub 议题页面提交 <a href="#qa_16">反馈</a>.</p>
+<p>如问题仍未解决, 可在项目的 GitHub 议题页面提交 <a href="#qa_17">反馈</a>.</p>
 <h2>打包应用<span><a class="mark" href="#qa_12" id="qa_12">#</a></span></h2>
 <p>AutoJs6 打包功能尚不完善, 打包应用与 AutoJs6 主应用可能有较大的功能和界面差异.</p>
 <p>AutoJs6 开发者暂不考虑参与打包功能相关的开发工作, 目前以 <a href="https://github.com/LZX284">LZX284</a> 为主要贡献者进行打包功能的开发及维护, 后续将继续由其他开发者贡献相关代码.</p>
@@ -557,7 +558,50 @@ AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 <code>
   }
 }
 </code></pre>
-<h2>代码转换<span><a class="mark" href="#qa_15" id="qa_15">#</a></span></h2>
+<h3>打包应用的共享存储权限<span><a class="mark" href="#qa_15" id="qa_15">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<p><code>project.json</code> 中的 <code>launchConfig.requiresSharedStorage</code> 是布尔值, 默认 <code>false</code>. 打包界面的 &quot;启动需要共享存储访问&quot; 选项与此字段对应, 可随打包配置保存.</p>
+<pre><code class="lang-json">{
+  &quot;launchConfig&quot;: {
+    &quot;requiresSharedStorage&quot;: true
+  }
+}
+</code></pre>
+<p>此选项适用于启动后需要直接读写 <code>/sdcard/Download</code> 等共享路径的项目. 打包资源会解包到应用私有目录, 仅使用这些资源或应用专属文件的脚本无需开启. 通过系统文件选择器或 MediaStore 访问文件的项目, 应按相应接口的授权规则处理, 无需仅为这些访问开启此选项. 打包器不会分析脚本代码来推断文件访问需求.</p>
+<table>
+<thead>
+<tr>
+<th>配置或状态</th>
+<th>启动行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>requiresSharedStorage: false</code> 或未配置</td>
+<td>不在启动时申请存储权限, 直接执行脚本. 运行中的共享路径访问仍受 Android 权限限制</td>
+</tr>
+<tr>
+<td><code>requiresSharedStorage: true</code>, 已有可用授权</td>
+<td>执行脚本</td>
+</tr>
+<tr>
+<td><code>requiresSharedStorage: true</code>, 缺少授权</td>
+<td>显示存储说明并暂停启动; 取消或拒绝授权不会执行脚本</td>
+</tr>
+<tr>
+<td>从系统权限设置返回</td>
+<td>重新检查实际权限; 返回设置页本身不代表授权成功</td>
+</tr>
+<tr>
+<td>缺少 Manifest 权限声明</td>
+<td>提示作者重新打包并包含所需权限</td>
+</tr>
+</tbody>
+</table>
+<p>Android 11 及以上使用 &quot;所有文件访问&quot; 设置. Android 10 及以下申请旧存储运行时权限, 无法再次弹出授权框时进入应用设置. 旧安装仍具有可用的传统存储访问权限时, 可直接继续启动. &quot;所有文件访问&quot; 不允许访问其他应用的私有目录, 也不保证可访问不可用的卷或任意受限路径.</p>
+<p>如果自定义了打包权限列表, 跨系统支持需要保留 <code>READ_EXTERNAL_STORAGE</code>, <code>WRITE_EXTERNAL_STORAGE</code> 和 <code>MANAGE_EXTERNAL_STORAGE</code> 对应的 Android 权限声明. 勾选启动选项不会自动修改权限列表. 更新旧项目后, 作者应按其实际共享路径需求设置此字段, 并验证原有文件能否访问.</p>
+<p>同时关闭桌面入口时, 缺少必要存储权限期间会保留桌面入口供用户恢复. 授权后重新启动会应用原有隐藏设置; 也可从打包应用设置页点击 &quot;运行脚本&quot;. 开机入口缺少权限时记录停止原因, 保留恢复入口, 不自动弹出授权页面. 存储授权不会豁免开机启动, 后台服务或音频播放的其他系统限制.</p>
+<h2>代码转换<span><a class="mark" href="#qa_16" id="qa_16">#</a></span></h2>
 <p>AutoJs6 支持直接调用 [ Java / Android / 扩展库 ] 等 API.<br>
 对于 AutoJs6 没有内置的功能, 可进行 Java 脚本化, 即直接参照 Java (或 Kotlin 等) 源码, 转换为 JavaScript 代码.<br>
 例如:</p>
@@ -585,7 +629,7 @@ function rotate(src, degrees, px, py) {
 }
 </code></pre>
 <p>关于脚本化 Java 的更多信息, 参阅 <a href="scriptingJava.html">Scripting Java - 脚本化 Java</a> 章节.</p>
-<h2>反馈<span><a class="mark" href="#qa_16" id="qa_16">#</a></span></h2>
+<h2>反馈<span><a class="mark" href="#qa_17" id="qa_17">#</a></span></h2>
 <p>如有任何问题或建议, 可在 GitHub 项目议题页面发起新的反馈.</p>
 <p>关于 <strong>应用文档</strong> 的反馈:<br>
 <a href="http://docs-issues.autojs6.com">http://docs-issues.autojs6.com</a></p>

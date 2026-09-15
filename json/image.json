@@ -2575,7 +2575,7 @@
               "textRaw": "[m] images.detectAndComputeFeatures(image, options?)",
               "type": "method",
               "name": "detectAndComputeFeatures",
-              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>grayscale?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 特征描述对象</li>\n</ul>\n<p>默认使用 <code>method = &quot;SIFT&quot;</code> 和 <code>grayscale = false</code>. <code>method</code> 支持 <code>SIFT</code>, <code>ORB</code> 或对应内部整数常量.</p>\n<p><code>scale</code> 被限制在 <code>0</code> 至 <code>1</code>. 未指定时, 小于约 100 万像素的图片使用 <code>1</code>; 更大的图片按约 100 万像素且最长边不超过 <code>1600</code> 的规则自动缩放.</p>\n",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxFeatures?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>grayscale?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 特征描述对象</li>\n</ul>\n<p>检测 <code>image</code> (或其 <code>region</code> 区域) 的关键点并计算描述子, 返回可反复用于 <code>matchFeatures()</code> 的特征对象.</p>\n<p><code>method</code> 支持 <code>SIFT</code> (默认, 精度高且对缩放和旋转稳定) 与 <code>ORB</code> (速度快, 二进制描述子), 或对应的内部整数常量.</p>\n<p><code>scale</code> 是检测前对区域应用的缩放比例, 取值范围 <code>(0, 8]</code>. 未指定或为 <code>0</code> 时自动确定: 不超过约 100 万像素的图片使用 <code>1</code>, 更大的图片按约 100 万像素且最长边不超过 <code>1600</code> 的规则缩小. 大于 <code>1</code> 的值会先放大图片, 适用于关键点不足的小图标 (如 <code>scale: 2</code>). 实际使用的比例可由 <code>ImageFeatures#scale</code> 读取.</p>\n<p><code>maxFeatures</code> 限制关键点数量 (按响应强度保留最优者). <code>0</code> 或未指定时使用方法默认值: <code>SIFT</code> 不限制, <code>ORB</code> 为 <code>20000</code>. 场景图纹理丰富时, 过小的上限会使目标区域的关键点被其他区域挤占而导致匹配失败.</p>\n<p>检测始终在灰度图上进行 (SIFT 与 ORB 仅使用亮度信息), 1, 3, 4 通道图片均可直接传入, <code>grayscale</code> 仅为兼容保留. ORB 关键点的图像边界由 OpenCV 默认的 <code>31</code> 像素调整为 <code>15</code> 像素, 使小于 <code>63</code> 像素的图片也能检测到关键点.</p>\n<p>纯色等没有关键点的图片返回 <code>count</code> 为 <code>0</code> 的特征对象, 参与匹配时结果为 <code>null</code> 而不抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2590,18 +2590,18 @@
               ]
             },
             {
-              "textRaw": "[m] images.matchFeatures(sceneFeatures, objectFeatures, options?)",
+              "textRaw": "[m] images.matchFeatures(scene, object, options?)",
               "type": "method",
               "name": "matchFeatures",
-              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>sceneFeatures</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 场景图片特征</li>\n<li><strong>objectFeatures</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 目标图片特征</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>matcher?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>drawMatches?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-images-objectframe\">ObjectFrame</a> | <a href=\"dataTypes#null\">null</a> } - 目标四边形, 或 <code>null</code></li>\n</ul>\n<p><code>matcher</code> 是 <code>org.opencv.features2d.DescriptorMatcher</code> 的静态常量名. 未指定时, ORB 一类的 <code>CV_8U</code> 描述符使用 <code>BRUTEFORCE_HAMMING</code>, 其他描述符使用 <code>FLANNBASED</code>.</p>\n<p>默认阈值对 <code>CV_8U</code> 描述符为 <code>0.8</code>, 对其他描述符为 <code>0.7</code>. <code>drawMatches</code> 可指定调试匹配图的 JPG 保存路径.</p>\n",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>scene</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> | <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 场景图片 (大图) 或其特征</li>\n<li><strong>object</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> | <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 目标图片 (小图) 或其特征</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>matcher?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>ransacThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>minInliers?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>drawMatches?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxFeatures?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-images-objectframe\">ObjectFrame</a> | <a href=\"dataTypes#null\">null</a> } - 目标四边形, 或 <code>null</code></li>\n</ul>\n<p>在场景中寻找目标, 返回目标四角在场景原图坐标系中的位置 (已还原 <code>region</code> 偏移与 <code>scale</code> 缩放).</p>\n<p>两个参数均可直接传入图片或图片路径, 此时会按 <code>method</code>, <code>scale</code>, <code>maxFeatures</code> 选项即时检测特征并在匹配后自动回收. 传入的 <a href=\"#imagefeatures\">ImageFeatures</a> 不会被回收 (除非已标记为一次性对象), 可反复用于多次匹配.</p>\n<p>匹配流程: 对目标的每个描述子在场景中取最近的两个描述子, 最近距离小于 <code>threshold</code> 倍次近距离时保留 (Lowe 比例测试); 保留的匹配不少于 <code>4</code> 对时用 RANSAC 估计单应矩阵, 重投影误差不超过 <code>ransacThreshold</code> (默认 <code>3</code> 像素) 的匹配为内点; 内点数不少于 <code>minInliers</code> (默认 <code>4</code>) 且目标四角的投影为凸的非退化四边形时返回 <a href=\"#c-images-objectframe\">ObjectFrame</a>, 否则返回 <code>null</code>. 匹配数与内点数可由 <code>ObjectFrame#matches</code> 及 <code>ObjectFrame#inliers</code> 读取.</p>\n<p><code>threshold</code> 取值 <code>(0, 1]</code>, 越小越严格. 默认对 ORB 等二进制描述子为 <code>0.8</code>, 对 SIFT 等浮点描述子为 <code>0.7</code>.</p>\n<p><code>matcher</code> 是 <code>org.opencv.features2d.DescriptorMatcher</code> 的静态常量名 (不区分大小写, 可用 <code>-</code> 代替 <code>_</code>) 或常量值. 未指定时, 二进制描述子使用 <code>BRUTEFORCE_HAMMING</code>, 浮点描述子使用 <code>FLANNBASED</code>. 与描述子类型不兼容的指定 (如 ORB 搭配 <code>FLANNBASED</code>, SIFT 搭配 <code>BRUTEFORCE_HAMMING</code>) 会自动改为对应的默认值而不再抛出异常.</p>\n<p>场景与目标须使用相同的检测方法, 否则抛出异常. 任一特征对象已回收时同样抛出异常.</p>\n<p><code>drawMatches</code> 可指定匹配示意图的 JPG 保存路径 (目标图与场景图并排并以连线标出匹配), 用于调试.</p>\n<p>目标较小 (如小于 <code>100</code> 像素的图标) 时, 建议使用默认的 <code>SIFT</code> 并配合 <code>scale: 2</code> 放大目标以获取足够的关键点; <code>ORB</code> 因关键点边界限制更适合较大的目标.</p>\n<pre><code class=\"lang-js\">let scene = images.captureScreen();\nlet frame = images.matchFeatures(scene, &quot;./icon.png&quot;);\nif (frame !== null) {\n    console.log(`center: ${frame.center}, angle: ${frame.angle.toFixed(1)}, inliers: ${frame.inliers}`);\n    click(frame.centerX, frame.centerY);\n}\nscene.recycle();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "sceneFeatures"
+                      "name": "scene"
                     },
                     {
-                      "name": "objectFeatures"
+                      "name": "object"
                     },
                     {
                       "name": "options?"
@@ -3065,9 +3065,23 @@
               "desc": "<p><code>images.detectAndComputeFeatures()</code> 返回的特征描述对象.</p>\n",
               "modules": [
                 {
+                  "textRaw": "[p#] ImageFeatures#count",
+                  "name": "[p#]_imagefeatures#count",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 检测到的关键点数量</li>\n</ul>\n<p>为 <code>0</code> 时 (如纯色图片) 匹配结果必为 <code>null</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ImageFeatures#count"
+                },
+                {
+                  "textRaw": "[p#] ImageFeatures#method",
+                  "name": "[p#]_imagefeatures#method",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 检测方法名称, 如 <code>&quot;SIFT&quot;</code> 或 <code>&quot;ORB&quot;</code></li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ImageFeatures#method"
+                },
+                {
                   "textRaw": "[p#] ImageFeatures#scale",
                   "name": "[p#] ImageFeatures#scale",
-                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 特征计算时使用的缩放比例</li>\n</ul>\n",
+                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 特征计算时实际使用的缩放比例</li>\n</ul>\n",
                   "type": "module",
                   "displayName": "[p#] ImageFeatures#region"
                 },
@@ -3171,10 +3185,10 @@
             {
               "textRaw": "[C] images.ObjectFrame",
               "name": "ObjectFrame",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>由 4 个 <a href=\"opencvPointType\">OpenCVPoint</a> 表示的特征匹配边框类.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>由 4 个 <a href=\"opencvPointType\">OpenCVPoint</a> 表示的特征匹配边框类. 四角与目标图片自身的四角一一对应, 因此旋转或透视变形的目标会得到旋转的边框, 可通过 <code>angle</code> 与 <code>bounds</code> 读取旋转角度及轴对齐外接矩形.</p>\n",
               "methods": [
                 {
-                  "textRaw": "[c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight)",
+                  "textRaw": "[c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight, matches?, inliers?)",
                   "type": "method",
                   "name": "ObjectFrame",
                   "signatures": [
@@ -3201,6 +3215,16 @@
                           "type": " [OpenCVPoint](opencvPointType) "
                         },
                         {
+                          "textRaw": "**[ matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数 ",
+                          "name": "**[",
+                          "desc": "matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数"
+                        },
+                        {
+                          "textRaw": "**[ inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数 ",
+                          "name": "**[",
+                          "desc": "inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数"
+                        },
+                        {
                           "textRaw": "<ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) } ",
                           "name": "<ins>**returns**</ins>",
                           "type": " [ObjectFrame](#c-images-objectframe) "
@@ -3220,6 +3244,12 @@
                         },
                         {
                           "name": "bottomRight"
+                        },
+                        {
+                          "name": "matches?"
+                        },
+                        {
+                          "name": "inliers?"
                         }
                       ]
                     }
@@ -3278,9 +3308,58 @@
                   "displayName": "[p#] ObjectFrame#center"
                 },
                 {
+                  "textRaw": "[p#] ObjectFrame#width",
+                  "name": "[p#]_objectframe#width",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 上边长度, 即目标在场景中的宽度</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#width"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#height",
+                  "name": "[p#]_objectframe#height",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 左边长度, 即目标在场景中的高度</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#height"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#angle",
+                  "name": "[p#]_objectframe#angle",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 上边的旋转角度 (度), 取值 <code>(-180, 180]</code></li>\n</ul>\n<p>正值表示屏幕上的顺时针方向. 未旋转的目标约为 <code>0</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#angle"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#bounds",
+                  "name": "[p#]_objectframe#bounds",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"opencvRectType\">OpenCVRect</a> } - 四角点的轴对齐外接矩形</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#bounds"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#points",
+                  "name": "[p#]_objectframe#points",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"opencvPointType\">OpenCVPoint</a>[] } - 场景坐标系中的内点</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#points"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#matches",
+                  "name": "[p#]_objectframe#matches",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 通过比例测试的匹配数</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#matches"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#inliers",
+                  "name": "[p#]_objectframe#inliers",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 支撑该边框的 RANSAC 内点数</li>\n</ul>\n<p>内点数越多, 边框越可靠.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#inliers"
+                },
+                {
                   "textRaw": "[m#] ObjectFrame#summary()",
                   "name": "[m#]_objectframe#summary()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 四角点和中心点摘要</li>\n</ul>\n",
+                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 四角点, 中心点, 尺寸, 角度及匹配统计摘要</li>\n</ul>\n",
                   "type": "module",
                   "displayName": "[m#] ObjectFrame#summary()"
                 }

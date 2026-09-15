@@ -1095,37 +1095,73 @@ if (best !== null) {
 
 ### [m] images.detectAndComputeFeatures(image, options?)
 
-**`6.6.0`**
+**`6.6.0`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **[ options ]** {{
     - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
     - scale?: [number](dataTypes#number);
-    - grayscale?: [boolean](dataTypes#boolean);
     - method?: [string](dataTypes#string) | [number](dataTypes#number);
+    - maxFeatures?: [number](dataTypes#number);
+    - grayscale?: [boolean](dataTypes#boolean);
 - }}
 - <ins>**returns**</ins> { [ImageFeatures](#imagefeatures) } - 特征描述对象
 
-默认使用 `method = "SIFT"` 和 `grayscale = false`. `method` 支持 `SIFT`, `ORB` 或对应内部整数常量.
+检测 `image` (或其 `region` 区域) 的关键点并计算描述子, 返回可反复用于 `matchFeatures()` 的特征对象.
 
-`scale` 被限制在 `0` 至 `1`. 未指定时, 小于约 100 万像素的图片使用 `1`; 更大的图片按约 100 万像素且最长边不超过 `1600` 的规则自动缩放.
+`method` 支持 `SIFT` (默认, 精度高且对缩放和旋转稳定) 与 `ORB` (速度快, 二进制描述子), 或对应的内部整数常量.
 
-### [m] images.matchFeatures(sceneFeatures, objectFeatures, options?)
+`scale` 是检测前对区域应用的缩放比例, 取值范围 `(0, 8]`. 未指定或为 `0` 时自动确定: 不超过约 100 万像素的图片使用 `1`, 更大的图片按约 100 万像素且最长边不超过 `1600` 的规则缩小. 大于 `1` 的值会先放大图片, 适用于关键点不足的小图标 (如 `scale: 2`). 实际使用的比例可由 `ImageFeatures#scale` 读取.
 
-**`6.6.0`**
+`maxFeatures` 限制关键点数量 (按响应强度保留最优者). `0` 或未指定时使用方法默认值: `SIFT` 不限制, `ORB` 为 `20000`. 场景图纹理丰富时, 过小的上限会使目标区域的关键点被其他区域挤占而导致匹配失败.
 
-- **sceneFeatures** { [ImageFeatures](#imagefeatures) } - 场景图片特征
-- **objectFeatures** { [ImageFeatures](#imagefeatures) } - 目标图片特征
+检测始终在灰度图上进行 (SIFT 与 ORB 仅使用亮度信息), 1, 3, 4 通道图片均可直接传入, `grayscale` 仅为兼容保留. ORB 关键点的图像边界由 OpenCV 默认的 `31` 像素调整为 `15` 像素, 使小于 `63` 像素的图片也能检测到关键点.
+
+纯色等没有关键点的图片返回 `count` 为 `0` 的特征对象, 参与匹配时结果为 `null` 而不抛出异常.
+
+### [m] images.matchFeatures(scene, object, options?)
+
+**`6.6.0`** **`[6.8.0]`**
+
+- **scene** { [ImageFeatures](#imagefeatures) | [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 场景图片 (大图) 或其特征
+- **object** { [ImageFeatures](#imagefeatures) | [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 目标图片 (小图) 或其特征
 - **[ options ]** {{
-    - matcher?: [string](dataTypes#string);
-    - drawMatches?: [string](dataTypes#string);
+    - matcher?: [string](dataTypes#string) | [number](dataTypes#number);
     - threshold?: [number](dataTypes#number);
+    - ransacThreshold?: [number](dataTypes#number);
+    - minInliers?: [number](dataTypes#number);
+    - drawMatches?: [string](dataTypes#string);
+    - method?: [string](dataTypes#string) | [number](dataTypes#number);
+    - scale?: [number](dataTypes#number);
+    - maxFeatures?: [number](dataTypes#number);
 - }}
 - <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) | [null](dataTypes#null) } - 目标四边形, 或 `null`
 
-`matcher` 是 `org.opencv.features2d.DescriptorMatcher` 的静态常量名. 未指定时, ORB 一类的 `CV_8U` 描述符使用 `BRUTEFORCE_HAMMING`, 其他描述符使用 `FLANNBASED`.
+在场景中寻找目标, 返回目标四角在场景原图坐标系中的位置 (已还原 `region` 偏移与 `scale` 缩放).
 
-默认阈值对 `CV_8U` 描述符为 `0.8`, 对其他描述符为 `0.7`. `drawMatches` 可指定调试匹配图的 JPG 保存路径.
+两个参数均可直接传入图片或图片路径, 此时会按 `method`, `scale`, `maxFeatures` 选项即时检测特征并在匹配后自动回收. 传入的 [ImageFeatures](#imagefeatures) 不会被回收 (除非已标记为一次性对象), 可反复用于多次匹配.
+
+匹配流程: 对目标的每个描述子在场景中取最近的两个描述子, 最近距离小于 `threshold` 倍次近距离时保留 (Lowe 比例测试); 保留的匹配不少于 `4` 对时用 RANSAC 估计单应矩阵, 重投影误差不超过 `ransacThreshold` (默认 `3` 像素) 的匹配为内点; 内点数不少于 `minInliers` (默认 `4`) 且目标四角的投影为凸的非退化四边形时返回 [ObjectFrame](#c-images-objectframe), 否则返回 `null`. 匹配数与内点数可由 `ObjectFrame#matches` 及 `ObjectFrame#inliers` 读取.
+
+`threshold` 取值 `(0, 1]`, 越小越严格. 默认对 ORB 等二进制描述子为 `0.8`, 对 SIFT 等浮点描述子为 `0.7`.
+
+`matcher` 是 `org.opencv.features2d.DescriptorMatcher` 的静态常量名 (不区分大小写, 可用 `-` 代替 `_`) 或常量值. 未指定时, 二进制描述子使用 `BRUTEFORCE_HAMMING`, 浮点描述子使用 `FLANNBASED`. 与描述子类型不兼容的指定 (如 ORB 搭配 `FLANNBASED`, SIFT 搭配 `BRUTEFORCE_HAMMING`) 会自动改为对应的默认值而不再抛出异常.
+
+场景与目标须使用相同的检测方法, 否则抛出异常. 任一特征对象已回收时同样抛出异常.
+
+`drawMatches` 可指定匹配示意图的 JPG 保存路径 (目标图与场景图并排并以连线标出匹配), 用于调试.
+
+目标较小 (如小于 `100` 像素的图标) 时, 建议使用默认的 `SIFT` 并配合 `scale: 2` 放大目标以获取足够的关键点; `ORB` 因关键点边界限制更适合较大的目标.
+
+```js
+let scene = images.captureScreen();
+let frame = images.matchFeatures(scene, "./icon.png");
+if (frame !== null) {
+    console.log(`center: ${frame.center}, angle: ${frame.angle.toFixed(1)}, inliers: ${frame.inliers}`);
+    click(frame.centerX, frame.centerY);
+}
+scene.recycle();
+```
 
 ## 相似度
 
@@ -1275,14 +1311,16 @@ if (best !== null) {
 
 **`6.8.0`**
 
-由 4 个 [OpenCVPoint](opencvPointType) 表示的特征匹配边框类.
+由 4 个 [OpenCVPoint](opencvPointType) 表示的特征匹配边框类. 四角与目标图片自身的四角一一对应, 因此旋转或透视变形的目标会得到旋转的边框, 可通过 `angle` 与 `bounds` 读取旋转角度及轴对齐外接矩形.
 
-#### [c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight)
+#### [c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight, matches?, inliers?)
 
 - **topLeft** { [OpenCVPoint](opencvPointType) }
 - **topRight** { [OpenCVPoint](opencvPointType) }
 - **bottomLeft** { [OpenCVPoint](opencvPointType) }
 - **bottomRight** { [OpenCVPoint](opencvPointType) }
+- **[ matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数
+- **[ inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数
 - <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) }
 
 创建一个对象边框.
@@ -1329,9 +1367,55 @@ if (best !== null) {
 
 - { [OpenCVPoint](opencvPointType) }
 
+#### [p#] ObjectFrame#width
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 上边长度, 即目标在场景中的宽度
+
+#### [p#] ObjectFrame#height
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 左边长度, 即目标在场景中的高度
+
+#### [p#] ObjectFrame#angle
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 上边的旋转角度 (度), 取值 `(-180, 180]`
+
+正值表示屏幕上的顺时针方向. 未旋转的目标约为 `0`.
+
+#### [p#] ObjectFrame#bounds
+
+**`6.8.0`** **`READONLY`**
+
+- { [OpenCVRect](opencvRectType) } - 四角点的轴对齐外接矩形
+
+#### [p#] ObjectFrame#points
+
+**`6.8.0`** **`READONLY`**
+
+- { [OpenCVPoint](opencvPointType)[] } - 场景坐标系中的内点
+
+#### [p#] ObjectFrame#matches
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 通过比例测试的匹配数
+
+#### [p#] ObjectFrame#inliers
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 支撑该边框的 RANSAC 内点数
+
+内点数越多, 边框越可靠.
+
 #### [m#] ObjectFrame#summary()
 
-- <ins>**returns**</ins> { [string](dataTypes#string) } - 四角点和中心点摘要
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 四角点, 中心点, 尺寸, 角度及匹配统计摘要
 
 ### MatchingResult
 
@@ -1477,9 +1561,23 @@ if (match !== null) {
 
 `images.detectAndComputeFeatures()` 返回的特征描述对象.
 
+#### [p#] ImageFeatures#count
+
+**`6.8.0`**
+
+- { [number](dataTypes#number) } - 检测到的关键点数量
+
+为 `0` 时 (如纯色图片) 匹配结果必为 `null`.
+
+#### [p#] ImageFeatures#method
+
+**`6.8.0`**
+
+- { [string](dataTypes#string) } - 检测方法名称, 如 `"SIFT"` 或 `"ORB"`
+
 #### [p#] ImageFeatures#scale
 
-- { [number](dataTypes#number) } - 特征计算时使用的缩放比例
+- { [number](dataTypes#number) } - 特征计算时实际使用的缩放比例
 
 #### [p#] ImageFeatures#region
 

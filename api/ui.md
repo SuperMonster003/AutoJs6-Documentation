@@ -102,7 +102,8 @@ ui.layout(xml);
 | `video` | `JsVideoView` | 视频视图 |
 | `webview`, `web` | `JsWebView` | WebView |
 | `canvas` | `JsCanvasView` | 可持续绘制的 Canvas 视图 |
-| `console` | `JsConsoleView` | 控制台日志视图 |
+| `console` | `JsConsoleView` | 当前脚本的控制台视图 (`global="true"` 或裸属性 `global` 时显示全局控制台) |
+| `globalconsole` | `JsGlobalConsoleView` | 全局控制台视图, 等价于 `<console global>` |
 | `list` | `JsListView` | 基于 RecyclerView 的列表 |
 | `grid` | `JsGridView` | 基于 RecyclerView 的网格 |
 | `viewpager` | `JsViewPager` | 分页视图 |
@@ -272,6 +273,29 @@ Canvas 绘图 API 参阅 [画布](canvas).
 - `webview.jsBridge` - 页面 JavaScript 与脚本之间的消息桥.
 
 `jsBridge` 提供 `send(event, ...args)`, `handle(channel, handler)`, `invoke(channel, ...args)` 和 `eval(code)`. `invoke` 和 `eval` 返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise). WebView 同时保留 Android `WebView` 的原生方法.
+
+### 控制台视图
+
+**`6.8.0`**
+
+`<console>` 显示当前脚本自身的控制台, 内容与 `console.log` 等方法的输出一致 (脚本的输出同时会转发到全局控制台); `<globalconsole>` 显示所有脚本共用的全局控制台 (即应用 "日志" 页面显示的内容), 与 `<console global="true">` 或裸属性写法 `<console global>` 等价. 两者默认不显示标题栏, 不显示时间前缀, 并按日志等级着色.
+
+```js
+"ui";
+
+ui.layout(
+    <vertical>
+        <console id="con" h="0" layout_weight="1" title="控制台" titleBackgroundColor="#3F51B5"/>
+        <globalconsole h="0" layout_weight="1" timeVisible="true" timeFormat="HH:mm:ss"/>
+    </vertical>
+);
+
+console.log("hello");
+```
+
+视图属性与 [console](console) 模块的 `setXxx` 方法一一对应, 如 `titleBackgroundColor` 对应 [console.setTitleBackgroundColor](console#m-settitlebackgroundcolor), `timeVisible` 对应 [console.setTimeVisible](console#m-settimevisible). 设置 `title` 后显示标题栏, 其右侧的 "更多" 按钮可显示或隐藏输入栏, 清空或复制日志以及打开设置对话框. 完整属性列表参阅 [UI 布局属性](uiAttributes#consoleview).
+
+脚本调用 [console.rawInput](console#m-rawinput) 或 [console.input](console#m-input) 等待输入时, 视图底部会自动显示输入栏, 提交后自动隐藏; `inputVisible="true"` 可使其常驻显示.
 
 ## 控件扩展方法
 

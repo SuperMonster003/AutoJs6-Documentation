@@ -748,18 +748,35 @@ Drawable 属性可使用:
 
 ### ConsoleView
 
-`console` 另外支持:
+`console` 和 `globalconsole` 另外支持 (属性与 [console](console) 模块的 `setXxx` 方法对应):
 
 | 属性 | 类型 |
 | --- | --- |
-| `textSize` | 浮点数, sp |
-| `textColors` | 最多 6 个颜色, 依次为 verbose, debug, info, warn, error, assert |
+| `global` | boolean. `true` 显示全局控制台, `false` 显示当前脚本的控制台; 仅 `console` 支持, 可写作裸属性 `<console global>` |
+| `title` | 字符串. 设置后显示标题栏 |
+| `titleBarVisible` (`showTitleBar`) | boolean |
+| `titleTextSize` | 浮点数, sp |
+| `titleTextColor` | 颜色 |
+| `titleBackgroundColor`, `titleBackgroundTint` | 颜色 |
+| `titleBackgroundAlpha` | 0 ~ 1 的浮点数 |
+| `titleIconsTint` | 颜色 |
+| `textSize` (`contentTextSize`) | 浮点数, sp |
+| `textColor` | 颜色. 同时应用于标题及全部日志等级 |
+| `textColors` (`contentTextColors`, `contentTextColor`) | 单个颜色, 或最多 6 个颜色依次为 verbose, debug, info, warn, error, assert |
 | `verboseTextColor` (`verboseColor`) | 颜色 |
-| `debugTextColor` (`debugColor`) | 颜色 |
+| `debugTextColor` (`debugColor`, `logTextColor`, `logColor`) | 颜色 |
 | `infoTextColor` (`infoColor`) | 颜色 |
 | `warnTextColor` (`warnColor`) | 颜色 |
 | `errorTextColor` (`errorColor`) | 颜色 |
 | `assertTextColor` (`assertColor`) | 颜色 |
+| `contentBackgroundColor`, `contentBackgroundTint` | 颜色 |
+| `contentBackgroundAlpha` | 0 ~ 1 的浮点数 |
+| `backgroundColor` (`bgColor`), `backgroundTint` (`bgTint`) | 颜色. 同时应用于标题栏及日志区域 |
+| `backgroundAlpha` | 0 ~ 1 的浮点数. 同时应用于标题栏及日志区域 |
+| `timeVisible` (`showTime`, `timestampVisible`) | boolean, 默认 `false` |
+| `timeFormat` | `SimpleDateFormat` 模式, 默认 `HH:mm:ss.SSS` |
+| `colorful` (`logColoring`) | boolean, 默认 `true` |
+| `inputVisible` (`showInput`, `inputBarVisible`) | boolean, 默认 `false` |
 | `isPinchToZoomEnabled` (`pinchToZoomEnabled`, `enablePinchToZoom`) | boolean |
 
 ### CanvasView

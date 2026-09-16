@@ -192,7 +192,7 @@
         {
           "textRaw": "工具集步骤",
           "name": "工具集步骤",
-          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#工具集-toolkit\">工具集</a> 的 9 个工具可作为链式步骤, 以链上的值为目标 (省略同步形式的首个目标参数), 结果为新值:</p>\n<table>\n<thead>\n<tr>\n<th>步骤</th>\n<th>链上的值</th>\n<th>结果</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>smartClick(options?)</td>\n<td>目标节点</td>\n<td>点击结果对象</td>\n</tr>\n<tr>\n<td>scrollUntil(target, options?)</td>\n<td>滚动容器 (给出 <code>container</code> 选项时忽略)</td>\n<td>找到的节点</td>\n</tr>\n<tr>\n<td>typeInto(text, options?)</td>\n<td>输入框 (<code>null</code> 时为焦点输入框)</td>\n<td>输入框节点</td>\n</tr>\n<tr>\n<td>dismissPopups(targets, options?)</td>\n<td>透传</td>\n<td>透传链上的值</td>\n</tr>\n<tr>\n<td>collectList(item, options?)</td>\n<td>列表容器 (<code>null</code> 时自动探测)</td>\n<td>条目数组</td>\n</tr>\n<tr>\n<td>launchAndWait(app, options?)</td>\n<td>忽略</td>\n<td>启动结果对象</td>\n</tr>\n<tr>\n<td>backUntil(cond, options?)</td>\n<td>忽略</td>\n<td>条件的值</td>\n</tr>\n<tr>\n<td>backToApp(app, options?)</td>\n<td>忽略</td>\n<td>包名</td>\n</tr>\n<tr>\n<td>toggle(checked, options?)</td>\n<td>目标节点</td>\n<td>切换结果对象</td>\n</tr>\n</tbody>\n</table>\n<p>链上的值为 <code>null</code> 而工具需要目标时, 以 <code>INVALID_TARGET</code> (<code>reason</code> 为 <code>noTarget</code>) 拒绝.<br>\n链式形式的 <code>timeout</code> 默认为 <code>0</code> (只查找一次), 与同步形式相同.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;设置项列表&#39;, 5e3)\n    .scrollUntil(&#39;开发者选项&#39;)\n    .smartClick({ verify: &#39;调试&#39; })\n    .then(r =&gt; console.log(r.method, r.verified));\n\nflow.wait(className(&#39;EditText&#39;))\n    .typeInto(&#39;hello&#39;, { submit: true });\n</code></pre>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#工具集-toolkit\">工具集</a> 的 12 个工具可作为链式步骤. 其中 <code>clickIfExists</code>, <code>clickAny</code>, <code>findAny</code> 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:</p>\n<table>\n<thead>\n<tr>\n<th>步骤</th>\n<th>链上的值</th>\n<th>结果</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>smartClick(options?)</td>\n<td>目标节点</td>\n<td>点击结果对象</td>\n</tr>\n<tr>\n<td>clickIfExists(target, options?)</td>\n<td>忽略</td>\n<td>存在且点击成功为 true, 缺席为 false</td>\n</tr>\n<tr>\n<td>clickAny(targets, options?)</td>\n<td>忽略</td>\n<td>被点击的候选对象或 null</td>\n</tr>\n<tr>\n<td>findAny(targets, options?)</td>\n<td>忽略</td>\n<td>找到的候选对象或 null</td>\n</tr>\n<tr>\n<td>scrollUntil(target, options?)</td>\n<td>滚动容器 (给出 <code>container</code> 选项时忽略)</td>\n<td>找到的节点</td>\n</tr>\n<tr>\n<td>typeInto(text, options?)</td>\n<td>输入框 (<code>null</code> 时为焦点输入框)</td>\n<td>输入框节点</td>\n</tr>\n<tr>\n<td>dismissPopups(targets, options?)</td>\n<td>透传</td>\n<td>透传链上的值</td>\n</tr>\n<tr>\n<td>collectList(item, options?)</td>\n<td>列表容器 (<code>null</code> 时自动探测)</td>\n<td>条目数组</td>\n</tr>\n<tr>\n<td>launchAndWait(app, options?)</td>\n<td>忽略</td>\n<td>启动结果对象</td>\n</tr>\n<tr>\n<td>backUntil(cond, options?)</td>\n<td>忽略</td>\n<td>条件的值</td>\n</tr>\n<tr>\n<td>backToApp(app, options?)</td>\n<td>忽略</td>\n<td>包名</td>\n</tr>\n<tr>\n<td>toggle(checked, options?)</td>\n<td>目标节点</td>\n<td>切换结果对象</td>\n</tr>\n</tbody>\n</table>\n<p>链上的值为 <code>null</code> 而工具需要目标时, 以 <code>INVALID_TARGET</code> (<code>reason</code> 为 <code>noTarget</code>) 拒绝.<br>\n链式形式的 <code>timeout</code> 默认为 <code>0</code> (只查找一次), 与同步形式相同.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;设置项列表&#39;, 5e3)\n    .scrollUntil(&#39;开发者选项&#39;)\n    .smartClick({ verify: &#39;调试&#39; })\n    .then(r =&gt; console.log(r.method, r.verified));\n\nflow.wait(className(&#39;EditText&#39;))\n    .typeInto(&#39;hello&#39;, { submit: true });\n</code></pre>\n",
           "type": "module",
           "displayName": "工具集步骤"
         },
@@ -292,6 +292,64 @@
           ],
           "type": "module",
           "displayName": "[m#] retry"
+        },
+        {
+          "textRaw": "[m#] whenPresent",
+          "name": "[m#]_whenpresent",
+          "methods": [
+            {
+              "textRaw": "whenPresent(cond, handler, options?)",
+              "type": "method",
+              "name": "whenPresent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>追加可选分支步骤, 参数和错误规则同 <a href=\"flow#m-whenpresent\">flow.whenPresent</a>. 未出现目标时跳过, 出现时等待处理函数返回的 Flow 或 Promise 完成; 两种情况都透传进入本步骤时的值. 上一步拒绝时不执行本步骤.</p>\n<p>处理函数在工作线程执行, 同 <a href=\"#m-run\">run</a>, 不调用 <code>sync()</code> 或直接操作 UI 组件.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "handler"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] whenPresent"
+        },
+        {
+          "textRaw": "[m#] repeatUntil",
+          "name": "[m#]_repeatuntil",
+          "methods": [
+            {
+              "textRaw": "repeatUntil(action, cond, options?)",
+              "type": "method",
+              "name": "repeatUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#flow\">Flow</a> }</li>\n</ul>\n<p>追加有界循环步骤, 参数同 <a href=\"flow#m-repeatuntil\">flow.repeatUntil</a>. 本步骤开始时才开始计算总时限, 与已有链截止取更早者. 完成后链上的值变为条件的匹配结果; 上一步拒绝时不执行本步骤.</p>\n<p><code>action</code> 在工作线程上每轮重新调用, 应迅速返回本轮新建的 Flow 或 Promise. 取消时停止其尚未完成的子流程; 无法抢占不返回的同步函数或撤销普通 Promise 的外部副作用.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "action"
+                    },
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] repeatUntil"
         },
         {
           "textRaw": "[m#] scope",

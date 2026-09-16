@@ -99,8 +99,9 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/16</p>
 
+- `更新` Flow 可选步骤 `whenPresent`, 有界循环 `repeatUntil`, 链式候选查找与点击, 集合稳定性及 `snapshot` 快照选项, 并校正 `stableFor` 的默认值为 0
 - `新增` 文本间距 (Pangu) 文档, 覆盖内置 pangu.js 10.1.0 的全局对象, 文本排版与间距检查
 - `更新` `runtime.requestPermissions` 的本地网络权限名称, Android 17 / targetSdk 37 条件, 异步授权与重试及插件权限边界
 - `新增` `device.pageSize` 只读属性文档, 说明以字节返回当前系统的内存页大小及 4 KB / 16 KB 用例

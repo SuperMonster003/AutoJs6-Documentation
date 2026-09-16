@@ -960,7 +960,7 @@ clickWait('登录', 5e3); /* 同上. */
 
 - <ins>**returns**</ins> { [Flow](flowType) }
 
-等待目标出现并连续 `stableFor` 毫秒 (默认 500) 无变化, 同 [flow.waitForStable](flow#m-waitforstable).
+等待目标出现并连续 `stableFor` 毫秒 (默认 0) 无变化, 同 [flow.waitForStable](flow#m-waitforstable).
 
 ```js
 waitForStable(className('RecyclerView'), { timeout: 10e3, stableFor: 800 }).then(list => console.log(list.childCount()));

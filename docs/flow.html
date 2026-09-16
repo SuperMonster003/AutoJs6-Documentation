@@ -285,6 +285,14 @@
 <li><span class="stability_undefined"><a href="#flow_waitforstable_cond_options_onok_onerr">waitForStable(cond, options, onOk?, onErr?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#flow_m_whenpresent">[m] whenPresent</a></span><ul>
+<li><span class="stability_undefined"><a href="#flow_whenpresent_cond_handler_options">whenPresent(cond, handler, options?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#flow_m_repeatuntil">[m] repeatUntil</a></span><ul>
+<li><span class="stability_undefined"><a href="#flow_repeatuntil_action_cond_options">repeatUntil(action, cond, options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#flow_m_waitforvisible">[m] waitForVisible</a></span><ul>
 <li><span class="stability_undefined"><a href="#flow_waitforvisible_cond_timeout_interval_onok_onerr">waitForVisible(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
 <li><span class="stability_undefined"><a href="#flow_waitforvisible_cond_options_onok_onerr">waitForVisible(cond, options, onOk?, onErr?)</a></span></li>
@@ -562,8 +570,9 @@ flow.wait(new Promise(resolve =&gt; setTimeout(() =&gt; resolve(&#39;done&#39;),
 <li><strong>[ root ]</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 选择器条件的查找根节点. 默认为活动窗口 (或 <a href="flowType.html#flowtype_m_scope">scope</a> 设置的根节点)</li>
 <li><strong>[ compass ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 找到节点后应用的 <a href="uiObjectType.html#uiobjecttype_m_compass">罗盘</a> 参数</li>
 <li><strong>[ resultType ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 选择器条件的 <a href="dataTypes.html#datatypes_pickupresult">结果类型</a>, 与 <a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 的结果参数相同</li>
-<li><strong>[ stableFor = <code>500</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 稳定检测时长 (毫秒), 仅稳定类等待使用. 默认值取自 <a href="#flow_m_defaults">flow.defaults</a></li>
+<li><strong>[ stableFor = <code>0</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 稳定检测时长 (毫秒), 仅稳定类等待使用. 默认值取自 <a href="#flow_m_defaults">flow.defaults</a>; <code>0</code> 表示首次符合条件即完成, 连续观察时须显式指定正数</li>
 <li><strong>[ compare = <code>&#39;fingerprint&#39;</code> ]</strong> { <code>&#39;fingerprint&#39;</code> | <code>&#39;bounds&#39;</code> | <code>&#39;content&#39;</code> | <a href="dataTypes.html#datatypes_function">(prev, next) =&gt; boolean</a> } - 稳定检测的比较方式: 节点指纹, 边界矩形, 文本与描述, 或自定义比较函数</li>
+<li><strong>[ snapshot ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(value: any) =&gt; any</a></span> } - 稳定检测的数据投影, 在工作线程上执行. 返回基本值, 数组或普通对象, 每次采样立即按结构复制后比较; 与 <code>compare</code> 互斥, 循环引用或不支持的值会拒绝流程. 完成时仍返回原始匹配结果</li>
 <li><strong>[ missing = <code>&#39;reset&#39;</code> ]</strong> { <code>&#39;reset&#39;</code> | <code>&#39;fail&#39;</code> } - 稳定检测期间目标消失时的处理: 重新计时, 或以 <code>TIMEOUT</code> 拒绝</li>
 <li><strong>[ strict ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 随后的动作步骤返回 <code>false</code> 时是否以 <code>ACTION_FAILED</code> 拒绝. 默认值取自 <a href="#flow_m_defaults">flow.defaults</a> 的 <code>strictActions</code></li>
 <li><strong>[ recoverService = <code>false</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 无障碍服务在等待期间断开时是否继续等待服务恢复, 而非立即以 <code>A11Y_UNAVAILABLE</code> 拒绝. 默认值取自 <a href="#flow_m_defaults">flow.defaults</a></li>
@@ -652,9 +661,22 @@ flow.waitWhile(&#39;加载中&#39;, 30e3).then(() =&gt; console.log(&#39;加载�
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
 </ul>
-<p>等待目标出现并保持稳定: 目标连续 <code>stableFor</code> 毫秒 (默认 500) 无变化时以目标 fulfill.</p>
+<p>等待目标出现并保持稳定: 目标连续 <code>stableFor</code> 毫秒 (默认 0) 无变化时以目标 fulfill. 默认值表示首次匹配即完成, 需要连续观察时显式设置正数.</p>
 <p>&quot;无变化&quot; 的判定由 <code>compare</code> 选项决定 (默认比较节点指纹, 即文本, 描述, 边界与主要状态), 期间目标消失时按 <code>missing</code> 选项重新计时 (默认) 或直接失败.<br>
 超时约束整个等待过程 (包括稳定检测).</p>
+<p>选择器使用 <code>resultType: &#39;[]&#39;</code> 时, 内置比较方式会在每次采样时按顺序提取全部节点的比较键, 节点状态, 数量或顺序变化都会重新计时. 指纹只包含节点自身状态, 不递归读取子节点或兄弟节点.<br>
+需要观察同一行的其他字段时使用 <code>snapshot</code>, 避免把活动节点对象当作历史快照. 快照稳定只表示采样内容在指定时间内无变化, 页面是否加载完整仍需结合应用状态判断.</p>
+<pre><code class="lang-js">waitForStable(&#39;去挂号&#39;, {
+    resultType: &#39;[]&#39;,
+    stableFor: 500,
+    timeout: 8e3,
+    snapshot: nodes =&gt; nodes.map(w =&gt; [
+        w.content(),
+        detect(w, &#39;s&lt;2&#39;, &#39;content&#39;), /* 余号字段, 位置以实际布局为准. */
+        detect(w, &#39;s&lt;1&#39;, &#39;content&#39;), /* 费用字段. */
+    ]),
+}).then(nodes =&gt; console.log(nodes.length));
+</code></pre>
 <p>适用于列表刷新, 动画过渡等 &quot;出现了但还在变&quot; 的场景.</p>
 <pre><code class="lang-js">/* 等待列表停止滚动后再读取. */
 flow.waitForStable(className(&#39;RecyclerView&#39;), { timeout: 10e3, stableFor: 800, compare: &#39;bounds&#39; })
@@ -662,6 +684,62 @@ flow.waitForStable(className(&#39;RecyclerView&#39;), { timeout: 10e3, stableFor
 
 /* 全局函数形式. */
 waitForStable(&#39;确定&#39;).click();
+</code></pre>
+<h2>[m] whenPresent<span><a class="mark" href="#flow_m_whenpresent" id="flow_m_whenpresent">#</a></span></h2>
+<h3>whenPresent(cond, handler, options?)<span><a class="mark" href="#flow_whenpresent_cond_handler_options" id="flow_whenpresent_cond_handler_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><strong>cond</strong> { <span class="type"><a href="#flow_cond">Cond</a></span> } - 可选目标的检测条件</li>
+<li><strong>handler</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(match: any) =&gt; any</a></span> } - 目标出现时的处理函数</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 支持等待选项中的 <code>timeout</code>, <code>interval</code>, <code>times</code>, <code>root</code>, <code>compass</code>, <code>resultType</code>, <code>recoverService</code>, 默认值与 <a href="#flow_m_wait">wait</a> 相同</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> } - 起点形式完成时值为 <code>null</code></li>
+</ul>
+<p>在检测期内未出现目标时跳过处理函数. 出现目标时以匹配结果调用 <code>handler</code>, 等待其返回的 Flow 或 Promise 完成; 普通返回值不改变链上的值. <a href="flowType.html#flowtype_m_whenpresent">链式形式</a> 始终透传进入本步骤时的值.</p>
+<p>只跳过检测期结束时仍未匹配的情况. 条件函数抛出的异常, 无障碍服务异常, 处理函数及其子流程的失败, 取消和链截止均继续传播. <code>options.timeout</code> 只约束检测阶段, 处理阶段可用链的 <a href="flowType.html#flowtype_m_timeout">timeout</a> 或子流程自己的超时约束.</p>
+<p>处理函数同 <a href="flowType.html#flowtype_m_run">run</a> 在工作线程上执行, 应返回新建的子流程, 不操作 UI 组件, 不调用 <code>sync()</code>. 子流程继承查找作用域和链截止; 取消本步骤时一并取消其尚未完成的子流程.</p>
+<pre><code class="lang-js">flow.wait(&#39;首页&#39;)
+    .clickIfExists(&#39;稍后再看&#39;, { timeout: 400 })
+    .whenPresent(/阅读并同意/, () =&gt;
+        flow.toggle(className(&#39;CheckBox&#39;), true, { timeout: 800 })
+            .waitThenClick(&#39;确定&#39;, 2e3),
+    { timeout: 800 })
+    .wait(&#39;下一页&#39;);
+</code></pre>
+<h2>[m] repeatUntil<span><a class="mark" href="#flow_m_repeatuntil" id="flow_m_repeatuntil">#</a></span></h2>
+<h3>repeatUntil(action, cond, options?)<span><a class="mark" href="#flow_repeatuntil_action_cond_options" id="flow_repeatuntil_action_cond_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><strong>action</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">(attempt: number) =&gt; any</a></span> } - 每轮动作的工厂函数, <code>attempt</code> 从 <code>1</code> 开始</li>
+<li><strong>cond</strong> { <span class="type"><a href="#flow_cond">Cond</a></span> } - 完成条件</li>
+<li><strong>[ options ]</strong> {{<ul>
+<li>timeout?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>maxAttempts?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>interval?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>retryOn?: <a href="dataTypes.html#datatypes_function">(error: any, attempt: number) =&gt; boolean</a>;</li>
+<li>root?: <a href="uiObjectType.html">UiObject</a>;</li>
+<li>compass?: <a href="dataTypes.html#datatypes_string">string</a>;</li>
+<li>resultType?: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_string">string</a>[];</li>
+</ul>
+</li>
+<li>}} - 循环选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> } - 完成时以 <code>cond</code> 的匹配结果为值</li>
+</ul>
+<p>首次动作前检查条件, 已满足时不执行动作. 否则执行 <code>action(attempt)</code>, 等待其返回的 Flow 或 Promise 完成, 再检查条件. 后续动作前按 <code>interval</code> 暂停并再次检查条件. 工厂函数每轮重新调用, 应返回本轮新建的子流程.</p>
+<ul>
+<li><code>timeout</code>: 总时限, 默认取 <code>flow.defaults().timeout</code>, 必须为有限非负数. <code>0</code> 只检查一次, 不执行动作. 总时限包括轮间延时和等待返回的子流程; 与外层链截止取更早者.</li>
+<li><code>maxAttempts</code>: 动作执行次数上限, 包含首次执行, 默认 <code>10</code>, 必须为非负整数. <code>0</code> 只检查条件.</li>
+<li><code>interval</code>: 轮间延时, 默认取 <code>flow.defaults().interval</code>.</li>
+<li><code>retryOn</code>: 动作失败时的同步判断函数, 须返回 boolean. 默认直接传播错误; 返回 <code>true</code> 才继续下一轮. 条件检测错误与取消不重试.</li>
+<li><code>root</code>, <code>compass</code>, <code>resultType</code>: 用于完成条件的选择器查找, 同等待选项.</li>
+</ul>
+<p>达到次数上限以 <code>TIMEOUT</code> 拒绝, <code>reason</code> 为 <code>&#39;attempts&#39;</code>; 总时限结束为 <code>&#39;timeout&#39;</code>, 外层链截止为 <code>&#39;chain&#39;</code>. 超时或取消时会取消仍在执行的子流程, 不再启动下一轮.</p>
+<p><code>action</code>, <code>retryOn</code> 与条件函数在工作线程执行. <code>action</code> 应迅速构造并返回子流程, 不应执行长时间同步工作或调用 <code>sync()</code>. 时限可以结束对子流程或 Promise 的等待, 无法抢占一个不返回的用户同步函数; 普通 Promise 自身的外部副作用也不能由 Flow 撤销.</p>
+<pre><code class="lang-js">flow.repeatUntil(
+    () =&gt; flow.smartClick(&#39;刷新&#39;, { timeout: 2e3 })
+        .waitForGone(&#39;加载中&#39;, { timeout: 5e3, stableFor: 300 }),
+    &#39;结果列表&#39;,
+    { timeout: 30e3, maxAttempts: 5, interval: 300 },
+).then(list =&gt; console.log(list.content()));
 </code></pre>
 <h2>[m] waitForVisible<span><a class="mark" href="#flow_m_waitforvisible" id="flow_m_waitforvisible">#</a></span></h2>
 <h3>waitForVisible(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#flow_waitforvisible_cond_timeout_interval_onok_onerr" id="flow_waitforvisible_cond_timeout_interval_onok_onerr">#</a></span></h3>
@@ -907,7 +985,7 @@ setTimeout(() =&gt; console.log(flow.cancelAll()), 3e3); /* 1 */
 <li>}} - 当前默认值快照</li>
 </ul>
 <p>读取当前脚本的 Flow 默认值.</p>
-<pre><code class="lang-js">console.log(flow.defaults()); /* { timeout: 10000, interval: 200, stableFor: 500, strictActions: true, humanize: { offset: [ 0, 0 ], delay: [ 0, 0 ] }, trace: false } */
+<pre><code class="lang-js">console.log(flow.defaults()); /* { timeout: 10000, interval: 200, stableFor: 0, strictActions: true, humanize: { offset: [ 0, 0 ], delay: [ 0, 0 ] }, trace: false } */
 </code></pre>
 <h3>defaults(options)<span><a class="mark" href="#flow_defaults_options" id="flow_defaults_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
@@ -929,7 +1007,7 @@ setTimeout(() =&gt; console.log(flow.cancelAll()), 3e3); /* 1 */
 <ul>
 <li><code>timeout</code> - 等待超时 (毫秒), <code>Infinity</code> 表示不限时. 默认 <code>10000</code></li>
 <li><code>interval</code> - 检测间隔 (毫秒). 默认 <code>200</code></li>
-<li><code>stableFor</code> - 稳定检测时长 (毫秒). 默认 <code>500</code></li>
+<li><code>stableFor</code> - 稳定检测时长 (毫秒). 默认 <code>0</code></li>
 <li><code>strictActions</code> - 动作步骤返回 <code>false</code> 时是否以 <code>ACTION_FAILED</code> 拒绝. 默认 <code>true</code>; 为 <code>false</code> 时链上的值变为 <code>false</code> 且链继续</li>
 <li><code>humanize</code> - 动作前的拟人化随机暂停与手势点击的随机偏移, 也是 <a href="automator.html#automator_toolkit">工具集</a> <code>humanize</code> 选项的默认值. <code>offset</code> 为像素 (单个数字对两轴生效, 或 <code>[dx, dy]</code>), <code>delay</code> 为毫秒 (单个数字或 <code>[min, max]</code>); <code>false</code> 关闭. 默认关闭</li>
 <li><code>recoverService</code> - 等待步骤是否在无障碍服务断开时等待服务恢复. 默认 <code>false</code></li>

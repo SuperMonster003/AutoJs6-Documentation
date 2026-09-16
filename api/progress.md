@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-16 Flow 增量更新: 链式 clickIfExists / clickAny / findAny, whenPresent 可选分支, repeatUntil 有界循环, 集合稳定比较与 snapshot 投影. 明确回调线程, 子流程取消, 错误传播和 stableFor 的实际默认值 0.
+
 2026-09-13 Pangu 增量更新: 覆盖内置 pangu.js 10.1.0 的全局对象, 文本间距处理, 间距检查与运行环境.
 
 本表覆盖 `toc.md` 与 `sidebar.md` 中的全部站内页面. 外部项目链接不计入部署进度.

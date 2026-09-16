@@ -79,7 +79,7 @@ Flow 步骤失败时的错误对象, 是 `name` 为 `'FlowError'` 的 JavaScript
 
 - { [string](dataTypes#string) \| [null](dataTypes#null) }
 
-细化错误代码的原因, 如 `'chain'` (链截止), `'sync'` (sync 超时), `'noTarget'`, `'notClickable'`, `'verify'`, `'maxSteps'`, `'end'`, `'filtered out'`; 无则为 `null`.
+细化错误代码的原因, 如 `'chain'` (链截止), `'sync'` (sync 超时), `'timeout'` (repeatUntil 总时限), `'attempts'` (repeatUntil 动作次数上限), `'noTarget'`, `'notClickable'`, `'verify'`, `'maxSteps'`, `'end'`, `'filtered out'`; 无则为 `null`. repeatUntil 自身的超时错误中, `attempts` 表示已调用动作的次数.
 
 ## 错误处理示例
 

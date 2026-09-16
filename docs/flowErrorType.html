@@ -364,7 +364,7 @@
 <ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
 </ul>
-<p>细化错误代码的原因, 如 <code>&#39;chain&#39;</code> (链截止), <code>&#39;sync&#39;</code> (sync 超时), <code>&#39;noTarget&#39;</code>, <code>&#39;notClickable&#39;</code>, <code>&#39;verify&#39;</code>, <code>&#39;maxSteps&#39;</code>, <code>&#39;end&#39;</code>, <code>&#39;filtered out&#39;</code>; 无则为 <code>null</code>.</p>
+<p>细化错误代码的原因, 如 <code>&#39;chain&#39;</code> (链截止), <code>&#39;sync&#39;</code> (sync 超时), <code>&#39;timeout&#39;</code> (repeatUntil 总时限), <code>&#39;attempts&#39;</code> (repeatUntil 动作次数上限), <code>&#39;noTarget&#39;</code>, <code>&#39;notClickable&#39;</code>, <code>&#39;verify&#39;</code>, <code>&#39;maxSteps&#39;</code>, <code>&#39;end&#39;</code>, <code>&#39;filtered out&#39;</code>; 无则为 <code>null</code>. repeatUntil 自身的超时错误中, <code>attempts</code> 表示已调用动作的次数.</p>
 <h2>错误处理示例<span><a class="mark" href="#flowerrortype" id="flowerrortype">#</a></span></h2>
 <pre><code class="lang-js">flow.wait(&#39;登录&#39;, 5e3).click().then(null, e =&gt; {
     switch (e.code) {

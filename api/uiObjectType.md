@@ -2160,7 +2160,7 @@ if (dialog && dialog.waitUntilGone(30e3)) {
 
 **`6.8.0`** **`A11Y`** **`Non-UI`**
 
-- **[ stableFor = `500` ]** { [number](dataTypes#number) } - 判定为稳定所需的无变化时长 (毫秒), 不能为负数
+- **[ stableFor = `0` ]** { [number](dataTypes#number) } - 判定为稳定所需的无变化时长 (毫秒), 不能为负数
 - **[ timeout = `10000` ]** { [number](dataTypes#number) } - 超时 (毫秒), 0 或负数表示不限时
 - **[ interval = `50` ]** { [number](dataTypes#number) } - 采样间隔 (毫秒)
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否在时限内稳定

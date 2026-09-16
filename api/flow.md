@@ -116,8 +116,9 @@ flow.wait(new Promise(resolve => setTimeout(() => resolve('done'), 500))); /* Pr
 - **[ root ]** { [UiObject](uiObjectType) } - 选择器条件的查找根节点. 默认为活动窗口 (或 [scope](flowType#m-scope) 设置的根节点)
 - **[ compass ]** { [string](dataTypes#string) } - 找到节点后应用的 [罗盘](uiObjectType#m-compass) 参数
 - **[ resultType ]** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 选择器条件的 [结果类型](dataTypes#pickupresult), 与 [pickup](uiSelectorType#m-pickup) 的结果参数相同
-- **[ stableFor = `500` ]** { [number](dataTypes#number) } - 稳定检测时长 (毫秒), 仅稳定类等待使用. 默认值取自 [flow.defaults](#m-defaults)
+- **[ stableFor = `0` ]** { [number](dataTypes#number) } - 稳定检测时长 (毫秒), 仅稳定类等待使用. 默认值取自 [flow.defaults](#m-defaults); `0` 表示首次符合条件即完成, 连续观察时须显式指定正数
 - **[ compare = `'fingerprint'` ]** { `'fingerprint'` \| `'bounds'` \| `'content'` \| [(prev, next) => boolean](dataTypes#function) } - 稳定检测的比较方式: 节点指纹, 边界矩形, 文本与描述, 或自定义比较函数
+- **[ snapshot ]** { [(value: any) => any](dataTypes#function) } - 稳定检测的数据投影, 在工作线程上执行. 返回基本值, 数组或普通对象, 每次采样立即按结构复制后比较; 与 `compare` 互斥, 循环引用或不支持的值会拒绝流程. 完成时仍返回原始匹配结果
 - **[ missing = `'reset'` ]** { `'reset'` \| `'fail'` } - 稳定检测期间目标消失时的处理: 重新计时, 或以 `TIMEOUT` 拒绝
 - **[ strict ]** { [boolean](dataTypes#boolean) } - 随后的动作步骤返回 `false` 时是否以 `ACTION_FAILED` 拒绝. 默认值取自 [flow.defaults](#m-defaults) 的 `strictActions`
 - **[ recoverService = `false` ]** { [boolean](dataTypes#boolean) } - 无障碍服务在等待期间断开时是否继续等待服务恢复, 而非立即以 `A11Y_UNAVAILABLE` 拒绝. 默认值取自 [flow.defaults](#m-defaults)
@@ -242,10 +243,26 @@ flow.waitWhile('加载中', 30e3).then(() => console.log('加载完成'));
 
 - <ins>**returns**</ins> { [Flow](flowType) }
 
-等待目标出现并保持稳定: 目标连续 `stableFor` 毫秒 (默认 500) 无变化时以目标 fulfill.
+等待目标出现并保持稳定: 目标连续 `stableFor` 毫秒 (默认 0) 无变化时以目标 fulfill. 默认值表示首次匹配即完成, 需要连续观察时显式设置正数.
 
 "无变化" 的判定由 `compare` 选项决定 (默认比较节点指纹, 即文本, 描述, 边界与主要状态), 期间目标消失时按 `missing` 选项重新计时 (默认) 或直接失败.<br>
 超时约束整个等待过程 (包括稳定检测).
+
+选择器使用 `resultType: '[]'` 时, 内置比较方式会在每次采样时按顺序提取全部节点的比较键, 节点状态, 数量或顺序变化都会重新计时. 指纹只包含节点自身状态, 不递归读取子节点或兄弟节点.<br>
+需要观察同一行的其他字段时使用 `snapshot`, 避免把活动节点对象当作历史快照. 快照稳定只表示采样内容在指定时间内无变化, 页面是否加载完整仍需结合应用状态判断.
+
+```js
+waitForStable('去挂号', {
+    resultType: '[]',
+    stableFor: 500,
+    timeout: 8e3,
+    snapshot: nodes => nodes.map(w => [
+        w.content(),
+        detect(w, 's<2', 'content'), /* 余号字段, 位置以实际布局为准. */
+        detect(w, 's<1', 'content'), /* 费用字段. */
+    ]),
+}).then(nodes => console.log(nodes.length));
+```
 
 适用于列表刷新, 动画过渡等 "出现了但还在变" 的场景.
 
@@ -256,6 +273,73 @@ flow.waitForStable(className('RecyclerView'), { timeout: 10e3, stableFor: 800, c
 
 /* 全局函数形式. */
 waitForStable('确定').click();
+```
+
+## [m] whenPresent
+
+### whenPresent(cond, handler, options?)
+
+**`6.8.0`** **`A11Y?`**
+
+- **cond** { [Cond](#条件-cond) } - 可选目标的检测条件
+- **handler** { [(match: any) => any](dataTypes#function) } - 目标出现时的处理函数
+- **[ options ]** { [Object](dataTypes#object) } - 支持等待选项中的 `timeout`, `interval`, `times`, `root`, `compass`, `resultType`, `recoverService`, 默认值与 [wait](#m-wait) 相同
+- <ins>**returns**</ins> { [Flow](flowType) } - 起点形式完成时值为 `null`
+
+在检测期内未出现目标时跳过处理函数. 出现目标时以匹配结果调用 `handler`, 等待其返回的 Flow 或 Promise 完成; 普通返回值不改变链上的值. [链式形式](flowType#m-whenpresent) 始终透传进入本步骤时的值.
+
+只跳过检测期结束时仍未匹配的情况. 条件函数抛出的异常, 无障碍服务异常, 处理函数及其子流程的失败, 取消和链截止均继续传播. `options.timeout` 只约束检测阶段, 处理阶段可用链的 [timeout](flowType#m-timeout) 或子流程自己的超时约束.
+
+处理函数同 [run](flowType#m-run) 在工作线程上执行, 应返回新建的子流程, 不操作 UI 组件, 不调用 `sync()`. 子流程继承查找作用域和链截止; 取消本步骤时一并取消其尚未完成的子流程.
+
+```js
+flow.wait('首页')
+    .clickIfExists('稍后再看', { timeout: 400 })
+    .whenPresent(/阅读并同意/, () =>
+        flow.toggle(className('CheckBox'), true, { timeout: 800 })
+            .waitThenClick('确定', 2e3),
+    { timeout: 800 })
+    .wait('下一页');
+```
+
+## [m] repeatUntil
+
+### repeatUntil(action, cond, options?)
+
+**`6.8.0`** **`A11Y?`**
+
+- **action** { [(attempt: number) => any](dataTypes#function) } - 每轮动作的工厂函数, `attempt` 从 `1` 开始
+- **cond** { [Cond](#条件-cond) } - 完成条件
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number);
+    - maxAttempts?: [number](dataTypes#number);
+    - interval?: [number](dataTypes#number);
+    - retryOn?: [(error: any, attempt: number) => boolean](dataTypes#function);
+    - root?: [UiObject](uiObjectType);
+    - compass?: [string](dataTypes#string);
+    - resultType?: [string](dataTypes#string) \| [string](dataTypes#string)[];
+- }} - 循环选项
+- <ins>**returns**</ins> { [Flow](flowType) } - 完成时以 `cond` 的匹配结果为值
+
+首次动作前检查条件, 已满足时不执行动作. 否则执行 `action(attempt)`, 等待其返回的 Flow 或 Promise 完成, 再检查条件. 后续动作前按 `interval` 暂停并再次检查条件. 工厂函数每轮重新调用, 应返回本轮新建的子流程.
+
+- `timeout`: 总时限, 默认取 `flow.defaults().timeout`, 必须为有限非负数. `0` 只检查一次, 不执行动作. 总时限包括轮间延时和等待返回的子流程; 与外层链截止取更早者.
+- `maxAttempts`: 动作执行次数上限, 包含首次执行, 默认 `10`, 必须为非负整数. `0` 只检查条件.
+- `interval`: 轮间延时, 默认取 `flow.defaults().interval`.
+- `retryOn`: 动作失败时的同步判断函数, 须返回 boolean. 默认直接传播错误; 返回 `true` 才继续下一轮. 条件检测错误与取消不重试.
+- `root`, `compass`, `resultType`: 用于完成条件的选择器查找, 同等待选项.
+
+达到次数上限以 `TIMEOUT` 拒绝, `reason` 为 `'attempts'`; 总时限结束为 `'timeout'`, 外层链截止为 `'chain'`. 超时或取消时会取消仍在执行的子流程, 不再启动下一轮.
+
+`action`, `retryOn` 与条件函数在工作线程执行. `action` 应迅速构造并返回子流程, 不应执行长时间同步工作或调用 `sync()`. 时限可以结束对子流程或 Promise 的等待, 无法抢占一个不返回的用户同步函数; 普通 Promise 自身的外部副作用也不能由 Flow 撤销.
+
+```js
+flow.repeatUntil(
+    () => flow.smartClick('刷新', { timeout: 2e3 })
+        .waitForGone('加载中', { timeout: 5e3, stableFor: 300 }),
+    '结果列表',
+    { timeout: 30e3, maxAttempts: 5, interval: 300 },
+).then(list => console.log(list.content()));
 ```
 
 ## [m] waitForVisible
@@ -617,7 +701,7 @@ setTimeout(() => console.log(flow.cancelAll()), 3e3); /* 1 */
 读取当前脚本的 Flow 默认值.
 
 ```js
-console.log(flow.defaults()); /* { timeout: 10000, interval: 200, stableFor: 500, strictActions: true, humanize: { offset: [ 0, 0 ], delay: [ 0, 0 ] }, trace: false } */
+console.log(flow.defaults()); /* { timeout: 10000, interval: 200, stableFor: 0, strictActions: true, humanize: { offset: [ 0, 0 ], delay: [ 0, 0 ] }, trace: false } */
 ```
 
 ### defaults(options)
@@ -639,7 +723,7 @@ console.log(flow.defaults()); /* { timeout: 10000, interval: 200, stableFor: 500
 
 - `timeout` - 等待超时 (毫秒), `Infinity` 表示不限时. 默认 `10000`
 - `interval` - 检测间隔 (毫秒). 默认 `200`
-- `stableFor` - 稳定检测时长 (毫秒). 默认 `500`
+- `stableFor` - 稳定检测时长 (毫秒). 默认 `0`
 - `strictActions` - 动作步骤返回 `false` 时是否以 `ACTION_FAILED` 拒绝. 默认 `true`; 为 `false` 时链上的值变为 `false` 且链继续
 - `humanize` - 动作前的拟人化随机暂停与手势点击的随机偏移, 也是 [工具集](automator#工具集-toolkit) `humanize` 选项的默认值. `offset` 为像素 (单个数字对两轴生效, 或 `[dx, dy]`), `delay` 为毫秒 (单个数字或 `[min, max]`); `false` 关闭. 默认关闭
 - `recoverService` - 等待步骤是否在无障碍服务断开时等待服务恢复. 默认 `false`

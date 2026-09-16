@@ -297,6 +297,14 @@
 <li><span class="stability_undefined"><a href="#flowtype_retry_times_delay">retry(times?, delay?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#flowtype_m_whenpresent">[m#] whenPresent</a></span><ul>
+<li><span class="stability_undefined"><a href="#flowtype_whenpresent_cond_handler_options">whenPresent(cond, handler, options?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#flowtype_m_repeatuntil">[m#] repeatUntil</a></span><ul>
+<li><span class="stability_undefined"><a href="#flowtype_repeatuntil_action_cond_options">repeatUntil(action, cond, options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#flowtype_m_scope">[m#] scope</a></span><ul>
 <li><span class="stability_undefined"><a href="#flowtype_scope_options">scope(options)</a></span></li>
 </ul>
@@ -623,7 +631,7 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 </code></pre>
 <h2>工具集步骤<span><a class="mark" href="#flowtype_4" id="flowtype_4">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
-<p><a href="automator.html#automator_toolkit">工具集</a> 的 9 个工具可作为链式步骤, 以链上的值为目标 (省略同步形式的首个目标参数), 结果为新值:</p>
+<p><a href="automator.html#automator_toolkit">工具集</a> 的 12 个工具可作为链式步骤. 其中 <code>clickIfExists</code>, <code>clickAny</code>, <code>findAny</code> 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:</p>
 <table>
 <thead>
 <tr>
@@ -637,6 +645,21 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 <td>smartClick(options?)</td>
 <td>目标节点</td>
 <td>点击结果对象</td>
+</tr>
+<tr>
+<td>clickIfExists(target, options?)</td>
+<td>忽略</td>
+<td>存在且点击成功为 true, 缺席为 false</td>
+</tr>
+<tr>
+<td>clickAny(targets, options?)</td>
+<td>忽略</td>
+<td>被点击的候选对象或 null</td>
+</tr>
+<tr>
+<td>findAny(targets, options?)</td>
+<td>忽略</td>
+<td>找到的候选对象或 null</td>
 </tr>
 <tr>
 <td>scrollUntil(target, options?)</td>
@@ -741,6 +764,22 @@ flow.wait(&#39;结果&#39;, 5e3).retry(1).then(w =&gt; console.log(w.text()));
 <blockquote>
 <p>注: 与同步的 <a href="automator.html#automator_m_retry">retry(fn, options)</a> 不同, 本方法只重跑链上的上一个步骤.</p>
 </blockquote>
+<h2>[m#] whenPresent<span><a class="mark" href="#flowtype_m_whenpresent" id="flowtype_m_whenpresent">#</a></span></h2>
+<h3>whenPresent(cond, handler, options?)<span><a class="mark" href="#flowtype_whenpresent_cond_handler_options" id="flowtype_whenpresent_cond_handler_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#flowtype_flow">Flow</a></span> }</li>
+</ul>
+<p>追加可选分支步骤, 参数和错误规则同 <a href="flow.html#flow_m_whenpresent">flow.whenPresent</a>. 未出现目标时跳过, 出现时等待处理函数返回的 Flow 或 Promise 完成; 两种情况都透传进入本步骤时的值. 上一步拒绝时不执行本步骤.</p>
+<p>处理函数在工作线程执行, 同 <a href="#flowtype_m_run">run</a>, 不调用 <code>sync()</code> 或直接操作 UI 组件.</p>
+<h2>[m#] repeatUntil<span><a class="mark" href="#flowtype_m_repeatuntil" id="flowtype_m_repeatuntil">#</a></span></h2>
+<h3>repeatUntil(action, cond, options?)<span><a class="mark" href="#flowtype_repeatuntil_action_cond_options" id="flowtype_repeatuntil_action_cond_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#flowtype_flow">Flow</a></span> }</li>
+</ul>
+<p>追加有界循环步骤, 参数同 <a href="flow.html#flow_m_repeatuntil">flow.repeatUntil</a>. 本步骤开始时才开始计算总时限, 与已有链截止取更早者. 完成后链上的值变为条件的匹配结果; 上一步拒绝时不执行本步骤.</p>
+<p><code>action</code> 在工作线程上每轮重新调用, 应迅速返回本轮新建的 Flow 或 Promise. 取消时停止其尚未完成的子流程; 无法抢占不返回的同步函数或撤销普通 Promise 的外部副作用.</p>
 <h2>[m#] scope<span><a class="mark" href="#flowtype_m_scope" id="flowtype_m_scope">#</a></span></h2>
 <h3>scope(options)<span><a class="mark" href="#flowtype_scope_options" id="flowtype_scope_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>

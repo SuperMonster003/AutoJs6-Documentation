@@ -2,8 +2,9 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/13</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/16</p>
 
+- `更新` Flow 可选步骤 `whenPresent`, 有界循环 `repeatUntil`, 链式候选查找与点击, 集合稳定性及 `snapshot` 快照选项, 并校正 `stableFor` 的默认值为 0
 - `新增` [文本间距 (Pangu)](https://docs.autojs6.com/#/pangu) 文档, 覆盖内置 pangu.js 10.1.0 的全局对象, 文本排版, 间距检查及运行环境
 
 - `更新` [HTTP](https://docs.autojs6.com/#/http) 与 [HttpRequestBuilderOptions](https://docs.autojs6.com/#/httpRequestBuilderOptionsType) 的 `isInsecure` / `insecure` 请求范围, 共享客户端配置及证书信任, CT, ECH 和本地网络权限的区别

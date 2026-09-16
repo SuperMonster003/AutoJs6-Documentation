@@ -199,11 +199,14 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 
 **`6.8.0`** **`A11Y`**
 
-[工具集](automator#工具集-toolkit) 的 9 个工具可作为链式步骤, 以链上的值为目标 (省略同步形式的首个目标参数), 结果为新值:
+[工具集](automator#工具集-toolkit) 的 12 个工具可作为链式步骤. 其中 `clickIfExists`, `clickAny`, `findAny` 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:
 
 | 步骤 | 链上的值 | 结果 |
 | --- | --- | --- |
 | smartClick(options?) | 目标节点 | 点击结果对象 |
+| clickIfExists(target, options?) | 忽略 | 存在且点击成功为 true, 缺席为 false |
+| clickAny(targets, options?) | 忽略 | 被点击的候选对象或 null |
+| findAny(targets, options?) | 忽略 | 找到的候选对象或 null |
 | scrollUntil(target, options?) | 滚动容器 (给出 `container` 选项时忽略) | 找到的节点 |
 | typeInto(text, options?) | 输入框 (`null` 时为焦点输入框) | 输入框节点 |
 | dismissPopups(targets, options?) | 透传 | 透传链上的值 |
@@ -297,6 +300,30 @@ flow.wait('结果', 5e3).retry(1).then(w => console.log(w.text()));
 ```
 
 > 注: 与同步的 [retry(fn, options)](automator#retry) 不同, 本方法只重跑链上的上一个步骤.
+
+## [m#] whenPresent
+
+### whenPresent(cond, handler, options?)
+
+**`6.8.0`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](#flow) }
+
+追加可选分支步骤, 参数和错误规则同 [flow.whenPresent](flow#m-whenpresent). 未出现目标时跳过, 出现时等待处理函数返回的 Flow 或 Promise 完成; 两种情况都透传进入本步骤时的值. 上一步拒绝时不执行本步骤.
+
+处理函数在工作线程执行, 同 [run](#m-run), 不调用 `sync()` 或直接操作 UI 组件.
+
+## [m#] repeatUntil
+
+### repeatUntil(action, cond, options?)
+
+**`6.8.0`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](#flow) }
+
+追加有界循环步骤, 参数同 [flow.repeatUntil](flow#m-repeatuntil). 本步骤开始时才开始计算总时限, 与已有链截止取更早者. 完成后链上的值变为条件的匹配结果; 上一步拒绝时不执行本步骤.
+
+`action` 在工作线程上每轮重新调用, 应迅速返回本轮新建的 Flow 或 Promise. 取消时停止其尚未完成的子流程; 无法抢占不返回的同步函数或撤销普通 Promise 的外部副作用.
 
 ## [m#] scope
 

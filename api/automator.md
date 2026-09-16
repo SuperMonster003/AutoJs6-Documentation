@@ -1336,8 +1336,48 @@ console.log(r.method); /* ancestor */
 /* 点击后确认新页面已出现. */
 smartClick('设置', { verify: '关于手机', verifyTimeout: 3e3 });
 
-/* 不上溯, 直接手势点按, 带拟人偏移与暂停. */
+/* 目标不可点击时不上溯, 回退到带拟人偏移与暂停的手势. */
 smartClick(id('banner'), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });
+```
+
+## [m] smartClickBounds
+
+### smartClickBounds(target, options?)
+
+**`6.8.0`** **`Global`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **[ options ]** {{
+    - timeout?: [number](dataTypes#number)
+    - interval?: [number](dataTypes#number)
+    - root?: [UiObject](uiObjectType)
+    - humanize?: [boolean](dataTypes#boolean) \| [Object](dataTypes#object)
+    - offset?: [number](dataTypes#number) \| [number](dataTypes#number)[]
+    - verify?: [Target](#目标参数-target)
+    - verifyTimeout?: [number](dataTypes#number)
+    - verifyInterval?: [number](dataTypes#number)
+- }} - 选项
+- <ins>**returns**</ins> {{
+    - ok: `true`
+    - method: `'gesture'`
+    - target: [UiObject](uiObjectType)
+    - verified: [any](dataTypes#any)
+- }} - 点击结果
+
+显式坐标点击: 在目标控件的边界中心加上 `offset` 与拟人偏移后执行点按手势. 不调用目标或祖先的控件点击方法, 即使控件 `click()` 返回成功也不会采用该方法. 适合控件动作返回成功但界面没有响应的情况.
+
+`offset` 为有符号 32 位整数像素, 单个数值对两轴生效, 或用 `[dx, dy]` 分别指定; 负值向左或向上偏移. 坐标来自实际屏幕边界, 不再应用 `setScreenMetrics` 缩放. `humanize.offset` 仍是非负随机偏移幅度.
+
+支持 [通用选项](#通用选项), `offset`, `verify`, `verifyTimeout` 和 `verifyInterval`. `verifyTimeout` 默认 `2000`, `verifyInterval` 默认 `100`. 不接受 `climb`, `maxClimb` 或 `gestureFallback` 选项.
+
+结果的 `method` 固定为 `'gesture'`, `target` 为原始目标节点, `verified` 为验证条件的结果, 未指定 `verify` 时为 `null`.
+
+未找到目标时抛出 `TIMEOUT`; 手势失败时抛出 `ACTION_FAILED`, `reason` 为 `'gesture'`; 验证超时的 `reason` 为 `'verify'`.
+
+```js
+smartClickBounds('设置', { timeout: 5e3, verify: '关于手机' });
+smartClickBounds(id('banner'), { offset: [ -10, 6 ] });
+flow.wait('下一步').smartClickBounds({ verify: '确认信息' }).catch(console.error);
 ```
 
 ## [m] clickIfExists
@@ -1366,6 +1406,35 @@ if (!clickIfExists('同意')) {
     console.log('没有同意按钮');
 }
 ```
+
+## [m] clickBoundsIfExists
+
+### clickBoundsIfExists(target, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClickBounds](#m-smartclickbounds) 的选项
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 目标存在且已点击为 `true`, 不存在为 `false`
+
+### clickBoundsIfExists(target, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **target** { [Target](#目标参数-target) } - 点击目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+目标在时限内存在时在控件中心坐标点按并返回 `true`, 不存在时返回 `false` 而不报错; 点击本身失败时仍抛出 [FlowError](flowErrorType).
+
+```js
+clickBoundsIfExists('跳过广告', 2e3); /* 最多等 2 秒. */
+if (!clickBoundsIfExists('同意')) {
+    console.log('没有同意按钮');
+}
+```
+
+找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 [FlowError](flowErrorType). 同时支持 `automator.` 同步形式, `flow.` 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.
 
 ## [m] clickAny
 
@@ -1399,6 +1468,41 @@ if (r) {
     console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);
 }
 ```
+
+## [m] clickBoundsAny
+
+### clickBoundsAny(targets, options?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标, 按优先顺序
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClickBounds](#m-smartclickbounds) 的选项
+- <ins>**returns**</ins> {{
+    - index: [number](dataTypes#number)
+    - target: [any](dataTypes#any)
+    - node: [UiObject](uiObjectType)
+    - method: `'gesture'`
+    - verified: [any](dataTypes#any)
+- }} \| [null](dataTypes#null) - 被点击的候选及方式, 都不存在时为 `null`
+
+### clickBoundsAny(targets, timeout)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`** **`Non-UI`**
+
+- **targets** { [Target](#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Object](dataTypes#object) \| [null](dataTypes#null) }
+
+每轮按顺序检查候选目标, 在控件中心坐标点按首个存在的. 结果的 `index` 为候选在数组中的序号, `target` 为候选本身, `node` 为找到的节点.
+
+```js
+let r = clickBoundsAny([ '同意', '允许', 'OK' ], 3e3);
+if (r) {
+    console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);
+}
+```
+
+找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 [FlowError](flowErrorType). 同时支持 `automator.` 同步形式, `flow.` 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.
 
 ## [m] findAny
 

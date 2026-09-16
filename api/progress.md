@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-16 Flow 坐标点击与诊断更新: 同步 clickBounds 等待, 延时和工具集系列, maxAttempts 默认 0 表示不限尝试次数, 以及 console.error 自动显示异步任务方法, 文件和行号. 验证依据为源码, Rhino 异常传播单元测试与声明 smoke 检查; 未执行医院应用真机挂号.
+
 2026-09-16 Flow 增量更新: 链式 clickIfExists / clickAny / findAny, whenPresent 可选分支, repeatUntil 有界循环, 集合稳定比较与 snapshot 投影. 明确回调线程, 子流程取消, 错误传播和 stableFor 的实际默认值 0.
 
 2026-09-13 Pangu 增量更新: 覆盖内置 pangu.js 10.1.0 的全局对象, 文本间距处理, 间距检查与运行环境.

@@ -102,7 +102,7 @@ flow.wait('登录', 5e3).click()
     .then(w => console.log(w.text()));
 ```
 
-同样可追加的等待还有 `waitUntil`, `waitWhile`, `waitForStable`, `waitForVisible`, `waitForHidden` (`waitForGone`), `waitForActivity`, `waitForPackage`, `waitThenClick` (`clickWait`), `waitThenLongClick`, `waitForStableThenClick` (`clickWhenStable`), `clickWhenStableAfter`, 语义与 [flow](flow) 上的同名函数一致.
+同样可追加的等待还有 `waitUntil`, `waitWhile`, `waitForStable`, `waitForVisible`, `waitForHidden` (`waitForGone`), `waitForActivity`, `waitForPackage`, `waitThenClick` (`clickWait`), `waitThenClickBounds` (`clickBoundsWait`), `waitThenLongClick`, `waitForStableThenClick` (`clickWhenStable`), `waitForStableThenClickBounds` (`clickBoundsWhenStable`), `clickWhenStableAfter`, `clickBoundsWhenStableAfter`, 语义与 [flow](flow) 上的同名函数一致.
 
 ## [m#] within
 
@@ -160,7 +160,10 @@ flow.within(className('RecyclerView'), 5e3)
 | imeEnter() | 0 | [imeEnter](uiObjectActionsType#m-imeenter) |
 | performAction(action, ...args) | 1 ~ 2 | [performAction](uiObjectActionsType#m-performaction) |
 | clickAfter(millis) / clickAfter(min, max) | 1 ~ 2 | 先休眠再 click |
+| clickBoundsAfter(millis) / clickBoundsAfter(min, max) | 1 ~ 2 | 先休眠再 clickBounds |
 | longClickAfter(millis) / longClickAfter(min, max) | 1 ~ 2 | 先休眠再 longClick |
+
+`clickBounds` 在控件中心加上可选偏移后执行坐标手势, 不调用控件点击方法. 偏移语义同 [UiObject.clickBounds](uiObjectType#m-clickbounds). `clickBoundsAfter` 使用中心坐标, 如需延时和偏移可组合 `sleep(...).clickBounds(offsetX, offsetY)`.
 
 每个动作步骤都可以追加尾随回调 `onOk` / `onErr`.
 
@@ -199,13 +202,16 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 
 **`6.8.0`** **`A11Y`**
 
-[工具集](automator#工具集-toolkit) 的 12 个工具可作为链式步骤. 其中 `clickIfExists`, `clickAny`, `findAny` 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:
+[工具集](automator#工具集-toolkit) 的 15 个工具可作为链式步骤. 其中 `clickIfExists`, `clickBoundsIfExists`, `clickAny`, `clickBoundsAny`, `findAny` 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:
 
 | 步骤 | 链上的值 | 结果 |
 | --- | --- | --- |
 | smartClick(options?) | 目标节点 | 点击结果对象 |
+| smartClickBounds(options?) | 目标节点 | 点击结果对象 |
 | clickIfExists(target, options?) | 忽略 | 存在且点击成功为 true, 缺席为 false |
+| clickBoundsIfExists(target, options?) | 忽略 | 存在且点击成功为 true, 缺席为 false |
 | clickAny(targets, options?) | 忽略 | 被点击的候选对象或 null |
+| clickBoundsAny(targets, options?) | 忽略 | 被点击的候选对象或 null |
 | findAny(targets, options?) | 忽略 | 找到的候选对象或 null |
 | scrollUntil(target, options?) | 滚动容器 (给出 `container` 选项时忽略) | 找到的节点 |
 | typeInto(text, options?) | 输入框 (`null` 时为焦点输入框) | 输入框节点 |

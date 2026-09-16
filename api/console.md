@@ -1104,6 +1104,8 @@ console.setBackgroundAlpha(-1).show(); /* 同上. */
 
 主要用途: 错误消息 / 异常消息
 
+自 6.8.0 起, 直接传入带 [flowStack](flowErrorType#p-flowstack) 的 Flow 错误对象时, 输出其原始异常栈与异步任务栈, 包含步骤方法, 脚本文件和行号. 例如 `flow.wait('目标').clickBounds().catch(console.error)`. 自定义处理也可使用 `console.error(error.stack)`.
+
 优先级: verbose < log < info < warn < **error** < assert
 
 字体颜色:

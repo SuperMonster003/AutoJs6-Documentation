@@ -948,6 +948,27 @@ waitThenClick('登录', 5e3);
 clickWait('登录', 5e3); /* 同上. */
 ```
 
+## [m] waitThenClickBounds
+
+### waitThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### waitThenClickBounds(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标出现后在控件中心坐标点按, 同 [flow.waitThenClickBounds](flow#m-waitthenclickbounds), 相当于 `waitAsync(cond, ...).clickBounds()`. `clickBoundsWait` 是别名.
+
+```js
+waitThenClickBounds('登录', 5e3);
+clickBoundsWait('登录', 5e3); /* 同上. */
+```
+
+直接使用控件边界中心执行手势, 不调用控件自身的 `click()` 方法. 等待参数与 [flow.wait](flow#m-wait) 相同, 稳定性参数见 [flow.waitForStable](flow#m-waitforstable). 需要坐标偏移时可使用 `waitAsync(cond, ...).clickBounds(offsetX, offsetY)`.
+
 ## [m] waitForStable
 
 ### waitForStable(cond, timeout?, interval?, onOk?, onErr?)
@@ -983,6 +1004,26 @@ waitForStable(className('RecyclerView'), { timeout: 10e3, stableFor: 800 }).then
 ```js
 clickWhenStable('下一步', 8e3);
 ```
+
+## [m] waitForStableThenClickBounds
+
+### waitForStableThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### waitForStableThenClickBounds(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标稳定后在控件中心坐标点按, 同 [flow.waitForStableThenClickBounds](flow#m-waitforstablethenclickbounds). `clickBoundsWhenStable` 是别名.
+
+```js
+clickBoundsWhenStable('下一步', 8e3);
+```
+
+直接使用控件边界中心执行手势, 不调用控件自身的 `click()` 方法. 等待参数与 [flow.wait](flow#m-wait) 相同, 稳定性参数见 [flow.waitForStable](flow#m-waitforstable). 需要坐标偏移时可使用 `waitAsync(cond, ...).clickBounds(offsetX, offsetY)`.
 
 ## [m] waitForVisible
 
@@ -1035,13 +1076,36 @@ clickWhenStableAfter('同意', 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒�
 clickWhenStableAfter('同意', { delay: [ 300, 800 ] }); /* 同上, 超时与间隔取默认值. */
 ```
 
+## [m] clickBoundsWhenStableAfter
+
+### clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickBoundsWhenStableAfter(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+等待目标稳定, 随机延时 `delayMin` 至 `delayMax` 毫秒后在控件中心坐标点按, 同 [flow.clickBoundsWhenStableAfter](flow#m-clickboundswhenstableafter).
+
+```js
+clickBoundsWhenStableAfter('同意', 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */
+clickBoundsWhenStableAfter('同意', { delay: [ 300, 800 ] }); /* 同上, 超时与间隔取默认值. */
+```
+
+直接使用控件边界中心执行手势, 不调用控件自身的 `click()` 方法. 等待参数与 [flow.wait](flow#m-wait) 相同, 稳定性参数见 [flow.waitForStable](flow#m-waitforstable). 需要坐标偏移时可使用 `waitAsync(cond, ...).clickBounds(offsetX, offsetY)`.
+
+选项对象使用 `delay` 指定固定延时或 `[min, max]` 范围, 省略延时会抛出异常.
+
 ## 工具集与事件驱动等待的全局函数
 
 **`6.8.0`**
 
 以下全局函数在 [自动化 (Automator)](automator) 与 [选择器 (UiSelector)](uiSelectorType) 章节说明:
 
-- [工具集](automator#工具集-toolkit): [smartClick](automator#m-smartclick), [clickIfExists](automator#m-clickifexists), [clickAny](automator#m-clickany), [findAny](automator#m-findany), [scrollUntil](automator#m-scrolluntil), [typeInto](automator#m-typeinto), [dismissPopups](automator#m-dismisspopups), [collectList](automator#m-collectlist), [launchAndWait](automator#m-launchandwait), [backUntil](automator#m-backuntil), [backToApp](automator#m-backtoapp), [toggle](automator#m-toggle), [retry](automator#m-retry)
+- [工具集](automator#工具集-toolkit): [smartClick](automator#m-smartclick), [smartClickBounds](automator#m-smartclickbounds), [clickIfExists](automator#m-clickifexists), [clickBoundsIfExists](automator#m-clickboundsifexists), [clickAny](automator#m-clickany), [clickBoundsAny](automator#m-clickboundsany), [findAny](automator#m-findany), [scrollUntil](automator#m-scrolluntil), [typeInto](automator#m-typeinto), [dismissPopups](automator#m-dismisspopups), [collectList](automator#m-collectlist), [launchAndWait](automator#m-launchandwait), [backUntil](automator#m-backuntil), [backToApp](automator#m-backtoapp), [toggle](automator#m-toggle), [retry](automator#m-retry)
 - [事件驱动等待](automator#事件驱动等待): [waitForIdle](automator#m-waitforidle), [waitForEvent](automator#m-waitforevent), [waitForToast](automator#m-waitfortoast), [waitForNotification](automator#m-waitfornotification)
 - [字符串选择器语法](uiSelectorType#m-select): `select('text=登录 clickable')` 返回选择器
 

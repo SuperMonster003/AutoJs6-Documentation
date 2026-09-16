@@ -318,6 +318,11 @@
 <li><span class="stability_undefined"><a href="#flow_waitthenclick_cond_options_onok_onerr">waitThenClick(cond, options, onOk?, onErr?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#flow_m_waitthenclickbounds">[m] waitThenClickBounds</a></span><ul>
+<li><span class="stability_undefined"><a href="#flow_waitthenclickbounds_cond_timeout_interval_onok_onerr">waitThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#flow_waitthenclickbounds_cond_options_onok_onerr">waitThenClickBounds(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#flow_m_waitthenlongclick">[m] waitThenLongClick</a></span><ul>
 <li><span class="stability_undefined"><a href="#flow_waitthenlongclick_cond_timeout_interval_onok_onerr">waitThenLongClick(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
 <li><span class="stability_undefined"><a href="#flow_waitthenlongclick_cond_options_onok_onerr">waitThenLongClick(cond, options, onOk?, onErr?)</a></span></li>
@@ -328,9 +333,19 @@
 <li><span class="stability_undefined"><a href="#flow_waitforstablethenclick_cond_options_onok_onerr">waitForStableThenClick(cond, options, onOk?, onErr?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#flow_m_waitforstablethenclickbounds">[m] waitForStableThenClickBounds</a></span><ul>
+<li><span class="stability_undefined"><a href="#flow_waitforstablethenclickbounds_cond_timeout_interval_onok_onerr">waitForStableThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#flow_waitforstablethenclickbounds_cond_options_onok_onerr">waitForStableThenClickBounds(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#flow_m_clickwhenstableafter">[m] clickWhenStableAfter</a></span><ul>
 <li><span class="stability_undefined"><a href="#flow_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)</a></span></li>
 <li><span class="stability_undefined"><a href="#flow_clickwhenstableafter_cond_options_onok_onerr">clickWhenStableAfter(cond, options, onOk?, onErr?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#flow_m_clickboundswhenstableafter">[m] clickBoundsWhenStableAfter</a></span><ul>
+<li><span class="stability_undefined"><a href="#flow_clickboundswhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)</a></span></li>
+<li><span class="stability_undefined"><a href="#flow_clickboundswhenstableafter_cond_options_onok_onerr">clickBoundsWhenStableAfter(cond, options, onOk?, onErr?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#flow_m_sleep">[m] sleep</a></span><ul>
@@ -446,6 +461,11 @@ $flow.wait(&#39;登录&#39;).click(); /* 同上. */
 <td>flow.waitThenClick</td>
 </tr>
 <tr>
+<td>waitThenClickBounds</td>
+<td>clickBoundsWait</td>
+<td>flow.waitThenClickBounds</td>
+</tr>
+<tr>
 <td>waitForStable</td>
 <td>-</td>
 <td>flow.waitForStable</td>
@@ -454,6 +474,11 @@ $flow.wait(&#39;登录&#39;).click(); /* 同上. */
 <td>waitForStableThenClick</td>
 <td>clickWhenStable</td>
 <td>flow.waitForStableThenClick</td>
+</tr>
+<tr>
+<td>waitForStableThenClickBounds</td>
+<td>clickBoundsWhenStable</td>
+<td>flow.waitForStableThenClickBounds</td>
 </tr>
 <tr>
 <td>waitForVisible</td>
@@ -469,6 +494,11 @@ $flow.wait(&#39;登录&#39;).click(); /* 同上. */
 <td>clickWhenStableAfter</td>
 <td>-</td>
 <td>flow.clickWhenStableAfter</td>
+</tr>
+<tr>
+<td>clickBoundsWhenStableAfter</td>
+<td>-</td>
+<td>flow.clickBoundsWhenStableAfter</td>
 </tr>
 </tbody>
 </table>
@@ -727,12 +757,12 @@ waitForStable(&#39;确定&#39;).click();
 <p>首次动作前检查条件, 已满足时不执行动作. 否则执行 <code>action(attempt)</code>, 等待其返回的 Flow 或 Promise 完成, 再检查条件. 后续动作前按 <code>interval</code> 暂停并再次检查条件. 工厂函数每轮重新调用, 应返回本轮新建的子流程.</p>
 <ul>
 <li><code>timeout</code>: 总时限, 默认取 <code>flow.defaults().timeout</code>, 必须为有限非负数. <code>0</code> 只检查一次, 不执行动作. 总时限包括轮间延时和等待返回的子流程; 与外层链截止取更早者.</li>
-<li><code>maxAttempts</code>: 动作执行次数上限, 包含首次执行, 默认 <code>10</code>, 必须为非负整数. <code>0</code> 只检查条件.</li>
+<li><code>maxAttempts</code>: 动作执行次数上限, 包含首次执行, 必须为非负整数. 默认 <code>0</code>, 表示不限制尝试次数, 仍受总 <code>timeout</code>, 外层链截止和取消控制; 正整数表示最多执行指定次数.</li>
 <li><code>interval</code>: 轮间延时, 默认取 <code>flow.defaults().interval</code>.</li>
 <li><code>retryOn</code>: 动作失败时的同步判断函数, 须返回 boolean. 默认直接传播错误; 返回 <code>true</code> 才继续下一轮. 条件检测错误与取消不重试.</li>
 <li><code>root</code>, <code>compass</code>, <code>resultType</code>: 用于完成条件的选择器查找, 同等待选项.</li>
 </ul>
-<p>达到次数上限以 <code>TIMEOUT</code> 拒绝, <code>reason</code> 为 <code>&#39;attempts&#39;</code>; 总时限结束为 <code>&#39;timeout&#39;</code>, 外层链截止为 <code>&#39;chain&#39;</code>. 超时或取消时会取消仍在执行的子流程, 不再启动下一轮.</p>
+<p>达到正整数次数上限以 <code>TIMEOUT</code> 拒绝, <code>reason</code> 为 <code>&#39;attempts&#39;</code>; 总时限结束为 <code>&#39;timeout&#39;</code>, 外层链截止为 <code>&#39;chain&#39;</code>. 超时或取消时会取消仍在执行的子流程, 不再启动下一轮.</p>
 <p><code>action</code>, <code>retryOn</code> 与条件函数在工作线程执行. <code>action</code> 应迅速构造并返回子流程, 不应执行长时间同步工作或调用 <code>sync()</code>. 时限可以结束对子流程或 Promise 的等待, 无法抢占一个不返回的用户同步函数; 普通 Promise 自身的外部副作用也不能由 Flow 撤销.</p>
 <pre><code class="lang-js">flow.repeatUntil(
     () =&gt; flow.smartClick(&#39;刷新&#39;, { timeout: 2e3 })
@@ -807,6 +837,21 @@ flow.waitForPackage(&#39;com.android.settings&#39;, 5e3).then(() =&gt; console.l
 clickWait(&#39;登录&#39;, 5e3); /* 同上. */
 flow.wait(&#39;登录&#39;, 5e3).click(); /* 同上. */
 </code></pre>
+<h2>[m] waitThenClickBounds<span><a class="mark" href="#flow_m_waitthenclickbounds" id="flow_m_waitthenclickbounds">#</a></span></h2>
+<h3>waitThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#flow_waitthenclickbounds_cond_timeout_interval_onok_onerr" id="flow_waitthenclickbounds_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>waitThenClickBounds(cond, options, onOk?, onErr?)<span><a class="mark" href="#flow_waitthenclickbounds_cond_options_onok_onerr" id="flow_waitthenclickbounds_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标出现后在控件中心坐标点按, 相当于 <code>flow.wait(cond, ...).clickBounds()</code>.</p>
+<p><code>clickBoundsWait</code> 是本方法的别名.</p>
+<pre><code class="lang-js">waitThenClickBounds(&#39;登录&#39;, 5e3);
+clickBoundsWait(&#39;登录&#39;, 5e3); /* 同上. */
+flow.wait(&#39;登录&#39;, 5e3).clickBounds(); /* 同上. */
+</code></pre>
+<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href="flow.html#flow_m_wait">flow.wait</a> 相同, 稳定性参数见 <a href="flow.html#flow_m_waitforstable">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>
 <h2>[m] waitThenLongClick<span><a class="mark" href="#flow_m_waitthenlongclick" id="flow_m_waitthenlongclick">#</a></span></h2>
 <h3>waitThenLongClick(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#flow_waitthenlongclick_cond_timeout_interval_onok_onerr" id="flow_waitthenlongclick_cond_timeout_interval_onok_onerr">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
@@ -828,6 +873,19 @@ flow.wait(&#39;登录&#39;, 5e3).click(); /* 同上. */
 <p><code>clickWhenStable</code> 是本方法的别名.</p>
 <pre><code class="lang-js">clickWhenStable(&#39;下一步&#39;, { timeout: 8e3, stableFor: 300 });
 </code></pre>
+<h2>[m] waitForStableThenClickBounds<span><a class="mark" href="#flow_m_waitforstablethenclickbounds" id="flow_m_waitforstablethenclickbounds">#</a></span></h2>
+<h3>waitForStableThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#flow_waitforstablethenclickbounds_cond_timeout_interval_onok_onerr" id="flow_waitforstablethenclickbounds_cond_timeout_interval_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>waitForStableThenClickBounds(cond, options, onOk?, onErr?)<span><a class="mark" href="#flow_waitforstablethenclickbounds_cond_options_onok_onerr" id="flow_waitforstablethenclickbounds_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标稳定后在控件中心坐标点按, 相当于 <code>flow.waitForStable(cond, ...).clickBounds()</code>.</p>
+<p><code>clickBoundsWhenStable</code> 是本方法的别名.</p>
+<pre><code class="lang-js">clickBoundsWhenStable(&#39;下一步&#39;, { timeout: 8e3, stableFor: 300 });
+</code></pre>
+<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href="flow.html#flow_m_wait">flow.wait</a> 相同, 稳定性参数见 <a href="flow.html#flow_m_waitforstable">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>
 <h2>[m] clickWhenStableAfter<span><a class="mark" href="#flow_m_clickwhenstableafter" id="flow_m_clickwhenstableafter">#</a></span></h2>
 <h3>clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)<span><a class="mark" href="#flow_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr" id="flow_clickwhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
@@ -845,6 +903,24 @@ flow.wait(&#39;登录&#39;, 5e3).click(); /* 同上. */
 clickWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */
 clickWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */
 </code></pre>
+<h2>[m] clickBoundsWhenStableAfter<span><a class="mark" href="#flow_m_clickboundswhenstableafter" id="flow_m_clickboundswhenstableafter">#</a></span></h2>
+<h3>clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)<span><a class="mark" href="#flow_clickboundswhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr" id="flow_clickboundswhenstableafter_cond_timeout_interval_delaymin_delaymax_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>
+<h3>clickBoundsWhenStableAfter(cond, options, onOk?, onErr?)<span><a class="mark" href="#flow_clickboundswhenstableafter_cond_options_onok_onerr" id="flow_clickboundswhenstableafter_cond_options_onok_onerr">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>[ delayMin ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 点击前延时下限 (毫秒)</li>
+<li><strong>[ delayMax ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 点击前延时上限 (毫秒)</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
+</ul>
+<p>等待目标稳定, 再随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒 (只给 <code>delayMin</code> 时为固定延时), 然后在控件中心坐标点按.<br>
+相当于 <code>flow.waitForStable(cond, ...).sleep(delayMin, delayMax).clickBounds()</code>.</p>
+<p>选项对象形式以 <code>delay</code> 键给出延时, 缺少延时时抛出异常.</p>
+<pre><code class="lang-js">clickBoundsWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */
+clickBoundsWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */
+clickBoundsWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */
+</code></pre>
+<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href="flow.html#flow_m_wait">flow.wait</a> 相同, 稳定性参数见 <a href="flow.html#flow_m_waitforstable">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>
 <h2>[m] sleep<span><a class="mark" href="#flow_m_sleep" id="flow_m_sleep">#</a></span></h2>
 <h3>sleep(millis)<span><a class="mark" href="#flow_sleep_millis" id="flow_sleep_millis">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
@@ -1052,8 +1128,11 @@ flow.wait(&#39;登录&#39;, 3e3).click();
 <p><a href="automator.html#automator_toolkit">工具集</a> 的每个函数 (除 <code>retry</code> 外) 都有 Flow 起点形式, 参数与同步形式相同, 结果为链上的值:</p>
 <ul>
 <li>flow.smartClick(target, options?)</li>
+<li>flow.smartClickBounds(target, options?)</li>
 <li>flow.clickIfExists(target, options?)</li>
+<li>flow.clickBoundsIfExists(target, options?)</li>
 <li>flow.clickAny(targets, options?)</li>
+<li>flow.clickBoundsAny(targets, options?)</li>
 <li>flow.findAny(targets, options?)</li>
 <li>flow.scrollUntil(target, options?)</li>
 <li>flow.typeInto(target, text, options?)</li>

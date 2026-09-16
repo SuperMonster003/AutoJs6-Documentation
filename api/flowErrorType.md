@@ -81,6 +81,36 @@ Flow 步骤失败时的错误对象, 是 `name` 为 `'FlowError'` 的 JavaScript
 
 细化错误代码的原因, 如 `'chain'` (链截止), `'sync'` (sync 超时), `'timeout'` (repeatUntil 总时限), `'attempts'` (repeatUntil 动作次数上限), `'noTarget'`, `'notClickable'`, `'verify'`, `'maxSteps'`, `'end'`, `'filtered out'`; 无则为 `null`. repeatUntil 自身的超时错误中, `attempts` 表示已调用动作的次数.
 
+## [p#] flowStack
+
+**`6.8.0`**
+
+- { [string](dataTypes#string) | [undefined](dataTypes#undefined) }
+
+异步任务栈. Flow 在创建步骤时保留脚本调用位置, 失败时记录该步骤及上游步骤的方法名, 脚本文件和行号, 跳过失败后未执行的步骤. 没有可用脚本位置时此属性可以不存在.
+
+`flowStack` 为不可枚举属性, 内容也附加在 `error.stack` 的原始异常栈之后. JavaScript Error 和 Java 异常转成的 Error 同样支持此诊断, 不限于 `FlowError`. 原有 `code`, `step`, `reason` 等字段与错误传播规则不变.
+
+使用 `.catch(console.error)` 即可输出完整诊断, 无需启用 `flow.trace(true)`. 自定义处理可读取 `error.stack` 或 `error.flowStack`. 原样抛出的基本类型, 冻结对象或禁止写入属性的对象仍保持原值, 可能无法附加这些属性; 未处理拒绝的日志仍可显示已捕获的任务栈.
+
+```js
+function submit() {
+    return flow.smartClickBounds('提交', { verify: '提交成功' });
+}
+
+waitAsync('表单').then(submit).catch(console.error);
+```
+
+任务栈的输出形式如下, 实际文件和行号取决于调用位置:
+
+```text
+Flow task stack:
+    at Flow.smartClickBounds (example.js:2)
+    at submit (example.js:2)
+    at Flow.then (example.js:5)
+    at Flow.wait (example.js:5)
+```
+
 ## 错误处理示例
 
 ```js

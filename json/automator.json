@@ -2180,7 +2180,7 @@
               "textRaw": "smartClick(target, options?)",
               "type": "method",
               "name": "smartClick",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>climb?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>maxClimb?: <a href=\"dataTypes#number\">number</a></li>\n<li>gestureFallback?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>offset?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[]</li>\n<li>verify?: <a href=\"#目标参数-target\">Target</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>ok: <code>true</code></li>\n<li>method: <code>&#39;node&#39;</code> | <code>&#39;ancestor&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>target: <a href=\"uiObjectType\">UiObject</a></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} - 点击结果</li>\n</ul>\n<p>智能点击: 目标可点击时直接点击 (<code>method</code> 为 <code>&#39;node&#39;</code>); 不可点击时上溯到最近的可点击祖先 (<code>climb</code>, 默认 <code>true</code>, 最多 <code>maxClimb</code> 层, 默认 <code>5</code>; 相当于罗盘 <code>k</code>; <code>method</code> 为 <code>&#39;ancestor&#39;</code>); 没有可点击祖先或点击被拒绝时, 在目标中心 (加 <code>offset</code> 像素与拟人偏移) 做点按手势 (<code>gestureFallback</code>, 默认 <code>true</code>; <code>method</code> 为 <code>&#39;gesture&#39;</code>). 之后可选地等待 <code>verify</code> 条件在 <code>verifyTimeout</code> 毫秒 (默认 <code>2000</code>, 间隔 <code>verifyInterval</code>, 默认 <code>100</code>) 内成立.</p>\n<p>结果的 <code>target</code> 为实际点击的节点 (上溯时为祖先节点), <code>verified</code> 为 <code>verify</code> 条件的结果 (未指定时为 <code>null</code>).</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>:</p>\n<ul>\n<li>未找到目标: <code>TIMEOUT</code></li>\n<li>点击被拒绝: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>click</code> (节点动作) 或 <code>gesture</code> (手势)</li>\n<li><code>verify</code> 未在时限内成立: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>verify</code></li>\n<li>关闭 <code>gestureFallback</code> 且没有可点击节点: <code>INVALID_TARGET</code>, <code>reason</code> 为 <code>notClickable</code></li>\n</ul>\n<pre><code class=\"lang-js\">/* 列表项的文本本身不可点击, 自动点击其可点击的祖先. */\nlet r = smartClick(&#39;关于手机&#39;, { timeout: 5e3 });\nconsole.log(r.method); /* ancestor */\n\n/* 点击后确认新页面已出现. */\nsmartClick(&#39;设置&#39;, { verify: &#39;关于手机&#39;, verifyTimeout: 3e3 });\n\n/* 不上溯, 直接手势点按, 带拟人偏移与暂停. */\nsmartClick(id(&#39;banner&#39;), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>climb?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>maxClimb?: <a href=\"dataTypes#number\">number</a></li>\n<li>gestureFallback?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>offset?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[]</li>\n<li>verify?: <a href=\"#目标参数-target\">Target</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>ok: <code>true</code></li>\n<li>method: <code>&#39;node&#39;</code> | <code>&#39;ancestor&#39;</code> | <code>&#39;gesture&#39;</code></li>\n<li>target: <a href=\"uiObjectType\">UiObject</a></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} - 点击结果</li>\n</ul>\n<p>智能点击: 目标可点击时直接点击 (<code>method</code> 为 <code>&#39;node&#39;</code>); 不可点击时上溯到最近的可点击祖先 (<code>climb</code>, 默认 <code>true</code>, 最多 <code>maxClimb</code> 层, 默认 <code>5</code>; 相当于罗盘 <code>k</code>; <code>method</code> 为 <code>&#39;ancestor&#39;</code>); 没有可点击祖先或点击被拒绝时, 在目标中心 (加 <code>offset</code> 像素与拟人偏移) 做点按手势 (<code>gestureFallback</code>, 默认 <code>true</code>; <code>method</code> 为 <code>&#39;gesture&#39;</code>). 之后可选地等待 <code>verify</code> 条件在 <code>verifyTimeout</code> 毫秒 (默认 <code>2000</code>, 间隔 <code>verifyInterval</code>, 默认 <code>100</code>) 内成立.</p>\n<p>结果的 <code>target</code> 为实际点击的节点 (上溯时为祖先节点), <code>verified</code> 为 <code>verify</code> 条件的结果 (未指定时为 <code>null</code>).</p>\n<p>失败时抛出 <a href=\"flowErrorType\">FlowError</a>:</p>\n<ul>\n<li>未找到目标: <code>TIMEOUT</code></li>\n<li>点击被拒绝: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>click</code> (节点动作) 或 <code>gesture</code> (手势)</li>\n<li><code>verify</code> 未在时限内成立: <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>verify</code></li>\n<li>关闭 <code>gestureFallback</code> 且没有可点击节点: <code>INVALID_TARGET</code>, <code>reason</code> 为 <code>notClickable</code></li>\n</ul>\n<pre><code class=\"lang-js\">/* 列表项的文本本身不可点击, 自动点击其可点击的祖先. */\nlet r = smartClick(&#39;关于手机&#39;, { timeout: 5e3 });\nconsole.log(r.method); /* ancestor */\n\n/* 点击后确认新页面已出现. */\nsmartClick(&#39;设置&#39;, { verify: &#39;关于手机&#39;, verifyTimeout: 3e3 });\n\n/* 目标不可点击时不上溯, 回退到带拟人偏移与暂停的手势. */\nsmartClick(id(&#39;banner&#39;), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -2197,6 +2197,32 @@
           ],
           "type": "module",
           "displayName": "[m] smartClick"
+        },
+        {
+          "textRaw": "[m] smartClickBounds",
+          "name": "[m]_smartclickbounds",
+          "methods": [
+            {
+              "textRaw": "smartClickBounds(target, options?)",
+              "type": "method",
+              "name": "smartClickBounds",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>timeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>interval?: <a href=\"dataTypes#number\">number</a></li>\n<li>root?: <a href=\"uiObjectType\">UiObject</a></li>\n<li>humanize?: <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#object\">Object</a></li>\n<li>offset?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[]</li>\n<li>verify?: <a href=\"#目标参数-target\">Target</a></li>\n<li>verifyTimeout?: <a href=\"dataTypes#number\">number</a></li>\n<li>verifyInterval?: <a href=\"dataTypes#number\">number</a></li>\n</ul>\n</li>\n<li>}} - 选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>ok: <code>true</code></li>\n<li>method: <code>&#39;gesture&#39;</code></li>\n<li>target: <a href=\"uiObjectType\">UiObject</a></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} - 点击结果</li>\n</ul>\n<p>显式坐标点击: 在目标控件的边界中心加上 <code>offset</code> 与拟人偏移后执行点按手势. 不调用目标或祖先的控件点击方法, 即使控件 <code>click()</code> 返回成功也不会采用该方法. 适合控件动作返回成功但界面没有响应的情况.</p>\n<p><code>offset</code> 为有符号 32 位整数像素, 单个数值对两轴生效, 或用 <code>[dx, dy]</code> 分别指定; 负值向左或向上偏移. 坐标来自实际屏幕边界, 不再应用 <code>setScreenMetrics</code> 缩放. <code>humanize.offset</code> 仍是非负随机偏移幅度.</p>\n<p>支持 <a href=\"#通用选项\">通用选项</a>, <code>offset</code>, <code>verify</code>, <code>verifyTimeout</code> 和 <code>verifyInterval</code>. <code>verifyTimeout</code> 默认 <code>2000</code>, <code>verifyInterval</code> 默认 <code>100</code>. 不接受 <code>climb</code>, <code>maxClimb</code> 或 <code>gestureFallback</code> 选项.</p>\n<p>结果的 <code>method</code> 固定为 <code>&#39;gesture&#39;</code>, <code>target</code> 为原始目标节点, <code>verified</code> 为验证条件的结果, 未指定 <code>verify</code> 时为 <code>null</code>.</p>\n<p>未找到目标时抛出 <code>TIMEOUT</code>; 手势失败时抛出 <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>&#39;gesture&#39;</code>; 验证超时的 <code>reason</code> 为 <code>&#39;verify&#39;</code>.</p>\n<pre><code class=\"lang-js\">smartClickBounds(&#39;设置&#39;, { timeout: 5e3, verify: &#39;关于手机&#39; });\nsmartClickBounds(id(&#39;banner&#39;), { offset: [ -10, 6 ] });\nflow.wait(&#39;下一步&#39;).smartClickBounds({ verify: &#39;确认信息&#39; }).catch(console.error);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] smartClickBounds"
         },
         {
           "textRaw": "[m] clickIfExists",
@@ -2243,6 +2269,50 @@
           "displayName": "[m] clickIfExists"
         },
         {
+          "textRaw": "[m] clickBoundsIfExists",
+          "name": "[m]_clickboundsifexists",
+          "methods": [
+            {
+              "textRaw": "clickBoundsIfExists(target, options?)",
+              "type": "method",
+              "name": "clickBoundsIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"#m-smartclickbounds\">smartClickBounds</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 目标存在且已点击为 <code>true</code>, 不存在为 <code>false</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsIfExists(target, timeout)",
+              "type": "method",
+              "name": "clickBoundsIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>目标在时限内存在时在控件中心坐标点按并返回 <code>true</code>, 不存在时返回 <code>false</code> 而不报错; 点击本身失败时仍抛出 <a href=\"flowErrorType\">FlowError</a>.</p>\n<pre><code class=\"lang-js\">clickBoundsIfExists(&#39;跳过广告&#39;, 2e3); /* 最多等 2 秒. */\nif (!clickBoundsIfExists(&#39;同意&#39;)) {\n    console.log(&#39;没有同意按钮&#39;);\n}\n</code></pre>\n<p>找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 <a href=\"flowErrorType\">FlowError</a>. 同时支持 <code>automator.</code> 同步形式, <code>flow.</code> 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickBoundsIfExists"
+        },
+        {
           "textRaw": "[m] clickAny",
           "name": "[m]_clickany",
           "methods": [
@@ -2285,6 +2355,50 @@
           ],
           "type": "module",
           "displayName": "[m] clickAny"
+        },
+        {
+          "textRaw": "[m] clickBoundsAny",
+          "name": "[m]_clickboundsany",
+          "methods": [
+            {
+              "textRaw": "clickBoundsAny(targets, options?)",
+              "type": "method",
+              "name": "clickBoundsAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标, 按优先顺序</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"#m-smartclickbounds\">smartClickBounds</a> 的选项</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>index: <a href=\"dataTypes#number\">number</a></li>\n<li>target: <a href=\"dataTypes#any\">any</a></li>\n<li>node: <a href=\"uiObjectType\">UiObject</a></li>\n<li>method: <code>&#39;gesture&#39;</code></li>\n<li>verified: <a href=\"dataTypes#any\">any</a></li>\n</ul>\n</li>\n<li>}} | <a href=\"dataTypes#null\">null</a> - 被点击的候选及方式, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsAny(targets, timeout)",
+              "type": "method",
+              "name": "clickBoundsAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>每轮按顺序检查候选目标, 在控件中心坐标点按首个存在的. 结果的 <code>index</code> 为候选在数组中的序号, <code>target</code> 为候选本身, <code>node</code> 为找到的节点.</p>\n<pre><code class=\"lang-js\">let r = clickBoundsAny([ &#39;同意&#39;, &#39;允许&#39;, &#39;OK&#39; ], 3e3);\nif (r) {\n    console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);\n}\n</code></pre>\n<p>找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 <a href=\"flowErrorType\">FlowError</a>. 同时支持 <code>automator.</code> 同步形式, <code>flow.</code> 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickBoundsAny"
         },
         {
           "textRaw": "[m] findAny",

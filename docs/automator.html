@@ -438,14 +438,28 @@
 <li><span class="stability_undefined"><a href="#automator_smartclick_target_options">smartClick(target, options?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#automator_m_smartclickbounds">[m] smartClickBounds</a></span><ul>
+<li><span class="stability_undefined"><a href="#automator_smartclickbounds_target_options">smartClickBounds(target, options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#automator_m_clickifexists">[m] clickIfExists</a></span><ul>
 <li><span class="stability_undefined"><a href="#automator_clickifexists_target_options">clickIfExists(target, options?)</a></span></li>
 <li><span class="stability_undefined"><a href="#automator_clickifexists_target_timeout">clickIfExists(target, timeout)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#automator_m_clickboundsifexists">[m] clickBoundsIfExists</a></span><ul>
+<li><span class="stability_undefined"><a href="#automator_clickboundsifexists_target_options">clickBoundsIfExists(target, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#automator_clickboundsifexists_target_timeout">clickBoundsIfExists(target, timeout)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#automator_m_clickany">[m] clickAny</a></span><ul>
 <li><span class="stability_undefined"><a href="#automator_clickany_targets_options">clickAny(targets, options?)</a></span></li>
 <li><span class="stability_undefined"><a href="#automator_clickany_targets_timeout">clickAny(targets, timeout)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#automator_m_clickboundsany">[m] clickBoundsAny</a></span><ul>
+<li><span class="stability_undefined"><a href="#automator_clickboundsany_targets_options">clickBoundsAny(targets, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#automator_clickboundsany_targets_timeout">clickBoundsAny(targets, timeout)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#automator_m_findany">[m] findAny</a></span><ul>
@@ -1564,8 +1578,43 @@ console.log(r.method); /* ancestor */
 /* 点击后确认新页面已出现. */
 smartClick(&#39;设置&#39;, { verify: &#39;关于手机&#39;, verifyTimeout: 3e3 });
 
-/* 不上溯, 直接手势点按, 带拟人偏移与暂停. */
+/* 目标不可点击时不上溯, 回退到带拟人偏移与暂停的手势. */
 smartClick(id(&#39;banner&#39;), { climb: false, humanize: { offset: 6, delay: [ 100, 300 ] } });
+</code></pre>
+<h2>[m] smartClickBounds<span><a class="mark" href="#automator_m_smartclickbounds" id="automator_m_smartclickbounds">#</a></span></h2>
+<h3>smartClickBounds(target, options?)<span><a class="mark" href="#automator_smartclickbounds_target_options" id="automator_smartclickbounds_target_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#automator_target">Target</a></span> } - 点击目标</li>
+<li><strong>[ options ]</strong> {{<ul>
+<li>timeout?: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>interval?: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>root?: <a href="uiObjectType.html">UiObject</a></li>
+<li>humanize?: <a href="dataTypes.html#datatypes_boolean">boolean</a> | <a href="dataTypes.html#datatypes_object">Object</a></li>
+<li>offset?: <a href="dataTypes.html#datatypes_number">number</a> | <a href="dataTypes.html#datatypes_number">number</a>[]</li>
+<li>verify?: <a href="#automator_target">Target</a></li>
+<li>verifyTimeout?: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>verifyInterval?: <a href="dataTypes.html#datatypes_number">number</a></li>
+</ul>
+</li>
+<li>}} - 选项</li>
+<li><ins><strong>returns</strong></ins> {{<ul>
+<li>ok: <code>true</code></li>
+<li>method: <code>&#39;gesture&#39;</code></li>
+<li>target: <a href="uiObjectType.html">UiObject</a></li>
+<li>verified: <a href="dataTypes.html#datatypes_any">any</a></li>
+</ul>
+</li>
+<li>}} - 点击结果</li>
+</ul>
+<p>显式坐标点击: 在目标控件的边界中心加上 <code>offset</code> 与拟人偏移后执行点按手势. 不调用目标或祖先的控件点击方法, 即使控件 <code>click()</code> 返回成功也不会采用该方法. 适合控件动作返回成功但界面没有响应的情况.</p>
+<p><code>offset</code> 为有符号 32 位整数像素, 单个数值对两轴生效, 或用 <code>[dx, dy]</code> 分别指定; 负值向左或向上偏移. 坐标来自实际屏幕边界, 不再应用 <code>setScreenMetrics</code> 缩放. <code>humanize.offset</code> 仍是非负随机偏移幅度.</p>
+<p>支持 <a href="#automator_3">通用选项</a>, <code>offset</code>, <code>verify</code>, <code>verifyTimeout</code> 和 <code>verifyInterval</code>. <code>verifyTimeout</code> 默认 <code>2000</code>, <code>verifyInterval</code> 默认 <code>100</code>. 不接受 <code>climb</code>, <code>maxClimb</code> 或 <code>gestureFallback</code> 选项.</p>
+<p>结果的 <code>method</code> 固定为 <code>&#39;gesture&#39;</code>, <code>target</code> 为原始目标节点, <code>verified</code> 为验证条件的结果, 未指定 <code>verify</code> 时为 <code>null</code>.</p>
+<p>未找到目标时抛出 <code>TIMEOUT</code>; 手势失败时抛出 <code>ACTION_FAILED</code>, <code>reason</code> 为 <code>&#39;gesture&#39;</code>; 验证超时的 <code>reason</code> 为 <code>&#39;verify&#39;</code>.</p>
+<pre><code class="lang-js">smartClickBounds(&#39;设置&#39;, { timeout: 5e3, verify: &#39;关于手机&#39; });
+smartClickBounds(id(&#39;banner&#39;), { offset: [ -10, 6 ] });
+flow.wait(&#39;下一步&#39;).smartClickBounds({ verify: &#39;确认信息&#39; }).catch(console.error);
 </code></pre>
 <h2>[m] clickIfExists<span><a class="mark" href="#automator_m_clickifexists" id="automator_m_clickifexists">#</a></span></h2>
 <h3>clickIfExists(target, options?)<span><a class="mark" href="#automator_clickifexists_target_options" id="automator_clickifexists_target_options">#</a></span></h3>
@@ -1588,6 +1637,28 @@ if (!clickIfExists(&#39;同意&#39;)) {
     console.log(&#39;没有同意按钮&#39;);
 }
 </code></pre>
+<h2>[m] clickBoundsIfExists<span><a class="mark" href="#automator_m_clickboundsifexists" id="automator_m_clickboundsifexists">#</a></span></h2>
+<h3>clickBoundsIfExists(target, options?)<span><a class="mark" href="#automator_clickboundsifexists_target_options" id="automator_clickboundsifexists_target_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#automator_target">Target</a></span> } - 点击目标</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 同 <a href="#automator_m_smartclickbounds">smartClickBounds</a> 的选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 目标存在且已点击为 <code>true</code>, 不存在为 <code>false</code></li>
+</ul>
+<h3>clickBoundsIfExists(target, timeout)<span><a class="mark" href="#automator_clickboundsifexists_target_timeout" id="automator_clickboundsifexists_target_timeout">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#automator_target">Target</a></span> } - 点击目标</li>
+<li><strong>timeout</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 查找超时 (毫秒)</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>目标在时限内存在时在控件中心坐标点按并返回 <code>true</code>, 不存在时返回 <code>false</code> 而不报错; 点击本身失败时仍抛出 <a href="flowErrorType.html">FlowError</a>.</p>
+<pre><code class="lang-js">clickBoundsIfExists(&#39;跳过广告&#39;, 2e3); /* 最多等 2 秒. */
+if (!clickBoundsIfExists(&#39;同意&#39;)) {
+    console.log(&#39;没有同意按钮&#39;);
+}
+</code></pre>
+<p>找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 <a href="flowErrorType.html">FlowError</a>. 同时支持 <code>automator.</code> 同步形式, <code>flow.</code> 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.</p>
 <h2>[m] clickAny<span><a class="mark" href="#automator_m_clickany" id="automator_m_clickany">#</a></span></h2>
 <h3>clickAny(targets, options?)<span><a class="mark" href="#automator_clickany_targets_options" id="automator_clickany_targets_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
@@ -1617,6 +1688,36 @@ if (r) {
     console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);
 }
 </code></pre>
+<h2>[m] clickBoundsAny<span><a class="mark" href="#automator_m_clickboundsany" id="automator_m_clickboundsany">#</a></span></h2>
+<h3>clickBoundsAny(targets, options?)<span><a class="mark" href="#automator_clickboundsany_targets_options" id="automator_clickboundsany_targets_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>targets</strong> { <span class="type"><a href="#automator_target">Target</a>[]</span> } - 候选目标, 按优先顺序</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 同 <a href="#automator_m_smartclickbounds">smartClickBounds</a> 的选项</li>
+<li><ins><strong>returns</strong></ins> {{<ul>
+<li>index: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>target: <a href="dataTypes.html#datatypes_any">any</a></li>
+<li>node: <a href="uiObjectType.html">UiObject</a></li>
+<li>method: <code>&#39;gesture&#39;</code></li>
+<li>verified: <a href="dataTypes.html#datatypes_any">any</a></li>
+</ul>
+</li>
+<li>}} | <a href="dataTypes.html#datatypes_null">null</a> - 被点击的候选及方式, 都不存在时为 <code>null</code></li>
+</ul>
+<h3>clickBoundsAny(targets, timeout)<span><a class="mark" href="#automator_clickboundsany_targets_timeout" id="automator_clickboundsany_targets_timeout">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>
+<ul>
+<li><strong>targets</strong> { <span class="type"><a href="#automator_target">Target</a>[]</span> } - 候选目标</li>
+<li><strong>timeout</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 查找超时 (毫秒)</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+<p>每轮按顺序检查候选目标, 在控件中心坐标点按首个存在的. 结果的 <code>index</code> 为候选在数组中的序号, <code>target</code> 为候选本身, <code>node</code> 为找到的节点.</p>
+<pre><code class="lang-js">let r = clickBoundsAny([ &#39;同意&#39;, &#39;允许&#39;, &#39;OK&#39; ], 3e3);
+if (r) {
+    console.log(`点击了第 ${r.index + 1} 个候选: ${r.target}`);
+}
+</code></pre>
+<p>找到目标后始终执行坐标手势, 动作或验证失败时仍抛出 <a href="flowErrorType.html">FlowError</a>. 同时支持 <code>automator.</code> 同步形式, <code>flow.</code> 起点形式和 Flow 链式形式; 链式调用也必须显式传入目标.</p>
 <h2>[m] findAny<span><a class="mark" href="#automator_m_findany" id="automator_m_findany">#</a></span></h2>
 <h3>findAny(targets, options?)<span><a class="mark" href="#automator_findany_targets_options" id="automator_findany_targets_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>

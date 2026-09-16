@@ -56,6 +56,13 @@
           "displayName": "[p#] reason"
         },
         {
+          "textRaw": "[p#] flowStack",
+          "name": "[p#]_flowstack",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#undefined\">undefined</a> }</li>\n</ul>\n<p>异步任务栈. Flow 在创建步骤时保留脚本调用位置, 失败时记录该步骤及上游步骤的方法名, 脚本文件和行号, 跳过失败后未执行的步骤. 没有可用脚本位置时此属性可以不存在.</p>\n<p><code>flowStack</code> 为不可枚举属性, 内容也附加在 <code>error.stack</code> 的原始异常栈之后. JavaScript Error 和 Java 异常转成的 Error 同样支持此诊断, 不限于 <code>FlowError</code>. 原有 <code>code</code>, <code>step</code>, <code>reason</code> 等字段与错误传播规则不变.</p>\n<p>使用 <code>.catch(console.error)</code> 即可输出完整诊断, 无需启用 <code>flow.trace(true)</code>. 自定义处理可读取 <code>error.stack</code> 或 <code>error.flowStack</code>. 原样抛出的基本类型, 冻结对象或禁止写入属性的对象仍保持原值, 可能无法附加这些属性; 未处理拒绝的日志仍可显示已捕获的任务栈.</p>\n<pre><code class=\"lang-js\">function submit() {\n    return flow.smartClickBounds(&#39;提交&#39;, { verify: &#39;提交成功&#39; });\n}\n\nwaitAsync(&#39;表单&#39;).then(submit).catch(console.error);\n</code></pre>\n<p>任务栈的输出形式如下, 实际文件和行号取决于调用位置:</p>\n<pre><code class=\"lang-text\">Flow task stack:\n    at Flow.smartClickBounds (example.js:2)\n    at submit (example.js:2)\n    at Flow.then (example.js:5)\n    at Flow.wait (example.js:5)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] flowStack"
+        },
+        {
           "textRaw": "错误处理示例",
           "name": "错误处理示例",
           "desc": "<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).click().then(null, e =&gt; {\n    switch (e.code) {\n        case &#39;TIMEOUT&#39;:\n            console.log(`${e.elapsed} 毫秒内未找到 ${e.selector}`);\n            break;\n        case &#39;A11Y_UNAVAILABLE&#39;:\n            auto.launchSettings();\n            break;\n        default:\n            console.error(e);\n    }\n});\n\n/* 同步形式捕获. */\ntry {\n    smartClick(&#39;不存在的按钮&#39;);\n} catch (e) {\n    console.log(e.name === &#39;FlowError&#39;, e.code); /* true TIMEOUT */\n}\n</code></pre>\n",

@@ -4,6 +4,7 @@
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/16</p>
 
+- `更新` Flow 坐标点击系列, maxAttempts 默认 0 的无限尝试语义, 以及异常的任务调用栈和控制台输出
 - `更新` Flow 可选步骤 `whenPresent`, 有界循环 `repeatUntil`, 链式候选查找与点击, 集合稳定性及 `snapshot` 快照选项, 并校正 `stableFor` 的默认值为 0
 - `新增` [文本间距 (Pangu)](https://docs.autojs6.com/#/pangu) 文档, 覆盖内置 pangu.js 10.1.0 的全局对象, 文本排版, 间距检查及运行环境
 

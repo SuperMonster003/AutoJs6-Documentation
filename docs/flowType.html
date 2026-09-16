@@ -438,7 +438,7 @@ console.log(f.state); /* fulfilled */
     .wait(&#39;欢迎回来&#39;, 10e3)
     .then(w =&gt; console.log(w.text()));
 </code></pre>
-<p>同样可追加的等待还有 <code>waitUntil</code>, <code>waitWhile</code>, <code>waitForStable</code>, <code>waitForVisible</code>, <code>waitForHidden</code> (<code>waitForGone</code>), <code>waitForActivity</code>, <code>waitForPackage</code>, <code>waitThenClick</code> (<code>clickWait</code>), <code>waitThenLongClick</code>, <code>waitForStableThenClick</code> (<code>clickWhenStable</code>), <code>clickWhenStableAfter</code>, 语义与 <a href="flow.html">flow</a> 上的同名函数一致.</p>
+<p>同样可追加的等待还有 <code>waitUntil</code>, <code>waitWhile</code>, <code>waitForStable</code>, <code>waitForVisible</code>, <code>waitForHidden</code> (<code>waitForGone</code>), <code>waitForActivity</code>, <code>waitForPackage</code>, <code>waitThenClick</code> (<code>clickWait</code>), <code>waitThenClickBounds</code> (<code>clickBoundsWait</code>), <code>waitThenLongClick</code>, <code>waitForStableThenClick</code> (<code>clickWhenStable</code>), <code>waitForStableThenClickBounds</code> (<code>clickBoundsWhenStable</code>), <code>clickWhenStableAfter</code>, <code>clickBoundsWhenStableAfter</code>, 语义与 <a href="flow.html">flow</a> 上的同名函数一致.</p>
 <h2>[m#] within<span><a class="mark" href="#flowtype_m_within" id="flowtype_m_within">#</a></span></h2>
 <h3>within(cond, timeout?, interval?, onOk?, onErr?)<span><a class="mark" href="#flowtype_within_cond_timeout_interval_onok_onerr" id="flowtype_within_cond_timeout_interval_onok_onerr">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>
@@ -559,12 +559,18 @@ flow.within(className(&#39;RecyclerView&#39;), 5e3)
 <td>先休眠再 click</td>
 </tr>
 <tr>
+<td>clickBoundsAfter(millis) / clickBoundsAfter(min, max)</td>
+<td>1 ~ 2</td>
+<td>先休眠再 clickBounds</td>
+</tr>
+<tr>
 <td>longClickAfter(millis) / longClickAfter(min, max)</td>
 <td>1 ~ 2</td>
 <td>先休眠再 longClick</td>
 </tr>
 </tbody>
 </table>
+<p><code>clickBounds</code> 在控件中心加上可选偏移后执行坐标手势, 不调用控件点击方法. 偏移语义同 <a href="uiObjectType.html#uiobjecttype_m_clickbounds">UiObject.clickBounds</a>. <code>clickBoundsAfter</code> 使用中心坐标, 如需延时和偏移可组合 <code>sleep(...).clickBounds(offsetX, offsetY)</code>.</p>
 <p>每个动作步骤都可以追加尾随回调 <code>onOk</code> / <code>onErr</code>.</p>
 <pre><code class="lang-js">flow.wait(&#39;用户名&#39;).setText(&#39;admin&#39;);
 flow.wait(className(&#39;Button&#39;).text(&#39;登录&#39;)).clickAfter(300, 800);
@@ -631,7 +637,7 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 </code></pre>
 <h2>工具集步骤<span><a class="mark" href="#flowtype_4" id="flowtype_4">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
-<p><a href="automator.html#automator_toolkit">工具集</a> 的 12 个工具可作为链式步骤. 其中 <code>clickIfExists</code>, <code>clickAny</code>, <code>findAny</code> 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:</p>
+<p><a href="automator.html#automator_toolkit">工具集</a> 的 15 个工具可作为链式步骤. 其中 <code>clickIfExists</code>, <code>clickBoundsIfExists</code>, <code>clickAny</code>, <code>clickBoundsAny</code>, <code>findAny</code> 使用显式目标参数; 其余工具的目标来源见下表. 结果为新值:</p>
 <table>
 <thead>
 <tr>
@@ -647,12 +653,27 @@ flow.of(null).swipe(500, 1600, 500, 400, 300); /* 以任意值起链, 只为执�
 <td>点击结果对象</td>
 </tr>
 <tr>
+<td>smartClickBounds(options?)</td>
+<td>目标节点</td>
+<td>点击结果对象</td>
+</tr>
+<tr>
 <td>clickIfExists(target, options?)</td>
 <td>忽略</td>
 <td>存在且点击成功为 true, 缺席为 false</td>
 </tr>
 <tr>
+<td>clickBoundsIfExists(target, options?)</td>
+<td>忽略</td>
+<td>存在且点击成功为 true, 缺席为 false</td>
+</tr>
+<tr>
 <td>clickAny(targets, options?)</td>
+<td>忽略</td>
+<td>被点击的候选对象或 null</td>
+</tr>
+<tr>
+<td>clickBoundsAny(targets, options?)</td>
 <td>忽略</td>
 <td>被点击的候选对象或 null</td>
 </tr>

@@ -1518,6 +1518,67 @@ Color('orange').isSimilar('dark-orange', 8, 'hs'); // true
 Color('#010101').isSimilar('#020202', { similarity: 0.95 }); // true
 ```
 
+## [m#] distance
+
+### distance(other, algorithm?)
+
+**`6.8.0`**
+
+- **other** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ algorithm = `'diff'` ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) } - 颜色检测算法
+- <ins>**returns**</ins> { [Range[0..255]](dataTypes#range) } - 颜色距离
+
+计算实例颜色与参数颜色的距离, 参阅 [colors.distance](color#m-distance):
+
+```js
+Color('orange').distance('dark-orange'); /* 约为 8.33. */
+```
+
+## [m#] invert
+
+### invert()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 反色
+
+参阅 [colors.invert](color#m-invert). 此方法不修改实例本身:
+
+```js
+colors.toHex(Color('#FF0000').invert()); // "#00FFFF"
+```
+
+## [m#] blend
+
+### blend(other, ratio?)
+
+**`6.8.0`**
+
+- **other** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ ratio = `0.5` ]** { [Range[0..1]](dataTypes#range) | [string](dataTypes#string) } - 参数颜色的权重, 字符串按 [Numberx.parseAny](numberx#m-parseany) 解析
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 混合后的颜色
+
+参阅 [colors.blend](color#m-blend). 此方法不修改实例本身:
+
+```js
+colors.toHex(Color('black').blend('white')); // "#7F7F7F"
+```
+
+## [m#] contrast
+
+### contrast(background)
+
+**`6.8.0`**
+
+- **background** { [OmniColor](omniTypes#omnicolor) } - 背景色, 须为不透明颜色
+- <ins>**returns**</ins> { [Range[1..21]](dataTypes#range) } - 对比度
+
+以实例颜色为前景色计算与背景色的对比度, 参阅 [colors.contrast](color#m-contrast):
+
+```js
+Color('black').contrast('white'); // 21
+```
+
 ## [m#] isEqual
 
 ### isEqual(other, alphaMatters?)

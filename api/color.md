@@ -1945,6 +1945,84 @@ colors.luminance(colors.YELLOW); // 0.9278
 
 > 参阅: [W3C Wiki](https://www.w3.org/WAI/GL/wiki/Relative_luminance)
 
+## [m] distance
+
+### distance(colorA, colorB, algorithm?)
+
+**`6.8.0`**
+
+- **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ algorithm = `'diff'` ]** { [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) | { algorithm?: [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) } } - 颜色检测算法
+- <ins>**returns**</ins> { [Range[0..255]](dataTypes#range) } - 颜色距离
+
+按指定 [颜色检测算法](dataTypes#colordetectionalgorithm) 计算两个颜色的距离, 量纲与 [颜色匹配阈值](glossaries#颜色匹配阈值) 一致, 因此 `colors.isSimilar(a, b, threshold, algorithm)` 等价于 `colors.distance(a, b, algorithm) <= threshold`:
+
+```js
+colors.distance('red', 'red'); // 0
+colors.distance('orange', 'dark-orange'); /* 约为 8.33. */
+colors.distance('orange', 'dark-orange') <= 9; /* true, 与 colors.isSimilar('orange', 'dark-orange', 9) 一致. */
+colors.distance('orange', 'dark-orange', 'hs'); /* 使用色相饱和度距离检测. */
+```
+
+`'equal'` 算法返回各分量差值的最大值, 仅当两个颜色完全相同时为 `0`.
+
+## [m] invert
+
+### invert(color)
+
+**`6.8.0`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 反色
+
+反转颜色的 `R (red)`, `G (green)`, `B (blue)` 分量, 保留 `A (alpha)` 分量:
+
+```js
+colors.toHex(colors.invert('#FF0000')); // "#00FFFF"
+colors.toHex(colors.invert('#80FF0000'), 8); // "#8000FFFF"
+```
+
+## [m] blend
+
+### blend(colorA, colorB, ratio?)
+
+**`6.8.0`**
+
+- **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **[ ratio = `0.5` ]** { [Range[0..1]](dataTypes#range) | [string](dataTypes#string) } - 第二个颜色的权重, 字符串按 [Numberx.parseAny](numberx#m-parseany) 解析
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 混合后的颜色
+
+按权重线性混合两个颜色 (含 `A (alpha)` 分量), `ratio` 为 `0` 时结果为 `colorA`, 为 `1` 时结果为 `colorB`:
+
+```js
+colors.toHex(colors.blend('black', 'white')); // "#7F7F7F"
+colors.toHex(colors.blend('black', 'white', 0)); // "#000000"
+colors.toHex(colors.blend('black', 'white', '100%')); // "#FFFFFF"
+colors.toHex(colors.blend('red', 'blue', 0.25)); // "#BF003F"
+```
+
+## [m] contrast
+
+### contrast(foreground, background)
+
+**`6.8.0`**
+
+- **foreground** { [OmniColor](omniTypes#omnicolor) } - 前景色
+- **background** { [OmniColor](omniTypes#omnicolor) } - 背景色, 须为不透明颜色
+- <ins>**returns**</ins> { [Range[1..21]](dataTypes#range) } - 对比度
+
+按 [WCAG](https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio) 公式计算前景色与背景色的对比度, 取值范围 `[1..21]`. 前景色带透明度时先与背景色合成; 背景色带透明度时抛出异常.
+
+通常 `4.5` 以上满足普通文本的可读性要求 (AA 标准), `7` 以上满足更高要求 (AAA 标准):
+
+```js
+colors.contrast('black', 'white'); // 21
+colors.contrast('white', 'white'); // 1
+colors.contrast('#777777', 'white') >= 4.5; // false
+```
+
 ## [m] toColorStateList
 
 ### toColorStateList(...color)

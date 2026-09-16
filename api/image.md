@@ -125,9 +125,11 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 
 `toBase64()` 和 `toBytes()` 支持 `png`, `jpg`, `jpeg`, `webp`, `webp_lossy`, `webp-lossy`, `webp_lossless` 和 `webp-lossless`. 后 4 种显式 WebP 模式要求 Android API 30 或更高.
 
-### [m] images.readPixels(path)
+### [m] images.readPixels(image)
 
-- **path** { [string](dataTypes#string) } - 图片路径
+**`[6.8.0]`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 图片或图片路径
 - <ins>**returns**</ins> {{
     - data: [JavaArray](dataTypes#javaarray)\<[number](dataTypes#number)\>;
     - width: [number](dataTypes#number);
@@ -135,6 +137,15 @@ images.loadAsync("https://example.com/picture.png").then((image) => {
 - }}
 
 读取图片的全部 ARGB 像素. `data` 按从左到右, 从上到下的顺序排列, 长度为 `width * height`.
+
+传入路径时, 读取的临时图片在返回前自动回收; 传入 [ImageWrapper](imageWrapperType) 时, 图片保持可用, 由调用方负责回收.
+
+```js
+let img = images.captureScreen();
+let { data, width, height } = images.readPixels(img);
+console.log(colors.toHex(data[10 * width + 20])); /* 坐标 (20, 10) 处的像素. */
+img.recycle();
+```
 
 ### [m] images.matToImage(mat)
 
@@ -917,6 +928,49 @@ requestScreenCapture({
 - }}
 - <ins>**returns**</ins> { [OpenCVPoint](opencvPointType)[] } - 全部匹配模式的基准点
 
+### [m] images.countPointsByColor(image, color, options?)
+
+**`6.8.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **color** { [ColorInt](dataTypes#colorint) | [ColorHex](dataTypes#colorhex) | [ColorName](dataTypes#colorname) }
+- **[ options ]** {{
+    - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
+    - threshold?: [number](dataTypes#number);
+    - similarity?: [number](dataTypes#number);
+- }}
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 匹配像素的数量
+
+统计图片 (或 `region` 区域) 中与指定颜色匹配的像素数量, 匹配规则与 [findPointsByColor](#m-images-findpointsbycolor-image-color-options) 相同 (RGB 各分量差值均不超过阈值).
+
+结果直接由 OpenCV 掩码统计得到, 不会生成点数组, 适合判断某个区域是否 "大部分" 为某种颜色:
+
+```js
+let img = images.captureScreen();
+let region = [ 100, 200, 300, 40 ];
+let total = region[2] * region[3];
+let ratio = images.countPointsByColor(img, "#ffffff", { region, threshold: 8 }) / total;
+console.log(ratio > 0.9 ? "区域几乎为白色" : "区域不是白色");
+img.recycle();
+```
+
+### [m] images.getMeanColor(image, region?)
+
+**`6.8.0`**
+
+- **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
+- **[ region ]** { [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType) } - 统计区域, 默认为整张图片
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) } - 平均颜色
+
+计算图片 (或 `region` 区域) 各通道的平均值并合成为颜色整数. 灰度图返回不透明灰色, 无透明通道的图片 alpha 为 `255`.
+
+```js
+let img = images.captureScreen();
+let mean = images.getMeanColor(img, [ 0, 0, 200, 100 ]);
+console.log(colors.toHex(mean), colors.luminance(mean) > 0.5 ? "偏亮" : "偏暗");
+img.recycle();
+```
+
 ## 找图与特征匹配
 
 ### [m] images.findCircles(image, options?)
@@ -950,10 +1004,13 @@ requestScreenCapture({
     - weakThreshold?: [number](dataTypes#number);
     - threshold?: [number](dataTypes#number);
     - level?: [number](dataTypes#number);
+    - scales?: [number](dataTypes#number) | [number](dataTypes#number)[];
 - }}
 - <ins>**returns**</ins> { [OpenCVPoint](opencvPointType) | [null](dataTypes#null) } - 最佳匹配的左上角坐标
 
 默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`. `level = -1` 表示自动选择图像金字塔层数.
+
+`scales` **`6.8.0`** 指定依次尝试的模板缩放比例 (含义与 [images.matchTemplate](#m-images-matchtemplate-image-template-options) 相同), 返回所有比例中相似度最高的匹配位置. 从 AutoJs6 6.8.0 起, 返回的坐标总是在原始分辨率上精确定位.
 
 ### [m] images.findPointByImage(image, template, x?, y?, width?, height?, threshold?)
 
@@ -998,6 +1055,8 @@ requestScreenCapture({
 
 ### [m] images.matchTemplate(image, template, options?)
 
+**`[6.8.0]`**
+
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 待搜索图片
 - **template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 模板图片
 - **[ options ]** {{
@@ -1006,6 +1065,7 @@ requestScreenCapture({
     - threshold?: [number](dataTypes#number);
     - level?: [number](dataTypes#number);
     - max?: [number](dataTypes#number);
+    - scales?: [number](dataTypes#number) | [number](dataTypes#number)[];
     - useTransparentMask?: [boolean](dataTypes#boolean);
     - transparentMask?: [boolean](dataTypes#boolean);
 - }}
@@ -1013,53 +1073,95 @@ requestScreenCapture({
 
 默认值为 `weakThreshold = 0.6`, `threshold = 0.9`, `level = -1`, `max = 5`, `useTransparentMask = false`. `transparentMask` 是 `useTransparentMask` 的兼容别名, 仅在前者缺失时生效.
 
-`max` 限制返回结果数量. 开启透明遮罩后, 模板的透明通道参与遮罩构造.
+`max` 限制返回结果数量. 结果按相似度降序排列, 且不含区域相互重叠的重复项. 从 AutoJs6 6.8.0 起, 所有匹配都会在原始分辨率上精确定位 (此前在较粗的金字塔层级达到阈值的结果会直接返回, 坐标可能偏差数个像素).
+
+`scales` (别名 `scale`) **`6.8.0`** 指定依次尝试的模板缩放比例, 可为单个数字或数组, 例如 `[ 0.8, 1, 1.25 ]`, 用于匹配在其他分辨率下截取的模板. 匹配结果的 [scale](#templatematch), [width](#templatematch) 与 [height](#templatematch) 反映实际采用的比例与尺寸, 无法放入图片的比例会被跳过. 比例须为正数.
+
+开启透明遮罩后, 4 通道模板中 alpha 小于 `128` 的像素不参与比较, 适合带透明背景的图标模板. 图片与模板的通道数不同时 (如灰度图与彩色模板) 会自动转换为相同通道后再比较. 纯色模板 (各颜色通道几乎没有变化) 会自动改用平方差算法计算相似度, 不再因相关系数无定义而永远无法匹配.
 
 ```js
 let result = images.matchTemplate("./screen.png", "./button.png", {
     region: [ 0, 0, 1080, 1200 ],
-    weakThreshold: 0.6,
     threshold: 0.9,
-    level: -1,
     max: 5,
-    useTransparentMask: false,
+    scales: [ 0.9, 1, 1.1 ],
 });
-console.log(result.best());
+let best = result.best();
+if (best !== null) {
+    console.log(best.similarity, best.scale, best.rect);
+    click(best.center.x, best.center.y);
+}
 ```
 
 ### [m] images.detectAndComputeFeatures(image, options?)
 
-**`6.6.0`**
+**`6.6.0`** **`[6.8.0]`**
 
 - **image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **[ options ]** {{
     - region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);
     - scale?: [number](dataTypes#number);
-    - grayscale?: [boolean](dataTypes#boolean);
     - method?: [string](dataTypes#string) | [number](dataTypes#number);
+    - maxFeatures?: [number](dataTypes#number);
+    - grayscale?: [boolean](dataTypes#boolean);
 - }}
 - <ins>**returns**</ins> { [ImageFeatures](#imagefeatures) } - 特征描述对象
 
-默认使用 `method = "SIFT"` 和 `grayscale = false`. `method` 支持 `SIFT`, `ORB` 或对应内部整数常量.
+检测 `image` (或其 `region` 区域) 的关键点并计算描述子, 返回可反复用于 `matchFeatures()` 的特征对象.
 
-`scale` 被限制在 `0` 至 `1`. 未指定时, 小于约 100 万像素的图片使用 `1`; 更大的图片按约 100 万像素且最长边不超过 `1600` 的规则自动缩放.
+`method` 支持 `SIFT` (默认, 精度高且对缩放和旋转稳定) 与 `ORB` (速度快, 二进制描述子), 或对应的内部整数常量.
 
-### [m] images.matchFeatures(sceneFeatures, objectFeatures, options?)
+`scale` 是检测前对区域应用的缩放比例, 取值范围 `(0, 8]`. 未指定或为 `0` 时自动确定: 不超过约 100 万像素的图片使用 `1`, 更大的图片按约 100 万像素且最长边不超过 `1600` 的规则缩小. 大于 `1` 的值会先放大图片, 适用于关键点不足的小图标 (如 `scale: 2`). 实际使用的比例可由 `ImageFeatures#scale` 读取.
 
-**`6.6.0`**
+`maxFeatures` 限制关键点数量 (按响应强度保留最优者). `0` 或未指定时使用方法默认值: `SIFT` 不限制, `ORB` 为 `20000`. 场景图纹理丰富时, 过小的上限会使目标区域的关键点被其他区域挤占而导致匹配失败.
 
-- **sceneFeatures** { [ImageFeatures](#imagefeatures) } - 场景图片特征
-- **objectFeatures** { [ImageFeatures](#imagefeatures) } - 目标图片特征
+检测始终在灰度图上进行 (SIFT 与 ORB 仅使用亮度信息), 1, 3, 4 通道图片均可直接传入, `grayscale` 仅为兼容保留. ORB 关键点的图像边界由 OpenCV 默认的 `31` 像素调整为 `15` 像素, 使小于 `63` 像素的图片也能检测到关键点.
+
+纯色等没有关键点的图片返回 `count` 为 `0` 的特征对象, 参与匹配时结果为 `null` 而不抛出异常.
+
+### [m] images.matchFeatures(scene, object, options?)
+
+**`6.6.0`** **`[6.8.0]`**
+
+- **scene** { [ImageFeatures](#imagefeatures) | [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 场景图片 (大图) 或其特征
+- **object** { [ImageFeatures](#imagefeatures) | [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 目标图片 (小图) 或其特征
 - **[ options ]** {{
-    - matcher?: [string](dataTypes#string);
-    - drawMatches?: [string](dataTypes#string);
+    - matcher?: [string](dataTypes#string) | [number](dataTypes#number);
     - threshold?: [number](dataTypes#number);
+    - ransacThreshold?: [number](dataTypes#number);
+    - minInliers?: [number](dataTypes#number);
+    - drawMatches?: [string](dataTypes#string);
+    - method?: [string](dataTypes#string) | [number](dataTypes#number);
+    - scale?: [number](dataTypes#number);
+    - maxFeatures?: [number](dataTypes#number);
 - }}
 - <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) | [null](dataTypes#null) } - 目标四边形, 或 `null`
 
-`matcher` 是 `org.opencv.features2d.DescriptorMatcher` 的静态常量名. 未指定时, ORB 一类的 `CV_8U` 描述符使用 `BRUTEFORCE_HAMMING`, 其他描述符使用 `FLANNBASED`.
+在场景中寻找目标, 返回目标四角在场景原图坐标系中的位置 (已还原 `region` 偏移与 `scale` 缩放).
 
-默认阈值对 `CV_8U` 描述符为 `0.8`, 对其他描述符为 `0.7`. `drawMatches` 可指定调试匹配图的 JPG 保存路径.
+两个参数均可直接传入图片或图片路径, 此时会按 `method`, `scale`, `maxFeatures` 选项即时检测特征并在匹配后自动回收. 传入的 [ImageFeatures](#imagefeatures) 不会被回收 (除非已标记为一次性对象), 可反复用于多次匹配.
+
+匹配流程: 对目标的每个描述子在场景中取最近的两个描述子, 最近距离小于 `threshold` 倍次近距离时保留 (Lowe 比例测试); 保留的匹配不少于 `4` 对时用 RANSAC 估计单应矩阵, 重投影误差不超过 `ransacThreshold` (默认 `3` 像素) 的匹配为内点; 内点数不少于 `minInliers` (默认 `4`) 且目标四角的投影为凸的非退化四边形时返回 [ObjectFrame](#c-images-objectframe), 否则返回 `null`. 匹配数与内点数可由 `ObjectFrame#matches` 及 `ObjectFrame#inliers` 读取.
+
+`threshold` 取值 `(0, 1]`, 越小越严格. 默认对 ORB 等二进制描述子为 `0.8`, 对 SIFT 等浮点描述子为 `0.7`.
+
+`matcher` 是 `org.opencv.features2d.DescriptorMatcher` 的静态常量名 (不区分大小写, 可用 `-` 代替 `_`) 或常量值. 未指定时, 二进制描述子使用 `BRUTEFORCE_HAMMING`, 浮点描述子使用 `FLANNBASED`. 与描述子类型不兼容的指定 (如 ORB 搭配 `FLANNBASED`, SIFT 搭配 `BRUTEFORCE_HAMMING`) 会自动改为对应的默认值而不再抛出异常.
+
+场景与目标须使用相同的检测方法, 否则抛出异常. 任一特征对象已回收时同样抛出异常.
+
+`drawMatches` 可指定匹配示意图的 JPG 保存路径 (目标图与场景图并排并以连线标出匹配), 用于调试.
+
+目标较小 (如小于 `100` 像素的图标) 时, 建议使用默认的 `SIFT` 并配合 `scale: 2` 放大目标以获取足够的关键点; `ORB` 因关键点边界限制更适合较大的目标.
+
+```js
+let scene = images.captureScreen();
+let frame = images.matchFeatures(scene, "./icon.png");
+if (frame !== null) {
+    console.log(`center: ${frame.center}, angle: ${frame.angle.toFixed(1)}, inliers: ${frame.inliers}`);
+    click(frame.centerX, frame.centerY);
+}
+scene.recycle();
+```
 
 ## 相似度
 
@@ -1105,7 +1207,7 @@ console.log(result.best());
 - **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) | [Mat](https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html) }
 - <ins>**returns**</ins> { [number](dataTypes#number) } - 均方误差
 
-结果越小表示差异越小, 完全相同为 `0`.
+结果越小表示差异越小, 完全相同为 `0`. 8 位图像的最大值为 `65025` (即 `255 * 255`).
 
 ### [m] images.ncc(imageA, imageB)
 
@@ -1117,9 +1219,13 @@ console.log(result.best());
 
 ### [m] images.isEqual(imageA, imageB)
 
+**`[6.8.0]`**
+
 - **imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - **imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) }
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 像素是否完全相同
+
+尺寸或类型不同时返回 `false`. 从 AutoJs6 6.8.0 起逐通道精确比较, 任一通道 (含 alpha) 相差 `1` 也会返回 `false`.
 
 ### [m] images.getSimilarity(imageA, imageB, options?)
 
@@ -1205,14 +1311,16 @@ console.log(result.best());
 
 **`6.8.0`**
 
-由 4 个 [OpenCVPoint](opencvPointType) 表示的特征匹配边框类.
+由 4 个 [OpenCVPoint](opencvPointType) 表示的特征匹配边框类. 四角与目标图片自身的四角一一对应, 因此旋转或透视变形的目标会得到旋转的边框, 可通过 `angle` 与 `bounds` 读取旋转角度及轴对齐外接矩形.
 
-#### [c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight)
+#### [c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight, matches?, inliers?)
 
 - **topLeft** { [OpenCVPoint](opencvPointType) }
 - **topRight** { [OpenCVPoint](opencvPointType) }
 - **bottomLeft** { [OpenCVPoint](opencvPointType) }
 - **bottomRight** { [OpenCVPoint](opencvPointType) }
+- **[ matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数
+- **[ inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数
 - <ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) }
 
 创建一个对象边框.
@@ -1259,9 +1367,55 @@ console.log(result.best());
 
 - { [OpenCVPoint](opencvPointType) }
 
+#### [p#] ObjectFrame#width
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 上边长度, 即目标在场景中的宽度
+
+#### [p#] ObjectFrame#height
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 左边长度, 即目标在场景中的高度
+
+#### [p#] ObjectFrame#angle
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 上边的旋转角度 (度), 取值 `(-180, 180]`
+
+正值表示屏幕上的顺时针方向. 未旋转的目标约为 `0`.
+
+#### [p#] ObjectFrame#bounds
+
+**`6.8.0`** **`READONLY`**
+
+- { [OpenCVRect](opencvRectType) } - 四角点的轴对齐外接矩形
+
+#### [p#] ObjectFrame#points
+
+**`6.8.0`** **`READONLY`**
+
+- { [OpenCVPoint](opencvPointType)[] } - 场景坐标系中的内点
+
+#### [p#] ObjectFrame#matches
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 通过比例测试的匹配数
+
+#### [p#] ObjectFrame#inliers
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 支撑该边框的 RANSAC 内点数
+
+内点数越多, 边框越可靠.
+
 #### [m#] ObjectFrame#summary()
 
-- <ins>**returns**</ins> { [string](dataTypes#string) } - 四角点和中心点摘要
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 四角点, 中心点, 尺寸, 角度及匹配统计摘要
 
 ### MatchingResult
 
@@ -1279,11 +1433,44 @@ console.log(result.best());
 
 - { [OpenCVPoint](opencvPointType)[] } - 匹配点数组
 
+#### [p#] MatchingResult#size
+
+**`6.8.0`** **`READONLY`**
+
+- { [number](dataTypes#number) } - 匹配数量
+
+#### [m#] MatchingResult#isEmpty()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否没有任何匹配
+
+#### [m#] MatchingResult#isNotEmpty()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否至少有一个匹配
+
+#### [m#] MatchingResult#filter(predicate)
+
+**`6.8.0`**
+
+- **predicate** { [Function](dataTypes#function) } - `(match: TemplateMatch) => boolean`
+- <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 仅包含使 `predicate` 返回真值的匹配的新结果
+
+原 `MatchingResult` 不会被修改:
+
+```js
+let result = images.matchTemplate(img, template, { max: 20 });
+let upperHalf = result.filter(m => m.center.y < img.height / 2);
+console.log(upperHalf.size);
+```
+
 #### [m#] MatchingResult#first()
 
 - <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
 
-返回当前顺序中的第一项.
+返回当前顺序中的第一项. 未经排序时, 结果按相似度降序排列, 第一项即最佳匹配.
 
 #### [m#] MatchingResult#last()
 
@@ -1340,25 +1527,57 @@ console.log(result.best());
 
 #### [m#] MatchingResult#sortBy(compareFn)
 
-**`Overload 2/2`**
+**`Overload 2/2`** **`[6.8.0]`**
 
 - **compareFn** { [Function](dataTypes#function) } - `(a: TemplateMatch, b: TemplateMatch) => number`
 - <ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 新的排序结果
 
-原 `MatchingResult` 不会被修改.
+原 `MatchingResult` 不会被修改. 比较函数只需返回任意数字, 仅其符号有效 (从 AutoJs6 6.8.0 起, 返回小数不再抛出类型转换异常):
+
+```js
+let byX = result.sortBy((a, b) => a.point.x - b.point.x);
+```
 
 ### TemplateMatch
 
+**`[6.8.0]`**
+
 - **point** { [OpenCVPoint](opencvPointType) } - 模板左上角坐标
 - **similarity** { [number](dataTypes#number) } - 匹配相似度
+- **width** { [number](dataTypes#number) } - 匹配区域宽度 (模板在匹配比例下的宽度) **`6.8.0`**
+- **height** { [number](dataTypes#number) } - 匹配区域高度 (模板在匹配比例下的高度) **`6.8.0`**
+- **scale** { [number](dataTypes#number) } - 产生该匹配的模板缩放比例, 未指定 `scales` 时为 `1` **`6.8.0`**
+- **center** { [OpenCVPoint](opencvPointType) } - 匹配区域的中心点 **`6.8.0`**
+- **rect** { [OpenCVRect](opencvRectType) } - 匹配区域对应的矩形 **`6.8.0`**
+
+```js
+let match = images.matchTemplate(img, template).best();
+if (match !== null) {
+    click(match.center.x, match.center.y);
+}
+```
 
 ### ImageFeatures
 
 `images.detectAndComputeFeatures()` 返回的特征描述对象.
 
+#### [p#] ImageFeatures#count
+
+**`6.8.0`**
+
+- { [number](dataTypes#number) } - 检测到的关键点数量
+
+为 `0` 时 (如纯色图片) 匹配结果必为 `null`.
+
+#### [p#] ImageFeatures#method
+
+**`6.8.0`**
+
+- { [string](dataTypes#string) } - 检测方法名称, 如 `"SIFT"` 或 `"ORB"`
+
 #### [p#] ImageFeatures#scale
 
-- { [number](dataTypes#number) } - 特征计算时使用的缩放比例
+- { [number](dataTypes#number) } - 特征计算时实际使用的缩放比例
 
 #### [p#] ImageFeatures#region
 

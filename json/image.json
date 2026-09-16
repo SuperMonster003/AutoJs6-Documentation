@@ -373,55 +373,19 @@
               "desc": "<p><code>toBase64()</code> 和 <code>toBytes()</code> 支持 <code>png</code>, <code>jpg</code>, <code>jpeg</code>, <code>webp</code>, <code>webp_lossy</code>, <code>webp-lossy</code>, <code>webp_lossless</code> 和 <code>webp-lossless</code>. 后 4 种显式 WebP 模式要求 Android API 30 或更高.</p>\n"
             },
             {
-              "textRaw": "[m] images.readPixels(path)",
+              "textRaw": "[m] images.readPixels(image)",
               "type": "method",
               "name": "readPixels",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 图片或图片路径</li>\n<li><ins><strong>returns</strong></ins> {{<ul>\n<li>data: <a href=\"dataTypes#javaarray\">JavaArray</a>\\&lt;<a href=\"dataTypes#number\">number</a>>;</li>\n<li>width: <a href=\"dataTypes#number\">number</a>;</li>\n<li>height: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>读取图片的全部 ARGB 像素. <code>data</code> 按从左到右, 从上到下的顺序排列, 长度为 <code>width * height</code>.</p>\n<p>传入路径时, 读取的临时图片在返回前自动回收; 传入 <a href=\"imageWrapperType\">ImageWrapper</a> 时, 图片保持可用, 由调用方负责回收.</p>\n<pre><code class=\"lang-js\">let img = images.captureScreen();\nlet { data, width, height } = images.readPixels(img);\nconsole.log(colors.toHex(data[10 * width + 20])); /* 坐标 (20, 10) 处的像素. */\nimg.recycle();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "textRaw": "**path** { [string](dataTypes#string) } - 图片路径 ",
-                      "name": "**path**",
-                      "type": " [string](dataTypes#string) ",
-                      "desc": "图片路径"
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> {{ ",
-                      "options": [
-                        {
-                          "textRaw": "data: [JavaArray](dataTypes#javaarray)\\<[number](dataTypes#number)\\>; ",
-                          "name": "data",
-                          "desc": "[JavaArray](dataTypes#javaarray)\\<[number](dataTypes#number)\\>;"
-                        },
-                        {
-                          "textRaw": "width: [number](dataTypes#number); ",
-                          "name": "width",
-                          "desc": "[number](dataTypes#number);"
-                        },
-                        {
-                          "textRaw": "height: [number](dataTypes#number); ",
-                          "name": "height",
-                          "desc": "[number](dataTypes#number);"
-                        }
-                      ],
-                      "name": "<ins>**returns**</ins>",
-                      "desc": "{{"
-                    },
-                    {
-                      "textRaw": "}} ",
-                      "name": "}}"
-                    }
-                  ]
-                },
-                {
-                  "params": [
-                    {
-                      "name": "path"
+                      "name": "image"
                     }
                   ]
                 }
-              ],
-              "desc": "<p>读取图片的全部 ARGB 像素. <code>data</code> 按从左到右, 从上到下的顺序排列, 长度为 <code>width * height</code>.</p>\n"
+              ]
             },
             {
               "textRaw": "[m] images.matToImage(mat)",
@@ -2410,6 +2374,46 @@
                     }
                   ]
                 }
+              ],
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>color</strong> { <a href=\"dataTypes#colorint\">ColorInt</a> | <a href=\"dataTypes#colorhex\">ColorHex</a> | <a href=\"dataTypes#colorname\">ColorName</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>similarity?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 匹配像素的数量</li>\n</ul>\n<p>统计图片 (或 <code>region</code> 区域) 中与指定颜色匹配的像素数量, 匹配规则与 <a href=\"#m-images-findpointsbycolor-image-color-options\">findPointsByColor</a> 相同 (RGB 各分量差值均不超过阈值).</p>\n<p>结果直接由 OpenCV 掩码统计得到, 不会生成点数组, 适合判断某个区域是否 &quot;大部分&quot; 为某种颜色:</p>\n<pre><code class=\"lang-js\">let img = images.captureScreen();\nlet region = [ 100, 200, 300, 40 ];\nlet total = region[2] * region[3];\nlet ratio = images.countPointsByColor(img, &quot;#ffffff&quot;, { region, threshold: 8 }) / total;\nconsole.log(ratio &gt; 0.9 ? &quot;区域几乎为白色&quot; : &quot;区域不是白色&quot;);\nimg.recycle();\n</code></pre>\n"
+            },
+            {
+              "textRaw": "[m] images.countPointsByColor(image, color, options?)",
+              "type": "method",
+              "name": "countPointsByColor",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>color</strong> { <a href=\"dataTypes#colorint\">ColorInt</a> | <a href=\"dataTypes#colorhex\">ColorHex</a> | <a href=\"dataTypes#colorname\">ColorName</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>similarity?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 匹配像素的数量</li>\n</ul>\n<p>统计图片 (或 <code>region</code> 区域) 中与指定颜色匹配的像素数量, 匹配规则与 <a href=\"#m-images-findpointsbycolor-image-color-options\">findPointsByColor</a> 相同 (RGB 各分量差值均不超过阈值).</p>\n<p>结果直接由 OpenCV 掩码统计得到, 不会生成点数组, 适合判断某个区域是否 &quot;大部分&quot; 为某种颜色:</p>\n<pre><code class=\"lang-js\">let img = images.captureScreen();\nlet region = [ 100, 200, 300, 40 ];\nlet total = region[2] * region[3];\nlet ratio = images.countPointsByColor(img, &quot;#ffffff&quot;, { region, threshold: 8 }) / total;\nconsole.log(ratio &gt; 0.9 ? &quot;区域几乎为白色&quot; : &quot;区域不是白色&quot;);\nimg.recycle();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "[m] images.getMeanColor(image, region?)",
+              "type": "method",
+              "name": "getMeanColor",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ region ]</strong> { <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a> } - 统计区域, 默认为整张图片</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#colorint\">ColorInt</a> } - 平均颜色</li>\n</ul>\n<p>计算图片 (或 <code>region</code> 区域) 各通道的平均值并合成为颜色整数. 灰度图返回不透明灰色, 无透明通道的图片 alpha 为 <code>255</code>.</p>\n<pre><code class=\"lang-js\">let img = images.captureScreen();\nlet mean = images.getMeanColor(img, [ 0, 0, 200, 100 ]);\nconsole.log(colors.toHex(mean), colors.luminance(mean) &gt; 0.5 ? &quot;偏亮&quot; : &quot;偏暗&quot;);\nimg.recycle();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "image"
+                    },
+                    {
+                      "name": "region?"
+                    }
+                  ]
+                }
               ]
             }
           ],
@@ -2442,7 +2446,7 @@
               "textRaw": "[m] images.findPointByImage(image, template, options?)",
               "type": "method",
               "name": "findPointByImage",
-              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 待搜索图片</li>\n<li><strong>template</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 模板图片</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>weakThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>level?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"opencvPointType\">OpenCVPoint</a> | <a href=\"dataTypes#null\">null</a> } - 最佳匹配的左上角坐标</li>\n</ul>\n<p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>. <code>level = -1</code> 表示自动选择图像金字塔层数.</p>\n",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 待搜索图片</li>\n<li><strong>template</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 模板图片</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>weakThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>level?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>scales?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[];</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"opencvPointType\">OpenCVPoint</a> | <a href=\"dataTypes#null\">null</a> } - 最佳匹配的左上角坐标</li>\n</ul>\n<p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>. <code>level = -1</code> 表示自动选择图像金字塔层数.</p>\n<p><code>scales</code> <strong><code>6.8.0</code></strong> 指定依次尝试的模板缩放比例 (含义与 <a href=\"#m-images-matchtemplate-image-template-options\">images.matchTemplate</a> 相同), 返回所有比例中相似度最高的匹配位置. 从 AutoJs6 6.8.0 起, 返回的坐标总是在原始分辨率上精确定位.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2550,75 +2554,8 @@
               "textRaw": "[m] images.matchTemplate(image, template, options?)",
               "type": "method",
               "name": "matchTemplate",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 待搜索图片</li>\n<li><strong>template</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 模板图片</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>weakThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>level?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>max?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>scales?: <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#number\">number</a>[];</li>\n<li>useTransparentMask?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>transparentMask?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#matchingresult\">MatchingResult</a> } - 匹配结果</li>\n</ul>\n<p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>, <code>max = 5</code>, <code>useTransparentMask = false</code>. <code>transparentMask</code> 是 <code>useTransparentMask</code> 的兼容别名, 仅在前者缺失时生效.</p>\n<p><code>max</code> 限制返回结果数量. 结果按相似度降序排列, 且不含区域相互重叠的重复项. 从 AutoJs6 6.8.0 起, 所有匹配都会在原始分辨率上精确定位 (此前在较粗的金字塔层级达到阈值的结果会直接返回, 坐标可能偏差数个像素).</p>\n<p><code>scales</code> (别名 <code>scale</code>) <strong><code>6.8.0</code></strong> 指定依次尝试的模板缩放比例, 可为单个数字或数组, 例如 <code>[ 0.8, 1, 1.25 ]</code>, 用于匹配在其他分辨率下截取的模板. 匹配结果的 <a href=\"#templatematch\">scale</a>, <a href=\"#templatematch\">width</a> 与 <a href=\"#templatematch\">height</a> 反映实际采用的比例与尺寸, 无法放入图片的比例会被跳过. 比例须为正数.</p>\n<p>开启透明遮罩后, 4 通道模板中 alpha 小于 <code>128</code> 的像素不参与比较, 适合带透明背景的图标模板. 图片与模板的通道数不同时 (如灰度图与彩色模板) 会自动转换为相同通道后再比较. 纯色模板 (各颜色通道几乎没有变化) 会自动改用平方差算法计算相似度, 不再因相关系数无定义而永远无法匹配.</p>\n<pre><code class=\"lang-js\">let result = images.matchTemplate(&quot;./screen.png&quot;, &quot;./button.png&quot;, {\n    region: [ 0, 0, 1080, 1200 ],\n    threshold: 0.9,\n    max: 5,\n    scales: [ 0.9, 1, 1.1 ],\n});\nlet best = result.best();\nif (best !== null) {\n    console.log(best.similarity, best.scale, best.rect);\n    click(best.center.x, best.center.y);\n}\n</code></pre>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "textRaw": "**image** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 待搜索图片 ",
-                      "name": "**image**",
-                      "type": " [ImageWrapper](imageWrapperType) | [string](dataTypes#string) ",
-                      "desc": "待搜索图片"
-                    },
-                    {
-                      "textRaw": "**template** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } - 模板图片 ",
-                      "name": "**template**",
-                      "type": " [ImageWrapper](imageWrapperType) | [string](dataTypes#string) ",
-                      "desc": "模板图片"
-                    },
-                    {
-                      "textRaw": "**[ options ]** {{ ",
-                      "options": [
-                        {
-                          "textRaw": "region?: [number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType); ",
-                          "name": "region?",
-                          "desc": "[number](dataTypes#number)[] | [AndroidRect](androidRectType) | [OpenCVRect](opencvRectType);"
-                        },
-                        {
-                          "textRaw": "weakThreshold?: [number](dataTypes#number); ",
-                          "name": "weakThreshold?",
-                          "desc": "[number](dataTypes#number);"
-                        },
-                        {
-                          "textRaw": "threshold?: [number](dataTypes#number); ",
-                          "name": "threshold?",
-                          "desc": "[number](dataTypes#number);"
-                        },
-                        {
-                          "textRaw": "level?: [number](dataTypes#number); ",
-                          "name": "level?",
-                          "desc": "[number](dataTypes#number);"
-                        },
-                        {
-                          "textRaw": "max?: [number](dataTypes#number); ",
-                          "name": "max?",
-                          "desc": "[number](dataTypes#number);"
-                        },
-                        {
-                          "textRaw": "useTransparentMask?: [boolean](dataTypes#boolean); ",
-                          "name": "useTransparentMask?",
-                          "desc": "[boolean](dataTypes#boolean);"
-                        },
-                        {
-                          "textRaw": "transparentMask?: [boolean](dataTypes#boolean); ",
-                          "name": "transparentMask?",
-                          "desc": "[boolean](dataTypes#boolean);"
-                        }
-                      ],
-                      "name": "**[",
-                      "desc": "options ]** {{"
-                    },
-                    {
-                      "textRaw": "}} ",
-                      "name": "}}"
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> { [MatchingResult](#matchingresult) } - 匹配结果 ",
-                      "name": "<ins>**returns**</ins>",
-                      "type": " [MatchingResult](#matchingresult) ",
-                      "desc": "匹配结果"
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -2632,14 +2569,13 @@
                     }
                   ]
                 }
-              ],
-              "desc": "<p>默认值为 <code>weakThreshold = 0.6</code>, <code>threshold = 0.9</code>, <code>level = -1</code>, <code>max = 5</code>, <code>useTransparentMask = false</code>. <code>transparentMask</code> 是 <code>useTransparentMask</code> 的兼容别名, 仅在前者缺失时生效.</p>\n<p><code>max</code> 限制返回结果数量. 开启透明遮罩后, 模板的透明通道参与遮罩构造.</p>\n<pre><code class=\"lang-js\">let result = images.matchTemplate(&quot;./screen.png&quot;, &quot;./button.png&quot;, {\n    region: [ 0, 0, 1080, 1200 ],\n    weakThreshold: 0.6,\n    threshold: 0.9,\n    level: -1,\n    max: 5,\n    useTransparentMask: false,\n});\nconsole.log(result.best());\n</code></pre>\n"
+              ]
             },
             {
               "textRaw": "[m] images.detectAndComputeFeatures(image, options?)",
               "type": "method",
               "name": "detectAndComputeFeatures",
-              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>grayscale?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 特征描述对象</li>\n</ul>\n<p>默认使用 <code>method = &quot;SIFT&quot;</code> 和 <code>grayscale = false</code>. <code>method</code> 支持 <code>SIFT</code>, <code>ORB</code> 或对应内部整数常量.</p>\n<p><code>scale</code> 被限制在 <code>0</code> 至 <code>1</code>. 未指定时, 小于约 100 万像素的图片使用 <code>1</code>; 更大的图片按约 100 万像素且最长边不超过 <code>1600</code> 的规则自动缩放.</p>\n",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>image</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>region?: <a href=\"dataTypes#number\">number</a>[] | <a href=\"androidRectType\">AndroidRect</a> | <a href=\"opencvRectType\">OpenCVRect</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxFeatures?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>grayscale?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 特征描述对象</li>\n</ul>\n<p>检测 <code>image</code> (或其 <code>region</code> 区域) 的关键点并计算描述子, 返回可反复用于 <code>matchFeatures()</code> 的特征对象.</p>\n<p><code>method</code> 支持 <code>SIFT</code> (默认, 精度高且对缩放和旋转稳定) 与 <code>ORB</code> (速度快, 二进制描述子), 或对应的内部整数常量.</p>\n<p><code>scale</code> 是检测前对区域应用的缩放比例, 取值范围 <code>(0, 8]</code>. 未指定或为 <code>0</code> 时自动确定: 不超过约 100 万像素的图片使用 <code>1</code>, 更大的图片按约 100 万像素且最长边不超过 <code>1600</code> 的规则缩小. 大于 <code>1</code> 的值会先放大图片, 适用于关键点不足的小图标 (如 <code>scale: 2</code>). 实际使用的比例可由 <code>ImageFeatures#scale</code> 读取.</p>\n<p><code>maxFeatures</code> 限制关键点数量 (按响应强度保留最优者). <code>0</code> 或未指定时使用方法默认值: <code>SIFT</code> 不限制, <code>ORB</code> 为 <code>20000</code>. 场景图纹理丰富时, 过小的上限会使目标区域的关键点被其他区域挤占而导致匹配失败.</p>\n<p>检测始终在灰度图上进行 (SIFT 与 ORB 仅使用亮度信息), 1, 3, 4 通道图片均可直接传入, <code>grayscale</code> 仅为兼容保留. ORB 关键点的图像边界由 OpenCV 默认的 <code>31</code> 像素调整为 <code>15</code> 像素, 使小于 <code>63</code> 像素的图片也能检测到关键点.</p>\n<p>纯色等没有关键点的图片返回 <code>count</code> 为 <code>0</code> 的特征对象, 参与匹配时结果为 <code>null</code> 而不抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2654,18 +2590,18 @@
               ]
             },
             {
-              "textRaw": "[m] images.matchFeatures(sceneFeatures, objectFeatures, options?)",
+              "textRaw": "[m] images.matchFeatures(scene, object, options?)",
               "type": "method",
               "name": "matchFeatures",
-              "desc": "<p><strong><code>6.6.0</code></strong></p>\n<ul>\n<li><strong>sceneFeatures</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 场景图片特征</li>\n<li><strong>objectFeatures</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> } - 目标图片特征</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>matcher?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>drawMatches?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-images-objectframe\">ObjectFrame</a> | <a href=\"dataTypes#null\">null</a> } - 目标四边形, 或 <code>null</code></li>\n</ul>\n<p><code>matcher</code> 是 <code>org.opencv.features2d.DescriptorMatcher</code> 的静态常量名. 未指定时, ORB 一类的 <code>CV_8U</code> 描述符使用 <code>BRUTEFORCE_HAMMING</code>, 其他描述符使用 <code>FLANNBASED</code>.</p>\n<p>默认阈值对 <code>CV_8U</code> 描述符为 <code>0.8</code>, 对其他描述符为 <code>0.7</code>. <code>drawMatches</code> 可指定调试匹配图的 JPG 保存路径.</p>\n",
+              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>scene</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> | <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 场景图片 (大图) 或其特征</li>\n<li><strong>object</strong> { <a href=\"#imagefeatures\">ImageFeatures</a> | <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> } - 目标图片 (小图) 或其特征</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>matcher?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>threshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>ransacThreshold?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>minInliers?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>drawMatches?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>method?: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>;</li>\n<li>scale?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxFeatures?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-images-objectframe\">ObjectFrame</a> | <a href=\"dataTypes#null\">null</a> } - 目标四边形, 或 <code>null</code></li>\n</ul>\n<p>在场景中寻找目标, 返回目标四角在场景原图坐标系中的位置 (已还原 <code>region</code> 偏移与 <code>scale</code> 缩放).</p>\n<p>两个参数均可直接传入图片或图片路径, 此时会按 <code>method</code>, <code>scale</code>, <code>maxFeatures</code> 选项即时检测特征并在匹配后自动回收. 传入的 <a href=\"#imagefeatures\">ImageFeatures</a> 不会被回收 (除非已标记为一次性对象), 可反复用于多次匹配.</p>\n<p>匹配流程: 对目标的每个描述子在场景中取最近的两个描述子, 最近距离小于 <code>threshold</code> 倍次近距离时保留 (Lowe 比例测试); 保留的匹配不少于 <code>4</code> 对时用 RANSAC 估计单应矩阵, 重投影误差不超过 <code>ransacThreshold</code> (默认 <code>3</code> 像素) 的匹配为内点; 内点数不少于 <code>minInliers</code> (默认 <code>4</code>) 且目标四角的投影为凸的非退化四边形时返回 <a href=\"#c-images-objectframe\">ObjectFrame</a>, 否则返回 <code>null</code>. 匹配数与内点数可由 <code>ObjectFrame#matches</code> 及 <code>ObjectFrame#inliers</code> 读取.</p>\n<p><code>threshold</code> 取值 <code>(0, 1]</code>, 越小越严格. 默认对 ORB 等二进制描述子为 <code>0.8</code>, 对 SIFT 等浮点描述子为 <code>0.7</code>.</p>\n<p><code>matcher</code> 是 <code>org.opencv.features2d.DescriptorMatcher</code> 的静态常量名 (不区分大小写, 可用 <code>-</code> 代替 <code>_</code>) 或常量值. 未指定时, 二进制描述子使用 <code>BRUTEFORCE_HAMMING</code>, 浮点描述子使用 <code>FLANNBASED</code>. 与描述子类型不兼容的指定 (如 ORB 搭配 <code>FLANNBASED</code>, SIFT 搭配 <code>BRUTEFORCE_HAMMING</code>) 会自动改为对应的默认值而不再抛出异常.</p>\n<p>场景与目标须使用相同的检测方法, 否则抛出异常. 任一特征对象已回收时同样抛出异常.</p>\n<p><code>drawMatches</code> 可指定匹配示意图的 JPG 保存路径 (目标图与场景图并排并以连线标出匹配), 用于调试.</p>\n<p>目标较小 (如小于 <code>100</code> 像素的图标) 时, 建议使用默认的 <code>SIFT</code> 并配合 <code>scale: 2</code> 放大目标以获取足够的关键点; <code>ORB</code> 因关键点边界限制更适合较大的目标.</p>\n<pre><code class=\"lang-js\">let scene = images.captureScreen();\nlet frame = images.matchFeatures(scene, &quot;./icon.png&quot;);\nif (frame !== null) {\n    console.log(`center: ${frame.center}, angle: ${frame.angle.toFixed(1)}, inliers: ${frame.inliers}`);\n    click(frame.centerX, frame.centerY);\n}\nscene.recycle();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "sceneFeatures"
+                      "name": "scene"
                     },
                     {
-                      "name": "objectFeatures"
+                      "name": "object"
                     },
                     {
                       "name": "options?"
@@ -2793,7 +2729,7 @@
                   ]
                 }
               ],
-              "desc": "<p>结果越小表示差异越小, 完全相同为 <code>0</code>.</p>\n"
+              "desc": "<p>结果越小表示差异越小, 完全相同为 <code>0</code>. 8 位图像的最大值为 <code>65025</code> (即 <code>255 * 255</code>).</p>\n"
             },
             {
               "textRaw": "[m] images.mse(imageA, imageB)",
@@ -2831,7 +2767,7 @@
                   ]
                 }
               ],
-              "desc": "<p>结果越小表示差异越小, 完全相同为 <code>0</code>.</p>\n"
+              "desc": "<p>结果越小表示差异越小, 完全相同为 <code>0</code>. 8 位图像的最大值为 <code>65025</code> (即 <code>255 * 255</code>).</p>\n"
             },
             {
               "textRaw": "[m] images.ncc(imageA, imageB)",
@@ -2875,27 +2811,8 @@
               "textRaw": "[m] images.isEqual(imageA, imageB)",
               "type": "method",
               "name": "isEqual",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>imageA</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>imageB</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 像素是否完全相同</li>\n</ul>\n<p>尺寸或类型不同时返回 <code>false</code>. 从 AutoJs6 6.8.0 起逐通道精确比较, 任一通道 (含 alpha) 相差 <code>1</code> 也会返回 <code>false</code>.</p>\n",
               "signatures": [
-                {
-                  "params": [
-                    {
-                      "textRaw": "**imageA** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } ",
-                      "name": "**imageA**",
-                      "type": " [ImageWrapper](imageWrapperType) | [string](dataTypes#string) "
-                    },
-                    {
-                      "textRaw": "**imageB** { [ImageWrapper](imageWrapperType) | [string](dataTypes#string) } ",
-                      "name": "**imageB**",
-                      "type": " [ImageWrapper](imageWrapperType) | [string](dataTypes#string) "
-                    },
-                    {
-                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 像素是否完全相同 ",
-                      "name": "<ins>**returns**</ins>",
-                      "type": " [boolean](dataTypes#boolean) ",
-                      "desc": "像素是否完全相同"
-                    }
-                  ]
-                },
                 {
                   "params": [
                     {
@@ -2906,8 +2823,7 @@
                     }
                   ]
                 }
-              ],
-              "desc": "<p><strong><code>6.6.0</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>imageA</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html\">Mat</a> }</li>\n<li><strong>imageB</strong> { <a href=\"imageWrapperType\">ImageWrapper</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html\">Mat</a> }</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>metric?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>type?: <a href=\"dataTypes#string\">string</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 所选算法的原始结果</li>\n</ul>\n<p><code>metric</code> 支持 <code>psnr</code>, <code>ssim</code>, <code>mssim</code>, <code>hist</code>, <code>mse</code> 和 <code>ncc</code>, 默认值为 <code>mssim</code>. <code>type</code> 是兼容别名, 仅在 <code>metric</code> 缺失时使用. 拼写 <code>pnsr</code> 会兼容为 <code>psnr</code>.</p>\n"
+              ]
             },
             {
               "textRaw": "[m] images.getSimilarity(imageA, imageB, options?)",
@@ -3035,9 +2951,37 @@
                   "displayName": "[p#] MatchingResult#points"
                 },
                 {
+                  "textRaw": "[p#] MatchingResult#size",
+                  "name": "[p#]_matchingresult#size",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 匹配数量</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] MatchingResult#size"
+                },
+                {
+                  "textRaw": "[m#] MatchingResult#isEmpty()",
+                  "name": "[m#]_matchingresult#isempty()",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否没有任何匹配</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[m#] MatchingResult#isEmpty()"
+                },
+                {
+                  "textRaw": "[m#] MatchingResult#isNotEmpty()",
+                  "name": "[m#]_matchingresult#isnotempty()",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否至少有一个匹配</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[m#] MatchingResult#isNotEmpty()"
+                },
+                {
+                  "textRaw": "[m#] MatchingResult#filter(predicate)",
+                  "name": "[m#]_matchingresult#filter(predicate)",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>predicate</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(match: TemplateMatch) =&gt; boolean</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#matchingresult\">MatchingResult</a> } - 仅包含使 <code>predicate</code> 返回真值的匹配的新结果</li>\n</ul>\n<p>原 <code>MatchingResult</code> 不会被修改:</p>\n<pre><code class=\"lang-js\">let result = images.matchTemplate(img, template, { max: 20 });\nlet upperHalf = result.filter(m =&gt; m.center.y &lt; img.height / 2);\nconsole.log(upperHalf.size);\n</code></pre>\n",
+                  "type": "module",
+                  "displayName": "[m#] MatchingResult#filter(predicate)"
+                },
+                {
                   "textRaw": "[m#] MatchingResult#first()",
                   "name": "[m#]_matchingresult#first()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#templatematch\">TemplateMatch</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回当前顺序中的第一项.</p>\n",
+                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#templatematch\">TemplateMatch</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>返回当前顺序中的第一项. 未经排序时, 结果按相似度降序排列, 第一项即最佳匹配.</p>\n",
                   "type": "module",
                   "displayName": "[m#] MatchingResult#first()"
                 },
@@ -3100,7 +3044,7 @@
                 {
                   "textRaw": "[m#] MatchingResult#sortBy(compareFn)",
                   "name": "[m#]_matchingresult#sortby(comparefn)",
-                  "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>compareFn</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(a: TemplateMatch, b: TemplateMatch) =&gt; number</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#matchingresult\">MatchingResult</a> } - 新的排序结果</li>\n</ul>\n<p>原 <code>MatchingResult</code> 不会被修改.</p>\n",
+                  "desc": "<p><strong><code>Overload 2/2</code></strong> <strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>compareFn</strong> { <a href=\"dataTypes#function\">Function</a> } - <code>(a: TemplateMatch, b: TemplateMatch) =&gt; number</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#matchingresult\">MatchingResult</a> } - 新的排序结果</li>\n</ul>\n<p>原 <code>MatchingResult</code> 不会被修改. 比较函数只需返回任意数字, 仅其符号有效 (从 AutoJs6 6.8.0 起, 返回小数不再抛出类型转换异常):</p>\n<pre><code class=\"lang-js\">let byX = result.sortBy((a, b) =&gt; a.point.x - b.point.x);\n</code></pre>\n",
                   "type": "module",
                   "displayName": "[m#] MatchingResult#sortBy(compareFn)"
                 }
@@ -3110,68 +3054,10 @@
             },
             {
               "textRaw": "TemplateMatch",
-              "name": "TemplateMatch",
-              "desc": "<ul>\n<li><strong>point</strong> { <a href=\"opencvPointType\">OpenCVPoint</a> } - 模板左上角坐标</li>\n<li><strong>similarity</strong> { <a href=\"dataTypes#number\">number</a> } - 匹配相似度</li>\n</ul>\n",
-              "modules": [
-                {
-                  "textRaw": "[p#] ImageFeatures#scale",
-                  "name": "[p#] ImageFeatures#scale",
-                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 特征计算时使用的缩放比例</li>\n</ul>\n",
-                  "type": "module",
-                  "displayName": "[p#] ImageFeatures#region"
-                },
-                {
-                  "textRaw": "[p#] ImageFeatures#region",
-                  "name": "[p#]_imagefeatures#region",
-                  "desc": "<ul>\n<li>{ <a href=\"opencvRectType\">OpenCVRect</a> } - 特征对应的原图区域</li>\n</ul>\n<p>匹配结果会使用此区域还原到原图坐标.</p>\n",
-                  "type": "module",
-                  "displayName": "[p#] ImageFeatures#region"
-                },
-                {
-                  "textRaw": "[p#] ImageFeatures#recycled",
-                  "name": "[p#]_imagefeatures#recycled",
-                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> } - 是否已回收</li>\n</ul>\n<p>该字段与 <code>isRecycled()</code> 返回相同的资源状态.</p>\n",
-                  "type": "module",
-                  "displayName": "[p#] ImageFeatures#recycled"
-                },
-                {
-                  "textRaw": "[m#] ImageFeatures#isRecycled()",
-                  "name": "[m#]_imagefeatures#isrecycled()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>返回特征资源是否已回收.</p>\n",
-                  "type": "module",
-                  "displayName": "[m#] ImageFeatures#isRecycled()"
-                },
-                {
-                  "textRaw": "[m#] ImageFeatures#recycle()",
-                  "name": "[m#]_imagefeatures#recycle()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>释放特征点和描述符资源. 重复调用不会再次释放.</p>\n",
-                  "type": "module",
-                  "displayName": "[m#] ImageFeatures#recycle()"
-                },
-                {
-                  "textRaw": "[m#] ImageFeatures#setOneShot(enabled)",
-                  "name": "[m#]_imagefeatures#setoneshot(enabled)",
-                  "desc": "<ul>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> }</li>\n</ul>\n<p>设置一次性资源标记并返回当前对象.</p>\n",
-                  "type": "module",
-                  "displayName": "[m#] ImageFeatures#setOneShot(enabled)"
-                },
-                {
-                  "textRaw": "[m#] ImageFeatures#oneShot()",
-                  "name": "[m#]_imagefeatures#oneshot()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#imagefeatures\">ImageFeatures</a> }</li>\n</ul>\n<p>将对象标记为一次性对象. 它被 <code>matchFeatures()</code> 使用后会自动回收.</p>\n",
-                  "type": "module",
-                  "displayName": "[m#] ImageFeatures#oneShot()"
-                },
-                {
-                  "textRaw": "[m#] ImageFeatures#shoot()",
-                  "name": "[m#]_imagefeatures#shoot()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>仅当对象已标记为一次性时执行回收.</p>\n",
-                  "type": "module",
-                  "displayName": "[m#] ImageFeatures#shoot()"
-                }
-              ],
+              "name": "templatematch",
+              "desc": "<p><strong><code>[6.8.0]</code></strong></p>\n<ul>\n<li><strong>point</strong> { <a href=\"opencvPointType\">OpenCVPoint</a> } - 模板左上角坐标</li>\n<li><strong>similarity</strong> { <a href=\"dataTypes#number\">number</a> } - 匹配相似度</li>\n<li><strong>width</strong> { <a href=\"dataTypes#number\">number</a> } - 匹配区域宽度 (模板在匹配比例下的宽度) <strong><code>6.8.0</code></strong></li>\n<li><strong>height</strong> { <a href=\"dataTypes#number\">number</a> } - 匹配区域高度 (模板在匹配比例下的高度) <strong><code>6.8.0</code></strong></li>\n<li><strong>scale</strong> { <a href=\"dataTypes#number\">number</a> } - 产生该匹配的模板缩放比例, 未指定 <code>scales</code> 时为 <code>1</code> <strong><code>6.8.0</code></strong></li>\n<li><strong>center</strong> { <a href=\"opencvPointType\">OpenCVPoint</a> } - 匹配区域的中心点 <strong><code>6.8.0</code></strong></li>\n<li><strong>rect</strong> { <a href=\"opencvRectType\">OpenCVRect</a> } - 匹配区域对应的矩形 <strong><code>6.8.0</code></strong></li>\n</ul>\n<pre><code class=\"lang-js\">let match = images.matchTemplate(img, template).best();\nif (match !== null) {\n    click(match.center.x, match.center.y);\n}\n</code></pre>\n",
               "type": "module",
-              "displayName": "ImageFeatures"
+              "displayName": "TemplateMatch"
             },
             {
               "textRaw": "ImageFeatures",
@@ -3179,9 +3065,23 @@
               "desc": "<p><code>images.detectAndComputeFeatures()</code> 返回的特征描述对象.</p>\n",
               "modules": [
                 {
+                  "textRaw": "[p#] ImageFeatures#count",
+                  "name": "[p#]_imagefeatures#count",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 检测到的关键点数量</li>\n</ul>\n<p>为 <code>0</code> 时 (如纯色图片) 匹配结果必为 <code>null</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ImageFeatures#count"
+                },
+                {
+                  "textRaw": "[p#] ImageFeatures#method",
+                  "name": "[p#]_imagefeatures#method",
+                  "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> } - 检测方法名称, 如 <code>&quot;SIFT&quot;</code> 或 <code>&quot;ORB&quot;</code></li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ImageFeatures#method"
+                },
+                {
                   "textRaw": "[p#] ImageFeatures#scale",
                   "name": "[p#] ImageFeatures#scale",
-                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 特征计算时使用的缩放比例</li>\n</ul>\n",
+                  "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 特征计算时实际使用的缩放比例</li>\n</ul>\n",
                   "type": "module",
                   "displayName": "[p#] ImageFeatures#region"
                 },
@@ -3285,10 +3185,10 @@
             {
               "textRaw": "[C] images.ObjectFrame",
               "name": "ObjectFrame",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>由 4 个 <a href=\"opencvPointType\">OpenCVPoint</a> 表示的特征匹配边框类.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>由 4 个 <a href=\"opencvPointType\">OpenCVPoint</a> 表示的特征匹配边框类. 四角与目标图片自身的四角一一对应, 因此旋转或透视变形的目标会得到旋转的边框, 可通过 <code>angle</code> 与 <code>bounds</code> 读取旋转角度及轴对齐外接矩形.</p>\n",
               "methods": [
                 {
-                  "textRaw": "[c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight)",
+                  "textRaw": "[c] images.ObjectFrame(topLeft, topRight, bottomLeft, bottomRight, matches?, inliers?)",
                   "type": "method",
                   "name": "ObjectFrame",
                   "signatures": [
@@ -3315,6 +3215,16 @@
                           "type": " [OpenCVPoint](opencvPointType) "
                         },
                         {
+                          "textRaw": "**[ matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数 ",
+                          "name": "**[",
+                          "desc": "matches = `0` ]** { [number](dataTypes#number) } - 通过比例测试的匹配数"
+                        },
+                        {
+                          "textRaw": "**[ inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数 ",
+                          "name": "**[",
+                          "desc": "inliers = `0` ]** { [number](dataTypes#number) } - RANSAC 内点数"
+                        },
+                        {
                           "textRaw": "<ins>**returns**</ins> { [ObjectFrame](#c-images-objectframe) } ",
                           "name": "<ins>**returns**</ins>",
                           "type": " [ObjectFrame](#c-images-objectframe) "
@@ -3334,6 +3244,12 @@
                         },
                         {
                           "name": "bottomRight"
+                        },
+                        {
+                          "name": "matches?"
+                        },
+                        {
+                          "name": "inliers?"
                         }
                       ]
                     }
@@ -3392,9 +3308,58 @@
                   "displayName": "[p#] ObjectFrame#center"
                 },
                 {
+                  "textRaw": "[p#] ObjectFrame#width",
+                  "name": "[p#]_objectframe#width",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 上边长度, 即目标在场景中的宽度</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#width"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#height",
+                  "name": "[p#]_objectframe#height",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 左边长度, 即目标在场景中的高度</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#height"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#angle",
+                  "name": "[p#]_objectframe#angle",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 上边的旋转角度 (度), 取值 <code>(-180, 180]</code></li>\n</ul>\n<p>正值表示屏幕上的顺时针方向. 未旋转的目标约为 <code>0</code>.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#angle"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#bounds",
+                  "name": "[p#]_objectframe#bounds",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"opencvRectType\">OpenCVRect</a> } - 四角点的轴对齐外接矩形</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#bounds"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#points",
+                  "name": "[p#]_objectframe#points",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"opencvPointType\">OpenCVPoint</a>[] } - 场景坐标系中的内点</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#points"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#matches",
+                  "name": "[p#]_objectframe#matches",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 通过比例测试的匹配数</li>\n</ul>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#matches"
+                },
+                {
+                  "textRaw": "[p#] ObjectFrame#inliers",
+                  "name": "[p#]_objectframe#inliers",
+                  "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> } - 支撑该边框的 RANSAC 内点数</li>\n</ul>\n<p>内点数越多, 边框越可靠.</p>\n",
+                  "type": "module",
+                  "displayName": "[p#] ObjectFrame#inliers"
+                },
+                {
                   "textRaw": "[m#] ObjectFrame#summary()",
                   "name": "[m#]_objectframe#summary()",
-                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 四角点和中心点摘要</li>\n</ul>\n",
+                  "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 四角点, 中心点, 尺寸, 角度及匹配统计摘要</li>\n</ul>\n",
                   "type": "module",
                   "displayName": "[m#] ObjectFrame#summary()"
                 }

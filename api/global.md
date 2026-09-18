@@ -2540,7 +2540,6 @@ FileProvider
 ImageViewCompat
 Snackbar
 MaterialDialog
-LogConfigurator
 Version
 ```
 
@@ -2562,7 +2561,7 @@ AtomicLong
 ReentrantLock
 ```
 
-当前 OkHttp 和 Log4j 类代理:
+当前 OkHttp 类代理:
 
 ```text
 Callback
@@ -2572,7 +2571,13 @@ MultipartBody
 OkHttpClient
 Request
 RequestBody
+```
+
+当前日志类代理 (自 6.8.0 起对应 AutoJs6 内置的 `org.autojs.autojs.core.console.log` 包, 保留 log4j 1.2 的常用接口, 不再是 `org.apache.log4j` 与 `de.mindpipe.android.logging.log4j`):
+
+```text
 Level
+LogConfigurator
 LogManager
 ```
 

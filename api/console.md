@@ -1422,13 +1422,15 @@ console.timeEnd('fruit');
     - [ maxFileSize = `512 * 1024` ]?: [number](dataTypes#number) - 文件的分卷阈值容量 (单位为字节)
     - [ maxBackupSize = `5` ]?: [number](dataTypes#number) - 文件最大备份数量, 达到上限后将替换最旧文件
     - [ rootLevel = `'all'` ]?: `'all'` | `'off'` | `'debug'` | `'info'` | `'warn'` | `'error'` | `'fatal'` - 日志写入级别
-    - [ filePattern = `'%d - [%p::%c::%C] - %m%n'` ]?: [string](dataTypes#string) - 日志写入格式, 参阅 [PatternLayout](https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html)
+    - [ filePattern = `'%m%n'` ]?: [string](dataTypes#string) - 日志写入格式, 为 log4j 1.2 [PatternLayout](https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html) 的子集: `%d` / `%d{fmt}` (含 `ISO8601` / `ABSOLUTE` / `DATE`), `%p`, `%c` / `%c{n}`, `%C` / `%C{n}`, `%m`, `%n`, `%t`, `%r`, `%%`, 位置转换符 `%F` / `%l` / `%L` / `%M` (输出 `?`), `%x` / `%X{key}` (输出空串) 及宽度修饰 (如 `%-5p`, `%.30c`); 未知转换符原样输出
 - }} - 日志输出至文件的配置选项
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 设置将全局日志写入文件的配置选项.
 
 该方法会影响所有脚本的日志记录.
+
+自 6.8.0 起, 日志写入由 AutoJs6 内置的滚动文件日志器 (`org.autojs.autojs.core.console.log`) 实现, 不再依赖 log4j, 上述选项与写入行为保持不变.
 
 ```js
 console.setGlobalLogConfig({

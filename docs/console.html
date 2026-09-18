@@ -1647,7 +1647,7 @@ console.timeEnd(&#39;fruit&#39;);
 <li>[ maxFileSize = <code>512 * 1024</code> ]?: <a href="dataTypes.html#datatypes_number">number</a> - 文件的分卷阈值容量 (单位为字节)</li>
 <li>[ maxBackupSize = <code>5</code> ]?: <a href="dataTypes.html#datatypes_number">number</a> - 文件最大备份数量, 达到上限后将替换最旧文件</li>
 <li>[ rootLevel = <code>&#39;all&#39;</code> ]?: <code>&#39;all&#39;</code> | <code>&#39;off&#39;</code> | <code>&#39;debug&#39;</code> | <code>&#39;info&#39;</code> | <code>&#39;warn&#39;</code> | <code>&#39;error&#39;</code> | <code>&#39;fatal&#39;</code> - 日志写入级别</li>
-<li>[ filePattern = <code>&#39;%d - [%p::%c::%C] - %m%n&#39;</code> ]?: <a href="dataTypes.html#datatypes_string">string</a> - 日志写入格式, 参阅 <a href="https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html">PatternLayout</a></li>
+<li>[ filePattern = <code>&#39;%m%n&#39;</code> ]?: <a href="dataTypes.html#datatypes_string">string</a> - 日志写入格式, 为 log4j 1.2 <a href="https://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/PatternLayout.html">PatternLayout</a> 的子集: <code>%d</code> / <code>%d{fmt}</code> (含 <code>ISO8601</code> / <code>ABSOLUTE</code> / <code>DATE</code>), <code>%p</code>, <code>%c</code> / <code>%c{n}</code>, <code>%C</code> / <code>%C{n}</code>, <code>%m</code>, <code>%n</code>, <code>%t</code>, <code>%r</code>, <code>%%</code>, 位置转换符 <code>%F</code> / <code>%l</code> / <code>%L</code> / <code>%M</code> (输出 <code>?</code>), <code>%x</code> / <code>%X{key}</code> (输出空串) 及宽度修饰 (如 <code>%-5p</code>, <code>%.30c</code>); 未知转换符原样输出</li>
 </ul>
 </li>
 <li>}} - 日志输出至文件的配置选项</li>
@@ -1655,6 +1655,7 @@ console.timeEnd(&#39;fruit&#39;);
 </ul>
 </div><p>设置将全局日志写入文件的配置选项.</p>
 <p>该方法会影响所有脚本的日志记录.</p>
+<p>自 6.8.0 起, 日志写入由 AutoJs6 内置的滚动文件日志器 (<code>org.autojs.autojs.core.console.log</code>) 实现, 不再依赖 log4j, 上述选项与写入行为保持不变.</p>
 <pre><code class="lang-js">console.setGlobalLogConfig({
     file: `./log/${Date.now()}.log`,
     filePattern: &#39;%d{yyyy-MM-dd/}%m%n&#39;,

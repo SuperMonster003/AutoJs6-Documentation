@@ -89,7 +89,27 @@ Drawable 属性可使用:
 - 字符串属性可写为普通文本或 `@string/name`.
 - `style` 可写为 `name` 或 `@style/name`, 仅查找 AutoJs6 应用资源.
 - `videoPath` 支持本地文件或 `@raw/name`.
-- 动画资源可写为 `@anim/name` 或 `@android:anim/name`.
+- 动画资源可写为 `@anim/name` 或 `@android:anim/name`, 可用名称见下文"动画资源".
+
+### 动画资源
+
+`textswitcher` 的 `animIn` / `animOut` 接受 `@anim/name` (AutoJs6 应用资源) 或 `@android:anim/name` (系统资源, 如 `@android:anim/fade_in`). 只有视图动画 (根元素为 `set`, `alpha`, `translate`, `scale` 或 `rotate` 的资源) 可以使用; AutoJs6 `res/anim` 目录里的 animator, 状态列表动画与插值器资源不能作为视图动画加载, 引用它们会使整个布局在解析时抛出 `InflateException`. `anim` 属性的内置模式对应下表中的 `slide_in_*` / `slide_out_*`, `fade_in` / `fade_out`, `fast_fade_*`, `grow_fade_in` / `shrink_fade_out` 与 `slide_in_micro` / `slide_out_micro`.
+
+AutoJs6 内置的可用 `@anim/` 名称 (共 131 个, 除单独注明外在 Android 7.0 (API 24) 及以上可用):
+
+| 分组 | 名称 |
+| --- | --- |
+| 淡入淡出与缩放 | `fade_in`, `fade_out`, `fast_fade_in`, `fast_fade_out`, `grow_fade_in`, `grow_fade_in_center`, `grow_fade_in_from_bottom`, `no_anim_fade_in`, `no_anim_fade_out`, `shrink_fade_out`, `shrink_fade_out_center`, `shrink_fade_out_from_bottom`, `slow_fade_in` |
+| 滑动与推入 | `push_down_in`, `push_down_in_no_alpha`, `push_down_out`, `push_down_out_no_alpha`, `push_up_in`, `push_up_out`, `slide_down`, `slide_in_bottom`, `slide_in_enter_micro`, `slide_in_exit_micro`, `slide_in_left`, `slide_in_micro`, `slide_in_right`, `slide_in_top`, `slide_out_bottom`, `slide_out_left`, `slide_out_micro`, `slide_out_right`, `slide_out_top`, `slide_up` |
+| 窗口, 对话框与弹出层 (AOSP) | `activity_close_enter` (API 31+), `activity_close_exit` (API 31+), `activity_open_enter` (API 31+), `activity_open_exit` (API 31+), `activity_translucent_close_exit`, `activity_translucent_open_enter`, `app_starting_exit`, `date_picker_fade_in_material`, `date_picker_fade_out_material`, `dialog_enter`, `dialog_exit`, `options_panel_enter`, `options_panel_exit`, `popup_enter_material`, `popup_exit_material`, `resolver_close_anim`, `resolver_launch_anim`, `search_bar_enter`, `search_bar_exit`, `submenu_enter`, `submenu_exit`, `swipe_window_enter`, `swipe_window_exit`, `toast_enter`, `toast_exit`, `tooltip_enter`, `tooltip_exit`, `translucent_enter`, `translucent_exit`, `window_move_from_decor` |
+| 任务与最近任务 | `launch_task_behind_source`, `launch_task_behind_target`, `recent_enter`, `recent_exit`, `recents_fade_in`, `recents_fade_out` |
+| 停靠窗口 | `dock_bottom_enter`, `dock_bottom_exit`, `dock_bottom_exit_keyguard`, `dock_left_enter`, `dock_left_exit`, `dock_right_enter`, `dock_right_exit`, `dock_top_enter`, `dock_top_exit` |
+| 输入法 | `input_method_enter`, `input_method_exit`, `input_method_extract_enter`, `input_method_extract_exit`, `input_method_fancy_enter`, `input_method_fancy_exit` |
+| 锁屏与壁纸 | `lock_screen_behind_enter`, `lock_screen_behind_enter_fade_in`, `lock_screen_behind_enter_subtle`, `lock_screen_behind_enter_wallpaper`, `lock_screen_enter`, `lock_screen_exit`, `lock_screen_wallpaper_exit`, `wallpaper_close_enter`, `wallpaper_close_exit`, `wallpaper_enter`, `wallpaper_exit`, `wallpaper_intra_close_enter`, `wallpaper_intra_close_exit`, `wallpaper_intra_open_enter`, `wallpaper_intra_open_exit`, `wallpaper_open_enter`, `wallpaper_open_exit` |
+| 屏幕旋转与用户切换 | `rotation_animation_enter`, `rotation_animation_jump_exit`, `rotation_animation_xfade_exit`, `screen_rotate_0_enter`, `screen_rotate_0_exit`, `screen_rotate_180_enter`, `screen_rotate_180_exit`, `screen_rotate_180_frame`, `screen_rotate_alpha`, `screen_rotate_finish_enter`, `screen_rotate_finish_exit`, `screen_rotate_finish_frame`, `screen_rotate_minus_90_enter`, `screen_rotate_minus_90_exit`, `screen_rotate_plus_90_enter`, `screen_rotate_plus_90_exit`, `screen_rotate_start_enter`, `screen_rotate_start_exit`, `screen_rotate_start_frame`, `screen_user_enter`, `screen_user_exit` |
+| 语音交互与屏保 | `dream_activity_close_exit`, `dream_activity_open_enter`, `dream_activity_open_exit`, `voice_activity_close_enter`, `voice_activity_close_exit`, `voice_activity_open_enter`, `voice_activity_open_exit`, `voice_layer_enter`, `voice_layer_exit` |
+
+`activity_close_enter`, `activity_close_exit`, `activity_open_enter`, `activity_open_exit` 使用 `<extend>` 元素, 仅 Android 12 (API 31) 及以上可用, 更低版本加载时抛出 `Unknown animation name: extend`.
 
 ## AutoJs6 简写转换
 
@@ -577,8 +597,8 @@ Drawable 属性可使用:
 | `text` (`nextText`) | 字符串. 使用切换动画显示下一文本 |
 | `currentText` | 字符串. 不使用切换动画设置当前文本 |
 | `anim` (`animation`) | `from left`, `from right`, `from top`, `from bottom`, `micro`, `fade`, `fast fade`, `shrink` 等内置模式 |
-| `animIn` (`inAnim`, `inAnimation`) | 动画资源 |
-| `animOut` (`outAnim`, `outAnimation`) | 动画资源 |
+| `animIn` (`inAnim`, `inAnimation`) | 动画资源, 可用名称见"动画资源"一节 |
+| `animOut` (`outAnim`, `outAnimation`) | 动画资源, 可用名称见"动画资源"一节 |
 
 完整类名或短类名 `<ImageSwitcher>` 支持:
 

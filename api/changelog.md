@@ -2,8 +2,9 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/16</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/20</p>
 
+- `新增` [邮件 (Mail)](https://docs.autojs6.com/#/mail), [MailClient](https://docs.autojs6.com/#/mailClientType), [MailMessage](https://docs.autojs6.com/#/mailMessageType), [MailAccountOptions](https://docs.autojs6.com/#/mailAccountOptionsType) 与 [MailSearchQuery](https://docs.autojs6.com/#/mailSearchQueryType) 文档, 覆盖 Angus Mail 插件的 IMAP / POP3 / SMTP 收发, 搜索, 附件, 标记, 文件夹, 新邮件监听, 账户选项, 服务商预设与错误代码
 - `更新` Flow 坐标点击系列, maxAttempts 默认 0 的无限尝试语义, 以及异常的任务调用栈和控制台输出
 - `更新` Flow 可选步骤 `whenPresent`, 有界循环 `repeatUntil`, 链式候选查找与点击, 集合稳定性及 `snapshot` 快照选项, 并校正 `stableFor` 的默认值为 0
 - `新增` [文本间距 (Pangu)](https://docs.autojs6.com/#/pangu) 文档, 覆盖内置 pangu.js 10.1.0 的全局对象, 文本排版, 间距检查及运行环境

@@ -1,0 +1,140 @@
+{
+  "source": "..\\api\\mailAccountOptionsType.md",
+  "modules": [
+    {
+      "textRaw": "MailAccountOptions",
+      "name": "mailaccountoptions",
+      "desc": "<p>MailAccountOptions 是 <a href=\"mail#m-connect\">mail.connect</a>, <a href=\"mail#m-connectasync\">mail.connectAsync</a> 与 <a href=\"mail#m-setdefault\">mail.setDefault</a> 接受的账户选项对象.</p>\n<p>最少只需 <code>provider</code> (或写明的服务器地址), <code>address</code> 与一种凭据 (<code>password</code>, <code>accessToken</code> 或 <code>tokenProvider</code>). 选择 <code>provider</code> 后, 服务器地址, 端口, TLS 方式与认证方式来自 <a href=\"#服务商预设-provider-presets\">服务商预设</a>, 显式写出的字段覆盖预设. 没有 <code>provider</code> 时必须写明 <code>imap</code> (或 <code>pop3</code>) 与 <code>smtp</code>, 且不会按地址域名推断.</p>\n<p>未知字段, 非法取值与互斥组合在 <code>connect</code> 处以 <code>INVALID_ARGUMENT</code> 拒绝. 对象像 <code>JSON.stringify</code> 一样序列化, <code>undefined</code> 与函数 (除 <code>tokenProvider</code>) 被忽略.</p>\n<pre><code class=\"lang-js\">let client = mail.connect({\n    provider: &#39;qq&#39;,\n    address: &#39;user@qq.com&#39;,\n    password: &#39;授权码&#39;,\n});\n</code></pre>\n<pre><code class=\"lang-js\">let client = mail.connect({\n    address: &#39;me@example.com&#39;,\n    user: &#39;me&#39;,\n    name: &#39;My Name&#39;,\n    password: &#39;secret&#39;,\n    receive: &#39;imap&#39;,\n    imap: { host: &#39;mail.example.com&#39;, port: 993, tls: &#39;ssl&#39; },\n    smtp: { host: &#39;mail.example.com&#39;, port: 587, tls: &#39;starttls&#39; },\n    timeout: { connect: 10000, read: 30000 },\n});\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">MailAccountOptions</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] provider",
+          "name": "[p?]_provider",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>服务商预设 ID, 见 <a href=\"#服务商预设-provider-presets\">服务商预设</a>. 未知 ID 抛出 <code>PROVIDER_UNKNOWN</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] provider"
+        },
+        {
+          "textRaw": "[p?] address",
+          "name": "[p?]_address",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>邮箱地址, 必填, 也是默认的登录名与发件人地址.</p>\n",
+          "type": "module",
+          "displayName": "[p?] address"
+        },
+        {
+          "textRaw": "[p?] user",
+          "name": "[p?]_user",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>登录名, 默认等于 <code>address</code>. 只有服务商要求用不含域名的用户名登录时才需要.</p>\n",
+          "type": "module",
+          "displayName": "[p?] user"
+        },
+        {
+          "textRaw": "[p?] name",
+          "name": "[p?]_name",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>发信时的显示名, 用于 <code>From</code> 头.</p>\n",
+          "type": "module",
+          "displayName": "[p?] name"
+        },
+        {
+          "textRaw": "[p?] auth",
+          "name": "[p?]_auth",
+          "desc": "<ul>\n<li>{ <code>&#39;password&#39;</code> | <code>&#39;xoauth2&#39;</code> }</li>\n</ul>\n<p>认证方式, 默认由凭据类型决定: 给出 <code>password</code> 为 <code>&#39;password&#39;</code>, 给出 <code>accessToken</code> 或 <code>tokenProvider</code> 为 <code>&#39;xoauth2&#39;</code>. 显式写出时必须与凭据类型一致.</p>\n",
+          "type": "module",
+          "displayName": "[p?] auth"
+        },
+        {
+          "textRaw": "[p?] password",
+          "name": "[p?]_password",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>密码. 多数服务商 (QQ, 163, 126, Sina, Gmail, iCloud, Yahoo) 要求在邮箱设置中生成的授权码或应用专用密码, 而不是登录密码; 各预设的 <code>authHint</code> 说明具体要求. 与 <code>accessToken</code> 互斥.</p>\n",
+          "type": "module",
+          "displayName": "[p?] password"
+        },
+        {
+          "textRaw": "[p?] accessToken",
+          "name": "[p?]_accesstoken",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>OAuth 2.0 访问令牌 (XOAUTH2), 用于 Gmail, Outlook.com 与 Microsoft 365. 令牌的获取与刷新由脚本负责. 与 <code>password</code> 互斥.</p>\n",
+          "type": "module",
+          "displayName": "[p?] accessToken"
+        },
+        {
+          "textRaw": "[p?] tokenProvider",
+          "name": "[p?]_tokenprovider",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#function\">Function</a> }</li>\n</ul>\n<p>返回访问令牌字符串的函数. 连接时若没有 <code>accessToken</code> 则先调用一次取得令牌; 之后服务器以 <code>AUTH_FAILED</code> 拒绝令牌时 (通常是过期), 插件在后台线程再次调用它取得新令牌并重试一次. 函数必须同步返回非空字符串, 否则抛出 <code>AUTH_FAILED</code>. 不能与 <code>password</code> 同用.</p>\n<pre><code class=\"lang-js\">let client = mail.connect({\n    provider: &#39;outlook&#39;,\n    address: &#39;me@outlook.com&#39;,\n    tokenProvider: () =&gt; refreshMyToken(), // 脚本自行实现的刷新逻辑.\n});\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] tokenProvider"
+        },
+        {
+          "textRaw": "[p?] receive",
+          "name": "[p?]_receive",
+          "desc": "<ul>\n<li>{ <code>&#39;imap&#39;</code> | <code>&#39;pop3&#39;</code> }</li>\n</ul>\n<p>收信协议, 默认为 <code>&#39;imap&#39;</code> (有 IMAP 端点时). POP3 只有 <code>INBOX</code>, 没有标记, 文件夹与推送, 搜索只能在客户端按信封过滤, 详见 <a href=\"mailClientType\">MailClient</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] receive"
+        },
+        {
+          "textRaw": "[p?] imap",
+          "name": "[p?]_imap",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>IMAP 端点 <code>{ host, port?, tls? }</code>. <code>tls</code> 为 <code>&#39;ssl&#39;</code> (默认, 隐式 TLS), <code>&#39;starttls&#39;</code> 或 <code>&#39;none&#39;</code>; <code>port</code> 省略时按 <code>tls</code> 取默认值 (<code>993</code> / <code>143</code>). 有 <code>provider</code> 时可只写需要覆盖的字段.</p>\n",
+          "type": "module",
+          "displayName": "[p?] imap"
+        },
+        {
+          "textRaw": "[p?] pop3",
+          "name": "[p?]_pop3",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>POP3 端点 <code>{ host, port?, tls? }</code>, 默认端口 <code>995</code> / <code>110</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] pop3"
+        },
+        {
+          "textRaw": "[p?] smtp",
+          "name": "[p?]_smtp",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>SMTP 端点 <code>{ host, port?, tls? }</code>, 默认端口 <code>465</code> (ssl), <code>587</code> (starttls), <code>25</code> (none). 没有 SMTP 端点时不能发信.</p>\n",
+          "type": "module",
+          "displayName": "[p?] smtp"
+        },
+        {
+          "textRaw": "[p?] timeout",
+          "name": "[p?]_timeout",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>超时 (毫秒) <code>{ connect?, read?, write? }</code>. <code>connect</code> 默认 15000, <code>read</code> 默认 60000, <code>write</code> 默认等于 <code>read</code>. 每项最长 10 分钟. 读取超时抛出可重试的 <code>TIMEOUT</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p?] timeout"
+        },
+        {
+          "textRaw": "[p?] tls",
+          "name": "[p?]_tls",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>TLS 选项 <code>{ trustAll? }</code>. <code>trustAll: true</code> 跳过证书校验, 只应用于自建服务器的调试; 此时账户在插件的状态与摘要中标记为不安全.</p>\n",
+          "type": "module",
+          "displayName": "[p?] tls"
+        },
+        {
+          "textRaw": "[p?] debug",
+          "name": "[p?]_debug",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>为 <code>true</code> 时把脱敏的协议摘要 (命令, 响应状态, 耗时, 传输字节数) 输出到 <code>console.verbose</code>. 不输出凭据与邮件内容.</p>\n",
+          "type": "module",
+          "displayName": "[p?] debug"
+        },
+        {
+          "textRaw": "[p?] clientId",
+          "name": "[p?]_clientid",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>IMAP <code>ID</code> 命令的字段 <code>{ name?, version? }</code>. 163 / 126 要求每个连接先发送 <code>ID</code>, 否则拒绝打开文件夹; 这些预设的 <code>requiresClientId</code> 为 <code>true</code>, 插件会自动以自己的名称发送, 脚本一般不需要设置.</p>\n",
+          "type": "module",
+          "displayName": "[p?] clientId"
+        },
+        {
+          "textRaw": "服务商预设 (Provider Presets)",
+          "name": "服务商预设_(provider_presets)",
+          "desc": "<p>插件内置以下预设 (可用 <a href=\"mail#p-providers\">mail.providers.list</a> 读取). 每项的字段:</p>\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>id</code></td>\n<td>预设 ID, 用于 <code>provider</code></td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>显示名</td>\n</tr>\n<tr>\n<td><code>domains</code></td>\n<td>邮箱地址域名, 用于 <a href=\"mail#p-providers\">mail.providers.resolve</a></td>\n</tr>\n<tr>\n<td><code>imap</code>, <code>pop3</code>, <code>smtp</code></td>\n<td>端点 <code>{ host, port, tls }</code>, 没有该服务时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>auth</code></td>\n<td>支持的认证方式列表</td>\n</tr>\n<tr>\n<td><code>authHint</code></td>\n<td>凭据要求说明</td>\n</tr>\n<tr>\n<td><code>autoSavesSent</code></td>\n<td>服务器是否自动保存已发送邮件 (影响 <a href=\"mailClientType#m-send\">send</a> 的副本处理)</td>\n</tr>\n<tr>\n<td><code>sentFolder</code></td>\n<td>&quot;已发送&quot; 文件夹名, 插件追加副本时使用</td>\n</tr>\n<tr>\n<td><code>requiresClientId</code></td>\n<td>是否要求 IMAP <code>ID</code> 命令</td>\n</tr>\n<tr>\n<td><code>idlePush</code></td>\n<td>IMAP IDLE 是否真正推送新邮件: <code>true</code>, <code>false</code> (接受命令但不推送或不支持, 监听改为轮询) 或 <code>null</code> (未核实)</td>\n</tr>\n<tr>\n<td><code>docsUrl</code></td>\n<td>服务商的帮助页面</td>\n</tr>\n<tr>\n<td><code>notes</code></td>\n<td>已核实的行为差异 (英文)</td>\n</tr>\n</tbody>\n</table>\n<table>\n<thead>\n<tr>\n<th>id</th>\n<th>名称</th>\n<th>域名</th>\n<th>IMAP</th>\n<th>POP3</th>\n<th>SMTP</th>\n<th>认证</th>\n<th>凭据</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>gmail</code></td>\n<td>Gmail</td>\n<td>gmail.com, googlemail.com</td>\n<td>imap.gmail.com:993 ssl</td>\n<td>pop.gmail.com:995</td>\n<td>smtp.gmail.com:465 ssl</td>\n<td>password, xoauth2</td>\n<td>开启两步验证后的应用专用密码, 或 OAuth 2.0 令牌</td>\n</tr>\n<tr>\n<td><code>outlook</code></td>\n<td>Outlook.com</td>\n<td>outlook.com, hotmail.com, live.com, msn.com</td>\n<td>outlook.office365.com:993 ssl</td>\n<td>outlook.office365.com:995</td>\n<td>smtp-mail.outlook.com:587 starttls</td>\n<td>xoauth2</td>\n<td>只接受 OAuth 2.0 令牌, IMAP / POP3 / SMTP 均拒绝密码与应用密码</td>\n</tr>\n<tr>\n<td><code>office365</code></td>\n<td>Microsoft 365</td>\n<td>(无)</td>\n<td>outlook.office365.com:993 ssl</td>\n<td>outlook.office365.com:995</td>\n<td>smtp.office365.com:587 starttls</td>\n<td>xoauth2, password</td>\n<td>OAuth 2.0 令牌; 租户可能只允许 SMTP 使用密码</td>\n</tr>\n<tr>\n<td><code>qq</code></td>\n<td>QQ 邮箱</td>\n<td>qq.com, foxmail.com, vip.qq.com</td>\n<td>imap.qq.com:993 ssl</td>\n<td>pop.qq.com:995</td>\n<td>smtp.qq.com:465 ssl</td>\n<td>password</td>\n<td>邮箱设置中生成的授权码</td>\n</tr>\n<tr>\n<td><code>163</code></td>\n<td>163 邮箱</td>\n<td>163.com, vip.163.com</td>\n<td>imap.163.com:993 ssl</td>\n<td>pop.163.com:995</td>\n<td>smtp.163.com:465 ssl</td>\n<td>password</td>\n<td>邮箱设置 (POP3/SMTP/IMAP) 中生成的授权码</td>\n</tr>\n<tr>\n<td><code>126</code></td>\n<td>126 邮箱</td>\n<td>126.com, vip.126.com</td>\n<td>imap.126.com:993 ssl</td>\n<td>pop.126.com:995</td>\n<td>smtp.126.com:465 ssl</td>\n<td>password</td>\n<td>同 163</td>\n</tr>\n<tr>\n<td><code>icloud</code></td>\n<td>iCloud Mail</td>\n<td>icloud.com, me.com, mac.com</td>\n<td>imap.mail.me.com:993 ssl</td>\n<td>无</td>\n<td>smtp.mail.me.com:587 starttls</td>\n<td>password</td>\n<td>appleid.apple.com 生成的 App 专用密码</td>\n</tr>\n<tr>\n<td><code>yahoo</code></td>\n<td>Yahoo Mail</td>\n<td>yahoo.com, ymail.com, rocketmail.com</td>\n<td>imap.mail.yahoo.com:993 ssl</td>\n<td>pop.mail.yahoo.com:995</td>\n<td>smtp.mail.yahoo.com:465 ssl</td>\n<td>password</td>\n<td>账户安全设置中生成的应用密码</td>\n</tr>\n<tr>\n<td><code>sina</code></td>\n<td>新浪邮箱</td>\n<td>sina.com, sina.cn</td>\n<td>imap.sina.com:993 ssl</td>\n<td>pop.sina.com:995</td>\n<td>smtp.sina.com:465 ssl</td>\n<td>password</td>\n<td>客户端设置中的授权码</td>\n</tr>\n<tr>\n<td><code>aliyun</code></td>\n<td>阿里云邮箱 (个人版)</td>\n<td>aliyun.com</td>\n<td>imap.aliyun.com:993 ssl</td>\n<td>pop3.aliyun.com:995</td>\n<td>smtp.aliyun.com:465 ssl</td>\n<td>password</td>\n<td>账户密码</td>\n</tr>\n</tbody>\n</table>\n<p>已用真实账户核实的行为差异:</p>\n<ul>\n<li>Gmail: 已发送邮件由服务器保存在 <code>[Gmail]/Sent Mail</code>; 自定义关键字可保存; IDLE 约 30 秒内推送; 非 ASCII 搜索由插件以 <code>CHARSET UTF-8</code> 发送.</li>\n<li>Outlook.com: 三个账户在 IMAP, POP3 与 SMTP 上均拒绝应用密码, 使用密码连接抛出 <code>AUTH_MECHANISM_UNSUPPORTED</code>, 必须使用令牌.</li>\n<li>QQ: 中文搜索服务器返回空结果而非错误, 需用 <code>fallback: &#39;always&#39;</code>; 服务器改写外发邮件的 Message-ID; <code>createFolder</code> 可能被拒绝或几秒后消失; 自定义关键字不保存; IDLE 不推送 (监听自动轮询), 新邮件 15 到 40 秒后可见.</li>\n<li>163: 每个连接需先发送 <code>ID</code> (插件自动处理); 服务器自动保存已发送邮件 (延迟可达数分钟); 对近期邮件的文本搜索返回空, 需用 <code>fallback: &#39;always&#39;</code>; 发件人显示名中的空格变为下划线; 不支持 IDLE. yeah.net 使用同一策略.</li>\n<li>126: 同 163, 但文本搜索 (含中文) 正常; 不支持 IDLE.</li>\n<li>新浪: 服务器不保存已发送邮件 (插件追加副本); 拒绝 IMAP <code>CREATE</code> (<code>createFolder</code> 失败于 <code>SERVER_ERROR</code>); 只支持 <code>ALL</code>, <code>SINCE</code> 与标记条件的服务器搜索, 文本搜索总是在客户端执行; 不推送 IDLE 且空闲 60 秒后断开.</li>\n<li>iCloud: 无 POP3 服务.</li>\n<li>Yahoo, 阿里云: 未用真实账户核实, 端点来自公开文档.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "服务商预设 (Provider Presets)"
+        },
+        {
+          "textRaw": "保存的账户 (Saved Accounts)",
+          "name": "保存的账户_(saved_accounts)",
+          "desc": "<p>在插件设置页保存的账户以别名连接: <code>mail.connect(&#39;别名&#39;)</code>. 凭据由插件持有, 脚本看不到. <a href=\"mail#p-accounts\">mail.accounts.list</a> 返回的每一项:</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>alias</code></td>\n<td>string</td>\n<td>别名</td>\n</tr>\n<tr>\n<td><code>address</code></td>\n<td>string</td>\n<td>邮箱地址</td>\n</tr>\n<tr>\n<td><code>user</code></td>\n<td>string</td>\n<td>登录名</td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>string \\</td>\n<td>undefined</td>\n<td>显示名</td>\n</tr>\n<tr>\n<td><code>provider</code></td>\n<td>string \\</td>\n<td>undefined</td>\n<td>预设 ID</td>\n</tr>\n<tr>\n<td><code>auth</code></td>\n<td>string</td>\n<td><code>&#39;password&#39;</code> 或 <code>&#39;xoauth2&#39;</code></td>\n</tr>\n<tr>\n<td><code>receive</code></td>\n<td>string</td>\n<td><code>&#39;imap&#39;</code> 或 <code>&#39;pop3&#39;</code></td>\n</tr>\n<tr>\n<td><code>imap</code>, <code>pop3</code>, <code>smtp</code></td>\n<td>Object \\</td>\n<td>undefined</td>\n<td>端点 <code>{ host, port, tls }</code></td>\n</tr>\n<tr>\n<td><code>default</code></td>\n<td>boolean</td>\n<td>是否为插件设置页标记的默认账户</td>\n</tr>\n<tr>\n<td><code>updatedAt</code></td>\n<td>number</td>\n<td>最近保存时间 (UTC 毫秒)</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td>string \\</td>\n<td>undefined</td>\n<td>保存的数据无法解析时的原因, 此时其他字段缺失</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">mail.accounts.list().forEach(a =&gt; console.log(a.alias, a.address, a.receive, a.default));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "保存的账户 (Saved Accounts)"
+        }
+      ],
+      "type": "module",
+      "displayName": "MailAccountOptions"
+    }
+  ]
+}

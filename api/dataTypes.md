@@ -2039,3 +2039,19 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## WindowFilter
 
 参阅 [窗口过滤器对象 (WindowFilter)](automator#窗口过滤器对象-windowfilter) 小节.
+
+## MailClient
+
+参阅 [MailClient - 邮件客户端](mailClientType) 类型章节.
+
+## MailMessage
+
+参阅 [MailMessage - 邮件消息](mailMessageType) 类型章节.
+
+## MailAccountOptions
+
+参阅 [MailAccountOptions](mailAccountOptionsType) 类型章节.
+
+## MailSearchQuery
+
+参阅 [MailSearchQuery](mailSearchQueryType) 类型章节.

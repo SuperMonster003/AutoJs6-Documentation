@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-20 邮件 (Mail) 新增: 覆盖 Angus Mail 插件提供的 mail 全局对象, MailClient 的收发, 搜索, 附件, 标记, 文件夹与监听方法, MailMessage / MailAttachment / MailAddress / MailSendMessage 对象, MailAccountOptions 账户选项与服务商预设, MailSearchQuery 查询条件, 以及 MailError 错误代码与各项上限. 服务商行为差异按 2026-09-18 至 2026-09-20 的真实账户矩阵记录.
+
 2026-09-16 分支整合: 同步 Console 输入与显示配置, UI 控制台视图, Images 模板与特征匹配, 图像统计和 Color 扩展方法. AI 分支的早期接口说明已由主分支统一插件目标接口覆盖, 合并时保留与当前源码一致的说明. 同步修正图片保存方法的跨页链接并全量生成离线文档与搜索索引.
 
 2026-09-16 Flow 坐标点击与诊断更新: 同步 clickBounds 等待, 延时和工具集系列, maxAttempts 默认 0 表示不限尝试次数, 以及 console.error 自动显示异步任务方法, 文件和行号. 验证依据为源码, Rhino 异常传播单元测试与声明 smoke 检查; 未执行医院应用真机挂号.
@@ -79,6 +81,7 @@
 | [Internationalization - 国际化](i18n) | √ |
 | [Jsox - JavaScript 对象扩展](jsox) | √ |
 | [Keys - 按键](keys) | √ |
+| [Mail - 邮件](mail) | √ |
 | [Media - 多媒体](media) | √ |
 | [MediaInfo - 媒体信息](mediainfo) | √ |
 | [MIME - 媒体类型](mime) | √ |
@@ -120,6 +123,8 @@
 | [UiObjectActions - 控件节点行为](uiObjectActionsType) | √ |
 | [Flow - 流程对象](flowType) | √ |
 | [FlowError - 流程错误](flowErrorType) | √ |
+| [MailClient - 邮件客户端](mailClientType) | √ |
+| [MailMessage - 邮件消息](mailMessageType) | √ |
 | [WebSocket](webSocketType) | &gt; 70% |
 | [EventEmitter - 事件发射器](eventEmitterType) | √ |
 | [ImageWrapper - 包装图像类](imageWrapperType) | √ |
@@ -159,6 +164,8 @@
 | [HttpResponse](httpResponseType) | √ |
 | [InjectableWebClient](injectableWebClientType) | √ |
 | [InjectableWebView](injectableWebViewType) | √ |
+| [MailAccountOptions](mailAccountOptionsType) | √ |
+| [MailSearchQuery](mailSearchQueryType) | √ |
 | [NoticeOptions](noticeOptionsType) | √ |
 | [NoticeChannelOptions](noticeChannelOptionsType) | √ |
 | [NoticePresetConfiguration](noticePresetConfigurationType) | √ |

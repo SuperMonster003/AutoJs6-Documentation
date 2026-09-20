@@ -1,0 +1,161 @@
+{
+  "source": "..\\api\\mailSearchQueryType.md",
+  "modules": [
+    {
+      "textRaw": "MailSearchQuery",
+      "name": "mailsearchquery",
+      "desc": "<p>MailSearchQuery 是 <a href=\"mailClientType#m-search\">client.search</a> 与 <a href=\"mail#转发方法-forwarded-methods\">mail.search</a> 接受的查询条件对象.</p>\n<p>同一对象内的多个条件为 &quot;与&quot; 关系; <code>and</code>, <code>or</code>, <code>not</code> 可任意嵌套 (最深 8 层) 组合子条件. 字符串条件为不区分大小写的子串匹配 (IMAP <code>SEARCH</code> 语义), 日期条件按天比较, <code>uid</code> 只能出现在最外层. 未知字段抛出 <code>INVALID_ARGUMENT</code>.</p>\n<p>IMAP 上查询交由服务器执行; 服务器拒绝或不支持时, 按 <code>fallback</code> 选项在客户端过滤. POP3 只能在客户端按信封过滤, <code>body</code>, <code>text</code> 与 <code>uid</code> 条件不可用.</p>\n<pre><code class=\"lang-js\">let hits = client.search({\n    from: &#39;noreply@example.com&#39;,\n    subject: &#39;验证码&#39;,\n    since: &#39;2026-09-01&#39;,\n    seen: false,\n}, { limit: 10 });\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">MailSearchQuery</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[p?] from",
+          "name": "[p?]_from",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>发件人 (地址或显示名) 包含此子串.</p>\n",
+          "type": "module",
+          "displayName": "[p?] from"
+        },
+        {
+          "textRaw": "[p?] cc",
+          "name": "[p?] cc",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] bcc"
+        },
+        {
+          "textRaw": "[p?] bcc",
+          "name": "[p?]_bcc",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>对应收件人字段包含此子串.</p>\n",
+          "type": "module",
+          "displayName": "[p?] bcc"
+        },
+        {
+          "textRaw": "[p?] subject",
+          "name": "[p?]_subject",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>主题包含此子串. 非 ASCII 关键字由插件以 <code>CHARSET UTF-8</code> 发送; 部分服务商对非 ASCII 搜索返回空结果或错误, 见 <a href=\"mailAccountOptionsType#服务商预设-provider-presets\">服务商预设</a> 的说明与 <code>fallback</code> 选项.</p>\n",
+          "type": "module",
+          "displayName": "[p?] subject"
+        },
+        {
+          "textRaw": "[p?] body",
+          "name": "[p?]_body",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>正文包含此子串. 客户端过滤时需下载候选邮件的正文, 代价较高; POP3 不可用.</p>\n",
+          "type": "module",
+          "displayName": "[p?] body"
+        },
+        {
+          "textRaw": "[p?] text",
+          "name": "[p?]_text",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>主题, 正文, 发件人或收件人任一包含此子串.</p>\n",
+          "type": "module",
+          "displayName": "[p?] text"
+        },
+        {
+          "textRaw": "[p?] since",
+          "name": "[p?]_since",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>接收日期不早于此日期 (含当天).</p>\n",
+          "type": "module",
+          "displayName": "[p?] since"
+        },
+        {
+          "textRaw": "[p?] before",
+          "name": "[p?]_before",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>接收日期早于此日期 (不含当天).</p>\n",
+          "type": "module",
+          "displayName": "[p?] before"
+        },
+        {
+          "textRaw": "[p?] sentSince",
+          "name": "[p?] sentSince",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] sentBefore"
+        },
+        {
+          "textRaw": "[p?] sentBefore",
+          "name": "[p?]_sentbefore",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>按 <code>Date</code> 头 (发送日期) 的对应条件.</p>\n<p>日期接受 JavaScript <code>Date</code>, UTC 毫秒时间戳, 或 ISO-8601 字符串 (<code>&#39;2026-09-01&#39;</code>, <code>&#39;2026-09-01T08:00:00Z&#39;</code>). 无论精度如何, 比较都按天进行, 这是 IMAP 协议的规则.</p>\n",
+          "type": "module",
+          "displayName": "[p?] sentBefore"
+        },
+        {
+          "textRaw": "[p?] draft",
+          "name": "[p?] draft",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p?] deleted"
+        },
+        {
+          "textRaw": "[p?] deleted",
+          "name": "[p?]_deleted",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>对应系统标记是否存在. <code>false</code> 表示要求标记不存在 (如 <code>seen: false</code> 为未读), 省略表示不限制.</p>\n",
+          "type": "module",
+          "displayName": "[p?] deleted"
+        },
+        {
+          "textRaw": "[p?] larger",
+          "name": "[p?]_larger",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>邮件大小大于此字节数.</p>\n",
+          "type": "module",
+          "displayName": "[p?] larger"
+        },
+        {
+          "textRaw": "[p?] smaller",
+          "name": "[p?]_smaller",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>邮件大小小于此字节数.</p>\n",
+          "type": "module",
+          "displayName": "[p?] smaller"
+        },
+        {
+          "textRaw": "[p?] header",
+          "name": "[p?]_header",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>任意邮件头的子串条件, 属性名为头名称, 属性值为子串, 如 <code>{ &#39;X-Mailer&#39;: &#39;Foo&#39;, &#39;List-Id&#39;: &#39;news&#39; }</code>. 多个头之间为 &quot;与&quot; 关系.</p>\n",
+          "type": "module",
+          "displayName": "[p?] header"
+        },
+        {
+          "textRaw": "[p?] messageId",
+          "name": "[p?]_messageid",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p><code>Message-ID</code> 头包含此子串 (可含尖括号). 163 的服务器搜索对近期邮件返回空结果, 需用 <code>fallback: &#39;always&#39;</code>; QQ 会改写外发邮件的 Message-ID, 因此按发送结果中的 <code>messageId</code> 查找不到.</p>\n",
+          "type": "module",
+          "displayName": "[p?] messageId"
+        },
+        {
+          "textRaw": "[p?] uid",
+          "name": "[p?]_uid",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#array\">Array</a> }</li>\n</ul>\n<p>限定候选邮件的 UID 集合, 只能写在最外层, 与其他条件为 &quot;与&quot; 关系. 接受单个 UID (<code>4711</code>), 范围字符串 (<code>&#39;1:50&#39;</code>, <code>&#39;100:*&#39;</code>, <code>&#39;1,5,9:12&#39;</code>; <code>*</code> 表示当前最大 UID), 或它们的数组. POP3 不可用.</p>\n",
+          "type": "module",
+          "displayName": "[p?] uid"
+        },
+        {
+          "textRaw": "[p?] and",
+          "name": "[p?]_and",
+          "desc": "<ul>\n<li>{ <a href=\"mailSearchQueryType\">MailSearchQuery</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>子条件全部成立.</p>\n",
+          "type": "module",
+          "displayName": "[p?] and"
+        },
+        {
+          "textRaw": "[p?] or",
+          "name": "[p?]_or",
+          "desc": "<ul>\n<li>{ <a href=\"mailSearchQueryType\">MailSearchQuery</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>子条件至少一个成立.</p>\n",
+          "type": "module",
+          "displayName": "[p?] or"
+        },
+        {
+          "textRaw": "[p?] not",
+          "name": "[p?]_not",
+          "desc": "<ul>\n<li>{ <a href=\"mailSearchQueryType\">MailSearchQuery</a> }</li>\n</ul>\n<p>子条件不成立.</p>\n<pre><code class=\"lang-js\">// (来自 a 或 b) 且 (主题含 &quot;发票&quot; 或 &quot;invoice&quot;) 且 非已读\nclient.search({\n    or: [{ from: &#39;a@example.com&#39; }, { from: &#39;b@example.com&#39; }],\n    and: [{ or: [{ subject: &#39;发票&#39; }, { subject: &#39;invoice&#39; }] }],\n    not: { seen: true },\n});\n\n// 最近 7 天内, 大于 1 MiB 且带 X-Priority 头的邮件\nclient.search({\n    since: Date.now() - 7 * 24 * 3600 * 1000,\n    larger: 1024 * 1024,\n    header: { &#39;X-Priority&#39;: &#39;1&#39; },\n});\n\n// 只在 UID 大于 5000 的邮件中查找\nclient.search({ uid: &#39;5001:*&#39;, subject: &#39;报表&#39; });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p?] not"
+        },
+        {
+          "textRaw": "客户端过滤 (Client Fallback)",
+          "name": "客户端过滤_(client_fallback)",
+          "desc": "<p><a href=\"mailClientType#m-search\">client.search</a> 的 <code>fallback</code> 选项决定服务器不执行查询时的处理:</p>\n<table>\n<thead>\n<tr>\n<th>fallback</th>\n<th>行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>&#39;client&#39;</code> (默认)</td>\n<td>先请求服务器; 服务器拒绝该查询时, 从最新一封开始拉取信封在客户端逐条过滤, 找满 <code>limit</code> 条即停止, 最多扫描 2000 条 (POP3 200 条)</td>\n</tr>\n<tr>\n<td><code>&#39;none&#39;</code></td>\n<td>只请求服务器, 被拒绝时把服务器的错误原样抛出 (通常为 <code>SERVER_ERROR</code>)</td>\n</tr>\n<tr>\n<td><code>&#39;always&#39;</code></td>\n<td>不请求服务器, 直接在客户端过滤. 用于服务器搜索返回空结果而非错误的服务商 (QQ 的中文搜索, 163 对近期邮件的文本搜索)</td>\n</tr>\n</tbody>\n</table>\n<p>结果数组的不可枚举属性 <code>fallback</code> 为 <code>&#39;server&#39;</code> 或 <code>&#39;client&#39;</code>, 说明本次实际采用的方式. 客户端过滤时含 <code>body</code> / <code>text</code> 条件的查询需要下载候选邮件正文, 耗时随扫描数增加; 有 <code>debug: true</code> 时每扫描 25 条输出一次进度.</p>\n",
+          "type": "module",
+          "displayName": "客户端过滤 (Client Fallback)"
+        }
+      ],
+      "type": "module",
+      "displayName": "MailSearchQuery"
+    }
+  ]
+}

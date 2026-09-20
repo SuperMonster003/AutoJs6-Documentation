@@ -1,0 +1,1205 @@
+{
+  "source": "..\\api\\mailClientType.md",
+  "modules": [
+    {
+      "textRaw": "邮件客户端 (MailClient)",
+      "name": "邮件客户端_(mailclient)",
+      "desc": "<p>MailClient 是 <a href=\"mail#m-connect\">mail.connect</a> 返回的会话对象, 持有一个账户到收信服务器 (IMAP 或 POP3) 与 SMTP 服务器的连接, 并提供收发, 搜索, 整理和监听邮件的方法.</p>\n<p>每个网络方法都有同步形态与 <code>Async</code> 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; <code>Async</code> 形态返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 回调在脚本线程执行. 失败时抛出 (或拒绝为) <a href=\"mail#c-mailerror\">MailError</a>. 客户端关闭后所有方法失败于 <code>SESSION_CLOSED</code>.</p>\n<p>收信协议为 POP3 时, 只有 <code>INBOX</code> 一个文件夹, 且不支持标记, 移动, 复制, 追加, 清除与文件夹管理, 这些方法失败于 <code>UNSUPPORTED_OPERATION</code>. 下表中的 &quot;协议&quot; 列标明各方法可用的收信协议.</p>\n<p>UID 参数统一接受: IMAP 的正整数 UID, POP3 的 UIDL 字符串, <a href=\"mailMessageType\">MailMessage</a> 对象 (自带 <code>uid</code> 与 <code>folder</code>), 以及以上任意项的数组 (需要多个 UID 的方法). 详见 <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a>.</p>\n<p>文件夹名为字符串, 默认 <code>&#39;INBOX&#39;</code>, 层级分隔符按服务器原样 (如 <code>&#39;Work/2026&#39;</code> 或 <code>&#39;Work.2026&#39;</code>), 可从 <a href=\"#m-folders\">folders</a> 返回的 <code>path</code> 读取.</p>\n<pre><code class=\"lang-js\">let client = mail.connect(&#39;work&#39;);\nconsole.log(client.toString()); // MailClient { provider=qq, address=user@qq.com }\nlet list = client.fetch({ limit: 20, unseenOnly: true });\nlist.forEach(m =&gt; console.log(m.uid, m.date, m.subject));\nclient.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">MailClient</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] MailClient",
+          "name": "[@]_mailclient",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>由 <a href=\"mail#m-connect\">mail.connect</a>, <a href=\"mail#m-connectasync\">mail.connectAsync</a> 或 <a href=\"mail#m-setdefault\">mail.setDefault</a> 得到, 不能用 <code>new</code> 构造.</p>\n",
+          "type": "module",
+          "displayName": "[@] MailClient"
+        },
+        {
+          "textRaw": "[p#] account",
+          "name": "[p#]_account",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>连接时传入的 <a href=\"mailAccountOptionsType\">MailAccountOptions</a> 副本, 去掉了 <code>password</code>, <code>accessToken</code> 与 <code>tokenProvider</code>; 使用令牌时补上 <code>auth: &#39;xoauth2&#39;</code>. 只包含脚本写明的字段, 预设补全的服务器地址不在其中. 用别名连接时只有 <code>{ alias }</code>. 完整的归一化账户 (含预设补全的端点) 可从 <a href=\"#m-test\">test</a> 结果的 <code>account</code> 读取.</p>\n",
+          "type": "module",
+          "displayName": "[p#] account"
+        },
+        {
+          "textRaw": "[p#] isConnected",
+          "name": "[p#]_isconnected",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>与插件的会话当前是否可用. 插件进程退出或令牌刷新后为 <code>false</code>, 下一次调用会自动重新打开会话, 因此此值为 <code>false</code> 不代表客户端不可用. 此属性不反映到邮件服务器的套接字状态, 空闲后服务器断开的连接在下一次调用时自动重连.</p>\n",
+          "type": "module",
+          "displayName": "[p#] isConnected"
+        },
+        {
+          "textRaw": "[p#] isClosed",
+          "name": "[p#]_isclosed",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>客户端是否已由 <a href=\"#m-close\">close</a> 关闭或随脚本退出关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] isClosed"
+        },
+        {
+          "textRaw": "[m#] test",
+          "name": "[m#]_test",
+          "methods": [
+            {
+              "textRaw": "client.test()",
+              "type": "method",
+              "name": "test",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailsessiontestresult\">MailSessionTestResult</a> } - 各端点的连通性报告</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "client.testAsync()",
+              "type": "method",
+              "name": "testAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailsessiontestresult\">MailSessionTestResult</a></li>\n</ul>\n<p>依次探测收信端点 (按 <code>receive</code> 只探测 IMAP 或 POP3 之一) 与 SMTP 端点, 读取各自的能力列表. 单个端点失败不抛出, 而是记录在对应报告的 <code>error</code> 中, 此时 <code>ok</code> 为 <code>false</code>.</p>\n<pre><code class=\"lang-js\">let report = client.test();\nconsole.log(report.ok, report.elapsedMs);\nconsole.log(report.imap.capabilities.includes(&#39;IDLE&#39;)); // 服务器是否支持推送.\nconsole.log(report.smtp.ok, report.smtp.error);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] test"
+        },
+        {
+          "textRaw": "[m#] send",
+          "name": "[m#]_send",
+          "methods": [
+            {
+              "textRaw": "client.send(message, options?)",
+              "type": "method",
+              "name": "send",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"mailMessageType#mailsendmessage\">MailSendMessage</a> } - 待发送的邮件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 发送选项<ul>\n<li><strong>[ saveToSent ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否在发送后向 &quot;已发送&quot; 文件夹追加副本</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailsendresult\">MailSendResult</a> } - 发送结果</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.sendAsync(message, options?)",
+              "type": "method",
+              "name": "sendAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"mailMessageType#mailsendmessage\">MailSendMessage</a> } - 待发送的邮件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 发送选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailsendresult\">MailSendResult</a></li>\n</ul>\n<p>通过 SMTP 发送邮件. 首次调用时建立 SMTP 连接, 之后复用. 发件人默认为账户地址与 <code>name</code>. 服务器拒绝邮件或全部收件人时抛出 <code>SEND_REJECTED</code>; 部分收件人被拒绝时正常返回, 被拒绝的地址列在结果的 <code>rejected</code> 中.</p>\n<p><code>saveToSent</code> 省略时, 服务器自动保存已发送邮件的服务商 (预设的 <code>autoSavesSent</code> 为 <code>true</code>, 如 Gmail, QQ, Outlook.com) 不再追加副本, 其余服务商在收信协议为 IMAP 时追加到预设或服务器标记的 &quot;已发送&quot; 文件夹. 显式传 <code>true</code> 或 <code>false</code> 分别强制追加或跳过 (服务器自动保存时 <code>true</code> 也不追加, 避免重复). 追加失败不影响发送结果, 只记录在 <code>saveError</code> 中.</p>\n<pre><code class=\"lang-js\">let result = client.send({\n    to: [&#39;a@example.com&#39;, { name: &#39;B&#39;, address: &#39;b@example.com&#39; }],\n    cc: &#39;c@example.com&#39;,\n    subject: &#39;周报&#39;,\n    text: &#39;纯文本正文&#39;,\n    html: &#39;&lt;p&gt;HTML 正文&lt;/p&gt;&#39;,\n    attachments: [\n        &#39;/sdcard/Download/report.pdf&#39;,\n        { path: &#39;/sdcard/Download/logo.png&#39;, contentId: &#39;logo&#39;, inline: true },\n    ],\n});\nconsole.log(result.messageId, result.accepted.length, result.sentCopy);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] send"
+        },
+        {
+          "textRaw": "[m#] folders",
+          "name": "[m#]_folders",
+          "methods": [
+            {
+              "textRaw": "client.folders(options?)",
+              "type": "method",
+              "name": "folders",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 列表选项<ul>\n<li><strong>[ subscribedOnly = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 只列出已订阅的文件夹</li>\n<li><strong>[ status = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 同时读取各文件夹的邮件数与未读数</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailfolder\">MailFolder</a><a href=\"dataTypes#array\">[]</a> } - 文件夹树</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.foldersAsync(options?)",
+              "type": "method",
+              "name": "foldersAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 列表选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailfolder\">MailFolder</a><a href=\"dataTypes#array\">[]</a></li>\n</ul>\n<p>列出文件夹树, 子文件夹在各项的 <code>children</code> 中. <code>status</code> 为 <code>true</code> 时每个文件夹多一次服务器往返, 文件夹很多时耗时明显. POP3 只返回 <code>INBOX</code>.</p>\n<pre><code class=\"lang-js\">function walk(folders, depth) {\n    folders.forEach(f =&gt; {\n        console.log(&#39; &#39;.repeat(depth * 2) + f.path, f.specialUse || &#39;&#39;, f.unseen);\n        walk(f.children, depth + 1);\n    });\n}\nwalk(client.folders({ status: true }), 0);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] folders"
+        },
+        {
+          "textRaw": "[m#] folder",
+          "name": "[m#]_folder",
+          "methods": [
+            {
+              "textRaw": "client.folder(path)",
+              "type": "method",
+              "name": "folder",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - <a href=\"#文件夹对象-folder-object\">文件夹对象</a></li>\n</ul>\n<p>返回绑定到 <code>path</code> 的轻量对象, 不访问网络. 其方法见 <a href=\"#文件夹对象-folder-object\">文件夹对象</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] folder"
+        },
+        {
+          "textRaw": "[m#] folderStatus",
+          "name": "[m#]_folderstatus",
+          "methods": [
+            {
+              "textRaw": "client.folderStatus(path)",
+              "type": "method",
+              "name": "folderStatus",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailfolderstatus\">MailFolderStatus</a> } - 文件夹状态</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.folderStatusAsync(path)",
+              "type": "method",
+              "name": "folderStatusAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailfolderstatus\">MailFolderStatus</a></li>\n</ul>\n<p>读取文件夹的邮件数, 未读数, 下一个 UID 与 UIDVALIDITY. 文件夹不存在时抛出 <code>FOLDER_NOT_FOUND</code>. 仅 IMAP.</p>\n<pre><code class=\"lang-js\">let status = client.folderStatus(&#39;INBOX&#39;);\nconsole.log(status.messages, status.unseen, status.uidNext);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] folderStatus"
+        },
+        {
+          "textRaw": "[m#] createFolder",
+          "name": "[m#]_createfolder",
+          "methods": [
+            {
+              "textRaw": "client.createFolder(path)",
+              "type": "method",
+              "name": "createFolder",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 新文件夹路径, 父级需已存在</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailfolder\">MailFolder</a> } - 新建的文件夹</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.createFolderAsync(path)",
+              "type": "method",
+              "name": "createFolderAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 新文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailfolder\">MailFolder</a></li>\n</ul>\n<p>创建并订阅文件夹. 仅 IMAP. 部分服务商 (如 QQ) 对新建文件夹的可见性有几十秒延迟.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] createFolder"
+        },
+        {
+          "textRaw": "[m#] deleteFolder",
+          "name": "[m#]_deletefolder",
+          "methods": [
+            {
+              "textRaw": "client.deleteFolder(path)",
+              "type": "method",
+              "name": "deleteFolder",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 恒为 <code>true</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.deleteFolderAsync(path)",
+              "type": "method",
+              "name": "deleteFolderAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <code>true</code></li>\n</ul>\n<p>删除文件夹及其中的邮件. 文件夹不存在时抛出 <code>FOLDER_NOT_FOUND</code>. 仅 IMAP.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] deleteFolder"
+        },
+        {
+          "textRaw": "[m#] renameFolder",
+          "name": "[m#]_renamefolder",
+          "methods": [
+            {
+              "textRaw": "client.renameFolder(path, newPath)",
+              "type": "method",
+              "name": "renameFolder",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 现有文件夹路径</li>\n<li><strong>newPath</strong> { <a href=\"dataTypes#string\">string</a> } - 新路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailfolder\">MailFolder</a> } - 改名后的文件夹</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "newPath"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.renameFolderAsync(path, newPath)",
+              "type": "method",
+              "name": "renameFolderAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - 现有文件夹路径</li>\n<li><strong>newPath</strong> { <a href=\"dataTypes#string\">string</a> } - 新路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"#mailfolder\">MailFolder</a></li>\n</ul>\n<p>重命名或移动文件夹 (新路径含不同父级时). 仅 IMAP.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "newPath"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] renameFolder"
+        },
+        {
+          "textRaw": "[m#] fetch",
+          "name": "[m#]_fetch",
+          "methods": [
+            {
+              "textRaw": "client.fetch(options?)",
+              "type": "method",
+              "name": "fetch",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 列表选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><strong>[ limit = 50 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最多返回的邮件数, 上限 1000</li>\n<li><strong>[ before ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 只返回 UID 小于此值的邮件, 用于向更早翻页</li>\n<li><strong>[ after ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 只返回 UID 大于此值的邮件, 用于取增量</li>\n<li><strong>[ order = <code>&#39;desc&#39;</code> ]</strong> { <code>&#39;desc&#39;</code> | <code>&#39;asc&#39;</code> } - <code>&#39;desc&#39;</code> 最新在前, <code>&#39;asc&#39;</code> 最早在前</li>\n<li><strong>[ unseenOnly = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 只返回未读邮件 (仅 IMAP)</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"mailMessageType\">MailMessage</a><a href=\"dataTypes#array\">[]</a> } - 邮件摘要列表</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.fetchAsync(options?)",
+              "type": "method",
+              "name": "fetchAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 列表选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"mailMessageType\">MailMessage</a><a href=\"dataTypes#array\">[]</a></li>\n</ul>\n<p>列出文件夹中的邮件摘要 (信封, 标记, 大小与是否含附件, 不含正文). 需要正文时对单条结果调用 <a href=\"mailMessageType#m-load\">load</a> 或对客户端调用 <a href=\"#m-get\">get</a>.</p>\n<p><code>before</code> 与 <code>after</code> 都是 UID 游标 (POP3 上为 UIDL 字符串), 不是日期. 按日期筛选请使用 <a href=\"#m-search\">search</a>.</p>\n<pre><code class=\"lang-js\">// 翻页读取 INBOX 全部邮件, 每页 100 条.\nlet cursor = undefined;\nwhile (true) {\n    let page = client.fetch({ limit: 100, before: cursor });\n    if (page.length === 0) break;\n    page.forEach(m =&gt; console.log(m.uid, m.subject));\n    cursor = page[page.length - 1].uid;\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] fetch"
+        },
+        {
+          "textRaw": "[m#] search",
+          "name": "[m#]_search",
+          "methods": [
+            {
+              "textRaw": "client.search(query, options?)",
+              "type": "method",
+              "name": "search",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>query</strong> { <a href=\"mailSearchQueryType\">MailSearchQuery</a> } - 查询条件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 搜索选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><strong>[ limit = 50 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 最多返回的邮件数, 上限 1000</li>\n<li><strong>[ before ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 只返回 UID 小于此值的邮件</li>\n<li><strong>[ fallback = <code>&#39;client&#39;</code> ]</strong> { <code>&#39;client&#39;</code> | <code>&#39;none&#39;</code> | <code>&#39;always&#39;</code> } - 客户端过滤策略</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"mailMessageType\">MailMessage</a><a href=\"dataTypes#array\">[]</a> } - 命中的邮件摘要, 最新在前; 数组附带不可枚举的 <code>fallback</code> 属性 (<code>&#39;server&#39;</code> 或 <code>&#39;client&#39;</code>) 说明命中来自服务器搜索还是客户端过滤</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.searchAsync(query, options?)",
+              "type": "method",
+              "name": "searchAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>query</strong> { <a href=\"mailSearchQueryType\">MailSearchQuery</a> } - 查询条件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 搜索选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"mailMessageType\">MailMessage</a><a href=\"dataTypes#array\">[]</a></li>\n</ul>\n<p>按条件搜索邮件. IMAP 上优先由服务器执行 SEARCH; 服务器拒绝该查询 (如不支持非 ASCII 关键字) 且 <code>fallback</code> 为 <code>&#39;client&#39;</code> 时, 改为在客户端拉取最近的信封逐条过滤, 最多扫描 2000 条. <code>&#39;none&#39;</code> 禁止客户端过滤, 服务器拒绝时直接抛出; <code>&#39;always&#39;</code> 不询问服务器, 适合服务器搜索漏掉刚送达邮件的服务商 (如 163 / 126).</p>\n<p>POP3 只能在客户端过滤, 且只有信封字段可用 (最多扫描 200 条), <code>body</code> / <code>text</code> 等正文条件不可用.</p>\n<pre><code class=\"lang-js\">let hits = client.search({\n    from: &#39;boss@example.com&#39;,\n    subject: &#39;验证码&#39;,\n    since: &#39;2026-09-01&#39;,\n    seen: false,\n}, { limit: 20 });\nconsole.log(hits.length, hits.fallback);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] search"
+        },
+        {
+          "textRaw": "[m#] get",
+          "name": "[m#]_get",
+          "methods": [
+            {
+              "textRaw": "client.get(uid, options?)",
+              "type": "method",
+              "name": "get",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>uid</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> } - <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 读取选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径, 传 <a href=\"mailMessageType\">MailMessage</a> 时默认为其 <code>folder</code></li>\n<li><strong>[ peek = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 读取时不将邮件标记为已读</li>\n<li><strong>[ includeRaw = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 同时返回原始 MIME 文本 (<code>raw</code>)</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"mailMessageType\">MailMessage</a> } - 含正文, 头与附件列表的完整邮件</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.getAsync(uid, options?)",
+              "type": "method",
+              "name": "getAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>uid</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> } - <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 读取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"mailMessageType\">MailMessage</a></li>\n</ul>\n<p>读取一封邮件的正文 (<code>text</code>, <code>html</code>), 全部头 (<code>headers</code>) 与附件列表 (<code>attachments</code>, 只含元数据, 附件内容需另行 <a href=\"#m-download\">download</a>). 内联正文总量超过 256 KiB 时被截断, 此时 <code>bodyTruncated</code> 为 <code>true</code>, 未内联的部分列在 <code>bodyParts</code> 中. 邮件不存在时抛出 <code>MESSAGE_NOT_FOUND</code>.</p>\n<pre><code class=\"lang-js\">let message = client.get(4711, { peek: false }); // 读取并标记为已读.\nconsole.log(message.subject, message.from.toString());\nconsole.log(message.text || message.html);\nconsole.log(message.headers[&#39;message-id&#39;]);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] get"
+        },
+        {
+          "textRaw": "[m#] fetchBody",
+          "name": "[m#]_fetchbody",
+          "methods": [
+            {
+              "textRaw": "client.fetchBody(uid, options?)",
+              "type": "method",
+              "name": "fetchBody",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.fetchBodyAsync(uid, options?)",
+              "type": "method",
+              "name": "fetchBodyAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p><a href=\"#m-get\">get</a> / <a href=\"#m-get\">getAsync</a> 的别名, 参数与结果完全相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] fetchBody"
+        },
+        {
+          "textRaw": "[m#] download",
+          "name": "[m#]_download",
+          "methods": [
+            {
+              "textRaw": "client.download(attachment, target?, options?)",
+              "type": "method",
+              "name": "download",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>attachment</strong> { <a href=\"mailMessageType#mailattachment\">MailAttachment</a> | <a href=\"dataTypes#object\">Object</a> } - <a href=\"#m-get\">get</a> 返回的附件对象, 或 <code>{ uid, partId, folder?, fileName? }</code></li>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项<ul>\n<li><strong>[ folder ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径, 默认取附件对象的 <code>folder</code></li>\n<li><strong>[ overwrite = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 目标文件已存在时是否覆盖</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 落盘文件的绝对路径</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "attachment"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.downloadAsync(attachment, target?, options?)",
+              "type": "method",
+              "name": "downloadAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>attachment</strong> { <a href=\"mailMessageType#mailattachment\">MailAttachment</a> | <a href=\"dataTypes#object\">Object</a> } - 附件对象或 <code>{ uid, partId }</code></li>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项<ul>\n<li><strong>[ folder ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><strong>[ overwrite = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否覆盖同名文件</li>\n<li><strong>[ onProgress ]</strong> { <a href=\"dataTypes#function\">Function</a> } - 进度回调 <code>(transferred, total)</code>, <code>total</code> 未知时为 <code>null</code></li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为落盘文件的绝对路径</li>\n</ul>\n<p>将附件流式写入文件. <code>target</code> 为目录 (已存在或以分隔符结尾) 时使用附件的 <code>fileName</code> 作为文件名; 为文件路径时按该路径保存. <code>overwrite</code> 为 <code>false</code> 且目标已存在时自动改用带序号的新文件名, 不会覆盖. 附件不存在时抛出 <code>ATTACHMENT_NOT_FOUND</code>, 超过 200 MiB 时抛出 <code>LIMIT_EXCEEDED</code>. 进度回调只在 <code>Async</code> 形态可用.</p>\n<pre><code class=\"lang-js\">let message = client.get(4711);\nmessage.attachments.forEach(a =&gt; {\n    let path = client.download(a, files.join(files.cwd(), &#39;attachments&#39;));\n    console.log(a.fileName, a.size, path);\n});\nclient.downloadAsync({ uid: 4711, partId: &#39;2&#39; }, &#39;/sdcard/Download/&#39;, {\n    onProgress: (done, total) =&gt; console.log(done, total),\n}).then(path =&gt; console.log(path));\n</code></pre>\n<p>附件对象自身也有 <a href=\"mailMessageType#m-download\">download</a> 方法, 等价于此方法.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "attachment"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] download"
+        },
+        {
+          "textRaw": "[m#] raw",
+          "name": "[m#]_raw",
+          "methods": [
+            {
+              "textRaw": "client.raw(uid, target?, options?)",
+              "type": "method",
+              "name": "raw",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>uid</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> } - <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径, 目录时文件名为 <code>&lt;uid&gt;.eml</code></li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><strong>[ overwrite = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否覆盖同名文件</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 落盘文件的绝对路径</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.rawAsync(uid, target?, options?)",
+              "type": "method",
+              "name": "rawAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>uid</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> } - <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项, 另支持 <code>onProgress</code> 进度回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为落盘文件的绝对路径</li>\n</ul>\n<p>将整封邮件的原始 MIME 内容 (<code>.eml</code>) 写入文件, 大小上限与附件相同. 只需在脚本中读取原文时, 可改用 <a href=\"#m-get\">get</a> 的 <code>includeRaw</code> 选项.</p>\n<pre><code class=\"lang-js\">console.log(client.raw(4711, &#39;/sdcard/Download/&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uid"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] raw"
+        },
+        {
+          "textRaw": "[m#] setFlags",
+          "name": "[m#]_setflags",
+          "methods": [
+            {
+              "textRaw": "client.setFlags(uids, flags, mode?, options?)",
+              "type": "method",
+              "name": "setFlags",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>uids</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> | <a href=\"dataTypes#array\">Array</a> } - 一个或多个 <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>flags</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 标记名, 系统标记 <code>&#39;seen&#39;</code>, <code>&#39;flagged&#39;</code>, <code>&#39;answered&#39;</code>, <code>&#39;draft&#39;</code>, <code>&#39;deleted&#39;</code> 或自定义关键字</li>\n<li><strong>[ mode = <code>&#39;add&#39;</code> ]</strong> { <code>&#39;add&#39;</code> | <code>&#39;remove&#39;</code> | <code>&#39;set&#39;</code> } - 添加, 移除或整体替换</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#array\">Array</a> } - 受影响的 UID 数组</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "flags"
+                    },
+                    {
+                      "name": "mode?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.setFlagsAsync(uids, flags, mode?, options?)",
+              "type": "method",
+              "name": "setFlagsAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为受影响的 UID 数组</li>\n</ul>\n<p>修改邮件标记. 自定义关键字 (如 <code>&#39;$Important&#39;</code>, <code>&#39;Project-X&#39;</code>) 由服务器决定是否持久保存, Gmail, QQ 与 163 均可保存. <code>&#39;recent&#39;</code> 是只读标记, 不能设置. 仅 IMAP.</p>\n<pre><code class=\"lang-js\">client.setFlags([4711, 4712], [&#39;seen&#39;, &#39;Project-X&#39;]);\nclient.setFlags(4711, &#39;flagged&#39;, &#39;remove&#39;);\nclient.setFlags(4711, [&#39;seen&#39;], &#39;set&#39;, { folder: &#39;Archive&#39; }); // 替换为只有已读.\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "flags"
+                    },
+                    {
+                      "name": "mode?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setFlags"
+        },
+        {
+          "textRaw": "[m#] markRead",
+          "name": "[m#]_markread",
+          "methods": [
+            {
+              "textRaw": "client.markRead(uids, options?)",
+              "type": "method",
+              "name": "markRead",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.markReadAsync(uids, options?)",
+              "type": "method",
+              "name": "markReadAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p>相当于 <code>setFlags(uids, &#39;seen&#39;, &#39;add&#39;, options)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] markRead"
+        },
+        {
+          "textRaw": "[m#] markUnread",
+          "name": "[m#]_markunread",
+          "methods": [
+            {
+              "textRaw": "client.markUnread(uids, options?)",
+              "type": "method",
+              "name": "markUnread",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.markUnreadAsync(uids, options?)",
+              "type": "method",
+              "name": "markUnreadAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p>相当于 <code>setFlags(uids, &#39;seen&#39;, &#39;remove&#39;, options)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] markUnread"
+        },
+        {
+          "textRaw": "[m#] flag",
+          "name": "[m#]_flag",
+          "methods": [
+            {
+              "textRaw": "client.flag(uids, options?)",
+              "type": "method",
+              "name": "flag",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.flagAsync(uids, options?)",
+              "type": "method",
+              "name": "flagAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p>相当于 <code>setFlags(uids, &#39;flagged&#39;, &#39;add&#39;, options)</code>, 即加星标.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] flag"
+        },
+        {
+          "textRaw": "[m#] unflag",
+          "name": "[m#]_unflag",
+          "methods": [
+            {
+              "textRaw": "client.unflag(uids, options?)",
+              "type": "method",
+              "name": "unflag",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.unflagAsync(uids, options?)",
+              "type": "method",
+              "name": "unflagAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p>相当于 <code>setFlags(uids, &#39;flagged&#39;, &#39;remove&#39;, options)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] unflag"
+        },
+        {
+          "textRaw": "[m#] move",
+          "name": "[m#]_move",
+          "methods": [
+            {
+              "textRaw": "client.move(uids, folder, options?)",
+              "type": "method",
+              "name": "move",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>uids</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> | <a href=\"dataTypes#array\">Array</a> } - 一个或多个 <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>folder</strong> { <a href=\"dataTypes#string\">string</a> } - 目标文件夹路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 选项<ul>\n<li><strong>[ from = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 来源文件夹路径</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#array\">Array</a> | <a href=\"dataTypes#boolean\">boolean</a> } - 服务器支持 UIDPLUS 时为邮件在目标文件夹中的新 UID 数组, 否则为 <code>true</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.moveAsync(uids, folder, options?)",
+              "type": "method",
+              "name": "moveAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值同上</li>\n</ul>\n<p>移动邮件. 服务器支持 MOVE 时原子完成, 否则以复制加删除加清除模拟. 仅 IMAP.</p>\n<pre><code class=\"lang-js\">let moved = client.move(client.search({ from: &#39;newsletter@example.com&#39; }), &#39;Newsletters&#39;);\nconsole.log(moved);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] move"
+        },
+        {
+          "textRaw": "[m#] copy",
+          "name": "[m#]_copy",
+          "methods": [
+            {
+              "textRaw": "client.copy(uids, folder, options?)",
+              "type": "method",
+              "name": "copy",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.copyAsync(uids, folder, options?)",
+              "type": "method",
+              "name": "copyAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<p>参数与返回值同 <a href=\"#m-move\">move</a>, 但保留来源邮件. 仅 IMAP.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] copy"
+        },
+        {
+          "textRaw": "[m#] delete",
+          "name": "[m#]_delete",
+          "methods": [
+            {
+              "textRaw": "client.delete(uids, options?)",
+              "type": "method",
+              "name": "delete",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>uids</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> | <a href=\"mailMessageType\">MailMessage</a> | <a href=\"dataTypes#array\">Array</a> } - 一个或多个 <a href=\"mailMessageType#uid-参数-uid-argument\">UID 参数</a></li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 选项<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><strong>[ expunge = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - IMAP 上是否随即清除</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#array\">Array</a> } - 受影响的 UID 数组</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.deleteAsync(uids, options?)",
+              "type": "method",
+              "name": "deleteAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为受影响的 UID 数组</li>\n</ul>\n<p>IMAP 上为邮件添加 <code>deleted</code> 标记, <code>expunge</code> 为 <code>true</code> 时立即清除, 否则邮件保留到下次 <a href=\"#m-expunge\">expunge</a>. 服务商对带 <code>deleted</code> 标记邮件的处理各不相同 (隐藏, 移入回收站或保留在列表中), 需要确定结果时使用 <code>expunge: true</code>. POP3 上标记 <code>DELE</code>, 在本次调用结束时提交, 不可撤销.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "uids"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] delete"
+        },
+        {
+          "textRaw": "[m#] expunge",
+          "name": "[m#]_expunge",
+          "methods": [
+            {
+              "textRaw": "client.expunge(folder?)",
+              "type": "method",
+              "name": "expunge",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 清除的邮件数</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "folder?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.expungeAsync(folder?)",
+              "type": "method",
+              "name": "expungeAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 文件夹路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为清除的邮件数</li>\n</ul>\n<p>永久删除文件夹中带 <code>deleted</code> 标记的邮件. 仅 IMAP.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "folder?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] expunge"
+        },
+        {
+          "textRaw": "[m#] append",
+          "name": "[m#]_append",
+          "methods": [
+            {
+              "textRaw": "client.append(folder, message, flags?)",
+              "type": "method",
+              "name": "append",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>folder</strong> { <a href=\"dataTypes#string\">string</a> } - 目标文件夹路径</li>\n<li><strong>message</strong> { <a href=\"mailMessageType#mailsendmessage\">MailSendMessage</a> } - 邮件内容, 字段与发送相同</li>\n<li><strong>[ flags ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 初始标记, 如 <code>[&#39;seen&#39;]</code> 或 <code>[&#39;draft&#39;]</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 服务器报告 APPENDUID 时为新邮件的 UID, 否则为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "client.appendAsync(folder, message, flags?)",
+              "type": "method",
+              "name": "appendAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为新 UID 或 <code>null</code></li>\n</ul>\n<p>不经 SMTP 发送, 直接把一封邮件写入文件夹, 常用于保存草稿或归档. 仅 IMAP.</p>\n<pre><code class=\"lang-js\">let uid = client.append(&#39;Drafts&#39;, { to: &#39;you@example.com&#39;, subject: &#39;草稿&#39;, text: &#39;稍后补充&#39; }, [&#39;draft&#39;]);\nconsole.log(uid);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "folder"
+                    },
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] append"
+        },
+        {
+          "textRaw": "[m#] watch",
+          "name": "[m#]_watch",
+          "methods": [
+            {
+              "textRaw": "client.watch(folder?, options?)",
+              "type": "method",
+              "name": "watch",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ folder = <code>&#39;INBOX&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 监听的文件夹路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 监听选项 (只传一个对象参数时也可把 <code>folder</code> 写在其中)<ul>\n<li><strong>[ mode = <code>&#39;auto&#39;</code> ]</strong> { <code>&#39;auto&#39;</code> | <code>&#39;idle&#39;</code> | <code>&#39;poll&#39;</code> } - <code>&#39;auto&#39;</code> 在服务器支持 IDLE 时推送, 否则轮询; <code>&#39;idle&#39;</code> 强制推送 (不支持时以错误关闭); <code>&#39;poll&#39;</code> 强制轮询</li>\n<li><strong>[ pollIntervalMs = 60000 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 轮询间隔, 最小 15000</li>\n<li><strong>[ fetchBody = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - <code>message</code> 事件的邮件是否已含正文</li>\n<li><strong>[ reconnect = true ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 连接断开后是否自动重连并继续监听</li>\n</ul>\n</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#mailwatch\">MailWatch</a> } - 监听对象</li>\n</ul>\n<p>开始监听文件夹的新邮件, 立即返回, 事件在脚本线程上派发, 因此脚本需保持运行 (如 UI 模式, <code>setInterval</code> 或事件循环), 不需要也不应使用 <code>sleep</code> 循环等待. 每个客户端最多同时打开 4 个监听, 超出时抛出 <code>LIMIT_EXCEEDED</code>.</p>\n<p>监听在插件进程中运行. Gmail 的 IDLE 推送约在送达后 30 秒内到达; QQ, Sina 接受 IDLE 但不推送, 163 / 126 不支持 IDLE, 这些服务商在 <code>&#39;auto&#39;</code> 下自动轮询 (QQ 的新邮件在送达后 15 到 40 秒可见). 服务器周期性断开连接时插件自动重连, 不产生 <code>error</code> 事件; 无法保证增量连续时触发 <code>resync</code>. 详见 <a href=\"#mailwatch\">MailWatch</a> 与预设的 <code>idlePush</code> 字段.</p>\n<pre><code class=\"lang-js\">let watch = client.watch({ folder: &#39;INBOX&#39;, mode: &#39;auto&#39;, fetchBody: true });\nwatch.on(&#39;message&#39;, (m, w) =&gt; console.log(w.mode, m.uid, m.subject));\nwatch.on(&#39;mode&#39;, mode =&gt; console.log(&#39;mode:&#39;, mode));\nwatch.on(&#39;resync&#39;, reason =&gt; console.log(&#39;resync:&#39;, reason));\nwatch.on(&#39;error&#39;, e =&gt; console.warn(e.toString()));\nwatch.on(&#39;close&#39;, reason =&gt; console.log(&#39;closed:&#39;, reason));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "folder?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] watch"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "client.close()",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>停止本客户端的全部监听并关闭连接. 重复调用无副作用. 之后的方法调用失败于 <code>SESSION_CLOSED</code>. 若本客户端是默认客户端, 默认设置同时清除.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "client.toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 形如 <code>MailClient { provider=qq, address=user@qq.com }</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "文件夹对象 (Folder Object)",
+          "name": "文件夹对象_(folder_object)",
+          "desc": "<p><a href=\"#m-folder\">client.folder(path)</a> 返回的对象把文件夹路径绑定到客户端, 方法与 <a href=\"#m-folderstatus\">folderStatus</a>, <a href=\"#m-createfolder\">createFolder</a>, <a href=\"#m-deletefolder\">deleteFolder</a>, <a href=\"#m-renamefolder\">renameFolder</a> 一一对应, 各自也有 <code>Async</code> 形态.</p>\n<table>\n<thead>\n<tr>\n<th>成员</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>path</code></td>\n<td>文件夹路径</td>\n</tr>\n<tr>\n<td><code>name</code></td>\n<td>路径的最后一段</td>\n</tr>\n<tr>\n<td><code>status()</code> / <code>statusAsync()</code></td>\n<td>等价于 <code>client.folderStatus(path)</code></td>\n</tr>\n<tr>\n<td><code>create()</code> / <code>createAsync()</code></td>\n<td>等价于 <code>client.createFolder(path)</code></td>\n</tr>\n<tr>\n<td><code>delete()</code> / <code>deleteAsync()</code></td>\n<td>等价于 <code>client.deleteFolder(path)</code></td>\n</tr>\n<tr>\n<td><code>rename(newPath)</code> / <code>renameAsync(newPath)</code></td>\n<td>等价于 <code>client.renameFolder(path, newPath)</code></td>\n</tr>\n<tr>\n<td><code>toString()</code></td>\n<td>返回 <code>path</code></td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">let archive = client.folder(&#39;Archive/2026&#39;);\nif (!client.folders().some(f =&gt; f.path === archive.path)) {\n    archive.create();\n}\nconsole.log(archive.status().messages);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "文件夹对象 (Folder Object)"
+        },
+        {
+          "textRaw": "MailFolder",
+          "name": "mailfolder",
+          "desc": "<p><a href=\"#m-folders\">folders</a>, <a href=\"#m-createfolder\">createFolder</a> 与 <a href=\"#m-renamefolder\">renameFolder</a> 返回的文件夹对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>name</code></td>\n<td>string</td>\n<td>显示名, 即路径的最后一段</td>\n</tr>\n<tr>\n<td><code>path</code></td>\n<td>string</td>\n<td>完整路径, 作为其他方法的 <code>folder</code> 参数</td>\n</tr>\n<tr>\n<td><code>delimiter</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>层级分隔符, 如 <code>&#39;/&#39;</code> 或 <code>&#39;.&#39;</code></td>\n</tr>\n<tr>\n<td><code>specialUse</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>文件夹用途: <code>&#39;inbox&#39;</code>, <code>&#39;sent&#39;</code>, <code>&#39;drafts&#39;</code>, <code>&#39;trash&#39;</code>, <code>&#39;junk&#39;</code>, <code>&#39;archive&#39;</code>, <code>&#39;all&#39;</code>, <code>&#39;flagged&#39;</code>, <code>&#39;important&#39;</code> 或 <code>null</code>. 来自服务器的 SPECIAL-USE 属性, 服务器不提供时按常见文件夹名推断</td>\n</tr>\n<tr>\n<td><code>selectable</code></td>\n<td>boolean</td>\n<td>能否打开 (纯目录节点为 <code>false</code>)</td>\n</tr>\n<tr>\n<td><code>subscribed</code></td>\n<td>boolean</td>\n<td>是否已订阅</td>\n</tr>\n<tr>\n<td><code>messages</code></td>\n<td>number \\</td>\n<td>null</td>\n<td>邮件数, 仅 <code>status: true</code> 时存在</td>\n</tr>\n<tr>\n<td><code>unseen</code></td>\n<td>number \\</td>\n<td>null</td>\n<td>未读数, 仅 <code>status: true</code> 时存在</td>\n</tr>\n<tr>\n<td><code>children</code></td>\n<td>MailFolder[]</td>\n<td>子文件夹</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "MailFolder"
+        },
+        {
+          "textRaw": "MailFolderStatus",
+          "name": "mailfolderstatus",
+          "desc": "<p><a href=\"#m-folderstatus\">folderStatus</a> 返回的对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>name</code></td>\n<td>string</td>\n<td>显示名</td>\n</tr>\n<tr>\n<td><code>path</code></td>\n<td>string</td>\n<td>完整路径</td>\n</tr>\n<tr>\n<td><code>messages</code></td>\n<td>number</td>\n<td>邮件数</td>\n</tr>\n<tr>\n<td><code>unseen</code></td>\n<td>number</td>\n<td>未读数</td>\n</tr>\n<tr>\n<td><code>recent</code></td>\n<td>number \\</td>\n<td>null</td>\n<td>自上次打开以来的新邮件数, 服务器不报告时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>uidNext</code></td>\n<td>number \\</td>\n<td>null</td>\n<td>下一封邮件将获得的 UID</td>\n</tr>\n<tr>\n<td><code>uidValidity</code></td>\n<td>number \\</td>\n<td>null</td>\n<td>UID 有效期标识, 变化时以前保存的 UID 全部失效</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "MailFolderStatus"
+        },
+        {
+          "textRaw": "MailSendResult",
+          "name": "mailsendresult",
+          "desc": "<p><a href=\"#m-send\">send</a> 返回的对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>messageId</code></td>\n<td>string</td>\n<td>邮件的 Message-ID</td>\n</tr>\n<tr>\n<td><code>accepted</code></td>\n<td>string[]</td>\n<td>服务器接受的收件人地址</td>\n</tr>\n<tr>\n<td><code>rejected</code></td>\n<td>string[]</td>\n<td>服务器拒绝的收件人地址</td>\n</tr>\n<tr>\n<td><code>savedToSent</code></td>\n<td>boolean</td>\n<td>是否已由插件追加副本到 &quot;已发送&quot; 文件夹</td>\n</tr>\n<tr>\n<td><code>sentCopy</code></td>\n<td>string</td>\n<td>副本来源: <code>&#39;server&#39;</code> (服务商自动保存), <code>&#39;appended&#39;</code> (插件追加), <code>&#39;failed&#39;</code> (追加失败) 或 <code>&#39;none&#39;</code> (未保存)</td>\n</tr>\n<tr>\n<td><code>sentFolder</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>副本所在文件夹</td>\n</tr>\n<tr>\n<td><code>saveError</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>追加失败时的原因</td>\n</tr>\n<tr>\n<td><code>elapsedMs</code></td>\n<td>number</td>\n<td>总耗时 (毫秒)</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "MailSendResult"
+        },
+        {
+          "textRaw": "MailSessionTestResult",
+          "name": "mailsessiontestresult",
+          "desc": "<p><a href=\"#m-test\">test</a> 返回的对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>ok</code></td>\n<td>boolean</td>\n<td>所有探测的端点都成功</td>\n</tr>\n<tr>\n<td><code>account</code></td>\n<td>Object</td>\n<td>不含凭据的账户快照, 同 <a href=\"#p-account\">account</a></td>\n</tr>\n<tr>\n<td><code>imap</code></td>\n<td>Object \\</td>\n<td>null</td>\n<td>IMAP 端点报告, 收信协议为 POP3 时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>pop3</code></td>\n<td>Object \\</td>\n<td>null</td>\n<td>POP3 端点报告, 收信协议为 IMAP 时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>smtp</code></td>\n<td>Object \\</td>\n<td>null</td>\n<td>SMTP 端点报告, 未配置 SMTP 时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>elapsedMs</code></td>\n<td>number</td>\n<td>总耗时 (毫秒)</td>\n</tr>\n</tbody>\n</table>\n<p>端点报告包含 <code>protocol</code>, <code>host</code>, <code>port</code>, <code>tls</code>, <code>ok</code>, <code>elapsedMs</code>, <code>capabilities</code> (服务器宣告的能力或扩展, 如 <code>&#39;IDLE&#39;</code>, <code>&#39;UIDPLUS&#39;</code>, <code>&#39;MOVE&#39;</code>, <code>&#39;SIZE&#39;</code>) 与 <code>error</code> (失败时为 <code>{ code, message, details, retryable }</code>, 否则为 <code>null</code>).</p>\n",
+          "type": "module",
+          "displayName": "MailSessionTestResult"
+        },
+        {
+          "textRaw": "MailWatch",
+          "name": "mailwatch",
+          "desc": "<p><a href=\"#m-watch\">watch</a> 返回的监听对象, 是 <a href=\"eventEmitterType\">EventEmitter</a> 的实例, <code>on</code> / <code>once</code> 返回自身以便链式调用.</p>\n",
+          "modules": [
+            {
+              "textRaw": "属性 (Properties)",
+              "name": "属性_(properties)",
+              "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>folder</code></td>\n<td>string</td>\n<td>监听的文件夹路径</td>\n</tr>\n<tr>\n<td><code>mode</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>当前推送方式 <code>&#39;idle&#39;</code> 或 <code>&#39;poll&#39;</code>, 尚未确定时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>generation</code></td>\n<td>number</td>\n<td>重连代数, 每次重连后加一</td>\n</tr>\n<tr>\n<td><code>isActive</code></td>\n<td>boolean</td>\n<td>是否仍在监听</td>\n</tr>\n<tr>\n<td><code>isClosed</code></td>\n<td>boolean</td>\n<td>是否已关闭</td>\n</tr>\n<tr>\n<td><code>state</code></td>\n<td>string</td>\n<td><code>&#39;active&#39;</code> 或 <code>&#39;closed&#39;</code></td>\n</tr>\n<tr>\n<td><code>reason</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>关闭原因, 未关闭时为 <code>null</code></td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "属性 (Properties)"
+            },
+            {
+              "textRaw": "方法 (Methods)",
+              "name": "方法_(methods)",
+              "desc": "<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>stop()</code></td>\n<td>停止监听, 随后触发 <code>close</code> 事件 (原因 <code>&#39;stopped&#39;</code>). 重复调用无副作用</td>\n</tr>\n<tr>\n<td><code>on(event, listener)</code> / <code>once(event, listener)</code></td>\n<td>注册监听器, 返回自身</td>\n</tr>\n</tbody>\n</table>\n",
+              "type": "module",
+              "displayName": "方法 (Methods)"
+            },
+            {
+              "textRaw": "事件 (Events)",
+              "name": "事件_(events)",
+              "desc": "<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>回调参数</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>message</code></td>\n<td><code>(message: MailMessage, watch: MailWatch)</code></td>\n<td>新邮件到达. <code>fetchBody: true</code> 时已含正文, 否则只有摘要, 可用 <code>message.load()</code> 读取</td>\n</tr>\n<tr>\n<td><code>mode</code></td>\n<td>`(mode: &#39;idle&#39; \\</td>\n<td>&#39;poll&#39;)`</td>\n<td>推送方式确定或切换</td>\n</tr>\n<tr>\n<td><code>resync</code></td>\n<td><code>(reason: string)</code></td>\n<td>插件无法保证增量连续 (如 <code>&#39;rewatched&#39;</code> 重连后, <code>&#39;queue-overflow&#39;</code> 事件积压超过 256 条), 脚本应自行 <a href=\"#m-fetch\">fetch</a> 补齐</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><code>(err: MailError)</code></td>\n<td>可恢复错误 (会继续重连) 或不可恢复错误 (随后 <code>close</code>)</td>\n</tr>\n<tr>\n<td><code>close</code></td>\n<td><code>(reason: string)</code></td>\n<td>监听已结束, 不再有事件. 原因: <code>&#39;stopped&#39;</code>, <code>&#39;error&#39;</code>, <code>&#39;closed&#39;</code> (客户端关闭), <code>&#39;script-exit&#39;</code>, <code>&#39;plugin-died&#39;</code>, <code>&#39;overflow&#39;</code></td>\n</tr>\n</tbody>\n</table>\n<p>建议始终注册 <code>error</code> 与 <code>close</code> 监听器, 否则监听因不可恢复错误结束时脚本无从得知.</p>\n",
+              "type": "module",
+              "displayName": "事件 (Events)"
+            }
+          ],
+          "type": "module",
+          "displayName": "MailWatch"
+        },
+        {
+          "textRaw": "限制 (Limits)",
+          "name": "限制_(limits)",
+          "desc": "<table>\n<thead>\n<tr>\n<th>项目</th>\n<th>上限</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>单次 <code>fetch</code> / <code>search</code> 返回数</td>\n<td>1000 (默认 50)</td>\n</tr>\n<tr>\n<td>客户端过滤扫描的信封数</td>\n<td>IMAP 2000, POP3 200</td>\n</tr>\n<tr>\n<td>内联正文 (<code>text</code> + <code>html</code>)</td>\n<td>256 KiB, 超出后 <code>bodyTruncated</code></td>\n</tr>\n<tr>\n<td>单个附件或原始邮件</td>\n<td>200 MiB</td>\n</tr>\n<tr>\n<td>每封邮件的附件数</td>\n<td>64</td>\n</tr>\n<tr>\n<td>收件人总数 (to + cc + bcc)</td>\n<td>500</td>\n</tr>\n<tr>\n<td>自定义头数 / 头值长度</td>\n<td>32 / 998 字符</td>\n</tr>\n<tr>\n<td>每个客户端的监听数</td>\n<td>4</td>\n</tr>\n<tr>\n<td>监听事件队列</td>\n<td>256</td>\n</tr>\n<tr>\n<td>轮询间隔</td>\n<td>15 秒到 1 小时</td>\n</tr>\n<tr>\n<td>超时设置</td>\n<td>每项最长 10 分钟</td>\n</tr>\n</tbody>\n</table>\n<p>超出上限的调用抛出 <code>LIMIT_EXCEEDED</code>.</p>\n",
+          "type": "module",
+          "displayName": "限制 (Limits)"
+        }
+      ],
+      "type": "module",
+      "displayName": "邮件客户端 (MailClient)"
+    }
+  ]
+}

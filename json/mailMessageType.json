@@ -1,0 +1,348 @@
+{
+  "source": "..\\api\\mailMessageType.md",
+  "modules": [
+    {
+      "textRaw": "邮件消息 (MailMessage)",
+      "name": "邮件消息_(mailmessage)",
+      "desc": "<p>MailMessage 是 <a href=\"mailClientType\">邮件客户端</a> 的 <a href=\"mailClientType#m-fetch\">fetch</a>, <a href=\"mailClientType#m-search\">search</a>, <a href=\"mailClientType#m-get\">get</a> 与 <a href=\"mailClientType#mailwatch\">监听</a> 的 <code>message</code> 事件返回的邮件对象.</p>\n<p><code>fetch</code> 与 <code>search</code> 返回的是摘要 (信封): 有 UID, 主题, 各方地址, 日期, 大小, 标记与是否含附件, 没有正文与附件列表, 此时 <code>bodyLoaded</code> 为 <code>false</code>. 对摘要调用 <a href=\"#m-load\">load</a> 或对客户端调用 <a href=\"mailClientType#m-get\">get</a> 得到含正文的完整对象.</p>\n<p>对象是普通 JavaScript 对象, 可直接 <code>JSON.stringify</code>. <code>date</code> / <code>receivedDate</code> 为 JavaScript <code>Date</code>, 各地址为 <a href=\"#mailaddress\">MailAddress</a>, 附件为 <a href=\"#mailattachment\">MailAttachment</a>. 本章同时说明发送与追加邮件时使用的 <a href=\"#mailsendmessage\">MailSendMessage</a> 以及各方法接受的 <a href=\"#uid-参数-uid-argument\">UID 参数</a>.</p>\n<pre><code class=\"lang-js\">let client = mail.connect(&#39;work&#39;);\nlet latest = client.fetch({ limit: 1 })[0];\nconsole.log(latest.uid, latest.subject, latest.from.toString(), latest.date);\nlet full = latest.load();\nconsole.log(full.text || full.html);\nfull.attachments.forEach(a =&gt; console.log(a.fileName, a.mimeType, a.size));\nclient.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">MailMessage</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] MailMessage",
+          "name": "[@]_mailmessage",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>邮件对象. 不能用 <code>new</code> 构造, 只由客户端方法与监听事件产生.</p>\n",
+          "type": "module",
+          "displayName": "[@] MailMessage"
+        },
+        {
+          "textRaw": "[p#] uid",
+          "name": "[p#]_uid",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>邮件在其文件夹中的唯一标识. IMAP 为正整数 UID, 同一文件夹内递增, 在 <code>uidValidity</code> 不变时稳定; POP3 为服务器分配的 UIDL 字符串.</p>\n",
+          "type": "module",
+          "displayName": "[p#] uid"
+        },
+        {
+          "textRaw": "[p#] folder",
+          "name": "[p#]_folder",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>邮件所在的文件夹路径. 把对象直接作为 <a href=\"#uid-参数-uid-argument\">UID 参数</a> 传给客户端方法时, 默认使用此文件夹.</p>\n",
+          "type": "module",
+          "displayName": "[p#] folder"
+        },
+        {
+          "textRaw": "[p#] messageId",
+          "name": "[p#]_messageid",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p><code>Message-ID</code> 头, 含尖括号, 缺失时为 <code>null</code>. 部分服务商 (如 QQ) 会改写外发邮件的 Message-ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] messageId"
+        },
+        {
+          "textRaw": "[p#] inReplyTo",
+          "name": "[p#]_inreplyto",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p><code>In-Reply-To</code> 头.</p>\n",
+          "type": "module",
+          "displayName": "[p#] inReplyTo"
+        },
+        {
+          "textRaw": "[p#] references",
+          "name": "[p#]_references",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p><code>References</code> 头中的 Message-ID 列表, 没有时为空数组.</p>\n",
+          "type": "module",
+          "displayName": "[p#] references"
+        },
+        {
+          "textRaw": "[p#] subject",
+          "name": "[p#]_subject",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>已解码的主题, 缺失时为空字符串.</p>\n",
+          "type": "module",
+          "displayName": "[p#] subject"
+        },
+        {
+          "textRaw": "[p#] from",
+          "name": "[p#]_from",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>发件人. 部分服务商 (163 / 126) 返回的显示名中空格会变成下划线.</p>\n",
+          "type": "module",
+          "displayName": "[p#] from"
+        },
+        {
+          "textRaw": "[p#] sender",
+          "name": "[p#]_sender",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p><code>Sender</code> 头, 通常为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] sender"
+        },
+        {
+          "textRaw": "[p#] replyTo",
+          "name": "[p#]_replyto",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] replyTo"
+        },
+        {
+          "textRaw": "[p#] to",
+          "name": "[p#]_to",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] to"
+        },
+        {
+          "textRaw": "[p#] cc",
+          "name": "[p#]_cc",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] cc"
+        },
+        {
+          "textRaw": "[p#] bcc",
+          "name": "[p#]_bcc",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailaddress\">MailAddress</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>收件人, 抄送与密送列表, 没有时为空数组. 收到的邮件通常没有 <code>bcc</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bcc"
+        },
+        {
+          "textRaw": "[p#] date",
+          "name": "[p#]_date",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p><code>Date</code> 头, 即发件方声明的发送时间, 无法解析时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] date"
+        },
+        {
+          "textRaw": "[p#] receivedDate",
+          "name": "[p#]_receiveddate",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#date\">Date</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>服务器记录的接收时间 (IMAP INTERNALDATE), POP3 或服务器不提供时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] receivedDate"
+        },
+        {
+          "textRaw": "[p#] size",
+          "name": "[p#]_size",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>邮件在服务器上的字节数.</p>\n",
+          "type": "module",
+          "displayName": "[p#] size"
+        },
+        {
+          "textRaw": "[p#] flags",
+          "name": "[p#]_flags",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>全部标记名: 系统标记 <code>&#39;seen&#39;</code>, <code>&#39;flagged&#39;</code>, <code>&#39;answered&#39;</code>, <code>&#39;draft&#39;</code>, <code>&#39;deleted&#39;</code>, 只读的 <code>&#39;recent&#39;</code>, 以及服务器保存的自定义关键字. POP3 没有标记, 为空数组.</p>\n",
+          "type": "module",
+          "displayName": "[p#] flags"
+        },
+        {
+          "textRaw": "[p#] seen",
+          "name": "[p#]_seen",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] seen"
+        },
+        {
+          "textRaw": "[p#] flagged",
+          "name": "[p#]_flagged",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] flagged"
+        },
+        {
+          "textRaw": "[p#] answered",
+          "name": "[p#]_answered",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] answered"
+        },
+        {
+          "textRaw": "[p#] draft",
+          "name": "[p#]_draft",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] draft"
+        },
+        {
+          "textRaw": "[p#] deleted",
+          "name": "[p#]_deleted",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>对应系统标记是否存在的便捷布尔值.</p>\n",
+          "type": "module",
+          "displayName": "[p#] deleted"
+        },
+        {
+          "textRaw": "[p#] hasAttachments",
+          "name": "[p#]_hasattachments",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否含附件. 摘要阶段由服务器报告的结构 (BODYSTRUCTURE) 判断, POP3 上需读取正文后才准确.</p>\n",
+          "type": "module",
+          "displayName": "[p#] hasAttachments"
+        },
+        {
+          "textRaw": "[p#] bodyLoaded",
+          "name": "[p#]_bodyloaded",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>正文, 头与附件列表是否已加载. <code>fetch</code> / <code>search</code> 的结果为 <code>false</code>, <a href=\"#m-load\">load</a> / <a href=\"mailClientType#m-get\">get</a> 的结果与 <code>fetchBody: true</code> 的监听事件为 <code>true</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bodyLoaded"
+        },
+        {
+          "textRaw": "[p#] text",
+          "name": "[p#]_text",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>纯文本正文, 邮件没有纯文本部分或尚未加载时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] text"
+        },
+        {
+          "textRaw": "[p#] html",
+          "name": "[p#]_html",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>HTML 正文, 邮件没有 HTML 部分或尚未加载时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] html"
+        },
+        {
+          "textRaw": "[p#] headers",
+          "name": "[p#]_headers",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>全部邮件头. 属性名为头名称 (大小写按服务器返回的原样, 查找时建议不区分大小写), 属性值为字符串数组 (同名头可能多次出现). 未加载时为空对象.</p>\n<pre><code class=\"lang-js\">let full = client.get(uid);\nfunction header(message, name) {\n    let key = Object.keys(message.headers).find(k =&gt; k.toLowerCase() === name.toLowerCase());\n    return key ? message.headers[key] : [];\n}\nconsole.log(header(full, &#39;X-Mailer&#39;)); // 如 [&#39;Foo Mailer 1.0&#39;] 或 [].\nconsole.log(header(full, &#39;List-Unsubscribe&#39;));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] headers"
+        },
+        {
+          "textRaw": "[p#] attachments",
+          "name": "[p#]_attachments",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailattachment\">MailAttachment</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>附件列表 (只含元数据). 内联图片等 <code>inline</code> 为 <code>true</code> 的部分也在其中. 未加载时为空数组.</p>\n",
+          "type": "module",
+          "displayName": "[p#] attachments"
+        },
+        {
+          "textRaw": "[p#] bodyTruncated",
+          "name": "[p#]_bodytruncated",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><code>text</code> 与 <code>html</code> 的总量超过 256 KiB 时为 <code>true</code>, 被省略的正文部分列在 <a href=\"#p-bodyparts\">bodyParts</a> 中.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bodyTruncated"
+        },
+        {
+          "textRaw": "[p#] bodyParts",
+          "name": "[p#]_bodyparts",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"#mailattachment\">MailAttachment</a><a href=\"dataTypes#array\">[]</a> }</li>\n</ul>\n<p>因超出内联预算而未随对象返回的正文部分, 每项与附件同形, 可用其 <a href=\"#m-download\">download</a> 方法保存为文件.</p>\n",
+          "type": "module",
+          "displayName": "[p#] bodyParts"
+        },
+        {
+          "textRaw": "[p#] raw",
+          "name": "[p#]_raw",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>以 <code>includeRaw: true</code> 读取时的原始 RFC 822 文本, 每个字节映射为一个字符 (ISO-8859-1). 未请求时为 <code>null</code>. 需要完整原文文件时改用 <a href=\"mailClientType#m-raw\">raw</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] raw"
+        },
+        {
+          "textRaw": "[p#] rawTruncated",
+          "name": "[p#]_rawtruncated",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><code>raw</code> 是否因超出内联预算而被截断.</p>\n",
+          "type": "module",
+          "displayName": "[p#] rawTruncated"
+        },
+        {
+          "textRaw": "[m#] load",
+          "name": "[m#]_load",
+          "methods": [
+            {
+              "textRaw": "message.load(options?)",
+              "type": "method",
+              "name": "load",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"mailClientType#m-get\">client.get</a> 的选项 (<code>peek</code>, <code>includeRaw</code>)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"mailMessageType\">MailMessage</a> } - 含正文的新对象</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "message.loadAsync(options?)",
+              "type": "method",
+              "name": "loadAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同上</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为 <a href=\"mailMessageType\">MailMessage</a></li>\n</ul>\n<p>用产生本对象的客户端读取完整邮件, 等价于 <code>client.get(message, options)</code>. 返回新对象, 不修改原对象. 这两个方法不可枚举, 不会出现在 <code>JSON.stringify</code> 的结果中.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] load"
+        },
+        {
+          "textRaw": "MailAttachment",
+          "name": "mailattachment",
+          "desc": "<p><a href=\"#p-attachments\">attachments</a> 与 <a href=\"#p-bodyparts\">bodyParts</a> 中的附件对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>partId</code></td>\n<td>string</td>\n<td>MIME 部分编号, 如 <code>&#39;2&#39;</code> 或 <code>&#39;1.2&#39;</code>, 与 <code>uid</code> 一起唯一定位附件</td>\n</tr>\n<tr>\n<td><code>fileName</code></td>\n<td>string</td>\n<td>已解码的文件名, 邮件未提供时由插件生成</td>\n</tr>\n<tr>\n<td><code>mimeType</code></td>\n<td>string</td>\n<td>媒体类型, 如 <code>&#39;application/pdf&#39;</code></td>\n</tr>\n<tr>\n<td><code>size</code></td>\n<td>number</td>\n<td>传输编码后的字节数 (Base64 编码的附件约为原文件的 4/3), 未知时为 <code>-1</code></td>\n</tr>\n<tr>\n<td><code>contentId</code></td>\n<td>string \\</td>\n<td>null</td>\n<td><code>Content-ID</code>, 内联图片在 HTML 中以 <code>cid:</code> 引用</td>\n</tr>\n<tr>\n<td><code>inline</code></td>\n<td>boolean</td>\n<td>是否为内联部分</td>\n</tr>\n<tr>\n<td><code>uid</code></td>\n<td>number \\</td>\n<td>string</td>\n<td>所属邮件的 UID</td>\n</tr>\n<tr>\n<td><code>folder</code></td>\n<td>string</td>\n<td>所属邮件的文件夹</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "MailAttachment"
+        },
+        {
+          "textRaw": "[m#] download",
+          "name": "[m#]_download",
+          "methods": [
+            {
+              "textRaw": "attachment.download(target?, options?)",
+              "type": "method",
+              "name": "download",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项 (<code>overwrite</code>)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 落盘文件的绝对路径</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "attachment.downloadAsync(target?, options?)",
+              "type": "method",
+              "name": "downloadAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ target = <code>files.cwd()</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 目标目录或文件路径</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 下载选项 (<code>overwrite</code>, <code>onProgress</code>)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值为落盘文件的绝对路径</li>\n</ul>\n<p>等价于 <a href=\"mailClientType#m-download\">client.download</a><code>(attachment, target, options)</code>, 用产生本对象的客户端下载. 不可枚举.</p>\n<pre><code class=\"lang-js\">let full = client.get(uid);\nlet pdf = full.attachments.find(a =&gt; a.mimeType === &#39;application/pdf&#39;);\nif (pdf) {\n    console.log(pdf.download(&#39;/sdcard/Download/&#39;));\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] download"
+        },
+        {
+          "textRaw": "MailAddress",
+          "name": "mailaddress",
+          "desc": "<p><code>from</code>, <code>sender</code>, <code>replyTo</code>, <code>to</code>, <code>cc</code>, <code>bcc</code> 中的地址对象.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>name</code></td>\n<td>string \\</td>\n<td>null</td>\n<td>显示名, 没有时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>address</code></td>\n<td>string</td>\n<td>邮箱地址</td>\n</tr>\n<tr>\n<td><code>toString()</code></td>\n<td>string</td>\n<td>有显示名时为 <code>Name &lt;address&gt;</code>, 否则为 <code>address</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "MailAddress"
+        },
+        {
+          "textRaw": "MailSendMessage",
+          "name": "mailsendmessage",
+          "desc": "<p><a href=\"mailClientType#m-send\">client.send</a> 与 <a href=\"mailClientType#m-append\">client.append</a> 接受的邮件内容对象. 除 <code>subject</code> 与至少一个收件人外均可省略.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>from</code></td>\n<td>地址</td>\n<td>发件人, 单个地址, 默认为账户地址与 <code>name</code>. 多数服务商要求与登录账户一致</td>\n</tr>\n<tr>\n<td><code>to</code></td>\n<td>地址</td>\n<td>收件人</td>\n</tr>\n<tr>\n<td><code>cc</code></td>\n<td>地址</td>\n<td>抄送</td>\n</tr>\n<tr>\n<td><code>bcc</code></td>\n<td>地址</td>\n<td>密送. <code>to</code>, <code>cc</code>, <code>bcc</code> 至少一个非空, 合计不超过 500 个</td>\n</tr>\n<tr>\n<td><code>replyTo</code></td>\n<td>地址</td>\n<td>回复地址</td>\n</tr>\n<tr>\n<td><code>subject</code></td>\n<td>string</td>\n<td>主题, 必填 (可为空字符串), 不超过 998 字符</td>\n</tr>\n<tr>\n<td><code>text</code></td>\n<td>string</td>\n<td>纯文本正文</td>\n</tr>\n<tr>\n<td><code>html</code></td>\n<td>string</td>\n<td>HTML 正文. 与 <code>text</code> 同时给出时发送 multipart/alternative</td>\n</tr>\n<tr>\n<td><code>attachments</code></td>\n<td>(string \\</td>\n<td>Object)[]</td>\n<td>附件, 见下文, 最多 64 个, 每个不超过 200 MiB</td>\n</tr>\n<tr>\n<td><code>headers</code></td>\n<td>Object</td>\n<td>自定义头, 属性值为字符串或字符串数组, 最多 32 个, 值不超过 998 字符且不含换行</td>\n</tr>\n<tr>\n<td><code>priority</code></td>\n<td>string</td>\n<td><code>&#39;high&#39;</code>, <code>&#39;normal&#39;</code> 或 <code>&#39;low&#39;</code></td>\n</tr>\n<tr>\n<td><code>inReplyTo</code></td>\n<td>string</td>\n<td>被回复邮件的 Message-ID</td>\n</tr>\n<tr>\n<td><code>references</code></td>\n<td>string \\</td>\n<td>string[]</td>\n<td>会话线索中的 Message-ID 列表</td>\n</tr>\n<tr>\n<td><code>date</code></td>\n<td>Date \\</td>\n<td>number \\</td>\n<td>string</td>\n<td><code>Date</code> 头, 默认为当前时间</td>\n</tr>\n</tbody>\n</table>\n<p>地址字段接受以下形式, 以及以上任意项的数组:</p>\n<pre><code class=\"lang-js\">&#39;a@b.c&#39;                               // 纯地址\n&#39;Name &lt;a@b.c&gt;&#39;                        // 带显示名\n&#39;a@b.c, Name &lt;b@example.com&gt;&#39;         // 逗号分隔的多个地址\n({ name: &#39;Name&#39;, address: &#39;a@b.c&#39; })  // 对象\n</code></pre>\n<p>附件项可为文件路径字符串, 或 <code>{ path, fileName?, mimeType?, contentId?, inline? }</code> 对象: <code>fileName</code> 默认为路径中的文件名, <code>mimeType</code> 默认按扩展名推断, <code>contentId</code> 与 <code>inline: true</code> 用于 HTML 正文中以 <code>cid:</code> 引用的内联图片. 相对路径相对于脚本工作目录.</p>\n<p><code>headers</code> 不能设置由插件生成的头 (<code>From</code>, <code>To</code>, <code>Cc</code>, <code>Bcc</code>, <code>Reply-To</code>, <code>Subject</code>, <code>Date</code>, <code>Message-ID</code>, <code>In-Reply-To</code>, <code>References</code>, <code>MIME-Version</code>, <code>Content-*</code>, 优先级相关头, <code>Return-Path</code>, <code>Received</code>, <code>DKIM-Signature</code>), 应改用对应字段.</p>\n<pre><code class=\"lang-js\">client.send({\n    to: [{ name: &#39;张三&#39;, address: &#39;zhangsan@example.com&#39; }, &#39;lisi@example.com&#39;],\n    subject: &#39;Re: 周报&#39;,\n    inReplyTo: &#39;&lt;original-id@example.com&gt;&#39;,\n    references: [&#39;&lt;original-id@example.com&gt;&#39;],\n    text: &#39;收到, 谢谢.&#39;,\n    html: &#39;&lt;p&gt;收到, 谢谢.&lt;/p&gt;&lt;img src=&quot;cid:sig&quot;&gt;&#39;,\n    attachments: [{ path: &#39;./signature.png&#39;, contentId: &#39;sig&#39;, inline: true }],\n    headers: { &#39;X-Auto-Reply&#39;: &#39;AutoJs6&#39; },\n    priority: &#39;high&#39;,\n});\n</code></pre>\n",
+          "type": "module",
+          "displayName": "MailSendMessage"
+        },
+        {
+          "textRaw": "UID 参数 (UID Argument)",
+          "name": "uid_参数_(uid_argument)",
+          "desc": "<p>接受邮件标识的方法 (如 <a href=\"mailClientType#m-get\">get</a>, <a href=\"mailClientType#m-setflags\">setFlags</a>, <a href=\"mailClientType#m-move\">move</a>, <a href=\"mailClientType#m-delete\">delete</a>) 统一接受以下形式:</p>\n<ul>\n<li>正整数 - IMAP UID</li>\n<li>非空字符串 - POP3 UIDL</li>\n<li><code>{ uid, folder? }</code> 对象 - 带文件夹的标识, <a href=\"mailMessageType\">MailMessage</a> 对象即属此类, 其 <code>folder</code> 作为默认文件夹</li>\n<li>以上任意项的数组 - 只用于接受多个 UID 的方法 (<code>setFlags</code>, <code>markRead</code> 等, <code>move</code>, <code>copy</code>, <code>delete</code>)</li>\n</ul>\n<p>传入对象时, 选项中的 <code>folder</code> 优先于对象自带的 <code>folder</code>; 传数组时以第一个对象的 <code>folder</code> 为准, 因此同一次调用的邮件应来自同一文件夹.</p>\n<pre><code class=\"lang-js\">let list = client.fetch({ unseenOnly: true });\nclient.markRead(list); // 直接传 MailMessage 数组.\nclient.get({ uid: 4711, folder: &#39;Archive&#39; });\nclient.delete(&#39;0000012345abcdef&#39;); // POP3 UIDL.\n</code></pre>\n",
+          "type": "module",
+          "displayName": "UID 参数 (UID Argument)"
+        }
+      ],
+      "type": "module",
+      "displayName": "邮件消息 (MailMessage)"
+    }
+  ]
+}

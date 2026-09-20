@@ -1,0 +1,321 @@
+{
+  "source": "..\\api\\epubReaderSessionType.md",
+  "modules": [
+    {
+      "textRaw": "阅读器会话 (EpubReaderSession)",
+      "name": "阅读器会话_(epubreadersession)",
+      "desc": "<p>EpubReaderSession 是 <a href=\"epub#m-read\">epub.read</a> 返回的阅读器会话对象, 是 <a href=\"eventEmitterType\">EventEmitter</a> 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转与书签变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.</p>\n<p>会话打开期间脚本保持运行 (与 <a href=\"mailClientType#mailwatch\">MailWatch</a> 相同), 不需要也不应使用 <code>sleep</code> 循环等待; <code>close</code> 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未关闭的会话自动结束, 阅读器保留为普通阅读, 不触发事件. 每个插件进程只有一个阅读器会话, 新的 <code>read</code> 会替换之前的会话.</p>\n<p>控制方法同步执行, 失败时抛出 <a href=\"epub#c-epuberror\">EpubError</a>; 会话关闭后 (以及 <code>open</code> 事件之前尚未与阅读器连接时) 失败于 <code>SESSION_CLOSED</code> 或 <code>READER_NOT_VISIBLE</code>. <code>on</code> / <code>once</code> 返回自身以便链式调用.</p>\n<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;, { href: &#39;OPS/chapter_003.xhtml&#39; });\nsession.on(&#39;open&#39;, e =&gt; console.log(e.title, e.href, e.positions))\n    .on(&#39;progress&#39;, e =&gt; console.log((e.totalProgression * 100).toFixed(1) + &#39;%&#39;, e.chapterTitle))\n    .on(&#39;close&#39;, e =&gt; console.log(&#39;closed:&#39;, e.reason));\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">EpubReaderSession</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] EpubReaderSession",
+          "name": "[@]_epubreadersession",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>会话对象. 不能用 <code>new</code> 构造, 只由 <a href=\"epub#m-read\">epub.read</a> 与 <a href=\"epub#m-readasync\">epub.readAsync</a> 产生.</p>\n",
+          "type": "module",
+          "displayName": "[@] EpubReaderSession"
+        },
+        {
+          "textRaw": "[p#] path",
+          "name": "[p#]_path",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>打开时解析得到的文件路径.</p>\n",
+          "type": "module",
+          "displayName": "[p#] path"
+        },
+        {
+          "textRaw": "[p#] state",
+          "name": "[p#]_state",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <code>&#39;pending&#39;</code> | <code>&#39;open&#39;</code> | <code>&#39;closed&#39;</code> }</li>\n</ul>\n<p><code>open</code> 事件之前为 <code>&#39;pending&#39;</code>, 之后为 <code>&#39;open&#39;</code>, 关闭后为 <code>&#39;closed&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] state"
+        },
+        {
+          "textRaw": "[p#] isOpen",
+          "name": "[p#]_isopen",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>阅读器是否已打开且会话尚未关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] isOpen"
+        },
+        {
+          "textRaw": "[p#] isClosed",
+          "name": "[p#]_isclosed",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>会话是否已关闭 (含脚本退出时的自动结束).</p>\n",
+          "type": "module",
+          "displayName": "[p#] isClosed"
+        },
+        {
+          "textRaw": "[p#] locator",
+          "name": "[p#]_locator",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"epubLocatorType\">EpubLocator</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>阅读器最近报告的位置 (来自 <code>open</code> 或 <code>progress</code> 事件), 尚无报告时为 <code>null</code>. 可保存后交给下次 <a href=\"epub#m-read\">epub.read</a> 的 <code>locator</code> 选项或 <a href=\"#m-goto\">goTo</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] locator"
+        },
+        {
+          "textRaw": "[p#] progress",
+          "name": "[p#]_progress",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>最近报告的全书总进度, 0 到 1; 尚无报告时为 <code>-1</code> (<code>open</code> 事件的 locator 通常还不含总进度, 首个 <code>progress</code> 事件后才有效). 会话关闭后保留最后的值.</p>\n",
+          "type": "module",
+          "displayName": "[p#] progress"
+        },
+        {
+          "textRaw": "[p#] title",
+          "name": "[p#]_title",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p><code>open</code> 事件带来的书名.</p>\n",
+          "type": "module",
+          "displayName": "[p#] title"
+        },
+        {
+          "textRaw": "[p#] chapterTitle",
+          "name": "[p#]_chaptertitle",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>最近 <code>progress</code> 事件的章节标题, 阅读器不知道时为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] chapterTitle"
+        },
+        {
+          "textRaw": "[p#] href",
+          "name": "[p#]_href",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>最近报告的资源 href.</p>\n",
+          "type": "module",
+          "displayName": "[p#] href"
+        },
+        {
+          "textRaw": "[p#] positions",
+          "name": "[p#]_positions",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><code>open</code> 事件带来的合成位置数 (近似页数), 此前为 <code>0</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] positions"
+        },
+        {
+          "textRaw": "[p#] reason",
+          "name": "[p#]_reason",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭原因, 未关闭时为 <code>null</code>. 取值见 <a href=\"#事件-events\">close 事件</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] reason"
+        },
+        {
+          "textRaw": "[m#] goTo",
+          "name": "[m#]_goto",
+          "methods": [
+            {
+              "textRaw": "session.goTo(target)",
+              "type": "method",
+              "name": "goTo",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"epubLocatorType\">EpubLocator</a> } - 资源 href (可带 <code>#fragment</code>), 全书总进度 (0 到 1), 或带 <code>href</code> 的 locator 对象 (最大 16 KiB)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>让阅读器跳转到目标位置, 成功后以 <code>progress</code> 事件报告新位置. 参数形态错误抛出 <code>INVALID_ARGUMENT</code>; 目标不在书内抛出 <code>RESOURCE_NOT_FOUND</code>, 校验通过后仍无法到达的目标以 <code>error</code> 事件报告.</p>\n<pre><code class=\"lang-js\">session.goTo(&#39;OPS/chapter_003.xhtml&#39;);\nsession.goTo(0.5);\nsession.goTo(session.locator);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] goTo"
+        },
+        {
+          "textRaw": "[m#] next",
+          "name": "[m#]_next",
+          "methods": [
+            {
+              "textRaw": "session.next()",
+              "type": "method",
+              "name": "next",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>翻到下一页 (滚动模式下为下一屏).</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] next"
+        },
+        {
+          "textRaw": "[m#] prev",
+          "name": "[m#]_prev",
+          "methods": [
+            {
+              "textRaw": "session.prev()",
+              "type": "method",
+              "name": "prev",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>翻到上一页.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] prev"
+        },
+        {
+          "textRaw": "[m#] nextChapter",
+          "name": "[m#]_nextchapter",
+          "methods": [
+            {
+              "textRaw": "session.nextChapter()",
+              "type": "method",
+              "name": "nextChapter",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>跳到阅读顺序中的下一个资源开头.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] nextChapter"
+        },
+        {
+          "textRaw": "[m#] prevChapter",
+          "name": "[m#]_prevchapter",
+          "methods": [
+            {
+              "textRaw": "session.prevChapter()",
+              "type": "method",
+              "name": "prevChapter",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>跳到阅读顺序中的上一个资源开头.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] prevChapter"
+        },
+        {
+          "textRaw": "[m#] setPreferences",
+          "name": "[m#]_setpreferences",
+          "methods": [
+            {
+              "textRaw": "session.setPreferences(partial)",
+              "type": "method",
+              "name": "setPreferences",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>partial</strong> { <a href=\"dataTypes#object\">Object</a> } - 要修改的偏好键值, 见 <a href=\"#阅读偏好-preferences\">阅读偏好</a>; 最大 16 KiB</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>应用部分阅读偏好, 未提及的键保持不变, 值为 <code>null</code> 的键恢复阅读器默认. 类型或范围不合法抛出 <code>INVALID_ARGUMENT</code>, 不做截断; 未知的键不导致失败, 已知的部分照常应用, 未知的键名以一个 <code>code</code> 为 <code>UNSUPPORTED_PREFERENCE</code> 的 <code>error</code> 事件报告. 应用后的偏好成为阅读器的全局默认, 会话结束后仍然有效.</p>\n<pre><code class=\"lang-js\">session.setPreferences({ theme: &#39;dark&#39;, fontSize: 1.3, scroll: true });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "partial"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setPreferences"
+        },
+        {
+          "textRaw": "[m#] bookmarks",
+          "name": "[m#]_bookmarks",
+          "methods": [
+            {
+              "textRaw": "session.bookmarks()",
+              "type": "method",
+              "name": "bookmarks",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> {{ locator: <a href=\"epubLocatorType\">EpubLocator</a>; createdAt: <a href=\"dataTypes#number\">number</a>; title?: <a href=\"dataTypes#string\">string</a>; text?: <a href=\"dataTypes#string\">string</a> }}[] - 书签列表</li>\n</ul>\n<p>阅读器为这本书保存的书签 (最多 500 条), <code>createdAt</code> 为 UTC 毫秒, <code>title</code> (章节) 与 <code>text</code> (摘录) 在阅读器未记录时缺失. 书签的增删由 <code>bookmark</code> 事件通知.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] bookmarks"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "session.close(options?)",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> {{ finish?: <a href=\"dataTypes#boolean\">boolean</a> }} - <code>finish</code> 默认 <code>false</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>结束会话, 随后触发 <code>close</code> 事件 (原因 <code>&#39;host&#39;</code>). 默认只结束会话, 阅读器 Activity 留给用户继续普通阅读 (进度照常记录); <code>finish</code> 为 <code>true</code> 时同时关闭阅读器. 重复调用无副作用.</p>\n<pre><code class=\"lang-js\">session.close(); // 阅读器留给用户.\nsession.close({ finish: true }); // 同时关闭阅读器.\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[m#] on",
+          "name": "[m#]_on",
+          "methods": [
+            {
+              "textRaw": "session.on(event, listener)",
+              "type": "method",
+              "name": "on",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>event</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#epubreadersession\">EpubReaderSession</a> } - 自身</li>\n</ul>\n<p>注册监听器. <code>once</code> 形态相同, 只触发一次. 其余成员见 <a href=\"eventEmitterType\">EventEmitter</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "session.toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 形如 <code>EpubReaderSession { path: ..., state: open, href: OPS/chapter_003.xhtml, progress: 0.25 }</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "事件 (Events)",
+          "name": "事件_(events)",
+          "desc": "<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>回调参数</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>open</code></td>\n<td><code>({ locator, title, href, positions })</code></td>\n<td>阅读器可见并显示了起始位置, 只触发一次. <code>title</code> 为书名, <code>positions</code> 为合成位置数</td>\n</tr>\n<tr>\n<td><code>progress</code></td>\n<td><code>({ locator, totalProgression, chapterTitle, href })</code></td>\n<td>位置变化 (翻页, 跳转, 滚动), 节流 500 毫秒并在停止后补发最后一次. <code>chapterTitle</code> 未知时为 <code>null</code></td>\n</tr>\n<tr>\n<td><code>bookmark</code></td>\n<td><code>({ action, locator, createdAt, title, text })</code></td>\n<td>用户在阅读器中添加 (<code>action</code> 为 <code>&#39;added&#39;</code>) 或删除 (<code>&#39;removed&#39;</code>) 书签</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><code>(err: EpubError)</code></td>\n<td>非致命错误, 会话继续: 未知的偏好键 (<code>UNSUPPORTED_PREFERENCE</code>), 校验通过后无法到达的跳转目标 (<code>RESOURCE_NOT_FOUND</code>, <code>INTERNAL</code>); 脚本未及时消费事件时的 <code>LIMIT_EXCEEDED</code> (随后 <code>close</code>)</td>\n</tr>\n<tr>\n<td><code>close</code></td>\n<td><code>({ reason })</code></td>\n<td>会话已结束, 不再有事件. 原因: <code>&#39;user&#39;</code> (用户离开阅读器), <code>&#39;host&#39;</code> (脚本调用 <code>close</code>), <code>&#39;replaced&#39;</code> (新会话替换), <code>&#39;timeout&#39;</code> (阅读器 60 秒内未显示), <code>&#39;error&#39;</code> (插件侧失败), <code>&#39;overflow&#39;</code> (脚本积压的事件超过 512 条或 8 MiB, 之前的事件被丢弃)</td>\n</tr>\n</tbody>\n</table>\n<p>事件对象都是普通 JavaScript 对象, 其中的 <code>locator</code> 为 <a href=\"epubLocatorType\">EpubLocator</a>. 建议始终注册 <code>error</code> 与 <code>close</code> 监听器, 否则会话因错误结束时脚本无从得知.</p>\n",
+          "type": "module",
+          "displayName": "事件 (Events)"
+        },
+        {
+          "textRaw": "阅读偏好 (Preferences)",
+          "name": "阅读偏好_(preferences)",
+          "desc": "<p><a href=\"epub#m-read\">epub.read</a> 的 <code>preferences</code> 选项与 <a href=\"#m-setpreferences\">setPreferences</a> 接受以下键, 每个键都可省略:</p>\n<table>\n<thead>\n<tr>\n<th>键</th>\n<th>类型</th>\n<th>取值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>fontSize</code></td>\n<td>number</td>\n<td>0.5 到 3.0, 相对字号倍数</td>\n</tr>\n<tr>\n<td><code>fontFamily</code></td>\n<td>string</td>\n<td>字体名, 最长 120 个字符, 不含控制字符; 阅读器已导入的字体可按名称使用</td>\n</tr>\n<tr>\n<td><code>lineHeight</code></td>\n<td>number</td>\n<td>1.0 到 2.0</td>\n</tr>\n<tr>\n<td><code>pageMargins</code></td>\n<td>number</td>\n<td>0.0 到 4.0</td>\n</tr>\n<tr>\n<td><code>theme</code></td>\n<td>string</td>\n<td><code>&#39;light&#39;</code>, <code>&#39;sepia&#39;</code> 或 <code>&#39;dark&#39;</code></td>\n</tr>\n<tr>\n<td><code>scroll</code></td>\n<td>boolean</td>\n<td><code>true</code> 为滚动模式, <code>false</code> 为分页模式</td>\n</tr>\n<tr>\n<td><code>columnCount</code></td>\n<td>string</td>\n<td><code>&#39;auto&#39;</code>, <code>&#39;1&#39;</code> 或 <code>&#39;2&#39;</code></td>\n</tr>\n<tr>\n<td><code>verticalText</code></td>\n<td>boolean</td>\n<td>是否强制竖排</td>\n</tr>\n<tr>\n<td><code>textAlign</code></td>\n<td>string</td>\n<td><code>&#39;start&#39;</code>, <code>&#39;end&#39;</code>, <code>&#39;left&#39;</code>, <code>&#39;right&#39;</code>, <code>&#39;justify&#39;</code> 或 <code>&#39;center&#39;</code></td>\n</tr>\n<tr>\n<td><code>hyphens</code></td>\n<td>boolean</td>\n<td>是否连字符断词</td>\n</tr>\n<tr>\n<td><code>publisherStyles</code></td>\n<td>boolean</td>\n<td>是否保留出版商样式; 设置 <code>lineHeight</code>, <code>textAlign</code> 或 <code>hyphens</code> 时若未同时指定, 会被关闭</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;, {\n    preferences: { theme: &#39;sepia&#39;, fontSize: 1.2, lineHeight: 1.5, publisherStyles: false },\n});\n</code></pre>\n",
+          "type": "module",
+          "displayName": "阅读偏好 (Preferences)"
+        }
+      ],
+      "type": "module",
+      "displayName": "阅读器会话 (EpubReaderSession)"
+    }
+  ]
+}

@@ -1,0 +1,617 @@
+{
+  "source": "..\\api\\epub.md",
+  "modules": [
+    {
+      "textRaw": "电子书 (EPUB)",
+      "name": "电子书_(epub)",
+      "desc": "<p><code>epub</code> 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 以及打开阅读器并接收阅读事件.</p>\n<p>从 AutoJs6 6.8.0 起, EPUB 功能由外置 Readium EPUB Reader 插件 (AutoJs6-Plugin-Readium-EPUB-Reader) 提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href=\"#c-epuberror\">EpubError</a>, 其消息以插件中心的本地化提示开头. <a href=\"#m-isavailable\">epub.isAvailable</a> 可预先探测.</p>\n<p>书籍以文件路径指定, 相对路径按脚本工作目录解析 (与 <a href=\"files#m-path\">files.path</a> 相同), 不接受 <code>content://</code> 等 URI. <a href=\"#m-open\">epub.open</a> 返回 <a href=\"epubBookType\">EpubBook</a> 对象, 书籍在插件进程中保持打开直到 <code>close()</code> 或脚本退出; 便捷层方法 (<a href=\"#m-metadata\">metadata</a>, <a href=\"#m-toc\">toc</a>, <a href=\"#m-readingorder\">readingOrder</a>, <a href=\"#m-text\">text</a>, <a href=\"#m-cover\">cover</a>, <a href=\"#m-search\">search</a>) 每次调用自行打开并关闭书籍, 适合一次性读取. <a href=\"#m-read\">epub.read</a> 打开插件的阅读器并返回 <a href=\"epubReaderSessionType\">EpubReaderSession</a>, 阅读事件在脚本线程到达.</p>\n<p>每个方法都有同步形态 <code>x(...)</code> 与异步形态 <code>xAsync(...)</code>, 二者参数与结果完全一致. 同步形态阻塞当前脚本线程直至插件返回结果或调用失败, 停止脚本会取消尚未完成的调用; 异步形态立即返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 回调在脚本线程执行. 传给插件的参数会像 <code>JSON.stringify</code> 一样序列化, 函数与 <code>undefined</code> 值被忽略, 未知的选项键在此处以 <code>INVALID_ARGUMENT</code> 拒绝.</p>\n<p>本模块注册为全局名称 <code>epub</code>, 并提供 <code>$epub</code> 别名.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;/sdcard/Books/moby-dick.epub&#39;);\nconsole.log(book.metadata.title, book.metadata.authors.join(&#39;, &#39;));\nbook.toc.forEach(e =&gt; console.log(e.title, e.href));\nconsole.log(book.text(0, { maxChars: 500 }));\nbook.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">epub</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] open",
+          "name": "[m]_open",
+          "methods": [
+            {
+              "textRaw": "epub.open(path)",
+              "type": "method",
+              "name": "open",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - EPUB 文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"epubBookType\">EpubBook</a> } - 已打开的书籍</li>\n</ul>\n<p>在插件进程中打开书籍并返回 <a href=\"epubBookType\">EpubBook</a>. 书籍保持打开直到 <a href=\"epubBookType#m-close\">close</a> 被调用或脚本退出 (脚本退出时自动关闭). 每个插件进程最多同时打开 8 本书, 超出时抛出 <code>LIMIT_EXCEEDED</code>; 一本书超过 5 分钟没有任何调用会被插件关闭, 之后的方法调用失败于 <code>SESSION_CLOSED</code>.</p>\n<p>打开失败的常见代码: <code>FILE_NOT_FOUND</code>, <code>FILE_UNREADABLE</code>, <code>NOT_EPUB</code> (扩展名与 ZIP 签名都不匹配, 或容器内没有 EPUB 包), <code>PARSE_FAILED</code>, <code>ENCRYPTED</code> (LCP 等 DRM 保护的出版物), <code>TIMEOUT</code> (打开超过 30 秒).</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nconsole.log(book.metadata.title);\nbook.close();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "epub.open(options)",
+              "type": "method",
+              "name": "open",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>path: <a href=\"dataTypes#string\">string</a>;</li>\n<li>displayName?: <a href=\"dataTypes#string\">string</a>;</li>\n</ul>\n</li>\n<li>}} - 打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"epubBookType\">EpubBook</a> } - 已打开的书籍</li>\n</ul>\n<p>以选项对象打开书籍. <code>displayName</code> 是插件用于显示的书名 (默认为文件名), 例如阅读器标题栏在出版物没有标题时的回退. 便捷层方法与 <a href=\"#m-read\">read</a> 的 <code>path</code> 参数同样接受此对象.</p>\n<pre><code class=\"lang-js\">let book = epub.open({ path: &#39;./books/moby-dick.epub&#39;, displayName: &#39;白鲸&#39; });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] open"
+        },
+        {
+          "textRaw": "[m] openAsync",
+          "name": "[m]_openasync",
+          "methods": [
+            {
+              "textRaw": "epub.openAsync(path)",
+              "type": "method",
+              "name": "openAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> } - EPUB 文件路径</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"epubBookType\">EpubBook</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "epub.openAsync(options)",
+              "type": "method",
+              "name": "openAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>options</strong> {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} - 打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"epubBookType\">EpubBook</a>&gt; }</li>\n</ul>\n<pre><code class=\"lang-js\">epub.openAsync(&#39;./books/moby-dick.epub&#39;).then((book) =&gt; {\n    console.log(book.positions);\n    book.close();\n}).catch(e =&gt; console.error(e.toString()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] openAsync"
+        },
+        {
+          "textRaw": "[m] metadata",
+          "name": "[m]_metadata",
+          "methods": [
+            {
+              "textRaw": "epub.metadata(path)",
+              "type": "method",
+              "name": "metadata",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 元数据对象</li>\n</ul>\n<p>打开书籍, 读取元数据后关闭. 返回对象的字段见 <a href=\"epubBookType#p-metadata\">EpubBook#metadata</a>.</p>\n<pre><code class=\"lang-js\">let meta = epub.metadata(&#39;./books/moby-dick.epub&#39;);\nconsole.log(meta.title, meta.language, meta.positions);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] metadata"
+        },
+        {
+          "textRaw": "[m] metadataAsync",
+          "name": "[m]_metadataasync",
+          "methods": [
+            {
+              "textRaw": "epub.metadataAsync(path)",
+              "type": "method",
+              "name": "metadataAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] metadataAsync"
+        },
+        {
+          "textRaw": "[m] toc",
+          "name": "[m]_toc",
+          "methods": [
+            {
+              "textRaw": "epub.toc(path)",
+              "type": "method",
+              "name": "toc",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a>[] } - 目录树</li>\n</ul>\n<p>打开书籍, 读取目录后关闭. 目录是 <code>{ title, href, children }</code> 节点组成的树, 见 <a href=\"epubBookType#p-toc\">EpubBook#toc</a>.</p>\n<pre><code class=\"lang-js\">function print(entries, depth) {\n    entries.forEach((e) =&gt; {\n        console.log(&#39;  &#39;.repeat(depth) + e.title, e.href);\n        print(e.children, depth + 1);\n    });\n}\nprint(epub.toc(&#39;./books/moby-dick.epub&#39;), 0);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toc"
+        },
+        {
+          "textRaw": "[m] tocAsync",
+          "name": "[m]_tocasync",
+          "methods": [
+            {
+              "textRaw": "epub.tocAsync(path)",
+              "type": "method",
+              "name": "tocAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>[]&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] tocAsync"
+        },
+        {
+          "textRaw": "[m] readingOrder",
+          "name": "[m]_readingorder",
+          "methods": [
+            {
+              "textRaw": "epub.readingOrder(path)",
+              "type": "method",
+              "name": "readingOrder",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a>[] } - 阅读顺序</li>\n</ul>\n<p>打开书籍, 读取阅读顺序 (spine) 后关闭. 每项为 <code>{ href, type, title? }</code>, 见 <a href=\"epubBookType#p-readingorder\">EpubBook#readingOrder</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] readingOrder"
+        },
+        {
+          "textRaw": "[m] readingOrderAsync",
+          "name": "[m]_readingorderasync",
+          "methods": [
+            {
+              "textRaw": "epub.readingOrderAsync(path)",
+              "type": "method",
+              "name": "readingOrderAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>[]&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] readingOrderAsync"
+        },
+        {
+          "textRaw": "[m] text",
+          "name": "[m]_text",
+          "methods": [
+            {
+              "textRaw": "epub.text(path, target?, options?)",
+              "type": "method",
+              "name": "text",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | {{ href: <a href=\"dataTypes#string\">string</a> }} } - 资源 href, 阅读顺序索引, 或带 <code>href</code> 的对象 (目录项, 阅读顺序项或 <a href=\"epubLocatorType\">EpubLocator</a>); 省略时为全书</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>offset?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxChars?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code>;</li>\n</ul>\n</li>\n<li>}} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n</ul>\n<p>打开书籍, 提取文本后关闭. 参数与结果同 <a href=\"epubBookType#m-text\">EpubBook#text</a>.</p>\n<pre><code class=\"lang-js\">let first = epub.text(&#39;./books/moby-dick.epub&#39;, 0, { maxChars: 2000 });\nlet whole = epub.text(&#39;./books/moby-dick.epub&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] text"
+        },
+        {
+          "textRaw": "[m] textAsync",
+          "name": "[m]_textasync",
+          "methods": [
+            {
+              "textRaw": "epub.textAsync(path, target?, options?)",
+              "type": "method",
+              "name": "textAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | {{ href: <a href=\"dataTypes#string\">string</a> }} } - 提取目标</li>\n<li><strong>[ options ]</strong> {{ offset?: <a href=\"dataTypes#number\">number</a>; maxChars?: <a href=\"dataTypes#number\">number</a>; format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code> }} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] textAsync"
+        },
+        {
+          "textRaw": "[m] cover",
+          "name": "[m]_cover",
+          "methods": [
+            {
+              "textRaw": "epub.cover(path)",
+              "type": "method",
+              "name": "cover",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 封面图像</li>\n</ul>\n<p>打开书籍, 解码封面后关闭. 书籍没有封面资源时抛出 <code>RESOURCE_NOT_FOUND</code>, 封面无法解码时抛出 <code>PARSE_FAILED</code>. 返回的图像使用完毕后应调用其 <code>recycle()</code>.</p>\n<pre><code class=\"lang-js\">let cover = epub.cover(&#39;./books/moby-dick.epub&#39;);\nconsole.log(cover.getWidth(), cover.getHeight());\ncover.recycle();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "epub.cover(path, outputPath, options?)",
+              "type": "method",
+              "name": "cover",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径, 或已存在的目录 (以封面资源自身的文件名保存)</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - <code>overwrite</code> 默认 <code>false</code>, 目标文件已存在时抛出 <code>INVALID_ARGUMENT</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 已保存的文件路径</li>\n</ul>\n<p>打开书籍, 把封面资源原样保存到 <code>outputPath</code> 后关闭. 输出路径同样按脚本工作目录解析.</p>\n<pre><code class=\"lang-js\">let saved = epub.cover(&#39;./books/moby-dick.epub&#39;, &#39;./covers&#39;, { overwrite: true });\nconsole.log(saved); // ./covers/cover.jpg\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] cover"
+        },
+        {
+          "textRaw": "[m] coverAsync",
+          "name": "[m]_coverasync",
+          "methods": [
+            {
+              "textRaw": "epub.coverAsync(path)",
+              "type": "method",
+              "name": "coverAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"imageWrapperType\">ImageWrapper</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "epub.coverAsync(path, outputPath, options?)",
+              "type": "method",
+              "name": "coverAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径或目录</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - 导出选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] coverAsync"
+        },
+        {
+          "textRaw": "[m] search",
+          "name": "[m]_search",
+          "methods": [
+            {
+              "textRaw": "epub.search(path, query, options?)",
+              "type": "method",
+              "name": "search",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>query</strong> { <a href=\"dataTypes#string\">string</a> } - 搜索词</li>\n<li><strong>[ options ]</strong> {{ offset?: <a href=\"dataTypes#number\">number</a>; limit?: <a href=\"dataTypes#number\">number</a> }} - 分页选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a>[] } - 命中列表</li>\n</ul>\n<p>打开书籍, 全文搜索后关闭. 参数与结果同 <a href=\"epubBookType#m-search\">EpubBook#search</a>.</p>\n<pre><code class=\"lang-js\">epub.search(&#39;./books/moby-dick.epub&#39;, &#39;whale&#39;, { limit: 5 })\n    .forEach(hit =&gt; console.log(hit.title, hit.text.before + &#39;[&#39; + hit.text.highlight + &#39;]&#39; + hit.text.after));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] search"
+        },
+        {
+          "textRaw": "[m] searchAsync",
+          "name": "[m]_searchasync",
+          "methods": [
+            {
+              "textRaw": "epub.searchAsync(path, query, options?)",
+              "type": "method",
+              "name": "searchAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>query</strong> { <a href=\"dataTypes#string\">string</a> } - 搜索词</li>\n<li><strong>[ options ]</strong> {{ offset?: <a href=\"dataTypes#number\">number</a>; limit?: <a href=\"dataTypes#number\">number</a> }} - 分页选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>[]&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] searchAsync"
+        },
+        {
+          "textRaw": "[m] read",
+          "name": "[m]_read",
+          "methods": [
+            {
+              "textRaw": "epub.read(path, options?)",
+              "type": "method",
+              "name": "read",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>href?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>progression?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>locator?: <a href=\"epubLocatorType\">EpubLocator</a>;</li>\n<li>preferences?: <a href=\"dataTypes#object\">Object</a>;</li>\n</ul>\n</li>\n<li>}} - 起始位置与阅读偏好</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"epubReaderSessionType\">EpubReaderSession</a> } - 阅读器会话</li>\n</ul>\n<p>在插件进程中建立阅读器会话并启动插件的阅读器 Activity, 立即返回 <a href=\"epubReaderSessionType\">EpubReaderSession</a>. 阅读器可见后触发 <code>open</code> 事件, 之后翻页, 跳转与书签变化以事件形式在脚本线程到达; 会话打开期间脚本保持运行, 直到 <code>close</code> 事件 (用户关闭阅读器, 脚本调用 <code>close()</code>, 会话被替换或超时). 起始位置最多指定一项: <code>href</code> (可带 <code>#fragment</code>), 总进度 <code>progression</code> (0 到 1) 或此前从事件或搜索得到的 <code>locator</code>; 省略时从上次阅读位置继续. <code>preferences</code> 为 <a href=\"epubReaderSessionType#阅读偏好-preferences\">阅读偏好</a> 的子集, 应用后成为阅读器的全局默认.</p>\n<p>阅读器 Activity 由 AutoJs6 启动, 受系统对后台应用启动 Activity 的限制; 在 AutoJs6 界面可见时运行脚本可确保启动成功. 阅读器 60 秒内未能显示时会话以 <code>timeout</code> 关闭. 每个插件进程只有一个阅读器会话, 新的 <code>read</code> 会以 <code>replaced</code> 关闭之前的会话并结束其阅读器. 脚本退出时会话结束但阅读器保留, 用户可继续普通阅读.</p>\n<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;, { href: &#39;OPS/chapter_003.xhtml&#39;, preferences: { theme: &#39;sepia&#39; } });\nsession.on(&#39;open&#39;, e =&gt; console.log(&#39;opened at&#39;, e.href, &#39;of&#39;, e.positions, &#39;positions&#39;));\nsession.on(&#39;progress&#39;, e =&gt; console.log((e.totalProgression * 100).toFixed(1) + &#39;%&#39;, e.chapterTitle));\nsession.on(&#39;error&#39;, e =&gt; console.warn(e.toString()));\nsession.on(&#39;close&#39;, e =&gt; console.log(&#39;closed:&#39;, e.reason));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] read"
+        },
+        {
+          "textRaw": "[m] readAsync",
+          "name": "[m]_readasync",
+          "methods": [
+            {
+              "textRaw": "epub.readAsync(path, options?)",
+              "type": "method",
+              "name": "readAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><strong>[ options ]</strong> {{ href?: <a href=\"dataTypes#string\">string</a>; progression?: <a href=\"dataTypes#number\">number</a>; locator?: <a href=\"epubLocatorType\">EpubLocator</a>; preferences?: <a href=\"dataTypes#object\">Object</a> }} - 起始位置与阅读偏好</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"epubReaderSessionType\">EpubReaderSession</a>&gt; }</li>\n</ul>\n<p>Promise 在插件会话建立且阅读器启动请求发出后落定, 不等待 <code>open</code> 事件.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] readAsync"
+        },
+        {
+          "textRaw": "[m] isAvailable",
+          "name": "[m]_isavailable",
+          "methods": [
+            {
+              "textRaw": "epub.isAvailable()",
+              "type": "method",
+              "name": "isAvailable",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否有兼容且已启用的 EPUB 插件</li>\n</ul>\n<p>探测插件. 插件缺失, 被禁用或不兼容时返回 <code>false</code>, 不抛出异常.</p>\n<pre><code class=\"lang-js\">if (!epub.isAvailable()) {\n    toastLog(&#39;请在插件中心安装并启用 Readium EPUB Reader&#39;);\n    exit();\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAvailable"
+        },
+        {
+          "textRaw": "[m] isAvailableAsync",
+          "name": "[m]_isavailableasync",
+          "methods": [
+            {
+              "textRaw": "epub.isAvailableAsync()",
+              "type": "method",
+              "name": "isAvailableAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#boolean\">boolean</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAvailableAsync"
+        },
+        {
+          "textRaw": "[C] EpubError",
+          "name": "[c]_epuberror",
+          "methods": [
+            {
+              "textRaw": "new epub.EpubError(message, code?)",
+              "type": "method",
+              "name": "EpubError",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>message</strong> { <a href=\"dataTypes#string\">string</a> } - 错误消息</li>\n<li><strong>[ code = <code>&#39;INTERNAL&#39;</code> ]</strong> { <a href=\"dataTypes#string\">string</a> } - 错误代码</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#c-epuberror\">EpubError</a> }</li>\n</ul>\n<p>EPUB 模块抛出的所有错误 (含 <a href=\"epubReaderSessionType\">EpubReaderSession</a> 的 <code>error</code> 事件参数) 都是 <code>name</code> 为 <code>&#39;EpubError&#39;</code> 的 JavaScript <a href=\"exceptions#error-对象\">Error</a>, 可用 <code>instanceof epub.EpubError</code> 判断. <code>message</code> 不可枚举, <code>JSON.stringify</code> 只输出 <code>code</code>. 脚本也可自行构造.</p>\n<pre><code class=\"lang-js\">try {\n    epub.open(&#39;./books/missing.epub&#39;);\n} catch (e) {\n    if (e instanceof epub.EpubError) {\n        console.log(e.code); // FILE_NOT_FOUND\n        console.log(e.toString()); // EpubError [FILE_NOT_FOUND]: file not found: ...\n    }\n}\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "code?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] EpubError"
+        },
+        {
+          "textRaw": "[p#] name",
+          "name": "[p#]_name",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <code>&#39;EpubError&#39;</code> }</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[p#] name"
+        },
+        {
+          "textRaw": "[p#] code",
+          "name": "[p#]_code",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>错误代码:</p>\n<table>\n<thead>\n<tr>\n<th>code</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>PLUGIN_UNAVAILABLE</td>\n<td>插件缺失, 绑定失败, 阅读器无法启动或插件进程在打开期间退出</td>\n</tr>\n<tr>\n<td>PLUGIN_DISABLED</td>\n<td>插件已安装但在插件中心被禁用</td>\n</tr>\n<tr>\n<td>PLUGIN_INCOMPATIBLE</td>\n<td>插件身份, 契约版本或要求的宿主版本不匹配</td>\n</tr>\n<tr>\n<td>FILE_NOT_FOUND</td>\n<td>文件不存在</td>\n</tr>\n<tr>\n<td>FILE_UNREADABLE</td>\n<td>文件不可读或不是常规文件</td>\n</tr>\n<tr>\n<td>NOT_EPUB</td>\n<td>既非 <code>.epub</code> 扩展名也非 ZIP 容器, 或容器内没有 EPUB 包</td>\n</tr>\n<tr>\n<td>PARSE_FAILED</td>\n<td>Readium 无法解析出版物, 或封面无法解码</td>\n</tr>\n<tr>\n<td>ENCRYPTED</td>\n<td>出版物受 LCP 等 DRM 保护</td>\n</tr>\n<tr>\n<td>RESOURCE_NOT_FOUND</td>\n<td>未知的 href, 超出范围的阅读顺序索引, 书外的 locator, 或书籍没有封面</td>\n</tr>\n<tr>\n<td>LIMIT_EXCEEDED</td>\n<td>超出 <a href=\"epubBookType#限制-limits\">限制</a> 中的任一上限, 或脚本未及时消费阅读事件</td>\n</tr>\n<tr>\n<td>INVALID_ARGUMENT</td>\n<td>参数形态或取值不合法, 未知的选项键, 输出文件已存在而未指定 <code>overwrite</code></td>\n</tr>\n<tr>\n<td>SESSION_CLOSED</td>\n<td>书籍或会话已关闭, 脚本正在退出, 或插件进程已退出</td>\n</tr>\n<tr>\n<td>SESSION_REPLACED</td>\n<td>预留: 对已被新会话替换的会话调用 (当前插件回答 <code>SESSION_CLOSED</code>)</td>\n</tr>\n<tr>\n<td>READER_NOT_VISIBLE</td>\n<td>阅读器尚未显示时的翻页请求</td>\n</tr>\n<tr>\n<td>UNSUPPORTED_PREFERENCE</td>\n<td>未知的偏好键 (只出现在 <code>error</code> 事件, 已知的键仍会应用)</td>\n</tr>\n<tr>\n<td>CANCELLED</td>\n<td>调用被脚本停止或宿主取消</td>\n</tr>\n<tr>\n<td>TIMEOUT</td>\n<td>打开超过 30 秒, 其它调用超过 60 秒</td>\n</tr>\n<tr>\n<td>IO</td>\n<td>描述符, 管道或文件写入失败</td>\n</tr>\n<tr>\n<td>INTERNAL</td>\n<td>其他未归类错误</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "[p#] code"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "epubError.toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 形如 <code>EpubError [CODE]: message</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "示例 (Examples)",
+          "name": "示例_(examples)",
+          "modules": [
+            {
+              "textRaw": "元数据与目录",
+              "name": "元数据与目录",
+              "desc": "<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nlet meta = book.metadata;\nconsole.log(meta.title, &#39;/&#39;, meta.authors.join(&#39;, &#39;), &#39;/&#39;, meta.language);\nconsole.log(&#39;阅读顺序&#39;, book.readingOrder.length, &#39;个资源, 位置数&#39;, book.positions);\nbook.toc.forEach(e =&gt; console.log(e.title, e.href, e.children.length));\nbook.close();\n</code></pre>\n",
+              "type": "module",
+              "displayName": "元数据与目录"
+            },
+            {
+              "textRaw": "导出章节文本与封面",
+              "name": "导出章节文本与封面",
+              "desc": "<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nlet chapter = book.toc[2];\nfiles.write(&#39;./out/&#39; + chapter.title + &#39;.txt&#39;, book.text(chapter, { format: &#39;markdown&#39; }));\nfiles.write(&#39;./out/whole.txt&#39;, book.textAll({ maxChars: 2 * 1024 * 1024 }));\ntry {\n    console.log(book.cover(&#39;./out&#39;, { overwrite: true }));\n} catch (e) {\n    if (e.code !== &#39;RESOURCE_NOT_FOUND&#39;) throw e;\n}\nbook.close();\n</code></pre>\n",
+              "type": "module",
+              "displayName": "导出章节文本与封面"
+            },
+            {
+              "textRaw": "打开阅读器并监听进度",
+              "name": "打开阅读器并监听进度",
+              "desc": "<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;, { progression: 0.25 });\nsession.on(&#39;open&#39;, () =&gt; session.setPreferences({ fontSize: 1.2 }));\nsession.on(&#39;progress&#39;, e =&gt; console.log((e.totalProgression * 100).toFixed(1) + &#39;%&#39;, e.chapterTitle || e.href));\nsession.on(&#39;bookmark&#39;, e =&gt; console.log(e.action, e.locator.href));\nsession.on(&#39;close&#39;, e =&gt; console.log(&#39;closed:&#39;, e.reason));\nsetTimeout(() =&gt; session.nextChapter(), 10000);\nsetTimeout(() =&gt; session.close(), 60000); // 阅读器留给用户继续阅读.\n</code></pre>\n",
+              "type": "module",
+              "displayName": "打开阅读器并监听进度"
+            },
+            {
+              "textRaw": "异步调用",
+              "name": "异步调用",
+              "desc": "<pre><code class=\"lang-js\">epub.searchAsync(&#39;./books/moby-dick.epub&#39;, &#39;whale&#39;, { limit: 20 })\n    .then(hits =&gt; console.log(hits.length, hits.map(h =&gt; h.title)))\n    .catch(e =&gt; console.error(e.toString()));\n</code></pre>\n",
+              "type": "module",
+              "displayName": "异步调用"
+            }
+          ],
+          "type": "module",
+          "displayName": "示例 (Examples)"
+        }
+      ],
+      "type": "module",
+      "displayName": "电子书 (EPUB)"
+    }
+  ]
+}

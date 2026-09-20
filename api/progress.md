@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-21 电子书 (EPUB) 新增: 覆盖 Readium EPUB Reader 插件提供的 epub 全局对象 (打开书籍, 便捷层, 阅读器会话与可用性探测), EpubBook 的元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出及全文搜索, EpubReaderSession 的事件, 控制方法与阅读偏好, EpubLocator 位置对象, 以及 EpubError 错误代码与各项上限. 依据为 AutoJs6 6.8.0 源码, JVM 测试与 2026-09-21 在 API 33 / API 37 模拟器上的脚本 smoke.
+
 2026-09-20 邮件 (Mail) 新增: 覆盖 Angus Mail 插件提供的 mail 全局对象, MailClient 的收发, 搜索, 附件, 标记, 文件夹与监听方法, MailMessage / MailAttachment / MailAddress / MailSendMessage 对象, MailAccountOptions 账户选项与服务商预设, MailSearchQuery 查询条件, 以及 MailError 错误代码与各项上限. 服务商行为差异按 2026-09-18 至 2026-09-20 的真实账户矩阵记录.
 
 2026-09-16 分支整合: 同步 Console 输入与显示配置, UI 控制台视图, Images 模板与特征匹配, 图像统计和 Color 扩展方法. AI 分支的早期接口说明已由主分支统一插件目标接口覆盖, 合并时保留与当前源码一致的说明. 同步修正图片保存方法的跨页链接并全量生成离线文档与搜索索引.
@@ -69,6 +71,7 @@
 | [Device - 设备](device) | √ |
 | [Dialogs - 对话框](dialogs) | &gt; 80% |
 | [E4X](e4x) | √ |
+| [EPUB - 电子书](epub) | √ |
 | [Engines - 引擎](engines) | √ |
 | [Events - 事件监听](events) | &gt; 80% |
 | [Files - 文件](files) | &gt; 80% |
@@ -121,6 +124,8 @@
 | [UiObject - 控件节点](uiObjectType) | √ |
 | [UiObjectCollection - 控件集合](uiObjectCollectionType) | √ |
 | [UiObjectActions - 控件节点行为](uiObjectActionsType) | √ |
+| [EpubBook - 电子书对象](epubBookType) | √ |
+| [EpubReaderSession - 阅读器会话](epubReaderSessionType) | √ |
 | [Flow - 流程对象](flowType) | √ |
 | [FlowError - 流程错误](flowErrorType) | √ |
 | [MailClient - 邮件客户端](mailClientType) | √ |
@@ -157,6 +162,7 @@
 | [CryptoKey](cryptoKeyType) | √ |
 | [CryptoKeyPair](cryptoKeyPairType) | √ |
 | [ConsoleBuildOptions](consoleBuildOptionsType) | √ |
+| [EpubLocator](epubLocatorType) | √ |
 | [HttpRequestBuilderOptions](httpRequestBuilderOptionsType) | √ |
 | [HttpRequestHeaders](httpRequestHeadersType) | √ |
 | [HttpResponseBody](httpResponseBodyType) | √ |

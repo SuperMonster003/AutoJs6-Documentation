@@ -1,0 +1,350 @@
+{
+  "source": "..\\api\\epubBookType.md",
+  "modules": [
+    {
+      "textRaw": "电子书对象 (EpubBook)",
+      "name": "电子书对象_(epubbook)",
+      "desc": "<p>EpubBook 是 <a href=\"epub#m-open\">epub.open</a> 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出以及全文搜索.</p>\n<p>每个方法都有同步形态与 <code>Async</code> 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; <code>Async</code> 形态返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 回调在脚本线程执行. 失败时抛出 (或拒绝为) <a href=\"epub#c-epuberror\">EpubError</a>. 书籍关闭后 (包括插件在 5 分钟无调用后自动关闭) 所有方法失败于 <code>SESSION_CLOSED</code>.</p>\n<p><code>metadata</code>, <code>toc</code>, <code>readingOrder</code> 与 <code>positions</code> 是只读属性, 首次访问时从插件读取并缓存. 书内资源以出版物相对 href 标识 (如 <code>OEBPS/chapter2.xhtml</code>), 目录, 阅读顺序, 搜索结果与 <a href=\"epubLocatorType\">EpubLocator</a> 中的 <code>href</code> 是同一套字符串, 可以互相传递.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nconsole.log(book.toString()); // EpubBook { path: /storage/emulated/0/.../moby-dick.epub }\nconsole.log(book.metadata.title, book.positions);\nconsole.log(book.text(book.readingOrder[1], { maxChars: 300 }));\nbook.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">EpubBook</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] EpubBook",
+          "name": "[@]_epubbook",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>书籍对象. 不能用 <code>new</code> 构造, 只由 <a href=\"epub#m-open\">epub.open</a> 与 <a href=\"epub#m-openasync\">epub.openAsync</a> 产生.</p>\n",
+          "type": "module",
+          "displayName": "[@] EpubBook"
+        },
+        {
+          "textRaw": "[p#] path",
+          "name": "[p#]_path",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>打开时解析得到的文件路径.</p>\n",
+          "type": "module",
+          "displayName": "[p#] path"
+        },
+        {
+          "textRaw": "[p#] isClosed",
+          "name": "[p#]_isclosed",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否已由脚本关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] isClosed"
+        },
+        {
+          "textRaw": "[p#] metadata",
+          "name": "[p#]_metadata",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>title: <a href=\"dataTypes#string\">string</a>;</li>\n<li>authors: <a href=\"dataTypes#string\">string</a>[];</li>\n<li>language?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>identifier?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>publisher?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>published?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>modified?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>description?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>subjects: <a href=\"dataTypes#string\">string</a>[];</li>\n<li>layout: <code>&#39;reflowable&#39;</code> | <code>&#39;fixed&#39;</code>;</li>\n<li>readingProgression: <code>&#39;ltr&#39;</code> | <code>&#39;rtl&#39;</code> | <code>&#39;auto&#39;</code>;</li>\n<li>cover?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>positions: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n<p>出版物元数据. <code>title</code>, <code>authors</code>, <code>subjects</code>, <code>layout</code>, <code>readingProgression</code> 与 <code>positions</code> 总是存在, 其余字段在包文档没有时缺失. 日期为 Readium 从包文档解析出的字符串; <code>cover</code> 是封面资源的 href, 可交给 <a href=\"#m-resource\">resource</a> 导出; <code>description</code> 最多 65536 个字符.</p>\n<pre><code class=\"lang-js\">let meta = epub.open(&#39;./books/moby-dick.epub&#39;).metadata;\nconsole.log(meta.title, meta.authors, meta.layout, meta.cover);\n</code></pre>\n",
+          "type": "module",
+          "displayName": "[p#] metadata"
+        },
+        {
+          "textRaw": "[p#] toc",
+          "name": "[p#]_toc",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{ title: <a href=\"dataTypes#string\">string</a>; href: <a href=\"dataTypes#string\">string</a>; children: <a href=\"dataTypes#object\">Object</a>[] }}[]</li>\n</ul>\n<p>目录树. 每个节点为 <code>{ title, href, children }</code>, <code>children</code> 总是数组 (可能为空), 节点顺序与书中一致, 最多 5000 个节点. 节点可直接作为 <a href=\"#m-text\">text</a> 的 <code>target</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] toc"
+        },
+        {
+          "textRaw": "[p#] readingOrder",
+          "name": "[p#]_readingorder",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{ href: <a href=\"dataTypes#string\">string</a>; type: <a href=\"dataTypes#string\">string</a>; title?: <a href=\"dataTypes#string\">string</a> }}[]</li>\n</ul>\n<p>阅读顺序 (spine) 的资源列表, <code>type</code> 为媒体类型 (未知时为空字符串), <code>title</code> 仅在清单提供时存在; 最多 5000 项. 数组下标即 <a href=\"#m-text\">text</a> 接受的阅读顺序索引.</p>\n",
+          "type": "module",
+          "displayName": "[p#] readingOrder"
+        },
+        {
+          "textRaw": "[p#] positions",
+          "name": "[p#]_positions",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>Readium 为整本书生成的合成位置数, 可视为近似页数; 阅读器进度条与 <a href=\"epubLocatorType\">EpubLocator</a> 的 <code>locations.position</code> 使用同一计数.</p>\n",
+          "type": "module",
+          "displayName": "[p#] positions"
+        },
+        {
+          "textRaw": "[m#] text",
+          "name": "[m#]_text",
+          "methods": [
+            {
+              "textRaw": "book.text(target?, options?)",
+              "type": "method",
+              "name": "text",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | {{ href: <a href=\"dataTypes#string\">string</a> }} } - 资源 href, 阅读顺序索引 (从 0 起), 或带 <code>href</code> 的对象 (目录项, 阅读顺序项或 <a href=\"epubLocatorType\">EpubLocator</a>); 省略时为全书</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>offset?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>maxChars?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code>;</li>\n</ul>\n</li>\n<li>}} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 文本</li>\n</ul>\n<p>提取单个资源或全书的文本. <code>format</code> 为 <code>&#39;text&#39;</code> (默认, 纯文本, 图片被丢弃) 或 <code>&#39;markdown&#39;</code> (保留标题, 图片与引用等结构). <code>offset</code> 跳过资源开头的若干字符, 只在指定单个资源时可用; <code>maxChars</code> 限制返回的字符总数, 默认 4194304 (4 MiB), 返回的字符串不会在代理对中间截断. 全书提取按阅读顺序拼接各资源的文本, 资源之间以空行分隔, 空资源跳过, <code>maxChars</code> 作用于合计. 目标对象只使用其 <code>href</code> (含 <code>#fragment</code> 时忽略片段), 因此目录项与 locator 都能作为目标. 非 HTML 的阅读顺序资源得到空字符串.</p>\n<p>未知 href 或超出范围的索引抛出 <code>RESOURCE_NOT_FOUND</code>; 单个资源超过 64 MiB 抛出 <code>LIMIT_EXCEEDED</code>.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nconsole.log(book.text(0, { maxChars: 1000 }));\nconsole.log(book.text(&#39;OPS/chapter_003.xhtml&#39;, { format: &#39;markdown&#39; }));\nconsole.log(book.text(book.toc[0]).length);\nconsole.log(book.text({ href: &#39;OPS/chapter_003.xhtml&#39; }, { offset: 500, maxChars: 200 }));\nbook.close();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "book.textAsync(target?, options?)",
+              "type": "method",
+              "name": "textAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ target ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a> | {{ href: <a href=\"dataTypes#string\">string</a> }} } - 提取目标</li>\n<li><strong>[ options ]</strong> {{ offset?: <a href=\"dataTypes#number\">number</a>; maxChars?: <a href=\"dataTypes#number\">number</a>; format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code> }} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] text"
+        },
+        {
+          "textRaw": "[m#] textAll",
+          "name": "[m#]_textall",
+          "methods": [
+            {
+              "textRaw": "book.textAll(options?)",
+              "type": "method",
+              "name": "textAll",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> {{ maxChars?: <a href=\"dataTypes#number\">number</a>; format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code> }} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 全书文本</li>\n</ul>\n<p>等价于省略 <code>target</code> 的 <a href=\"#m-text\">text</a>: 按阅读顺序拼接全书文本, <code>maxChars</code> 默认 4194304. <code>offset</code> 在此不可用.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "book.textAllAsync(options?)",
+              "type": "method",
+              "name": "textAllAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> {{ maxChars?: <a href=\"dataTypes#number\">number</a>; format?: <code>&#39;text&#39;</code> | <code>&#39;markdown&#39;</code> }} - 提取选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] textAll"
+        },
+        {
+          "textRaw": "[m#] cover",
+          "name": "[m#]_cover",
+          "methods": [
+            {
+              "textRaw": "book.cover()",
+              "type": "method",
+              "name": "cover",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"imageWrapperType\">ImageWrapper</a> } - 封面图像</li>\n</ul>\n<p>解码封面资源 (<code>metadata.cover</code>) 为图像. 书籍没有封面时抛出 <code>RESOURCE_NOT_FOUND</code>, 无法解码时抛出 <code>PARSE_FAILED</code>. 使用完毕后应调用图像的 <code>recycle()</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "book.cover(outputPath, options?)",
+              "type": "method",
+              "name": "cover",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径, 或已存在的目录 (以封面资源自身的文件名保存)</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - <code>overwrite</code> 默认 <code>false</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 已保存的文件路径</li>\n</ul>\n<p>把封面资源原样写入文件. 输出路径按脚本工作目录解析, 不存在的父目录会被创建; 目标文件已存在而 <code>overwrite</code> 为 <code>false</code> 时抛出 <code>INVALID_ARGUMENT</code>. 写入先落到临时文件, 成功后再替换目标.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nlet image = book.cover();\nconsole.log(image.getWidth(), image.getHeight());\nimage.recycle();\nconsole.log(book.cover(&#39;./covers/moby-dick.jpg&#39;, { overwrite: true }));\nbook.close();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "book.coverAsync()",
+              "type": "method",
+              "name": "coverAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"imageWrapperType\">ImageWrapper</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "book.coverAsync(outputPath, options?)",
+              "type": "method",
+              "name": "coverAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径或目录</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - 导出选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cover"
+        },
+        {
+          "textRaw": "[m#] resource",
+          "name": "[m#]_resource",
+          "methods": [
+            {
+              "textRaw": "book.resource(href, outputPath, options?)",
+              "type": "method",
+              "name": "resource",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>href</strong> { <a href=\"dataTypes#string\">string</a> } - 清单内资源的 href (最长 2048 个字符)</li>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径, 或已存在的目录 (以资源自身的文件名保存)</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - <code>overwrite</code> 默认 <code>false</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 已保存的文件路径</li>\n</ul>\n<p>把书内任意清单资源 (图片, 样式, 字体, 章节 XHTML 等) 原样导出到文件, 输出规则同 <a href=\"#m-cover\">cover</a>. 不在清单内的 href 抛出 <code>RESOURCE_NOT_FOUND</code>, 资源超过 64 MiB 抛出 <code>LIMIT_EXCEEDED</code>.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nconsole.log(book.resource(&#39;OPS/images/frontispiece.jpg&#39;, &#39;./out&#39;));\nconsole.log(book.resource(&#39;OPS/chapter_001.xhtml&#39;, &#39;./out/chapter1.xhtml&#39;, { overwrite: true }));\nbook.close();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "href"
+                    },
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "book.resourceAsync(href, outputPath, options?)",
+              "type": "method",
+              "name": "resourceAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>href</strong> { <a href=\"dataTypes#string\">string</a> } - 资源 href</li>\n<li><strong>outputPath</strong> { <a href=\"dataTypes#string\">string</a> } - 输出文件路径或目录</li>\n<li><strong>[ options ]</strong> {{ overwrite?: <a href=\"dataTypes#boolean\">boolean</a> }} - 导出选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "href"
+                    },
+                    {
+                      "name": "outputPath"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] resource"
+        },
+        {
+          "textRaw": "[m#] search",
+          "name": "[m#]_search",
+          "methods": [
+            {
+              "textRaw": "book.search(query, options?)",
+              "type": "method",
+              "name": "search",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>query</strong> { <a href=\"dataTypes#string\">string</a> } - 搜索词, 首尾空白去除且内部空白折叠后长度须在 1 到 256 个字符之间</li>\n<li><strong>[ options ]</strong> {{<ul>\n<li>offset?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>limit?: <a href=\"dataTypes#number\">number</a>;</li>\n</ul>\n</li>\n<li>}} - <code>offset</code> 默认 0; <code>limit</code> 为 1 到 500, 默认 50; <code>offset + limit</code> 不得超过 500</li>\n<li><ins><strong>returns</strong></ins> {{ href: <a href=\"dataTypes#string\">string</a>; title?: <a href=\"dataTypes#string\">string</a>; locator: <a href=\"epubLocatorType\">EpubLocator</a>; text: {{ before: <a href=\"dataTypes#string\">string</a>; highlight: <a href=\"dataTypes#string\">string</a>; after: <a href=\"dataTypes#string\">string</a> }} }}[] - 命中列表</li>\n</ul>\n<p>由 Readium 搜索服务执行的全文搜索. 每个命中含所在资源的 <code>href</code>, 章节 <code>title</code> (已知时), 指向命中处的 <code>locator</code> (可交给 <a href=\"epubReaderSessionType#m-goto\">EpubReaderSession#goTo</a> 或 <a href=\"epub#m-read\">epub.read</a> 的 <code>locator</code>) 与上下文 <code>text</code>. 一次查询最多得到 500 个命中, 通过 <code>offset</code> 与 <code>limit</code> 分页.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nlet hits = book.search(&#39;white whale&#39;, { limit: 20 });\nhits.forEach(h =&gt; console.log(h.title, &#39;:&#39;, h.text.before + &#39;[&#39; + h.text.highlight + &#39;]&#39; + h.text.after));\nlet more = book.search(&#39;white whale&#39;, { offset: 20, limit: 20 });\nbook.close();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "book.searchAsync(query, options?)",
+              "type": "method",
+              "name": "searchAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>query</strong> { <a href=\"dataTypes#string\">string</a> } - 搜索词</li>\n<li><strong>[ options ]</strong> {{ offset?: <a href=\"dataTypes#number\">number</a>; limit?: <a href=\"dataTypes#number\">number</a> }} - 分页选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>[]&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "query"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] search"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "book.close()",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>关闭书籍并释放插件侧的资源. 重复调用无副作用, 之后的方法调用失败于 <code>SESSION_CLOSED</code>. 脚本退出时未关闭的书籍自动关闭.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "book.toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 形如 <code>EpubBook { path: /sdcard/Books/moby-dick.epub }</code>, 关闭后附加 <code>, closed</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "限制 (Limits)",
+          "name": "限制_(limits)",
+          "desc": "<table>\n<thead>\n<tr>\n<th>项目</th>\n<th>上限</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>每个插件进程同时打开的书籍</td>\n<td>8</td>\n</tr>\n<tr>\n<td>书籍空闲 (无调用) 时长</td>\n<td>5 分钟, 超出后由插件关闭</td>\n</tr>\n<tr>\n<td>href 长度</td>\n<td>2048 个字符</td>\n</tr>\n<tr>\n<td>目录节点 / 阅读顺序项</td>\n<td>各 5000</td>\n</tr>\n<tr>\n<td><code>text</code> 单次 <code>maxChars</code> 默认值</td>\n<td>4194304 (4 MiB)</td>\n</tr>\n<tr>\n<td>单个资源 (<code>text</code> 渲染或 <code>resource</code> / <code>cover</code> 导出)</td>\n<td>64 MiB</td>\n</tr>\n<tr>\n<td>搜索词长度</td>\n<td>1 到 256 个字符</td>\n</tr>\n<tr>\n<td>单次 <code>search</code> 返回数 / 一次查询的全部命中</td>\n<td>500 (默认 50) / 500</td>\n</tr>\n<tr>\n<td>打开超时 / 其它调用超时</td>\n<td>30 秒 / 60 秒</td>\n</tr>\n</tbody>\n</table>\n<p>超出上限的调用抛出 <code>LIMIT_EXCEEDED</code>, 超时抛出 <code>TIMEOUT</code>.</p>\n",
+          "type": "module",
+          "displayName": "限制 (Limits)"
+        }
+      ],
+      "type": "module",
+      "displayName": "电子书对象 (EpubBook)"
+    }
+  ]
+}

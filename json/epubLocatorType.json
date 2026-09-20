@@ -1,0 +1,28 @@
+{
+  "source": "..\\api\\epubLocatorType.md",
+  "modules": [
+    {
+      "textRaw": "EpubLocator",
+      "name": "epublocator",
+      "desc": "<p>EpubLocator 是 Readium 用于描述 EPUB 中一个位置的普通 JavaScript 对象 (Readium <code>Locator</code> 的 JSON 形式). <a href=\"epubReaderSessionType\">EpubReaderSession</a> 的 <code>open</code> / <code>progress</code> / <code>bookmark</code> 事件, <a href=\"epubReaderSessionType#p-locator\">session.locator</a>, <a href=\"epubReaderSessionType#m-bookmarks\">session.bookmarks</a> 与 <a href=\"epubBookType#m-search\">EpubBook#search</a> 的命中都携带此对象; 脚本可以把它原样交回 <a href=\"epubReaderSessionType#m-goto\">session.goTo</a>, <a href=\"epub#m-read\">epub.read</a> 的 <code>locator</code> 选项或 <a href=\"epubBookType#m-text\">EpubBook#text</a> 的 <code>target</code>, 也可以保存为 JSON 供下次运行使用.</p>\n<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;);\nsession.on(&#39;progress&#39;, (e) =&gt; {\n    files.write(&#39;./moby-dick.locator.json&#39;, JSON.stringify(e.locator));\n});\n// 下次运行:\nlet saved = JSON.parse(files.read(&#39;./moby-dick.locator.json&#39;));\nepub.read(&#39;./books/moby-dick.epub&#39;, { locator: saved });\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">EpubLocator</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] EpubLocator",
+          "name": "[@]_epublocator",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>href: <a href=\"dataTypes#string\">string</a>;</li>\n<li>type: <a href=\"dataTypes#string\">string</a>;</li>\n<li>title?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>locations?: {{<ul>\n<li>fragments?: <a href=\"dataTypes#string\">string</a>[];</li>\n<li>progression?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>totalProgression?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>position?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>cssSelector?: <a href=\"dataTypes#string\">string</a>;</li>\n</ul>\n</li>\n<li>}};</li>\n<li>text?: {{<ul>\n<li>before?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>highlight?: <a href=\"dataTypes#string\">string</a>;</li>\n<li>after?: <a href=\"dataTypes#string\">string</a>;</li>\n</ul>\n</li>\n<li>}};</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[@] EpubLocator"
+        },
+        {
+          "textRaw": "字段 (Fields)",
+          "name": "字段_(fields)",
+          "desc": "<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>href</code></td>\n<td>位置所在资源的出版物相对 href, 与目录, 阅读顺序和搜索结果中的 <code>href</code> 是同一套字符串</td>\n</tr>\n<tr>\n<td><code>type</code></td>\n<td>资源的媒体类型, 如 <code>application/xhtml+xml</code></td>\n</tr>\n<tr>\n<td><code>title</code></td>\n<td>资源或章节标题, 已知时存在</td>\n</tr>\n<tr>\n<td><code>locations.progression</code></td>\n<td>在该资源内的进度, 0 到 1</td>\n</tr>\n<tr>\n<td><code>locations.totalProgression</code></td>\n<td>在全书中的进度, 0 到 1</td>\n</tr>\n<tr>\n<td><code>locations.position</code></td>\n<td>合成位置序号 (从 1 起), 与 <a href=\"epubBookType#p-positions\">EpubBook#positions</a> 同一计数</td>\n</tr>\n<tr>\n<td><code>locations.cssSelector</code></td>\n<td>定位到元素的 CSS 选择器</td>\n</tr>\n<tr>\n<td><code>locations.fragments</code></td>\n<td>资源内的片段标识</td>\n</tr>\n<tr>\n<td><code>text.before</code> / <code>text.highlight</code> / <code>text.after</code></td>\n<td>位置处的上下文文本, 搜索结果与书签的 locator 携带</td>\n</tr>\n</tbody>\n</table>\n<p>脚本传回插件的 locator 必须带非空 <code>href</code>, 序列化后不超过 16 KiB (否则 <code>LIMIT_EXCEEDED</code>), 且 <code>href</code> 须指向当前书籍中的资源 (否则 <code>RESOURCE_NOT_FOUND</code>); 其余字段按 Readium 的规则解析, 无法解析时 <code>INVALID_ARGUMENT</code>. 从插件收到的 locator 可原样传回. 手工构造时至少给出 <code>href</code>, 可再加 <code>locations.progression</code> 指定资源内的位置:</p>\n<pre><code class=\"lang-js\">session.goTo({ href: &#39;OPS/chapter_003.xhtml&#39;, locations: { progression: 0.5 } });\n</code></pre>\n",
+          "type": "module",
+          "displayName": "字段 (Fields)"
+        }
+      ],
+      "type": "module",
+      "displayName": "EpubLocator"
+    }
+  ]
+}

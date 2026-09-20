@@ -2055,3 +2055,15 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## MailSearchQuery
 
 参阅 [MailSearchQuery](mailSearchQueryType) 类型章节.
+
+## EpubBook
+
+参阅 [EpubBook - 电子书对象](epubBookType) 类型章节.
+
+## EpubReaderSession
+
+参阅 [EpubReaderSession - 阅读器会话](epubReaderSessionType) 类型章节.
+
+## EpubLocator
+
+参阅 [EpubLocator](epubLocatorType) 类型章节.

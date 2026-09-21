@@ -160,7 +160,7 @@ mail.close();
 
 - <ins>**returns**</ins> { [Object](dataTypes#object)[[]](dataTypes#array) } - 全部服务商预设
 
-返回插件内置的服务商预设列表. 每项包含 `id`, `name`, `domains`, `imap`, `pop3`, `smtp`, `auth`, `authHint`, `autoSavesSent`, `sentFolder`, `requiresClientId`, `idlePush`, `docsUrl` 与 `notes`, 含义见 [MailAccountOptions](mailAccountOptionsType#服务商预设-provider-presets).
+返回插件内置的服务商预设列表. 每项包含 `id`, `name`, `domains`, `imap`, `pop3`, `smtp`, `auth`, `authHint`, `autoSavesSent`, `sentFolder`, `requiresClientId`, `idlePush`, `pop3Xoauth2TwoLine`, `docsUrl` 与 `notes`, 含义见 [MailAccountOptions](mailAccountOptionsType#服务商预设-provider-presets).
 
 ```js
 mail.providers.list().forEach(p => console.log(p.id, p.imap.host, p.auth.join('/')));

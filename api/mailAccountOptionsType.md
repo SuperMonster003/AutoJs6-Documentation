@@ -153,6 +153,7 @@ IMAP `ID` 命令的字段 `{ name?, version? }`. 163 / 126 要求每个连接先
 | `sentFolder` | "已发送" 文件夹名, 插件追加副本时使用 |
 | `requiresClientId` | 是否要求 IMAP `ID` 命令 |
 | `idlePush` | IMAP IDLE 是否真正推送新邮件: `true`, `false` (接受命令但不推送或不支持, 监听改为轮询) 或 `null` (未核实) |
+| `pop3Xoauth2TwoLine` | POP3 的 `AUTH XOAUTH2` 是否只接受两行形式 (先发命令, 收到 `+` 后再发 base64 响应): Outlook.com 与 Microsoft 365 为 `true`, 插件据此选择发送形式 |
 | `docsUrl` | 服务商的帮助页面 |
 | `notes` | 已核实的行为差异 (英文) |
 
@@ -172,7 +173,7 @@ IMAP `ID` 命令的字段 `{ name?, version? }`. 163 / 126 要求每个连接先
 已用真实账户核实的行为差异:
 
 - Gmail: 已发送邮件由服务器保存在 `[Gmail]/Sent Mail`; 自定义关键字可保存; IDLE 约 30 秒内推送; 非 ASCII 搜索由插件以 `CHARSET UTF-8` 发送.
-- Outlook.com: 三个账户在 IMAP, POP3 与 SMTP 上均拒绝应用密码, 使用密码连接抛出 `AUTH_MECHANISM_UNSUPPORTED`, 必须使用令牌.
+- Outlook.com: 三个账户在 IMAP, POP3 与 SMTP 上均拒绝应用密码, 使用密码连接抛出 `AUTH_MECHANISM_UNSUPPORTED`, 必须使用令牌; 以令牌核实 (一个 Hotmail 账户): 文件夹角色来自常规名称 (无 SPECIAL-USE), 服务器保存已发送副本并改写 Message-ID, 自定义关键字不保存, `createFolder` 与 `move` 正常, IDLE 约 10 秒内推送, 中文主题的服务器搜索能命中但可能耗时数分钟, POP3 只接受两行式 `AUTH XOAUTH2` (插件自动处理); 部分较新的个人邮箱被微软禁用了 SMTP AUTH (`535 5.7.139`), 用户设置中没有开关.
 - QQ: 中文搜索服务器返回空结果而非错误, 需用 `fallback: 'always'`; 服务器改写外发邮件的 Message-ID; `createFolder` 可能被拒绝或几秒后消失; 自定义关键字不保存; IDLE 不推送 (监听自动轮询), 新邮件 15 到 40 秒后可见.
 - 163: 每个连接需先发送 `ID` (插件自动处理); 服务器自动保存已发送邮件 (延迟可达数分钟); 对近期邮件的文本搜索返回空, 需用 `fallback: 'always'`; 发件人显示名中的空格变为下划线; 不支持 IDLE. yeah.net 使用同一策略.
 - 126: 同 163, 但文本搜索 (含中文) 正常; 不支持 IDLE.

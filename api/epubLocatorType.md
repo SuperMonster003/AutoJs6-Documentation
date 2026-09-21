@@ -1,6 +1,6 @@
 # EpubLocator
 
-EpubLocator 是 Readium 用于描述 EPUB 中一个位置的普通 JavaScript 对象 (Readium `Locator` 的 JSON 形式). [EpubReaderSession](epubReaderSessionType) 的 `open` / `progress` / `bookmark` 事件, [session.locator](epubReaderSessionType#p-locator), [session.bookmarks](epubReaderSessionType#m-bookmarks) 与 [EpubBook#search](epubBookType#m-search) 的命中都携带此对象; 脚本可以把它原样交回 [session.goTo](epubReaderSessionType#m-goto), [epub.read](epub#m-read) 的 `locator` 选项或 [EpubBook#text](epubBookType#m-text) 的 `target`, 也可以保存为 JSON 供下次运行使用.
+EpubLocator 是 Readium 用于描述 EPUB 中一个位置的普通 JavaScript 对象 (Readium `Locator` 的 JSON 形式). [EpubReaderSession](epubReaderSessionType) 的 `open` / `progress` / `bookmark` / `highlight` 事件, [session.locator](epubReaderSessionType#p-locator), [session.bookmarks](epubReaderSessionType#m-bookmarks), [EpubBook#annotations](epubBookType#m-annotations) 与 [EpubBook#search](epubBookType#m-search) 的命中都携带此对象; 脚本可以把它原样交回 [session.goTo](epubReaderSessionType#m-goto), [epub.read](epub#m-read) 的 `locator` 选项或 [EpubBook#text](epubBookType#m-text) 的 `target`, 也可以保存为 JSON 供下次运行使用.
 
 ```js
 let session = epub.read('./books/moby-dick.epub');

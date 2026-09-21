@@ -5,6 +5,7 @@
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/21</p>
 
 - `新增` [电子书 (EPUB)](https://docs.autojs6.com/#/epub), [EpubBook](https://docs.autojs6.com/#/epubBookType), [EpubReaderSession](https://docs.autojs6.com/#/epubReaderSessionType) 与 [EpubLocator](https://docs.autojs6.com/#/epubLocatorType) 文档, 覆盖 Readium EPUB Reader 插件的元数据, 目录, 正文提取, 封面与资源导出, 全文搜索, 阅读器会话事件与控制, 阅读偏好, 位置对象与错误代码
+- `更新` [电子书 (EPUB)](https://docs.autojs6.com/#/epub) 增加高亮与笔记: [EpubBook#annotations](https://docs.autojs6.com/#/epubBookType?id=m-annotations) 与便捷层 `epub.annotations` 读取阅读器为一本书保存的高亮与笔记 (Readium EPUB Reader 插件 1.1.0, EPUB 契约版本 2), [EpubReaderSession](https://docs.autojs6.com/#/epubReaderSessionType) 增加 `highlight` 事件 (`action` 为 `added` / `updated` / `removed`), [EpubLocator](https://docs.autojs6.com/#/epubLocatorType) 的携带位置随之补充
 - `新增` [邮件 (Mail)](https://docs.autojs6.com/#/mail), [MailClient](https://docs.autojs6.com/#/mailClientType), [MailMessage](https://docs.autojs6.com/#/mailMessageType), [MailAccountOptions](https://docs.autojs6.com/#/mailAccountOptionsType) 与 [MailSearchQuery](https://docs.autojs6.com/#/mailSearchQueryType) 文档, 覆盖 Angus Mail 插件的 IMAP / POP3 / SMTP 收发, 搜索, 附件, 标记, 文件夹, 新邮件监听, 账户选项, 服务商预设与错误代码
 - `更新` [邮件 (Mail)](https://docs.autojs6.com/#/mail) 增加 "邮件到达时运行脚本" 示例: Angus Mail 插件 1.1.0 的后台守望与 AutoJs6 定时任务 "邮件到达时" (邮件契约版本 2), 脚本经 `engines.myEngine().execArgv.mail` 读取守望名, 账户别名, 文件夹, 信封与到达时间
 - `更新` Flow 坐标点击系列, maxAttempts 默认 0 的无限尝试语义, 以及异常的任务调用栈和控制台输出

@@ -304,6 +304,11 @@
 <li><span class="stability_undefined"><a href="#epubbooktype_book_searchasync_query_options">book.searchAsync(query, options?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#epubbooktype_m_annotations">[m#] annotations</a></span><ul>
+<li><span class="stability_undefined"><a href="#epubbooktype_book_annotations">book.annotations()</a></span></li>
+<li><span class="stability_undefined"><a href="#epubbooktype_book_annotationsasync">book.annotationsAsync()</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#epubbooktype_m_close">[m#] close</a></span><ul>
 <li><span class="stability_undefined"><a href="#epubbooktype_book_close">book.close()</a></span></li>
 </ul>
@@ -321,7 +326,7 @@
 
         <div id="apicontent">
             <h1>电子书对象 (EpubBook)<span><a class="mark" href="#epubbooktype_epubbook" id="epubbooktype_epubbook">#</a></span></h1>
-<p>EpubBook 是 <a href="epub.html#epub_m_open">epub.open</a> 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出以及全文搜索.</p>
+<p>EpubBook 是 <a href="epub.html#epub_m_open">epub.open</a> 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出, 全文搜索以及阅读器为这本书保存的高亮与笔记.</p>
 <p>每个方法都有同步形态与 <code>Async</code> 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; <code>Async</code> 形态返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 回调在脚本线程执行. 失败时抛出 (或拒绝为) <a href="epub.html#epub_c_epuberror">EpubError</a>. 书籍关闭后 (包括插件在 5 分钟无调用后自动关闭) 所有方法失败于 <code>SESSION_CLOSED</code>.</p>
 <p><code>metadata</code>, <code>toc</code>, <code>readingOrder</code> 与 <code>positions</code> 是只读属性, 首次访问时从插件读取并缓存. 书内资源以出版物相对 href 标识 (如 <code>OEBPS/chapter2.xhtml</code>), 目录, 阅读顺序, 搜索结果与 <a href="epubLocatorType.html">EpubLocator</a> 中的 <code>href</code> 是同一套字符串, 可以互相传递.</p>
 <pre><code class="lang-js">let book = epub.open(&#39;./books/moby-dick.epub&#39;);
@@ -520,6 +525,22 @@ book.close();
 <li><strong>[ options ]</strong> { <span class="type">{ offset?: <a href="dataTypes.html#datatypes_number">number</a>; limit?: <a href="dataTypes.html#datatypes_number">number</a></span> }} - 分页选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">Object</a>[]&gt;</span> }</li>
 </ul>
+<h2>[m#] annotations<span><a class="mark" href="#epubbooktype_m_annotations" id="epubbooktype_m_annotations">#</a></span></h2>
+<h3>book.annotations()<span><a class="mark" href="#epubbooktype_book_annotations" id="epubbooktype_book_annotations">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type">{ id: <a href="dataTypes.html#datatypes_number">number</a>; style: <a href="dataTypes.html#datatypes_string">string</a>; color: <a href="dataTypes.html#datatypes_string">string</a>; note?: <a href="dataTypes.html#datatypes_string">string</a>; quote?: <a href="dataTypes.html#datatypes_string">string</a>; title?: <a href="dataTypes.html#datatypes_string">string</a>; locator: <a href="epubLocatorType.html">EpubLocator</a>; createdAt: <a href="dataTypes.html#datatypes_number">number</a>; updatedAt: <a href="dataTypes.html#datatypes_number">number</a></span> }}[] - 高亮与笔记列表</li>
+</ul>
+<p>阅读器为这本书保存的高亮与笔记 (Readium EPUB Reader 插件 1.1.0 起), 按阅读顺序排列 (先按资源在阅读顺序中的位置, 再按资源内的进度), 每次调用实时读取, 不缓存. 每条含阅读器分配的 <code>id</code>, <code>style</code> (<code>&#39;highlight&#39;</code> 或 <code>&#39;underline&#39;</code>), <code>color</code> (<code>#RRGGBB</code>), 用户填写的 <code>note</code> (无笔记时缺失), 选中的原文 <code>quote</code>, 章节 <code>title</code> (已知时), 指向选区的 <code>locator</code> 以及 UTC 毫秒的 <code>createdAt</code> / <code>updatedAt</code>. 最多返回 2000 条 (阅读器每本书的存储上限). 需要携带 EPUB 契约版本 2 的 AutoJs6 构建 (6.8.0 build 5282 之后); 插件为 1.0.0 时失败于 <code>PLUGIN_INCOMPATIBLE</code>. 只读: 高亮的添加, 编辑与删除在阅读器中完成, 并由 <a href="epubReaderSessionType.html">EpubReaderSession</a> 的 <code>highlight</code> 事件通知.</p>
+<pre><code class="lang-js">let book = epub.open(&#39;./books/moby-dick.epub&#39;);
+book.annotations().filter(a =&gt; a.note).forEach(a =&gt; console.log(a.title, &#39;:&#39;, a.quote, &#39;-&gt;&#39;, a.note));
+book.close();
+</code></pre>
+<h3>book.annotationsAsync()<span><a class="mark" href="#epubbooktype_book_annotationsasync" id="epubbooktype_book_annotationsasync">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">Object</a>[]&gt;</span> }</li>
+</ul>
 <h2>[m#] close<span><a class="mark" href="#epubbooktype_m_close" id="epubbooktype_m_close">#</a></span></h2>
 <h3>book.close()<span><a class="mark" href="#epubbooktype_book_close" id="epubbooktype_book_close">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
@@ -573,6 +594,10 @@ book.close();
 <tr>
 <td>单次 <code>search</code> 返回数 / 一次查询的全部命中</td>
 <td>500 (默认 50) / 500</td>
+</tr>
+<tr>
+<td><code>annotations</code> 返回的高亮与笔记</td>
+<td>2000 (阅读器每本书的存储上限)</td>
 </tr>
 <tr>
 <td>打开超时 / 其它调用超时</td>

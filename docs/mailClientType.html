@@ -901,7 +901,7 @@ console.log(uid);
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#mailclienttype_mailwatch">MailWatch</a></span> } - 监听对象</li>
 </ul>
 <p>开始监听文件夹的新邮件, 立即返回, 事件在脚本线程上派发, 因此脚本需保持运行 (如 UI 模式, <code>setInterval</code> 或事件循环), 不需要也不应使用 <code>sleep</code> 循环等待. 每个客户端最多同时打开 4 个监听, 超出时抛出 <code>LIMIT_EXCEEDED</code>.</p>
-<p>监听在插件进程中运行. Gmail 的 IDLE 推送约在送达后 30 秒内到达; QQ, Sina 接受 IDLE 但不推送, 163 / 126 不支持 IDLE, 这些服务商在 <code>&#39;auto&#39;</code> 下自动轮询 (QQ 的新邮件在送达后 15 到 40 秒可见). 服务器周期性断开连接时插件自动重连, 不产生 <code>error</code> 事件; 无法保证增量连续时触发 <code>resync</code>. 详见 <a href="#mailclienttype_mailwatch">MailWatch</a> 与预设的 <code>idlePush</code> 字段.</p>
+<p>监听在插件进程中运行. Gmail 的 IDLE 推送约在送达后 30 秒内到达, Outlook.com 约 10 秒; QQ, Sina 接受 IDLE 但不推送, 163 / 126 不支持 IDLE, 这些服务商在 <code>&#39;auto&#39;</code> 下自动轮询 (QQ 的新邮件在送达后 15 到 40 秒可见). 服务器周期性断开连接时插件自动重连, 不产生 <code>error</code> 事件; 无法保证增量连续时触发 <code>resync</code>. 详见 <a href="#mailclienttype_mailwatch">MailWatch</a> 与预设的 <code>idlePush</code> 字段.</p>
 <pre><code class="lang-js">let watch = client.watch({ folder: &#39;INBOX&#39;, mode: &#39;auto&#39;, fetchBody: true });
 watch.on(&#39;message&#39;, (m, w) =&gt; console.log(w.mode, m.uid, m.subject));
 watch.on(&#39;mode&#39;, mode =&gt; console.log(&#39;mode:&#39;, mode));

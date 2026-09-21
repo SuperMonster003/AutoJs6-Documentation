@@ -322,6 +322,7 @@
 <li><span class="stability_undefined"><a href="#mail">发送带附件的邮件</a></span></li>
 <li><span class="stability_undefined"><a href="#mail_1">读取未读邮件并下载附件</a></span></li>
 <li><span class="stability_undefined"><a href="#mail_2">监听新邮件</a></span></li>
+<li><span class="stability_undefined"><a href="#mail_run_a_script_on_mail_arrival">邮件到达时运行脚本 (Run a Script on Mail Arrival)</a></span></li>
 <li><span class="stability_undefined"><a href="#mail_3">异步调用</a></span></li>
 </ul>
 </li>
@@ -446,7 +447,7 @@ mail.close();
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 全部服务商预设</li>
 </ul>
-<p>返回插件内置的服务商预设列表. 每项包含 <code>id</code>, <code>name</code>, <code>domains</code>, <code>imap</code>, <code>pop3</code>, <code>smtp</code>, <code>auth</code>, <code>authHint</code>, <code>autoSavesSent</code>, <code>sentFolder</code>, <code>requiresClientId</code>, <code>idlePush</code>, <code>docsUrl</code> 与 <code>notes</code>, 含义见 <a href="mailAccountOptionsType.html#mailaccountoptionstype_provider_presets">MailAccountOptions</a>.</p>
+<p>返回插件内置的服务商预设列表. 每项包含 <code>id</code>, <code>name</code>, <code>domains</code>, <code>imap</code>, <code>pop3</code>, <code>smtp</code>, <code>auth</code>, <code>authHint</code>, <code>autoSavesSent</code>, <code>sentFolder</code>, <code>requiresClientId</code>, <code>idlePush</code>, <code>pop3Xoauth2TwoLine</code>, <code>docsUrl</code> 与 <code>notes</code>, 含义见 <a href="mailAccountOptionsType.html#mailaccountoptionstype_provider_presets">MailAccountOptions</a>.</p>
 <pre><code class="lang-js">mail.providers.list().forEach(p =&gt; console.log(p.id, p.imap.host, p.auth.join(&#39;/&#39;)));
 </code></pre>
 <h3>mail.providers.get(id)<span><a class="mark" href="#mail_mail_providers_get_id" id="mail_mail_providers_get_id">#</a></span></h3>
@@ -834,6 +835,21 @@ setTimeout(() =&gt; {
     watch.stop();
     client.close();
 }, 10 * 60 * 1000);
+</code></pre>
+<h3>邮件到达时运行脚本 (Run a Script on Mail Arrival)<span><a class="mark" href="#mail_run_a_script_on_mail_arrival" id="mail_run_a_script_on_mail_arrival">#</a></span></h3>
+<p>Angus Mail 插件 1.1.0 起 (需要携带邮件契约版本 2 的 AutoJs6 构建), 插件设置页的 &quot;守望&quot; 页面可以在没有脚本运行时为已保存账户保持 IMAP IDLE 或轮询连接 (前台服务), 并在新邮件到达时唤醒 AutoJs6 的定时任务 &quot;邮件到达时&quot; (长按脚本 &gt; 定时任务 &gt; 广播触发 &gt; 邮件到达时, 选择守望并可选填写发件人 / 主题过滤). 被启动的脚本通过 <code>engines.myEngine().execArgv.mail</code> 读取该事件: <code>triggerId</code> (守望名), <code>alias</code> (已保存账户的别名), <code>address</code>, <code>folder</code>, <code>message</code> (新邮件的信封, <code>bodyLoaded</code> 为 false) 与 <code>receivedAt</code> (插件看到该邮件的 UTC 毫秒). 同一封邮件只启动一次, 同一任务每 3 秒至多启动一次 (连续到达时以最后一封为准).</p>
+<pre><code class="lang-js">let argv = engines.myEngine().execArgv;
+if (!argv.mail) {
+    console.log(&#39;不是由邮件到达任务启动&#39;);
+    exit();
+}
+console.log(argv.mail.triggerId, argv.mail.message.subject, argv.mail.message.from.address);
+let client = mail.connect(argv.mail.alias); // 以守望所用的别名连接, 秘密留在插件内.
+let full = client.get(argv.mail.message); // 按需加载正文.
+if (/验证码/.test(full.subject)) {
+    console.log(full.text);
+}
+client.close();
 </code></pre>
 <h3>异步调用<span><a class="mark" href="#mail_3" id="mail_3">#</a></span></h3>
 <pre><code class="lang-js">mail.connectAsync(&#39;work&#39;).then(client =&gt; {

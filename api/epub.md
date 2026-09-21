@@ -1,10 +1,10 @@
 # 电子书 (EPUB)
 
-`epub` 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 以及打开阅读器并接收阅读事件.
+`epub` 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 读取阅读器中的高亮与笔记, 以及打开阅读器并接收阅读事件.
 
 从 AutoJs6 6.8.0 起, EPUB 功能由外置 Readium EPUB Reader 插件 (AutoJs6-Plugin-Readium-EPUB-Reader) 提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE`, `PLUGIN_DISABLED` 或 `PLUGIN_INCOMPATIBLE` 的 [EpubError](#c-epuberror), 其消息以插件中心的本地化提示开头. [epub.isAvailable](#m-isavailable) 可预先探测.
 
-书籍以文件路径指定, 相对路径按脚本工作目录解析 (与 [files.path](files#m-path) 相同), 不接受 `content://` 等 URI. [epub.open](#m-open) 返回 [EpubBook](epubBookType) 对象, 书籍在插件进程中保持打开直到 `close()` 或脚本退出; 便捷层方法 ([metadata](#m-metadata), [toc](#m-toc), [readingOrder](#m-readingorder), [text](#m-text), [cover](#m-cover), [search](#m-search)) 每次调用自行打开并关闭书籍, 适合一次性读取. [epub.read](#m-read) 打开插件的阅读器并返回 [EpubReaderSession](epubReaderSessionType), 阅读事件在脚本线程到达.
+书籍以文件路径指定, 相对路径按脚本工作目录解析 (与 [files.path](files#m-path) 相同), 不接受 `content://` 等 URI. [epub.open](#m-open) 返回 [EpubBook](epubBookType) 对象, 书籍在插件进程中保持打开直到 `close()` 或脚本退出; 便捷层方法 ([metadata](#m-metadata), [toc](#m-toc), [readingOrder](#m-readingorder), [text](#m-text), [cover](#m-cover), [search](#m-search), [annotations](#m-annotations)) 每次调用自行打开并关闭书籍, 适合一次性读取. [epub.read](#m-read) 打开插件的阅读器并返回 [EpubReaderSession](epubReaderSessionType), 阅读事件在脚本线程到达.
 
 每个方法都有同步形态 `x(...)` 与异步形态 `xAsync(...)`, 二者参数与结果完全一致. 同步形态阻塞当前脚本线程直至插件返回结果或调用失败, 停止脚本会取消尚未完成的调用; 异步形态立即返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 回调在脚本线程执行. 传给插件的参数会像 `JSON.stringify` 一样序列化, 函数与 `undefined` 值被忽略, 未知的选项键在此处以 `INVALID_ARGUMENT` 拒绝.
 
@@ -270,6 +270,31 @@ epub.search('./books/moby-dick.epub', 'whale', { limit: 5 })
 - **[ options ]** {{ offset?: [number](dataTypes#number); limit?: [number](dataTypes#number) }} - 分页选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](dataTypes#object)[]&gt; }
 
+## [m] annotations
+
+### epub.annotations(path)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) | {{ path: [string](dataTypes#string); displayName?: [string](dataTypes#string) }} } - 文件路径或打开选项
+- <ins>**returns**</ins> {{ id: [number](dataTypes#number); style: [string](dataTypes#string); color: [string](dataTypes#string); note?: [string](dataTypes#string); quote?: [string](dataTypes#string); title?: [string](dataTypes#string); locator: [EpubLocator](epubLocatorType); createdAt: [number](dataTypes#number); updatedAt: [number](dataTypes#number) }}[] - 高亮与笔记列表
+
+打开书籍, 读取阅读器为它保存的高亮与笔记后关闭. 结果同 [EpubBook#annotations](epubBookType#m-annotations): 按阅读顺序排列, 最多 2000 条. 需要 Readium EPUB Reader 插件 1.1.0 (EPUB 契约版本 2) 与携带该契约版本的 AutoJs6 构建 (6.8.0 build 5282 之后); 插件为 1.0.0 时失败于 `PLUGIN_INCOMPATIBLE`.
+
+```js
+epub.annotations('./books/moby-dick.epub')
+    .forEach(a => console.log(a.title || a.locator.href, '|', a.quote, a.note ? '// ' + a.note : ''));
+```
+
+## [m] annotationsAsync
+
+### epub.annotationsAsync(path)
+
+**`6.8.0`** **`Async`**
+
+- **path** { [string](dataTypes#string) | {{ path: [string](dataTypes#string); displayName?: [string](dataTypes#string) }} } - 文件路径或打开选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](dataTypes#object)[]&gt; }
+
 ## [m] read
 
 ### epub.read(path, options?)
@@ -439,6 +464,17 @@ session.on('bookmark', e => console.log(e.action, e.locator.href));
 session.on('close', e => console.log('closed:', e.reason));
 setTimeout(() => session.nextChapter(), 10000);
 setTimeout(() => session.close(), 60000); // 阅读器留给用户继续阅读.
+```
+
+### 读取高亮与笔记
+
+```js
+let book = epub.open('./books/moby-dick.epub');
+let notes = book.annotations();
+console.log(notes.length, '条高亮与笔记');
+notes.forEach(a => console.log(a.title || a.locator.href, '|', a.style, a.color, '|', a.quote, a.note ? '// ' + a.note : ''));
+files.write('./out/notes.md', notes.filter(a => a.note).map(a => '> ' + a.quote + '\n\n' + a.note).join('\n\n'));
+book.close();
 ```
 
 ### 异步调用

@@ -332,7 +332,7 @@
 
         <div id="apicontent">
             <h1>阅读器会话 (EpubReaderSession)<span><a class="mark" href="#epubreadersessiontype_epubreadersession" id="epubreadersessiontype_epubreadersession">#</a></span></h1>
-<p>EpubReaderSession 是 <a href="epub.html#epub_m_read">epub.read</a> 返回的阅读器会话对象, 是 <a href="eventEmitterType.html">EventEmitter</a> 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转与书签变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.</p>
+<p>EpubReaderSession 是 <a href="epub.html#epub_m_read">epub.read</a> 返回的阅读器会话对象, 是 <a href="eventEmitterType.html">EventEmitter</a> 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转, 书签与高亮变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.</p>
 <p>会话打开期间脚本保持运行 (与 <a href="mailClientType.html#mailclienttype_mailwatch">MailWatch</a> 相同), 不需要也不应使用 <code>sleep</code> 循环等待; <code>close</code> 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未关闭的会话自动结束, 阅读器保留为普通阅读, 不触发事件. 每个插件进程只有一个阅读器会话, 新的 <code>read</code> 会替换之前的会话.</p>
 <p>控制方法同步执行, 失败时抛出 <a href="epub.html#epub_c_epuberror">EpubError</a>; 会话关闭后 (以及 <code>open</code> 事件之前尚未与阅读器连接时) 失败于 <code>SESSION_CLOSED</code> 或 <code>READER_NOT_VISIBLE</code>. <code>on</code> / <code>once</code> 返回自身以便链式调用.</p>
 <pre><code class="lang-js">let session = epub.read(&#39;./books/moby-dick.epub&#39;, { href: &#39;OPS/chapter_003.xhtml&#39; });
@@ -520,6 +520,11 @@ session.close({ finish: true }); // 同时关闭阅读器.
 <td><code>bookmark</code></td>
 <td><code>({ action, locator, createdAt, title, text })</code></td>
 <td>用户在阅读器中添加 (<code>action</code> 为 <code>&#39;added&#39;</code>) 或删除 (<code>&#39;removed&#39;</code>) 书签</td>
+</tr>
+<tr>
+<td><code>highlight</code></td>
+<td><code>({ action, id, style, color, note, quote, title, locator, createdAt, updatedAt })</code></td>
+<td>用户在阅读器中添加 (<code>action</code> 为 <code>&#39;added&#39;</code>), 编辑 (<code>&#39;updated&#39;</code>) 或删除 (<code>&#39;removed&#39;</code>) 高亮或笔记 (Readium EPUB Reader 插件 1.1.0 起, 需要携带 EPUB 契约版本 2 的 AutoJs6 构建); 字段同 <a href="epubBookType.html#epubbooktype_m_annotations">EpubBook#annotations</a>, 无笔记时 <code>note</code> 为 <code>null</code></td>
 </tr>
 <tr>
 <td><code>error</code></td>

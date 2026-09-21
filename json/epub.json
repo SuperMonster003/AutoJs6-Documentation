@@ -4,7 +4,7 @@
     {
       "textRaw": "电子书 (EPUB)",
       "name": "电子书_(epub)",
-      "desc": "<p><code>epub</code> 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 以及打开阅读器并接收阅读事件.</p>\n<p>从 AutoJs6 6.8.0 起, EPUB 功能由外置 Readium EPUB Reader 插件 (AutoJs6-Plugin-Readium-EPUB-Reader) 提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href=\"#c-epuberror\">EpubError</a>, 其消息以插件中心的本地化提示开头. <a href=\"#m-isavailable\">epub.isAvailable</a> 可预先探测.</p>\n<p>书籍以文件路径指定, 相对路径按脚本工作目录解析 (与 <a href=\"files#m-path\">files.path</a> 相同), 不接受 <code>content://</code> 等 URI. <a href=\"#m-open\">epub.open</a> 返回 <a href=\"epubBookType\">EpubBook</a> 对象, 书籍在插件进程中保持打开直到 <code>close()</code> 或脚本退出; 便捷层方法 (<a href=\"#m-metadata\">metadata</a>, <a href=\"#m-toc\">toc</a>, <a href=\"#m-readingorder\">readingOrder</a>, <a href=\"#m-text\">text</a>, <a href=\"#m-cover\">cover</a>, <a href=\"#m-search\">search</a>) 每次调用自行打开并关闭书籍, 适合一次性读取. <a href=\"#m-read\">epub.read</a> 打开插件的阅读器并返回 <a href=\"epubReaderSessionType\">EpubReaderSession</a>, 阅读事件在脚本线程到达.</p>\n<p>每个方法都有同步形态 <code>x(...)</code> 与异步形态 <code>xAsync(...)</code>, 二者参数与结果完全一致. 同步形态阻塞当前脚本线程直至插件返回结果或调用失败, 停止脚本会取消尚未完成的调用; 异步形态立即返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 回调在脚本线程执行. 传给插件的参数会像 <code>JSON.stringify</code> 一样序列化, 函数与 <code>undefined</code> 值被忽略, 未知的选项键在此处以 <code>INVALID_ARGUMENT</code> 拒绝.</p>\n<p>本模块注册为全局名称 <code>epub</code>, 并提供 <code>$epub</code> 别名.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;/sdcard/Books/moby-dick.epub&#39;);\nconsole.log(book.metadata.title, book.metadata.authors.join(&#39;, &#39;));\nbook.toc.forEach(e =&gt; console.log(e.title, e.href));\nconsole.log(book.text(0, { maxChars: 500 }));\nbook.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">epub</p>\n\n<hr>\n",
+      "desc": "<p><code>epub</code> 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 读取阅读器中的高亮与笔记, 以及打开阅读器并接收阅读事件.</p>\n<p>从 AutoJs6 6.8.0 起, EPUB 功能由外置 Readium EPUB Reader 插件 (AutoJs6-Plugin-Readium-EPUB-Reader) 提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href=\"#c-epuberror\">EpubError</a>, 其消息以插件中心的本地化提示开头. <a href=\"#m-isavailable\">epub.isAvailable</a> 可预先探测.</p>\n<p>书籍以文件路径指定, 相对路径按脚本工作目录解析 (与 <a href=\"files#m-path\">files.path</a> 相同), 不接受 <code>content://</code> 等 URI. <a href=\"#m-open\">epub.open</a> 返回 <a href=\"epubBookType\">EpubBook</a> 对象, 书籍在插件进程中保持打开直到 <code>close()</code> 或脚本退出; 便捷层方法 (<a href=\"#m-metadata\">metadata</a>, <a href=\"#m-toc\">toc</a>, <a href=\"#m-readingorder\">readingOrder</a>, <a href=\"#m-text\">text</a>, <a href=\"#m-cover\">cover</a>, <a href=\"#m-search\">search</a>, <a href=\"#m-annotations\">annotations</a>) 每次调用自行打开并关闭书籍, 适合一次性读取. <a href=\"#m-read\">epub.read</a> 打开插件的阅读器并返回 <a href=\"epubReaderSessionType\">EpubReaderSession</a>, 阅读事件在脚本线程到达.</p>\n<p>每个方法都有同步形态 <code>x(...)</code> 与异步形态 <code>xAsync(...)</code>, 二者参数与结果完全一致. 同步形态阻塞当前脚本线程直至插件返回结果或调用失败, 停止脚本会取消尚未完成的调用; 异步形态立即返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 回调在脚本线程执行. 传给插件的参数会像 <code>JSON.stringify</code> 一样序列化, 函数与 <code>undefined</code> 值被忽略, 未知的选项键在此处以 <code>INVALID_ARGUMENT</code> 拒绝.</p>\n<p>本模块注册为全局名称 <code>epub</code>, 并提供 <code>$epub</code> 别名.</p>\n<pre><code class=\"lang-js\">let book = epub.open(&#39;/sdcard/Books/moby-dick.epub&#39;);\nconsole.log(book.metadata.title, book.metadata.authors.join(&#39;, &#39;));\nbook.toc.forEach(e =&gt; console.log(e.title, e.href));\nconsole.log(book.text(0, { maxChars: 500 }));\nbook.close();\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">epub</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[m] open",
@@ -425,6 +425,52 @@
           "displayName": "[m] searchAsync"
         },
         {
+          "textRaw": "[m] annotations",
+          "name": "[m]_annotations",
+          "methods": [
+            {
+              "textRaw": "epub.annotations(path)",
+              "type": "method",
+              "name": "annotations",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> {{ id: <a href=\"dataTypes#number\">number</a>; style: <a href=\"dataTypes#string\">string</a>; color: <a href=\"dataTypes#string\">string</a>; note?: <a href=\"dataTypes#string\">string</a>; quote?: <a href=\"dataTypes#string\">string</a>; title?: <a href=\"dataTypes#string\">string</a>; locator: <a href=\"epubLocatorType\">EpubLocator</a>; createdAt: <a href=\"dataTypes#number\">number</a>; updatedAt: <a href=\"dataTypes#number\">number</a> }}[] - 高亮与笔记列表</li>\n</ul>\n<p>打开书籍, 读取阅读器为它保存的高亮与笔记后关闭. 结果同 <a href=\"epubBookType#m-annotations\">EpubBook#annotations</a>: 按阅读顺序排列, 最多 2000 条. 需要 Readium EPUB Reader 插件 1.1.0 (EPUB 契约版本 2) 与携带该契约版本的 AutoJs6 构建 (6.8.0 build 5282 之后); 插件为 1.0.0 时失败于 <code>PLUGIN_INCOMPATIBLE</code>.</p>\n<pre><code class=\"lang-js\">epub.annotations(&#39;./books/moby-dick.epub&#39;)\n    .forEach(a =&gt; console.log(a.title || a.locator.href, &#39;|&#39;, a.quote, a.note ? &#39;// &#39; + a.note : &#39;&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] annotations"
+        },
+        {
+          "textRaw": "[m] annotationsAsync",
+          "name": "[m]_annotationsasync",
+          "methods": [
+            {
+              "textRaw": "epub.annotationsAsync(path)",
+              "type": "method",
+              "name": "annotationsAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>path</strong> { <a href=\"dataTypes#string\">string</a> | {{ path: <a href=\"dataTypes#string\">string</a>; displayName?: <a href=\"dataTypes#string\">string</a> }} } - 文件路径或打开选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>[]&gt; }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "path"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] annotationsAsync"
+        },
+        {
           "textRaw": "[m] read",
           "name": "[m]_read",
           "methods": [
@@ -597,6 +643,13 @@
               "desc": "<pre><code class=\"lang-js\">let session = epub.read(&#39;./books/moby-dick.epub&#39;, { progression: 0.25 });\nsession.on(&#39;open&#39;, () =&gt; session.setPreferences({ fontSize: 1.2 }));\nsession.on(&#39;progress&#39;, e =&gt; console.log((e.totalProgression * 100).toFixed(1) + &#39;%&#39;, e.chapterTitle || e.href));\nsession.on(&#39;bookmark&#39;, e =&gt; console.log(e.action, e.locator.href));\nsession.on(&#39;close&#39;, e =&gt; console.log(&#39;closed:&#39;, e.reason));\nsetTimeout(() =&gt; session.nextChapter(), 10000);\nsetTimeout(() =&gt; session.close(), 60000); // 阅读器留给用户继续阅读.\n</code></pre>\n",
               "type": "module",
               "displayName": "打开阅读器并监听进度"
+            },
+            {
+              "textRaw": "读取高亮与笔记",
+              "name": "读取高亮与笔记",
+              "desc": "<pre><code class=\"lang-js\">let book = epub.open(&#39;./books/moby-dick.epub&#39;);\nlet notes = book.annotations();\nconsole.log(notes.length, &#39;条高亮与笔记&#39;);\nnotes.forEach(a =&gt; console.log(a.title || a.locator.href, &#39;|&#39;, a.style, a.color, &#39;|&#39;, a.quote, a.note ? &#39;// &#39; + a.note : &#39;&#39;));\nfiles.write(&#39;./out/notes.md&#39;, notes.filter(a =&gt; a.note).map(a =&gt; &#39;&gt; &#39; + a.quote + &#39;\\n\\n&#39; + a.note).join(&#39;\\n\\n&#39;));\nbook.close();\n</code></pre>\n",
+              "type": "module",
+              "displayName": "读取高亮与笔记"
             },
             {
               "textRaw": "异步调用",

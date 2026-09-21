@@ -1,6 +1,6 @@
 # 阅读器会话 (EpubReaderSession)
 
-EpubReaderSession 是 [epub.read](epub#m-read) 返回的阅读器会话对象, 是 [EventEmitter](eventEmitterType) 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转与书签变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.
+EpubReaderSession 是 [epub.read](epub#m-read) 返回的阅读器会话对象, 是 [EventEmitter](eventEmitterType) 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转, 书签与高亮变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.
 
 会话打开期间脚本保持运行 (与 [MailWatch](mailClientType#mailwatch) 相同), 不需要也不应使用 `sleep` 循环等待; `close` 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未关闭的会话自动结束, 阅读器保留为普通阅读, 不触发事件. 每个插件进程只有一个阅读器会话, 新的 `read` 会替换之前的会话.
 
@@ -238,6 +238,7 @@ session.close({ finish: true }); // 同时关闭阅读器.
 | `open` | `({ locator, title, href, positions })` | 阅读器可见并显示了起始位置, 只触发一次. `title` 为书名, `positions` 为合成位置数 |
 | `progress` | `({ locator, totalProgression, chapterTitle, href })` | 位置变化 (翻页, 跳转, 滚动), 节流 500 毫秒并在停止后补发最后一次. `chapterTitle` 未知时为 `null` |
 | `bookmark` | `({ action, locator, createdAt, title, text })` | 用户在阅读器中添加 (`action` 为 `'added'`) 或删除 (`'removed'`) 书签 |
+| `highlight` | `({ action, id, style, color, note, quote, title, locator, createdAt, updatedAt })` | 用户在阅读器中添加 (`action` 为 `'added'`), 编辑 (`'updated'`) 或删除 (`'removed'`) 高亮或笔记 (Readium EPUB Reader 插件 1.1.0 起, 需要携带 EPUB 契约版本 2 的 AutoJs6 构建); 字段同 [EpubBook#annotations](epubBookType#m-annotations), 无笔记时 `note` 为 `null` |
 | `error` | `(err: EpubError)` | 非致命错误, 会话继续: 未知的偏好键 (`UNSUPPORTED_PREFERENCE`), 校验通过后无法到达的跳转目标 (`RESOURCE_NOT_FOUND`, `INTERNAL`); 脚本未及时消费事件时的 `LIMIT_EXCEEDED` (随后 `close`) |
 | `close` | `({ reason })` | 会话已结束, 不再有事件. 原因: `'user'` (用户离开阅读器), `'host'` (脚本调用 `close`), `'replaced'` (新会话替换), `'timeout'` (阅读器 60 秒内未显示), `'error'` (插件侧失败), `'overflow'` (脚本积压的事件超过 512 条或 8 MiB, 之前的事件被丢弃) |
 

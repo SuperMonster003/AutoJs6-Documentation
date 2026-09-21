@@ -1,6 +1,6 @@
 # 电子书对象 (EpubBook)
 
-EpubBook 是 [epub.open](epub#m-open) 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出以及全文搜索.
+EpubBook 是 [epub.open](epub#m-open) 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出, 全文搜索以及阅读器为这本书保存的高亮与笔记.
 
 每个方法都有同步形态与 `Async` 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; `Async` 形态返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 回调在脚本线程执行. 失败时抛出 (或拒绝为) [EpubError](epub#c-epuberror). 书籍关闭后 (包括插件在 5 分钟无调用后自动关闭) 所有方法失败于 `SESSION_CLOSED`.
 
@@ -249,6 +249,28 @@ book.close();
 - **[ options ]** {{ offset?: [number](dataTypes#number); limit?: [number](dataTypes#number) }} - 分页选项
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](dataTypes#object)[]&gt; }
 
+## [m#] annotations
+
+### book.annotations()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> {{ id: [number](dataTypes#number); style: [string](dataTypes#string); color: [string](dataTypes#string); note?: [string](dataTypes#string); quote?: [string](dataTypes#string); title?: [string](dataTypes#string); locator: [EpubLocator](epubLocatorType); createdAt: [number](dataTypes#number); updatedAt: [number](dataTypes#number) }}[] - 高亮与笔记列表
+
+阅读器为这本书保存的高亮与笔记 (Readium EPUB Reader 插件 1.1.0 起), 按阅读顺序排列 (先按资源在阅读顺序中的位置, 再按资源内的进度), 每次调用实时读取, 不缓存. 每条含阅读器分配的 `id`, `style` (`'highlight'` 或 `'underline'`), `color` (`#RRGGBB`), 用户填写的 `note` (无笔记时缺失), 选中的原文 `quote`, 章节 `title` (已知时), 指向选区的 `locator` 以及 UTC 毫秒的 `createdAt` / `updatedAt`. 最多返回 2000 条 (阅读器每本书的存储上限). 需要携带 EPUB 契约版本 2 的 AutoJs6 构建 (6.8.0 build 5282 之后); 插件为 1.0.0 时失败于 `PLUGIN_INCOMPATIBLE`. 只读: 高亮的添加, 编辑与删除在阅读器中完成, 并由 [EpubReaderSession](epubReaderSessionType) 的 `highlight` 事件通知.
+
+```js
+let book = epub.open('./books/moby-dick.epub');
+book.annotations().filter(a => a.note).forEach(a => console.log(a.title, ':', a.quote, '->', a.note));
+book.close();
+```
+
+### book.annotationsAsync()
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[Object](dataTypes#object)[]&gt; }
+
 ## [m#] close
 
 ### book.close()
@@ -279,6 +301,7 @@ book.close();
 | 单个资源 (`text` 渲染或 `resource` / `cover` 导出) | 64 MiB |
 | 搜索词长度 | 1 到 256 个字符 |
 | 单次 `search` 返回数 / 一次查询的全部命中 | 500 (默认 50) / 500 |
+| `annotations` 返回的高亮与笔记 | 2000 (阅读器每本书的存储上限) |
 | 打开超时 / 其它调用超时 | 30 秒 / 60 秒 |
 
 超出上限的调用抛出 `LIMIT_EXCEEDED`, 超时抛出 `TIMEOUT`.

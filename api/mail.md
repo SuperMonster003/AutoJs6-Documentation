@@ -196,7 +196,7 @@ let client = mail.connect({ provider: preset.id, address: 'someone@foxmail.com',
 
 - <ins>**returns**</ins> { [Object](dataTypes#object)[[]](dataTypes#array) } - 插件设置页保存的账户
 
-每项包含 `alias`, `address`, `user`, `name`, `provider`, `auth`, `receive`, `imap`, `pop3`, `smtp`, `default` 与 `updatedAt`, 不包含任何凭据. 保存的账户无法解析时只包含 `alias` 与 `error`. 字段含义见 [MailAccountOptions](mailAccountOptionsType#保存的账户-saved-accounts).
+每项包含 `alias`, `address`, `user`, `name`, `provider`, `auth`, `receive`, `imap`, `pop3`, `smtp`, `default` 与 `updatedAt`, 不包含任何凭据. 在插件设置页经浏览器以 Google / Microsoft 账号登录的账户 (Angus Mail 1.2.0) 另有 `oauth` 对象 (`provider` 为 `google` 或 `microsoft`, `authorizedAt` 与 `expiresAt` 为 UTC 毫秒, `needsReauth` 为 true 时表示刷新被拒, 需在插件设置页重新登录), 其 `auth` 为 `xoauth2`, 访问令牌由插件自行续期, 令牌本身不会出现在这里. 保存的账户无法解析时只包含 `alias` 与 `error`. 字段含义见 [MailAccountOptions](mailAccountOptionsType#保存的账户-saved-accounts).
 
 ### mail.accounts.has(alias)
 

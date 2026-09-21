@@ -387,6 +387,25 @@ setTimeout(() => {
 }, 10 * 60 * 1000);
 ```
 
+### 邮件到达时运行脚本 (Run a Script on Mail Arrival)
+
+Angus Mail 插件 1.1.0 起 (需要携带邮件契约版本 2 的 AutoJs6 构建), 插件设置页的 "守望" 页面可以在没有脚本运行时为已保存账户保持 IMAP IDLE 或轮询连接 (前台服务), 并在新邮件到达时唤醒 AutoJs6 的定时任务 "邮件到达时" (长按脚本 > 定时任务 > 广播触发 > 邮件到达时, 选择守望并可选填写发件人 / 主题过滤). 被启动的脚本通过 `engines.myEngine().execArgv.mail` 读取该事件: `triggerId` (守望名), `alias` (已保存账户的别名), `address`, `folder`, `message` (新邮件的信封, `bodyLoaded` 为 false) 与 `receivedAt` (插件看到该邮件的 UTC 毫秒). 同一封邮件只启动一次, 同一任务每 3 秒至多启动一次 (连续到达时以最后一封为准).
+
+```js
+let argv = engines.myEngine().execArgv;
+if (!argv.mail) {
+    console.log('不是由邮件到达任务启动');
+    exit();
+}
+console.log(argv.mail.triggerId, argv.mail.message.subject, argv.mail.message.from.address);
+let client = mail.connect(argv.mail.alias); // 以守望所用的别名连接, 秘密留在插件内.
+let full = client.get(argv.mail.message); // 按需加载正文.
+if (/验证码/.test(full.subject)) {
+    console.log(full.text);
+}
+client.close();
+```
+
 ### 异步调用
 
 ```js

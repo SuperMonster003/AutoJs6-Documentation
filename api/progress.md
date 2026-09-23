@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-23 AI Agent 执行通道: 同步 ai.agent.result/context, JSON 结果上限, 显式 null, 独立上下文快照与单文件和项目示例. 任务创建与控制 API 仍未开放.
+
 2026-09-21 电子书 (EPUB) 新增: 覆盖 Readium EPUB Reader 插件提供的 epub 全局对象 (打开书籍, 便捷层, 阅读器会话与可用性探测), EpubBook 的元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出及全文搜索, EpubReaderSession 的事件, 控制方法与阅读偏好, EpubLocator 位置对象, 以及 EpubError 错误代码与各项上限. 依据为 AutoJs6 6.8.0 源码, JVM 测试与 2026-09-21 在 API 33 / API 37 模拟器上的脚本 smoke.
 
 2026-09-20 邮件 (Mail) 新增: 覆盖 Angus Mail 插件提供的 mail 全局对象, MailClient 的收发, 搜索, 附件, 标记, 文件夹与监听方法, MailMessage / MailAttachment / MailAddress / MailSendMessage 对象, MailAccountOptions 账户选项与服务商预设, MailSearchQuery 查询条件, 以及 MailError 错误代码与各项上限. 服务商行为差异按 2026-09-18 至 2026-09-20 的真实账户矩阵记录.

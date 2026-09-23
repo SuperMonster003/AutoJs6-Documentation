@@ -30,6 +30,54 @@ ai('Reply with OK').then((text) => {
 });
 ```
 
+## [p+] agent
+
+### ai.agent
+
+**`6.8.0`** **`Getter`**
+
+- { [object](dataTypes#object) } - Agent 登记脚本的执行上下文与结果通道
+
+要求宿主构建号不低于 `5287`. 当前提供 `result` 与 `context`, 供经 Agent 登记入口启动的 Rhino 脚本使用. 任务创建与任务控制方法尚未开放.
+
+### ai.agent.result(value)
+
+- **value** { [any](dataTypes#any) } - 可经 `JSON.stringify` 序列化为 JSON 的结果
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 本次结果是否已接收
+
+向当前登记脚本的执行记录写入结构化结果. 序列化后的 UTF-8 JSON 不得超过 `64 KiB`. 多次调用以执行结束前最后一次成功上报为准, 调用本身不会结束脚本. `null` 是有效结果, 与没有调用此方法不同.
+
+普通脚本缺少 Agent 执行上下文时返回 `false`, 并输出提示. 执行记录已经结束时不再接收结果. 有执行上下文时, 无法序列化的值, 循环引用或超限结果会抛出异常. JavaScript 的普通对象与数组按 `JSON.stringify` 的规则生成快照, 后续修改原对象不会改变已上报结果.
+
+插件将执行结果交回模型作为观察. 只有任务恰好执行一次脚本, 未执行其他操作工具, 且模型最终用 `done` 收尾时, 任务结果才附带 `script` 字段. 查询脚本目录, 参数询问, 执行确认与进度报告不影响这一条件. `script` 包含 `id`, `path`, `executionId`, `result`; 结果过大时会保留前三个字段, 将 `result` 替换为带 `truncated` 与 `preview` 的摘要, 并标记 `resultTruncated: true`. 凭据字段会脱敏.
+
+```js
+/**
+ * @agent
+ * @description 统计传入的文本字符数
+ * @param {string} text 文本
+ * @risk readonly
+ * @confirm never
+ */
+let agentContext = ai.agent.context();
+let text = new java.lang.String(agentContext.parameters.text);
+ai.agent.result({ characters: text.codePointCount(0, text.length()) });
+```
+
+### ai.agent.context()
+
+- <ins>**returns**</ins> { [object](dataTypes#object) | [null](dataTypes#null) } - 当前登记脚本的上下文快照, 普通脚本返回 `null`
+
+每次调用返回独立对象, 修改它不会改变原始参数或后续读取的上下文.
+
+| 字段 | 类型 | 含义 |
+| --- | --- | --- |
+| runId | [string](dataTypes#string) | 所属 Agent 任务 ID |
+| parameters | [object](dataTypes#object) | 经登记参数校验并补齐默认值的有效参数 |
+| presetName | [string](dataTypes#string) \| [null](dataTypes#null) | 调用方传入的预设名称, 未指定时为空字符串或 null |
+
+登记脚本也可使用 `engines.myEngine().execArgv` 读取执行参数. 宿主内置的 `agent/统计剪贴板字数.js` 和 `agent/清理下载目录旧安装包/` 演示单文件与项目登记. 清理示例默认 `dryRun: true`, 只预览系统下载目录内的旧安装包, 设置 `dryRun: false` 后才会删除; 不递归子目录.
+
 ## [m] ask
 
 ### ask(input, options?)

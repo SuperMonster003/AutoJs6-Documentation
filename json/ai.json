@@ -33,6 +33,35 @@
           "displayName": "[@] ai"
         },
         {
+          "textRaw": "[p+] agent",
+          "name": "[p+]_agent",
+          "properties": [
+            {
+              "textRaw": "ai.agent",
+              "name": "agent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">object</a> } - Agent 登记脚本的执行上下文与结果通道</li>\n</ul>\n<p>要求宿主构建号不低于 <code>5287</code>. 当前提供 <code>result</code> 与 <code>context</code>, 供经 Agent 登记入口启动的 Rhino 脚本使用. 任务创建与任务控制方法尚未开放.</p>\n"
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "ai.agent.result(value)",
+              "name": "ai.agent.result(value)",
+              "desc": "<ul>\n<li><strong>value</strong> { <a href=\"dataTypes#any\">any</a> } - 可经 <code>JSON.stringify</code> 序列化为 JSON 的结果</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 本次结果是否已接收</li>\n</ul>\n<p>向当前登记脚本的执行记录写入结构化结果. 序列化后的 UTF-8 JSON 不得超过 <code>64 KiB</code>. 多次调用以执行结束前最后一次成功上报为准, 调用本身不会结束脚本. <code>null</code> 是有效结果, 与没有调用此方法不同.</p>\n<p>普通脚本缺少 Agent 执行上下文时返回 <code>false</code>, 并输出提示. 执行记录已经结束时不再接收结果. 有执行上下文时, 无法序列化的值, 循环引用或超限结果会抛出异常. JavaScript 的普通对象与数组按 <code>JSON.stringify</code> 的规则生成快照, 后续修改原对象不会改变已上报结果.</p>\n<p>插件将执行结果交回模型作为观察. 只有任务恰好执行一次脚本, 未执行其他操作工具, 且模型最终用 <code>done</code> 收尾时, 任务结果才附带 <code>script</code> 字段. 查询脚本目录, 参数询问, 执行确认与进度报告不影响这一条件. <code>script</code> 包含 <code>id</code>, <code>path</code>, <code>executionId</code>, <code>result</code>; 结果过大时会保留前三个字段, 将 <code>result</code> 替换为带 <code>truncated</code> 与 <code>preview</code> 的摘要, 并标记 <code>resultTruncated: true</code>. 凭据字段会脱敏.</p>\n<pre><code class=\"lang-js\">/**\n * @agent\n * @description 统计传入的文本字符数\n * @param {string} text 文本\n * @risk readonly\n * @confirm never\n */\nlet agentContext = ai.agent.context();\nlet text = new java.lang.String(agentContext.parameters.text);\nai.agent.result({ characters: text.codePointCount(0, text.length()) });\n</code></pre>\n",
+              "type": "module",
+              "displayName": "ai.agent.result(value)"
+            },
+            {
+              "textRaw": "ai.agent.context()",
+              "name": "ai.agent.context()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">object</a> | <a href=\"dataTypes#null\">null</a> } - 当前登记脚本的上下文快照, 普通脚本返回 <code>null</code></li>\n</ul>\n<p>每次调用返回独立对象, 修改它不会改变原始参数或后续读取的上下文.</p>\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>类型</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>runId</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>所属 Agent 任务 ID</td>\n</tr>\n<tr>\n<td>parameters</td>\n<td><a href=\"dataTypes#object\">object</a></td>\n<td>经登记参数校验并补齐默认值的有效参数</td>\n</tr>\n<tr>\n<td>presetName</td>\n<td><a href=\"dataTypes#string\">string</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>调用方传入的预设名称, 未指定时为空字符串或 null</td>\n</tr>\n</tbody>\n</table>\n<p>登记脚本也可使用 <code>engines.myEngine().execArgv</code> 读取执行参数. 宿主内置的 <code>agent/统计剪贴板字数.js</code> 和 <code>agent/清理下载目录旧安装包/</code> 演示单文件与项目登记. 清理示例默认 <code>dryRun: true</code>, 只预览系统下载目录内的旧安装包, 设置 <code>dryRun: false</code> 后才会删除; 不递归子目录.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.context()"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p+] agent"
+        },
+        {
           "textRaw": "[m] ask",
           "name": "[m]_ask",
           "methods": [

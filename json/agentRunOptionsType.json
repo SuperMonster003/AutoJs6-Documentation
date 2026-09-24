@@ -1,0 +1,28 @@
+{
+  "source": "..\\api\\agentRunOptionsType.md",
+  "modules": [
+    {
+      "textRaw": "AgentRunOptions - Agent 任务选项",
+      "name": "agentrunoptions_-_agent_任务选项",
+      "desc": "<p>用于 <a href=\"ai#aiagentrungoal-options\">ai.agent.run</a> 和 <a href=\"ai#aiagentcreateoptions\">ai.agent.create</a>. 只接受下表中的键, 显式 null/undefined 不是有效选项值.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>默认与含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>preset</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>当前仅 default</td>\n</tr>\n<tr>\n<td>target</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>完整模型目标 ID, 省略使用插件默认目标</td>\n</tr>\n<tr>\n<td>tools</td>\n<td><a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> 或 <a href=\"dataTypes#object\">object</a></td>\n<td>工具组数组, 或含 enable/disable 数组的对象</td>\n</tr>\n<tr>\n<td>budget</td>\n<td><a href=\"dataTypes#object\">object</a></td>\n<td>任务预算覆盖</td>\n</tr>\n<tr>\n<td>confirm</td>\n<td><code>&#39;default&#39;</code> \\</td>\n<td><code>&#39;cautious&#39;</code></td>\n<td>default; cautious 对普通变更也逐次确认</td>\n</tr>\n<tr>\n<td>interaction</td>\n<td><code>&#39;plugin&#39;</code> \\</td>\n<td><code>&#39;script&#39;</code></td>\n<td>plugin; 选择询问和操作确认的承接方</td>\n</tr>\n<tr>\n<td>detached</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>false; true 允许任务继续在插件后台运行</td>\n</tr>\n<tr>\n<td>context</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>附加上下文, 最多 8 KiB</td>\n</tr>\n<tr>\n<td>parameters</td>\n<td><a href=\"dataTypes#object\">object</a></td>\n<td>给模型的预填参数, 不替代登记 Schema 校验</td>\n</tr>\n<tr>\n<td>memory</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>true; false 不注入偏好记忆</td>\n</tr>\n<tr>\n<td>scriptRoots</td>\n<td><a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a></td>\n<td>附加脚本根选择, 最多 32 项, 只能缩小已批准范围</td>\n</tr>\n<tr>\n<td>locale</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>使用链路语言; 最多 64 字节</td>\n</tr>\n</tbody>\n</table>\n<p>工具组为 observe, act, ocr, gesture, script, files, shell, memory, user. gesture/files/shell 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效.</p>\n<p>context 与 parameters 合并注入模型时总计仍不能超过 8 KiB. 预填参数不授权任何文件访问或设备操作. scriptRoots 必须为绝对目录, 不含父目录跳转或隐藏越界路径; 宿主再次进行真实路径校验.</p>\n",
+      "modules": [
+        {
+          "textRaw": "budget",
+          "name": "budget",
+          "desc": "<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>普通任务默认</th>\n<th>detached 默认</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>maxSteps</td>\n<td>40</td>\n<td>40</td>\n<td>最大步骤数</td>\n</tr>\n<tr>\n<td>maxModelCalls</td>\n<td>60</td>\n<td>60</td>\n<td>含格式修复和降级的模型调用数</td>\n</tr>\n<tr>\n<td>maxDurationMs</td>\n<td>600000</td>\n<td>1800000</td>\n<td>包含等待询问/确认的总时长</td>\n</tr>\n<tr>\n<td>maxTotalTokens</td>\n<td>300000</td>\n<td>300000</td>\n<td>输入与输出 token 总预算</td>\n</tr>\n</tbody>\n</table>\n<p>当前插件开发版本只允许在默认预算内收紧. 宿主同时检查协议硬上限: 200 步, 300 次调用, 普通任务 30 分钟 / detached 60 分钟, 1000000 token. 通过宿主硬上限校验并不表示插件会接受大于当前默认值的预算; 插件拒绝会返回失败句柄. 所有预算值必须为正整数.</p>\n<p>确认超时当前为 120 秒, 参数询问最长为 10 分钟, 并服从剩余任务时长. 这两个值不是公开 budget 字段. 到期按拒绝/超时反馈, 不默认允许操作.</p>\n",
+          "type": "module",
+          "displayName": "budget"
+        },
+        {
+          "textRaw": "交互与任务归属",
+          "name": "交互与任务归属",
+          "desc": "<p>plugin 模式仍向脚本发送 input/confirmation 通知, 但标记 <code>readOnly: true</code>, respond/confirm 会拒绝. script 模式由脚本监听器回应. <code>detached</code> 不改变交互承接方; detached + script 在发起脚本退出后若需继续回应, 应在超时前由另一个脚本 get 并接管交互, 或改用 plugin 模式.</p>\n<p><code>create</code> 保存选项快照. 单次 overrides 中的 budget 按字段合并且不能增加固定预算, tools 和 scriptRoots 只能缩小范围, cautious 不能放宽. 其他字段按单次覆盖值使用.</p>\n",
+          "type": "module",
+          "displayName": "交互与任务归属"
+        }
+      ],
+      "type": "module",
+      "displayName": "AgentRunOptions - Agent 任务选项"
+    }
+  ]
+}

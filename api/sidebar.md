@@ -132,6 +132,11 @@
 <summary style="padding-left: 1em">Other Types - 其他类型</summary>
 
 * [AndroidBundle](androidBundleType)
+- [AgentRun](agentRunType)
+- [AgentRunOptions](agentRunOptionsType)
+- [AgentResult](agentResultType)
+- [AgentScriptEntry](agentScriptEntryType)
+- [AgentEvent](agentEventType)
 * [AndroidRect](androidRectType)
 * [CryptoCipherOptions](cryptoCipherOptionsType)
 * [CryptoKey](cryptoKeyType)

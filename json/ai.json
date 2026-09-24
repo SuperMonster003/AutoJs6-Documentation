@@ -39,10 +39,59 @@
             {
               "textRaw": "ai.agent",
               "name": "agent",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">object</a> } - Agent 登记脚本的执行上下文与结果通道</li>\n</ul>\n<p>要求宿主构建号不低于 <code>5287</code>. 当前提供 <code>result</code> 与 <code>context</code>, 供经 Agent 登记入口启动的 Rhino 脚本使用. 任务创建与任务控制方法尚未开放.</p>\n"
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Getter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">object</a> } - Agent 任务控制, 登记脚本目录, 执行上下文与结果通道</li>\n</ul>\n<p><code>result</code> 与 <code>context</code> 要求宿主构建号不低于 <code>5287</code>; 任务控制方法要求不低于 <code>5293</code>. 任务循环由已启用并附着的 AI Agent 插件执行, 模型与设备能力经宿主代理提供. <code>catalog</code>, <code>result</code> 与 <code>context</code> 的宿主侧功能不要求插件在线.</p>\n"
             }
           ],
           "modules": [
+            {
+              "textRaw": "ai.agent.run(goal, options?)",
+              "name": "ai.agent.run(goal,_options?)",
+              "desc": "<ul>\n<li><strong>goal</strong> { <a href=\"dataTypes#string\">string</a> } - 非空自然语言目标, UTF-8 不超过 4 KiB</li>\n<li><strong>[ options = <code>{}</code> ]</strong> { <a href=\"agentRunOptionsType\">AgentRunOptions</a> } - 模型, 工具范围, 预算与交互方式</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"agentRunType\">AgentRun</a> } - 同步返回的任务句柄</li>\n</ul>\n<p>参数错误同步抛出. 插件未安装, 未启用或未附着时返回 <code>state: &#39;failed&#39;</code> 的句柄, <code>error.code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>error.hint</code> 指向 AutoJs6 抽屉中的 AI Agent 入口. 此时 <code>result</code> Promise 拒绝; 不自动启用插件或重放任务.</p>\n<pre><code class=\"lang-js\">let run = ai.agent.run(&#39;查询当前设备型号和 Android 版本, 根据查询结果报告.&#39;, {\n    tools: [&#39;observe&#39;, &#39;user&#39;],\n});\nrun.on(&#39;progress&#39;, (event) =&gt; console.log(event.message));\nrun.result.then((result) =&gt; console.log(result.status, result.summary), console.error);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "ai.agent.run(goal, options?)"
+            },
+            {
+              "textRaw": "ai.agent.create(options)",
+              "name": "ai.agent.create(options)",
+              "desc": "<ul>\n<li><strong>options</strong> { <a href=\"agentRunOptionsType\">AgentRunOptions</a> } - 固定选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">object</a> } - 包含 <code>run(goal, overrides?)</code> 和只读 <code>options</code> 的助手</li>\n</ul>\n<p>创建助手不启动任务. 每次读取 <code>options</code> 得到独立快照. <code>run</code> 接受与 <code>ai.agent.run</code> 相同的目标和覆盖选项; 覆盖可改变模型等普通选项, 预算逐键合并且只能降低, 工具和脚本根范围只能缩小, 已固定的 <code>cautious</code> 不能改回 <code>default</code>. 插件仍独立校验全局权限和当前预算上限.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.create(options)"
+            },
+            {
+              "textRaw": "ai.agent.get(id)",
+              "name": "ai.agent.get(id)",
+              "desc": "<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 任务 UUID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"agentRunType\">AgentRun</a> | <a href=\"dataTypes#null\">null</a> } - 当前脚本的观察句柄, 任务不存在时为 null</li>\n</ul>\n<p>同一脚本重复获取同一 ID 返回同一句柄. 获取其他脚本的任务不会转移任务归属; 观察脚本退出不会取消它. 已结束任务的 <code>result</code> 兑现历史结果. 链路不可用时抛出异常.</p>\n<p>重新获取会发送当前状态与仍待处理的询问/确认, 不重放历史步骤或设备动作. 同一宿主进程启动的任务继续使用原有回调; 其他入口的活动任务通过有界快照轮询观察, 短暂的中间状态可能不会逐个重现. 宿主或插件进程退出后的任务不会自动恢复执行.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.get(id)"
+            },
+            {
+              "textRaw": "ai.agent.list(filter?)",
+              "name": "ai.agent.list(filter?)",
+              "desc": "<p><strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ filter = <code>{}</code> ]</strong> { <a href=\"dataTypes#object\">object</a> } - 可选 <code>state</code>, <code>preset</code>, <code>since</code>, <code>until</code>, <code>limit</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现最近任务摘要数组</li>\n</ul>\n<p><code>state</code> 为一个任务状态或不重复的状态数组, <code>preset</code> 为预设名, <code>since</code> / <code>until</code> 为包含边界的 Unix 毫秒时间, <code>limit</code> 为 1 到 50 的整数, 默认 50. 按最近登记顺序返回, 每项含 <code>id</code>, <code>goal</code>, <code>state</code>, <code>startedAt</code>, <code>detached</code>, <code>preset</code>. 目标摘要可能被裁剪; 当前插件只保留有界历史, 不代表无限历史检索.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.list(filter?)"
+            },
+            {
+              "textRaw": "ai.agent.catalog(query?)",
+              "name": "ai.agent.catalog(query?)",
+              "desc": "<p><strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ query ]</strong> { <a href=\"dataTypes#string\">string</a> } - 不超过 4 KiB 的目录查询文本</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现 <a href=\"agentScriptEntryType\">AgentScriptEntry</a> 数组</li>\n</ul>\n<p>由宿主扫描当前工作目录和已附着链路中经宿主批准的附加根. 插件不可用时仍可查询工作目录. 仅返回显式登记且有效的脚本元数据, 不执行脚本, 不返回脚本正文. 最多 500 项 / 256 KiB.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.catalog(query?)"
+            },
+            {
+              "textRaw": "ai.agent.presets()",
+              "name": "ai.agent.presets()",
+              "desc": "<p><strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现可用预设名称数组</li>\n</ul>\n<p>当前开发版本只提供 <code>default</code>; 自定义预设界面尚未交付. 此方法要求插件已附着.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.presets()"
+            },
+            {
+              "textRaw": "ai.agent.status()",
+              "name": "ai.agent.status()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">object</a> } - 当前链路状态快照</li>\n</ul>\n<p>包含 <code>state</code>, <code>queuedCount</code>, 可选 <code>runningRunId</code> 与 <code>errorCode</code>. <code>state</code> 为 <code>detached</code>, <code>attaching</code>, <code>attached</code>, <code>host_unavailable</code> 或 <code>failed</code>. 同步读取不会尝试启用或连接插件.</p>\n",
+              "type": "module",
+              "displayName": "ai.agent.status()"
+            },
             {
               "textRaw": "ai.agent.result(value)",
               "name": "ai.agent.result(value)",

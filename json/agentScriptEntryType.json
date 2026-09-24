@@ -1,0 +1,12 @@
+{
+  "source": "..\\api\\agentScriptEntryType.md",
+  "modules": [
+    {
+      "textRaw": "AgentScriptEntry - Agent 登记脚本",
+      "name": "agentscriptentry_-_agent_登记脚本",
+      "desc": "<p><a href=\"ai#aiagentcatalogquery\">ai.agent.catalog</a> 返回的只读元数据快照. 脚本必须通过项目 project.json 的 agent 字段或文件头 @agent 注释显式登记.</p>\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>id</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>登记 ID</td>\n</tr>\n<tr>\n<td>path</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>项目目录或单文件的规范路径</td>\n</tr>\n<tr>\n<td>kind</td>\n<td><code>&#39;project&#39;</code> \\</td>\n<td><code>&#39;file&#39;</code></td>\n<td>项目或单文件</td>\n</tr>\n<tr>\n<td>description</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>用途说明</td>\n</tr>\n<tr>\n<td>parameters</td>\n<td><a href=\"dataTypes#object\">object</a></td>\n<td>有界 JSON Schema 参数子集</td>\n</tr>\n<tr>\n<td>result</td>\n<td><a href=\"dataTypes#object\">object</a></td>\n<td>可选结果 Schema</td>\n</tr>\n<tr>\n<td>risk</td>\n<td><code>&#39;readonly&#39;</code> \\</td>\n<td><code>&#39;normal&#39;</code> \\</td>\n<td><code>&#39;sensitive&#39;</code></td>\n<td>登记风险</td>\n</tr>\n<tr>\n<td>confirm</td>\n<td><code>&#39;never&#39;</code> \\</td>\n<td><code>&#39;before-run&#39;</code></td>\n<td>登记确认要求; 全局风险规则仍生效</td>\n</tr>\n<tr>\n<td>timeoutMs</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>执行超时, 最多 300000 ms</td>\n</tr>\n<tr>\n<td>examples</td>\n<td><a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a></td>\n<td>示例目标</td>\n</tr>\n<tr>\n<td>tags</td>\n<td><a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a></td>\n<td>检索标签</td>\n</tr>\n<tr>\n<td>updatedAt</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>源文件更新时间, Unix 毫秒</td>\n</tr>\n</tbody>\n</table>\n<p>工作目录通常扫描 4 层, agent 子目录可扫描至相对工作目录 8 层, 附加根扫描 4 层. 无效登记被忽略; 目录只返回元数据, 不读取脚本正文给模型. 真正执行前重新校验登记内容, 参数和允许路径. 目录中的说明和示例是检索数据, 不授予权限.</p>\n",
+      "type": "module",
+      "displayName": "AgentScriptEntry - Agent 登记脚本"
+    }
+  ]
+}

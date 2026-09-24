@@ -36,9 +36,73 @@ ai('Reply with OK').then((text) => {
 
 **`6.8.0`** **`Getter`**
 
-- { [object](dataTypes#object) } - Agent 登记脚本的执行上下文与结果通道
+- { [object](dataTypes#object) } - Agent 任务控制, 登记脚本目录, 执行上下文与结果通道
 
-要求宿主构建号不低于 `5287`. 当前提供 `result` 与 `context`, 供经 Agent 登记入口启动的 Rhino 脚本使用. 任务创建与任务控制方法尚未开放.
+`result` 与 `context` 要求宿主构建号不低于 `5287`; 任务控制方法要求不低于 `5293`. 任务循环由已启用并附着的 AI Agent 插件执行, 模型与设备能力经宿主代理提供. `catalog`, `result` 与 `context` 的宿主侧功能不要求插件在线.
+
+### ai.agent.run(goal, options?)
+
+- **goal** { [string](dataTypes#string) } - 非空自然语言目标, UTF-8 不超过 4 KiB
+- **[ options = `{}` ]** { [AgentRunOptions](agentRunOptionsType) } - 模型, 工具范围, 预算与交互方式
+- <ins>**returns**</ins> { [AgentRun](agentRunType) } - 同步返回的任务句柄
+
+参数错误同步抛出. 插件未安装, 未启用或未附着时返回 `state: 'failed'` 的句柄, `error.code` 为 `PLUGIN_UNAVAILABLE`, `error.hint` 指向 AutoJs6 抽屉中的 AI Agent 入口. 此时 `result` Promise 拒绝; 不自动启用插件或重放任务.
+
+```js
+let run = ai.agent.run('查询当前设备型号和 Android 版本, 根据查询结果报告.', {
+    tools: ['observe', 'user'],
+});
+run.on('progress', (event) => console.log(event.message));
+run.result.then((result) => console.log(result.status, result.summary), console.error);
+```
+
+### ai.agent.create(options)
+
+- **options** { [AgentRunOptions](agentRunOptionsType) } - 固定选项
+- <ins>**returns**</ins> { [object](dataTypes#object) } - 包含 `run(goal, overrides?)` 和只读 `options` 的助手
+
+创建助手不启动任务. 每次读取 `options` 得到独立快照. `run` 接受与 `ai.agent.run` 相同的目标和覆盖选项; 覆盖可改变模型等普通选项, 预算逐键合并且只能降低, 工具和脚本根范围只能缩小, 已固定的 `cautious` 不能改回 `default`. 插件仍独立校验全局权限和当前预算上限.
+
+### ai.agent.get(id)
+
+- **id** { [string](dataTypes#string) } - 任务 UUID
+- <ins>**returns**</ins> { [AgentRun](agentRunType) | [null](dataTypes#null) } - 当前脚本的观察句柄, 任务不存在时为 null
+
+同一脚本重复获取同一 ID 返回同一句柄. 获取其他脚本的任务不会转移任务归属; 观察脚本退出不会取消它. 已结束任务的 `result` 兑现历史结果. 链路不可用时抛出异常.
+
+重新获取会发送当前状态与仍待处理的询问/确认, 不重放历史步骤或设备动作. 同一宿主进程启动的任务继续使用原有回调; 其他入口的活动任务通过有界快照轮询观察, 短暂的中间状态可能不会逐个重现. 宿主或插件进程退出后的任务不会自动恢复执行.
+
+### ai.agent.list(filter?)
+
+**`Async`**
+
+- **[ filter = `{}` ]** { [object](dataTypes#object) } - 可选 `state`, `preset`, `since`, `until`, `limit`
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现最近任务摘要数组
+
+`state` 为一个任务状态或不重复的状态数组, `preset` 为预设名, `since` / `until` 为包含边界的 Unix 毫秒时间, `limit` 为 1 到 50 的整数, 默认 50. 按最近登记顺序返回, 每项含 `id`, `goal`, `state`, `startedAt`, `detached`, `preset`. 目标摘要可能被裁剪; 当前插件只保留有界历史, 不代表无限历史检索.
+
+### ai.agent.catalog(query?)
+
+**`Async`**
+
+- **[ query ]** { [string](dataTypes#string) } - 不超过 4 KiB 的目录查询文本
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现 [AgentScriptEntry](agentScriptEntryType) 数组
+
+由宿主扫描当前工作目录和已附着链路中经宿主批准的附加根. 插件不可用时仍可查询工作目录. 仅返回显式登记且有效的脚本元数据, 不执行脚本, 不返回脚本正文. 最多 500 项 / 256 KiB.
+
+### ai.agent.presets()
+
+**`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现可用预设名称数组
+
+当前开发版本只提供 `default`; 自定义预设界面尚未交付. 此方法要求插件已附着.
+
+### ai.agent.status()
+
+- <ins>**returns**</ins> { [object](dataTypes#object) } - 当前链路状态快照
+
+包含 `state`, `queuedCount`, 可选 `runningRunId` 与 `errorCode`. `state` 为 `detached`, `attaching`, `attached`, `host_unavailable` 或 `failed`. 同步读取不会尝试启用或连接插件.
 
 ### ai.agent.result(value)
 

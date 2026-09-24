@@ -1,0 +1,284 @@
+{
+  "source": "..\\api\\agentRunType.md",
+  "modules": [
+    {
+      "textRaw": "AgentRun - Agent 任务句柄",
+      "name": "agentrun_-_agent_任务句柄",
+      "desc": "<p>由 <a href=\"ai#aiagentrungoal-options\">ai.agent.run</a> 或 <a href=\"ai#aiagentgetid\">ai.agent.get</a> 返回的宿主侧 Rhino 对象. 句柄的方法和事件属于创建它的脚本线程, 不应跨脚本线程传递使用.</p>\n",
+      "modules": [
+        {
+          "textRaw": "只读属性",
+          "name": "只读属性",
+          "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>id</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>任务 UUID; 入队前拒绝的句柄也有独立 ID</td>\n</tr>\n<tr>\n<td>goal</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>原始目标</td>\n</tr>\n<tr>\n<td>startedAt</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>登记时间, Unix 毫秒</td>\n</tr>\n<tr>\n<td>detached</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>是否后台托管</td>\n</tr>\n<tr>\n<td>state</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>当前任务或句柄状态</td>\n</tr>\n<tr>\n<td>error</td>\n<td><a href=\"dataTypes#object\">object</a> \\</td>\n<td><a href=\"dataTypes#null\">null</a></td>\n<td>句柄级错误, 含 code/message/hint?</td>\n</tr>\n<tr>\n<td>result</td>\n<td><a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a></td>\n<td>兑现 <a href=\"agentResultType\">AgentResult</a></td>\n</tr>\n</tbody>\n</table>\n<p><code>state</code> 的活动值为 <code>queued</code>, <code>running</code>, <code>waiting_input</code>, <code>waiting_confirmation</code>, <code>cancelling</code>; 终态为 <code>completed</code>, <code>partial</code>, <code>failed</code>, <code>blocked</code>, <code>cancelled</code>.</p>\n<p>任务本身的失败, 阻塞或取消也兑现 <code>result</code>; 插件不可用, 链路丢失等句柄级错误才拒绝. 不能只凭 Promise 兑现判定目标完成, 应检查 <code>result.status</code>, <code>evidence</code> 和 <code>unfinished</code>.</p>\n<p>普通任务在等待期间保持所属脚本事件循环; 脚本被停止时取消它发起的非 detached 任务. 取消只停止后续操作, 不撤销已提交的订单, 消息或文件变更.</p>\n<p>后台托管任务不单独阻止发起脚本退出. 显式读取 <code>run.result</code> 会保持当前脚本等待该 Promise, <code>join</code> 也可等待; 仅注册事件不会阻止 detached 发起脚本自然结束. 脚本退出后监听器释放, 任务仍受插件预算与宿主链路生命周期约束. <code>get</code> 获取的观察句柄不会成为原任务的所有者.</p>\n",
+          "type": "module",
+          "displayName": "只读属性"
+        },
+        {
+          "textRaw": "[m#] on / once / off",
+          "name": "[m#]_on_/_once_/_off",
+          "methods": [
+            {
+              "textRaw": "AgentRun#once(event, listener)",
+              "type": "method",
+              "name": "AgentRun#once",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**event** { [string](dataTypes#string) } - [AgentEvent](agentEventType) 中的事件名 ",
+                      "name": "**event**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "[AgentEvent](agentEventType) 中的事件名"
+                    },
+                    {
+                      "textRaw": "**listener** { [Function](dataTypes#function) } - 接收一个事件对象 ",
+                      "name": "**listener**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "接收一个事件对象"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [AgentRun](agentRunType) } - 当前句柄 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [AgentRun](agentRunType) ",
+                      "desc": "当前句柄"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>分别添加持续监听, 添加一次监听和移除指定监听. 事件通过脚本线程顺序派发; 不在 Binder 回调线程执行 JS. 终态后释放已有监听器. <code>get</code> 只重现当前待处理交互, 不回放旧步骤.</p>\n"
+            },
+            {
+              "textRaw": "AgentRun#off(event, listener)",
+              "type": "method",
+              "name": "AgentRun#off",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**event** { [string](dataTypes#string) } - [AgentEvent](agentEventType) 中的事件名 ",
+                      "name": "**event**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "[AgentEvent](agentEventType) 中的事件名"
+                    },
+                    {
+                      "textRaw": "**listener** { [Function](dataTypes#function) } - 接收一个事件对象 ",
+                      "name": "**listener**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "接收一个事件对象"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [AgentRun](agentRunType) } - 当前句柄 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [AgentRun](agentRunType) ",
+                      "desc": "当前句柄"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>分别添加持续监听, 添加一次监听和移除指定监听. 事件通过脚本线程顺序派发; 不在 Binder 回调线程执行 JS. 终态后释放已有监听器. <code>get</code> 只重现当前待处理交互, 不回放旧步骤.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on / once / off"
+        },
+        {
+          "textRaw": "[m#] respond",
+          "name": "[m#]_respond",
+          "methods": [
+            {
+              "textRaw": "AgentRun#respond(requestId, value)",
+              "type": "method",
+              "name": "AgentRun#respond",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**requestId** { [string](dataTypes#string) } - 当前 input 请求 ID ",
+                      "name": "**requestId**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前 input 请求 ID"
+                    },
+                    {
+                      "textRaw": "**value** { [string](dataTypes#string) | [boolean](dataTypes#boolean) } - text/choice 为字符串, confirm 为布尔值 ",
+                      "name": "**value**",
+                      "type": " [string](dataTypes#string) | [boolean](dataTypes#boolean) ",
+                      "desc": "text/choice 为字符串, confirm 为布尔值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 回应是否被接受 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "回应是否被接受"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "requestId"
+                    },
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>仅 <code>interaction: &#39;script&#39;</code> 可回应. choice 必须逐字匹配原选项, text 不可为空白, JSON 值最多 4 KiB. 过期, 已提交或非当前请求抛出带 <code>code</code> 的错误. 模型的 confirm 类型 input 不等同于敏感操作 confirmation.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] respond"
+        },
+        {
+          "textRaw": "[m#] confirm",
+          "name": "[m#]_confirm",
+          "methods": [
+            {
+              "textRaw": "AgentRun#confirm(requestId, allowed, scope?)",
+              "type": "method",
+              "name": "AgentRun#confirm",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**requestId** { [string](dataTypes#string) } - 当前 confirmation 请求 ID ",
+                      "name": "**requestId**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "当前 confirmation 请求 ID"
+                    },
+                    {
+                      "textRaw": "**allowed** { [boolean](dataTypes#boolean) } - 允许或拒绝 ",
+                      "name": "**allowed**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "允许或拒绝"
+                    },
+                    {
+                      "textRaw": "**[ scope = 'once' ]** { `'once'` | `'run'` } - 授权范围 ",
+                      "name": "**[",
+                      "desc": "scope = 'once' ]** { `'once'` | `'run'` } - 授权范围"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 回应是否被接受 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "回应是否被接受"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "requestId"
+                    },
+                    {
+                      "name": "allowed"
+                    },
+                    {
+                      "name": "scope?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>仅脚本交互模式可使用. 只有事件明确给出 <code>allowRunScope: true</code> 时允许 run 范围. 支付等逐次确认操作不可扩大授权范围. 不应仅按模型文字或请求名称自动允许敏感操作, 应检查事件中的实际参数和风险.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] confirm"
+        },
+        {
+          "textRaw": "[m#] cancel",
+          "name": "[m#]_cancel",
+          "methods": [
+            {
+              "textRaw": "AgentRun#cancel(reason?)",
+              "type": "method",
+              "name": "AgentRun#cancel",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ reason = 'script-request' ]** { [string](dataTypes#string) } - 最多 256 字节的原因 ",
+                      "name": "**[",
+                      "desc": "reason = 'script-request' ]** { [string](dataTypes#string) } - 最多 256 字节的原因"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [AgentRun](agentRunType) } - 当前句柄 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [AgentRun](agentRunType) ",
+                      "desc": "当前句柄"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求取消当前任务. 已结束时不再次发送取消. 终态通过事件与 result 返回, 不保证调用返回瞬间已中断不可取消的设备操作.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cancel"
+        },
+        {
+          "textRaw": "[m#] join",
+          "name": "[m#]_join",
+          "methods": [
+            {
+              "textRaw": "AgentRun#join(timeoutMs?)",
+              "type": "method",
+              "name": "AgentRun#join",
+              "desc": "<p><strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ timeoutMs ]</strong> { <a href=\"dataTypes#number\">number</a> } - 1 到 3600000 的整数; 省略时等待任务终态</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"agentResultType\">AgentResult</a> } - 任务终态结果</li>\n</ul>\n<p>阻塞当前脚本线程, 同时处理该句柄在此线程上的事件, 因而 input/confirmation 监听器仍可回应. UI 线程禁止调用, 也不能在该句柄的监听器中递归 join. 超时抛出 <code>code: &#39;JOIN_TIMEOUT&#39;</code>, 不取消任务; 后续仍可观察 result 或再次 join. 其他任务的定时器和事件不因本方法而获得通用消息循环.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeoutMs?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] join"
+        }
+      ],
+      "type": "module",
+      "displayName": "AgentRun - Agent 任务句柄"
+    }
+  ]
+}

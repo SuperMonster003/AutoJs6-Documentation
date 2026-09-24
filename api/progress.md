@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-09-24 AI Agent 记忆: 同步插件 1.0.0 / 构建号 57 的逐条确认写入, 作用域隔离, 记忆管理与 JSON 导入/导出; 明确 memory: false 只关闭自动注入, memory 工具组控制查询/提议. 无新增 JavaScript 方法.
+
 2026-09-24 AI Agent 预设: 同步插件 1.0.0 / 构建号 56 的命名预设与默认选择, 入队快照, 模型目录标注, 工具/预算/确认/脚本目录收紧规则, 固定上下文合并及记忆范围. 公开脚本签名与宿主构建要求保持不变.
 
 2026-09-24 AI Agent 任务 API: 同步 run/create/get/list/catalog/presets/status, AgentRun 事件/Promise/join, 脚本归属与 detached, 交互承接方和预算边界; 保留 result/context 执行通道. 对应宿主 6.8.0 / 5293.

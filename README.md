@@ -101,6 +101,7 @@ generator\auto-generate-for-autojs6.bat
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/21</p>
 
+- `更新` AI Agent 构建号 60 的全局设置与预算合并规则, 区分初始默认值和协议硬上限, 说明工具组与审慎模式只能由预设及单次参数进一步收紧
 - `新增` 电子书 (EPUB), EpubBook, EpubReaderSession 与 EpubLocator 文档, 覆盖 Readium EPUB Reader 插件的元数据, 目录, 正文提取, 封面与资源导出, 全文搜索, 阅读器会话事件与控制, 阅读偏好, 位置对象与错误代码
 - `新增` 邮件 (Mail), MailClient, MailMessage, MailAccountOptions 与 MailSearchQuery 文档, 覆盖 Angus Mail 插件的 IMAP / POP3 / SMTP 收发, 搜索, 附件, 标记, 文件夹, 新邮件监听, 账户选项, 服务商预设与错误代码
 - `更新` Flow 坐标点击系列, maxAttempts 默认 0 的无限尝试语义, 以及异常的任务调用栈和控制台输出

@@ -100,7 +100,7 @@ run.result.then((result) => console.log(result.status, result.summary), console.
 
 在 AI Agent 任务台的 "预设" 页面新建, 编辑, 复制, 删除或设为默认. 名称同时用于脚本调用和记忆作用域, 保存后保持不变; 更换名称可复制为新预设. 内置 `default` 可以编辑但不能删除. 删除当前默认预设后, 新任务恢复使用 `default`.
 
-`run` 省略 `preset` 时使用插件当前选定的默认预设; 显式传入名称时只使用该预设. 入队时固定配置快照, 后续编辑或删除不改变已入队的任务. 不存在的预设会被插件拒绝, 不会自动替换为默认预设. 合并规则见 [AgentRunOptions](agentRunOptionsType).
+`run` 省略 `preset` 时使用插件当前选定的默认预设; 显式传入名称时只使用该预设. 入队时固定配置快照, 后续编辑或删除不改变已入队的任务. 不存在的预设会被插件拒绝, 不会自动替换为默认预设. AI Agent 构建号 60 起, 设置页可调整全局工具组, 预算和审慎模式, 预设与单次选项只能进一步收紧. 合并规则见 [AgentRunOptions](agentRunOptionsType).
 
 ### ai.agent.status()
 

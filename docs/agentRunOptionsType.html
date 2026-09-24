@@ -293,17 +293,17 @@
 <tr>
 <td>preset</td>
 <td><a href="dataTypes.html#datatypes_string">string</a></td>
-<td>当前仅 default</td>
+<td>预设名称; 省略使用插件当前选定的默认预设</td>
 </tr>
 <tr>
 <td>target</td>
 <td><a href="dataTypes.html#datatypes_string">string</a></td>
-<td>完整模型目标 ID, 省略使用插件默认目标</td>
+<td>完整模型目标 ID; 省略沿用预设, 预设也未指定时自动选择可用本地目标, 否则选择首个可用目标</td>
 </tr>
 <tr>
 <td>tools</td>
 <td><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a> 或 <a href="dataTypes.html#datatypes_object">object</a></td>
-<td>工具组数组, 或含 enable/disable 数组的对象</td>
+<td>省略沿用预设; 工具组数组, 或含 enable/disable 数组的对象, 只能进一步收紧</td>
 </tr>
 <tr>
 <td>budget</td>
@@ -314,7 +314,7 @@
 <td>confirm</td>
 <td><code>&#39;default&#39;</code> \</td>
 <td><code>&#39;cautious&#39;</code></td>
-<td>default; cautious 对普通变更也逐次确认</td>
+<td>沿用预设, 初始为 default; cautious 对普通变更也要求确认, 不能放宽预设的 cautious</td>
 </tr>
 <tr>
 <td>interaction</td>
@@ -340,12 +340,12 @@
 <tr>
 <td>memory</td>
 <td><a href="dataTypes.html#datatypes_boolean">boolean</a></td>
-<td>true; false 不注入偏好记忆</td>
+<td>true; false 不注入偏好记忆, true 不能重新启用预设已关闭的记忆或跨越预设作用域</td>
 </tr>
 <tr>
 <td>scriptRoots</td>
 <td><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a></td>
-<td>附加脚本根选择, 最多 32 项, 只能缩小已批准范围</td>
+<td>省略沿用预设; 附加脚本根选择, 最多 32 项, 只能缩小预设与宿主共同批准的范围</td>
 </tr>
 <tr>
 <td>locale</td>
@@ -355,7 +355,8 @@
 </tbody>
 </table>
 <p>工具组为 observe, act, ocr, gesture, script, files, shell, memory, user. gesture/files/shell 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效.</p>
-<p>context 与 parameters 合并注入模型时总计仍不能超过 8 KiB. 预填参数不授权任何文件访问或设备操作. scriptRoots 必须为绝对目录, 不含父目录跳转或隐藏越界路径; 宿主再次进行真实路径校验.</p>
+<p>预设固定上下文与本次 context 以空行拼接, 本次 context 为空不会清除预设文本. 该文本与 parameters 合并注入模型时总计仍不能超过 8 KiB. 预填参数不授权任何文件访问或设备操作. scriptRoots 必须为绝对目录, 不含父目录跳转或隐藏越界路径; 宿主再次进行真实路径校验.</p>
+<p>自定义预设要求 AI Agent 1.0.0 / 构建号 56 或以上. 预设模型目标来自宿主代理的模型目录. 预设页显示本地/在线/混合及结构化 JSON 支持, 不支持结构化约束的目标标注 &quot;退化模式&quot;. 显式指定的目标失效时任务失败, 不自动更换目标. 记忆范围只可选择全局及当前预设, 仅全局, 仅当前预设或关闭, 不可读取其他预设的记忆.</p>
 <h2>budget<span><a class="mark" href="#agentrunoptionstype_budget" id="agentrunoptionstype_budget">#</a></span></h2>
 <table>
 <thead>
@@ -393,7 +394,8 @@
 </tr>
 </tbody>
 </table>
-<p>当前插件开发版本只允许在默认预算内收紧. 宿主同时检查协议硬上限: 200 步, 300 次调用, 普通任务 30 分钟 / detached 60 分钟, 1000000 token. 通过宿主硬上限校验并不表示插件会接受大于当前默认值的预算; 插件拒绝会返回失败句柄. 所有预算值必须为正整数.</p>
+<p>表中是初始上限. 当前插件开发版本只允许在该上限内收紧; 预设的预算覆盖与宿主剩余 token 授权共同约束有效预算, 单次任务覆盖不能再放宽它. 例如预设限制为 5 步时, 任务传入 maxSteps: 6 会被拒绝. 预设的 1800000 毫秒限制用于普通任务时仍按普通任务的 600000 毫秒上限收紧.</p>
+<p>宿主同时检查协议硬上限: 200 步, 300 次调用, 普通任务 30 分钟 / detached 60 分钟, 1000000 token. 通过宿主硬上限校验并不表示插件会接受大于当前有效预算的值; 插件拒绝会返回失败句柄. 所有预算值必须为正整数.</p>
 <p>确认超时当前为 120 秒, 参数询问最长为 10 分钟, 并服从剩余任务时长. 这两个值不是公开 budget 字段. 到期按拒绝/超时反馈, 不默认允许操作.</p>
 <h2>交互与任务归属<span><a class="mark" href="#agentrunoptionstype" id="agentrunoptionstype">#</a></span></h2>
 <p>plugin 模式仍向脚本发送 input/confirmation 通知, 但标记 <code>readOnly: true</code>, respond/confirm 会拒绝. script 模式由脚本监听器回应. <code>detached</code> 不改变交互承接方; detached + script 在发起脚本退出后若需继续回应, 应在超时前由另一个脚本 get 并接管交互, 或改用 plugin 模式.</p>

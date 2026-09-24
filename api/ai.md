@@ -96,7 +96,11 @@ run.result.then((result) => console.log(result.status, result.summary), console.
 
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现可用预设名称数组
 
-当前开发版本只提供 `default`; 自定义预设界面尚未交付. 此方法要求插件已附着.
+返回插件内置 `default` 和用户保存的预设名称. 此方法要求插件已附着; 自定义预设要求 AI Agent 1.0.0 / 构建号 56 或以上.
+
+在 AI Agent 任务台的 "预设" 页面新建, 编辑, 复制, 删除或设为默认. 名称同时用于脚本调用和记忆作用域, 保存后保持不变; 更换名称可复制为新预设. 内置 `default` 可以编辑但不能删除. 删除当前默认预设后, 新任务恢复使用 `default`.
+
+`run` 省略 `preset` 时使用插件当前选定的默认预设; 显式传入名称时只使用该预设. 入队时固定配置快照, 后续编辑或删除不改变已入队的任务. 不存在的预设会被插件拒绝, 不会自动替换为默认预设. 合并规则见 [AgentRunOptions](agentRunOptionsType).
 
 ### ai.agent.status()
 

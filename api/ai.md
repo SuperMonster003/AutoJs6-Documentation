@@ -40,6 +40,10 @@ ai('Reply with OK').then((text) => {
 
 `result` 与 `context` 要求宿主构建号不低于 `5287`; 任务控制方法要求不低于 `5293`. 任务循环由已启用并附着的 AI Agent 插件执行, 模型与设备能力经宿主代理提供. `catalog`, `result` 与 `context` 的宿主侧功能不要求插件在线.
 
+AI Agent 1.0.0 要求 Android 7.0 / API 24 或以上. 插件附着要求宿主构建号不低于 `5289`, 使用本节完整任务 API 时应安装构建号 `5293` 或以上. 当前宿主模型代理使用 3-Stone AI 插件中的模型目录; 请先在该插件中配置在线模型或导入本地模型, 再在 AI Agent 预设中选择目标. 其他 Provider 需要宿主另行集成, 不能仅通过 target 指定其组件.
+
+目标可用仅表示当前允许调用, 不保证模型能完成具体任务或持续输出有效决策. 显式选择的模型调用失败时不会自动换用其他模型. 1.0.0 使用文本与可选 OCR 观察, 视觉输入, 原生工具调用和动态脚本生成尚未提供. 插件界面, 脚本登记和配置示例见 [AI Agent 使用说明](https://github.com/SuperMonster003/AutoJs6-Plugin-AI-Agent#readme).
+
 ### ai.agent.run(goal, options?)
 
 - **goal** { [string](dataTypes#string) } - 非空自然语言目标, UTF-8 不超过 4 KiB

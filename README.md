@@ -47,9 +47,9 @@
 `targetAutoJs6Version` 用于固定可复现的离线 HTML 版本.
 
 编辑完成后, 执行一条命令即可全量生成离线 HTML, 应用离线插件的规范化规则,
-并安全同步到 `AutoJs6-Plugin-Offline-Docs`. 同步成功后, 两个项目的
-`versionName` 会与 `targetAutoJs6Version` 对齐, 各自的
-`versionCode` / `VERSION_BUILD` 增加 1:
+并安全同步到 `AutoJs6-Plugin-Offline-Docs`. 同步成功后, 文档项目的
+`versionName` 和插件的内容版本会与 `targetAutoJs6Version` 对齐,
+插件的独立发行版本保持不变, 各自的 `versionCode` / `VERSION_BUILD` 增加 1:
 
 ```powershell
 generator\auto-generate-for-autojs6.bat
@@ -99,8 +99,9 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/21</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/25</p>
 
+- `更新` AI Agent 1.0.0 的 Android, 宿主构建与 3-Stone AI 模型运行条件, 区分插件附着与完整任务 API, 说明模型可用性和当前观察能力
 - `更新` AI Agent 构建号 60 的全局设置与预算合并规则, 区分初始默认值和协议硬上限, 说明工具组与审慎模式只能由预设及单次参数进一步收紧
 - `新增` 电子书 (EPUB), EpubBook, EpubReaderSession 与 EpubLocator 文档, 覆盖 Readium EPUB Reader 插件的元数据, 目录, 正文提取, 封面与资源导出, 全文搜索, 阅读器会话事件与控制, 阅读偏好, 位置对象与错误代码
 - `新增` 邮件 (Mail), MailClient, MailMessage, MailAccountOptions 与 MailSearchQuery 文档, 覆盖 Angus Mail 插件的 IMAP / POP3 / SMTP 收发, 搜索, 附件, 标记, 文件夹, 新邮件监听, 账户选项, 服务商预设与错误代码

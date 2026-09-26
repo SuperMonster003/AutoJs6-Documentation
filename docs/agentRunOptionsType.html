@@ -270,6 +270,7 @@
             <h2>目录</h2>
 <ul>
 <li><span class="stability_undefined"><a href="#agentrunoptionstype_agentrunoptions_agent">AgentRunOptions - Agent 任务选项</a></span><ul>
+<li><span class="stability_undefined"><a href="#agentrunoptionstype_script_dynamic">script_dynamic</a></span></li>
 <li><span class="stability_undefined"><a href="#agentrunoptionstype_memory">memory</a></span></li>
 <li><span class="stability_undefined"><a href="#agentrunoptionstype_budget">budget</a></span></li>
 <li><span class="stability_undefined"><a href="#agentrunoptionstype">交互与任务归属</a></span></li>
@@ -355,10 +356,14 @@
 </tr>
 </tbody>
 </table>
-<p>工具组为 observe, act, ocr, gesture, script, files, shell, memory, user. gesture/files/shell 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效.</p>
+<p>工具组为 observe, act, ocr, gesture, script, script_dynamic, files, shell, memory, user. gesture/script_dynamic/files/shell 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效. script_dynamic 要求 AI Agent 1.1.0 开发版本及支持该组的宿主, 详见下节.</p>
 <p>AI Agent 1.0.0 / 构建号 60 起, 可从插件任务台的 &quot;设置&quot; 调整全局工具组, 默认预算, 审慎模式与默认预设. 全局设置同时适用于界面与 <code>ai.agent</code> 发起的任务. 任务入队时固定设置与预设快照, 后续修改不改变已入队任务. 开启工具组仍须满足宿主授权和工具执行条件, 也不会免除操作确认. 设置页关闭语音输入仅隐藏语音入口, 不影响脚本任务.</p>
 <p>预设固定上下文与本次 context 以空行拼接, 本次 context 为空不会清除预设文本. 该文本与 parameters 合并注入模型时总计仍不能超过 8 KiB. 预填参数不授权任何文件访问或设备操作. scriptRoots 必须为绝对目录, 不含父目录跳转或隐藏越界路径; 宿主再次进行真实路径校验.</p>
 <p>自定义预设要求 AI Agent 1.0.0 / 构建号 56 或以上. 预设模型目标来自宿主代理的模型目录. 预设页显示本地/在线/混合及结构化 JSON 支持, 不支持结构化约束的目标标注 &quot;退化模式&quot;. 显式指定的目标失效时任务失败, 不自动更换目标. 记忆范围只可选择全局及当前预设, 仅全局, 仅当前预设或关闭, 不可读取其他预设的记忆.</p>
+<h2>script_dynamic<span><a class="mark" href="#agentrunoptionstype_script_dynamic" id="agentrunoptionstype_script_dynamic">#</a></span></h2>
+<p>AI Agent 1.1.0 开发版本提供模型工具 <code>script_run_source(source, timeoutMs?)</code>, 它不是 <code>ai.agent</code> 下新增的 JavaScript 方法. 在插件设置中明确启用 script_dynamic 后, 预设及 tools 选项可继续缩小其使用范围; 仅在单次任务中声明 tools 不能打开全局关闭的组.</p>
+<p>模型生成的源码通过宿主 <code>engines.execScript</code> 执行. 每次执行都要单独确认, 确认页先展示摘要并可展开完整源码, 不能通过 &quot;本次任务内允许&quot; 跳过后续源码确认. 拒绝或确认超时均不执行. 动态脚本使用 AutoJs6 的脚本运行权限, 不受限于其他模型工具组的操作范围; 开启此组前应了解脚本能力, 执行前应审阅完整源码.</p>
+<p>源码保存在插件私有任务步骤记录中, 历史诊断导出会移除源码与其他参数. 可从步骤详情选择保存脚本, 由系统文件选择器创建带 <code>@agent</code> 登记头的 <code>.js</code> 文件; 登记头将风险固定为 sensitive, 确认要求为 before-run. 将文件保存至宿主已登记的脚本目录, 或在宿主批准的脚本根中加入其所在目录后重新扫描, 才能通过 script 组选择该脚本. 保存文件本身不执行脚本.</p>
 <h2>memory<span><a class="mark" href="#agentrunoptionstype_memory" id="agentrunoptionstype_memory">#</a></span></h2>
 <p>AI Agent 1.0.0 / 构建号 57 起支持记忆管理与模型工具 <code>memory_get(keys?)</code> / <code>memory_propose(key, value, scope?)</code>. 它们由 Agent 决策使用, 不是 <code>ai.agent</code> 下新增的 JavaScript 方法.</p>
 <p><code>memory: false</code> 仅关闭任务开始时的自动注入. 若同时需要禁止该任务查询或提出记忆, 请在 tools 中禁用 memory 组; 预设的记忆范围设为关闭时也会拒绝这两个工具. 自动注入按更新时间从新到旧保留完整条目, 最多 4 KiB; 当前预设的同名 key 优先于全局值. <code>memory_get</code> 可按 key 查询, 始终受当前预设作用域约束.</p>

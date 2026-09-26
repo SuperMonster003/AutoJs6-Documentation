@@ -99,8 +99,9 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/25</p>
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
 
+- `更新` AI Agent 1.1.0 开发版本的 script_dynamic 工具组, 默认关闭, 每份源码单独确认, 私有步骤记录与保存登记脚本的流程
 - `更新` AI Agent 1.0.0 的 Android, 宿主构建与 3-Stone AI 模型运行条件, 区分插件附着与完整任务 API, 说明模型可用性和当前观察能力
 - `更新` AI Agent 构建号 60 的全局设置与预算合并规则, 区分初始默认值和协议硬上限, 说明工具组与审慎模式只能由预设及单次参数进一步收紧
 - `新增` 电子书 (EPUB), EpubBook, EpubReaderSession 与 EpubLocator 文档, 覆盖 Readium EPUB Reader 插件的元数据, 目录, 正文提取, 封面与资源导出, 全文搜索, 阅读器会话事件与控制, 阅读偏好, 位置对象与错误代码

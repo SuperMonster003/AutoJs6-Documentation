@@ -101,6 +101,7 @@ generator\auto-generate-for-autojs6.bat
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
 
+- `更新` AI Agent 1.2.0 开发版本的 mcp 工具组, 默认关闭, 服务器配置与工具选择, 逐服务器风险和远端取消边界
 - `更新` AI Agent 1.1.0 开发版本的 script_dynamic 工具组, 默认关闭, 每份源码单独确认, 私有步骤记录与保存登记脚本的流程
 - `更新` AI Agent 1.0.0 的 Android, 宿主构建与 3-Stone AI 模型运行条件, 区分插件附着与完整任务 API, 说明模型可用性和当前观察能力
 - `更新` AI Agent 构建号 60 的全局设置与预算合并规则, 区分初始默认值和协议硬上限, 说明工具组与审慎模式只能由预设及单次参数进一步收紧

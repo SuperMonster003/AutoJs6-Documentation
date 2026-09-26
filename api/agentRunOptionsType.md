@@ -17,13 +17,29 @@
 | scriptRoots | [string](dataTypes#string)[[]](dataTypes#array) | 省略沿用预设; 附加脚本根选择, 最多 32 项, 只能缩小预设与宿主共同批准的范围 |
 | locale | [string](dataTypes#string) | 使用链路语言; 最多 64 字节 |
 
-工具组为 observe, act, ocr, gesture, script, script_dynamic, files, shell, memory, user. gesture/script_dynamic/files/shell 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效. script_dynamic 要求 AI Agent 1.1.0 开发版本及支持该组的宿主, 详见下节.
+工具组为 observe, act, ocr, gesture, script, script_dynamic, files, shell, memory, user, mcp. gesture/script_dynamic/files/shell/mcp 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效. script_dynamic 要求 AI Agent 1.1.0 开发版本及支持该组的宿主; mcp 要求 AI Agent 1.2.0 开发版本及支持该组的宿主, 详见下节.
 
 AI Agent 1.0.0 / 构建号 60 起, 可从插件任务台的 "设置" 调整全局工具组, 默认预算, 审慎模式与默认预设. 全局设置同时适用于界面与 `ai.agent` 发起的任务. 任务入队时固定设置与预设快照, 后续修改不改变已入队任务. 开启工具组仍须满足宿主授权和工具执行条件, 也不会免除操作确认. 设置页关闭语音输入仅隐藏语音入口, 不影响脚本任务.
 
 预设固定上下文与本次 context 以空行拼接, 本次 context 为空不会清除预设文本. 该文本与 parameters 合并注入模型时总计仍不能超过 8 KiB. 预填参数不授权任何文件访问或设备操作. scriptRoots 必须为绝对目录, 不含父目录跳转或隐藏越界路径; 宿主再次进行真实路径校验.
 
 自定义预设要求 AI Agent 1.0.0 / 构建号 56 或以上. 预设模型目标来自宿主代理的模型目录. 预设页显示本地/在线/混合及结构化 JSON 支持, 不支持结构化约束的目标标注 "退化模式". 显式指定的目标失效时任务失败, 不自动更换目标. 记忆范围只可选择全局及当前预设, 仅全局, 仅当前预设或关闭, 不可读取其他预设的记忆.
+
+## mcp
+
+AI Agent 1.2.0 开发版本可将用户选定的 MCP 工具纳入任务. 在插件的 MCP 服务器设置中填写服务器地址, 按需保存 Bearer 令牌, 发现并选择允许使用的工具, 然后启用服务器及设置和预设中的 mcp 组. 本机 MCP Server 默认地址为 `http://127.0.0.1:9637/mcp`; 其他服务器要求 HTTPS. 令牌与用户配对在 MCP Server 侧管理, `tools` 选项不包含凭据, 不创建服务器或自动批准配对.
+
+模型中的工具名以 `mcp_<server>_<tool>` 区分来源. 工具目录在任务准备时固定, 参数仍经 Schema 校验; 不支持的 Schema 会显示原因且不提供给模型. 风险由用户逐服务器指定, 默认 SENSITIVE, 不根据远端 annotations 降低. 启用工具组不会免除风险确认, 模型和步骤预算也继续生效. 工具返回 `isError` 时作为失败观察回送, 不计为成功执行; 公共错误为 `TOOL_FAILED`, 具体 MCP 原因使用有界的诊断字段.
+
+MCP 工具在对应服务器执行, 不受宿主内置工具的文件目录或能力 grant 限制. 取消会停止本地等待并尝试取消远端请求, 但不能撤销已经发生的操作. 连接失败或超时不自动重放调用. MCP 令牌加密保存在插件私有目录, 不进入模型提示词或历史导出. 当前只支持 Streamable HTTP 的工具列表与调用, 不提供 stdio, OAuth 或独立 MCP Client 插件的公开 API.
+
+```js
+// 先在插件中配置并启用 MCP 服务器, 工具及所用预设.
+let task = ai.agent.run('使用已配置的 MCP 工具查询可用信息', {
+    tools: ['mcp', 'user'],
+    interaction: 'plugin',
+});
+```
 
 ## script_dynamic
 

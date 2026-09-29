@@ -303,7 +303,7 @@
 </tr>
 <tr>
 <td>input</td>
-<td>requestId, kind, question, choices?, memoryKey?, timeoutMs, readOnly</td>
+<td>requestId, kind, question, choices?, steps?, memoryKey?, timeoutMs, readOnly</td>
 <td>请求用户信息</td>
 </tr>
 <tr>
@@ -323,7 +323,7 @@
 </tr>
 </tbody>
 </table>
-<p>input.kind 为 text, choice 或 confirm. text/choice 以字符串回答, confirm 以布尔值回答. timeoutMs 是该次请求提供的剩余等待上限, 收到回调前已过去的时间仍计入截止; 应及时回应, 过期不再有效.</p>
+<p>input.kind 为 text, choice, confirm 或 plan. text/choice 以字符串回答, confirm 以布尔值回答, plan (计划模式下模型提议的 steps, 见 <a href="agentRunOptionsType.html">AgentRunOptions</a> 的 plan 选项) 以 1 到 8 条非空字符串组成的数组回答, 可直接回传 steps 或修改后回传. timeoutMs 是该次请求提供的剩余等待上限, 收到回调前已过去的时间仍计入截止; 应及时回应, 过期不再有效.</p>
 <p>confirmation.risk 为 normal 或 sensitive, 参数来自实际待执行工具, 而非模型在询问文字中的自称. <code>readOnly: true</code> 表示由插件界面处理; <code>allowRunScope: false</code> 表示只可逐次确认. 敏感支付操作必须单次确认, 没有响应时不会默认执行.</p>
 <p>step 中 observation 和参数可被裁剪或脱敏. <code>confirmation</code> 为 allowed, denied 或 auto; 模型询问不占用工具确认授权. error 事件之后可能仍有 done, 因为任务失败结果同样会兑现 Promise; 句柄错误只拒绝 Promise, 不伪造任务结果.</p>
 <pre><code class="lang-js">let run = ai.agent.run(&#39;先询问我的演示称呼, 然后报告它.&#39;, {

@@ -39,7 +39,7 @@
 ### AgentRun#respond(requestId, value)
 
 - **requestId** { [string](dataTypes#string) } - 当前 input 请求 ID
-- **value** { [string](dataTypes#string) | [boolean](dataTypes#boolean) } - text/choice 为字符串, confirm 为布尔值
+- **value** { [string](dataTypes#string) | [boolean](dataTypes#boolean) | [string](dataTypes#string)[] } - text/choice 为字符串, confirm 为布尔值, plan 为 1 到 8 条非空字符串组成的数组 (每条不超过 200 字, 可在模型提议的基础上修改)
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 回应是否被接受
 
 仅 `interaction: 'script'` 可回应. choice 必须逐字匹配原选项, text 不可为空白, JSON 值最多 4 KiB. 过期, 已提交或非当前请求抛出带 `code` 的错误. 模型的 confirm 类型 input 不等同于敏感操作 confirmation.

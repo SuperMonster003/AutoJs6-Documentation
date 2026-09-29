@@ -16,6 +16,7 @@
 | memory | [boolean](dataTypes#boolean) | true; false 不注入偏好记忆, true 不能重新启用预设已关闭的记忆或跨越预设作用域 |
 | scriptRoots | [string](dataTypes#string)[[]](dataTypes#array) | 省略沿用预设; 附加脚本根选择, 最多 32 项, 只能缩小预设与宿主共同批准的范围 |
 | locale | [string](dataTypes#string) | 使用链路语言; 最多 64 字节 |
+| plan | [boolean](dataTypes#boolean) | 沿用预设的计划模式开关, 初始为 false; true 时模型先提出 1 到 8 步计划, 经 kind 为 plan 的 input 事件审阅 (可修改) 后才执行首个工具, 计划不再适用时会再次提出计划审阅 |
 
 工具组为 observe, act, ocr, gesture, script, script_dynamic, files, shell, memory, user, mcp. gesture/script_dynamic/files/shell/mcp 默认关闭, ocr 还要求宿主报告可用的授权 OCR 能力. 选项只能收紧插件的实际可用集合, 不能启用全局关闭的组或扩大宿主 grant. 名称不重复且必须有效. script_dynamic 要求 AI Agent 1.1.0 开发版本及支持该组的宿主; mcp 要求 AI Agent 1.2.0 开发版本及支持该组的宿主, 详见下节.
 

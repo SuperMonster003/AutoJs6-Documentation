@@ -368,7 +368,7 @@
 <h3>AgentRun#respond(requestId, value)<span><a class="mark" href="#agentruntype_agentrun_respond_requestid_value" id="agentruntype_agentrun_respond_requestid_value">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>requestId</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 当前 input 请求 ID</li>
-<li><strong>value</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - text/choice 为字符串, confirm 为布尔值</li>
+<li><strong>value</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - text/choice 为字符串, confirm 为布尔值, plan 为 1 到 8 条非空字符串组成的数组 (每条不超过 200 字, 可在模型提议的基础上修改)</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 回应是否被接受</li>
 </ul>
 </div><p>仅 <code>interaction: &#39;script&#39;</code> 可回应. choice 必须逐字匹配原选项, text 不可为空白, JSON 值最多 4 KiB. 过期, 已提交或非当前请求抛出带 <code>code</code> 的错误. 模型的 confirm 类型 input 不等同于敏感操作 confirmation.</p>

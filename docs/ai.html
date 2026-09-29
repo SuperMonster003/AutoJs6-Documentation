@@ -394,16 +394,18 @@
 <ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> } - Agent 任务控制, 登记脚本目录, 执行上下文与结果通道</li>
 </ul>
-<p><code>result</code> 与 <code>context</code> 要求宿主构建号不低于 <code>5287</code>; 任务控制方法要求不低于 <code>5293</code>. 任务循环由已启用并附着的 AI Agent 插件执行, 模型与设备能力经宿主代理提供. <code>catalog</code>, <code>result</code> 与 <code>context</code> 的宿主侧功能不要求插件在线.</p>
-<p>AI Agent 1.0.0 要求 Android 7.0 / API 24 或以上. 插件附着要求宿主构建号不低于 <code>5289</code>, 使用本节完整任务 API 时应安装构建号 <code>5293</code> 或以上. 当前宿主模型代理使用 3-Stone AI 插件中的模型目录; 请先在该插件中配置在线模型或导入本地模型, 再在 AI Agent 预设中选择目标. 其他 Provider 需要宿主另行集成, 不能仅通过 target 指定其组件.</p>
-<p>目标可用仅表示当前允许调用, 不保证模型能完成具体任务或持续输出有效决策. 显式选择的模型调用失败时不会自动换用其他模型. 1.0.0 使用文本与可选 OCR 观察, 视觉输入, 原生工具调用和动态脚本生成尚未提供. 插件界面, 脚本登记和配置示例见 <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-AI-Agent#readme">AI Agent 使用说明</a>.</p>
+<p><code>result</code> 与 <code>context</code> 要求宿主构建号不低于 <code>5287</code>; 任务控制方法自 <code>5293</code> 起提供, 当前 3-Stove Agent 插件要求宿主构建号不低于 <code>5298</code>. 任务循环由已启用的 3-Stove Agent 插件执行, 模型与设备能力经宿主代理提供. <code>catalog</code>, <code>result</code> 与 <code>context</code> 的宿主侧功能不要求插件在线.</p>
+<p>插件中心是唯一的启用和禁用入口, 宿主抽屉不再提供独立的 Agent 开关. 首次安装官方插件后自动启用且不弹出启用确认; 用户明确禁用的插件在更新后保持禁用. 脚本与插件独立界面在需要时自动建立连接, 自动连接不代替插件中心的启用授权, 不增加开机自启, 不重放已结束或被中断的任务. <code>status()</code> 只读取当前状态, 因此首次使用前的 <code>detached</code> 不表示插件未启用.</p>
+<p>3-Stove Agent 要求 Android 7.0 / API 24 或以上. 当前宿主模型代理使用 3-Stone AI 插件中的模型目录; 请先在该插件中配置在线模型或导入本地模型. 插件任务台与悬浮球共用界面中的模型选择, 脚本可通过任务选项指定目标. 其他 Provider 需要宿主另行集成, 不能仅通过 target 指定其组件.</p>
+<p>目标可用仅表示当前允许调用, 不保证模型能完成具体任务或持续输出有效决策. 显式选择的模型调用失败时不会自动换用其他模型. 当前插件支持文本, 可选 OCR 与截图观察, 原生工具调用和受确认控制的动态脚本生成; 具体能力取决于模型与已启用的工具组. 插件界面, 脚本登记和配置示例见 <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Stove-Agent#readme">3-Stove Agent 使用说明</a>.</p>
 <h3>ai.agent.run(goal, options?)<span><a class="mark" href="#ai_ai_agent_run_goal_options" id="ai_ai_agent_run_goal_options">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>goal</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 非空自然语言目标, UTF-8 不超过 4 KiB</li>
 <li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="agentRunOptionsType.html">AgentRunOptions</a></span> } - 模型, 工具范围, 预算与交互方式</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="agentRunType.html">AgentRun</a></span> } - 同步返回的任务句柄</li>
 </ul>
-</div><p>参数错误同步抛出. 插件未安装, 未启用或未附着时返回 <code>state: &#39;failed&#39;</code> 的句柄, <code>error.code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>error.hint</code> 指向 AutoJs6 抽屉中的 AI Agent 入口. 此时 <code>result</code> Promise 拒绝; 不自动启用插件或重放任务.</p>
+</div><p>参数错误同步抛出. 插件已启用且兼容时, 此方法会在提交任务前按需连接并等待附着完成, 无需先打开插件界面. 插件未安装, 被禁用, 不兼容或连接失败时返回 <code>state: &#39;failed&#39;</code> 的句柄, <code>error.code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>error.hint</code> 提供插件中心中的安装, 启用或更新引导; 此时 <code>result</code> Promise 拒绝. 不会自动重新启用用户禁用的插件或重放任务.</p>
+<p>连接尚未建立时, 同步等待必须在脚本工作线程执行. Android 主线程需要处理服务连接回调, 因此不能在该线程阻塞等待首次连接; 从 UI 回调发起任务时应使用 <code>threads.start</code> 切换到工作线程.</p>
 <pre><code class="lang-js">let run = ai.agent.run(&#39;查询当前设备型号和 Android 版本, 根据查询结果报告.&#39;, {
     tools: [&#39;observe&#39;, &#39;user&#39;],
 });
@@ -421,7 +423,7 @@ run.result.then((result) =&gt; console.log(result.status, result.summary), conso
 <li><strong>id</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 任务 UUID</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="agentRunType.html">AgentRun</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 当前脚本的观察句柄, 任务不存在时为 null</li>
 </ul>
-</div><p>同一脚本重复获取同一 ID 返回同一句柄. 获取其他脚本的任务不会转移任务归属; 观察脚本退出不会取消它. 已结束任务的 <code>result</code> 兑现历史结果. 链路不可用时抛出异常.</p>
+</div><p>同一脚本重复获取同一 ID 返回同一句柄. 获取其他脚本的任务不会转移任务归属; 观察脚本退出不会取消它. 已结束任务的 <code>result</code> 兑现历史结果. 需要访问插件时按需连接; 与 <code>run</code> 一样, 首次连接的同步等待应在脚本工作线程执行. 插件不可用或连接失败时抛出异常.</p>
 <p>重新获取会发送当前状态与仍待处理的询问/确认, 不重放历史步骤或设备动作. 同一宿主进程启动的任务继续使用原有回调; 其他入口的活动任务通过有界快照轮询观察, 短暂的中间状态可能不会逐个重现. 宿主或插件进程退出后的任务不会自动恢复执行.</p>
 <h3>ai.agent.list(filter?)<span><a class="mark" href="#ai_ai_agent_list_filter" id="ai_ai_agent_list_filter">#</a></span></h3>
 <p><strong><code>Async</code></strong></p>
@@ -430,20 +432,21 @@ run.result.then((result) =&gt; console.log(result.status, result.summary), conso
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现最近任务摘要数组</li>
 </ul>
 <p><code>state</code> 为一个任务状态或不重复的状态数组, <code>preset</code> 为预设名, <code>since</code> / <code>until</code> 为包含边界的 Unix 毫秒时间, <code>limit</code> 为 1 到 50 的整数, 默认 50. 按最近登记顺序返回, 每项含 <code>id</code>, <code>goal</code>, <code>state</code>, <code>startedAt</code>, <code>detached</code>, <code>preset</code>. 目标摘要可能被裁剪; 当前插件只保留有界历史, 不代表无限历史检索.</p>
+<p>插件已启用时异步按需连接. 读取列表不会启动或恢复其中的任务.</p>
 <h3>ai.agent.catalog(query?)<span><a class="mark" href="#ai_ai_agent_catalog_query" id="ai_ai_agent_catalog_query">#</a></span></h3>
 <p><strong><code>Async</code></strong></p>
 <ul>
 <li><strong>[ query ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 不超过 4 KiB 的目录查询文本</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现 <a href="agentScriptEntryType.html">AgentScriptEntry</a> 数组</li>
 </ul>
-<p>由宿主扫描当前工作目录和已附着链路中经宿主批准的附加根. 插件不可用时仍可查询工作目录. 仅返回显式登记且有效的脚本元数据, 不执行脚本, 不返回脚本正文. 最多 500 项 / 256 KiB.</p>
+<p>由宿主扫描当前工作目录和链路中经宿主批准的附加根. 插件已启用时异步按需连接以读取附加根; 插件不可用时仍可查询工作目录. 仅返回显式登记且有效的脚本元数据, 不执行脚本, 不返回脚本正文. 最多 500 项 / 256 KiB.</p>
 <h3>ai.agent.presets()<span><a class="mark" href="#ai_ai_agent_presets" id="ai_ai_agent_presets">#</a></span></h3>
 <p><strong><code>Async</code></strong></p>
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现可用预设名称数组</li>
 </ul>
-<p>返回插件内置 <code>default</code> 和用户保存的预设名称. 此方法要求插件已附着; 自定义预设要求 AI Agent 1.0.0 / 构建号 56 或以上.</p>
-<p>在 AI Agent 任务台的 &quot;预设&quot; 页面新建, 编辑, 复制, 删除或设为默认. 名称同时用于脚本调用和记忆作用域, 保存后保持不变; 更换名称可复制为新预设. 内置 <code>default</code> 可以编辑但不能删除. 删除当前默认预设后, 新任务恢复使用 <code>default</code>.</p>
+<p>返回插件内置 <code>default</code> 和用户保存的预设名称. 插件已启用时异步按需连接, 无需用户提前建立连接.</p>
+<p>在 3-Stove Agent 任务台的 &quot;预设&quot; 页面新建, 编辑, 复制, 删除或设为默认. 名称同时用于脚本调用和记忆作用域, 保存后保持不变; 更换名称可复制为新预设. 内置 <code>default</code> 可以编辑但不能删除. 删除当前默认预设后, 新任务恢复使用 <code>default</code>.</p>
 <p><code>run</code> 省略 <code>preset</code> 时使用插件当前选定的默认预设; 显式传入名称时只使用该预设. 入队时固定配置快照, 后续编辑或删除不改变已入队的任务. 不存在的预设会被插件拒绝, 不会自动替换为默认预设. AI Agent 构建号 60 起, 设置页可调整全局工具组, 预算和审慎模式, 预设与单次选项只能进一步收紧. 合并规则见 <a href="agentRunOptionsType.html">AgentRunOptions</a>.</p>
 <h3>ai.agent.status()<span><a class="mark" href="#ai_ai_agent_status" id="ai_ai_agent_status">#</a></span></h3>
 <div class="signature"><ul>

@@ -39,6 +39,7 @@
 * [Global - 全局对象](global)
 * [HTTP](http)
 * [Images - 图像](image)
+- [Installer - 安装器](installer)
 * [Internationalization - 国际化](i18n)
 * [Jsox - JavaScript 对象扩展](jsox)
 * [Keys - 按键](keys)

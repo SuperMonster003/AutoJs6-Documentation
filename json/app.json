@@ -403,6 +403,44 @@
           "displayName": "[m] openDualAppSettings"
         },
         {
+          "textRaw": "[m] uninstall",
+          "name": "[m]_uninstall",
+          "methods": [
+            {
+              "textRaw": "app.uninstall(packageName)",
+              "type": "method",
+              "name": "uninstall",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**packageName** { [string](dataTypes#string) | [App](appType) } - 应用包名或应用枚举值, 字符串也可使用应用枚举别名 ",
+                      "name": "**packageName**",
+                      "type": " [string](dataTypes#string) | [App](appType) ",
+                      "desc": "应用包名或应用枚举值, 字符串也可使用应用枚举别名"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>交给系统卸载程序显示确认界面. 如果应用未安装, 由系统卸载程序处理, 可能显示 &quot;未找到应用&quot;. 本方法不等待卸载结果, 无需安装器插件.</p>\n<p>需要 Shizuku / Root 静默卸载, 保留数据, 目标用户或完成结果时, 使用 <a href=\"installer#m-uninstall\">installer.uninstall</a>, 该方法需要 3-Setup Installer 插件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] uninstall"
+        },
+        {
           "textRaw": "[m] uninstallDual",
           "name": "[m]_uninstalldual",
           "methods": [
@@ -695,31 +733,6 @@
             }
           ],
           "desc": "<p>用其他应用编辑文件. 文件不存在的情况由编辑文件的应用处理.</p>\n<p>如果找不出可以编辑该文件的应用, 则抛出 <code>ActivityNotException</code>.</p>\n<pre><code>// 编辑文本文件.\napp.editFile(&quot;/sdcard/1.txt/);\n</code></pre>"
-        },
-        {
-          "textRaw": "app.uninstall(packageName)",
-          "type": "method",
-          "name": "uninstall",
-          "signatures": [
-            {
-              "params": [
-                {
-                  "textRaw": "**packageName** { [string](dataTypes#string) } 应用包名 ",
-                  "name": "**packageName**",
-                  "type": " [string](dataTypes#string) ",
-                  "desc": "应用包名"
-                }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "packageName"
-                }
-              ]
-            }
-          ],
-          "desc": "<p>卸载应用. 执行后会会弹出卸载应用的提示框. 如果该包名的应用未安装, 由应用卸载程序处理, 可能弹出 &quot;未找到应用&quot; 的提示.</p>\n<pre><code>// 卸载 QQ.\napp.uninstall(&quot;com.tencent.mobileqq&quot;);\n</code></pre>"
         },
         {
           "textRaw": "app.openUrl(url)",

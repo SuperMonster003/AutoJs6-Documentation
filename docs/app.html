@@ -61,6 +61,7 @@
 <li><a class="nav-global" href="global.html">Global - 全局对象</a></li>
 <li><a class="nav-http" href="http.html">HTTP</a></li>
 <li><a class="nav-image" href="image.html">Images - 图像</a></li>
+<li><a class="nav-installer" href="installer.html">Installer - 安装器</a></li>
 <li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
 <li><a class="nav-jsox" href="jsox.html">Jsox - JavaScript 对象扩展</a></li>
 <li><a class="nav-keys" href="keys.html">Keys - 按键</a></li>
@@ -345,7 +346,10 @@
 </li>
 <li><span class="stability_undefined"><a href="#app_app_viewfile_path">app.viewFile(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#app_app_editfile_path">app.editFile(path)</a></span></li>
+<li><span class="stability_undefined"><a href="#app_m_uninstall">[m] uninstall</a></span><ul>
 <li><span class="stability_undefined"><a href="#app_app_uninstall_packagename">app.uninstall(packageName)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#app_m_uninstalldual">[m] uninstallDual</a></span><ul>
 <li><span class="stability_undefined"><a href="#app_uninstalldual_app">uninstallDual(app)</a></span></li>
 </ul>
@@ -612,14 +616,15 @@ app.viewFile(&quot;/sdcard/1.txt&quot;);
 <p>如果找不出可以编辑该文件的应用, 则抛出 <code>ActivityNotException</code>.</p>
 <pre><code>// 编辑文本文件.
 app.editFile(&quot;/sdcard/1.txt/);
-</code></pre><h2>app.uninstall(packageName)<span><a class="mark" href="#app_app_uninstall_packagename" id="app_app_uninstall_packagename">#</a></span></h2>
+</code></pre><h2>[m] uninstall<span><a class="mark" href="#app_m_uninstall" id="app_m_uninstall">#</a></span></h2>
+<h3>app.uninstall(packageName)<span><a class="mark" href="#app_app_uninstall_packagename" id="app_app_uninstall_packagename">#</a></span></h3>
 <div class="signature"><ul>
-<li><strong>packageName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 应用包名</li>
+<li><strong>packageName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="appType.html">App</a></span> } - 应用包名或应用枚举值, 字符串也可使用应用枚举别名</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>卸载应用. 执行后会会弹出卸载应用的提示框. 如果该包名的应用未安装, 由应用卸载程序处理, 可能弹出 &quot;未找到应用&quot; 的提示.</p>
-<pre><code>// 卸载 QQ.
-app.uninstall(&quot;com.tencent.mobileqq&quot;);
-</code></pre><h2>[m] uninstallDual<span><a class="mark" href="#app_m_uninstalldual" id="app_m_uninstalldual">#</a></span></h2>
+</div><p>交给系统卸载程序显示确认界面. 如果应用未安装, 由系统卸载程序处理, 可能显示 &quot;未找到应用&quot;. 本方法不等待卸载结果, 无需安装器插件.</p>
+<p>需要 Shizuku / Root 静默卸载, 保留数据, 目标用户或完成结果时, 使用 <a href="installer.html#installer_m_uninstall">installer.uninstall</a>, 该方法需要 3-Setup Installer 插件.</p>
+<h2>[m] uninstallDual<span><a class="mark" href="#app_m_uninstalldual" id="app_m_uninstalldual">#</a></span></h2>
 <h3>uninstallDual(app)<span><a class="mark" href="#app_uninstalldual_app" id="app_uninstalldual_app">#</a></span></h3>
 <p><strong><code>6.6.0</code></strong> <strong><code>Global</code></strong></p>
 <ul>

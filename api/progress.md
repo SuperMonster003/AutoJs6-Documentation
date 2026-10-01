@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-01 安装器 (Installer): 按宿主源码补充 installer / $installer 的同步, Async 和会话 API, 来源与分包形态, 授权查询, 用户列表, 默认安装器, 结果和错误类型. 明确插件探测, 短等待超时, 来源删除和脚本退出的取消边界; 对应手工声明提供单项与批量结果的类型关联.
+
 2026-09-29 3-Stove Agent 按需连接: 插件中心统一启用状态, 官方首次安装自动启用且尊重后续禁用; run/get 在脚本工作线程等待首次连接, list/presets/catalog 异步连接, status 只读且 detached 不等同于禁用. 去除抽屉开关指引并更新插件名称, 最低宿主和当前观察能力, 保持无开机自启与无任务重放. 无公开方法签名变化.
 
 2026-09-26 AI Agent 1.2.0 开发配套: 同步默认关闭的 mcp 工具组, 服务器和工具选择, 逐服务器风险, Schema 准入, 远端执行与取消边界. 公开 tools 仍为组选择, 不接受令牌或服务器地址, 不新增 JavaScript 方法.
@@ -99,6 +101,7 @@
 | [Global - 全局对象](global) | √ |
 | [HTTP](http) | √ |
 | [Images - 图像](image) | √ |
+| [Installer - 安装器](installer) | √ |
 | [Internationalization - 国际化](i18n) | √ |
 | [Jsox - JavaScript 对象扩展](jsox) | √ |
 | [Keys - 按键](keys) | √ |

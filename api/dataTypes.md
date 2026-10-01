@@ -2067,3 +2067,35 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## EpubLocator
 
 参阅 [EpubLocator](epubLocatorType) 类型章节.
+
+## InstallSource
+
+参阅 [InstallSource](installer#installsource) 的普通来源, 分包与批量形态.
+
+## InstallOptions
+
+参阅 [InstallOptions](installer#installoptions) 安装选项.
+
+## UninstallOptions
+
+参阅 [UninstallOptions](installer#uninstalloptions) 卸载选项.
+
+## InstallResult
+
+参阅 [InstallResult](installer#installresult) 安装结果.
+
+## UninstallResult
+
+参阅 [UninstallResult](installer#uninstallresult) 卸载结果.
+
+## InstallSession
+
+参阅 [InstallSession](installer#installsession) 安装会话.
+
+## PackageArchiveInfo
+
+参阅 [PackageArchiveInfo](installer#packagearchiveinfo) 安装包检查信息.
+
+## InstallerError
+
+参阅 [InstallerError](installer#c-installererror) 错误类型.

@@ -320,16 +320,16 @@ app.viewFile("/sdcard/1.txt");
 app.editFile("/sdcard/1.txt/);
 ```
 
-## app.uninstall(packageName)
+## [m] uninstall
 
-- **packageName** { [string](dataTypes#string) } 应用包名
+### app.uninstall(packageName)
 
-卸载应用. 执行后会会弹出卸载应用的提示框. 如果该包名的应用未安装, 由应用卸载程序处理, 可能弹出 "未找到应用" 的提示.
+- **packageName** { [string](dataTypes#string) | [App](appType) } - 应用包名或应用枚举值, 字符串也可使用应用枚举别名
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-```
-// 卸载 QQ.
-app.uninstall("com.tencent.mobileqq");
-```
+交给系统卸载程序显示确认界面. 如果应用未安装, 由系统卸载程序处理, 可能显示 "未找到应用". 本方法不等待卸载结果, 无需安装器插件.
+
+需要 Shizuku / Root 静默卸载, 保留数据, 目标用户或完成结果时, 使用 [installer.uninstall](installer#m-uninstall), 该方法需要 3-Setup Installer 插件.
 
 ## [m] uninstallDual
 

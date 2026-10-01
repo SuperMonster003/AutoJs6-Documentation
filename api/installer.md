@@ -4,6 +4,8 @@
 
 从 AutoJs6 6.8.0 起, 此模块由外置 3-Setup Installer 插件提供. 使用前需在插件中心安装, 启用并授权兼容插件. [isAvailable](#m-isavailable) 和 [status](#p-status) 可用于探测插件; 插件缺失或不可用时, 实际操作抛出或以 Promise 拒绝 `code` 为 `PLUGIN_UNAVAILABLE` 的 [InstallerError](#c-installererror). 脚本 API 不会自动改走系统安装器.
 
+`dhizuku`, 安装交互 `notification` 和默认安装器 `mode: 'persistent'` 需要宿主构建 5306 或更高版本, 以及声明对应能力的 3-Setup Installer 1.1.0 实现. 新宿主仍可连接 V1 插件, 不会向旧插件发送未知选项或新事务. 缺少 Dhizuku 能力时返回 `AUTHORIZER_UNAVAILABLE`; 缺少通知安装或持久默认能力时返回 `INVALID_ARGUMENT`. 插件正式发布与索引准入仍以 [插件路线图](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Setup-Installer/blob/master/ROADMAP.md) 为准, 本文不代表已完成远端发布或全部设备验收.
+
 安装支持同步, Async 和会话三种形态. 同步方法阻塞当前脚本线程, Async 方法返回 Promise, [session](#m-session) 返回监听阶段与进度的会话. Promise 回调和会话事件都在创建它们的脚本线程执行. 同步方法不能阻塞 Android UI 线程; `session` 的创建, `status` 和 `authorizer` 的同步查询也需要脚本工作线程. UI 脚本可使用 Async 方法, 或在工作线程中创建和使用会话.
 
 停止脚本会取消宿主等待, 取消未完成的安装会话并释放来源资源. 已完成的安装不会回滚. 卸载, 授权请求和默认安装器设置没有单独的远端取消接口: 退出脚本会停止等待并抑制后续脚本回调, 但不能保证撤回系统已经接收的操作.
@@ -104,7 +106,7 @@ let startChosen = source => {
 - **[ options ]** { [UninstallOptions](#uninstalloptions) }
 - <ins>**returns**</ins> { [UninstallResult](#uninstallresult) }
 
-通过插件卸载应用. Shizuku 或 Root 可用于静默卸载, `none` 使用系统确认界面. `keepData` 和目标用户选项需要相应特权能力. 系统应用保护, 设备管理员和用户策略仍可阻止卸载.
+通过插件卸载应用. Shizuku 或 Root 可用于静默卸载, `none` 使用系统确认界面. Dhizuku 在已授权的当前所有者/工作资料用户中执行, 不支持 `keepData` 或其他/全部用户. `keepData` 和目标用户选项需要相应特权能力. 系统应用保护, 设备管理员和用户策略仍可阻止卸载. 通知模式仅用于安装, 卸载传入 `interaction: 'notification'` 会返回 `INVALID_ARGUMENT`.
 
 [app.uninstall](app#m-uninstall) 保持原有的系统卸载意图行为, 无需此插件, 也不提供本方法的安装器结果与特权选项.
 
@@ -152,11 +154,11 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 
 - { [string](dataTypes#string)[] }
 
-返回插件报告为可用的授权方式, 取值来自 `'none'`, `'shizuku'`, `'root'`, 不包含 `'auto'`. "可用" 不等于服务已运行或已经授权, 需结合 `state` 查看. 此列表不表示插件设置中的自动选择优先级.
+返回插件报告为可用的授权方式, 取值来自 `'none'`, `'shizuku'`, `'root'` 和经 V2 协商的 `'dhizuku'`, 不包含 `'auto'`. "可用" 不等于服务已运行或已经授权, 需结合 `state` 查看. 此列表不表示插件设置中的自动选择优先级.
 
 ### installer.authorizer.state(name?)
 
-- **[ name = 'auto' ]** { [string](dataTypes#string) } - `'auto'`, `'none'`, `'shizuku'` 或 `'root'`
+- **[ name = 'auto' ]** { [string](dataTypes#string) } - `'auto'`, `'none'`, `'shizuku'`, `'root'` 或 `'dhizuku'`
 - <ins>**returns**</ins> { [AuthorizerState](#authorizerstate) }
 
 查询状态, 不请求新的授权. `auto` 返回聚合状态: 任一路径可用则 `available` 为 `true`; 任一可用路径正在运行则 `running` 为 `true`; 任一可用且正在运行的路径已获授权则 `granted` 为 `true`. 它不暴露插件自定义的选择顺序, 也不承诺下一次安装一定采用某个特权路径.
@@ -165,11 +167,13 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 
 **`Non-UI`**
 
-- **name** { [string](dataTypes#string) } - `'auto'`, `'none'`, `'shizuku'` 或 `'root'`
+- **name** { [string](dataTypes#string) } - `'auto'`, `'none'`, `'shizuku'`, `'root'` 或 `'dhizuku'`
 - **[ timeout = 300000 ]** { [number](dataTypes#number) } - 等待超时, 毫秒, 取值为 1 至 7200000 的整数
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 请求结果
 
-显式选择 `shizuku` 或 `root` 时请求对应授权. 拒绝, 不可用和超时可通过相应 `InstallerError` 报告. `auto` 只检查是否已有可用, 运行中且已授权的路径, 不主动发起 Shizuku 或 Root 的新授权提示.
+显式选择 `shizuku`, `root` 或 `dhizuku` 时请求对应授权. 拒绝, 不可用和超时可通过相应 `InstallerError` 报告. `auto` 只检查是否已有可用, 运行中且已授权的路径, 不主动发起新的特权授权提示.
+
+Dhizuku 需要 Android 8.0 (API 26) 或以上, 已激活为 device owner 或 profile owner 的 Dhizuku, 以及单独授予 3-Setup Installer 的权限. 向 AutoJs6 授权不等于向插件授权. 设备所有者/工作资料所有者权限不是 Root 或 Shizuku shell 权限, 支持的操作和目标用户见 [InstallOptions](#installoptions).
 
 ### installer.authorizer.requestAsync(name, timeout?)
 
@@ -198,10 +202,21 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 **`6.8.0`** **`Non-UI`**
 
 - **[ enabled = true ]** { [boolean](dataTypes#boolean) } - 是否将插件设为默认安装器
-- **[ options ]** {{ authorizer?: [string](dataTypes#string) }} - 授权方式, 默认 `'auto'`
+- **[ options ]** {{ authorizer?: [string](dataTypes#string); mode?: [string](dataTypes#string) }} - 授权方式默认 `'auto'`, mode 默认 `'preferred'`
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否达到所请求的状态
 
-需要 Shizuku 或 Root 授权, 无特权时抛出 `AUTHORIZER_REQUIRED`. `enabled: false` 表示取消本插件的默认安装器设置. 返回 `true` 表示所请求的启用或取消状态已经达到. 某些 Android 版本存在其他默认处理程序时, 仍需用户在系统设置中先清除原默认项. 此接口不保证持久锁定默认安装器.
+返回 `true` 表示所请求的启用或取消状态已经达到. 省略 `mode` 或使用 `'preferred'` 时保留原接口语义, 通过 Shizuku 或 Root 管理普通偏好, 不承诺持久锁定. `enabled: false` 只取消本插件设置, 不清除其他应用的默认记录. 某些 Android 版本已有其他默认处理程序时, 仍需先在系统设置中清除原默认项; 无特权时返回 `AUTHORIZER_REQUIRED`.
+
+`mode: 'persistent'` 使用对应设备策略的持久默认功能, 当前插件要求显式选择 `authorizer: 'dhizuku'`. Root/system 身份的持久默认能力未作为当前保证. 启用成功需要插件成为持久处理者; 关闭成功表示本插件的持久项已经移除, 原普通偏好可以保留, 因此此时 `isDefault()` 仍可能是 `true`. 模式不会在不支持时自动切换. 模式只接受 `'preferred'` 和 `'persistent'`, 未知值或 `null` 被拒绝.
+
+下面只定义函数, 调用前需确认设备所有者配置及插件授权:
+
+```js
+let setPersistentChosen = enabled => installer.setDefault(enabled, {
+    authorizer: 'dhizuku',
+    mode: 'persistent',
+});
+```
 
 ## [m] setDefaultAsync
 
@@ -210,7 +225,7 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 **`6.8.0`** **`Async`**
 
 - **[ enabled = true ]** { [boolean](dataTypes#boolean) }
-- **[ options ]** {{ authorizer?: [string](dataTypes#string) }}
+- **[ options ]** {{ authorizer?: [string](dataTypes#string); mode?: [string](dataTypes#string) }}
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [boolean](dataTypes#boolean)
 
 [setDefault](#m-setdefault) 的异步形态.
@@ -243,7 +258,7 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-探测插件是否可用. 插件缺失, 禁用, 未授权或不兼容等情况返回 `false`. 返回 `true` 只说明插件可用, 不代表已经获得 Shizuku 或 Root 授权, 也不代表可静默安装.
+探测插件是否可用. 插件缺失, 禁用, 未授权或不兼容等情况返回 `false`. 返回 `true` 只说明插件可用, 不代表已经获得 Shizuku, Root 或 Dhizuku 授权, 也不代表可静默安装或支持全部可选能力.
 
 ## [p] status
 
@@ -257,7 +272,7 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 | --- | --- | --- |
 | `available` | boolean | 插件是否可用 |
 | `pluginVersion` | string | 实际选中的插件版本, 可选 |
-| `contractVersion` | number | 可用时返回的契约版本 |
+| `contractVersion` | number | 可用时宿主与插件协商出的契约版本; 新宿主可使用 1 或 2 |
 | `reason` | string | 不可用时的原因, 可选 |
 
 这是同步查询. 插件不可用的原因以字段返回, 不使用操作方法的 `PLUGIN_UNAVAILABLE` 异常形态.
@@ -276,18 +291,22 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 
 | 字段 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `authorizer` | `'auto' \| 'none' \| 'shizuku' \| 'root'` | `'auto'` | 自动按插件配置选择可用路径; 显式指定时不回退 |
-| `interaction` | `'auto' \| 'dialog' \| 'silent'` | `'auto'` | 交互方式, 见下文 |
-| `allowDowngrade` | boolean | `false` | 允许降级, 需要特权; 设备策略和应用属性仍可能限制 |
-| `allowTestOnly` | boolean | `false` | 允许测试包, 需要特权 |
-| `bypassLowTargetSdk` | boolean | `false` | 绕过低 targetSdk 安装限制, 需要特权和平台支持 |
-| `installer` | string | 插件自身 | 安装者包名, 需要特权; 空字符串同省略, 至多 255 个 UTF-8 字节 |
-| `user` | number 或 `'current' \| 'all'` | `'current'` | 目标用户; 数字为 0 至 2147483647 的整数, 跨用户需要特权 |
+| `authorizer` | string | `'auto'` | `'auto'`, `'none'`, `'shizuku'`, `'root'` 或 `'dhizuku'`; 显式指定时不回退 |
+| `interaction` | string | `'auto'` | `'auto'`, `'dialog'`, `'silent'` 或 `'notification'`; 见下文 |
+| `allowDowngrade` | boolean | `false` | 请求降级, 需要 Shizuku/Root; 设备策略和应用属性仍可能限制, Dhizuku 拒绝该选项 |
+| `allowTestOnly` | boolean | `false` | 请求安装测试包, 需要 Shizuku/Root; Dhizuku 拒绝该选项 |
+| `bypassLowTargetSdk` | boolean | `false` | 请求绕过低 targetSdk 限制, 需要 Shizuku/Root 及平台支持; Dhizuku 拒绝该选项 |
+| `installer` | string | 按授权身份 | 空字符串同省略, 至多 255 个 UTF-8 字节; Shizuku ADB 默认为 shell, Root/none 为插件, Dhizuku 为 owner 包且不接受其他包 |
+| `user` | number 或 string | `'current'` | `'current'`, `'all'` 或 0 至 2147483647 的整数; Dhizuku 仅允许当前 owner/profile 用户, 不允许其他或全部用户 |
 | `deleteSource` | boolean | `false` | 成功后尽力删除宿主路径来源, 见下文 |
 | `continueOnError` | boolean | `true` | 批量安装遇到失败项后是否继续 |
 | `timeout` | number | `1800000` | 整个安装操作的超时, 毫秒, 1 至 7200000 的整数 |
 
 `interaction: 'auto'` 在特权可用时优先静默, 系统仍要求确认时允许显示确认界面, 实际结果的 `interaction` 为 `'dialog'` 并通过 `notes` 说明. 无特权时使用对话框. `'dialog'` 显式请求插件确认界面; `'silent'` 在没有合适特权或系统仍要求确认时失败于 `AUTHORIZER_REQUIRED`, 不回退为对话框.
+
+`'notification'` 需要已协商的通知安装能力. 插件不主动打开确认对话框, 使用通知承载确认, 取消, 进度和结果; `none` 路径需要的 Android 系统确认仍须由通知动作进入. 缺少通知权限, 全局通知关闭或所需通知渠道/通知组不可用时返回 `NOTIFICATION_UNAVAILABLE`, 不悄悄回退为对话框或静默安装. 已确认安装成功后才发生的通知显示失败不会把已安装事实改为失败. 该模式只适用于安装和安装会话.
+
+Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立授权. 它只支持当前 owner/profile 用户, 安装归属 owner 包. `allowDowngrade`, `allowTestOnly`, `bypassLowTargetSdk`, 其他安装者包名和其他/全部用户均被明确拒绝, 不会忽略. 新插件配置的自动顺序为 Shizuku, Root, Dhizuku, none; 已有显式启用和排序设置保留.
 
 `deleteSource: true` 仅在该项收到确定的安装成功结果后, 由宿主尽力删除路径, `File` 和 `file://` 对应文件. 宿主不会删除 `content://` 来源, 安装失败的来源保留. 分包项只有全部来源均成功删除时才报告 `sourceDeleted: true`; 删除失败或保留内容 URI 时通过 `sourceDeleted` 与 `notes` 说明, 不把已经成功的安装改成失败. 同一个源文件被多个批量项引用时, 有失败项仍需要保留该来源.
 
@@ -297,10 +316,10 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 
 | 字段 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `authorizer` | `'auto' \| 'none' \| 'shizuku' \| 'root'` | `'auto'` | 授权方式 |
-| `interaction` | `'auto' \| 'dialog' \| 'silent'` | `'auto'` | 与安装选项相同的交互语义 |
-| `keepData` | boolean | `false` | 卸载时保留应用数据, 需要特权 |
-| `user` | number 或 `'current' \| 'all'` | `'current'` | 目标用户, 数字必须为非负整数 |
+| `authorizer` | string | `'auto'` | `'auto'`, `'none'`, `'shizuku'`, `'root'` 或 `'dhizuku'` |
+| `interaction` | string | `'auto'` | 仅 `'auto'`, `'dialog'` 或 `'silent'`; 不接受 `'notification'` |
+| `keepData` | boolean | `false` | 请求保留应用数据, 需要 Shizuku/Root; Dhizuku 拒绝该选项 |
+| `user` | number 或 string | `'current'` | `'current'`, `'all'` 或非负整数; Dhizuku 仅当前 owner/profile 用户 |
 | `timeout` | number | `1800000` | 毫秒, 1 至 7200000 的整数 |
 
 显式 `null` 和未知选项被拒绝. `user: 'all'` 请求卸载所有用户的应用; 实际执行仍受设备权限和策略约束.
@@ -313,8 +332,8 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 | `packageName` | string | 包名, 可选 |
 | `versionName`, `versionCode` | string, number | 本次版本, 可选 |
 | `previousVersionCode` | number | 更新前版本, 可选 |
-| `authorizer` | `'none' \| 'shizuku' \| 'root'` | 实际授权方式, 选择前失败时可能缺省 |
-| `interaction` | `'dialog' \| 'silent'` | 实际交互方式, 早期失败时可能缺省 |
+| `authorizer` | string | 实际授权方式为 `'none'`, `'shizuku'`, `'root'` 或 `'dhizuku'`; 选择前失败时可能缺省 |
+| `interaction` | string | 实际交互方式为 `'dialog'`, `'silent'` 或 `'notification'`; 早期失败时可能缺省 |
 | `durationMillis` | number | 耗时, 毫秒, 早期失败时可能缺省 |
 | `sourceDeleted` | boolean | 来源是否全部成功删除, 可选 |
 | `notes` | string[] | 安装与删除说明, 可选 |
@@ -413,6 +432,7 @@ AAB 可返回包名, 版本和模块信息, 但 `installable` 为 `false`. 安�
 | `INVALID_PACKAGE` | 清单, 分包集合或包内容无效 |
 | `INCOMPATIBLE_DEVICE` | 设备或 SDK 与安装包不兼容 |
 | `AUTHORIZER_UNAVAILABLE`, `AUTHORIZER_DENIED`, `AUTHORIZER_REQUIRED` | 授权方式不可用, 授权被拒绝或操作需要特权 |
+| `NOTIFICATION_UNAVAILABLE` | 通知安装所需权限, 全局通知或渠道不可用; 不自动切换模式 |
 | `USER_CANCELLED`, `USER_ACTION_TIMEOUT` | 用户取消或确认超时 |
 | `SIGNATURE_MISMATCH` | 与已安装版本签名不一致 |
 | `INSUFFICIENT_STORAGE` | 存储空间不足 |

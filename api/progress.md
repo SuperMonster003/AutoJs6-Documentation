@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-02 Installer P8: 同步宿主 5306 的 Dhizuku 授权名称, notification 安装交互, NOTIFICATION_UNAVAILABLE 错误与 setDefault 的 preferred/persistent 模式. 明确 V1/V2 能力协商, Dhizuku API 26+/设备或工作资料所有者/当前用户限制, 不支持的安装标志与保留数据, 通知模式不用于卸载及持久项关闭后的布尔语义. 插件远端发布仍延迟, 设备验收范围由插件路线图独立记录.
+
 2026-10-01 安装器 (Installer): 按宿主源码补充 installer / $installer 的同步, Async 和会话 API, 来源与分包形态, 授权查询, 用户列表, 默认安装器, 结果和错误类型. 明确插件探测, 短等待超时, 来源删除和脚本退出的取消边界; 对应手工声明提供单项与批量结果的类型关联.
 
 2026-09-29 3-Stove Agent 按需连接: 插件中心统一启用状态, 官方首次安装自动启用且尊重后续禁用; run/get 在脚本工作线程等待首次连接, list/presets/catalog 异步连接, status 只读且 detached 不等同于禁用. 去除抽屉开关指引并更新插件名称, 最低宿主和当前观察能力, 保持无开机自启与无任务重放. 无公开方法签名变化.

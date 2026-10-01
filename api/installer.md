@@ -193,7 +193,9 @@ Dhizuku 需要 Android 8.0 (API 26) 或以上, 已激活为 device owner 或 pro
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
-查询 3-Setup Installer 是否为当前默认安装器. 插件不可用时抛出 `PLUGIN_UNAVAILABLE`, 可用性探测应使用 [isAvailable](#m-isavailable).
+查询 3-Setup Installer 是否为当前 APK intent 的实际处理者. 返回 `true` 不区分普通偏好与持久策略, 也不单独证明系统当前存在持久锁定. 插件不可用时抛出 `PLUGIN_UNAVAILABLE`, 可用性探测应使用 [isAvailable](#m-isavailable).
+
+插件状态中的 `persistentConfigured` 是上次完整配置持久默认项的本地回执, 不代表当前系统策略. 宿主 5307 起可解码此可选协议字段, 缺省为 `false`; 脚本接口仍返回布尔值, 没有公开该状态对象或同名属性. 回执缺失也不能证明没有持久策略.
 
 ## [m] setDefault
 
@@ -207,7 +209,15 @@ Dhizuku 需要 Android 8.0 (API 26) 或以上, 已激活为 device owner 或 pro
 
 返回 `true` 表示所请求的启用或取消状态已经达到. 省略 `mode` 或使用 `'preferred'` 时保留原接口语义, 通过 Shizuku 或 Root 管理普通偏好, 不承诺持久锁定. `enabled: false` 只取消本插件设置, 不清除其他应用的默认记录. 某些 Android 版本已有其他默认处理程序时, 仍需先在系统设置中清除原默认项; 无特权时返回 `AUTHORIZER_REQUIRED`.
 
-`mode: 'persistent'` 使用对应设备策略的持久默认功能, 当前插件要求显式选择 `authorizer: 'dhizuku'`. Root/system 身份的持久默认能力未作为当前保证. 启用成功需要插件成为持久处理者; 关闭成功表示本插件的持久项已经移除, 原普通偏好可以保留, 因此此时 `isDefault()` 仍可能是 `true`. 模式不会在不支持时自动切换. 模式只接受 `'preferred'` 和 `'persistent'`, 未知值或 `null` 被拒绝.
+`mode: 'persistent'` 请求持久默认功能. 启用成功表示这次操作已确认本插件的四种 APK intent 持久关联及实际解析; 关闭成功表示本插件的持久项已经移除. 原普通偏好可以保留, 因此关闭后 `isDefault()` 仍可能是 `true`. 模式只接受 `'preferred'` 和 `'persistent'`, 未知值或 `null` 被拒绝.
+
+| 持久模式授权方式 | 当前条件 |
+| --- | --- |
+| `'dhizuku'` | API 26 至 33, 已激活的 device/profile owner 和插件独立授权, 仅当前 owner/profile 用户. API 34+ 无法通过此通道接收 owner 的最终策略结果, 因而在写入前返回 `INVALID_ARGUMENT`; 该限制不影响普通 Dhizuku 安装/卸载. |
+| `'root'` | 仅 user 0, Root 环境必须支持独立 system UID/GID 1000 进程及所需框架操作. 已验证 API 24 / Magisk 25.2 / SELinux Enforcing, 不保证其他 Root 管理器或 ROM. 不能切换身份或被系统策略拒绝时明确失败, 不修改 SELinux 设置. |
+| `'auto'` | 按插件已有排序, 启用状态和授权可用性, 只考虑当前用户可用的 Root 或上述 API 范围内的 Dhizuku; 跳过 Shizuku 和 none. 新配置中 Root 先于 Dhizuku. 选定后的执行失败不会改用另一个身份. |
+
+显式指定身份不会回退, `persistent` 失败也不会改成 `preferred`. Root 路径在写入前拒绝竞争 APK 持久策略以及无法识别的本插件既有策略. Dhizuku 的多项写入不是事务; 部分失败可能留下已写策略, 不会为补偿而清除未知旧策略. 取消或进程退出不会重放操作, 也不承诺已经完成的策略修改一定被撤销; 未确认结果按失败处理并保留审计.
 
 下面只定义函数, 调用前需确认设备所有者配置及插件授权:
 

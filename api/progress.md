@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-02 Installer P8 边界校正: 按最终生产实现补充 Dhizuku 持久默认 API 26-33 与 API 34+ 写前拒绝, Root 独立 system 身份和 user 0 限制, persistent 的 auto 身份筛选及失败不回退. 说明 isDefault 只检查当前解析, persistentConfigured 是宿主 5307 起可解码的本地回执, 不新增脚本状态属性. 区分未确认写入与回滚保证, 设备范围以插件证据为准.
+
 2026-10-02 Installer P8: 同步宿主 5306 的 Dhizuku 授权名称, notification 安装交互, NOTIFICATION_UNAVAILABLE 错误与 setDefault 的 preferred/persistent 模式. 明确 V1/V2 能力协商, Dhizuku API 26+/设备或工作资料所有者/当前用户限制, 不支持的安装标志与保留数据, 通知模式不用于卸载及持久项关闭后的布尔语义. 插件远端发布仍延迟, 设备验收范围由插件路线图独立记录.
 
 2026-10-01 安装器 (Installer): 按宿主源码补充 installer / $installer 的同步, Async 和会话 API, 来源与分包形态, 授权查询, 用户列表, 默认安装器, 结果和错误类型. 明确插件探测, 短等待超时, 来源删除和脚本退出的取消边界; 对应手工声明提供单项与批量结果的类型关联.

@@ -503,7 +503,8 @@ console.log(installer.status);
 <ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
 </ul>
-<p>查询 3-Setup Installer 是否为当前默认安装器. 插件不可用时抛出 <code>PLUGIN_UNAVAILABLE</code>, 可用性探测应使用 <a href="#installer_m_isavailable">isAvailable</a>.</p>
+<p>查询 3-Setup Installer 是否为当前 APK intent 的实际处理者. 返回 <code>true</code> 不区分普通偏好与持久策略, 也不单独证明系统当前存在持久锁定. 插件不可用时抛出 <code>PLUGIN_UNAVAILABLE</code>, 可用性探测应使用 <a href="#installer_m_isavailable">isAvailable</a>.</p>
+<p>插件状态中的 <code>persistentConfigured</code> 是上次完整配置持久默认项的本地回执, 不代表当前系统策略. 宿主 5307 起可解码此可选协议字段, 缺省为 <code>false</code>; 脚本接口仍返回布尔值, 没有公开该状态对象或同名属性. 回执缺失也不能证明没有持久策略.</p>
 <h2>[m] setDefault<span><a class="mark" href="#installer_m_setdefault" id="installer_m_setdefault">#</a></span></h2>
 <h3>installer.setDefault(enabled?, options?)<span><a class="mark" href="#installer_installer_setdefault_enabled_options" id="installer_installer_setdefault_enabled_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>
@@ -513,7 +514,30 @@ console.log(installer.status);
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否达到所请求的状态</li>
 </ul>
 <p>返回 <code>true</code> 表示所请求的启用或取消状态已经达到. 省略 <code>mode</code> 或使用 <code>&#39;preferred&#39;</code> 时保留原接口语义, 通过 Shizuku 或 Root 管理普通偏好, 不承诺持久锁定. <code>enabled: false</code> 只取消本插件设置, 不清除其他应用的默认记录. 某些 Android 版本已有其他默认处理程序时, 仍需先在系统设置中清除原默认项; 无特权时返回 <code>AUTHORIZER_REQUIRED</code>.</p>
-<p><code>mode: &#39;persistent&#39;</code> 使用对应设备策略的持久默认功能, 当前插件要求显式选择 <code>authorizer: &#39;dhizuku&#39;</code>. Root/system 身份的持久默认能力未作为当前保证. 启用成功需要插件成为持久处理者; 关闭成功表示本插件的持久项已经移除, 原普通偏好可以保留, 因此此时 <code>isDefault()</code> 仍可能是 <code>true</code>. 模式不会在不支持时自动切换. 模式只接受 <code>&#39;preferred&#39;</code> 和 <code>&#39;persistent&#39;</code>, 未知值或 <code>null</code> 被拒绝.</p>
+<p><code>mode: &#39;persistent&#39;</code> 请求持久默认功能. 启用成功表示这次操作已确认本插件的四种 APK intent 持久关联及实际解析; 关闭成功表示本插件的持久项已经移除. 原普通偏好可以保留, 因此关闭后 <code>isDefault()</code> 仍可能是 <code>true</code>. 模式只接受 <code>&#39;preferred&#39;</code> 和 <code>&#39;persistent&#39;</code>, 未知值或 <code>null</code> 被拒绝.</p>
+<table>
+<thead>
+<tr>
+<th>持久模式授权方式</th>
+<th>当前条件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&#39;dhizuku&#39;</code></td>
+<td>API 26 至 33, 已激活的 device/profile owner 和插件独立授权, 仅当前 owner/profile 用户. API 34+ 无法通过此通道接收 owner 的最终策略结果, 因而在写入前返回 <code>INVALID_ARGUMENT</code>; 该限制不影响普通 Dhizuku 安装/卸载.</td>
+</tr>
+<tr>
+<td><code>&#39;root&#39;</code></td>
+<td>仅 user 0, Root 环境必须支持独立 system UID/GID 1000 进程及所需框架操作. 已验证 API 24 / Magisk 25.2 / SELinux Enforcing, 不保证其他 Root 管理器或 ROM. 不能切换身份或被系统策略拒绝时明确失败, 不修改 SELinux 设置.</td>
+</tr>
+<tr>
+<td><code>&#39;auto&#39;</code></td>
+<td>按插件已有排序, 启用状态和授权可用性, 只考虑当前用户可用的 Root 或上述 API 范围内的 Dhizuku; 跳过 Shizuku 和 none. 新配置中 Root 先于 Dhizuku. 选定后的执行失败不会改用另一个身份.</td>
+</tr>
+</tbody>
+</table>
+<p>显式指定身份不会回退, <code>persistent</code> 失败也不会改成 <code>preferred</code>. Root 路径在写入前拒绝竞争 APK 持久策略以及无法识别的本插件既有策略. Dhizuku 的多项写入不是事务; 部分失败可能留下已写策略, 不会为补偿而清除未知旧策略. 取消或进程退出不会重放操作, 也不承诺已经完成的策略修改一定被撤销; 未确认结果按失败处理并保留审计.</p>
 <p>下面只定义函数, 调用前需确认设备所有者配置及插件授权:</p>
 <pre><code class="lang-js">let setPersistentChosen = enabled =&gt; installer.setDefault(enabled, {
     authorizer: &#39;dhizuku&#39;,

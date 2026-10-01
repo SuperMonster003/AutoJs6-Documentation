@@ -4,6 +4,8 @@
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
 
+- `更新` [安装器 (Installer)](https://docs.autojs6.com/#/installer) 的高级安装选项, optimizing 阶段及所有权/手动编译观察结果, 补充本地签名门禁, 包名/共享 UID 黑名单和选中分包的权限预览边界
+
 - `更新` [安装器 (Installer)](https://docs.autojs6.com/#/installer) 的持久默认边界: Dhizuku API 26-33, Root 独立 system 身份与 user 0, 按模式选择自动授权, 本地配置回执和未确认写入语义
 
 - `更新` AI Agent 1.2.0 开发版本的 mcp 工具组, 默认关闭, 服务器配置与工具选择, 逐服务器风险和远端取消边界

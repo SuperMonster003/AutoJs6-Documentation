@@ -101,6 +101,7 @@ generator\auto-generate-for-autojs6.bat
 
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
 
+- `更新` Installer 高级安装选项, 所有权/手动编译观察结果, 本地签名门禁, 包名/共享 UID 黑名单与选中分包的声明权限预览
 - `更新` Installer 持久默认的 Dhizuku API 26-33, Root/system 身份与 user 0, 自动授权筛选和本地回执边界
 
 - `更新` AI Agent 1.2.0 开发版本的 mcp 工具组, 默认关闭, 服务器配置与工具选择, 逐服务器风险和远端取消边界

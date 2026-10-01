@@ -6,6 +6,8 @@
 
 `dhizuku`, 安装交互 `notification` 和默认安装器 `mode: 'persistent'` 需要宿主构建 5306 或更高版本, 以及声明对应能力的 3-Setup Installer 1.1.0 实现. 新宿主仍可连接 V1 插件, 不会向旧插件发送未知选项或新事务. 缺少 Dhizuku 能力时返回 `AUTHORIZER_UNAVAILABLE`; 缺少通知安装或持久默认能力时返回 `INVALID_ARGUMENT`. 插件正式发布与索引准入仍以 [插件路线图](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Setup-Installer/blob/master/ROADMAP.md) 为准, 本文不代表已完成远端发布或全部设备验收.
 
+高级安装选项需要宿主构建 5308+ 及 3-Setup Installer 1.2.0 对应能力, 在实际处理请求的同一插件连接上协商 V3 和 `advanced-install-options`. 未提供的新字段不发送; 显式 `false` 或 `'none'` 仍需要上述支持. 缺少能力时在提交操作前返回 `INVALID_ARGUMENT`.
+
 安装支持同步, Async 和会话三种形态. 同步方法阻塞当前脚本线程, Async 方法返回 Promise, [session](#m-session) 返回监听阶段与进度的会话. Promise 回调和会话事件都在创建它们的脚本线程执行. 同步方法不能阻塞 Android UI 线程; `session` 的创建, `status` 和 `authorizer` 的同步查询也需要脚本工作线程. UI 脚本可使用 Async 方法, 或在工作线程中创建和使用会话.
 
 停止脚本会取消宿主等待, 取消未完成的安装会话并释放来源资源. 已完成的安装不会回滚. 卸载, 授权请求和默认安装器设置没有单独的远端取消接口: 退出脚本会停止等待并抑制后续脚本回调, 但不能保证撤回系统已经接收的操作.
@@ -306,6 +308,11 @@ let setPersistentChosen = enabled => installer.setDefault(enabled, {
 | `allowDowngrade` | boolean | `false` | 请求降级, 需要 Shizuku/Root; 设备策略和应用属性仍可能限制, Dhizuku 拒绝该选项 |
 | `allowTestOnly` | boolean | `false` | 请求安装测试包, 需要 Shizuku/Root; Dhizuku 拒绝该选项 |
 | `bypassLowTargetSdk` | boolean | `false` | 请求绕过低 targetSdk 限制, 需要 Shizuku/Root 及平台支持; Dhizuku 拒绝该选项 |
+| `grantAllRequestedPermissions` | boolean | 不请求 | V3; `true` 通过 Shizuku/Root 请求授予系统允许的权限, 不代表全部声明权限一定获准 |
+| `requestUpdateOwnership` | boolean | 不请求 | V3; `true` 需要 API 34+, 请求在首次安装时启用更新所有权, 实际状态见 `updateOwner` 与 `notes` |
+| `dexopt` | string | `'none'` 的行为 | V3; `'none'`, `'verify'`, `'speed-profile'` 或 `'speed'`; 非 none 需要 Shizuku/Root, verify 需要 API 26+ |
+| `installReason` | string | 保留后端默认 | V3, API 26+; `'unknown'`, `'device-restore'`, `'device-setup'`, `'user'` 或 `'policy'` |
+| `packageSource` | string | 保留后端默认 | V3, API 33+; `'unspecified'`, `'store'`, `'local-file'`, `'downloaded-file'` 或 `'other'`; 省略时保留 API 33+ 原有 local-file 归属 |
 | `installer` | string | 按授权身份 | 空字符串同省略, 至多 255 个 UTF-8 字节; Shizuku ADB 默认为 shell, Root/none 为插件, Dhizuku 为 owner 包且不接受其他包 |
 | `user` | number 或 string | `'current'` | `'current'`, `'all'` 或 0 至 2147483647 的整数; Dhizuku 仅允许当前 owner/profile 用户, 不允许其他或全部用户 |
 | `deleteSource` | boolean | `false` | 成功后尽力删除宿主路径来源, 见下文 |
@@ -317,6 +324,14 @@ let setPersistentChosen = enabled => installer.setDefault(enabled, {
 `'notification'` 需要已协商的通知安装能力. 插件不主动打开确认对话框, 使用通知承载确认, 取消, 进度和结果; `none` 路径需要的 Android 系统确认仍须由通知动作进入. 缺少通知权限, 全局通知关闭或所需通知渠道/通知组不可用时返回 `NOTIFICATION_UNAVAILABLE`, 不悄悄回退为对话框或静默安装. 已确认安装成功后才发生的通知显示失败不会把已安装事实改为失败. 该模式只适用于安装和安装会话.
 
 Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立授权. 它只支持当前 owner/profile 用户, 安装归属 owner 包. `allowDowngrade`, `allowTestOnly`, `bypassLowTargetSdk`, 其他安装者包名和其他/全部用户均被明确拒绝, 不会忽略. 新插件配置的自动顺序为 Shizuku, Root, Dhizuku, none; 已有显式启用和排序设置保留.
+
+以上五个高级字段只用于安装. 省略保持原行为, 传入 `null` 不表示省略, 原始 Android 数字常量也不代替字符串枚举. 元数据选项不会改变安装历史的宿主/脚本来源标签. 平台不支持所请求字段时明确拒绝, 不切换授权方式.
+
+`grantAllRequestedPermissions` 请求系统授予可授予的权限; Android 14 也可能包含安装器可改变的 app-op, 如 `USE_FULL_SCREEN_INTENT`. 它不保证所有声明权限获准, 不授予无障碍, 悬浮窗或任意签名权限, 仍受 restricted, system-fixed 和 policy-fixed 约束, 且不会额外设置 restricted 权限 allowlist 标志. `requestUpdateOwnership: true` 仅能在初次安装时启用所有权, 更新或其他用户已有该包时可能被 Android 忽略; `false` 只是不请求, 不撤销既有 owner. 请以结果读回为准, 参阅 [Android SessionParams](https://developer.android.com/reference/android/content/pm/PackageInstaller.SessionParams#setRequestUpdateOwnership(boolean)). `dexopt: 'none'` 只表示不追加手动编译步骤, 不关闭 Android 自身的正常编译.
+
+安装策略由插件本地设置管理, 对宿主, 脚本, 首页和外部来源统一生效. 签名不匹配/无法确认的策略阻止及包名/共享 UID 精确黑名单均以 `BLOCKED_BY_POLICY` 拒绝. 仅真实 `dialog` 确认页可对当前项目一次性允许继续签名检查, Android 自身仍会验证签名; 静默或通知动作不能完成这项放行, 黑名单不可覆盖. 脚本不接受策略绕过字段. 权限预览汇总实际选中 APK 分包的声明权限, 不代表已经授予的权限. 本轮没有增加按来源配置文件.
+
+none/Dhizuku 的已安装签名查询仅限当前用户, Shizuku/Root 使用全局查询. SharedUID 黑名单非空时, 如果当前用户查不到该包且无法排除其他用户已有的记录, 插件会拒绝继续; 这类不确定性不能通过一次签名确认覆盖. 此处 SharedUID 指清单的 sharedUserId, 不是目标 Android user ID.
 
 `deleteSource: true` 仅在该项收到确定的安装成功结果后, 由宿主尽力删除路径, `File` 和 `file://` 对应文件. 宿主不会删除 `content://` 来源, 安装失败的来源保留. 分包项只有全部来源均成功删除时才报告 `sourceDeleted: true`; 删除失败或保留内容 URI 时通过 `sourceDeleted` 与 `notes` 说明, 不把已经成功的安装改成失败. 同一个源文件被多个批量项引用时, 有失败项仍需要保留该来源.
 
@@ -347,9 +362,13 @@ Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立�
 | `durationMillis` | number | 耗时, 毫秒, 早期失败时可能缺省 |
 | `sourceDeleted` | boolean | 来源是否全部成功删除, 可选 |
 | `notes` | string[] | 安装与删除说明, 可选 |
+| `updateOwner` | string 或 null | V3 可选; 请求更新所有权后当前调用身份可见的读回包名. null 表示 Android 未向该身份返回 owner, 可能没有 owner 或受可见性限制; 读取失败则省略字段并写入 notes |
+| `dexopt` | Object | V3 可选; 非 none 的附加编译观察 `{ filter, status, message? }`, 见下文 |
 | `error` | [InstallerError](#c-installererror) | 失败项的真正错误实例, 可选 |
 
 批量完成不代表每一项成功, 需逐项检查 `ok`. `error` 支持 `instanceof installer.InstallerError`. 版本号等整数由宿主保留 64 位整数值; JavaScript 数值运算仍受 Number 的安全整数范围限制.
+
+`dexopt.status` 为 `'accepted'`, `'failed'`, `'cancelled'`, `'timeout'`, `'unavailable'` 或 `'unknown'`. `accepted` 包含系统跳过该次编译的情况, 不保证实际执行了编译. `unknown` 表示无法识别或未获得确定结果. 默认 none 不返回 dexopt 对象. 安装已经确认成功后, 附加步骤失败, 取消或超时不会把该项 `ok` 改成 `false` 或卸载应用, 应结合该对象和 `notes` 判断附加请求的结果.
 
 ## UninstallResult
 
@@ -365,7 +384,7 @@ Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立�
 | `state` | string | 当前状态, 只读 |
 | `result` | InstallResult 或 InstallResult[] | 完成结果, 完成前为 `undefined`, 只读 |
 
-`state` 为 `'pending'`, `'preparing'`, `'confirming'`, `'writing'`, `'committing'`, `'completed'`, `'failed'` 或 `'cancelled'`.
+`state` 为 `'pending'`, `'preparing'`, `'confirming'`, `'writing'`, `'committing'`, `'optimizing'`, `'completed'`, `'failed'` 或 `'cancelled'`. optimizing 仅在 V3 请求非 none 的额外手动编译时出现, 是非终态阶段, 不证明实际完成了编译.
 
 ### InstallSession.cancel()
 

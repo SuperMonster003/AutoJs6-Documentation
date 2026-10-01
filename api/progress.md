@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-02 Installer P9 本轮同步: 覆盖宿主 5308+ 的五项高级安装选项, V3 能力协商, optimizing 阶段及 updateOwner/dexopt 观察值, 区分省略与显式 false/none. 说明权限授予, 更新所有权, 手动编译的系统边界, 本地签名门禁, 不可覆盖的包名/共享 UID 黑名单和选中分包的声明权限预览. 本轮不包含按来源配置文件, 不代表插件全部 P9 条目或远端发布完成.
+
 2026-10-02 Installer P8 边界校正: 按最终生产实现补充 Dhizuku 持久默认 API 26-33 与 API 34+ 写前拒绝, Root 独立 system 身份和 user 0 限制, persistent 的 auto 身份筛选及失败不回退. 说明 isDefault 只检查当前解析, persistentConfigured 是宿主 5307 起可解码的本地回执, 不新增脚本状态属性. 区分未确认写入与回滚保证, 设备范围以插件证据为准.
 
 2026-10-02 Installer P8: 同步宿主 5306 的 Dhizuku 授权名称, notification 安装交互, NOTIFICATION_UNAVAILABLE 错误与 setDefault 的 preferred/persistent 模式. 明确 V1/V2 能力协商, Dhizuku API 26+/设备或工作资料所有者/当前用户限制, 不支持的安装标志与保留数据, 通知模式不用于卸载及持久项关闭后的布尔语义. 插件远端发布仍延迟, 设备验收范围由插件路线图独立记录.

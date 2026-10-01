@@ -364,6 +364,7 @@
 <p><code>installer</code> 模块用于安装, 更新, 卸载和检查 Android 应用, 并查询授权方式, 设备用户和默认安装器. 全局对象别名为 <code>$installer</code>.</p>
 <p>从 AutoJs6 6.8.0 起, 此模块由外置 3-Setup Installer 插件提供. 使用前需在插件中心安装, 启用并授权兼容插件. <a href="#installer_m_isavailable">isAvailable</a> 和 <a href="#installer_p_status">status</a> 可用于探测插件; 插件缺失或不可用时, 实际操作抛出或以 Promise 拒绝 <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code> 的 <a href="#installer_c_installererror">InstallerError</a>. 脚本 API 不会自动改走系统安装器.</p>
 <p><code>dhizuku</code>, 安装交互 <code>notification</code> 和默认安装器 <code>mode: &#39;persistent&#39;</code> 需要宿主构建 5306 或更高版本, 以及声明对应能力的 3-Setup Installer 1.1.0 实现. 新宿主仍可连接 V1 插件, 不会向旧插件发送未知选项或新事务. 缺少 Dhizuku 能力时返回 <code>AUTHORIZER_UNAVAILABLE</code>; 缺少通知安装或持久默认能力时返回 <code>INVALID_ARGUMENT</code>. 插件正式发布与索引准入仍以 <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Setup-Installer/blob/master/ROADMAP.md">插件路线图</a> 为准, 本文不代表已完成远端发布或全部设备验收.</p>
+<p>高级安装选项需要宿主构建 5308+ 及 3-Setup Installer 1.2.0 对应能力, 在实际处理请求的同一插件连接上协商 V3 和 <code>advanced-install-options</code>. 未提供的新字段不发送; 显式 <code>false</code> 或 <code>&#39;none&#39;</code> 仍需要上述支持. 缺少能力时在提交操作前返回 <code>INVALID_ARGUMENT</code>.</p>
 <p>安装支持同步, Async 和会话三种形态. 同步方法阻塞当前脚本线程, Async 方法返回 Promise, <a href="#installer_m_session">session</a> 返回监听阶段与进度的会话. Promise 回调和会话事件都在创建它们的脚本线程执行. 同步方法不能阻塞 Android UI 线程; <code>session</code> 的创建, <code>status</code> 和 <code>authorizer</code> 的同步查询也需要脚本工作线程. UI 脚本可使用 Async 方法, 或在工作线程中创建和使用会话.</p>
 <p>停止脚本会取消宿主等待, 取消未完成的安装会话并释放来源资源. 已完成的安装不会回滚. 卸载, 授权请求和默认安装器设置没有单独的远端取消接口: 退出脚本会停止等待并抑制后续脚本回调, 但不能保证撤回系统已经接收的操作.</p>
 <pre><code class="lang-js">console.log(installer.isAvailable());
@@ -659,6 +660,36 @@ console.log(installer.status);
 <td>请求绕过低 targetSdk 限制, 需要 Shizuku/Root 及平台支持; Dhizuku 拒绝该选项</td>
 </tr>
 <tr>
+<td><code>grantAllRequestedPermissions</code></td>
+<td>boolean</td>
+<td>不请求</td>
+<td>V3; <code>true</code> 通过 Shizuku/Root 请求授予系统允许的权限, 不代表全部声明权限一定获准</td>
+</tr>
+<tr>
+<td><code>requestUpdateOwnership</code></td>
+<td>boolean</td>
+<td>不请求</td>
+<td>V3; <code>true</code> 需要 API 34+, 请求在首次安装时启用更新所有权, 实际状态见 <code>updateOwner</code> 与 <code>notes</code></td>
+</tr>
+<tr>
+<td><code>dexopt</code></td>
+<td>string</td>
+<td><code>&#39;none&#39;</code> 的行为</td>
+<td>V3; <code>&#39;none&#39;</code>, <code>&#39;verify&#39;</code>, <code>&#39;speed-profile&#39;</code> 或 <code>&#39;speed&#39;</code>; 非 none 需要 Shizuku/Root, verify 需要 API 26+</td>
+</tr>
+<tr>
+<td><code>installReason</code></td>
+<td>string</td>
+<td>保留后端默认</td>
+<td>V3, API 26+; <code>&#39;unknown&#39;</code>, <code>&#39;device-restore&#39;</code>, <code>&#39;device-setup&#39;</code>, <code>&#39;user&#39;</code> 或 <code>&#39;policy&#39;</code></td>
+</tr>
+<tr>
+<td><code>packageSource</code></td>
+<td>string</td>
+<td>保留后端默认</td>
+<td>V3, API 33+; <code>&#39;unspecified&#39;</code>, <code>&#39;store&#39;</code>, <code>&#39;local-file&#39;</code>, <code>&#39;downloaded-file&#39;</code> 或 <code>&#39;other&#39;</code>; 省略时保留 API 33+ 原有 local-file 归属</td>
+</tr>
+<tr>
 <td><code>installer</code></td>
 <td>string</td>
 <td>按授权身份</td>
@@ -693,6 +724,10 @@ console.log(installer.status);
 <p><code>interaction: &#39;auto&#39;</code> 在特权可用时优先静默, 系统仍要求确认时允许显示确认界面, 实际结果的 <code>interaction</code> 为 <code>&#39;dialog&#39;</code> 并通过 <code>notes</code> 说明. 无特权时使用对话框. <code>&#39;dialog&#39;</code> 显式请求插件确认界面; <code>&#39;silent&#39;</code> 在没有合适特权或系统仍要求确认时失败于 <code>AUTHORIZER_REQUIRED</code>, 不回退为对话框.</p>
 <p><code>&#39;notification&#39;</code> 需要已协商的通知安装能力. 插件不主动打开确认对话框, 使用通知承载确认, 取消, 进度和结果; <code>none</code> 路径需要的 Android 系统确认仍须由通知动作进入. 缺少通知权限, 全局通知关闭或所需通知渠道/通知组不可用时返回 <code>NOTIFICATION_UNAVAILABLE</code>, 不悄悄回退为对话框或静默安装. 已确认安装成功后才发生的通知显示失败不会把已安装事实改为失败. 该模式只适用于安装和安装会话.</p>
 <p>Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立授权. 它只支持当前 owner/profile 用户, 安装归属 owner 包. <code>allowDowngrade</code>, <code>allowTestOnly</code>, <code>bypassLowTargetSdk</code>, 其他安装者包名和其他/全部用户均被明确拒绝, 不会忽略. 新插件配置的自动顺序为 Shizuku, Root, Dhizuku, none; 已有显式启用和排序设置保留.</p>
+<p>以上五个高级字段只用于安装. 省略保持原行为, 传入 <code>null</code> 不表示省略, 原始 Android 数字常量也不代替字符串枚举. 元数据选项不会改变安装历史的宿主/脚本来源标签. 平台不支持所请求字段时明确拒绝, 不切换授权方式.</p>
+<p><code>grantAllRequestedPermissions</code> 请求系统授予可授予的权限; Android 14 也可能包含安装器可改变的 app-op, 如 <code>USE_FULL_SCREEN_INTENT</code>. 它不保证所有声明权限获准, 不授予无障碍, 悬浮窗或任意签名权限, 仍受 restricted, system-fixed 和 policy-fixed 约束, 且不会额外设置 restricted 权限 allowlist 标志. <code>requestUpdateOwnership: true</code> 仅能在初次安装时启用所有权, 更新或其他用户已有该包时可能被 Android 忽略; <code>false</code> 只是不请求, 不撤销既有 owner. 请以结果读回为准, 参阅 <a href="https://developer.android.com/reference/android/content/pm/PackageInstaller.SessionParams#setRequestUpdateOwnership(boolean">Android SessionParams</a>). <code>dexopt: &#39;none&#39;</code> 只表示不追加手动编译步骤, 不关闭 Android 自身的正常编译.</p>
+<p>安装策略由插件本地设置管理, 对宿主, 脚本, 首页和外部来源统一生效. 签名不匹配/无法确认的策略阻止及包名/共享 UID 精确黑名单均以 <code>BLOCKED_BY_POLICY</code> 拒绝. 仅真实 <code>dialog</code> 确认页可对当前项目一次性允许继续签名检查, Android 自身仍会验证签名; 静默或通知动作不能完成这项放行, 黑名单不可覆盖. 脚本不接受策略绕过字段. 权限预览汇总实际选中 APK 分包的声明权限, 不代表已经授予的权限. 本轮没有增加按来源配置文件.</p>
+<p>none/Dhizuku 的已安装签名查询仅限当前用户, Shizuku/Root 使用全局查询. SharedUID 黑名单非空时, 如果当前用户查不到该包且无法排除其他用户已有的记录, 插件会拒绝继续; 这类不确定性不能通过一次签名确认覆盖. 此处 SharedUID 指清单的 sharedUserId, 不是目标 Android user ID.</p>
 <p><code>deleteSource: true</code> 仅在该项收到确定的安装成功结果后, 由宿主尽力删除路径, <code>File</code> 和 <code>file://</code> 对应文件. 宿主不会删除 <code>content://</code> 来源, 安装失败的来源保留. 分包项只有全部来源均成功删除时才报告 <code>sourceDeleted: true</code>; 删除失败或保留内容 URI 时通过 <code>sourceDeleted</code> 与 <code>notes</code> 说明, 不把已经成功的安装改成失败. 同一个源文件被多个批量项引用时, 有失败项仍需要保留该来源.</p>
 <p>单次请求 JSON 至多 64 KiB. 在设备, 平台或授权方式不支持某项特权能力时, 以错误或结果中的说明为准.</p>
 <h2>UninstallOptions<span><a class="mark" href="#installer_uninstalloptions" id="installer_uninstalloptions">#</a></span></h2>
@@ -795,6 +830,16 @@ console.log(installer.status);
 <td>安装与删除说明, 可选</td>
 </tr>
 <tr>
+<td><code>updateOwner</code></td>
+<td>string 或 null</td>
+<td>V3 可选; 请求更新所有权后当前调用身份可见的读回包名. null 表示 Android 未向该身份返回 owner, 可能没有 owner 或受可见性限制; 读取失败则省略字段并写入 notes</td>
+</tr>
+<tr>
+<td><code>dexopt</code></td>
+<td>Object</td>
+<td>V3 可选; 非 none 的附加编译观察 <code>{ filter, status, message? }</code>, 见下文</td>
+</tr>
+<tr>
 <td><code>error</code></td>
 <td><a href="#installer_c_installererror">InstallerError</a></td>
 <td>失败项的真正错误实例, 可选</td>
@@ -802,6 +847,7 @@ console.log(installer.status);
 </tbody>
 </table>
 <p>批量完成不代表每一项成功, 需逐项检查 <code>ok</code>. <code>error</code> 支持 <code>instanceof installer.InstallerError</code>. 版本号等整数由宿主保留 64 位整数值; JavaScript 数值运算仍受 Number 的安全整数范围限制.</p>
+<p><code>dexopt.status</code> 为 <code>&#39;accepted&#39;</code>, <code>&#39;failed&#39;</code>, <code>&#39;cancelled&#39;</code>, <code>&#39;timeout&#39;</code>, <code>&#39;unavailable&#39;</code> 或 <code>&#39;unknown&#39;</code>. <code>accepted</code> 包含系统跳过该次编译的情况, 不保证实际执行了编译. <code>unknown</code> 表示无法识别或未获得确定结果. 默认 none 不返回 dexopt 对象. 安装已经确认成功后, 附加步骤失败, 取消或超时不会把该项 <code>ok</code> 改成 <code>false</code> 或卸载应用, 应结合该对象和 <code>notes</code> 判断附加请求的结果.</p>
 <h2>UninstallResult<span><a class="mark" href="#installer_uninstallresult" id="installer_uninstallresult">#</a></span></h2>
 <p>返回 <code>ok</code>, <code>packageName</code>, 实际 <code>authorizer</code> 和可选的 <a href="#installer_c_installererror">InstallerError</a> <code>error</code>. 在方法通过异常报告失败时没有返回值.</p>
 <h2>InstallSession<span><a class="mark" href="#installer_installsession" id="installer_installsession">#</a></span></h2>
@@ -832,7 +878,7 @@ console.log(installer.status);
 </tr>
 </tbody>
 </table>
-<p><code>state</code> 为 <code>&#39;pending&#39;</code>, <code>&#39;preparing&#39;</code>, <code>&#39;confirming&#39;</code>, <code>&#39;writing&#39;</code>, <code>&#39;committing&#39;</code>, <code>&#39;completed&#39;</code>, <code>&#39;failed&#39;</code> 或 <code>&#39;cancelled&#39;</code>.</p>
+<p><code>state</code> 为 <code>&#39;pending&#39;</code>, <code>&#39;preparing&#39;</code>, <code>&#39;confirming&#39;</code>, <code>&#39;writing&#39;</code>, <code>&#39;committing&#39;</code>, <code>&#39;optimizing&#39;</code>, <code>&#39;completed&#39;</code>, <code>&#39;failed&#39;</code> 或 <code>&#39;cancelled&#39;</code>. optimizing 仅在 V3 请求非 none 的额外手动编译时出现, 是非终态阶段, 不证明实际完成了编译.</p>
 <h3>InstallSession.cancel()<span><a class="mark" href="#installer_installsession_cancel" id="installer_installsession_cancel">#</a></span></h3>
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否接受了新的取消请求</li>

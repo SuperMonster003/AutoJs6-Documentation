@@ -4635,6 +4635,68 @@ pickup(depth(5), '@');
 pickup({ depth: 5 }, '@');
 ```
 
+## [m#] minDepth
+
+### minDepth(min)
+
+**`6.8.0`** **`Global`**
+
+- **min** { [number](dataTypes#number) } - 控件层级深度最小值
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+控件的 [控件层级](glossaries#控件层级) 深度数值选择器.
+
+- 筛选条件说明: 控件的控件层级深度不小于指定参数
+- 关联控件属性: [depth](uiObjectType#m-depth)
+
+例如对于以下控件:
+
+```js
+wA.depth(); // 2
+wB.depth(); // 4
+wC.depth(); // 6
+```
+
+`minDepth(4)` 是一个控件数值选择器, 可以匹配控件 `wB` 和 `wC`.
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(minDepth(4), '@');
+pickup({ minDepth: 4 }, '@');
+```
+
+## [m#] maxDepth
+
+### maxDepth(max)
+
+**`6.8.0`** **`Global`**
+
+- **max** { [number](dataTypes#number) } - 控件层级深度最大值
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+控件的 [控件层级](glossaries#控件层级) 深度数值选择器.
+
+- 筛选条件说明: 控件的控件层级深度不大于指定参数
+- 关联控件属性: [depth](uiObjectType#m-depth)
+
+例如对于以下控件:
+
+```js
+wA.depth(); // 2
+wB.depth(); // 4
+wC.depth(); // 6
+```
+
+`maxDepth(4)` 是一个控件数值选择器, 可以匹配控件 `wA` 和 `wB`.
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(maxDepth(4), '@');
+pickup({ maxDepth: 4 }, '@');
+```
+
 ## [m#] rowCount
 
 ### rowCount(d)
@@ -4867,6 +4929,68 @@ pickup(indexInParent(5), '@');
 pickup({ indexInParent: 5 }, '@');
 ```
 
+## [m#] minIndexInParent
+
+### minIndexInParent(min)
+
+**`6.8.0`** **`Global`**
+
+- **min** { [number](dataTypes#number) } - 控件在其父控件的索引最小值
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+控件在其父控件索引数值选择器.
+
+- 筛选条件说明: 控件在其父控件的索引值不小于指定参数
+- 关联控件属性: [indexInParent](uiObjectType#m-indexinparent)
+
+例如对于以下控件:
+
+```js
+wA.indexInParent(); // 0
+wB.indexInParent(); // 2
+wC.indexInParent(); // 5
+```
+
+`minIndexInParent(2)` 是一个控件数值选择器, 可以匹配控件 `wB` 和 `wC`.
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(minIndexInParent(2), '@');
+pickup({ minIndexInParent: 2 }, '@');
+```
+
+## [m#] maxIndexInParent
+
+### maxIndexInParent(max)
+
+**`6.8.0`** **`Global`**
+
+- **max** { [number](dataTypes#number) } - 控件在其父控件的索引最大值
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+控件在其父控件索引数值选择器.
+
+- 筛选条件说明: 控件在其父控件的索引值不大于指定参数
+- 关联控件属性: [indexInParent](uiObjectType#m-indexinparent)
+
+例如对于以下控件:
+
+```js
+wA.indexInParent(); // 0
+wB.indexInParent(); // 2
+wC.indexInParent(); // 5
+```
+
+`maxIndexInParent(2)` 是一个控件数值选择器, 可以匹配控件 `wA` 和 `wB`.
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(maxIndexInParent(2), '@');
+pickup({ maxIndexInParent: 2 }, '@');
+```
+
 ## [m#] childCount
 
 ### childCount(d)
@@ -4915,7 +5039,7 @@ pickup({ childCount: 5 }, '@');
 ```js
 wA.childCount(); // 0
 wB.childCount(); // 3
-wB.childCount(); // 5
+wC.childCount(); // 5
 ```
 
 `minChildCount(2)` 是一个控件数值选择器, 可以匹配控件 `wB` 和 `wC`.
@@ -4946,7 +5070,7 @@ pickup({ minChildCount: 2 }, '@');
 ```js
 wA.childCount(); // 0
 wB.childCount(); // 3
-wB.childCount(); // 5
+wC.childCount(); // 5
 ```
 
 `maxChildCount(4)` 是一个控件数值选择器, 可以匹配控件 `wA` 和 `wB`.
@@ -5662,7 +5786,7 @@ pickup({
 
 语法为以空白分隔的若干条件:
 
-- `key=value` - 属性等于 `value`, 如 `text=登录`, `id=btn_ok`, `depth=3`, `checked=true`. 值含空格或特殊字符时用引号包裹 (`"..."` 或 `'...'`, 支持 `\"`, `\\`, `\n`, `\t` 转义); 多参数的键以逗号分隔值, 如 `bounds=0,0,100,200`
+- `key=value` - 属性等于 `value`, 如 `text=登录`, `id=btn_ok`, `depth=3`, `minDepth=3`, `checked=true`. 值含空格或特殊字符时用引号包裹 (`"..."` 或 `'...'`, 支持 `\"`, `\\`, `\n`, `\t` 转义); 多参数的键以逗号分隔值, 如 `bounds=0,0,100,200`
 - `key~=regex` 或 `key=/regex/flags` - 字符串属性的正则匹配 (对应 `keyMatch`), 如 `text~=^登.录$`, `desc=/close/i`
 - `key` / `!key` - 布尔属性为 `true` / `false`, 如 `clickable`, `!enabled`
 

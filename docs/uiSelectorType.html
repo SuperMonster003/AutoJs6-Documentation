@@ -765,6 +765,14 @@
 <li><span class="stability_undefined"><a href="#uiselectortype_depth_d">depth(d)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_mindepth">[m#] minDepth</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_mindepth_min">minDepth(min)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_maxdepth">[m#] maxDepth</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_maxdepth_max">maxDepth(max)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_rowcount">[m#] rowCount</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiselectortype_rowcount_d">rowCount(d)</a></span></li>
 </ul>
@@ -795,6 +803,14 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_indexinparent">[m#] indexInParent</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiselectortype_indexinparent_d">indexInParent(d)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_minindexinparent">[m#] minIndexInParent</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_minindexinparent_min">minIndexInParent(min)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_maxindexinparent">[m#] maxIndexInParent</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_maxindexinparent_max">maxIndexInParent(max)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_childcount">[m#] childCount</a></span><ul>
@@ -4488,6 +4504,50 @@ pickup({ dismissable: true }, &#39;@&#39;);
 <pre><code class="lang-js">pickup(depth(5), &#39;@&#39;);
 pickup({ depth: 5 }, &#39;@&#39;);
 </code></pre>
+<h2>[m#] minDepth<span><a class="mark" href="#uiselectortype_m_mindepth" id="uiselectortype_m_mindepth">#</a></span></h2>
+<h3>minDepth(min)<span><a class="mark" href="#uiselectortype_mindepth_min" id="uiselectortype_mindepth_min">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong></p>
+<ul>
+<li><strong>min</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 控件层级深度最小值</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> }</li>
+</ul>
+<p>控件的 <a href="glossaries.html#glossaries_13">控件层级</a> 深度数值选择器.</p>
+<ul>
+<li>筛选条件说明: 控件的控件层级深度不小于指定参数</li>
+<li>关联控件属性: <a href="uiObjectType.html#uiobjecttype_m_depth">depth</a></li>
+</ul>
+<p>例如对于以下控件:</p>
+<pre><code class="lang-js">wA.depth(); // 2
+wB.depth(); // 4
+wC.depth(); // 6
+</code></pre>
+<p><code>minDepth(4)</code> 是一个控件数值选择器, 可以匹配控件 <code>wB</code> 和 <code>wC</code>.</p>
+<p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
+<pre><code class="lang-js">pickup(minDepth(4), &#39;@&#39;);
+pickup({ minDepth: 4 }, &#39;@&#39;);
+</code></pre>
+<h2>[m#] maxDepth<span><a class="mark" href="#uiselectortype_m_maxdepth" id="uiselectortype_m_maxdepth">#</a></span></h2>
+<h3>maxDepth(max)<span><a class="mark" href="#uiselectortype_maxdepth_max" id="uiselectortype_maxdepth_max">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong></p>
+<ul>
+<li><strong>max</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 控件层级深度最大值</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> }</li>
+</ul>
+<p>控件的 <a href="glossaries.html#glossaries_13">控件层级</a> 深度数值选择器.</p>
+<ul>
+<li>筛选条件说明: 控件的控件层级深度不大于指定参数</li>
+<li>关联控件属性: <a href="uiObjectType.html#uiobjecttype_m_depth">depth</a></li>
+</ul>
+<p>例如对于以下控件:</p>
+<pre><code class="lang-js">wA.depth(); // 2
+wB.depth(); // 4
+wC.depth(); // 6
+</code></pre>
+<p><code>maxDepth(4)</code> 是一个控件数值选择器, 可以匹配控件 <code>wA</code> 和 <code>wB</code>.</p>
+<p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
+<pre><code class="lang-js">pickup(maxDepth(4), &#39;@&#39;);
+pickup({ maxDepth: 4 }, &#39;@&#39;);
+</code></pre>
 <h2>[m#] rowCount<span><a class="mark" href="#uiselectortype_m_rowcount" id="uiselectortype_m_rowcount">#</a></span></h2>
 <h3>rowCount(d)<span><a class="mark" href="#uiselectortype_rowcount_d" id="uiselectortype_rowcount_d">#</a></span></h3>
 <p><strong><code>Global</code></strong></p>
@@ -4648,6 +4708,50 @@ pickup({ drawingOrder: 23 }, &#39;@&#39;);
 <pre><code class="lang-js">pickup(indexInParent(5), &#39;@&#39;);
 pickup({ indexInParent: 5 }, &#39;@&#39;);
 </code></pre>
+<h2>[m#] minIndexInParent<span><a class="mark" href="#uiselectortype_m_minindexinparent" id="uiselectortype_m_minindexinparent">#</a></span></h2>
+<h3>minIndexInParent(min)<span><a class="mark" href="#uiselectortype_minindexinparent_min" id="uiselectortype_minindexinparent_min">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong></p>
+<ul>
+<li><strong>min</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 控件在其父控件的索引最小值</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> }</li>
+</ul>
+<p>控件在其父控件索引数值选择器.</p>
+<ul>
+<li>筛选条件说明: 控件在其父控件的索引值不小于指定参数</li>
+<li>关联控件属性: <a href="uiObjectType.html#uiobjecttype_m_indexinparent">indexInParent</a></li>
+</ul>
+<p>例如对于以下控件:</p>
+<pre><code class="lang-js">wA.indexInParent(); // 0
+wB.indexInParent(); // 2
+wC.indexInParent(); // 5
+</code></pre>
+<p><code>minIndexInParent(2)</code> 是一个控件数值选择器, 可以匹配控件 <code>wB</code> 和 <code>wC</code>.</p>
+<p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
+<pre><code class="lang-js">pickup(minIndexInParent(2), &#39;@&#39;);
+pickup({ minIndexInParent: 2 }, &#39;@&#39;);
+</code></pre>
+<h2>[m#] maxIndexInParent<span><a class="mark" href="#uiselectortype_m_maxindexinparent" id="uiselectortype_m_maxindexinparent">#</a></span></h2>
+<h3>maxIndexInParent(max)<span><a class="mark" href="#uiselectortype_maxindexinparent_max" id="uiselectortype_maxindexinparent_max">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong></p>
+<ul>
+<li><strong>max</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 控件在其父控件的索引最大值</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> }</li>
+</ul>
+<p>控件在其父控件索引数值选择器.</p>
+<ul>
+<li>筛选条件说明: 控件在其父控件的索引值不大于指定参数</li>
+<li>关联控件属性: <a href="uiObjectType.html#uiobjecttype_m_indexinparent">indexInParent</a></li>
+</ul>
+<p>例如对于以下控件:</p>
+<pre><code class="lang-js">wA.indexInParent(); // 0
+wB.indexInParent(); // 2
+wC.indexInParent(); // 5
+</code></pre>
+<p><code>maxIndexInParent(2)</code> 是一个控件数值选择器, 可以匹配控件 <code>wA</code> 和 <code>wB</code>.</p>
+<p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
+<pre><code class="lang-js">pickup(maxIndexInParent(2), &#39;@&#39;);
+pickup({ maxIndexInParent: 2 }, &#39;@&#39;);
+</code></pre>
 <h2>[m#] childCount<span><a class="mark" href="#uiselectortype_m_childcount" id="uiselectortype_m_childcount">#</a></span></h2>
 <h3>childCount(d)<span><a class="mark" href="#uiselectortype_childcount_d" id="uiselectortype_childcount_d">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong></p>
@@ -4683,7 +4787,7 @@ pickup({ childCount: 5 }, &#39;@&#39;);
 <p>例如对于以下控件:</p>
 <pre><code class="lang-js">wA.childCount(); // 0
 wB.childCount(); // 3
-wB.childCount(); // 5
+wC.childCount(); // 5
 </code></pre>
 <p><code>minChildCount(2)</code> 是一个控件数值选择器, 可以匹配控件 <code>wB</code> 和 <code>wC</code>.</p>
 <p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
@@ -4705,7 +4809,7 @@ pickup({ minChildCount: 2 }, &#39;@&#39;);
 <p>例如对于以下控件:</p>
 <pre><code class="lang-js">wA.childCount(); // 0
 wB.childCount(); // 3
-wB.childCount(); // 5
+wC.childCount(); // 5
 </code></pre>
 <p><code>maxChildCount(4)</code> 是一个控件数值选择器, 可以匹配控件 <code>wA</code> 和 <code>wB</code>.</p>
 <p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
@@ -5224,7 +5328,7 @@ pickup({
 <p>字符串选择器语法: 解析 <code>syntax</code> 中的条件并追加到当前选择器, 返回选择器自身 (可继续链式调用 <code>findOne</code> 等). 全局形式 <code>select(&#39;...&#39;)</code> 以空选择器开始.</p>
 <p>语法为以空白分隔的若干条件:</p>
 <ul>
-<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\&quot;</code>, <code>\\</code>, <code>\n</code>, <code>\t</code> 转义); 多参数的键以逗号分隔值, 如 <code>bounds=0,0,100,200</code></li>
+<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>minDepth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\&quot;</code>, <code>\\</code>, <code>\n</code>, <code>\t</code> 转义); 多参数的键以逗号分隔值, 如 <code>bounds=0,0,100,200</code></li>
 <li><code>key~=regex</code> 或 <code>key=/regex/flags</code> - 字符串属性的正则匹配 (对应 <code>keyMatch</code>), 如 <code>text~=^登.录$</code>, <code>desc=/close/i</code></li>
 <li><code>key</code> / <code>!key</code> - 布尔属性为 <code>true</code> / <code>false</code>, 如 <code>clickable</code>, <code>!enabled</code></li>
 </ul>

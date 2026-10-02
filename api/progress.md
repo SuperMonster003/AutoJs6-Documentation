@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-02 Installer 来源配置: 同步宿主 5312+ 的 V3 source-profiles 协商, 首个来源/包名前缀匹配规则, 局部默认值及显式覆盖. installer/installReason/packageSource 接受 null 重置, 其他 null 仍拒绝. 说明处理开始快照, 确认与重试边界, 会话级选项, sourceDeleteRequested 和批量共享来源保护. 文档及声明同步不代表远端发布.
+
 2026-10-02 Installer P9 本轮同步: 覆盖宿主 5308+ 的五项高级安装选项, V3 能力协商, optimizing 阶段及 updateOwner/dexopt 观察值, 区分省略与显式 false/none. 说明权限授予, 更新所有权, 手动编译的系统边界, 本地签名门禁, 不可覆盖的包名/共享 UID 黑名单和选中分包的声明权限预览. 本轮不包含按来源配置文件, 不代表插件全部 P9 条目或远端发布完成.
 
 2026-10-02 Installer P8 边界校正: 按最终生产实现补充 Dhizuku 持久默认 API 26-33 与 API 34+ 写前拒绝, Root 独立 system 身份和 user 0 限制, persistent 的 auto 身份筛选及失败不回退. 说明 isDefault 只检查当前解析, persistentConfigured 是宿主 5307 起可解码的本地回执, 不新增脚本状态属性. 区分未确认写入与回滚保证, 设备范围以插件证据为准.

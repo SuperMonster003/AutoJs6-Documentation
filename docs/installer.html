@@ -337,7 +337,10 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#installer_installsource">InstallSource</a></span></li>
-<li><span class="stability_undefined"><a href="#installer_installoptions">InstallOptions</a></span></li>
+<li><span class="stability_undefined"><a href="#installer_installoptions">InstallOptions</a></span><ul>
+<li><span class="stability_undefined"><a href="#installer">来源配置文件</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#installer_uninstalloptions">UninstallOptions</a></span></li>
 <li><span class="stability_undefined"><a href="#installer_installresult">InstallResult</a></span></li>
 <li><span class="stability_undefined"><a href="#installer_uninstallresult">UninstallResult</a></span></li>
@@ -365,6 +368,7 @@
 <p>从 AutoJs6 6.8.0 起, 此模块由外置 3-Setup Installer 插件提供. 使用前需在插件中心安装, 启用并授权兼容插件. <a href="#installer_m_isavailable">isAvailable</a> 和 <a href="#installer_p_status">status</a> 可用于探测插件; 插件缺失或不可用时, 实际操作抛出或以 Promise 拒绝 <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code> 的 <a href="#installer_c_installererror">InstallerError</a>. 脚本 API 不会自动改走系统安装器.</p>
 <p><code>dhizuku</code>, 安装交互 <code>notification</code> 和默认安装器 <code>mode: &#39;persistent&#39;</code> 需要宿主构建 5306 或更高版本, 以及声明对应能力的 3-Setup Installer 1.1.0 实现. 新宿主仍可连接 V1 插件, 不会向旧插件发送未知选项或新事务. 缺少 Dhizuku 能力时返回 <code>AUTHORIZER_UNAVAILABLE</code>; 缺少通知安装或持久默认能力时返回 <code>INVALID_ARGUMENT</code>. 插件正式发布与索引准入仍以 <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Setup-Installer/blob/master/ROADMAP.md">插件路线图</a> 为准, 本文不代表已完成远端发布或全部设备验收.</p>
 <p>高级安装选项需要宿主构建 5308+ 及 3-Setup Installer 1.2.0 对应能力, 在实际处理请求的同一插件连接上协商 V3 和 <code>advanced-install-options</code>. 未提供的新字段不发送; 显式 <code>false</code> 或 <code>&#39;none&#39;</code> 仍需要上述支持. 缺少能力时在提交操作前返回 <code>INVALID_ARGUMENT</code>.</p>
+<p>宿主构建 5312+ 可协商 V3 的 <code>source-profiles</code> 能力, 让宿主安装入口和脚本使用插件设置中的 <a href="#installer">来源配置文件</a>. 旧宿主或未声明该能力的插件保持原请求行为, 不应用远端来源配置. 此扩展不增加脚本方法.</p>
 <p>安装支持同步, Async 和会话三种形态. 同步方法阻塞当前脚本线程, Async 方法返回 Promise, <a href="#installer_m_session">session</a> 返回监听阶段与进度的会话. Promise 回调和会话事件都在创建它们的脚本线程执行. 同步方法不能阻塞 Android UI 线程; <code>session</code> 的创建, <code>status</code> 和 <code>authorizer</code> 的同步查询也需要脚本工作线程. UI 脚本可使用 Async 方法, 或在工作线程中创建和使用会话.</p>
 <p>停止脚本会取消宿主等待, 取消未完成的安装会话并释放来源资源. 已完成的安装不会回滚. 卸载, 授权请求和默认安装器设置没有单独的远端取消接口: 退出脚本会停止等待并抑制后续脚本回调, 但不能保证撤回系统已经接收的操作.</p>
 <pre><code class="lang-js">console.log(installer.isAvailable());
@@ -618,7 +622,7 @@ console.log(installer.status);
 <p>一个应用的显式分包集合写作 <code>{ splits: [source1, source2] }</code>, 至少 1 个, 至多 64 个文件. 顶层数组表示 1 至 32 个独立应用, 其中每项可为普通来源或分包集合. 嵌套数组不表示分包, 会被拒绝.</p>
 <p>来源不能为 <code>null</code>, 空白路径, 含 NUL 的路径, 空数组, 稀疏数组或未知对象. 分包对象只接受 <code>splits</code> 字段, 分包元素必须是普通来源. <code>file://</code> URI 必须是没有远端主机, 查询参数或片段的本地文件 URI.</p>
 <h2>InstallOptions<span><a class="mark" href="#installer_installoptions" id="installer_installoptions">#</a></span></h2>
-<p>省略选项或选项字段时采用下表默认值. 显式 <code>null</code>, 未知字段, 非布尔标志, 非法枚举, 小数用户 ID 和非有限超时均为 <code>INVALID_ARGUMENT</code>. 字段 <code>splits</code> 只属于来源对象, 不属于安装选项.</p>
+<p>下表列出没有配置文件覆盖时的默认值. 支持来源配置的宿主/插件允许省略字段继承匹配配置, 显式字段优先. 只有 <code>installer</code>, <code>installReason</code> 和 <code>packageSource</code> 接受 <code>null</code>, 用于清除继承值并恢复相应后端默认. 整个 options 的 <code>null</code>, 其他字段的 <code>null</code>, 未知字段, 非布尔标志, 非法枚举, 小数用户 ID 和非有限超时均为 <code>INVALID_ARGUMENT</code>. 字段 <code>splits</code> 只属于来源对象, 不属于安装选项.</p>
 <table>
 <thead>
 <tr>
@@ -679,21 +683,21 @@ console.log(installer.status);
 </tr>
 <tr>
 <td><code>installReason</code></td>
-<td>string</td>
+<td>string 或 null</td>
 <td>保留后端默认</td>
-<td>V3, API 26+; <code>&#39;unknown&#39;</code>, <code>&#39;device-restore&#39;</code>, <code>&#39;device-setup&#39;</code>, <code>&#39;user&#39;</code> 或 <code>&#39;policy&#39;</code></td>
+<td>V3; 非 null 值需要 API 26+: <code>&#39;unknown&#39;</code>, <code>&#39;device-restore&#39;</code>, <code>&#39;device-setup&#39;</code>, <code>&#39;user&#39;</code> 或 <code>&#39;policy&#39;</code></td>
 </tr>
 <tr>
 <td><code>packageSource</code></td>
-<td>string</td>
+<td>string 或 null</td>
 <td>保留后端默认</td>
-<td>V3, API 33+; <code>&#39;unspecified&#39;</code>, <code>&#39;store&#39;</code>, <code>&#39;local-file&#39;</code>, <code>&#39;downloaded-file&#39;</code> 或 <code>&#39;other&#39;</code>; 省略时保留 API 33+ 原有 local-file 归属</td>
+<td>V3; 非 null 值需要 API 33+: <code>&#39;unspecified&#39;</code>, <code>&#39;store&#39;</code>, <code>&#39;local-file&#39;</code>, <code>&#39;downloaded-file&#39;</code> 或 <code>&#39;other&#39;</code>; 后端默认保留 API 33+ 原有 local-file 归属</td>
 </tr>
 <tr>
 <td><code>installer</code></td>
-<td>string</td>
+<td>string 或 null</td>
 <td>按授权身份</td>
-<td>空字符串同省略, 至多 255 个 UTF-8 字节; Shizuku ADB 默认为 shell, Root/none 为插件, Dhizuku 为 owner 包且不接受其他包</td>
+<td><code>null</code> 或空字符串清除继承值, 非空包名至多 255 个 UTF-8 字节; Shizuku ADB 默认为 shell, Root/none 为插件, Dhizuku 为 owner 包且不接受其他包</td>
 </tr>
 <tr>
 <td><code>user</code></td>
@@ -724,11 +728,24 @@ console.log(installer.status);
 <p><code>interaction: &#39;auto&#39;</code> 在特权可用时优先静默, 系统仍要求确认时允许显示确认界面, 实际结果的 <code>interaction</code> 为 <code>&#39;dialog&#39;</code> 并通过 <code>notes</code> 说明. 无特权时使用对话框. <code>&#39;dialog&#39;</code> 显式请求插件确认界面; <code>&#39;silent&#39;</code> 在没有合适特权或系统仍要求确认时失败于 <code>AUTHORIZER_REQUIRED</code>, 不回退为对话框.</p>
 <p><code>&#39;notification&#39;</code> 需要已协商的通知安装能力. 插件不主动打开确认对话框, 使用通知承载确认, 取消, 进度和结果; <code>none</code> 路径需要的 Android 系统确认仍须由通知动作进入. 缺少通知权限, 全局通知关闭或所需通知渠道/通知组不可用时返回 <code>NOTIFICATION_UNAVAILABLE</code>, 不悄悄回退为对话框或静默安装. 已确认安装成功后才发生的通知显示失败不会把已安装事实改为失败. 该模式只适用于安装和安装会话.</p>
 <p>Dhizuku 要求 API 26+, 已激活的设备/工作资料所有者及插件独立授权. 它只支持当前 owner/profile 用户, 安装归属 owner 包. <code>allowDowngrade</code>, <code>allowTestOnly</code>, <code>bypassLowTargetSdk</code>, 其他安装者包名和其他/全部用户均被明确拒绝, 不会忽略. 新插件配置的自动顺序为 Shizuku, Root, Dhizuku, none; 已有显式启用和排序设置保留.</p>
-<p>以上五个高级字段只用于安装. 省略保持原行为, 传入 <code>null</code> 不表示省略, 原始 Android 数字常量也不代替字符串枚举. 元数据选项不会改变安装历史的宿主/脚本来源标签. 平台不支持所请求字段时明确拒绝, 不切换授权方式.</p>
+<p>以上五个高级字段只用于安装. 没有配置文件覆盖时, 省略保持原行为. 显式 <code>false</code>, <code>&#39;none&#39;</code> 以及 <code>installReason</code>/<code>packageSource</code> 的 <code>null</code> 仍需 V3 和高级选项能力, 不当作未提供. 原始 Android 数字常量不代替字符串枚举. 元数据选项不会改变安装历史的宿主/脚本来源标签. 平台不支持所请求字段时明确拒绝, 不切换授权方式.</p>
 <p><code>grantAllRequestedPermissions</code> 请求系统授予可授予的权限; Android 14 也可能包含安装器可改变的 app-op, 如 <code>USE_FULL_SCREEN_INTENT</code>. 它不保证所有声明权限获准, 不授予无障碍, 悬浮窗或任意签名权限, 仍受 restricted, system-fixed 和 policy-fixed 约束, 且不会额外设置 restricted 权限 allowlist 标志. <code>requestUpdateOwnership: true</code> 仅能在初次安装时启用所有权, 更新或其他用户已有该包时可能被 Android 忽略; <code>false</code> 只是不请求, 不撤销既有 owner. 请以结果读回为准, 参阅 <a href="https://developer.android.com/reference/android/content/pm/PackageInstaller.SessionParams#setRequestUpdateOwnership(boolean">Android SessionParams</a>). <code>dexopt: &#39;none&#39;</code> 只表示不追加手动编译步骤, 不关闭 Android 自身的正常编译.</p>
-<p>安装策略由插件本地设置管理, 对宿主, 脚本, 首页和外部来源统一生效. 签名不匹配/无法确认的策略阻止及包名/共享 UID 精确黑名单均以 <code>BLOCKED_BY_POLICY</code> 拒绝. 仅真实 <code>dialog</code> 确认页可对当前项目一次性允许继续签名检查, Android 自身仍会验证签名; 静默或通知动作不能完成这项放行, 黑名单不可覆盖. 脚本不接受策略绕过字段. 权限预览汇总实际选中 APK 分包的声明权限, 不代表已经授予的权限. 本轮没有增加按来源配置文件.</p>
+<p>安装策略由插件本地设置管理, 对宿主, 脚本, 首页和外部来源统一生效. 签名不匹配/无法确认的策略阻止及包名/共享 UID 精确黑名单均以 <code>BLOCKED_BY_POLICY</code> 拒绝. 仅真实 <code>dialog</code> 确认页可对当前项目一次性允许继续签名检查, Android 自身仍会验证签名; 静默或通知动作不能完成这项放行, 黑名单不可覆盖. 脚本和来源配置均不能绕过这些策略. 权限预览汇总实际选中 APK 分包的声明权限, 不代表已经授予的权限.</p>
+<h3>来源配置文件<span><a class="mark" href="#installer" id="installer">#</a></span></h3>
+<p>在插件设置中管理配置名称, 启用状态, 来源, 包名前缀, 选项及排列顺序. 来源可为宿主, 脚本, 外部入口或任意来源; 任意来源也包含插件首页. 空前缀匹配任意包. 非空前缀按实际解析出的包名进行区分大小写的字符前缀匹配, 不使用来源文件名. 例如 <code>com.example</code> 也匹配 <code>com.example2</code>; <code>com.example.</code> 只匹配此前缀下的包名.</p>
+<p>按设置顺序选择首个同时满足来源和包名前缀的已启用配置, 不合并多个配置. 配置只提供 12 个每应用选项的局部默认值, 即上表除 <code>interaction</code>, <code>timeout</code>, <code>continueOnError</code> 外的字段. 优先级为入口默认值, 匹配配置, 显式请求字段; 真实安装确认页中的最终选择还可覆盖这些选项. 明确的 <code>false</code>, <code>&#39;auto&#39;</code>, <code>&#39;current&#39;</code>, <code>&#39;none&#39;</code> 和三个可空字段的 <code>null</code> 都是覆盖, 不是继承.</p>
+<p>插件在任务实际开始处理时固定来源配置和自动授权排序, 此后修改设置不会改变该任务或同批后续项目. 已完成确认的任务重试沿用完整确认选项; 尚未确认的重试重新读取入口默认值和来源配置. 每次重试仍重新检查来源与签名, 不复用一次性签名策略放行. <code>interaction</code>, <code>timeout</code> 和 <code>continueOnError</code> 始终属于整次会话, 配置不能延长批量操作的期限.</p>
+<p>以下函数显式保留来源并清除三个可空字段的配置继承, 调用时仍需兼容的宿主和插件:</p>
+<pre><code class="lang-js">let installWithResets = source =&gt; installer.install(source, {
+    deleteSource: false,
+    installer: null,
+    installReason: null,
+    packageSource: null,
+});
+</code></pre>
 <p>none/Dhizuku 的已安装签名查询仅限当前用户, Shizuku/Root 使用全局查询. SharedUID 黑名单非空时, 如果当前用户查不到该包且无法排除其他用户已有的记录, 插件会拒绝继续; 这类不确定性不能通过一次签名确认覆盖. 此处 SharedUID 指清单的 sharedUserId, 不是目标 Android user ID.</p>
-<p><code>deleteSource: true</code> 仅在该项收到确定的安装成功结果后, 由宿主尽力删除路径, <code>File</code> 和 <code>file://</code> 对应文件. 宿主不会删除 <code>content://</code> 来源, 安装失败的来源保留. 分包项只有全部来源均成功删除时才报告 <code>sourceDeleted: true</code>; 删除失败或保留内容 URI 时通过 <code>sourceDeleted</code> 与 <code>notes</code> 说明, 不把已经成功的安装改成失败. 同一个源文件被多个批量项引用时, 有失败项仍需要保留该来源.</p>
+<p>最终有效的 <code>deleteSource: true</code> 仅在该项收到确定的安装成功结果后, 由宿主尽力删除路径, <code>File</code> 和 <code>file://</code> 对应文件. 宿主不会删除 <code>content://</code> 来源. 支持来源配置时, 宿主以本次协商和每项布尔 <code>sourceDeleteRequested</code> 决定删除; 字段缺失或类型不正确时保留文件并记录说明. 脚本显式 <code>deleteSource: false</code> 始终禁止宿主删除.</p>
+<p>宿主在完整批量结果到达后再清理, 失败, 未处理或成功但要求保留的项目都会保护共用路径及能确认的文件别名. 插件本地外部入口还会保留同批重复 URI/规范化文件路径, 防止后续项目尚未读取时来源已被前项删除. 分包项只有全部来源均成功删除时才报告 <code>sourceDeleted: true</code>; 删除失败, 安全检查不通过或保留内容 URI 时通过 <code>sourceDeleted</code> 与 <code>notes</code> 说明, 不把已经成功的安装改成失败.</p>
 <p>单次请求 JSON 至多 64 KiB. 在设备, 平台或授权方式不支持某项特权能力时, 以错误或结果中的说明为准.</p>
 <h2>UninstallOptions<span><a class="mark" href="#installer_uninstalloptions" id="installer_uninstalloptions">#</a></span></h2>
 <table>
@@ -823,6 +840,11 @@ console.log(installer.status);
 <td><code>sourceDeleted</code></td>
 <td>boolean</td>
 <td>来源是否全部成功删除, 可选</td>
+</tr>
+<tr>
+<td><code>sourceDeleteRequested</code></td>
+<td>boolean</td>
+<td>来源配置协商后的最终删除请求, 可选; false 表示保留, true 不代表已删除. 新协商的成功结果必须提供布尔值, 缺失或类型错误时宿主保留来源并写入 notes</td>
 </tr>
 <tr>
 <td><code>notes</code></td>

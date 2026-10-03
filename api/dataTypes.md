@@ -2099,3 +2099,71 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## InstallerError
 
 参阅 [InstallerError](installer#c-installererror) 错误类型.
+
+## ComposeNode
+
+参阅 [ComposeNode - Compose 节点](composeNodeType) 类型章节.
+
+## ComposeState
+
+参阅 [ComposeState - Compose 状态](composeStateType) 类型章节.
+
+## ComposeModifier
+
+参阅 [ComposeModifier - Compose 修饰链](composeModifierType) 类型章节.
+
+## ComposeTheme
+
+参阅 [ComposeTheme - Compose 主题](composeThemeType) 输入选项.
+
+## ComposeThemeSnapshot
+
+参阅 [ComposeTheme 返回快照](composeThemeType#替换与继承).
+
+## ComposeSession
+
+参阅 [ComposeSession - Compose 会话](composeSessionType) 类型章节.
+
+## ComposeFloatyWindow
+
+参阅 [ComposeFloatyWindow - Compose 悬浮窗](composeFloatyWindowType) 类型章节.
+
+## ComposeRef
+
+参阅 [compose](compose) 的引用对象和 ref 方法.
+
+## ComposeError
+
+参阅 [compose](compose) 的类型化错误与错误码.
+
+## ComposeColorInput
+
+参阅 [ComposeColorInput](composeComponents#composecolorinput) 输入形态.
+
+## ComposeDpInput
+
+参阅 [ComposeDpInput](composeComponents#composedpinput) 输入形态.
+
+## ComposeSpInput
+
+参阅 [ComposeSpInput](composeComponents#composespinput) 输入形态.
+
+## ComposeShapeInput
+
+参阅 [ComposeShapeInput](composeComponents#composeshapeinput) 输入形态.
+
+## ComposeTextStyleInput
+
+参阅 [ComposeTextStyleInput](composeComponents#composetextstyleinput) 输入形态.
+
+## ComposeImageInput
+
+参阅 [ComposeImageInput](composeComponents#composeimageinput) 输入形态.
+
+## ComposeIconNameInput
+
+参阅 [ComposeIconNameInput](composeComponents#composeiconnameinput) 输入形态.
+
+## ComposeValueInput
+
+参阅 [ComposeValueInput](composeComponents#composevalueinput) 输入形态.

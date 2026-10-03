@@ -1,0 +1,42 @@
+{
+  "source": "..\\api\\composeStateType.md",
+  "modules": [
+    {
+      "textRaw": "Compose 状态 (ComposeState)",
+      "name": "compose_状态_(composestate)",
+      "desc": "<p>ComposeState 由 <a href=\"compose#m-state\">compose.state</a> 创建, 在所属脚本线程保存一个值, 并记录渲染函数对该值的读取. 它不是 Android View, 也不是可跨脚本引擎共享的状态容器.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeState&lt;T&gt;</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "[@] ComposeState",
+          "name": "[@]_composestate",
+          "desc": "<p>不能直接用 <code>new</code> 创建. <code>compose.state(initialValue)</code> 必须传入一个初始值, 可以显式传入 <code>undefined</code> 或 <code>null</code>.</p>\n<ul>\n<li><ins><strong>template</strong></ins> { <a href=\"dataTypes#generic\">T</a> } - 状态保存的值的类型.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "[@] ComposeState"
+        },
+        {
+          "textRaw": "[p#] value",
+          "name": "[p#]_value",
+          "desc": "<p><strong><code>Getter/Setter</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#generic\">T</a> }</li>\n</ul>\n<p>读取当前值或替换整个值. 读取和写入都必须在创建该状态的脚本线程执行; 工作线程应经 <a href=\"compose#m-post\">compose.post</a> 投递, 直接访问会抛出 <code>INVALID_ARGUMENT</code>.</p>\n<p>渲染函数执行期间读取 <code>value</code> 会建立依赖. 写入不同的值只安排后续渲染, 不在赋值语句内部同步执行渲染函数. 同一轮调度之前的连续赋值会合并, 因而不保证每次赋值对应一帧.</p>\n<p>值的比较规则如下:</p>\n<table>\n<thead>\n<tr>\n<th>值</th>\n<th>是否视为未改变</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>普通字符串和布尔值</td>\n<td>值相等.</td>\n</tr>\n<tr>\n<td>数字</td>\n<td>按数值的双精度表示比较; 重复赋值 <code>NaN</code> 视为相同, <code>0</code> 和 <code>-0</code> 视为不同.</td>\n</tr>\n<tr>\n<td>对象, 数组, 函数及其他引用值</td>\n<td>同一个引用.</td>\n</tr>\n</tbody>\n</table>\n<p>状态不深度代理对象, 也不复制初始值. 修改对象内部字段或数组内容不会自动触发渲染; 应重新赋予一个新的值或引用.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet state = compose.state({name: &#39;Alice&#39;});\ncompose.mount(function () {\n    return compose.Column({padding: 16},\n        compose.Text({key: &#39;name&#39;, text: state.value.name}),\n        compose.Button({key: &#39;change&#39;, onClick: function () {\n            state.value = {name: &#39;Bob&#39;};\n        }}, &#39;Change&#39;));\n});\n</code></pre>\n<p>这里 <code>state.value.name = &#39;Bob&#39;</code> 不会自动发出状态变化通知, 将同一对象重新赋给 <code>state.value</code> 也不会产生通知.</p>\n",
+          "type": "module",
+          "displayName": "[p#] value"
+        },
+        {
+          "textRaw": "渲染依赖",
+          "name": "渲染依赖",
+          "desc": "<p><code>compose.mount(render)</code> 和 <code>compose.floaty(render)</code> 只订阅各自渲染函数实际读取的状态. 在普通业务代码中读取 <code>value</code> 不会建立视图订阅. 同一状态可以被同一脚本中的多个会话读取, 状态变化会分别安排这些会话渲染.</p>\n<p>每次成功渲染后, 依赖集合更新为本次实际读取的状态. 条件分支不再读取某个状态时, 后续对该状态的修改不会触发该分支所属会话渲染.</p>\n<p>渲染异常时保留上一次有效界面, 并保留之前及此次尝试读取的依赖, 以便修正状态后再次渲染. 普通渲染异常被报告为 <code>RENDER_FAILED</code>; 已有的类型化错误保留其错误码. 参阅 <a href=\"compose#错误与异常\">错误与异常</a>.</p>\n<p>渲染函数应描述当前状态对应的节点树. 在渲染函数内修改其已读取的状态会再次安排渲染, 不应以这种方式形成循环更新. 渲染函数内调用 <code>compose.mount</code> 或 <code>compose.floaty</code> 会被明确拒绝.</p>\n",
+          "type": "module",
+          "displayName": "渲染依赖"
+        },
+        {
+          "textRaw": "批处理与生命周期",
+          "name": "批处理与生命周期",
+          "desc": "<p><a href=\"compose#m-batch\">compose.batch</a> 可以合并多个状态赋值和节点更改. 其节点事务失败时会回滚节点更改, 但不会撤销已经完成的 <code>state.value</code> 赋值或普通 JavaScript 副作用.</p>\n<p>关闭一个会话会移除该会话的渲染订阅, 不会单独销毁状态对象. 只要所属脚本仍在运行, 该状态仍可供业务代码或其他会话使用. 脚本结束后, 依赖和待执行渲染会被清理, 再访问已结束运行时中的状态会得到 <code>SESSION_CLOSED</code>.</p>\n<p>ComposeState 没有公开的 <code>set</code>, <code>update</code>, <code>subscribe</code> 或 <code>dispose</code> 方法. 修改状态使用 <code>value</code> 属性, 会话清理由 <a href=\"composeSessionType#m-close\">ComposeSession.close</a> 管理.</p>\n",
+          "type": "module",
+          "displayName": "批处理与生命周期"
+        }
+      ],
+      "type": "module",
+      "displayName": "Compose 状态 (ComposeState)"
+    }
+  ]
+}

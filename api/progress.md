@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-03 Compose UI V1 参考: 补齐模块, 节点, 响应式状态, 修饰链, 主题, 会话和悬浮窗类型页, 以及 29 个节点组件与 Snackbar 命令说明. 组件表直接投影实际冻结目录的 30 项与 114 个规范属性, 补充输入类型, 快捷属性顺序, 父作用域, 插槽, 事件参数和主题替换/继承边界. 当前仍需匹配的本地宿主构建及 Compose UI 插件, 无 JSX/TSX 或独立 compose.dialog API. 全站生成与离线同步由本轮统一验收, 不据文档源完成度宣称官方发布.
+
 2026-10-03 Compose UI 打包应用: 按实际 APK Builder / INRT 实现补充独立插件依赖, 应用与运行时版本区别, 各应用独立的启用/授权记录, 类型化错误和 XML 提示示例. API 37.1 / 16 KB 页模拟器已验证真实生成的 x86_64 应用在插件已安装/未安装两种条件下的行为, 应用 versionCode 为 1; 同一产物在两种条件下均完成连续启动验证. 完整 API 参考和离线插件同步保留至后续阶段.
 
 2026-10-03 Compose UI 无障碍: 核实 testTag 原样 ID, id/idContains/idMatches 匹配, text/desc 子节点与 Button 点击祖先规则. API 24 x86 与 API 35 x86_64 模拟器使用真实内置无障碍服务和宿主 Rhino 选择器验证通过; 当前为配套宿主的本地预览能力. 本页仅覆盖无障碍与选择器, 完整组件与方法参考仍在补充.
@@ -96,7 +98,7 @@
 | [Base64](base64) | √ |
 | [Canvas - 画布](canvas) | √ |
 | [Color - 颜色](color) | √ |
-| [Compose UI](compose) | &lt; 10% |
+| [Compose UI](compose) | √ |
 | [Console - 控制台](console) | √ |
 | [Continuation - 续体](continuation) | √ |
 | [Converter - 单位转换](cvt) | √ |
@@ -158,6 +160,13 @@
 | [UiObject - 控件节点](uiObjectType) | √ |
 | [UiObjectCollection - 控件集合](uiObjectCollectionType) | √ |
 | [UiObjectActions - 控件节点行为](uiObjectActionsType) | √ |
+| [ComposeNode - Compose 节点](composeNodeType) | √ |
+| [ComposeState - Compose 状态](composeStateType) | √ |
+| [ComposeModifier - Compose 修饰链](composeModifierType) | √ |
+| [ComposeTheme - Compose 主题](composeThemeType) | √ |
+| [ComposeSession - Compose 会话](composeSessionType) | √ |
+| [ComposeFloatyWindow - Compose 悬浮窗](composeFloatyWindowType) | √ |
+| [Compose 组件目录](composeComponents) | √ |
 | [EpubBook - 电子书对象](epubBookType) | √ |
 | [EpubReaderSession - 阅读器会话](epubReaderSessionType) | √ |
 | [Flow - 流程对象](flowType) | √ |

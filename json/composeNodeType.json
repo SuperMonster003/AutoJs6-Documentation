@@ -1,0 +1,642 @@
+{
+  "source": "..\\api\\composeNodeType.md",
+  "modules": [
+    {
+      "textRaw": "Compose 节点 (ComposeNode)",
+      "name": "compose_节点_(composenode)",
+      "desc": "<p>ComposeNode 是 <a href=\"compose#组件工厂\">组件工厂</a> 或 <a href=\"compose#m-createelement\">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code> 或 <code>compose.floaty</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>\n<p>所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 <a href=\"compose#m-post\">compose.post</a> 或所属会话的 <code>post</code>. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeNode</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件名, 例如 <code>&#39;Text&#39;</code> 或 <code>&#39;Button&#39;</code>. 创建后不可更改.</p>\n",
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] key",
+          "name": "[p#]_key",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>创建时的稳定键. 字符串保留原值, 有限数字转换为字符串, 未提供时为 <code>null</code>. 键的相等性影响响应式树复用; 同一父节点的普通 children 列表中, 非 <code>null</code> 的键必须唯一. 空字符串仍是一个键, 数字 <code>1</code> 和字符串 <code>&#39;1&#39;</code> 会成为相同的键. 具名插槽按插槽名协调, 不参与此列表的 key 冲突检查.</p>\n",
+          "type": "module",
+          "displayName": "[p#] key"
+        },
+        {
+          "textRaw": "[p#] nodeId",
+          "name": "[p#]_nodeid",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>节点在当前挂载树中的标识. 挂载前, 从树中移除后或所属会话关闭后为 <code>-1</code>. 节点回到同一个会话时可保留其内部身份, 但 <code>nodeId</code> 不是持久化业务键, 也不是 Android 资源 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] nodeId"
+        },
+        {
+          "textRaw": "[p#] parent",
+          "name": "[p#]_parent",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeNodeType\">ComposeNode</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>脚本节点树中的父节点. 根节点和当前未归属任何父节点的节点为 <code>null</code>. 插槽中的节点也具有 <code>parent</code>; 此关系不等同于 <a href=\"compose#无障碍与选择器\">无障碍节点树</a> 的父子关系.</p>\n",
+          "type": "module",
+          "displayName": "[p#] parent"
+        },
+        {
+          "textRaw": "[p#] children",
+          "name": "[p#]_children",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeNodeType\">ComposeNode</a>[] }</li>\n</ul>\n<p>普通子节点的数组快照, 不包含具名插槽. 修改返回数组不会改变节点树, 应调用 <code>append</code>, <code>insert</code>, <code>remove</code>, <code>replace</code> 或 <code>clear</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] children"
+        },
+        {
+          "textRaw": "组件属性",
+          "name": "组件属性",
+          "desc": "<p>组件在 <a href=\"composeComponents\">目录</a> 中声明的属性及其别名, 以及 <a href=\"composeModifierType#快捷属性\">快捷属性</a> 和 <code>modifier</code>, 都可通过节点属性访问或 <code>get</code> / <code>set</code> 读写:</p>\n<pre><code class=\"lang-js\">let title = compose.Text({text: &#39;Ready&#39;, color: &#39;#202020&#39;});\ntitle.text = &#39;Running&#39;;\ntitle.set({fontSize: 18, alpha: 0.8});\nconsole.log(title.get(&#39;text&#39;));\n</code></pre>\n<p>只有该组件实际声明的属性可用. 例如 <code>Text</code> 没有 <code>checked</code>, 未知属性赋值会报 <code>UNKNOWN_PROP</code>. 属性名和枚举区分大小写, 值按目录校验, 不把 <code>&#39;false&#39;</code> 自动转换为布尔值, 也不把数字自动转换为 <code>text</code>.</p>\n<p>返回的属性值是归一化脚本值: dp / sp 是数值, 颜色是 ARGB 整数, 数组和结构值是普通脚本对象. 有目录默认值时返回默认值, 否则未指定的属性返回 <code>undefined</code>. <code>modifier</code> 只返回显式设置的链, 不会把快捷属性合成为新链.</p>\n<p><code>Image.src</code> 读取为底层 Android Bitmap 引用, 不返回最初的文件路径或新建 ImageWrapper. 调用方图片的有效期应覆盖所有原生使用, 参阅 <a href=\"composeComponents#composeimageinput\">组件图像输入</a> 与 <a href=\"composeSessionType#m-close\">关闭清理边界</a>.</p>\n<p>事件属性, <code>ref</code> 和具名插槽通过创建选项或 <code>set</code> 设置; 它们没有普通属性访问器. 例如使用 <code>node.set({onClick: fn})</code> 或 <code>node.on(&#39;click&#39;, fn)</code>, 不使用 <code>node.onClick = fn</code>.</p>\n",
+          "type": "module",
+          "displayName": "组件属性"
+        },
+        {
+          "textRaw": "[m#] set",
+          "name": "[m#]_set",
+          "methods": [
+            {
+              "textRaw": "node.set(props)",
+              "type": "method",
+              "name": "set",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**props** { [Object](dataTypes#object) | [null](dataTypes#null) | [undefined](dataTypes#undefined) } - 要更新的属性, 事件, 插槽或 ref. ",
+                      "name": "**props**",
+                      "type": " [Object](dataTypes#object) | [null](dataTypes#null) | [undefined](dataTypes#undefined) ",
+                      "desc": "要更新的属性, 事件, 插槽或 ref."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "props"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>合并给出的字段, 未提供字段保留原值. 支持组件属性, 快捷属性, <code>modifier</code>, <code>ref</code>, <code>slots</code>, 目录中的具名插槽和 <code>onX</code> 事件回调. 一个对象中同时提供同一属性的不同别名会被拒绝.</p>\n<p>必须传入一个参数; 容器本身为 <code>null</code> 或 <code>undefined</code> 时是空更新, 不清空已有属性.</p>\n<p><code>modifier: null</code> 清除显式链; <code>ref: null</code> 解除此节点的 ref 声明; <code>onClick: null</code> 等事件字段清空对应监听列表. 普通属性只有目录允许时才接受 <code>null</code>, 不使用 <code>null</code> 或 <code>undefined</code> 作为通用的恢复默认值命令.</p>\n<p><code>key</code>, <code>type</code>, <code>nodeId</code>, <code>parent</code> 和 <code>children</code> 不可通过 <code>set</code> 修改. 子节点操作使用树方法. 失败的节点更改会回滚, 详见 <a href=\"compose#m-batch\">批处理</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] set"
+        },
+        {
+          "textRaw": "[m#] get",
+          "name": "[m#]_get",
+          "methods": [
+            {
+              "textRaw": "node.get(name)",
+              "type": "method",
+              "name": "get",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 组件属性, 属性别名, 快捷属性或 `'modifier'`. ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "组件属性, 属性别名, 快捷属性或 `'modifier'`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - 归一化属性值或 `undefined`. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "归一化属性值或 `undefined`."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>与同名业务属性访问器一致. <code>type</code>, <code>key</code>, <code>nodeId</code>, <code>parent</code>, <code>children</code> 应通过直接属性读取; <code>get</code> 不用于读取事件函数, 插槽或 ref. 不支持的名称报 <code>UNKNOWN_PROP</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] get"
+        },
+        {
+          "textRaw": "子节点输入",
+          "name": "子节点输入",
+          "desc": "<p>树方法接受一个节点, 一个字符串或以上内容的嵌套数组. 字符串自动成为 <code>Text</code> 节点; <code>null</code>, <code>undefined</code> 和 <code>false</code> 被忽略. 数字和 <code>true</code> 不会自动成为文字, 应显式使用 <code>String(value)</code>.</p>\n<p>是否允许子节点及其数量由父组件决定. 例如 <code>Text</code> 不接受子节点, 因此创建文本应使用 <code>compose.Text({text: &#39;Hello&#39;})</code>, 不能用 <code>compose.Text(&#39;Hello&#39;)</code> 替代.</p>\n<p>同一个节点不能在一棵树中同时出现两次. 同一会话内移动节点会从原父节点或插槽移除它; 循环引用, 重复句柄或跨会话移动会被拒绝.</p>\n",
+          "type": "module",
+          "displayName": "子节点输入"
+        },
+        {
+          "textRaw": "[m#] append",
+          "name": "[m#]_append",
+          "methods": [
+            {
+              "textRaw": "node.append(child)",
+              "type": "method",
+              "name": "append",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**child** { [ComposeChild](compose#composechild) } - 按上述规则展开的内容, 必须提供一个参数. ",
+                      "name": "**child**",
+                      "type": " [ComposeChild](compose#composechild) ",
+                      "desc": "按上述规则展开的内容, 必须提供一个参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前父节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前父节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "child"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>追加到普通子节点末尾. 已在该父节点中的句柄会移动到新位置, 不复制节点.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] append"
+        },
+        {
+          "textRaw": "[m#] insert",
+          "name": "[m#]_insert",
+          "methods": [
+            {
+              "textRaw": "node.insert(index, child)",
+              "type": "method",
+              "name": "insert",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**index** { [number](dataTypes#number) } - 整数插入位置, `0..node.children.length`. ",
+                      "name": "**index**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "整数插入位置, `0..node.children.length`."
+                    },
+                    {
+                      "textRaw": "**child** { [ComposeChild](compose#composechild) } - 要插入的内容. ",
+                      "name": "**child**",
+                      "type": " [ComposeChild](compose#composechild) ",
+                      "desc": "要插入的内容."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前父节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前父节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "index"
+                    },
+                    {
+                      "name": "child"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在指定位置插入. 传入数组时按展开顺序插入. 移动已有子节点时会相应调整其原位置, 不产生重复项.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] insert"
+        },
+        {
+          "textRaw": "[m#] remove",
+          "name": "[m#]_remove",
+          "methods": [
+            {
+              "textRaw": "node.remove(childOrIndex)",
+              "type": "method",
+              "name": "remove",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**childOrIndex** { [ComposeNode](composeNodeType) | [number](dataTypes#number) } - 当前普通子节点句柄或非负整数索引. ",
+                      "name": "**childOrIndex**",
+                      "type": " [ComposeNode](composeNodeType) | [number](dataTypes#number) ",
+                      "desc": "当前普通子节点句柄或非负整数索引."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前父节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前父节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "childOrIndex"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>只移除一个直接普通子节点, 不按字符串 key 查找, 也不递归寻找后代. 合法类型但未找到对应子节点时会报 <code>NODE_DETACHED</code>. 具名插槽应使用 <code>slot(name, null)</code> 清空.</p>\n<p>移除不等同于永久销毁句柄. 所属会话仍存活时, 可继续修改声明并插回同一会话; 已移除节点的 <code>focus</code>, <code>blur</code>, <code>scrollTo</code> 等原生命令会报 <code>NODE_DETACHED</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] remove"
+        },
+        {
+          "textRaw": "[m#] replace",
+          "name": "[m#]_replace",
+          "methods": [
+            {
+              "textRaw": "node.replace(children)",
+              "type": "method",
+              "name": "replace",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**children** { [ComposeChild](compose#composechild) } - 新的普通子节点内容, 必须提供一个参数. ",
+                      "name": "**children**",
+                      "type": " [ComposeChild](compose#composechild) ",
+                      "desc": "新的普通子节点内容, 必须提供一个参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前父节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前父节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "children"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>整体替换普通子节点列表. <code>null</code> 或空数组清空该列表, 具名插槽保持不变.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] replace"
+        },
+        {
+          "textRaw": "[m#] clear",
+          "name": "[m#]_clear",
+          "methods": [
+            {
+              "textRaw": "node.clear()",
+              "type": "method",
+              "name": "clear",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前父节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前父节点."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>等同于 <code>node.replace([])</code>, 只清空普通子节点.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clear"
+        },
+        {
+          "textRaw": "[m#] slot",
+          "name": "[m#]_slot",
+          "methods": [
+            {
+              "textRaw": "node.slot(name, child)",
+              "type": "method",
+              "name": "slot",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**name** { [string](dataTypes#string) } - 该组件目录声明的插槽名称. ",
+                      "name": "**name**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "该组件目录声明的插槽名称."
+                    },
+                    {
+                      "textRaw": "**child** { [ComposeChild](compose#composechild) } - 插槽内容, 展开后至多一个节点. ",
+                      "name": "**child**",
+                      "type": " [ComposeChild](compose#composechild) ",
+                      "desc": "插槽内容, 展开后至多一个节点."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "name"
+                    },
+                    {
+                      "name": "child"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置或替换一个插槽. <code>null</code>, <code>undefined</code>, <code>false</code> 或空数组可清空可选插槽, 必需插槽仍受目录校验. 多个组件应先包在一个 <code>Row</code>, <code>Column</code> 或 <code>Box</code> 中, 再作为插槽节点传入.</p>\n<p><code>node.set({slots: {title: titleNode}})</code> 和 <code>node.set({title: titleNode})</code> 也可设置目录中名为 <code>title</code> 的插槽. <code>slots</code> 对象按给出的插槽合并, 不自动清空未提及的插槽.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] slot"
+        },
+        {
+          "textRaw": "[m#] on",
+          "name": "[m#]_on",
+          "methods": [
+            {
+              "textRaw": "node.on(event, fn)",
+              "type": "method",
+              "name": "on",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**event** { [string](dataTypes#string) } - 该组件支持的事件名称, 例如 `'click'`, `'valueChange'`. ",
+                      "name": "**event**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "该组件支持的事件名称, 例如 `'click'`, `'valueChange'`."
+                    },
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 事件回调. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "事件回调."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>追加监听函数, 普通函数的 <code>this</code> 是当前节点. 事件参数见 <a href=\"compose#事件回调\">事件回调</a>. 对应的 <code>onClick</code>, <code>onValueChange</code> 等名称也可作为事件别名, 但不接受旧 View 风格的下划线名称.</p>\n<p>重复注册同一函数会追加多次, 不自动去重. <code>node.set({onClick: fn})</code> 则替换该事件的监听列表. 监听按注册顺序处理, 若较早的监听关闭会话或停止脚本, 后面的监听不再执行.</p>\n<p>原生事件通过队列回到所属脚本线程, 不在 Compose 的组合或布局调用栈中同步执行 JavaScript. 回调的返回值不用于阻止原生事件或提交控件状态.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on"
+        },
+        {
+          "textRaw": "[m#] off",
+          "name": "[m#]_off",
+          "methods": [
+            {
+              "textRaw": "node.off(event, fn?)",
+              "type": "method",
+              "name": "off",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**event** { [string](dataTypes#string) } - 已支持的事件名称或对应 `onX` 别名. ",
+                      "name": "**event**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "已支持的事件名称或对应 `onX` 别名."
+                    },
+                    {
+                      "textRaw": "**[ fn ]** { [Function](dataTypes#function) | [null](dataTypes#null) } - 要移除的函数引用. ",
+                      "name": "**[",
+                      "desc": "fn ]** { [Function](dataTypes#function) | [null](dataTypes#null) } - 要移除的函数引用."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "fn?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>给出函数时移除所有相同函数引用的注册. 省略, <code>null</code> 或 <code>undefined</code> 时移除该事件的全部用户监听. 输入框自身的内部文本同步不会因此停止.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] off"
+        },
+        {
+          "textRaw": "[m#] focus",
+          "name": "[m#]_focus",
+          "methods": [
+            {
+              "textRaw": "node.focus()",
+              "type": "method",
+              "name": "focus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>向已挂载且支持焦点命令的组件请求焦点. 按钮, 选择控件, 滑块, 输入框和带 <code>clickable</code> Modifier 的节点支持此命令. 其他类型会报 <code>INVALID_ARGUMENT</code>; 未挂载会报 <code>NODE_DETACHED</code>.</p>\n<p>命令异步到达原生视图, 返回值不代表已经获得焦点或显示输入法. 悬浮输入框还需要 <a href=\"composeFloatyWindowType#m-requestfocus\">窗口允许焦点</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] focus"
+        },
+        {
+          "textRaw": "[m#] blur",
+          "name": "[m#]_blur",
+          "methods": [
+            {
+              "textRaw": "node.blur()",
+              "type": "method",
+              "name": "blur",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前节点."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>清除该已挂载组件的焦点, 支持范围与 <code>focus()</code> 相同.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] blur"
+        },
+        {
+          "textRaw": "[m#] scrollTo",
+          "name": "[m#]_scrollto",
+          "methods": [
+            {
+              "textRaw": "node.scrollTo(index)",
+              "type": "method",
+              "name": "scrollTo",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 非负整数条目索引.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeNodeType\">ComposeNode</a> } - 当前节点.</li>\n</ul>\n<p>仅适用于 <code>LazyColumn</code> 或 <code>LazyRow</code>, 索引须小于当前条目数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "index"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "node.scrollTo(target)",
+              "type": "method",
+              "name": "scrollTo",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>target</strong> {{ index?: <a href=\"dataTypes#number\">number</a>; offset?: <a href=\"dataTypes#number\">number</a> }} - 至少提供一个字段.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeNodeType\">ComposeNode</a> } - 当前节点.</li>\n</ul>\n<p>有 <code>index</code> 时选择懒加载条目, 可同时给出正负整数 <code>offset</code> 作为该条目的像素偏移. 没有 <code>index</code> 时, <code>offset</code> 是非负整数的绝对滚动像素位置: 普通滚动 Modifier 直接设置该位置, 懒列表从第 0 项加该偏移请求重新测量. 数值均须在对应的 32 位整数范围内.</p>\n<p><code>scrollTo(100)</code> 表示懒列表索引, 不表示普通滚动容器的 100 px; 普通容器应写 <code>scrollTo({offset: 100})</code>. 只有懒列表和实际带滚动 Modifier 的节点支持滚动命令.</p>\n<p>普通节点同链含多个滚动操作时, offset 命令作用于第一个, 即最外层滚动操作. 该命令不提供两个方向的独立坐标参数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] scrollTo"
+        },
+        {
+          "textRaw": "[m#] edit",
+          "name": "[m#]_edit",
+          "methods": [
+            {
+              "textRaw": "node.edit(change)",
+              "type": "method",
+              "name": "edit",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**change** {{ text?: [string](dataTypes#string); selection?: [Array](dataTypes#array) | [Object](dataTypes#object) }} - 至少给出 `text` 或 `selection`. ",
+                      "name": "**change**",
+                      "type": "{ text?: [string](dataTypes#string); selection?: [Array](dataTypes#array) | [Object](dataTypes#object) ",
+                      "desc": "} - 至少给出 `text` 或 `selection`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前输入框节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "当前输入框节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "change"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>仅用于 <code>TextField</code> 和 <code>OutlinedTextField</code>. <code>selection</code> 接受 <code>[start, end]</code> 或 <code>{start, end}</code>, 两端必须为当前目标文本范围内的非负整数, 以 UTF-16 代码单元计数, 允许反向选区.</p>\n<p>仅改变文字而未给选区时, 新文字与旧文字不同会把光标移到末尾; 文字不变或省略时保留现有选区. 未挂载输入框的编辑作为初始或待挂载编辑保存; 已挂载输入框通过原生命令应用.</p>\n<p>原生输入发生后, 宿主在 <code>onValueChange(text, selection, editSeq)</code> 回调之前更新句柄中的文字和编辑序列. <code>node.text</code> / <code>node.value</code> 读取这一已同步的编辑状态. 给它们赋值与 <code>set({text: ...})</code> 都走显式编辑路径, 不直接覆盖原生缓冲区.</p>\n<p>每次编辑自动携带脚本已观察到的序列. 若原生编辑在命令到达前发生了更新, 迟到编辑会被拒绝并报告 <code>INVALID_ARGUMENT</code> (<code>prop: &#39;editSeq&#39;</code>), 保留较新的输入. 不需要也不允许在 <code>edit</code> 参数中自行设置 <code>editSeq</code> 或输入法组合区间.</p>\n<p>下面的 <code>field</code> 为已经创建的 TextField 或 OutlinedTextField 句柄:</p>\n<pre><code class=\"lang-js\">field.edit({text: &#39;Hello&#39;, selection: [0, 5]});\nfield.edit({selection: {start: 5, end: 5}});\n</code></pre>\n<p>受控声明在相同 key 的重绘中可复用编辑器, 保留原生输入和选区; 从实际树中移除再插入会开始新的原生编辑生命周期, 不应依靠保存句柄恢复之前的输入法组合状态.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] edit"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "node.toString()",
+              "type": "method",
+              "name": "toString",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } - 例如 `ComposeNode(type=Text, nodeId=1)`. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "例如 `ComposeNode(type=Text, nodeId=1)`."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>用于诊断节点类型和当前公开标识. 所属会话关闭后仍可读取这类结构信息, 但组件属性访问和树/原生命令会报 <code>SESSION_CLOSED</code>. 结构 getter 没有清空承诺, 不应用它们判断业务操作仍然可用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        }
+      ],
+      "type": "module",
+      "displayName": "Compose 节点 (ComposeNode)"
+    }
+  ]
+}

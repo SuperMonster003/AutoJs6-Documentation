@@ -1,0 +1,258 @@
+{
+  "source": "..\\api\\composeSessionType.md",
+  "modules": [
+    {
+      "textRaw": "Compose 会话 (ComposeSession)",
+      "name": "compose_会话_(composesession)",
+      "desc": "<p>ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 <a href=\"compose#m-mount\">compose.mount</a> 返回, 或经 <a href=\"composeFloatyWindowType#p-session\">ComposeFloatyWindow.session</a> 取得. 不能直接用 <code>new</code> 创建.</p>\n<p>UI 挂载和悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 会话不是 Android Activity 或 View; 修改组件使用 <a href=\"composeNodeType\">ComposeNode</a>, 窗口操作使用 <a href=\"composeFloatyWindowType\">ComposeFloatyWindow</a>.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeSession</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "[p#] root",
+          "name": "[p#]_root",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeNodeType\">ComposeNode</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>当前根节点句柄. 响应式渲染更换根节点时, 此属性随会话更新. 会话关闭后立即读取为 <code>null</code>. 它不是原生 View, 也不表示本次更改已经完成屏幕绘制.</p>\n",
+          "type": "module",
+          "displayName": "[p#] root"
+        },
+        {
+          "textRaw": "[m#] update",
+          "name": "[m#]_update",
+          "methods": [
+            {
+              "textRaw": "session.update(fn)",
+              "type": "method",
+              "name": "update",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 同步执行的更新函数, 无参数. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "同步执行的更新函数, 无参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - `fn` 的返回值. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "`fn` 的返回值."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在所属脚本线程运行一次 <a href=\"compose#m-batch\">compose.batch</a>. 普通函数的 <code>this</code> 为脚本全局对象, 不会自动传入会话或根节点. 返回值是更新函数的结果, 不是会话对象.</p>\n<p>下面假设 <code>session</code> 已挂载, <code>title</code> 和 <code>toggle</code> 是该会话内的 Text 与 Switch 句柄:</p>\n<pre><code class=\"lang-js\">let result = session.update(function () {\n    title.text = &#39;Updated&#39;;\n    toggle.checked = true;\n    return &#39;done&#39;;\n});\n</code></pre>\n<p>会话必须尚未关闭. 更新仍受节点归属和单次事务只影响一个活动会话的限制; 此方法不会把传入函数永久注册为新的渲染函数.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] update"
+        },
+        {
+          "textRaw": "[m#] post",
+          "name": "[m#]_post",
+          "methods": [
+            {
+              "textRaw": "session.post(fn, delay?)",
+              "type": "method",
+              "name": "post",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 稍后在所属脚本线程执行的函数, 无参数. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "稍后在所属脚本线程执行的函数, 无参数."
+                    },
+                    {
+                      "textRaw": "**[ delay = 0 ]** { [number](dataTypes#number) } - 延迟毫秒数, 必须为 `0..2147483647` 的整数. ",
+                      "name": "**[",
+                      "desc": "delay = 0 ]** { [number](dataTypes#number) } - 延迟毫秒数, 必须为 `0..2147483647` 的整数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    },
+                    {
+                      "name": "delay?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可从工作线程调用. 即使 <code>delay</code> 为 <code>0</code>, 也会排队而非立即调用. 执行时自动使用节点事务和响应式批处理; 普通函数的 <code>this</code> 为脚本全局对象.</p>\n<p>任务到期时若会话已经关闭, 函数不会执行. 对已关闭会话继续调用 <code>post</code> 则同步抛出 <code>SESSION_CLOSED</code>. 队列满时可能抛出 <code>LIMIT_EXCEEDED</code>.</p>\n<p>此方法不返回定时器编号, 没有单个任务取消接口, 也不为非 UI 脚本额外保活. 关闭会话保证其任务不再调用脚本, 不表示所有延迟闭包立即从引擎的调度队列删除. 脚本结束会清理该引擎的待执行任务.</p>\n<p>如果希望任务只随引擎退出取消, 使用 <a href=\"compose#m-post\">compose.post</a>; 单个会话关闭不会取消该模块级任务.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] post"
+        },
+        {
+          "textRaw": "[m#] showSnackbar",
+          "name": "[m#]_showsnackbar",
+          "methods": [
+            {
+              "textRaw": "session.showSnackbar(message, options?)",
+              "type": "method",
+              "name": "showSnackbar",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { [string](dataTypes#string) } - Snackbar 文本. ",
+                      "name": "**message**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "Snackbar 文本."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 下表中的选项; 容器省略或为 nullish 值时使用默认选项. ",
+                      "name": "**[",
+                      "desc": "options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 下表中的选项; 容器省略或为 nullish 值时使用默认选项."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeSession](composeSessionType) } - 当前会话. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeSession](composeSessionType) ",
+                      "desc": "当前会话."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>默认值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>actionLabel</code></td>\n<td><code>string</code> 或 <code>null</code></td>\n<td><code>null</code></td>\n<td>操作按钮文本.</td>\n</tr>\n<tr>\n<td><code>duration</code></td>\n<td><code>&#39;short&#39;</code>, <code>&#39;long&#39;</code>, <code>&#39;indefinite&#39;</code> 或 <code>null</code></td>\n<td><code>&#39;short&#39;</code></td>\n<td><code>null</code> 使用默认时长; 不是毫秒数.</td>\n</tr>\n<tr>\n<td><code>onAction</code></td>\n<td><code>Function</code> 或 <code>null</code></td>\n<td>无</td>\n<td>用户执行操作时调用, 无参数.</td>\n</tr>\n<tr>\n<td><code>onDismiss</code></td>\n<td><code>Function</code> 或 <code>null</code></td>\n<td>无</td>\n<td>非操作方式消失时调用, 无参数.</td>\n</tr>\n</tbody>\n</table>\n<p>普通回调函数的 <code>this</code> 为当前会话. 每条请求最多产生一次操作或消失结果; 关闭会话后释放尚未完成的请求和回调, 不补发消失通知.</p>\n<p><code>actionLabel</code>, <code>onAction</code>, <code>onDismiss</code> 为 <code>null</code> 或 <code>undefined</code> 时表示省略. <code>duration: undefined</code> 不作为默认时长, 会报 <code>INVALID_ARGUMENT</code>; 未使用该项时应省略或传 <code>null</code>.</p>\n<p>请求按顺序显示, 并在同一轮树更新被接受后选择会话中的第一个 <code>Scaffold</code>. 该 Scaffold 必须使用默认 Snackbar host. 不存在 Scaffold, 或该 Scaffold 自定义了 <code>snackbarHost</code> 插槽时, 请求会报 <code>INVALID_ARGUMENT</code>. 多个 Scaffold 时不自动选择距离调用处最近的一个.</p>\n<p>移除或替换当前 Snackbar host 会结束其待处理请求, 按非操作方式返回结果. 原生显示与回调是异步的; 返回当前会话不表示 Snackbar 已显示或用户已操作. 未知选项抛出 <code>UNKNOWN_PROP</code>, 类型或枚举不合法抛出 <code>INVALID_ARGUMENT</code>.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet session = compose.mount(compose.Scaffold({},\n    compose.Button({onClick: function () {\n        session.showSnackbar(&#39;Saved&#39;, {\n            actionLabel: &#39;Undo&#39;,\n            onAction: function () { console.log(&#39;Undo requested&#39;); },\n        });\n    }}, &#39;Save&#39;)));\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] showSnackbar"
+        },
+        {
+          "textRaw": "[m#] on",
+          "name": "[m#]_on",
+          "methods": [
+            {
+              "textRaw": "session.on(event, fn)",
+              "type": "method",
+              "name": "on",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**event** { [string](dataTypes#string) } - 仅支持 `'close'`. ",
+                      "name": "**event**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "仅支持 `'close'`."
+                    },
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 关闭回调, 无参数. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "关闭回调, 无参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeSession](composeSessionType) } - 当前会话. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeSession](composeSessionType) ",
+                      "desc": "当前会话."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>普通回调函数的 <code>this</code> 为当前会话. 回调执行前会话已标为关闭, <code>root</code> 已清空, 节点订阅及回调已释放. 每次注册在首次关闭时调用一次, 重复 <code>close()</code> 不重复通知. 回调异常会报告给脚本控制台, 不阻止其他关闭回调和后续清理.</p>\n<p>此对象没有 <code>off</code> 方法, 也不支持 <code>session.on(&#39;error&#39;, fn)</code>. 在会话关闭后注册会报 <code>SESSION_CLOSED</code>. 节点事件应使用 <a href=\"composeNodeType#m-on\">ComposeNode.on</a>, Snackbar 结果应使用其选项回调.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on"
+        },
+        {
+          "textRaw": "[m#] isClosed",
+          "name": "[m#]_isclosed",
+          "methods": [
+            {
+              "textRaw": "session.isClosed()",
+              "type": "method",
+              "name": "isClosed",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已经关闭. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否已经关闭."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>这是方法, 不是布尔属性. 可在关闭后继续查询.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isClosed"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "session.close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>关闭当前会话, 释放渲染资源, 节点事件, 渲染依赖和当前 ref, 并使所属 <code>post</code> 任务不再执行. 悬浮会话同时关闭窗口和释放其脚本保活引用. 此方法幂等, 可从工作线程请求关闭; 脚本侧通知仍回到所属调度线程处理.</p>\n<p>关闭标志先于原生资源清理完成. 原生视图释放在 Android 主线程执行, <code>close()</code> 返回或 <code>&#39;close&#39;</code> 回调都不是原生释放完成的回执. 调用方图片的生命周期应覆盖这段过程, 不要仅凭关闭返回就立即 recycle 仍可能被原生视图引用的图片.</p>\n<p>没有原生释放完成的确认时, 不要在 <code>remove</code>, <code>close</code> 返回后或关闭监听中主动 recycle. 图片不再使用后可放弃脚本持有的强引用, 交给正常回收机制处理. 当前没有 <code>awaitClosed</code> 或等待原生释放的 Promise 接口.</p>\n<p>关闭 UI 会话会移除 Compose 内容, 不等同于请求结束脚本 Activity. 页面后续行为由脚本自身决定.</p>\n<p>会话也会在脚本停止, 所属 Activity 销毁, UI 内容被替换, 原生窗口关闭, 或插件更新/卸载/禁用时关闭. 常规原生回调不会在主线程同步执行非 UI 脚本, 关闭操作也不会等待另一个脚本线程完成.</p>\n<p>关闭后 <code>root</code> 为 <code>null</code>, <code>isClosed()</code> 为 <code>true</code>, 重复 <code>close()</code> 仍安全; <code>update</code>, <code>post</code>, <code>showSnackbar</code>, <code>on</code> 及原会话节点的业务操作会报 <code>SESSION_CLOSED</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "Compose 会话 (ComposeSession)"
+    }
+  ]
+}

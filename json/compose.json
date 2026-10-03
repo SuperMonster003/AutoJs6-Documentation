@@ -4,8 +4,626 @@
     {
       "textRaw": "Compose UI (Compose)",
       "name": "compose_ui_(compose)",
-      "desc": "<p><code>compose</code> 与 <code>$compose</code> 提供由 Compose UI 插件渲染的脚本界面. 本页说明无障碍节点与宿主选择器的关系, 以及打包应用的运行条件; 完整组件和方法参考仍在补充.</p>\n<aside class=\"doc-status doc-status--incomplete\">\n<p><strong>文档状态:</strong> 无障碍与选择器及打包应用已核实. 完整组件和方法参考仍在补充.</p>\n</aside>\n\n",
+      "desc": "<p><code>compose</code> 与 <code>$compose</code> 是同一个可调用模块, 通过 Compose UI 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.0.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.</p>\n<p>运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 Compose UI 插件. 最低宿主构建要求为 AutoJs6 6.8.0 / 5316, 同时仍须满足实际插件契约和共享依赖检查.</p>\n<table>\n<thead>\n<tr>\n<th>内容</th>\n<th>参考</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>节点属性, 树操作与原生命令</td>\n<td><a href=\"composeNodeType\">ComposeNode</a></td>\n</tr>\n<tr>\n<td>响应式状态</td>\n<td><a href=\"composeStateType\">ComposeState</a></td>\n</tr>\n<tr>\n<td>布局修饰链</td>\n<td><a href=\"composeModifierType\">ComposeModifier</a></td>\n</tr>\n<tr>\n<td>主题覆盖</td>\n<td><a href=\"composeThemeType\">ComposeTheme</a></td>\n</tr>\n<tr>\n<td>会话与 Snackbar</td>\n<td><a href=\"composeSessionType\">ComposeSession</a></td>\n</tr>\n<tr>\n<td>悬浮窗口</td>\n<td><a href=\"composeFloatyWindowType\">ComposeFloatyWindow</a></td>\n</tr>\n<tr>\n<td>组件属性, 插槽, 事件和生成目录</td>\n<td><a href=\"composeComponents\">ComposeComponents</a></td>\n</tr>\n</tbody>\n</table>\n<p>1.0.0 提供 UI 模式页面和 <code>compose.floaty</code> 两种承载方式. 没有 TSX/JSX 接入, <code>compose.dialog</code> 或 XML/Android View 与 Compose 的混合节点挂载接口. 组件目录中的 <code>AlertDialog</code> 是已有会话内的组件, 不表示存在独立的 <code>compose.dialog</code> 承载入口.</p>\n",
       "modules": [
+        {
+          "textRaw": "两层使用方式",
+          "name": "两层使用方式",
+          "modules": [
+            {
+              "textRaw": "节点句柄",
+              "name": "节点句柄",
+              "desc": "<p>先创建节点并保存句柄, 挂载后直接修改属性或子节点. 同一轮更新会传到已经存在的界面.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet title = compose.Text({text: &#39;Ready&#39;});\nlet button = compose.Button({onClick: function () {\n    title.text = &#39;Clicked&#39;;\n}}, &#39;Run&#39;);\nlet session = compose.mount(compose.Column({padding: 16}, title, button));\n</code></pre>\n<p>节点是 <a href=\"composeNodeType\">ComposeNode</a>, 不是原生 View. 只允许目录声明的属性和命令.</p>\n",
+              "type": "module",
+              "displayName": "节点句柄"
+            },
+            {
+              "textRaw": "state 与 render",
+              "name": "state_与_render",
+              "desc": "<p>把函数传给 <code>mount</code> 或 <code>floaty</code>, 函数读取 <a href=\"composeStateType#p-value\">ComposeState.value</a> 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet count = compose.state(0);\ncompose.mount(function () {\n    return compose.Column({padding: 16},\n        compose.Text({key: &#39;count&#39;, text: &#39;Count: &#39; + count.value}),\n        compose.Button({key: &#39;increment&#39;, onClick: function () {\n            count.value++;\n        }}, &#39;Increment&#39;));\n});\n</code></pre>\n<p>两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 <code>ref</code> 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 <code>ref.current</code>.</p>\n<p>同一父节点的普通 children 列表中, 非 <code>null</code> 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.</p>\n",
+              "type": "module",
+              "displayName": "state 与 render"
+            }
+          ],
+          "type": "module",
+          "displayName": "两层使用方式"
+        },
+        {
+          "textRaw": "线程与生命周期",
+          "name": "线程与生命周期",
+          "desc": "<ul>\n<li>UI 脚本由 <code>&#39;ui&#39;;</code> 声明, 其 Compose 操作在该脚本的 UI 调度线程执行.</li>\n<li>非 UI 脚本使用 <code>compose.floaty</code>, JavaScript 回调仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理.</li>\n<li>组件属性, state 读写, 树操作, 主题和普通窗口方法需要所属脚本线程. 工作线程使用 <code>compose.post</code>, <code>session.post</code> 或 <code>window.post</code>; 清理用的幂等 <code>close()</code> 也可从工作线程请求.</li>\n<li>原生事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. UI 脚本中的阻塞等待同样会阻塞界面.</li>\n<li>同一脚本引擎最多有 8 个活动会话, UI 页面和悬浮窗共同计数. 替换现有 UI 页面时会扣除即将替换的旧 UI 会话, 不额外消耗一个长期名额.</li>\n<li>新的 <code>compose.mount</code> 替换旧的 Compose UI 页面. <code>ui.layout</code>, <code>ui.layoutFile</code> 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗不因此关闭.</li>\n<li>脚本停止, Activity 销毁, 会话主动关闭或原生窗口关闭会清理相应资源. 当前 UI Activity 自行处理方向及窗口尺寸等已声明的配置变化, 常规旋转和分屏尺寸变化可保留引擎与节点. 真正的 Activity 重建或销毁会结束其 UI 引擎, 不自动恢复原 state 或会话.</li>\n<li>插件更新, 卸载或禁用会关闭正在使用它的会话并报告对应错误. 重新安装或启用插件不会自动复活旧句柄, 后续应创建新的会话和节点.</li>\n</ul>\n<p>每个悬浮会话持有一个属于自身的脚本保活引用. 关闭一个悬浮窗只释放该引用; 最后一个窗口关闭且没有其他保活来源时, 非 UI 脚本可自然结束. <code>post</code> 本身不提供额外保活.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">compose</p>\n\n",
+          "type": "module",
+          "displayName": "线程与生命周期"
+        },
+        {
+          "textRaw": "[@] compose",
+          "name": "[@]_compose",
+          "methods": [
+            {
+              "textRaw": "compose(nodeOrRender, options?)",
+              "type": "method",
+              "name": "compose",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**nodeOrRender** { [ComposeNode](composeNodeType) | [Function](dataTypes#function) } - 根节点, 或返回一个根节点的渲染函数. ",
+                      "name": "**nodeOrRender**",
+                      "type": " [ComposeNode](composeNodeType) | [Function](dataTypes#function) ",
+                      "desc": "根节点, 或返回一个根节点的渲染函数."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 与 `mount` 相同的选项. ",
+                      "name": "**[",
+                      "desc": "options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 与 `mount` 相同的选项."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeSession](composeSessionType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeSession](composeSessionType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "nodeOrRender"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>等同于 <a href=\"#m-mount\">compose.mount</a>. <code>$compose</code> 与 <code>compose</code> 是同一对象. 组件工厂和模块方法不作为省略模块名的全局函数提供.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[@] compose"
+        },
+        {
+          "textRaw": "[p] version",
+          "name": "[p]_version",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>插件当前可用时返回新对象 <code>{plugin, contract, compose}</code>:</p>\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>类型</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>plugin</code></td>\n<td><code>string</code></td>\n<td>已安装插件的版本名称.</td>\n</tr>\n<tr>\n<td><code>contract</code></td>\n<td><code>number</code></td>\n<td>渲染器契约版本, 当前为 <code>1</code>.</td>\n</tr>\n<tr>\n<td><code>compose</code></td>\n<td><code>string</code></td>\n<td>渲染器声明的 Jetpack Compose 运行时版本.</td>\n</tr>\n</tbody>\n</table>\n<p>插件缺失, 禁用, 未授权或不兼容时返回 <code>null</code>. 读取会执行正常插件发现与兼容性检查, 不弹出安装/授权界面, 也不创建会话. 它不是仅凭包名判断已安装的标志.</p>\n",
+          "type": "module",
+          "displayName": "[p] version"
+        },
+        {
+          "textRaw": "[p] sessions",
+          "name": "[p]_sessions",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeSessionType\">ComposeSession</a>[] }</li>\n</ul>\n<p>当前脚本尚未关闭的会话数组快照, 包含 UI 挂载和悬浮会话. 修改数组不会创建, 移除或关闭会话. 悬浮窗对应项为 <code>window.session</code>, 不是窗口对象本身.</p>\n",
+          "type": "module",
+          "displayName": "[p] sessions"
+        },
+        {
+          "textRaw": "[m] isAvailable",
+          "name": "[m]_isavailable",
+          "methods": [
+            {
+              "textRaw": "compose.isAvailable()",
+              "type": "method",
+              "name": "isAvailable",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>正常发现, 信任与兼容性检查是否通过. 与 <code>compose.version !== null</code> 的探测意义一致, 不自动安装或启用插件. 单次探测通过不保证后续插件状态不变, 实际挂载仍会重新检查.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAvailable"
+        },
+        {
+          "textRaw": "组件工厂",
+          "name": "组件工厂",
+          "methods": [
+            {
+              "textRaw": "compose.Component(props?, ...children)",
+              "type": "method",
+              "name": "Component",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ props ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 组件声明. ",
+                      "name": "**[",
+                      "desc": "props ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 组件声明."
+                    },
+                    {
+                      "textRaw": "**...children** { ...([ComposeChild](#composechild))[] } - 子节点输入. ",
+                      "name": "**...children**",
+                      "type": " ...([ComposeChild](#composechild))[] ",
+                      "desc": "子节点输入."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "props?"
+                    },
+                    {
+                      "name": "...children"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p><code>Component</code> 替换为实际工厂名称:</p>\n<table>\n<thead>\n<tr>\n<th>分类</th>\n<th>工厂</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>布局</td>\n<td><code>Column</code>, <code>Row</code>, <code>Box</code>, <code>Spacer</code>, <code>LazyColumn</code>, <code>LazyRow</code>, <code>Scaffold</code></td>\n</tr>\n<tr>\n<td>容器与应用栏</td>\n<td><code>Surface</code>, <code>Card</code>, <code>HorizontalDivider</code>, <code>TopAppBar</code></td>\n</tr>\n<tr>\n<td>内容</td>\n<td><code>Text</code>, <code>Icon</code>, <code>Image</code></td>\n</tr>\n<tr>\n<td>按钮</td>\n<td><code>Button</code>, <code>ElevatedButton</code>, <code>FilledTonalButton</code>, <code>OutlinedButton</code>, <code>TextButton</code>, <code>IconButton</code></td>\n</tr>\n<tr>\n<td>输入与选择</td>\n<td><code>Switch</code>, <code>Checkbox</code>, <code>RadioButton</code>, <code>Slider</code>, <code>TextField</code>, <code>OutlinedTextField</code></td>\n</tr>\n<tr>\n<td>进度与会话内对话框</td>\n<td><code>CircularProgressIndicator</code>, <code>LinearProgressIndicator</code>, <code>AlertDialog</code></td>\n</tr>\n</tbody>\n</table>\n<p>省略 props 时可直接传节点, 字符串或数组作为 children. 子节点数组可嵌套, <code>null</code>, <code>undefined</code>, <code>false</code> 被忽略, 字符串自动生成 <code>Text</code>. 数字和 <code>true</code> 不隐式转换为文字. 是否允许 children 及其数量仍由组件目录决定; <code>Text</code> 使用 <code>{text: &#39;Hello&#39;}</code>, 不是 <code>Text(&#39;Hello&#39;)</code>.</p>\n<p>创建 props 可包含组件属性, <code>key</code>, <code>ref</code>, <code>modifier</code>, 快捷属性, <code>children</code>, <code>slots</code>, 具名插槽及 <code>onX</code> 回调. <code>props.children</code> 与位置 children 不可同时提供. 参数是当前声明的快照, 后续修改原 props 对象不会自动更新节点.</p>\n<p>props 容器本身为 <code>null</code> 或 <code>undefined</code> 时按空对象处理. 这不表示对象内任意属性值都可使用 nullish 值.</p>\n<p>1.0.0 有 29 个节点工厂. <code>Snackbar</code> 是会话命令, 没有 <code>compose.Snackbar()</code> 节点工厂; 使用 <a href=\"composeSessionType#m-showsnackbar\">session.showSnackbar</a>. 具体属性, 默认值, 输入类型, ImageWrapper 所有权及插槽要求见 <a href=\"composeComponents\">组件目录</a>.</p>\n"
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "ComposeChild",
+              "name": "composechild",
+              "desc": "<p>本文以 ComposeChild 表示子节点输入: <a href=\"composeNodeType\">ComposeNode</a>, <a href=\"dataTypes#string\">string</a>, 以上内容的递归数组, 或被忽略的 <code>null</code>, <code>undefined</code>, <code>false</code>. 其中不包含其他数字, 布尔值或任意对象. 每个父组件仍独立限制其允许的子节点数量.</p>\n",
+              "type": "module",
+              "displayName": "ComposeChild"
+            }
+          ],
+          "type": "module",
+          "displayName": "组件工厂"
+        },
+        {
+          "textRaw": "[m] createElement",
+          "name": "[m]_createelement",
+          "methods": [
+            {
+              "textRaw": "compose.createElement(type, props?, ...children)",
+              "type": "method",
+              "name": "createElement",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**type** { [string](dataTypes#string) } - 目录中的组件名称, 区分大小写. ",
+                      "name": "**type**",
+                      "type": " [string](dataTypes#string) ",
+                      "desc": "目录中的组件名称, 区分大小写."
+                    },
+                    {
+                      "textRaw": "**[ props ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 与对应组件工厂一致. ",
+                      "name": "**[",
+                      "desc": "props ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 与对应组件工厂一致."
+                    },
+                    {
+                      "textRaw": "**...children** { ...([ComposeChild](#composechild))[] } - 同组件工厂的子节点规则. ",
+                      "name": "**...children**",
+                      "type": " ...([ComposeChild](#composechild))[] ",
+                      "desc": "同组件工厂的子节点规则."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "type"
+                    },
+                    {
+                      "name": "props?"
+                    },
+                    {
+                      "name": "...children"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>等同于调用同名工厂, 例如 <code>compose.createElement(&#39;Text&#39;, {text: &#39;Hello&#39;})</code>. 未知名称报 <code>UNKNOWN_COMPONENT</code>, 将仅命令的 <code>Snackbar</code> 当作节点创建会报 <code>INVALID_ARGUMENT</code>. 此入口不表示提供 TSX/JSX 编译或 Kotlin Composable 调用能力.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] createElement"
+        },
+        {
+          "textRaw": "[m] modifier",
+          "name": "[m]_modifier",
+          "methods": [
+            {
+              "textRaw": "compose.modifier()",
+              "type": "method",
+              "name": "modifier",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } - 空的不可变 Modifier 链. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeModifier](composeModifierType) ",
+                      "desc": "空的不可变 Modifier 链."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>后续链式方法返回新的链, 原链保持不变. 链的顺序, 作用域与快捷属性映射见 <a href=\"composeModifierType\">ComposeModifier</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] modifier"
+        },
+        {
+          "textRaw": "[m] state",
+          "name": "[m]_state",
+          "methods": [
+            {
+              "textRaw": "compose.state(initialValue)",
+              "type": "method",
+              "name": "state",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**initialValue** { [T](dataTypes#generic) } - 初始值, 必须提供一个参数. ",
+                      "name": "**initialValue**",
+                      "type": " [T](dataTypes#generic) ",
+                      "desc": "初始值, 必须提供一个参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeState](composeStateType)&lt;[T](dataTypes#generic)&gt; } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeState](composeStateType)&lt;[T](dataTypes#generic)&gt; "
+                    },
+                    {
+                      "textRaw": "<ins>**template**</ins> { [T](dataTypes#generic) } ",
+                      "name": "<ins>**template**</ins>",
+                      "type": " [T](dataTypes#generic) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "initialValue"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>保存一个值, 通过 <code>.value</code> 读写. 不深拷贝或深度代理对象; 同引用对象内部字段变动不会自动通知视图. 仅在 render 内读取才建立视图依赖, 后续更改在调度时合并渲染. 详见 <a href=\"composeStateType\">ComposeState</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] state"
+        },
+        {
+          "textRaw": "[m] ref",
+          "name": "[m]_ref",
+          "methods": [
+            {
+              "textRaw": "compose.ref()",
+              "type": "method",
+              "name": "ref",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeRef](#composeref) } - 初始 `current` 为 `null` 的引用对象. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeRef](#composeref) ",
+                      "desc": "初始 `current` 为 `null` 的引用对象."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>传给节点创建选项的 <code>ref</code>, 或 <code>node.set({ref})</code>. 它不会创建节点, 也不是按 testTag 查找节点的选择器.</p>\n"
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "ComposeRef",
+              "name": "composeref",
+              "desc": "<p>只有一个公开属性 <code>current</code>:</p>\n<ul>\n<li><strong>current</strong> { <a href=\"composeNodeType\">ComposeNode</a> | <a href=\"dataTypes#null\">null</a> } - 只读, 指向成功帧接受后的实际节点.</li>\n</ul>\n<p>调用 <code>mount</code> 返回或 state 刚赋值时, 新一帧的 ref 不一定已发布. 节点移除并被接受后清空对应引用, 会话关闭后读取为 <code>null</code>. 同一帧不能把同一个 ref 同时指向多个节点. 需要独立定位多个控件时分别创建 ref.</p>\n<p>若不同会话共用一个 ref, <code>current</code> 会随最近接受的帧改变, 不是多个节点的集合. 关闭其他会话不会清除仍指向存活节点的引用.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet fieldRef = compose.ref();\ncompose.mount(function () {\n    return compose.Column({},\n        compose.OutlinedTextField({key: &#39;field&#39;, ref: fieldRef, text: &#39;&#39;}),\n        compose.Button({key: &#39;focus&#39;, onClick: function () {\n            if (fieldRef.current !== null) fieldRef.current.focus();\n        }}, &#39;Focus&#39;));\n});\n</code></pre>\n",
+              "type": "module",
+              "displayName": "ComposeRef"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] ref"
+        },
+        {
+          "textRaw": "[m] mount",
+          "name": "[m]_mount",
+          "methods": [
+            {
+              "textRaw": "compose.mount(nodeOrRender, options?)",
+              "type": "method",
+              "name": "mount",
+              "desc": "<p><strong><code>UI</code></strong></p>\n<ul>\n<li><strong>nodeOrRender</strong> { <a href=\"composeNodeType\">ComposeNode</a> | <a href=\"dataTypes#function\">Function</a> } - 一个根节点或无参数的渲染函数.</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 仅接受 <code>theme</code> 字段, 值为 <a href=\"composeThemeType\">ComposeTheme</a> 或 <code>null</code>.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeSessionType\">ComposeSession</a> }</li>\n</ul>\n<p>把节点树挂载到当前 UI 脚本 Activity. 非 UI 脚本调用会得到 <code>UI_MODE_REQUIRED</code>. 渲染函数必须返回一个节点, 不能返回 <code>null</code>, 节点数组或原生 View; 普通函数的 <code>this</code> 为脚本全局对象.</p>\n<p>新页面声明验证和渲染器打开成功后, 会关闭原 Compose UI 会话并替换页面. 初始声明或打开失败时, 原页面仍可保持有效. 同一渲染函数中再次调用 <code>mount</code> 或 <code>floaty</code> 会报 <code>INVALID_ARGUMENT</code>, 保留此前有效页面.</p>\n<p>options 容器省略或为 <code>null</code> / <code>undefined</code> 时按空对象处理. 其中 <code>theme</code> 省略或为 <code>null</code> 时沿用模块当前默认覆盖; 显式 <code>{theme: {}}</code> 表示空覆盖, 不与模块默认对象深度合并. 其他选项报 <code>UNKNOWN_PROP</code>. 主题规则见 <a href=\"composeThemeType#替换与继承\">ComposeTheme</a>.</p>\n<p>返回会话不代表所有原生布局与绘制已完成. 更新节点和 ref 的发布遵循会话提交与回执过程; 原生命令会在可执行时处理.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "nodeOrRender"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] mount"
+        },
+        {
+          "textRaw": "[m] floaty",
+          "name": "[m]_floaty",
+          "methods": [
+            {
+              "textRaw": "compose.floaty(nodeOrRender, options?)",
+              "type": "method",
+              "name": "floaty",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**nodeOrRender** { [ComposeNode](composeNodeType) | [Function](dataTypes#function) } - 与 `mount` 相同的根节点或渲染函数. ",
+                      "name": "**nodeOrRender**",
+                      "type": " [ComposeNode](composeNodeType) | [Function](dataTypes#function) ",
+                      "desc": "与 `mount` 相同的根节点或渲染函数."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - `raw`, `x`, `y`, `width`, `height`, `touchable`, `focusable`, `theme`. ",
+                      "name": "**[",
+                      "desc": "options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - `raw`, `x`, `y`, `width`, `height`, `touchable`, `focusable`, `theme`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "nodeOrRender"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在当前脚本的悬浮窗系统中创建一个独立窗口, 可从 UI 或非 UI 脚本的所属线程调用. 缺少悬浮窗权限报 <code>PERMISSION_REQUIRED</code>, 此调用不自动弹出授权页面.</p>\n<p>每次成功调用创建独立悬浮会话, 不替换已有页面或其他悬浮窗. 渲染函数内禁止再次创建窗口. 几何单位是物理像素, 与组件布局的 dp 不同; 选项默认值, 焦点, 关闭与保活规则见 <a href=\"composeFloatyWindowType\">ComposeFloatyWindow</a>.</p>\n<p>options 容器省略或为 <code>null</code> / <code>undefined</code> 时使用默认选项, 成员值仍按各字段校验.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] floaty"
+        },
+        {
+          "textRaw": "[m] batch",
+          "name": "[m]_batch",
+          "methods": [
+            {
+              "textRaw": "compose.batch(fn)",
+              "type": "method",
+              "name": "batch",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 在所属脚本线程立即执行的函数, 无参数. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "在所属脚本线程立即执行的函数, 无参数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [any](dataTypes#any) } - `fn` 的返回值. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "`fn` 的返回值."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>将该函数中的节点更改作为一次事务验证与发布, 并合并响应式更新. 嵌套 batch 加入外层事务. 普通函数的 <code>this</code> 为脚本全局对象.</p>\n<p>批处理范围是同步函数执行过程, 不等待函数返回的 Promise 完成; 后续异步任务需要各自进入所属脚本线程和事务.</p>\n<p>参数或树验证失败, 或同步函数抛出异常时, 本次节点声明更改会回滚, 保留此前有效树. 已完成的 <code>state.value</code> 赋值, 普通 JavaScript 变量赋值及外部副作用不会被撤销. 这不是任意脚本操作的通用回滚机制.</p>\n<p>单次节点事务最多影响一个活动会话. 同一个 batch 修改两棵属于不同会话的挂载树会得到 <code>INVALID_ARGUMENT</code>, 不先发布其中一棵. 批处理不保证只有一次屏幕绘制, 也不会同步等待原生帧完成.</p>\n<p>下面的 <code>title</code> 和 <code>button</code> 为已经创建的节点句柄:</p>\n<pre><code class=\"lang-js\">let value = compose.batch(function () {\n    title.text = &#39;Ready&#39;;\n    button.enabled = true;\n    return 42;\n});\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] batch"
+        },
+        {
+          "textRaw": "[m] post",
+          "name": "[m]_post",
+          "methods": [
+            {
+              "textRaw": "compose.post(fn, delay?)",
+              "type": "method",
+              "name": "post",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 投递到所属脚本线程的函数, 无参数. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "投递到所属脚本线程的函数, 无参数."
+                    },
+                    {
+                      "textRaw": "**[ delay = 0 ]** { [number](dataTypes#number) } - `0..2147483647` 的整数毫秒数. ",
+                      "name": "**[",
+                      "desc": "delay = 0 ]** { [number](dataTypes#number) } - `0..2147483647` 的整数毫秒数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    },
+                    {
+                      "name": "delay?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可从工作线程调用. <code>delay: 0</code> 也会排队, 执行时自动进行节点事务和响应式批处理. 普通函数的 <code>this</code> 为脚本全局对象. 无取消编号或单任务取消接口, 不提供额外脚本保活.</p>\n<p>模块级任务随脚本引擎退出取消, 不随某一个会话关闭取消. 需要会话关闭后跳过执行的任务, 使用 <a href=\"composeSessionType#m-post\">session.post</a>. 如在模块级任务中访问已经关闭会话的句柄, 仍会得到 <code>SESSION_CLOSED</code>.</p>\n<p>非法延迟值报 <code>INVALID_ARGUMENT</code>, 投递队列满时可能报 <code>LIMIT_EXCEEDED</code>. 异步执行函数发生异常时, 错误被报告到脚本控制台, 不会回到早已返回的 <code>post</code> 调用处.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] post"
+        },
+        {
+          "textRaw": "[m] theme",
+          "name": "[m]_theme",
+          "methods": [
+            {
+              "textRaw": "compose.theme()",
+              "type": "method",
+              "name": "theme",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeThemeType#替换与继承\">ComposeThemeSnapshot</a> } - 当前脚本主题覆盖的普通对象副本.</li>\n</ul>\n<p>首次设置前返回 <code>{}</code>. 这是脚本覆盖值的快照, 不是最终已解析的 Material 调色板或宿主全部主题值.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "compose.theme(options)",
+              "type": "method",
+              "name": "theme",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"composeThemeType\">ComposeTheme</a> | <a href=\"dataTypes#null\">null</a> | <a href=\"dataTypes#undefined\">undefined</a> } - 新的完整覆盖对象, <code>null</code> / <code>undefined</code> 按空覆盖处理.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeThemeType#替换与继承\">ComposeThemeSnapshot</a> } - 归一化后的覆盖对象副本.</li>\n</ul>\n<p>整体替换模块之前的覆盖选项, 为未来会话设置默认值, 并更新最后一个尚未关闭的会话. 不广播更新全部现存会话. 未指定项的回退及动态色行为见 <a href=\"composeThemeType#替换与继承\">ComposeTheme</a>.</p>\n<p>无参数调用是读取, 显式传入 <code>null</code> 或 <code>undefined</code> 则是设置一份空覆盖, 与 <code>compose.theme({})</code> 相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] theme"
+        },
+        {
+          "textRaw": "事件回调",
+          "name": "事件回调",
+          "desc": "<p>节点事件可在 props 中声明 <code>onX</code>, 或使用 <a href=\"composeNodeType#m-on\">node.on</a>. 普通节点回调函数的 <code>this</code> 为该节点, 箭头函数仍遵循 JavaScript 自己的词法 <code>this</code> 规则.</p>\n<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>声明属性</th>\n<th>参数</th>\n<th>来源</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>click</code></td>\n<td><code>onClick</code></td>\n<td>无</td>\n<td>组件或点击行为.</td>\n</tr>\n<tr>\n<td><code>longClick</code></td>\n<td><code>onLongClick</code></td>\n<td>无</td>\n<td>长按行为.</td>\n</tr>\n<tr>\n<td><code>focusChange</code></td>\n<td><code>onFocusChange</code></td>\n<td><code>focused: boolean</code></td>\n<td>实际焦点变化.</td>\n</tr>\n<tr>\n<td><code>scroll</code></td>\n<td><code>onScroll</code></td>\n<td><code>firstVisibleIndex: number 或 null</code>, <code>offset: number</code></td>\n<td>懒列表返回可见首项索引, 普通滚动 Modifier 返回 <code>null</code>; offset 为像素.</td>\n</tr>\n<tr>\n<td><code>checkedChange</code></td>\n<td><code>onCheckedChange</code></td>\n<td><code>checked: boolean</code></td>\n<td>Switch, Checkbox, RadioButton.</td>\n</tr>\n<tr>\n<td><code>valueChange</code></td>\n<td><code>onValueChange</code></td>\n<td><code>value: number</code></td>\n<td>Slider.</td>\n</tr>\n<tr>\n<td><code>valueChange</code></td>\n<td><code>onValueChange</code></td>\n<td><code>text: string</code>, <code>selection: {start, end}</code>, <code>editSeq: number</code></td>\n<td>TextField 和 OutlinedTextField, 选区为 UTF-16 偏移.</td>\n</tr>\n<tr>\n<td><code>valueChangeFinished</code></td>\n<td><code>onValueChangeFinished</code></td>\n<td>无</td>\n<td>Slider 结束调整.</td>\n</tr>\n<tr>\n<td><code>dismissRequest</code></td>\n<td><code>onDismissRequest</code></td>\n<td>无</td>\n<td>AlertDialog 请求关闭.</td>\n</tr>\n</tbody>\n</table>\n<p>事件在所属脚本线程执行, 节点回调内的修改自动进入节点事务和响应式批处理. 连续输入和滚动通知可合并, 不保证每个原生中间状态都产生一个回调.</p>\n<p>Switch / Checkbox / RadioButton / Slider 的变化是交互提议, 需要回调更新属性或 state 才会成为新的受控值. 输入框则在调用 <code>onValueChange</code> 前同步此次原生文字, 选区与编辑序列; 显式编辑的仲裁规则见 <a href=\"composeNodeType#m-edit\">node.edit</a>.</p>\n<p>会话关闭事件只用 <code>session.on(&#39;close&#39;, fn)</code>. Snackbar 的操作/消失结果只用 <code>showSnackbar</code> 的 <code>onAction</code> / <code>onDismiss</code> 选项. 没有公开的 <code>session.on(&#39;error&#39;)</code> 或通用 DOM Event 对象, 回调返回值也不用于阻止原生事件.</p>\n",
+          "type": "module",
+          "displayName": "事件回调"
+        },
+        {
+          "textRaw": "错误与异常",
+          "name": "错误与异常",
+          "desc": "<p>同步参数检查和挂载失败可用 <code>try/catch</code> 捕获. 异步重绘, 原生命令或 <code>post</code> 执行失败会报告到所属脚本控制台; 不能在调用已经返回后, 再由其外部同步 <code>try/catch</code> 捕获.</p>\n<p>普通渲染异常保留上一次有效界面, 状态修正后可再次渲染. 插件失效或不可恢复的渲染器故障会关闭对应会话. 用户自己抛出的脚本异常及其调用栈按来源保留, 不保证任意 <code>throw</code> 都会变成 ComposeError.</p>\n",
+          "type": "module",
+          "displayName": "错误与异常"
+        },
+        {
+          "textRaw": "[C] ComposeError",
+          "name": "[c]_composeerror",
+          "ctors": [
+            {
+              "textRaw": "new ComposeError(message?, code?, nodeId?, prop?, cause?)",
+              "type": "ctor",
+              "name": "ComposeError",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ message = '' ]** { [string](dataTypes#string) } - 错误说明. ",
+                      "name": "**[",
+                      "desc": "message = '' ]** { [string](dataTypes#string) } - 错误说明."
+                    },
+                    {
+                      "textRaw": "**[ code = 'INVALID_ARGUMENT' ]** { [string](dataTypes#string) } - 稳定错误码. ",
+                      "name": "**[",
+                      "desc": "code = 'INVALID_ARGUMENT' ]** { [string](dataTypes#string) } - 稳定错误码."
+                    },
+                    {
+                      "textRaw": "**[ nodeId = null ]** { [number](dataTypes#number) | [null](dataTypes#null) } - 相关节点标识. ",
+                      "name": "**[",
+                      "desc": "nodeId = null ]** { [number](dataTypes#number) | [null](dataTypes#null) } - 相关节点标识."
+                    },
+                    {
+                      "textRaw": "**[ prop = null ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 相关属性或参数. ",
+                      "name": "**[",
+                      "desc": "prop = null ]** { [string](dataTypes#string) | [null](dataTypes#null) } - 相关属性或参数."
+                    },
+                    {
+                      "textRaw": "**[ cause = null ]** { [any](dataTypes#any) } - 原因异常. ",
+                      "name": "**[",
+                      "desc": "cause = null ]** { [any](dataTypes#any) } - 原因异常."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeError](#c-composeerror) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeError](#c-composeerror) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message?"
+                    },
+                    {
+                      "name": "code?"
+                    },
+                    {
+                      "name": "nodeId?"
+                    },
+                    {
+                      "name": "prop?"
+                    },
+                    {
+                      "name": "cause?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>全局 <code>ComposeError</code> 与 <code>compose.ComposeError</code> 指向同一个构造函数, 继承 <code>Error</code>. 直接调用而不写 <code>new</code> 也会创建实例. 系统产生的错误包含 <code>code</code>, <code>message</code>, <code>nodeId</code>, <code>prop</code>, <code>cause</code>, <code>stack</code> 和 <code>retryable</code>.</p>\n<p><code>message</code> 按宿主语言本地化, <code>code</code> 保持稳定. 未关联节点或属性时相应字段为 <code>null</code>. <code>retryable</code> 仅对下表前四种插件状态错误为 <code>true</code>, 表示修正外部状态后可尝试新的操作, 不表示自动重试或恢复旧会话.</p>\n<table>\n<thead>\n<tr>\n<th>错误码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>PLUGIN_UNAVAILABLE</code></td>\n<td>插件缺失, 已卸载或在会话存活期间被更新而失效.</td>\n</tr>\n<tr>\n<td><code>PLUGIN_DISABLED</code></td>\n<td>插件被系统或当前应用的启用记录禁用.</td>\n</tr>\n<tr>\n<td><code>PLUGIN_UNAUTHORIZED</code></td>\n<td>插件未通过当前应用的信任/授权检查.</td>\n</tr>\n<tr>\n<td><code>PLUGIN_INCOMPATIBLE</code></td>\n<td>宿主版本, 插件契约, 声明能力或共享依赖不兼容.</td>\n</tr>\n<tr>\n<td><code>UI_MODE_REQUIRED</code></td>\n<td>当前没有可用的 UI 脚本 Activity, 不能执行页面挂载.</td>\n</tr>\n<tr>\n<td><code>PERMISSION_REQUIRED</code></td>\n<td>缺少所需权限, 例如悬浮窗权限.</td>\n</tr>\n<tr>\n<td><code>INVALID_ARGUMENT</code></td>\n<td>参数类型, 范围, 枚举, 树关系, 命令条件或调用线程不合法.</td>\n</tr>\n<tr>\n<td><code>UNKNOWN_COMPONENT</code></td>\n<td>未声明的组件名称.</td>\n</tr>\n<tr>\n<td><code>UNKNOWN_PROP</code></td>\n<td>未声明的属性, 事件, 插槽或选项.</td>\n</tr>\n<tr>\n<td><code>INVALID_MODIFIER</code></td>\n<td>无效 Modifier 或修饰链.</td>\n</tr>\n<tr>\n<td><code>SCOPE_MISMATCH</code></td>\n<td>Modifier 出现在错误的父布局作用域.</td>\n</tr>\n<tr>\n<td><code>DUPLICATE_KEY</code></td>\n<td>同级稳定 key 冲突.</td>\n</tr>\n<tr>\n<td><code>LIMIT_EXCEEDED</code></td>\n<td>节点, 深度, 回调, 队列或其他契约上限超出.</td>\n</tr>\n<tr>\n<td><code>RENDER_FAILED</code></td>\n<td>渲染声明或脚本侧 Compose 操作失败.</td>\n</tr>\n<tr>\n<td><code>SESSION_CLOSED</code></td>\n<td>所属会话或脚本运行时已经关闭.</td>\n</tr>\n<tr>\n<td><code>NODE_DETACHED</code></td>\n<td>节点不在可执行命令的挂载树中, 或归属其他图/会话.</td>\n</tr>\n<tr>\n<td><code>RENDERER_FAILED</code></td>\n<td>原生渲染器或窗口承载发生不可恢复故障.</td>\n</tr>\n<tr>\n<td><code>INTERNAL</code></td>\n<td>内部状态或契约不变量失败.</td>\n</tr>\n</tbody>\n</table>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] ComposeError"
+        },
+        {
+          "textRaw": "输入与资源上限",
+          "name": "输入与资源上限",
+          "desc": "<p>输入类型按 <a href=\"composeComponents#输入类型\">组件目录</a> 严格校验. 不把任意字符串转为数字或布尔值; dp / sp 字符串必须使用对应单位. <code>null</code> 仅在具体属性允许时合法, 不应把省略, <code>undefined</code> 和 <code>null</code> 普遍视为等价.</p>\n<table>\n<thead>\n<tr>\n<th>项目</th>\n<th>上限</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>单会话节点数</td>\n<td>5000, 包括具名插槽内节点.</td>\n</tr>\n<tr>\n<td>树深度</td>\n<td>64.</td>\n</tr>\n<tr>\n<td>单次补丁批</td>\n<td>2000 个操作.</td>\n</tr>\n<tr>\n<td>单个字符串</td>\n<td>65536 个 UTF-16 代码单元, 不按 UTF-8 字节数计算.</td>\n</tr>\n<tr>\n<td>普通节点直接子节点</td>\n<td>2000.</td>\n</tr>\n<tr>\n<td>懒列表直接条目</td>\n<td>10000, 同时仍受单会话 5000 节点上限限制.</td>\n</tr>\n<tr>\n<td>单条 Modifier 链</td>\n<td>64 个操作.</td>\n</tr>\n<tr>\n<td>单会话回调预算</td>\n<td>4096, 包括节点, 会话和待处理通知所持有的回调.</td>\n</tr>\n<tr>\n<td>单引擎活动会话</td>\n<td>8.</td>\n</tr>\n<tr>\n<td>单张位图</td>\n<td>32000000 像素.</td>\n</tr>\n<tr>\n<td>原生事件队列</td>\n<td>1024.</td>\n</tr>\n<tr>\n<td>单个属性对象</td>\n<td>128 项.</td>\n</tr>\n</tbody>\n</table>\n<p>ImageWrapper 和位图的所有权规则见 <a href=\"composeComponents#composeimageinput\">Image 输入</a>. 图片引用需要覆盖原生使用期, 不应仅因 <code>remove</code> / <code>close</code> 返回或关闭事件就立即 recycle. 无法确认原生释放已经完成时, 图片不再使用后可放弃脚本强引用并交给正常回收机制. 当前没有等待原生释放完成的公开接口.</p>\n",
+          "type": "module",
+          "displayName": "输入与资源上限"
+        },
         {
           "textRaw": "无障碍与选择器",
           "name": "无障碍与选择器",

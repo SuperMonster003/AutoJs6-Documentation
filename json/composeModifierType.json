@@ -1,0 +1,858 @@
+{
+  "source": "..\\api\\composeModifierType.md",
+  "modules": [
+    {
+      "textRaw": "ComposeModifier - Compose 修饰链",
+      "name": "composemodifier_-_compose_修饰链",
+      "desc": "<p>ComposeModifier 由 <a href=\"compose#m-modifier\">compose.modifier</a> 创建, 用于描述节点的尺寸, 留白, 绘制, 交互和无障碍信息. 它不是 Android View, 也不是 Kotlin Modifier 对象. 当前 20 个方法均返回一条新的修饰链, 原链不会改变.</p>\n<p>本页适用于配套 AutoJs6 6.8.0 本地构建与已安装, 启用的 Compose UI 插件. 组件目录见 <a href=\"composeComponents\">Compose 组件</a>.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet base = compose.modifier().padding(12);\nlet colored = base.background(&#39;#E8DEF8&#39;);\n\ncompose.mount(compose.Column({ spacing: 8 },\n    compose.Text({ text: &#39;只有留白&#39;, modifier: base }),\n    compose.Text({ text: &#39;留白和背景&#39;, modifier: colored })));\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeModifier</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "链的顺序与作用域",
+          "name": "链的顺序与作用域",
+          "desc": "<ul>\n<li>方法按调用顺序追加. <code>padding(16).background(color)</code> 与 <code>background(color).padding(16)</code> 的绘制区域不同.</li>\n<li>没有对原链的原地修改. <code>chain.padding(8);</code> 不会改变 <code>chain</code>; 需要使用返回值, 如 <code>chain = chain.padding(8)</code>.</li>\n<li>一条链可以给多个节点复用, 但 <code>weight</code> / <code>align</code> 必须满足每个节点的直接父组件作用域.</li>\n<li><code>weight</code> 仅用于直接位于 <code>Column</code> 或 <code>Row</code> 下的节点. <code>align</code> 仅用于直接位于 <code>Box</code> 下的节点.</li>\n<li><code>Card</code>, <code>Button</code>, <code>Surface</code>, <code>LazyColumn</code>, <code>Scaffold</code> 等内部使用的 Row/Column/Box 不是脚本可继承的作用域. 需要时在它们内部显式放置一个 <code>Column</code>, <code>Row</code> 或 <code>Box</code>.</li>\n<li>尺寸数值按 dp 解释, 也可写成 <code>&#39;16dp&#39;</code>. 不接受 <code>&#39;16px&#39;</code>, <code>&#39;50%&#39;</code>, <code>&#39;wrap_content&#39;</code> 或 <code>&#39;*&#39;</code>. 字体大小使用 sp, 由组件属性控制.</li>\n<li>每个节点最多 64 个修饰操作, 包含快捷属性展开的操作. 超限为 <code>LIMIT_EXCEEDED</code>; 无效参数或作用域会得到 <code>ComposeError</code>.</li>\n</ul>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\ncompose.mount(compose.Row({ modifier: compose.modifier().fillMaxWidth() },\n    compose.Text({ text: &#39;1 份&#39;, modifier: compose.modifier().weight(1) }),\n    compose.Text({ text: &#39;2 份&#39;, modifier: compose.modifier().weight(2) })));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "链的顺序与作用域"
+        },
+        {
+          "textRaw": "快捷属性",
+          "name": "快捷属性",
+          "desc": "<p>所有节点支持下列快捷属性. 它们展开为修饰操作, 然后才执行显式 <code>modifier</code> 链. 固定顺序与对象属性书写顺序无关:</p>\n<p><code>w -&gt; h -&gt; padding -&gt; bg -&gt; weight -&gt; alpha -&gt; testTag -&gt; contentDescription -&gt; modifier</code></p>\n<table>\n<thead>\n<tr>\n<th>快捷属性</th>\n<th>等价操作</th>\n<th>输入</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>w</code></td>\n<td><code>width(value)</code></td>\n<td>非负 dp</td>\n</tr>\n<tr>\n<td><code>h</code></td>\n<td><code>height(value)</code></td>\n<td>非负 dp</td>\n</tr>\n<tr>\n<td><code>padding</code></td>\n<td><code>padding(...)</code></td>\n<td>一个 dp, 或长度为 1 / 2 / 4 的 dp 数组</td>\n</tr>\n<tr>\n<td><code>bg</code></td>\n<td><code>background(color)</code></td>\n<td><a href=\"composeComponents#composecolorinput\">ComposeColorInput</a>, 不接受 null</td>\n</tr>\n<tr>\n<td><code>weight</code></td>\n<td><code>weight(value)</code></td>\n<td>大于 0 的有限数, 默认 <code>fill: true</code>, 仍需 Column/Row 父作用域</td>\n</tr>\n<tr>\n<td><code>alpha</code></td>\n<td><code>alpha(value)</code></td>\n<td>0 到 1</td>\n</tr>\n<tr>\n<td><code>testTag</code></td>\n<td><code>testTag(value)</code></td>\n<td>字符串</td>\n</tr>\n<tr>\n<td><code>contentDescription</code></td>\n<td><code>semantics(value)</code></td>\n<td>字符串或 null</td>\n</tr>\n</tbody>\n</table>\n<p>例如 <code>{ bg: &#39;#FFFFFF&#39;, padding: 8, modifier: compose.modifier().border(1, &#39;#000000&#39;) }</code> 始终先留白, 再背景, 再边框. 若要求背景覆盖留白区域, 可只用显式链 <code>background(&#39;#FFFFFF&#39;).padding(8).border(1, &#39;#000000&#39;)</code>.</p>\n<p>快捷属性与显式链中同名操作会依次保留, 不按名称互相替换. <code>padding: [8, 16]</code> 是水平 8 dp, 垂直 16 dp; 四项顺序为 start, top, end, bottom, 不是 CSS 的 top, right, bottom, left.</p>\n",
+          "type": "module",
+          "displayName": "快捷属性"
+        },
+        {
+          "textRaw": "方法目录",
+          "name": "方法目录",
+          "desc": "<p>以下方法均返回 <a href=\"composeModifierType\">ComposeModifier</a> 新链. 省略可选参数与显式传入 null/undefined 不等价; 除 <code>semantics(null)</code> 外, 应省略未使用的参数.</p>\n",
+          "modules": [
+            {
+              "textRaw": "[m] padding",
+              "name": "[m]_padding",
+              "methods": [
+                {
+                  "textRaw": "padding(all)",
+                  "type": "method",
+                  "name": "padding",
+                  "desc": "<p><strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><strong>all</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - 四边非负留白.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeModifierType\">ComposeModifier</a> }</li>\n</ul>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "all"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "padding(horizontal, vertical)",
+                  "type": "method",
+                  "name": "padding",
+                  "desc": "<p><strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>horizontal</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - start/end 留白.</li>\n<li><strong>vertical</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - top/bottom 留白.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeModifierType\">ComposeModifier</a> }</li>\n</ul>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "horizontal"
+                        },
+                        {
+                          "name": "vertical"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "padding(start, top, end, bottom)",
+                  "type": "method",
+                  "name": "padding",
+                  "desc": "<p><strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>start</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> }</li>\n<li><strong>top</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> }</li>\n<li><strong>end</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> }</li>\n<li><strong>bottom</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeModifierType\">ComposeModifier</a> }</li>\n</ul>\n<p>全部留白必须非负. start/end 随布局方向解释. 不支持三个参数或把数组直接作为此方法的一个参数; 数组形式仅用于 <code>padding</code> 快捷属性.</p>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "start"
+                        },
+                        {
+                          "name": "top"
+                        },
+                        {
+                          "name": "end"
+                        },
+                        {
+                          "name": "bottom"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] padding"
+            },
+            {
+              "textRaw": "[m] size",
+              "name": "[m]_size",
+              "methods": [
+                {
+                  "textRaw": "size(size)",
+                  "type": "method",
+                  "name": "size",
+                  "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>size</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - 非负宽高.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeModifierType\">ComposeModifier</a> }</li>\n</ul>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "size"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "textRaw": "size(width, height)",
+                  "type": "method",
+                  "name": "size",
+                  "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>width</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - 非负宽度.</li>\n<li><strong>height</strong> { <a href=\"composeComponents#composedpinput\">ComposeDpInput</a> } - 非负高度.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"composeModifierType\">ComposeModifier</a> }</li>\n</ul>\n",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "name": "width"
+                        },
+                        {
+                          "name": "height"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] size"
+            },
+            {
+              "textRaw": "[m] width",
+              "name": "[m]_width",
+              "methods": [
+                {
+                  "textRaw": "width(width)",
+                  "type": "method",
+                  "name": "width",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**width** { [ComposeDpInput](composeComponents#composedpinput) } - 非负宽度. ",
+                          "name": "**width**",
+                          "type": " [ComposeDpInput](composeComponents#composedpinput) ",
+                          "desc": "非负宽度."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "width"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] width"
+            },
+            {
+              "textRaw": "[m] height",
+              "name": "[m]_height",
+              "methods": [
+                {
+                  "textRaw": "height(height)",
+                  "type": "method",
+                  "name": "height",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**height** { [ComposeDpInput](composeComponents#composedpinput) } - 非负高度. ",
+                          "name": "**height**",
+                          "type": " [ComposeDpInput](composeComponents#composedpinput) ",
+                          "desc": "非负高度."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "height"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p><code>size</code> / <code>width</code> / <code>height</code> 仍受到父布局的测量约束, 不会强制突破父容器可用空间.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] height"
+            },
+            {
+              "textRaw": "[m] fillMaxWidth",
+              "name": "[m]_fillmaxwidth",
+              "methods": [
+                {
+                  "textRaw": "fillMaxWidth(fraction?)",
+                  "type": "method",
+                  "name": "fillMaxWidth",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ fraction = 1 ]** { [number](dataTypes#number) } - 可用宽度比例, 0 到 1. ",
+                          "name": "**[",
+                          "desc": "fraction = 1 ]** { [number](dataTypes#number) } - 可用宽度比例, 0 到 1."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "fraction?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] fillMaxWidth"
+            },
+            {
+              "textRaw": "[m] fillMaxHeight",
+              "name": "[m]_fillmaxheight",
+              "methods": [
+                {
+                  "textRaw": "fillMaxHeight(fraction?)",
+                  "type": "method",
+                  "name": "fillMaxHeight",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ fraction = 1 ]** { [number](dataTypes#number) } - 可用高度比例, 0 到 1. ",
+                          "name": "**[",
+                          "desc": "fraction = 1 ]** { [number](dataTypes#number) } - 可用高度比例, 0 到 1."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "fraction?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] fillMaxHeight"
+            },
+            {
+              "textRaw": "[m] fillMaxSize",
+              "name": "[m]_fillmaxsize",
+              "methods": [
+                {
+                  "textRaw": "fillMaxSize(fraction?)",
+                  "type": "method",
+                  "name": "fillMaxSize",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ fraction = 1 ]** { [number](dataTypes#number) } - 可用宽高比例, 0 到 1. ",
+                          "name": "**[",
+                          "desc": "fraction = 1 ]** { [number](dataTypes#number) } - 可用宽高比例, 0 到 1."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "fraction?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] fillMaxSize"
+            },
+            {
+              "textRaw": "[m] weight",
+              "name": "[m]_weight",
+              "methods": [
+                {
+                  "textRaw": "weight(weight, fill?)",
+                  "type": "method",
+                  "name": "weight",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**weight** { [number](dataTypes#number) } - 大于 0 的有限权重. ",
+                          "name": "**weight**",
+                          "type": " [number](dataTypes#number) ",
+                          "desc": "大于 0 的有限权重."
+                        },
+                        {
+                          "textRaw": "**[ fill = true ]** { [boolean](dataTypes#boolean) } - 是否填满分配到的空间. ",
+                          "name": "**[",
+                          "desc": "fill = true ]** { [boolean](dataTypes#boolean) } - 是否填满分配到的空间."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "weight"
+                        },
+                        {
+                          "name": "fill?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>在 Row 中分配剩余宽度, 在 Column 中分配剩余高度. 仅直接 Column/Row 子节点可用. 不是百分比尺寸, 也不能直接用在 LazyColumn 的 item 上.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] weight"
+            },
+            {
+              "textRaw": "[m] align",
+              "name": "[m]_align",
+              "methods": [
+                {
+                  "textRaw": "align(alignment)",
+                  "type": "method",
+                  "name": "align",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**alignment** { [string](dataTypes#string) } - Box 内对齐位置. ",
+                          "name": "**alignment**",
+                          "type": " [string](dataTypes#string) ",
+                          "desc": "Box 内对齐位置."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "alignment"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>仅直接 Box 子节点可用. 取值为 <code>topStart</code>, <code>topCenter</code>, <code>topEnd</code>, <code>centerStart</code>, <code>center</code>, <code>centerEnd</code>, <code>bottomStart</code>, <code>bottomCenter</code>, <code>bottomEnd</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] align"
+            },
+            {
+              "textRaw": "[m] background",
+              "name": "[m]_background",
+              "methods": [
+                {
+                  "textRaw": "background(color, shape?)",
+                  "type": "method",
+                  "name": "background",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**color** { [ComposeColorInput](composeComponents#composecolorinput) } ",
+                          "name": "**color**",
+                          "type": " [ComposeColorInput](composeComponents#composecolorinput) "
+                        },
+                        {
+                          "textRaw": "**[ shape = 'rectangle' ]** { [ComposeShapeInput](composeComponents#composeshapeinput) } ",
+                          "name": "**[",
+                          "desc": "shape = 'rectangle' ]** { [ComposeShapeInput](composeComponents#composeshapeinput) }"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "color"
+                        },
+                        {
+                          "name": "shape?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>按指定形状绘制背景. 这不自动裁剪子内容; 需要裁剪时另用 <code>clip</code>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] background"
+            },
+            {
+              "textRaw": "[m] border",
+              "name": "[m]_border",
+              "methods": [
+                {
+                  "textRaw": "border(width, color, shape?)",
+                  "type": "method",
+                  "name": "border",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**width** { [ComposeDpInput](composeComponents#composedpinput) } - 非负边框宽度. ",
+                          "name": "**width**",
+                          "type": " [ComposeDpInput](composeComponents#composedpinput) ",
+                          "desc": "非负边框宽度."
+                        },
+                        {
+                          "textRaw": "**color** { [ComposeColorInput](composeComponents#composecolorinput) } ",
+                          "name": "**color**",
+                          "type": " [ComposeColorInput](composeComponents#composecolorinput) "
+                        },
+                        {
+                          "textRaw": "**[ shape = 'rectangle' ]** { [ComposeShapeInput](composeComponents#composeshapeinput) } ",
+                          "name": "**[",
+                          "desc": "shape = 'rectangle' ]** { [ComposeShapeInput](composeComponents#composeshapeinput) }"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "width"
+                        },
+                        {
+                          "name": "color"
+                        },
+                        {
+                          "name": "shape?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] border"
+            },
+            {
+              "textRaw": "[m] clip",
+              "name": "[m]_clip",
+              "methods": [
+                {
+                  "textRaw": "clip(shape)",
+                  "type": "method",
+                  "name": "clip",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**shape** { [ComposeShapeInput](composeComponents#composeshapeinput) } ",
+                          "name": "**shape**",
+                          "type": " [ComposeShapeInput](composeComponents#composeshapeinput) "
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "shape"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] clip"
+            },
+            {
+              "textRaw": "[m] alpha",
+              "name": "[m]_alpha",
+              "methods": [
+                {
+                  "textRaw": "alpha(alpha)",
+                  "type": "method",
+                  "name": "alpha",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**alpha** { [number](dataTypes#number) } - 0 到 1, 0 为全透明, 1 为不额外降低不透明度. ",
+                          "name": "**alpha**",
+                          "type": " [number](dataTypes#number) ",
+                          "desc": "0 到 1, 0 为全透明, 1 为不额外降低不透明度."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "alpha"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] alpha"
+            },
+            {
+              "textRaw": "[m] clickable",
+              "name": "[m]_clickable",
+              "methods": [
+                {
+                  "textRaw": "clickable(callback, enabled?)",
+                  "type": "method",
+                  "name": "clickable",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**callback** { [Function](dataTypes#function) } - 无参数点击回调; 普通函数的 `this` 是当前节点. ",
+                          "name": "**callback**",
+                          "type": " [Function](dataTypes#function) ",
+                          "desc": "无参数点击回调; 普通函数的 `this` 是当前节点."
+                        },
+                        {
+                          "textRaw": "**[ enabled = true ]** { [boolean](dataTypes#boolean) } ",
+                          "name": "**[",
+                          "desc": "enabled = true ]** { [boolean](dataTypes#boolean) }"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "callback"
+                        },
+                        {
+                          "name": "enabled?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>事件排队回到脚本所属线程, 回调返回值不用于消费原生事件. 对于自身有原生点击动作的组件, 优先使用节点 <code>onClick</code>; 无该回调时, 渲染器可使用最后一个已启用的 clickable 作为其激活动作. 组件提供 <code>enabled</code> 属性时, <code>enabled: false</code> 也会禁用修饰链的点击.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] clickable"
+            },
+            {
+              "textRaw": "[m] verticalScroll",
+              "name": "[m]_verticalscroll",
+              "methods": [
+                {
+                  "textRaw": "verticalScroll(enabled?)",
+                  "type": "method",
+                  "name": "verticalScroll",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ enabled = true ]** { [boolean](dataTypes#boolean) } ",
+                          "name": "**[",
+                          "desc": "enabled = true ]** { [boolean](dataTypes#boolean) }"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "enabled?"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] verticalScroll"
+            },
+            {
+              "textRaw": "[m] horizontalScroll",
+              "name": "[m]_horizontalscroll",
+              "methods": [
+                {
+                  "textRaw": "horizontalScroll(enabled?)",
+                  "type": "method",
+                  "name": "horizontalScroll",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**[ enabled = true ]** { [boolean](dataTypes#boolean) } ",
+                          "name": "**[",
+                          "desc": "enabled = true ]** { [boolean](dataTypes#boolean) }"
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "enabled?"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>为普通节点增加滚动容器. 父布局须提供有限的可视尺寸; 不要在同一方向再套没有有限尺寸约束的 LazyColumn/LazyRow. 挂载后可经节点 <code>scrollTo({ offset: 120 })</code> 请求绝对滚动偏移, 单位为物理像素. 若同链包含多个滚动操作, offset 命令作用于最外层, 即第一个滚动操作.</p>\n<p>普通滚动的 <code>onScroll(firstVisibleIndex, offset)</code> 第一参为 null, 第二参为 px 偏移; LazyColumn/LazyRow 则提供数字索引. 默认不会仅因首次挂载触发初始 scroll 回调.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] horizontalScroll"
+            },
+            {
+              "textRaw": "[m] offset",
+              "name": "[m]_offset",
+              "methods": [
+                {
+                  "textRaw": "offset(x, y)",
+                  "type": "method",
+                  "name": "offset",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**x** { [ComposeDpInput](composeComponents#composedpinput) } - 水平偏移, 可为负数. ",
+                          "name": "**x**",
+                          "type": " [ComposeDpInput](composeComponents#composedpinput) ",
+                          "desc": "水平偏移, 可为负数."
+                        },
+                        {
+                          "textRaw": "**y** { [ComposeDpInput](composeComponents#composedpinput) } - 垂直偏移, 可为负数. ",
+                          "name": "**y**",
+                          "type": " [ComposeDpInput](composeComponents#composedpinput) ",
+                          "desc": "垂直偏移, 可为负数."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "x"
+                        },
+                        {
+                          "name": "y"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>偏移绘制/放置位置, 不等于增加 margin. 水平方向遵循布局方向.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] offset"
+            },
+            {
+              "textRaw": "[m] aspectRatio",
+              "name": "[m]_aspectratio",
+              "methods": [
+                {
+                  "textRaw": "aspectRatio(ratio)",
+                  "type": "method",
+                  "name": "aspectRatio",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**ratio** { [number](dataTypes#number) } - 大于 0 的有限宽高比, 如 `16 / 9`. ",
+                          "name": "**ratio**",
+                          "type": " [number](dataTypes#number) ",
+                          "desc": "大于 0 的有限宽高比, 如 `16 / 9`."
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "ratio"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] aspectRatio"
+            },
+            {
+              "textRaw": "[m] testTag",
+              "name": "[m]_testtag",
+              "methods": [
+                {
+                  "textRaw": "testTag(tag)",
+                  "type": "method",
+                  "name": "testTag",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**tag** { [string](dataTypes#string) } ",
+                          "name": "**tag**",
+                          "type": " [string](dataTypes#string) "
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "tag"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>为当前节点添加语义标签. 它按原字符串暴露为无障碍节点 ID, 不自动增加包名前缀. 参阅 <a href=\"compose#无障碍与选择器\">无障碍与选择器</a>.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] testTag"
+            },
+            {
+              "textRaw": "[m] semantics",
+              "name": "[m]_semantics",
+              "methods": [
+                {
+                  "textRaw": "semantics(contentDescription)",
+                  "type": "method",
+                  "name": "semantics",
+                  "signatures": [
+                    {
+                      "params": [
+                        {
+                          "textRaw": "**contentDescription** { [string](dataTypes#string) | [null](dataTypes#null) } ",
+                          "name": "**contentDescription**",
+                          "type": " [string](dataTypes#string) | [null](dataTypes#null) "
+                        },
+                        {
+                          "textRaw": "<ins>**returns**</ins> { [ComposeModifier](composeModifierType) } ",
+                          "name": "<ins>**returns**</ins>",
+                          "type": " [ComposeModifier](composeModifierType) "
+                        }
+                      ]
+                    },
+                    {
+                      "params": [
+                        {
+                          "name": "contentDescription"
+                        }
+                      ]
+                    }
+                  ],
+                  "desc": "<p>为节点添加无障碍内容描述; null 表示此操作不增加描述. 该方法接受字符串, 不接受 <code>{ contentDescription: ... }</code> 对象. 重复 semantics 操作按链顺序保留, null 不表示清除整条链前面已经设置的描述.</p>\n"
+                }
+              ],
+              "type": "module",
+              "displayName": "[m] semantics"
+            }
+          ],
+          "type": "module",
+          "displayName": "方法目录"
+        }
+      ],
+      "type": "module",
+      "displayName": "ComposeModifier - Compose 修饰链"
+    }
+  ]
+}

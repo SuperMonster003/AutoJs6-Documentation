@@ -1,0 +1,418 @@
+{
+  "source": "..\\api\\composeFloatyWindowType.md",
+  "modules": [
+    {
+      "textRaw": "Compose 悬浮窗 (ComposeFloatyWindow)",
+      "name": "compose_悬浮窗_(composefloatywindow)",
+      "desc": "<p>ComposeFloatyWindow 由 <a href=\"compose#m-floaty\">compose.floaty</a> 创建, 同时拥有一个原生悬浮窗和一个 <a href=\"composeSessionType\">ComposeSession</a>. UI 与非 UI 脚本均可使用, 需要当前应用已获悬浮窗权限. 不能直接用 <code>new</code> 创建.</p>\n<p>窗口操作使用物理像素, 与 Compose 节点的 dp 布局尺寸不同. 创建返回后原生窗口仍可能正在附加, 位置和尺寸变更会交给 Android 主线程处理.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeFloatyWindow</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "创建选项",
+          "name": "创建选项",
+          "desc": "<p>传给 <code>compose.floaty(nodeOrRender, options?)</code> 的选项如下:</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>默认行为</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>raw</code></td>\n<td><code>boolean</code></td>\n<td><code>false</code>, 使用可调整窗口, 其移动/尺寸/关闭控件默认隐藏; <code>true</code> 使用没有这些控件的 raw 窗口.</td>\n</tr>\n<tr>\n<td><code>x</code>, <code>y</code></td>\n<td><code>number</code></td>\n<td>省略时不覆盖原生窗口的位置. 每项须为 <code>-2147483648..2147483647</code> 的整数像素, 可以为负数.</td>\n</tr>\n<tr>\n<td><code>width</code>, <code>height</code></td>\n<td><code>number</code></td>\n<td>省略两项时保留原生窗口的默认测量; 只给一项时另一项按内容包裹. 每项为非负整数像素, 或 <code>-1</code> / <code>-2</code>.</td>\n</tr>\n<tr>\n<td><code>touchable</code></td>\n<td><code>boolean</code></td>\n<td><code>true</code>.</td>\n</tr>\n<tr>\n<td><code>focusable</code></td>\n<td><code>boolean</code></td>\n<td><code>false</code>.</td>\n</tr>\n<tr>\n<td><code>theme</code></td>\n<td><a href=\"composeThemeType\">ComposeTheme</a></td>\n<td>省略或 <code>null</code> 时沿用模块当前默认主题覆盖.</td>\n</tr>\n</tbody>\n</table>\n<p><code>width</code> / <code>height</code> 的 <code>-1</code> 表示 <code>MATCH_PARENT</code>, <code>-2</code> 表示 <code>WRAP_CONTENT</code>. 最大数值为 <code>2147483647</code>. 布尔项不接受 <code>0</code>, <code>1</code> 或字符串; 几何项不接受 dp 字符串, 小数, <code>NaN</code>, 无穷大或显式 <code>null</code>. 未知选项会报 <code>UNKNOWN_PROP</code>.</p>\n<pre><code class=\"lang-js\">// 非 UI 脚本. 运行前为当前应用授予悬浮窗权限.\nlet label = compose.Text({text: &#39;HUD&#39;});\nlet window = compose.floaty(compose.Column({padding: 12}, label,\n    compose.Button({onClick: function () { window.close(); }}, &#39;Close&#39;)), {\n    raw: true,\n    x: 24,\n    y: 120,\n    width: 280,\n    height: -2,\n});\n\nthreads.start(function () {\n    window.post(function () { label.text = &#39;Worker update&#39;; });\n});\n</code></pre>\n",
+          "type": "module",
+          "displayName": "创建选项"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeSessionType\">ComposeSession</a> }</li>\n</ul>\n<p>拥有该窗口节点树的会话. 此对象也出现在 <a href=\"compose#p-sessions\">compose.sessions</a> 中. <code>window.session.close()</code> 与 <code>window.close()</code> 关闭同一个会话和窗口.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] root",
+          "name": "[p#]_root",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"composeNodeType\">ComposeNode</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>等同于 <code>window.session.root</code>. 关闭后为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] root"
+        },
+        {
+          "textRaw": "会话方法转发",
+          "name": "会话方法转发",
+          "desc": "<p>下列方法直接转发给 <code>window.session</code>, 参数, 回调线程与行为和对应的 <a href=\"composeSessionType\">ComposeSession</a> 方法相同:</p>\n<table>\n<thead>\n<tr>\n<th>调用</th>\n<th>返回值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>window.update(fn)</code></td>\n<td><code>fn</code> 的返回值</td>\n<td>同步批处理节点更新.</td>\n</tr>\n<tr>\n<td><code>window.post(fn, delay?)</code></td>\n<td><code>undefined</code></td>\n<td>所属会话关闭后不再执行, 可从工作线程投递.</td>\n</tr>\n<tr>\n<td><code>window.showSnackbar(message, options?)</code></td>\n<td><code>window.session</code></td>\n<td>需要会话中存在使用默认 Snackbar host 的 Scaffold.</td>\n</tr>\n<tr>\n<td><code>window.on(&#39;close&#39;, fn)</code></td>\n<td><code>window.session</code></td>\n<td>普通回调函数的 <code>this</code> 是会话, 不是窗口.</td>\n</tr>\n<tr>\n<td><code>window.isClosed()</code></td>\n<td><code>boolean</code></td>\n<td>是否已关闭, 关闭后仍可查询.</td>\n</tr>\n</tbody>\n</table>\n<p><code>on</code> 和 <code>showSnackbar</code> 返回会话, 因此不能在其返回值上直接链式调用 <code>setPosition</code> 等窗口方法.</p>\n",
+          "type": "module",
+          "displayName": "会话方法转发"
+        },
+        {
+          "textRaw": "[m#] setPosition",
+          "name": "[m#]_setposition",
+          "methods": [
+            {
+              "textRaw": "window.setPosition(x, y)",
+              "type": "method",
+              "name": "setPosition",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 水平位置, 整数像素. ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "水平位置, 整数像素."
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 垂直位置, 整数像素. ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "垂直位置, 整数像素."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>使用与创建选项相同的整数范围. 非 raw 窗口沿用宿主既有 floaty 的内容位置偏移规则. 该方法排队更新原生窗口, 立即读取坐标可能仍得到上一次的快照.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setPosition"
+        },
+        {
+          "textRaw": "[m#] setSize",
+          "name": "[m#]_setsize",
+          "methods": [
+            {
+              "textRaw": "window.setSize(width, height)",
+              "type": "method",
+              "name": "setSize",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**width** { [number](dataTypes#number) } - 宽度, 非负整数像素或 `-1` / `-2`. ",
+                      "name": "**width**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "宽度, 非负整数像素或 `-1` / `-2`."
+                    },
+                    {
+                      "textRaw": "**height** { [number](dataTypes#number) } - 高度, 非负整数像素或 `-1` / `-2`. ",
+                      "name": "**height**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "高度, 非负整数像素或 `-1` / `-2`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>两项都必须传入. 原生测量完成前, <code>getWidth()</code> 和 <code>getHeight()</code> 不一定已反映本次请求.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setSize"
+        },
+        {
+          "textRaw": "[m#] getX",
+          "name": "[m#]_getx",
+          "methods": [
+            {
+              "textRaw": "window.getX()",
+              "type": "method",
+              "name": "getX",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 最近可用的水平位置快照, 像素. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "最近可用的水平位置快照, 像素."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>原生窗口尚未创建时为 <code>-1</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getX"
+        },
+        {
+          "textRaw": "[m#] getY",
+          "name": "[m#]_gety",
+          "methods": [
+            {
+              "textRaw": "window.getY()",
+              "type": "method",
+              "name": "getY",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 最近可用的垂直位置快照, 像素. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "最近可用的垂直位置快照, 像素."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>原生窗口尚未创建时为 <code>-1</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getY"
+        },
+        {
+          "textRaw": "[m#] getWidth",
+          "name": "[m#]_getwidth",
+          "methods": [
+            {
+              "textRaw": "window.getWidth()",
+              "type": "method",
+              "name": "getWidth",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 最近一次实际测量宽度, 像素. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "最近一次实际测量宽度, 像素."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>尚未完成测量时可为 <code>0</code>. 返回测量结果, 不返回创建选项中 <code>-1</code> / <code>-2</code> 的尺寸标记.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getWidth"
+        },
+        {
+          "textRaw": "[m#] getHeight",
+          "name": "[m#]_getheight",
+          "methods": [
+            {
+              "textRaw": "window.getHeight()",
+              "type": "method",
+              "name": "getHeight",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } - 最近一次实际测量高度, 像素. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "最近一次实际测量高度, 像素."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>尚未完成测量时可为 <code>0</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getHeight"
+        },
+        {
+          "textRaw": "[m#] requestFocus",
+          "name": "[m#]_requestfocus",
+          "methods": [
+            {
+              "textRaw": "window.requestFocus()",
+              "type": "method",
+              "name": "requestFocus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>使原生窗口允许取得焦点. 输入框自身还可调用 <a href=\"composeNodeType#m-focus\">node.focus()</a>; 窗口允许焦点和具体编辑器取得焦点是两个步骤. 返回值不表示输入法已经显示.</p>\n<p>已验证的 HyperOS 悬浮窗输入场景是在桌面显示窗口并调用 <code>requestFocus()</code>; 系统对其他前台应用之上的悬浮焦点可能有额外限制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] requestFocus"
+        },
+        {
+          "textRaw": "[m#] disableFocus",
+          "name": "[m#]_disablefocus",
+          "methods": [
+            {
+              "textRaw": "window.disableFocus()",
+              "type": "method",
+              "name": "disableFocus",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>禁止窗口取得输入焦点, 恢复与默认 <code>focusable: false</code> 一致的窗口行为. 不等同于关闭窗口.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] disableFocus"
+        },
+        {
+          "textRaw": "[m#] setTouchable",
+          "name": "[m#]_settouchable",
+          "methods": [
+            {
+              "textRaw": "window.setTouchable(touchable)",
+              "type": "method",
+              "name": "setTouchable",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**touchable** { [boolean](dataTypes#boolean) } - 是否接收触摸. ",
+                      "name": "**touchable**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否接收触摸."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "touchable"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设为 <code>false</code> 后窗口不接收触摸, 包括窗口上的交互控件. 脚本仍可通过 <code>close()</code> 关闭它.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setTouchable"
+        },
+        {
+          "textRaw": "[m#] setAdjustEnabled",
+          "name": "[m#]_setadjustenabled",
+          "methods": [
+            {
+              "textRaw": "window.setAdjustEnabled(enabled)",
+              "type": "method",
+              "name": "setAdjustEnabled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**enabled** { [boolean](dataTypes#boolean) } - 是否显示移动, 调整尺寸和关闭控件. ",
+                      "name": "**enabled**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否显示移动, 调整尺寸和关闭控件."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeFloatyWindow](composeFloatyWindowType) } - 当前窗口. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeFloatyWindow](composeFloatyWindowType) ",
+                      "desc": "当前窗口."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>仅适用于创建时 <code>raw: false</code> 的窗口. 对 raw 窗口调用会抛出 <code>INVALID_ARGUMENT</code>, 不因此关闭原有窗口. 设为 <code>false</code> 也会隐藏原生关闭按钮, 应保留脚本自己的关闭入口.</p>\n<p>这些控件默认隐藏. 需要让用户拖动, 调整尺寸或使用原生关闭按钮时, 调用 <code>window.setAdjustEnabled(true)</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setAdjustEnabled"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "window.close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>幂等地关闭窗口和所属会话, 可从工作线程请求. 在原生窗口尚未附加时关闭, 也会取消后续附加. 不需要等待窗口出现再清理.</p>\n<p>窗口也可由原生关闭控件, 当前脚本的 <code>floaty.closeAll()</code>, 会话关闭或脚本退出清理. 每个悬浮会话独立持有脚本保活引用; 关闭一个窗口只释放其自身引用, 不会停止其他仍存活的会话. 如果最后一个窗口关闭且脚本没有其他保活来源, 非 UI 脚本可以自然结束.</p>\n<p>除 <code>post</code>, 幂等 <code>close</code> 和 <code>isClosed()</code> 外, 窗口方法应在所属脚本线程执行, 包括读取几何快照的 <code>getX</code>, <code>getY</code>, <code>getWidth</code>, <code>getHeight</code>. 关闭后所有位置, 尺寸, 焦点, 触摸和调整控件操作及其几何 getter 都会抛出 <code>SESSION_CLOSED</code>; <code>root</code>, <code>session</code> 和 <code>isClosed()</code> 仍可用于观察清理结果.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "Compose 悬浮窗 (ComposeFloatyWindow)"
+    }
+  ]
+}

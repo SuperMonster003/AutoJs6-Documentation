@@ -1,0 +1,42 @@
+{
+  "source": "..\\api\\composeThemeType.md",
+  "modules": [
+    {
+      "textRaw": "ComposeTheme - Compose 主题",
+      "name": "composetheme_-_compose_主题",
+      "desc": "<p>ComposeTheme 是传给 <a href=\"compose#m-theme\">compose.theme</a>, <a href=\"compose#m-mount\">compose.mount</a> 或 <a href=\"compose#m-floaty\">compose.floaty</a> 的普通 JavaScript 选项对象. 它描述脚本覆盖项, 不直接提供完整的 Material 3 ColorScheme 或 Kotlin Typography 对象.</p>\n<p>当前主题支持 seed, 明暗模式, Android 12+ 动态颜色, 指定颜色角色以及字体族和文字缩放. 需要配套 AutoJs6 6.8.0 本地构建和 Compose UI 插件.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\ncompose.theme({ seed: &#39;#006C4C&#39;, dark: false, dynamicColor: false });\ncompose.mount(compose.Surface({ modifier: compose.modifier().fillMaxSize() },\n    compose.Column({ padding: 20, spacing: 12 },\n        compose.Text({ text: &#39;主题示例&#39;, style: &#39;headlineMedium&#39; }),\n        compose.Button({ onClick: function () {\n            compose.theme({ seed: &#39;#006C4C&#39;, dark: true });\n        } }, &#39;切换到深色&#39;))));\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "选项",
+          "name": "选项",
+          "desc": "<p style=\"font: bold 2em sans-serif; color: #FF7043\">ComposeTheme</p>\n\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>输入</th>\n<th>省略时</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>seed</code></td>\n<td><a href=\"composeComponents#composecolorinput\">ComposeColorInput</a> 或 null</td>\n<td>使用宿主当前主色</td>\n</tr>\n<tr>\n<td><code>colors</code></td>\n<td>颜色角色名称到 ComposeColorInput 的对象, 或 null</td>\n<td>无本次显式颜色覆盖</td>\n</tr>\n<tr>\n<td><code>dark</code></td>\n<td>boolean, <code>&#39;system&#39;</code> 或 null</td>\n<td>跟随宿主当前明暗配置</td>\n</tr>\n<tr>\n<td><code>dynamicColor</code></td>\n<td>boolean 或 null</td>\n<td>false</td>\n</tr>\n<tr>\n<td><code>typography</code></td>\n<td>包含 <code>fontFamily</code> / <code>scale</code> 的对象, 或 null</td>\n<td>使用宿主/系统文字默认值</td>\n</tr>\n<tr>\n<td><code>typography.fontFamily</code></td>\n<td>string 或 null</td>\n<td>使用默认字体族</td>\n</tr>\n<tr>\n<td><code>typography.scale</code></td>\n<td>大于 0 的有限数或 null</td>\n<td>使用系统文字缩放</td>\n</tr>\n</tbody>\n</table>\n<p><code>seed: null</code>, <code>dark: null</code>, <code>dark: &#39;system&#39;</code> 表示相应覆盖项为空. <code>colors</code> 中每个实际颜色值必须有效, 不能以 <code>{ primary: null }</code> 清除单个角色. <code>dynamicColor: null</code> 与省略一样为 false. 对象中的未知键会得到 <code>UNKNOWN_PROP</code>, 非法值会得到 <code>INVALID_ARGUMENT</code>.</p>\n<p><code>typography.scale</code> 替换当前组合使用的文字缩放系数, 不是与系统值相乘; 不改变 dp 布局密度. 例如 <code>scale: 1.2</code> 使用 1.2 的文字缩放, 省略则保留系统设置.</p>\n<p>字体族接受 <code>default</code>, <code>system</code>, <code>sans-serif</code>, <code>sansserif</code>, <code>serif</code>, <code>monospace</code>, <code>cursive</code>, 以及 Android <code>Typeface.create</code> 可识别的字体族名称. 未识别名称可能由 Android 回退; 不从字体文件路径或 URL 加载字体. 空字符串不是有效字体族.</p>\n",
+          "type": "module",
+          "displayName": "选项"
+        },
+        {
+          "textRaw": "替换与继承",
+          "name": "替换与继承",
+          "desc": "<p>主题的替换规则分为两个层次:</p>\n<ol>\n<li>每次 <code>compose.theme(options)</code> <strong>整体替换上一份脚本覆盖对象</strong>, 不与上一份脚本对象做深合并. <code>compose.theme({ dark: true })</code> 不会保留上次指定的 seed, colors 或字体.</li>\n<li>将这次覆盖对象应用到某个会话时, 未指定的 seed, dark 和字体项继续继承宿主当前默认值. <code>colors</code> 中本次提供的角色覆盖宿主同名角色; <code>dynamicColor</code> 使用本次布尔值, 省略即 false.</li>\n</ol>\n<p><code>compose.theme</code> 同时改变未来挂载的默认主题, 并更新当前最后一个尚未关闭的会话. 它不广播修改所有存活会话. 之前建立的其他 UI/floaty 会话保留自己的脚本覆盖项, 仍可跟随宿主未被覆盖的配置变化.</p>\n<p>挂载选项中的 <code>theme</code> 若省略或为 null, 沿用模块当前默认主题. 显式 <code>{ theme: {} }</code> 则提供一份空的会话覆盖对象, 不与模块默认主题合并. <code>compose.theme({})</code> 同样会清除先前脚本覆盖, 回到宿主颜色/明暗及系统文字设置, 同时关闭动态颜色.</p>\n<p><code>compose.theme(null)</code> / <code>compose.theme(undefined)</code> 也按空覆盖对象进行设置, 不是 getter; 读取必须调用无参数的 <code>compose.theme()</code>. 挂载的整个 options 为 null/undefined 时按空选项处理, 但显式 <code>{ theme: undefined }</code> 会解析为空主题覆盖, 与省略 theme 或 <code>{ theme: null }</code> 沿用模块默认的行为不同.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\ncompose.theme({ seed: &#39;#984061&#39;, dark: false });\ncompose.mount(compose.Text({ text: &#39;本次使用宿主主题&#39; }), { theme: {} });\n\n// 整体替换为只固定深色模式; 先前的 #984061 不再是脚本覆盖项.\ncompose.theme({ dark: true });\n</code></pre>\n<p>读取 <code>compose.theme()</code> 得到的是模块保存的脚本覆盖快照, <strong>不是当前会话最终计算出的完整调色板</strong>. 首次设置前结果为 <code>{}</code>. 设置后返回一个新对象, 包含:</p>\n<table>\n<thead>\n<tr>\n<th>返回字段</th>\n<th>值</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>seed</code></td>\n<td>规范化的 ARGB 整数或 null</td>\n</tr>\n<tr>\n<td><code>colors</code></td>\n<td>显式角色到 ARGB 整数的对象</td>\n</tr>\n<tr>\n<td><code>dark</code></td>\n<td>true / false / null, 其中 <code>&#39;system&#39;</code> 被规范化为 null</td>\n</tr>\n<tr>\n<td><code>dynamicColor</code></td>\n<td>true / false</td>\n</tr>\n<tr>\n<td><code>typography.fontFamily</code></td>\n<td>字符串或 null</td>\n</tr>\n<tr>\n<td><code>typography.scale</code></td>\n<td>数值或 null</td>\n</tr>\n</tbody>\n</table>\n<p>此返回形态在类型声明中名为 ComposeThemeSnapshot. 修改返回对象不会改变主题; 再次传给 <code>compose.theme</code> 才会应用. 显式设置一份新的选项对象时, 应保留确实需要继续覆盖的字段.</p>\n",
+          "type": "module",
+          "displayName": "替换与继承"
+        },
+        {
+          "textRaw": "配色优先级",
+          "name": "配色优先级",
+          "desc": "<p>渲染器按以下顺序确定基础配色, 最后再应用 <code>colors</code> 中的显式角色:</p>\n<ol>\n<li><code>dynamicColor: true</code> 且 Android API &gt;= 31 时, 使用系统动态浅色/深色配色.</li>\n<li>未获得动态配色时, 使用当前有效 seed 生成配色.</li>\n<li>没有 seed 时, 使用 Material 3 默认浅色/深色配色.</li>\n</ol>\n<p>因此 API24 等旧系统可以接受 <code>dynamicColor: true</code>, 但实际回退到 seed 配色. Android 12+ 启用动态颜色时, seed 不会覆盖系统动态方案; 要比较 seed 效果, 请把 <code>dynamicColor</code> 设为 false. 明暗配置及宿主主色变化会更新未被脚本覆盖的项.</p>\n",
+          "type": "module",
+          "displayName": "配色优先级"
+        },
+        {
+          "textRaw": "颜色角色",
+          "name": "颜色角色",
+          "desc": "<p><code>colors</code> 只接受下表列出的大小写敏感键. 这些键也覆盖 Material 3 的容器和文字角色, 不等于给每个组件逐项设置 <code>bg</code> 或 <code>color</code>.</p>\n<table>\n<thead>\n<tr>\n<th>分组</th>\n<th>角色</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>主色</td>\n<td><code>primary</code>, <code>onPrimary</code>, <code>primaryContainer</code>, <code>onPrimaryContainer</code>, <code>inversePrimary</code></td>\n</tr>\n<tr>\n<td>次色</td>\n<td><code>secondary</code>, <code>onSecondary</code>, <code>secondaryContainer</code>, <code>onSecondaryContainer</code></td>\n</tr>\n<tr>\n<td>第三色</td>\n<td><code>tertiary</code>, <code>onTertiary</code>, <code>tertiaryContainer</code>, <code>onTertiaryContainer</code></td>\n</tr>\n<tr>\n<td>背景</td>\n<td><code>background</code>, <code>onBackground</code></td>\n</tr>\n<tr>\n<td>表面</td>\n<td><code>surface</code>, <code>onSurface</code>, <code>surfaceVariant</code>, <code>onSurfaceVariant</code>, <code>surfaceTint</code>, <code>inverseSurface</code>, <code>inverseOnSurface</code></td>\n</tr>\n<tr>\n<td>错误</td>\n<td><code>error</code>, <code>onError</code>, <code>errorContainer</code>, <code>onErrorContainer</code></td>\n</tr>\n<tr>\n<td>轮廓</td>\n<td><code>outline</code>, <code>outlineVariant</code>, <code>scrim</code></td>\n</tr>\n<tr>\n<td>表面层级</td>\n<td><code>surfaceBright</code>, <code>surfaceDim</code>, <code>surfaceContainer</code>, <code>surfaceContainerHigh</code>, <code>surfaceContainerHighest</code>, <code>surfaceContainerLow</code>, <code>surfaceContainerLowest</code></td>\n</tr>\n<tr>\n<td>固定主色</td>\n<td><code>primaryFixed</code>, <code>primaryFixedDim</code>, <code>onPrimaryFixed</code>, <code>onPrimaryFixedVariant</code></td>\n</tr>\n<tr>\n<td>固定次色</td>\n<td><code>secondaryFixed</code>, <code>secondaryFixedDim</code>, <code>onSecondaryFixed</code>, <code>onSecondaryFixedVariant</code></td>\n</tr>\n<tr>\n<td>固定第三色</td>\n<td><code>tertiaryFixed</code>, <code>tertiaryFixedDim</code>, <code>onTertiaryFixed</code>, <code>onTertiaryFixedVariant</code></td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-js\">// 在创建页面前设置; primary 与 onPrimary 一并指定以保持文字可读.\ncompose.theme({\n    dark: false,\n    colors: { primary: &#39;#006C4C&#39;, onPrimary: &#39;#FFFFFF&#39; },\n    typography: { fontFamily: &#39;sans-serif&#39;, scale: 1.1 }\n});\n</code></pre>\n<p>单节点的文字 <code>style</code> / <code>fontSize</code>, 容器 <code>color</code> / <code>contentColor</code> 等继续按各组件规则覆盖局部外观, 参阅 <a href=\"composeComponents#输入类型\">组件输入类型</a> 与 <a href=\"composeComponents#组件使用\">组件目录</a>.</p>\n",
+          "type": "module",
+          "displayName": "颜色角色"
+        }
+      ],
+      "type": "module",
+      "displayName": "ComposeTheme - Compose 主题"
+    }
+  ]
+}

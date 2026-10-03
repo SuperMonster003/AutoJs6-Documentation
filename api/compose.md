@@ -1,9 +1,9 @@
 # Compose UI (Compose)
 
-`compose` 与 `$compose` 提供由 Compose UI 插件渲染的脚本界面. 本页先说明无障碍节点与宿主选择器的关系; 完整组件和方法参考仍在补充.
+`compose` 与 `$compose` 提供由 Compose UI 插件渲染的脚本界面. 本页说明无障碍节点与宿主选择器的关系, 以及打包应用的运行条件; 完整组件和方法参考仍在补充.
 
 <aside class="doc-status doc-status--incomplete">
-<p><strong>文档状态:</strong> 无障碍与选择器已核实. 完整组件和方法参考仍在补充.</p>
+<p><strong>文档状态:</strong> 无障碍与选择器及打包应用已核实. 完整组件和方法参考仍在补充.</p>
 </aside>
 
 ## 无障碍与选择器
@@ -114,3 +114,73 @@ if (node !== null) {
 - 查找会话已经关闭或已经移除的节点不会返回仍有效的控件. 保存的无障碍节点也可能失效, 页面变化后应重新查找.
 - 同名标签可能匹配多个节点. `findOnce()` 返回选择器当前遍历顺序下的第一个匹配项, 不表示标签具有全局唯一性.
 - 本节的内置无障碍验收不代表已验证所有第三方无障碍服务, 也不等同于 TalkBack 完整可用性评估.
+
+## 打包应用
+
+### 运行时与插件依赖
+
+使用 `compose` 的脚本可通过 AutoJs6 的 "打包应用" 流程生成独立 APK. APK Builder 插件将配套 Runtime Kit 中的 INRT 运行时与项目脚本装入应用, Compose UI 渲染器仍由目标设备上另行安装的 Compose UI 插件提供.
+
+- 构建端需要包含 `compose` 模块的配套宿主和 APK Builder 插件, 其 Runtime Kit 也必须包含该模块及配套共享依赖.
+- 运行端需要安装兼容的 Compose UI 插件, 包名为 `io.github.supermonster003.autojs6.plugin.compose.ui`. 打包不会自动把该插件 APK 嵌入应用, 应用启动也不会自动安装或授权插件.
+- 使用 `compose.mount` 的项目入口脚本应保留 `'ui';` 模式声明. `compose.floaty` 仍须满足生成应用自身的悬浮窗授权与系统运行条件.
+- Compose 渲染本身不依赖无障碍服务. 如果脚本同时使用无障碍选择器或动作, 则仍需满足这些 API 的授权条件.
+
+当前属于配套本地构建的预览能力, 不能仅根据 APK Builder 的产品名称或版本名称判断其模板已经包含 Compose UI 支持.
+
+### 应用版本与运行时版本
+
+应用自己的版本和内嵌运行时的版本分别承担不同作用:
+
+| 版本 | 来源 | 用途 |
+| --- | --- | --- |
+| 应用 `versionCode` / `versionName` | 项目的打包配置 | 应用自身的安装与升级. `versionCode` 可以从 `1` 开始. |
+| INRT 运行时版本 | 配套 Runtime Kit 的宿主构建 | 校验 Compose UI 插件要求的最低宿主版本. |
+| Compose UI 插件版本 | 目标设备上安装的插件 | 提供实际渲染器, 并与运行时校验契约和共享依赖兼容性. |
+
+最低宿主版本检查使用 INRT 模板中的编译版本, 不使用生成应用的 `versionCode`. 因而不需要把自己的应用版本改成 AutoJs6 的构建号. 如果模板过旧, 应更新配套 Runtime Kit 并重新打包; 单独提高应用 `versionCode` 不会更新运行时.
+
+同理, 更新设备上的 AutoJs6 主应用或构建端宿主, 不会改写已经生成的 APK 内部运行时. 新的运行时能力需要随重新打包后的应用版本交付.
+
+### 启用状态与授权
+
+生成应用使用自己的插件启用与授权记录. AutoJs6 主应用中保存的启用选择和用户授权不会自动复制到生成应用.
+
+Compose UI 插件沿用既有的签名信任策略. 未保存启用选择时默认启用, 仍须通过签名信任检查; 显式禁用或系统停用会阻止装载. 应用自己的签名不会代替对插件签名的校验, 也不应通过修改权限声明或跳过检查来绕过授权失败.
+
+### 缺失插件与错误处理
+
+`compose.isAvailable()` 可用于探测当前是否可用, 但 `false` 本身不能区分缺失, 禁用, 未授权或不兼容. 需要获知原因时, 可捕获挂载时的类型化错误:
+
+| `error.code` | 含义 |
+| --- | --- |
+| `PLUGIN_UNAVAILABLE` | 未找到可用插件, 包括目标设备未安装 Compose UI 插件. |
+| `PLUGIN_DISABLED` | 插件被系统停用, 或在当前应用的启用记录中关闭. |
+| `PLUGIN_UNAUTHORIZED` | 插件签名未通过当前应用的信任与授权检查. |
+| `PLUGIN_INCOMPATIBLE` | 内嵌运行时版本, 插件契约或共享依赖不兼容. |
+
+未安装插件时, 错误的 `message` 是包含插件包名的本地化说明. 应用可用已有的 XML 界面显示这一信息, 例如:
+
+```js
+'ui';
+
+try {
+    compose.mount(compose.Text({text: 'Compose UI 已就绪'}));
+} catch (error) {
+    if (error.code !== 'PLUGIN_UNAVAILABLE') {
+        throw error;
+    }
+    ui.layout('<vertical padding="16"><text id="composeFailure" /></vertical>');
+    ui.composeFailure.setText(error.code + '\n' + String(error.message));
+}
+```
+
+上例仅处理挂载时插件不可用的情况, 其他错误继续交给脚本原有的错误处理. 安装兼容插件后重新启动应用, 可重新进行装载与兼容性检查.
+
+### 验证范围
+
+已使用配套本地 Runtime Kit 和独立 APK Builder 插件生成 x86_64 应用, 并在 API 37.1 / 16 KB 页模拟器上实际安装运行. 应用使用默认签名和 `versionCode: 1`, UI 脚本仍按模板内的运行时版本完成插件兼容性检查.
+
+安装兼容 Compose UI 插件时, 同一应用可挂载计数器页面并通过按钮更新状态. 真实卸载插件后, 同一应用可在自己的 XML 界面显示 `PLUGIN_UNAVAILABLE` 及包含插件包名的本地化说明. 验收范围为 Rhino UI 入口, 默认应用签名及插件存在/缺失两种条件.
+
+同一产物在上述两种条件下均已完成连续启动验证.

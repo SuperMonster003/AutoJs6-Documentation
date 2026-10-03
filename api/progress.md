@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-03 Compose UI 无障碍: 核实 testTag 原样 ID, id/idContains/idMatches 匹配, text/desc 子节点与 Button 点击祖先规则. API 24 x86 与 API 35 x86_64 模拟器使用真实内置无障碍服务和宿主 Rhino 选择器验证通过; 当前为配套宿主的本地预览能力. 本页仅覆盖无障碍与选择器, 完整组件与方法参考仍在补充.
+
 2026-10-02 Installer 来源配置: 同步宿主 5312+ 的 V3 source-profiles 协商, 首个来源/包名前缀匹配规则, 局部默认值及显式覆盖. installer/installReason/packageSource 接受 null 重置, 其他 null 仍拒绝. 说明处理开始快照, 确认与重试边界, 会话级选项, sourceDeleteRequested 和批量共享来源保护. 文档及声明同步不代表远端发布.
 
 2026-10-02 Installer P9 本轮同步: 覆盖宿主 5308+ 的五项高级安装选项, V3 能力协商, optimizing 阶段及 updateOwner/dexopt 观察值, 区分省略与显式 false/none. 说明权限授予, 更新所有权, 手动编译的系统边界, 本地签名门禁, 不可覆盖的包名/共享 UID 黑名单和选中分包的声明权限预览. 本轮不包含按来源配置文件, 不代表插件全部 P9 条目或远端发布完成.
@@ -92,6 +94,7 @@
 | [Base64](base64) | √ |
 | [Canvas - 画布](canvas) | √ |
 | [Color - 颜色](color) | √ |
+| [Compose UI](compose) | &lt; 10% |
 | [Console - 控制台](console) | √ |
 | [Continuation - 续体](continuation) | √ |
 | [Converter - 单位转换](cvt) | √ |

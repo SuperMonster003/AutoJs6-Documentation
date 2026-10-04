@@ -336,7 +336,7 @@
         <div id="apicontent">
             <h1>Compose 组件 (Components)<span><a class="mark" href="#composecomponents_compose_components" id="composecomponents_compose_components">#</a></span></h1>
 <p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a> 或 <a href="compose.html#compose_m_floaty">compose.floaty</a>.</p>
-<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 这些工厂不接受 JSX/TSX, Kotlin Composable 函数或任意 Android View; <code>compose.Snackbar</code> 不是节点工厂.</p>
+<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数或 Android View; <code>compose.Snackbar</code> 不是节点工厂.</p>
 <h2>输入类型<span><a class="mark" href="#composecomponents" id="composecomponents">#</a></span></h2>
 <p>属性使用严格转换, 不依赖一般 JavaScript 真值或自动数字字符串转换. <code>checked: &#39;true&#39;</code>, <code>value: &#39;0.5&#39;</code>, 未知属性或无效枚举都会被拒绝. 属性的名称和枚举值大小写敏感; 图标名称另有大小写兼容规则.</p>
 <p>目录生成表中的 Compose*Input 是 TypeScript 输入辅助类型, 对应以下实际形态. 单个属性是否允许 null 由该属性决定, 不表示所有同类输入都接受 null.</p>
@@ -461,7 +461,7 @@ compose.mount(compose.Column({ spacing: 8 },
 </code></pre>
 <p>同一组件不能同时声明主 children 与 <code>content</code> 插槽. Surface 和 Scaffold 的主内容至多一个节点, 多个内容请放进一个布局. AlertDialog 的 <code>confirm</code> 插槽必需, 即使 <code>open: false</code> 也应声明.</p>
 <h2>事件回调<span><a class="mark" href="#composecomponents_3" id="composecomponents_3">#</a></span></h2>
-<p>属性名使用 <code>on</code> 前缀, <code>node.on</code> 使用不带前缀的事件名, 如 <code>onClick</code> 对应 <code>node.on(&#39;click&#39;, fn)</code>. 回调排队到拥有该节点的脚本线程, 返回值不用于决定原生事件是否被消费. 在一个事件回调内进行的多次更新会按既有 batch 规则合并. 参阅 <a href="compose.html#compose_2">线程与生命周期</a>.</p>
+<p>属性名使用 <code>on</code> 前缀, <code>node.on</code> 使用不带前缀的事件名, 如 <code>onClick</code> 对应 <code>node.on(&#39;click&#39;, fn)</code>. 回调排队到拥有该节点的脚本线程, 返回值不用于决定原生事件是否被消费. 在一个事件回调内进行的多次更新会按既有 batch 规则合并. 参阅 <a href="compose.html#compose_4">线程与生命周期</a>.</p>
 <table>
 <thead>
 <tr>
@@ -523,7 +523,7 @@ compose.mount(compose.Column({ spacing: 8 },
 </tr>
 </tbody>
 </table>
-<p>目录列出可注册的事件集合, 不保证没有滚动/焦点能力的组件会产生 scroll/focusChange. 控件 <code>enabled: false</code> 会阻止对应原生交互. 可访问节点的 ID/文本/描述与点击祖先规则见 <a href="compose.html#compose_7">无障碍与选择器</a>.</p>
+<p>目录列出可注册的事件集合, 不保证没有滚动/焦点能力的组件会产生 scroll/focusChange. 控件 <code>enabled: false</code> 会阻止对应原生交互. 可访问节点的 ID/文本/描述与点击祖先规则见 <a href="compose.html#compose_9">无障碍与选择器</a>.</p>
 <h2>组件使用<span><a class="mark" href="#composecomponents_4" id="composecomponents_4">#</a></span></h2>
 <p>下列说明与末尾生成的属性/插槽/事件表一起使用. 未列出的 Android View 属性, Compose 参数和扩展组件不属于此接口.</p>
 <h3>Column<span><a class="mark" href="#composecomponents_column" id="composecomponents_column">#</a></span></h3>

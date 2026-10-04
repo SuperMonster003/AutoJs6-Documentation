@@ -355,7 +355,7 @@
 
         <div id="apicontent">
             <h1>Compose 节点 (ComposeNode)<span><a class="mark" href="#composenodetype_compose_composenode" id="composenodetype_compose_composenode">#</a></span></h1>
-<p>ComposeNode 是 <a href="compose.html#compose_3">组件工厂</a> 或 <a href="compose.html#compose_m_createelement">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code> 或 <code>compose.floaty</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>
+<p>ComposeNode 是 <a href="compose.html#compose_5">组件工厂</a> 或 <a href="compose.html#compose_m_createelement">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code> 或 <code>compose.floaty</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>
 <p>所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 <a href="compose.html#compose_m_post">compose.post</a> 或所属会话的 <code>post</code>. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeNode</p>
 
@@ -382,7 +382,7 @@
 <ul>
 <li>{ <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
 </ul>
-<p>脚本节点树中的父节点. 根节点和当前未归属任何父节点的节点为 <code>null</code>. 插槽中的节点也具有 <code>parent</code>; 此关系不等同于 <a href="compose.html#compose_7">无障碍节点树</a> 的父子关系.</p>
+<p>脚本节点树中的父节点. 根节点和当前未归属任何父节点的节点为 <code>null</code>. 插槽中的节点也具有 <code>parent</code>; 此关系不等同于 <a href="compose.html#compose_9">无障碍节点树</a> 的父子关系.</p>
 <h2>[p#] children<span><a class="mark" href="#composenodetype_p_children" id="composenodetype_p_children">#</a></span></h2>
 <p><strong><code>READONLY</code></strong></p>
 <ul>
@@ -473,7 +473,7 @@ console.log(title.get(&#39;text&#39;));
 <li><strong>fn</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - 事件回调.</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> } - 当前节点.</li>
 </ul>
-</div><p>追加监听函数, 普通函数的 <code>this</code> 是当前节点. 事件参数见 <a href="compose.html#compose_4">事件回调</a>. 对应的 <code>onClick</code>, <code>onValueChange</code> 等名称也可作为事件别名, 但不接受旧 View 风格的下划线名称.</p>
+</div><p>追加监听函数, 普通函数的 <code>this</code> 是当前节点. 事件参数见 <a href="compose.html#compose_6">事件回调</a>. 对应的 <code>onClick</code>, <code>onValueChange</code> 等名称也可作为事件别名, 但不接受旧 View 风格的下划线名称.</p>
 <p>重复注册同一函数会追加多次, 不自动去重. <code>node.set({onClick: fn})</code> 则替换该事件的监听列表. 监听按注册顺序处理, 若较早的监听关闭会话或停止脚本, 后面的监听不再执行.</p>
 <p>原生事件通过队列回到所属脚本线程, 不在 Compose 的组合或布局调用栈中同步执行 JavaScript. 回调的返回值不用于阻止原生事件或提交控件状态.</p>
 <h2>[m#] off<span><a class="mark" href="#composenodetype_m_off" id="composenodetype_m_off">#</a></span></h2>

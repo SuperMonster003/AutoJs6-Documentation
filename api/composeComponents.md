@@ -2,7 +2,7 @@
 
 本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount) 或 [compose.floaty](compose#m-floaty).
 
-需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 这些工厂不接受 JSX/TSX, Kotlin Composable 函数或任意 Android View; `compose.Snackbar` 不是节点工厂.
+需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数或 Android View; `compose.Snackbar` 不是节点工厂.
 
 ## 输入类型
 

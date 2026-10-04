@@ -1,8 +1,8 @@
 # Compose UI (Compose)
 
-`compose` 与 `$compose` 是同一个可调用模块, 通过 Compose UI 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.0.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
+`compose` 与 `$compose` 是同一个可调用模块, 通过 Compose UI 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.1.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
 
-运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 Compose UI 插件. 最低宿主构建要求为 AutoJs6 6.8.0 / 5316, 同时仍须满足实际插件契约和共享依赖检查.
+运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 Compose UI 插件. 普通 JavaScript 工厂 API 的最低宿主构建要求仍为 AutoJs6 6.8.0 / 5316, 同时须满足实际插件契约和共享依赖检查. [TSX 接入](#tsx-接入) 需要 5319 或以上的配套宿主及 TypeScript Engine 0.6.4.
 
 | 内容 | 参考 |
 | --- | --- |
@@ -14,7 +14,7 @@
 | 悬浮窗口 | [ComposeFloatyWindow](composeFloatyWindowType) |
 | 组件属性, 插槽, 事件和生成目录 | [ComposeComponents](composeComponents) |
 
-1.0.0 提供 UI 模式页面和 `compose.floaty` 两种承载方式. 没有 TSX/JSX 接入, `compose.dialog` 或 XML/Android View 与 Compose 的混合节点挂载接口. 组件目录中的 `AlertDialog` 是已有会话内的组件, 不表示存在独立的 `compose.dialog` 承载入口.
+当前提供 UI 模式页面和 `compose.floaty` 两种承载方式. 1.1.0 本地预览增加 `.tsx` 写法, 不增加独立的 `compose.dialog` 或 XML/Android View 与 Compose 的混合节点挂载接口. 组件目录中的 `AlertDialog` 是已有会话内的组件, 不表示存在独立的 `compose.dialog` 承载入口.
 
 ## 两层使用方式
 
@@ -54,6 +54,90 @@ compose.mount(function () {
 两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 `ref` 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 `ref.current`.
 
 同一父节点的普通 children 列表中, 非 `null` 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.
+
+## TSX 接入
+
+### 可用条件
+
+Compose TSX 需要以下配套条件:
+
+- AutoJs6 6.8.0 / 构建号 5319 或以上, 使用 Rhino 脚本入口.
+- Compose UI 1.1.0 本地开发预览, 已安装, 启用并通过宿主的信任与兼容性检查.
+- TypeScript Engine 0.6.4, 已安装, 启用并可连接, 提供真实 TypeScript 编译与 Compose 声明.
+- 源文件扩展名为 `.tsx`. UI 页面在文件开头保留 `'ui';`; 非 UI 脚本使用 `compose.floaty` 并满足其悬浮窗权限要求.
+
+普通 `.js` 工厂写法不需要 TypeScript Engine. 给 `.js` 文件加入 TSX 标签不会自动启用 TypeScript 编译. Node profile 不接受 `.tsx`, 也不提供 Compose TSX 挂载入口.
+
+宿主通过 TypeScript Engine 编译原始 `.tsx`, 再执行生成的 JavaScript. 无需自行配置 JSX factory 或引入 React. `jsx`, `jsxFactory`, `jsxFragmentFactory` 等编译入口仍由 profile 控制, 不能在 `tsconfig.json` 中切换到 React runtime 或自定义 factory.
+
+### 标签与组件工厂
+
+`<compose.Column>` 使用当前脚本实际的 `compose.Column` 工厂引用. `<compose:Column>` 使用带 `compose:` 前缀的目录名称. 两种写法使用同一组件目录, 属性, 插槽和事件规则, 不改变节点或回调的所有权.
+
+编辑器中推荐 `<compose.Name>` 写法, 可按组件获得属性补全. `<compose:Name>` 的编译与属性/事件类型检查同样受支持, 但当前 TypeScript 6 语言服务不保证命名空间标签内的准确属性补全.
+
+```tsx
+'ui';
+
+let count = compose.state(0);
+compose.mount(() => (
+    <>
+        <compose.Column padding={16} spacing={8}>
+            <compose:Text key="count" text={'Count: ' + count.value} />
+            <compose.Button key="increment" onClick={() => {
+                count.value++;
+            }}>Increment</compose.Button>
+        </compose.Column>
+    </>
+));
+```
+
+可以保存真实工厂引用后作为标签, 例如 `let Increment = compose.Button` 后使用 `<Increment>Run</Increment>`. 任意用户函数不会被当作 Compose 函数组件调用, 即使它返回一个 Compose 节点; 未注册函数会报 `INVALID_ARGUMENT`, 不执行函数体.
+
+小写标签仍沿用原有 XML UI 语义: `<vertical>`, `<text>` 和 `<button>` 不会自动变成 Compose 组件. `<compose:Unknown>` 报 `UNKNOWN_COMPONENT`. `Snackbar` 仍是 [会话命令](composeSessionType#m-showsnackbar), 不能作为节点标签使用.
+
+props 的值直接进入原有类型化属性解析, 不会先转成 XML 字符串. `ref`, `modifier` 和事件函数保留对象或函数语义. 普通 `function` 事件处理器的 `this` 仍是实际节点; 箭头函数使用 JavaScript 原有的词法 `this`. `ref.current`, state 重绘与 key 协调规则与工厂写法一致.
+
+组件属性和事件参数具有对应的 TypeScript 声明. 但 JSX 表达式与 fragment 沿用既有 `any` 结果类型, 编译通过不代表已经确认其属于 XML 或 Compose, 也不代表片段的根数量合法. 混域, 叶节点 children 和片段数量等限制仍由运行时执行.
+
+`Text` 通过 `text` 属性接收文字, 例如 `<compose.Text text="Hello" />`. 它不接受 `<compose.Text>Hello</compose.Text>` 这样的直接 children. `Button` 等允许 children 的组件可以使用字符串子节点. 数字或 `true` 不会在 Compose 中隐式变成文字, 需要先调用 `String(value)`; `null`, `undefined`, `false` 被忽略.
+
+### Fragment 与插槽
+
+`<>...</>` 是属于当前脚本的中立片段载体, 本身不创建容器或布局. 它由消费位置决定展开方式, 不等同于 JavaScript 数组, 也不会自动补一层 `Column`.
+
+| 使用位置 | 规则 |
+| --- | --- |
+| Compose 容器 children | 按原顺序展开片段中的内容, 继续检查父组件的 children 数量和作用域. |
+| `mount`, `compose(...)`, `floaty` 的根或 render 返回值 | 片段展开后必须恰好有一个根节点, 空片段或多根报 `INVALID_ARGUMENT`. |
+| 单节点插槽 | 可以是空片段或一个节点, 多节点报 `INVALID_ARGUMENT`. |
+| XML UI | 保留原有 XML 的片段, 文本和根节点规则. |
+
+具名插槽可直接使用嵌套 TSX. 插槽内容需要多个组件时, 使用实际的 `Row` 或 `Column` 包裹, 不能借助 fragment 绕过单节点插槽限制.
+
+```tsx
+'ui';
+
+compose.mount(
+    <compose.Column padding={16}>
+        <compose.TopAppBar title={<><compose:Text text="Account" /></>} />
+        <compose.OutlinedTextField
+            text="Ada"
+            label={<compose.Text text="Name" />}
+        />
+    </compose.Column>
+);
+```
+
+片段和节点都不能从其他脚本引擎搬到当前脚本. Fragment 不扩大组件数量, 深度, 子数组长度或 props 的既有上限.
+
+### XML 与 Compose 的边界
+
+XML 节点不能作为 Compose 的 children 或插槽, Compose 节点也不能插入 XML UI 树. 例如 `<compose.Column><text text="Mixed" /></compose.Column>` 和 `<vertical><compose.Text text="Mixed" /></vertical>` 都会被拒绝, 错误码为 `INVALID_ARGUMENT`.
+
+无效树在替换内容前被拒绝. 尝试把混合树传给 `ui.layout` 时保留原页面; Compose render 产生混合树时按原有渲染失败规则保留上一个成功帧, 原按钮回调仍可修改状态并触发后续有效渲染. 这不表示提供两套 UI 的混合挂载能力.
+
+TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍报 `UI_MODE_REQUIRED`; 同一个 `.tsx` 脚本可通过 `compose.floaty` 创建并关闭自己的浮动会话.
 
 ## 线程与生命周期
 
@@ -137,11 +221,11 @@ compose.mount(function () {
 
 props 容器本身为 `null` 或 `undefined` 时按空对象处理. 这不表示对象内任意属性值都可使用 nullish 值.
 
-1.0.0 有 29 个节点工厂. `Snackbar` 是会话命令, 没有 `compose.Snackbar()` 节点工厂; 使用 [session.showSnackbar](composeSessionType#m-showsnackbar). 具体属性, 默认值, 输入类型, ImageWrapper 所有权及插槽要求见 [组件目录](composeComponents).
+当前有 29 个节点工厂. `Snackbar` 是会话命令, 没有 `compose.Snackbar()` 节点工厂; 使用 [session.showSnackbar](composeSessionType#m-showsnackbar). 具体属性, 默认值, 输入类型, ImageWrapper 所有权及插槽要求见 [组件目录](composeComponents).
 
 ### ComposeChild
 
-本文以 ComposeChild 表示子节点输入: [ComposeNode](composeNodeType), [string](dataTypes#string), 以上内容的递归数组, 或被忽略的 `null`, `undefined`, `false`. 其中不包含其他数字, 布尔值或任意对象. 每个父组件仍独立限制其允许的子节点数量.
+本文以 ComposeChild 表示子节点输入: [ComposeNode](composeNodeType), [string](dataTypes#string), 以上内容的递归数组, 或被忽略的 `null`, `undefined`, `false`. 其中不包含其他数字, 布尔值或任意对象. 当前脚本的 TSX fragment 可按 [片段规则](#fragment-与插槽) 展开为这些输入. 每个父组件仍独立限制其允许的子节点数量.
 
 ## [m] createElement
 
@@ -152,7 +236,7 @@ props 容器本身为 `null` 或 `undefined` 时按空对象处理. 这不表示
 - **...children** { ...([ComposeChild](#composechild))[] } - 同组件工厂的子节点规则.
 - <ins>**returns**</ins> { [ComposeNode](composeNodeType) }
 
-等同于调用同名工厂, 例如 `compose.createElement('Text', {text: 'Hello'})`. 未知名称报 `UNKNOWN_COMPONENT`, 将仅命令的 `Snackbar` 当作节点创建会报 `INVALID_ARGUMENT`. 此入口不表示提供 TSX/JSX 编译或 Kotlin Composable 调用能力.
+等同于调用同名工厂, 例如 `compose.createElement('Text', {text: 'Hello'})`. 未知名称报 `UNKNOWN_COMPONENT`, 将仅命令的 `Snackbar` 当作节点创建会报 `INVALID_ARGUMENT`. 此方法本身不执行 TypeScript 编译, 也不接受任意 Kotlin Composable; `.tsx` 文件使用 [TSX 接入](#tsx-接入) 中的配套编译入口.
 
 ## [m] modifier
 
@@ -214,6 +298,8 @@ compose.mount(function () {
 - <ins>**returns**</ins> { [ComposeSession](composeSessionType) }
 
 把节点树挂载到当前 UI 脚本 Activity. 非 UI 脚本调用会得到 `UI_MODE_REQUIRED`. 渲染函数必须返回一个节点, 不能返回 `null`, 节点数组或原生 View; 普通函数的 `this` 为脚本全局对象.
+
+TSX 入口还接受当前脚本的 fragment 作为根或 render 返回值, 展开后必须恰好有一个节点. 其中字符串按 children 规则创建 `Text` 后计数, 不会自动增加外层容器.
 
 新页面声明验证和渲染器打开成功后, 会关闭原 Compose UI 会话并替换页面. 初始声明或打开失败时, 原页面仍可保持有效. 同一渲染函数中再次调用 `mount` 或 `floaty` 会报 `INVALID_ARGUMENT`, 保留此前有效页面.
 

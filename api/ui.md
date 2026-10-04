@@ -1,6 +1,6 @@
 # 用户界面 (UI)
 
-UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 Android 视图. 布局采用声明式 XML, 外观与 JSX 或 React 组件树相似, 但运行时由 Rhino 按 [E4X](e4x) XML 处理, 不是浏览器 DOM, JSX 或 React.
+UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 Android 视图. 普通 JavaScript 的布局采用声明式 XML, 由 Rhino 按 [E4X](e4x) XML 处理, 不是浏览器 DOM 或 React 组件树. 配套 TypeScript Engine 的 `.tsx` 入口也可编译小写 XML UI 标签; Compose 标签的版本条件与独立挂载边界见 [Compose TSX 接入](compose#tsx-接入).
 
 `ui` 模块提供布局渲染, 视图查询, UI 线程调度, 自定义控件和系统栏控制等功能. `$ui` 是 `ui` 的等效别名.
 

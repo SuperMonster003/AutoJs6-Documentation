@@ -345,7 +345,7 @@ compose.mount(function () {
 <h2>渲染依赖<span><a class="mark" href="#composestatetype" id="composestatetype">#</a></span></h2>
 <p><code>compose.mount(render)</code> 和 <code>compose.floaty(render)</code> 只订阅各自渲染函数实际读取的状态. 在普通业务代码中读取 <code>value</code> 不会建立视图订阅. 同一状态可以被同一脚本中的多个会话读取, 状态变化会分别安排这些会话渲染.</p>
 <p>每次成功渲染后, 依赖集合更新为本次实际读取的状态. 条件分支不再读取某个状态时, 后续对该状态的修改不会触发该分支所属会话渲染.</p>
-<p>渲染异常时保留上一次有效界面, 并保留之前及此次尝试读取的依赖, 以便修正状态后再次渲染. 普通渲染异常被报告为 <code>RENDER_FAILED</code>; 已有的类型化错误保留其错误码. 参阅 <a href="compose.html#compose_5">错误与异常</a>.</p>
+<p>渲染异常时保留上一次有效界面, 并保留之前及此次尝试读取的依赖, 以便修正状态后再次渲染. 普通渲染异常被报告为 <code>RENDER_FAILED</code>; 已有的类型化错误保留其错误码. 参阅 <a href="compose.html#compose_7">错误与异常</a>.</p>
 <p>渲染函数应描述当前状态对应的节点树. 在渲染函数内修改其已读取的状态会再次安排渲染, 不应以这种方式形成循环更新. 渲染函数内调用 <code>compose.mount</code> 或 <code>compose.floaty</code> 会被明确拒绝.</p>
 <h2>批处理与生命周期<span><a class="mark" href="#composestatetype_1" id="composestatetype_1">#</a></span></h2>
 <p><a href="compose.html#compose_m_batch">compose.batch</a> 可以合并多个状态赋值和节点更改. 其节点事务失败时会回滚节点更改, 但不会撤销已经完成的 <code>state.value</code> 赋值或普通 JavaScript 副作用.</p>

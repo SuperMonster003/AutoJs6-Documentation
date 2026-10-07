@@ -14,7 +14,7 @@
 | 悬浮窗口 | [ComposeFloatyWindow](composeFloatyWindowType) |
 | 组件属性, 插槽, 事件和生成目录 | [ComposeComponents](composeComponents) |
 
-当前提供 UI 模式页面和 `compose.floaty` 两种承载方式. 1.1.0 本地预览增加 `.tsx` 写法, 不增加独立的 `compose.dialog` 或 XML/Android View 与 Compose 的混合节点挂载接口. 组件目录中的 `AlertDialog` 是已有会话内的组件, 不表示存在独立的 `compose.dialog` 承载入口.
+当前提供 UI 模式页面, `compose.floaty` 和 [XML 容器挂载](#m-attach). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0. 组件目录中的 `AlertDialog` 是已有会话内的组件, 不表示存在独立的 `compose.dialog` 承载入口.
 
 ## 两层使用方式
 
@@ -36,7 +36,7 @@ let session = compose.mount(compose.Column({padding: 16}, title, button));
 
 ### state 与 render
 
-把函数传给 `mount` 或 `floaty`, 函数读取 [ComposeState.value](composeStateType#p-value) 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.
+把函数作为 `mount`, `attach` 或 `floaty` 的根输入, 函数读取 [ComposeState.value](composeStateType#p-value) 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.
 
 ```js
 'ui';
@@ -109,7 +109,7 @@ props 的值直接进入原有类型化属性解析, 不会先转成 XML 字符�
 | 使用位置 | 规则 |
 | --- | --- |
 | Compose 容器 children | 按原顺序展开片段中的内容, 继续检查父组件的 children 数量和作用域. |
-| `mount`, `compose(...)`, `floaty` 的根或 render 返回值 | 片段展开后必须恰好有一个根节点, 空片段或多根报 `INVALID_ARGUMENT`. |
+| `mount`, `attach`, `compose(...)`, `floaty` 的根或 render 返回值 | 片段展开后必须恰好有一个根节点, 空片段或多根报 `INVALID_ARGUMENT`. |
 | 单节点插槽 | 可以是空片段或一个节点, 多节点报 `INVALID_ARGUMENT`. |
 | XML UI | 保留原有 XML 的片段, 文本和根节点规则. |
 
@@ -135,17 +135,19 @@ compose.mount(
 
 XML 节点不能作为 Compose 的 children 或插槽, Compose 节点也不能插入 XML UI 树. 例如 `<compose.Column><text text="Mixed" /></compose.Column>` 和 `<vertical><compose.Text text="Mixed" /></vertical>` 都会被拒绝, 错误码为 `INVALID_ARGUMENT`.
 
-无效树在替换内容前被拒绝. 尝试把混合树传给 `ui.layout` 时保留原页面; Compose render 产生混合树时按原有渲染失败规则保留上一个成功帧, 原按钮回调仍可修改状态并触发后续有效渲染. 这不表示提供两套 UI 的混合挂载能力.
+无效树在替换内容前被拒绝. 尝试把直接混合的树传给 `ui.layout` 时保留原页面; Compose render 产生无效树时按原有渲染失败规则保留上一个成功帧, 原按钮回调仍可修改状态并触发后续有效渲染.
+
+两套 UI 通过明确的边界组合: 在 XML 树中放置空的 `<compose id="slot" />`, 完成布局后调用 [compose.attach](#m-attach); 在 Compose 树中使用 [AndroidView](composeComponents#androidview) 包装实际 Android View. `<compose>` 不接受 XML 元素子节点, 也不能把 `<compose.Text>` 直接写在其内部. AndroidView 的 `view` 属性接收实际 View 或同步 View 工厂, 不接收 XML TSX 值或 ComposeNode.
 
 TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍报 `UI_MODE_REQUIRED`; 同一个 `.tsx` 脚本可通过 `compose.floaty` 创建并关闭自己的浮动会话.
 
 ## 线程与生命周期
 
 - UI 脚本由 `'ui';` 声明, 其 Compose 操作在该脚本的 UI 调度线程执行.
-- 非 UI 脚本使用 `compose.floaty`, JavaScript 回调仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理.
+- 非 UI 脚本可使用 `compose.floaty`, 或向旧悬浮窗口的 `<compose>` 容器 `attach`. 普通节点事件仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理; 同步 View 工厂的特殊主线程规则见 [ComposeViewFactory](composeComponents#composeviewfactory).
 - 组件属性, state 读写, 树操作, 主题和普通窗口方法需要所属脚本线程. 工作线程使用 `compose.post`, `session.post` 或 `window.post`; 清理用的幂等 `close()` 也可从工作线程请求.
-- 原生事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. UI 脚本中的阻塞等待同样会阻塞界面.
-- 同一脚本引擎最多有 8 个活动会话, UI 页面和悬浮窗共同计数. 替换现有 UI 页面时会扣除即将替换的旧 UI 会话, 不额外消耗一个长期名额.
+- Compose 节点事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. AndroidView 内通过旧 `ui` API 或 XML TSX 注册的 View 事件仍遵循原生 UI 规则, 点击回调在主线程执行; 非 UI 脚本从这些回调修改 Compose 状态时使用 `compose.post`. UI 脚本中的阻塞等待同样会阻塞界面.
+- 同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载和 Compose 悬浮窗共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.
 - 新的 `compose.mount` 替换旧的 Compose UI 页面. `ui.layout`, `ui.layoutFile` 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗不因此关闭.
 - 脚本停止, Activity 销毁, 会话主动关闭或原生窗口关闭会清理相应资源. 当前 UI Activity 自行处理方向及窗口尺寸等已声明的配置变化, 常规旋转和分屏尺寸变化可保留引擎与节点. 真正的 Activity 重建或销毁会结束其 UI 引擎, 不自动恢复原 state 或会话.
 - 插件更新, 卸载或禁用会关闭正在使用它的会话并报告对应错误. 重新安装或启用插件不会自动复活旧句柄, 后续应创建新的会话和节点.
@@ -214,6 +216,7 @@ TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍�
 | 按钮 | `Button`, `ElevatedButton`, `FilledTonalButton`, `OutlinedButton`, `TextButton`, `IconButton` |
 | 输入与选择 | `Switch`, `Checkbox`, `RadioButton`, `Slider`, `TextField`, `OutlinedTextField` |
 | 进度与会话内对话框 | `CircularProgressIndicator`, `LinearProgressIndicator`, `AlertDialog` |
+| F2 原生 View 互操作 | `AndroidView` |
 
 省略 props 时可直接传节点, 字符串或数组作为 children. 子节点数组可嵌套, `null`, `undefined`, `false` 被忽略, 字符串自动生成 `Text`. 数字和 `true` 不隐式转换为文字. 是否允许 children 及其数量仍由组件目录决定; `Text` 使用 `{text: 'Hello'}`, 不是 `Text('Hello')`.
 
@@ -221,7 +224,7 @@ TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍�
 
 props 容器本身为 `null` 或 `undefined` 时按空对象处理. 这不表示对象内任意属性值都可使用 nullish 值.
 
-当前有 29 个节点工厂. `Snackbar` 是会话命令, 没有 `compose.Snackbar()` 节点工厂; 使用 [session.showSnackbar](composeSessionType#m-showsnackbar). 具体属性, 默认值, 输入类型, ImageWrapper 所有权及插槽要求见 [组件目录](composeComponents).
+基础目录有 29 个节点工厂, F2 另提供 AndroidView 扩展. `Snackbar` 是会话命令, 没有 `compose.Snackbar()` 节点工厂; 使用 [session.showSnackbar](composeSessionType#m-showsnackbar). 具体属性, 默认值, 输入类型, ImageWrapper 所有权及插槽要求见 [组件目录](composeComponents).
 
 ### ComposeChild
 
@@ -306,6 +309,43 @@ TSX 入口还接受当前脚本的 fragment 作为根或 render 返回值, 展�
 options 容器省略或为 `null` / `undefined` 时按空对象处理. 其中 `theme` 省略或为 `null` 时沿用模块当前默认覆盖; 显式 `{theme: {}}` 表示空覆盖, 不与模块默认对象深度合并. 其他选项报 `UNKNOWN_PROP`. 主题规则见 [ComposeTheme](composeThemeType#替换与继承).
 
 返回会话不代表所有原生布局与绘制已完成. 更新节点和 ref 的发布遵循会话提交与回执过程; 原生命令会在可执行时处理.
+
+## [m] attach
+
+### compose.attach(container, nodeOrRender, options?)
+
+- **container** { [ComposeNativeView](composeComponents#composenativeview) } - 本脚本的 XML `<compose>` 容器, 通常从 `ui.<id>` 或旧悬浮窗口的 ID 属性取得.
+- **nodeOrRender** { [ComposeNode](composeNodeType) | [Function](dataTypes#function) } - 一个根节点, 或返回一个根节点的同步渲染函数. TSX fragment 沿用 [单根规则](#fragment-与插槽).
+- **[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 仅接受 `theme` 字段, 规则与 `mount` 相同.
+- <ins>**returns**</ins> { [ComposeSession](composeSessionType) } - 此容器的挂载会话.
+
+把 Compose 内容挂载到现有 XML 页面或旧悬浮窗口的指定位置. 此方法不替换整个 Activity 内容, 也不新建悬浮窗口. 容器仍是 Android View; `ui.slot` 不会变成 ComposeNode, 根节点通过返回会话的 `root` 访问.
+
+options 容器省略或为 `null` / `undefined` 时按空对象处理. `theme` 省略或为 `null` 时继承模块默认覆盖; 显式 `{theme: {}}` 或 `{theme: undefined}` 使用空覆盖. 此行为与 [mount](#m-mount) 的主题输入一致.
+
+目标必须由当前脚本的 `<compose>` 标签创建. 普通 FrameLayout, 其他脚本的容器或任意对象均不能替代. 容器只能由 `attach` 管理内容, 不向其手动 `addView` 或传入 XML 子节点.
+
+同一容器再次成功挂载会关闭它的旧会话. 挂载另一个容器不关闭当前容器的会话. 新内容或 View 工厂准备失败时保留旧会话; 捕获错误后仍可继续使用旧内容. 嵌入会话与 UI 页面, Compose 悬浮窗共同占用单引擎最多 8 个活动会话的名额.
+
+```js
+'ui';
+
+ui.layout('<vertical padding="16">' +
+    '<text text="XML heading" textSize="20sp" />' +
+    '<compose id="slot" w="*" h="120" />' +
+    '<button id="increment" text="Increment" />' +
+    '</vertical>');
+
+let count = compose.state(0);
+let session = compose.attach(ui.slot, function () {
+    return compose.Text({text: 'Compose count: ' + count.value, fontSize: 22});
+});
+ui.increment.on('click', function () {
+    count.value += 1;
+});
+```
+
+非 UI 脚本可在原有悬浮窗中使用 `<compose>` 容器, 仍需满足该窗口的悬浮窗权限与生命周期要求. `attach` 和节点操作在所属脚本线程调用; View 的原生创建与挂载由主线程处理. 不在 View 工厂中创建新的 mount, attach 或 floaty 会话.
 
 ## [m] floaty
 

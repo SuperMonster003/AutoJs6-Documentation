@@ -287,6 +287,9 @@
 <li><span class="stability_undefined"><a href="#composecomponents_compose_components">Compose 组件 (Components)</a></span><ul>
 <li><span class="stability_undefined"><a href="#composecomponents">输入类型</a></span><ul>
 <li><span class="stability_undefined"><a href="#composecomponents_composecolorinput">ComposeColorInput</a></span></li>
+<li><span class="stability_undefined"><a href="#composecomponents_composenativeview">ComposeNativeView</a></span></li>
+<li><span class="stability_undefined"><a href="#composecomponents_composeviewfactory">ComposeViewFactory</a></span></li>
+<li><span class="stability_undefined"><a href="#composecomponents_composeviewinput">ComposeViewInput</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_composedpinput">ComposeDpInput</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_composespinput">ComposeSpInput</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_composeshapeinput">ComposeShapeInput</a></span></li>
@@ -313,6 +316,7 @@
 <li><span class="stability_undefined"><a href="#composecomponents_topappbar">TopAppBar</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_text">Text</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_icon">Icon</a></span></li>
+<li><span class="stability_undefined"><a href="#composecomponents_androidview">AndroidView</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_image">Image</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_button">Button</a></span></li>
 <li><span class="stability_undefined"><a href="#composecomponents_elevatedbutton">ElevatedButton</a></span></li>
@@ -333,6 +337,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#composecomponents_5">目录生成表</a></span></li>
+<li><span class="stability_undefined"><a href="#composecomponents_f2">F2 互操作目录</a></span></li>
 </ul>
 </li>
 </ul>
@@ -341,13 +346,21 @@
 
         <div id="apicontent">
             <h1>Compose 组件 (Components)<span><a class="mark" href="#composecomponents_compose_components" id="composecomponents_compose_components">#</a></span></h1>
-<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a> 或 <a href="compose.html#compose_m_floaty">compose.floaty</a>.</p>
-<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数或 Android View; <code>compose.Snackbar</code> 不是节点工厂.</p>
+<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 <a href="#composecomponents_androidview">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a> 或 <a href="compose.html#compose_m_floaty">compose.floaty</a>.</p>
+<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>
 <h2>输入类型<span><a class="mark" href="#composecomponents" id="composecomponents">#</a></span></h2>
 <p>属性使用严格转换, 不依赖一般 JavaScript 真值或自动数字字符串转换. <code>checked: &#39;true&#39;</code>, <code>value: &#39;0.5&#39;</code>, 未知属性或无效枚举都会被拒绝. 属性的名称和枚举值大小写敏感; 图标名称另有大小写兼容规则.</p>
 <p>目录生成表中的 Compose*Input 是 TypeScript 输入辅助类型, 对应以下实际形态. 单个属性是否允许 null 由该属性决定, 不表示所有同类输入都接受 null.</p>
 <h3>ComposeColorInput<span><a class="mark" href="#composecomponents_composecolorinput" id="composecomponents_composecolorinput">#</a></span></h3>
 <p>支持 <a href="dataTypes.html#datatypes_colorint">ColorInt</a>, <a href="dataTypes.html#datatypes_colorhex">ColorHex</a>, <a href="dataTypes.html#datatypes_colorname">ColorName</a>, <a href="colorType.html">Color</a> 或宿主 <a href="dataTypes.html#datatypes_themecolor">ThemeColor</a>, 按 <a href="color.html#color_m_toint">colors.toInt</a> 转成 ARGB 整数. 不接受任意 <code>{ r, g, b }</code> 对象或颜色分量数组. 部分组件颜色属性接受 null 以使用默认颜色, <code>background</code> / <code>border</code> 修饰操作的颜色不接受 null.</p>
+<h3>ComposeNativeView<span><a class="mark" href="#composecomponents_composenativeview" id="composecomponents_composenativeview">#</a></span></h3>
+<p>实际的 <a href="https://developer.android.com/reference/android/view/View">android.view.View</a>, 包括 <code>ui.inflate</code> 结果和宿主 ID 查找返回的 NativeView 包装对象. 普通 JavaScript 对象, 字符串, 数字, Promise, XML TSX 值和 ComposeNode 都不是原生 View.</p>
+<p>编辑器没有加载原生声明组时, 此类型保留为对象形态, 仍排除原始值, 函数和 Promise; 任意对象是否为真实 View 由运行时检查. 完整原生成员补全需要原有 Android 等可选声明组, F2 不改变这些组的默认启用状态.</p>
+<h3>ComposeViewFactory<span><a class="mark" href="#composecomponents_composeviewfactory" id="composecomponents_composeviewfactory">#</a></span></h3>
+<p>同步函数 <code>(context) =&gt; view</code>. <code>context</code> 是 <a href="https://developer.android.com/reference/android/content/Context">Android Context</a>: UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 <a href="#composecomponents_composenativeview">ComposeNativeView</a>, 不接受 Promise 或无返回值. 不把函数的 <code>this</code> 当作 ComposeNode.</p>
+<p>宿主在准备 <code>AndroidView</code> 创建或显式 <code>set({view: factory})</code> 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach 或 floaty 会话.</p>
+<h3>ComposeViewInput<span><a class="mark" href="#composecomponents_composeviewinput" id="composecomponents_composeviewinput">#</a></span></h3>
+<p><a href="#composecomponents_composenativeview">ComposeNativeView</a> 或 <a href="#composecomponents_composeviewfactory">ComposeViewFactory</a>. 仅用于 AndroidView 的必填 <code>view</code> 属性. Getter 返回准备后的实际 View, 不返回工厂, Promise 或内部身份值.</p>
 <h3>ComposeDpInput<span><a class="mark" href="#composecomponents_composedpinput" id="composecomponents_composedpinput">#</a></span></h3>
 <p>有限数值或带 <code>dp</code> 后缀的数值字符串, 如 <code>16</code>, <code>&#39;16dp&#39;</code>, <code>&#39;0.5dp&#39;</code>. <code>w</code>, <code>h</code>, padding, spacing, 圆角和边框等以 dp 解释. 一般尺寸/留白非负; <code>offset(x, y)</code> 允许负值. 不接受 px, 百分比, <code>&#39;*&#39;</code>, <code>&#39;auto&#39;</code> 或 XML 布局尺寸关键字.</p>
 <h3>ComposeSpInput<span><a class="mark" href="#composecomponents_composespinput" id="composecomponents_composespinput">#</a></span></h3>
@@ -561,6 +574,28 @@ compose.mount(compose.Column({ spacing: 8 },
 <p>通过 <code>text</code> 属性设置字符串, 默认空字符串. 支持 Material 样式名/样式对象, color, fontSize, fontWeight, textAlign, maxLines, overflow 和 selectable. textAlign 为 start / end / left / right / center / justify; overflow 为 clip / ellipsis / visible. <code>maxLines</code> 为正整数, <code>selectable</code> 默认为 false. 不接受 children.</p>
 <h3>Icon<span><a class="mark" href="#composecomponents_icon" id="composecomponents_icon">#</a></span></h3>
 <p>必需 <code>name</code>, 可选 <code>tint</code>. 名称集合见 <a href="#composecomponents_composeiconnameinput">ComposeIconNameInput</a>. 不使用 text 作为图标名称; 不接受 children.</p>
+<h3>AndroidView<span><a class="mark" href="#composecomponents_androidview" id="composecomponents_androidview">#</a></span></h3>
+<p>F2 扩展, 使用 <a href="compose.html">配套宿主和插件</a>. 必填 <code>view</code>, 接受 <a href="#composecomponents_composeviewinput">ComposeViewInput</a>; 不接受 children, 具名插槽, <code>update</code> 或 <code>onRelease</code> 脚本属性. 修饰链和快捷尺寸仍使用 Compose 的单位与顺序. <code>compose.createElement(&#39;AndroidView&#39;, {view})</code>, <code>&lt;compose.AndroidView view={view} /&gt;</code> 和 <code>&lt;compose:AndroidView view={view} /&gt;</code> 使用同一节点行为.</p>
+<p>传入的 View 必须可由该节点独占挂载. 不会从已有父视图强行取走 View, 也不能让两个 AndroidView 节点同时借用同一实例. 同一容器替换会话时, 仍被旧会话占用的 View 也不能直接交给新会话. 未具备互操作能力的插件报 <code>PLUGIN_INCOMPATIBLE</code>, 无效 View 或占用冲突报 <code>INVALID_ARGUMENT</code>. 工厂抛出的普通异常按可恢复的 <code>RENDER_FAILED</code> 处理, 已有 ComposeError 保留其错误码, 不替换已经有效的旧内容.</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+
+let nativeButton = ui.inflate(&#39;&lt;button text=&quot;Native button&quot; /&gt;&#39;);
+let nativeNode = compose.AndroidView({view: nativeButton, w: 200, h: 56});
+nativeButton.on(&#39;click&#39;, function () {
+    nativeButton.setText(&#39;Clicked&#39;);
+});
+compose.mount(compose.Column({padding: 16, spacing: 12},
+    compose.Text({text: &#39;Compose heading&#39;}), nativeNode));
+</code></pre>
+<p>也可让宿主在主线程提供 Context 并创建 View:</p>
+<pre><code class="lang-js">let nativeNode = compose.AndroidView({view: function (context) {
+    let text = new android.widget.TextView(context);
+    text.setText(&#39;Created by a View factory&#39;);
+    return text;
+}});
+</code></pre>
+<p><code>nativeNode.view</code> 和 <code>nativeNode.get(&#39;view&#39;)</code> 返回同一个实际 View 对象对应的包装. 使用 <code>nativeNode.set({view: anotherView})</code> 或给 <code>nativeNode.view</code> 赋值可替换输入. 修改该 View 的 Android 属性仍须遵守 Android 主线程要求; ComposeNode 的业务操作仍在所属脚本线程进行.</p>
+<p>节点借用 View, 不代替调用方销毁 View 自身的业务资源或清除用户注册的原生监听. 节点移除或会话关闭的原生清理具有 <a href="composeSessionType.html#composesessiontype_m_close">异步边界</a>; 不凭 <code>close()</code> 返回就立即把该 View 添加到另一个父视图. 需要复用时, 应在主线程确认旧父视图已释放它, 再创建新的 AndroidView 节点. 已关闭会话的 ComposeNode 句柄本身不能复用.</p>
 <h3>Image<span><a class="mark" href="#composecomponents_image" id="composecomponents_image">#</a></span></h3>
 <p>必需 <code>src</code>, 使用 <a href="#composecomponents_composeimageinput">ComposeImageInput</a>. <code>contentScale</code> 支持 fit / crop / fillBounds / fillWidth / fillHeight / inside / none, 默认 fit. 尺寸通过 modifier 或 w/h 指定. 不接受 children.</p>
 <h3>Button<span><a class="mark" href="#composecomponents_button" id="composecomponents_button">#</a></span></h3>
@@ -2104,6 +2139,48 @@ let session = compose.mount(compose.Scaffold({},
 </tbody>
 </table>
 <!-- autojs6-compose-catalog:v1:end -->
+<h2>F2 互操作目录<span><a class="mark" href="#composecomponents_f2" id="composecomponents_f2">#</a></span></h2>
+<!-- autojs6-compose-interop:f2:start -->
+<!-- Generated from org.autojs.plugin.compose.api.interop.AndroidViewInteropV1; schema=1; contract=1; extension=1; feature=android-view-interop-v1; sha256=cbee120589a49e97f8bf5ea546b508f0a1f8b77b685e8affd8b03da67b838a37. -->
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Children</th>
+<th>Slots</th>
+<th>Events</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AndroidView</code></td>
+<td>NONE</td>
+<td>-</td>
+<td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
+<td><code>android-view-interop-v1</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Script input</th>
+<th>Getter</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>view</code></td>
+<td><code>View &#124; ((context: android.content.Context) =&gt; View)</code></td>
+<td><code>View</code></td>
+<td>true</td>
+</tr>
+</tbody>
+</table>
+<!-- autojs6-compose-interop:f2:end -->
 
         </div>
     </div>

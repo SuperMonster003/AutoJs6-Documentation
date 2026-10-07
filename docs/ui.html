@@ -299,6 +299,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#ui_6">控件扩展方法</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_compose">Compose 容器</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_nativeview">NativeView 包装</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_attr_name_value">attr(name, value)</a></span></li>
@@ -527,6 +528,11 @@ ui.layout(xml);
 <td><code>frame</code></td>
 <td><code>JsFrameLayout</code></td>
 <td>帧布局</td>
+</tr>
+<tr>
+<td><code>compose</code></td>
+<td><code>ComposeContainerView</code></td>
+<td>F2 空容器, 用 <a href="compose.html#compose_m_attach">compose.attach</a> 填入 Compose 内容</td>
 </tr>
 <tr>
 <td><code>relative</code></td>
@@ -973,6 +979,15 @@ console.log(&quot;hello&quot;);
 </tbody>
 </table>
 <p><code>list</code> 和 <code>grid</code> 还有供布局器使用的 <code>setItemTemplate</code>, <code>setDataSourceAdapter</code> 和 <code>initWithScriptRuntime</code>. 常规脚本不应替换这些内部协作对象.</p>
+<h2>Compose 容器<span><a class="mark" href="#ui_compose" id="ui_compose">#</a></span></h2>
+<p>配套宿主 5320 与支持 F2 的 Compose UI 插件提供 <code>&lt;compose&gt;</code> 标签. 它沿用 FrameLayout 的布局尺寸和 ID 属性, XML 内只能留空或包含空白, 不能放置 XML 元素子节点. <code>&lt;compose&gt;</code> 是 Android 容器 View, 与 <code>&lt;compose.Text&gt;</code> 这样的 Compose TSX 组件不同.</p>
+<p>完成 <code>ui.layout</code> 后, 使用原有 <code>ui.&lt;id&gt;</code> 或 <code>ui.findById</code> 取得容器并调用 <a href="compose.html#compose_m_attach">compose.attach</a>. 旧悬浮窗口中的同类容器也通过该窗口的 ID 查找访问. ID 查找继续返回 NativeView, 不返回 ComposeNode; Compose 根节点从 attach 返回的会话获取.</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+
+ui.layout(&#39;&lt;vertical&gt;&lt;text text=&quot;XML&quot; /&gt;&lt;compose id=&quot;slot&quot; w=&quot;*&quot; h=&quot;120&quot; /&gt;&lt;/vertical&gt;&#39;);
+let session = compose.attach(ui.slot, compose.Text({text: &#39;Compose&#39;}));
+</code></pre>
+<p>不要把任意 FrameLayout 当作 <code>&lt;compose&gt;</code> 使用, 不向该容器手动添加子视图, 也不把 ComposeNode 直接交给 <code>ui.layout</code> 或 <code>addView</code>. 反方向嵌入使用 Compose 的 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a> 节点及实际 View, 不直接嵌入 XML TSX 表达式.</p>
 <h2>NativeView 包装<span><a class="mark" href="#ui_nativeview" id="ui_nativeview">#</a></span></h2>
 <p>由 <code>ui.inflate</code>, <code>ui.findById</code> 或 ID 属性访问返回的对象是 Android <code>View</code> 的 Rhino 包装对象. 它既可调用实际 Java 视图的方法, 也附加属性访问, 后代 ID 查询和事件方法.</p>
 <h3>attr(name)<span><a class="mark" href="#ui_attr_name" id="ui_attr_name">#</a></span></h3>
@@ -1336,6 +1351,8 @@ ui.read.on(&#39;click&#39;, function () {
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.android.com/reference/android/view/View">View</a></span> } - NativeView 包装后的根视图</li>
 </ul>
 </div><p>动态渲染并返回视图. 在非 UI 模式下, 使用带 <code>ScriptTheme</code> 的应用上下文; 在 UI 模式下使用当前脚本 Activity.</p>
+<p>配套宿主 5320 的 <code>.tsx</code> 入口还接受 XML TSX 表达式, 如 <code>ui.inflate(&lt;button text=&quot;Native&quot; onClick={view =&gt; view.setText(&#39;Clicked&#39;)} /&gt;)</code>. 宿主会创建实际 View 并连接 XML <code>onClick</code> 监听, 监听参数为被点击的 NativeView. 这可用于 <a href="composeComponents.html#composecomponents_composeviewfactory">ComposeViewFactory</a>. 不能传入 ComposeNode 或包含 Compose 节点的 fragment, 也不把 XML TSX 值直接当作 AndroidView 的 <code>view</code> 属性.</p>
+<p>此 XML TSX 监听沿用原生 View 的事件发射器, 普通 <code>function</code> 的 <code>this</code> 是该 <a href="events.html#events_eventemitter">EventEmitter</a>, 不是 View 或 ComposeNode. 应使用回调参数操作被点击的 View. 这不表示 E4X XML 或 XML 字符串能在属性中保存 JavaScript 函数.</p>
 <p>传入 <code>parent</code> 可使依赖父布局参数的属性在渲染时正确应用. <code>isAttachedToParent</code> 为 <code>true</code> 时, 布局器会把结果直接附加到 <code>parent</code>.</p>
 <pre><code class="lang-js">let child = ui.inflate(
     &lt;text text=&quot;动态视图&quot;/&gt;,

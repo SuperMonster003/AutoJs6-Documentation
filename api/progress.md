@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-07 Compose UI F2 本地配套: 补充 XML `<compose>` 与 `compose.attach`, AndroidView 的实际 View / 同步 Context 工厂, getter 与替换规则, 多容器会话和原有 XML / Compose 直接混域限制. 保留冻结 V1 目录, 互操作属性表单独生成. 配套源码与声明正在本轮验收, 全站生成和离线同步以统一交付记录为准; 此条不表示官方发布.
+
 2026-10-07 Color 感知色彩与主题色控制: 同步宿主 6.8.0 的 OKLab / OKLCH 转换, ensureContrast, harmony, tones, derive, nightVariant, simulate 与 extract, ColorDetectionAlgorithm 新增 oklab, 以及 colors.theme 的主题色读写, 颜色库列表, 智能颜色库激活, 换组与脚本状态. 说明脚本修改的 500 毫秒合并, 历史来源与撤销规则, 示例结果在 API 37 模拟器上逐项核对.
 
 2026-10-04 Compose UI F1 TSX 本地配套: 模块页补充宿主 5319, Compose UI 1.1.0 与 TypeScript Engine 0.6.4 的可用条件, 成员工厂与命名空间标签, Fragment 根/插槽规则, 真实 ref/事件语义及 XML 混域拒绝. 普通 JavaScript 工厂最低宿主 5316 保持不变. 已核对真实声明层与 TypeScript 编译输出; 设备交互验收, 全站生成与离线同步由本轮统一完成, 当前条目不表示官方发布.

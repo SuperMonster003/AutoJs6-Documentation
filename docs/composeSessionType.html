@@ -318,8 +318,8 @@
 
         <div id="apicontent">
             <h1>Compose 会话 (ComposeSession)<span><a class="mark" href="#composesessiontype_compose_composesession" id="composesessiontype_compose_composesession">#</a></span></h1>
-<p>ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 <a href="compose.html#compose_m_mount">compose.mount</a> 返回, 或经 <a href="composeFloatyWindowType.html#composefloatywindowtype_p_session">ComposeFloatyWindow.session</a> 取得. 不能直接用 <code>new</code> 创建.</p>
-<p>UI 挂载和悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 会话不是 Android Activity 或 View; 修改组件使用 <a href="composeNodeType.html">ComposeNode</a>, 窗口操作使用 <a href="composeFloatyWindowType.html">ComposeFloatyWindow</a>.</p>
+<p>ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a> 返回, 或经 <a href="composeFloatyWindowType.html#composefloatywindowtype_p_session">ComposeFloatyWindow.session</a> 取得. 不能直接用 <code>new</code> 创建.</p>
+<p>UI 挂载, XML 容器挂载和 Compose 悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 同一 XML 容器重新成功 attach 时替换它的旧会话, 不关闭其他容器的会话. 会话不是 Android Activity 或 View; 修改组件使用 <a href="composeNodeType.html">ComposeNode</a>, 窗口操作使用 <a href="composeFloatyWindowType.html">ComposeFloatyWindow</a>.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeSession</p>
 
 <h2>[p#] root<span><a class="mark" href="#composesessiontype_p_root" id="composesessiontype_p_root">#</a></span></h2>
@@ -435,6 +435,8 @@ let session = compose.mount(compose.Scaffold({},
 <p>关闭标志先于原生资源清理完成. 原生视图释放在 Android 主线程执行, <code>close()</code> 返回或 <code>&#39;close&#39;</code> 回调都不是原生释放完成的回执. 调用方图片的生命周期应覆盖这段过程, 不要仅凭关闭返回就立即 recycle 仍可能被原生视图引用的图片.</p>
 <p>没有原生释放完成的确认时, 不要在 <code>remove</code>, <code>close</code> 返回后或关闭监听中主动 recycle. 图片不再使用后可放弃脚本持有的强引用, 交给正常回收机制处理. 当前没有 <code>awaitClosed</code> 或等待原生释放的 Promise 接口.</p>
 <p>关闭 UI 会话会移除 Compose 内容, 不等同于请求结束脚本 Activity. 页面后续行为由脚本自身决定.</p>
+<p>关闭 XML 容器会话只移除该容器内的 Compose 内容, 保留 <code>&lt;compose&gt;</code> 容器本身和外层 XML 页面或旧悬浮窗口. 在容器首次进入窗口前可以先 attach 准备内容; 首次真实进入窗口后, 任何 detach 都会关闭它的会话, 临时移出再放回也不会自动重启. 若还需显示, 应创建新节点并再次 attach. 旧悬浮窗口关闭或移除容器同样会关闭嵌入会话并释放相应保活.</p>
+<p>AndroidView 的实际 View 释放也在主线程完成. 如需转交另一个父视图或新会话, 先结束旧使用, 再在主线程确认其原生父视图已释放. 不以 <code>close()</code> 返回或 <code>&#39;close&#39;</code> 事件作为可立即重用的回执, 也不能复用旧会话的节点句柄.</p>
 <p>会话也会在脚本停止, 所属 Activity 销毁, UI 内容被替换, 原生窗口关闭, 或插件更新/卸载/禁用时关闭. 常规原生回调不会在主线程同步执行非 UI 脚本, 关闭操作也不会等待另一个脚本线程完成.</p>
 <p>关闭后 <code>root</code> 为 <code>null</code>, <code>isClosed()</code> 为 <code>true</code>, 重复 <code>close()</code> 仍安全; <code>update</code>, <code>post</code>, <code>showSnackbar</code>, <code>on</code> 及原会话节点的业务操作会报 <code>SESSION_CLOSED</code>.</p>
 

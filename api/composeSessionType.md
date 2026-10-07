@@ -1,8 +1,8 @@
 # Compose 会话 (ComposeSession)
 
-ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 [compose.mount](compose#m-mount) 返回, 或经 [ComposeFloatyWindow.session](composeFloatyWindowType#p-session) 取得. 不能直接用 `new` 创建.
+ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach) 返回, 或经 [ComposeFloatyWindow.session](composeFloatyWindowType#p-session) 取得. 不能直接用 `new` 创建.
 
-UI 挂载和悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 会话不是 Android Activity 或 View; 修改组件使用 [ComposeNode](composeNodeType), 窗口操作使用 [ComposeFloatyWindow](composeFloatyWindowType).
+UI 挂载, XML 容器挂载和 Compose 悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 同一 XML 容器重新成功 attach 时替换它的旧会话, 不关闭其他容器的会话. 会话不是 Android Activity 或 View; 修改组件使用 [ComposeNode](composeNodeType), 窗口操作使用 [ComposeFloatyWindow](composeFloatyWindowType).
 
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeSession</p>
 
@@ -119,6 +119,10 @@ let session = compose.mount(compose.Scaffold({},
 没有原生释放完成的确认时, 不要在 `remove`, `close` 返回后或关闭监听中主动 recycle. 图片不再使用后可放弃脚本持有的强引用, 交给正常回收机制处理. 当前没有 `awaitClosed` 或等待原生释放的 Promise 接口.
 
 关闭 UI 会话会移除 Compose 内容, 不等同于请求结束脚本 Activity. 页面后续行为由脚本自身决定.
+
+关闭 XML 容器会话只移除该容器内的 Compose 内容, 保留 `<compose>` 容器本身和外层 XML 页面或旧悬浮窗口. 在容器首次进入窗口前可以先 attach 准备内容; 首次真实进入窗口后, 任何 detach 都会关闭它的会话, 临时移出再放回也不会自动重启. 若还需显示, 应创建新节点并再次 attach. 旧悬浮窗口关闭或移除容器同样会关闭嵌入会话并释放相应保活.
+
+AndroidView 的实际 View 释放也在主线程完成. 如需转交另一个父视图或新会话, 先结束旧使用, 再在主线程确认其原生父视图已释放. 不以 `close()` 返回或 `'close'` 事件作为可立即重用的回执, 也不能复用旧会话的节点句柄.
 
 会话也会在脚本停止, 所属 Activity 销毁, UI 内容被替换, 原生窗口关闭, 或插件更新/卸载/禁用时关闭. 常规原生回调不会在主线程同步执行非 UI 脚本, 关闭操作也不会等待另一个脚本线程完成.
 

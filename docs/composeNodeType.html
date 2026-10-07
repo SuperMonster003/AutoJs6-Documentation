@@ -361,7 +361,7 @@
 
         <div id="apicontent">
             <h1>Compose 节点 (ComposeNode)<span><a class="mark" href="#composenodetype_compose_composenode" id="composenodetype_compose_composenode">#</a></span></h1>
-<p>ComposeNode 是 <a href="compose.html#compose_5">组件工厂</a> 或 <a href="compose.html#compose_m_createelement">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code> 或 <code>compose.floaty</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>
+<p>ComposeNode 是 <a href="compose.html#compose_5">组件工厂</a> 或 <a href="compose.html#compose_m_createelement">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code>, <code>compose.attach</code> 或 <code>compose.floaty</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>
 <p>所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 <a href="compose.html#compose_m_post">compose.post</a> 或所属会话的 <code>post</code>. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeNode</p>
 
@@ -405,6 +405,7 @@ console.log(title.get(&#39;text&#39;));
 <p>只有该组件实际声明的属性可用. 例如 <code>Text</code> 没有 <code>checked</code>, 未知属性赋值会报 <code>UNKNOWN_PROP</code>. 属性名和枚举区分大小写, 值按目录校验, 不把 <code>&#39;false&#39;</code> 自动转换为布尔值, 也不把数字自动转换为 <code>text</code>.</p>
 <p>返回的属性值是归一化脚本值: dp / sp 是数值, 颜色是 ARGB 整数, 数组和结构值是普通脚本对象. 有目录默认值时返回默认值, 否则未指定的属性返回 <code>undefined</code>. <code>modifier</code> 只返回显式设置的链, 不会把快捷属性合成为新链.</p>
 <p><code>Image.src</code> 读取为底层 Android Bitmap 引用, 不返回最初的文件路径或新建 ImageWrapper. 调用方图片的有效期应覆盖所有原生使用, 参阅 <a href="composeComponents.html#composecomponents_composeimageinput">组件图像输入</a> 与 <a href="composeSessionType.html#composesessiontype_m_close">关闭清理边界</a>.</p>
+<p>F2 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a> 的 <code>view</code> 读取为准备后的实际 Android View, 即使创建时传入的是工厂也不返回该函数. 可用 <code>node.set({view: anotherView})</code> 或直接赋值更新, 输入仍须符合 <a href="composeComponents.html#composecomponents_composeviewinput">ComposeViewInput</a>. 节点句柄与被借用的 View 是不同对象; 不将 ComposeNode 传给 <code>ui.setContentView</code>, <code>addView</code> 或 AndroidView 的 <code>view</code> 属性.</p>
 <p>事件属性, <code>ref</code> 和具名插槽通过创建选项或 <code>set</code> 设置; 它们没有普通属性访问器. 例如使用 <code>node.set({onClick: fn})</code> 或 <code>node.on(&#39;click&#39;, fn)</code>, 不使用 <code>node.onClick = fn</code>.</p>
 <h2>[m#] set<span><a class="mark" href="#composenodetype_m_set" id="composenodetype_m_set">#</a></span></h2>
 <h3>node.set(props)<span><a class="mark" href="#composenodetype_node_set_props" id="composenodetype_node_set_props">#</a></span></h3>

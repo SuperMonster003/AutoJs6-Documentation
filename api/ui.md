@@ -67,6 +67,7 @@ ui.layout(xml);
 | `linear`, `horizontal` | `JsLinearLayout` | 默认水平方向的线性布局 |
 | `vertical` | `JsLinearLayout` | 垂直方向的线性布局 |
 | `frame` | `JsFrameLayout` | 帧布局 |
+| `compose` | `ComposeContainerView` | F2 空容器, 用 [compose.attach](compose#m-attach) 填入 Compose 内容 |
 | `relative` | `JsRelativeLayout` | 相对布局 |
 | `scroll` | `JsScrollView` | 垂直滚动布局 |
 | `drawer` | `JsDrawerLayout` | 抽屉布局 |
@@ -320,6 +321,21 @@ console.log("hello");
 | `video` | `setCustomMediaController(controller)` | 设置自定义 MediaController 或 `null` |
 
 `list` 和 `grid` 还有供布局器使用的 `setItemTemplate`, `setDataSourceAdapter` 和 `initWithScriptRuntime`. 常规脚本不应替换这些内部协作对象.
+
+## Compose 容器
+
+配套宿主 5320 与支持 F2 的 Compose UI 插件提供 `<compose>` 标签. 它沿用 FrameLayout 的布局尺寸和 ID 属性, XML 内只能留空或包含空白, 不能放置 XML 元素子节点. `<compose>` 是 Android 容器 View, 与 `<compose.Text>` 这样的 Compose TSX 组件不同.
+
+完成 `ui.layout` 后, 使用原有 `ui.<id>` 或 `ui.findById` 取得容器并调用 [compose.attach](compose#m-attach). 旧悬浮窗口中的同类容器也通过该窗口的 ID 查找访问. ID 查找继续返回 NativeView, 不返回 ComposeNode; Compose 根节点从 attach 返回的会话获取.
+
+```js
+'ui';
+
+ui.layout('<vertical><text text="XML" /><compose id="slot" w="*" h="120" /></vertical>');
+let session = compose.attach(ui.slot, compose.Text({text: 'Compose'}));
+```
+
+不要把任意 FrameLayout 当作 `<compose>` 使用, 不向该容器手动添加子视图, 也不把 ComposeNode 直接交给 `ui.layout` 或 `addView`. 反方向嵌入使用 Compose 的 [AndroidView](composeComponents#androidview) 节点及实际 View, 不直接嵌入 XML TSX 表达式.
 
 ## NativeView 包装
 
@@ -642,6 +658,10 @@ ui.read.on('click', function () {
 - <ins>**returns**</ins> { [View](https://developer.android.com/reference/android/view/View) } - NativeView 包装后的根视图
 
 动态渲染并返回视图. 在非 UI 模式下, 使用带 `ScriptTheme` 的应用上下文; 在 UI 模式下使用当前脚本 Activity.
+
+配套宿主 5320 的 `.tsx` 入口还接受 XML TSX 表达式, 如 `ui.inflate(<button text="Native" onClick={view => view.setText('Clicked')} />)`. 宿主会创建实际 View 并连接 XML `onClick` 监听, 监听参数为被点击的 NativeView. 这可用于 [ComposeViewFactory](composeComponents#composeviewfactory). 不能传入 ComposeNode 或包含 Compose 节点的 fragment, 也不把 XML TSX 值直接当作 AndroidView 的 `view` 属性.
+
+此 XML TSX 监听沿用原生 View 的事件发射器, 普通 `function` 的 `this` 是该 [EventEmitter](events#eventemitter), 不是 View 或 ComposeNode. 应使用回调参数操作被点击的 View. 这不表示 E4X XML 或 XML 字符串能在属性中保存 JavaScript 函数.
 
 传入 `parent` 可使依赖父布局参数的属性在渲染时正确应用. `isAttachedToParent` 为 `true` 时, 布局器会把结果直接附加到 `parent`.
 

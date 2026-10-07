@@ -1,8 +1,8 @@
 # Compose 组件 (Components)
 
-本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount) 或 [compose.floaty](compose#m-floaty).
+本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach) 或 [compose.floaty](compose#m-floaty).
 
-需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数或 Android View; `compose.Snackbar` 不是节点工厂.
+需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 `view` 属性接入; `compose.Snackbar` 不是节点工厂.
 
 ## 输入类型
 
@@ -13,6 +13,22 @@
 ### ComposeColorInput
 
 支持 [ColorInt](dataTypes#colorint), [ColorHex](dataTypes#colorhex), [ColorName](dataTypes#colorname), [Color](colorType) 或宿主 [ThemeColor](dataTypes#themecolor), 按 [colors.toInt](color#m-toint) 转成 ARGB 整数. 不接受任意 `{ r, g, b }` 对象或颜色分量数组. 部分组件颜色属性接受 null 以使用默认颜色, `background` / `border` 修饰操作的颜色不接受 null.
+
+### ComposeNativeView
+
+实际的 [android.view.View](https://developer.android.com/reference/android/view/View), 包括 `ui.inflate` 结果和宿主 ID 查找返回的 NativeView 包装对象. 普通 JavaScript 对象, 字符串, 数字, Promise, XML TSX 值和 ComposeNode 都不是原生 View.
+
+编辑器没有加载原生声明组时, 此类型保留为对象形态, 仍排除原始值, 函数和 Promise; 任意对象是否为真实 View 由运行时检查. 完整原生成员补全需要原有 Android 等可选声明组, F2 不改变这些组的默认启用状态.
+
+### ComposeViewFactory
+
+同步函数 `(context) => view`. `context` 是 [Android Context](https://developer.android.com/reference/android/content/Context): UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 [ComposeNativeView](#composenativeview), 不接受 Promise 或无返回值. 不把函数的 `this` 当作 ComposeNode.
+
+宿主在准备 `AndroidView` 创建或显式 `set({view: factory})` 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach 或 floaty 会话.
+
+### ComposeViewInput
+
+[ComposeNativeView](#composenativeview) 或 [ComposeViewFactory](#composeviewfactory). 仅用于 AndroidView 的必填 `view` 属性. Getter 返回准备后的实际 View, 不返回工厂, Promise 或内部身份值.
 
 ### ComposeDpInput
 
@@ -222,6 +238,38 @@ let bar = compose.TopAppBar({
 ### Icon
 
 必需 `name`, 可选 `tint`. 名称集合见 [ComposeIconNameInput](#composeiconnameinput). 不使用 text 作为图标名称; 不接受 children.
+
+### AndroidView
+
+F2 扩展, 使用 [配套宿主和插件](compose). 必填 `view`, 接受 [ComposeViewInput](#composeviewinput); 不接受 children, 具名插槽, `update` 或 `onRelease` 脚本属性. 修饰链和快捷尺寸仍使用 Compose 的单位与顺序. `compose.createElement('AndroidView', {view})`, `<compose.AndroidView view={view} />` 和 `<compose:AndroidView view={view} />` 使用同一节点行为.
+
+传入的 View 必须可由该节点独占挂载. 不会从已有父视图强行取走 View, 也不能让两个 AndroidView 节点同时借用同一实例. 同一容器替换会话时, 仍被旧会话占用的 View 也不能直接交给新会话. 未具备互操作能力的插件报 `PLUGIN_INCOMPATIBLE`, 无效 View 或占用冲突报 `INVALID_ARGUMENT`. 工厂抛出的普通异常按可恢复的 `RENDER_FAILED` 处理, 已有 ComposeError 保留其错误码, 不替换已经有效的旧内容.
+
+```js
+'ui';
+
+let nativeButton = ui.inflate('<button text="Native button" />');
+let nativeNode = compose.AndroidView({view: nativeButton, w: 200, h: 56});
+nativeButton.on('click', function () {
+    nativeButton.setText('Clicked');
+});
+compose.mount(compose.Column({padding: 16, spacing: 12},
+    compose.Text({text: 'Compose heading'}), nativeNode));
+```
+
+也可让宿主在主线程提供 Context 并创建 View:
+
+```js
+let nativeNode = compose.AndroidView({view: function (context) {
+    let text = new android.widget.TextView(context);
+    text.setText('Created by a View factory');
+    return text;
+}});
+```
+
+`nativeNode.view` 和 `nativeNode.get('view')` 返回同一个实际 View 对象对应的包装. 使用 `nativeNode.set({view: anotherView})` 或给 `nativeNode.view` 赋值可替换输入. 修改该 View 的 Android 属性仍须遵守 Android 主线程要求; ComposeNode 的业务操作仍在所属脚本线程进行.
+
+节点借用 View, 不代替调用方销毁 View 自身的业务资源或清除用户注册的原生监听. 节点移除或会话关闭的原生清理具有 [异步边界](composeSessionType#m-close); 不凭 `close()` 返回就立即把该 View 添加到另一个父视图. 需要复用时, 应在主线程确认旧父视图已释放它, 再创建新的 AndroidView 节点. 已关闭会话的 ComposeNode 句柄本身不能复用.
 
 ### Image
 
@@ -491,3 +539,18 @@ let session = compose.mount(compose.Scaffold({},
 | <code>TopAppBar</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
 
 <!-- autojs6-compose-catalog:v1:end -->
+
+## F2 互操作目录
+
+<!-- autojs6-compose-interop:f2:start -->
+<!-- Generated from org.autojs.plugin.compose.api.interop.AndroidViewInteropV1; schema=1; contract=1; extension=1; feature=android-view-interop-v1; sha256=cbee120589a49e97f8bf5ea546b508f0a1f8b77b685e8affd8b03da67b838a37. -->
+
+| Component | Children | Slots | Events | Feature |
+| --- | --- | --- | --- | --- |
+| <code>AndroidView</code> | NONE | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>android-view-interop-v1</code> |
+
+| Property | Script input | Getter | Required |
+| --- | --- | --- | --- |
+| <code>view</code> | <code>View &#124; ((context: android.content.Context) =&gt; View)</code> | <code>View</code> | true |
+
+<!-- autojs6-compose-interop:f2:end -->

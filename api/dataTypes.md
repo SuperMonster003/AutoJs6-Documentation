@@ -2183,3 +2183,15 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 ## ComposeValueInput
 
 参阅 [ComposeValueInput](composeComponents#composevalueinput) 输入形态.
+
+## ComposeNativeView
+
+参阅 [ComposeNativeView](composeComponents#composenativeview) 原生 Android View 输入形态.
+
+## ComposeViewFactory
+
+参阅 [ComposeViewFactory](composeComponents#composeviewfactory) 的同步 Context 工厂签名与主线程创建规则.
+
+## ComposeViewInput
+
+参阅 [ComposeViewInput](composeComponents#composeviewinput), 用于 AndroidView 的实际 View 或同步工厂输入.

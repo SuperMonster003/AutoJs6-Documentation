@@ -1,6 +1,6 @@
 # Compose 节点 (ComposeNode)
 
-ComposeNode 是 [组件工厂](compose#组件工厂) 或 [compose.createElement](compose#m-createelement) 返回的脚本句柄, 不能直接用 `new` 创建. 节点可以先创建和组装, 再交给 `compose.mount` 或 `compose.floaty` 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.
+ComposeNode 是 [组件工厂](compose#组件工厂) 或 [compose.createElement](compose#m-createelement) 返回的脚本句柄, 不能直接用 `new` 创建. 节点可以先创建和组装, 再交给 `compose.mount`, `compose.attach` 或 `compose.floaty` 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.
 
 所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 [compose.post](compose#m-post) 或所属会话的 `post`. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.
 
@@ -62,6 +62,8 @@ console.log(title.get('text'));
 返回的属性值是归一化脚本值: dp / sp 是数值, 颜色是 ARGB 整数, 数组和结构值是普通脚本对象. 有目录默认值时返回默认值, 否则未指定的属性返回 `undefined`. `modifier` 只返回显式设置的链, 不会把快捷属性合成为新链.
 
 `Image.src` 读取为底层 Android Bitmap 引用, 不返回最初的文件路径或新建 ImageWrapper. 调用方图片的有效期应覆盖所有原生使用, 参阅 [组件图像输入](composeComponents#composeimageinput) 与 [关闭清理边界](composeSessionType#m-close).
+
+F2 [AndroidView](composeComponents#androidview) 的 `view` 读取为准备后的实际 Android View, 即使创建时传入的是工厂也不返回该函数. 可用 `node.set({view: anotherView})` 或直接赋值更新, 输入仍须符合 [ComposeViewInput](composeComponents#composeviewinput). 节点句柄与被借用的 View 是不同对象; 不将 ComposeNode 传给 `ui.setContentView`, `addView` 或 AndroidView 的 `view` 属性.
 
 事件属性, `ref` 和具名插槽通过创建选项或 `set` 设置; 它们没有普通属性访问器. 例如使用 `node.set({onClick: fn})` 或 `node.on('click', fn)`, 不使用 `node.onClick = fn`.
 

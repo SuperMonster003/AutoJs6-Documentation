@@ -99,6 +99,8 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
+- `新增` [终端 (Terminal)](https://docs.autojs6.com/#/terminal) 及会话, 选项与错误参考, 对应 3-Shell Terminal 插件的完整脚本 API
+
 <p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
 
 - `更新` Installer 高级安装选项, 所有权/手动编译观察结果, 本地签名门禁, 包名/共享 UID 黑名单与选中分包的声明权限预览

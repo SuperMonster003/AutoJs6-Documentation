@@ -190,6 +190,8 @@ F2 [AndroidView](composeComponents#androidview) 的 `view` 读取为准备后的
 
 向已挂载且支持焦点命令的组件请求焦点. 按钮, 选择控件, 滑块, 输入框和带 `clickable` Modifier 的节点支持此命令. 其他类型会报 `INVALID_ARGUMENT`; 未挂载会报 `NODE_DETACHED`.
 
+V2 追加支持 NavigationBarItem, NavigationRailItem, NavigationDrawerItem, Tab, DropdownMenuItem, AssistChip, FilterChip, InputChip, SegmentedButtonItem, FloatingActionButton 和 SearchBar, 具体可用命令也列在 [组件目录](composeComponents#v2-目录生成表) 中.
+
 命令异步到达原生视图, 返回值不代表已经获得焦点或显示输入法. 悬浮输入框还需要 [窗口允许焦点](composeFloatyWindowType#m-requestfocus).
 
 ## [m#] blur
@@ -206,10 +208,10 @@ F2 [AndroidView](composeComponents#androidview) 的 `view` 读取为准备后的
 
 **`Overload 1/2`**
 
-- **index** { [number](dataTypes#number) } - 非负整数条目索引.
+- **index** { [number](dataTypes#number) } - 非负整数条目或页面索引.
 - <ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点.
 
-仅适用于 `LazyColumn` 或 `LazyRow`, 索引须小于当前条目数.
+适用于 `LazyColumn`, `LazyRow` 及 V2 的 `LazyVerticalGrid`, `HorizontalPager`. 网格索引指子项而非行号, 分页索引指页面, 均须小于当前子项数量.
 
 ### node.scrollTo(target)
 
@@ -218,9 +220,11 @@ F2 [AndroidView](composeComponents#androidview) 的 `view` 读取为准备后的
 - **target** {{ index?: [number](dataTypes#number); offset?: [number](dataTypes#number) }} - 至少提供一个字段.
 - <ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 当前节点.
 
-有 `index` 时选择懒加载条目, 可同时给出正负整数 `offset` 作为该条目的像素偏移. 没有 `index` 时, `offset` 是非负整数的绝对滚动像素位置: 普通滚动 Modifier 直接设置该位置, 懒列表从第 0 项加该偏移请求重新测量. 数值均须在对应的 32 位整数范围内.
+有 `index` 时选择懒加载条目或页面, 可同时给出正负整数 `offset` 作为该条目或页面的物理像素偏移. 没有 `index` 时, `offset` 是非负整数的绝对滚动像素位置: 普通滚动 Modifier 直接设置该位置, 懒列表和网格从第 0 项, 分页从第 0 页加该偏移请求定位. 数值均须在对应的 32 位整数范围内.
 
-`scrollTo(100)` 表示懒列表索引, 不表示普通滚动容器的 100 px; 普通容器应写 `scrollTo({offset: 100})`. 只有懒列表和实际带滚动 Modifier 的节点支持滚动命令.
+`scrollTo(100)` 表示条目或页面索引, 不表示普通滚动容器的 100 px; 普通容器应写 `scrollTo({offset: 100})`. 只有上述列表, 网格, 分页和实际带滚动 Modifier 的节点支持滚动命令.
+
+HorizontalPager 的 offset 根据实际页面尺寸与间距转换为定位请求, 不接受页面比例. 原生手势或此命令会移动页面并报告 pageChange, 不自动改写节点的 page 属性; 无关属性更新保留原生页面位置.
 
 普通节点同链含多个滚动操作时, offset 命令作用于第一个, 即最外层滚动操作. 该命令不提供两个方向的独立坐标参数.
 

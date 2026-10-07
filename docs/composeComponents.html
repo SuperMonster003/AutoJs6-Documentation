@@ -695,7 +695,8 @@ let session = compose.mount(compose.Scaffold({},
 <h2>V2 组件<span><a class="mark" href="#composecomponents_v2" id="composecomponents_v2">#</a></span></h2>
 <p>以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 Compose UI 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.</p>
 <p>状态属性使用严格类型, 不将数字字符串当数字. <code>page</code>, <code>selectedIndex</code>, <code>hour</code>, <code>minute</code>, 年份及 <code>columns</code> 是整数. 构造输入, 后续 <code>set</code> 与属性赋值都受相同范围和树结构规则约束. 下方目录表列出每项默认值, 类型, 插槽和事件; 数值上限与跨属性约束由运行时检查.</p>
-<p>日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, 显式更新 page 时再定位.</p>
+<p>日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, page 属性值改变时请求定位. 需要在 page 属性值未改变时重新定位, 使用 scrollTo.</p>
+<p>NavigationBarItem, NavigationRailItem, NavigationDrawerItem, Tab, DropdownMenuItem, AssistChip, FilterChip, InputChip, SegmentedButtonItem, FloatingActionButton 和 SearchBar 提供原生 <a href="composeNodeType.html#composenodetype_m_focus">focus / blur</a> 命令. 节点须已挂载; 焦点请求异步生效, 不保证输入法随即显示. 其他节点可通过已有 clickable Modifier 获得相应焦点目标.</p>
 <h3>NavigationBar<span><a class="mark" href="#composecomponents_navigationbar" id="composecomponents_navigationbar">#</a></span></h3>
 <p><code>compose.NavigationBar(props?, ...items)</code> 返回底部导航栏节点. 普通 children 至少包含一个 <a href="#composecomponents_navigationbaritem">NavigationBarItem</a>, 不接受字符串, Text 或其他节点. 同时最多一个 item 的 <code>selected</code> 为 true. <code>containerColor</code> 和 <code>contentColor</code> 控制栏颜色.</p>
 <h3>NavigationBarItem<span><a class="mark" href="#composecomponents_navigationbaritem" id="composecomponents_navigationbaritem">#</a></span></h3>
@@ -745,7 +746,7 @@ compose.mount(function () {
 <p><code>timeChange(hour, minute)</code> 以两个数字参数报告当前时间, 即使使用 12 小时显示, hour 仍采用 0 到 23. 它不接收日期, 时区或 Date 对象, 也不提供 TextField 的 edit 命令.</p>
 <h3>HorizontalPager<span><a class="mark" href="#composecomponents_horizontalpager" id="composecomponents_horizontalpager">#</a></span></h3>
 <p><code>compose.HorizontalPager(props?, ...pages)</code> 使用普通 children 定义页面, 至少需要一个页面. <code>page</code> 默认 0, 必须是现有页面索引. <code>pageSpacing</code> 为非负 dp, 默认 0. <code>userScrollEnabled</code> 默认 true.</p>
-<p>页面变化触发 <code>pageChange(page)</code>. 使用 <code>node.scrollTo(index)</code> 或 <code>node.scrollTo({index, offset})</code> 定位; offset 是物理像素, 根据实际页面尺寸转换, 不是页面比例或 dp. 页面内容应有稳定 key, 单节点最多 2000 个直接 children, 全会话仍受总节点数限制.</p>
+<p>页面变化触发 <code>pageChange(page)</code>. <code>scroll(index, offset)</code> 的 index 为当前页面索引, offset 为相对该页的物理像素偏移. 使用 <code>node.scrollTo(index)</code> 或 <code>node.scrollTo({index, offset})</code> 定位; offset 根据实际页面尺寸转换, 不是页面比例或 dp. 页面内容应有稳定 key, 单节点最多 2000 个直接 children, 全会话仍受总节点数限制.</p>
 <h3>LazyVerticalGrid<span><a class="mark" href="#composecomponents_lazyverticalgrid" id="composecomponents_lazyverticalgrid">#</a></span></h3>
 <p><code>compose.LazyVerticalGrid(props?, ...items)</code> 提供纵向懒网格. <code>columns</code> 默认 2, 允许 1 到 64 的整数. <code>spacing</code> 为非负 dp, 默认 0. <code>contentPadding</code> 可为一个 dp 值或长度为 1 / 2 / 4 的 dp 数组, 默认 0. <code>userScrollEnabled</code> 默认 true, <code>reverseLayout</code> 默认 false.</p>
 <p>支持 <code>scrollTo(index)</code> 及 <code>{index, offset}</code> 形式, index 指子项而非行号. <code>scroll(firstVisibleIndex, offset)</code> 中的 offset 为物理像素. 网格需要明确的可用高度, 不应直接置于同向且无限高度的滚动布局中. children 建议使用稳定 key, 单节点最多 2000 个直接 children.</p>
@@ -2307,7 +2308,7 @@ let session = compose.mount(function () {
 <!-- autojs6-compose-interop:f2:end -->
 <h2>V2 目录生成表<span><a class="mark" href="#composecomponents_v2_1" id="composecomponents_v2_1">#</a></span></h2>
 <!-- autojs6-compose-catalog:v2:start -->
-<!-- Generated from org.autojs.plugin.compose.api.v2.ComposeUiV2.catalog; schema=1; contract=2; sha256=66e2e1e5eeae09613682cd78cd0d953a0e4f405400524ce8f5230c0f595d3406. -->
+<!-- Generated from org.autojs.plugin.compose.api.v2.ComposeUiV2.catalog; schema=1; contract=2; sha256=f46009f6ca2c69cfcbfcfa8f829ec678ffe81e647eb48812db6ee2b2f087f712. -->
 <table>
 <thead>
 <tr>
@@ -2330,7 +2331,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code></td>
 <td><code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>Badge</code></td>
@@ -2370,7 +2371,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code></td>
 <td><code>leadingIcon</code>, <code>text (required)</code>, <code>trailingIcon</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>FilterChip</code></td>
@@ -2380,7 +2381,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code>, <code>selected</code></td>
 <td><code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>FloatingActionButton</code></td>
@@ -2390,7 +2391,7 @@ let session = compose.mount(function () {
 <td><code>containerColor</code>, <code>contentColor</code>, <code>shape</code></td>
 <td><code>content</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>HorizontalPager</code></td>
@@ -2410,7 +2411,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code>, <code>selected</code></td>
 <td><code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>LazyVerticalGrid</code></td>
@@ -2450,7 +2451,7 @@ let session = compose.mount(function () {
 <td><code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code></td>
 <td><code>icon (required)</code>, <code>label</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>NavigationDrawer</code></td>
@@ -2470,7 +2471,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code>, <code>selected</code></td>
 <td><code>badge</code>, <code>icon</code>, <code>label (required)</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>NavigationRail</code></td>
@@ -2490,7 +2491,7 @@ let session = compose.mount(function () {
 <td><code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code></td>
 <td><code>icon (required)</code>, <code>label</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>PullToRefresh</code></td>
@@ -2510,7 +2511,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code>, <code>expanded</code>, <code>query</code></td>
 <td><code>content</code>, <code>leadingIcon</code>, <code>placeholder</code>, <code>trailingIcon</code></td>
 <td><code>click</code>, <code>expandedChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>queryChange</code>, <code>scroll</code>, <code>search</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>SegmentedButton</code></td>
@@ -2530,7 +2531,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code>, <code>selected</code></td>
 <td><code>icon</code>, <code>label (required)</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>Tab</code></td>
@@ -2540,7 +2541,7 @@ let session = compose.mount(function () {
 <td><code>enabled</code></td>
 <td><code>icon</code>, <code>text</code></td>
 <td><code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code></td>
-<td>-</td>
+<td><code>blur</code>, <code>focus</code></td>
 </tr>
 <tr>
 <td><code>TabRow</code></td>

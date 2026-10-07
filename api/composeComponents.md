@@ -389,7 +389,9 @@ let session = compose.mount(compose.Scaffold({},
 
 状态属性使用严格类型, 不将数字字符串当数字. `page`, `selectedIndex`, `hour`, `minute`, 年份及 `columns` 是整数. 构造输入, 后续 `set` 与属性赋值都受相同范围和树结构规则约束. 下方目录表列出每项默认值, 类型, 插槽和事件; 数值上限与跨属性约束由运行时检查.
 
-日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, 显式更新 page 时再定位.
+日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, page 属性值改变时请求定位. 需要在 page 属性值未改变时重新定位, 使用 scrollTo.
+
+NavigationBarItem, NavigationRailItem, NavigationDrawerItem, Tab, DropdownMenuItem, AssistChip, FilterChip, InputChip, SegmentedButtonItem, FloatingActionButton 和 SearchBar 提供原生 [focus / blur](composeNodeType#m-focus) 命令. 节点须已挂载; 焦点请求异步生效, 不保证输入法随即显示. 其他节点可通过已有 clickable Modifier 获得相应焦点目标.
 
 ### NavigationBar
 
@@ -476,7 +478,7 @@ let date = compose.DatePicker({selectedDateMillis: Date.UTC(2026, 9, 7),
 
 `compose.HorizontalPager(props?, ...pages)` 使用普通 children 定义页面, 至少需要一个页面. `page` 默认 0, 必须是现有页面索引. `pageSpacing` 为非负 dp, 默认 0. `userScrollEnabled` 默认 true.
 
-页面变化触发 `pageChange(page)`. 使用 `node.scrollTo(index)` 或 `node.scrollTo({index, offset})` 定位; offset 是物理像素, 根据实际页面尺寸转换, 不是页面比例或 dp. 页面内容应有稳定 key, 单节点最多 2000 个直接 children, 全会话仍受总节点数限制.
+页面变化触发 `pageChange(page)`. `scroll(index, offset)` 的 index 为当前页面索引, offset 为相对该页的物理像素偏移. 使用 `node.scrollTo(index)` 或 `node.scrollTo({index, offset})` 定位; offset 根据实际页面尺寸转换, 不是页面比例或 dp. 页面内容应有稳定 key, 单节点最多 2000 个直接 children, 全会话仍受总节点数限制.
 
 ### LazyVerticalGrid
 
@@ -722,32 +724,32 @@ let session = compose.mount(function () {
 ## V2 目录生成表
 
 <!-- autojs6-compose-catalog:v2:start -->
-<!-- Generated from org.autojs.plugin.compose.api.v2.ComposeUiV2.catalog; schema=1; contract=2; sha256=66e2e1e5eeae09613682cd78cd0d953a0e4f405400524ce8f5230c0f595d3406. -->
+<!-- Generated from org.autojs.plugin.compose.api.v2.ComposeUiV2.catalog; schema=1; contract=2; sha256=f46009f6ca2c69cfcbfcfa8f829ec678ffe81e647eb48812db6ee2b2f087f712. -->
 
 | Component | Invocation | Children | Scope | Canonical properties | Slots | Events | Commands |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| <code>AssistChip</code> | NODE | NONE | ANY | <code>enabled</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>AssistChip</code> | NODE | NONE | ANY | <code>enabled</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>Badge</code> | NODE | SINGLE | ANY | <code>text</code>, <code>visible</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
 | <code>DatePicker</code> | NODE | NONE | ANY | <code>displayMode</code>, <code>selectedDateMillis</code>, <code>showModeToggle</code>, <code>yearEnd</code>, <code>yearStart</code> | - | <code>click</code>, <code>dateChange</code>, <code>displayModeChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
 | <code>DropdownMenu</code> | NODE | MANY | ANY | <code>open</code> | <code>anchor (required)</code> | <code>click</code>, <code>dismissRequest</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
-| <code>DropdownMenuItem</code> | NODE | NONE | ANY | <code>enabled</code> | <code>leadingIcon</code>, <code>text (required)</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
-| <code>FilterChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
-| <code>FloatingActionButton</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code>, <code>shape</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>DropdownMenuItem</code> | NODE | NONE | ANY | <code>enabled</code> | <code>leadingIcon</code>, <code>text (required)</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
+| <code>FilterChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | <code>blur</code>, <code>focus</code> |
+| <code>FloatingActionButton</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code>, <code>shape</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>HorizontalPager</code> | NODE | LAZY_ITEMS | ANY | <code>page</code>, <code>pageSpacing</code>, <code>userScrollEnabled</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>pageChange</code>, <code>scroll</code> | <code>scrollTo</code> |
-| <code>InputChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
+| <code>InputChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | <code>blur</code>, <code>focus</code> |
 | <code>LazyVerticalGrid</code> | NODE | LAZY_ITEMS | ANY | <code>columns</code>, <code>contentPadding</code>, <code>reverseLayout</code>, <code>spacing</code>, <code>userScrollEnabled</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>scrollTo</code> |
 | <code>ModalBottomSheet</code> | NODE | SINGLE | ANY | <code>cancelable</code>, <code>containerColor</code>, <code>contentColor</code>, <code>open</code>, <code>shape</code> | <code>content</code> | <code>click</code>, <code>dismissRequest</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
 | <code>NavigationBar</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
-| <code>NavigationBarItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationBarItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>NavigationDrawer</code> | NODE | SINGLE | ANY | <code>gesturesEnabled</code>, <code>open</code> | <code>content</code>, <code>drawerContent (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>openChange</code>, <code>scroll</code> | - |
-| <code>NavigationDrawerItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>badge</code>, <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationDrawerItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>badge</code>, <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>NavigationRail</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code> | <code>header</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
-| <code>NavigationRailItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationRailItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>PullToRefresh</code> | NODE | SINGLE | ANY | <code>enabled</code>, <code>refreshing</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>refresh</code>, <code>scroll</code> | - |
-| <code>SearchBar</code> | NODE | MANY | ANY | <code>enabled</code>, <code>expanded</code>, <code>query</code> | <code>content</code>, <code>leadingIcon</code>, <code>placeholder</code>, <code>trailingIcon</code> | <code>click</code>, <code>expandedChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>queryChange</code>, <code>scroll</code>, <code>search</code> | - |
+| <code>SearchBar</code> | NODE | MANY | ANY | <code>enabled</code>, <code>expanded</code>, <code>query</code> | <code>content</code>, <code>leadingIcon</code>, <code>placeholder</code>, <code>trailingIcon</code> | <code>click</code>, <code>expandedChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>queryChange</code>, <code>scroll</code>, <code>search</code> | <code>blur</code>, <code>focus</code> |
 | <code>SegmentedButton</code> | NODE | MANY | ANY | <code>mode</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
-| <code>SegmentedButtonItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
-| <code>Tab</code> | NODE | NONE | ANY | <code>enabled</code> | <code>icon</code>, <code>text</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>SegmentedButtonItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | <code>blur</code>, <code>focus</code> |
+| <code>Tab</code> | NODE | NONE | ANY | <code>enabled</code> | <code>icon</code>, <code>text</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>blur</code>, <code>focus</code> |
 | <code>TabRow</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code>, <code>scrollable</code>, <code>selectedIndex</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
 | <code>TimePicker</code> | NODE | NONE | ANY | <code>displayMode</code>, <code>hour</code>, <code>is24Hour</code>, <code>minute</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>timeChange</code> | - |
 | <code>Tooltip</code> | NODE | SINGLE | ANY | <code>open</code> | <code>content</code>, <code>tooltip (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>openChange</code>, <code>scroll</code> | - |

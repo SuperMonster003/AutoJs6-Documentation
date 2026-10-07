@@ -497,6 +497,7 @@ console.log(title.get(&#39;text&#39;));
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> } - 当前节点.</li>
 </ul>
 </div><p>向已挂载且支持焦点命令的组件请求焦点. 按钮, 选择控件, 滑块, 输入框和带 <code>clickable</code> Modifier 的节点支持此命令. 其他类型会报 <code>INVALID_ARGUMENT</code>; 未挂载会报 <code>NODE_DETACHED</code>.</p>
+<p>V2 追加支持 NavigationBarItem, NavigationRailItem, NavigationDrawerItem, Tab, DropdownMenuItem, AssistChip, FilterChip, InputChip, SegmentedButtonItem, FloatingActionButton 和 SearchBar, 具体可用命令也列在 <a href="composeComponents.html#composecomponents_v2_1">组件目录</a> 中.</p>
 <p>命令异步到达原生视图, 返回值不代表已经获得焦点或显示输入法. 悬浮输入框还需要 <a href="composeFloatyWindowType.html#composefloatywindowtype_m_requestfocus">窗口允许焦点</a>.</p>
 <h2>[m#] blur<span><a class="mark" href="#composenodetype_m_blur" id="composenodetype_m_blur">#</a></span></h2>
 <h3>node.blur()<span><a class="mark" href="#composenodetype_node_blur" id="composenodetype_node_blur">#</a></span></h3>
@@ -508,18 +509,19 @@ console.log(title.get(&#39;text&#39;));
 <h3>node.scrollTo(index)<span><a class="mark" href="#composenodetype_node_scrollto_index" id="composenodetype_node_scrollto_index">#</a></span></h3>
 <p><strong><code>Overload 1/2</code></strong></p>
 <ul>
-<li><strong>index</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非负整数条目索引.</li>
+<li><strong>index</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非负整数条目或页面索引.</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> } - 当前节点.</li>
 </ul>
-<p>仅适用于 <code>LazyColumn</code> 或 <code>LazyRow</code>, 索引须小于当前条目数.</p>
+<p>适用于 <code>LazyColumn</code>, <code>LazyRow</code> 及 V2 的 <code>LazyVerticalGrid</code>, <code>HorizontalPager</code>. 网格索引指子项而非行号, 分页索引指页面, 均须小于当前子项数量.</p>
 <h3>node.scrollTo(target)<span><a class="mark" href="#composenodetype_node_scrollto_target" id="composenodetype_node_scrollto_target">#</a></span></h3>
 <p><strong><code>Overload 2/2</code></strong></p>
 <ul>
 <li><strong>target</strong> { <span class="type">{ index?: <a href="dataTypes.html#datatypes_number">number</a>; offset?: <a href="dataTypes.html#datatypes_number">number</a></span> }} - 至少提供一个字段.</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> } - 当前节点.</li>
 </ul>
-<p>有 <code>index</code> 时选择懒加载条目, 可同时给出正负整数 <code>offset</code> 作为该条目的像素偏移. 没有 <code>index</code> 时, <code>offset</code> 是非负整数的绝对滚动像素位置: 普通滚动 Modifier 直接设置该位置, 懒列表从第 0 项加该偏移请求重新测量. 数值均须在对应的 32 位整数范围内.</p>
-<p><code>scrollTo(100)</code> 表示懒列表索引, 不表示普通滚动容器的 100 px; 普通容器应写 <code>scrollTo({offset: 100})</code>. 只有懒列表和实际带滚动 Modifier 的节点支持滚动命令.</p>
+<p>有 <code>index</code> 时选择懒加载条目或页面, 可同时给出正负整数 <code>offset</code> 作为该条目或页面的物理像素偏移. 没有 <code>index</code> 时, <code>offset</code> 是非负整数的绝对滚动像素位置: 普通滚动 Modifier 直接设置该位置, 懒列表和网格从第 0 项, 分页从第 0 页加该偏移请求定位. 数值均须在对应的 32 位整数范围内.</p>
+<p><code>scrollTo(100)</code> 表示条目或页面索引, 不表示普通滚动容器的 100 px; 普通容器应写 <code>scrollTo({offset: 100})</code>. 只有上述列表, 网格, 分页和实际带滚动 Modifier 的节点支持滚动命令.</p>
+<p>HorizontalPager 的 offset 根据实际页面尺寸与间距转换为定位请求, 不接受页面比例. 原生手势或此命令会移动页面并报告 pageChange, 不自动改写节点的 page 属性; 无关属性更新保留原生页面位置.</p>
 <p>普通节点同链含多个滚动操作时, offset 命令作用于第一个, 即最外层滚动操作. 该命令不提供两个方向的独立坐标参数.</p>
 <h2>[m#] edit<span><a class="mark" href="#composenodetype_m_edit" id="composenodetype_m_edit">#</a></span></h2>
 <h3>node.edit(change)<span><a class="mark" href="#composenodetype_node_edit_change" id="composenodetype_node_edit_change">#</a></span></h3>

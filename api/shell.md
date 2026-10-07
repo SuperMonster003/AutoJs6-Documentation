@@ -1,5 +1,7 @@
 # Shell
 
+交互式终端会话, 可见执行和输出事件由独立的 [terminal 模块](terminal) 提供, 需要安装 3-Shell Terminal 插件. 本章的 `shell()` API 保留其原有的一次性命令执行和权限语义; 两者的返回值及进程权限不同.
+
 shell 模块用于在 Android 设备本地执行 Shell 命令.
 
 它不会建立 ADB 连接. 普通模式使用 AutoJs6 应用进程可用的 `sh`, Root 模式使用 `su`. 命令正文通常与 `adb shell` 后面的部分相同.

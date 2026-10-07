@@ -69,6 +69,7 @@
 * [Storages - 存储](storages)
 * [Sysprops - 系统属性](sysprops)
 * [Tasks - 任务](tasks)
+- [Terminal - 终端](terminal)
 * [Threads - 线程](threads)
 * [Timers - 定时器](timers)
 * [Toast - 消息浮动框](toast)
@@ -170,3 +171,7 @@
 
 * [GitHub - 应用项目地址](http://project.autojs6.com)
 * [GitHub - 文档项目地址](http://docs-project.autojs6.com)
+
+- [TerminalSession - 终端会话](terminalSessionType)
+- [TerminalOpenOptions - 终端选项](terminalOpenOptionsType)
+- [TerminalError - 终端错误](terminalErrorType)

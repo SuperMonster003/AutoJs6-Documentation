@@ -1,0 +1,227 @@
+{
+  "source": "..\\api\\terminalSessionType.md",
+  "modules": [
+    {
+      "textRaw": "TerminalSession",
+      "name": "terminalsession",
+      "desc": "<p>由 <a href=\"terminal#m-open\">terminal.open</a>, <a href=\"terminal#m-exec\">terminal.exec</a>, <a href=\"terminal#m-sessions\">terminal.sessions</a> 等返回的会话对象, 继承 <a href=\"events#class-eventemitter\">EventEmitter</a>. 对象绑定插件中的会话 ID; 不应在插件进程重启后继续使用旧对象.</p>\n",
+      "modules": [
+        {
+          "textRaw": "属性",
+          "name": "属性",
+          "desc": "<p>以下属性只读. 对象保存最近一次观察到的会话状态, 不会持续轮询; <code>isAlive()</code> 会刷新状态, 退出回调也会更新退出码.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>id</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>会话 ID, 在本次会话存续期间不变</td>\n</tr>\n<tr>\n<td>cwd</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>最近一次观察到的目录</td>\n</tr>\n<tr>\n<td>title</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>会话标题</td>\n</tr>\n<tr>\n<td>createdAt</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>创建时间, Unix epoch 毫秒</td>\n</tr>\n<tr>\n<td>pid</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>子进程 PID, 启动过程中可能为负数</td>\n</tr>\n<tr>\n<td>state</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><code>pending</code>, <code>running</code> 或 <code>exited</code></td>\n</tr>\n<tr>\n<td>exitCode</td>\n<td><a href=\"dataTypes#number\">number</a> 或 <a href=\"dataTypes#null\">null</a></td>\n<td>尚未观察到退出时为 null</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "属性"
+        },
+        {
+          "textRaw": "[m] isAlive",
+          "name": "[m]_isalive",
+          "methods": [
+            {
+              "textRaw": "session.isAlive()",
+              "type": "method",
+              "name": "isAlive",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>刷新会话状态并返回是否仍存活. 没有 <code>isAliveAsync</code> 形态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAlive"
+        },
+        {
+          "textRaw": "[m] write",
+          "name": "[m]_write",
+          "methods": [
+            {
+              "textRaw": "session.write(data)",
+              "type": "method",
+              "name": "write",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>[] } - UTF-8 文本或 0..255 的整数字节数组</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> } - 当前对象, 可链式调用</li>\n</ul>\n<p>向终端输入数据, 最多 64 KiB 且不能是空内容. 文本末尾加入 <code>\\n</code> 才会执行完整命令; <code>[3]</code> 发送 Ctrl+C.</p>\n<pre><code class=\"lang-js\">session.write(&#39;echo ready\\n&#39;);\nsession.write([3]); // Ctrl+C.\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "session.writeAsync(data)",
+              "type": "method",
+              "name": "writeAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>data</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#number\">number</a>[] }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#void\">void</a>&gt; }</li>\n</ul>\n<p>异步写入, Promise 完成值为 <code>undefined</code>, 不返回会话对象.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "data"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] write"
+        },
+        {
+          "textRaw": "[m] show",
+          "name": "[m]_show",
+          "methods": [
+            {
+              "textRaw": "session.show()",
+              "type": "method",
+              "name": "show",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> } - 当前对象</li>\n</ul>\n<p>显示当前会话. 受 Android 后台启动界面规则限制.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "session.showAsync()",
+              "type": "method",
+              "name": "showAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#void\">void</a>&gt; }</li>\n</ul>\n<p>异步显示, 完成值为 <code>undefined</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] show"
+        },
+        {
+          "textRaw": "[m] close",
+          "name": "[m]_close",
+          "methods": [
+            {
+              "textRaw": "session.close()",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否关闭了存在的会话</li>\n</ul>\n<p>关闭当前会话及其 shell.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "session.closeAsync()",
+              "type": "method",
+              "name": "closeAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#boolean\">boolean</a>&gt; }</li>\n</ul>\n<p>异步关闭当前会话.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] close"
+        },
+        {
+          "textRaw": "[m] waitFor",
+          "name": "[m]_waitfor",
+          "methods": [
+            {
+              "textRaw": "session.waitFor(pattern, timeout?)",
+              "type": "method",
+              "name": "waitFor",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>pattern</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> } - 非空子串或正则表达式</li>\n<li><strong>[ timeout = 600000 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 非负整数毫秒, 0 表示不限时</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 第一个匹配的后续输出行或提示片段</li>\n</ul>\n<p>从调用时刻订阅新的输出, 不搜索之前的转录内容. 超时报 <code>TIMEOUT</code>, 在匹配前流已结束时报 <code>SESSION_CLOSED</code>; 每次等待都会释放自己的订阅. 正则表达式使用与宿主选择器相同的 Java 兼容转换, 不推进 JavaScript <code>lastIndex</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pattern"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "session.waitForAsync(pattern, timeout?)",
+              "type": "method",
+              "name": "waitForAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>pattern</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> }</li>\n<li><strong>[ timeout = 600000 ]</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n<p>异步等待, 匹配和清理行为相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "pattern"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitFor"
+        },
+        {
+          "textRaw": "[m] transcript",
+          "name": "[m]_transcript",
+          "methods": [
+            {
+              "textRaw": "session.transcript(maxBytes?)",
+              "type": "method",
+              "name": "transcript",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ maxBytes = 1048576 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 1..1048576 的整数, 单位为 UTF-8 字节</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>读取当前屏幕和回滚文本, 达到上限时保留最新部分, 还受跨进程回复大小限制. 这是经过终端渲染的文本, 不等于完整的原始字节日志. 已移出插件注册表的会话不能再次读取转录.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "maxBytes?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "session.transcriptAsync(maxBytes?)",
+              "type": "method",
+              "name": "transcriptAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ maxBytes = 1048576 ]</strong> { <a href=\"dataTypes#number\">number</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#string\">string</a>&gt; }</li>\n</ul>\n<p>异步读取转录.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "maxBytes?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] transcript"
+        },
+        {
+          "textRaw": "事件",
+          "name": "事件",
+          "desc": "<p>使用 <code>on</code>, <code>once</code>, <code>prependListener</code>, <code>prependOnceListener</code>, <code>off</code>, <code>removeListener</code>, <code>removeAllListeners</code> 管理监听器.</p>\n<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>回调签名</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>output</td>\n<td><code>(text: string) =&gt; void</code></td>\n<td>输出行或不带换行的提示片段</td>\n</tr>\n<tr>\n<td>overflow</td>\n<td><code>(droppedBytes: number) =&gt; void</code></td>\n<td>观察流缓冲已满, 有输出字节被丢弃</td>\n</tr>\n<tr>\n<td>exit</td>\n<td><code>(exitCode: number) =&gt; void</code></td>\n<td>会话已退出且订阅管道已排空, 每对象交付一次</td>\n</tr>\n</tbody>\n</table>\n<p><code>output</code> 默认移除 ANSI 控制序列, 可在 <code>exec</code> 选项中设置 <code>stripAnsi: false</code>. 单行超过 64 KiB 时分块交付且不拆分 UTF-8 字符. 管道空闲约 100 ms 时会交付不完整的行, 以支持没有换行的交互提示. <code>exit</code> 之后不会再交付 <code>output</code>.</p>\n<p>第一个 <code>output</code> 或 <code>overflow</code> 监听器会建立输出订阅; 最后一个此类监听器移除后释放订阅, 包括 <code>once</code> 自动移除的情况. 仅监听 <code>exit</code> 不建立输出管道. 每个会话最多 4 个订阅, <code>waitFor()</code> 也占用独立订阅.</p>\n<p>本脚本刚创建的会话首次订阅时会回放仍可读取的屏幕转录. 从 <code>sessions()</code> 或 <code>session(id)</code> 获取的对象只监听新输出. 已移除会话的历史无法恢复. 溢出只影响观察流, 不会阻塞终端本身; 丢弃计数可能合并, 不能用于定位精确字节偏移. 不应把事件当作无损日志存储.</p>\n<pre><code class=\"lang-js\">let session = terminal.exec(&#39;sleep 1; printf &quot;Name: &quot;; read name; echo &quot;Hello $name&quot;&#39;, {\n    cwd: terminal.env().home, show: false, keepOpen: false,\n});\nsession.on(&#39;output&#39;, text =&gt; {\n    if (text.indexOf(&#39;Name: &#39;) &gt;= 0) session.write(&#39;AutoJs6\\n&#39;);\n});\nsession.on(&#39;overflow&#39;, bytes =&gt; console.warn(&#39;Dropped: &#39; + bytes));\nsession.on(&#39;exit&#39;, code =&gt; console.log(&#39;Exit: &#39; + code));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "事件"
+        }
+      ],
+      "type": "module",
+      "displayName": "TerminalSession"
+    }
+  ]
+}

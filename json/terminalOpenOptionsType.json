@@ -1,0 +1,21 @@
+{
+  "source": "..\\api\\terminalOpenOptionsType.md",
+  "modules": [
+    {
+      "textRaw": "TerminalOpenOptions",
+      "name": "terminalopenoptions",
+      "desc": "<p><code>terminal.open()</code> 和 <code>terminal.openAsync()</code> 接受的选项. 传给插件的值按 JSON 规则处理, 函数和 <code>undefined</code> 值不作为选项传递. 未知选项键会得到 <code>INVALID_ARGUMENT</code>.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>默认值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>cwd</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>脚本工作目录, 没有时为插件 HOME</td>\n<td>初始目录, 相对路径以脚本工作目录为基准; 不接受 <code>content://</code> 等 URI</td>\n</tr>\n<tr>\n<td>env</td>\n<td><a href=\"dataTypes#object\">Object</a></td>\n<td>空对象</td>\n<td>字符串环境变量覆盖, 最多 64 项, 每项的键和值合计含等号不超过 4096 UTF-8 字节</td>\n</tr>\n<tr>\n<td>show</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>true</td>\n<td>创建后打开终端界面</td>\n</tr>\n<tr>\n<td>title</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>命令或目录名</td>\n<td>会话标题, 不能是空白字符串</td>\n</tr>\n</tbody>\n</table>\n<p><code>env</code> 的键不能包含等号或 NUL, 值必须是字符串且不能包含 NUL. 不允许覆盖由插件管理的 <code>HOME</code>, <code>PREFIX</code>, <code>PATH</code>. 目录最多 4096 UTF-8 字节, 完整请求最多 64 KiB. 共享存储权限需要授予终端插件本身.</p>\n<pre><code class=\"lang-js\">let session = terminal.open({\n    cwd: terminal.env().home,\n    env: { LANG: &#39;en_US.UTF-8&#39;, TASK_NAME: &#39;example&#39; },\n    show: false,\n    title: &#39;Example&#39;,\n});\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "TerminalExecOptions",
+          "name": "terminalexecoptions",
+          "desc": "<p><code>terminal.exec()</code> / <code>execAsync()</code> 和 <code>terminal.npm.run()</code> / <code>runAsync()</code> 另外接受以下字段, 并包含上表的全部字段.</p>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>默认值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>keepOpen</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>true</td>\n<td>命令结束后保留交互式 shell</td>\n</tr>\n<tr>\n<td>wait</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>false</td>\n<td>等待整个会话退出</td>\n</tr>\n<tr>\n<td>timeout</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>600000</td>\n<td><code>wait: true</code> 的超时, 单位 ms, 非负整数, 0 表示不限时</td>\n</tr>\n<tr>\n<td>stripAnsi</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>true</td>\n<td>交付输出和匹配等待时移除 ANSI 控制序列</td>\n</tr>\n</tbody>\n</table>\n<p><code>wait: true</code> 与默认的 <code>keepOpen: true</code> 组合会继续等待保留的 shell. 获取命令退出码时, 使用 <code>keepOpen: false</code>. 超时不会自动关闭会话.</p>\n<pre><code class=\"lang-js\">terminal.execAsync(&#39;echo ready&#39;, {\n    cwd: terminal.env().home,\n    show: false,\n    keepOpen: false,\n    wait: true,\n    timeout: 30000,\n}).then(session =&gt; console.log(session.exitCode));\n</code></pre>\n",
+          "type": "module",
+          "displayName": "TerminalExecOptions"
+        }
+      ],
+      "type": "module",
+      "displayName": "TerminalOpenOptions"
+    }
+  ]
+}

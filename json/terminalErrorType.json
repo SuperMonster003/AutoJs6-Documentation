@@ -1,0 +1,57 @@
+{
+  "source": "..\\api\\terminalErrorType.md",
+  "modules": [
+    {
+      "textRaw": "TerminalError",
+      "name": "terminalerror",
+      "desc": "<p>终端同步调用抛出的错误, 以及异步调用拒绝 Promise 时返回的错误对象. 继承 JavaScript <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Error\">Error</a>, 可通过 <code>error instanceof terminal.TerminalError</code> 检查.</p>\n",
+      "modules": [
+        {
+          "textRaw": "属性",
+          "name": "属性",
+          "desc": "<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>name</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><code>TerminalError</code></td>\n</tr>\n<tr>\n<td>message</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>错误说明, 插件可用性错误包含插件中心提示</td>\n</tr>\n<tr>\n<td>code</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>下表中的代码</td>\n</tr>\n<tr>\n<td>sessionId</td>\n<td><a href=\"dataTypes#string\">string</a> 或 <a href=\"dataTypes#undefined\">undefined</a></td>\n<td>与特定会话有关时携带</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "属性"
+        },
+        {
+          "textRaw": "错误代码",
+          "name": "错误代码",
+          "desc": "<table>\n<thead>\n<tr>\n<th>代码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>PLUGIN_UNAVAILABLE</td>\n<td>插件缺失, 禁用, 未授权, 连接失败或进程消失</td>\n</tr>\n<tr>\n<td>PLUGIN_INCOMPATIBLE</td>\n<td>契约版本或最低宿主版本不满足</td>\n</tr>\n<tr>\n<td>INVALID_ARGUMENT</td>\n<td>参数类型, 选项键, 长度或调用线程不符合要求</td>\n</tr>\n<tr>\n<td>SESSION_NOT_FOUND</td>\n<td>会话 ID 不存在</td>\n</tr>\n<tr>\n<td>SESSION_LIMIT</td>\n<td>已达到 16 个并发会话</td>\n</tr>\n<tr>\n<td>SESSION_CLOSED</td>\n<td>会话或其输出流已结束</td>\n</tr>\n<tr>\n<td>DIRECTORY_INACCESSIBLE</td>\n<td>目录不存在, 不是目录或不可访问</td>\n</tr>\n<tr>\n<td>STORAGE_PERMISSION_REQUIRED</td>\n<td>终端插件尚未获得共享存储权限</td>\n</tr>\n<tr>\n<td>PTY_FAILED</td>\n<td>无法创建 pty 或 shell 子进程</td>\n</tr>\n<tr>\n<td>NODE_UNAVAILABLE</td>\n<td>请求的 Node.js 工具链不可用</td>\n</tr>\n<tr>\n<td>SUBSCRIPTION_LIMIT</td>\n<td>已达到每会话 4 个订阅</td>\n</tr>\n<tr>\n<td>TIMEOUT</td>\n<td>命令退出等待或输出匹配超时</td>\n</tr>\n<tr>\n<td>CANCELLED</td>\n<td>脚本停止或操作被取消</td>\n</tr>\n<tr>\n<td>INTERNAL</td>\n<td>其他错误或不能识别的插件错误代码</td>\n</tr>\n</tbody>\n</table>\n<p><code>TIMEOUT</code> 不会自动关闭仍运行的会话. 是否继续观察或关闭应由脚本决定.</p>\n<pre><code class=\"lang-js\">try {\n    let session = terminal.open(&#39;/sdcard/MyProject&#39;);\n    session.show();\n} catch (error) {\n    if (error instanceof terminal.TerminalError) {\n        console.error(error.code + &#39;: &#39; + error.message);\n    } else {\n        throw error;\n    }\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "错误代码"
+        },
+        {
+          "textRaw": "[C] TerminalError",
+          "name": "[c]_terminalerror",
+          "methods": [
+            {
+              "textRaw": "new terminal.TerminalError(message?, code?, sessionId?)",
+              "type": "method",
+              "name": "TerminalError",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ message = &#39;&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ code = &#39;INTERNAL&#39; ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ sessionId ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalErrorType\">TerminalError</a> }</li>\n</ul>\n<p>构造一个终端错误, 省略 <code>new</code> 也可调用. 自行构造的代码可以是其他字符串; 插件调用的标准代码见上表.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "message?"
+                    },
+                    {
+                      "name": "code?"
+                    },
+                    {
+                      "name": "sessionId?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] TerminalError"
+        }
+      ],
+      "type": "module",
+      "displayName": "TerminalError"
+    }
+  ]
+}

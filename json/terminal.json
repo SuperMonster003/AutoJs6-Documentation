@@ -1,0 +1,441 @@
+{
+  "source": "..\\api\\terminal.md",
+  "modules": [
+    {
+      "textRaw": "终端 (Terminal)",
+      "name": "终端_(terminal)",
+      "desc": "<p><code>terminal</code> 模块通过独立的 3-Shell Terminal 插件创建, 显示和驱动交互式系统终端. 全局对象 <code>terminal</code> 与 <code>$terminal</code> 指向同一对象. 本模块自 AutoJs6 6.8.0 提供, 完整脚本 API 需要包含终端模块的构建 (5315 或更新).</p>\n<p>先在插件中心安装并启用 <a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Shell-Terminal\">3-Shell Terminal</a>. 插件未安装, 被禁用, 未授权或连接失败时, 会话操作抛出 <a href=\"terminalErrorType\">TerminalError</a>, 错误代码为 <code>PLUGIN_UNAVAILABLE</code>; 契约不兼容时为 <code>PLUGIN_INCOMPATIBLE</code>. 可用 <a href=\"#m-isavailable\">isAvailable</a> 预先探测.</p>\n<p>会话在插件进程中以插件自己的 UID 和权限运行. 它不继承宿主的存储授权, 不提供 root 或 Shizuku 权限. 与返回命令执行结果的 <a href=\"shell\">shell()</a> 不同, <code>terminal.exec()</code> 返回可显示, 输入和监听的 <a href=\"terminalSessionType\">TerminalSession</a>. 需要一次性执行命令并读取结果时可使用 <code>shell()</code>; 需要持续交互或可见会话时使用 <code>terminal</code>.</p>\n<p>同步方法阻塞当前脚本线程, 不可在 Android UI 线程调用. 对应的 <code>Async</code> 方法返回 <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>, 结果和事件在发起调用的脚本线程交付. <code>session()</code> 和 <code>state()</code> 仅有同步形态. 同步终端等待期间仍会交付终端事件, 因此 <code>output</code> 监听器可以在 <code>waitFor()</code> 等待时调用 <code>write()</code>.</p>\n<p>脚本退出会取消本脚本的调用, 订阅和回调, 已创建的终端会话继续运行. 关闭 AutoJs6 或离开终端界面也不会主动关闭会话. 插件进程被系统终止时, 会话不能恢复; 前台服务有助于保活, 仍受设备的后台限制影响.</p>\n<pre><code class=\"lang-js\">if (!terminal.isAvailable()) {\n    toast(&#39;请先安装并启用 3-Shell Terminal&#39;);\n    exit();\n}\nlet result = terminal.exec(&#39;echo ready; exit 3&#39;, {\n    cwd: terminal.env().home,\n    show: false,\n    keepOpen: false,\n    wait: true,\n});\nconsole.log(result.exitCode); // 3.\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">terminal</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[m] open",
+          "name": "[m]_open",
+          "methods": [
+            {
+              "textRaw": "terminal.open(directoryOrOptions?)",
+              "type": "method",
+              "name": "open",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ directoryOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"terminalOpenOptionsType\">TerminalOpenOptions</a> } - 初始目录或选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> } - 新建会话</li>\n</ul>\n<p>默认创建并显示新会话. 未指定目录时使用脚本工作目录, 脚本没有工作目录时使用插件的 <code>HOME</code>. 相对目录按脚本工作目录解析, 不接受 URI. 脚本访问无权限的共享目录会得到 <code>STORAGE_PERMISSION_REQUIRED</code>; 插件界面自身创建会话时可以回退到主目录并显示授权提示.</p>\n<pre><code class=\"lang-js\">let session = terminal.open({ cwd: terminal.env().home, show: false, title: &#39;Example&#39; });\nsession.write(&#39;echo hello\\n&#39;);\nsession.show();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directoryOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] open"
+        },
+        {
+          "textRaw": "[m] openAsync",
+          "name": "[m]_openasync",
+          "methods": [
+            {
+              "textRaw": "terminal.openAsync(directoryOrOptions?)",
+              "type": "method",
+              "name": "openAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ directoryOrOptions ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"terminalOpenOptionsType\">TerminalOpenOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"terminalSessionType\">TerminalSession</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-open\">open</a> 的异步形态, 参数和创建行为相同.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "directoryOrOptions?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] openAsync"
+        },
+        {
+          "textRaw": "[m] sessions",
+          "name": "[m]_sessions",
+          "methods": [
+            {
+              "textRaw": "terminal.sessions()",
+              "type": "method",
+              "name": "sessions",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a>[] }</li>\n</ul>\n<p>列出插件当前的全部会话, 包括从界面或其他脚本创建的会话. 同时存在的会话最多 16 个.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sessions"
+        },
+        {
+          "textRaw": "[m] sessionsAsync",
+          "name": "[m]_sessionsasync",
+          "methods": [
+            {
+              "textRaw": "terminal.sessionsAsync()",
+              "type": "method",
+              "name": "sessionsAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"terminalSessionType\">TerminalSession</a>[]&gt; }</li>\n</ul>\n<p><a href=\"#m-sessions\">sessions</a> 的异步形态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] sessionsAsync"
+        },
+        {
+          "textRaw": "[m] session",
+          "name": "[m]_session",
+          "methods": [
+            {
+              "textRaw": "terminal.session(id)",
+              "type": "method",
+              "name": "session",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 会话 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>获取当前仍在插件注册表中的会话, 不存在时返回 <code>null</code>. 已退出的会话会移出注册表. 此方法没有 <code>sessionAsync</code> 形态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] session"
+        },
+        {
+          "textRaw": "[m] close",
+          "name": "[m]_close",
+          "methods": [
+            {
+              "textRaw": "terminal.close(id)",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> } - 会话 ID</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否关闭了存在的会话</li>\n</ul>\n<p>关闭指定会话及其 shell. 可以关闭从界面或其他脚本创建的会话.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] close"
+        },
+        {
+          "textRaw": "[m] closeAsync",
+          "name": "[m]_closeasync",
+          "methods": [
+            {
+              "textRaw": "terminal.closeAsync(id)",
+              "type": "method",
+              "name": "closeAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>id</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#boolean\">boolean</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-close\">close</a> 的异步形态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] closeAsync"
+        },
+        {
+          "textRaw": "[m] closeAll",
+          "name": "[m]_closeall",
+          "methods": [
+            {
+              "textRaw": "terminal.closeAll()",
+              "type": "method",
+              "name": "closeAll",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 关闭的会话数量</li>\n</ul>\n<p>关闭插件中的全部会话, 包括用户或其他脚本创建的会话. 只清理当前脚本创建的会话时, 应保存各会话 ID 并逐个关闭.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] closeAll"
+        },
+        {
+          "textRaw": "[m] closeAllAsync",
+          "name": "[m]_closeallasync",
+          "methods": [
+            {
+              "textRaw": "terminal.closeAllAsync()",
+              "type": "method",
+              "name": "closeAllAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#number\">number</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-closeall\">closeAll</a> 的异步形态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] closeAllAsync"
+        },
+        {
+          "textRaw": "[m] show",
+          "name": "[m]_show",
+          "methods": [
+            {
+              "textRaw": "terminal.show(id?)",
+              "type": "method",
+              "name": "show",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>[ id ]</strong> { <a href=\"dataTypes#string\">string</a> } - 会话 ID, 省略时显示最近会话</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>打开插件终端界面. 与 <code>app.startActivity()</code> 一样, 从后台打开界面可能受到 Android 限制.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] show"
+        },
+        {
+          "textRaw": "[m] showAsync",
+          "name": "[m]_showasync",
+          "methods": [
+            {
+              "textRaw": "terminal.showAsync(id?)",
+              "type": "method",
+              "name": "showAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>[ id ]</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#void\">void</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-show\">show</a> 的异步形态.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "id?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] showAsync"
+        },
+        {
+          "textRaw": "[m] state",
+          "name": "[m]_state",
+          "methods": [
+            {
+              "textRaw": "terminal.state()",
+              "type": "method",
+              "name": "state",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>返回 <code>available</code>, <code>not_installed</code>, <code>disabled</code>, <code>incompatible</code> 或 <code>unavailable</code>. <code>disabled</code> 包含 Android 禁用, 插件中心禁用和未授权; <code>unavailable</code> 表示已安装但服务不能正常应答. 插件缺失不会因为缺失本身而抛出异常. 此方法没有 <code>stateAsync</code> 形态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] state"
+        },
+        {
+          "textRaw": "[m] isAvailable",
+          "name": "[m]_isavailable",
+          "methods": [
+            {
+              "textRaw": "terminal.isAvailable()",
+              "type": "method",
+              "name": "isAvailable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>插件已启用, 兼容且能够应答时返回 <code>true</code>. 缺失或连接失败时返回 <code>false</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAvailable"
+        },
+        {
+          "textRaw": "[m] isAvailableAsync",
+          "name": "[m]_isavailableasync",
+          "methods": [
+            {
+              "textRaw": "terminal.isAvailableAsync()",
+              "type": "method",
+              "name": "isAvailableAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#boolean\">boolean</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-isavailable\">isAvailable</a> 的异步形态.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] isAvailableAsync"
+        },
+        {
+          "textRaw": "[m] exec",
+          "name": "[m]_exec",
+          "methods": [
+            {
+              "textRaw": "terminal.exec(command, options?)",
+              "type": "method",
+              "name": "exec",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>command</strong> { <a href=\"dataTypes#string\">string</a> } - 非空命令, 最多 64 KiB UTF-8</li>\n<li><strong>[ options ]</strong> { <a href=\"terminalOpenOptionsType#terminalexecoptions\">TerminalExecOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> }</li>\n</ul>\n<p>在新会话中执行命令. 默认 <code>show: true</code>, <code>keepOpen: true</code>, <code>wait: false</code>. 命令结束后默认保留交互式 shell. 设置 <code>wait: true</code> 会等待整个会话退出, 因此等待命令退出码时应同时设置 <code>keepOpen: false</code>. <code>timeout</code> 默认 600000 ms, <code>0</code> 表示不限时. 超时会抛出 <code>TIMEOUT</code>, 会话继续运行, 可查询或显式关闭.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "command"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] exec"
+        },
+        {
+          "textRaw": "[m] execAsync",
+          "name": "[m]_execasync",
+          "methods": [
+            {
+              "textRaw": "terminal.execAsync(command, options?)",
+              "type": "method",
+              "name": "execAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>command</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ options ]</strong> { <a href=\"terminalOpenOptionsType#terminalexecoptions\">TerminalExecOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"terminalSessionType\">TerminalSession</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-exec\">exec</a> 的异步形态. <code>wait: false</code> 时 Promise 在会话建立后完成, <code>wait: true</code> 时等待会话退出.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "command"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] execAsync"
+        },
+        {
+          "textRaw": "[p+] npm",
+          "name": "[p+]_npm",
+          "properties": [
+            {
+              "textRaw": "terminal.npm",
+              "name": "npm",
+              "desc": "<p>提供 npm 脚本执行方法. 需要安装签名可信的 Node.js Runtime 1.5.0 或更新版本, 并在 3-Shell Terminal 设置中开启 Node.js 集成. 该功能不会安装依赖或绕过 Android 对应用私有目录中可执行文件的限制.</p>\n"
+            }
+          ],
+          "modules": [
+            {
+              "textRaw": "terminal.npm.run(script, directory?, options?)",
+              "name": "terminal.npm.run(script,_directory?,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>script</strong> { <a href=\"dataTypes#string\">string</a> } - package.json 中的脚本名, 仅允许字母, 数字及 <code>_.:@/+-</code></li>\n<li><strong>[ directory ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 工程目录</li>\n<li><strong>[ options ]</strong> { <a href=\"terminalOpenOptionsType#terminalexecoptions\">TerminalExecOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"terminalSessionType\">TerminalSession</a> }</li>\n</ul>\n<p>相当于运行 <code>npm run &lt;script&gt;</code>. <code>directory</code> 与 <code>options.cwd</code> 同时传入且不相同时, 抛出 <code>INVALID_ARGUMENT</code>. 仅使用第三个参数时, 第二个参数可传 <code>null</code>.</p>\n<pre><code class=\"lang-js\">let task = terminal.npm.run(&#39;build&#39;, &#39;/sdcard/MyProject&#39;, {\n    keepOpen: false, wait: true, timeout: 600000,\n});\nconsole.log(task.exitCode);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "terminal.npm.run(script, directory?, options?)"
+            },
+            {
+              "textRaw": "terminal.npm.runAsync(script, directory?, options?)",
+              "name": "terminal.npm.runasync(script,_directory?,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>script</strong> { <a href=\"dataTypes#string\">string</a> }</li>\n<li><strong>[ directory ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n<li><strong>[ options ]</strong> { <a href=\"terminalOpenOptionsType#terminalexecoptions\">TerminalExecOptions</a> }</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"terminalSessionType\">TerminalSession</a>&gt; }</li>\n</ul>\n<p><code>npm.run</code> 的异步形态.</p>\n",
+              "type": "module",
+              "displayName": "terminal.npm.runAsync(script, directory?, options?)"
+            }
+          ],
+          "type": "module",
+          "displayName": "[p+] npm"
+        },
+        {
+          "textRaw": "[m] env",
+          "name": "[m]_env",
+          "methods": [
+            {
+              "textRaw": "terminal.env()",
+              "type": "method",
+              "name": "env",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#object\">Object</a> } - 插件环境信息</li>\n</ul>\n<table>\n<thead>\n<tr>\n<th>属性</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>home</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>插件私有主目录</td>\n</tr>\n<tr>\n<td>prefix</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>插件命令和软件包目录</td>\n</tr>\n<tr>\n<td>shell</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><code>/system/bin/sh</code></td>\n</tr>\n<tr>\n<td>npmRegistry</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>当前 npm 镜像源</td>\n</tr>\n<tr>\n<td>storageAccess</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td><code>granted</code>, <code>denied</code> 或 <code>not_applicable</code></td>\n</tr>\n<tr>\n<td>pluginVersion</td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>终端插件版本名称</td>\n</tr>\n<tr>\n<td>contractVersion</td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>终端契约版本</td>\n</tr>\n<tr>\n<td>node.available</td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>Node.js 工具链是否可用</td>\n</tr>\n<tr>\n<td>node.version</td>\n<td><a href=\"dataTypes#string\">string</a> 或 <a href=\"dataTypes#null\">null</a></td>\n<td>Node.js 版本, 初次异步探测尚未结束时也可能为 null</td>\n</tr>\n<tr>\n<td>node.packageName</td>\n<td><a href=\"dataTypes#string\">string</a> 或 <a href=\"dataTypes#null\">null</a></td>\n<td>运行时插件包名</td>\n</tr>\n<tr>\n<td>node.pluginVersion</td>\n<td><a href=\"dataTypes#string\">string</a> 或 <a href=\"dataTypes#null\">null</a></td>\n<td>运行时插件版本名称</td>\n</tr>\n<tr>\n<td>node.reason</td>\n<td><a href=\"dataTypes#string\">string</a> 或 <a href=\"dataTypes#null\">null</a></td>\n<td>可用时为 null, 否则是下述原因之一</td>\n</tr>\n</tbody>\n</table>\n<p>Node.js 不可用原因为 <code>disabled</code>, <code>plugin-missing</code>, <code>plugin-untrusted</code>, <code>plugin-too-old</code>, <code>executable-missing</code>, <code>exec-denied</code> 或 <code>setup-failed</code>. 普通 shell 会话仍可使用.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] env"
+        },
+        {
+          "textRaw": "[m] envAsync",
+          "name": "[m]_envasync",
+          "methods": [
+            {
+              "textRaw": "terminal.envAsync()",
+              "type": "method",
+              "name": "envAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a>&lt;<a href=\"dataTypes#object\">Object</a>&gt; }</li>\n</ul>\n<p><a href=\"#m-env\">env</a> 的异步形态, 字段相同.</p>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] envAsync"
+        },
+        {
+          "textRaw": "[C] TerminalError",
+          "name": "[c]_terminalerror",
+          "properties": [
+            {
+              "textRaw": "`TerminalError` { [Function](dataTypes#function) } ",
+              "type": " [Function](dataTypes#function) ",
+              "name": "TerminalError",
+              "desc": "<p>错误构造器, 详见 <a href=\"terminalErrorType\">TerminalError</a>. 同步调用可在 <code>catch</code> 中通过 <code>instanceof terminal.TerminalError</code> 和 <code>code</code> 检查错误; Async 调用以同样的错误对象拒绝 Promise.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[C] TerminalError"
+        }
+      ],
+      "type": "module",
+      "displayName": "终端 (Terminal)"
+    }
+  ]
+}

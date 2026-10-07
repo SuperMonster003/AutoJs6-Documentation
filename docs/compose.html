@@ -342,6 +342,10 @@
 <li><span class="stability_undefined"><a href="#compose_compose_floaty_nodeorrender_options">compose.floaty(nodeOrRender, options?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#compose_m_dialog">[m] dialog</a></span><ul>
+<li><span class="stability_undefined"><a href="#compose_compose_dialog_nodeorrender_options">compose.dialog(nodeOrRender, options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#compose_m_batch">[m] batch</a></span><ul>
 <li><span class="stability_undefined"><a href="#compose_compose_batch_fn">compose.batch(fn)</a></span></li>
 </ul>
@@ -426,7 +430,8 @@
 </tr>
 </tbody>
 </table>
-<p>当前提供 UI 模式页面, <code>compose.floaty</code> 和 <a href="#compose_m_attach">XML 容器挂载</a>. 配套宿主 5320 的 F2 能力增加 <code>&lt;compose&gt;</code> 容器与 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a>, 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 <code>.tsx</code> 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0. 组件目录中的 <code>AlertDialog</code> 是已有会话内的组件, 不表示存在独立的 <code>compose.dialog</code> 承载入口.</p>
+<p>当前提供 UI 模式页面, <code>compose.floaty</code>, <a href="#compose_m_attach">XML 容器挂载</a> 和 <a href="#compose_m_dialog">独立对话框</a>. 配套宿主 5320 的 F2 能力增加 <code>&lt;compose&gt;</code> 容器与 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a>, 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 <code>.tsx</code> 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0.</p>
+<p>F3 的 <code>compose.dialog</code> 需要配套宿主 5321 和具备对话框能力的 Compose UI 1.1.0 构建, <code>.tsx</code> 使用 TypeScript Engine 0.6.6, Declarations 4.34.0 与 Ace Editor 1.28.0. 组件目录中的 <code>AlertDialog</code> 仍是已有会话树内的节点; <code>compose.dialog</code> 创建独立会话, 二者不是同一入口.</p>
 <h2>两层使用方式<span><a class="mark" href="#compose" id="compose">#</a></span></h2>
 <h3>节点句柄<span><a class="mark" href="#compose_1" id="compose_1">#</a></span></h3>
 <p>先创建节点并保存句柄, 挂载后直接修改属性或子节点. 同一轮更新会传到已经存在的界面.</p>
@@ -440,7 +445,7 @@ let session = compose.mount(compose.Column({padding: 16}, title, button));
 </code></pre>
 <p>节点是 <a href="composeNodeType.html">ComposeNode</a>, 不是原生 View. 只允许目录声明的属性和命令.</p>
 <h3>state 与 render<span><a class="mark" href="#compose_state_render" id="compose_state_render">#</a></span></h3>
-<p>把函数作为 <code>mount</code>, <code>attach</code> 或 <code>floaty</code> 的根输入, 函数读取 <a href="composeStateType.html#composestatetype_p_value">ComposeState.value</a> 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.</p>
+<p>把函数作为 <code>mount</code>, <code>attach</code>, <code>floaty</code> 或 <code>dialog</code> 的根输入, 函数读取 <a href="composeStateType.html#composestatetype_p_value">ComposeState.value</a> 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
 let count = compose.state(0);
@@ -461,7 +466,7 @@ compose.mount(function () {
 <li>AutoJs6 6.8.0 / 构建号 5319 或以上, 使用 Rhino 脚本入口.</li>
 <li>Compose UI 1.1.0 本地开发预览, 已安装, 启用并通过宿主的信任与兼容性检查.</li>
 <li>TypeScript Engine 0.6.4, 已安装, 启用并可连接, 提供真实 TypeScript 编译与 Compose 声明.</li>
-<li>源文件扩展名为 <code>.tsx</code>. UI 页面在文件开头保留 <code>&#39;ui&#39;;</code>; 非 UI 脚本使用 <code>compose.floaty</code> 并满足其悬浮窗权限要求.</li>
+<li>源文件扩展名为 <code>.tsx</code>. UI 页面在文件开头保留 <code>&#39;ui&#39;;</code>; 非 UI 脚本可使用 <code>compose.floaty</code> 或具备配套 F3 能力的 <code>compose.dialog</code>, 并满足悬浮窗权限要求.</li>
 </ul>
 <p>普通 <code>.js</code> 工厂写法不需要 TypeScript Engine. 给 <code>.js</code> 文件加入 TSX 标签不会自动启用 TypeScript 编译. Node profile 不接受 <code>.tsx</code>, 也不提供 Compose TSX 挂载入口.</p>
 <p>宿主通过 TypeScript Engine 编译原始 <code>.tsx</code>, 再执行生成的 JavaScript. 无需自行配置 JSX factory 或引入 React. <code>jsx</code>, <code>jsxFactory</code>, <code>jsxFragmentFactory</code> 等编译入口仍由 profile 控制, 不能在 <code>tsconfig.json</code> 中切换到 React runtime 或自定义 factory.</p>
@@ -502,7 +507,7 @@ compose.mount(() =&gt; (
 <td>按原顺序展开片段中的内容, 继续检查父组件的 children 数量和作用域.</td>
 </tr>
 <tr>
-<td><code>mount</code>, <code>attach</code>, <code>compose(...)</code>, <code>floaty</code> 的根或 render 返回值</td>
+<td><code>mount</code>, <code>attach</code>, <code>compose(...)</code>, <code>floaty</code>, <code>dialog</code> 的根或 render 返回值</td>
 <td>片段展开后必须恰好有一个根节点, 空片段或多根报 <code>INVALID_ARGUMENT</code>.</td>
 </tr>
 <tr>
@@ -533,19 +538,19 @@ compose.mount(
 <p>XML 节点不能作为 Compose 的 children 或插槽, Compose 节点也不能插入 XML UI 树. 例如 <code>&lt;compose.Column&gt;&lt;text text=&quot;Mixed&quot; /&gt;&lt;/compose.Column&gt;</code> 和 <code>&lt;vertical&gt;&lt;compose.Text text=&quot;Mixed&quot; /&gt;&lt;/vertical&gt;</code> 都会被拒绝, 错误码为 <code>INVALID_ARGUMENT</code>.</p>
 <p>无效树在替换内容前被拒绝. 尝试把直接混合的树传给 <code>ui.layout</code> 时保留原页面; Compose render 产生无效树时按原有渲染失败规则保留上一个成功帧, 原按钮回调仍可修改状态并触发后续有效渲染.</p>
 <p>两套 UI 通过明确的边界组合: 在 XML 树中放置空的 <code>&lt;compose id=&quot;slot&quot; /&gt;</code>, 完成布局后调用 <a href="#compose_m_attach">compose.attach</a>; 在 Compose 树中使用 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a> 包装实际 Android View. <code>&lt;compose&gt;</code> 不接受 XML 元素子节点, 也不能把 <code>&lt;compose.Text&gt;</code> 直接写在其内部. AndroidView 的 <code>view</code> 属性接收实际 View 或同步 View 工厂, 不接收 XML TSX 值或 ComposeNode.</p>
-<p>TSX 标签本身不改变生命周期. 非 UI 模式执行 <code>compose.mount</code> 仍报 <code>UI_MODE_REQUIRED</code>; 同一个 <code>.tsx</code> 脚本可通过 <code>compose.floaty</code> 创建并关闭自己的浮动会话.</p>
+<p>TSX 标签本身不改变生命周期. 非 UI 模式执行 <code>compose.mount</code> 仍报 <code>UI_MODE_REQUIRED</code>; 同一个 <code>.tsx</code> 脚本可通过 <code>compose.floaty</code> 或具备配套 F3 能力的 <code>compose.dialog</code> 创建并关闭自己的窗口会话.</p>
 <h2>线程与生命周期<span><a class="mark" href="#compose_4" id="compose_4">#</a></span></h2>
 <div class="signature"><ul>
 <li>UI 脚本由 <code>&#39;ui&#39;;</code> 声明, 其 Compose 操作在该脚本的 UI 调度线程执行.</li>
-<li>非 UI 脚本可使用 <code>compose.floaty</code>, 或向旧悬浮窗口的 <code>&lt;compose&gt;</code> 容器 <code>attach</code>. 普通节点事件仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理; 同步 View 工厂的特殊主线程规则见 <a href="composeComponents.html#composecomponents_composeviewfactory">ComposeViewFactory</a>.</li>
+<li>非 UI 脚本可使用 <code>compose.floaty</code>, <code>compose.dialog</code>, 或向旧悬浮窗口的 <code>&lt;compose&gt;</code> 容器 <code>attach</code>. 普通节点事件仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理; 同步 View 工厂的特殊主线程规则见 <a href="composeComponents.html#composecomponents_composeviewfactory">ComposeViewFactory</a>.</li>
 <li>组件属性, state 读写, 树操作, 主题和普通窗口方法需要所属脚本线程. 工作线程使用 <code>compose.post</code>, <code>session.post</code> 或 <code>window.post</code>; 清理用的幂等 <code>close()</code> 也可从工作线程请求.</li>
 <li>Compose 节点事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. AndroidView 内通过旧 <code>ui</code> API 或 XML TSX 注册的 View 事件仍遵循原生 UI 规则, 点击回调在主线程执行; 非 UI 脚本从这些回调修改 Compose 状态时使用 <code>compose.post</code>. UI 脚本中的阻塞等待同样会阻塞界面.</li>
-<li>同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载和 Compose 悬浮窗共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.</li>
-<li>新的 <code>compose.mount</code> 替换旧的 Compose UI 页面. <code>ui.layout</code>, <code>ui.layoutFile</code> 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗不因此关闭.</li>
+<li>同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载, Compose 悬浮窗和对话框共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.</li>
+<li>新的 <code>compose.mount</code> 替换旧的 Compose UI 页面. <code>ui.layout</code>, <code>ui.layoutFile</code> 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗和对话框不因此关闭.</li>
 <li>脚本停止, Activity 销毁, 会话主动关闭或原生窗口关闭会清理相应资源. 当前 UI Activity 自行处理方向及窗口尺寸等已声明的配置变化, 常规旋转和分屏尺寸变化可保留引擎与节点. 真正的 Activity 重建或销毁会结束其 UI 引擎, 不自动恢复原 state 或会话.</li>
 <li>插件更新, 卸载或禁用会关闭正在使用它的会话并报告对应错误. 重新安装或启用插件不会自动复活旧句柄, 后续应创建新的会话和节点.</li>
 </ul>
-</div><p>每个悬浮会话持有一个属于自身的脚本保活引用. 关闭一个悬浮窗只释放该引用; 最后一个窗口关闭且没有其他保活来源时, 非 UI 脚本可自然结束. <code>post</code> 本身不提供额外保活.</p>
+</div><p>每个悬浮会话和非 UI 对话框会话持有属于自身的脚本保活引用. 关闭一个窗口只释放相应引用; 最后一个窗口关闭且没有其他保活来源时, 非 UI 脚本可自然结束. <code>post</code> 本身不提供额外保活.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">compose</p>
 
 <h2>[@] compose<span><a class="mark" href="#compose_compose" id="compose_compose">#</a></span></h2>
@@ -594,7 +599,7 @@ compose.mount(
 <ul>
 <li>{ <span class="type"><a href="composeSessionType.html">ComposeSession</a>[]</span> }</li>
 </ul>
-<p>当前脚本尚未关闭的会话数组快照, 包含 UI 挂载和悬浮会话. 修改数组不会创建, 移除或关闭会话. 悬浮窗对应项为 <code>window.session</code>, 不是窗口对象本身.</p>
+<p>当前脚本尚未关闭的会话数组快照, 包含 UI 挂载, XML 容器挂载, 悬浮会话和独立对话框. 修改数组不会创建, 移除或关闭会话. 悬浮窗对应项为 <code>window.session</code>, 不是窗口对象本身.</p>
 <h2>[m] isAvailable<span><a class="mark" href="#compose_m_isavailable" id="compose_m_isavailable">#</a></span></h2>
 <h3>compose.isAvailable()<span><a class="mark" href="#compose_compose_isavailable" id="compose_compose_isavailable">#</a></span></h3>
 <div class="signature"><ul>
@@ -741,7 +746,7 @@ ui.increment.on(&#39;click&#39;, function () {
     count.value += 1;
 });
 </code></pre>
-<p>非 UI 脚本可在原有悬浮窗中使用 <code>&lt;compose&gt;</code> 容器, 仍需满足该窗口的悬浮窗权限与生命周期要求. <code>attach</code> 和节点操作在所属脚本线程调用; View 的原生创建与挂载由主线程处理. 不在 View 工厂中创建新的 mount, attach 或 floaty 会话.</p>
+<p>非 UI 脚本可在原有悬浮窗中使用 <code>&lt;compose&gt;</code> 容器, 仍需满足该窗口的悬浮窗权限与生命周期要求. <code>attach</code> 和节点操作在所属脚本线程调用; View 的原生创建与挂载由主线程处理. 不在 View 工厂中创建新的 mount, attach, floaty 或 dialog 会话.</p>
 <h2>[m] floaty<span><a class="mark" href="#compose_m_floaty" id="compose_m_floaty">#</a></span></h2>
 <h3>compose.floaty(nodeOrRender, options?)<span><a class="mark" href="#compose_compose_floaty_nodeorrender_options" id="compose_compose_floaty_nodeorrender_options">#</a></span></h3>
 <div class="signature"><ul>
@@ -752,6 +757,70 @@ ui.increment.on(&#39;click&#39;, function () {
 </div><p>在当前脚本的悬浮窗系统中创建一个独立窗口, 可从 UI 或非 UI 脚本的所属线程调用. 缺少悬浮窗权限报 <code>PERMISSION_REQUIRED</code>, 此调用不自动弹出授权页面.</p>
 <p>每次成功调用创建独立悬浮会话, 不替换已有页面或其他悬浮窗. 渲染函数内禁止再次创建窗口. 几何单位是物理像素, 与组件布局的 dp 不同; 选项默认值, 焦点, 关闭与保活规则见 <a href="composeFloatyWindowType.html">ComposeFloatyWindow</a>.</p>
 <p>options 容器省略或为 <code>null</code> / <code>undefined</code> 时使用默认选项, 成员值仍按各字段校验.</p>
+<h2>[m] dialog<span><a class="mark" href="#compose_m_dialog" id="compose_m_dialog">#</a></span></h2>
+<h3>compose.dialog(nodeOrRender, options?)<span><a class="mark" href="#compose_compose_dialog_nodeorrender_options" id="compose_compose_dialog_nodeorrender_options">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>nodeOrRender</strong> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> | <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - 一个根节点或返回一个根节点的同步渲染函数; TSX fragment 遵循 <a href="#compose_fragment">单根规则</a>.</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 仅接受下表中的 <code>type</code>, <code>cancelable</code>, <code>theme</code>.</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeSessionType.html">ComposeSession</a></span> } - 此独立对话框的会话, 不是 Promise 或浮动窗口控制对象.</li>
+</ul>
+</div><p>创建一个由 Compose 内容组成的独立对话框. 每次成功调用产生新会话, 不替换已有页面, XML 容器, 悬浮窗或其他对话框, 并计入单脚本引擎最多 8 个活动会话的限制. 返回会话可使用 <code>update</code>, <code>post</code>, <code>close</code>, <code>on(&#39;close&#39;)</code> 和 <code>showSnackbar</code>; 不提供 <code>setPosition</code>, window token 或 window type 选项.</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>类型</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td><code>&#39;alert&#39;</code> 或 <code>&#39;bottomSheet&#39;</code></td>
+<td><code>&#39;alert&#39;</code></td>
+<td>普通独立对话框或底部弹层. 底部弹层打开时直接展开, 不停留在部分展开状态.</td>
+</tr>
+<tr>
+<td><code>cancelable</code></td>
+<td><code>boolean</code></td>
+<td><code>true</code></td>
+<td>是否允许返回键, 外部点击和底部弹层滑动取消.</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td><a href="composeThemeType.html">ComposeTheme</a>, <code>null</code> 或 <code>undefined</code></td>
+<td>继承模块默认覆盖</td>
+<td>与其他挂载入口采用相同的覆盖规则.</td>
+</tr>
+</tbody>
+</table>
+<p>options 容器省略或为 <code>null</code> / <code>undefined</code> 时使用默认选项. <code>type</code> 与 <code>cancelable</code> 只有省略时取默认值, 显式 <code>null</code> 或 <code>undefined</code> 都报 <code>INVALID_ARGUMENT</code>. <code>theme</code> 省略或为 <code>null</code> 时继承模块默认覆盖; 显式 <code>{theme: {}}</code> 或 <code>{theme: undefined}</code> 使用空覆盖. 未知选项报 <code>UNKNOWN_PROP</code>.</p>
+<p>TypeScript 未启用 <code>exactOptionalPropertyTypes</code> 时, 可选属性的显式 <code>undefined</code> 可能不产生编辑器诊断, 运行时仍按上述规则校验.</p>
+<p>UI 脚本使用当前脚本自身的 Activity 窗口, 不挂到其他 Activity, 也不要求悬浮窗权限. 非 UI 脚本使用悬浮窗口, 必须预先具有当前应用的悬浮窗权限; 未获权限报 <code>PERMISSION_REQUIRED</code>, 调用不会自动申请或打开授权页面. 非 UI 对话框在存活期间为脚本保活, 关闭后释放属于该会话的引用.</p>
+<p><code>cancelable: false</code> 同时禁止返回键, 对话框外部点击和底部弹层滑动导致的用户取消. 脚本主动 <code>session.close()</code> 始终可用, 脚本停止或所属 Activity 销毁等生命周期清理也不受此选项阻止. 允许的用户取消会关闭会话, <code>on(&#39;close&#39;)</code> 沿用所属脚本线程上的一次通知规则; 不返回确认/取消值.</p>
+<p>根内容支持响应式状态, ref, 节点事件, TSX 和 AndroidView. 节点仍属于当前脚本与会话, 不能直接混入 XML TSX 值或任意原生 View. 在 render 或 AndroidView 工厂中再创建 mount, attach, floaty 或 dialog 会话会被拒绝. 初始化或渲染器能力检查失败时, 已有内容继续有效; 缺少对话框能力的旧插件报 <code>PLUGIN_INCOMPATIBLE</code>.</p>
+<p><code>compose.isAvailable()</code> 探测基础可用性, 不保证旧版本插件已提供对话框能力. 可捕获 <code>PLUGIN_INCOMPATIBLE</code> 提示使用配套插件, 不应据此关闭仍有效的原会话.</p>
+<p>下面是独立对话框, 内部没有使用会话树组件 <code>AlertDialog</code>:</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+
+let count = compose.state(0);
+let session = compose.dialog(function () {
+    return compose.Column({padding: 20, spacing: 12},
+        compose.Text({key: &#39;count&#39;, text: &#39;Count: &#39; + count.value}),
+        compose.Button({key: &#39;add&#39;, onClick: function () { count.value += 1; }}, &#39;Increment&#39;),
+        compose.TextButton({key: &#39;close&#39;, onClick: function () { session.close(); }}, &#39;Close&#39;));
+}, {cancelable: false});
+session.on(&#39;close&#39;, function () {
+    console.log(&#39;Dialog closed&#39;);
+});
+</code></pre>
+<p>底部弹层使用同一个入口:</p>
+<pre><code class="lang-js">// 非 UI 脚本需要事先授予当前应用悬浮窗权限.
+let sheet = compose.dialog(compose.Column({padding: 20},
+    compose.Text({text: &#39;Bottom sheet&#39;})), {type: &#39;bottomSheet&#39;});
+</code></pre>
+<p>Snackbar 仍需要用户节点树中的 <code>Scaffold</code> 及其默认 host, 不因选择底部弹层而隐式获得可寻址的 Snackbar 节点. 关闭标志与原生窗口释放的异步边界见 <a href="composeSessionType.html#composesessiontype_m_close">ComposeSession</a>. 若只需文本提示, 确认或输入结果, 可使用已有的 <a href="dialogs.html">dialogs 模块</a>.</p>
 <h2>[m] batch<span><a class="mark" href="#compose_m_batch" id="compose_m_batch">#</a></span></h2>
 <h3>compose.batch(fn)<span><a class="mark" href="#compose_compose_batch_fn" id="compose_compose_batch_fn">#</a></span></h3>
 <div class="signature"><ul>

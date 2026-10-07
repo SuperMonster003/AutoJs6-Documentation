@@ -346,7 +346,7 @@
 
         <div id="apicontent">
             <h1>Compose 组件 (Components)<span><a class="mark" href="#composecomponents_compose_components" id="composecomponents_compose_components">#</a></span></h1>
-<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 <a href="#composecomponents_androidview">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a> 或 <a href="compose.html#compose_m_floaty">compose.floaty</a>.</p>
+<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 <a href="#composecomponents_androidview">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a>, <a href="compose.html#compose_m_floaty">compose.floaty</a> 或 <a href="compose.html#compose_m_dialog">compose.dialog</a>.</p>
 <p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>
 <h2>输入类型<span><a class="mark" href="#composecomponents" id="composecomponents">#</a></span></h2>
 <p>属性使用严格转换, 不依赖一般 JavaScript 真值或自动数字字符串转换. <code>checked: &#39;true&#39;</code>, <code>value: &#39;0.5&#39;</code>, 未知属性或无效枚举都会被拒绝. 属性的名称和枚举值大小写敏感; 图标名称另有大小写兼容规则.</p>
@@ -358,7 +358,7 @@
 <p>编辑器没有加载原生声明组时, 此类型保留为对象形态, 仍排除原始值, 函数和 Promise; 任意对象是否为真实 View 由运行时检查. 完整原生成员补全需要原有 Android 等可选声明组, F2 不改变这些组的默认启用状态.</p>
 <h3>ComposeViewFactory<span><a class="mark" href="#composecomponents_composeviewfactory" id="composecomponents_composeviewfactory">#</a></span></h3>
 <p>同步函数 <code>(context) =&gt; view</code>. <code>context</code> 是 <a href="https://developer.android.com/reference/android/content/Context">Android Context</a>: UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 <a href="#composecomponents_composenativeview">ComposeNativeView</a>, 不接受 Promise 或无返回值. 不把函数的 <code>this</code> 当作 ComposeNode.</p>
-<p>宿主在准备 <code>AndroidView</code> 创建或显式 <code>set({view: factory})</code> 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach 或 floaty 会话.</p>
+<p>宿主在准备 <code>AndroidView</code> 创建或显式 <code>set({view: factory})</code> 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach, floaty 或 dialog 会话.</p>
 <h3>ComposeViewInput<span><a class="mark" href="#composecomponents_composeviewinput" id="composecomponents_composeviewinput">#</a></span></h3>
 <p><a href="#composecomponents_composenativeview">ComposeNativeView</a> 或 <a href="#composecomponents_composeviewfactory">ComposeViewFactory</a>. 仅用于 AndroidView 的必填 <code>view</code> 属性. Getter 返回准备后的实际 View, 不返回工厂, Promise 或内部身份值.</p>
 <h3>ComposeDpInput<span><a class="mark" href="#composecomponents_composedpinput" id="composecomponents_composedpinput">#</a></span></h3>
@@ -648,7 +648,7 @@ let dialog = compose.AlertDialog({
 });
 compose.mount(compose.Box({}, dialog));
 </code></pre>
-<p>它是会话树中的组件, 不是独立的 <code>compose.dialog</code> API.</p>
+<p>它是会话树中的组件. 如需为内容创建独立对话框或底部弹层会话, 使用 <a href="compose.html#compose_m_dialog">compose.dialog</a>.</p>
 <h3>CircularProgressIndicator<span><a class="mark" href="#composecomponents_circularprogressindicator" id="composecomponents_circularprogressindicator">#</a></span></h3>
 <p>圆形进度指示器. <code>progress</code> 为 0 到 1 的数字时显示确定进度, 省略或 null 时显示不确定进度. 可设置 color / trackColor, 不接受 children.</p>
 <h3>LinearProgressIndicator<span><a class="mark" href="#composecomponents_linearprogressindicator" id="composecomponents_linearprogressindicator">#</a></span></h3>

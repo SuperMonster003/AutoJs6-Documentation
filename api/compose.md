@@ -14,7 +14,9 @@
 | 悬浮窗口 | [ComposeFloatyWindow](composeFloatyWindowType) |
 | 组件属性, 插槽, 事件和生成目录 | [ComposeComponents](composeComponents) |
 
-当前提供 UI 模式页面, `compose.floaty` 和 [XML 容器挂载](#m-attach). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0. 组件目录中的 `AlertDialog` 是已有会话内的组件, 不表示存在独立的 `compose.dialog` 承载入口.
+当前提供 UI 模式页面, `compose.floaty`, [XML 容器挂载](#m-attach) 和 [独立对话框](#m-dialog). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0.
+
+F3 的 `compose.dialog` 需要配套宿主 5321 和具备对话框能力的 Compose UI 1.1.0 构建, `.tsx` 使用 TypeScript Engine 0.6.6, Declarations 4.34.0 与 Ace Editor 1.28.0. 组件目录中的 `AlertDialog` 仍是已有会话树内的节点; `compose.dialog` 创建独立会话, 二者不是同一入口.
 
 ## 两层使用方式
 
@@ -36,7 +38,7 @@ let session = compose.mount(compose.Column({padding: 16}, title, button));
 
 ### state 与 render
 
-把函数作为 `mount`, `attach` 或 `floaty` 的根输入, 函数读取 [ComposeState.value](composeStateType#p-value) 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.
+把函数作为 `mount`, `attach`, `floaty` 或 `dialog` 的根输入, 函数读取 [ComposeState.value](composeStateType#p-value) 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.
 
 ```js
 'ui';
@@ -64,7 +66,7 @@ Compose TSX 需要以下配套条件:
 - AutoJs6 6.8.0 / 构建号 5319 或以上, 使用 Rhino 脚本入口.
 - Compose UI 1.1.0 本地开发预览, 已安装, 启用并通过宿主的信任与兼容性检查.
 - TypeScript Engine 0.6.4, 已安装, 启用并可连接, 提供真实 TypeScript 编译与 Compose 声明.
-- 源文件扩展名为 `.tsx`. UI 页面在文件开头保留 `'ui';`; 非 UI 脚本使用 `compose.floaty` 并满足其悬浮窗权限要求.
+- 源文件扩展名为 `.tsx`. UI 页面在文件开头保留 `'ui';`; 非 UI 脚本可使用 `compose.floaty` 或具备配套 F3 能力的 `compose.dialog`, 并满足悬浮窗权限要求.
 
 普通 `.js` 工厂写法不需要 TypeScript Engine. 给 `.js` 文件加入 TSX 标签不会自动启用 TypeScript 编译. Node profile 不接受 `.tsx`, 也不提供 Compose TSX 挂载入口.
 
@@ -109,7 +111,7 @@ props 的值直接进入原有类型化属性解析, 不会先转成 XML 字符�
 | 使用位置 | 规则 |
 | --- | --- |
 | Compose 容器 children | 按原顺序展开片段中的内容, 继续检查父组件的 children 数量和作用域. |
-| `mount`, `attach`, `compose(...)`, `floaty` 的根或 render 返回值 | 片段展开后必须恰好有一个根节点, 空片段或多根报 `INVALID_ARGUMENT`. |
+| `mount`, `attach`, `compose(...)`, `floaty`, `dialog` 的根或 render 返回值 | 片段展开后必须恰好有一个根节点, 空片段或多根报 `INVALID_ARGUMENT`. |
 | 单节点插槽 | 可以是空片段或一个节点, 多节点报 `INVALID_ARGUMENT`. |
 | XML UI | 保留原有 XML 的片段, 文本和根节点规则. |
 
@@ -139,20 +141,20 @@ XML 节点不能作为 Compose 的 children 或插槽, Compose 节点也不能�
 
 两套 UI 通过明确的边界组合: 在 XML 树中放置空的 `<compose id="slot" />`, 完成布局后调用 [compose.attach](#m-attach); 在 Compose 树中使用 [AndroidView](composeComponents#androidview) 包装实际 Android View. `<compose>` 不接受 XML 元素子节点, 也不能把 `<compose.Text>` 直接写在其内部. AndroidView 的 `view` 属性接收实际 View 或同步 View 工厂, 不接收 XML TSX 值或 ComposeNode.
 
-TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍报 `UI_MODE_REQUIRED`; 同一个 `.tsx` 脚本可通过 `compose.floaty` 创建并关闭自己的浮动会话.
+TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍报 `UI_MODE_REQUIRED`; 同一个 `.tsx` 脚本可通过 `compose.floaty` 或具备配套 F3 能力的 `compose.dialog` 创建并关闭自己的窗口会话.
 
 ## 线程与生命周期
 
 - UI 脚本由 `'ui';` 声明, 其 Compose 操作在该脚本的 UI 调度线程执行.
-- 非 UI 脚本可使用 `compose.floaty`, 或向旧悬浮窗口的 `<compose>` 容器 `attach`. 普通节点事件仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理; 同步 View 工厂的特殊主线程规则见 [ComposeViewFactory](composeComponents#composeviewfactory).
+- 非 UI 脚本可使用 `compose.floaty`, `compose.dialog`, 或向旧悬浮窗口的 `<compose>` 容器 `attach`. 普通节点事件仍在创建会话的脚本线程执行, 原生窗口与绘制在 Android 主线程处理; 同步 View 工厂的特殊主线程规则见 [ComposeViewFactory](composeComponents#composeviewfactory).
 - 组件属性, state 读写, 树操作, 主题和普通窗口方法需要所属脚本线程. 工作线程使用 `compose.post`, `session.post` 或 `window.post`; 清理用的幂等 `close()` 也可从工作线程请求.
 - Compose 节点事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. AndroidView 内通过旧 `ui` API 或 XML TSX 注册的 View 事件仍遵循原生 UI 规则, 点击回调在主线程执行; 非 UI 脚本从这些回调修改 Compose 状态时使用 `compose.post`. UI 脚本中的阻塞等待同样会阻塞界面.
-- 同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载和 Compose 悬浮窗共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.
-- 新的 `compose.mount` 替换旧的 Compose UI 页面. `ui.layout`, `ui.layoutFile` 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗不因此关闭.
+- 同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载, Compose 悬浮窗和对话框共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.
+- 新的 `compose.mount` 替换旧的 Compose UI 页面. `ui.layout`, `ui.layoutFile` 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗和对话框不因此关闭.
 - 脚本停止, Activity 销毁, 会话主动关闭或原生窗口关闭会清理相应资源. 当前 UI Activity 自行处理方向及窗口尺寸等已声明的配置变化, 常规旋转和分屏尺寸变化可保留引擎与节点. 真正的 Activity 重建或销毁会结束其 UI 引擎, 不自动恢复原 state 或会话.
 - 插件更新, 卸载或禁用会关闭正在使用它的会话并报告对应错误. 重新安装或启用插件不会自动复活旧句柄, 后续应创建新的会话和节点.
 
-每个悬浮会话持有一个属于自身的脚本保活引用. 关闭一个悬浮窗只释放该引用; 最后一个窗口关闭且没有其他保活来源时, 非 UI 脚本可自然结束. `post` 本身不提供额外保活.
+每个悬浮会话和非 UI 对话框会话持有属于自身的脚本保活引用. 关闭一个窗口只释放相应引用; 最后一个窗口关闭且没有其他保活来源时, 非 UI 脚本可自然结束. `post` 本身不提供额外保活.
 
 <p style="font: bold 2em sans-serif; color: #FF7043">compose</p>
 
@@ -188,7 +190,7 @@ TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍�
 
 - { [ComposeSession](composeSessionType)[] }
 
-当前脚本尚未关闭的会话数组快照, 包含 UI 挂载和悬浮会话. 修改数组不会创建, 移除或关闭会话. 悬浮窗对应项为 `window.session`, 不是窗口对象本身.
+当前脚本尚未关闭的会话数组快照, 包含 UI 挂载, XML 容器挂载, 悬浮会话和独立对话框. 修改数组不会创建, 移除或关闭会话. 悬浮窗对应项为 `window.session`, 不是窗口对象本身.
 
 ## [m] isAvailable
 
@@ -345,7 +347,7 @@ ui.increment.on('click', function () {
 });
 ```
 
-非 UI 脚本可在原有悬浮窗中使用 `<compose>` 容器, 仍需满足该窗口的悬浮窗权限与生命周期要求. `attach` 和节点操作在所属脚本线程调用; View 的原生创建与挂载由主线程处理. 不在 View 工厂中创建新的 mount, attach 或 floaty 会话.
+非 UI 脚本可在原有悬浮窗中使用 `<compose>` 容器, 仍需满足该窗口的悬浮窗权限与生命周期要求. `attach` 和节点操作在所属脚本线程调用; View 的原生创建与挂载由主线程处理. 不在 View 工厂中创建新的 mount, attach, floaty 或 dialog 会话.
 
 ## [m] floaty
 
@@ -360,6 +362,61 @@ ui.increment.on('click', function () {
 每次成功调用创建独立悬浮会话, 不替换已有页面或其他悬浮窗. 渲染函数内禁止再次创建窗口. 几何单位是物理像素, 与组件布局的 dp 不同; 选项默认值, 焦点, 关闭与保活规则见 [ComposeFloatyWindow](composeFloatyWindowType).
 
 options 容器省略或为 `null` / `undefined` 时使用默认选项, 成员值仍按各字段校验.
+
+## [m] dialog
+
+### compose.dialog(nodeOrRender, options?)
+
+- **nodeOrRender** { [ComposeNode](composeNodeType) | [Function](dataTypes#function) } - 一个根节点或返回一个根节点的同步渲染函数; TSX fragment 遵循 [单根规则](#fragment-与插槽).
+- **[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 仅接受下表中的 `type`, `cancelable`, `theme`.
+- <ins>**returns**</ins> { [ComposeSession](composeSessionType) } - 此独立对话框的会话, 不是 Promise 或浮动窗口控制对象.
+
+创建一个由 Compose 内容组成的独立对话框. 每次成功调用产生新会话, 不替换已有页面, XML 容器, 悬浮窗或其他对话框, 并计入单脚本引擎最多 8 个活动会话的限制. 返回会话可使用 `update`, `post`, `close`, `on('close')` 和 `showSnackbar`; 不提供 `setPosition`, window token 或 window type 选项.
+
+| 选项 | 类型 | 默认值 | 说明 |
+| --- | --- | --- | --- |
+| `type` | `'alert'` 或 `'bottomSheet'` | `'alert'` | 普通独立对话框或底部弹层. 底部弹层打开时直接展开, 不停留在部分展开状态. |
+| `cancelable` | `boolean` | `true` | 是否允许返回键, 外部点击和底部弹层滑动取消. |
+| `theme` | [ComposeTheme](composeThemeType), `null` 或 `undefined` | 继承模块默认覆盖 | 与其他挂载入口采用相同的覆盖规则. |
+
+options 容器省略或为 `null` / `undefined` 时使用默认选项. `type` 与 `cancelable` 只有省略时取默认值, 显式 `null` 或 `undefined` 都报 `INVALID_ARGUMENT`. `theme` 省略或为 `null` 时继承模块默认覆盖; 显式 `{theme: {}}` 或 `{theme: undefined}` 使用空覆盖. 未知选项报 `UNKNOWN_PROP`.
+
+TypeScript 未启用 `exactOptionalPropertyTypes` 时, 可选属性的显式 `undefined` 可能不产生编辑器诊断, 运行时仍按上述规则校验.
+
+UI 脚本使用当前脚本自身的 Activity 窗口, 不挂到其他 Activity, 也不要求悬浮窗权限. 非 UI 脚本使用悬浮窗口, 必须预先具有当前应用的悬浮窗权限; 未获权限报 `PERMISSION_REQUIRED`, 调用不会自动申请或打开授权页面. 非 UI 对话框在存活期间为脚本保活, 关闭后释放属于该会话的引用.
+
+`cancelable: false` 同时禁止返回键, 对话框外部点击和底部弹层滑动导致的用户取消. 脚本主动 `session.close()` 始终可用, 脚本停止或所属 Activity 销毁等生命周期清理也不受此选项阻止. 允许的用户取消会关闭会话, `on('close')` 沿用所属脚本线程上的一次通知规则; 不返回确认/取消值.
+
+根内容支持响应式状态, ref, 节点事件, TSX 和 AndroidView. 节点仍属于当前脚本与会话, 不能直接混入 XML TSX 值或任意原生 View. 在 render 或 AndroidView 工厂中再创建 mount, attach, floaty 或 dialog 会话会被拒绝. 初始化或渲染器能力检查失败时, 已有内容继续有效; 缺少对话框能力的旧插件报 `PLUGIN_INCOMPATIBLE`.
+
+`compose.isAvailable()` 探测基础可用性, 不保证旧版本插件已提供对话框能力. 可捕获 `PLUGIN_INCOMPATIBLE` 提示使用配套插件, 不应据此关闭仍有效的原会话.
+
+下面是独立对话框, 内部没有使用会话树组件 `AlertDialog`:
+
+```js
+'ui';
+
+let count = compose.state(0);
+let session = compose.dialog(function () {
+    return compose.Column({padding: 20, spacing: 12},
+        compose.Text({key: 'count', text: 'Count: ' + count.value}),
+        compose.Button({key: 'add', onClick: function () { count.value += 1; }}, 'Increment'),
+        compose.TextButton({key: 'close', onClick: function () { session.close(); }}, 'Close'));
+}, {cancelable: false});
+session.on('close', function () {
+    console.log('Dialog closed');
+});
+```
+
+底部弹层使用同一个入口:
+
+```js
+// 非 UI 脚本需要事先授予当前应用悬浮窗权限.
+let sheet = compose.dialog(compose.Column({padding: 20},
+    compose.Text({text: 'Bottom sheet'})), {type: 'bottomSheet'});
+```
+
+Snackbar 仍需要用户节点树中的 `Scaffold` 及其默认 host, 不因选择底部弹层而隐式获得可寻址的 Snackbar 节点. 关闭标志与原生窗口释放的异步边界见 [ComposeSession](composeSessionType#m-close). 若只需文本提示, 确认或输入结果, 可使用已有的 [dialogs 模块](dialogs).
 
 ## [m] batch
 

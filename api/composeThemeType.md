@@ -1,6 +1,6 @@
 # ComposeTheme - Compose 主题
 
-ComposeTheme 是传给 [compose.theme](compose#m-theme), [compose.mount](compose#m-mount) 或 [compose.floaty](compose#m-floaty) 的普通 JavaScript 选项对象. 它描述脚本覆盖项, 不直接提供完整的 Material 3 ColorScheme 或 Kotlin Typography 对象.
+ComposeTheme 是传给 [compose.theme](compose#m-theme), 或作为 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty), [compose.dialog](compose#m-dialog) 的 `theme` 选项的普通 JavaScript 对象. 它描述脚本覆盖项, 不直接提供完整的 Material 3 ColorScheme 或 Kotlin Typography 对象.
 
 当前主题支持 seed, 明暗模式, Android 12+ 动态颜色, 指定颜色角色以及字体族和文字缩放. 需要配套 AutoJs6 6.8.0 本地构建和 Compose UI 插件.
 

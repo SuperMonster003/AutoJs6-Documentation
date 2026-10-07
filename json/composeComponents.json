@@ -4,7 +4,7 @@
     {
       "textRaw": "Compose 组件 (Components)",
       "name": "compose_组件_(components)",
-      "desc": "<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 <a href=\"#androidview\">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href=\"composeNodeType\">ComposeNode</a>, 然后交给 <a href=\"compose#m-mount\">compose.mount</a>, <a href=\"compose#m-attach\">compose.attach</a> 或 <a href=\"compose#m-floaty\">compose.floaty</a>.</p>\n<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href=\"compose#tsx-接入\">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>\n",
+      "desc": "<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 <a href=\"#androidview\">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href=\"composeNodeType\">ComposeNode</a>, 然后交给 <a href=\"compose#m-mount\">compose.mount</a>, <a href=\"compose#m-attach\">compose.attach</a>, <a href=\"compose#m-floaty\">compose.floaty</a> 或 <a href=\"compose#m-dialog\">compose.dialog</a>.</p>\n<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href=\"compose#tsx-接入\">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>\n",
       "modules": [
         {
           "textRaw": "输入类型",
@@ -28,7 +28,7 @@
             {
               "textRaw": "ComposeViewFactory",
               "name": "composeviewfactory",
-              "desc": "<p>同步函数 <code>(context) =&gt; view</code>. <code>context</code> 是 <a href=\"https://developer.android.com/reference/android/content/Context\">Android Context</a>: UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 <a href=\"#composenativeview\">ComposeNativeView</a>, 不接受 Promise 或无返回值. 不把函数的 <code>this</code> 当作 ComposeNode.</p>\n<p>宿主在准备 <code>AndroidView</code> 创建或显式 <code>set({view: factory})</code> 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach 或 floaty 会话.</p>\n",
+              "desc": "<p>同步函数 <code>(context) =&gt; view</code>. <code>context</code> 是 <a href=\"https://developer.android.com/reference/android/content/Context\">Android Context</a>: UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 <a href=\"#composenativeview\">ComposeNativeView</a>, 不接受 Promise 或无返回值. 不把函数的 <code>this</code> 当作 ComposeNode.</p>\n<p>宿主在准备 <code>AndroidView</code> 创建或显式 <code>set({view: factory})</code> 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach, floaty 或 dialog 会话.</p>\n",
               "type": "module",
               "displayName": "ComposeViewFactory"
             },
@@ -310,7 +310,7 @@
             {
               "textRaw": "AlertDialog",
               "name": "alertdialog",
-              "desc": "<p>受控对话框节点. <code>open</code> 默认为 false, <code>confirm</code> 插槽必需; 还支持 icon, title, text 和 dismiss 插槽, 以及 containerColor 和 shape. <code>onDismissRequest</code> 仅报告关闭请求, 不自动把 open 改为 false. confirm/dismiss 中的按钮也由脚本决定何时关闭.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet dialog = compose.AlertDialog({\n    open: true,\n    title: &#39;确认&#39;,\n    text: &#39;是否继续?&#39;,\n    confirm: compose.TextButton({ onClick: function () { dialog.open = false; } }, &#39;继续&#39;),\n    dismiss: compose.TextButton({ onClick: function () { dialog.open = false; } }, &#39;取消&#39;),\n    onDismissRequest: function () { dialog.open = false; }\n});\ncompose.mount(compose.Box({}, dialog));\n</code></pre>\n<p>它是会话树中的组件, 不是独立的 <code>compose.dialog</code> API.</p>\n",
+              "desc": "<p>受控对话框节点. <code>open</code> 默认为 false, <code>confirm</code> 插槽必需; 还支持 icon, title, text 和 dismiss 插槽, 以及 containerColor 和 shape. <code>onDismissRequest</code> 仅报告关闭请求, 不自动把 open 改为 false. confirm/dismiss 中的按钮也由脚本决定何时关闭.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet dialog = compose.AlertDialog({\n    open: true,\n    title: &#39;确认&#39;,\n    text: &#39;是否继续?&#39;,\n    confirm: compose.TextButton({ onClick: function () { dialog.open = false; } }, &#39;继续&#39;),\n    dismiss: compose.TextButton({ onClick: function () { dialog.open = false; } }, &#39;取消&#39;),\n    onDismissRequest: function () { dialog.open = false; }\n});\ncompose.mount(compose.Box({}, dialog));\n</code></pre>\n<p>它是会话树中的组件. 如需为内容创建独立对话框或底部弹层会话, 使用 <a href=\"compose#m-dialog\">compose.dialog</a>.</p>\n",
               "type": "module",
               "displayName": "AlertDialog"
             },

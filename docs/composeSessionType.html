@@ -318,8 +318,8 @@
 
         <div id="apicontent">
             <h1>Compose 会话 (ComposeSession)<span><a class="mark" href="#composesessiontype_compose_composesession" id="composesessiontype_compose_composesession">#</a></span></h1>
-<p>ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a> 返回, 或经 <a href="composeFloatyWindowType.html#composefloatywindowtype_p_session">ComposeFloatyWindow.session</a> 取得. 不能直接用 <code>new</code> 创建.</p>
-<p>UI 挂载, XML 容器挂载和 Compose 悬浮窗共享单脚本引擎最多 8 个活动会话的限制. 同一 XML 容器重新成功 attach 时替换它的旧会话, 不关闭其他容器的会话. 会话不是 Android Activity 或 View; 修改组件使用 <a href="composeNodeType.html">ComposeNode</a>, 窗口操作使用 <a href="composeFloatyWindowType.html">ComposeFloatyWindow</a>.</p>
+<p>ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a>, <a href="compose.html#compose_m_dialog">compose.dialog</a> 返回, 或经 <a href="composeFloatyWindowType.html#composefloatywindowtype_p_session">ComposeFloatyWindow.session</a> 取得. 不能直接用 <code>new</code> 创建.</p>
+<p>UI 挂载, XML 容器挂载, Compose 悬浮窗和独立对话框共享单脚本引擎最多 8 个活动会话的限制. 同一 XML 容器重新成功 attach 时替换它的旧会话, 不关闭其他容器的会话. 新的 dialog 会话不替换其他会话. 会话不是 Android Activity 或 View; 修改组件使用 <a href="composeNodeType.html">ComposeNode</a>, 浮动窗口操作使用 <a href="composeFloatyWindowType.html">ComposeFloatyWindow</a>.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeSession</p>
 
 <h2>[p#] root<span><a class="mark" href="#composesessiontype_p_root" id="composesessiontype_p_root">#</a></span></h2>
@@ -328,6 +328,7 @@
 <li>{ <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
 </ul>
 <p>当前根节点句柄. 响应式渲染更换根节点时, 此属性随会话更新. 会话关闭后立即读取为 <code>null</code>. 它不是原生 View, 也不表示本次更改已经完成屏幕绘制.</p>
+<p>独立对话框的 root 同样是用户提供的内容节点, 不是原生窗口或内部的呈现容器.</p>
 <h2>[m#] update<span><a class="mark" href="#composesessiontype_m_update" id="composesessiontype_m_update">#</a></span></h2>
 <h3>session.update(fn)<span><a class="mark" href="#composesessiontype_session_update_fn" id="composesessiontype_session_update_fn">#</a></span></h3>
 <div class="signature"><ul>
@@ -400,6 +401,7 @@
 <p>普通回调函数的 <code>this</code> 为当前会话. 每条请求最多产生一次操作或消失结果; 关闭会话后释放尚未完成的请求和回调, 不补发消失通知.</p>
 <p><code>actionLabel</code>, <code>onAction</code>, <code>onDismiss</code> 为 <code>null</code> 或 <code>undefined</code> 时表示省略. <code>duration: undefined</code> 不作为默认时长, 会报 <code>INVALID_ARGUMENT</code>; 未使用该项时应省略或传 <code>null</code>.</p>
 <p>请求按顺序显示, 并在同一轮树更新被接受后选择会话中的第一个 <code>Scaffold</code>. 该 Scaffold 必须使用默认 Snackbar host. 不存在 Scaffold, 或该 Scaffold 自定义了 <code>snackbarHost</code> 插槽时, 请求会报 <code>INVALID_ARGUMENT</code>. 多个 Scaffold 时不自动选择距离调用处最近的一个.</p>
+<p>独立对话框和底部弹层会话也遵循此规则. 底部弹层的呈现外壳不作为用户树中的 Scaffold 或命令目标.</p>
 <p>移除或替换当前 Snackbar host 会结束其待处理请求, 按非操作方式返回结果. 原生显示与回调是异步的; 返回当前会话不表示 Snackbar 已显示或用户已操作. 未知选项抛出 <code>UNKNOWN_PROP</code>, 类型或枚举不合法抛出 <code>INVALID_ARGUMENT</code>.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -419,6 +421,7 @@ let session = compose.mount(compose.Scaffold({},
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeSessionType.html">ComposeSession</a></span> } - 当前会话.</li>
 </ul>
 </div><p>普通回调函数的 <code>this</code> 为当前会话. 回调执行前会话已标为关闭, <code>root</code> 已清空, 节点订阅及回调已释放. 每次注册在首次关闭时调用一次, 重复 <code>close()</code> 不重复通知. 回调异常会报告给脚本控制台, 不阻止其他关闭回调和后续清理.</p>
+<p>对话框允许的返回键, 外部点击或滑动取消会进入同一关闭流程, 关闭通知回到所属脚本线程, 不附带确认/取消结果. <code>cancelable: false</code> 禁止用户取消, 不禁止脚本主动关闭.</p>
 <p>此对象没有 <code>off</code> 方法, 也不支持 <code>session.on(&#39;error&#39;, fn)</code>. 在会话关闭后注册会报 <code>SESSION_CLOSED</code>. 节点事件应使用 <a href="composeNodeType.html#composenodetype_m_on">ComposeNode.on</a>, Snackbar 结果应使用其选项回调.</p>
 <h2>[m#] isClosed<span><a class="mark" href="#composesessiontype_m_isclosed" id="composesessiontype_m_isclosed">#</a></span></h2>
 <h3>session.isClosed()<span><a class="mark" href="#composesessiontype_session_isclosed" id="composesessiontype_session_isclosed">#</a></span></h3>
@@ -431,13 +434,14 @@ let session = compose.mount(compose.Scaffold({},
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>关闭当前会话, 释放渲染资源, 节点事件, 渲染依赖和当前 ref, 并使所属 <code>post</code> 任务不再执行. 悬浮会话同时关闭窗口和释放其脚本保活引用. 此方法幂等, 可从工作线程请求关闭; 脚本侧通知仍回到所属调度线程处理.</p>
+</div><p>关闭当前会话, 释放渲染资源, 节点事件, 渲染依赖和当前 ref, 并使所属 <code>post</code> 任务不再执行. 悬浮和对话框会话同时关闭相应窗口, 并释放其持有的脚本保活引用. 此方法幂等, 可从工作线程请求关闭; 脚本侧通知仍回到所属调度线程处理.</p>
 <p>关闭标志先于原生资源清理完成. 原生视图释放在 Android 主线程执行, <code>close()</code> 返回或 <code>&#39;close&#39;</code> 回调都不是原生释放完成的回执. 调用方图片的生命周期应覆盖这段过程, 不要仅凭关闭返回就立即 recycle 仍可能被原生视图引用的图片.</p>
 <p>没有原生释放完成的确认时, 不要在 <code>remove</code>, <code>close</code> 返回后或关闭监听中主动 recycle. 图片不再使用后可放弃脚本持有的强引用, 交给正常回收机制处理. 当前没有 <code>awaitClosed</code> 或等待原生释放的 Promise 接口.</p>
 <p>关闭 UI 会话会移除 Compose 内容, 不等同于请求结束脚本 Activity. 页面后续行为由脚本自身决定.</p>
+<p>关闭独立对话框只关闭该对话框会话. 其他对话框, 页面, XML 容器和悬浮窗继续存在, <code>cancelable: false</code> 不影响主动关闭. 非 UI 脚本最后一个保活来源释放后可自然结束.</p>
 <p>关闭 XML 容器会话只移除该容器内的 Compose 内容, 保留 <code>&lt;compose&gt;</code> 容器本身和外层 XML 页面或旧悬浮窗口. 在容器首次进入窗口前可以先 attach 准备内容; 首次真实进入窗口后, 任何 detach 都会关闭它的会话, 临时移出再放回也不会自动重启. 若还需显示, 应创建新节点并再次 attach. 旧悬浮窗口关闭或移除容器同样会关闭嵌入会话并释放相应保活.</p>
 <p>AndroidView 的实际 View 释放也在主线程完成. 如需转交另一个父视图或新会话, 先结束旧使用, 再在主线程确认其原生父视图已释放. 不以 <code>close()</code> 返回或 <code>&#39;close&#39;</code> 事件作为可立即重用的回执, 也不能复用旧会话的节点句柄.</p>
-<p>会话也会在脚本停止, 所属 Activity 销毁, UI 内容被替换, 原生窗口关闭, 或插件更新/卸载/禁用时关闭. 常规原生回调不会在主线程同步执行非 UI 脚本, 关闭操作也不会等待另一个脚本线程完成.</p>
+<p>会话也会在脚本停止, 所属 Activity 销毁, 对应 UI 内容被替换, 原生窗口关闭, 或插件更新/卸载/禁用时关闭. Compose 会话关闭通知和节点事件不会在主线程同步执行非 UI 脚本, 关闭操作也不会等待另一个脚本线程完成. AndroidView 直接注册的原生 View 事件遵循 <a href="compose.html#compose_4">原生 UI 线程规则</a>.</p>
 <p>关闭后 <code>root</code> 为 <code>null</code>, <code>isClosed()</code> 为 <code>true</code>, 重复 <code>close()</code> 仍安全; <code>update</code>, <code>post</code>, <code>showSnackbar</code>, <code>on</code> 及原会话节点的业务操作会报 <code>SESSION_CLOSED</code>.</p>
 
         </div>

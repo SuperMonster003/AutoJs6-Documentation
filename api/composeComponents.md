@@ -1,6 +1,6 @@
 # Compose 组件 (Components)
 
-本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach) 或 [compose.floaty](compose#m-floaty).
+本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty) 或 [compose.dialog](compose#m-dialog).
 
 需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 `view` 属性接入; `compose.Snackbar` 不是节点工厂.
 
@@ -24,7 +24,7 @@
 
 同步函数 `(context) => view`. `context` 是 [Android Context](https://developer.android.com/reference/android/content/Context): UI 脚本使用当前 Activity, 非 UI 脚本使用带脚本主题的 Context 包装. 返回值必须是 [ComposeNativeView](#composenativeview), 不接受 Promise 或无返回值. 不把函数的 `this` 当作 ComposeNode.
 
-宿主在准备 `AndroidView` 创建或显式 `set({view: factory})` 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach 或 floaty 会话.
+宿主在准备 `AndroidView` 创建或显式 `set({view: factory})` 时, 在 Android 主线程调用一次工厂. 它不在 Compose 重组期间反复调用. 响应式 render 再次执行到该声明时仍会重新准备, 因此需要复用原生 View 时应在 render 外保存实际 View. 工厂应只完成简短的原生创建和初始化, 不执行阻塞任务, 不创建 mount, attach, floaty 或 dialog 会话.
 
 ### ComposeViewInput
 
@@ -358,7 +358,7 @@ let dialog = compose.AlertDialog({
 compose.mount(compose.Box({}, dialog));
 ```
 
-它是会话树中的组件, 不是独立的 `compose.dialog` API.
+它是会话树中的组件. 如需为内容创建独立对话框或底部弹层会话, 使用 [compose.dialog](compose#m-dialog).
 
 ### CircularProgressIndicator
 

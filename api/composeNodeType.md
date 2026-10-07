@@ -1,6 +1,6 @@
 # Compose 节点 (ComposeNode)
 
-ComposeNode 是 [组件工厂](compose#组件工厂) 或 [compose.createElement](compose#m-createelement) 返回的脚本句柄, 不能直接用 `new` 创建. 节点可以先创建和组装, 再交给 `compose.mount`, `compose.attach` 或 `compose.floaty` 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.
+ComposeNode 是 [组件工厂](compose#组件工厂) 或 [compose.createElement](compose#m-createelement) 返回的脚本句柄, 不能直接用 `new` 创建. 节点可以先创建和组装, 再交给 `compose.mount`, `compose.attach`, `compose.floaty` 或 `compose.dialog` 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.
 
 所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 [compose.post](compose#m-post) 或所属会话的 `post`. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.
 

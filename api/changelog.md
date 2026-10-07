@@ -2,7 +2,9 @@
 
 ## v6.8.0
 
-<p style="font: bold 0.8em sans-serif; color: #888888">2026/09/26</p>
+- `新增` [Terminal](terminal), [TerminalSession](terminalSessionType), [TerminalOpenOptions](terminalOpenOptionsType) 与 [TerminalError](terminalErrorType), 说明 3-Shell Terminal 插件依赖, 同步和异步会话管理, 输出事件, npm 脚本, 权限与生命周期
+
+<p style="font: bold 0.8em sans-serif; color: #888888">2026/10/05</p>
 
 - `更新` [安装器 (Installer)](https://docs.autojs6.com/#/installer) 的高级安装选项, optimizing 阶段及所有权/手动编译观察结果, 补充本地签名门禁, 包名/共享 UID 黑名单和选中分包的权限预览边界
 

@@ -140,6 +140,7 @@
 | [Recorder - 记录器](recorder) | √ |
 | [Sensors - 传感器](sensors) | √ |
 | [Settings - 应用设置](settings) | √ |
+| [Terminal](terminal) | 已完成 |
 | [Shell](shell) | √ |
 | [Shizuku](shizuku) | √ |
 | [SQLite - 数据库](sqlite) | √ |

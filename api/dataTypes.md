@@ -1501,6 +1501,22 @@ HSV 色彩空间中 `H (hue)` 及 `S (saturation)` 的相关距离检测:
     <img src="images/hs-distance-color-detection.png" alt="hs-distance-color-detection" width="695">
 </picture>
 
+### OKLab 距离检测
+
+参数名称: `oklab`
+
+自 AutoJs6 6.8.0 起可用.
+
+计算 [OKLab](https://bottosson.github.io/posts/oklab/) 色彩空间中两点间的欧氏距离, 并乘以 `255`, 使黑色与白色的距离为 `255`, 与 [颜色匹配阈值](glossaries#颜色匹配阈值) 的量纲一致.
+
+OKLab 是感知均匀的色彩空间, 此距离更接近人眼感受到的颜色差异, 但计算开销高于其他算法.
+
+```js
+colors.distance('black', 'white', 'oklab'); /* 约为 255. */
+colors.distance('red', '#FE0000', 'oklab'); /* 约为 0.51. */
+colors.isSimilar('orange', 'dark-orange', 16, 'oklab'); // true
+```
+
 ## Range
 
 表示一个数字的数值范围.

@@ -1,6 +1,6 @@
 # Compose 组件 (Components)
 
-本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty) 或 [compose.dialog](compose#m-dialog).
+本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, V2 追加的 25 个节点组件, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty) 或 [compose.dialog](compose#m-dialog).
 
 需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 `view` 属性接入; `compose.Snackbar` 不是节点工厂.
 
@@ -106,6 +106,8 @@ let session = compose.mount(compose.Column({ padding: 16 },
 此外, `ArrowBack`, `ArrowForward`, `ExitToApp`, `KeyboardArrowLeft`, `KeyboardArrowRight`, `List`, `Send` 提供这五种样式的自动镜像形式, 如 `'AutoMirrored.Filled.ArrowBack'`, 共 35 项, 名称同样不区分大小写.
 
 未提供 material-icons-extended 全量图标. 其他图案请通过 `Image` 使用自己的图片. 为有交互含义的图标设置 `contentDescription`, 装饰性图标可以不设.
+
+V2 组件继续使用相同的 core 图标和 Image 输入, 新组件的 icon 插槽不要求安装或打包额外图标库.
 
 ### ComposeValueInput
 
@@ -381,6 +383,168 @@ let session = compose.mount(compose.Scaffold({},
     } }, '保存')));
 ```
 
+## V2 组件
+
+以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 Compose UI 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.
+
+状态属性使用严格类型, 不将数字字符串当数字. `page`, `selectedIndex`, `hour`, `minute`, 年份及 `columns` 是整数. 构造输入, 后续 `set` 与属性赋值都受相同范围和树结构规则约束. 下方目录表列出每项默认值, 类型, 插槽和事件; 数值上限与跨属性约束由运行时检查.
+
+日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, 显式更新 page 时再定位.
+
+### NavigationBar
+
+`compose.NavigationBar(props?, ...items)` 返回底部导航栏节点. 普通 children 至少包含一个 [NavigationBarItem](#navigationbaritem), 不接受字符串, Text 或其他节点. 同时最多一个 item 的 `selected` 为 true. `containerColor` 和 `contentColor` 控制栏颜色.
+
+### NavigationBarItem
+
+`compose.NavigationBarItem(props)` 需要必填 `icon` 插槽, `label` 可选. `selected` 默认为 false, `enabled` 和 `alwaysShowLabel` 默认为 true. 必须直接位于 NavigationBar 下. 用户点击触发 `click`; 脚本根据当前页面更新各 item 的 `selected`.
+
+```js
+'ui';
+
+let page = compose.state(0);
+compose.mount(function () {
+    return compose.NavigationBar({},
+        compose.NavigationBarItem({key: 'home', selected: page.value === 0,
+            icon: compose.Icon({name: 'Home'}), label: '首页',
+            onClick: function () { page.value = 0; }}),
+        compose.NavigationBarItem({key: 'settings', selected: page.value === 1,
+            icon: compose.Icon({name: 'Settings'}), label: '设置',
+            onClick: function () { page.value = 1; }}));
+});
+```
+
+### NavigationRail
+
+`compose.NavigationRail(props?, ...items)` 返回侧边导航栏. children 至少包含一个 [NavigationRailItem](#navigationrailitem), 且最多选中一个. `header` 为可选的单节点插槽. 颜色属性与 NavigationBar 相同.
+
+### NavigationRailItem
+
+`compose.NavigationRailItem(props)` 必须直接位于 NavigationRail 下. 必填 `icon`, 可选 `label`, `selected`, `enabled` 与 `alwaysShowLabel` 的规则同 NavigationBarItem.
+
+### NavigationDrawer
+
+`compose.NavigationDrawer(props, child?)` 通过必填 `drawerContent` 插槽定义抽屉, 通过一个普通 child 或 `content` 插槽定义页面. 同时提供 child 与 content 会被拒绝. `open` 默认 false, `gesturesEnabled` 默认 true. `openChange(open)` 回调接收布尔值.
+
+抽屉需要多个条目时, 把 [NavigationDrawerItem](#navigationdraweritem) 放入 Column, 再交给 drawerContent. 页面内容和抽屉内容都属于当前会话.
+
+### NavigationDrawerItem
+
+`compose.NavigationDrawerItem(props)` 需要 `label` 插槽, 可选 `icon` 和 `badge`. `selected` 默认 false, `enabled` 默认 true, 点击触发 `click`.
+
+### TabRow
+
+`compose.TabRow(props?, ...tabs)` 只接受直接的 [Tab](#tab) children. `selectedIndex` 默认 0, 必须是现有子项的索引, 因此至少需要一个 Tab. `scrollable` 默认 false; 为 true 时允许标签栏横向滚动. `containerColor` 和 `contentColor` 控制颜色.
+
+### Tab
+
+`compose.Tab(props?)` 必须直接位于 TabRow 下, `text` 与 `icon` 是可选插槽, `enabled` 默认 true. 点击触发 `click`; 在回调中更新父 TabRow 的 selectedIndex 或关联状态. Tab 自身没有 selected 属性.
+
+### ModalBottomSheet
+
+`compose.ModalBottomSheet(props?, child?)` 是当前会话树中的底部弹层节点, 使用单个 child 或 `content` 插槽. `open` 默认 false, `cancelable` 默认 true; 可设置 `shape`, `containerColor` 和 `contentColor`.
+
+用户请求关闭时触发 `dismissRequest()`. 脚本应设置 `open = false` 或从树中移除此节点. `cancelable: false` 禁用返回键, 外部点击及下滑关闭请求, 脚本仍可修改 open. 此节点与创建独立会话的 [compose.dialog](compose#m-dialog) 不同.
+
+### DropdownMenu
+
+`compose.DropdownMenu(props, ...items)` 需要 `anchor` 插槽作为菜单定位内容. `open` 默认 false, 普通 children 作为菜单内容, 通常使用 DropdownMenuItem. 外部关闭请求触发 `dismissRequest()`, 脚本可设置 open 为 false.
+
+### DropdownMenuItem
+
+`compose.DropdownMenuItem(props)` 需要 `text` 插槽, 可选 `leadingIcon` 与 `trailingIcon`, `enabled` 默认 true. 点击触发 `click`, 是否关闭父菜单由脚本决定.
+
+### DatePicker
+
+`compose.DatePicker(props?)` 不接受 children. `selectedDateMillis` 是 UTC 零时的毫秒时间戳或 null, 默认 null. `yearStart` 和 `yearEnd` 默认 1900 与 2100, 均须在 1583 到 9999 之间且起始年不晚于结束年. 非 null 选中日期必须在该年份区间内, 不能用未经转换的本地时间戳代替 UTC 日期.
+
+`displayMode` 为 `'picker'` 或 `'input'`, 默认 `'picker'`. `showModeToggle` 默认 true. `dateChange(selectedDateMillis)` 接收 [number](dataTypes#number) 或 null, 无选择或输入日期无效时为 null. `displayModeChange(displayMode)` 接收 `'picker'` 或 `'input'`.
+
+```js
+let date = compose.DatePicker({selectedDateMillis: Date.UTC(2026, 9, 7),
+    onDateChange: function (millis) { this.selectedDateMillis = millis; },
+    onDisplayModeChange: function (mode) { this.displayMode = mode; }});
+```
+
+### TimePicker
+
+`compose.TimePicker(props?)` 不接受 children. `hour` 为 0 到 23 的整数, `minute` 为 0 到 59 的整数, 默认均为 0. `is24Hour` 默认 true. `displayMode` 为 `'picker'` 或 `'input'`, 默认 `'picker'`.
+
+`timeChange(hour, minute)` 以两个数字参数报告当前时间, 即使使用 12 小时显示, hour 仍采用 0 到 23. 它不接收日期, 时区或 Date 对象, 也不提供 TextField 的 edit 命令.
+
+### HorizontalPager
+
+`compose.HorizontalPager(props?, ...pages)` 使用普通 children 定义页面, 至少需要一个页面. `page` 默认 0, 必须是现有页面索引. `pageSpacing` 为非负 dp, 默认 0. `userScrollEnabled` 默认 true.
+
+页面变化触发 `pageChange(page)`. 使用 `node.scrollTo(index)` 或 `node.scrollTo({index, offset})` 定位; offset 是物理像素, 根据实际页面尺寸转换, 不是页面比例或 dp. 页面内容应有稳定 key, 单节点最多 2000 个直接 children, 全会话仍受总节点数限制.
+
+### LazyVerticalGrid
+
+`compose.LazyVerticalGrid(props?, ...items)` 提供纵向懒网格. `columns` 默认 2, 允许 1 到 64 的整数. `spacing` 为非负 dp, 默认 0. `contentPadding` 可为一个 dp 值或长度为 1 / 2 / 4 的 dp 数组, 默认 0. `userScrollEnabled` 默认 true, `reverseLayout` 默认 false.
+
+支持 `scrollTo(index)` 及 `{index, offset}` 形式, index 指子项而非行号. `scroll(firstVisibleIndex, offset)` 中的 offset 为物理像素. 网格需要明确的可用高度, 不应直接置于同向且无限高度的滚动布局中. children 建议使用稳定 key, 单节点最多 2000 个直接 children.
+
+### AssistChip
+
+`compose.AssistChip(props)` 需要 `label` 插槽, 可选 `leadingIcon` 和 `trailingIcon`. `enabled` 默认 true, 点击触发 `click`, 不包含选中状态.
+
+### FilterChip
+
+`compose.FilterChip(props)` 使用与 AssistChip 相同的插槽, 增加默认 false 的 `selected`. `selectedChange(selected)` 回调接收布尔值; 在回调中更新属性或状态以保留新选择.
+
+### InputChip
+
+`compose.InputChip(props)` 的属性, 插槽和 selectedChange 参数与 FilterChip 相同. `trailingIcon` 只是图标插槽, 不自动删除节点; 删除行为由脚本通过相应点击回调实现.
+
+### Badge
+
+`compose.Badge(props?, child?)` 接受一个 child 或 content 插槽作为被标记内容. `text` 默认空字符串, `visible` 默认 true. visible 为 false 时隐藏标记, 保留被标记内容. 不应把数字直接写入 text, 可用 `String(count)` 转换. 没有内容时可用作独立标记.
+
+### SegmentedButton
+
+`compose.SegmentedButton(props?, ...items)` 只接受直接的 SegmentedButtonItem, 至少一个. `mode` 为 `'single'` 或 `'multi'`, 默认 `'single'`. single 模式同时最多一个 item 的 selected 为 true, 可以全部未选中; 多项状态应通过 [compose.batch](compose#m-batch) 或一次状态重绘一起修改.
+
+### SegmentedButtonItem
+
+`compose.SegmentedButtonItem(props)` 必须直接位于 SegmentedButton 下. 需要 label 插槽, 可选 icon. selected 默认 false, enabled 默认 true, `selectedChange(selected)` 回调接收新选择状态. 父容器不自动替脚本修改其他 item 的属性.
+
+### FloatingActionButton
+
+`compose.FloatingActionButton(props?, ...children)` 接受内容 children 或 content 插槽, 可设置 containerColor, contentColor 和 shape. 点击触发 click. 它是当前布局中的浮动操作按钮组件, 不会创建 [compose.floaty](compose#m-floaty) 悬浮窗口.
+
+### SearchBar
+
+`compose.SearchBar(props?, ...children)` 的 `query` 默认空字符串, `expanded` 默认 false, `enabled` 默认 true. 支持 placeholder, leadingIcon, trailingIcon 与 content 插槽; 普通 children 或 content 作为展开后的内容.
+
+`queryChange(text)` 和 `search(text)` 分别报告输入变化与提交搜索, `expandedChange(expanded)` 报告展开状态变化. text 为字符串, expanded 为布尔值. 通过 query 属性更新内容, 不使用 TextField 的 edit 命令.
+
+### Tooltip
+
+`compose.Tooltip(props, child?)` 需要 tooltip 插槽作为提示内容, 以一个 child 或 content 插槽作为锚点内容. `open` 默认 false, `openChange(open)` 参数为布尔值. 提示内容需要多个节点时先用 Column 或 Row 包裹, 不以 fragment 绕过单插槽数量限制.
+
+长按或鼠标悬停会请求 openChange(true), 需要脚本接受后才显示. 显式 open 为 true 时持续显示, 直到脚本将其改为 false 或移除节点.
+
+### PullToRefresh
+
+`compose.PullToRefresh(props?, child?)` 通过一个 child 或 content 插槽包裹内容. `refreshing` 默认 false, `enabled` 默认 true. 用户请求刷新时触发无参数 `refresh()` 事件; 脚本自行执行刷新任务并更新 refreshing.
+
+```js
+'ui';
+
+let count = compose.state(0);
+let loading = compose.state(false);
+let session = compose.mount(function () {
+    return compose.PullToRefresh({refreshing: loading.value,
+        onRefresh: function () {
+            loading.value = true;
+            session.post(function () {
+                count.value++;
+                loading.value = false;
+            }, 250);
+        }}, compose.LazyColumn({}, compose.Text({text: '刷新次数: ' + count.value})));
+});
+```
+
 ## 目录生成表
 
 下方区域直接来自冻结 V1 的实际组件目录, 包含 30 个目录项和 114 个规范属性, 不手工修改. NODE 表示节点工厂, COMMAND 表示命令; Children 的 NONE / SINGLE / MANY / LAZY_ITEMS 表示子节点策略, Scope 表示作用域类别. `Default (wire value)` 以目录模型展示默认值, 不是要求脚本构造 `{ kind, value }` 对象; 脚本仍使用本页列出的普通输入类型. `unspecified` 表示目录未给出默认值, 具体默认外观由渲染器/主题确定.
@@ -554,3 +718,221 @@ let session = compose.mount(compose.Scaffold({},
 | <code>view</code> | <code>View &#124; ((context: android.content.Context) =&gt; View)</code> | <code>View</code> | true |
 
 <!-- autojs6-compose-interop:f2:end -->
+
+## V2 目录生成表
+
+<!-- autojs6-compose-catalog:v2:start -->
+<!-- Generated from org.autojs.plugin.compose.api.v2.ComposeUiV2.catalog; schema=1; contract=2; sha256=66e2e1e5eeae09613682cd78cd0d953a0e4f405400524ce8f5230c0f595d3406. -->
+
+| Component | Invocation | Children | Scope | Canonical properties | Slots | Events | Commands |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| <code>AssistChip</code> | NODE | NONE | ANY | <code>enabled</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>Badge</code> | NODE | SINGLE | ANY | <code>text</code>, <code>visible</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>DatePicker</code> | NODE | NONE | ANY | <code>displayMode</code>, <code>selectedDateMillis</code>, <code>showModeToggle</code>, <code>yearEnd</code>, <code>yearStart</code> | - | <code>click</code>, <code>dateChange</code>, <code>displayModeChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>DropdownMenu</code> | NODE | MANY | ANY | <code>open</code> | <code>anchor (required)</code> | <code>click</code>, <code>dismissRequest</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>DropdownMenuItem</code> | NODE | NONE | ANY | <code>enabled</code> | <code>leadingIcon</code>, <code>text (required)</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>FilterChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
+| <code>FloatingActionButton</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code>, <code>shape</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>HorizontalPager</code> | NODE | LAZY_ITEMS | ANY | <code>page</code>, <code>pageSpacing</code>, <code>userScrollEnabled</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>pageChange</code>, <code>scroll</code> | <code>scrollTo</code> |
+| <code>InputChip</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>label (required)</code>, <code>leadingIcon</code>, <code>trailingIcon</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
+| <code>LazyVerticalGrid</code> | NODE | LAZY_ITEMS | ANY | <code>columns</code>, <code>contentPadding</code>, <code>reverseLayout</code>, <code>spacing</code>, <code>userScrollEnabled</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | <code>scrollTo</code> |
+| <code>ModalBottomSheet</code> | NODE | SINGLE | ANY | <code>cancelable</code>, <code>containerColor</code>, <code>contentColor</code>, <code>open</code>, <code>shape</code> | <code>content</code> | <code>click</code>, <code>dismissRequest</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationBar</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationBarItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationDrawer</code> | NODE | SINGLE | ANY | <code>gesturesEnabled</code>, <code>open</code> | <code>content</code>, <code>drawerContent (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>openChange</code>, <code>scroll</code> | - |
+| <code>NavigationDrawerItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>badge</code>, <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationRail</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code> | <code>header</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>NavigationRailItem</code> | NODE | NONE | ANY | <code>alwaysShowLabel</code>, <code>enabled</code>, <code>selected</code> | <code>icon (required)</code>, <code>label</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>PullToRefresh</code> | NODE | SINGLE | ANY | <code>enabled</code>, <code>refreshing</code> | <code>content</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>refresh</code>, <code>scroll</code> | - |
+| <code>SearchBar</code> | NODE | MANY | ANY | <code>enabled</code>, <code>expanded</code>, <code>query</code> | <code>content</code>, <code>leadingIcon</code>, <code>placeholder</code>, <code>trailingIcon</code> | <code>click</code>, <code>expandedChange</code>, <code>focusChange</code>, <code>longClick</code>, <code>queryChange</code>, <code>scroll</code>, <code>search</code> | - |
+| <code>SegmentedButton</code> | NODE | MANY | ANY | <code>mode</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>SegmentedButtonItem</code> | NODE | NONE | ANY | <code>enabled</code>, <code>selected</code> | <code>icon</code>, <code>label (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>selectedChange</code> | - |
+| <code>Tab</code> | NODE | NONE | ANY | <code>enabled</code> | <code>icon</code>, <code>text</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>TabRow</code> | NODE | MANY | ANY | <code>containerColor</code>, <code>contentColor</code>, <code>scrollable</code>, <code>selectedIndex</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code> | - |
+| <code>TimePicker</code> | NODE | NONE | ANY | <code>displayMode</code>, <code>hour</code>, <code>is24Hour</code>, <code>minute</code> | - | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>scroll</code>, <code>timeChange</code> | - |
+| <code>Tooltip</code> | NODE | SINGLE | ANY | <code>open</code> | <code>content</code>, <code>tooltip (required)</code> | <code>click</code>, <code>focusChange</code>, <code>longClick</code>, <code>openChange</code>, <code>scroll</code> | - |
+
+| Component | Property | TypeScript input type | Required | Default (wire value) | Aliases | Update | Constraints |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| <code>AssistChip</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>Badge</code> | <code>text</code> | <code>string</code> | false | <code>{&quot;kind&quot;:&quot;STRING&quot;,&quot;value&quot;:&quot;&quot;}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>Badge</code> | <code>visible</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>DatePicker</code> | <code>displayMode</code> | <code>&quot;input&quot; &#124; &quot;picker&quot;</code> | false | <code>{&quot;kind&quot;:&quot;ENUM&quot;,&quot;value&quot;:&quot;picker&quot;}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>DatePicker</code> | <code>selectedDateMillis</code> | <code>null &#124; number</code> | false | <code>{&quot;kind&quot;:&quot;NULL&quot;,&quot;value&quot;:null}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:253402214400000.0,&quot;minimum&quot;:-12212553600000.0}</code> |
+| <code>DatePicker</code> | <code>showModeToggle</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>DatePicker</code> | <code>yearEnd</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:2100.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:9999.0,&quot;minimum&quot;:1583.0}</code> |
+| <code>DatePicker</code> | <code>yearStart</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:1900.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:9999.0,&quot;minimum&quot;:1583.0}</code> |
+| <code>DropdownMenu</code> | <code>open</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>DropdownMenuItem</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>FilterChip</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>FilterChip</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>FloatingActionButton</code> | <code>containerColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>FloatingActionButton</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>FloatingActionButton</code> | <code>shape</code> | <code>ComposeShapeInput</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>HorizontalPager</code> | <code>page</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:2147483647.0,&quot;minimum&quot;:0.0}</code> |
+| <code>HorizontalPager</code> | <code>pageSpacing</code> | <code>ComposeDpInput</code> | false | <code>{&quot;kind&quot;:&quot;DP&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;minimum&quot;:0.0}</code> |
+| <code>HorizontalPager</code> | <code>userScrollEnabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>InputChip</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>InputChip</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>LazyVerticalGrid</code> | <code>columns</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:2.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:64.0,&quot;minimum&quot;:1.0}</code> |
+| <code>LazyVerticalGrid</code> | <code>contentPadding</code> | <code>ComposeDpInput &#124; ReadonlyArray&lt;ComposeDpInput&gt;</code> | false | <code>{&quot;kind&quot;:&quot;DP&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;listKinds&quot;:[&quot;DP&quot;],&quot;listMaximum&quot;:4,&quot;listMinimum&quot;:1}</code> |
+| <code>LazyVerticalGrid</code> | <code>reverseLayout</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>LazyVerticalGrid</code> | <code>spacing</code> | <code>ComposeDpInput</code> | false | <code>{&quot;kind&quot;:&quot;DP&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;minimum&quot;:0.0}</code> |
+| <code>LazyVerticalGrid</code> | <code>userScrollEnabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>ModalBottomSheet</code> | <code>cancelable</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>ModalBottomSheet</code> | <code>containerColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>ModalBottomSheet</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>ModalBottomSheet</code> | <code>open</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>ModalBottomSheet</code> | <code>shape</code> | <code>ComposeShapeInput</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationBar</code> | <code>containerColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationBar</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationBarItem</code> | <code>alwaysShowLabel</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationBarItem</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationBarItem</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationDrawer</code> | <code>gesturesEnabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationDrawer</code> | <code>open</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationDrawerItem</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationDrawerItem</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationRail</code> | <code>containerColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationRail</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationRailItem</code> | <code>alwaysShowLabel</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationRailItem</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>NavigationRailItem</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>PullToRefresh</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>PullToRefresh</code> | <code>refreshing</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SearchBar</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SearchBar</code> | <code>expanded</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SearchBar</code> | <code>query</code> | <code>string</code> | false | <code>{&quot;kind&quot;:&quot;STRING&quot;,&quot;value&quot;:&quot;&quot;}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SegmentedButton</code> | <code>mode</code> | <code>&quot;multi&quot; &#124; &quot;single&quot;</code> | false | <code>{&quot;kind&quot;:&quot;ENUM&quot;,&quot;value&quot;:&quot;single&quot;}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SegmentedButtonItem</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>SegmentedButtonItem</code> | <code>selected</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>Tab</code> | <code>enabled</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>TabRow</code> | <code>containerColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>TabRow</code> | <code>contentColor</code> | <code>ComposeColorInput &#124; null</code> | false | unspecified | - | SET_PROPS | <code>{}</code> |
+| <code>TabRow</code> | <code>scrollable</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>TabRow</code> | <code>selectedIndex</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:2147483647.0,&quot;minimum&quot;:0.0}</code> |
+| <code>TimePicker</code> | <code>displayMode</code> | <code>&quot;input&quot; &#124; &quot;picker&quot;</code> | false | <code>{&quot;kind&quot;:&quot;ENUM&quot;,&quot;value&quot;:&quot;picker&quot;}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>TimePicker</code> | <code>hour</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:23.0,&quot;minimum&quot;:0.0}</code> |
+| <code>TimePicker</code> | <code>is24Hour</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:true}</code> | - | SET_PROPS | <code>{}</code> |
+| <code>TimePicker</code> | <code>minute</code> | <code>number</code> | false | <code>{&quot;kind&quot;:&quot;NUMBER&quot;,&quot;value&quot;:0.0}</code> | - | SET_PROPS | <code>{&quot;integral&quot;:true,&quot;maximum&quot;:59.0,&quot;minimum&quot;:0.0}</code> |
+| <code>Tooltip</code> | <code>open</code> | <code>boolean</code> | false | <code>{&quot;kind&quot;:&quot;BOOLEAN&quot;,&quot;value&quot;:false}</code> | - | SET_PROPS | <code>{}</code> |
+
+| Component | Event | Callback arguments |
+| --- | --- | --- |
+| <code>AssistChip</code> | <code>click</code> | <code>none</code> |
+| <code>AssistChip</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>AssistChip</code> | <code>longClick</code> | <code>none</code> |
+| <code>AssistChip</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>Badge</code> | <code>click</code> | <code>none</code> |
+| <code>Badge</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>Badge</code> | <code>longClick</code> | <code>none</code> |
+| <code>Badge</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>DatePicker</code> | <code>click</code> | <code>none</code> |
+| <code>DatePicker</code> | <code>dateChange</code> | <code>selectedDateMillis: LONG &#124; null</code> |
+| <code>DatePicker</code> | <code>displayModeChange</code> | <code>displayMode: STRING</code> |
+| <code>DatePicker</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>DatePicker</code> | <code>longClick</code> | <code>none</code> |
+| <code>DatePicker</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>DropdownMenu</code> | <code>click</code> | <code>none</code> |
+| <code>DropdownMenu</code> | <code>dismissRequest</code> | <code>none</code> |
+| <code>DropdownMenu</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>DropdownMenu</code> | <code>longClick</code> | <code>none</code> |
+| <code>DropdownMenu</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>DropdownMenuItem</code> | <code>click</code> | <code>none</code> |
+| <code>DropdownMenuItem</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>DropdownMenuItem</code> | <code>longClick</code> | <code>none</code> |
+| <code>DropdownMenuItem</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>FilterChip</code> | <code>click</code> | <code>none</code> |
+| <code>FilterChip</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>FilterChip</code> | <code>longClick</code> | <code>none</code> |
+| <code>FilterChip</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>FilterChip</code> | <code>selectedChange</code> | <code>selected: BOOLEAN</code> |
+| <code>FloatingActionButton</code> | <code>click</code> | <code>none</code> |
+| <code>FloatingActionButton</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>FloatingActionButton</code> | <code>longClick</code> | <code>none</code> |
+| <code>FloatingActionButton</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>HorizontalPager</code> | <code>click</code> | <code>none</code> |
+| <code>HorizontalPager</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>HorizontalPager</code> | <code>longClick</code> | <code>none</code> |
+| <code>HorizontalPager</code> | <code>pageChange</code> | <code>page: INTEGER</code> |
+| <code>HorizontalPager</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>InputChip</code> | <code>click</code> | <code>none</code> |
+| <code>InputChip</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>InputChip</code> | <code>longClick</code> | <code>none</code> |
+| <code>InputChip</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>InputChip</code> | <code>selectedChange</code> | <code>selected: BOOLEAN</code> |
+| <code>LazyVerticalGrid</code> | <code>click</code> | <code>none</code> |
+| <code>LazyVerticalGrid</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>LazyVerticalGrid</code> | <code>longClick</code> | <code>none</code> |
+| <code>LazyVerticalGrid</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>ModalBottomSheet</code> | <code>click</code> | <code>none</code> |
+| <code>ModalBottomSheet</code> | <code>dismissRequest</code> | <code>none</code> |
+| <code>ModalBottomSheet</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>ModalBottomSheet</code> | <code>longClick</code> | <code>none</code> |
+| <code>ModalBottomSheet</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationBar</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationBar</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationBar</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationBar</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationBarItem</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationBarItem</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationBarItem</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationBarItem</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationDrawer</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationDrawer</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationDrawer</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationDrawer</code> | <code>openChange</code> | <code>open: BOOLEAN</code> |
+| <code>NavigationDrawer</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationDrawerItem</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationDrawerItem</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationDrawerItem</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationDrawerItem</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationRail</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationRail</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationRail</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationRail</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>NavigationRailItem</code> | <code>click</code> | <code>none</code> |
+| <code>NavigationRailItem</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>NavigationRailItem</code> | <code>longClick</code> | <code>none</code> |
+| <code>NavigationRailItem</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>PullToRefresh</code> | <code>click</code> | <code>none</code> |
+| <code>PullToRefresh</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>PullToRefresh</code> | <code>longClick</code> | <code>none</code> |
+| <code>PullToRefresh</code> | <code>refresh</code> | <code>none</code> |
+| <code>PullToRefresh</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>SearchBar</code> | <code>click</code> | <code>none</code> |
+| <code>SearchBar</code> | <code>expandedChange</code> | <code>expanded: BOOLEAN</code> |
+| <code>SearchBar</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>SearchBar</code> | <code>longClick</code> | <code>none</code> |
+| <code>SearchBar</code> | <code>queryChange</code> | <code>text: STRING</code> |
+| <code>SearchBar</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>SearchBar</code> | <code>search</code> | <code>text: STRING</code> |
+| <code>SegmentedButton</code> | <code>click</code> | <code>none</code> |
+| <code>SegmentedButton</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>SegmentedButton</code> | <code>longClick</code> | <code>none</code> |
+| <code>SegmentedButton</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>SegmentedButtonItem</code> | <code>click</code> | <code>none</code> |
+| <code>SegmentedButtonItem</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>SegmentedButtonItem</code> | <code>longClick</code> | <code>none</code> |
+| <code>SegmentedButtonItem</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>SegmentedButtonItem</code> | <code>selectedChange</code> | <code>selected: BOOLEAN</code> |
+| <code>Tab</code> | <code>click</code> | <code>none</code> |
+| <code>Tab</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>Tab</code> | <code>longClick</code> | <code>none</code> |
+| <code>Tab</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>TabRow</code> | <code>click</code> | <code>none</code> |
+| <code>TabRow</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>TabRow</code> | <code>longClick</code> | <code>none</code> |
+| <code>TabRow</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>TimePicker</code> | <code>click</code> | <code>none</code> |
+| <code>TimePicker</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>TimePicker</code> | <code>longClick</code> | <code>none</code> |
+| <code>TimePicker</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+| <code>TimePicker</code> | <code>timeChange</code> | <code>hour: INTEGER, minute: INTEGER</code> |
+| <code>Tooltip</code> | <code>click</code> | <code>none</code> |
+| <code>Tooltip</code> | <code>focusChange</code> | <code>focused: BOOLEAN</code> |
+| <code>Tooltip</code> | <code>longClick</code> | <code>none</code> |
+| <code>Tooltip</code> | <code>openChange</code> | <code>open: BOOLEAN</code> |
+| <code>Tooltip</code> | <code>scroll</code> | <code>firstVisibleIndex: INTEGER &#124; null, offset: INTEGER</code> |
+
+<!-- autojs6-compose-catalog:v2:end -->

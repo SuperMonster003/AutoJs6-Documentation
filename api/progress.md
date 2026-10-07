@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-07 Compose UI F4 本地配套: 补充契约 V2 追加的 25 个节点, 导航与分段子项限制, 必填插槽, 日期 UTC 语义, 时间/选择/搜索事件, 分页与网格滚动, Tooltip 及下拉刷新. 冻结 V1 和 F2 目录保留, V2 属性和事件表由实际目录单独生成并校验. 本轮源码和设备验证, 全站生成及离线同步以统一交付记录为准, 此条不表示官方发布.
+
 2026-10-07 Compose UI F3 本地配套: 补充 compose.dialog 的独立对话框与底部弹层, alert / bottomSheet 选项, cancelable 的返回键/外部点击/滑动约束, 非 UI 悬浮权限和保活, 共享会话限制及关闭回调. 对话框返回原有 ComposeSession, 支持 TSX 和 AndroidView 内容; dialogs 模块增加双向参阅. 源码和声明的实际验收, 全站生成及离线同步由本轮统一记录, 此条不表示官方发布.
 
 2026-10-07 Compose UI F2 本地配套: 补充 XML `<compose>` 与 `compose.attach`, AndroidView 的实际 View / 同步 Context 工厂, getter 与替换规则, 多容器会话和原有 XML / Compose 直接混域限制. 保留冻结 V1 目录, 互操作属性表单独生成. 配套源码与声明正在本轮验收, 全站生成和离线同步以统一交付记录为准; 此条不表示官方发布.

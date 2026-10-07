@@ -18,6 +18,8 @@
 
 F3 的 `compose.dialog` 需要配套宿主 5321 和具备对话框能力的 Compose UI 1.1.0 构建, `.tsx` 使用 TypeScript Engine 0.6.6, Declarations 4.34.0 与 Ace Editor 1.28.0. 组件目录中的 `AlertDialog` 仍是已有会话树内的节点; `compose.dialog` 创建独立会话, 二者不是同一入口.
 
+F4 的 [V2 组件](composeComponents#v2-组件) 需要配套宿主 5322 和契约版本 2 的 Compose UI 插件. V2 追加导航, 菜单, 日期/时间选择, 分页, 网格和搜索等 25 个节点, V1 组件目录保持不变. `.tsx` 使用 TypeScript Engine 0.6.7, Declarations 4.35.0 与 Ace Editor 1.29.0. 旧 V1 插件在支持它的配套宿主中仍可运行原有组件, 不能据新工厂名称存在就判断插件已经支持 V2.
+
 ## 两层使用方式
 
 ### 节点句柄

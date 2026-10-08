@@ -57,6 +57,8 @@ compose.mount(function () {
 
 两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 `ref` 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 `ref.current`.
 
+大型树中只有局部内容变化时, 可用 [compose.memo](#m-memo) 复用依赖未变的片段, 避免每次渲染重新创建全部节点.
+
 同一父节点的普通 children 列表中, 非 `null` 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.
 
 ## TSX 接入
@@ -442,6 +444,61 @@ let value = compose.batch(function () {
     title.text = 'Ready';
     button.enabled = true;
     return 42;
+});
+```
+
+## [m] memo
+
+### compose.memo(fn, deps, options?)
+
+- **fn** { [Function](dataTypes#function) } - 在当前渲染函数中同步执行的片段函数, 无参数, 返回一个节点.
+- **deps** { [any](dataTypes#any)[] } - 依赖值数组, 最多 256 项.
+- **[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 仅接受 `key` 字段.
+  - **[ key ]** { [string](dataTypes#string) | [number](dataTypes#number) | [null](dataTypes#null) } - 片段在当前作用域内的稳定标识, 如列表条目的 key.
+- <ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 本次构建或复用的片段根节点.
+
+在渲染函数中复用未变化的界面片段, 跳过重新创建它的节点. 只能在 `mount`, `attach`, `floaty`, `dialog` 或 `compose(...)` 的渲染函数执行期间调用; 节点句柄写法, 事件回调和 `post` 任务中调用会得到 `INVALID_ARGUMENT`. 需要 AutoJs6 6.8.0 (5323) 或更高版本的匹配本地构建, 不改变 Compose UI 插件的版本要求.
+
+每次调用先确定所属的记录位置:
+
+- 作用域为渲染函数本身或外层 memo 片段. 嵌套 memo 只与同一外层片段中的记录匹配.
+- 提供 `options.key` 时按 key 匹配, 同一作用域内 key 重复报 `DUPLICATE_KEY`. 未提供时按调用次序匹配, 因此条件分支前后的调用次序变化会使后续片段重新构建.
+- 记录还须来自同一函数字面量. 同一字面量在每次渲染中创建的新闭包视为同一来源.
+
+上一次成功渲染的记录同时满足以下条件时, 直接返回原节点, `fn` 不执行:
+
+- `deps` 长度相同且每一项未变. 数字, 字符串和布尔值按值比较, 规则与 `Object.is` 相同; 对象, 数组和函数按引用比较.
+- `fn` 上次执行时读取的 [ComposeState.value](composeStateType#p-value) 之后没有被赋予不同的值.
+- 原节点仍位于该会话的上一棵树中.
+
+否则 `fn` 重新执行, 返回的节点按组件类型和 key 与原节点协调. 复用的片段仍订阅它读取过的 state, 这些 state 改变时会重新渲染并重建该片段.
+
+`fn` 闭包中使用的普通值, 例如循环中的条目对象或外层变量, 不会被自动追踪, 应列入 `deps`; 遗漏时片段保持旧内容. 通过节点句柄或 `ref` 修改复用节点时, 修改保留到该片段重新执行为止.
+
+渲染失败时保留此前的记录. 渲染插件拒绝一帧后, 全部记录失效, 下一次渲染重新构建. 会话关闭时释放记录. 每次渲染最多调用 5000 次 memo. 依赖数组超过 256 项报 `LIMIT_EXCEEDED`, 不是数组报 `INVALID_ARGUMENT`.
+
+下例的按钮只改变计数文本, 1000 个条目在之后的渲染中均被复用:
+
+```js
+'ui';
+
+let items = compose.state([]);
+let clicks = compose.state(0);
+let initial = [];
+for (let i = 0; i < 1000; i++) initial.push({id: 'item-' + i, title: 'Item ' + i});
+items.value = initial;
+
+compose.mount(function () {
+    let rows = items.value.map(function (item) {
+        return compose.memo(function () {
+            return compose.Text({key: item.id, text: item.title});
+        }, [item.id, item.title], {key: item.id});
+    });
+    return compose.Column({padding: 16},
+        compose.Button({key: 'count', onClick: function () {
+            clicks.value++;
+        }}, 'Clicks: ' + clicks.value),
+        compose.LazyColumn({key: 'list', modifier: compose.modifier().weight(1)}, rows));
 });
 ```
 

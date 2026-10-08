@@ -350,6 +350,10 @@
 <li><span class="stability_undefined"><a href="#compose_compose_batch_fn">compose.batch(fn)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#compose_m_memo">[m] memo</a></span><ul>
+<li><span class="stability_undefined"><a href="#compose_compose_memo_fn_deps_options">compose.memo(fn, deps, options?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#compose_m_post">[m] post</a></span><ul>
 <li><span class="stability_undefined"><a href="#compose_compose_post_fn_delay">compose.post(fn, delay?)</a></span></li>
 </ul>
@@ -459,6 +463,7 @@ compose.mount(function () {
 });
 </code></pre>
 <p>两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 <code>ref</code> 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 <code>ref.current</code>.</p>
+<p>大型树中只有局部内容变化时, 可用 <a href="#compose_m_memo">compose.memo</a> 复用依赖未变的片段, 避免每次渲染重新创建全部节点.</p>
 <p>同一父节点的普通 children 列表中, 非 <code>null</code> 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.</p>
 <h2>TSX 接入<span><a class="mark" href="#compose_tsx" id="compose_tsx">#</a></span></h2>
 <h3>可用条件<span><a class="mark" href="#compose_2" id="compose_2">#</a></span></h3>
@@ -837,6 +842,55 @@ let sheet = compose.dialog(compose.Column({padding: 20},
     title.text = &#39;Ready&#39;;
     button.enabled = true;
     return 42;
+});
+</code></pre>
+<h2>[m] memo<span><a class="mark" href="#compose_m_memo" id="compose_m_memo">#</a></span></h2>
+<h3>compose.memo(fn, deps, options?)<span><a class="mark" href="#compose_compose_memo_fn_deps_options" id="compose_compose_memo_fn_deps_options">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>fn</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - 在当前渲染函数中同步执行的片段函数, 无参数, 返回一个节点.</li>
+<li><strong>deps</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a>[]</span> } - 依赖值数组, 最多 256 项.</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 仅接受 <code>key</code> 字段.<ul>
+<li><strong>[ key ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 片段在当前作用域内的稳定标识, 如列表条目的 key.</li>
+</ul>
+</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="composeNodeType.html">ComposeNode</a></span> } - 本次构建或复用的片段根节点.</li>
+</ul>
+</div><p>在渲染函数中复用未变化的界面片段, 跳过重新创建它的节点. 只能在 <code>mount</code>, <code>attach</code>, <code>floaty</code>, <code>dialog</code> 或 <code>compose(...)</code> 的渲染函数执行期间调用; 节点句柄写法, 事件回调和 <code>post</code> 任务中调用会得到 <code>INVALID_ARGUMENT</code>. 需要 AutoJs6 6.8.0 (5323) 或更高版本的匹配本地构建, 不改变 Compose UI 插件的版本要求.</p>
+<p>每次调用先确定所属的记录位置:</p>
+<ul>
+<li>作用域为渲染函数本身或外层 memo 片段. 嵌套 memo 只与同一外层片段中的记录匹配.</li>
+<li>提供 <code>options.key</code> 时按 key 匹配, 同一作用域内 key 重复报 <code>DUPLICATE_KEY</code>. 未提供时按调用次序匹配, 因此条件分支前后的调用次序变化会使后续片段重新构建.</li>
+<li>记录还须来自同一函数字面量. 同一字面量在每次渲染中创建的新闭包视为同一来源.</li>
+</ul>
+<p>上一次成功渲染的记录同时满足以下条件时, 直接返回原节点, <code>fn</code> 不执行:</p>
+<ul>
+<li><code>deps</code> 长度相同且每一项未变. 数字, 字符串和布尔值按值比较, 规则与 <code>Object.is</code> 相同; 对象, 数组和函数按引用比较.</li>
+<li><code>fn</code> 上次执行时读取的 <a href="composeStateType.html#composestatetype_p_value">ComposeState.value</a> 之后没有被赋予不同的值.</li>
+<li>原节点仍位于该会话的上一棵树中.</li>
+</ul>
+<p>否则 <code>fn</code> 重新执行, 返回的节点按组件类型和 key 与原节点协调. 复用的片段仍订阅它读取过的 state, 这些 state 改变时会重新渲染并重建该片段.</p>
+<p><code>fn</code> 闭包中使用的普通值, 例如循环中的条目对象或外层变量, 不会被自动追踪, 应列入 <code>deps</code>; 遗漏时片段保持旧内容. 通过节点句柄或 <code>ref</code> 修改复用节点时, 修改保留到该片段重新执行为止.</p>
+<p>渲染失败时保留此前的记录. 渲染插件拒绝一帧后, 全部记录失效, 下一次渲染重新构建. 会话关闭时释放记录. 每次渲染最多调用 5000 次 memo. 依赖数组超过 256 项报 <code>LIMIT_EXCEEDED</code>, 不是数组报 <code>INVALID_ARGUMENT</code>.</p>
+<p>下例的按钮只改变计数文本, 1000 个条目在之后的渲染中均被复用:</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+
+let items = compose.state([]);
+let clicks = compose.state(0);
+let initial = [];
+for (let i = 0; i &lt; 1000; i++) initial.push({id: &#39;item-&#39; + i, title: &#39;Item &#39; + i});
+items.value = initial;
+
+compose.mount(function () {
+    let rows = items.value.map(function (item) {
+        return compose.memo(function () {
+            return compose.Text({key: item.id, text: item.title});
+        }, [item.id, item.title], {key: item.id});
+    });
+    return compose.Column({padding: 16},
+        compose.Button({key: &#39;count&#39;, onClick: function () {
+            clicks.value++;
+        }}, &#39;Clicks: &#39; + clicks.value),
+        compose.LazyColumn({key: &#39;list&#39;, modifier: compose.modifier().weight(1)}, rows));
 });
 </code></pre>
 <h2>[m] post<span><a class="mark" href="#compose_m_post" id="compose_m_post">#</a></span></h2>

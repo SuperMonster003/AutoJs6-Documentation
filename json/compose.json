@@ -20,7 +20,7 @@
             {
               "textRaw": "state 与 render",
               "name": "state_与_render",
-              "desc": "<p>把函数作为 <code>mount</code>, <code>attach</code>, <code>floaty</code> 或 <code>dialog</code> 的根输入, 函数读取 <a href=\"composeStateType#p-value\">ComposeState.value</a> 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet count = compose.state(0);\ncompose.mount(function () {\n    return compose.Column({padding: 16},\n        compose.Text({key: &#39;count&#39;, text: &#39;Count: &#39; + count.value}),\n        compose.Button({key: &#39;increment&#39;, onClick: function () {\n            count.value++;\n        }}, &#39;Increment&#39;));\n});\n</code></pre>\n<p>两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 <code>ref</code> 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 <code>ref.current</code>.</p>\n<p>同一父节点的普通 children 列表中, 非 <code>null</code> 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.</p>\n",
+              "desc": "<p>把函数作为 <code>mount</code>, <code>attach</code>, <code>floaty</code> 或 <code>dialog</code> 的根输入, 函数读取 <a href=\"composeStateType#p-value\">ComposeState.value</a> 并返回一个根节点. 后续状态变化会安排重绘, 并根据组件类型和 key 复用已有节点.</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet count = compose.state(0);\ncompose.mount(function () {\n    return compose.Column({padding: 16},\n        compose.Text({key: &#39;count&#39;, text: &#39;Count: &#39; + count.value}),\n        compose.Button({key: &#39;increment&#39;, onClick: function () {\n            count.value++;\n        }}, &#39;Increment&#39;));\n});\n</code></pre>\n<p>两种方式可以配合: 渲染函数可使用先前保存的节点, 也可通过 <code>ref</code> 取得成功帧中的实际节点. 渲染函数中新创建的节点是用于协调的声明, 后续渲染可能把它们合并到原节点; 需要长期持有实际句柄时使用 <code>ref.current</code>.</p>\n<p>大型树中只有局部内容变化时, 可用 <a href=\"#m-memo\">compose.memo</a> 复用依赖未变的片段, 避免每次渲染重新创建全部节点.</p>\n<p>同一父节点的普通 children 列表中, 非 <code>null</code> 的 key 必须唯一. 有 key 的子节点按 key 和组件类型复用, 无 key 的子节点按同类型的出现次序匹配. 具名插槽按插槽名协调, 不参与普通 children 的 key 冲突检查. 多子节点渲染中缺少 key 会每个会话最多警告一次; 警告不拒绝渲染, 但会话内重排仍应使用稳定 key.</p>\n",
               "type": "module",
               "displayName": "state 与 render"
             }
@@ -592,6 +592,69 @@
           ],
           "type": "module",
           "displayName": "[m] batch"
+        },
+        {
+          "textRaw": "[m] memo",
+          "name": "[m]_memo",
+          "methods": [
+            {
+              "textRaw": "compose.memo(fn, deps, options?)",
+              "type": "method",
+              "name": "memo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**fn** { [Function](dataTypes#function) } - 在当前渲染函数中同步执行的片段函数, 无参数, 返回一个节点. ",
+                      "name": "**fn**",
+                      "type": " [Function](dataTypes#function) ",
+                      "desc": "在当前渲染函数中同步执行的片段函数, 无参数, 返回一个节点."
+                    },
+                    {
+                      "textRaw": "**deps** { [any](dataTypes#any)[] } - 依赖值数组, 最多 256 项. ",
+                      "name": "**deps**",
+                      "type": " [any](dataTypes#any)[] ",
+                      "desc": "依赖值数组, 最多 256 项."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 仅接受 `key` 字段. ",
+                      "options": [
+                        {
+                          "textRaw": "**[ key ]** { [string](dataTypes#string) | [number](dataTypes#number) | [null](dataTypes#null) } - 片段在当前作用域内的稳定标识, 如列表条目的 key. ",
+                          "name": "**[",
+                          "desc": "key ]** { [string](dataTypes#string) | [number](dataTypes#number) | [null](dataTypes#null) } - 片段在当前作用域内的稳定标识, 如列表条目的 key."
+                        }
+                      ],
+                      "name": "**[",
+                      "desc": "options ]** { [Object](dataTypes#object) | [null](dataTypes#null) } - 仅接受 `key` 字段."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 本次构建或复用的片段根节点. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ComposeNode](composeNodeType) ",
+                      "desc": "本次构建或复用的片段根节点."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "fn"
+                    },
+                    {
+                      "name": "deps"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在渲染函数中复用未变化的界面片段, 跳过重新创建它的节点. 只能在 <code>mount</code>, <code>attach</code>, <code>floaty</code>, <code>dialog</code> 或 <code>compose(...)</code> 的渲染函数执行期间调用; 节点句柄写法, 事件回调和 <code>post</code> 任务中调用会得到 <code>INVALID_ARGUMENT</code>. 需要 AutoJs6 6.8.0 (5323) 或更高版本的匹配本地构建, 不改变 Compose UI 插件的版本要求.</p>\n<p>每次调用先确定所属的记录位置:</p>\n<ul>\n<li>作用域为渲染函数本身或外层 memo 片段. 嵌套 memo 只与同一外层片段中的记录匹配.</li>\n<li>提供 <code>options.key</code> 时按 key 匹配, 同一作用域内 key 重复报 <code>DUPLICATE_KEY</code>. 未提供时按调用次序匹配, 因此条件分支前后的调用次序变化会使后续片段重新构建.</li>\n<li>记录还须来自同一函数字面量. 同一字面量在每次渲染中创建的新闭包视为同一来源.</li>\n</ul>\n<p>上一次成功渲染的记录同时满足以下条件时, 直接返回原节点, <code>fn</code> 不执行:</p>\n<ul>\n<li><code>deps</code> 长度相同且每一项未变. 数字, 字符串和布尔值按值比较, 规则与 <code>Object.is</code> 相同; 对象, 数组和函数按引用比较.</li>\n<li><code>fn</code> 上次执行时读取的 <a href=\"composeStateType#p-value\">ComposeState.value</a> 之后没有被赋予不同的值.</li>\n<li>原节点仍位于该会话的上一棵树中.</li>\n</ul>\n<p>否则 <code>fn</code> 重新执行, 返回的节点按组件类型和 key 与原节点协调. 复用的片段仍订阅它读取过的 state, 这些 state 改变时会重新渲染并重建该片段.</p>\n<p><code>fn</code> 闭包中使用的普通值, 例如循环中的条目对象或外层变量, 不会被自动追踪, 应列入 <code>deps</code>; 遗漏时片段保持旧内容. 通过节点句柄或 <code>ref</code> 修改复用节点时, 修改保留到该片段重新执行为止.</p>\n<p>渲染失败时保留此前的记录. 渲染插件拒绝一帧后, 全部记录失效, 下一次渲染重新构建. 会话关闭时释放记录. 每次渲染最多调用 5000 次 memo. 依赖数组超过 256 项报 <code>LIMIT_EXCEEDED</code>, 不是数组报 <code>INVALID_ARGUMENT</code>.</p>\n<p>下例的按钮只改变计数文本, 1000 个条目在之后的渲染中均被复用:</p>\n<pre><code class=\"lang-js\">&#39;ui&#39;;\n\nlet items = compose.state([]);\nlet clicks = compose.state(0);\nlet initial = [];\nfor (let i = 0; i &lt; 1000; i++) initial.push({id: &#39;item-&#39; + i, title: &#39;Item &#39; + i});\nitems.value = initial;\n\ncompose.mount(function () {\n    let rows = items.value.map(function (item) {\n        return compose.memo(function () {\n            return compose.Text({key: item.id, text: item.title});\n        }, [item.id, item.title], {key: item.id});\n    });\n    return compose.Column({padding: 16},\n        compose.Button({key: &#39;count&#39;, onClick: function () {\n            clicks.value++;\n        }}, &#39;Clicks: &#39; + clicks.value),\n        compose.LazyColumn({key: &#39;list&#39;, modifier: compose.modifier().weight(1)}, rows));\n});\n</code></pre>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] memo"
         },
         {
           "textRaw": "[m] post",

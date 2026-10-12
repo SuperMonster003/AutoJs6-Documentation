@@ -6,7 +6,7 @@
 <p><strong>文档状态:</strong> 此章节仍在补充或完善中.</p>
 </aside>
 
-需要用 Compose 节点, 响应式状态或 AndroidView 组织独立对话框及底部弹层时, 参阅 [compose.dialog](compose#m-dialog). 它需要配套 Compose UI 插件并返回 ComposeSession, 不返回本模块的确认值或输入结果; 非 UI 脚本还需要预先具有悬浮窗权限. 本模块的既有方法和返回方式保持不变.
+需要用 Compose 节点, 响应式状态或 AndroidView 组织独立对话框及底部弹层时, 参阅 [compose.dialog](compose#m-dialog). 它需要配套 3-Block Compose 插件并返回 ComposeSession, 不返回本模块的确认值或输入结果; 非 UI 脚本还需要预先具有悬浮窗权限. 本模块的既有方法和返回方式保持不变.
 
 dialogs 模块提供了简单的对话框支持, 可以通过对话框和用户进行交互. 最简单的例子如下:
 

@@ -2,7 +2,7 @@
 
 ComposeModifier 由 [compose.modifier](compose#m-modifier) 创建, 用于描述节点的尺寸, 留白, 绘制, 交互和无障碍信息. 它不是 Android View, 也不是 Kotlin Modifier 对象. 当前 20 个方法均返回一条新的修饰链, 原链不会改变.
 
-本页适用于配套 AutoJs6 6.8.0 本地构建与已安装, 启用的 Compose UI 插件. 组件目录见 [Compose 组件](composeComponents).
+本页适用于配套 AutoJs6 6.8.0 本地构建与已安装, 启用的 3-Block Compose 插件. 组件目录见 [Compose 组件](composeComponents).
 
 ```js
 'ui';

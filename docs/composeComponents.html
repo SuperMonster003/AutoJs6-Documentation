@@ -45,7 +45,7 @@
 <li><a class="nav-base64" href="base64.html">Base64</a></li>
 <li><a class="nav-canvas" href="canvas.html">Canvas - 画布</a></li>
 <li><a class="nav-color" href="color.html">Color - 颜色</a></li>
-<li><a class="nav-compose" href="compose.html">Compose UI</a></li>
+<li><a class="nav-compose" href="compose.html">3-Block Compose</a></li>
 <li><a class="nav-console" href="console.html">Console - 控制台</a></li>
 <li><a class="nav-continuation" href="continuation.html">Continuation - 续体</a></li>
 <li><a class="nav-cvt" href="cvt.html">Converter - 单位转换</a></li>
@@ -376,8 +376,8 @@
 
         <div id="apicontent">
             <h1>Compose 组件 (Components)<span><a class="mark" href="#composecomponents_compose_components" id="composecomponents_compose_components">#</a></span></h1>
-<p>本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, V2 追加的 25 个节点组件, 以及单独协商的 F2 <a href="#composecomponents_androidview">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a>, <a href="compose.html#compose_m_floaty">compose.floaty</a> 或 <a href="compose.html#compose_m_dialog">compose.dialog</a>.</p>
-<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>
+<p>本页列出 3-Block Compose V1 的 29 个节点组件和仅命令形式的 Snackbar, V2 追加的 25 个节点组件, 以及单独协商的 F2 <a href="#composecomponents_androidview">AndroidView</a> 扩展. 使用方式为 <code>compose.Text({ text: &#39;内容&#39; })</code>, <code>compose.Column(props, ...children)</code> 等, 返回 <a href="composeNodeType.html">ComposeNode</a>, 然后交给 <a href="compose.html#compose_m_mount">compose.mount</a>, <a href="compose.html#compose_m_attach">compose.attach</a>, <a href="compose.html#compose_m_floaty">compose.floaty</a> 或 <a href="compose.html#compose_m_dialog">compose.dialog</a>.</p>
+<p>需要提供 <code>compose</code> 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 3-Block Compose 插件. 配套 <code>.tsx</code> 入口可以使用这些工厂, 具体版本要求与标签规则见 <a href="compose.html#compose_tsx">TSX 接入</a>. 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 <code>view</code> 属性接入; <code>compose.Snackbar</code> 不是节点工厂.</p>
 <h2>输入类型<span><a class="mark" href="#composecomponents" id="composecomponents">#</a></span></h2>
 <p>属性使用严格转换, 不依赖一般 JavaScript 真值或自动数字字符串转换. <code>checked: &#39;true&#39;</code>, <code>value: &#39;0.5&#39;</code>, 未知属性或无效枚举都会被拒绝. 属性的名称和枚举值大小写敏感; 图标名称另有大小写兼容规则.</p>
 <p>目录生成表中的 Compose*Input 是 TypeScript 输入辅助类型, 对应以下实际形态. 单个属性是否允许 null 由该属性决定, 不表示所有同类输入都接受 null.</p>
@@ -694,7 +694,7 @@ let session = compose.mount(compose.Scaffold({},
     } }, &#39;保存&#39;)));
 </code></pre>
 <h2>V2 组件<span><a class="mark" href="#composecomponents_v2" id="composecomponents_v2">#</a></span></h2>
-<p>以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 Compose UI 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.</p>
+<p>以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 3-Block Compose 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.</p>
 <p>状态属性使用严格类型, 不将数字字符串当数字. <code>page</code>, <code>selectedIndex</code>, <code>hour</code>, <code>minute</code>, 年份及 <code>columns</code> 是整数. 构造输入, 后续 <code>set</code> 与属性赋值都受相同范围和树结构规则约束. 下方目录表列出每项默认值, 类型, 插槽和事件; 数值上限与跨属性约束由运行时检查.</p>
 <p>日期, 时间, 选择, 输入和开合状态由已接受的节点属性控制. 用户操作触发事件, 不自动改写脚本节点的属性; 回调中需要通过属性赋值, set 或响应式 state 接受新值. HorizontalPager 的手势和 scrollTo 会直接移动原生页面并报告 pageChange, 但也不自动改写脚本 page 属性; 无关属性更新保留已有页面位置, page 属性值改变时请求定位. 需要在 page 属性值未改变时重新定位, 使用 scrollTo.</p>
 <p>NavigationBarItem, NavigationRailItem, NavigationDrawerItem, Tab, DropdownMenuItem, AssistChip, FilterChip, InputChip, SegmentedButtonItem, FloatingActionButton 和 SearchBar 提供原生 <a href="composeNodeType.html#composenodetype_m_focus">focus / blur</a> 命令. 节点须已挂载; 焦点请求异步生效, 不保证输入法随即显示. 其他节点可通过已有 clickable Modifier 获得相应焦点目标.</p>

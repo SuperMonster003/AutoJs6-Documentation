@@ -324,7 +324,7 @@ console.log("hello");
 
 ## Compose 容器
 
-配套宿主 5320 与支持 F2 的 Compose UI 插件提供 `<compose>` 标签. 它沿用 FrameLayout 的布局尺寸和 ID 属性, XML 内只能留空或包含空白, 不能放置 XML 元素子节点. `<compose>` 是 Android 容器 View, 与 `<compose.Text>` 这样的 Compose TSX 组件不同.
+配套宿主 5320 与支持 F2 的 3-Block Compose 插件提供 `<compose>` 标签. 它沿用 FrameLayout 的布局尺寸和 ID 属性, XML 内只能留空或包含空白, 不能放置 XML 元素子节点. `<compose>` 是 Android 容器 View, 与 `<compose.Text>` 这样的 Compose TSX 组件不同.
 
 完成 `ui.layout` 后, 使用原有 `ui.<id>` 或 `ui.findById` 取得容器并调用 [compose.attach](compose#m-attach). 旧悬浮窗口中的同类容器也通过该窗口的 ID 查找访问. ID 查找继续返回 NativeView, 不返回 ComposeNode; Compose 根节点从 attach 返回的会话获取.
 

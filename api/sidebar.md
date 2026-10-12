@@ -20,7 +20,7 @@
 * [Base64](base64)
 * [Canvas - 画布](canvas)
 * [Color - 颜色](color)
-- [Compose UI](compose)
+- [3-Block Compose](compose)
 * [Console - 控制台](console)
 * [Continuation - 续体](continuation)
 * [Converter - 单位转换](cvt)

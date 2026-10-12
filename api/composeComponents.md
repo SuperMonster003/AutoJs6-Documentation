@@ -1,8 +1,8 @@
 # Compose 组件 (Components)
 
-本页列出 Compose UI V1 的 29 个节点组件和仅命令形式的 Snackbar, V2 追加的 25 个节点组件, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty) 或 [compose.dialog](compose#m-dialog).
+本页列出 3-Block Compose V1 的 29 个节点组件和仅命令形式的 Snackbar, V2 追加的 25 个节点组件, 以及单独协商的 F2 [AndroidView](#androidview) 扩展. 使用方式为 `compose.Text({ text: '内容' })`, `compose.Column(props, ...children)` 等, 返回 [ComposeNode](composeNodeType), 然后交给 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.floaty](compose#m-floaty) 或 [compose.dialog](compose#m-dialog).
 
-需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 Compose UI 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 `view` 属性接入; `compose.Snackbar` 不是节点工厂.
+需要提供 `compose` 模块的配套 AutoJs6 6.8.0 本地构建, 以及已安装, 启用且兼容的 3-Block Compose 插件. 配套 `.tsx` 入口可以使用这些工厂, 具体版本要求与标签规则见 [TSX 接入](compose#tsx-接入). 工厂不接受任意 Kotlin Composable 函数. 原生 Android View 仅通过 AndroidView 的 `view` 属性接入; `compose.Snackbar` 不是节点工厂.
 
 ## 输入类型
 
@@ -385,7 +385,7 @@ let session = compose.mount(compose.Scaffold({},
 
 ## V2 组件
 
-以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 Compose UI 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.
+以下组件需要 AutoJs6 6.8.0 / 宿主构建 5322 与契约版本 2 的 3-Block Compose 插件. 工厂与两种 TSX 标签使用同一规则. 声明配套版本为 Declarations 4.35.0, TypeScript Engine 0.6.7 和 Ace Editor 1.29.0. V1 组件的名称, 属性和事件保持不变; 在支持 V1 插件的配套宿主中, 新组件仍需要实际的 V2 插件能力.
 
 状态属性使用严格类型, 不将数字字符串当数字. `page`, `selectedIndex`, `hour`, `minute`, 年份及 `columns` 是整数. 构造输入, 后续 `set` 与属性赋值都受相同范围和树结构规则约束. 下方目录表列出每项默认值, 类型, 插槽和事件; 数值上限与跨属性约束由运行时检查.
 

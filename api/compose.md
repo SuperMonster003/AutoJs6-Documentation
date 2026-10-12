@@ -1,8 +1,8 @@
-# Compose UI (Compose)
+# 3-Block Compose (Compose)
 
-`compose` 与 `$compose` 是同一个可调用模块, 通过 Compose UI 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.1.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
+`compose` 与 `$compose` 是同一个可调用模块, 通过 3-Block Compose 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.1.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
 
-运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 Compose UI 插件. 普通 JavaScript 工厂 API 的最低宿主构建要求仍为 AutoJs6 6.8.0 / 5316, 同时须满足实际插件契约和共享依赖检查. [TSX 接入](#tsx-接入) 需要 5319 或以上的配套宿主及 TypeScript Engine 0.6.4.
+运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 3-Block Compose 插件. 普通 JavaScript 工厂 API 的最低宿主构建要求仍为 AutoJs6 6.8.0 / 5316, 同时须满足实际插件契约和共享依赖检查. [TSX 接入](#tsx-接入) 需要 5319 或以上的配套宿主及 TypeScript Engine 0.6.4.
 
 | 内容 | 参考 |
 | --- | --- |
@@ -14,11 +14,11 @@
 | 悬浮窗口 | [ComposeFloatyWindow](composeFloatyWindowType) |
 | 组件属性, 插槽, 事件和生成目录 | [ComposeComponents](composeComponents) |
 
-当前提供 UI 模式页面, `compose.floaty`, [XML 容器挂载](#m-attach) 和 [独立对话框](#m-dialog). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 Compose UI 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0.
+当前提供 UI 模式页面, `compose.floaty`, [XML 容器挂载](#m-attach) 和 [独立对话框](#m-dialog). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 3-Block Compose 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0.
 
-F3 的 `compose.dialog` 需要配套宿主 5321 和具备对话框能力的 Compose UI 1.1.0 构建, `.tsx` 使用 TypeScript Engine 0.6.6, Declarations 4.34.0 与 Ace Editor 1.28.0. 组件目录中的 `AlertDialog` 仍是已有会话树内的节点; `compose.dialog` 创建独立会话, 二者不是同一入口.
+F3 的 `compose.dialog` 需要配套宿主 5321 和具备对话框能力的 3-Block Compose 构建 (原 Compose UI 1.1.0), `.tsx` 使用 TypeScript Engine 0.6.6, Declarations 4.34.0 与 Ace Editor 1.28.0. 组件目录中的 `AlertDialog` 仍是已有会话树内的节点; `compose.dialog` 创建独立会话, 二者不是同一入口.
 
-F4 的 [V2 组件](composeComponents#v2-组件) 需要配套宿主 5322 和契约版本 2 的 Compose UI 插件. V2 追加导航, 菜单, 日期/时间选择, 分页, 网格和搜索等 25 个节点, V1 组件目录保持不变. `.tsx` 使用 TypeScript Engine 0.6.7, Declarations 4.35.0 与 Ace Editor 1.29.0. 旧 V1 插件在支持它的配套宿主中仍可运行原有组件, 不能据新工厂名称存在就判断插件已经支持 V2.
+F4 的 [V2 组件](composeComponents#v2-组件) 需要配套宿主 5322 和契约版本 2 的 3-Block Compose 插件. V2 追加导航, 菜单, 日期/时间选择, 分页, 网格和搜索等 25 个节点, V1 组件目录保持不变. `.tsx` 使用 TypeScript Engine 0.6.7, Declarations 4.35.0 与 Ace Editor 1.29.0. 旧 V1 插件在支持它的配套宿主中仍可运行原有组件, 不能据新工厂名称存在就判断插件已经支持 V2.
 
 ## 两层使用方式
 
@@ -68,7 +68,7 @@ compose.mount(function () {
 Compose TSX 需要以下配套条件:
 
 - AutoJs6 6.8.0 / 构建号 5319 或以上, 使用 Rhino 脚本入口.
-- Compose UI 1.1.0 本地开发预览, 已安装, 启用并通过宿主的信任与兼容性检查.
+- 3-Block Compose 1.2.0 本地开发预览, 已安装, 启用并通过宿主的信任与兼容性检查.
 - TypeScript Engine 0.6.4, 已安装, 启用并可连接, 提供真实 TypeScript 编译与 Compose 声明.
 - 源文件扩展名为 `.tsx`. UI 页面在文件开头保留 `'ui';`; 非 UI 脚本可使用 `compose.floaty` 或具备配套 F3 能力的 `compose.dialog`, 并满足悬浮窗权限要求.
 
@@ -154,7 +154,7 @@ TSX 标签本身不改变生命周期. 非 UI 模式执行 `compose.mount` 仍�
 - 组件属性, state 读写, 树操作, 主题和普通窗口方法需要所属脚本线程. 工作线程使用 `compose.post`, `session.post` 或 `window.post`; 清理用的幂等 `close()` 也可从工作线程请求.
 - Compose 节点事件排队回到脚本线程, 不在 Compose 的组合, 布局或绘制期间同步执行 JavaScript. AndroidView 内通过旧 `ui` API 或 XML TSX 注册的 View 事件仍遵循原生 UI 规则, 点击回调在主线程执行; 非 UI 脚本从这些回调修改 Compose 状态时使用 `compose.post`. UI 脚本中的阻塞等待同样会阻塞界面.
 - 同一脚本引擎最多有 8 个活动会话, UI 页面, XML 容器挂载, Compose 悬浮窗和对话框共同计数. 替换同一承载目标的旧会话时会扣除即将替换的会话, 不额外消耗一个长期名额.
-- 新的 `compose.mount` 替换旧的 Compose UI 页面. `ui.layout`, `ui.layoutFile` 或其他 UI 内容替换也会关闭原 Compose UI 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗和对话框不因此关闭.
+- 新的 `compose.mount` 替换旧的 3-Block Compose 页面. `ui.layout`, `ui.layoutFile` 或其他 UI 内容替换也会关闭原 3-Block Compose 会话, 不同时保留两套页面; 同一脚本的独立 Compose 悬浮窗和对话框不因此关闭.
 - 脚本停止, Activity 销毁, 会话主动关闭或原生窗口关闭会清理相应资源. 当前 UI Activity 自行处理方向及窗口尺寸等已声明的配置变化, 常规旋转和分屏尺寸变化可保留引擎与节点. 真正的 Activity 重建或销毁会结束其 UI 引擎, 不自动恢复原 state 或会话.
 - 插件更新, 卸载或禁用会关闭正在使用它的会话并报告对应错误. 重新安装或启用插件不会自动复活旧句柄, 后续应创建新的会话和节点.
 
@@ -310,7 +310,7 @@ compose.mount(function () {
 
 TSX 入口还接受当前脚本的 fragment 作为根或 render 返回值, 展开后必须恰好有一个节点. 其中字符串按 children 规则创建 `Text` 后计数, 不会自动增加外层容器.
 
-新页面声明验证和渲染器打开成功后, 会关闭原 Compose UI 会话并替换页面. 初始声明或打开失败时, 原页面仍可保持有效. 同一渲染函数中再次调用 `mount` 或 `floaty` 会报 `INVALID_ARGUMENT`, 保留此前有效页面.
+新页面声明验证和渲染器打开成功后, 会关闭原 3-Block Compose 会话并替换页面. 初始声明或打开失败时, 原页面仍可保持有效. 同一渲染函数中再次调用 `mount` 或 `floaty` 会报 `INVALID_ARGUMENT`, 保留此前有效页面.
 
 options 容器省略或为 `null` / `undefined` 时按空对象处理. 其中 `theme` 省略或为 `null` 时沿用模块当前默认覆盖; 显式 `{theme: {}}` 表示空覆盖, 不与模块默认对象深度合并. 其他选项报 `UNKNOWN_PROP`. 主题规则见 [ComposeTheme](composeThemeType#替换与继承).
 
@@ -457,7 +457,7 @@ let value = compose.batch(function () {
   - **[ key ]** { [string](dataTypes#string) | [number](dataTypes#number) | [null](dataTypes#null) } - 片段在当前作用域内的稳定标识, 如列表条目的 key.
 - <ins>**returns**</ins> { [ComposeNode](composeNodeType) } - 本次构建或复用的片段根节点.
 
-在渲染函数中复用未变化的界面片段, 跳过重新创建它的节点. 只能在 `mount`, `attach`, `floaty`, `dialog` 或 `compose(...)` 的渲染函数执行期间调用; 节点句柄写法, 事件回调和 `post` 任务中调用会得到 `INVALID_ARGUMENT`. 需要 AutoJs6 6.8.0 (5323) 或更高版本的匹配本地构建, 不改变 Compose UI 插件的版本要求.
+在渲染函数中复用未变化的界面片段, 跳过重新创建它的节点. 只能在 `mount`, `attach`, `floaty`, `dialog` 或 `compose(...)` 的渲染函数执行期间调用; 节点句柄写法, 事件回调和 `post` 任务中调用会得到 `INVALID_ARGUMENT`. 需要 AutoJs6 6.8.0 (5323) 或更高版本的匹配本地构建, 不改变 3-Block Compose 插件的版本要求.
 
 每次调用先确定所属的记录位置:
 
@@ -626,7 +626,7 @@ ImageWrapper 和位图的所有权规则见 [Image 输入](composeComponents#com
 
 ### 运行条件
 
-- 安装并启用 Compose UI 插件, 使用包含 `compose` 模块的配套宿主构建. 当前为本地预览能力.
+- 安装并启用 3-Block Compose 插件, 使用包含 `compose` 模块的配套宿主构建. 当前为本地预览能力.
 - 界面已挂载, 待查找的节点位于当前可访问窗口并已参与布局.
 - 查找与点击依赖宿主无障碍服务. 界面渲染本身不要求启用无障碍.
 - 操作 AutoJs6 自身的脚本页面时, 关闭设置中的 "保护模式". 该模式会让选择器跳过宿主包名, 包括宿主承载的 Compose 页面.
@@ -679,7 +679,7 @@ ImageWrapper 和位图的所有权规则见 [Image 输入](composeComponents#com
 
 这两个子节点的 `parent().id()` 都是 `start_button`. 此按钮在 Android 无障碍中还有一个角色子节点, 自身 `className()` 为 `android.view.View`; 因而通过按钮自身标签查找点击目标更稳定.
 
-上述验证于 2026-10-03 使用配套本地宿主, Compose UI 插件和 Compose 1.12.1 完成. 查找与点击均经过真实内置无障碍服务以及宿主 Rhino 选择器, 包括 `id('start_button').findOnce().click()` 到脚本 `onClick` 回调的完整路径.
+上述验证于 2026-10-03 使用配套本地宿主, 3-Block Compose 插件和 Compose 1.12.1 完成. 查找与点击均经过真实内置无障碍服务以及宿主 Rhino 选择器, 包括 `id('start_button').findOnce().click()` 到脚本 `onClick` 回调的完整路径.
 
 ### 示例
 
@@ -735,14 +735,14 @@ if (node !== null) {
 
 ### 运行时与插件依赖
 
-使用 `compose` 的脚本可通过 AutoJs6 的 "打包应用" 流程生成独立 APK. APK Builder 插件将配套 Runtime Kit 中的 INRT 运行时与项目脚本装入应用, Compose UI 渲染器仍由目标设备上另行安装的 Compose UI 插件提供.
+使用 `compose` 的脚本可通过 AutoJs6 的 "打包应用" 流程生成独立 APK. APK Builder 插件将配套 Runtime Kit 中的 INRT 运行时与项目脚本装入应用, 3-Block Compose 渲染器仍由目标设备上另行安装的 3-Block Compose 插件提供.
 
 - 构建端需要包含 `compose` 模块的配套宿主和 APK Builder 插件, 其 Runtime Kit 也必须包含该模块及配套共享依赖.
-- 运行端需要安装兼容的 Compose UI 插件, 包名为 `io.github.supermonster003.autojs6.plugin.compose.ui`. 打包不会自动把该插件 APK 嵌入应用, 应用启动也不会自动安装或授权插件.
+- 运行端需要安装兼容的 3-Block Compose 插件, 包名为 `io.github.supermonster003.autojs6.plugin.three.block.compose`. 打包不会自动把该插件 APK 嵌入应用, 应用启动也不会自动安装或授权插件.
 - 使用 `compose.mount` 的项目入口脚本应保留 `'ui';` 模式声明. `compose.floaty` 仍须满足生成应用自身的悬浮窗授权与系统运行条件.
 - Compose 渲染本身不依赖无障碍服务. 如果脚本同时使用无障碍选择器或动作, 则仍需满足这些 API 的授权条件.
 
-当前属于配套本地构建的预览能力, 不能仅根据 APK Builder 的产品名称或版本名称判断其模板已经包含 Compose UI 支持.
+当前属于配套本地构建的预览能力, 不能仅根据 APK Builder 的产品名称或版本名称判断其模板已经包含 3-Block Compose 支持.
 
 ### 应用版本与运行时版本
 
@@ -751,8 +751,8 @@ if (node !== null) {
 | 版本 | 来源 | 用途 |
 | --- | --- | --- |
 | 应用 `versionCode` / `versionName` | 项目的打包配置 | 应用自身的安装与升级. `versionCode` 可以从 `1` 开始. |
-| INRT 运行时版本 | 配套 Runtime Kit 的宿主构建 | 校验 Compose UI 插件要求的最低宿主版本. |
-| Compose UI 插件版本 | 目标设备上安装的插件 | 提供实际渲染器, 并与运行时校验契约和共享依赖兼容性. |
+| INRT 运行时版本 | 配套 Runtime Kit 的宿主构建 | 校验 3-Block Compose 插件要求的最低宿主版本. |
+| 3-Block Compose 插件版本 | 目标设备上安装的插件 | 提供实际渲染器, 并与运行时校验契约和共享依赖兼容性. |
 
 最低宿主版本检查使用 INRT 模板中的编译版本, 不使用生成应用的 `versionCode`. 因而不需要把自己的应用版本改成 AutoJs6 的构建号. 如果模板过旧, 应更新配套 Runtime Kit 并重新打包; 单独提高应用 `versionCode` 不会更新运行时.
 
@@ -762,7 +762,7 @@ if (node !== null) {
 
 生成应用使用自己的插件启用与授权记录. AutoJs6 主应用中保存的启用选择和用户授权不会自动复制到生成应用.
 
-Compose UI 插件沿用既有的签名信任策略. 未保存启用选择时默认启用, 仍须通过签名信任检查; 显式禁用或系统停用会阻止装载. 应用自己的签名不会代替对插件签名的校验, 也不应通过修改权限声明或跳过检查来绕过授权失败.
+3-Block Compose 插件沿用既有的签名信任策略. 未保存启用选择时默认启用, 仍须通过签名信任检查; 显式禁用或系统停用会阻止装载. 应用自己的签名不会代替对插件签名的校验, 也不应通过修改权限声明或跳过检查来绕过授权失败.
 
 ### 缺失插件与错误处理
 
@@ -770,7 +770,7 @@ Compose UI 插件沿用既有的签名信任策略. 未保存启用选择时默�
 
 | `error.code` | 含义 |
 | --- | --- |
-| `PLUGIN_UNAVAILABLE` | 未找到可用插件, 包括目标设备未安装 Compose UI 插件. |
+| `PLUGIN_UNAVAILABLE` | 未找到可用插件, 包括目标设备未安装 3-Block Compose 插件. |
 | `PLUGIN_DISABLED` | 插件被系统停用, 或在当前应用的启用记录中关闭. |
 | `PLUGIN_UNAUTHORIZED` | 插件签名未通过当前应用的信任与授权检查. |
 | `PLUGIN_INCOMPATIBLE` | 内嵌运行时版本, 插件契约或共享依赖不兼容. |
@@ -781,7 +781,7 @@ Compose UI 插件沿用既有的签名信任策略. 未保存启用选择时默�
 'ui';
 
 try {
-    compose.mount(compose.Text({text: 'Compose UI 已就绪'}));
+    compose.mount(compose.Text({text: '3-Block Compose 已就绪'}));
 } catch (error) {
     if (error.code !== 'PLUGIN_UNAVAILABLE') {
         throw error;
@@ -797,6 +797,6 @@ try {
 
 已使用配套本地 Runtime Kit 和独立 APK Builder 插件生成 x86_64 应用, 并在 API 37.1 / 16 KB 页模拟器上实际安装运行. 应用使用默认签名和 `versionCode: 1`, UI 脚本仍按模板内的运行时版本完成插件兼容性检查.
 
-安装兼容 Compose UI 插件时, 同一应用可挂载计数器页面并通过按钮更新状态. 真实卸载插件后, 同一应用可在自己的 XML 界面显示 `PLUGIN_UNAVAILABLE` 及包含插件包名的本地化说明. 验收范围为 Rhino UI 入口, 默认应用签名及插件存在/缺失两种条件.
+安装兼容 3-Block Compose 插件时, 同一应用可挂载计数器页面并通过按钮更新状态. 真实卸载插件后, 同一应用可在自己的 XML 界面显示 `PLUGIN_UNAVAILABLE` 及包含插件包名的本地化说明. 验收范围为 Rhino UI 入口, 默认应用签名及插件存在/缺失两种条件.
 
 同一产物在上述两种条件下均已完成连续启动验证.

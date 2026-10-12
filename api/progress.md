@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-12 AutoJs4 运行时对照模式: 补充 "使用 AutoJs4 运行并对照" 的两次运行流程, 起止行与前缀的剔除规则, 结果页的摘要, 差异标记与 issue 模板复制, 以及 120 秒超时和不稳定输出的判读提示. 需要宿主 6.8.0 开发版 (对照功能提交后的构建) 与 AutoJs4 Runtime 1.0.0; 在 XQ-AT72 (Android 12) 上验证结果页.
+
 2026-10-12 AutoJs4 运行时 (AutoJs4 Runtime): 新增插件说明页, 覆盖 AutoJs4 Runtime 插件的用途 (以 Auto.js 4.1.1 Alpha2 引擎对照运行结果), 安装与独立权限, 文件管理器 "使用 AutoJs4 运行" 对 .js / .auto / 项目文件夹的入口, 日志前缀与任务停止, 运行限制及差异反馈方式. 页面不是脚本 API, 不新增全局对象. 需要宿主 6.8.0 / 5334 与 AutoJs4 Runtime 插件; 插件仓库尚未发布, 此条不表示官方发布.
 
 2026-10-12 Device Android ID 重载: 补充 device.getAndroidId(useSystemId), 无参/false 的应用 ID 语义, Android 8.0+ 上 Shizuku 优先与 Root 后备的系统值读取, 运行应用所属 Android 用户范围, 权限或读取失败抛出异常, 以及旧系统忽略参数的行为.

@@ -290,9 +290,10 @@
 <li><span class="stability_undefined"><a href="#autojs4runtime_1">安装与启用</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_2">入口</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_3">运行方式</a></span></li>
-<li><span class="stability_undefined"><a href="#autojs4runtime_4">限制</a></span></li>
-<li><span class="stability_undefined"><a href="#autojs4runtime_5">差异反馈</a></span></li>
-<li><span class="stability_undefined"><a href="#autojs4runtime_6">相关链接</a></span></li>
+<li><span class="stability_undefined"><a href="#autojs4runtime_4">对照模式</a></span></li>
+<li><span class="stability_undefined"><a href="#autojs4runtime_5">限制</a></span></li>
+<li><span class="stability_undefined"><a href="#autojs4runtime_6">差异反馈</a></span></li>
+<li><span class="stability_undefined"><a href="#autojs4runtime_7">相关链接</a></span></li>
 </ul>
 </li>
 </ul>
@@ -309,7 +310,7 @@
 <p>AutoJs4 是 AutoJs6 的行为基准: 除少数特定情况外, 能在 AutoJs4 正常运行的脚本, 在 AutoJs6 上也应正常运行且效果与结果完全一致. 当一个脚本在 AutoJs6 上的表现与预期不同时, 可以用 &quot;使用 AutoJs4 运行&quot; 在同一台设备上立即得到 AutoJs4 的结果:</p>
 <ul>
 <li>两者一致: 问题通常出在脚本本身或设备环境, 与 AutoJs6 的改动无关.</li>
-<li>AutoJs4 正常而 AutoJs6 异常: 这是最值得反馈的情形, 见 <a href="#autojs4runtime_5">差异反馈</a>.</li>
+<li>AutoJs4 正常而 AutoJs6 异常: 这是最值得反馈的情形, 见 <a href="#autojs4runtime_6">差异反馈</a>.</li>
 <li>AutoJs4 异常而 AutoJs6 正常: 通常是 AutoJs6 已修复的旧问题, 不需要反馈.</li>
 </ul>
 <hr>
@@ -350,7 +351,7 @@
 </tr>
 </tbody>
 </table>
-<p>&quot;使用 AutoJs4 运行&quot; 是显式操作. 普通的运行按钮, 定时任务, 快捷方式, 外部意图与打包应用仍由 AutoJs6 自己的引擎执行, 扩展名或文件头指令不会把脚本自动交给 AutoJs4.</p>
+<p>&quot;使用 AutoJs4 运行&quot; 与 &quot;使用 AutoJs4 运行并对照&quot; 都是显式操作. 普通的运行按钮, 定时任务, 快捷方式, 外部意图与打包应用仍由 AutoJs6 自己的引擎执行, 扩展名或文件头指令不会把脚本自动交给 AutoJs4.</p>
 <hr>
 <h2>运行方式<span><a class="mark" href="#autojs4runtime_3" id="autojs4runtime_3">#</a></span></h2>
 <div class="signature"><ul>
@@ -367,7 +368,16 @@ toast(&quot;hello&quot;);
 </code></pre>
 <p>AutoJs6 运行时第一行输出 <code>org.autojs.autojs6</code>, AutoJs4 运行时输出插件包名 <code>io.github.supermonster003.autojs6.plugin.autojs4.runtime</code>, 以此确认脚本由哪个引擎执行.</p>
 <hr>
-<h2>限制<span><a class="mark" href="#autojs4runtime_4" id="autojs4runtime_4">#</a></span></h2>
+<h2>对照模式<span><a class="mark" href="#autojs4runtime_4" id="autojs4runtime_4">#</a></span></h2>
+<p>文件管理器中 <code>.js</code> 文件与项目文件夹的 &quot;更多&quot; 菜单另有 &quot;使用 AutoJs4 运行并对照&quot;: AutoJs6 先用自己的引擎运行目标, 结束后再经 AutoJs4 Runtime 运行一次, 两次运行回到 AutoJs6 控制台的输出 (去掉 &quot;开始运行&quot; / &quot;运行结束&quot; 等起止行与 <code>[AutoJs4]</code> 前缀) 逐行对比后在结果页显示:</p>
+<ul>
+<li>摘要: 目标路径, 两次输出是否一致 (差异行数), 两次运行各自的用时, 以及运行失败或超时的提示.</li>
+<li>差异: 以 <code>-</code> 标记只在 AutoJs6 输出中出现的行, 以 <code>+</code> 标记只在 AutoJs4 输出中出现的行, 其余为相同行.</li>
+<li>&quot;复制为 issue 模板&quot;: 把脚本路径, AutoJs6 与插件版本, 设备与 Android 版本, 两次完整输出及差异整理为 Markdown 复制到剪贴板, 可直接粘贴到 issue.</li>
+</ul>
+<p>每次运行最多等待 120 秒, 超时的运行会被强制停止并在摘要中标明. 对照期间显示进度对话框, 需要交互的脚本 (对话框, 输入) 仍会按各自引擎的方式弹出界面. 随机值, 时间戳与并发日志次序等本身不稳定的输出会被计为差异, 判读时需自行排除.</p>
+<hr>
+<h2>限制<span><a class="mark" href="#autojs4runtime_5" id="autojs4runtime_5">#</a></span></h2>
 <div class="signature"><ul>
 <li>不共享权限: 插件的无障碍服务, 悬浮窗, 存储与截图权限都需要单独授予, 不继承 AutoJs6 的授权; Shizuku 不可用于 AutoJs4 引擎.</li>
 <li>不改变 AutoJs4: 插件原样编译 AutoJs4 的引擎模块, 不修补其脚本语义. <code>armeabi-v7a</code> 使用 AutoJs4 原版 OpenCV 3.4.3 原生库; 64 位设备使用同一 OpenCV 版本的重编库; <code>x86</code> 与 AutoJs4 一样不含 OpenCV.</li>
@@ -376,7 +386,7 @@ toast(&quot;hello&quot;);
 <li>并发上限: 同时最多运行 16 个 AutoJs4 脚本.</li>
 </ul>
 </div><hr>
-<h2>差异反馈<span><a class="mark" href="#autojs4runtime_5" id="autojs4runtime_5">#</a></span></h2>
+<h2>差异反馈<span><a class="mark" href="#autojs4runtime_6" id="autojs4runtime_6">#</a></span></h2>
 <p>发现 &quot;AutoJs4 正常而 AutoJs6 异常&quot; 的差异时, 请先排除下列已知的 &quot;特定情况&quot;, 再向 <a href="http://issues.autojs6.com">AutoJs6 的 issue 跟踪器</a> 反馈:</p>
 <ul>
 <li>包名不同: AutoJs4 为 <code>org.autojs.autojs4</code> (插件内为其自身包名), AutoJs6 为 <code>org.autojs.autojs6</code>, 依赖包名的脚本行为必然不同.</li>
@@ -386,7 +396,7 @@ toast(&quot;hello&quot;);
 </ul>
 <p>反馈时请附上: 脚本 (或最小复现片段), 两次运行的控制台输出 (AutoJs4 的输出带 <code>[AutoJs4]</code> 前缀), 设备型号与 Android 版本, AutoJs6 与插件的版本号.</p>
 <hr>
-<h2>相关链接<span><a class="mark" href="#autojs4runtime_6" id="autojs4runtime_6">#</a></span></h2>
+<h2>相关链接<span><a class="mark" href="#autojs4runtime_7" id="autojs4runtime_7">#</a></span></h2>
 <div class="signature"><ul>
 <li><a href="https://github.com/SuperMonster003/AutoJs6-Plugin-AutoJs4-Runtime">AutoJs6-Plugin-AutoJs4-Runtime</a>: 插件仓库, 含 README 与发行历史.</li>
 <li><a href="https://github.com/SuperMonster003/AutoJs4">AutoJs4</a>: 被内嵌的引擎项目.</li>

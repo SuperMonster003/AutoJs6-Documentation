@@ -86,6 +86,19 @@ AutoJs6 运行时第一行输出 `org.autojs.autojs6`, AutoJs4 运行时输出�
 
 ---
 
+## com.stardust 兼容类
+
+Auto.js 4 的 Java 类位于 `com.stardust` 包 (如 `com.stardust.pio.PFiles`, `com.stardust.autojs.runtime.api.Files`, `com.stardust.automator.UiObject`), 旧脚本可能直接以这些名字调用静态方法, 构造对象或做 `instanceof` 判断. 自 6.8.0 起, AutoJs6 不再内置这些类的副本, 而是在脚本解析类名时把 `com.stardust` 名字映射到 AutoJs6 的同名实现; 脚本写 `com.stardust.autojs.runtime.api.Files` 得到的就是 `org.autojs.autojs.runtime.api.Files`, 因而 `runtime.files instanceof com.stardust.autojs.runtime.api.Files` 成立, `new com.stardust.pio.PFile(path)` 得到的是 AutoJs6 的 PFile.
+
+- 完整映射 (218 个类): 旧副本中脚本能触及的静态成员, 构造器与实例成员在 AutoJs6 的同名类上都存在, 参数类型按脚本可见的方式兼容 (数值互换, `Object` 对函数等). 包括 `runtime.api` 下的 Files, Images, Device, Dialogs, Events, Threads, Timers, Engines, Shell 等, `pio` 下的 PFiles, PFile 及文本 / 二进制文件类, `core.image` 下的 ImageWrapper, Colors, ColorFinder, ColorDetector, TemplateMatching, `util` 下的 ScreenMetrics, UiHandler, TextUtils, MapBuilder, IntentExtras 等工具类, 以及引擎, 执行, 脚本源等内部类.
+- 部分映射 (90 个类): AutoJs6 的同名类覆盖了大部分而非全部成员, 如 UiObject, UiSelector, UiObjectCollection, ScriptRuntime, ConsoleImpl, GlobalConsole, ProjectConfig, 引擎入口类与布局膨胀相关的类; 缺少的成员以 "方法不存在" 报错. 其中 5 个工具类映射到改名后的 AutoJs6 类 (`com.stardust.util.ClipboardUtil` 对应 `ClipboardUtils`, `IntentUtil` 对应 `IntentUtils`, `UnderuseExecutors` 对应 `UnderUseExecutors`, `SdkVersionUtil` 对应 `SdkVersionUtils`, `MimeTypes` 对应 `MimeTypesUtils`), `importClass` 定义的全局名是 AutoJs6 的名字.
+- 不再提供 (46 个类): 没有 AutoJs6 对应物的内部类与工具类 (如 `com.stardust.util.Nath`, `com.stardust.automator.UiGlobalSelector`), 脚本写这些名字时得到的是空的包对象.
+- 映射只作用于脚本中的类名解析 (`Packages`, 顶层 `com`, `importClass`, `importPackage`); `java.lang.Class.forName("com.stardust...")` 这类按 JVM 类名的查找不受影响, 会抛出 ClassNotFoundException.
+
+完整清单与每个部分映射类缺少的成员见 AutoJs6 仓库的 `docs/dev/stardust-compat-inventory.md`. 这是 AutoJs6 宿主的行为, 与是否安装本插件无关; 用 AutoJs4 引擎运行时, 脚本看到的仍是 AutoJs4 自己的 `com.stardust` 类.
+
+---
+
 ## 差异反馈
 
 发现 "AutoJs4 正常而 AutoJs6 异常" 的差异时, 请先排除下列已知的 "特定情况", 再向 [AutoJs6 的 issue 跟踪器](http://issues.autojs6.com) 反馈:

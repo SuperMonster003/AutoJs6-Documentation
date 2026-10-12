@@ -1,0 +1,62 @@
+{
+  "source": "..\\api\\autojs4Runtime.md",
+  "miscs": [
+    {
+      "textRaw": "AutoJs4 运行时 (AutoJs4 Runtime)",
+      "name": "AutoJs4 运行时 (AutoJs4 Runtime)",
+      "type": "misc",
+      "desc": "<p>AutoJs4 运行时是一个独立安装的 AutoJs6 插件 (<a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-AutoJs4-Runtime\">AutoJs6-Plugin-AutoJs4-Runtime</a>), 它内嵌 <a href=\"https://github.com/SuperMonster003/AutoJs4\">AutoJs4</a> 的脚本引擎 (Auto.js 4.1.1 Alpha2 的克隆, Rhino 1.7.7.2, OpenCV 3.4.3), 使 AutoJs6 的文件管理器可以用 AutoJs4 引擎运行一个脚本并对照结果, 无需另外安装 AutoJs4. 本页面自 AutoJs6 6.8.0 (构建 5334) 起适用.</p>\n<p>本页面不是脚本 API. AutoJs4 运行时没有新增任何全局对象或模块, 脚本内容不需要为它做任何修改.</p>\n<hr>\n",
+      "miscs": [
+        {
+          "textRaw": "用途",
+          "name": "用途",
+          "desc": "<p>AutoJs4 是 AutoJs6 的行为基准: 除少数特定情况外, 能在 AutoJs4 正常运行的脚本, 在 AutoJs6 上也应正常运行且效果与结果完全一致. 当一个脚本在 AutoJs6 上的表现与预期不同时, 可以用 &quot;使用 AutoJs4 运行&quot; 在同一台设备上立即得到 AutoJs4 的结果:</p>\n<ul>\n<li>两者一致: 问题通常出在脚本本身或设备环境, 与 AutoJs6 的改动无关.</li>\n<li>AutoJs4 正常而 AutoJs6 异常: 这是最值得反馈的情形, 见 <a href=\"#差异反馈\">差异反馈</a>.</li>\n<li>AutoJs4 异常而 AutoJs6 正常: 通常是 AutoJs6 已修复的旧问题, 不需要反馈.</li>\n</ul>\n<hr>\n",
+          "type": "misc",
+          "displayName": "用途"
+        },
+        {
+          "textRaw": "安装与启用",
+          "name": "安装与启用",
+          "desc": "<ol>\n<li>在插件中心的官方插件库安装 AutoJs4 Runtime, 并确认其处于启用状态. 插件按 ABI 拆分发布 (<code>arm64-v8a</code>, <code>armeabi-v7a</code>, <code>x86_64</code>, <code>x86</code>), 也提供包含全部 ABI 的 <code>universal</code> 包; 需要 Android 7.0 (API 24) 或更高版本.</li>\n<li>在插件中心打开插件的设置页 (条目中的 &quot;打开插件&quot;), 按脚本需要授予下列权限. 这些权限属于插件自身, 与 AutoJs6 已获得的权限相互独立:<ul>\n<li>存储权限: 读取脚本文件与脚本访问的文件 (插件沿用 AutoJs4 的 <code>targetSdk 28</code> 与传统外部存储模型).</li>\n<li>悬浮窗: 脚本使用 <code>floaty</code>, <code>console.show()</code> 或 AutoJs4 的对话框时需要.</li>\n<li>无障碍服务: 脚本使用控件操作 (<code>click</code>, <code>text().findOne()</code> 等) 时需要, 在系统设置中为 &quot;AutoJs4 Runtime&quot; 单独开启.</li>\n<li>忽略电池优化与 Root 状态: 设置页提供状态显示与跳转, 按需处理.</li>\n</ul>\n</li>\n</ol>\n<p>插件未安装时, 文件管理器的对应菜单位置显示 &quot;安装 AutoJs4 Runtime&quot;, 点击后跳转插件中心; 插件已安装但被禁用或协议不兼容时, 点击 &quot;使用 AutoJs4 运行&quot; 会提示启用或升级.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "安装与启用"
+        },
+        {
+          "textRaw": "入口",
+          "name": "入口",
+          "desc": "<p>在 AutoJs6 文件管理器中打开以下对象的 &quot;更多&quot; 菜单, 选择 &quot;使用 AutoJs4 运行&quot;:</p>\n<table>\n<thead>\n<tr>\n<th>对象</th>\n<th>运行方式</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>.js</code> 文件</td>\n<td>以文件所在目录为工作目录运行; <code>&quot;ui&quot;;</code> 脚本在插件进程内打开 AutoJs4 自己的脚本界面</td>\n</tr>\n<tr>\n<td><code>.auto</code> 文件</td>\n<td>由 AutoJs4 的 Root 录制回放引擎执行, 需要 Root 权限</td>\n</tr>\n<tr>\n<td>含 <code>project.json</code> 的项目文件夹</td>\n<td>读取 <code>main</code> 作为入口, 以项目目录为工作目录, 遵循 <code>features</code>; <code>main</code> 缺失或不存在时拒绝运行并提示</td>\n</tr>\n</tbody>\n</table>\n<p>&quot;使用 AutoJs4 运行&quot; 是显式操作. 普通的运行按钮, 定时任务, 快捷方式, 外部意图与打包应用仍由 AutoJs6 自己的引擎执行, 扩展名或文件头指令不会把脚本自动交给 AutoJs4.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "入口"
+        },
+        {
+          "textRaw": "运行方式",
+          "name": "运行方式",
+          "desc": "<ul>\n<li>脚本在插件自己的进程中由 AutoJs4 引擎执行, 不进入 AutoJs6 进程; AutoJs6 只负责发现插件, 发起请求, 接收日志与结束状态.</li>\n<li>任务出现在 AutoJs6 的任务面板中, 图标与普通脚本相同; 任务面板的停止按钮, 音量键停止与 &quot;停止全部&quot; 都能结束 AutoJs4 任务.</li>\n<li>AutoJs4 的控制台输出会逐行回到 AutoJs6 控制台, 保持原有级别, 并加上 <code>[AutoJs4]</code> 前缀. 脚本异常以 AutoJs4 的格式打印, 任务按异常结束.</li>\n<li>插件设置中的 &quot;显示 AutoJs4 控制台窗口&quot; 默认关闭; 开启后 <code>console.show()</code> 同时在插件进程显示 AutoJs4 原有的浮动控制台, 便于对照视觉效果.</li>\n<li>插件进程意外退出时, AutoJs6 以 &quot;AutoJs4 运行时意外退出&quot; 结束任务.</li>\n</ul>\n<pre><code class=\"lang-js\">/* 保存为任意 .js 文件, 分别用运行按钮与 &quot;使用 AutoJs4 运行&quot; 执行, 对照控制台输出. */\nconsole.log(&quot;engine package: &quot; + context.getPackageName());\nconsole.log(&quot;device: &quot; + device.brand + &quot; &quot; + device.model + &quot; (API &quot; + device.sdkInt + &quot;)&quot;);\ntoast(&quot;hello&quot;);\n</code></pre>\n<p>AutoJs6 运行时第一行输出 <code>org.autojs.autojs6</code>, AutoJs4 运行时输出插件包名 <code>io.github.supermonster003.autojs6.plugin.autojs4.runtime</code>, 以此确认脚本由哪个引擎执行.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "运行方式"
+        },
+        {
+          "textRaw": "限制",
+          "name": "限制",
+          "desc": "<ul>\n<li>不共享权限: 插件的无障碍服务, 悬浮窗, 存储与截图权限都需要单独授予, 不继承 AutoJs6 的授权; Shizuku 不可用于 AutoJs4 引擎.</li>\n<li>不改变 AutoJs4: 插件原样编译 AutoJs4 的引擎模块, 不修补其脚本语义. <code>armeabi-v7a</code> 使用 AutoJs4 原版 OpenCV 3.4.3 原生库; 64 位设备使用同一 OpenCV 版本的重编库; <code>x86</code> 与 AutoJs4 一样不含 OpenCV.</li>\n<li>不参与编辑: 代码补全, 高亮与文档仍以 AutoJs6 为准, AutoJs4 引擎只用于运行.</li>\n<li>不用于打包: 打包应用 (inrt) 不包含 AutoJs4 引擎.</li>\n<li>并发上限: 同时最多运行 16 个 AutoJs4 脚本.</li>\n</ul>\n<hr>\n",
+          "type": "misc",
+          "displayName": "限制"
+        },
+        {
+          "textRaw": "差异反馈",
+          "name": "差异反馈",
+          "desc": "<p>发现 &quot;AutoJs4 正常而 AutoJs6 异常&quot; 的差异时, 请先排除下列已知的 &quot;特定情况&quot;, 再向 <a href=\"http://issues.autojs6.com\">AutoJs6 的 issue 跟踪器</a> 反馈:</p>\n<ul>\n<li>包名不同: AutoJs4 为 <code>org.autojs.autojs4</code> (插件内为其自身包名), AutoJs6 为 <code>org.autojs.autojs6</code>, 依赖包名的脚本行为必然不同.</li>\n<li>Rhino 版本差异带来的语法与内置对象差异 (ES6+ 特性在 AutoJs4 不可用).</li>\n<li>已在 AutoJs6 中被明确移除或替换的功能 (如 AutoJs4 的打包插件机制).</li>\n<li><code>targetSdk 28</code> 与 AutoJs6 的 <code>targetSdk</code> 不同所带来的存储, 后台与权限模型差异.</li>\n</ul>\n<p>反馈时请附上: 脚本 (或最小复现片段), 两次运行的控制台输出 (AutoJs4 的输出带 <code>[AutoJs4]</code> 前缀), 设备型号与 Android 版本, AutoJs6 与插件的版本号.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "差异反馈"
+        },
+        {
+          "textRaw": "相关链接",
+          "name": "相关链接",
+          "desc": "<ul>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-AutoJs4-Runtime\">AutoJs6-Plugin-AutoJs4-Runtime</a>: 插件仓库, 含 README 与发行历史.</li>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs4\">AutoJs4</a>: 被内嵌的引擎项目.</li>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs4-Documentation\">AutoJs4-Documentation</a>: Auto.js 4.1.0 文档的克隆, 是本文档的参考基准.</li>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6/blob/master/docs/dev/autojs4-runtime-protocol-v1.md\">AutoJs4 Runtime 协议 V1</a>: 宿主与插件之间的契约.</li>\n</ul>\n",
+          "type": "misc",
+          "displayName": "相关链接"
+        }
+      ]
+    }
+  ]
+}

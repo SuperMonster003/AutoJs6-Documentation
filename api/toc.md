@@ -16,6 +16,7 @@
 
 * [AI - 人工智能](ai)
 * [App - 通用应用](app)
+- [AutoJs4 Runtime - AutoJs4 运行时](autojs4Runtime)
 * [AutoJs6 - 本体应用](autojs)
 * [Automator - 自动化](automator)
 * [Barcode - 条码](barcode)

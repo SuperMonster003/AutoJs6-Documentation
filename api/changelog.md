@@ -2,6 +2,7 @@
 
 ## v6.8.0
 
+- `新增` [AutoJs4 运行时 (AutoJs4 Runtime)](autojs4Runtime), 说明 AutoJs4 Runtime 插件的用途, 安装与权限, 文件管理器 "使用 AutoJs4 运行" 入口, 日志回传与任务停止, 运行限制以及差异反馈方式
 - `更新` [设备 (Device)](device) 的 getAndroidId(useSystemId) 重载, 说明通过 Shizuku/Root 获取运行应用所属 Android 用户的系统值, 失败抛出异常及 Android 8.0 以前忽略参数的行为
 
 - `新增` [Terminal](terminal), [TerminalSession](terminalSessionType), [TerminalOpenOptions](terminalOpenOptionsType) 与 [TerminalError](terminalErrorType), 说明 3-Shell Terminal 插件依赖, 同步和异步会话管理, 输出事件, npm 脚本, 权限与生命周期

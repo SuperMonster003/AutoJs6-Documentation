@@ -799,8 +799,9 @@ def validate(text: str, path: Path) -> None:
     ):
         raise ValueError(f"Legacy incomplete-section marker in {relative}")
 
-    # `callAutoJs` is the public Node bridge method name, not a product name.
-    if re.search(r"(?<!call)AutoJs(?!6|Pro|-Docs)", text):
+    # `callAutoJs` is the public Node bridge method name, not a product name;
+    # `AutoJs4` is the baseline project (SuperMonster003/AutoJs4) embedded by the AutoJs4 Runtime plugin.
+    if re.search(r"(?<!call)AutoJs(?!6|4|Pro|-Docs)", text):
         raise ValueError(f"Legacy bare AutoJs product name in {relative}")
     if re.search(
         r"""packageName\s*:\s*["']org\.autojs\.autojs["']""",

@@ -140,6 +140,8 @@ generator\auto-generate-for-autojs6.bat
 
 ## v6.8.0
 
+- `更新` [设备 (Device)](https://docs.autojs6.com/#/device) 的 getAndroidId(useSystemId) 重载, 说明通过 Shizuku/Root 获取运行应用所属 Android 用户的系统值, 失败抛出异常及 Android 8.0 以前忽略参数的行为
+
 - `新增` [终端 (Terminal)](https://docs.autojs6.com/#/terminal) 及会话, 选项与错误参考, 对应 3-Shell Terminal 插件的完整脚本 API
 - `新增` [颜色 (Color)](https://docs.autojs6.com/#/color) 的 OKLab / OKLCH 转换, 对比度调整, 和谐色, 色阶, 派生配色, 夜间对应色, 色觉缺陷模拟与图像主要颜色提取, 以及 `oklab` 颜色检测算法
 - `新增` colors.theme 主题色控制文档, 覆盖主题色读写, 颜色库列表, 智能颜色库的激活, 换组与脚本状态, 以及脚本修改的合并与撤销

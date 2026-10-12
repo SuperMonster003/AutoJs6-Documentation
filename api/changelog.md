@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [设备 (Device)](device) 的 getAndroidId(useSystemId) 重载, 说明通过 Shizuku/Root 获取运行应用所属 Android 用户的系统值, 失败抛出异常及 Android 8.0 以前忽略参数的行为
+
 - `新增` [Terminal](terminal), [TerminalSession](terminalSessionType), [TerminalOpenOptions](terminalOpenOptionsType) 与 [TerminalError](terminalErrorType), 说明 3-Shell Terminal 插件依赖, 同步和异步会话管理, 输出事件, npm 脚本, 权限与生命周期
 - `新增` [颜色 (Color)](color) 的 OKLab / OKLCH 转换 (oklab, oklch, toOklab, toOklch), ensureContrast, harmony, tones, derive, nightVariant, simulate 与 extract 条目, 以及 [ColorDetectionAlgorithm](dataTypes#colordetectionalgorithm) 的 `oklab` 算法
 - `新增` [颜色 (Color)](color) 的 colors.theme 主题色控制条目 (get, set, reset, libraries, activate, deactivate, next, state, current), 说明脚本修改的合并, 历史来源与撤销, 以及智能颜色库的 "脚本状态" 状态源与 "脚本启动" 换组时机

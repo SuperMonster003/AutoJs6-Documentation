@@ -302,9 +302,39 @@ console.log('当前是否使用 16 KB 页: ' + (pageSize === 16384));
 
 ### getAndroidId()
 
+**`Overload 1/2`**
+
 - <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Android ID
 
-返回 `Settings.Secure.ANDROID_ID`. Android 8.0 及以上系统通常按应用签名密钥, 用户和设备确定此值. 系统未提供值时返回 `null`.
+返回当前应用读取的 `Settings.Secure.ANDROID_ID`, 等价于 `getAndroidId(false)`, 不申请 Shizuku 或 Root 权限. 系统未提供值时返回 `null`.
+
+Android 8.0 (API 26) 以前, 此值属于当前 Android 用户的系统设置. Android 8.0 及以上系统通常按应用签名密钥, Android 用户和设备确定此值, 因此不同签名的应用可以取得不同结果. 在升级到 Android 8.0 前已安装且保留的应用存在兼容例外, 不能仅凭 APK 的目标 SDK 版本判断返回值范围.
+
+### getAndroidId(useSystemId)
+
+**`Overload 2/2`** **`6.8.0`**
+
+- **useSystemId** { [boolean](dataTypes#boolean) } - 是否通过高权限读取系统用户级 Android ID
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Android ID
+
+`useSystemId` 为 `false` 时保持无参调用的行为.
+
+Android 8.0 (API 26) 及以上, `useSystemId` 为 `true` 时优先通过已启动且已授权的 Shizuku 读取系统值, 不可用或读取失败时尝试 Root. 两种途径均无法取得有效值时抛出异常, 不回退到当前应用的 Android ID, 不返回空字符串或 `null`.
+
+读取范围为运行 AutoJs6 或打包应用的 Android 用户, 包括副用户或工作资料, 不固定读取主用户或当前前台用户. 在同一设备的同一 Android 用户下, 不同应用通过高权限读取这一系统设置可获得相同的值. 清除普通应用数据, 卸载重装应用或更换 APK 签名不会重置该系统值; 恢复出厂设置, 重建 Android 用户或修改系统设置后不保证保持不变.
+
+Android 8.0 以前忽略 `useSystemId`, 直接使用无参调用的读取方式, 不检查或申请 Shizuku/Root 权限. 此时系统未提供值仍可返回 `null`.
+
+```js
+log(device.getAndroidId());      // 当前应用可读取的 Android ID.
+log(device.getAndroidId(false)); // 与无参调用相同.
+
+try {
+    log(device.getAndroidId(true)); // 系统用户级 Android ID.
+} catch (error) {
+    console.error(error); // Android 8.0+ 上需具备可用的 Shizuku 或 Root 权限.
+}
+```
 
 ## [m] getSharedDeviceId
 

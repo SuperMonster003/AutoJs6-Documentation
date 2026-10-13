@@ -2,7 +2,7 @@
 
 <!-- type=misc -->
 
-3-Block Compose 设计器是 [3-Block Compose](compose) 插件 ([AutoJs6-Plugin-Three-Block-Compose](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose)) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 `compose` 脚本的界面树; 保存结果就是普通的 `.js` 脚本文件 (1.4.0 起也可以是 `.tsx` 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 本地开发预览起适用, 1.3.0 与 1.4.0 (本地开发预览) 新增的能力在文中注明; 插件尚未发布, 此页不表示官方发布.
+3-Block Compose 设计器是 [3-Block Compose](compose) 插件 ([AutoJs6-Plugin-Three-Block-Compose](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose)) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 `compose` 脚本的界面树; 保存结果就是普通的 `.js` 脚本文件 (1.4.0 起也可以是 `.tsx` 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.5.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.
 
 本页面不是脚本 API. 设计器没有新增任何全局对象或模块, 它读写的脚本与手写的 `compose` 脚本完全相同. 脚本 API 见 [3-Block Compose](compose), 组件, 属性, 插槽与事件见 [ComposeComponents](composeComponents).
 
@@ -12,7 +12,7 @@
 
 - 从组件面板拖放组件, 在画布上即时看到与 AutoJs6 内一致的渲染结果, 再在属性抽屉中调整属性, 修饰链, 插槽与事件.
 - 维护脚本的界面部分: 设计器只改写界面树和顶层 `compose.state` 声明, 其它语句原样保留, 因此可以反复在设计器与 AutoJs6 编辑器之间往返.
-- 设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 "状态" 面板中临时改变 state 的预览值, 并在 "交互预览" 中直接操作绑定了 state 的控件, 见下文 "预览状态与交互预览" 一节.
+- 编辑时设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 "状态" 面板中临时改变 state 的预览值, 并在 "交互预览" 中直接操作绑定了 state 的控件; 1.5.0 起 JavaScript 工程的交互预览会在插件内受限的沙箱中运行脚本, 见下文 "预览状态与交互预览" 一节.
 
 ---
 
@@ -50,6 +50,7 @@
 | 大纲 | 多级折叠的节点树, 与画布选中同步. 每行提供上移, 下移, 删除; 长按拖动到另一节点的上方, 内部或下方可重排或换父, 是否能放入按目标组件的子节点策略判断 |
 | 属性 | 选中节点的 key, 目录属性, 快捷属性 (padding, w, h 等), 插槽, 事件与修饰链 |
 | 状态 (1.3.0) | 顶层 `compose.state` 的初值与预览值, 见下文 "预览状态与交互预览" 一节 |
+| 控制台 (1.5.0) | 交互预览中脚本的 `console` / `log` 输出, `toast` 与错误, 见下文 "在预览中运行脚本" 一节 |
 | 组件面板 | 右下角 "+" 打开, 按组件画廊的分类列出全部可插入组件, 插入到当前选中的容器 (或根节点); 目标不接受子节点时提示 |
 
 竖屏时画布在上, 大纲与属性在下; 横屏或平板上 (页面宽度大于高度) 画布在左, 大纲与属性在右. 大纲与属性列表的末尾留有空白, 可以把最后几行滚动到 "+" 按钮上方.
@@ -66,19 +67,45 @@
 
 ## 预览状态与交互预览
 
-1.3.0 起编辑页有 "状态" 标签页, 画布右上角有 "交互预览" 开关. 两者都不执行脚本, 只改变画布, 不改动脚本, 也不产生撤销步骤或草稿.
+1.3.0 起编辑页有 "状态" 标签页, 画布右上角有 "交互预览" 开关; 1.5.0 起 JavaScript 工程的交互预览会运行脚本 (见下文 "在预览中运行脚本"). 两者都只改变画布, 不改动脚本, 也不产生撤销步骤或草稿.
 
 - 状态面板列出脚本顶层的每个 `compose.state`: 名称, 脚本中的初值 (字面量或表达式源码), 以及预览值. 布尔值用开关, 数字与字符串用输入框, 其它值 (数组, 对象, `null`, 或初值是表达式时) 按 JavaScript 字面量输入. 可以单项 "重置" 或 "全部重置"; 文档被重新加载 (外部修改, 从来源重新导入) 时预览值清空.
 - 画布中绑定了 state 的属性 (例如 `checked: on.value`) 显示预览值, 没有预览值时显示初值.
-- 打开 "交互预览" 后画布不再点选与拖动, 组件可以直接操作. 一个绑定了 state 的属性, 如果组件有一个事件的载荷字段与该属性同名, 操作就把新值写入该 state 的预览值; 目前包括 `Switch`, `Checkbox`, `RadioButton` 的 `checked`, `Slider` 的 `value`, `TextField` / `OutlinedTextField` 的 `text`, `FilterChip`, `InputChip`, `SegmentedButtonItem` 的 `selected`, `HorizontalPager` 的 `page`, `Tooltip` 与 `NavigationDrawer` 的 `open`, `SearchBar` 的 `expanded`, `DatePicker` 的 `selectedDateMillis` 与 `displayMode`, `TimePicker` 的 `hour` 与 `minute`. 关闭开关即回到编辑模式.
+- 打开 "交互预览" 后画布不再点选与拖动, 组件可以直接操作; 关闭开关即回到编辑模式. JavaScript 工程 (1.5.0 起, Android 8.0 或更高版本) 运行脚本, 见下一小节. TSX 工程, 以及 Android 8.0 以下设备上的工程, 不运行脚本: 一个绑定了 state 的属性, 如果组件有一个事件的载荷字段与该属性同名, 操作就把新值写入该 state 的预览值; 目前包括 `Switch`, `Checkbox`, `RadioButton` 的 `checked`, `Slider` 的 `value`, `TextField` / `OutlinedTextField` 的 `text`, `FilterChip`, `InputChip`, `SegmentedButtonItem` 的 `selected`, `HorizontalPager` 的 `page`, `Tooltip` 与 `NavigationDrawer` 的 `open`, `SearchBar` 的 `expanded`, `DatePicker` 的 `selectedDateMillis` 与 `displayMode`, `TimePicker` 的 `hour` 与 `minute`.
 
-与在 AutoJs6 中真实运行的差异:
+不运行脚本时 (编辑模式, TSX 工程, Android 8.0 以下) 与在 AutoJs6 中真实运行的差异:
 
 - 事件处理函数不执行. 按钮的 `onClick`, 以及处理函数中对 state 的其它赋值, 计算, `toast`, 模块调用等都不会发生; 只有上面那种 "控件的新值直接写回它绑定的 state" 会反映到预览值.
 - 只有直接写成 `x.value` 的属性参与; 表达式 (例如 `selected: tab.value == 2` 或 `text: 'Hi ' + name.value`) 不会随预览值重新计算, 文本类属性仍显示其源码.
 - 渲染函数不执行: 渲染前置语句, 条件与循环生成的内容仍是占位, 不会随预览值增减节点.
 - 弹层由打开状态的属性决定是否画在画布中; 画布中的弹层不会因点按遮罩或返回键而关闭, 要关闭可在状态面板改回预览值.
 - 预览值不随脚本保存, 也不会作为初值写回; 要改变初值, 在属性抽屉或 AutoJs6 编辑器中修改 `compose.state(...)`.
+
+### 在预览中运行脚本 (1.5.0)
+
+打开 "交互预览" 后, JavaScript 工程的脚本在插件内的沙箱中运行, 画布显示脚本挂载的界面. 运行的是保存时会写出的脚本, 状态面板中的预览值作为对应 `compose.state(...)` 的初值. 点击按钮, 输入文字, 拨动开关等事件交给脚本的处理函数, state 变化后渲染函数重新执行, 与在 AutoJs6 中运行时一样更新画布; 修改工程或预览值后脚本从头重新运行, 关闭开关后画布回到文档的预览. 脚本运行时, "交互预览" 开关上显示运行图标.
+
+预览中可用的 API:
+
+| API | 说明 |
+| --- | --- |
+| `compose` / `$compose` | `state`, `ref`, `modifier`, `batch`, `memo`, `createElement` 与全部节点工厂, `mount` / `floaty` / `dialog` (内容都画在画布上), `post`, `theme`, `sessions`, `version`, `isAvailable`, `ComposeError`; 节点句柄的属性读写与 `set`, `get`, `append`, `insert`, `remove`, `replace`, `clear`, `slot`, `on`, `off`, `focus`, `blur`, `scrollTo`, `edit`; 会话的 `update`, `post`, `close`, `isClosed`, `on('close')`, `showSnackbar` |
+| `console`, `log`, `print`, `toast`, `toastLog` | 写入 "控制台" 标签页; `toast` 与 `showSnackbar` 也只写入控制台 |
+| `setTimeout`, `setInterval`, `clearTimeout`, `clearInterval` | 同时最多 64 个待执行的定时器, 重复间隔不小于 16 ms |
+| JavaScript 标准内置对象 | `JSON`, `Math`, `Date`, `RegExp`, `Map`, `Set` 等, 语言级别与 AutoJs6 的 Rhino (ES6) 一致 |
+
+其它 AutoJs6 模块与全局函数 (`app`, `ui`, `files`, `http`, `images`, `device`, `threads`, `sleep`, `require`, `importClass` 等) 一经访问即抛出 "... is not available in the designer preview"; 需要 AutoJs6 ui 页面的 `compose.attach` 同样不可用. 脚本不能访问 Java 与 Android: `java`, `Packages`, `android` 等不可用, 也无法经任何对象取得 Java 类.
+
+限制与差异:
+
+- 每次进入沙箱 (加载脚本, 处理一个事件, 执行一轮到期的定时器) 最多运行约 3 秒. 超出时 (例如死循环) 预览停止脚本, 画布底部与控制台说明原因; 修改工程, 或关闭再打开交互预览即可重新运行. 脚本中的 `try` / `catch` / `finally` 不能拦截这种停止.
+- 脚本错误 (未捕获的异常, `compose` 的参数错误) 显示在画布底部与控制台, 并列入问题列表; 预览继续运行, 之后的事件照常处理.
+- 文本框的输入按编辑序号同步: 用户已继续输入时, 脚本基于旧内容写入的文字不会覆盖它, 与在 AutoJs6 中一致.
+- `compose.memo` 在预览中每次都重新计算片段, 结果与 AutoJs6 相同, 只是不复用.
+- `floaty` 与 `dialog` 的窗口选项不生效, 内容画在画布上; `AndroidView` 无法在预览中创建视图, 仍显示占位.
+- 运行结果只用于画布: 不改动文档, 不写入工程或草稿, 预览中的 state 值也不会写回状态面板.
+- 设计器转到后台时停止脚本, 回到前台后重新运行.
+- 需要 Android 8.0 (API 26) 或更高版本 (沙箱中的 JavaScript `Date` 基于 `java.time`); 更低版本的设备与 TSX 工程按上文的方式预览, 不运行脚本.
 
 ---
 
@@ -136,7 +163,7 @@
 
 ## 限制
 
-- 不运行脚本: 事件处理函数不会触发, `compose.state` 绑定在画布中显示初值或状态面板中的预览值, 渲染前置语句与条件 / 循环生成的内容只能以占位呈现 (见下文 "预览状态与交互预览" 一节).
+- 编辑时不运行脚本: 事件处理函数不会触发, `compose.state` 绑定在画布中显示初值或状态面板中的预览值, 渲染前置语句与条件 / 循环生成的内容只能以占位呈现. 1.5.0 起交互预览可以运行 JavaScript 工程的脚本, 但只提供 `compose`, 控制台与定时器等少数 API (见上文 "预览状态与交互预览" 一节).
 - 弹层类组件 (`AlertDialog`, `ModalBottomSheet`, `DropdownMenu`, `Tooltip`) 处于打开状态时, 1.3.0 起按接近真实的样式画在画布的逻辑屏幕内 (对话框与底部弹层带遮罩盖在页面上方, 菜单与提示贴近锚点, 放不下时翻到另一侧), 不弹出真实窗口, 弹层中的节点可以点选; 菜单宽度取 112 - 280 dp 内的可用宽度, 不按内容收窄 (1.2.0 显示为内联卡片).
 - `Image` (1.3.0): `'@drawable/名称'` 取自已安装的 AutoJs6, 相对路径在菜单 "图片目录" 选定的文件夹中查找; 网址, 绝对路径与表达式仍显示占位, 原因列在问题列表中. 1.2.0 中所有 `Image` 都显示占位.
 - `AndroidView` 不能在设计器中绘制: 1.3.0 起显示为保留其尺寸修饰的浅色占位区域, 并在其中显示 `view` 表达式的源码; 不能从组件面板插入. `Snackbar` 是会话命令, 不在面板中.

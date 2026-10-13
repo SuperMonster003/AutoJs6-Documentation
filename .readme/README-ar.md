@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `إضافة جديدة` [مصمم 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), يشرح المصمم المرئي المدمج في المكون الإضافي 3-Block Compose: مداخله وملفات المشاريع, ولوحة الرسم / المخطط / الخصائص / لوحة المكونات والمسودات في شاشة التحرير, ومجموعة السكربت الفرعية المعترف بها وقواعد الذهاب والإياب, والتسليم ثنائي الاتجاه مع محرر AutoJs6, والقيود الحالية
 - `تحديث` قسم "وضع المقارنة" في [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) يشرح عمليتي التشغيل في "التشغيل باستخدام AutoJs4 والمقارنة", وملخص النتائج وعلامات الاختلاف ونسخ قالب issue
 - `إضافة جديدة` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), لشرح غرض إضافة AutoJs4 Runtime وتثبيتها وأذوناتها, ومدخل "التشغيل باستخدام AutoJs4" في مدير الملفات, وإرجاع السجلات وإيقاف المهام وحدود التنفيذ والإبلاغ عن الاختلافات
 - `تحديث` التحميل الزائد getAndroidId(useSystemId) في [Device](https://docs.autojs6.com/#/device) يشرح جلب قيمة النظام لمستخدم Android الذي يشغل التطبيق عبر Shizuku/Root, والاستثناء عند الفشل وتجاهل المعامل قبل Android 8.0

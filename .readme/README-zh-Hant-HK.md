@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `新增` [3-Block Compose 設計器 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), 說明 3-Block Compose 插件內置可視化設計器的入口與工程檔案, 編輯頁的畫布 / 大綱 / 屬性 / 組件面板與草稿, 可識別的腳本子集與往返規則, 與 AutoJs6 編輯器的雙向交接以及當前限制
 - `更新` [AutoJs4 運行時 (AutoJs4 Runtime)](https://docs.autojs6.com/#/autojs4Runtime) 增加 "對照模式" 小節, 説明 "使用 AutoJs4 運行並對照" 的兩次運行, 結果頁摘要與差異標記, 以及 issue 模板的複製
 - `新增` [AutoJs4 運行時 (AutoJs4 Runtime)](https://docs.autojs6.com/#/autojs4Runtime), 説明 AutoJs4 Runtime 插件的用途, 安裝與權限, 文件管理器 "使用 AutoJs4 運行" 入口, 日誌回傳與任務停止, 運行限制以及差異反饋方式
 - `更新` [設備 (Device)](https://docs.autojs6.com/#/device) 的 getAndroidId(useSystemId) 重載, 説明通過 Shizuku/Root 獲取運行應用所屬 Android 用户的系統值, 失敗拋出異常及 Android 8.0 以前忽略參數的行為

@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `추가` [3-Block Compose 디자이너 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner). 3-Block Compose 플러그인에 내장된 비주얼 디자이너의 진입점과 프로젝트 파일, 편집 화면의 캔버스 / 개요 / 속성 / 구성요소 팔레트와 초안, 인식되는 스크립트 하위 집합과 왕복 규칙, AutoJs6 편집기와의 양방향 전달, 현재 제한 사항을 설명합니다
 - `업데이트` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime)의 "비교 모드" 절에서 "AutoJs4로 실행하고 비교"의 두 번 실행, 결과 요약과 차이 표시, issue 템플릿 복사를 설명
 - `추가` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), AutoJs4 Runtime 플러그인의 용도, 설치와 권한, 파일 관리자의 "AutoJs4로 실행" 항목, 로그 반환, 작업 중지, 실행 제한과 차이 보고 방법 설명
 - `업데이트` [Device](https://docs.autojs6.com/#/device)의 getAndroidId(useSystemId) 오버로드에서 Shizuku/Root로 실행 앱의 Android 사용자 시스템 값을 가져오는 방법, 실패 시 예외, Android 8.0 이전에 인수를 무시하는 동작 설명

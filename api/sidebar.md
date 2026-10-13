@@ -21,6 +21,7 @@
 * [Canvas - 画布](canvas)
 * [Color - 颜色](color)
 - [3-Block Compose](compose)
+- [3-Block Compose Designer - 设计器](composeDesigner)
 * [Console - 控制台](console)
 * [Continuation - 续体](continuation)
 * [Converter - 单位转换](cvt)

@@ -71,6 +71,7 @@ Les documents peuvent changer à tout moment et diverger du comportement réel. 
 
 ### v6.8.0
 
+- `Fonctionnalité` [Concepteur 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), décrivant le concepteur visuel intégré au plugin 3-Block Compose: ses points d'entrée et fichiers de projet, le canevas / plan / propriétés / palette de composants et les brouillons de l'éditeur, le sous-ensemble de script reconnu et les règles d'aller-retour, le passage bidirectionnel avec l'éditeur AutoJs6 et les limites actuelles
 - `Mise à jour` La section "Mode de comparaison" de [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) décrit les deux exécutions de "Exécuter avec AutoJs4 et comparer", les résumés et repères des différences, ainsi que la copie du modèle d'issue
 - `Fonctionnalité` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), présentant le rôle du plugin AutoJs4 Runtime, son installation et ses permissions, l'entrée "Exécuter avec AutoJs4" du gestionnaire de fichiers, le retour des journaux, l'arrêt des tâches, les limites d'exécution et le signalement des différences
 - `Mise à jour` La surcharge getAndroidId(useSystemId) de [Device](https://docs.autojs6.com/#/device) explique l'obtention, via Shizuku/Root, de la valeur système de l'utilisateur Android de l'application, les exceptions en cas d'échec et l'argument ignoré avant Android 8.0

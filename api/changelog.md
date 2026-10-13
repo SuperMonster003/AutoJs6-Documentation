@@ -2,6 +2,7 @@
 
 ## v6.8.0
 
+- `新增` [3-Block Compose 设计器 (Compose Designer)](composeDesigner), 说明 3-Block Compose 插件内置可视化设计器的入口与工程文件, 编辑页的画布 / 大纲 / 属性 / 组件面板与草稿, 可识别的脚本子集与往返规则, 与 AutoJs6 编辑器的双向交接以及当前限制
 - `更新` [AutoJs4 运行时 (AutoJs4 Runtime)](autojs4Runtime) 增加 "对照模式" 小节, 说明 "使用 AutoJs4 运行并对照" 的两次运行, 结果页摘要与差异标记, 以及 issue 模板的复制
 - `新增` [AutoJs4 运行时 (AutoJs4 Runtime)](autojs4Runtime), 说明 AutoJs4 Runtime 插件的用途, 安装与权限, 文件管理器 "使用 AutoJs4 运行" 入口, 日志回传与任务停止, 运行限制以及差异反馈方式
 - `更新` [设备 (Device)](device) 的 getAndroidId(useSystemId) 重载, 说明通过 Shizuku/Root 获取运行应用所属 Android 用户的系统值, 失败抛出异常及 Android 8.0 以前忽略参数的行为

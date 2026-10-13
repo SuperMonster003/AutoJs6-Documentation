@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `新機能` [3-Block Compose デザイナー (Compose Designer)](https://docs.autojs6.com/#/composeDesigner). 3-Block Compose プラグインに内蔵されたビジュアルデザイナーについて, 入口とプロジェクトファイル, 編集画面のキャンバス / アウトライン / プロパティ / コンポーネントパレットと下書き, 認識されるスクリプトのサブセットと往復のルール, AutoJs6 エディターとの双方向の受け渡し, 現在の制限を説明します
 - `更新` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) に "比較モード" を追加し, "AutoJs4 で実行して比較" の 2 回の実行, 結果の概要と差分表示, issue テンプレートのコピーを説明
 - `新機能` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), AutoJs4 Runtime プラグインの用途, インストールと権限, ファイルマネージャーの "AutoJs4 で実行", ログの返送, タスク停止, 実行制限と差分報告を説明
 - `更新` [Device](https://docs.autojs6.com/#/device) の getAndroidId(useSystemId) オーバーロードで, Shizuku/Root による実行アプリの Android ユーザーのシステム値取得, 失敗時の例外, Android 8.0 未満で引数を無視する動作を説明

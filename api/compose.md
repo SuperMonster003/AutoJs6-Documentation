@@ -13,6 +13,7 @@
 | 会话与 Snackbar | [ComposeSession](composeSessionType) |
 | 悬浮窗口 | [ComposeFloatyWindow](composeFloatyWindowType) |
 | 组件属性, 插槽, 事件和生成目录 | [ComposeComponents](composeComponents) |
+| 插件内置的可视化设计器 | [3-Block Compose 设计器](composeDesigner) |
 
 当前提供 UI 模式页面, `compose.floaty`, [XML 容器挂载](#m-attach) 和 [独立对话框](#m-dialog). 配套宿主 5320 的 F2 能力增加 `<compose>` 容器与 [AndroidView](composeComponents#androidview), 需要支持此互操作能力的 3-Block Compose 1.1.0 预览包; 仅版本名称相同的早期 1.1.0 包不保证具备此能力. F2 的 `.tsx` 声明使用 TypeScript Engine 0.6.5, Declarations 4.33.0 与配套 Ace Editor 1.26.0.
 

@@ -1,6 +1,6 @@
 # 3-Block Compose (Compose)
 
-`compose` 与 `$compose` 是同一个可调用模块, 通过 3-Block Compose 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.1.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
+`compose` 与 `$compose` 是同一个可调用模块, 通过 3-Block Compose 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.2.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
 
 运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 3-Block Compose 插件. 普通 JavaScript 工厂 API 的最低宿主构建要求仍为 AutoJs6 6.8.0 / 5316, 同时须满足实际插件契约和共享依赖检查. [TSX 接入](#tsx-接入) 需要 5319 或以上的配套宿主及 TypeScript Engine 0.6.4.
 

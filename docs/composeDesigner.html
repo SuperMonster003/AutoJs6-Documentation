@@ -293,6 +293,7 @@
 <li><span class="stability_undefined"><a href="#composedesigner_3">编辑页</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_4">预览状态与交互预览</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_5">可识别的脚本子集与往返规则</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_tsx">TSX 工程</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_autojs6">与 AutoJs6 的衔接</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_6">限制</a></span></li>
 </ul>
@@ -304,14 +305,14 @@
         <div id="apicontent">
             <h1>3-Block Compose 设计器 (Compose Designer)<span><a class="mark" href="#composedesigner_3_block_compose_compose_designer" id="composedesigner_3_block_compose_compose_designer">#</a></span></h1>
 <!-- type=misc -->
-<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件, 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 本地开发预览起适用, 1.3.0 (本地开发预览) 新增的能力在文中注明; 插件尚未发布, 此页不表示官方发布.</p>
+<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 本地开发预览起适用, 1.3.0 与 1.4.0 (本地开发预览) 新增的能力在文中注明; 插件尚未发布, 此页不表示官方发布.</p>
 <p>本页面不是脚本 API. 设计器没有新增任何全局对象或模块, 它读写的脚本与手写的 <code>compose</code> 脚本完全相同. 脚本 API 见 <a href="compose.html">3-Block Compose</a>, 组件, 属性, 插槽与事件见 <a href="composeComponents.html">ComposeComponents</a>.</p>
 <hr>
 <h2>用途<span><a class="mark" href="#composedesigner" id="composedesigner">#</a></span></h2>
 <div class="signature"><ul>
 <li>从组件面板拖放组件, 在画布上即时看到与 AutoJs6 内一致的渲染结果, 再在属性抽屉中调整属性, 修饰链, 插槽与事件.</li>
 <li>维护脚本的界面部分: 设计器只改写界面树和顶层 <code>compose.state</code> 声明, 其它语句原样保留, 因此可以反复在设计器与 AutoJs6 编辑器之间往返.</li>
-<li>设计器不执行脚本: 它用 Rhino 解析器解析脚本并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 &quot;状态&quot; 面板中临时改变 state 的预览值, 并在 &quot;交互预览&quot; 中直接操作绑定了 state 的控件, 见下文 &quot;预览状态与交互预览&quot; 一节.</li>
+<li>设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 &quot;状态&quot; 面板中临时改变 state 的预览值, 并在 &quot;交互预览&quot; 中直接操作绑定了 state 的控件, 见下文 &quot;预览状态与交互预览&quot; 一节.</li>
 </ul>
 </div><hr>
 <h2>入口<span><a class="mark" href="#composedesigner_1" id="composedesigner_1">#</a></span></h2>
@@ -333,7 +334,7 @@
 </tr>
 <tr>
 <td>文件管理器</td>
-<td>以 3-Block Compose 打开 <code>.js</code> 文件 (<code>application/x-javascript</code>, <code>text/javascript</code> 或 <code>text/plain</code>)</td>
+<td>以 3-Block Compose 打开 <code>.js</code> 文件 (<code>application/x-javascript</code>, <code>text/javascript</code> 或 <code>text/plain</code>); 1.4.0 起也可以打开 <code>.tsx</code> 文件 (另含 <code>text/typescript</code>)</td>
 </tr>
 </tbody>
 </table>
@@ -341,7 +342,7 @@
 <hr>
 <h2>工程与文件<span><a class="mark" href="#composedesigner_2" id="composedesigner_2">#</a></span></h2>
 <div class="signature"><ul>
-<li>工程就是一个 <code>.js</code> 文件, 保存在插件私有目录 <code>files/designer/projects/</code> 中, 没有额外的工程描述文件. 新建工程写入一个最小的 <code>compose.mount</code> 模板; 名称重复时自动加 <code>-2</code>, <code>-3</code> 后缀.</li>
+<li>工程就是一个 <code>.js</code> 文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 保存在插件私有目录 <code>files/designer/projects/</code> 中, 没有额外的工程描述文件. 新建工程时选择 JavaScript 或 TSX (1.4.0), 写入一个最小的 <code>compose.mount</code> 模板; 名称重复时自动加 <code>-2</code>, <code>-3</code> 后缀. 导入的文件以 <code>.tsx</code> 结尾时成为 TSX 工程, 其它文件成为 <code>.js</code> 工程.</li>
 <li>导入: 通过系统文件选择器选择脚本, 复制为一个新工程并记录来源. 保存工程不会写回来源文件. 导出: 编辑页菜单 &quot;导出到文件&quot; 通过系统文件选择器另存一份.</li>
 <li>来源同步 (1.3.0): 导入时保留对来源文件的访问权限 (文件提供方允许时, 先尝试读写, 不行再只读), 之后可在编辑页菜单手动 &quot;写回来源&quot; 或 &quot;从来源重新导入&quot;. 设计器记录双方上次同步时的内容摘要: 写回时来源在此之后被改过, 或重新导入时工程在此之后被改过 (含未保存修改), 都会先询问. 来源被移走, 被替换或授权失效时提示 &quot;来源文件不可用&quot;, 可经系统文件选择器重新选择以恢复关联. 1.2.0 导入的工程没有摘要, 两侧内容相同时视为已同步.</li>
 <li>外部文档: 从 AutoJs6 编辑器或文件管理器打开的文件保存时直接写回原文件. 没有写入权限时 (例如只读授权或只读路径), 保存会把内容另存为一个新工程并提示, 编辑页随即切换到该工程, 原文件保持不变.</li>
@@ -416,7 +417,27 @@
 </ol>
 <p>界面树内可识别: <code>compose.X({属性}, 子节点...)</code> 与子节点数组写法, 字符串子节点 (等价于 <code>compose.Text</code>), 快捷属性与 <code>compose.modifier().a().b()</code> 修饰链, <code>key</code>, 事件属性中的函数表达式 (源码保留), 以及对已声明 state 的 <code>x.value</code> 绑定. 属性值分三态: 字面量 (字符串, 数字, 布尔, <code>null</code>, 数组与对象字面量) 可在属性抽屉中编辑; <code>x.value</code> 识别为绑定; 其它表达式按源码保留, 画布中文本类属性显示其源码, 其它属性不参与预览. 条件或循环生成的子节点同样按源码保留, 画布中显示为占位.</p>
 <p>以下情况无法映射, 设计器拒绝打开并给出行列位置: 语法错误, 没有挂载调用, 多处挂载调用, 根节点不是 <code>compose</code> 工厂调用, 渲染函数没有 <code>return</code>, 属性对象使用展开或计算键, 同一属性对象重复出现 <code>children</code>.</p>
-<p>保存时按固定格式生成界面部分: 4 空格缩进, 字符串用单引号, 每个子节点独占一行. 设计器生成的脚本再次打开不会产生任何改动; 手写的脚本第一次保存时界面部分会被改写为该格式, 保留的语句与注释不变. TSX 文件不能在设计器中打开, 首版只支持 JavaScript.</p>
+<p>保存时按固定格式生成界面部分: 4 空格缩进, 字符串用单引号, 每个子节点独占一行. 设计器生成的脚本再次打开不会产生任何改动; 手写的脚本第一次保存时界面部分会被改写为该格式, 保留的语句与注释不变. TSX 工程见下一节 (1.2.0 与 1.3.0 不能打开 TSX 文件).</p>
+<hr>
+<h2>TSX 工程<span><a class="mark" href="#composedesigner_tsx" id="composedesigner_tsx">#</a></span></h2>
+<p>1.4.0 起设计器可以编辑 <code>.tsx</code> 工程. 新建工程时选择 &quot;TSX&quot;, 或导入 <code>.tsx</code> 文件, 或从 AutoJs6 编辑器与文件管理器打开 <code>.tsx</code> 文件, 都按 TSX 读写.</p>
+<ul>
+<li>解析: 源码交给 TypeScript Engine 插件 0.7.0 或更高版本提供的语法树解析服务 (TypeScript 解析契约 v1), 只做语法分析, 不做类型检查, 不编译, 也不执行. TypeScript Engine 首次使用该服务时需要加载 TypeScript, 打开会慢几秒, 之后通常在 1 秒内.</li>
+<li>可识别的顶层语句与 JavaScript 相同 (顶层 state 声明与唯一的挂载调用), 界面树写成 JSX:<ul>
+<li><code>&lt;compose.X&gt;</code> 与 <code>&lt;compose:X&gt;</code> 标签是可编辑的节点. <code>key</code>, <code>modifier</code>, 目录属性, 插槽 (属性值写成元素, 只含一个元素的 Fragment 或字符串), <code>slots</code> 与 <code>children</code> 属性, 以及 <code>onXxx</code> 事件属性中的函数都能识别.</li>
+<li>属性值: 引号字符串按 JSX 规则解码 <code>&amp;amp;</code> 等实体, 不处理反斜杠转义; <code>{}</code> 中的字面量可在属性抽屉中编辑, <code>{x.value}</code> 识别为绑定, 其它表达式按源码保留; 不带值的属性 (例如 <code>enabled</code>) 等于 <code>{true}</code>.</li>
+<li>JSX 文本子节点按 TypeScript 的 JSX 规则折叠空白, 解码实体后成为文本节点; <code>{&#39;文字&#39;}</code> 同样是文本节点.</li>
+<li>Fragment (<code>&lt;&gt;...&lt;/&gt;</code>) 被展开到所在位置; 根节点可以是只含一个 compose 元素的 Fragment.</li>
+<li>其它标签 (例如 <code>const Increment = compose.Button</code> 之后的 <code>&lt;Increment&gt;</code>) 与 <code>{}</code> 中的表达式子节点 (条件, 循环, 注释, 展开) 按源码保留, 画布中显示为占位.</li>
+<li><code>compose.state&lt;T&gt;(初值)</code> 的类型参数会保留; 带类型标注的变量 (例如 <code>const n: number = &lt;a href=&quot;http://man7.org/linux/man-pages/man0/compose.state.0.html&quot;&gt;compose.state(0)&lt;/a&gt;</code>) 按普通语句原样保留, 不作为 state 显示. 带泛型, 返回类型, <code>async</code> 或函数名的事件函数按表达式保留.</li>
+</ul>
+</li>
+<li>以下情况拒绝打开并给出行列位置: TypeScript 报告的语法错误, 与 JavaScript 相同的结构问题, XML 标签 (例如 <code>&lt;text&gt;</code>) 出现在 Compose 界面中, 展开属性 <code>{...props}</code>, 带命名空间的属性名, 带参数或类型参数的渲染函数, 挂载结果变量的类型标注, 超出 Unicode 范围的数字实体.</li>
+<li>生成格式: 4 空格缩进, 字符串属性用单引号 (例如 <code>text=&#39;Hello&#39;</code>), 其它值写在 <code>{}</code> 中, 每个子元素独占一行; 没有子元素的元素自闭合, 只有一段纯文本的元素写在同一行 (例如 <code>&lt;compose.Button&gt;Add&lt;/compose.Button&gt;</code>); 含单引号, <code>&amp;</code>, 反斜杠或换行等不能原样写成 JSX 的字符串改写为 <code>{&#39;...&#39;}</code>; <code>&lt;compose:X&gt;</code> 写回为 <code>&lt;compose.X&gt;</code>. 设计器生成的 TSX 再次打开不会产生任何改动.</li>
+<li>事件处理函数的语法检查同样由 TypeScript Engine 完成, 可以使用类型标注等 TypeScript 语法.</li>
+<li>运行: &quot;在 AutoJs6 中运行&quot; 把工程文件以内容 Uri 交给 AutoJs6, AutoJs6 按文件名把它交给 TypeScript Engine 编译后运行 (JavaScript 工程仍交出脚本文本); 有未保存修改时先保存. 复制, 导出 (保持 <code>.tsx</code> 文件名), 在 AutoJs6 编辑器中打开与导入 AutoJs6 脚本目录与 JavaScript 工程相同.</li>
+<li>未安装 TypeScript Engine, 版本低于 0.7.0, 或解析服务暂时不可用时, TSX 工程以只读方式显示源码并说明原因: 可以复制源码或重试, 不能编辑界面树, 也没有画布预览. 安装或更新 TypeScript Engine 后回到设计器会自动重试.</li>
+</ul>
 <hr>
 <h2>与 AutoJs6 的衔接<span><a class="mark" href="#composedesigner_autojs6" id="composedesigner_autojs6">#</a></span></h2>
 <p>编辑页菜单提供四个去向, 都复用 AutoJs6 的公开入口, 需要已安装 AutoJs6; 去向前如有未保存修改会先保存:</p>
@@ -430,7 +451,7 @@
 <tbody>
 <tr>
 <td>在 AutoJs6 中运行</td>
-<td>把脚本文本交给 AutoJs6 运行, 与组件画廊的 &quot;运行&quot; 相同</td>
+<td>把脚本文本交给 AutoJs6 运行, 与组件画廊的 &quot;运行&quot; 相同; TSX 工程 (1.4.0) 交出工程文件, 见上文 &quot;TSX 工程&quot; 一节</td>
 </tr>
 <tr>
 <td>在 AutoJs6 编辑器中打开</td>
@@ -455,6 +476,7 @@
 <li>弹层类组件 (<code>AlertDialog</code>, <code>ModalBottomSheet</code>, <code>DropdownMenu</code>, <code>Tooltip</code>) 处于打开状态时, 1.3.0 起按接近真实的样式画在画布的逻辑屏幕内 (对话框与底部弹层带遮罩盖在页面上方, 菜单与提示贴近锚点, 放不下时翻到另一侧), 不弹出真实窗口, 弹层中的节点可以点选; 菜单宽度取 112 - 280 dp 内的可用宽度, 不按内容收窄 (1.2.0 显示为内联卡片).</li>
 <li><code>Image</code> (1.3.0): <code>&#39;@drawable/名称&#39;</code> 取自已安装的 AutoJs6, 相对路径在菜单 &quot;图片目录&quot; 选定的文件夹中查找; 网址, 绝对路径与表达式仍显示占位, 原因列在问题列表中. 1.2.0 中所有 <code>Image</code> 都显示占位.</li>
 <li><code>AndroidView</code> 不能在设计器中绘制: 1.3.0 起显示为保留其尺寸修饰的浅色占位区域, 并在其中显示 <code>view</code> 表达式的源码; 不能从组件面板插入. <code>Snackbar</code> 是会话命令, 不在面板中.</li>
+<li>TSX 工程 (1.4.0) 需要 TypeScript Engine 0.7.0 或更高版本, 否则只能以只读源码查看与复制; 生成格式会把手写 TSX 的界面部分改写为统一格式 (见上文 &quot;TSX 工程&quot; 一节).</li>
 <li>以 <code>file://</code> 路径打开的文件受系统存储限制, 可能无法读取或写回; 建议通过 AutoJs6 编辑器或文件管理器以内容 Uri 打开.</li>
 </ul>
 </div>

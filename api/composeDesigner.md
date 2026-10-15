@@ -2,7 +2,7 @@
 
 <!-- type=misc -->
 
-3-Block Compose 设计器是 [3-Block Compose](compose) 插件 ([AutoJs6-Plugin-Three-Block-Compose](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose)) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 `compose` 脚本的界面树; 保存结果就是普通的 `.js` 脚本文件 (1.4.0 起也可以是 `.tsx` 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.7.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.
+3-Block Compose 设计器是 [3-Block Compose](compose) 插件 ([AutoJs6-Plugin-Three-Block-Compose](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose)) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 `compose` 脚本的界面树; 保存结果就是普通的 `.js` 脚本文件 (1.4.0 起也可以是 `.tsx` 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.8.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.
 
 本页面不是脚本 API. 设计器没有新增任何全局对象或模块, 它读写的脚本与手写的 `compose` 脚本完全相同. 脚本 API 见 [3-Block Compose](compose), 组件, 属性, 插槽与事件见 [ComposeComponents](composeComponents).
 
@@ -171,7 +171,7 @@ XML 字面量以带位置的具体语法树保存: 空白, 注释, CDATA, 处理
 | 大纲 | 元素树: 折叠, 上移 / 下移 / 删除, 长按拖动到另一元素的上方 / 内部 / 下方; 脚本有多个 XML 字面量时顶部显示片段切换器, 传给 `ui.layout` 的片段标 "(ui.layout)" |
 | 属性 | 标签 (可换成面板中的任一标签), `id`, 文本内容 (没有元素子节点的元素), 已设置的属性 (按脚本顺序置顶), 按 View 类分组的目录属性 (最近的类展开, 简写属性在名下显示全名), 值三态, 裸属性, 任意属性名, 事件 (见下文) |
 | 绑定 | 当前片段中 `{{ }}` 引用的名称: 脚本顶层字面量声明的求值结果 (`var title = "Hi"` 这类不运行脚本也能求出的声明, 在插件的沙箱中求值, Android 8.0 或更高版本), 求值失败的原因, 或 "无顶层声明"; 可以输入 JSON 覆盖值, 只影响画布, 不进文档, 撤销与草稿 |
-| 问题 | 按文档站的标签与属性目录校验: 未知标签, 未知或宿主拒绝的属性, 值的类型与格式 (布尔, 整数, 尺寸, 颜色, gravity, 枚举), 只对 `relative` 子视图有效的属性, `list` / `grid` 的模板子节点, 重复 `id`, 空的 `{{ }}`; 以及布局预览的失败与诊断 |
+| 问题 | 按文档站的标签与属性目录校验: 未知标签, 未知或宿主拒绝的属性, 值的类型与格式 (布尔, 整数, 尺寸, 颜色, gravity, 枚举), 只对 `relative` 子视图有效的属性, `list` / `grid` 的模板子节点, 重复 `id`, 空的 `{{ }}`; 以及布局预览的失败与诊断. 1.8.0 起其后列出脚本的 "预览差异" (见下文 "预览差异") |
 | 控制台 | 布局预览时显示预览的状态与 AutoJs6 绘制时报告的失败码, 位置与诊断; 交互预览 (1.7.0) 时显示 AutoJs6 运行脚本的输出, 错误与结束原因 |
 | 组件面板 | 右下角 "+": 文档站的 48 个标签按布局 / 文本 / 按钮 / 输入 / 选择 / 进度 / 图片 / 媒体 / 列表 / 其它分类, 每个带默认属性; 插入到选中的容器末尾, 或选中元素之后. `<compose>` 容器与类名标签不在面板中, 脚本里已有的仍可编辑 |
 
@@ -218,8 +218,27 @@ UI 工程的画布由已安装的 AutoJs6 绘制: 设计器把当前片段的 XM
 - 修改工程后约 0.4 秒脚本从头重新运行; 关闭开关, 设计器转到后台或关闭编辑页时脚本停止, 画布回到布局预览. 脚本调用 `exit()` 或出错后结束时, 画布上方与控制台显示原因 (错误带行号), 开关保持打开, 修改工程或关闭再打开开关即可再次运行.
 - 运行以工程文件名出现在 AutoJs6 的运行列表中, 也可以从那里停止.
 - 运行结果只用于画布: 不改动文档, 不写入工程或草稿. 交互期间画布不再响应点选与拖拽 (指针交给脚本的控件), 大纲与属性抽屉照常可用.
-- 与在 AutoJs6 中运行的差异: 没有 Activity 窗口, `activity` 为 `undefined`, `ui.finish`, `ui.statusBarColor` 等窗口级函数不生效 (控制台各提示一次), `ui.emitter` 只有 `create`; 画布的逻辑屏幕与视口同大, 没有状态栏 / 导航栏; `dialogs.*` 等对话框以悬浮窗形式显示在设计器之上 (需要 AutoJs6 的悬浮窗权限). 脚本体与处理函数和真实运行一样在 AutoJs6 的主线程执行, 忙等 (例如 `while (true)`) 会卡住 AutoJs6, 停止也要等它让出; 定时器与事件驱动的脚本可随时停止.
+- 与在 AutoJs6 中运行的差异: 没有 Activity 窗口, `activity` 为 `undefined`, `ui.finish`, `ui.statusBarColor` 等窗口级函数不生效, `ui.emitter` 为 `null` (注册 `resume`, `pause` 等事件的语句会出错); 画布的逻辑屏幕与视口同大, 没有状态栏 / 导航栏; `dialogs.*` 等对话框以悬浮窗形式显示在设计器之上 (需要 AutoJs6 的悬浮窗权限). 脚本体与处理函数和真实运行一样在 AutoJs6 的主线程执行, 忙等 (例如 `while (true)`) 会卡住 AutoJs6, 停止也要等它让出; 定时器与事件驱动的脚本可随时停止.
 - 与 JavaScript (Compose) 工程的交互预览不同, UI 工程的脚本不在插件内的沙箱里运行, 而是真实地在 AutoJs6 中运行, 没有 API 范围与时间限制; 不要在预览中运行会产生不可逆副作用的脚本.
+
+### 预览差异 (Preview Differences)
+
+1.8.0 起, UI 工程的 "问题" 标签页在校验问题与布局预览的问题之后列出 "预览差异": 设计器解析脚本 (不运行) 时找出在预览中运行与在 AutoJs6 中运行行为不同的写法, 每条显示行号, 该行用到的写法与一句说明. 它们是信息级提示, 不计入菜单 "校验结果" 中的错误数, 也不影响保存与运行; 点按条目会在浏览器中打开本节. 布局预览不运行脚本, 说明描述的是交互预览运行脚本时的行为.
+
+| 写法 | 预览中的行为 |
+| --- | --- |
+| `activity.*` | 预览没有 Activity 窗口, `activity` 不可用, 运行到这一行时出错 |
+| `ui.emitter` 监听 `resume`, `pause` 或 `back_pressed` | 预览中 `ui.emitter` 为 `null`, 运行到这一行时出错; 这些事件只在 AutoJs6 中运行时发生 |
+| `ui.emitter` 的其它用法 (`activity_result`, `create_options_menu`, `options_item_selected` 等事件) | 同上; Activity 事件只在 AutoJs6 中运行时发生 |
+| `ui.statusBarColor`, `ui.navigationBarColor`, `ui.backgroundColor` | 预览没有窗口, 调用不生效 |
+| `ui.finish`, `ui.keepScreenOn`, `ui.statusBarIconLight`, `ui.statusBarIconLightBy`, `ui.navigationBarIconLight`, `ui.navigationBarIconLightBy` | 同上; `ui.finish` 不会结束这次运行 |
+| `dialogs.*` 与全局的 `alert`, `confirm`, `prompt`, `rawInput` | 对话框以悬浮窗显示在设计器之上而不是画布内, 并且需要 AutoJs6 拥有显示在其他应用上层的权限 |
+| 主线程上的无限循环: 条件恒为真的 `while`, `do ... while` 或没有条件的 `for (;;)`, 循环体内没有能离开它的 `break`, `return` 或 `throw`, 且不在交给 `threads.start` 的函数中 | 与真实运行一样在 AutoJs6 的主线程执行; 在预览中会卡住 AutoJs6, 设计器也无法停止这次运行. 把这类循环放进 `threads.start(...)` |
+| `threads.*`, `events.*` | 交互预览中与在 AutoJs6 中一样真实运行, 预览停止时随之结束 |
+
+- 脚本自己声明了同名的变量, 函数或参数 (例如 `let events = []`) 时, 该名称不作为差异列出.
+- 同一行的同一类差异只列一条. 列表只看写法, 不判断这一行运行时是否会被执行到.
+- 输入法与弹出层的 Android 版本限制见上文 "在预览中运行 UI 脚本" 的条件表, 不在差异列表中.
 
 ### 限制
 

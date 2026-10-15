@@ -1,0 +1,152 @@
+{
+  "source": "..\\api\\galleryViewSessionType.md",
+  "modules": [
+    {
+      "textRaw": "查看器会话 (GalleryViewSession)",
+      "name": "查看器会话_(galleryviewsession)",
+      "desc": "<p>GalleryViewSession 是 <a href=\"gallery#m-view\">gallery.view</a> 返回的查看器会话对象, 是 <a href=\"eventEmitterType\">EventEmitter</a> 的实例, 连接脚本与 3-Maple Image 插件中正在显示这些图片的查看器: 查看器的打开与翻页以事件形式在脚本线程到达, 脚本可以读取当前页并结束会话.</p>\n<p>会话打开期间脚本保持运行, 不需要也不应使用 <code>sleep</code> 循环等待; <code>close</code> 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未关闭的会话自动结束, 查看器保留给用户继续浏览, 不触发事件. 插件同一时间只有一个界面会话, 新的选图, 查看或编辑会以 <code>replaced</code> 关闭当前会话并关闭其查看器.</p>\n<p><code>on</code> / <code>once</code> 返回自身以便链式调用.</p>\n<pre><code class=\"lang-js\">let session = gallery.view([&#39;./out/a.jpg&#39;, &#39;./out/b.jpg&#39;, &#39;./out/c.jpg&#39;]);\nsession.on(&#39;open&#39;, e =&gt; console.log(&#39;共&#39;, e.count, &#39;张&#39;))\n    .on(&#39;page&#39;, e =&gt; console.log(e.index, e.path))\n    .on(&#39;close&#39;, e =&gt; console.log(&#39;closed:&#39;, e.reason));\n</code></pre>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">GalleryViewSession</p>\n\n<hr>\n",
+      "modules": [
+        {
+          "textRaw": "[@] GalleryViewSession",
+          "name": "[@]_galleryviewsession",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p>会话对象. 不能用 <code>new</code> 构造, 只由 <a href=\"gallery#m-view\">gallery.view</a> 与 <a href=\"gallery#m-viewasync\">gallery.viewAsync</a> 产生.</p>\n",
+          "type": "module",
+          "displayName": "[@] GalleryViewSession"
+        },
+        {
+          "textRaw": "[p#] paths",
+          "name": "[p#]_paths",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a>[] }</li>\n</ul>\n<p>按页序排列的图片路径 (已按工作目录解析为绝对路径).</p>\n",
+          "type": "module",
+          "displayName": "[p#] paths"
+        },
+        {
+          "textRaw": "[p#] count",
+          "name": "[p#]_count",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>图片数量.</p>\n",
+          "type": "module",
+          "displayName": "[p#] count"
+        },
+        {
+          "textRaw": "[p#] index",
+          "name": "[p#]_index",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>查看器当前显示的页 (从 <code>0</code> 开始), 第一个 <code>page</code> 事件之前为 <code>-1</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] index"
+        },
+        {
+          "textRaw": "[p#] path",
+          "name": "[p#]_path",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>当前页的路径, 第一个 <code>page</code> 事件之前为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] path"
+        },
+        {
+          "textRaw": "[p#] state",
+          "name": "[p#]_state",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <code>&#39;pending&#39;</code> | <code>&#39;open&#39;</code> | <code>&#39;closed&#39;</code> }</li>\n</ul>\n<p><code>open</code> 事件之前为 <code>&#39;pending&#39;</code>, 之后为 <code>&#39;open&#39;</code>, 关闭后为 <code>&#39;closed&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] state"
+        },
+        {
+          "textRaw": "[p#] isOpen",
+          "name": "[p#]_isopen",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>查看器是否已显示且会话尚未关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] isOpen"
+        },
+        {
+          "textRaw": "[p#] isClosed",
+          "name": "[p#]_isclosed",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>会话是否已关闭 (含脚本退出时的自动结束).</p>\n",
+          "type": "module",
+          "displayName": "[p#] isClosed"
+        },
+        {
+          "textRaw": "[p#] reason",
+          "name": "[p#]_reason",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭后为 <code>close</code> 事件的原因, 之前为 <code>null</code>; 脚本退出时的自动结束为 <code>&#39;script-exit&#39;</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] reason"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "session.close(options?)",
+              "type": "method",
+              "name": "close",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ options ]</strong> {{ finish?: <a href=\"dataTypes#boolean\">boolean</a> }} - <code>finish</code> 默认 <code>true</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#galleryviewsession\">GalleryViewSession</a> } - 自身</li>\n</ul>\n<p>结束会话并关闭查看器, 随后触发 <code>close</code> 事件 (原因 <code>&#39;host&#39;</code>). <code>finish</code> 为 <code>false</code> 时只结束会话, 查看器留给用户继续浏览. 重复调用无副作用.</p>\n<pre><code class=\"lang-js\">session.close(); // 关闭查看器.\nsession.close({ finish: false }); // 查看器留给用户.\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[m#] on",
+          "name": "[m#]_on",
+          "methods": [
+            {
+              "textRaw": "session.on(event, listener)",
+              "type": "method",
+              "name": "on",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>event</strong> { <a href=\"dataTypes#string\">string</a> } - 事件名</li>\n<li><strong>listener</strong> { <a href=\"dataTypes#function\">Function</a> } - 监听器</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"#galleryviewsession\">GalleryViewSession</a> } - 自身</li>\n</ul>\n<p>注册监听器. <code>once</code> 形态相同, 只触发一次. 其余成员见 <a href=\"eventEmitterType\">EventEmitter</a>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "event"
+                    },
+                    {
+                      "name": "listener"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] on"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "session.toString()",
+              "type": "method",
+              "name": "toString",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 形如 <code>GalleryViewSession { count: 3, state: open, index: 1 }</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        },
+        {
+          "textRaw": "事件 (Events)",
+          "name": "事件_(events)",
+          "desc": "<table>\n<thead>\n<tr>\n<th>事件</th>\n<th>回调参数</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>open</code></td>\n<td><code>({ count })</code></td>\n<td>查看器已显示, 只触发一次</td>\n</tr>\n<tr>\n<td><code>page</code></td>\n<td><code>({ index, path })</code></td>\n<td>查看器显示的页变化, 起始页也会触发一次</td>\n</tr>\n<tr>\n<td><code>error</code></td>\n<td><code>(err: GalleryError)</code></td>\n<td>插件报告的错误; 脚本未及时消费事件时的 <code>LIMIT_EXCEEDED</code> (随后 <code>close</code>)</td>\n</tr>\n<tr>\n<td><code>close</code></td>\n<td><code>({ reason })</code></td>\n<td>会话已结束, 不再有事件. 原因: <code>&#39;user&#39;</code> (用户离开查看器), <code>&#39;host&#39;</code> (脚本调用 <code>close</code>), <code>&#39;replaced&#39;</code> (新会话替换), <code>&#39;timeout&#39;</code> (查看器 60 秒内未显示), <code>&#39;error&#39;</code> (插件侧失败或插件进程退出), <code>&#39;overflow&#39;</code> (脚本积压的事件超过 512 条或 8 MiB, 之前的事件被丢弃)</td>\n</tr>\n</tbody>\n</table>\n<p>事件对象都是普通 JavaScript 对象, <code>error</code> 事件的参数为 <a href=\"gallery#c-galleryerror\">GalleryError</a>. 建议始终注册 <code>close</code> 监听器, 以便得知用户何时离开查看器.</p>\n",
+          "type": "module",
+          "displayName": "事件 (Events)"
+        }
+      ],
+      "type": "module",
+      "displayName": "查看器会话 (GalleryViewSession)"
+    }
+  ]
+}

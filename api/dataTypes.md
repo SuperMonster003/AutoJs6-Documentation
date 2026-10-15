@@ -2084,6 +2084,10 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 
 参阅 [EpubLocator](epubLocatorType) 类型章节.
 
+## GalleryViewSession
+
+参阅 [GalleryViewSession - 查看器会话](galleryViewSessionType) 类型章节.
+
 ## InstallSource
 
 参阅 [InstallSource](installer#installsource) 的普通来源, 分包与批量形态.

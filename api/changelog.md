@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `新增` [文件 (Files)](files#m-batchrename) 的 files.batchRename, 说明 Batch Rename 插件提供的批量重命名: 方案预览与逐项排除, 执行, 撤销与历史批次, 选项与替换变量 (计数器, 日期时间, 随机值), 冲突策略, 结果对象及错误代码
+
 - `新增` [相册 (Gallery)](gallery) 与 [GalleryViewSession](galleryViewSessionType), 说明 3-Maple Image 插件提供的选图, 查看器会话, 编辑与无界面转换, 文件由 AutoJs6 读写的边界, 照片访问权限与错误代码
 
 - `更新` [API 参考](documentation) 补齐 Files 与 RootAutomator 成员, 颜色结果容器, WebView 上下文和可选参数重载, 校正字节追加与滑动参数, 同步坐标缩放说明, 说明 setScaleBases 失败时不修改或占用基数, 以及基数 setter 的整数转换规则

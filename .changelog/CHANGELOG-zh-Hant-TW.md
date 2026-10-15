@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `新增` [檔案 (Files)](https://docs.autojs6.com/#/files?id=m-batchrename) 的 files.batchRename, 說明 Batch Rename 外掛提供的批次重新命名: 方案預覽與逐項排除, 執行, 復原與歷史批次, 選項與替換變數 (計數器, 日期時間, 隨機值), 衝突策略, 結果物件及錯誤代碼
 - `新增` [相簿 (Gallery)](https://docs.autojs6.com/#/gallery) 與 [GalleryViewSession](https://docs.autojs6.com/#/galleryViewSessionType), 說明 3-Maple Image 外掛提供的選圖, 檢視器工作階段, 編輯與無介面轉換, 檔案由 AutoJs6 讀寫的邊界, 相片存取權限與錯誤代碼
 - `更新` [API 參考](https://docs.autojs6.com/#/documentation) 補齊 Files 與 RootAutomator 成員, 色彩結果容器, WebView 上下文和選用參數多載, 校正位元組附加與滑動參數, 同步座標縮放說明, 說明 setScaleBases 失敗時不修改或占用基數, 以及基數 setter 的整數轉換規則
 - `新增` [3-Block Compose 設計器 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), 說明 3-Block Compose 外掛內建視覺化設計器的入口與專案檔案, 編輯頁的畫布 / 大綱 / 屬性 / 元件面板與草稿, 可識別的指令碼子集與往返規則, 與 AutoJs6 編輯器的雙向交接以及目前限制

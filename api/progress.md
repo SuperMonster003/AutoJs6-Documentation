@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-15 文件 (Files) 批量重命名: 新增 files.batchRename 条目组 (由 Batch Rename 插件提供), 覆盖 plan, apply, undo, history, isAvailable 及异步形态, 选项与替换变量 (计数器, 日期时间, 随机值), 冲突策略, 方案, 结果, 撤销结果与历史对象, 以及 BatchRenameError 错误代码. 依据为 AutoJs6 6.8.0 源码 (files.batchRename 与宿主执行器), Batch Rename 插件的引擎源码, 以及 2026-10-15 在 OnePlus OPD2413 (API 35) 上运行全部示例的结果.
+
 2026-10-15 相册 (Gallery) 新增: 覆盖 3-Maple Image 插件 (3.4.0 及以上) 提供的 gallery 全局对象, 包括选图 (pick, 单选 / 多选, maxCount, mimeTypes, 返回的图片对象与权限处理), 查看器 (view / viewAsync 与 GalleryViewSession 的属性, close 与事件), 编辑 (edit 的输出位置, overwrite 与保存对话框初始值), 无界面转换 (convert 的格式, 质量, 无损, 目标大小, 尺寸模式, 背景色与 EXIF 选项), 可用性探测, 文件由 AutoJs6 读写的边界, 以及 GalleryError 错误代码与各项上限. 依据为 AutoJs6 6.8.0 源码 (宿主提交 902141102), JVM 测试, 插件提交 835bee9 与 2026-10-15 在 API 30 / API 24 模拟器上的插件契约测试; 插件 3.4.0 尚未发布, 此条不表示官方发布.
 
 2026-10-15 API 覆盖核查补齐: 根据当前 Augmentable 注册与原型实现补充 Files 的继承成员, RootAutomator 构造和实例方法, auto.waitFor 超时, 颜色分量与 Java float[] 结果容器重载, WebView 上下文, Numberx.parseFloat 可选基数, Console 数组颜色与无参构建, flow.of 无参起点. 校正 appendBytes 和 RootAutomator.swipe 参数, cX/cY/cXy/cYx 的统一显式模式, 三参数形式, 有限数值和基数校验, 交叉比例 width/height 与横屏行为. 同时说明基数 setter 的整数转换, 以及 setScaleBases 失败时不修改或占用任一方向的行为. 核查覆盖成员名称和本轮确认的调用形式, 不据此宣称全部运行条件或设备行为已完成验证.

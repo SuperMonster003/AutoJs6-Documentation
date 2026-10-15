@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `新增` [文件 (Files)](https://docs.autojs6.com/#/files?id=m-batchrename) 的 files.batchRename, 说明 Batch Rename 插件提供的批量重命名: 方案预览与逐项排除, 执行, 撤销与历史批次, 选项与替换变量 (计数器, 日期时间, 随机值), 冲突策略, 结果对象及错误代码
 - `新增` [相册 (Gallery)](https://docs.autojs6.com/#/gallery) 与 [GalleryViewSession](https://docs.autojs6.com/#/galleryViewSessionType), 说明 3-Maple Image 插件提供的选图, 查看器会话, 编辑与无界面转换, 文件由 AutoJs6 读写的边界, 照片访问权限与错误代码
 - `更新` [API 参考](https://docs.autojs6.com/#/documentation) 补齐 Files 与 RootAutomator 成员, 颜色结果容器, WebView 上下文和可选参数重载, 校正字节追加与滑动参数, 同步坐标缩放说明, 说明 setScaleBases 失败时不修改或占用基数, 以及基数 setter 的整数转换规则
 - `新增` [3-Block Compose 设计器 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), 说明 3-Block Compose 插件内置可视化设计器的入口与工程文件, 编辑页的画布 / 大纲 / 属性 / 组件面板与草稿, 可识别的脚本子集与往返规则, 与 AutoJs6 编辑器的双向交接以及当前限制

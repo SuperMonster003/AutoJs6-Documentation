@@ -320,7 +320,7 @@ plan.items.filter(it => it.status === 'rename').forEach(it => console.log(it.nam
 - }} - 执行选项
 - <ins>**returns**</ins> { [BatchRenameResult](#批量重命名结果-batchrenameresult) } - 执行结果
 
-执行方案, 只改名状态为 `rename` 的条目. 脚本修改了条目的 `excluded`, 或以 `onConflict` 指定了与方案不同的 [冲突策略](#冲突策略) 时, 插件以同一批目标与同一计算时刻重新计算方案后再执行, 因此计数器等取值可能随排除而变化.
+执行方案, 只改名状态为 `rename` 的条目. 脚本修改了条目的 `excluded`, 或以 `onConflict` 指定了与方案不同的 [冲突策略](#冲突策略-conflict-policies) 时, 插件以同一批目标与同一计算时刻重新计算方案后再执行, 因此计数器等取值可能随排除而变化.
 
 执行前逐项核对: 条目必须仍然存在且类型不变, 文件的修改时间与大小必须与 plan 时相同, 否则该条目状态为 `stale` 且不改名, 其余条目照常执行. 嵌套条目先改深层再改浅层, 互换名称等循环改名经临时名称完成. 至少改名一个条目的批次记入撤销日志, 其 ID 为结果的 `batchId`.
 
@@ -632,7 +632,7 @@ log(jsFiles);
 | 选项 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | search | string \| RegExp | (必填) | 查找内容, 见下文 |
-| replace | string | `''` | 替换文本, 可含 [替换变量](#替换变量) |
+| replace | string | `''` | 替换文本, 可含 [替换变量](#替换变量-variables) |
 | regex | boolean | `false` | 将字符串形式的 `search` 作为 ECMAScript 正则表达式 |
 | matchAll | boolean | `false` | 替换全部匹配, 否则只替换第一个 |
 | caseSensitive | boolean | `false` | 查找时区分大小写 |
@@ -650,7 +650,7 @@ log(jsFiles);
 | sanitizeReplacement | string | `'_'` | `sanitize` 使用的替换文本, 不能包含它所替换的字符或 `/` |
 | trim | boolean | `false` | 去除开头的空白以及结尾的空白与点号 |
 | continueNumbering | boolean | `false` | 计数器从相关文件夹已有名称中的最大序号之后继续 |
-| onConflict | `'fail'` \| `'skip'` \| `'number'` \| `'overwrite'` | `'fail'` | [冲突策略](#冲突策略) |
+| onConflict | `'fail'` \| `'skip'` \| `'number'` \| `'overwrite'` | `'fail'` | [冲突策略](#冲突策略-conflict-policies) |
 | conflictNumberPattern | string | `' ({n})'` | `'number'` 策略追加在主文件名之后的后缀, `{n}` 为序号; 必须包含 `{n}`, 不能包含 `/` |
 | onProgress | function | - | 进度回调, 仅 [files.batchRename(paths, options)](#filesbatchrenamepaths-options) 使用, 与 apply 的 `applyOptions.onProgress` 相同 |
 
@@ -667,7 +667,7 @@ log(jsFiles);
 3. 展开 `replace` 中的变量, 再执行替换.
 4. 依次应用 `format`, `normalize`, `halfWidth`, `sanitize` 与 `trim`, 最后与未参与替换的部分拼回名称.
 
-## 替换变量
+## 替换变量 (Variables)
 
 `replace` 中可使用以下变量. 变量对应的选项关闭时, 以及无法解析的写法, 都作为字面文本保留. `$$` 表示一个字面 `$`, 且其后的文本不会被识别为变量 (如 `$$YYYY` 得到 `$YYYY`).
 
@@ -730,7 +730,7 @@ files.batchRename('./trip', {
 files.batchRename('./music', { search: '', format: 'lower', includeFolders: false });
 ```
 
-## 冲突策略
+## 冲突策略 (Conflict Policies)
 
 同一文件夹中, 新名称与本批另一条目的新名称相同 (`duplicateInBatch`), 或与不改名的既有条目相同 (`existingEntry`) 时产生冲突. 在不区分大小写的存储 (如 FAT32/exFAT 格式的 SD 卡) 上按不区分大小写比较.
 

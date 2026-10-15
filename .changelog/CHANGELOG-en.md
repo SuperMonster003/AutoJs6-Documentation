@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `Feature` [Gallery](https://docs.autojs6.com/#/gallery) and [GalleryViewSession](https://docs.autojs6.com/#/galleryViewSessionType), covering picking, viewer sessions, editing and headless conversion provided by the 3-Maple Image plugin, the boundary that AutoJs6 reads and writes the files itself, photo access and error codes
 - `Update` [API reference](https://docs.autojs6.com/#/documentation) covers missing Files and RootAutomator members, color result arrays, WebView contexts and optional overloads, and corrects byte append, swipe parameters and coordinate scaling descriptions; explains that failed setScaleBases calls neither change nor consume scale bases, and documents integer conversion by the base setters
 - `Feature` [3-Block Compose Designer](https://docs.autojs6.com/#/composeDesigner), covering the visual designer built into the 3-Block Compose plugin: its entries and project files, the editor's canvas / outline / properties / component palette and drafts, the recognized script subset and round-trip rules, the two-way hand-over with the AutoJs6 editor, and current limitations
 - `Update` The "Comparison mode" section in [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) explains the two runs performed by "Run with AutoJs4 and compare", result summaries and difference markers, and copying the issue template

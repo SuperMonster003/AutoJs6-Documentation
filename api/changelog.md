@@ -2,7 +2,7 @@
 
 ## v6.8.0
 
-- `更新` [API 参考](documentation) 补齐 Files 与 RootAutomator 成员, 颜色结果容器, WebView 上下文和可选参数重载, 校正字节追加与滑动参数, 同步坐标缩放说明
+- `更新` [API 参考](documentation) 补齐 Files 与 RootAutomator 成员, 颜色结果容器, WebView 上下文和可选参数重载, 校正字节追加与滑动参数, 同步坐标缩放说明, 说明 setScaleBases 失败时不修改或占用基数, 以及基数 setter 的整数转换规则
 
 - `新增` [3-Block Compose 设计器 (Compose Designer)](composeDesigner), 说明 3-Block Compose 插件内置可视化设计器的入口与工程文件, 编辑页的画布 / 大纲 / 属性 / 组件面板与草稿, 可识别的脚本子集与往返规则, 与 AutoJs6 编辑器的双向交接以及当前限制
 - `更新` [AutoJs4 运行时 (AutoJs4 Runtime)](autojs4Runtime) 增加 "对照模式" 小节, 说明 "使用 AutoJs4 运行并对照" 的两次运行, 结果页摘要与差异标记, 以及 issue 模板的复制

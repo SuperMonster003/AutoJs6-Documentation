@@ -1592,15 +1592,24 @@ console.log(contentMatch(/^开始.*/).exists()
 
 ### setScaleBases(baseX, baseY)
 
-**`Global`**
+**`[6.8.0]`** **`Global`**
 
 - **baseX** { [number](dataTypes#number) } - 横向标度基数
 - **baseY** { [number](dataTypes#number) } - 纵向标度基数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-同时设置 [cX](#m-cx), [cY](#m-cy), [cYx](#m-cyx) 和 [cXy](#m-cxy) 使用的标度基数. 两个参数必须为正整数.
+同时设置 [cX](#m-cx), [cY](#m-cy), [cYx](#m-cyx) 和 [cXy](#m-cxy) 使用的标度基数. 参数先按运行时整数转换规则转换, 小数部分向 0 截断, 再要求结果位于 `1..2147483647`. 例如 `720.5` 转换为 `720`, 而 `0.5` 转换为 `0` 后会被拒绝; 非有限数值或转换失败也会抛出异常.
 
-每个方向的基数在同一个脚本运行时中最多设置一次.
+每个方向的基数在同一个脚本运行时中最多成功设置一次, 即使设为初始默认值也会占用该方向的设置机会. 自 AutoJs6 6.8.0 起, 只有两个参数都转换和验证成功, 且两个方向都尚未设置时, 才一次性保存两者. 参数错误或某个方向已经设置时, 本次成对设置不会修改基数, 也不会占用仍未设置的方向.
+
+```js
+try {
+    setScaleBases(720, 0); /* 纵向基数无效, 两个方向均不被占用. */
+} catch (ignored) {}
+setScaleBases(1080, 1920); /* 失败后仍可正常设置. */
+```
+
+这里的整数转换兼容既有 setter 行为. 它与 `cX/cY/cXy/cYx` 调用中显式传入的绝对坐标 `base` 不同: 后者要求参数本身是正整数, 不接受 `720.5` 这样的非整数基数. `setScreenMetrics` 是触摸操作的设计分辨率设置, 不修改这里的标度基数.
 
 ## [m] setScaleBaseX
 
@@ -1611,7 +1620,9 @@ console.log(contentMatch(/^开始.*/).exists()
 - **baseX** { [number](dataTypes#number) } - 横向标度基数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-设置横向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.
+设置横向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 `1..2147483647` 范围内的正整数; 例如 `720.5` 保存为 `720`. 转换或校验失败时不修改基数, 也不占用设置机会.
+
+同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 [setScaleBases](#m-setscalebases) 共用该方向的设置状态. 此转换规则不同于坐标方法显式 `base` 参数的严格整数校验.
 
 ## [m] setScaleBaseY
 
@@ -1622,7 +1633,9 @@ console.log(contentMatch(/^开始.*/).exists()
 - **baseY** { [number](dataTypes#number) } - 纵向标度基数
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-设置纵向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.
+设置纵向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 `1..2147483647` 范围内的正整数; 例如 `1280.5` 保存为 `1280`. 转换或校验失败时不修改基数, 也不占用设置机会.
+
+同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 [setScaleBases](#m-setscalebases) 共用该方向的设置状态. 此转换规则不同于坐标方法显式 `base` 参数的严格整数校验.
 
 ## [m] cX
 

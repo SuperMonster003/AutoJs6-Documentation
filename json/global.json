@@ -2165,7 +2165,7 @@
               "textRaw": "setScaleBases(baseX, baseY)",
               "type": "method",
               "name": "setScaleBases",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseX</strong> { <a href=\"dataTypes#number\">number</a> } - 横向标度基数</li>\n<li><strong>baseY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>同时设置 <a href=\"#m-cx\">cX</a>, <a href=\"#m-cy\">cY</a>, <a href=\"#m-cyx\">cYx</a> 和 <a href=\"#m-cxy\">cXy</a> 使用的标度基数. 两个参数必须为正整数.</p>\n<p>每个方向的基数在同一个脚本运行时中最多设置一次.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseX</strong> { <a href=\"dataTypes#number\">number</a> } - 横向标度基数</li>\n<li><strong>baseY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>同时设置 <a href=\"#m-cx\">cX</a>, <a href=\"#m-cy\">cY</a>, <a href=\"#m-cyx\">cYx</a> 和 <a href=\"#m-cxy\">cXy</a> 使用的标度基数. 参数先按运行时整数转换规则转换, 小数部分向 0 截断, 再要求结果位于 <code>1..2147483647</code>. 例如 <code>720.5</code> 转换为 <code>720</code>, 而 <code>0.5</code> 转换为 <code>0</code> 后会被拒绝; 非有限数值或转换失败也会抛出异常.</p>\n<p>每个方向的基数在同一个脚本运行时中最多成功设置一次, 即使设为初始默认值也会占用该方向的设置机会. 自 AutoJs6 6.8.0 起, 只有两个参数都转换和验证成功, 且两个方向都尚未设置时, 才一次性保存两者. 参数错误或某个方向已经设置时, 本次成对设置不会修改基数, 也不会占用仍未设置的方向.</p>\n<pre><code class=\"lang-js\">try {\n    setScaleBases(720, 0); /* 纵向基数无效, 两个方向均不被占用. */\n} catch (ignored) {}\nsetScaleBases(1080, 1920); /* 失败后仍可正常设置. */\n</code></pre>\n<p>这里的整数转换兼容既有 setter 行为. 它与 <code>cX/cY/cXy/cYx</code> 调用中显式传入的绝对坐标 <code>base</code> 不同: 后者要求参数本身是正整数, 不接受 <code>720.5</code> 这样的非整数基数. <code>setScreenMetrics</code> 是触摸操作的设计分辨率设置, 不修改这里的标度基数.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2191,7 +2191,7 @@
               "textRaw": "setScaleBaseX(baseX)",
               "type": "method",
               "name": "setScaleBaseX",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseX</strong> { <a href=\"dataTypes#number\">number</a> } - 横向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置横向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseX</strong> { <a href=\"dataTypes#number\">number</a> } - 横向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置横向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 <code>1..2147483647</code> 范围内的正整数; 例如 <code>720.5</code> 保存为 <code>720</code>. 转换或校验失败时不修改基数, 也不占用设置机会.</p>\n<p>同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 <a href=\"#m-setscalebases\">setScaleBases</a> 共用该方向的设置状态. 此转换规则不同于坐标方法显式 <code>base</code> 参数的严格整数校验.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2214,7 +2214,7 @@
               "textRaw": "setScaleBaseY(baseY)",
               "type": "method",
               "name": "setScaleBaseY",
-              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置纵向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong></p>\n<ul>\n<li><strong>baseY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵向标度基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#void\">void</a> }</li>\n</ul>\n<p>设置纵向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 <code>1..2147483647</code> 范围内的正整数; 例如 <code>1280.5</code> 保存为 <code>1280</code>. 转换或校验失败时不修改基数, 也不占用设置机会.</p>\n<p>同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 <a href=\"#m-setscalebases\">setScaleBases</a> 共用该方向的设置状态. 此转换规则不同于坐标方法显式 <code>base</code> 参数的严格整数校验.</p>\n",
               "signatures": [
                 {
                   "params": [

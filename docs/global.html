@@ -2004,14 +2004,20 @@ console.log(getClip());
 <p>默认值为 <code>1280</code>.</p>
 <h2>[m] setScaleBases<span><a class="mark" href="#global_m_setscalebases" id="global_m_setscalebases">#</a></span></h2>
 <h3>setScaleBases(baseX, baseY)<span><a class="mark" href="#global_setscalebases_basex_basey" id="global_setscalebases_basex_basey">#</a></span></h3>
-<p><strong><code>Global</code></strong></p>
+<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong></p>
 <ul>
 <li><strong>baseX</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 横向标度基数</li>
 <li><strong>baseY</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 纵向标度基数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>同时设置 <a href="#global_m_cx">cX</a>, <a href="#global_m_cy">cY</a>, <a href="#global_m_cyx">cYx</a> 和 <a href="#global_m_cxy">cXy</a> 使用的标度基数. 两个参数必须为正整数.</p>
-<p>每个方向的基数在同一个脚本运行时中最多设置一次.</p>
+<p>同时设置 <a href="#global_m_cx">cX</a>, <a href="#global_m_cy">cY</a>, <a href="#global_m_cyx">cYx</a> 和 <a href="#global_m_cxy">cXy</a> 使用的标度基数. 参数先按运行时整数转换规则转换, 小数部分向 0 截断, 再要求结果位于 <code>1..2147483647</code>. 例如 <code>720.5</code> 转换为 <code>720</code>, 而 <code>0.5</code> 转换为 <code>0</code> 后会被拒绝; 非有限数值或转换失败也会抛出异常.</p>
+<p>每个方向的基数在同一个脚本运行时中最多成功设置一次, 即使设为初始默认值也会占用该方向的设置机会. 自 AutoJs6 6.8.0 起, 只有两个参数都转换和验证成功, 且两个方向都尚未设置时, 才一次性保存两者. 参数错误或某个方向已经设置时, 本次成对设置不会修改基数, 也不会占用仍未设置的方向.</p>
+<pre><code class="lang-js">try {
+    setScaleBases(720, 0); /* 纵向基数无效, 两个方向均不被占用. */
+} catch (ignored) {}
+setScaleBases(1080, 1920); /* 失败后仍可正常设置. */
+</code></pre>
+<p>这里的整数转换兼容既有 setter 行为. 它与 <code>cX/cY/cXy/cYx</code> 调用中显式传入的绝对坐标 <code>base</code> 不同: 后者要求参数本身是正整数, 不接受 <code>720.5</code> 这样的非整数基数. <code>setScreenMetrics</code> 是触摸操作的设计分辨率设置, 不修改这里的标度基数.</p>
 <h2>[m] setScaleBaseX<span><a class="mark" href="#global_m_setscalebasex" id="global_m_setscalebasex">#</a></span></h2>
 <h3>setScaleBaseX(baseX)<span><a class="mark" href="#global_setscalebasex_basex" id="global_setscalebasex_basex">#</a></span></h3>
 <p><strong><code>Global</code></strong></p>
@@ -2019,7 +2025,8 @@ console.log(getClip());
 <li><strong>baseX</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 横向标度基数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>设置横向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.</p>
+<p>设置横向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 <code>1..2147483647</code> 范围内的正整数; 例如 <code>720.5</code> 保存为 <code>720</code>. 转换或校验失败时不修改基数, 也不占用设置机会.</p>
+<p>同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 <a href="#global_m_setscalebases">setScaleBases</a> 共用该方向的设置状态. 此转换规则不同于坐标方法显式 <code>base</code> 参数的严格整数校验.</p>
 <h2>[m] setScaleBaseY<span><a class="mark" href="#global_m_setscalebasey" id="global_m_setscalebasey">#</a></span></h2>
 <h3>setScaleBaseY(baseY)<span><a class="mark" href="#global_setscalebasey_basey" id="global_setscalebasey_basey">#</a></span></h3>
 <p><strong><code>Global</code></strong></p>
@@ -2027,7 +2034,8 @@ console.log(getClip());
 <li><strong>baseY</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 纵向标度基数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>设置纵向标度基数. 参数必须为正整数, 且在同一个脚本运行时中最多设置一次.</p>
+<p>设置纵向标度基数. 先按运行时整数转换规则向 0 截断小数部分, 再校验结果为 <code>1..2147483647</code> 范围内的正整数; 例如 <code>1280.5</code> 保存为 <code>1280</code>. 转换或校验失败时不修改基数, 也不占用设置机会.</p>
+<p>同一个脚本运行时中, 该方向最多成功设置一次, 即使保存的值与初始默认值相同也算一次设置. 与 <a href="#global_m_setscalebases">setScaleBases</a> 共用该方向的设置状态. 此转换规则不同于坐标方法显式 <code>base</code> 参数的严格整数校验.</p>
 <h2>[m] cX<span><a class="mark" href="#global_m_cx" id="global_m_cx">#</a></span></h2>
 <p>按设备宽度换算横坐标或比例.</p>
 <p>自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: <code>true</code> 强制比例, <code>false</code> 强制绝对坐标, 省略, <code>null</code>, <code>undefined</code> 或 <code>&quot;auto&quot;</code> 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.</p>

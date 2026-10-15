@@ -6,6 +6,8 @@ UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 And
 
 布局标签及属性的完整清单参阅 [UI 布局属性](uiAttributes).
 
+3-Block Compose 插件 1.6.0 起的可视化设计器可以打开 ui 模式脚本, 在画布上编辑 XML 布局并由 AutoJs6 绘制预览, 见 [3-Block Compose 设计器](composeDesigner#ui-xml-工程-160).
+
 ## UI 模式
 
 脚本的第一个有效语句使用字符串指令 `'ui';` 可启用 UI 模式. 注释和空行可以位于指令之前. 指令必须位于其他有效语句之前.

@@ -325,6 +325,18 @@
 <li><span class="stability_undefined"><a href="#files_files_move_frompath_topath">files.move(fromPath, toPath)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_rename_path_newname">files.rename(path, newName)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_renamewithoutextension_path_newname">files.renameWithoutExtension(path, newName)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_m_batchrename">[m+] batchRename</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_paths_options">files.batchRename(paths, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan(paths, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_apply_plan_applyoptions">files.batchRename.apply(plan, applyOptions?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_undo_target">files.batchRename.undo(target)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_history_limit">files.batchRename.history(limit?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_isavailable">files.batchRename.isAvailable()</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_planasync_paths_options">files.batchRename.planAsync(paths, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_applyasync_plan_applyoptions">files.batchRename.applyAsync(plan, applyOptions?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_undoasync_target">files.batchRename.undoAsync(target)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#files_files_getname_path">files.getName(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_getnamewithoutextension_path">files.getNameWithoutExtension(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_getextension_path">files.getExtension(path)</a></span></li>
@@ -369,6 +381,21 @@
 <li><span class="stability_undefined"><a href="#files_pwritabletextfile_writelines_lines">PWritableTextFile.writelines(lines)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_pwritabletextfile_flush">PWritableTextFile.flush()</a></span></li>
 <li><span class="stability_undefined"><a href="#files_pwritabletextfile_close">PWritableTextFile.close()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#files_batchrenameoptions">批量重命名选项 (BatchRenameOptions)</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_variables">替换变量 (Variables)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_conflict_policies">冲突策略 (Conflict Policies)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#files_batchrenameplan">批量重命名方案 (BatchRenamePlan)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_batchrenameresult">批量重命名结果 (BatchRenameResult)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_batchrenameundoresult">批量重命名撤销结果 (BatchRenameUndoResult)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_batchrenamehistoryentry">批量重命名历史 (BatchRenameHistoryEntry)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_batchrenameerror">批量重命名错误 (BatchRenameError)</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_new_files_batchrename_batchrenameerror_message_code">new files.batchRename.BatchRenameError(message, code?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_p_name">[p#] name</a></span></li>
+<li><span class="stability_undefined"><a href="#files_p_code">[p#] code</a></span></li>
 </ul>
 </li>
 </ul>
@@ -553,6 +580,152 @@ app.viewFile(&quot;/sdcard/1.txt&quot;);
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
 </ul>
 </div><p>重命名文件, 不包含拓展名, 并返回是否重命名成功. 例如 <code>files.rename(&quot;/sdcard/1.txt&quot;, &quot;2&quot;)</code> 会把 &quot;1.txt&quot; 重命名为 &quot;2.txt&quot;.</p>
+<h2>[m+] batchRename<span><a class="mark" href="#files_m_batchrename" id="files_m_batchrename">#</a></span></h2>
+<p>批量重命名文件与文件夹. 新名称按查找与替换, 正则表达式, 计数器, 日期时间及随机值等规则计算, 支持先预览方案, 逐项排除, 冲突处理与撤销.</p>
+<p>批量重命名由外置 Batch Rename 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 Batch Rename 插件. 未发现可用插件时, 调用将抛出 (异步形态以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href="#files_batchrenameerror">BatchRenameError</a>. <a href="#files_files_batchrename_isavailable">files.batchRename.isAvailable</a> 可预先探测.</p>
+<p>插件只计算新名称; 枚举目标, 改名, 撤销日志及回收站均由 AutoJs6 完成. 文件管理器中的批量重命名 (多选工具栏, 文件夹菜单 &quot;批量重命名其中的项目&quot; 及重命名对话框 &quot;更多&quot; 菜单) 使用同一插件与同一撤销日志.</p>
+<p>一次重命名分为两步: <a href="#files_files_batchrename_plan_paths_options">plan</a> 枚举目标并计算 <a href="#files_batchrenameplan">方案</a>, 不修改任何文件; <a href="#files_files_batchrename_apply_plan_applyoptions">apply</a> 执行方案并返回 <a href="#files_batchrenameresult">结果</a>. 直接调用 <code>files.batchRename(paths, options)</code> 等价于先 plan 再 apply.</p>
+<p><code>paths</code> 为路径字符串或其数组, 相对路径按脚本工作目录解析 (与 <a href="#files_m_path">files.path</a> 相同). 给出的每个路径都是深度为 0 的条目. 给出文件夹且 <code>includeSubfolders</code> 为 <code>true</code> (默认) 时, 其中的全部条目也会加入, 深度逐层加 1, 按深度优先的顺序排列, 同一文件夹内按名称排序 (不区分大小写). 符号链接不会被跟随或改名: 给出的路径不能是符号链接, 文件夹中的符号链接被跳过.</p>
+<p>一个方案至多包含 2000 个条目, 涉及至多 512 个文件夹, 这些文件夹合计至多 20000 个名称, 给出的文件夹之下至多 32 层, 超出时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<p>同步形态阻塞当前脚本线程直至完成, 停止脚本会取消等待; 异步形态 (<code>planAsync</code>, <code>applyAsync</code>, <code>undoAsync</code>) 立即返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 进度回调与结果在脚本线程执行. 除 RegExp 形式的 <code>search</code> 与 <code>onProgress</code> 函数外, 选项会像 <code>JSON.stringify</code> 一样序列化.</p>
+<p><code>$files.batchRename</code> 与 <code>files.batchRename</code> 指向同一对象.</p>
+<pre><code class="lang-js">let dir = files.path(&#39;./batch-rename-demo&#39;);
+[&#39;IMG_0001.jpg&#39;, &#39;IMG_0002.jpg&#39;, &#39;notes.txt&#39;].forEach(name =&gt; files.createWithDirs(files.join(dir, name)));
+
+let plan = files.batchRename.plan(dir, { search: &#39;IMG_&#39;, replace: &#39;Photo_&#39;, includeFolders: false });
+plan.items.forEach(it =&gt; console.log(it.name + &#39; -&gt; &#39; + it.newName + &#39; (&#39; + it.status + &#39;)&#39;));
+// batch-rename-demo -&gt; batch-rename-demo (excluded)
+// IMG_0001.jpg -&gt; Photo_0001.jpg (rename)
+// IMG_0002.jpg -&gt; Photo_0002.jpg (rename)
+// notes.txt -&gt; notes.txt (unchanged)
+
+if (!plan.rejected) {
+    let result = files.batchRename.apply(plan);
+    console.log(result.counts.renamed); // 2
+}
+</code></pre>
+<h3>files.batchRename(paths, options)<span><a class="mark" href="#files_files_batchrename_paths_options" id="files_files_batchrename_paths_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>paths</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 文件或文件夹路径</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameresult">BatchRenameResult</a></span> } - 执行结果</li>
+</ul>
+<p>计算方案并立即执行, 相当于 <code>files.batchRename.apply(files.batchRename.plan(paths, options), { onProgress: options.onProgress })</code>. 方案被拒绝时抛出 <code>PLAN_REJECTED</code>, 不改名任何条目.</p>
+<pre><code class="lang-js">/* 把 ./docs 中所有 .txt 文件的扩展名改为 md. */
+let result = files.batchRename(&#39;./docs&#39;, { search: &#39;txt&#39;, replace: &#39;md&#39;, target: &#39;extension&#39;, includeFolders: false });
+console.log(result.counts.renamed, result.counts.skipped);
+</code></pre>
+<h3>files.batchRename.plan(paths, options)<span><a class="mark" href="#files_files_batchrename_plan_paths_options" id="files_files_batchrename_plan_paths_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>paths</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 文件或文件夹路径</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameplan">BatchRenamePlan</a></span> } - 重命名方案</li>
+</ul>
+<p>计算每个条目的新名称与状态 (<code>rename</code>, <code>unchanged</code>, <code>conflict</code>, <code>invalid</code> 或 <code>excluded</code>), 不修改任何文件. 计算时刻 (<code>dateTime: &#39;now&#39;</code> 的取值) 在此时确定.</p>
+<p>可将方案中条目的 <code>excluded</code> 设为 <code>true</code> 后再交给 <a href="#files_files_batchrename_apply_plan_applyoptions">apply</a> 执行. 每个脚本保留最近 16 个方案供 apply 使用, 更早的方案执行时抛出 <code>PLAN_STALE</code>.</p>
+<pre><code class="lang-js">/* 日期前缀 (取文件修改时间) 与三位序号, 如 IMG_1234.jpg -&gt; 2026-10-15_001.jpg. */
+let plan = files.batchRename.plan(&#39;./camera&#39;, {
+    search: /^IMG_\d+/,
+    replace: &#39;$YYYY-$MM-$DD_${padding=3;start=1}&#39;,
+    enumerate: true,
+    includeFolders: false,
+});
+plan.items.filter(it =&gt; it.status === &#39;rename&#39;).forEach(it =&gt; console.log(it.name, &#39;-&gt;&#39;, it.newName));
+</code></pre>
+<h3>files.batchRename.apply(plan, applyOptions?)<span><a class="mark" href="#files_files_batchrename_apply_plan_applyoptions" id="files_files_batchrename_apply_plan_applyoptions">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>plan</strong> { <span class="type"><a href="#files_batchrenameplan">BatchRenamePlan</a></span> } - <a href="#files_files_batchrename_plan_paths_options">plan</a> 返回的方案</li>
+<li><strong>[ applyOptions ]</strong> {{<ul>
+<li>onConflict?: <code>&#39;fail&#39;</code> | <code>&#39;skip&#39;</code> | <code>&#39;number&#39;</code> | <code>&#39;overwrite&#39;</code>;</li>
+<li>onProgress?: (done: <a href="dataTypes.html#datatypes_number">number</a>, total: <a href="dataTypes.html#datatypes_number">number</a>, item: <a href="#files_batchrenameresult">BatchRenameResultItem</a>) =&gt; <a href="dataTypes.html#datatypes_void">void</a>;</li>
+</ul>
+</li>
+<li>}} - 执行选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameresult">BatchRenameResult</a></span> } - 执行结果</li>
+</ul>
+<p>执行方案, 只改名状态为 <code>rename</code> 的条目. 脚本修改了条目的 <code>excluded</code>, 或以 <code>onConflict</code> 指定了与方案不同的 <a href="#files_conflict_policies">冲突策略</a> 时, 插件以同一批目标与同一计算时刻重新计算方案后再执行, 因此计数器等取值可能随排除而变化.</p>
+<p>执行前逐项核对: 条目必须仍然存在且类型不变, 文件的修改时间与大小必须与 plan 时相同, 否则该条目状态为 <code>stale</code> 且不改名, 其余条目照常执行. 嵌套条目先改深层再改浅层, 互换名称等循环改名经临时名称完成. 至少改名一个条目的批次记入撤销日志, 其 ID 为结果的 <code>batchId</code>.</p>
+<p>每个方案至多执行一次, 再次执行抛出 <code>PLAN_STALE</code>. 方案被拒绝时抛出 <code>PLAN_REJECTED</code> 且不改名任何条目, 此时方案不会被消耗, 可改用其他 <code>onConflict</code> 再次执行.</p>
+<p><code>onProgress</code> 每处理完一个待改名条目调用一次: <code>done</code> 为已处理数, <code>total</code> 为待改名条目数, <code>item</code> 的结构与结果的 <code>items</code> 元素相同. <code>onProgress</code> 抛出的异常不会中断批次: 批次完成并记入日志后, apply 再抛出该异常.</p>
+<pre><code class="lang-js">let plan = files.batchRename.plan(&#39;./photos&#39;, { search: /\s+/g, replace: &#39;_&#39; });
+/* 排除名称以 &quot;keep&quot; 开头的条目. */
+plan.items.forEach((it) =&gt; {
+    if (it.name.startsWith(&#39;keep&#39;)) it.excluded = true;
+});
+let result = files.batchRename.apply(plan, {
+    onConflict: &#39;number&#39;,
+    onProgress: (done, total, item) =&gt; console.log(done + &#39;/&#39; + total, item.newPath),
+});
+console.log(result.batchId, result.undoable);
+</code></pre>
+<h3>files.batchRename.undo(target)<span><a class="mark" href="#files_files_batchrename_undo_target" id="files_files_batchrename_undo_target">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#files_batchrenameresult">BatchRenameResult</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - apply 的结果或批次 ID</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameundoresult">BatchRenameUndoResult</a></span> } - 撤销结果</li>
+</ul>
+<p>撤销一个批次, 把其中仍持有新名称的条目改回原名, 浅层条目先恢复. 改名之后又被修改, 移动或删除的条目状态为 <code>stale</code>, 不会被恢复. 以 <code>overwrite</code> 策略替换的既有条目会从回收站恢复.</p>
+<p>文件管理器产生的批次也可撤销 (批次 ID 见 <a href="#files_files_batchrename_history_limit">history</a>). 批次不存在, 已不在日志中, 或已没有可撤销的条目时抛出 <code>UNDO_UNAVAILABLE</code>. 恢复失败的条目 (状态 <code>failed</code>) 可再次调用 undo 重试.</p>
+<pre><code class="lang-js">let result = files.batchRename(&#39;./notes&#39;, { search: &#39;draft&#39;, replace: &#39;final&#39; });
+let undone = files.batchRename.undo(result);
+console.log(undone.state, undone.counts.restored); // restored ...
+</code></pre>
+<h3>files.batchRename.history(limit?)<span><a class="mark" href="#files_files_batchrename_history_limit" id="files_files_batchrename_history_limit">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>[ limit = 20 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最多返回的批次数, 为非负整数, 大于 20 时按 20 处理</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenamehistoryentry">BatchRenameHistoryEntry</a>[]</span> } - 批次列表</li>
+</ul>
+<p>返回撤销日志中最近的批次, 最新的在前, 包括脚本与文件管理器产生的批次. 日志为脚本 (所有脚本共用) 与文件管理器各保留最近 20 个批次, 更早的批次被移出日志, 无法再撤销.</p>
+<pre><code class="lang-js">/* 撤销最近一个仍可撤销的批次. */
+let latest = files.batchRename.history().find(entry =&gt; entry.undoable);
+if (latest) {
+    console.log(latest.source, new Date(latest.createdAt));
+    files.batchRename.undo(latest.batchId);
+}
+</code></pre>
+<h3>files.batchRename.isAvailable()<span><a class="mark" href="#files_files_batchrename_isavailable" id="files_files_batchrename_isavailable">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>返回当前是否有已安装, 已启用, 已授权且与当前 AutoJs6 版本兼容的 Batch Rename 插件可用. 此方法不抛出插件相关的异常.</p>
+<pre><code class="lang-js">if (!files.batchRename.isAvailable()) {
+    toastLog(&#39;请先在插件中心安装并启用 Batch Rename 插件&#39;);
+    exit();
+}
+</code></pre>
+<h3>files.batchRename.planAsync(paths, options)<span><a class="mark" href="#files_files_batchrename_planasync_paths_options" id="files_files_batchrename_planasync_paths_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>paths</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 文件或文件夹路径</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#files_batchrenameplan">BatchRenamePlan</a>&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_plan_paths_options">plan</a> 的异步形态. 参数错误同样以 Promise 拒绝.</p>
+<h3>files.batchRename.applyAsync(plan, applyOptions?)<span><a class="mark" href="#files_files_batchrename_applyasync_plan_applyoptions" id="files_files_batchrename_applyasync_plan_applyoptions">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>plan</strong> { <span class="type"><a href="#files_batchrenameplan">BatchRenamePlan</a></span> } - <a href="#files_files_batchrename_plan_paths_options">plan</a> 或 planAsync 返回的方案</li>
+<li><strong>[ applyOptions ]</strong> {{ onConflict?: <code>&#39;fail&#39;</code> | <code>&#39;skip&#39;</code> | <code>&#39;number&#39;</code> | <code>&#39;overwrite&#39;</code>; onProgress?: <a href="dataTypes.html#datatypes_function">Function</a> }} - 执行选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#files_batchrenameresult">BatchRenameResult</a>&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_apply_plan_applyoptions">apply</a> 的异步形态. <code>onProgress</code> 在脚本线程调用.</p>
+<pre><code class="lang-js">files.batchRename.planAsync(&#39;./downloads&#39;, { search: /[()]/g, replace: &#39;&#39;, includeFolders: false })
+    .then(plan =&gt; files.batchRename.applyAsync(plan, { onConflict: &#39;skip&#39; }))
+    .then(result =&gt; console.log(result.counts))
+    .catch(e =&gt; console.error(e.toString()));
+</code></pre>
+<h3>files.batchRename.undoAsync(target)<span><a class="mark" href="#files_files_batchrename_undoasync_target" id="files_files_batchrename_undoasync_target">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#files_batchrenameresult">BatchRenameResult</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - apply 的结果或批次 ID</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#files_batchrenameundoresult">BatchRenameUndoResult</a>&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_undo_target">undo</a> 的异步形态.</p>
 <h2>files.getName(path)<span><a class="mark" href="#files_files_getname_path" id="files_files_getname_path">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>
@@ -701,6 +874,817 @@ log(jsFiles);
 <h2>PWritableTextFile.close()<span><a class="mark" href="#files_pwritabletextfile_close" id="files_pwritabletextfile_close">#</a></span></h2>
 <p>关闭文件. 同时会被缓冲区内容输出到文件.</p>
 <p><strong>打开一个文件写入后, 不再使用时务必关闭, 否则文件可能会丢失</strong></p>
+<h1>批量重命名选项 (BatchRenameOptions)<span><a class="mark" href="#files_batchrenameoptions" id="files_batchrenameoptions">#</a></span></h1>
+<p><a href="#files_m_batchrename">files.batchRename</a> 与 <a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan</a> 的选项对象. 除 <code>search</code> 外均可省略, 值为 <code>null</code> 或 <code>undefined</code> 时取默认值. 类型不符或取值未知时抛出 <code>INVALID_OPTIONS</code>.</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>类型</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>search</td>
+<td>string \</td>
+<td>RegExp</td>
+<td>(必填)</td>
+<td>查找内容, 见下文</td>
+</tr>
+<tr>
+<td>replace</td>
+<td>string</td>
+<td><code>&#39;&#39;</code></td>
+<td>替换文本, 可含 <a href="#files_variables">替换变量</a></td>
+</tr>
+<tr>
+<td>regex</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>将字符串形式的 <code>search</code> 作为 ECMAScript 正则表达式</td>
+</tr>
+<tr>
+<td>matchAll</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>替换全部匹配, 否则只替换第一个</td>
+</tr>
+<tr>
+<td>caseSensitive</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>查找时区分大小写</td>
+</tr>
+<tr>
+<td>target</td>
+<td><code>&#39;all&#39;</code> \</td>
+<td><code>&#39;name&#39;</code> \</td>
+<td><code>&#39;extension&#39;</code></td>
+<td><code>&#39;all&#39;</code></td>
+<td>查找与替换作用于完整名称, 主文件名或扩展名</td>
+</tr>
+<tr>
+<td>includeFiles</td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>改名文件</td>
+</tr>
+<tr>
+<td>includeFolders</td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>改名文件夹, 包括 <code>paths</code> 中给出的文件夹自身</td>
+</tr>
+<tr>
+<td>includeSubfolders</td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td>加入给出文件夹中的全部条目 (含各级子文件夹); 为 <code>false</code> 时只处理 <code>paths</code> 中给出的条目</td>
+</tr>
+<tr>
+<td>format</td>
+<td><code>&#39;none&#39;</code> \</td>
+<td><code>&#39;lower&#39;</code> \</td>
+<td><code>&#39;upper&#39;</code> \</td>
+<td><code>&#39;title&#39;</code> \</td>
+<td><code>&#39;capitalize&#39;</code></td>
+<td><code>&#39;none&#39;</code></td>
+<td>替换后的文本格式: 不变, 小写, 大写, 首字符大写, 每个以空白分隔的词首字符大写. 大小写转换跟随当前语言</td>
+</tr>
+<tr>
+<td>enumerate</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>展开计数器 <code>${...}</code>, 否则作为字面文本</td>
+</tr>
+<tr>
+<td>random</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>展开随机值 <code>${rstring...=N}</code> 与 <code>${ruuidv4}</code>, 否则作为字面文本</td>
+</tr>
+<tr>
+<td>dateTime</td>
+<td><code>&#39;modified&#39;</code> \</td>
+<td><code>&#39;now&#39;</code> \</td>
+<td><code>false</code></td>
+<td><code>&#39;modified&#39;</code></td>
+<td>日期时间变量取条目的修改时间或调用 plan 的时刻; 为 <code>false</code> 时日期时间变量作为字面文本</td>
+</tr>
+<tr>
+<td>normalize</td>
+<td><code>&#39;nfc&#39;</code> \</td>
+<td><code>&#39;nfd&#39;</code> \</td>
+<td><code>false</code></td>
+<td><code>false</code></td>
+<td>Unicode 规范化</td>
+</tr>
+<tr>
+<td>halfWidth</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>全角字符 (U+FF01 至 U+FF5E) 及全角空格转为半角</td>
+</tr>
+<tr>
+<td>sanitize</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>把 <code>\</code>, <code>:</code>, <code>*</code>, <code>?</code>, <code>&quot;</code>, <code>&lt;</code>, <code>&gt;</code>, `\</td>
+<td><code>与控制字符替换为</code>sanitizeReplacement<code>, 并在 Windows 保留设备名 (如</code>CON<code>,</code>com1.txt<code>) 之后追加</code>sanitizeReplacement<code>(为空时追加</code>_`), 便于复制到 FAT32/exFAT 存储或 Windows</td>
+</tr>
+<tr>
+<td>sanitizeReplacement</td>
+<td>string</td>
+<td><code>&#39;_&#39;</code></td>
+<td><code>sanitize</code> 使用的替换文本, 不能包含它所替换的字符或 <code>/</code></td>
+</tr>
+<tr>
+<td>trim</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>去除开头的空白以及结尾的空白与点号</td>
+</tr>
+<tr>
+<td>continueNumbering</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>计数器从相关文件夹已有名称中的最大序号之后继续</td>
+</tr>
+<tr>
+<td>onConflict</td>
+<td><code>&#39;fail&#39;</code> \</td>
+<td><code>&#39;skip&#39;</code> \</td>
+<td><code>&#39;number&#39;</code> \</td>
+<td><code>&#39;overwrite&#39;</code></td>
+<td><code>&#39;fail&#39;</code></td>
+<td><a href="#files_conflict_policies">冲突策略</a></td>
+</tr>
+<tr>
+<td>conflictNumberPattern</td>
+<td>string</td>
+<td><code>&#39; ({n})&#39;</code></td>
+<td><code>&#39;number&#39;</code> 策略追加在主文件名之后的后缀, <code>{n}</code> 为序号; 必须包含 <code>{n}</code>, 不能包含 <code>/</code></td>
+</tr>
+<tr>
+<td>onProgress</td>
+<td>function</td>
+<td>-</td>
+<td>进度回调, 仅 <a href="#files_files_batchrename_paths_options">files.batchRename(paths, options)</a> 使用, 与 apply 的 <code>applyOptions.onProgress</code> 相同</td>
+</tr>
+</tbody>
+</table>
+<p><code>search</code>, <code>replace</code> 及其他文本选项各自至多 4096 个字符, 超出时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<p><code>search</code> 为字符串时, <code>regex</code> 决定其为纯文本还是正则表达式源码, <code>matchAll</code> 与 <code>caseSensitive</code> 分别对应 <code>g</code> 与 <code>i</code> 标志. <code>search</code> 为 RegExp 时总按正则表达式处理, 此时忽略 <code>regex</code>, <code>matchAll</code> 与 <code>caseSensitive</code>: <code>g</code> 标志表示替换全部匹配, <code>i</code> 标志表示不区分大小写, <code>m</code>, <code>s</code>, <code>u</code>, <code>y</code> 标志照常生效. 正则表达式语法为 ECMAScript (与脚本中的 RegExp 一致). 单次匹配超过 1 秒或整个方案的匹配超过 30 秒时抛出 <code>LIMIT_EXCEEDED</code>. <code>search</code> 为空字符串时匹配全部条目但不替换文本, 可用于只应用文本格式与名称清理.</p>
+<p>扩展名为文件名最后一个点号之后的文本. 文件夹, 不含点号的名称, 仅以点号开头的名称 (如 <code>.nomedia</code>) 及以点号结尾的名称没有扩展名, <code>target</code> 为 <code>&#39;extension&#39;</code> 时这些条目保持不变. <code>archive.tar.gz</code> 的主文件名为 <code>archive.tar</code>, 扩展名为 <code>gz</code>.</p>
+<p>每个条目按以下顺序处理, 计算出的名称与原名称相同时状态为 <code>unchanged</code>:</p>
+<ol>
+<li>被排除的条目 (脚本排除或被 <code>includeFiles</code>, <code>includeFolders</code>, <code>includeSubfolders</code> 排除) 保持原名.</li>
+<li><code>target</code> 指定的部分不匹配 <code>search</code> 时保持原名.</li>
+<li>展开 <code>replace</code> 中的变量, 再执行替换.</li>
+<li>依次应用 <code>format</code>, <code>normalize</code>, <code>halfWidth</code>, <code>sanitize</code> 与 <code>trim</code>, 最后与未参与替换的部分拼回名称.</li>
+</ol>
+<h2>替换变量 (Variables)<span><a class="mark" href="#files_variables" id="files_variables">#</a></span></h2>
+<p><code>replace</code> 中可使用以下变量. 变量对应的选项关闭时, 以及无法解析的写法, 都作为字面文本保留. <code>$$</code> 表示一个字面 <code>$</code>, 且其后的文本不会被识别为变量 (如 <code>$$YYYY</code> 得到 <code>$YYYY</code>).</p>
+<p>正则表达式模式下, <code>replace</code> 还可使用 ECMAScript 替换记号, 如 <code>$1</code>, <code>$&lt;name&gt;</code> 与 <code>$&amp;</code>. 纯文本模式下这些写法作为字面文本.</p>
+<p>计数器 (需要 <code>enumerate: true</code>):</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${}</code></td>
+<td>从 0 开始, 每次加 1</td>
+</tr>
+<tr>
+<td><code>${start=X}</code></td>
+<td>起始值为 X (至多 15 位的整数, 可为负数)</td>
+</tr>
+<tr>
+<td><code>${increment=X}</code></td>
+<td>增量为 X (至多 15 位的整数, 可为负数或 0)</td>
+</tr>
+<tr>
+<td><code>${padding=X}</code></td>
+<td>至少 X 位 (0 至 255), 不足时在前面补 0</td>
+</tr>
+<tr>
+<td><code>${start=10;increment=2;padding=4}</code></td>
+<td>以 <code>;</code> 组合, 键的顺序任意</td>
+</tr>
+</tbody>
+</table>
+<p>计数器按条目顺序取值, 只对新名称与原名称不同的条目递增. 计数器在冲突处理之前取值, 因此因冲突而未改名的条目同样占用一个序号. 同一 <code>replace</code> 中的多个计数器各自按自己的设置取值.</p>
+<p><code>continueNumbering</code> 按 <code>replace</code> 中第一个计数器两侧的字面文本, 在相关文件夹的已有名称中查找最大序号, 使第一个值大于它. 计数器两侧都没有字面文本, 增量不为正数, 或正则表达式模式下两侧的字面文本含 <code>$</code> 时, 计数器照常从起始值开始.</p>
+<p>日期时间 (<code>dateTime</code> 不为 <code>false</code> 时可用, 区分大小写, 较长的名称优先, 如 <code>$MMM</code> 先于 <code>$MM</code>):</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$YYYY</code></td>
+<td>四位年份</td>
+<td><code>$hh</code></td>
+<td>两位小时 (24 小时制)</td>
+</tr>
+<tr>
+<td><code>$YY</code></td>
+<td>年份后两位</td>
+<td><code>$h</code></td>
+<td>小时</td>
+</tr>
+<tr>
+<td><code>$Y</code></td>
+<td>年份最后一位</td>
+<td><code>$mm</code></td>
+<td>两位分钟</td>
+</tr>
+<tr>
+<td><code>$MMMM</code></td>
+<td>月份全称</td>
+<td><code>$m</code></td>
+<td>分钟</td>
+</tr>
+<tr>
+<td><code>$MMM</code></td>
+<td>月份简称</td>
+<td><code>$ss</code></td>
+<td>两位秒</td>
+</tr>
+<tr>
+<td><code>$MM</code></td>
+<td>两位月份</td>
+<td><code>$s</code></td>
+<td>秒</td>
+</tr>
+<tr>
+<td><code>$M</code></td>
+<td>月份</td>
+<td><code>$fff</code></td>
+<td>三位毫秒</td>
+</tr>
+<tr>
+<td><code>$DDDD</code></td>
+<td>星期全称</td>
+<td><code>$ff</code></td>
+<td>毫秒的前两位</td>
+</tr>
+<tr>
+<td><code>$DDD</code></td>
+<td>星期简称</td>
+<td><code>$f</code></td>
+<td>毫秒的第一位</td>
+</tr>
+<tr>
+<td><code>$DD</code></td>
+<td>两位日期</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>$D</code></td>
+<td>日期</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>月份与星期的名称使用当前语言, 时间使用当前时区. 由于 <code>dateTime</code> 默认为 <code>&#39;modified&#39;</code>, <code>replace</code> 中 <code>$</code> 之后紧跟上述字母时会被识别为日期时间变量 (如 <code>$file</code> 得到 <code>$f</code> 的值加 <code>ile</code>), 需要字面 <code>$</code> 时写作 <code>$$</code>, 或设置 <code>dateTime: false</code>.</p>
+<p>随机值 (需要 <code>random: true</code>):</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${rstringalnum=N}</code></td>
+<td>N 个随机字母或数字</td>
+</tr>
+<tr>
+<td><code>${rstringalpha=N}</code></td>
+<td>N 个随机字母</td>
+</tr>
+<tr>
+<td><code>${rstringdigit=N}</code></td>
+<td>N 个随机数字</td>
+</tr>
+<tr>
+<td><code>${ruuidv4}</code></td>
+<td>随机 UUID (第 4 版, 小写)</td>
+</tr>
+</tbody>
+</table>
+<p>N 为 1 至 256, 超过 256 时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<pre><code class="lang-js">/* 用计数器为照片重新编号: a.jpg, b.jpg -&gt; trip_01.jpg, trip_02.jpg. */
+files.batchRename(&#39;./trip&#39;, {
+    search: /^.+$/,
+    replace: &#39;trip_${start=1;padding=2}&#39;,
+    target: &#39;name&#39;,
+    enumerate: true,
+    includeFolders: false,
+});
+
+/* 只转为小写, 不替换文本. */
+files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#39;, includeFolders: false });
+</code></pre>
+<h2>冲突策略 (Conflict Policies)<span><a class="mark" href="#files_conflict_policies" id="files_conflict_policies">#</a></span></h2>
+<p>同一文件夹中, 新名称与本批另一条目的新名称相同 (<code>duplicateInBatch</code>), 或与不改名的既有条目相同 (<code>existingEntry</code>) 时产生冲突. 在不区分大小写的存储 (如 FAT32/exFAT 格式的 SD 卡) 上按不区分大小写比较.</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&#39;fail&#39;</code></td>
+<td>方案被拒绝 (<code>rejected</code> 为 <code>true</code>), 所有冲突条目的状态为 <code>conflict</code></td>
+</tr>
+<tr>
+<td><code>&#39;skip&#39;</code></td>
+<td>冲突条目保留原名 (状态为 <code>conflict</code>), 其余条目照常改名</td>
+</tr>
+<tr>
+<td><code>&#39;number&#39;</code></td>
+<td>在主文件名之后追加 <code>conflictNumberPattern</code>, 取 1 至 999 中第一个可用的序号 (如 <code>photo (1).jpg</code>); 无可用序号时状态为 <code>conflict</code> (<code>numbersExhausted</code>)</td>
+</tr>
+<tr>
+<td><code>&#39;overwrite&#39;</code></td>
+<td>替换同名的既有条目, 被替换的条目先移入 AutoJs6 回收站, 撤销时恢复; 本批内的重名仍为冲突</td>
+</tr>
+</tbody>
+</table>
+<p>在后三种策略下, 本批内重名的一组条目中, 顺序最前的条目保留该名称. 存在新名称非法的条目 (状态 <code>invalid</code>) 时, 方案总会被拒绝.</p>
+<h1>批量重命名方案 (BatchRenamePlan)<span><a class="mark" href="#files_batchrenameplan" id="files_batchrenameplan">#</a></span></h1>
+<p><a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan</a> 的返回值.</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>string</td>
+<td>方案 ID</td>
+</tr>
+<tr>
+<td>options</td>
+<td>object</td>
+<td>补全默认值后的选项. RegExp 形式的 <code>search</code> 记为其 <code>source</code>, 并按其标志给出 <code>regex</code>, <code>matchAll</code>, <code>caseSensitive</code> 及 <code>regexFlags</code> (<code>m</code>, <code>s</code>, <code>u</code>, <code>y</code> 中的标志)</td>
+</tr>
+<tr>
+<td>items</td>
+<td>object[]</td>
+<td>条目, 见下文</td>
+</tr>
+<tr>
+<td>counts</td>
+<td>object</td>
+<td>各状态的条目数: <code>rename</code>, <code>unchanged</code>, <code>conflict</code>, <code>invalid</code>, <code>excluded</code></td>
+</tr>
+<tr>
+<td>rejected</td>
+<td>boolean</td>
+<td>存在 <code>invalid</code> 条目, 或 <code>onConflict</code> 为 <code>&#39;fail&#39;</code> 且存在 <code>conflict</code> 条目时为 <code>true</code>; 执行被拒绝的方案将抛出 <code>PLAN_REJECTED</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>items</code> 的元素 (BatchRenamePlanItem):</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>path</td>
+<td>string</td>
+<td>绝对路径</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>当前名称</td>
+</tr>
+<tr>
+<td>kind</td>
+<td><code>&#39;file&#39;</code> \</td>
+<td><code>&#39;dir&#39;</code></td>
+<td>文件或文件夹</td>
+</tr>
+<tr>
+<td>depth</td>
+<td>number</td>
+<td><code>paths</code> 中给出的条目为 0, 其下每层加 1</td>
+</tr>
+<tr>
+<td>newName</td>
+<td>string</td>
+<td>新名称. 不改名的条目为当前名称, <code>conflict</code> 与 <code>invalid</code> 条目为计算出但不能使用的名称</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>&#39;rename&#39;</code> 将改名, <code>&#39;unchanged&#39;</code> 名称不变, <code>&#39;conflict&#39;</code> 冲突, <code>&#39;invalid&#39;</code> 新名称非法, <code>&#39;excluded&#39;</code> 被排除</td>
+</tr>
+<tr>
+<td>reason</td>
+<td>string \</td>
+<td>null</td>
+<td>状态的原因, 见下表</td>
+</tr>
+<tr>
+<td>excluded</td>
+<td>boolean</td>
+<td>脚本排除标志. 设为 <code>true</code> 后执行时该条目不改名 (原因为 <code>excludedByCaller</code>). 被 <code>includeFiles</code> 等选项排除的条目此值为 <code>false</code>, 状态为 <code>excluded</code>, 原因为 <code>notIncluded</code></td>
+</tr>
+<tr>
+<td>overwrites</td>
+<td>boolean</td>
+<td>执行时将替换同名的既有条目 (<code>onConflict</code> 为 <code>&#39;overwrite&#39;</code>)</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>reason</th>
+<th>status</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>noMatch</td>
+<td>unchanged</td>
+<td>作用部分不匹配 <code>search</code>, 或 <code>target</code> 为 <code>&#39;extension&#39;</code> 而条目没有扩展名</td>
+</tr>
+<tr>
+<td>sameName</td>
+<td>unchanged</td>
+<td>计算出的名称与当前名称相同</td>
+</tr>
+<tr>
+<td>excludedByCaller</td>
+<td>excluded</td>
+<td>脚本将 <code>excluded</code> 设为 <code>true</code></td>
+</tr>
+<tr>
+<td>notIncluded</td>
+<td>excluded</td>
+<td>被 <code>includeFiles</code>, <code>includeFolders</code> 或 <code>includeSubfolders</code> 排除</td>
+</tr>
+<tr>
+<td>duplicateInBatch</td>
+<td>conflict</td>
+<td>本批另一条目在同一文件夹中得到相同名称</td>
+</tr>
+<tr>
+<td>existingEntry</td>
+<td>conflict</td>
+<td>名称已被不改名的既有条目占用</td>
+</tr>
+<tr>
+<td>numbersExhausted</td>
+<td>conflict</td>
+<td><code>&#39;number&#39;</code> 策略在 999 以内没有可用的序号</td>
+</tr>
+<tr>
+<td>numbered</td>
+<td>rename</td>
+<td><code>&#39;number&#39;</code> 策略追加了序号</td>
+</tr>
+<tr>
+<td>overwrite</td>
+<td>rename</td>
+<td><code>&#39;overwrite&#39;</code> 策略将替换既有条目</td>
+</tr>
+<tr>
+<td>empty</td>
+<td>invalid</td>
+<td>名称为空</td>
+</tr>
+<tr>
+<td>dotName</td>
+<td>invalid</td>
+<td>名称为 <code>.</code> 或 <code>..</code></td>
+</tr>
+<tr>
+<td>separator</td>
+<td>invalid</td>
+<td>名称包含 <code>/</code> 或 NUL 字符</td>
+</tr>
+<tr>
+<td>tooLong</td>
+<td>invalid</td>
+<td>名称超过 255 个 UTF-8 字节</td>
+</tr>
+<tr>
+<td>restrictedCharacter</td>
+<td>invalid</td>
+<td>所在存储 (如 FAT32/exFAT) 不允许名称中的某个字符, 可开启 <code>sanitize</code></td>
+</tr>
+</tbody>
+</table>
+<h1>批量重命名结果 (BatchRenameResult)<span><a class="mark" href="#files_batchrenameresult" id="files_batchrenameresult">#</a></span></h1>
+<p><a href="#files_files_batchrename_paths_options">files.batchRename(paths, options)</a> 与 <a href="#files_files_batchrename_apply_plan_applyoptions">files.batchRename.apply</a> 的返回值.</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>batchId</td>
+<td>string \</td>
+<td>null</td>
+<td>撤销日志中的批次 ID, 没有待改名的条目时为 <code>null</code></td>
+</tr>
+<tr>
+<td>counts</td>
+<td>object</td>
+<td>各状态的条目数: <code>renamed</code>, <code>skipped</code>, <code>failed</code>, <code>stale</code>, <code>excluded</code></td>
+</tr>
+<tr>
+<td>items</td>
+<td>object[]</td>
+<td>与方案的 <code>items</code> 一一对应, 见下文</td>
+</tr>
+<tr>
+<td>undoable</td>
+<td>boolean</td>
+<td>是否有可撤销的条目</td>
+</tr>
+</tbody>
+</table>
+<p><code>items</code> 的元素 (BatchRenameResultItem, 也是 <code>onProgress</code> 的 <code>item</code> 参数):</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>path</td>
+<td>string</td>
+<td>执行前的路径</td>
+</tr>
+<tr>
+<td>newPath</td>
+<td>string</td>
+<td>执行后的路径, 已计入上层文件夹的改名</td>
+</tr>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>&#39;renamed&#39;</code> 已改名, <code>&#39;skipped&#39;</code> 方案中不改名 (<code>unchanged</code> 或 <code>conflict</code>), <code>&#39;failed&#39;</code> 改名失败, <code>&#39;stale&#39;</code> 方案计算后被修改, <code>&#39;excluded&#39;</code> 被排除</td>
+</tr>
+<tr>
+<td>reason</td>
+<td>string \</td>
+<td>null</td>
+<td>原因. <code>skipped</code> 与 <code>excluded</code> 条目为方案中的原因, 其他见下表</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>reason</th>
+<th>status</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>missing</td>
+<td>stale</td>
+<td>条目已不存在</td>
+</tr>
+<tr>
+<td>kindChanged</td>
+<td>stale</td>
+<td>条目在文件与文件夹之间发生了变化</td>
+</tr>
+<tr>
+<td>changed</td>
+<td>stale</td>
+<td>文件的修改时间或大小已变化</td>
+</tr>
+<tr>
+<td>occupied</td>
+<td>failed</td>
+<td>新名称已被占用</td>
+</tr>
+<tr>
+<td>trashFailed</td>
+<td>failed</td>
+<td><code>&#39;overwrite&#39;</code> 策略无法将既有条目移入回收站</td>
+</tr>
+<tr>
+<td>ioFailed</td>
+<td>failed</td>
+<td>文件系统拒绝改名</td>
+</tr>
+</tbody>
+</table>
+<h1>批量重命名撤销结果 (BatchRenameUndoResult)<span><a class="mark" href="#files_batchrenameundoresult" id="files_batchrenameundoresult">#</a></span></h1>
+<p><a href="#files_files_batchrename_undo_target">files.batchRename.undo</a> 的返回值.</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>batchId</td>
+<td>string</td>
+<td>批次 ID</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td><code>&#39;restored&#39;</code> 本次处理的条目全部恢复, <code>&#39;recoveryRequired&#39;</code> 部分条目未能恢复</td>
+</tr>
+<tr>
+<td>counts</td>
+<td>object</td>
+<td>各状态的条目数: <code>restored</code>, <code>stale</code>, <code>failed</code></td>
+</tr>
+<tr>
+<td>items</td>
+<td>object[]</td>
+<td>本次处理的条目: <code>path</code> (撤销前的路径), <code>newPath</code> (撤销后的路径), <code>status</code> (<code>&#39;restored&#39;</code>, <code>&#39;stale&#39;</code> 或 <code>&#39;failed&#39;</code>) 与 <code>reason</code></td>
+</tr>
+<tr>
+<td>undoable</td>
+<td>boolean</td>
+<td>是否仍有可撤销的条目 (如恢复失败的条目)</td>
+</tr>
+</tbody>
+</table>
+<p><code>stale</code> 条目的原因与 <a href="#files_batchrenameresult">结果</a> 相同 (改名之后条目又被删除或修改). <code>failed</code> 条目的原因为 <code>occupied</code> (原名称已被占用), <code>ioFailed</code>, 或 <code>replacedNotRestored</code> (条目已恢复原名, 但被 <code>&#39;overwrite&#39;</code> 替换的既有条目未能从回收站恢复, 此类条目不能再次撤销).</p>
+<h1>批量重命名历史 (BatchRenameHistoryEntry)<span><a class="mark" href="#files_batchrenamehistoryentry" id="files_batchrenamehistoryentry">#</a></span></h1>
+<p><a href="#files_files_batchrename_history_limit">files.batchRename.history</a> 返回的数组元素.</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>batchId</td>
+<td>string</td>
+<td>批次 ID</td>
+</tr>
+<tr>
+<td>source</td>
+<td>string</td>
+<td><code>&#39;script&#39;</code> 脚本, <code>&#39;explorer&#39;</code> 文件管理器</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td><code>&#39;committed&#39;</code> 全部改名, <code>&#39;partial&#39;</code> 部分改名, <code>&#39;rejected&#39;</code> 没有条目改名, <code>&#39;restored&#39;</code> 已撤销, <code>&#39;recoveryRequired&#39;</code> 撤销未全部成功</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>number</td>
+<td>创建时间 (毫秒时间戳)</td>
+</tr>
+<tr>
+<td>updatedAt</td>
+<td>number</td>
+<td>最近一次更新时间 (毫秒时间戳)</td>
+</tr>
+<tr>
+<td>counts</td>
+<td>object</td>
+<td><code>renamed</code> 曾改名的条目数, <code>notRenamed</code> 未改名的条目数, <code>restored</code> 已恢复的条目数</td>
+</tr>
+<tr>
+<td>undoable</td>
+<td>boolean</td>
+<td>是否有可撤销的条目</td>
+</tr>
+</tbody>
+</table>
+<h1>批量重命名错误 (BatchRenameError)<span><a class="mark" href="#files_batchrenameerror" id="files_batchrenameerror">#</a></span></h1>
+<h2>new files.batchRename.BatchRenameError(message, code?)<span><a class="mark" href="#files_new_files_batchrename_batchrenameerror_message_code" id="files_new_files_batchrename_batchrenameerror_message_code">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>message</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 错误消息</li>
+<li><strong>[ code = <code>&#39;INTERNAL&#39;</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 错误代码</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameerror">BatchRenameError</a></span> }</li>
+</ul>
+<p><a href="#files_m_batchrename">files.batchRename</a> 抛出的错误 (含异步形态 Promise 拒绝的原因) 都是 <code>name</code> 为 <code>&#39;BatchRenameError&#39;</code> 的 JavaScript <a href="exceptions.html#exceptions_error">Error</a>, 可用 <code>instanceof files.batchRename.BatchRenameError</code> 判断. <code>message</code> 不可枚举, <code>toString()</code> 返回 <code>BatchRenameError [code]: message</code>. <code>onProgress</code> 回调自身抛出的值保持原样. 脚本也可自行构造.</p>
+<pre><code class="lang-js">try {
+    files.batchRename(&#39;./missing-folder&#39;, { search: &#39;a&#39;, replace: &#39;b&#39; });
+} catch (e) {
+    if (e instanceof files.batchRename.BatchRenameError) {
+        console.log(e.code); // INVALID_PATHS
+        console.log(e.toString()); // BatchRenameError [INVALID_PATHS]: path does not exist: ...
+    }
+}
+</code></pre>
+<h2>[p#] name<span><a class="mark" href="#files_p_name" id="files_p_name">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li>{ <code>&#39;BatchRenameError&#39;</code> }</li>
+</ul>
+<h2>[p#] code<span><a class="mark" href="#files_p_code" id="files_p_code">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+<p>错误代码:</p>
+<table>
+<thead>
+<tr>
+<th>code</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PLUGIN_UNAVAILABLE</td>
+<td>未安装 Batch Rename 插件, 或无法连接插件</td>
+</tr>
+<tr>
+<td>PLUGIN_DISABLED</td>
+<td>插件已安装, 但在插件中心被停用或未授权</td>
+</tr>
+<tr>
+<td>PLUGIN_INCOMPATIBLE</td>
+<td>插件与当前 AutoJs6 版本不兼容</td>
+</tr>
+<tr>
+<td>INVALID_OPTIONS</td>
+<td>选项的类型或取值不合法, 正则表达式无法编译, apply 的参数不是 plan 返回的方案, 或方案的条目被增删</td>
+</tr>
+<tr>
+<td>INVALID_PATHS</td>
+<td><code>paths</code> 为空, 路径不存在, 为根目录或为符号链接</td>
+</tr>
+<tr>
+<td>LIMIT_EXCEEDED</td>
+<td>超出条目, 文件夹, 名称数量, 层数, 文本长度或随机值长度上限, 或正则表达式匹配超时</td>
+</tr>
+<tr>
+<td>PLAN_REJECTED</td>
+<td>方案含非法名称, 或 <code>onConflict</code> 为 <code>&#39;fail&#39;</code> 时存在冲突</td>
+</tr>
+<tr>
+<td>PLAN_STALE</td>
+<td>方案已执行过, 不属于当前脚本, 或已不在最近 16 个方案之中</td>
+</tr>
+<tr>
+<td>IO_FAILED</td>
+<td>无法列出文件夹或无法写入撤销日志</td>
+</tr>
+<tr>
+<td>UNDO_UNAVAILABLE</td>
+<td>批次不存在, 已不在日志中, 已没有可撤销的条目, 或 undo 的参数既不是批次 ID 也不是 apply 的结果</td>
+</tr>
+<tr>
+<td>INTERNAL</td>
+<td>其他未归类错误</td>
+</tr>
+</tbody>
+</table>
 
         </div>
     </div>

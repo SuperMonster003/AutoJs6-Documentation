@@ -6141,7 +6141,7 @@ className('EditText').findOnce().setSelection(1, 5); /* 效果同上, 但存在�
 - **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
 - <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
-对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass).
+对 `selector.findOnce()` 进行 [罗盘定位](uiObjectType#m-compass).
 
 ```js
 pickup(text('abc'), 'p3'); /* 空指针安全. */
@@ -6157,7 +6157,7 @@ text('abc').findOnce().parent().parent().parent(); /* 效果同上, 但存在潜
 - **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
 - <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
-对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
+对 `selector.findOnce()` 进行 [罗盘定位](uiObjectType#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
 ```js
 pickup(text('abc'), 'p3', 'click'); /* 空指针安全. */
@@ -6212,7 +6212,7 @@ pickup(w, 'xyz', 'height'); /* 在 w 控件的所有子孙节点中筛选内容�
 - **compass** { [DetectCompass](dataTypes#detectcompass) } - 控件罗盘参数
 - <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
-以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass).
+以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjectType#m-compass).
 
 ```js
 let w = text('abc').findOnce();
@@ -6231,7 +6231,7 @@ pickup(w, 'xyz', 'p2'); /* 在 w 控件的所有子孙节点中筛选内容为 '
 - **result** { [PickupResult](dataTypes#pickupresult) } - 结果筛选参数
 - <ins>**returns**</ins> { [any](dataTypes#any) } - 筛选结果
 
-以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjecttype#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
+以 `root` 参数指定的控件为根节点, 对 `selector.findOnce()` 进行 [罗盘定位](uiObjectType#m-compass) 后, 再进行 [结果筛选](dataTypes#pickupresult) 或 [参化调用](dataTypes#uiobjectinvokable).
 
 ```js
 let w = text('abc').findOnce();

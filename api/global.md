@@ -1626,441 +1626,183 @@ console.log(contentMatch(/^开始.*/).exists()
 
 ## [m] cX
 
-横坐标标度.
+按设备宽度换算横坐标或比例.
+
+自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: `true` 强制比例, `false` 强制绝对坐标, 省略, `null`, `undefined` 或 `"auto"` 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.
 
 ### cX()
 
-**`6.2.0`** **`Global`** **`Overload 1/4`**
+**`Global`** **`Overload 1/3`**
 
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前设备宽度
 
-无参时, 返回当前设备宽度.
+无参调用返回 `device.width`.
 
-```js
-console.log(cX() === device.width); // true
-```
+### cX(x, base?, isRatio?)
 
-### cX(x, base, isRatio?)
+**`[6.8.0]`** **`Global`** **`Overload 2/3`**
 
-**`6.2.0`** **`Global`** **`Overload 2/4`**
+- **x** { [number](dataTypes#number) } - 有限的坐标值或比例, 可为负数
+- **[ base ]** { [number](dataTypes#number) } - 绝对坐标分支的基数
+- **[ isRatio = "auto" ]** { [boolean](dataTypes#boolean) | `"auto"` } - 换算模式
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 换算后四舍五入的整数
 
-- **x** { [number](dataTypes#number) } - 绝对坐标值
-- **base** { [number](dataTypes#number) } - 坐标值基数
-- **[ isRatio = false ]** { [boolean](dataTypes#boolean) } - 是否强制将 `x` 作为百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+- 绝对坐标分支: `base` 默认为当前 `getScaleBaseX()`, 初始值为 `720`. 参与计算的基数必须是 `1..2147483647` 范围内的整数. 结果为 `Math.round(device.width * x / base)`.
+- 比例分支: 结果为 `Math.round(device.width * x)`, `base` 不参与计算.
 
-由基数换算后得到的横坐标值.
+自动模式下, `Math.abs(x) < 1` 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.
 
-`isRatio` 为 `true` 时, `x` 强制作为屏幕宽度百分比, 此时 `base` 不参与计算.
-
-例如在一个设备宽度为 `1096` 的设备上的 `100` 像素, 在其他不同宽度的设备上将转换为不同的值:
+结果不经 Java `long` 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 `-1.5` 得到 `-1`. 超出 JavaScript 安全整数范围的结果仍受 `number` 精度限制.
 
 ```js
-/* 在宽度为 1096 像素的设备上. */
-cX(100, 1096); // 100
-
-/* 在宽度为 1080 像素的设备上. */
-cX(100, 1096); // 99
-
-/* 在宽度为 720 像素的设备上. */
-cX(100, 1096); // 66
-
-/* 在宽度为 540 像素的设备上. */
-cX(100, 1096); // 49
+cX(384); /* 按当前绝对坐标基数缩放. */
+cX(0.5, 720, false); /* 将 0.5 当作绝对坐标. */
+cX(2, undefined, true); /* 设备宽度的两倍. */
 ```
-
-上述示例的 `1096` 为基数, 默认基数为 `720`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cX(100); /* 相当于 cX(100, 720). */
-setScaleBaseX(1096);
-cX(100); /* 相当于 cX(100, 1096). */
-```
-
-默认基数只能修改最多一次.
 
 ### cX(x, isRatio)
 
-**`6.2.0`** **`Global`** **`Overload 3/4`**
+**`[6.8.0]`** **`Global`** **`Overload 3/3`**
 
-- **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
-- **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
+- **x** { [number](dataTypes#number) } - 有限的坐标值或比例
+- **isRatio** { [boolean](dataTypes#boolean) | `"auto"` } - 使用默认基数时的模式快捷参数
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,<br>
-即当参数 `x` 满足 `-1 < x < 1` 时, `x` 将视为屏幕宽度百分比, 否则将视为绝对坐标值.
-
-`isRatio` 参数为 `true` 时, `x` 参数将强制视为百分比, 如 `cX(2, true)` 意味着两倍屏幕宽度, `2` 的意义不再是像素值.
-
-`isRatio` 参数为 `false` 时, `x` 参数将强制视为绝对坐标值, 如 `cX(0.5, false)` 意味着 `0.5` 像素值, 其意义不再是百分比.
-
-### cX(x)
-
-**`6.2.0`** **`Global`** **`Overload 4/4`**
-
-- **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-当参数 `x` 满足 `-1 < x < 1` 时, 相当于 `cX(x, /* isRatio = */ true)`, 即 `x` 将视为屏幕宽度百分比.
-
-当参数 `x` 满足 `x <= -1 | x >= 1` 时, 相当于 `cX(x, /* base = */ 720)`, 即 `x` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseX` 等方法修改, `720` 为其默认值.
+第二个参数为布尔值或 `"auto"` 时, 省略 `base`. `cX(0.5, false)` 强制按绝对坐标换算, `cX(2, true)` 强制按比例换算. 此快捷形式若再传入非 `null` / `undefined` 的第三个模式参数, 会因模式重复而抛出异常.
 
 ## [m] cY
 
-纵坐标标度.
+按设备高度换算纵坐标或比例.
+
+自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: `true` 强制比例, `false` 强制绝对坐标, 省略, `null`, `undefined` 或 `"auto"` 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.
 
 ### cY()
 
-**`6.2.0`** **`Global`** **`Overload 1/4`**
+**`Global`** **`Overload 1/3`**
 
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 当前设备高度
 
-无参时, 返回当前设备高度.
+无参调用返回 `device.height`.
 
-```js
-console.log(cY() === device.height); // true
-```
+### cY(y, base?, isRatio?)
 
-### cY(y, base, isRatio?)
+**`[6.8.0]`** **`Global`** **`Overload 2/3`**
 
-**`6.2.0`** **`Global`** **`Overload 2/4`**
+- **y** { [number](dataTypes#number) } - 有限的坐标值或比例, 可为负数
+- **[ base ]** { [number](dataTypes#number) } - 绝对坐标分支的基数
+- **[ isRatio = "auto" ]** { [boolean](dataTypes#boolean) | `"auto"` } - 换算模式
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 换算后四舍五入的整数
 
-- **y** { [number](dataTypes#number) } - 绝对坐标值
-- **base** { [number](dataTypes#number) } - 坐标值基数
-- **[ isRatio = false ]** { [boolean](dataTypes#boolean) } - 是否强制将 `y` 作为百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
+- 绝对坐标分支: `base` 默认为当前 `getScaleBaseY()`, 初始值为 `1280`. 参与计算的基数必须是 `1..2147483647` 范围内的整数. 结果为 `Math.round(device.height * y / base)`.
+- 比例分支: 结果为 `Math.round(device.height * y)`, `base` 不参与计算.
 
-由基数换算后得到的纵坐标值.
+自动模式下, `Math.abs(y) < 1` 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.
 
-`isRatio` 为 `true` 时, `y` 强制作为屏幕高度百分比, 此时 `base` 不参与计算.
-
-例如在一个设备高度为 `2560` 的设备上的 `100` 像素, 在其他不同高度的设备上将转换为不同的值:
+结果不经 Java `long` 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 `-1.5` 得到 `-1`. 超出 JavaScript 安全整数范围的结果仍受 `number` 精度限制.
 
 ```js
-/* 在高度为 2560 像素的设备上. */
-cY(100, 2560); // 100
-
-/* 在高度为 1920 像素的设备上. */
-cY(100, 2560); // 75
-
-/* 在高度为 1280 像素的设备上. */
-cY(100, 2560); // 50
-
-/* 在高度为 960 像素的设备上. */
-cY(100, 2560); // 38
+cY(384); /* 按当前绝对坐标基数缩放. */
+cY(0.5, 1280, false); /* 将 0.5 当作绝对坐标. */
+cY(2, undefined, true); /* 设备高度的两倍. */
 ```
-
-上述示例的 `2560` 为基数, 默认基数为 `1280`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cY(100); /* 相当于 cY(100, 1280). */
-setScaleBaseY(2560);
-cY(100); /* 相当于 cY(100, 2560). */
-```
-
-默认基数只能修改最多一次.
 
 ### cY(y, isRatio)
 
-**`6.2.0`** **`Global`** **`Overload 3/4`**
+**`[6.8.0]`** **`Global`** **`Overload 3/3`**
 
-- **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
-- **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
+- **y** { [number](dataTypes#number) } - 有限的坐标值或比例
+- **isRatio** { [boolean](dataTypes#boolean) | `"auto"` } - 使用默认基数时的模式快捷参数
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,<br>
-即当参数 `y` 满足 `-1 < y < 1` 时, `y` 将视为屏幕高度百分比, 否则将视为绝对坐标值.
-
-`isRatio` 参数为 `true` 时, `y` 参数将强制视为百分比, 如 `cY(2, true)` 意味着两倍屏幕高度, `2` 的意义不再是像素值.
-
-`isRatio` 参数为 `false` 时, `y` 参数将强制视为绝对坐标值, 如 `cY(0.5, false)` 意味着 `0.5` 像素值, 其意义不再是百分比.
-
-### cY(y)
-
-**`6.2.0`** **`Global`** **`Overload 4/4`**
-
-- **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-当参数 `y` 满足 `-1 < y < 1` 时, 相当于 `cY(y, /* isRatio = */ true)`, 即 `y` 将视为屏幕高度百分比.
-
-当参数 `y` 满足 `y <= -1 | y >= 1` 时, 相当于 `cY(y, /* base = */ 1280)`, 即 `y` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseY` 等方法修改, `1280` 为其默认值.
+第二个参数为布尔值或 `"auto"` 时, 省略 `base`. `cY(0.5, false)` 强制按绝对坐标换算, `cY(2, true)` 强制按比例换算. 此快捷形式若再传入非 `null` / `undefined` 的第三个模式参数, 会因模式重复而抛出异常.
 
 ## [m] cYx
 
-以横坐标度量的纵坐标标度.
+按设备宽度换算纵坐标. 交叉比例统一使用宽高比 `width / height`, 包括大于 1 的横屏比例.
 
-与设备高度无关, 与设备宽度相关的坐标标度.
+自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: `true` 强制比例, `false` 强制绝对坐标, 省略, `null`, `undefined` 或 `"auto"` 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.
 
-如 `cYx(0.5, '9:16')` 对于以下 5 个设备 (以分辨率区分) 得到的结果是完全一致的:
+### cYx(y, base?, isRatio?)
 
-```text
-1. 1080 × 1920
-4. 1080 × 2160
-5. 1080 × 2340
-3. 1080 × 2520
-2. 1080 × 2560
-```
+**`[6.8.0]`** **`Global`** **`Overload 1/2`**
 
-因为所有设备宽度相同, `cYx` 的结果是高度无关的.
+- **y** { [number](dataTypes#number) } - 有限的坐标值或比例, 可为负数
+- **[ base ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 绝对坐标基数或比例分支的宽高比
+- **[ isRatio = "auto" ]** { [boolean](dataTypes#boolean) | `"auto"` } - 换算模式
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 换算后四舍五入的整数
 
-计算结果:
+- 绝对坐标分支: `base` 默认为当前 `getScaleBaseX()`, 初始值为 `720`. 参与计算的基数必须是 `1..2147483647` 范围内的整数. 结果为 `Math.round(device.width * y / base)`.
+- 比例分支: 数字 `base` 表示正有限的宽高比 `ratio`. 省略时使用 `getScaleBaseX() / getScaleBaseY()`, 结果为 `Math.round(device.width * y / ratio)`. 字符串比例如 `"9:16"` 或 `"16:9"` 必须恰有两个正有限数值, 并启用比例分支; 它与显式 `isRatio = false` 冲突, 会抛出异常.
 
-```js
-1080 * 0.5 * 16 / 9; // 960
-```
+仅在使用默认宽高比时, 横纵基数必须保持设置状态一致: 两者均使用默认值, 或两者均已设置. 使用显式比例或绝对坐标分支时, 不要求另一个方向的基数也已设置.
 
-设想如下场景, 某个应用页面是可以向下滚动窗口显示更多内容的, 在屏幕上半部分有一个按钮 `BTN`, 距离屏幕上边缘 `H` 距离, 另一台设备与当前设备屏幕宽度相同, 但高度更大, 相当于屏幕纵向变长, 此时按钮 `BTN` 距离屏幕上边缘依然是 `H` 距离, 仅仅是屏幕下方显示了更多内容.<br>
-因此可使用 `cYx` 标度表示按钮 `BTN` 的位置, 如 `cYx(0.2, 1080 / 1920)` 或 `cYx(0.2, 9 / 16)` 或 `cYx(0.2, '9:16')`.
+6.8.0 统一宽高比为 `width / height`, 不再根据比例是否大于 1 取倒数. 横屏脚本应直接传入如 `16 / 9` 或 `"16:9"`, 默认比例也按横基数除以纵基数计算.
 
-上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕高度的, 因此第 2 个参数对应设备宽高比例值.<br>
-如果使用绝对坐标值 (`Y` 坐标值), 如 `384`, 则第 2 个参数对应的是设备屏幕宽度值:
+自动模式下, `Math.abs(y) < 1` 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.
 
-| 第 1 个参数 | 第 2 个参数 |        示例        |
-|:-------:|:-------:|:----------------:|
-| Y 坐标百分比 |  设备宽高比  | cYx(0.2, '9:16') |
-|  Y 坐标值  |  设备宽度值  |  cYx(384, 1096)  |
-
-### cYx(coordinateY, baseX)
-
-**`6.2.0`** **`Global`** **`Overload [1(A)]/3`**
-
-- **coordinateY** { [number](dataTypes#number) } - 纵坐标值
-- **[ baseX = 720 ]** { [number](dataTypes#number) } - 横坐标基数
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-由横坐标基数换算后得到的纵坐标值.
-
-例如在一个设备宽度为 `1096` 设备上的 `512` 像素高度, 在其他不同宽度的设备上将转换为不同的值:
+结果不经 Java `long` 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 `-1.5` 得到 `-1`. 超出 JavaScript 安全整数范围的结果仍受 `number` 精度限制.
 
 ```js
-/* 在宽度为 1096 像素的设备上. */
-cYx(512, 1096); // 512
-
-/* 在宽度为 1080 像素的设备上. */
-cYx(512, 1096); // 505
-
-/* 在宽度为 720 像素的设备上. */
-cYx(512, 1096); // 336
-
-/* 在宽度为 540 像素的设备上. */
-cYx(512, 1096); // 252
+cYx(384); /* 按当前绝对坐标基数缩放. */
+cYx(0.5, 720, false); /* 将 0.5 当作绝对坐标. */
+cYx(2, 16 / 9, true); /* 显式横屏比例, 强制比例模式. */
 ```
-
-上述示例的 `1096` 为基数, 默认基数为 `720`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cYx(512); /* 相当于 cYx(512, 720). */
-setScaleBaseX(1096);
-cYx(512); /* 相当于 cYx(512, 1096). */
-```
-
-默认基数只能修改最多一次.
-
-### cYx(percentY, ratio)
-
-**`6.2.0`** **`Global`** **`Overload [1(B)]/3`**
-
-- **percentY** { [number](dataTypes#number) } - 纵坐标百分比
-- **[ ratio = '9:16' ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 设备宽高比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-由设备宽高比换算后得到的新纵坐标值.
-
-例如在一个设备宽度与高度分别为 `1096` 和 `2560` 的设备上的 `512` 像素高度, 即 `0.2` 倍的屏幕高度, 在其他不同宽度的设备上将转换为不同的值:
-
-```js
-/* 在宽度为 1096 像素的设备上. */
-cYx(0.2, 1096 / 2560); // 512
-
-/* 在宽度为 1080 像素的设备上. */
-cYx(0.2, 1096 / 2560); // 505
-
-/* 在宽度为 720 像素的设备上. */
-cYx(0.2, 1096 / 2560); // 336
-
-/* 在宽度为 540 像素的设备上. */
-cYx(0.2, 1096 / 2560); // 252
-```
-
-上述示例的 `1096 / 2560` 为基数, 默认基数为 `720 / 1280`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cYx(0.2); /* 相当于 cYx(0.2, 720 / 1280). */
-setScaleBases(1096, 2560);
-cYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560). */
-```
-
-默认基数只能修改最多一次.
 
 ### cYx(y, isRatio)
 
-**`6.2.0`** **`Global`** **`Overload 2/3`**
+**`[6.8.0]`** **`Global`** **`Overload 2/2`**
 
-- **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
-- **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `y` 参数强制作为百分比
+- **y** { [number](dataTypes#number) } - 有限的坐标值或比例
+- **isRatio** { [boolean](dataTypes#boolean) | `"auto"` } - 使用默认基数时的模式快捷参数
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `y` 参数的范围自动决定 `y` 是否视为百分比,<br>
-即当参数 `y` 满足 `-1 < y < 1` 时, `y` 将视为屏幕高度百分比, 否则将视为绝对坐标值.
+第二个参数为布尔值或 `"auto"` 时, 省略 `base`. `cYx(0.5, false)` 强制按绝对坐标换算, `cYx(2, true)` 强制按比例换算. 此快捷形式若再传入非 `null` / `undefined` 的第三个模式参数, 会因模式重复而抛出异常.
 
-`isRatio` 参数为 `true` 时, `y` 参数将强制视为百分比, 如 `cYx(2, true)` 意味着两倍屏幕高度, `2` 的意义不再是像素值.
-
-`isRatio` 参数为 `false` 时, `y` 参数将强制视为绝对坐标值, 如 `cYx(0.5, false)` 意味着 `0.5` 像素值, 其意义不再是百分比.
-
-### cYx(y)
-
-**`6.2.0`** **`Global`** **`Overload 3/3`**
-
-- **y** { [number](dataTypes#number) } - 绝对坐标值或屏幕高度百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-当参数 `y` 满足 `-1 < y < 1` 时, 相当于 `cYx(y, /* isRatio = */ true)`, 即 `y` 将视为屏幕高度百分比.
-
-当参数 `y` 满足 `y <= -1 | y >= 1` 时, 相当于 `cYx(y, /* base = */ 720)`, 即 `y` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseX` 等方法修改, `720` 为其默认值.
-
-```js
-cYx(0.3); /* 相当于 cYx(0.3, '9:16'). */
-cYx(384); /* 相当于 cYx(384, 720). */
-```
+必须提供坐标参数, 无参调用会抛出异常.
 
 ## [m] cXy
 
-以纵坐标度量的横坐标标度.
+按设备高度换算横坐标. 交叉比例统一使用宽高比 `width / height`, 包括大于 1 的横屏比例.
 
-与设备宽度无关, 与设备高度相关的坐标标度.
+自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: `true` 强制比例, `false` 强制绝对坐标, 省略, `null`, `undefined` 或 `"auto"` 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.
 
-如 `cXy(0.5, '9:16')` 对于以下 5 个设备 (以分辨率区分) 得到的结果是完全一致的:
+### cXy(x, base?, isRatio?)
 
-```text
-1. 1080 × 1920
-4. 1096 × 1920
-5. 720 × 1920
-3. 540 × 1920
-2. 960 × 1920
-```
+**`[6.8.0]`** **`Global`** **`Overload 1/2`**
 
-因为所有设备高度相同, `cXy` 的结果是宽度无关的.
+- **x** { [number](dataTypes#number) } - 有限的坐标值或比例, 可为负数
+- **[ base ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 绝对坐标基数或比例分支的宽高比
+- **[ isRatio = "auto" ]** { [boolean](dataTypes#boolean) | `"auto"` } - 换算模式
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 换算后四舍五入的整数
 
-计算结果:
+- 绝对坐标分支: `base` 默认为当前 `getScaleBaseY()`, 初始值为 `1280`. 参与计算的基数必须是 `1..2147483647` 范围内的整数. 结果为 `Math.round(device.height * x / base)`.
+- 比例分支: 数字 `base` 表示正有限的宽高比 `ratio`. 省略时使用 `getScaleBaseX() / getScaleBaseY()`, 结果为 `Math.round(device.height * x * ratio)`. 字符串比例如 `"9:16"` 或 `"16:9"` 必须恰有两个正有限数值, 并启用比例分支; 它与显式 `isRatio = false` 冲突, 会抛出异常.
 
-```js
-1920 * 0.5 * 9 / 16; // 540
-```
+仅在使用默认宽高比时, 横纵基数必须保持设置状态一致: 两者均使用默认值, 或两者均已设置. 使用显式比例或绝对坐标分支时, 不要求另一个方向的基数也已设置.
 
-设想如下场景, 某个应用页面是可以向右滚动窗口显示更多内容的, 在屏幕左半部分有一个按钮 `BTN`, 距离屏幕左边缘 `W` 距离, 另一台设备与当前设备屏幕高度相同, 但宽度更大, 相当于屏幕横向变长, 此时按钮 `BTN` 距离屏幕左边缘依然是 `W` 距离, 仅仅是屏幕右方显示了更多内容.<br>
-因此可使用 `cXy` 标度表示按钮 `BTN` 的位置, 如 `cXy(0.2, 1080 / 1920)` 或 `cXy(0.2, 9 / 16)` 或 `cXy(0.2, '9:16')`.
+6.8.0 统一宽高比为 `width / height`, 不再根据比例是否大于 1 取倒数. 横屏脚本应直接传入如 `16 / 9` 或 `"16:9"`, 默认比例也按横基数除以纵基数计算.
 
-上述示例的 `0.2` 是一个相对值, 是相对于当前设备屏幕宽度的, 因此第 2 个参数对应设备宽高比例值.<br>
-如果使用绝对坐标值 (`X` 坐标值), 如 `384`, 则第 2 个参数对应的是设备屏幕高度值:
+自动模式下, `Math.abs(x) < 1` 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.
 
-| 第 1 个参数 | 第 2 个参数 |        示例        |
-|:-------:|:-------:|:----------------:|
-| X 坐标百分比 |  设备宽高比  | cXy(0.2, '9:16') |
-|  X 坐标值  |  设备高度值  |  cXy(384, 2560)  |
-
-### cXy(coordinateX, baseY)
-
-**`6.2.0`** **`Global`** **`Overload [1(A)]/3`**
-
-- **coordinateX** { [number](dataTypes#number) } - 横坐标值
-- **[ baseY = 1280 ]** { [number](dataTypes#number) } - 纵坐标基数
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-由纵坐标基数换算后得到的横坐标值.
-
-例如在一个设备高度为 `2560` 设备上的 `512` 像素宽度, 在其他不同高度的设备上将转换为不同的值:
+结果不经 Java `long` 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 `-1.5` 得到 `-1`. 超出 JavaScript 安全整数范围的结果仍受 `number` 精度限制.
 
 ```js
-/* 在高度为 2560 像素的设备上. */
-cXy(512, 2560); // 512
-
-/* 在高度为 1920 像素的设备上. */
-cXy(512, 2560); // 384
-
-/* 在高度为 1280 像素的设备上. */
-cXy(512, 2560); // 256
-
-/* 在高度为 960 像素的设备上. */
-cXy(512, 2560); // 192
+cXy(384); /* 按当前绝对坐标基数缩放. */
+cXy(0.5, 1280, false); /* 将 0.5 当作绝对坐标. */
+cXy(2, 16 / 9, true); /* 显式横屏比例, 强制比例模式. */
 ```
-
-上述示例的 `2560` 为基数, 默认基数为 `1280`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cXy(512); /* 相当于 cXy(512, 1280). */
-setScaleBaseY(2560);
-cXy(512); /* 相当于 cXy(512, 2560). */
-```
-
-默认基数只能修改最多一次.
-
-### cXy(percentX, ratio)
-
-**`6.2.0`** **`Global`** **`Overload [1(B)]/3`**
-
-- **percentX** { [number](dataTypes#number) } - 横坐标百分比
-- **[ ratio = '9:16' ]** { [number](dataTypes#number) | [string](dataTypes#string) } - 设备宽高比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-由设备宽高比换算后得到的新横坐标值.
-
-例如在一个设备高度与宽度分别为 `1096` 和 `2560` 的设备上的 `548` 像素宽度, 即 `0.5` 倍的屏幕宽度, 在其他不同高度的设备上将转换为不同的值:
-
-```js
-/* 在高度为 2560 像素的设备上. */
-cXy(0.5, 1096 / 2560); // 548
-
-/* 在高度为 1920 像素的设备上. */
-cXy(0.5, 1096 / 2560); // 411
-
-/* 在高度为 1280 像素的设备上. */
-cXy(0.5, 1096 / 2560); // 274
-
-/* 在高度为 960 像素的设备上. */
-cXy(0.5, 1096 / 2560); // 206
-```
-
-上述示例的 `1096 / 2560` 为基数, 默认基数为 `720 / 1280`, 如需设置默认基数, 可使用以下方法:
-
-```js
-cXy(0.5); /* 相当于 cXy(0.5, 720 / 1280). */
-setScaleBases(1096, 2560);
-cXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560). */
-```
-
-默认基数只能修改最多一次.
 
 ### cXy(x, isRatio)
 
-**`6.2.0`** **`Global`** **`Overload 2/3`**
+**`[6.8.0]`** **`Global`** **`Overload 2/2`**
 
-- **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
-- **[ isRatio = 'auto' ]** { `'auto'` | [boolean](dataTypes#boolean) } - 是否将 `x` 参数强制作为百分比
+- **x** { [number](dataTypes#number) } - 有限的坐标值或比例
+- **isRatio** { [boolean](dataTypes#boolean) | `"auto"` } - 使用默认基数时的模式快捷参数
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-`isRatio` 参数默认为 `auto`, 即由 `x` 参数的范围自动决定 `x` 是否视为百分比,<br>
-即当参数 `x` 满足 `-1 < x < 1` 时, `x` 将视为屏幕宽度百分比, 否则将视为绝对坐标值.
+第二个参数为布尔值或 `"auto"` 时, 省略 `base`. `cXy(0.5, false)` 强制按绝对坐标换算, `cXy(2, true)` 强制按比例换算. 此快捷形式若再传入非 `null` / `undefined` 的第三个模式参数, 会因模式重复而抛出异常.
 
-`isRatio` 参数为 `true` 时, `x` 参数将强制视为百分比, 如 `cXy(2, true)` 意味着两倍屏幕宽度, `2` 的意义不再是像素值.
-
-`isRatio` 参数为 `false` 时, `x` 参数将强制视为绝对坐标值, 如 `cXy(0.5, false)` 意味着 `0.5` 像素值, 其意义不再是百分比.
-
-### cXy(x)
-
-**`6.2.0`** **`Global`** **`Overload 3/3`**
-
-- **x** { [number](dataTypes#number) } - 绝对坐标值或屏幕宽度百分比
-- <ins>**returns**</ins> { [number](dataTypes#number) }
-
-当参数 `x` 满足 `-1 < x < 1` 时, 相当于 `cXy(x, /* isRatio = */ true)`, 即 `x` 将视为屏幕宽度百分比.
-
-当参数 `x` 满足 `x <= -1 | x >= 1` 时, 相当于 `cXy(x, /* base = */ 1280)`, 即 `x` 将视为绝对坐标值, 另 `base` 参数可能由 `setScaleBaseY` 等方法修改, `1280` 为其默认值.
-
-```js
-cXy(0.3); /* 相当于 cXy(0.3, '9:16'). */
-cXy(384); /* 相当于 cXy(384, 1280). */
-```
+必须提供坐标参数, 无参调用会抛出异常.
 
 ## [m+] species
 

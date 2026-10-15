@@ -71,6 +71,7 @@ Documentation may change at any time, and some descriptions may differ from actu
 
 ### v6.8.0
 
+- `Update` [API reference](https://docs.autojs6.com/#/documentation) covers missing Files and RootAutomator members, color result arrays, WebView contexts and optional overloads, and corrects byte append, swipe parameters and coordinate scaling descriptions
 - `Feature` [3-Block Compose Designer](https://docs.autojs6.com/#/composeDesigner), covering the visual designer built into the 3-Block Compose plugin: its entries and project files, the editor's canvas / outline / properties / component palette and drafts, the recognized script subset and round-trip rules, the two-way hand-over with the AutoJs6 editor, and current limitations
 - `Update` The "Comparison mode" section in [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) explains the two runs performed by "Run with AutoJs4 and compare", result summaries and difference markers, and copying the issue template
 - `Feature` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), covering the AutoJs4 Runtime plugin's purpose, installation and permissions, the file manager's "Run with AutoJs4" entry, returned logs, stopping tasks, execution limits and reporting differences

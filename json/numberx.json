@@ -298,10 +298,10 @@
           "name": "[m]_parsefloat",
           "methods": [
             {
-              "textRaw": "parseFloat(string, radix)",
+              "textRaw": "parseFloat(string, radix?)",
               "type": "method",
               "name": "parseFloat",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>string</strong> { <a href=\"dataTypes#string\">string</a> } - 待解析的字符串</li>\n<li><strong>radix</strong> { <a href=\"dataTypes#number\">number</a> } - 进制的基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>根据指定的进制基数, 解析字符串并返回一个数字.</p>\n<p>标准内置对象 Number 的 parseInt 支持进制基数 radix 参数, 即 parseInt(string, radix), 但 parseFloat 不支持 radix 参数.</p>\n<p>此扩展方法对上述 radix 参数提供了支持:</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Numberx.parseFloat(&quot;0.101&quot;, 2)); // 0.625\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Number.parseFloat(&quot;0.101&quot;, 2)); // 0.625\nconsole.log(parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(parseFloat(&quot;0.101&quot;, 2)); // 0.625\n</code></pre>\n",
+              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>\n<ul>\n<li><strong>string</strong> { <a href=\"dataTypes#string\">string</a> } - 待解析的字符串</li>\n<li><strong>[ radix ]</strong> { <a href=\"dataTypes#number\">number</a> } - 进制的基数; 省略时使用内置 parseFloat 的解析规则</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>根据指定的进制基数, 解析字符串并返回一个数字. 省略 <code>radix</code> 或传入 <code>null</code> / <code>undefined</code> 时使用 Rhino 原有的 <code>parseFloat</code> 规则, 如 <code>Numberx.parseFloat(&quot;12.5px&quot;)</code> 返回 <code>12.5</code>.</p>\n<p>标准内置对象 Number 的 parseInt 支持进制基数 radix 参数, 即 parseInt(string, radix), 但 parseFloat 不支持 radix 参数.</p>\n<p>此扩展方法对上述 radix 参数提供了支持:</p>\n<pre><code class=\"lang-js\">console.log(Numberx.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Numberx.parseFloat(&quot;0.101&quot;, 2)); // 0.625\n\n/* 启用内置对象扩展后. */\n\nconsole.log(Number.parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(Number.parseFloat(&quot;0.101&quot;, 2)); // 0.625\nconsole.log(parseFloat(&quot;0.8&quot;, 16)); // 0.5\nconsole.log(parseFloat(&quot;0.101&quot;, 2)); // 0.625\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -309,7 +309,7 @@
                       "name": "string"
                     },
                     {
-                      "name": "radix"
+                      "name": "radix?"
                     }
                   ]
                 }

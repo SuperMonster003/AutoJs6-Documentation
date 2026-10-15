@@ -494,6 +494,7 @@
 </li>
 <li><span class="stability_undefined"><a href="#color_m_torgb">[m] toRgb</a></span><ul>
 <li><span class="stability_undefined"><a href="#color_torgb_color">toRgb(color)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_torgb_red_green_blue">toRgb(red, green, blue)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#color_m_torgba">[m] toRgba</a></span><ul>
@@ -509,16 +510,22 @@
 <li><span class="stability_undefined"><a href="#color_m_tohsv">[m] toHsv</a></span><ul>
 <li><span class="stability_undefined"><a href="#color_tohsv_color">toHsv(color)</a></span></li>
 <li><span class="stability_undefined"><a href="#color_tohsv_red_green_blue">toHsv(red, green, blue)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsv_color_result">toHsv(color, result)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsv_red_green_blue_result">toHsv(red, green, blue, result)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#color_m_tohsva">[m] toHsva</a></span><ul>
 <li><span class="stability_undefined"><a href="#color_tohsva_color">toHsva(color)</a></span></li>
 <li><span class="stability_undefined"><a href="#color_tohsva_red_green_blue_alpha">toHsva(red, green, blue, alpha)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsva_color_result">toHsva(color, result)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsva_red_green_blue_alpha_result">toHsva(red, green, blue, alpha, result)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#color_m_tohsl">[m] toHsl</a></span><ul>
 <li><span class="stability_undefined"><a href="#color_tohsl_color">toHsl(color)</a></span></li>
 <li><span class="stability_undefined"><a href="#color_tohsl_red_green_blue">toHsl(red, green, blue)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsl_color_result">toHsl(color, result)</a></span></li>
+<li><span class="stability_undefined"><a href="#color_tohsl_red_green_blue_result">toHsl(red, green, blue, result)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#color_m_tohsla">[m] toHsla</a></span><ul>
@@ -2022,7 +2029,7 @@ colors.toHex(colors.oklch(l, c, h + 180)); // &quot;#C97E00&quot;
 </code></pre>
 <h2>[m] toRgb<span><a class="mark" href="#color_m_torgb" id="color_m_torgb">#</a></span></h2>
 <h3>toRgb(color)<span><a class="mark" href="#color_torgb_color" id="color_torgb_color">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
 <ul>
 <li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 颜色分量数组</li>
@@ -2031,6 +2038,15 @@ colors.toHex(colors.oklch(l, c, h + 180)); // &quot;#C97E00&quot;
 <pre><code class="lang-js">let [ r, g, b ] = colors.toRgb(&#39;#663399&#39;);
 console.log(`R: ${r}, G: ${g}, B: ${b}`);
 </code></pre>
+<h3>toRgb(red, green, blue)<span><a class="mark" href="#color_torgb_red_green_blue" id="color_torgb_red_green_blue">#</a></span></h3>
+<p><strong><code>Overload 2/2</code></strong></p>
+<ul>
+<li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - R 分量</li>
+<li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - G 分量</li>
+<li><strong>blue</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - B 分量</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - RGB 分量数组</li>
+</ul>
+<p>先按 <code>colors.rgb(red, green, blue)</code> 解析颜色, 再返回 RGB 分量数组.</p>
 <h2>[m] toRgba<span><a class="mark" href="#color_m_torgba" id="color_m_torgba">#</a></span></h2>
 <h3>toRgba(color)<span><a class="mark" href="#color_torgba_color" id="color_torgba_color">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
@@ -2092,7 +2108,7 @@ console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..
 </code></pre>
 <h2>[m] toHsv<span><a class="mark" href="#color_m_tohsv" id="color_m_tohsv">#</a></span></h2>
 <h3>toHsv(color)<span><a class="mark" href="#color_tohsv_color" id="color_tohsv_color">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/4</code></strong></p>
 <ul>
 <li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 颜色分量数组</li>
@@ -2102,7 +2118,7 @@ console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..
 console.log(`H: ${h}, S: ${s}, V: ${v}`);
 </code></pre>
 <h3>toHsv(red, green, blue)<span><a class="mark" href="#color_tohsv_red_green_blue" id="color_tohsv_red_green_blue">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/4</code></strong></p>
 <ul>
 <li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - R (red)</li>
 <li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - G (green)</li>
@@ -2113,9 +2129,31 @@ console.log(`H: ${h}, S: ${s}, V: ${v}`);
 <pre><code class="lang-js">let [ h, s, v ] = colors.toHsv(102, 51, 153);
 console.log(`H: ${h}, S: ${s}, V: ${v}`);
 </code></pre>
+<h3>toHsv(color, result)<span><a class="mark" href="#color_tohsv_color_result" id="color_tohsv_color_result">#</a></span></h3>
+<p><strong><code>Overload 3/4</code></strong></p>
+<ul>
+<li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 3</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSV 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.</p>
+<h3>toHsv(red, green, blue, result)<span><a class="mark" href="#color_tohsv_red_green_blue_result" id="color_tohsv_red_green_blue_result">#</a></span></h3>
+<p><strong><code>Overload 4/4</code></strong></p>
+<ul>
+<li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>blue</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 3</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSV 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.</p>
+<pre><code class="lang-js">let result = util.java.array(&#39;float&#39;, 3);
+let hsv = colors.toHsv(&#39;#663399&#39;, result);
+console.log(hsv, result[0]);
+</code></pre>
 <h2>[m] toHsva<span><a class="mark" href="#color_m_tohsva" id="color_m_tohsva">#</a></span></h2>
 <h3>toHsva(color)<span><a class="mark" href="#color_tohsva_color" id="color_tohsva_color">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/4</code></strong></p>
 <ul>
 <li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 颜色分量数组</li>
@@ -2126,7 +2164,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}`);
 console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 </code></pre>
 <h3>toHsva(red, green, blue, alpha)<span><a class="mark" href="#color_tohsva_red_green_blue_alpha" id="color_tohsva_red_green_blue_alpha">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/4</code></strong></p>
 <ul>
 <li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - R (red)</li>
 <li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - G (green)</li>
@@ -2139,9 +2177,28 @@ console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 <pre><code class="lang-js">let [ h, s, v, a ] = colors.toHsva(102, 51, 153, 191);
 console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 </code></pre>
+<h3>toHsva(color, result)<span><a class="mark" href="#color_tohsva_color_result" id="color_tohsva_color_result">#</a></span></h3>
+<p><strong><code>Overload 3/4</code></strong></p>
+<ul>
+<li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 4</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSVA 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 实现写入前四项并返回四个分量.</p>
+<h3>toHsva(red, green, blue, alpha, result)<span><a class="mark" href="#color_tohsva_red_green_blue_alpha_result" id="color_tohsva_red_green_blue_alpha_result">#</a></span></h3>
+<p><strong><code>Overload 4/4</code></strong></p>
+<ul>
+<li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>blue</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>alpha</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 4</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSVA 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 实现写入前四项并返回四个分量.</p>
 <h2>[m] toHsl<span><a class="mark" href="#color_m_tohsl" id="color_m_tohsl">#</a></span></h2>
 <h3>toHsl(color)<span><a class="mark" href="#color_tohsl_color" id="color_tohsl_color">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 1/4</code></strong></p>
 <ul>
 <li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 颜色分量数组</li>
@@ -2151,7 +2208,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 console.log(`H: ${h}, S: ${s}, L: ${l}`);
 </code></pre>
 <h3>toHsl(red, green, blue)<span><a class="mark" href="#color_tohsl_red_green_blue" id="color_tohsl_red_green_blue">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/4</code></strong></p>
 <ul>
 <li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - R (red)</li>
 <li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量 - G (green)</li>
@@ -2162,6 +2219,24 @@ console.log(`H: ${h}, S: ${s}, L: ${l}`);
 <pre><code class="lang-js">let [ h, s, l ] = colors.toHsl(102, 51, 153);
 console.log(`H: ${h}, S: ${s}, L: ${l}`);
 </code></pre>
+<h3>toHsl(color, result)<span><a class="mark" href="#color_tohsl_color_result" id="color_tohsl_color_result">#</a></span></h3>
+<p><strong><code>Overload 3/4</code></strong></p>
+<ul>
+<li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 3</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSL 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.</p>
+<h3>toHsl(red, green, blue, result)<span><a class="mark" href="#color_tohsl_red_green_blue_result" id="color_tohsl_red_green_blue_result">#</a></span></h3>
+<p><strong><code>Overload 4/4</code></strong></p>
+<ul>
+<li><strong>red</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>green</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>blue</strong> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponent">ColorComponent</a></span> } - 颜色分量</li>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java 原始类型 <code>float[]</code>, 长度至少为 3</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_colorcomponents">ColorComponents</a></span> } - 转换结果的 JavaScript 数组</li>
+</ul>
+<p>将转换后的 HSL 分量写入 <code>result</code>, 同时返回 JavaScript 数组. <code>result</code> 必须是 Java <code>float[]</code>, 不能使用普通 JavaScript 数组或 Java <code>Float[]</code>. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.</p>
 <h2>[m] toHsla<span><a class="mark" href="#color_m_tohsla" id="color_m_tohsla">#</a></span></h2>
 <h3>toHsla(color)<span><a class="mark" href="#color_tohsla_color" id="color_tohsla_color">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
@@ -2344,7 +2419,7 @@ colors.isSimilar(&#39;orange&#39;, &#39;dark-orange&#39;, 8, &#39;diff&#39;); //
 colors.isSimilar(&#39;orange&#39;, &#39;dark-orange&#39;, 8, &#39;hs&#39;); // true
 </code></pre>
 <h3>isSimilar(colorA, colorB, options)<span><a class="mark" href="#color_issimilar_colora_colorb_options" id="color_issimilar_colora_colorb_options">#</a></span></h3>
-<p><strong><code>6.2.0</code></strong> <strong><code>Overload 4/4</code></strong></p>
+<p><strong><code>Overload 4/4</code></strong></p>
 <ul>
 <li><strong>colorA</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>
 <li><strong>colorB</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 颜色参数</li>

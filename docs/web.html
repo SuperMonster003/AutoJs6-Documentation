@@ -291,6 +291,7 @@
 <li><span class="stability_undefined"><a href="#web_m_newinjectablewebview">[m] newInjectableWebView</a></span><ul>
 <li><span class="stability_undefined"><a href="#web_newinjectablewebview_url">newInjectableWebView(url?)</a></span></li>
 <li><span class="stability_undefined"><a href="#web_newinjectablewebview_activity">newInjectableWebView(activity)</a></span></li>
+<li><span class="stability_undefined"><a href="#web_newinjectablewebview_androidcontext_url">newInjectableWebView(androidContext, url)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#web_m_newinjectablewebclient">[m] newInjectableWebClient</a></span><ul>
@@ -326,7 +327,7 @@
 <p>公开 Okio <code>ByteString</code> Java 类, 用于构造或判断 WebSocket 二进制消息.</p>
 <h2>[m] newInjectableWebView<span><a class="mark" href="#web_m_newinjectablewebview" id="web_m_newinjectablewebview">#</a></span></h2>
 <h3>newInjectableWebView(url?)<span><a class="mark" href="#web_newinjectablewebview_url" id="web_newinjectablewebview_url">#</a></span></h3>
-<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1-2]/3</code></strong> <strong><code>UI</code></strong></p>
+<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1-2]/4</code></strong> <strong><code>UI</code></strong></p>
 <ul>
 <li><strong>[ url ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 需要 WebView 加载的 URL</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="injectableWebViewType.html">InjectableWebView</a></span> }</li>
@@ -409,12 +410,23 @@ WebChromeClient 是 HTML/JavaScript 与 Android 客户端交互的中间件, 它
 });
 </code></pre>
 <h3>newInjectableWebView(activity)<span><a class="mark" href="#web_newinjectablewebview_activity" id="web_newinjectablewebview_activity">#</a></span></h3>
-<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong> <strong><code>UI</code></strong></p>
+<p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/4</code></strong> <strong><code>UI</code></strong></p>
 <ul>
-<li><strong>activity</strong> { <span class="type"><a href="dataTypes.html#datatypes_scriptexecuteactivity">ScriptExecuteActivity</a></span> } - 上下文对象, 默认为 UI 模式下的全局 activity 对象</li>
+<li><strong>activity</strong> { <span class="type"><a href="https://developer.android.com/reference/android/content/Context">android.content.Context</a></span> } - 创建 WebView 的 Android 上下文</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="injectableWebViewType.html">InjectableWebView</a></span> }</li>
 </ul>
-<p>新建并返回一个 <a href="dataTypes.html#datatypes_injectablewebview">InjectableWebView</a> (可 <a href="glossaries.html#glossaries_24">注入</a> 的 <a href="https://developer.android.com/reference/android/webkit/WebView">WebView</a>) 实例, 通过 <code>activity</code> 参数可传入不同的 <code>org.mozilla.javascript.Context</code> 上下文对象, 该对象主要用于执行 JavaScript 语句.</p>
+<p>新建并返回一个 <a href="injectableWebViewType.html">InjectableWebView</a> 实例. <code>activity</code> 是 Android 上下文, 通常传入 UI 模式的全局 <code>activity</code>. 它用于创建 Android View, 不是 Rhino 的 JavaScript 执行上下文.</p>
+<h3>newInjectableWebView(androidContext, url)<span><a class="mark" href="#web_newinjectablewebview_androidcontext_url" id="web_newinjectablewebview_androidcontext_url">#</a></span></h3>
+<p><strong><code>Global</code></strong> <strong><code>Overload 4/4</code></strong> <strong><code>UI</code></strong></p>
+<ul>
+<li><strong>androidContext</strong> { <span class="type"><a href="https://developer.android.com/reference/android/content/Context">android.content.Context</a></span> } - 创建 WebView 的 Android 上下文</li>
+<li><strong>url</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 初始 URL; <code>null</code> 表示不加载初始页面</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="injectableWebViewType.html">InjectableWebView</a></span> }</li>
+</ul>
+<p>使用指定 Android 上下文创建 WebView, 并在提供 URL 时加载该页面. 当前实现解包后不是 Android Context 的参数会回退到应用上下文; 通常应显式传入有效的 Activity.</p>
+<pre><code class="lang-js">&#39;ui&#39;;
+activity.setContentView(web.newInjectableWebView(activity, &#39;https://example.com&#39;));
+</code></pre>
 <h2>[m] newInjectableWebClient<span><a class="mark" href="#web_m_newinjectablewebclient" id="web_m_newinjectablewebclient">#</a></span></h2>
 <h3>newInjectableWebClient()<span><a class="mark" href="#web_newinjectablewebclient" id="web_newinjectablewebclient">#</a></span></h3>
 <p><strong><code>6.3.0</code></strong> <strong><code>Global</code></strong></p>

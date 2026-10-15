@@ -24,7 +24,7 @@ web 模块主要用于 [WebView](https://developer.android.com/reference/android
 
 ### newInjectableWebView(url?)
 
-**`6.3.0`** **`Global`** **`Overload [1-2]/3`** **`UI`**
+**`6.3.0`** **`Global`** **`Overload [1-2]/4`** **`UI`**
 
 - **[ url ]** { [string](dataTypes#string) } - 需要 WebView 加载的 URL
 - <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
@@ -127,12 +127,27 @@ ui.emitter.on('back_pressed', function (e) {
 
 ### newInjectableWebView(activity)
 
-**`6.3.0`** **`Global`** **`Overload 3/3`** **`UI`**
+**`6.3.0`** **`Global`** **`Overload 3/4`** **`UI`**
 
-- **activity** { [ScriptExecuteActivity](dataTypes#scriptexecuteactivity) } - 上下文对象, 默认为 UI 模式下的全局 activity 对象
+- **activity** { [android.content.Context](https://developer.android.com/reference/android/content/Context) } - 创建 WebView 的 Android 上下文
 - <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
 
-新建并返回一个 [InjectableWebView](dataTypes#injectablewebview) (可 [注入](glossaries#注入) 的 [WebView](https://developer.android.com/reference/android/webkit/WebView)) 实例, 通过 `activity` 参数可传入不同的 `org.mozilla.javascript.Context` 上下文对象, 该对象主要用于执行 JavaScript 语句.
+新建并返回一个 [InjectableWebView](injectableWebViewType) 实例. `activity` 是 Android 上下文, 通常传入 UI 模式的全局 `activity`. 它用于创建 Android View, 不是 Rhino 的 JavaScript 执行上下文.
+
+### newInjectableWebView(androidContext, url)
+
+**`Global`** **`Overload 4/4`** **`UI`**
+
+- **androidContext** { [android.content.Context](https://developer.android.com/reference/android/content/Context) } - 创建 WebView 的 Android 上下文
+- **url** { [string](dataTypes#string) | [null](dataTypes#null) } - 初始 URL; `null` 表示不加载初始页面
+- <ins>**returns**</ins> { [InjectableWebView](injectableWebViewType) }
+
+使用指定 Android 上下文创建 WebView, 并在提供 URL 时加载该页面. 当前实现解包后不是 Android Context 的参数会回退到应用上下文; 通常应显式传入有效的 Activity.
+
+```js
+'ui';
+activity.setContentView(web.newInjectableWebView(activity, 'https://example.com'));
+```
 
 ## [m] newInjectableWebClient
 

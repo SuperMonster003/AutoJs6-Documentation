@@ -384,7 +384,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#flow_m_of">[m] of</a></span><ul>
-<li><span class="stability_undefined"><a href="#flow_of_value">of(value)</a></span></li>
+<li><span class="stability_undefined"><a href="#flow_of_value">of(value?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#flow_m_flow">[m] Flow</a></span><ul>
@@ -985,13 +985,13 @@ flow.sleep(1e3, &#39;±200&#39;).home(); /* 800 ~ 1200 毫秒后回到桌面. */
 <p>注: <code>fn</code> 中不能调用 <a href="flowType.html#flowtype_m_sync">sync</a> (会抛出异常), 也不能操作 UI 组件. 需要回到脚本线程时, 使用 <a href="flowType.html#flowtype_m_then">then</a>.</p>
 </blockquote>
 <h2>[m] of<span><a class="mark" href="#flow_m_of" id="flow_m_of">#</a></span></h2>
-<h3>of(value)<span><a class="mark" href="#flow_of_value" id="flow_of_value">#</a></span></h3>
+<h3>of(value?)<span><a class="mark" href="#flow_of_value" id="flow_of_value">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
-<li><strong>value</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 初始值</li>
+<li><strong>[ value = null ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 初始值</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="flowType.html">Flow</a></span> }</li>
 </ul>
-<p>以一个已知值起链, 返回已 fulfill 的 Flow.</p>
+<p>以一个已知值起链, 返回已 fulfill 的 Flow. 无参调用 <code>flow.of()</code> 的初始值为 <code>null</code>; 可通过 <code>map</code> 或 <code>then</code> 继续处理, 后续要求控件目标的步骤仍会校验该值.</p>
 <pre><code class="lang-js">flow.of(text(&#39;登录&#39;).findOnce()).click(); /* 值为 null 时以 INVALID_TARGET 拒绝. */
 flow.of(5).map(x =&gt; x * 2).then(x =&gt; console.log(x)); /* 10 */
 </code></pre>

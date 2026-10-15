@@ -11,7 +11,7 @@ console.log(`${size.width}x${size.height}`);
 
 常见相关方法或属性:
 
-- [UiObject#size](uiobjectType#m-size)
+- [UiObject#size](uiObjectType#m-size)
 
 > 注: 本章节仅列出部分属性或方法.
 

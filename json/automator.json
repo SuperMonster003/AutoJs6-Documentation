@@ -16,7 +16,7 @@
         {
           "textRaw": "高权限自动化 (RootAutomator)",
           "name": "高权限自动化_(rootautomator)",
-          "desc": "<p>RootAutomator 通过 Root 权限向设备输入系统写入触摸事件, 可执行按下, 移动, 抬起及多指操作. 它与基于无障碍服务的 <code>automator</code> 方法具有不同的运行条件和生命周期, 详见 <a href=\"#rootautomator\">RootAutomator</a>.</p>\n",
+          "desc": "<p>RootAutomator 通过 Root 或可访问输入设备的 Shizuku 向设备输入系统写入触摸事件, 可执行按下, 移动, 抬起及多指操作. 它与基于无障碍服务的 <code>automator</code> 方法具有不同的运行条件和生命周期, 详见 <a href=\"#rootautomator\">RootAutomator</a>.</p>\n",
           "type": "module",
           "displayName": "高权限自动化 (RootAutomator)"
         },
@@ -903,346 +903,822 @@
     {
       "textRaw": "RootAutomator",
       "name": "rootautomator",
-      "desc": "<p>RootAutomator 是一个使用 root 权限来模拟触摸的对象, 用它可以完成触摸与多点触摸, 并且这些动作的执行没有延迟.</p>\n<p>一个脚本中最好只存在一个 RootAutomator, 并且保证脚本结束退出他. 可以在 exit 事件中退出 RootAutomator, 例如:</p>\n<pre><code>let ra = new RootAutomator();\nevents.on(&#39;exit&#39;, function(){\n  ra.exit();\n});\n// 执行一些点击操作.\n...\n\n</code></pre><p><strong>注意以下命令需要 root 权限</strong></p>\n",
-      "methods": [
+      "desc": "<p>RootAutomator 通过设备输入接口发送触摸事件, 与无障碍服务的自动化方法独立. 优先使用 Root; Root 不可用时, 可使用已授权且可工作的 Shizuku, 但 Shizuku 还必须能访问可写的触摸输入设备, 否则构造失败.</p>\n<p>以下方法由实例调用, 如 <code>ra.tap(100, 200)</code>. 默认触摸 ID 初始为 <code>0</code>, 可通过 <code>setDefaultId</code> 修改. 涉及输入事件的方法在后端未准备就绪或写入失败时抛出异常.</p>\n",
+      "modules": [
         {
-          "textRaw": "RootAutomator.tap(x, y[, id])",
-          "type": "method",
-          "name": "tap",
-          "signatures": [
+          "textRaw": "[c] RootAutomator",
+          "name": "[c]_rootautomator",
+          "ctors": [
             {
-              "params": [
+              "textRaw": "new RootAutomator(waitForReady?)",
+              "type": "ctor",
+              "name": "RootAutomator",
+              "signatures": [
                 {
-                  "textRaw": "**x** { [number](dataTypes#number) } 横坐标 ",
-                  "name": "**x**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**[ waitForReady = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - `true` 在构造时最多等待 5000 毫秒; `false` 不在构造时等待; 数字指定等待超时毫秒数, 负数跳过等待 ",
+                      "name": "**[",
+                      "desc": "waitForReady = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - `true` 在构造时最多等待 5000 毫秒; `false` 不在构造时等待; 数字指定等待超时毫秒数, 负数跳过等待"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [RootAutomator](#rootautomator) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [RootAutomator](#rootautomator) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y** { [number](dataTypes#number) } 纵坐标 ",
-                  "name": "**y**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "纵坐标"
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1, 可以通过 setDefaultId 指定. ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1, 可以通过 setDefaultId 指定.",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "waitForReady?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "id",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>创建输入控制对象. 即使构造时不等待, 发送输入事件前仍会最多等待 5000 毫秒. 等待超时或初始化失败会抛出异常. 不应在 UI 线程执行会阻塞的操作.</p>\n<pre><code class=\"lang-js\">let ra = new RootAutomator(true);\nevents.on(&#39;exit&#39;, () =&gt; ra.exit());\nra.tap(100, 200);\n</code></pre>\n"
             }
           ],
-          "desc": "<p>点击位置 (x, y). 其中 id 是一个整数值, 用于区分多点触摸, 不同的 id 表示不同的 &quot;手指&quot;, 例如:</p>\n<pre><code>let ra = new RootAutomator();\n// 让 &quot;手指 1&quot; 点击位置 (100, 100).\nra.tap(100, 100, 1);\n// 让 &quot;手指 2&quot; 点击位置 (200, 200).\nra.tap(200, 200, 2);\nra.exit();\n</code></pre><p>如果不需要多点触摸, 则不需要 id 这个参数.\n多点触摸通常用于手势或游戏操作, 例如模拟双指捏合, 双指上滑等.</p>\n<p>某些情况下可能存在 tap 点击无反应的情况, 这时可以用 <code>RootAutomator.press()</code> 函数代替.</p>\n"
+          "type": "module",
+          "displayName": "[c] RootAutomator"
         },
         {
-          "textRaw": "RootAutomator.swipe(x1, x2, y1, y2[, duration, id])",
-          "type": "method",
-          "name": "swipe",
-          "signatures": [
+          "textRaw": "[m#] tap",
+          "name": "[m#]_tap",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#tap(x, y, id?)",
+              "type": "method",
+              "name": "RootAutomator#tap",
+              "signatures": [
                 {
-                  "textRaw": "**x1** { [number](dataTypes#number) } 滑动起点横坐标 ",
-                  "name": "**x1**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "滑动起点横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y1** { [number](dataTypes#number) } 滑动起点纵坐标 ",
-                  "name": "**y1**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "滑动起点纵坐标"
-                },
-                {
-                  "textRaw": "**x2** { [number](dataTypes#number) } 滑动终点横坐标 ",
-                  "name": "**x2**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "滑动终点横坐标"
-                },
-                {
-                  "textRaw": "**y2** { [number](dataTypes#number) } 滑动终点纵坐标 ",
-                  "name": "**y2**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "滑动终点纵坐标"
-                },
-                {
-                  "textRaw": "**duration** { [number](dataTypes#number) } 滑动时长, 单位毫秒, 默认值为 300 ",
-                  "name": "**duration**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "滑动时长, 单位毫秒, 默认值为 300",
-                  "optional": true
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x1"
-                },
-                {
-                  "name": "x2"
-                },
-                {
-                  "name": "y1"
-                },
-                {
-                  "name": "y2"
-                },
-                {
-                  "name": "duration",
-                  "optional": true
-                },
-                {
-                  "name": "id",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>在指定位置按下后立即抬起. 不同 ID 可区分多个触点. 坐标受此实例 <code>setScreenMetrics</code> 的设置影响.</p>\n"
             }
           ],
-          "desc": "<p>模拟一次从 (x1, y1) 到 (x2, y2) 的时间为 duration 毫秒的滑动.</p>\n"
+          "type": "module",
+          "displayName": "[m#] tap"
         },
         {
-          "textRaw": "RootAutomator.press(x, y, duration[, id])",
-          "type": "method",
-          "name": "press",
-          "signatures": [
+          "textRaw": "[m#] swipe",
+          "name": "[m#]_swipe",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#swipe(x1, y1, x2, y2, duration?, id?)",
+              "type": "method",
+              "name": "RootAutomator#swipe",
+              "signatures": [
                 {
-                  "textRaw": "**x** { [number](dataTypes#number) } 横坐标 ",
-                  "name": "**x**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**x1** { [number](dataTypes#number) } - 起点横坐标 ",
+                      "name": "**x1**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起点横坐标"
+                    },
+                    {
+                      "textRaw": "**y1** { [number](dataTypes#number) } - 起点纵坐标 ",
+                      "name": "**y1**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起点纵坐标"
+                    },
+                    {
+                      "textRaw": "**x2** { [number](dataTypes#number) } - 终点横坐标 ",
+                      "name": "**x2**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终点横坐标"
+                    },
+                    {
+                      "textRaw": "**y2** { [number](dataTypes#number) } - 终点纵坐标 ",
+                      "name": "**y2**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终点纵坐标"
+                    },
+                    {
+                      "textRaw": "**[ duration = 300 ]** { [number](dataTypes#number) } - 滑动时长, 毫秒 ",
+                      "name": "**[",
+                      "desc": "duration = 300 ]** { [number](dataTypes#number) } - 滑动时长, 毫秒"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y** { [number](dataTypes#number) } 纵坐标 ",
-                  "name": "**y**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "纵坐标"
-                },
-                {
-                  "textRaw": "**duration** { [number](dataTypes#number) } 按下时长 ",
-                  "name": "**duration**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "按下时长"
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "x1"
+                    },
+                    {
+                      "name": "y1"
+                    },
+                    {
+                      "name": "x2"
+                    },
+                    {
+                      "name": "y2"
+                    },
+                    {
+                      "name": "duration?"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "duration"
-                },
-                {
-                  "name": "id",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>从起点向终点持续发送移动事件, 最后抬起触点. 参数顺序是起点 <code>(x1, y1)</code>, 终点 <code>(x2, y2)</code>; 坐标受此实例的屏幕度量设置影响.</p>\n"
             }
           ],
-          "desc": "<p>模拟按下位置 (x, y), 时长为 duration 毫秒.</p>\n"
+          "type": "module",
+          "displayName": "[m#] swipe"
         },
         {
-          "textRaw": "RootAutomator.longPress(x, y[\\, id\\])",
-          "type": "method",
-          "name": "longPress",
-          "signatures": [
+          "textRaw": "[m#] press",
+          "name": "[m#]_press",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#press(x, y, duration, id?)",
+              "type": "method",
+              "name": "RootAutomator#press",
+              "signatures": [
                 {
-                  "textRaw": "**x** { [number](dataTypes#number) } 横坐标 ",
-                  "name": "**x**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "**duration** { [number](dataTypes#number) } - 按住时长, 毫秒 ",
+                      "name": "**duration**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "按住时长, 毫秒"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y** { [number](dataTypes#number) } 纵坐标 ",
-                  "name": "**y**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "纵坐标"
-                },
-                {
-                  "textRaw": "**duration** { [number](dataTypes#number) } 按下时长 ",
-                  "name": "**duration**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "按下时长"
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1"
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "duration"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y[\\"
-                },
-                {
-                  "name": "id\\"
-                }
-              ]
+              ],
+              "desc": "<p>在指定位置按下, 阻塞等待给定时长后抬起.</p>\n"
             }
           ],
-          "desc": "<p>模拟长按位置 (x, y).</p>\n<p>以上为简单模拟触摸操作的函数. 如果要模拟一些复杂的手势, 需要更底层的函数.</p>\n"
+          "type": "module",
+          "displayName": "[m#] press"
         },
         {
-          "textRaw": "RootAutomator.touchDown(x, y[, id])",
-          "type": "method",
-          "name": "touchDown",
-          "signatures": [
+          "textRaw": "[m#] longPress",
+          "name": "[m#]_longpress",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#longPress(x, y, id?)",
+              "type": "method",
+              "name": "RootAutomator#longPress",
+              "signatures": [
                 {
-                  "textRaw": "**x** { [number](dataTypes#number) } 横坐标 ",
-                  "name": "**x**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y** { [number](dataTypes#number) } 纵坐标 ",
-                  "name": "**y**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "纵坐标"
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "id",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>按住时长为 Android 的长按阈值加 200 毫秒, 随后抬起.</p>\n"
             }
           ],
-          "desc": "<p>模拟手指按下位置 (x, y).</p>\n"
+          "type": "module",
+          "displayName": "[m#] longPress"
         },
         {
-          "textRaw": "RootAutomator.touchMove(x, y[, id])",
-          "type": "method",
-          "name": "touchMove",
-          "signatures": [
+          "textRaw": "[m#] touchDown",
+          "name": "[m#]_touchdown",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#touchDown(x, y, id?)",
+              "type": "method",
+              "name": "RootAutomator#touchDown",
+              "signatures": [
                 {
-                  "textRaw": "**x** { [number](dataTypes#number) } 横坐标 ",
-                  "name": "**x**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "横坐标"
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
                 },
                 {
-                  "textRaw": "**y** { [number](dataTypes#number) } 纵坐标 ",
-                  "name": "**y**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "纵坐标"
-                },
-                {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
-            },
-            {
-              "params": [
-                {
-                  "name": "x"
-                },
-                {
-                  "name": "y"
-                },
-                {
-                  "name": "id",
-                  "optional": true
-                }
-              ]
+              ],
+              "desc": "<p>按下触点并发送同步事件. 配合 <code>touchMove</code> 与 <code>touchUp</code> 组成多点触摸过程.</p>\n"
             }
           ],
-          "desc": "<p>模拟移动手指到位置 (x, y).</p>\n"
+          "type": "module",
+          "displayName": "[m#] touchDown"
         },
         {
-          "textRaw": "RootAutomator.touchUp([id])",
-          "type": "method",
-          "name": "touchUp",
-          "signatures": [
+          "textRaw": "[m#] touchMove",
+          "name": "[m#]_touchmove",
+          "methods": [
             {
-              "params": [
+              "textRaw": "RootAutomator#touchMove(x, y, id?)",
+              "type": "method",
+              "name": "RootAutomator#touchMove",
+              "signatures": [
                 {
-                  "textRaw": "**id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1 ",
-                  "name": "**id**",
-                  "type": " [number](dataTypes#number) ",
-                  "desc": "多点触摸 id, 可选, 默认为 1",
-                  "optional": true
-                }
-              ]
-            },
-            {
-              "params": [
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
                 {
-                  "name": "id",
-                  "optional": true
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    },
+                    {
+                      "name": "id?"
+                    }
+                  ]
                 }
-              ]
+              ],
+              "desc": "<p>将指定 ID 的触点移到给定位置并发送同步事件. 应先对该 ID 调用 <code>touchDown</code>.</p>\n"
             }
           ],
-          "desc": "<p>模拟手指弹起.</p>\n"
+          "type": "module",
+          "displayName": "[m#] touchMove"
+        },
+        {
+          "textRaw": "[m#] touchUp",
+          "name": "[m#]_touchup",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#touchUp(id?)",
+              "type": "method",
+              "name": "RootAutomator#touchUp",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID ",
+                      "name": "**[",
+                      "desc": "id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>抬起指定 ID 的触点并发送同步事件. 最后一个触点抬起时同时发送触摸释放事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] touchUp"
+        },
+        {
+          "textRaw": "[m#] setScreenMetrics",
+          "name": "[m#]_setscreenmetrics",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#setScreenMetrics(width, height)",
+              "type": "method",
+              "name": "RootAutomator#setScreenMetrics",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**width** { [number](dataTypes#number) } - 脚本坐标使用的屏幕宽度 ",
+                      "name": "**width**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "脚本坐标使用的屏幕宽度"
+                    },
+                    {
+                      "textRaw": "**height** { [number](dataTypes#number) } - 脚本坐标使用的屏幕高度 ",
+                      "name": "**height**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "脚本坐标使用的屏幕高度"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "width"
+                    },
+                    {
+                      "name": "height"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置当前实例的坐标缩放基准. 影响此实例的坐标方法; 与全局 <code>setScreenMetrics</code> 的设置相互独立. 不转换 <code>sendEvent</code> 的原始数值.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setScreenMetrics"
+        },
+        {
+          "textRaw": "[m#] sendEvent",
+          "name": "[m#]_sendevent",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#sendEvent(type, code, value)",
+              "type": "method",
+              "name": "RootAutomator#sendEvent",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**type** { [number](dataTypes#number) } - Linux 输入事件类型 ",
+                      "name": "**type**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "Linux 输入事件类型"
+                    },
+                    {
+                      "textRaw": "**code** { [number](dataTypes#number) } - 输入事件代码 ",
+                      "name": "**code**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "输入事件代码"
+                    },
+                    {
+                      "textRaw": "**value** { [number](dataTypes#number) } - 原始事件值 ",
+                      "name": "**value**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "原始事件值"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "type"
+                    },
+                    {
+                      "name": "code"
+                    },
+                    {
+                      "name": "value"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向输入设备发送底层事件. 需要调用者自行管理触点和同步事件. Shizuku 后端会暂存事件, 收到 <code>SYN_REPORT</code> 或 <code>SYN_MT_REPORT</code> 时提交事件批次.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sendEvent"
+        },
+        {
+          "textRaw": "[m#] touch",
+          "name": "[m#]_touch",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#touch(x, y)",
+              "type": "method",
+              "name": "RootAutomator#touch",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>依次发送横纵坐标事件, 相当于调用 <code>touchX(x)</code> 和 <code>touchY(y)</code>. 不自动按下, 抬起或发送同步事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] touch"
+        },
+        {
+          "textRaw": "[m#] touchX",
+          "name": "[m#]_touchx",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#touchX(x)",
+              "type": "method",
+              "name": "RootAutomator#touchX",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) } - 横坐标 ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "横坐标"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>发送 <code>EV_ABS / ABS_MT_POSITION_X</code> 事件. 应用当前实例的横坐标缩放; Shizuku 后端还将屏幕坐标映射到输入设备坐标. 不自动发送同步事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] touchX"
+        },
+        {
+          "textRaw": "[m#] touchY",
+          "name": "[m#]_touchy",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#touchY(y)",
+              "type": "method",
+              "name": "RootAutomator#touchY",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) } - 纵坐标 ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "纵坐标"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>发送 <code>EV_ABS / ABS_MT_POSITION_Y</code> 事件. 应用当前实例的纵坐标缩放; Shizuku 后端还将屏幕坐标映射到输入设备坐标. 不自动发送同步事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] touchY"
+        },
+        {
+          "textRaw": "[m#] sendSync",
+          "name": "[m#]_sendsync",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#sendSync()",
+              "type": "method",
+              "name": "RootAutomator#sendSync",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>发送值为 <code>0</code> 的 <code>EV_SYN / SYN_REPORT</code> 事件. Shizuku 后端同时提交已缓存的输入事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sendSync"
+        },
+        {
+          "textRaw": "[m#] sendMtSync",
+          "name": "[m#]_sendmtsync",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#sendMtSync()",
+              "type": "method",
+              "name": "RootAutomator#sendMtSync",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>发送值为 <code>0</code> 的 <code>EV_SYN / SYN_MT_REPORT</code> 事件. Shizuku 后端同时提交已缓存的输入事件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] sendMtSync"
+        },
+        {
+          "textRaw": "[m#] getDefaultId",
+          "name": "[m#]_getdefaultid",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#getDefaultId()",
+              "type": "method",
+              "name": "RootAutomator#getDefaultId",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前实例默认触摸 ID, 初始值为 <code>0</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] getDefaultId"
+        },
+        {
+          "textRaw": "[m#] setDefaultId",
+          "name": "[m#]_setdefaultid",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#setDefaultId(id)",
+              "type": "method",
+              "name": "RootAutomator#setDefaultId",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 新的默认触摸 ID ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "新的默认触摸 ID"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置此后省略 ID 的触摸方法使用的默认值. 不改变已经按下的触点的 ID.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setDefaultId"
+        },
+        {
+          "textRaw": "[m#] exit",
+          "name": "[m#]_exit",
+          "methods": [
+            {
+              "textRaw": "RootAutomator#exit()",
+              "type": "method",
+              "name": "RootAutomator#exit",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>退出当前实例的 Root 输入进程及 Shell; 使用 Shizuku 时提交尚未发送的输入事件. 建议在脚本 <code>exit</code> 事件中调用, 使用结束后不再复用该实例.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exit"
         }
       ],
       "type": "module",
@@ -1562,17 +2038,6 @@
           "type": "method",
           "name": "currentComponent",
           "desc": "<p><strong><code>6.6.1</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#string\">string</a> } - 最近识别的前台组件名称, 未识别时为空字符串</li>\n</ul>\n<p>包名和 Activity 名称均可用时返回 <code>packageName/activityName</code>, 否则返回空字符串.</p>\n",
-          "signatures": [
-            {
-              "params": []
-            }
-          ]
-        },
-        {
-          "textRaw": "auto.waitFor()",
-          "type": "method",
-          "name": "waitFor",
-          "desc": "<p>检查无障碍服务是否已经启用, 如果没有启用则跳转到无障碍服务启用界面, 并等待无障碍服务启动; 当无障碍服务启动后脚本会继续运行.</p>\n<p>因为该函数是阻塞的, 因此除非是有协程特性, 否则不能在 ui 模式下运行该函数, 建议在 ui 模式下使用 <code>auto()</code> 函数.</p>\n",
           "signatures": [
             {
               "params": []
@@ -1989,6 +2454,41 @@
         }
       ],
       "properties": [
+        {
+          "textRaw": "[m] auto.waitFor",
+          "name": "waitFor",
+          "methods": [
+            {
+              "textRaw": "auto.waitFor(timeout?)",
+              "type": "method",
+              "name": "waitFor",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ timeout = -1 ]** { [number](dataTypes#number) } - 等待无障碍服务绑定的超时, 毫秒; 负数表示无限等待 ",
+                      "name": "**[",
+                      "desc": "timeout = -1 ]** { [number](dataTypes#number) } - 等待无障碍服务绑定的超时, 毫秒; 负数表示无限等待"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>尝试启动无障碍服务并阻塞等待服务绑定. 必要时引导用户进入无障碍设置. 超时仍未绑定会中断脚本. 此方法不等待服务进入 <code>isOperational</code> 状态, 也不同于返回 Flow 的条件等待 <code>auto.wait(cond, ...)</code>.</p>\n<p>应在工作线程调用; UI 模式中使用非阻塞入口或将等待放到工作线程.</p>\n"
+            }
+          ]
+        },
         {
           "textRaw": "auto.service",
           "name": "service",

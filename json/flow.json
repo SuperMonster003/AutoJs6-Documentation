@@ -1058,15 +1058,15 @@
           "name": "[m]_of",
           "methods": [
             {
-              "textRaw": "of(value)",
+              "textRaw": "of(value?)",
               "type": "method",
               "name": "of",
-              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>value</strong> { <a href=\"dataTypes#any\">any</a> } - 初始值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>以一个已知值起链, 返回已 fulfill 的 Flow.</p>\n<pre><code class=\"lang-js\">flow.of(text(&#39;登录&#39;).findOnce()).click(); /* 值为 null 时以 INVALID_TARGET 拒绝. */\nflow.of(5).map(x =&gt; x * 2).then(x =&gt; console.log(x)); /* 10 */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>[ value = null ]</strong> { <a href=\"dataTypes#any\">any</a> } - 初始值</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>以一个已知值起链, 返回已 fulfill 的 Flow. 无参调用 <code>flow.of()</code> 的初始值为 <code>null</code>; 可通过 <code>map</code> 或 <code>then</code> 继续处理, 后续要求控件目标的步骤仍会校验该值.</p>\n<pre><code class=\"lang-js\">flow.of(text(&#39;登录&#39;).findOnce()).click(); /* 值为 null 时以 INVALID_TARGET 拒绝. */\nflow.of(5).map(x =&gt; x * 2).then(x =&gt; console.log(x)); /* 10 */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "value"
+                      "name": "value?"
                     }
                   ]
                 }

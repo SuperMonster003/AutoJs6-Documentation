@@ -1516,7 +1516,7 @@ colors.toHex(colors.oklch(l, c, h + 180)); // "#C97E00"
 
 ### toRgb(color)
 
-**`6.2.0`**
+**`6.2.0`** **`Overload 1/2`**
 
 - **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -1527,6 +1527,17 @@ colors.toHex(colors.oklch(l, c, h + 180)); // "#C97E00"
 let [ r, g, b ] = colors.toRgb('#663399');
 console.log(`R: ${r}, G: ${g}, B: ${b}`);
 ```
+
+### toRgb(red, green, blue)
+
+**`Overload 2/2`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - R 分量
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - G 分量
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - B 分量
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - RGB 分量数组
+
+先按 `colors.rgb(red, green, blue)` 解析颜色, 再返回 RGB 分量数组.
 
 ## [m] toRgba
 
@@ -1606,7 +1617,7 @@ console.log(`A: ${a2}, R: ${r2}, G: ${g2}, B: ${b2}`); /* A 分量范围为 [0..
 
 ### toHsv(color)
 
-**`6.2.0`** **`Overload 1/2`**
+**`6.2.0`** **`Overload 1/4`**
 
 - **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -1620,7 +1631,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}`);
 
 ### toHsv(red, green, blue)
 
-**`6.2.0`** **`Overload 2/2`**
+**`6.2.0`** **`Overload 2/4`**
 
 - **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
 - **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
@@ -1634,11 +1645,39 @@ let [ h, s, v ] = colors.toHsv(102, 51, 153);
 console.log(`H: ${h}, S: ${s}, V: ${v}`);
 ```
 
+### toHsv(color, result)
+
+**`Overload 3/4`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 3
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSV 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.
+
+### toHsv(red, green, blue, result)
+
+**`Overload 4/4`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 3
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSV 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.
+
+```js
+let result = util.java.array('float', 3);
+let hsv = colors.toHsv('#663399', result);
+console.log(hsv, result[0]);
+```
+
 ## [m] toHsva
 
 ### toHsva(color)
 
-**`6.2.0`** **`Overload 1/2`**
+**`6.2.0`** **`Overload 1/4`**
 
 - **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -1654,7 +1693,7 @@ console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 
 ### toHsva(red, green, blue, alpha)
 
-**`6.2.0`** **`Overload 2/2`**
+**`6.2.0`** **`Overload 2/4`**
 
 - **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
 - **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
@@ -1671,11 +1710,34 @@ let [ h, s, v, a ] = colors.toHsva(102, 51, 153, 191);
 console.log(`H: ${h}, S: ${s}, V: ${v}, A: ${a}`);
 ```
 
+### toHsva(color, result)
+
+**`Overload 3/4`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 4
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSVA 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 实现写入前四项并返回四个分量.
+
+### toHsva(red, green, blue, alpha, result)
+
+**`Overload 4/4`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 4
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSVA 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 实现写入前四项并返回四个分量.
+
 ## [m] toHsl
 
 ### toHsl(color)
 
-**`6.2.0`** **`Overload 1/2`**
+**`6.2.0`** **`Overload 1/4`**
 
 - **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
@@ -1689,7 +1751,7 @@ console.log(`H: ${h}, S: ${s}, L: ${l}`);
 
 ### toHsl(red, green, blue)
 
-**`6.2.0`** **`Overload 2/2`**
+**`6.2.0`** **`Overload 2/4`**
 
 - **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
 - **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
@@ -1702,6 +1764,28 @@ console.log(`H: ${h}, S: ${s}, L: ${l}`);
 let [ h, s, l ] = colors.toHsl(102, 51, 153);
 console.log(`H: ${h}, S: ${s}, L: ${l}`);
 ```
+
+### toHsl(color, result)
+
+**`Overload 3/4`**
+
+- **color** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 3
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSL 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.
+
+### toHsl(red, green, blue, result)
+
+**`Overload 4/4`**
+
+- **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **blue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量
+- **result** { [JavaArray](dataTypes#javaarray) } - Java 原始类型 `float[]`, 长度至少为 3
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 转换结果的 JavaScript 数组
+
+将转换后的 HSL 分量写入 `result`, 同时返回 JavaScript 数组. `result` 必须是 Java `float[]`, 不能使用普通 JavaScript 数组或 Java `Float[]`. 写入前三项; 返回值复制整个结果容器, 因此建议传入长度恰为 3 的数组.
 
 ## [m] toHsla
 
@@ -1963,7 +2047,7 @@ colors.isSimilar('orange', 'dark-orange', 8, 'hs'); // true
 
 ### isSimilar(colorA, colorB, options)
 
-**`6.2.0`** **`Overload 4/4`**
+**`Overload 4/4`**
 
 - **colorA** { [OmniColor](omniTypes#omnicolor) } - 颜色参数
 - **colorB** { [OmniColor](omniTypes#omnicolor) } - 颜色参数

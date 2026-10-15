@@ -299,15 +299,26 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#files_files_create_path">files.create(path)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_m_createifnotexists">[m] createIfNotExists</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_createifnotexists_path">files.createIfNotExists(path)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#files_files_createwithdirs_path">files.createWithDirs(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_exists_path">files.exists(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_ensuredir_path">files.ensureDir(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_read_path_encoding_utf_8">files.read(path[, encoding = &quot;utf-8&quot;])</a></span></li>
+<li><span class="stability_undefined"><a href="#files_m_readassets">[m] readAssets</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_readassets_filename_encoding">files.readAssets(fileName, encoding?)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#files_files_readbytes_path">files.readBytes(path)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_write_path_text_encoding_utf_8">files.write(path, text[, encoding = &quot;utf-8&quot;])</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_writebytes_path_bytes">files.writeBytes(path, bytes)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_append_path_text_encoding_utf_8">files.append(path, text[, encoding = &#39;utf-8&#39;])</a></span></li>
-<li><span class="stability_undefined"><a href="#files_files_appendbytes_path_text_encoding_utf_8">files.appendBytes(path, text[, encoding = &#39;utf-8&#39;])</a></span></li>
+<li><span class="stability_undefined"><a href="#files_m_appendbytes">[m] appendBytes</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_appendbytes_path_bytes">files.appendBytes(path, bytes)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#files_files_copy_frompath_topath">files.copy(fromPath, toPath)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_move_frompath_topath">files.move(fromPath, toPath)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_rename_path_newname">files.rename(path, newName)</a></span></li>
@@ -324,6 +335,18 @@
 </li>
 <li><span class="stability_undefined"><a href="#files_m_path">[m] path</a></span><ul>
 <li><span class="stability_undefined"><a href="#files_files_path_relativepath">files.path(relativePath?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#files_m_gethumanreadablesize">[m] getHumanReadableSize</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_gethumanreadablesize_bytes_useiecidentifier">files.getHumanReadableSize(bytes, useIecIdentifier?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#files_m_formatsizewithunit">[m] formatSizeWithUnit</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_formatsizewithunit_bytes">files.formatSizeWithUnit(bytes)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#files_m_getsimplifiedpath">[m] getSimplifiedPath</a></span><ul>
+<li><span class="stability_undefined"><a href="#files_files_getsimplifiedpath_path">files.getSimplifiedPath(path)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#files_files_listdir_path_filter">files.listDir(path[, filter])</a></span></li>
@@ -406,7 +429,14 @@ log(files.isDir(&quot;/sdcard/文件.txt&quot;)); // 返回 false.
 </ul>
 </div><p>创建一个文件或文件夹并返回是否创建成功. 如果文件已经存在, 则直接返回 <code>false</code>.</p>
 <pre><code>files.create(&quot;/sdcard/新文件夹/&quot;);
-</code></pre><h2>files.createWithDirs(path)<span><a class="mark" href="#files_files_createwithdirs_path" id="files_files_createwithdirs_path">#</a></span></h2>
+</code></pre><h2>[m] createIfNotExists<span><a class="mark" href="#files_m_createifnotexists" id="files_m_createifnotexists">#</a></span></h2>
+<h3>files.createIfNotExists(path)<span><a class="mark" href="#files_files_createifnotexists_path" id="files_files_createifnotexists_path">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 文件路径</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+</div><p>文件不存在时先创建父目录, 再创建空文件. 新文件创建成功返回 <code>true</code>; 路径已经存在或文件创建失败时返回 <code>false</code>. 相对路径以当前脚本工作目录解析. 与 <code>files.createWithDirs(path)</code> 使用相同实现.</p>
+<h2>files.createWithDirs(path)<span><a class="mark" href="#files_files_createwithdirs_path" id="files_files_createwithdirs_path">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
@@ -433,7 +463,15 @@ log(files.isDir(&quot;/sdcard/文件.txt&quot;)); // 返回 false.
 </ul>
 </div><p>读取文本文件 path 的所有内容并返回. 如果文件不存在, 则抛出 <code>FileNotFoundException</code>.</p>
 <pre><code>log(files.read(&quot;/sdcard/1.txt&quot;));
-</code></pre><h2>files.readBytes(path)<span><a class="mark" href="#files_files_readbytes_path" id="files_files_readbytes_path">#</a></span></h2>
+</code></pre><h2>[m] readAssets<span><a class="mark" href="#files_m_readassets" id="files_m_readassets">#</a></span></h2>
+<h3>files.readAssets(fileName, encoding?)<span><a class="mark" href="#files_files_readassets_filename_encoding" id="files_files_readassets_filename_encoding">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>fileName</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 运行应用 assets 内的相对文件名</li>
+<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 字符编码</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>读取运行应用 APK 的 assets 文本资源. 这里的路径相对于 assets 根目录, 不使用脚本工作目录或共享存储路径. 资源不存在或读取失败时抛出异常.</p>
+<h2>files.readBytes(path)<span><a class="mark" href="#files_files_readbytes_path" id="files_files_readbytes_path">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>
 <li><ins><strong>returns</strong></ins> { <span class="type">byte[]</span> }</li>
@@ -477,12 +515,14 @@ files.append(&quot;/sdcard/1.txt&quot;, text);
 files.append(&quot;/sdcard/1.txt&quot;, text);
 // 用其他应用查看文件.
 app.viewFile(&quot;/sdcard/1.txt&quot;);
-</code></pre><h2>files.appendBytes(path, text[, encoding = &#39;utf-8&#39;])<span><a class="mark" href="#files_files_appendbytes_path_text_encoding_utf_8" id="files_files_appendbytes_path_text_encoding_utf_8">#</a></span></h2>
+</code></pre><h2>[m] appendBytes<span><a class="mark" href="#files_m_appendbytes" id="files_m_appendbytes">#</a></span></h2>
+<h3>files.appendBytes(path, bytes)<span><a class="mark" href="#files_files_appendbytes_path_bytes" id="files_files_appendbytes_path_bytes">#</a></span></h3>
 <div class="signature"><ul>
-<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>
-<li><strong>bytes</strong> { <span class="type">byte[]</span> } 字节数组, 要写入的二进制数据</li>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 目标文件路径</li>
+<li><strong>bytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a></span> } - Java <code>byte[]</code>, 要追加的二进制数据</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>把 bytes 追加到文件 path 的末尾. 如果文件不存在则创建.</p>
+</div><p>将字节数组追加到文件末尾. 文件不存在时尝试创建; 父目录须可访问. 此方法直接写入字节, 没有字符编码参数.</p>
 <h2>files.copy(fromPath, toPath)<span><a class="mark" href="#files_files_copy_frompath_topath" id="files_files_copy_frompath_topath">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>fromPath</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 要复制的原文件路径</li>
@@ -564,6 +604,28 @@ app.viewFile(&quot;/sdcard/1.txt&quot;);
 <p>省略 <strong>relativePath</strong>, 当前工作目录不可用, 或路径中的 <code>..</code> 越过文件系统根目录时返回 <code>null</code>.</p>
 <pre><code class="lang-js">files.path(&#39;./1.png&#39;);
 </code></pre>
+<h2>[m] getHumanReadableSize<span><a class="mark" href="#files_m_gethumanreadablesize" id="files_m_gethumanreadablesize">#</a></span></h2>
+<h3>files.getHumanReadableSize(bytes, useIecIdentifier?)<span><a class="mark" href="#files_files_gethumanreadablesize_bytes_useiecidentifier" id="files_files_gethumanreadablesize_bytes_useiecidentifier">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>bytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非负整数字节数</li>
+<li><strong>[ useIecIdentifier = false ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否使用 KiB, MiB 等 IEC 单位名称</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>将字节数转换为便于阅读的大小文本, 自动选择单位, 使用空格分隔数字与单位并保留一位小数. 此兼容方法使用与 <code>fmt.bytes</code> 相同的字节换算实现; 需要自定义输出时参阅 <a href="fmt.html#fmt_m_bytes">fmt.bytes</a>.</p>
+<h2>[m] formatSizeWithUnit<span><a class="mark" href="#files_m_formatsizewithunit" id="files_m_formatsizewithunit">#</a></span></h2>
+<h3>files.formatSizeWithUnit(bytes)<span><a class="mark" href="#files_files_formatsizewithunit_bytes" id="files_files_formatsizewithunit_bytes">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>bytes</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 非负整数字节数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>按系统区域格式输出文件大小. 小于 1000 B 时输出整数 B; 后续按 1024 换算, 依次使用 KiB, MiB, GiB 和 TiB. 每一级的切换阈值是前一级的 1000 倍, KiB 保留一位小数, MiB 及更大单位保留两位小数. 负数抛出异常.</p>
+<h2>[m] getSimplifiedPath<span><a class="mark" href="#files_m_getsimplifiedpath" id="files_m_getsimplifiedpath">#</a></span></h2>
+<h3>files.getSimplifiedPath(path)<span><a class="mark" href="#files_files_getsimplifiedpath_path" id="files_files_getsimplifiedpath_path">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待简化的路径</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>移除路径中可识别的存储根目录前缀, 便于显示. 依次匹配外部存储根目录, 运行应用的示例目录, 私有 files, cache 和 data 目录. 子路径保留起始 <code>/</code>, 根目录本身变为空字符串; 不匹配时原样返回. 不解析脚本相对路径, 不保证结果可再次作为文件定位路径使用.</p>
 <h2>files.listDir(path[, filter])<span><a class="mark" href="#files_files_listdir_path_filter" id="files_files_listdir_path_filter">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>

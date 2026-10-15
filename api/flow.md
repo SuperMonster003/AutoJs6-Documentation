@@ -633,14 +633,14 @@ flow.run(() => {
 
 ## [m] of
 
-### of(value)
+### of(value?)
 
 **`6.8.0`**
 
-- **value** { [any](dataTypes#any) } - 初始值
+- **[ value = null ]** { [any](dataTypes#any) } - 初始值
 - <ins>**returns**</ins> { [Flow](flowType) }
 
-以一个已知值起链, 返回已 fulfill 的 Flow.
+以一个已知值起链, 返回已 fulfill 的 Flow. 无参调用 `flow.of()` 的初始值为 `null`; 可通过 `map` 或 `then` 继续处理, 后续要求控件目标的步骤仍会校验该值.
 
 ```js
 flow.of(text('登录').findOnce()).click(); /* 值为 null 时以 INVALID_TARGET 拒绝. */

@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `Actualización` [Referencia de API](https://docs.autojs6.com/#/documentation): miembros faltantes de Files y RootAutomator, matrices de resultados de color, contextos WebView y sobrecargas opcionales, con correcciones en los parametros de anexado de bytes, deslizamiento y escalado de coordenadas
 - `Nuevo` [Diseñador de 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), que describe el diseñador visual integrado en el complemento 3-Block Compose: sus entradas y archivos de proyecto, el lienzo / esquema / propiedades / paleta de componentes y los borradores del editor, el subconjunto de script reconocido y las reglas de ida y vuelta, el traspaso bidireccional con el editor de AutoJs6 y las limitaciones actuales
 - `Actualización` La sección "Modo de comparación" de [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) explica las dos ejecuciones de "Ejecutar con AutoJs4 y comparar", el resumen y las marcas de diferencias, y la copia de la plantilla de incidencias
 - `Nuevo` [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime), con el propósito del complemento AutoJs4 Runtime, instalación y permisos, la entrada "Ejecutar con AutoJs4" del gestor de archivos, devolución de registros, detención de tareas, límites de ejecución y notificación de diferencias

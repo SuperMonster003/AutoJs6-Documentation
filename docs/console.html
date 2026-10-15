@@ -339,7 +339,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#console_m_build">[m] build</a></span><ul>
-<li><span class="stability_undefined"><a href="#console_build_options">build(options)</a></span></li>
+<li><span class="stability_undefined"><a href="#console_build_options">build(options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#console_m_setsize">[m] setSize</a></span><ul>
@@ -426,6 +426,8 @@
 <li><span class="stability_undefined"><a href="#console_m_setcontenttextcolor">[m] setContentTextColor</a></span><ul>
 <li><span class="stability_undefined"><a href="#console_setcontenttextcolor_colormap">setContentTextColor(colorMap)</a></span></li>
 <li><span class="stability_undefined"><a href="#console_setcontenttextcolor_color">setContentTextColor(color)</a></span></li>
+<li><span class="stability_undefined"><a href="#console_setcontenttextcolor_colors">setContentTextColor(colors)</a></span></li>
+<li><span class="stability_undefined"><a href="#console_setcontenttextcolor_colors_1">setContentTextColor(...colors)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#console_m_setcontenttextcolors">[m] setContentTextColors</a></span><ul>
@@ -824,13 +826,13 @@ setTimeout(console.reset, 2e3); /* 2 秒钟后重置. */
 <p>启动控制台 Activity 活动窗口.</p>
 <p>此方法相当于是 AutoJs6 首页右上区域点击 &quot;日志&quot; 图标的代码实现.</p>
 <h2>[m] build<span><a class="mark" href="#console_m_build" id="console_m_build">#</a></span></h2>
-<h3>build(options)<span><a class="mark" href="#console_build_options" id="console_build_options">#</a></span></h3>
+<h3>build(options?)<span><a class="mark" href="#console_build_options" id="console_build_options">#</a></span></h3>
 <p><strong><code>6.3.0</code></strong></p>
 <ul>
-<li><strong>options</strong> { <span class="type"><a href="consoleBuildOptionsType.html">ConsoleBuildOptions</a></span> } - 构建器选项</li>
+<li><strong>[ options = {} ]</strong> { <span class="type"><a href="consoleBuildOptionsType.html">ConsoleBuildOptions</a></span> } - 构建器选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type">{ show(): <a href="dataTypes.html#datatypes_void">void</a></span> }}</li>
 </ul>
-<p>构建控制台浮动窗口的配置.</p>
+<p>构建控制台浮动窗口的配置. 无参调用 <code>console.build()</code> 获取当前构建器, 不额外应用配置; 可继续调用 <code>.show()</code>.</p>
 <p>构建后使用 <code>show</code> 方法显示控制台浮动窗口, 即 <code>console.build({ ... }).show()</code>.</p>
 <p>构建器支持一次性配置多个浮动窗口样式选项:</p>
 <pre><code class="lang-js">console.build({
@@ -1162,7 +1164,7 @@ console.build({ contentTextSize: 18 }).show(); /* 效果同上. */
 </code></pre>
 <h2>[m] setContentTextColor<span><a class="mark" href="#console_m_setcontenttextcolor" id="console_m_setcontenttextcolor">#</a></span></h2>
 <h3>setContentTextColor(colorMap)<span><a class="mark" href="#console_setcontenttextcolor_colormap" id="console_setcontenttextcolor_colormap">#</a></span></h3>
-<p><strong><code>6.3.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<p><strong><code>6.3.0</code></strong> <strong><code>Overload 1/4</code></strong></p>
 <ul>
 <li><strong>colorMap</strong> {{<ul>
 <li>verbose?: <a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a>;</li>
@@ -1174,6 +1176,7 @@ console.build({ contentTextSize: 18 }).show(); /* 效果同上. */
 </ul>
 </li>
 <li>}} - 浮动窗口日志文本字体颜色表</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
 </ul>
 <p>设置控制台浮动窗口的日志文本字体颜色, 按日志等级设置一个或多个不同的字体颜色.</p>
 <pre><code class="lang-js">/* 设置 LOG 等级日志字体颜色为深橙色. */
@@ -1197,9 +1200,9 @@ console.setContentTextColor({
 });
 </code></pre>
 <h3>setContentTextColor(color)<span><a class="mark" href="#console_setcontenttextcolor_color" id="console_setcontenttextcolor_color">#</a></span></h3>
-<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<p><strong><code>6.3.0</code></strong> <strong><code>Overload 2/4</code></strong></p>
 <ul>
-<li><strong>colors</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 浮动窗口日志文本字体统一颜色</li>
+<li><strong>color</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a></span> } - 浮动窗口日志文本字体统一颜色</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
 </ul>
 <p>设置控制台浮动窗口的日志文本字体的统一颜色.</p>
@@ -1210,6 +1213,22 @@ console.setContentTextColor(&#39;dark-green&#39;).show();
     console[fName].call(console, `content text color test for console.${fName}`);
 });
 </code></pre>
+<h3>setContentTextColor(colors)<span><a class="mark" href="#console_setcontenttextcolor_colors" id="console_setcontenttextcolor_colors">#</a></span></h3>
+<p><strong><code>Overload 3/4</code></strong></p>
+<ul>
+<li><strong>colors</strong> { <span class="type"><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a>[]</span> } - 日志等级颜色数组</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
+</ul>
+<p>数组依次对应 <code>verbose</code>, <code>log</code>, <code>info</code>, <code>warn</code>, <code>error</code> 和 <code>assert</code>. 最多读取前六项, 超出的项忽略; 缺少的项交给控制台使用默认颜色. 与单色参数不同, 单元素数组只配置第一个日志等级.</p>
+<pre><code class="lang-js">console.setContentTextColor([&#39;gray&#39;, &#39;white&#39;, &#39;green&#39;, &#39;yellow&#39;, &#39;red&#39;, &#39;magenta&#39;]);
+</code></pre>
+<h3>setContentTextColor(...colors)<span><a class="mark" href="#console_setcontenttextcolor_colors_1" id="console_setcontenttextcolor_colors_1">#</a></span></h3>
+<p><strong><code>Overload 4/4</code></strong></p>
+<ul>
+<li><strong>...colors</strong> { <span class="type">...(<a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a>)[]</span> } - 0 至 6 个位置颜色参数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
+</ul>
+<p>传入 2 至 6 个位置参数时按日志等级顺序设置颜色. 无参调用传入空颜色配置. 单个参数仍按前述单色, 颜色表或数组重载处理, 因而单个颜色会统一设置全部等级. 超过 6 个位置参数抛出异常.</p>
 <h2>[m] setContentTextColors<span><a class="mark" href="#console_m_setcontenttextcolors" id="console_m_setcontenttextcolors">#</a></span></h2>
 <h3>setContentTextColors(...colors)<span><a class="mark" href="#console_setcontenttextcolors_colors" id="console_setcontenttextcolors_colors">#</a></span></h3>
 <p><strong><code>6.6.0</code></strong></p>
@@ -1217,7 +1236,7 @@ console.setContentTextColor(&#39;dark-green&#39;).show();
 <li><strong>...colors</strong> { <span class="type"><a href="documentation.html#documentation_9">...</a><a href="omniTypes.html#omnitypes_omnicolor">OmniColor</a><a href="documentation.html#documentation_9">[]</a></span> } - 各日志等级的文字颜色</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="console.html">this</a></span> }</li>
 </ul>
-<p><a href="#console_m_setcontenttextcolor">setContentTextColor</a> 的兼容别名. 传入多个颜色时依次对应 <code>verbose</code>, <code>log</code>, <code>info</code>, <code>warn</code>, <code>error</code> 和 <code>assert</code>.</p>
+<p><a href="#console_m_setcontenttextcolor">setContentTextColor</a> 的兼容别名, 也接受单色, 颜色表或单个颜色数组. 传入 2 至 6 个位置颜色参数时, 依次对应 <code>verbose</code>, <code>log</code>, <code>info</code>, <code>warn</code>, <code>error</code> 和 <code>assert</code>; 超过 6 个参数抛出异常. 单数名称同样支持这些位置参数.</p>
 <h2>[m] setContentBackgroundColor<span><a class="mark" href="#console_m_setcontentbackgroundcolor" id="console_m_setcontentbackgroundcolor">#</a></span></h2>
 <h3>setContentBackgroundColor(color)<span><a class="mark" href="#console_setcontentbackgroundcolor_color" id="console_setcontentbackgroundcolor_color">#</a></span></h3>
 <p><strong><code>6.3.0</code></strong></p>

@@ -2232,13 +2232,13 @@
         {
           "textRaw": "[m] cX",
           "name": "[m]_cx",
-          "desc": "<p>横坐标标度.</p>\n",
+          "desc": "<p>按设备宽度换算横坐标或比例.</p>\n<p>自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: <code>true</code> 强制比例, <code>false</code> 强制绝对坐标, 省略, <code>null</code>, <code>undefined</code> 或 <code>&quot;auto&quot;</code> 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.</p>\n",
           "methods": [
             {
               "textRaw": "cX()",
               "type": "method",
               "name": "cX",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>无参时, 返回当前设备宽度.</p>\n<pre><code class=\"lang-js\">console.log(cX() === device.width); // true\n</code></pre>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备宽度</li>\n</ul>\n<p>无参调用返回 <code>device.width</code>.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -2246,10 +2246,10 @@
               ]
             },
             {
-              "textRaw": "cX(x, base, isRatio?)",
+              "textRaw": "cX(x, base?, isRatio?)",
               "type": "method",
               "name": "cX",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值</li>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 坐标值基数</li>\n<li><strong>[ isRatio = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否强制将 <code>x</code> 作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由基数换算后得到的横坐标值.</p>\n<p><code>isRatio</code> 为 <code>true</code> 时, <code>x</code> 强制作为屏幕宽度百分比, 此时 <code>base</code> 不参与计算.</p>\n<p>例如在一个设备宽度为 <code>1096</code> 的设备上的 <code>100</code> 像素, 在其他不同宽度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在宽度为 1096 像素的设备上. */\ncX(100, 1096); // 100\n\n/* 在宽度为 1080 像素的设备上. */\ncX(100, 1096); // 99\n\n/* 在宽度为 720 像素的设备上. */\ncX(100, 1096); // 66\n\n/* 在宽度为 540 像素的设备上. */\ncX(100, 1096); // 49\n</code></pre>\n<p>上述示例的 <code>1096</code> 为基数, 默认基数为 <code>720</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cX(100); /* 相当于 cX(100, 720). */\nsetScaleBaseX(1096);\ncX(100); /* 相当于 cX(100, 1096). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例, 可为负数</li>\n<li><strong>[ base ]</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标分支的基数</li>\n<li><strong>[ isRatio = &quot;auto&quot; ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 换算模式</li>\n<li><p><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 换算后四舍五入的整数</p>\n</li>\n<li><p>绝对坐标分支: <code>base</code> 默认为当前 <code>getScaleBaseX()</code>, 初始值为 <code>720</code>. 参与计算的基数必须是 <code>1..2147483647</code> 范围内的整数. 结果为 <code>Math.round(device.width * x / base)</code>.</p>\n</li>\n<li>比例分支: 结果为 <code>Math.round(device.width * x)</code>, <code>base</code> 不参与计算.</li>\n</ul>\n<p>自动模式下, <code>Math.abs(x) &lt; 1</code> 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.</p>\n<p>结果不经 Java <code>long</code> 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 <code>-1.5</code> 得到 <code>-1</code>. 超出 JavaScript 安全整数范围的结果仍受 <code>number</code> 精度限制.</p>\n<pre><code class=\"lang-js\">cX(384); /* 按当前绝对坐标基数缩放. */\ncX(0.5, 720, false); /* 将 0.5 当作绝对坐标. */\ncX(2, undefined, true); /* 设备宽度的两倍. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -2257,7 +2257,7 @@
                       "name": "x"
                     },
                     {
-                      "name": "base"
+                      "name": "base?"
                     },
                     {
                       "name": "isRatio?"
@@ -2270,7 +2270,7 @@
               "textRaw": "cX(x, isRatio)",
               "type": "method",
               "name": "cX",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕宽度百分比</li>\n<li><strong>[ isRatio = &#39;auto&#39; ]</strong> { <code>&#39;auto&#39;</code> | <a href=\"dataTypes#boolean\">boolean</a> } - 是否将 <code>x</code> 参数强制作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><code>isRatio</code> 参数默认为 <code>auto</code>, 即由 <code>x</code> 参数的范围自动决定 <code>x</code> 是否视为百分比,<br>\n即当参数 <code>x</code> 满足 <code>-1 &lt; x &lt; 1</code> 时, <code>x</code> 将视为屏幕宽度百分比, 否则将视为绝对坐标值.</p>\n<p><code>isRatio</code> 参数为 <code>true</code> 时, <code>x</code> 参数将强制视为百分比, 如 <code>cX(2, true)</code> 意味着两倍屏幕宽度, <code>2</code> 的意义不再是像素值.</p>\n<p><code>isRatio</code> 参数为 <code>false</code> 时, <code>x</code> 参数将强制视为绝对坐标值, 如 <code>cX(0.5, false)</code> 意味着 <code>0.5</code> 像素值, 其意义不再是百分比.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例</li>\n<li><strong>isRatio</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 使用默认基数时的模式快捷参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>第二个参数为布尔值或 <code>&quot;auto&quot;</code> 时, 省略 <code>base</code>. <code>cX(0.5, false)</code> 强制按绝对坐标换算, <code>cX(2, true)</code> 强制按比例换算. 此快捷形式若再传入非 <code>null</code> / <code>undefined</code> 的第三个模式参数, 会因模式重复而抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2279,21 +2279,6 @@
                     },
                     {
                       "name": "isRatio"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cX(x)",
-              "type": "method",
-              "name": "cX",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕宽度百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当参数 <code>x</code> 满足 <code>-1 &lt; x &lt; 1</code> 时, 相当于 <code>cX(x, /* isRatio = */ true)</code>, 即 <code>x</code> 将视为屏幕宽度百分比.</p>\n<p>当参数 <code>x</code> 满足 <code>x &lt;= -1 | x &gt;= 1</code> 时, 相当于 <code>cX(x, /* base = */ 720)</code>, 即 <code>x</code> 将视为绝对坐标值, 另 <code>base</code> 参数可能由 <code>setScaleBaseX</code> 等方法修改, <code>720</code> 为其默认值.</p>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "x"
                     }
                   ]
                 }
@@ -2306,13 +2291,13 @@
         {
           "textRaw": "[m] cY",
           "name": "[m]_cy",
-          "desc": "<p>纵坐标标度.</p>\n",
+          "desc": "<p>按设备高度换算纵坐标或比例.</p>\n<p>自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: <code>true</code> 强制比例, <code>false</code> 强制绝对坐标, 省略, <code>null</code>, <code>undefined</code> 或 <code>&quot;auto&quot;</code> 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.</p>\n",
           "methods": [
             {
               "textRaw": "cY()",
               "type": "method",
               "name": "cY",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/4</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>无参时, 返回当前设备高度.</p>\n<pre><code class=\"lang-js\">console.log(cY() === device.height); // true\n</code></pre>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 当前设备高度</li>\n</ul>\n<p>无参调用返回 <code>device.height</code>.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -2320,10 +2305,10 @@
               ]
             },
             {
-              "textRaw": "cY(y, base, isRatio?)",
+              "textRaw": "cY(y, base?, isRatio?)",
               "type": "method",
               "name": "cY",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/4</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值</li>\n<li><strong>base</strong> { <a href=\"dataTypes#number\">number</a> } - 坐标值基数</li>\n<li><strong>[ isRatio = false ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否强制将 <code>y</code> 作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由基数换算后得到的纵坐标值.</p>\n<p><code>isRatio</code> 为 <code>true</code> 时, <code>y</code> 强制作为屏幕高度百分比, 此时 <code>base</code> 不参与计算.</p>\n<p>例如在一个设备高度为 <code>2560</code> 的设备上的 <code>100</code> 像素, 在其他不同高度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在高度为 2560 像素的设备上. */\ncY(100, 2560); // 100\n\n/* 在高度为 1920 像素的设备上. */\ncY(100, 2560); // 75\n\n/* 在高度为 1280 像素的设备上. */\ncY(100, 2560); // 50\n\n/* 在高度为 960 像素的设备上. */\ncY(100, 2560); // 38\n</code></pre>\n<p>上述示例的 <code>2560</code> 为基数, 默认基数为 <code>1280</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cY(100); /* 相当于 cY(100, 1280). */\nsetScaleBaseY(2560);\ncY(100); /* 相当于 cY(100, 2560). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例, 可为负数</li>\n<li><strong>[ base ]</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标分支的基数</li>\n<li><strong>[ isRatio = &quot;auto&quot; ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 换算模式</li>\n<li><p><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 换算后四舍五入的整数</p>\n</li>\n<li><p>绝对坐标分支: <code>base</code> 默认为当前 <code>getScaleBaseY()</code>, 初始值为 <code>1280</code>. 参与计算的基数必须是 <code>1..2147483647</code> 范围内的整数. 结果为 <code>Math.round(device.height * y / base)</code>.</p>\n</li>\n<li>比例分支: 结果为 <code>Math.round(device.height * y)</code>, <code>base</code> 不参与计算.</li>\n</ul>\n<p>自动模式下, <code>Math.abs(y) &lt; 1</code> 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.</p>\n<p>结果不经 Java <code>long</code> 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 <code>-1.5</code> 得到 <code>-1</code>. 超出 JavaScript 安全整数范围的结果仍受 <code>number</code> 精度限制.</p>\n<pre><code class=\"lang-js\">cY(384); /* 按当前绝对坐标基数缩放. */\ncY(0.5, 1280, false); /* 将 0.5 当作绝对坐标. */\ncY(2, undefined, true); /* 设备高度的两倍. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -2331,7 +2316,7 @@
                       "name": "y"
                     },
                     {
-                      "name": "base"
+                      "name": "base?"
                     },
                     {
                       "name": "isRatio?"
@@ -2344,7 +2329,7 @@
               "textRaw": "cY(y, isRatio)",
               "type": "method",
               "name": "cY",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/4</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕高度百分比</li>\n<li><strong>[ isRatio = &#39;auto&#39; ]</strong> { <code>&#39;auto&#39;</code> | <a href=\"dataTypes#boolean\">boolean</a> } - 是否将 <code>y</code> 参数强制作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><code>isRatio</code> 参数默认为 <code>auto</code>, 即由 <code>y</code> 参数的范围自动决定 <code>y</code> 是否视为百分比,<br>\n即当参数 <code>y</code> 满足 <code>-1 &lt; y &lt; 1</code> 时, <code>y</code> 将视为屏幕高度百分比, 否则将视为绝对坐标值.</p>\n<p><code>isRatio</code> 参数为 <code>true</code> 时, <code>y</code> 参数将强制视为百分比, 如 <code>cY(2, true)</code> 意味着两倍屏幕高度, <code>2</code> 的意义不再是像素值.</p>\n<p><code>isRatio</code> 参数为 <code>false</code> 时, <code>y</code> 参数将强制视为绝对坐标值, 如 <code>cY(0.5, false)</code> 意味着 <code>0.5</code> 像素值, 其意义不再是百分比.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例</li>\n<li><strong>isRatio</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 使用默认基数时的模式快捷参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>第二个参数为布尔值或 <code>&quot;auto&quot;</code> 时, 省略 <code>base</code>. <code>cY(0.5, false)</code> 强制按绝对坐标换算, <code>cY(2, true)</code> 强制按比例换算. 此快捷形式若再传入非 <code>null</code> / <code>undefined</code> 的第三个模式参数, 会因模式重复而抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2353,21 +2338,6 @@
                     },
                     {
                       "name": "isRatio"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cY(y)",
-              "type": "method",
-              "name": "cY",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 4/4</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕高度百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当参数 <code>y</code> 满足 <code>-1 &lt; y &lt; 1</code> 时, 相当于 <code>cY(y, /* isRatio = */ true)</code>, 即 <code>y</code> 将视为屏幕高度百分比.</p>\n<p>当参数 <code>y</code> 满足 <code>y &lt;= -1 | y &gt;= 1</code> 时, 相当于 <code>cY(y, /* base = */ 1280)</code>, 即 <code>y</code> 将视为绝对坐标值, 另 <code>base</code> 参数可能由 <code>setScaleBaseY</code> 等方法修改, <code>1280</code> 为其默认值.</p>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "y"
                     }
                   ]
                 }
@@ -2380,39 +2350,24 @@
         {
           "textRaw": "[m] cYx",
           "name": "[m]_cyx",
-          "desc": "<p>以横坐标度量的纵坐标标度.</p>\n<p>与设备高度无关, 与设备宽度相关的坐标标度.</p>\n<p>如 <code>cYx(0.5, &#39;9:16&#39;)</code> 对于以下 5 个设备 (以分辨率区分) 得到的结果是完全一致的:</p>\n<pre><code class=\"lang-text\">1. 1080 × 1920\n4. 1080 × 2160\n5. 1080 × 2340\n3. 1080 × 2520\n2. 1080 × 2560\n</code></pre>\n<p>因为所有设备宽度相同, <code>cYx</code> 的结果是高度无关的.</p>\n<p>计算结果:</p>\n<pre><code class=\"lang-js\">1080 * 0.5 * 16 / 9; // 960\n</code></pre>\n<p>设想如下场景, 某个应用页面是可以向下滚动窗口显示更多内容的, 在屏幕上半部分有一个按钮 <code>BTN</code>, 距离屏幕上边缘 <code>H</code> 距离, 另一台设备与当前设备屏幕宽度相同, 但高度更大, 相当于屏幕纵向变长, 此时按钮 <code>BTN</code> 距离屏幕上边缘依然是 <code>H</code> 距离, 仅仅是屏幕下方显示了更多内容.<br>\n因此可使用 <code>cYx</code> 标度表示按钮 <code>BTN</code> 的位置, 如 <code>cYx(0.2, 1080 / 1920)</code> 或 <code>cYx(0.2, 9 / 16)</code> 或 <code>cYx(0.2, &#39;9:16&#39;)</code>.</p>\n<p>上述示例的 <code>0.2</code> 是一个相对值, 是相对于当前设备屏幕高度的, 因此第 2 个参数对应设备宽高比例值.<br>\n如果使用绝对坐标值 (<code>Y</code> 坐标值), 如 <code>384</code>, 则第 2 个参数对应的是设备屏幕宽度值:</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:center\">第 1 个参数</th>\n<th style=\"text-align:center\">第 2 个参数</th>\n<th style=\"text-align:center\">示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:center\">Y 坐标百分比</td>\n<td style=\"text-align:center\">设备宽高比</td>\n<td style=\"text-align:center\">cYx(0.2, &#39;9:16&#39;)</td>\n</tr>\n<tr>\n<td style=\"text-align:center\">Y 坐标值</td>\n<td style=\"text-align:center\">设备宽度值</td>\n<td style=\"text-align:center\">cYx(384, 1096)</td>\n</tr>\n</tbody>\n</table>\n",
+          "desc": "<p>按设备宽度换算纵坐标. 交叉比例统一使用宽高比 <code>width / height</code>, 包括大于 1 的横屏比例.</p>\n<p>自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: <code>true</code> 强制比例, <code>false</code> 强制绝对坐标, 省略, <code>null</code>, <code>undefined</code> 或 <code>&quot;auto&quot;</code> 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.</p>\n",
           "methods": [
             {
-              "textRaw": "cYx(coordinateY, baseX)",
+              "textRaw": "cYx(y, base?, isRatio?)",
               "type": "method",
               "name": "cYx",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1(A)]/3</code></strong></p>\n<ul>\n<li><strong>coordinateY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵坐标值</li>\n<li><strong>[ baseX = 720 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 横坐标基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由横坐标基数换算后得到的纵坐标值.</p>\n<p>例如在一个设备宽度为 <code>1096</code> 设备上的 <code>512</code> 像素高度, 在其他不同宽度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在宽度为 1096 像素的设备上. */\ncYx(512, 1096); // 512\n\n/* 在宽度为 1080 像素的设备上. */\ncYx(512, 1096); // 505\n\n/* 在宽度为 720 像素的设备上. */\ncYx(512, 1096); // 336\n\n/* 在宽度为 540 像素的设备上. */\ncYx(512, 1096); // 252\n</code></pre>\n<p>上述示例的 <code>1096</code> 为基数, 默认基数为 <code>720</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cYx(512); /* 相当于 cYx(512, 720). */\nsetScaleBaseX(1096);\ncYx(512); /* 相当于 cYx(512, 1096). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例, 可为负数</li>\n<li><strong>[ base ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 绝对坐标基数或比例分支的宽高比</li>\n<li><strong>[ isRatio = &quot;auto&quot; ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 换算模式</li>\n<li><p><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 换算后四舍五入的整数</p>\n</li>\n<li><p>绝对坐标分支: <code>base</code> 默认为当前 <code>getScaleBaseX()</code>, 初始值为 <code>720</code>. 参与计算的基数必须是 <code>1..2147483647</code> 范围内的整数. 结果为 <code>Math.round(device.width * y / base)</code>.</p>\n</li>\n<li>比例分支: 数字 <code>base</code> 表示正有限的宽高比 <code>ratio</code>. 省略时使用 <code>getScaleBaseX() / getScaleBaseY()</code>, 结果为 <code>Math.round(device.width * y / ratio)</code>. 字符串比例如 <code>&quot;9:16&quot;</code> 或 <code>&quot;16:9&quot;</code> 必须恰有两个正有限数值, 并启用比例分支; 它与显式 <code>isRatio = false</code> 冲突, 会抛出异常.</li>\n</ul>\n<p>仅在使用默认宽高比时, 横纵基数必须保持设置状态一致: 两者均使用默认值, 或两者均已设置. 使用显式比例或绝对坐标分支时, 不要求另一个方向的基数也已设置.</p>\n<p>6.8.0 统一宽高比为 <code>width / height</code>, 不再根据比例是否大于 1 取倒数. 横屏脚本应直接传入如 <code>16 / 9</code> 或 <code>&quot;16:9&quot;</code>, 默认比例也按横基数除以纵基数计算.</p>\n<p>自动模式下, <code>Math.abs(y) &lt; 1</code> 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.</p>\n<p>结果不经 Java <code>long</code> 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 <code>-1.5</code> 得到 <code>-1</code>. 超出 JavaScript 安全整数范围的结果仍受 <code>number</code> 精度限制.</p>\n<pre><code class=\"lang-js\">cYx(384); /* 按当前绝对坐标基数缩放. */\ncYx(0.5, 720, false); /* 将 0.5 当作绝对坐标. */\ncYx(2, 16 / 9, true); /* 显式横屏比例, 强制比例模式. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "coordinateY"
+                      "name": "y"
                     },
                     {
-                      "name": "baseX"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cYx(percentY, ratio)",
-              "type": "method",
-              "name": "cYx",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1(B)]/3</code></strong></p>\n<ul>\n<li><strong>percentY</strong> { <a href=\"dataTypes#number\">number</a> } - 纵坐标百分比</li>\n<li><strong>[ ratio = &#39;9:16&#39; ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 设备宽高比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由设备宽高比换算后得到的新纵坐标值.</p>\n<p>例如在一个设备宽度与高度分别为 <code>1096</code> 和 <code>2560</code> 的设备上的 <code>512</code> 像素高度, 即 <code>0.2</code> 倍的屏幕高度, 在其他不同宽度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在宽度为 1096 像素的设备上. */\ncYx(0.2, 1096 / 2560); // 512\n\n/* 在宽度为 1080 像素的设备上. */\ncYx(0.2, 1096 / 2560); // 505\n\n/* 在宽度为 720 像素的设备上. */\ncYx(0.2, 1096 / 2560); // 336\n\n/* 在宽度为 540 像素的设备上. */\ncYx(0.2, 1096 / 2560); // 252\n</code></pre>\n<p>上述示例的 <code>1096 / 2560</code> 为基数, 默认基数为 <code>720 / 1280</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cYx(0.2); /* 相当于 cYx(0.2, 720 / 1280). */\nsetScaleBases(1096, 2560);\ncYx(0.2); /* 相当于 cYx(0.2, 1096 / 2560). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "percentY"
+                      "name": "base?"
                     },
                     {
-                      "name": "ratio"
+                      "name": "isRatio?"
                     }
                   ]
                 }
@@ -2422,7 +2377,7 @@
               "textRaw": "cYx(y, isRatio)",
               "type": "method",
               "name": "cYx",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕高度百分比</li>\n<li><strong>[ isRatio = &#39;auto&#39; ]</strong> { <code>&#39;auto&#39;</code> | <a href=\"dataTypes#boolean\">boolean</a> } - 是否将 <code>y</code> 参数强制作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><code>isRatio</code> 参数默认为 <code>auto</code>, 即由 <code>y</code> 参数的范围自动决定 <code>y</code> 是否视为百分比,<br>\n即当参数 <code>y</code> 满足 <code>-1 &lt; y &lt; 1</code> 时, <code>y</code> 将视为屏幕高度百分比, 否则将视为绝对坐标值.</p>\n<p><code>isRatio</code> 参数为 <code>true</code> 时, <code>y</code> 参数将强制视为百分比, 如 <code>cYx(2, true)</code> 意味着两倍屏幕高度, <code>2</code> 的意义不再是像素值.</p>\n<p><code>isRatio</code> 参数为 <code>false</code> 时, <code>y</code> 参数将强制视为绝对坐标值, 如 <code>cYx(0.5, false)</code> 意味着 <code>0.5</code> 像素值, 其意义不再是百分比.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例</li>\n<li><strong>isRatio</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 使用默认基数时的模式快捷参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>第二个参数为布尔值或 <code>&quot;auto&quot;</code> 时, 省略 <code>base</code>. <code>cYx(0.5, false)</code> 强制按绝对坐标换算, <code>cYx(2, true)</code> 强制按比例换算. 此快捷形式若再传入非 <code>null</code> / <code>undefined</code> 的第三个模式参数, 会因模式重复而抛出异常.</p>\n<p>必须提供坐标参数, 无参调用会抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2431,21 +2386,6 @@
                     },
                     {
                       "name": "isRatio"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cYx(y)",
-              "type": "method",
-              "name": "cYx",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>y</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕高度百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当参数 <code>y</code> 满足 <code>-1 &lt; y &lt; 1</code> 时, 相当于 <code>cYx(y, /* isRatio = */ true)</code>, 即 <code>y</code> 将视为屏幕高度百分比.</p>\n<p>当参数 <code>y</code> 满足 <code>y &lt;= -1 | y &gt;= 1</code> 时, 相当于 <code>cYx(y, /* base = */ 720)</code>, 即 <code>y</code> 将视为绝对坐标值, 另 <code>base</code> 参数可能由 <code>setScaleBaseX</code> 等方法修改, <code>720</code> 为其默认值.</p>\n<pre><code class=\"lang-js\">cYx(0.3); /* 相当于 cYx(0.3, &#39;9:16&#39;). */\ncYx(384); /* 相当于 cYx(384, 720). */\n</code></pre>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "y"
                     }
                   ]
                 }
@@ -2458,39 +2398,24 @@
         {
           "textRaw": "[m] cXy",
           "name": "[m]_cxy",
-          "desc": "<p>以纵坐标度量的横坐标标度.</p>\n<p>与设备宽度无关, 与设备高度相关的坐标标度.</p>\n<p>如 <code>cXy(0.5, &#39;9:16&#39;)</code> 对于以下 5 个设备 (以分辨率区分) 得到的结果是完全一致的:</p>\n<pre><code class=\"lang-text\">1. 1080 × 1920\n4. 1096 × 1920\n5. 720 × 1920\n3. 540 × 1920\n2. 960 × 1920\n</code></pre>\n<p>因为所有设备高度相同, <code>cXy</code> 的结果是宽度无关的.</p>\n<p>计算结果:</p>\n<pre><code class=\"lang-js\">1920 * 0.5 * 9 / 16; // 540\n</code></pre>\n<p>设想如下场景, 某个应用页面是可以向右滚动窗口显示更多内容的, 在屏幕左半部分有一个按钮 <code>BTN</code>, 距离屏幕左边缘 <code>W</code> 距离, 另一台设备与当前设备屏幕高度相同, 但宽度更大, 相当于屏幕横向变长, 此时按钮 <code>BTN</code> 距离屏幕左边缘依然是 <code>W</code> 距离, 仅仅是屏幕右方显示了更多内容.<br>\n因此可使用 <code>cXy</code> 标度表示按钮 <code>BTN</code> 的位置, 如 <code>cXy(0.2, 1080 / 1920)</code> 或 <code>cXy(0.2, 9 / 16)</code> 或 <code>cXy(0.2, &#39;9:16&#39;)</code>.</p>\n<p>上述示例的 <code>0.2</code> 是一个相对值, 是相对于当前设备屏幕宽度的, 因此第 2 个参数对应设备宽高比例值.<br>\n如果使用绝对坐标值 (<code>X</code> 坐标值), 如 <code>384</code>, 则第 2 个参数对应的是设备屏幕高度值:</p>\n<table>\n<thead>\n<tr>\n<th style=\"text-align:center\">第 1 个参数</th>\n<th style=\"text-align:center\">第 2 个参数</th>\n<th style=\"text-align:center\">示例</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:center\">X 坐标百分比</td>\n<td style=\"text-align:center\">设备宽高比</td>\n<td style=\"text-align:center\">cXy(0.2, &#39;9:16&#39;)</td>\n</tr>\n<tr>\n<td style=\"text-align:center\">X 坐标值</td>\n<td style=\"text-align:center\">设备高度值</td>\n<td style=\"text-align:center\">cXy(384, 2560)</td>\n</tr>\n</tbody>\n</table>\n",
+          "desc": "<p>按设备高度换算横坐标. 交叉比例统一使用宽高比 <code>width / height</code>, 包括大于 1 的横屏比例.</p>\n<p>自 AutoJs6 6.8.0 起, 四个坐标换算函数统一模式规则: <code>true</code> 强制比例, <code>false</code> 强制绝对坐标, 省略, <code>null</code>, <code>undefined</code> 或 <code>&quot;auto&quot;</code> 按坐标值绝对值是否小于 1 自动选择. 非有限数值和无效基数会抛出异常.</p>\n",
           "methods": [
             {
-              "textRaw": "cXy(coordinateX, baseY)",
+              "textRaw": "cXy(x, base?, isRatio?)",
               "type": "method",
               "name": "cXy",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1(A)]/3</code></strong></p>\n<ul>\n<li><strong>coordinateX</strong> { <a href=\"dataTypes#number\">number</a> } - 横坐标值</li>\n<li><strong>[ baseY = 1280 ]</strong> { <a href=\"dataTypes#number\">number</a> } - 纵坐标基数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由纵坐标基数换算后得到的横坐标值.</p>\n<p>例如在一个设备高度为 <code>2560</code> 设备上的 <code>512</code> 像素宽度, 在其他不同高度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在高度为 2560 像素的设备上. */\ncXy(512, 2560); // 512\n\n/* 在高度为 1920 像素的设备上. */\ncXy(512, 2560); // 384\n\n/* 在高度为 1280 像素的设备上. */\ncXy(512, 2560); // 256\n\n/* 在高度为 960 像素的设备上. */\ncXy(512, 2560); // 192\n</code></pre>\n<p>上述示例的 <code>2560</code> 为基数, 默认基数为 <code>1280</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cXy(512); /* 相当于 cXy(512, 1280). */\nsetScaleBaseY(2560);\ncXy(512); /* 相当于 cXy(512, 2560). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例, 可为负数</li>\n<li><strong>[ base ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 绝对坐标基数或比例分支的宽高比</li>\n<li><strong>[ isRatio = &quot;auto&quot; ]</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 换算模式</li>\n<li><p><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> } - 换算后四舍五入的整数</p>\n</li>\n<li><p>绝对坐标分支: <code>base</code> 默认为当前 <code>getScaleBaseY()</code>, 初始值为 <code>1280</code>. 参与计算的基数必须是 <code>1..2147483647</code> 范围内的整数. 结果为 <code>Math.round(device.height * x / base)</code>.</p>\n</li>\n<li>比例分支: 数字 <code>base</code> 表示正有限的宽高比 <code>ratio</code>. 省略时使用 <code>getScaleBaseX() / getScaleBaseY()</code>, 结果为 <code>Math.round(device.height * x * ratio)</code>. 字符串比例如 <code>&quot;9:16&quot;</code> 或 <code>&quot;16:9&quot;</code> 必须恰有两个正有限数值, 并启用比例分支; 它与显式 <code>isRatio = false</code> 冲突, 会抛出异常.</li>\n</ul>\n<p>仅在使用默认宽高比时, 横纵基数必须保持设置状态一致: 两者均使用默认值, 或两者均已设置. 使用显式比例或绝对坐标分支时, 不要求另一个方向的基数也已设置.</p>\n<p>6.8.0 统一宽高比为 <code>width / height</code>, 不再根据比例是否大于 1 取倒数. 横屏脚本应直接传入如 <code>16 / 9</code> 或 <code>&quot;16:9&quot;</code>, 默认比例也按横基数除以纵基数计算.</p>\n<p>自动模式下, <code>Math.abs(x) &lt; 1</code> 使用比例分支, 其他值使用绝对坐标分支. 若第二个参数是数字且未指定模式, 仍按此规则判断, 不会因为传入基数而自动切换模式.</p>\n<p>结果不经 Java <code>long</code> 的饱和截断. 恰好处于半值时向正无穷方向舍入, 如 <code>-1.5</code> 得到 <code>-1</code>. 超出 JavaScript 安全整数范围的结果仍受 <code>number</code> 精度限制.</p>\n<pre><code class=\"lang-js\">cXy(384); /* 按当前绝对坐标基数缩放. */\ncXy(0.5, 1280, false); /* 将 0.5 当作绝对坐标. */\ncXy(2, 16 / 9, true); /* 显式横屏比例, 强制比例模式. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
                     {
-                      "name": "coordinateX"
+                      "name": "x"
                     },
                     {
-                      "name": "baseY"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cXy(percentX, ratio)",
-              "type": "method",
-              "name": "cXy",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload [1(B)]/3</code></strong></p>\n<ul>\n<li><strong>percentX</strong> { <a href=\"dataTypes#number\">number</a> } - 横坐标百分比</li>\n<li><strong>[ ratio = &#39;9:16&#39; ]</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 设备宽高比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>由设备宽高比换算后得到的新横坐标值.</p>\n<p>例如在一个设备高度与宽度分别为 <code>1096</code> 和 <code>2560</code> 的设备上的 <code>548</code> 像素宽度, 即 <code>0.5</code> 倍的屏幕宽度, 在其他不同高度的设备上将转换为不同的值:</p>\n<pre><code class=\"lang-js\">/* 在高度为 2560 像素的设备上. */\ncXy(0.5, 1096 / 2560); // 548\n\n/* 在高度为 1920 像素的设备上. */\ncXy(0.5, 1096 / 2560); // 411\n\n/* 在高度为 1280 像素的设备上. */\ncXy(0.5, 1096 / 2560); // 274\n\n/* 在高度为 960 像素的设备上. */\ncXy(0.5, 1096 / 2560); // 206\n</code></pre>\n<p>上述示例的 <code>1096 / 2560</code> 为基数, 默认基数为 <code>720 / 1280</code>, 如需设置默认基数, 可使用以下方法:</p>\n<pre><code class=\"lang-js\">cXy(0.5); /* 相当于 cXy(0.5, 720 / 1280). */\nsetScaleBases(1096, 2560);\ncXy(0.5); /* 相当于 cXy(0.5, 1096 / 2560). */\n</code></pre>\n<p>默认基数只能修改最多一次.</p>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "percentX"
+                      "name": "base?"
                     },
                     {
-                      "name": "ratio"
+                      "name": "isRatio?"
                     }
                   ]
                 }
@@ -2500,7 +2425,7 @@
               "textRaw": "cXy(x, isRatio)",
               "type": "method",
               "name": "cXy",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕宽度百分比</li>\n<li><strong>[ isRatio = &#39;auto&#39; ]</strong> { <code>&#39;auto&#39;</code> | <a href=\"dataTypes#boolean\">boolean</a> } - 是否将 <code>x</code> 参数强制作为百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><code>isRatio</code> 参数默认为 <code>auto</code>, 即由 <code>x</code> 参数的范围自动决定 <code>x</code> 是否视为百分比,<br>\n即当参数 <code>x</code> 满足 <code>-1 &lt; x &lt; 1</code> 时, <code>x</code> 将视为屏幕宽度百分比, 否则将视为绝对坐标值.</p>\n<p><code>isRatio</code> 参数为 <code>true</code> 时, <code>x</code> 参数将强制视为百分比, 如 <code>cXy(2, true)</code> 意味着两倍屏幕宽度, <code>2</code> 的意义不再是像素值.</p>\n<p><code>isRatio</code> 参数为 <code>false</code> 时, <code>x</code> 参数将强制视为绝对坐标值, 如 <code>cXy(0.5, false)</code> 意味着 <code>0.5</code> 像素值, 其意义不再是百分比.</p>\n",
+              "desc": "<p><strong><code>[6.8.0]</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 有限的坐标值或比例</li>\n<li><strong>isRatio</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <code>&quot;auto&quot;</code> } - 使用默认基数时的模式快捷参数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>第二个参数为布尔值或 <code>&quot;auto&quot;</code> 时, 省略 <code>base</code>. <code>cXy(0.5, false)</code> 强制按绝对坐标换算, <code>cXy(2, true)</code> 强制按比例换算. 此快捷形式若再传入非 <code>null</code> / <code>undefined</code> 的第三个模式参数, 会因模式重复而抛出异常.</p>\n<p>必须提供坐标参数, 无参调用会抛出异常.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -2509,21 +2434,6 @@
                     },
                     {
                       "name": "isRatio"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "textRaw": "cXy(x)",
-              "type": "method",
-              "name": "cXy",
-              "desc": "<p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>x</strong> { <a href=\"dataTypes#number\">number</a> } - 绝对坐标值或屏幕宽度百分比</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>当参数 <code>x</code> 满足 <code>-1 &lt; x &lt; 1</code> 时, 相当于 <code>cXy(x, /* isRatio = */ true)</code>, 即 <code>x</code> 将视为屏幕宽度百分比.</p>\n<p>当参数 <code>x</code> 满足 <code>x &lt;= -1 | x &gt;= 1</code> 时, 相当于 <code>cXy(x, /* base = */ 1280)</code>, 即 <code>x</code> 将视为绝对坐标值, 另 <code>base</code> 参数可能由 <code>setScaleBaseY</code> 等方法修改, <code>1280</code> 为其默认值.</p>\n<pre><code class=\"lang-js\">cXy(0.3); /* 相当于 cXy(0.3, &#39;9:16&#39;). */\ncXy(384); /* 相当于 cXy(384, 1280). */\n</code></pre>\n",
-              "signatures": [
-                {
-                  "params": [
-                    {
-                      "name": "x"
                     }
                   ]
                 }

@@ -12,7 +12,7 @@ SimpleActionAutomator 提供按文本或控件序号执行点击, 滚动和文�
 
 ## 高权限自动化 (RootAutomator)
 
-RootAutomator 通过 Root 权限向设备输入系统写入触摸事件, 可执行按下, 移动, 抬起及多指操作. 它与基于无障碍服务的 `automator` 方法具有不同的运行条件和生命周期, 详见 [RootAutomator](#rootautomator).
+RootAutomator 通过 Root 或可访问输入设备的 Shizuku 向设备输入系统写入触摸事件, 可执行按下, 移动, 抬起及多指操作. 它与基于无障碍服务的 `automator` 方法具有不同的运行条件和生命周期, 详见 [RootAutomator](#rootautomator).
 
 ## 自动化配置 (AutomatorConfiguration)
 
@@ -489,96 +489,193 @@ gesturesAsync(
 
 # RootAutomator
 
-RootAutomator 是一个使用 root 权限来模拟触摸的对象, 用它可以完成触摸与多点触摸, 并且这些动作的执行没有延迟.
+RootAutomator 通过设备输入接口发送触摸事件, 与无障碍服务的自动化方法独立. 优先使用 Root; Root 不可用时, 可使用已授权且可工作的 Shizuku, 但 Shizuku 还必须能访问可写的触摸输入设备, 否则构造失败.
 
-一个脚本中最好只存在一个 RootAutomator, 并且保证脚本结束退出他. 可以在 exit 事件中退出 RootAutomator, 例如:
+以下方法由实例调用, 如 `ra.tap(100, 200)`. 默认触摸 ID 初始为 `0`, 可通过 `setDefaultId` 修改. 涉及输入事件的方法在后端未准备就绪或写入失败时抛出异常.
 
-```
-let ra = new RootAutomator();
-events.on('exit', function(){
-  ra.exit();
-});
-// 执行一些点击操作.
-...
+## [c] RootAutomator
 
-```
+### new RootAutomator(waitForReady?)
 
-**注意以下命令需要 root 权限**
+- **[ waitForReady = false ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - `true` 在构造时最多等待 5000 毫秒; `false` 不在构造时等待; 数字指定等待超时毫秒数, 负数跳过等待
+- <ins>**returns**</ins> { [RootAutomator](#rootautomator) }
 
-## RootAutomator.tap(x, y[, id])
+创建输入控制对象. 即使构造时不等待, 发送输入事件前仍会最多等待 5000 毫秒. 等待超时或初始化失败会抛出异常. 不应在 UI 线程执行会阻塞的操作.
 
-- **x** { [number](dataTypes#number) } 横坐标
-- **y** { [number](dataTypes#number) } 纵坐标
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1, 可以通过 setDefaultId 指定.
-
-点击位置 (x, y). 其中 id 是一个整数值, 用于区分多点触摸, 不同的 id 表示不同的 "手指", 例如:
-
-```
-let ra = new RootAutomator();
-// 让 "手指 1" 点击位置 (100, 100).
-ra.tap(100, 100, 1);
-// 让 "手指 2" 点击位置 (200, 200).
-ra.tap(200, 200, 2);
-ra.exit();
+```js
+let ra = new RootAutomator(true);
+events.on('exit', () => ra.exit());
+ra.tap(100, 200);
 ```
 
-如果不需要多点触摸, 则不需要 id 这个参数.
-多点触摸通常用于手势或游戏操作, 例如模拟双指捏合, 双指上滑等.
+## [m#] tap
 
-某些情况下可能存在 tap 点击无反应的情况, 这时可以用 `RootAutomator.press()` 函数代替.
+### RootAutomator#tap(x, y, id?)
 
-## RootAutomator.swipe(x1, x2, y1, y2[, duration, id])
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-- **x1** { [number](dataTypes#number) } 滑动起点横坐标
-- **y1** { [number](dataTypes#number) } 滑动起点纵坐标
-- **x2** { [number](dataTypes#number) } 滑动终点横坐标
-- **y2** { [number](dataTypes#number) } 滑动终点纵坐标
-- **duration** { [number](dataTypes#number) } 滑动时长, 单位毫秒, 默认值为 300
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+在指定位置按下后立即抬起. 不同 ID 可区分多个触点. 坐标受此实例 `setScreenMetrics` 的设置影响.
 
-模拟一次从 (x1, y1) 到 (x2, y2) 的时间为 duration 毫秒的滑动.
+## [m#] swipe
 
-## RootAutomator.press(x, y, duration[, id])
+### RootAutomator#swipe(x1, y1, x2, y2, duration?, id?)
 
-- **x** { [number](dataTypes#number) } 横坐标
-- **y** { [number](dataTypes#number) } 纵坐标
-- **duration** { [number](dataTypes#number) } 按下时长
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+- **x1** { [number](dataTypes#number) } - 起点横坐标
+- **y1** { [number](dataTypes#number) } - 起点纵坐标
+- **x2** { [number](dataTypes#number) } - 终点横坐标
+- **y2** { [number](dataTypes#number) } - 终点纵坐标
+- **[ duration = 300 ]** { [number](dataTypes#number) } - 滑动时长, 毫秒
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-模拟按下位置 (x, y), 时长为 duration 毫秒.
+从起点向终点持续发送移动事件, 最后抬起触点. 参数顺序是起点 `(x1, y1)`, 终点 `(x2, y2)`; 坐标受此实例的屏幕度量设置影响.
 
-## RootAutomator.longPress(x, y[\, id\])
+## [m#] press
 
-- **x** { [number](dataTypes#number) } 横坐标
-- **y** { [number](dataTypes#number) } 纵坐标
-- **duration** { [number](dataTypes#number) } 按下时长
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+### RootAutomator#press(x, y, duration, id?)
 
-模拟长按位置 (x, y).
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- **duration** { [number](dataTypes#number) } - 按住时长, 毫秒
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-以上为简单模拟触摸操作的函数. 如果要模拟一些复杂的手势, 需要更底层的函数.
+在指定位置按下, 阻塞等待给定时长后抬起.
 
-## RootAutomator.touchDown(x, y[, id])
+## [m#] longPress
 
-- **x** { [number](dataTypes#number) } 横坐标
-- **y** { [number](dataTypes#number) } 纵坐标
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+### RootAutomator#longPress(x, y, id?)
 
-模拟手指按下位置 (x, y).
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-## RootAutomator.touchMove(x, y[, id])
+按住时长为 Android 的长按阈值加 200 毫秒, 随后抬起.
 
-- **x** { [number](dataTypes#number) } 横坐标
-- **y** { [number](dataTypes#number) } 纵坐标
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+## [m#] touchDown
 
-模拟移动手指到位置 (x, y).
+### RootAutomator#touchDown(x, y, id?)
 
-## RootAutomator.touchUp([id])
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
 
-- **id** { [number](dataTypes#number) } 多点触摸 id, 可选, 默认为 1
+按下触点并发送同步事件. 配合 `touchMove` 与 `touchUp` 组成多点触摸过程.
 
-模拟手指弹起.
+## [m#] touchMove
+
+### RootAutomator#touchMove(x, y, id?)
+
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+将指定 ID 的触点移到给定位置并发送同步事件. 应先对该 ID 调用 `touchDown`.
+
+## [m#] touchUp
+
+### RootAutomator#touchUp(id?)
+
+- **[ id ]** { [number](dataTypes#number) } - 触摸 ID, 省略时使用当前默认 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+抬起指定 ID 的触点并发送同步事件. 最后一个触点抬起时同时发送触摸释放事件.
+
+## [m#] setScreenMetrics
+
+### RootAutomator#setScreenMetrics(width, height)
+
+- **width** { [number](dataTypes#number) } - 脚本坐标使用的屏幕宽度
+- **height** { [number](dataTypes#number) } - 脚本坐标使用的屏幕高度
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置当前实例的坐标缩放基准. 影响此实例的坐标方法; 与全局 `setScreenMetrics` 的设置相互独立. 不转换 `sendEvent` 的原始数值.
+
+## [m#] sendEvent
+
+### RootAutomator#sendEvent(type, code, value)
+
+- **type** { [number](dataTypes#number) } - Linux 输入事件类型
+- **code** { [number](dataTypes#number) } - 输入事件代码
+- **value** { [number](dataTypes#number) } - 原始事件值
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+向输入设备发送底层事件. 需要调用者自行管理触点和同步事件. Shizuku 后端会暂存事件, 收到 `SYN_REPORT` 或 `SYN_MT_REPORT` 时提交事件批次.
+
+## [m#] touch
+
+### RootAutomator#touch(x, y)
+
+- **x** { [number](dataTypes#number) } - 横坐标
+- **y** { [number](dataTypes#number) } - 纵坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+依次发送横纵坐标事件, 相当于调用 `touchX(x)` 和 `touchY(y)`. 不自动按下, 抬起或发送同步事件.
+
+## [m#] touchX
+
+### RootAutomator#touchX(x)
+
+- **x** { [number](dataTypes#number) } - 横坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `EV_ABS / ABS_MT_POSITION_X` 事件. 应用当前实例的横坐标缩放; Shizuku 后端还将屏幕坐标映射到输入设备坐标. 不自动发送同步事件.
+
+## [m#] touchY
+
+### RootAutomator#touchY(y)
+
+- **y** { [number](dataTypes#number) } - 纵坐标
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送 `EV_ABS / ABS_MT_POSITION_Y` 事件. 应用当前实例的纵坐标缩放; Shizuku 后端还将屏幕坐标映射到输入设备坐标. 不自动发送同步事件.
+
+## [m#] sendSync
+
+### RootAutomator#sendSync()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送值为 `0` 的 `EV_SYN / SYN_REPORT` 事件. Shizuku 后端同时提交已缓存的输入事件.
+
+## [m#] sendMtSync
+
+### RootAutomator#sendMtSync()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+发送值为 `0` 的 `EV_SYN / SYN_MT_REPORT` 事件. Shizuku 后端同时提交已缓存的输入事件.
+
+## [m#] getDefaultId
+
+### RootAutomator#getDefaultId()
+
+- <ins>**returns**</ins> { [number](dataTypes#number) }
+
+返回当前实例默认触摸 ID, 初始值为 `0`.
+
+## [m#] setDefaultId
+
+### RootAutomator#setDefaultId(id)
+
+- **id** { [number](dataTypes#number) } - 新的默认触摸 ID
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+设置此后省略 ID 的触摸方法使用的默认值. 不改变已经按下的触点的 ID.
+
+## [m#] exit
+
+### RootAutomator#exit()
+
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+退出当前实例的 Root 输入进程及 Shell; 使用 Shizuku 时提交尚未发送的输入事件. 建议在脚本 `exit` 事件中调用, 使用结束后不再复用该实例.
 
 # 使用 root 权限点击和滑动的简单命令
 
@@ -884,11 +981,16 @@ auto.registerEvent('view_scrolled', e => console.log('滚动结束'), { debounce
 
 [auto.removeEvent](#m-removeevent) 的兼容别名. 此方法仍只移除一个事件名称.
 
-## auto.waitFor()
+## [m] auto.waitFor
 
-检查无障碍服务是否已经启用, 如果没有启用则跳转到无障碍服务启用界面, 并等待无障碍服务启动; 当无障碍服务启动后脚本会继续运行.
+### auto.waitFor(timeout?)
 
-因为该函数是阻塞的, 因此除非是有协程特性, 否则不能在 ui 模式下运行该函数, 建议在 ui 模式下使用 `auto()` 函数.
+- **[ timeout = -1 ]** { [number](dataTypes#number) } - 等待无障碍服务绑定的超时, 毫秒; 负数表示无限等待
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+尝试启动无障碍服务并阻塞等待服务绑定. 必要时引导用户进入无障碍设置. 超时仍未绑定会中断脚本. 此方法不等待服务进入 `isOperational` 状态, 也不同于返回 Flow 的条件等待 `auto.wait(cond, ...)`.
+
+应在工作线程调用; UI 模式中使用非阻塞入口或将等待放到工作线程.
 
 ## auto.setMode(mode)
 

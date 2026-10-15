@@ -77,6 +77,15 @@ files.join('/sdcard', 'Download', '1.txt');
 files.create("/sdcard/新文件夹/");
 ```
 
+## [m] createIfNotExists
+
+### files.createIfNotExists(path)
+
+- **path** { [string](dataTypes#string) } - 文件路径
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+文件不存在时先创建父目录, 再创建空文件. 新文件创建成功返回 `true`; 路径已经存在或文件创建失败时返回 `false`. 相对路径以当前脚本工作目录解析. 与 `files.createWithDirs(path)` 使用相同实现.
+
 ## files.createWithDirs(path)
 
 - **path** { [string](dataTypes#string) } 路径
@@ -114,6 +123,16 @@ files.createWithDirs("/sdcard/新文件夹/新文件夹/新文件夹/1.txt");
 ```
 log(files.read("/sdcard/1.txt"));
 ```
+
+## [m] readAssets
+
+### files.readAssets(fileName, encoding?)
+
+- **fileName** { [string](dataTypes#string) } - 运行应用 assets 内的相对文件名
+- **[ encoding = "utf-8" ]** { [string](dataTypes#string) } - 字符编码
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+读取运行应用 APK 的 assets 文本资源. 这里的路径相对于 assets 根目录, 不使用脚本工作目录或共享存储路径. 资源不存在或读取失败时抛出异常.
 
 ## files.readBytes(path)
 
@@ -174,12 +193,15 @@ files.append("/sdcard/1.txt", text);
 app.viewFile("/sdcard/1.txt");
 ```
 
-## files.appendBytes(path, text[, encoding = 'utf-8'])
+## [m] appendBytes
 
-- **path** { [string](dataTypes#string) } 路径
-- **bytes** {byte[]} 字节数组, 要写入的二进制数据
+### files.appendBytes(path, bytes)
 
-把 bytes 追加到文件 path 的末尾. 如果文件不存在则创建.
+- **path** { [string](dataTypes#string) } - 目标文件路径
+- **bytes** { [JavaArray](dataTypes#javaarray) } - Java `byte[]`, 要追加的二进制数据
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+将字节数组追加到文件末尾. 文件不存在时尝试创建; 父目录须可访问. 此方法直接写入字节, 没有字符编码参数.
 
 ## files.copy(fromPath, toPath)
 
@@ -279,6 +301,34 @@ app.viewFile("/sdcard/1.txt");
 ```js
 files.path('./1.png');
 ```
+
+## [m] getHumanReadableSize
+
+### files.getHumanReadableSize(bytes, useIecIdentifier?)
+
+- **bytes** { [number](dataTypes#number) } - 非负整数字节数
+- **[ useIecIdentifier = false ]** { [boolean](dataTypes#boolean) } - 是否使用 KiB, MiB 等 IEC 单位名称
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+将字节数转换为便于阅读的大小文本, 自动选择单位, 使用空格分隔数字与单位并保留一位小数. 此兼容方法使用与 `fmt.bytes` 相同的字节换算实现; 需要自定义输出时参阅 [fmt.bytes](fmt#m-bytes).
+
+## [m] formatSizeWithUnit
+
+### files.formatSizeWithUnit(bytes)
+
+- **bytes** { [number](dataTypes#number) } - 非负整数字节数
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+按系统区域格式输出文件大小. 小于 1000 B 时输出整数 B; 后续按 1024 换算, 依次使用 KiB, MiB, GiB 和 TiB. 每一级的切换阈值是前一级的 1000 倍, KiB 保留一位小数, MiB 及更大单位保留两位小数. 负数抛出异常.
+
+## [m] getSimplifiedPath
+
+### files.getSimplifiedPath(path)
+
+- **path** { [string](dataTypes#string) } - 待简化的路径
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+移除路径中可识别的存储根目录前缀, 便于显示. 依次匹配外部存储根目录, 运行应用的示例目录, 私有 files, cache 和 data 目录. 子路径保留起始 `/`, 根目录本身变为空字符串; 不匹配时原样返回. 不解析脚本相对路径, 不保证结果可再次作为文件定位路径使用.
 
 ## files.listDir(path[, filter])
 

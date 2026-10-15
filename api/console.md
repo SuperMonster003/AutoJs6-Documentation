@@ -341,14 +341,14 @@ setTimeout(console.reset, 2e3); /* 2 秒钟后重置. */
 
 ## [m] build
 
-### build(options)
+### build(options?)
 
 **`6.3.0`**
 
-- **options** { [ConsoleBuildOptions](consoleBuildOptionsType) } - 构建器选项
+- **[ options = {} ]** { [ConsoleBuildOptions](consoleBuildOptionsType) } - 构建器选项
 - <ins>**returns**</ins> {{ show(): [void](dataTypes#void) }}
 
-构建控制台浮动窗口的配置.
+构建控制台浮动窗口的配置. 无参调用 `console.build()` 获取当前构建器, 不额外应用配置; 可继续调用 `.show()`.
 
 构建后使用 `show` 方法显示控制台浮动窗口, 即 `console.build({ ... }).show()`.
 
@@ -812,7 +812,7 @@ console.build({ contentTextSize: 18 }).show(); /* 效果同上. */
 
 ### setContentTextColor(colorMap)
 
-**`6.3.0`** **`Overload 1/2`**
+**`6.3.0`** **`Overload 1/4`**
 
 - **colorMap** {{
     - verbose?: [OmniColor](omniTypes#omnicolor);
@@ -822,6 +822,7 @@ console.build({ contentTextSize: 18 }).show(); /* 效果同上. */
     - error?: [OmniColor](omniTypes#omnicolor);
     - assert?: [OmniColor](omniTypes#omnicolor);
 - }} - 浮动窗口日志文本字体颜色表
+- <ins>**returns**</ins> { [this](console) }
 
 设置控制台浮动窗口的日志文本字体颜色, 按日志等级设置一个或多个不同的字体颜色.
 
@@ -849,9 +850,9 @@ console.setContentTextColor({
 
 ### setContentTextColor(color)
 
-**`6.3.0`** **`Overload 2/2`**
+**`6.3.0`** **`Overload 2/4`**
 
-- **colors** { [OmniColor](omniTypes#omnicolor) } - 浮动窗口日志文本字体统一颜色
+- **color** { [OmniColor](omniTypes#omnicolor) } - 浮动窗口日志文本字体统一颜色
 - <ins>**returns**</ins> { [this](console) }
 
 设置控制台浮动窗口的日志文本字体的统一颜色.
@@ -866,6 +867,28 @@ console.setContentTextColor('dark-green').show();
 });
 ```
 
+### setContentTextColor(colors)
+
+**`Overload 3/4`**
+
+- **colors** { [OmniColor](omniTypes#omnicolor)[] } - 日志等级颜色数组
+- <ins>**returns**</ins> { [this](console) }
+
+数组依次对应 `verbose`, `log`, `info`, `warn`, `error` 和 `assert`. 最多读取前六项, 超出的项忽略; 缺少的项交给控制台使用默认颜色. 与单色参数不同, 单元素数组只配置第一个日志等级.
+
+```js
+console.setContentTextColor(['gray', 'white', 'green', 'yellow', 'red', 'magenta']);
+```
+
+### setContentTextColor(...colors)
+
+**`Overload 4/4`**
+
+- **...colors** { ...([OmniColor](omniTypes#omnicolor))[] } - 0 至 6 个位置颜色参数
+- <ins>**returns**</ins> { [this](console) }
+
+传入 2 至 6 个位置参数时按日志等级顺序设置颜色. 无参调用传入空颜色配置. 单个参数仍按前述单色, 颜色表或数组重载处理, 因而单个颜色会统一设置全部等级. 超过 6 个位置参数抛出异常.
+
 ## [m] setContentTextColors
 
 ### setContentTextColors(...colors)
@@ -875,7 +898,7 @@ console.setContentTextColor('dark-green').show();
 - **...colors** { [...](documentation#可变参数)[OmniColor](omniTypes#omnicolor)[[]](documentation#可变参数) } - 各日志等级的文字颜色
 - <ins>**returns**</ins> { [this](console) }
 
-[setContentTextColor](#m-setcontenttextcolor) 的兼容别名. 传入多个颜色时依次对应 `verbose`, `log`, `info`, `warn`, `error` 和 `assert`.
+[setContentTextColor](#m-setcontenttextcolor) 的兼容别名, 也接受单色, 颜色表或单个颜色数组. 传入 2 至 6 个位置颜色参数时, 依次对应 `verbose`, `log`, `info`, `warn`, `error` 和 `assert`; 超过 6 个参数抛出异常. 单数名称同样支持这些位置参数.
 
 ## [m] setContentBackgroundColor
 

@@ -328,7 +328,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#numberx_m_parsefloat">[m] parseFloat</a></span><ul>
-<li><span class="stability_undefined"><a href="#numberx_parsefloat_string_radix">parseFloat(string, radix)</a></span></li>
+<li><span class="stability_undefined"><a href="#numberx_parsefloat_string_radix">parseFloat(string, radix?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#numberx_m_parsepercent">[m] parsePercent</a></span><ul>
@@ -664,14 +664,14 @@ console.log((3).padEnd(3)); // &quot;300&quot;
 console.log((99.1).padEnd(5)); // &quot;99.10&quot;
 </code></pre>
 <h2>[m] parseFloat<span><a class="mark" href="#numberx_m_parsefloat" id="numberx_m_parsefloat">#</a></span></h2>
-<h3>parseFloat(string, radix)<span><a class="mark" href="#numberx_parsefloat_string_radix" id="numberx_parsefloat_string_radix">#</a></span></h3>
+<h3>parseFloat(string, radix?)<span><a class="mark" href="#numberx_parsefloat_string_radix" id="numberx_parsefloat_string_radix">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>xObject</code></strong></p>
 <ul>
 <li><strong>string</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待解析的字符串</li>
-<li><strong>radix</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 进制的基数</li>
+<li><strong>[ radix ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 进制的基数; 省略时使用内置 parseFloat 的解析规则</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
 </ul>
-<p>根据指定的进制基数, 解析字符串并返回一个数字.</p>
+<p>根据指定的进制基数, 解析字符串并返回一个数字. 省略 <code>radix</code> 或传入 <code>null</code> / <code>undefined</code> 时使用 Rhino 原有的 <code>parseFloat</code> 规则, 如 <code>Numberx.parseFloat(&quot;12.5px&quot;)</code> 返回 <code>12.5</code>.</p>
 <p>标准内置对象 Number 的 parseInt 支持进制基数 radix 参数, 即 parseInt(string, radix), 但 parseFloat 不支持 radix 参数.</p>
 <p>此扩展方法对上述 radix 参数提供了支持:</p>
 <pre><code class="lang-js">console.log(Numberx.parseFloat(&quot;0.8&quot;, 16)); // 0.5

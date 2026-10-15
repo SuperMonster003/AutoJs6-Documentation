@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `更新` [API 參考](https://docs.autojs6.com/#/documentation) 補齊 Files 與 RootAutomator 成員, 色彩結果容器, WebView 上下文和選用參數多載, 校正位元組附加與滑動參數, 同步座標縮放說明
 - `新增` [3-Block Compose 設計器 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner), 說明 3-Block Compose 外掛內建視覺化設計器的入口與專案檔案, 編輯頁的畫布 / 大綱 / 屬性 / 元件面板與草稿, 可識別的指令碼子集與往返規則, 與 AutoJs6 編輯器的雙向交接以及目前限制
 - `更新` [AutoJs4 執行時 (AutoJs4 Runtime)](https://docs.autojs6.com/#/autojs4Runtime) 增加 "對照模式" 小節, 說明 "使用 AutoJs4 執行並對照" 的兩次執行, 結果頁摘要與差異標記, 以及 issue 模板的複製
 - `新增` [AutoJs4 執行時 (AutoJs4 Runtime)](https://docs.autojs6.com/#/autojs4Runtime), 說明 AutoJs4 Runtime 外掛的用途, 安裝與許可權, 檔案管理器 "使用 AutoJs4 執行" 入口, 日誌回傳與任務停止, 執行限制以及差異反饋方式

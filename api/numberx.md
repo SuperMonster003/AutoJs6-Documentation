@@ -408,15 +408,15 @@ console.log((99.1).padEnd(5)); // "99.10"
 
 ## [m] parseFloat
 
-### parseFloat(string, radix)
+### parseFloat(string, radix?)
 
 **`6.2.0`** **`xObject`**
 
 - **string** { [string](dataTypes#string) } - 待解析的字符串
-- **radix** { [number](dataTypes#number) } - 进制的基数
+- **[ radix ]** { [number](dataTypes#number) } - 进制的基数; 省略时使用内置 parseFloat 的解析规则
 - <ins>**returns**</ins> { [number](dataTypes#number) }
 
-根据指定的进制基数, 解析字符串并返回一个数字.
+根据指定的进制基数, 解析字符串并返回一个数字. 省略 `radix` 或传入 `null` / `undefined` 时使用 Rhino 原有的 `parseFloat` 规则, 如 `Numberx.parseFloat("12.5px")` 返回 `12.5`.
 
 标准内置对象 Number 的 parseInt 支持进制基数 radix 参数, 即 parseInt(string, radix), 但 parseFloat 不支持 radix 参数.
 

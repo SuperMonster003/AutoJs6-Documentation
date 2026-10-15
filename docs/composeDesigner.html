@@ -305,6 +305,7 @@
 <li><span class="stability_undefined"><a href="#composedesigner_8">编辑页</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_9">事件</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_10">布局预览</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_ui_1_7_0">在预览中运行 UI 脚本 (1.7.0)</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_11">限制</a></span></li>
 </ul>
 </li>
@@ -319,7 +320,7 @@
         <div id="apicontent">
             <h1>3-Block Compose 设计器 (Compose 与 UI 工程)<span><a class="mark" href="#composedesigner_3_block_compose_compose_ui" id="composedesigner_3_block_compose_compose_ui">#</a></span></h1>
 <!-- type=misc -->
-<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.5.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.</p>
+<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.7.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.</p>
 <p>本页面不是脚本 API. 设计器没有新增任何全局对象或模块, 它读写的脚本与手写的 <code>compose</code> 脚本完全相同. 脚本 API 见 <a href="compose.html">3-Block Compose</a>, 组件, 属性, 插槽与事件见 <a href="composeComponents.html">ComposeComponents</a>.</p>
 <hr>
 <h2>用途<span><a class="mark" href="#composedesigner" id="composedesigner">#</a></span></h2>
@@ -327,7 +328,7 @@
 <li>从组件面板拖放组件, 在画布上即时看到与 AutoJs6 内一致的渲染结果, 再在属性抽屉中调整属性, 修饰链, 插槽与事件.</li>
 <li>维护脚本的界面部分: 设计器只改写界面树和顶层 <code>compose.state</code> 声明, 其它语句原样保留, 因此可以反复在设计器与 AutoJs6 编辑器之间往返.</li>
 <li>编辑传统 <code>&quot;ui&quot;;</code> 模式脚本 (1.6.0): XML 布局在大纲与属性抽屉中编辑, 未触碰的字节原样保留, 画布由已安装的 AutoJs6 用 ui 模式的布局器绘制; 见下文 &quot;UI (XML) 工程&quot; 一节.</li>
-<li>编辑时设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 &quot;状态&quot; 面板中临时改变 state 的预览值, 并在 &quot;交互预览&quot; 中直接操作绑定了 state 的控件; 1.5.0 起 JavaScript 工程的交互预览会在插件内受限的沙箱中运行脚本, 见下文 &quot;预览状态与交互预览&quot; 一节.</li>
+<li>编辑时设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 &quot;状态&quot; 面板中临时改变 state 的预览值, 并在 &quot;交互预览&quot; 中直接操作绑定了 state 的控件; 1.5.0 起 JavaScript 工程的交互预览会在插件内受限的沙箱中运行脚本, 见下文 &quot;预览状态与交互预览&quot; 一节; 1.7.0 起 UI (XML) 工程的交互预览由 AutoJs6 真实运行整份脚本 (Android 13 起), 见 &quot;在预览中运行 UI 脚本&quot;.</li>
 </ul>
 </div><hr>
 <h2>入口<span><a class="mark" href="#composedesigner_1" id="composedesigner_1">#</a></span></h2>
@@ -398,7 +399,7 @@
 </tr>
 <tr>
 <td>控制台 (1.5.0)</td>
-<td>交互预览中脚本的 <code>console</code> / <code>log</code> 输出, <code>toast</code> 与错误, 见下文 &quot;在预览中运行脚本&quot; 一节</td>
+<td>交互预览中脚本的 <code>console</code> / <code>log</code> 输出, <code>toast</code> 与错误, 见下文 &quot;在预览中运行脚本&quot; 一节; UI 工程 (1.7.0) 显示 AutoJs6 运行脚本的输出</td>
 </tr>
 <tr>
 <td>组件面板</td>
@@ -523,7 +524,7 @@
 <tbody>
 <tr>
 <td>画布</td>
-<td>由 AutoJs6 绘制的布局 (见下文 &quot;布局预览&quot;); 点按选中元素 (命中最小的可见元素), 长按拖到另一元素上按容器方向插入; 选中框与 &quot;标签 #id&quot; 标签; 缩放 75% / 100%</td>
+<td>由 AutoJs6 绘制的布局 (见下文 &quot;布局预览&quot;); 点按选中元素 (命中最小的可见元素), 长按拖到另一元素上按容器方向插入; 选中框与 &quot;标签 #id&quot; 标签; 缩放 75% / 100%. 画布上方一行放 &quot;交互预览&quot; 开关与运行状态 (1.7.0, 见下文 &quot;在预览中运行 UI 脚本&quot;)</td>
 </tr>
 <tr>
 <td>大纲</td>
@@ -543,7 +544,7 @@
 </tr>
 <tr>
 <td>控制台</td>
-<td>1.6.0 只显示布局预览的状态与 AutoJs6 绘制时报告的失败码, 位置与诊断; UI 工程的脚本不在设计器中运行</td>
+<td>布局预览时显示预览的状态与 AutoJs6 绘制时报告的失败码, 位置与诊断; 交互预览 (1.7.0) 时显示 AutoJs6 运行脚本的输出, 错误与结束原因</td>
 </tr>
 <tr>
 <td>组件面板</td>
@@ -587,12 +588,44 @@
 <li>画布的逻辑屏幕与视口同大, 对应 <code>ui.layout</code> 填满页面的效果; 亮暗与语言跟随设置页.</li>
 <li>布局失败 (XML 无法解析, 标签或属性被宿主拒绝, 某个 View 在测量时出错) 时画布说明原因, 问题列表与大纲定位到出错的元素; <code>{{ }}</code> 求值失败的属性按原文显示, 作为诊断列出.</li>
 <li>预览运行时是 AutoJs6 内的一次 ui 模式执行, 以 &quot;3-Block Compose 预览&quot; 出现在 AutoJs6 的运行列表中, 可以从那里停止 (画布会提示, 回到设计器时重新连接); 设计器关闭或转到后台时释放.</li>
-<li>1.6.0 的画布只用于布局: 不响应控件的点击与输入 (编辑模式拦截指针), 窗口级函数 (<code>ui.statusBarColor</code> 等) 与弹出层不生效, <code>WebView</code>, <code>VideoView</code>, <code>SurfaceView</code> 类视图在快照模式下显示占位. 在预览中真实运行 UI 脚本是后续版本的计划.</li>
+<li>布局预览只用于布局: 不响应控件的点击与输入 (编辑模式拦截指针), 窗口级函数 (<code>ui.statusBarColor</code> 等) 与弹出层不生效, <code>WebView</code>, <code>VideoView</code>, <code>SurfaceView</code> 类视图在快照模式下显示占位. 要在画布上真实运行脚本, 见下节 &quot;在预览中运行 UI 脚本&quot; (1.7.0).</li>
+</ul>
+<h3>在预览中运行 UI 脚本 (1.7.0)<span><a class="mark" href="#composedesigner_ui_1_7_0" id="composedesigner_ui_1_7_0">#</a></span></h3>
+<p>画布上方的 &quot;交互预览&quot; 开关打开后, AutoJs6 会把整份脚本当作一次普通的 ui 模式运行来执行 (与 &quot;在 AutoJs6 中运行&quot; 相同的引擎, 相同的权限), 只是 <code>ui.layout</code> 的内容显示在设计器的画布上而不是 AutoJs6 的页面里. 画布里的控件直接接收点击与触摸, 脚本的事件处理函数, <code>{{ }}</code> 绑定, 定时器与其它 AutoJs6 模块都按脚本的逻辑真实运行; 控制台标签页显示脚本的 <code>console</code> 输出, 错误与结束原因. 每个工程第一次打开开关时会先确认: 这等价于运行脚本, 脚本的副作用 (文件, 网络, 无障碍操作, 悬浮窗等) 都会真实发生.</p>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AutoJs6 包含预览契约 v2 (宿主提交 4c332c2053 之后的 6.8.0 构建), Android 13 (API 33) 或更高版本</td>
+<td>显示 &quot;交互预览&quot; 开关; 打开后 AutoJs6 在画布中运行脚本, 开关上显示运行图标</td>
+</tr>
+<tr>
+<td>Android 13 - 14</td>
+<td>同上, 但画布中的输入框收不到键盘输入 (提示 &quot;Android 15 之前预览不能接收键盘输入&quot;); Android 15 起输入法可用</td>
+</tr>
+<tr>
+<td>Android 7.0 - 12, 或 AutoJs6 只有预览契约 v1 (1.6.0 配套的构建)</td>
+<td>不显示开关, 画布上方说明原因 (需要 Android 13 / 需要更新的 AutoJs6), 用 &quot;在 AutoJs6 中运行&quot; 试运行脚本</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>运行的是保存时会写出的脚本; 绑定值面板中的临时覆盖只影响布局预览, 真实运行使用脚本自己的值.</li>
+<li>修改工程后约 0.4 秒脚本从头重新运行; 关闭开关, 设计器转到后台或关闭编辑页时脚本停止, 画布回到布局预览. 脚本调用 <code>exit()</code> 或出错后结束时, 画布上方与控制台显示原因 (错误带行号), 开关保持打开, 修改工程或关闭再打开开关即可再次运行.</li>
+<li>运行以工程文件名出现在 AutoJs6 的运行列表中, 也可以从那里停止.</li>
+<li>运行结果只用于画布: 不改动文档, 不写入工程或草稿. 交互期间画布不再响应点选与拖拽 (指针交给脚本的控件), 大纲与属性抽屉照常可用.</li>
+<li>与在 AutoJs6 中运行的差异: 没有 Activity 窗口, <code>activity</code> 为 <code>undefined</code>, <code>ui.finish</code>, <code>ui.statusBarColor</code> 等窗口级函数不生效 (控制台各提示一次), <code>ui.emitter</code> 只有 <code>create</code>; 画布的逻辑屏幕与视口同大, 没有状态栏 / 导航栏; <code>dialogs.*</code> 等对话框以悬浮窗形式显示在设计器之上 (需要 AutoJs6 的悬浮窗权限). 脚本体与处理函数和真实运行一样在 AutoJs6 的主线程执行, 忙等 (例如 <code>while (true)</code>) 会卡住 AutoJs6, 停止也要等它让出; 定时器与事件驱动的脚本可随时停止.</li>
+<li>与 JavaScript (Compose) 工程的交互预览不同, UI 工程的脚本不在插件内的沙箱里运行, 而是真实地在 AutoJs6 中运行, 没有 API 范围与时间限制; 不要在预览中运行会产生不可逆副作用的脚本.</li>
 </ul>
 <h3>限制<span><a class="mark" href="#composedesigner_11" id="composedesigner_11">#</a></span></h3>
 <div class="signature"><ul>
 <li>只识别 <code>&quot;ui&quot;</code> 指令与 XML 字面量; 用字符串拼接或运行时才生成的布局不在画布中.</li>
-<li>画布不运行脚本: <code>{{ }}</code> 只能显示顶层字面量声明或绑定值面板给出的值; 列表项模板中的 <code>{{ }}</code> 没有数据源, 按原文显示.</li>
+<li>布局预览不运行脚本: <code>{{ }}</code> 只能显示顶层字面量声明或绑定值面板给出的值; 列表项模板中的 <code>{{ }}</code> 没有数据源, 按原文显示. 交互预览 (1.7.0, Android 13 起) 运行整份脚本后这些都按脚本的逻辑显示.</li>
 <li>布局预览需要 AutoJs6 的预览服务; 旧版本 AutoJs6 只能编辑, 不能预览.</li>
 <li>属性目录来自文档站 (<code>ui</code> 与 <code>uiAttributes</code> 页面, 生成时的文档提交记录在目录中), 文档未收录的属性按 &quot;未知属性&quot; 提示而不是拒绝.</li>
 </ul>

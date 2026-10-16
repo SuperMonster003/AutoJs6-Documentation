@@ -307,11 +307,19 @@
 <li><span class="stability_undefined"><a href="#composedesigner_10">布局预览</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_ui_1_7_0">在预览中运行 UI 脚本 (1.7.0)</a></span></li>
 <li><span class="stability_undefined"><a href="#composedesigner_preview_differences">预览差异 (Preview Differences)</a></span></li>
-<li><span class="stability_undefined"><a href="#composedesigner_11">限制</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_xml_1_8_0">XML 文件与文件夹工程 (1.8.0)</a></span><ul>
+<li><span class="stability_undefined"><a href="#composedesigner_xml">新建 XML 文件</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_11">文件夹工程</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_12">外部文档</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_13">预览中的工程文件</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_android_xml">Android 原生 XML</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#composedesigner_14">限制</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#composedesigner_autojs6">与 AutoJs6 的衔接</a></span></li>
-<li><span class="stability_undefined"><a href="#composedesigner_12">限制</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_15">限制</a></span></li>
 </ul>
 </li>
 </ul>
@@ -328,7 +336,7 @@
 <div class="signature"><ul>
 <li>从组件面板拖放组件, 在画布上即时看到与 AutoJs6 内一致的渲染结果, 再在属性抽屉中调整属性, 修饰链, 插槽与事件.</li>
 <li>维护脚本的界面部分: 设计器只改写界面树和顶层 <code>compose.state</code> 声明, 其它语句原样保留, 因此可以反复在设计器与 AutoJs6 编辑器之间往返.</li>
-<li>编辑传统 <code>&quot;ui&quot;;</code> 模式脚本 (1.6.0): XML 布局在大纲与属性抽屉中编辑, 未触碰的字节原样保留, 画布由已安装的 AutoJs6 用 ui 模式的布局器绘制; 见下文 &quot;UI (XML) 工程&quot; 一节.</li>
+<li>编辑传统 <code>&quot;ui&quot;;</code> 模式脚本 (1.6.0): XML 布局在大纲与属性抽屉中编辑, 未触碰的字节原样保留, 画布由已安装的 AutoJs6 用 ui 模式的布局器绘制; 1.8.0 起布局也可以是单独的 XML 文件 (含 Android 原生 XML), 带布局文件的工程是一个文件夹; 见下文 &quot;UI (XML) 工程&quot; 一节.</li>
 <li>编辑时设计器不执行脚本: 它只解析脚本 (JavaScript 用 Rhino 解析器, TSX 用 TypeScript Engine 插件的解析服务) 并用渲染器预览, 事件处理函数不会在画布中触发, 运行要交给 AutoJs6. 1.3.0 起可以在 &quot;状态&quot; 面板中临时改变 state 的预览值, 并在 &quot;交互预览&quot; 中直接操作绑定了 state 的控件; 1.5.0 起 JavaScript 工程的交互预览会在插件内受限的沙箱中运行脚本, 见下文 &quot;预览状态与交互预览&quot; 一节; 1.7.0 起 UI (XML) 工程的交互预览由 AutoJs6 真实运行整份脚本 (Android 13 起), 见 &quot;在预览中运行 UI 脚本&quot;.</li>
 </ul>
 </div><hr>
@@ -351,7 +359,7 @@
 </tr>
 <tr>
 <td>文件管理器</td>
-<td>以 3-Block Compose 打开 <code>.js</code> 文件 (<code>application/x-javascript</code>, <code>text/javascript</code> 或 <code>text/plain</code>); 1.4.0 起也可以打开 <code>.tsx</code> 文件 (另含 <code>text/typescript</code>). 1.6.0 起以 <code>&quot;ui&quot;;</code> 开头且调用 <code>ui.layout</code> 的 <code>.js</code> 文件按 UI (XML) 工程打开</td>
+<td>以 3-Block Compose 打开 <code>.js</code> 文件 (<code>application/x-javascript</code>, <code>text/javascript</code> 或 <code>text/plain</code>); 1.4.0 起也可以打开 <code>.tsx</code> 文件 (另含 <code>text/typescript</code>). 1.6.0 起以 <code>&quot;ui&quot;;</code> 开头且调用 <code>ui.layout</code> 的 <code>.js</code> 文件按 UI (XML) 工程打开 (1.8.0 起也包括调用 <code>ui.layoutFile</code> 的)</td>
 </tr>
 </tbody>
 </table>
@@ -359,8 +367,8 @@
 <hr>
 <h2>工程与文件<span><a class="mark" href="#composedesigner_2" id="composedesigner_2">#</a></span></h2>
 <div class="signature"><ul>
-<li>工程就是一个 <code>.js</code> 文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 保存在插件私有目录 <code>files/designer/projects/</code> 中, 没有额外的工程描述文件. 新建工程时选择 JavaScript, TSX (1.4.0) 或 UI (XML) (1.6.0), 写入一个最小的 <code>compose.mount</code> 模板 (UI 工程为 <code>&quot;ui&quot;;</code> 加一个带文本与按钮的 <code>ui.layout</code> 布局和一个点击处理函数); 名称重复时自动加 <code>-2</code>, <code>-3</code> 后缀. 导入的文件以 <code>.tsx</code> 结尾时成为 TSX 工程, 其它文件成为 <code>.js</code> 工程; <code>.js</code> 工程以 <code>&quot;ui&quot;;</code> 开头且调用 <code>ui.layout</code> 时按 UI (XML) 工程读取, 首页列表以 <code>JS</code> / <code>TSX</code> / <code>UI</code> 标注类型.</li>
-<li>导入: 通过系统文件选择器选择脚本, 复制为一个新工程并记录来源. 保存工程不会写回来源文件. 导出: 编辑页菜单 &quot;导出到文件&quot; 通过系统文件选择器另存一份.</li>
+<li>工程就是一个 <code>.js</code> 文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 保存在插件私有目录 <code>files/designer/projects/</code> 中, 没有额外的工程描述文件; 1.8.0 起带布局文件的 UI 工程是一个文件夹 (<code>名称/main.js</code> 加布局文件与 <code>project.json</code>), 见下文 &quot;XML 文件与文件夹工程&quot;. 新建工程时选择 JavaScript, TSX (1.4.0) 或 UI (XML) (1.6.0), 写入一个最小的 <code>compose.mount</code> 模板 (UI 工程为 <code>&quot;ui&quot;;</code> 加一个带文本与按钮的 <code>ui.layout</code> 布局和一个点击处理函数); 名称重复时自动加 <code>-2</code>, <code>-3</code> 后缀. 导入的文件以 <code>.tsx</code> 结尾时成为 TSX 工程, 其它文件成为 <code>.js</code> 工程; <code>.js</code> 工程以 <code>&quot;ui&quot;;</code> 开头且调用 <code>ui.layout</code> 时按 UI (XML) 工程读取, 首页列表以 <code>JS</code> / <code>TSX</code> / <code>UI</code> 标注类型.</li>
+<li>导入: 通过系统文件选择器选择脚本, 复制为一个新工程并记录来源. 保存工程不会写回来源文件. 导出: 编辑页菜单 &quot;导出到文件&quot; 通过系统文件选择器另存一份. 1.8.0 起也可以导入 zip 或文件夹, 文件夹工程导出为 zip.</li>
 <li>来源同步 (1.3.0): 导入时保留对来源文件的访问权限 (文件提供方允许时, 先尝试读写, 不行再只读), 之后可在编辑页菜单手动 &quot;写回来源&quot; 或 &quot;从来源重新导入&quot;. 设计器记录双方上次同步时的内容摘要: 写回时来源在此之后被改过, 或重新导入时工程在此之后被改过 (含未保存修改), 都会先询问. 来源被移走, 被替换或授权失效时提示 &quot;来源文件不可用&quot;, 可经系统文件选择器重新选择以恢复关联. 1.2.0 导入的工程没有摘要, 两侧内容相同时视为已同步.</li>
 <li>外部文档: 从 AutoJs6 编辑器或文件管理器打开的文件保存时直接写回原文件. 没有写入权限时 (例如只读授权或只读路径), 保存会把内容另存为一个新工程并提示, 编辑页随即切换到该工程, 原文件保持不变.</li>
 <li>草稿: 编辑停顿约 1 秒和离开编辑页时, 当前内容写入 <code>files/designer/drafts/</code>; 进程被结束后重新打开会询问恢复或丢弃草稿. 只有显式保存才写工程文件或原文件.</li>
@@ -506,11 +514,11 @@
 <p>1.6.0 起设计器可以打开传统 <code>&quot;ui&quot;;</code> 模式脚本 (布局写成 E4X XML 字面量, 见 <a href="ui.html">ui</a>) 并作为 &quot;UI (XML) 工程&quot; 编辑. 新建工程时选择 &quot;UI (XML)&quot;, 或导入这样的脚本, 或从 AutoJs6 编辑器与文件管理器打开它, 都按 UI 工程读写; 首页列表以 <code>UI</code> 标注. 画布不由插件自带的渲染器绘制, 而是交给已安装的 AutoJs6 (见下文 &quot;布局预览&quot;).</p>
 <h3>可识别的脚本子集<span><a class="mark" href="#composedesigner_6" id="composedesigner_6">#</a></span></h3>
 <div class="signature"><ul>
-<li>脚本以 <code>&quot;ui&quot;;</code> 指令开头 (前面可以有注释), 并至少调用一次 <code>ui.layout(...)</code>.</li>
+<li>脚本以 <code>&quot;ui&quot;;</code> 指令开头 (前面可以有注释), 并至少调用一次 <code>ui.layout(...)</code> (1.8.0 起或 <code>ui.layoutFile(...)</code>, 见下文 &quot;XML 文件与文件夹工程&quot;).</li>
 <li>脚本中的每个 XML 字面量都是一个布局片段: <code>ui.layout</code> 的参数 (直接写出的字面量, 或只被一个 XML 字面量初始化且之后不再赋值的变量) 是画布默认显示的根; 其它字面量 (例如 <code>ui.inflate</code> 的模板) 可以在大纲顶部的片段切换器中切换到画布.</li>
 <li><code>ui.registerWidget(名称, ...)</code> 注册的自定义控件标签按脚本的约定接受任意属性, 不参与目录校验.</li>
 <li>其它顶层语句 (函数, 变量, 事件注册, <code>require</code> 等) 全部按源码原样保留, 位置不变. 设计器只读写 XML 字面量, 以及 (见下文 &quot;事件&quot;) 在 <code>ui.layout</code> 语句之后追加的处理函数桩.</li>
-<li>以下情况拒绝打开并给出行列位置: 语法错误, 没有 <code>&quot;ui&quot;</code> 指令, 没有 <code>ui.layout</code> 调用, <code>ui.layout</code> 的参数既不是 XML 字面量也不是只用一个字面量初始化的变量, 嵌套的 XML 字面量, XML 列表 (<code>&lt;&gt;...&lt;/&gt;</code>), 字面量本身的 XML 语法问题.</li>
+<li>以下情况拒绝打开并给出行列位置: 语法错误, 没有 <code>&quot;ui&quot;</code> 指令, 没有 <code>ui.layout</code> (或 1.8.0 起的 <code>ui.layoutFile</code>) 调用, <code>ui.layout</code> 的参数既不是 XML 字面量也不是只用一个字面量初始化的变量, 嵌套的 XML 字面量, XML 列表 (<code>&lt;&gt;...&lt;/&gt;</code>), 字面量本身的 XML 语法问题.</li>
 </ul>
 </div><h3>无损写回<span><a class="mark" href="#composedesigner_7" id="composedesigner_7">#</a></span></h3>
 <p>XML 字面量以带位置的具体语法树保存: 空白, 注释, CDATA, 处理指令, 属性顺序, 引号与 E4X <code>{表达式}</code> 片段全部保留, 保存时未触碰的字节不变. 只有被编辑过的开始标签 (改属性或标签名时整个开始标签重排, 未改的属性保持原文与引号, 新属性追加在末尾, 新 <code>id</code> 写在最前), 被修改的文本内容, 以及新插入的元素会被改写; 新元素按相邻元素的缩进生成并自闭合, 删除元素时连带其前面的空白行. 与 Compose 工程不同, UI 工程没有 &quot;规范格式&quot;: 手写的脚本第一次保存也不会被整体重排.</p>
@@ -529,7 +537,7 @@
 </tr>
 <tr>
 <td>大纲</td>
-<td>元素树: 折叠, 上移 / 下移 / 删除, 长按拖动到另一元素的上方 / 内部 / 下方; 脚本有多个 XML 字面量时顶部显示片段切换器, 传给 <code>ui.layout</code> 的片段标 &quot;(ui.layout)&quot;</td>
+<td>元素树: 折叠, 上移 / 下移 / 删除, 长按拖动到另一元素的上方 / 内部 / 下方; 脚本有多个 XML 字面量时顶部显示片段切换器, 传给 <code>ui.layout</code> 的片段标 &quot;(ui.layout)&quot;; 1.8.0 起布局文件以文件名列在其中, 片段行右侧的菜单 &quot;存为 XML 文件&quot; / &quot;新建 XML 文件&quot;</td>
 </tr>
 <tr>
 <td>属性</td>
@@ -549,7 +557,7 @@
 </tr>
 <tr>
 <td>组件面板</td>
-<td>右下角 &quot;+&quot;: 文档站的 48 个标签按布局 / 文本 / 按钮 / 输入 / 选择 / 进度 / 图片 / 媒体 / 列表 / 其它分类, 每个带默认属性; 插入到选中的容器末尾, 或选中元素之后. <code>&lt;compose&gt;</code> 容器与类名标签不在面板中, 脚本里已有的仍可编辑</td>
+<td>右下角 &quot;+&quot;: 文档站的 48 个标签按布局 / 文本 / 按钮 / 输入 / 选择 / 进度 / 图片 / 媒体 / 列表 / 其它分类, 每个带默认属性; 插入到选中的容器末尾, 或选中元素之后. <code>&lt;compose&gt;</code> 容器与类名标签不在面板中, 脚本里已有的仍可编辑; Android 原生 XML 片段 (1.8.0) 改为插入常用 View 类</td>
 </tr>
 </tbody>
 </table>
@@ -672,12 +680,65 @@
 <li>同一行的同一类差异只列一条. 列表只看写法, 不判断这一行运行时是否会被执行到.</li>
 <li>输入法与弹出层的 Android 版本限制见上文 &quot;在预览中运行 UI 脚本&quot; 的条件表, 不在差异列表中.</li>
 </ul>
-<h3>限制<span><a class="mark" href="#composedesigner_11" id="composedesigner_11">#</a></span></h3>
+<h3>XML 文件与文件夹工程 (1.8.0)<span><a class="mark" href="#composedesigner_xml_1_8_0" id="composedesigner_xml_1_8_0">#</a></span></h3>
+<p>1.8.0 起 UI 工程的布局可以写在单独的 XML 文件里, 由脚本以字符串字面量路径引用:</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ui.layoutFile(&quot;layout.xml&quot;)</code></td>
+<td>该文件作为页面布局 (与 <code>ui.layout</code> 相同), 画布默认显示它; 片段切换器以文件名标注</td>
+</tr>
+<tr>
+<td><code>ui.inflate(files.read(&quot;item.xml&quot;), ...)</code></td>
+<td>该文件作为另一个片段 (例如列表项模板)</td>
+</tr>
+<tr>
+<td><code>ui.useAndroidLayout()</code> / <code>ui.useAndroidLayout(true)</code> / <code>ui.useAndroidLayout(false)</code></td>
+<td>布局按 Android 原生 XML / AutoJs6 XML 解析; 不写时按内容判断 (根元素声明命名空间或使用 <code>android:</code> / <code>app:</code> 属性即为原生), 与 AutoJs6 的判断相同</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>路径相对脚本所在的文件夹; 拼接或变量给出的路径不读取. 读不到的文件在问题标签页列出, 画布不显示它; 脚本唯一的布局读不到时拒绝打开并说明原因.</li>
+<li>文件片段与脚本内的 XML 字面量一样无损编辑: 文件开头的 BOM, XML 声明与注释, 根元素之后的内容原样保留, Windows 换行在写回时还原. 保存与草稿只写有改动的文件. 事件桩追加在加载该文件的语句之后.</li>
+</ul>
+<h4>新建 XML 文件<span><a class="mark" href="#composedesigner_xml" id="composedesigner_xml">#</a></span></h4>
+<p>大纲顶部片段行右侧的菜单提供两种做法, 都是一个可撤销的编辑步骤, 保存时才写文件:</p>
+<ul>
+<li>&quot;存为 XML 文件&quot;: 把当前片段原样移到文件, 脚本中的 <code>ui.layout(&lt;...&gt;)</code> 改为 <code>ui.layoutFile(&quot;...&quot;)</code>, <code>ui.inflate(&lt;...&gt;, ...)</code> 改为 <code>ui.inflate(files.read(&quot;...&quot;), ...)</code>. 只有直接写在 <code>ui.layout(...)</code> 中或作为 <code>ui.inflate(...)</code> 第一个参数的字面量可以移动; 经变量传递的字面量与含 E4X <code>{表达式}</code> 的字面量不行 (文件中的 <code>{...}</code> 不会被求值).</li>
+<li>&quot;新建 XML 文件&quot;: 新建只含一个纵向根容器的文件, 可选 AutoJs6 XML 或 Android 原生 XML (脚本已写明 <code>ui.useAndroidLayout</code> 时随之, 不再询问), 并在脚本末尾追加 <code>let &lt;名称&gt;View = ui.inflate(files.read(&quot;...&quot;));</code>.</li>
+<li>路径须是以 <code>.xml</code> 结尾的相对路径, 不能离开脚本所在的文件夹, 不能与脚本已引用的文件重名; 原生 XML 默认放在 <code>res/layout/</code> 下.</li>
+</ul>
+<h4>文件夹工程<span><a class="mark" href="#composedesigner_11" id="composedesigner_11">#</a></span></h4>
 <div class="signature"><ul>
-<li>只识别 <code>&quot;ui&quot;</code> 指令与 XML 字面量; 用字符串拼接或运行时才生成的布局不在画布中.</li>
+<li>私有工程第一次带着布局文件保存时, 由 <code>名称.js</code> 变为文件夹 <code>名称/</code>: 脚本改名为 <code>main.js</code>, 布局文件放在同一文件夹中, 草稿, 来源记录与图片目录随之迁移, 并生成 AutoJs6 的 <code>project.json</code> (<code>name</code>, <code>main</code>, <code>packageName</code> 为 <code>org.example.&lt;名称&gt;</code>, <code>versionName</code>, <code>versionCode</code>), 因此在 AutoJs6 中可以作为项目运行与打包. 首页以 <code>名称/</code> 显示文件夹工程.</li>
+<li>新建工程时, UI 类型的 &quot;布局&quot; 可选 &quot;脚本内&quot;, &quot;AutoJs6 XML 文件&quot; 或 &quot;Android 原生 XML 文件&quot;; 后两种直接创建文件夹工程, 原生模板为 <code>ui.useAndroidLayout()</code> 加 <code>res/layout/activity_main.xml</code>, 与 AutoJs6 示例 &quot;Android 原生布局&quot; 的组织方式相同.</li>
+<li>菜单 &quot;导出到文件&quot; 把文件夹工程 (或带布局文件的文档) 导出为一个 zip: <code>main.js</code> 在顶层, 缺少 <code>project.json</code> 时补上.</li>
+<li>首页菜单 &quot;导入脚本或 zip&quot; 也接受 zip, &quot;导入文件夹&quot; 接受一个文件夹: 顶层 (或唯一外层文件夹内) 有 <code>main.js</code> 时成为文件夹工程; 没有时, 唯一的顶层 <code>.js</code> 改名为 <code>main.js</code>; 只有一个脚本时成为普通工程. 含不安全路径 (<code>..</code>, 绝对路径), 超过 4096 个文件或 128 MB, 或找不到脚本的 zip 整体拒绝. 导入的 zip 与文件夹不记录来源.</li>
+</ul>
+</div><h4>外部文档<span><a class="mark" href="#composedesigner_12" id="composedesigner_12">#</a></span></h4>
+<p>从 AutoJs6 编辑器或文件管理器打开的脚本, 布局文件在脚本所在的文件夹中读写. 以文件路径 (<code>file://</code>) 打开时直接读写; 以内容 Uri 打开 (例如 AutoJs6 编辑器交来的脚本) 时, 第一次需要在系统文件夹选择器中选择脚本所在的文件夹 (问题标签页, 读不到布局时的报错页, 或布局文件菜单中的 &quot;选择脚本所在的文件夹以读写布局文件&quot;), 设计器核对其中有该脚本后保留读写授权, 之后按需在其中创建子文件夹与文件. 没有写入权限的文档另存为工程时, 布局文件一同存入新的文件夹工程.</p>
+<h4>预览中的工程文件<span><a class="mark" href="#composedesigner_13" id="composedesigner_13">#</a></span></h4>
+<p>布局预览与交互预览把工程文件交给 AutoJs6: 文件夹工程的全部文件, 外部文档旁的 <code>res/</code> 目录, 以及设计器中尚未保存的布局文件. 因此布局可以引用 <code>res/</code> 中的字符串, 颜色, 尺寸, 样式, 图片与 <code>&lt;include&gt;</code> 布局 (见 <a href="ui.html">用户界面</a> 的 &quot;工程资源&quot;), 交互预览中的 <code>ui.layoutFile</code> 与 <code>files.read</code> 按工程目录解析. 这需要预览契约 v3 (宿主提交 9df0a154b 之后的 6.8.0 构建); 更早的 AutoJs6 只收到 XML 文本, 问题标签页提示 res 资源与布局文件的预览可能与实际运行不同.</p>
+<h4>Android 原生 XML<span><a class="mark" href="#composedesigner_android_xml" id="composedesigner_android_xml">#</a></span></h4>
+<p>原生片段按 AutoJs6 实际处理的属性目录编辑与校验. 目录由宿主的属性表与设备覆盖快照生成 (见 <a href="uiAndroidAttributes.html">Android XML 属性</a>), 列出每个 View 类可设置与不能设置的 <code>android:</code> / <code>app:</code> 属性, 以及各父布局接受的布局参数:</p>
+<ul>
+<li>属性抽屉: id 写作 <code>android:id=&quot;@+id/...&quot;</code>; 按类与父布局列出可设置的属性, 布尔属性为开关, 纯枚举属性为下拉; 标签不能在抽屉中改换.</li>
+<li>组件面板: 插入常用的 View 类 (<code>LinearLayout</code>, <code>TextView</code>, <code>Button</code>, <code>EditText</code>, <code>ImageView</code> 等, 带 <code>android:layout_width</code> / <code>android:layout_height</code>).</li>
+<li>问题标签页: 缺少 <code>android:</code> / <code>app:</code> 前缀的属性 (原生 XML 会忽略它), 未知属性, 不是父布局参数的布局属性, AutoJs6 不能设置的属性, 以及值的格式 (布尔, 整数, 尺寸, 颜色, 枚举与标志名); <code>@</code> / <code>?</code> 引用不检查.</li>
+</ul>
+<h3>限制<span><a class="mark" href="#composedesigner_14" id="composedesigner_14">#</a></span></h3>
+<div class="signature"><ul>
+<li>只识别 <code>&quot;ui&quot;</code> 指令, XML 字面量与以字符串字面量引用的布局文件 (1.8.0); 用字符串拼接或运行时才生成的布局不在画布中.</li>
 <li>布局预览不运行脚本: <code>{{ }}</code> 只能显示顶层字面量声明或绑定值面板给出的值; 列表项模板中的 <code>{{ }}</code> 没有数据源, 按原文显示. 交互预览 (1.7.0, Android 13 起) 运行整份脚本后这些都按脚本的逻辑显示.</li>
 <li>布局预览需要 AutoJs6 的预览服务; 旧版本 AutoJs6 只能编辑, 不能预览.</li>
-<li>属性目录来自文档站 (<code>ui</code> 与 <code>uiAttributes</code> 页面, 生成时的文档提交记录在目录中), 文档未收录的属性按 &quot;未知属性&quot; 提示而不是拒绝.</li>
+<li>属性目录来自文档站 (<code>ui</code> 与 <code>uiAttributes</code> 页面, 生成时的文档提交记录在目录中), 文档未收录的属性按 &quot;未知属性&quot; 提示而不是拒绝. Android 原生 XML 片段 (1.8.0) 使用由宿主属性表生成的另一份目录, 见上文 &quot;Android 原生 XML&quot;.</li>
 </ul>
 </div><hr>
 <h2>与 AutoJs6 的衔接<span><a class="mark" href="#composedesigner_autojs6" id="composedesigner_autojs6">#</a></span></h2>
@@ -692,7 +753,7 @@
 <tbody>
 <tr>
 <td>在 AutoJs6 中运行</td>
-<td>把脚本文本交给 AutoJs6 运行, 与组件画廊的 &quot;运行&quot; 相同; TSX 工程 (1.4.0) 交出工程文件, 见上文 &quot;TSX 工程&quot; 一节</td>
+<td>把脚本文本交给 AutoJs6 运行, 与组件画廊的 &quot;运行&quot; 相同; TSX 工程 (1.4.0) 交出工程文件, 见上文 &quot;TSX 工程&quot; 一节; 带布局文件的 UI 工程 (1.8.0) 交出工程 zip, AutoJs6 解到缓存目录并以项目方式运行, 结束后清理</td>
 </tr>
 <tr>
 <td>在 AutoJs6 编辑器中打开</td>
@@ -700,7 +761,7 @@
 </tr>
 <tr>
 <td>导入 AutoJs6 脚本目录</td>
-<td>AutoJs6 以文件名把脚本复制到自己的脚本目录</td>
+<td>AutoJs6 以文件名把脚本复制到自己的脚本目录; 带布局文件的 UI 工程 (1.8.0) 交出工程 zip, AutoJs6 解到脚本目录下与 zip 同名的文件夹, 已存在时询问覆盖 (zip 中的文件替换同名文件, 其它文件保留) 或另存为新文件夹</td>
 </tr>
 <tr>
 <td>复制脚本</td>
@@ -708,10 +769,10 @@
 </tr>
 </tbody>
 </table>
-<p>反向交接由 AutoJs6 编辑器发起: &quot;在 3-Block Compose 设计器中打开&quot; 先保存当前文件, 再以读写授权交给设计器; 设计器保存后回到 AutoJs6 编辑器, 编辑器按文件内容是否变化自动重新加载, 存在未保存修改时先询问. 该菜单项需要包含对应入口的 AutoJs6 6.8.0 构建 (宿主提交 db7e6a1734 之后); 其它去向只需要能运行 <code>compose</code> 脚本的 AutoJs6 (宿主提交 f12665ffde 之后).</p>
+<p>反向交接由 AutoJs6 编辑器发起: &quot;在 3-Block Compose 设计器中打开&quot; 先保存当前文件, 再以读写授权交给设计器; 设计器保存后回到 AutoJs6 编辑器, 编辑器按文件内容是否变化自动重新加载, 存在未保存修改时先询问. 该菜单项需要包含对应入口的 AutoJs6 6.8.0 构建 (宿主提交 db7e6a1734 之后); 其它去向只需要能运行 <code>compose</code> 脚本的 AutoJs6 (宿主提交 f12665ffde 之后); 带布局文件的 UI 工程的运行与导入 (1.8.0) 需要包含工程 zip 入口的 6.8.0 构建 (宿主提交 faf412ef7 之后), 更早的版本中这两个去向换成一行 &quot;需要更新版本的 AutoJs6&quot;.</p>
 <p>设计器本身不依赖 AutoJs6: 画布使用插件自带的渲染器, 与脚本在 AutoJs6 内运行时的渲染实现相同.</p>
 <hr>
-<h2>限制<span><a class="mark" href="#composedesigner_12" id="composedesigner_12">#</a></span></h2>
+<h2>限制<span><a class="mark" href="#composedesigner_15" id="composedesigner_15">#</a></span></h2>
 <div class="signature"><ul>
 <li>编辑时不运行脚本: 事件处理函数不会触发, <code>compose.state</code> 绑定在画布中显示初值或状态面板中的预览值, 渲染前置语句与条件 / 循环生成的内容只能以占位呈现. 1.5.0 起交互预览可以运行 JavaScript 工程的脚本, 但只提供 <code>compose</code>, 控制台与定时器等少数 API (见上文 &quot;预览状态与交互预览&quot; 一节).</li>
 <li>弹层类组件 (<code>AlertDialog</code>, <code>ModalBottomSheet</code>, <code>DropdownMenu</code>, <code>Tooltip</code>) 处于打开状态时, 1.3.0 起按接近真实的样式画在画布的逻辑屏幕内 (对话框与底部弹层带遮罩盖在页面上方, 菜单与提示贴近锚点, 放不下时翻到另一侧), 不弹出真实窗口, 弹层中的节点可以点选; 菜单宽度取 112 - 280 dp 内的可用宽度, 不按内容收窄 (1.2.0 显示为内联卡片).</li>

@@ -292,6 +292,7 @@
 <li><span class="stability_undefined"><a href="#plugins">应用插件</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_1">项目插件</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_2">内置扩展插件</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_3">插件工具</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_m_load">[m] load</a></span><ul>
 <li><span class="stability_undefined"><a href="#plugins_load_apppluginpackagename">load(appPluginPackageName)</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_load_projectpluginname">load(projectPluginName)</a></span></li>
@@ -317,6 +318,22 @@
 <li><span class="stability_undefined"><a href="#plugins_extendallbut_modulenames">extendAllBut(...moduleNames)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#plugins_m_tools_list">[m] tools.list</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_tools_list">tools.list()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_tools_providers">[m] tools.providers</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_tools_providers">tools.providers()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_tools_call">[m] tools.call</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_tools_call_name_args_options">tools.call(name, args?, options?)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#plugins_m_tools_callasync">[m] tools.callAsync</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_tools_callasync_name_args_options">tools.callAsync(name, args?, options?)</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -326,7 +343,7 @@
         <div id="apicontent">
             <h1>插件 (Plugins)<span><a class="mark" href="#plugins_plugins" id="plugins_plugins">#</a></span></h1>
 <p>在 AutoJs6 中, 插件分为 [ 应用插件 / 项目插件 / 内置扩展插件 ].</p>
-<p>plugins 模块主要用于插件及扩展模块的加载并使其功能生效.</p>
+<p>plugins 模块主要用于插件及扩展模块的加载并使其功能生效. <a href="#plugins_3">plugins.tools</a> 用于调用 AutoJs6 插件自描述的工具.</p>
 <h2>应用插件<span><a class="mark" href="#plugins" id="plugins">#</a></span></h2>
 <p>应用插件通常是一个由开发者编写的可安装的 APK 文件, 安装插件后可由 AutoJs6 通过 <a href="#plugins_m_load">plugins.load</a> 方法加载并使用插件.</p>
 <p>应用插件的使用步骤:</p>
@@ -369,6 +386,21 @@ plugins.extendAll();
 <li><a href="numberx.html">Numberx - Number 扩展</a></li>
 <li><a href="mathx.html">Mathx - Math 扩展</a></li>
 </ul>
+<h2>插件工具<span><a class="mark" href="#plugins_3" id="plugins_3">#</a></span></h2>
+<p>部分 AutoJs6 插件会声明自己提供的工具 (名称, 说明, 参数格式与风险等级), 例如中文转换或目标检测. AutoJs6 汇总这些工具, 脚本通过 <a href="#plugins_m_tools_list">plugins.tools.list</a> 查看, 通过 <a href="#plugins_m_tools_call">plugins.tools.call</a> 调用; MCP Server 等插件也经同一途径使用它们.</p>
+<ul>
+<li>工具名称为 <code>&lt;插件短名&gt;_&lt;工具名&gt;</code>, 例如 <code>opencc_convert</code>.</li>
+<li>参数须符合工具声明的参数格式 (JSON Schema 的一个子集). AutoJs6 在调用前校验, 并为缺省的参数填入声明的默认值.</li>
+<li>图片参数接受 <code>&quot;screen&quot;</code> (当前屏幕), 文件路径或 <a href="imageWrapperType.html">ImageWrapper</a> 对象; 文件参数接受文件路径. 路径按 <a href="files.html#files_m_path">files.path</a> 解析. 使用 <code>&quot;screen&quot;</code> 时, Android 11 及以上且无障碍服务运行中使用无障碍截图, 否则需先调用 <a href="image.html#image_m_images_requestscreencapture_options">images.requestScreenCapture</a>.</li>
+<li>工具产生的文件 (如图片) 写入调用时 <code>outputs</code> 选项指定的路径.</li>
+<li>脚本可调用所有已在插件中心授权并启用的插件的工具, 包括用户授权 (非官方) 的插件.</li>
+</ul>
+<pre><code class="lang-js">let tools = plugins.tools.list();
+tools.forEach(t =&gt; console.log(t.name, &#39;-&#39;, t.description));
+
+let answer = plugins.tools.call(&#39;opencc_convert&#39;, { text: &#39;汉字&#39;, config: &#39;s2t&#39; });
+console.log(answer.result);
+</code></pre>
 <hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">plugins</p>
 
@@ -445,6 +477,76 @@ plugins.extendAll();
 </ul>
 <p>加载所有的 <a href="#plugins_2">内置扩展插件</a>, 但排除指定的插件.</p>
 <pre><code class="lang-js">plugins.extendAllBut(&#39;Mathx&#39;); /* 加载除 Math 外的全部内置扩展插件. */
+</code></pre>
+<h2>[m] tools.list<span><a class="mark" href="#plugins_m_tools_list" id="plugins_m_tools_list">#</a></span></h2>
+<h3>tools.list()<span><a class="mark" href="#plugins_tools_list" id="plugins_tools_list">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> }</li>
+</ul>
+<p>返回当前可用的 <a href="#plugins_3">插件工具</a>. 每个元素包含:</p>
+<ul>
+<li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 工具名称 (<code>&lt;插件短名&gt;_&lt;工具名&gt;</code>)</li>
+<li><strong>description</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 工具说明 (英文, 由插件作者撰写)</li>
+<li><strong>inputSchema</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 参数格式</li>
+<li><strong>outputSchema</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 结果格式 (可能不存在)</li>
+<li><strong>risk</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 风险等级: <code>readonly</code>, <code>write</code>, <code>destructive</code> 或 <code>network</code></li>
+<li><strong>timeoutMs</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 单次调用的时限 (毫秒)</li>
+<li><strong>outputs</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 工具可产生的文件, 每项包含 <code>name</code> 与 <code>mimeType</code></li>
+<li><strong>imageParameters</strong> / <strong>fileParameters</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 图片参数与文件参数的名称</li>
+<li><strong>provider</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 提供工具的插件包名</li>
+<li><strong>trust</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件的信任级别: <code>official</code>, <code>trusted</code> 或 <code>user_granted</code></li>
+</ul>
+<pre><code class="lang-js">plugins.tools.list().forEach(t =&gt; console.log(t.name, t.risk));
+</code></pre>
+<h2>[m] tools.providers<span><a class="mark" href="#plugins_m_tools_providers" id="plugins_m_tools_providers">#</a></span></h2>
+<h3>tools.providers()<span><a class="mark" href="#plugins_tools_providers" id="plugins_tools_providers">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> }</li>
+</ul>
+<p>返回所有声明了工具的插件及其状态, 用于查明某个工具为何不可用. 每个元素包含 <code>packageName</code>, <code>trust</code>, <code>status</code> (<code>available</code>, <code>disabled</code>, <code>unauthorized</code>, <code>incompatible</code>, <code>failed</code> 或 <code>refused</code>), <code>shortName</code>, <code>tools</code> (工具数量), <code>detail</code> (不可用的原因) 与 <code>diagnostics</code> (被剔除的工具及原因).</p>
+<h2>[m] tools.call<span><a class="mark" href="#plugins_m_tools_call" id="plugins_m_tools_call">#</a></span></h2>
+<h3>tools.call(name, args?, options?)<span><a class="mark" href="#plugins_tools_call_name_args_options" id="plugins_tools_call_name_args_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 工具名称</li>
+<li><strong>[ args = {} ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 工具参数</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 调用选项<ul>
+<li><strong>[ timeoutMs ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 时限 (毫秒), 只能比工具声明的时限更短</li>
+<li><strong>[ outputs ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 以工具声明的文件名称为键, 以写入路径为值</li>
+<li><strong>[ overwrite = false ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 输出路径已存在文件时是否覆盖</li>
+</ul>
+</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> }</li>
+</ul>
+<p>调用一个 <a href="#plugins_3">插件工具</a> 并等待结果. 返回对象包含:</p>
+<ul>
+<li><strong>result</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 工具返回的结果</li>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 结果的简短文字说明 (可能不存在)</li>
+<li><strong>outputs</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 已写入的文件, 每项包含 <code>name</code>, <code>path</code>, <code>bytes</code> 与 <code>mimeType</code></li>
+<li><strong>tool</strong> / <strong>provider</strong> / <strong>invocationId</strong> / <strong>durationMs</strong> - 工具名称, 插件包名, 调用标识与耗时 (毫秒)</li>
+</ul>
+<p>参数不符合格式, 工具不存在, 插件报告错误或超过时限时抛出异常, 异常消息包含原因. 同步形态阻塞当前脚本线程直至完成, 停止脚本会取消调用.</p>
+<pre><code class="lang-js">/* 调用工具并把产生的图片写入工作目录. */
+let answer = plugins.tools.call(&#39;imagequant_quantize&#39;, { image: &#39;photo.png&#39;, colors: 16 }, {
+    outputs: { image: &#39;out/photo-16.png&#39; },
+});
+console.log(answer.outputs[0].path);
+</code></pre>
+<h2>[m] tools.callAsync<span><a class="mark" href="#plugins_m_tools_callasync" id="plugins_m_tools_callasync">#</a></span></h2>
+<h3>tools.callAsync(name, args?, options?)<span><a class="mark" href="#plugins_tools_callasync_name_args_options" id="plugins_tools_callasync_name_args_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>name</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 工具名称</li>
+<li><strong>[ args = {} ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 工具参数</li>
+<li><strong>[ options ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> } - 调用选项, 同 <a href="#plugins_m_tools_call">plugins.tools.call</a></li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">Object</a>&gt;</span> }</li>
+</ul>
+<p><a href="#plugins_m_tools_call">plugins.tools.call</a> 的异步形态, 立即返回 Promise, 结果在脚本线程送达; 失败时 Promise 以包含原因的错误拒绝.</p>
+<pre><code class="lang-js">plugins.tools.callAsync(&#39;opencc_convert&#39;, { text: &#39;汉字&#39; })
+    .then(answer =&gt; console.log(answer.result))
+    .catch(e =&gt; console.error(e.message));
 </code></pre>
 
         </div>

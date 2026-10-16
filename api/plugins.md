@@ -70,7 +70,7 @@ AutoJs6 预置以下 JavaScript 内置对象扩展模块:
 
 - 工具名称为 `<插件短名>_<工具名>`, 例如 `opencc_convert`.
 - 参数须符合工具声明的参数格式 (JSON Schema 的一个子集). AutoJs6 在调用前校验, 并为缺省的参数填入声明的默认值.
-- 图片参数接受 `"screen"` (当前屏幕), 文件路径或 [ImageWrapper](imageWrapperType) 对象; 文件参数接受文件路径. 路径按 [files.path](files#m-path) 解析. 使用 `"screen"` 时, Android 11 及以上且无障碍服务运行中使用无障碍截图, 否则需先调用 [images.requestScreenCapture](image#m-images-requestscreencapture-options).
+- 图片参数接受 `"screen"` (当前屏幕), 文件路径或 [ImageWrapper](imageWrapperType) 对象; 文件参数接受文件路径; 目录参数接受目录路径, AutoJs6 把目录中的文件交给插件 (例如 YOLO 模型目录中的 model.json, model.ncnn.param 与 model.ncnn.bin). 路径按 [files.path](files#m-path) 解析. 使用 `"screen"` 时, Android 11 及以上且无障碍服务运行中使用无障碍截图, 否则需先调用 [images.requestScreenCapture](image#m-images-requestscreencapture-options).
 - 工具产生的文件 (如图片) 写入调用时 `outputs` 选项指定的路径.
 - 脚本可调用所有已在插件中心授权并启用的插件的工具, 包括用户授权 (非官方) 的插件.
 
@@ -212,7 +212,7 @@ plugins.extendAllBut('Mathx'); /* 加载除 Math 外的全部内置扩展插件.
 - **risk** { [string](dataTypes#string) } - 风险等级: `readonly`, `write`, `destructive` 或 `network`
 - **timeoutMs** { [number](dataTypes#number) } - 单次调用的时限 (毫秒)
 - **outputs** { [Object](dataTypes#object)[[]](dataTypes#array) } - 工具可产生的文件, 每项包含 `name` 与 `mimeType`
-- **imageParameters** / **fileParameters** { [string](dataTypes#string)[[]](dataTypes#array) } - 图片参数与文件参数的名称
+- **imageParameters** / **fileParameters** / **directoryParameters** { [string](dataTypes#string)[[]](dataTypes#array) } - 图片参数, 文件参数与目录参数的名称
 - **provider** { [string](dataTypes#string) } - 提供工具的插件包名
 - **trust** { [string](dataTypes#string) } - 插件的信任级别: `official`, `trusted` 或 `user_granted`
 

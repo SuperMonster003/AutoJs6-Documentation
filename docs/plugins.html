@@ -391,7 +391,7 @@ plugins.extendAll();
 <ul>
 <li>工具名称为 <code>&lt;插件短名&gt;_&lt;工具名&gt;</code>, 例如 <code>opencc_convert</code>.</li>
 <li>参数须符合工具声明的参数格式 (JSON Schema 的一个子集). AutoJs6 在调用前校验, 并为缺省的参数填入声明的默认值.</li>
-<li>图片参数接受 <code>&quot;screen&quot;</code> (当前屏幕), 文件路径或 <a href="imageWrapperType.html">ImageWrapper</a> 对象; 文件参数接受文件路径. 路径按 <a href="files.html#files_m_path">files.path</a> 解析. 使用 <code>&quot;screen&quot;</code> 时, Android 11 及以上且无障碍服务运行中使用无障碍截图, 否则需先调用 <a href="image.html#image_m_images_requestscreencapture_options">images.requestScreenCapture</a>.</li>
+<li>图片参数接受 <code>&quot;screen&quot;</code> (当前屏幕), 文件路径或 <a href="imageWrapperType.html">ImageWrapper</a> 对象; 文件参数接受文件路径; 目录参数接受目录路径, AutoJs6 把目录中的文件交给插件 (例如 YOLO 模型目录中的 model.json, model.ncnn.param 与 model.ncnn.bin). 路径按 <a href="files.html#files_m_path">files.path</a> 解析. 使用 <code>&quot;screen&quot;</code> 时, Android 11 及以上且无障碍服务运行中使用无障碍截图, 否则需先调用 <a href="image.html#image_m_images_requestscreencapture_options">images.requestScreenCapture</a>.</li>
 <li>工具产生的文件 (如图片) 写入调用时 <code>outputs</code> 选项指定的路径.</li>
 <li>脚本可调用所有已在插件中心授权并启用的插件的工具, 包括用户授权 (非官方) 的插件.</li>
 </ul>
@@ -493,7 +493,7 @@ plugins.extendAll();
 <li><strong>risk</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 风险等级: <code>readonly</code>, <code>write</code>, <code>destructive</code> 或 <code>network</code></li>
 <li><strong>timeoutMs</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 单次调用的时限 (毫秒)</li>
 <li><strong>outputs</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 工具可产生的文件, 每项包含 <code>name</code> 与 <code>mimeType</code></li>
-<li><strong>imageParameters</strong> / <strong>fileParameters</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 图片参数与文件参数的名称</li>
+<li><strong>imageParameters</strong> / <strong>fileParameters</strong> / <strong>directoryParameters</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a><a href="dataTypes.html#datatypes_array">[]</a></span> } - 图片参数, 文件参数与目录参数的名称</li>
 <li><strong>provider</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 提供工具的插件包名</li>
 <li><strong>trust</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 插件的信任级别: <code>official</code>, <code>trusted</code> 或 <code>user_granted</code></li>
 </ul>

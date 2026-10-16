@@ -328,13 +328,22 @@
 <li><span class="stability_undefined"><a href="#files_m_batchrename">[m+] batchRename</a></span><ul>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_paths_options">files.batchRename(paths, options)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan(paths, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_preview_item_options">files.batchRename.preview(item, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_preview_items_options">files.batchRename.preview(items, options)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_apply_plan_applyoptions">files.batchRename.apply(plan, applyOptions?)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_undo_target">files.batchRename.undo(target)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_history_limit">files.batchRename.history(limit?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_deletehistory_target">files.batchRename.deleteHistory(target)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_clearhistory_options">files.batchRename.clearHistory(options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_presets">files.batchRename.presets()</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_importpresets_json_importoptions">files.batchRename.importPresets(json, importOptions?)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_isavailable">files.batchRename.isAvailable()</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_planasync_paths_options">files.batchRename.planAsync(paths, options)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_previewasync_nameoritems_options">files.batchRename.previewAsync(nameOrItems, options)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_applyasync_plan_applyoptions">files.batchRename.applyAsync(plan, applyOptions?)</a></span></li>
 <li><span class="stability_undefined"><a href="#files_files_batchrename_undoasync_target">files.batchRename.undoAsync(target)</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_presetsasync">files.batchRename.presetsAsync()</a></span></li>
+<li><span class="stability_undefined"><a href="#files_files_batchrename_importpresetsasync_json_importoptions">files.batchRename.importPresetsAsync(json, importOptions?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#files_files_getname_path">files.getName(path)</a></span></li>
@@ -581,13 +590,13 @@ app.viewFile(&quot;/sdcard/1.txt&quot;);
 </ul>
 </div><p>重命名文件, 不包含拓展名, 并返回是否重命名成功. 例如 <code>files.rename(&quot;/sdcard/1.txt&quot;, &quot;2&quot;)</code> 会把 &quot;1.txt&quot; 重命名为 &quot;2.txt&quot;.</p>
 <h2>[m+] batchRename<span><a class="mark" href="#files_m_batchrename" id="files_m_batchrename">#</a></span></h2>
-<p>批量重命名文件与文件夹. 新名称按查找与替换, 正则表达式, 计数器, 日期时间及随机值等规则计算, 支持先预览方案, 逐项排除, 冲突处理与撤销.</p>
-<p>批量重命名由外置 Batch Rename 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 Batch Rename 插件. 未发现可用插件时, 调用将抛出 (异步形态以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href="#files_batchrenameerror">BatchRenameError</a>. <a href="#files_files_batchrename_isavailable">files.batchRename.isAvailable</a> 可预先探测.</p>
-<p>插件只计算新名称; 枚举目标, 改名, 撤销日志及回收站均由 AutoJs6 完成. 文件管理器中的批量重命名 (多选工具栏, 文件夹菜单 &quot;批量重命名其中的项目&quot; 及重命名对话框 &quot;更多&quot; 菜单) 使用同一插件与同一撤销日志.</p>
-<p>一次重命名分为两步: <a href="#files_files_batchrename_plan_paths_options">plan</a> 枚举目标并计算 <a href="#files_batchrenameplan">方案</a>, 不修改任何文件; <a href="#files_files_batchrename_apply_plan_applyoptions">apply</a> 执行方案并返回 <a href="#files_batchrenameresult">结果</a>. 直接调用 <code>files.batchRename(paths, options)</code> 等价于先 plan 再 apply.</p>
+<p>批量重命名文件与文件夹. 新名称按查找与替换, 正则表达式, 计数器, 日期时间, 随机值, 照片元数据及汉字转拼音等规则计算, 支持先预览方案, 逐项排除, 冲突处理, 命名预设与撤销.</p>
+<p>批量重命名由外置 Batch Rename 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 Batch Rename 插件. 未发现可用插件时, 调用将抛出 (异步形态以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href="#files_batchrenameerror">BatchRenameError</a>. <a href="#files_files_batchrename_isavailable">files.batchRename.isAvailable</a> 可预先探测. 汉字转拼音 (<code>pinyin</code> 系列选项与 <code>${pinyin}</code> 变量), 照片元数据 (<code>metadata</code>) 及命名预设 (<code>preset</code>, <a href="#files_files_batchrename_presets">presets</a>, <a href="#files_files_batchrename_importpresets_json_importoptions">importPresets</a>) 需要 Batch Rename 1.1.0 及以上版本, 旧版本插件遇到时抛出 <code>PLUGIN_INCOMPATIBLE</code>.</p>
+<p>插件只计算新名称; 枚举目标, 改名, 撤销日志及回收站均由 AutoJs6 完成. 文件管理器中的批量重命名 (多选工具栏, 文件夹菜单 &quot;批量重命名其中的项目&quot; 及重命名对话框 &quot;更多&quot; 菜单) 使用同一插件与同一撤销日志. 日志中的批次也可在 AutoJs6 的 &quot;重命名历史&quot; 页面中查看, 搜索, 撤销或删除 (入口: 文件管理器重命名对话框 &quot;更多&quot; 菜单 &gt; &quot;重命名历史&quot;).</p>
+<p>一次重命名分为两步: <a href="#files_files_batchrename_plan_paths_options">plan</a> 枚举目标并计算 <a href="#files_batchrenameplan">方案</a>, 不修改任何文件; <a href="#files_files_batchrename_apply_plan_applyoptions">apply</a> 执行方案并返回 <a href="#files_batchrenameresult">结果</a>. 直接调用 <code>files.batchRename(paths, options)</code> 等价于先 plan 再 apply. <a href="#files_files_batchrename_preview_item_options">preview</a> 只按名称试算新名称, 不访问文件.</p>
 <p><code>paths</code> 为路径字符串或其数组, 相对路径按脚本工作目录解析 (与 <a href="#files_m_path">files.path</a> 相同). 给出的每个路径都是深度为 0 的条目. 给出文件夹且 <code>includeSubfolders</code> 为 <code>true</code> (默认) 时, 其中的全部条目也会加入, 深度逐层加 1, 按深度优先的顺序排列, 同一文件夹内按名称排序 (不区分大小写). 符号链接不会被跟随或改名: 给出的路径不能是符号链接, 文件夹中的符号链接被跳过.</p>
 <p>一个方案至多包含 2000 个条目, 涉及至多 512 个文件夹, 这些文件夹合计至多 20000 个名称, 给出的文件夹之下至多 32 层, 超出时抛出 <code>LIMIT_EXCEEDED</code>.</p>
-<p>同步形态阻塞当前脚本线程直至完成, 停止脚本会取消等待; 异步形态 (<code>planAsync</code>, <code>applyAsync</code>, <code>undoAsync</code>) 立即返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 进度回调与结果在脚本线程执行. 除 RegExp 形式的 <code>search</code> 与 <code>onProgress</code> 函数外, 选项会像 <code>JSON.stringify</code> 一样序列化.</p>
+<p>同步形态阻塞当前脚本线程直至完成, 停止脚本会取消等待; 异步形态 (<code>planAsync</code>, <code>previewAsync</code>, <code>applyAsync</code>, <code>undoAsync</code>, <code>presetsAsync</code>, <code>importPresetsAsync</code>) 立即返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 进度回调与结果在脚本线程执行. 除 RegExp 形式的 <code>search</code> 与 <code>onProgress</code> 函数外, 选项会像 <code>JSON.stringify</code> 一样序列化.</p>
 <p><code>$files.batchRename</code> 与 <code>files.batchRename</code> 指向同一对象.</p>
 <pre><code class="lang-js">let dir = files.path(&#39;./batch-rename-demo&#39;);
 [&#39;IMG_0001.jpg&#39;, &#39;IMG_0002.jpg&#39;, &#39;notes.txt&#39;].forEach(name =&gt; files.createWithDirs(files.join(dir, name)));
@@ -634,6 +643,37 @@ let plan = files.batchRename.plan(&#39;./camera&#39;, {
 });
 plan.items.filter(it =&gt; it.status === &#39;rename&#39;).forEach(it =&gt; console.log(it.name, &#39;-&gt;&#39;, it.newName));
 </code></pre>
+<h3>files.batchRename.preview(item, options)<span><a class="mark" href="#files_files_batchrename_preview_item_options" id="files_files_batchrename_preview_item_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>
+<ul>
+<li><strong>item</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type">{{ name: <a href="dataTypes.html#datatypes_string">string</a>; isDirectory?: <a href="dataTypes.html#datatypes_boolean">boolean</a>; lastModified?: <a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_date">Date</a></span> }} } - 名称或试算条目</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type">{{ newName: <a href="dataTypes.html#datatypes_string">string</a>; status: <a href="dataTypes.html#datatypes_string">string</a>; reason: <a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }} } - 试算结果</li>
+</ul>
+<p>按 <code>options</code> 试算一个名称的新名称, 不访问也不改名任何文件, 适合在没有对应文件时检验替换规则. 结果的 <code>newName</code>, <code>status</code> 与 <code>reason</code> 与 <a href="#files_batchrenameplan">方案</a> 条目的同名属性相同.</p>
+<p>字符串视为文件名, 修改时间为调用时刻. 试算条目可用 <code>isDirectory</code> 表示文件夹 (默认 <code>false</code>), 用 <code>lastModified</code> (毫秒时间戳或 Date) 给出修改时间, 分别供 <code>includeFiles</code> / <code>includeFolders</code> 与日期时间变量使用. 名称必须是 1 至 1024 个字符的单个文件名, 不能为 <code>.</code> 或 <code>..</code>, 不能包含 <code>/</code>, 否则抛出 <code>INVALID_OPTIONS</code>.</p>
+<p>试算不读取文件, 因此 <code>metadata</code> 为 <code>true</code> 时抛出 <code>INVALID_OPTIONS</code>. 其他选项 (包括 <code>preset</code>) 与 <a href="#files_files_batchrename_plan_paths_options">plan</a> 相同, 文件夹层级相关的选项不起作用.</p>
+<pre><code class="lang-js">let result = files.batchRename.preview(&#39;IMG_0001.JPG&#39;, { search: &#39;IMG_&#39;, replace: &#39;Photo_&#39;, format: &#39;lower&#39; });
+console.log(result.newName, result.status); // photo_0001.jpg rename
+
+let dated = files.batchRename.preview({ name: &#39;scan.pdf&#39;, lastModified: new Date(2026, 9, 15) }, {
+    search: /^/, replace: &#39;$YYYY-$MM-$DD_&#39;, target: &#39;name&#39;,
+});
+console.log(dated.newName); // 2026-10-15_scan.pdf
+</code></pre>
+<h3>files.batchRename.preview(items, options)<span><a class="mark" href="#files_files_batchrename_preview_items_options" id="files_files_batchrename_preview_items_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>
+<ul>
+<li><strong>items</strong> { <span class="type">(<a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a>)[]</span> } - 名称或试算条目 (与 <a href="#files_files_batchrename_preview_item_options">Overload 1/2</a> 的 <code>item</code> 相同) 的数组, 至多 2000 个</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_object">object</a>[]</span> } - 与 <code>items</code> 一一对应的试算结果</li>
+</ul>
+<p>试算一组名称. 这些名称视为同一文件夹中仅有的条目: 计数器按数组顺序取值, 冲突只在这些名称之间产生 (<code>duplicateInBatch</code>), 不检查已有文件或存储对字符的限制. 超过 2000 个名称时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<pre><code class="lang-js">let results = files.batchRename.preview([&#39;a.txt&#39;, &#39;b.txt&#39;, &#39;c.md&#39;], {
+    search: /^.+$/, replace: &#39;note_${start=1}&#39;, target: &#39;name&#39;, enumerate: true,
+});
+console.log(results.map(it =&gt; it.newName).join(&#39;, &#39;)); // note_1.txt, note_2.txt, note_3.md
+</code></pre>
 <h3>files.batchRename.apply(plan, applyOptions?)<span><a class="mark" href="#files_files_batchrename_apply_plan_applyoptions" id="files_files_batchrename_apply_plan_applyoptions">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
@@ -668,7 +708,7 @@ console.log(result.batchId, result.undoable);
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenameundoresult">BatchRenameUndoResult</a></span> } - 撤销结果</li>
 </ul>
 <p>撤销一个批次, 把其中仍持有新名称的条目改回原名, 浅层条目先恢复. 改名之后又被修改, 移动或删除的条目状态为 <code>stale</code>, 不会被恢复. 以 <code>overwrite</code> 策略替换的既有条目会从回收站恢复.</p>
-<p>文件管理器产生的批次也可撤销 (批次 ID 见 <a href="#files_files_batchrename_history_limit">history</a>). 批次不存在, 已不在日志中, 或已没有可撤销的条目时抛出 <code>UNDO_UNAVAILABLE</code>. 恢复失败的条目 (状态 <code>failed</code>) 可再次调用 undo 重试.</p>
+<p>文件管理器产生的批次也可撤销 (批次 ID 见 <a href="#files_files_batchrename_history_limit">history</a>); 也可在 &quot;重命名历史&quot; 页面中撤销. 批次不存在, 已不在日志中, 或已没有可撤销的条目时抛出 <code>UNDO_UNAVAILABLE</code>. 恢复失败的条目 (状态 <code>failed</code>) 可再次调用 undo 重试.</p>
 <pre><code class="lang-js">let result = files.batchRename(&#39;./notes&#39;, { search: &#39;draft&#39;, replace: &#39;final&#39; });
 let undone = files.batchRename.undo(result);
 console.log(undone.state, undone.counts.restored); // restored ...
@@ -676,16 +716,78 @@ console.log(undone.state, undone.counts.restored); // restored ...
 <h3>files.batchRename.history(limit?)<span><a class="mark" href="#files_files_batchrename_history_limit" id="files_files_batchrename_history_limit">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
-<li><strong>[ limit = 20 ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最多返回的批次数, 为非负整数, 大于 20 时按 20 处理</li>
+<li><strong>[ limit ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 最多返回的批次数, 为非负整数; 省略时返回全部批次</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#files_batchrenamehistoryentry">BatchRenameHistoryEntry</a>[]</span> } - 批次列表</li>
 </ul>
-<p>返回撤销日志中最近的批次, 最新的在前, 包括脚本与文件管理器产生的批次. 日志为脚本 (所有脚本共用) 与文件管理器各保留最近 20 个批次, 更早的批次被移出日志, 无法再撤销.</p>
+<p>返回撤销日志中的批次, 最新的在前, 包括脚本与文件管理器产生的批次. 日志为脚本 (所有脚本共用) 与每个插件 (文件管理器的批次计入执行它的插件) 各保留最近若干个批次, 默认 20 个, 可在 &quot;重命名历史&quot; 页面的菜单中改为 50 或 100. 更早的批次被移出日志, 无法再撤销.</p>
 <pre><code class="lang-js">/* 撤销最近一个仍可撤销的批次. */
 let latest = files.batchRename.history().find(entry =&gt; entry.undoable);
 if (latest) {
     console.log(latest.source, new Date(latest.createdAt));
     files.batchRename.undo(latest.batchId);
 }
+</code></pre>
+<h3>files.batchRename.deleteHistory(target)<span><a class="mark" href="#files_files_batchrename_deletehistory_target" id="files_files_batchrename_deletehistory_target">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>target</strong> { <span class="type"><a href="#files_batchrenameresult">BatchRenameResult</a></span> | <span class="type"><a href="#files_batchrenamehistoryentry">BatchRenameHistoryEntry</a></span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - apply 的结果, history 的元素或批次 ID</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否删除了该批次</li>
+</ul>
+<p>从撤销日志中删除一个批次, 包括文件管理器产生的批次. 删除后该批次无法再撤销, 已改名的文件保持不变. 日志中没有该批次时返回 <code>false</code>. <code>target</code> 不是批次 ID 且不含批次 ID 时抛出 <code>INVALID_OPTIONS</code>.</p>
+<pre><code class="lang-js">let result = files.batchRename(&#39;./notes&#39;, { search: &#39;draft&#39;, replace: &#39;final&#39; });
+console.log(files.batchRename.deleteHistory(result)); // true
+console.log(files.batchRename.deleteHistory(result.batchId)); // false
+</code></pre>
+<h3>files.batchRename.clearHistory(options?)<span><a class="mark" href="#files_files_batchrename_clearhistory_options" id="files_files_batchrename_clearhistory_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>[ options ]</strong> {{ source?: <code>&#39;script&#39;</code> | <code>&#39;explorer&#39;</code> }} - 清理范围</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 删除的批次数</li>
+</ul>
+<p>删除撤销日志中的全部批次, 或某个来源 (<code>&#39;script&#39;</code> 脚本, <code>&#39;explorer&#39;</code> 文件管理器) 的批次. 删除后这些批次无法再撤销, 已改名的文件保持不变. <code>source</code> 为其他值时抛出 <code>INVALID_OPTIONS</code>.</p>
+<pre><code class="lang-js">/* 只清理脚本产生的批次. */
+console.log(files.batchRename.clearHistory({ source: &#39;script&#39; }));
+</code></pre>
+<h3>files.batchRename.presets()<span><a class="mark" href="#files_files_batchrename_presets" id="files_files_batchrename_presets">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type">{{ name: <a href="dataTypes.html#datatypes_string">string</a>; options: <a href="dataTypes.html#datatypes_object">object</a></span> }}[] } - 命名预设列表</li>
+</ul>
+<p>返回 Batch Rename 插件中保存的命名预设, 顺序与插件中的顺序相同. <code>options</code> 为预设的完整选项, 键与 <a href="#files_batchrenameoptions">BatchRenameOptions</a> 相同, 值为字符串或布尔值 (如 <code>dateTime</code> 关闭时为 <code>&#39;none&#39;</code>).</p>
+<p>命名预设在插件界面中保存, 加载, 重命名, 删除, 导入与导出 (顶栏 &quot;预设&quot; 按钮). 脚本可用 <code>options.preset</code> 引用预设, 或用 <a href="#files_files_batchrename_importpresets_json_importoptions">importPresets</a> 导入. 插件至多保存 100 个预设, 名称为 1 至 64 个字符.</p>
+<pre><code class="lang-js">files.batchRename.presets().forEach(preset =&gt; console.log(preset.name, preset.options.replace));
+</code></pre>
+<h3>files.batchRename.importPresets(json, importOptions?)<span><a class="mark" href="#files_files_batchrename_importpresets_json_importoptions" id="files_files_batchrename_importpresets_json_importoptions">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><strong>json</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> } - 预设文档, 为插件导出的 JSON 文本或其解析后的对象</li>
+<li><strong>[ importOptions ]</strong> {{ onConflict?: <code>&#39;skip&#39;</code> | <code>&#39;overwrite&#39;</code> | <code>&#39;rename&#39;</code> }} - 同名预设的处理方式, 默认 <code>&#39;skip&#39;</code></li>
+<li><ins><strong>returns</strong></ins> { <span class="type">{ imported: <a href="dataTypes.html#datatypes_string">string</a>[]; skipped: <a href="dataTypes.html#datatypes_string">string</a>[]; rejected: <a href="dataTypes.html#datatypes_object">object</a>[]</span> }} - 导入结果</li>
+</ul>
+<p>按顺序导入预设文档中的预设. 文档与插件导出的文件格式相同:</p>
+<pre><code class="lang-json">{
+    &quot;format&quot;: &quot;autojs6-batch-rename-presets&quot;,
+    &quot;version&quot;: 1,
+    &quot;presets&quot;: [
+        { &quot;name&quot;: &quot;Date prefix&quot;, &quot;options&quot;: { &quot;search&quot;: &quot;^&quot;, &quot;regex&quot;: true, &quot;replace&quot;: &quot;$YYYY$MM$DD_&quot;, &quot;includeFolders&quot;: false } }
+    ]
+}
+</code></pre>
+<p><code>options</code> 使用 <a href="#files_batchrenameoptions">BatchRenameOptions</a> 的键, 省略的键取默认值. 名称去除首尾空白后为 1 至 64 个字符. 已有同名预设时, <code>&#39;skip&#39;</code> 保留已有预设并在 <code>skipped</code> 中列出名称, <code>&#39;overwrite&#39;</code> 替换已有预设, <code>&#39;rename&#39;</code> 以 <code>名称 (n)</code> 形式的第一个可用名称保存.</p>
+<p><code>imported</code> 为实际保存的名称. 选项不合法, 或保存后会超过 100 个预设或总大小上限的条目被拒绝, 列入 <code>rejected</code> (元素为 <code>{ index, name, reason }</code>: <code>index</code> 为条目在 <code>presets</code> 中的位置, <code>reason</code> 为英文原因), 其余条目照常导入. 文档不是预设文档或版本不受支持时抛出 <code>INVALID_OPTIONS</code>, 超过 131072 个字符时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<pre><code class="lang-js">let result = files.batchRename.importPresets({
+    format: &#39;autojs6-batch-rename-presets&#39;,
+    version: 1,
+    presets: [
+        { name: &#39;Date prefix&#39;, options: { search: &#39;^&#39;, regex: true, replace: &#39;$YYYY$MM$DD_&#39;, includeFolders: false } },
+        { name: &#39;Broken&#39;, options: { onConflict: &#39;later&#39; } },
+    ],
+});
+console.log(result.imported); // [&quot;Date prefix&quot;]
+console.log(result.rejected[0].index, result.rejected[0].name); // 1 Broken
+
+/* 以预设计算方案, 显式给出的选项优先. */
+let plan = files.batchRename.plan(&#39;./camera&#39;, { preset: &#39;Date prefix&#39; });
 </code></pre>
 <h3>files.batchRename.isAvailable()<span><a class="mark" href="#files_files_batchrename_isavailable" id="files_files_batchrename_isavailable">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
@@ -706,6 +808,14 @@ if (latest) {
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#files_batchrenameplan">BatchRenamePlan</a>&gt;</span> }</li>
 </ul>
 <p><a href="#files_files_batchrename_plan_paths_options">plan</a> 的异步形态. 参数错误同样以 Promise 拒绝.</p>
+<h3>files.batchRename.previewAsync(nameOrItems, options)<span><a class="mark" href="#files_files_batchrename_previewasync_nameoritems_options" id="files_files_batchrename_previewasync_nameoritems_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>nameOrItems</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> | <span class="type">(<a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a>)[]</span> } - 名称, 试算条目或其数组</li>
+<li><strong>options</strong> { <span class="type"><a href="#files_batchrenameoptions">BatchRenameOptions</a></span> } - 重命名选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">object</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a>[]&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_preview_item_options">preview</a> 的异步形态. 给出数组时以结果数组兑现.</p>
 <h3>files.batchRename.applyAsync(plan, applyOptions?)<span><a class="mark" href="#files_files_batchrename_applyasync_plan_applyoptions" id="files_files_batchrename_applyasync_plan_applyoptions">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
 <ul>
@@ -726,6 +836,20 @@ if (latest) {
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="#files_batchrenameundoresult">BatchRenameUndoResult</a>&gt;</span> }</li>
 </ul>
 <p><a href="#files_files_batchrename_undo_target">undo</a> 的异步形态.</p>
+<h3>files.batchRename.presetsAsync()<span><a class="mark" href="#files_files_batchrename_presetsasync" id="files_files_batchrename_presetsasync">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">object</a>[]&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_presets">presets</a> 的异步形态.</p>
+<h3>files.batchRename.importPresetsAsync(json, importOptions?)<span><a class="mark" href="#files_files_batchrename_importpresetsasync_json_importoptions" id="files_files_batchrename_importpresetsasync_json_importoptions">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
+<ul>
+<li><strong>json</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> } - 预设文档</li>
+<li><strong>[ importOptions ]</strong> {{ onConflict?: <code>&#39;skip&#39;</code> | <code>&#39;overwrite&#39;</code> | <code>&#39;rename&#39;</code> }} - 同名预设的处理方式, 默认 <code>&#39;skip&#39;</code></li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>&lt;<a href="dataTypes.html#datatypes_object">object</a>&gt;</span> }</li>
+</ul>
+<p><a href="#files_files_batchrename_importpresets_json_importoptions">importPresets</a> 的异步形态.</p>
 <h2>files.getName(path)<span><a class="mark" href="#files_files_getname_path" id="files_files_getname_path">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 路径</li>
@@ -875,7 +999,7 @@ log(jsFiles);
 <p>关闭文件. 同时会被缓冲区内容输出到文件.</p>
 <p><strong>打开一个文件写入后, 不再使用时务必关闭, 否则文件可能会丢失</strong></p>
 <h1>批量重命名选项 (BatchRenameOptions)<span><a class="mark" href="#files_batchrenameoptions" id="files_batchrenameoptions">#</a></span></h1>
-<p><a href="#files_m_batchrename">files.batchRename</a> 与 <a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan</a> 的选项对象. 除 <code>search</code> 外均可省略, 值为 <code>null</code> 或 <code>undefined</code> 时取默认值. 类型不符或取值未知时抛出 <code>INVALID_OPTIONS</code>.</p>
+<p><a href="#files_m_batchrename">files.batchRename</a>, <a href="#files_files_batchrename_plan_paths_options">files.batchRename.plan</a> 与 <a href="#files_files_batchrename_preview_item_options">files.batchRename.preview</a> 的选项对象. 除 <code>search</code> 外均可省略 (给出 <code>preset</code> 时 <code>search</code> 也可省略, 取预设中的值), 值为 <code>null</code> 或 <code>undefined</code> 时取默认值. 类型不符或取值未知时抛出 <code>INVALID_OPTIONS</code>.</p>
 <table>
 <thead>
 <tr>
@@ -1028,6 +1152,54 @@ log(jsFiles);
 <td><code>&#39;number&#39;</code> 策略追加在主文件名之后的后缀, <code>{n}</code> 为序号; 必须包含 <code>{n}</code>, 不能包含 <code>/</code></td>
 </tr>
 <tr>
+<td>pinyin</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>替换之后把名称中的汉字转为拼音, 见 <a href="#files_variables">替换变量</a> 中的汉字转拼音</td>
+</tr>
+<tr>
+<td>pinyinTone</td>
+<td><code>&#39;none&#39;</code> \</td>
+<td><code>&#39;mark&#39;</code> \</td>
+<td><code>&#39;number&#39;</code></td>
+<td><code>&#39;none&#39;</code></td>
+<td>拼音声调: 无 (<code>zhang</code>), 声调符号 (<code>zhāng</code>), 数字 (<code>zhang1</code>); 同时作用于 <code>${pinyin}</code></td>
+</tr>
+<tr>
+<td>pinyinSeparator</td>
+<td><code>&#39;none&#39;</code> \</td>
+<td><code>&#39;space&#39;</code> \</td>
+<td><code>&#39;underscore&#39;</code> \</td>
+<td><code>&#39;hyphen&#39;</code></td>
+<td><code>&#39;none&#39;</code></td>
+<td>相邻音节之间的分隔: 无, 空格, <code>_</code>, <code>-</code></td>
+</tr>
+<tr>
+<td>pinyinCase</td>
+<td><code>&#39;lower&#39;</code> \</td>
+<td><code>&#39;capitalize&#39;</code></td>
+<td><code>&#39;lower&#39;</code></td>
+<td>全部小写 (<code>zhangsan</code>), 或每个音节首字母大写 (<code>ZhangSan</code>)</td>
+</tr>
+<tr>
+<td>pinyinInitials</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>只保留每个音节的首字母 (不带声调)</td>
+</tr>
+<tr>
+<td>metadata</td>
+<td>boolean</td>
+<td><code>false</code></td>
+<td>展开照片元数据变量, 见 <a href="#files_variables">替换变量</a>; 不能用于 preview</td>
+</tr>
+<tr>
+<td>preset</td>
+<td>string</td>
+<td>-</td>
+<td>Batch Rename 插件中保存的命名预设的名称 (见 <a href="#files_files_batchrename_presets">presets</a>). 以默认值为起点, 先应用预设的选项, 再应用本对象中给出的其他选项; 预设不存在时抛出 <code>INVALID_OPTIONS</code></td>
+</tr>
+<tr>
 <td>onProgress</td>
 <td>function</td>
 <td>-</td>
@@ -1043,7 +1215,7 @@ log(jsFiles);
 <li>被排除的条目 (脚本排除或被 <code>includeFiles</code>, <code>includeFolders</code>, <code>includeSubfolders</code> 排除) 保持原名.</li>
 <li><code>target</code> 指定的部分不匹配 <code>search</code> 时保持原名.</li>
 <li>展开 <code>replace</code> 中的变量, 再执行替换.</li>
-<li>依次应用 <code>format</code>, <code>normalize</code>, <code>halfWidth</code>, <code>sanitize</code> 与 <code>trim</code>, 最后与未参与替换的部分拼回名称.</li>
+<li>依次应用 <code>pinyin</code>, <code>format</code>, <code>normalize</code>, <code>halfWidth</code>, <code>sanitize</code> 与 <code>trim</code>, 最后与未参与替换的部分拼回名称.</li>
 </ol>
 <h2>替换变量 (Variables)<span><a class="mark" href="#files_variables" id="files_variables">#</a></span></h2>
 <p><code>replace</code> 中可使用以下变量. 变量对应的选项关闭时, 以及无法解析的写法, 都作为字面文本保留. <code>$$</code> 表示一个字面 <code>$</code>, 且其后的文本不会被识别为变量 (如 <code>$$YYYY</code> 得到 <code>$YYYY</code>).</p>
@@ -1188,6 +1360,161 @@ log(jsFiles);
 </tbody>
 </table>
 <p>N 为 1 至 256, 超过 256 时抛出 <code>LIMIT_EXCEEDED</code>.</p>
+<p>汉字转拼音:</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>${pinyin}</code></td>
+<td><code>target</code> 所指部分的原名称的拼音, 无需开启 <code>pinyin</code>; 风格由 <code>pinyinTone</code>, <code>pinyinSeparator</code>, <code>pinyinCase</code> 与 <code>pinyinInitials</code> 决定</td>
+</tr>
+</tbody>
+</table>
+<p><code>pinyin</code> 为 <code>true</code> 时, 替换之后把名称中的汉字转为拼音, 非汉字原样保留. 拼音按插件内置的单字与词组词典转换, 多音字按词组判断, 繁体字同样转换. 音节分隔符只出现在相邻的两个音节之间 (如 <code>我的照片 2024</code> 在 <code>pinyinSeparator: &#39;underscore&#39;</code> 时为 <code>wo_de_zhao_pian 2024</code>). 无声调与数字声调时 <code>ü</code> 写作 <code>v</code> (<code>绿色</code> 为 <code>lvse</code> 或 <code>lv4se4</code>), 名称保持为 ASCII 字符; 轻声不加数字. <code>pinyinInitials</code> 只保留每个音节的首字母 (<code>北京大学</code> 为 <code>bjdx</code>). <code>$${pinyin}</code> 得到字面的 <code>${pinyin}</code>.</p>
+<p>照片元数据 (需要 <code>metadata: true</code>, 否则作为字面文本):</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>说明</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$CAMERA_MAKE</code></td>
+<td>相机厂商</td>
+<td><code>Canon</code></td>
+</tr>
+<tr>
+<td><code>$CAMERA_MODEL</code></td>
+<td>相机型号</td>
+<td><code>EOS R5</code></td>
+</tr>
+<tr>
+<td><code>$LENS</code></td>
+<td>镜头型号</td>
+<td><code>RF50mm F1.8</code></td>
+</tr>
+<tr>
+<td><code>$ISO</code></td>
+<td>感光度</td>
+<td><code>400</code></td>
+</tr>
+<tr>
+<td><code>$APERTURE</code></td>
+<td>光圈, 保留一位小数</td>
+<td><code>f2.8</code>, <code>f8</code></td>
+</tr>
+<tr>
+<td><code>$SHUTTER</code></td>
+<td>快门速度; 1 秒以下写作分数, 斜线改为短横线</td>
+<td><code>1-250s</code>, <code>2s</code>, <code>1.5s</code></td>
+</tr>
+<tr>
+<td><code>$FOCAL</code></td>
+<td>焦距, 保留一位小数</td>
+<td><code>50mm</code>, <code>4.2mm</code></td>
+</tr>
+<tr>
+<td><code>$FLASH</code></td>
+<td>是否闪光</td>
+<td><code>On</code>, <code>Off</code></td>
+</tr>
+<tr>
+<td><code>$WIDTH</code></td>
+<td>宽度 (像素)</td>
+<td><code>4032</code></td>
+</tr>
+<tr>
+<td><code>$HEIGHT</code></td>
+<td>高度 (像素)</td>
+<td><code>3024</code></td>
+</tr>
+<tr>
+<td><code>$AUTHOR</code></td>
+<td>作者</td>
+<td></td>
+</tr>
+<tr>
+<td><code>$COPYRIGHT</code></td>
+<td>版权</td>
+<td></td>
+</tr>
+<tr>
+<td><code>$LATITUDE</code></td>
+<td>纬度, 十进制度, 6 位小数, 南纬为负</td>
+<td><code>31.230416</code></td>
+</tr>
+<tr>
+<td><code>$LONGITUDE</code></td>
+<td>经度, 十进制度, 6 位小数, 西经为负</td>
+<td><code>-121.473701</code></td>
+</tr>
+<tr>
+<td><code>$ALTITUDE</code></td>
+<td>海拔, 取整到米</td>
+<td><code>120m</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_YYYY</code></td>
+<td>拍摄时间的四位年份</td>
+<td><code>2026</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_YY</code></td>
+<td>年份后两位</td>
+<td><code>26</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_MM</code></td>
+<td>两位月份</td>
+<td><code>10</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_DD</code></td>
+<td>两位日期</td>
+<td><code>15</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_HH</code></td>
+<td>两位小时 (24 小时制)</td>
+<td><code>08</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_mm</code></td>
+<td>两位分钟</td>
+<td><code>30</code></td>
+</tr>
+<tr>
+<td><code>$DATE_TAKEN_SS</code></td>
+<td>两位秒</td>
+<td><code>59</code></td>
+</tr>
+<tr>
+<td><code>$EXPOSURE_BIAS</code></td>
+<td>曝光补偿, 保留一位小数</td>
+<td><code>+0.3EV</code>, <code>0EV</code>, <code>-1EV</code></td>
+</tr>
+<tr>
+<td><code>$ORIENTATION</code></td>
+<td>方向: 顺时针旋转角度, 镜像时加 <code>M</code></td>
+<td><code>0</code>, <code>90</code>, <code>180M</code></td>
+</tr>
+<tr>
+<td><code>$COLOR_SPACE</code></td>
+<td>色彩空间</td>
+<td><code>sRGB</code>, <code>AdobeRGB</code>, <code>Uncalibrated</code></td>
+</tr>
+</tbody>
+</table>
+<p>元数据变量区分大小写 (<code>$DATE_TAKEN_MM</code> 为月, <code>$DATE_TAKEN_mm</code> 为分), 先于日期时间变量识别, 较长的名称优先 (<code>$DATE_TAKEN_YYYY</code> 不会被识别为 <code>$D</code>). 取值与语言无关且可直接用于文件名, 文本值中的 <code>/</code> 替换为 <code>-</code>.</p>
+<p><code>metadata</code> 为 <code>true</code> 且 <code>replace</code> 含元数据变量时, AutoJs6 读取图片文件 (JPEG, PNG, WebP, HEIF 及 DNG, CR2, NEF, ARW 等 RAW 格式) 的 EXIF, 作者与版权缺失时读取 XMP, 只读不改. 文件中没有的值 (以及文件夹与非图片文件) 展开为空文本, 对应条目的 <code>metadataMissing</code> 为 <code>true</code>. <code>$DATE_TAKEN_*</code> 使用照片记录的当地时间, 不换算时区; 缺失时改用条目的修改时间, 不计为缺失.</p>
 <pre><code class="lang-js">/* 用计数器为照片重新编号: a.jpg, b.jpg -&gt; trip_01.jpg, trip_02.jpg. */
 files.batchRename(&#39;./trip&#39;, {
     search: /^.+$/,
@@ -1199,6 +1526,19 @@ files.batchRename(&#39;./trip&#39;, {
 
 /* 只转为小写, 不替换文本. */
 files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#39;, includeFolders: false });
+
+/* 汉字转拼音: 张三.txt -&gt; ZhangSan_张三.txt. */
+console.log(files.batchRename.preview(&#39;张三.txt&#39;, { search: /^/, replace: &#39;${pinyin}_&#39;, target: &#39;name&#39;, pinyinCase: &#39;capitalize&#39; }).newName);
+
+/* 拍摄日期与相机型号: DSC_0001.NEF -&gt; 20090210_NIKON D90.NEF. */
+let plan = files.batchRename.plan(&#39;./photos&#39;, {
+    search: /^.+$/,
+    replace: &#39;$DATE_TAKEN_YYYY$DATE_TAKEN_MM$DATE_TAKEN_DD_$CAMERA_MODEL&#39;,
+    target: &#39;name&#39;,
+    metadata: true,
+    includeFolders: false,
+});
+plan.items.filter(it =&gt; it.metadataMissing).forEach(it =&gt; console.log(&#39;missing metadata: &#39; + it.name));
 </code></pre>
 <h2>冲突策略 (Conflict Policies)<span><a class="mark" href="#files_conflict_policies" id="files_conflict_policies">#</a></span></h2>
 <p>同一文件夹中, 新名称与本批另一条目的新名称相同 (<code>duplicateInBatch</code>), 或与不改名的既有条目相同 (<code>existingEntry</code>) 时产生冲突. 在不区分大小写的存储 (如 FAT32/exFAT 格式的 SD 卡) 上按不区分大小写比较.</p>
@@ -1248,7 +1588,7 @@ files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#3
 <tr>
 <td>options</td>
 <td>object</td>
-<td>补全默认值后的选项. RegExp 形式的 <code>search</code> 记为其 <code>source</code>, 并按其标志给出 <code>regex</code>, <code>matchAll</code>, <code>caseSensitive</code> 及 <code>regexFlags</code> (<code>m</code>, <code>s</code>, <code>u</code>, <code>y</code> 中的标志)</td>
+<td>补全默认值后的选项. RegExp 形式的 <code>search</code> 记为其 <code>source</code>, 并按其标志给出 <code>regex</code>, <code>matchAll</code>, <code>caseSensitive</code> 及 <code>regexFlags</code> (<code>m</code>, <code>s</code>, <code>u</code>, <code>y</code> 中的标志). 使用 <code>preset</code> 时为插件合并后的完整选项 (默认值, 预设, 显式选项依次覆盖), apply 按这份选项执行, 之后修改预设不影响该方案</td>
 </tr>
 <tr>
 <td>items</td>
@@ -1323,6 +1663,11 @@ files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#3
 <td>overwrites</td>
 <td>boolean</td>
 <td>执行时将替换同名的既有条目 (<code>onConflict</code> 为 <code>&#39;overwrite&#39;</code>)</td>
+</tr>
+<tr>
+<td>metadataMissing</td>
+<td>boolean</td>
+<td>新名称用到的照片元数据变量中有缺失的值 (已展开为空文本); 未开启 <code>metadata</code> 时为 <code>false</code></td>
 </tr>
 </tbody>
 </table>
@@ -1649,11 +1994,11 @@ files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#3
 </tr>
 <tr>
 <td>PLUGIN_INCOMPATIBLE</td>
-<td>插件与当前 AutoJs6 版本不兼容</td>
+<td>插件与当前 AutoJs6 版本不兼容, 或插件版本过低, 不支持所用的选项或方法 (汉字转拼音, 照片元数据与命名预设需要 Batch Rename 1.1.0 及以上版本)</td>
 </tr>
 <tr>
 <td>INVALID_OPTIONS</td>
-<td>选项的类型或取值不合法, 正则表达式无法编译, apply 的参数不是 plan 返回的方案, 或方案的条目被增删</td>
+<td>选项的类型或取值不合法, 正则表达式无法编译, apply 的参数不是 plan 返回的方案, 方案的条目被增删, 预设不存在, preview 的名称不合法或使用了 <code>metadata</code>, 预设文档无法识别, 或 deleteHistory / clearHistory 的参数不合法</td>
 </tr>
 <tr>
 <td>INVALID_PATHS</td>
@@ -1661,7 +2006,7 @@ files.batchRename(&#39;./music&#39;, { search: &#39;&#39;, format: &#39;lower&#3
 </tr>
 <tr>
 <td>LIMIT_EXCEEDED</td>
-<td>超出条目, 文件夹, 名称数量, 层数, 文本长度或随机值长度上限, 或正则表达式匹配超时</td>
+<td>超出条目, 文件夹, 名称数量, 层数, 文本长度, 随机值长度或预设文档长度上限, 或正则表达式匹配超时</td>
 </tr>
 <tr>
 <td>PLAN_REJECTED</td>

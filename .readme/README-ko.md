@@ -71,7 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
-- `추가` [파일 (Files)](https://docs.autojs6.com/#/files?id=m-batchrename) 의 files.batchRename. Batch Rename 플러그인이 제공하는 일괄 이름 바꾸기: 계획 미리 보기와 항목별 제외, 실행, 실행 취소와 배치 기록, 옵션과 치환 변수 (카운터, 날짜와 시간, 임의 값), 충돌 정책, 결과 객체와 오류 코드를 설명합니다
+- `추가` [파일 (Files)](https://docs.autojs6.com/#/files?id=m-batchrename) 의 files.batchRename. Batch Rename 플러그인이 제공하는 일괄 이름 바꾸기: 계획 미리 보기와 항목별 제외, 실행, 실행 취소, 배치 기록 조회와 삭제, 파일에 접근하지 않는 이름 미리 계산, 이름 있는 프리셋, 옵션과 치환 변수 (카운터, 날짜와 시간, 임의 값, 사진 메타데이터, 한자 병음 변환), 충돌 정책, 결과 객체와 오류 코드를 설명합니다
 - `추가` [갤러리 (Gallery)](https://docs.autojs6.com/#/gallery) 및 [GalleryViewSession](https://docs.autojs6.com/#/galleryViewSessionType). 3-Maple Image 플러그인이 제공하는 이미지 선택, 뷰어 세션, 편집, 화면 없는 변환, 파일을 AutoJs6 가 직접 읽고 쓰는 경계, 사진 접근 권한과 오류 코드를 설명합니다
 - `업데이트` [API 참조](https://docs.autojs6.com/#/documentation): 누락된 Files 및 RootAutomator 멤버, 색상 결과 배열, WebView 컨텍스트와 선택적 인수 오버로드를 보완하고 바이트 추가 및 스와이프 인수와 좌표 배율 설명을 수정, setScaleBases 실패 시 기준값과 설정 가능 상태가 유지되는 동작 및 기준값 setter의 정수 변환 규칙 설명
 - `추가` [3-Block Compose 디자이너 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner). 3-Block Compose 플러그인에 내장된 비주얼 디자이너의 진입점과 프로젝트 파일, 편집 화면의 캔버스 / 개요 / 속성 / 구성요소 팔레트와 초안, 인식되는 스크립트 하위 집합과 왕복 규칙, AutoJs6 편집기와의 양방향 전달, 현재 제한 사항을 설명합니다

@@ -2,7 +2,7 @@
 
 ## v6.8.0
 
-- `新增` [文件 (Files)](files#m-batchrename) 的 files.batchRename, 说明 Batch Rename 插件提供的批量重命名: 方案预览与逐项排除, 执行, 撤销与历史批次, 选项与替换变量 (计数器, 日期时间, 随机值), 冲突策略, 结果对象及错误代码
+- `新增` [文件 (Files)](files#m-batchrename) 的 files.batchRename, 说明 Batch Rename 插件提供的批量重命名: 方案预览与逐项排除, 执行, 撤销, 历史批次的查询与清理, 不访问文件的名称试算, 命名预设, 选项与替换变量 (计数器, 日期时间, 随机值, 照片元数据, 汉字转拼音), 冲突策略, 结果对象及错误代码
 
 - `新增` [相册 (Gallery)](gallery) 与 [GalleryViewSession](galleryViewSessionType), 说明 3-Maple Image 插件提供的选图, 查看器会话, 编辑与无界面转换, 文件由 AutoJs6 读写的边界, 照片访问权限与错误代码
 

@@ -237,19 +237,19 @@ app.viewFile("/sdcard/1.txt");
 
 ## [m+] batchRename
 
-批量重命名文件与文件夹. 新名称按查找与替换, 正则表达式, 计数器, 日期时间及随机值等规则计算, 支持先预览方案, 逐项排除, 冲突处理与撤销.
+批量重命名文件与文件夹. 新名称按查找与替换, 正则表达式, 计数器, 日期时间, 随机值, 照片元数据及汉字转拼音等规则计算, 支持先预览方案, 逐项排除, 冲突处理, 命名预设与撤销.
 
-批量重命名由外置 Batch Rename 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 Batch Rename 插件. 未发现可用插件时, 调用将抛出 (异步形态以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE`, `PLUGIN_DISABLED` 或 `PLUGIN_INCOMPATIBLE` 的 [BatchRenameError](#批量重命名错误-batchrenameerror). [files.batchRename.isAvailable](#filesbatchrenameisavailable) 可预先探测.
+批量重命名由外置 Batch Rename 插件提供. 调用前, 必须安装并启用与当前 AutoJs6 版本兼容的 Batch Rename 插件. 未发现可用插件时, 调用将抛出 (异步形态以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE`, `PLUGIN_DISABLED` 或 `PLUGIN_INCOMPATIBLE` 的 [BatchRenameError](#批量重命名错误-batchrenameerror). [files.batchRename.isAvailable](#filesbatchrenameisavailable) 可预先探测. 汉字转拼音 (`pinyin` 系列选项与 `${pinyin}` 变量), 照片元数据 (`metadata`) 及命名预设 (`preset`, [presets](#filesbatchrenamepresets), [importPresets](#filesbatchrenameimportpresetsjson-importoptions)) 需要 Batch Rename 1.1.0 及以上版本, 旧版本插件遇到时抛出 `PLUGIN_INCOMPATIBLE`.
 
-插件只计算新名称; 枚举目标, 改名, 撤销日志及回收站均由 AutoJs6 完成. 文件管理器中的批量重命名 (多选工具栏, 文件夹菜单 "批量重命名其中的项目" 及重命名对话框 "更多" 菜单) 使用同一插件与同一撤销日志.
+插件只计算新名称; 枚举目标, 改名, 撤销日志及回收站均由 AutoJs6 完成. 文件管理器中的批量重命名 (多选工具栏, 文件夹菜单 "批量重命名其中的项目" 及重命名对话框 "更多" 菜单) 使用同一插件与同一撤销日志. 日志中的批次也可在 AutoJs6 的 "重命名历史" 页面中查看, 搜索, 撤销或删除 (入口: 文件管理器重命名对话框 "更多" 菜单 > "重命名历史").
 
-一次重命名分为两步: [plan](#filesbatchrenameplanpaths-options) 枚举目标并计算 [方案](#批量重命名方案-batchrenameplan), 不修改任何文件; [apply](#filesbatchrenameapplyplan-applyoptions) 执行方案并返回 [结果](#批量重命名结果-batchrenameresult). 直接调用 `files.batchRename(paths, options)` 等价于先 plan 再 apply.
+一次重命名分为两步: [plan](#filesbatchrenameplanpaths-options) 枚举目标并计算 [方案](#批量重命名方案-batchrenameplan), 不修改任何文件; [apply](#filesbatchrenameapplyplan-applyoptions) 执行方案并返回 [结果](#批量重命名结果-batchrenameresult). 直接调用 `files.batchRename(paths, options)` 等价于先 plan 再 apply. [preview](#filesbatchrenamepreviewitem-options) 只按名称试算新名称, 不访问文件.
 
 `paths` 为路径字符串或其数组, 相对路径按脚本工作目录解析 (与 [files.path](#m-path) 相同). 给出的每个路径都是深度为 0 的条目. 给出文件夹且 `includeSubfolders` 为 `true` (默认) 时, 其中的全部条目也会加入, 深度逐层加 1, 按深度优先的顺序排列, 同一文件夹内按名称排序 (不区分大小写). 符号链接不会被跟随或改名: 给出的路径不能是符号链接, 文件夹中的符号链接被跳过.
 
 一个方案至多包含 2000 个条目, 涉及至多 512 个文件夹, 这些文件夹合计至多 20000 个名称, 给出的文件夹之下至多 32 层, 超出时抛出 `LIMIT_EXCEEDED`.
 
-同步形态阻塞当前脚本线程直至完成, 停止脚本会取消等待; 异步形态 (`planAsync`, `applyAsync`, `undoAsync`) 立即返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 进度回调与结果在脚本线程执行. 除 RegExp 形式的 `search` 与 `onProgress` 函数外, 选项会像 `JSON.stringify` 一样序列化.
+同步形态阻塞当前脚本线程直至完成, 停止脚本会取消等待; 异步形态 (`planAsync`, `previewAsync`, `applyAsync`, `undoAsync`, `presetsAsync`, `importPresetsAsync`) 立即返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 进度回调与结果在脚本线程执行. 除 RegExp 形式的 `search` 与 `onProgress` 函数外, 选项会像 `JSON.stringify` 一样序列化.
 
 `$files.batchRename` 与 `files.batchRename` 指向同一对象.
 
@@ -309,6 +309,47 @@ let plan = files.batchRename.plan('./camera', {
 plan.items.filter(it => it.status === 'rename').forEach(it => console.log(it.name, '->', it.newName));
 ```
 
+### files.batchRename.preview(item, options)
+
+**`6.8.0`** **`Overload 1/2`**
+
+- **item** { [string](dataTypes#string) | {{ name: [string](dataTypes#string); isDirectory?: [boolean](dataTypes#boolean); lastModified?: [number](dataTypes#number) | [Date](dataTypes#date) }} } - 名称或试算条目
+- **options** { [BatchRenameOptions](#批量重命名选项-batchrenameoptions) } - 重命名选项
+- <ins>**returns**</ins> { {{ newName: [string](dataTypes#string); status: [string](dataTypes#string); reason: [string](dataTypes#string) | [null](dataTypes#null) }} } - 试算结果
+
+按 `options` 试算一个名称的新名称, 不访问也不改名任何文件, 适合在没有对应文件时检验替换规则. 结果的 `newName`, `status` 与 `reason` 与 [方案](#批量重命名方案-batchrenameplan) 条目的同名属性相同.
+
+字符串视为文件名, 修改时间为调用时刻. 试算条目可用 `isDirectory` 表示文件夹 (默认 `false`), 用 `lastModified` (毫秒时间戳或 Date) 给出修改时间, 分别供 `includeFiles` / `includeFolders` 与日期时间变量使用. 名称必须是 1 至 1024 个字符的单个文件名, 不能为 `.` 或 `..`, 不能包含 `/`, 否则抛出 `INVALID_OPTIONS`.
+
+试算不读取文件, 因此 `metadata` 为 `true` 时抛出 `INVALID_OPTIONS`. 其他选项 (包括 `preset`) 与 [plan](#filesbatchrenameplanpaths-options) 相同, 文件夹层级相关的选项不起作用.
+
+```js
+let result = files.batchRename.preview('IMG_0001.JPG', { search: 'IMG_', replace: 'Photo_', format: 'lower' });
+console.log(result.newName, result.status); // photo_0001.jpg rename
+
+let dated = files.batchRename.preview({ name: 'scan.pdf', lastModified: new Date(2026, 9, 15) }, {
+    search: /^/, replace: '$YYYY-$MM-$DD_', target: 'name',
+});
+console.log(dated.newName); // 2026-10-15_scan.pdf
+```
+
+### files.batchRename.preview(items, options)
+
+**`6.8.0`** **`Overload 2/2`**
+
+- **items** { ([string](dataTypes#string) | [object](dataTypes#object))[] } - 名称或试算条目 (与 [Overload 1/2](#filesbatchrenamepreviewitem-options) 的 `item` 相同) 的数组, 至多 2000 个
+- **options** { [BatchRenameOptions](#批量重命名选项-batchrenameoptions) } - 重命名选项
+- <ins>**returns**</ins> { [object](dataTypes#object)[] } - 与 `items` 一一对应的试算结果
+
+试算一组名称. 这些名称视为同一文件夹中仅有的条目: 计数器按数组顺序取值, 冲突只在这些名称之间产生 (`duplicateInBatch`), 不检查已有文件或存储对字符的限制. 超过 2000 个名称时抛出 `LIMIT_EXCEEDED`.
+
+```js
+let results = files.batchRename.preview(['a.txt', 'b.txt', 'c.md'], {
+    search: /^.+$/, replace: 'note_${start=1}', target: 'name', enumerate: true,
+});
+console.log(results.map(it => it.newName).join(', ')); // note_1.txt, note_2.txt, note_3.md
+```
+
 ### files.batchRename.apply(plan, applyOptions?)
 
 **`6.8.0`**
@@ -350,7 +391,7 @@ console.log(result.batchId, result.undoable);
 
 撤销一个批次, 把其中仍持有新名称的条目改回原名, 浅层条目先恢复. 改名之后又被修改, 移动或删除的条目状态为 `stale`, 不会被恢复. 以 `overwrite` 策略替换的既有条目会从回收站恢复.
 
-文件管理器产生的批次也可撤销 (批次 ID 见 [history](#filesbatchrenamehistorylimit)). 批次不存在, 已不在日志中, 或已没有可撤销的条目时抛出 `UNDO_UNAVAILABLE`. 恢复失败的条目 (状态 `failed`) 可再次调用 undo 重试.
+文件管理器产生的批次也可撤销 (批次 ID 见 [history](#filesbatchrenamehistorylimit)); 也可在 "重命名历史" 页面中撤销. 批次不存在, 已不在日志中, 或已没有可撤销的条目时抛出 `UNDO_UNAVAILABLE`. 恢复失败的条目 (状态 `failed`) 可再次调用 undo 重试.
 
 ```js
 let result = files.batchRename('./notes', { search: 'draft', replace: 'final' });
@@ -362,10 +403,10 @@ console.log(undone.state, undone.counts.restored); // restored ...
 
 **`6.8.0`**
 
-- **[ limit = 20 ]** { [number](dataTypes#number) } - 最多返回的批次数, 为非负整数, 大于 20 时按 20 处理
+- **[ limit ]** { [number](dataTypes#number) } - 最多返回的批次数, 为非负整数; 省略时返回全部批次
 - <ins>**returns**</ins> { [BatchRenameHistoryEntry](#批量重命名历史-batchrenamehistoryentry)[] } - 批次列表
 
-返回撤销日志中最近的批次, 最新的在前, 包括脚本与文件管理器产生的批次. 日志为脚本 (所有脚本共用) 与文件管理器各保留最近 20 个批次, 更早的批次被移出日志, 无法再撤销.
+返回撤销日志中的批次, 最新的在前, 包括脚本与文件管理器产生的批次. 日志为脚本 (所有脚本共用) 与每个插件 (文件管理器的批次计入执行它的插件) 各保留最近若干个批次, 默认 20 个, 可在 "重命名历史" 页面的菜单中改为 50 或 100. 更早的批次被移出日志, 无法再撤销.
 
 ```js
 /* 撤销最近一个仍可撤销的批次. */
@@ -374,6 +415,89 @@ if (latest) {
     console.log(latest.source, new Date(latest.createdAt));
     files.batchRename.undo(latest.batchId);
 }
+```
+
+### files.batchRename.deleteHistory(target)
+
+**`6.8.0`**
+
+- **target** { [BatchRenameResult](#批量重命名结果-batchrenameresult) | [BatchRenameHistoryEntry](#批量重命名历史-batchrenamehistoryentry) | [string](dataTypes#string) } - apply 的结果, history 的元素或批次 ID
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否删除了该批次
+
+从撤销日志中删除一个批次, 包括文件管理器产生的批次. 删除后该批次无法再撤销, 已改名的文件保持不变. 日志中没有该批次时返回 `false`. `target` 不是批次 ID 且不含批次 ID 时抛出 `INVALID_OPTIONS`.
+
+```js
+let result = files.batchRename('./notes', { search: 'draft', replace: 'final' });
+console.log(files.batchRename.deleteHistory(result)); // true
+console.log(files.batchRename.deleteHistory(result.batchId)); // false
+```
+
+### files.batchRename.clearHistory(options?)
+
+**`6.8.0`**
+
+- **[ options ]** {{ source?: `'script'` | `'explorer'` }} - 清理范围
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 删除的批次数
+
+删除撤销日志中的全部批次, 或某个来源 (`'script'` 脚本, `'explorer'` 文件管理器) 的批次. 删除后这些批次无法再撤销, 已改名的文件保持不变. `source` 为其他值时抛出 `INVALID_OPTIONS`.
+
+```js
+/* 只清理脚本产生的批次. */
+console.log(files.batchRename.clearHistory({ source: 'script' }));
+```
+
+### files.batchRename.presets()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { {{ name: [string](dataTypes#string); options: [object](dataTypes#object) }}[] } - 命名预设列表
+
+返回 Batch Rename 插件中保存的命名预设, 顺序与插件中的顺序相同. `options` 为预设的完整选项, 键与 [BatchRenameOptions](#批量重命名选项-batchrenameoptions) 相同, 值为字符串或布尔值 (如 `dateTime` 关闭时为 `'none'`).
+
+命名预设在插件界面中保存, 加载, 重命名, 删除, 导入与导出 (顶栏 "预设" 按钮). 脚本可用 `options.preset` 引用预设, 或用 [importPresets](#filesbatchrenameimportpresetsjson-importoptions) 导入. 插件至多保存 100 个预设, 名称为 1 至 64 个字符.
+
+```js
+files.batchRename.presets().forEach(preset => console.log(preset.name, preset.options.replace));
+```
+
+### files.batchRename.importPresets(json, importOptions?)
+
+**`6.8.0`**
+
+- **json** { [string](dataTypes#string) | [object](dataTypes#object) } - 预设文档, 为插件导出的 JSON 文本或其解析后的对象
+- **[ importOptions ]** {{ onConflict?: `'skip'` | `'overwrite'` | `'rename'` }} - 同名预设的处理方式, 默认 `'skip'`
+- <ins>**returns**</ins> {{ imported: [string](dataTypes#string)[]; skipped: [string](dataTypes#string)[]; rejected: [object](dataTypes#object)[] }} - 导入结果
+
+按顺序导入预设文档中的预设. 文档与插件导出的文件格式相同:
+
+```json
+{
+    "format": "autojs6-batch-rename-presets",
+    "version": 1,
+    "presets": [
+        { "name": "Date prefix", "options": { "search": "^", "regex": true, "replace": "$YYYY$MM$DD_", "includeFolders": false } }
+    ]
+}
+```
+
+`options` 使用 [BatchRenameOptions](#批量重命名选项-batchrenameoptions) 的键, 省略的键取默认值. 名称去除首尾空白后为 1 至 64 个字符. 已有同名预设时, `'skip'` 保留已有预设并在 `skipped` 中列出名称, `'overwrite'` 替换已有预设, `'rename'` 以 `名称 (n)` 形式的第一个可用名称保存.
+
+`imported` 为实际保存的名称. 选项不合法, 或保存后会超过 100 个预设或总大小上限的条目被拒绝, 列入 `rejected` (元素为 `{ index, name, reason }`: `index` 为条目在 `presets` 中的位置, `reason` 为英文原因), 其余条目照常导入. 文档不是预设文档或版本不受支持时抛出 `INVALID_OPTIONS`, 超过 131072 个字符时抛出 `LIMIT_EXCEEDED`.
+
+```js
+let result = files.batchRename.importPresets({
+    format: 'autojs6-batch-rename-presets',
+    version: 1,
+    presets: [
+        { name: 'Date prefix', options: { search: '^', regex: true, replace: '$YYYY$MM$DD_', includeFolders: false } },
+        { name: 'Broken', options: { onConflict: 'later' } },
+    ],
+});
+console.log(result.imported); // ["Date prefix"]
+console.log(result.rejected[0].index, result.rejected[0].name); // 1 Broken
+
+/* 以预设计算方案, 显式给出的选项优先. */
+let plan = files.batchRename.plan('./camera', { preset: 'Date prefix' });
 ```
 
 ### files.batchRename.isAvailable()
@@ -401,6 +525,16 @@ if (!files.batchRename.isAvailable()) {
 
 [plan](#filesbatchrenameplanpaths-options) 的异步形态. 参数错误同样以 Promise 拒绝.
 
+### files.batchRename.previewAsync(nameOrItems, options)
+
+**`6.8.0`** **`Async`**
+
+- **nameOrItems** { [string](dataTypes#string) | [object](dataTypes#object) | ([string](dataTypes#string) | [object](dataTypes#object))[] } - 名称, 试算条目或其数组
+- **options** { [BatchRenameOptions](#批量重命名选项-batchrenameoptions) } - 重命名选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[object](dataTypes#object) | [object](dataTypes#object)[]&gt; }
+
+[preview](#filesbatchrenamepreviewitem-options) 的异步形态. 给出数组时以结果数组兑现.
+
 ### files.batchRename.applyAsync(plan, applyOptions?)
 
 **`6.8.0`** **`Async`**
@@ -426,6 +560,24 @@ files.batchRename.planAsync('./downloads', { search: /[()]/g, replace: '', inclu
 - <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[BatchRenameUndoResult](#批量重命名撤销结果-batchrenameundoresult)&gt; }
 
 [undo](#filesbatchrenameundotarget) 的异步形态.
+
+### files.batchRename.presetsAsync()
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[object](dataTypes#object)[]&gt; }
+
+[presets](#filesbatchrenamepresets) 的异步形态.
+
+### files.batchRename.importPresetsAsync(json, importOptions?)
+
+**`6.8.0`** **`Async`**
+
+- **json** { [string](dataTypes#string) | [object](dataTypes#object) } - 预设文档
+- **[ importOptions ]** {{ onConflict?: `'skip'` | `'overwrite'` | `'rename'` }} - 同名预设的处理方式, 默认 `'skip'`
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise)&lt;[object](dataTypes#object)&gt; }
+
+[importPresets](#filesbatchrenameimportpresetsjson-importoptions) 的异步形态.
 
 ## files.getName(path)
 
@@ -627,7 +779,7 @@ log(jsFiles);
 
 # 批量重命名选项 (BatchRenameOptions)
 
-[files.batchRename](#m-batchrename) 与 [files.batchRename.plan](#filesbatchrenameplanpaths-options) 的选项对象. 除 `search` 外均可省略, 值为 `null` 或 `undefined` 时取默认值. 类型不符或取值未知时抛出 `INVALID_OPTIONS`.
+[files.batchRename](#m-batchrename), [files.batchRename.plan](#filesbatchrenameplanpaths-options) 与 [files.batchRename.preview](#filesbatchrenamepreviewitem-options) 的选项对象. 除 `search` 外均可省略 (给出 `preset` 时 `search` 也可省略, 取预设中的值), 值为 `null` 或 `undefined` 时取默认值. 类型不符或取值未知时抛出 `INVALID_OPTIONS`.
 
 | 选项 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
@@ -652,6 +804,13 @@ log(jsFiles);
 | continueNumbering | boolean | `false` | 计数器从相关文件夹已有名称中的最大序号之后继续 |
 | onConflict | `'fail'` \| `'skip'` \| `'number'` \| `'overwrite'` | `'fail'` | [冲突策略](#冲突策略-conflict-policies) |
 | conflictNumberPattern | string | `' ({n})'` | `'number'` 策略追加在主文件名之后的后缀, `{n}` 为序号; 必须包含 `{n}`, 不能包含 `/` |
+| pinyin | boolean | `false` | 替换之后把名称中的汉字转为拼音, 见 [替换变量](#替换变量-variables) 中的汉字转拼音 |
+| pinyinTone | `'none'` \| `'mark'` \| `'number'` | `'none'` | 拼音声调: 无 (`zhang`), 声调符号 (`zhāng`), 数字 (`zhang1`); 同时作用于 `${pinyin}` |
+| pinyinSeparator | `'none'` \| `'space'` \| `'underscore'` \| `'hyphen'` | `'none'` | 相邻音节之间的分隔: 无, 空格, `_`, `-` |
+| pinyinCase | `'lower'` \| `'capitalize'` | `'lower'` | 全部小写 (`zhangsan`), 或每个音节首字母大写 (`ZhangSan`) |
+| pinyinInitials | boolean | `false` | 只保留每个音节的首字母 (不带声调) |
+| metadata | boolean | `false` | 展开照片元数据变量, 见 [替换变量](#替换变量-variables); 不能用于 preview |
+| preset | string | - | Batch Rename 插件中保存的命名预设的名称 (见 [presets](#filesbatchrenamepresets)). 以默认值为起点, 先应用预设的选项, 再应用本对象中给出的其他选项; 预设不存在时抛出 `INVALID_OPTIONS` |
 | onProgress | function | - | 进度回调, 仅 [files.batchRename(paths, options)](#filesbatchrenamepaths-options) 使用, 与 apply 的 `applyOptions.onProgress` 相同 |
 
 `search`, `replace` 及其他文本选项各自至多 4096 个字符, 超出时抛出 `LIMIT_EXCEEDED`.
@@ -665,7 +824,7 @@ log(jsFiles);
 1. 被排除的条目 (脚本排除或被 `includeFiles`, `includeFolders`, `includeSubfolders` 排除) 保持原名.
 2. `target` 指定的部分不匹配 `search` 时保持原名.
 3. 展开 `replace` 中的变量, 再执行替换.
-4. 依次应用 `format`, `normalize`, `halfWidth`, `sanitize` 与 `trim`, 最后与未参与替换的部分拼回名称.
+4. 依次应用 `pinyin`, `format`, `normalize`, `halfWidth`, `sanitize` 与 `trim`, 最后与未参与替换的部分拼回名称.
 
 ## 替换变量 (Variables)
 
@@ -716,6 +875,48 @@ log(jsFiles);
 
 N 为 1 至 256, 超过 256 时抛出 `LIMIT_EXCEEDED`.
 
+汉字转拼音:
+
+| 变量 | 说明 |
+| --- | --- |
+| `${pinyin}` | `target` 所指部分的原名称的拼音, 无需开启 `pinyin`; 风格由 `pinyinTone`, `pinyinSeparator`, `pinyinCase` 与 `pinyinInitials` 决定 |
+
+`pinyin` 为 `true` 时, 替换之后把名称中的汉字转为拼音, 非汉字原样保留. 拼音按插件内置的单字与词组词典转换, 多音字按词组判断, 繁体字同样转换. 音节分隔符只出现在相邻的两个音节之间 (如 `我的照片 2024` 在 `pinyinSeparator: 'underscore'` 时为 `wo_de_zhao_pian 2024`). 无声调与数字声调时 `ü` 写作 `v` (`绿色` 为 `lvse` 或 `lv4se4`), 名称保持为 ASCII 字符; 轻声不加数字. `pinyinInitials` 只保留每个音节的首字母 (`北京大学` 为 `bjdx`). `$${pinyin}` 得到字面的 `${pinyin}`.
+
+照片元数据 (需要 `metadata: true`, 否则作为字面文本):
+
+| 变量 | 说明 | 示例 |
+| --- | --- | --- |
+| `$CAMERA_MAKE` | 相机厂商 | `Canon` |
+| `$CAMERA_MODEL` | 相机型号 | `EOS R5` |
+| `$LENS` | 镜头型号 | `RF50mm F1.8` |
+| `$ISO` | 感光度 | `400` |
+| `$APERTURE` | 光圈, 保留一位小数 | `f2.8`, `f8` |
+| `$SHUTTER` | 快门速度; 1 秒以下写作分数, 斜线改为短横线 | `1-250s`, `2s`, `1.5s` |
+| `$FOCAL` | 焦距, 保留一位小数 | `50mm`, `4.2mm` |
+| `$FLASH` | 是否闪光 | `On`, `Off` |
+| `$WIDTH` | 宽度 (像素) | `4032` |
+| `$HEIGHT` | 高度 (像素) | `3024` |
+| `$AUTHOR` | 作者 | |
+| `$COPYRIGHT` | 版权 | |
+| `$LATITUDE` | 纬度, 十进制度, 6 位小数, 南纬为负 | `31.230416` |
+| `$LONGITUDE` | 经度, 十进制度, 6 位小数, 西经为负 | `-121.473701` |
+| `$ALTITUDE` | 海拔, 取整到米 | `120m` |
+| `$DATE_TAKEN_YYYY` | 拍摄时间的四位年份 | `2026` |
+| `$DATE_TAKEN_YY` | 年份后两位 | `26` |
+| `$DATE_TAKEN_MM` | 两位月份 | `10` |
+| `$DATE_TAKEN_DD` | 两位日期 | `15` |
+| `$DATE_TAKEN_HH` | 两位小时 (24 小时制) | `08` |
+| `$DATE_TAKEN_mm` | 两位分钟 | `30` |
+| `$DATE_TAKEN_SS` | 两位秒 | `59` |
+| `$EXPOSURE_BIAS` | 曝光补偿, 保留一位小数 | `+0.3EV`, `0EV`, `-1EV` |
+| `$ORIENTATION` | 方向: 顺时针旋转角度, 镜像时加 `M` | `0`, `90`, `180M` |
+| `$COLOR_SPACE` | 色彩空间 | `sRGB`, `AdobeRGB`, `Uncalibrated` |
+
+元数据变量区分大小写 (`$DATE_TAKEN_MM` 为月, `$DATE_TAKEN_mm` 为分), 先于日期时间变量识别, 较长的名称优先 (`$DATE_TAKEN_YYYY` 不会被识别为 `$D`). 取值与语言无关且可直接用于文件名, 文本值中的 `/` 替换为 `-`.
+
+`metadata` 为 `true` 且 `replace` 含元数据变量时, AutoJs6 读取图片文件 (JPEG, PNG, WebP, HEIF 及 DNG, CR2, NEF, ARW 等 RAW 格式) 的 EXIF, 作者与版权缺失时读取 XMP, 只读不改. 文件中没有的值 (以及文件夹与非图片文件) 展开为空文本, 对应条目的 `metadataMissing` 为 `true`. `$DATE_TAKEN_*` 使用照片记录的当地时间, 不换算时区; 缺失时改用条目的修改时间, 不计为缺失.
+
 ```js
 /* 用计数器为照片重新编号: a.jpg, b.jpg -> trip_01.jpg, trip_02.jpg. */
 files.batchRename('./trip', {
@@ -728,6 +929,19 @@ files.batchRename('./trip', {
 
 /* 只转为小写, 不替换文本. */
 files.batchRename('./music', { search: '', format: 'lower', includeFolders: false });
+
+/* 汉字转拼音: 张三.txt -> ZhangSan_张三.txt. */
+console.log(files.batchRename.preview('张三.txt', { search: /^/, replace: '${pinyin}_', target: 'name', pinyinCase: 'capitalize' }).newName);
+
+/* 拍摄日期与相机型号: DSC_0001.NEF -> 20090210_NIKON D90.NEF. */
+let plan = files.batchRename.plan('./photos', {
+    search: /^.+$/,
+    replace: '$DATE_TAKEN_YYYY$DATE_TAKEN_MM$DATE_TAKEN_DD_$CAMERA_MODEL',
+    target: 'name',
+    metadata: true,
+    includeFolders: false,
+});
+plan.items.filter(it => it.metadataMissing).forEach(it => console.log('missing metadata: ' + it.name));
 ```
 
 ## 冲突策略 (Conflict Policies)
@@ -750,7 +964,7 @@ files.batchRename('./music', { search: '', format: 'lower', includeFolders: fals
 | 属性 | 类型 | 说明 |
 | --- | --- | --- |
 | id | string | 方案 ID |
-| options | object | 补全默认值后的选项. RegExp 形式的 `search` 记为其 `source`, 并按其标志给出 `regex`, `matchAll`, `caseSensitive` 及 `regexFlags` (`m`, `s`, `u`, `y` 中的标志) |
+| options | object | 补全默认值后的选项. RegExp 形式的 `search` 记为其 `source`, 并按其标志给出 `regex`, `matchAll`, `caseSensitive` 及 `regexFlags` (`m`, `s`, `u`, `y` 中的标志). 使用 `preset` 时为插件合并后的完整选项 (默认值, 预设, 显式选项依次覆盖), apply 按这份选项执行, 之后修改预设不影响该方案 |
 | items | object[] | 条目, 见下文 |
 | counts | object | 各状态的条目数: `rename`, `unchanged`, `conflict`, `invalid`, `excluded` |
 | rejected | boolean | 存在 `invalid` 条目, 或 `onConflict` 为 `'fail'` 且存在 `conflict` 条目时为 `true`; 执行被拒绝的方案将抛出 `PLAN_REJECTED` |
@@ -768,6 +982,7 @@ files.batchRename('./music', { search: '', format: 'lower', includeFolders: fals
 | reason | string \| null | 状态的原因, 见下表 |
 | excluded | boolean | 脚本排除标志. 设为 `true` 后执行时该条目不改名 (原因为 `excludedByCaller`). 被 `includeFiles` 等选项排除的条目此值为 `false`, 状态为 `excluded`, 原因为 `notIncluded` |
 | overwrites | boolean | 执行时将替换同名的既有条目 (`onConflict` 为 `'overwrite'`) |
+| metadataMissing | boolean | 新名称用到的照片元数据变量中有缺失的值 (已展开为空文本); 未开启 `metadata` 时为 `false` |
 
 | reason | status | 含义 |
 | --- | --- | --- |
@@ -884,10 +1099,10 @@ try {
 | --- | --- |
 | PLUGIN_UNAVAILABLE | 未安装 Batch Rename 插件, 或无法连接插件 |
 | PLUGIN_DISABLED | 插件已安装, 但在插件中心被停用或未授权 |
-| PLUGIN_INCOMPATIBLE | 插件与当前 AutoJs6 版本不兼容 |
-| INVALID_OPTIONS | 选项的类型或取值不合法, 正则表达式无法编译, apply 的参数不是 plan 返回的方案, 或方案的条目被增删 |
+| PLUGIN_INCOMPATIBLE | 插件与当前 AutoJs6 版本不兼容, 或插件版本过低, 不支持所用的选项或方法 (汉字转拼音, 照片元数据与命名预设需要 Batch Rename 1.1.0 及以上版本) |
+| INVALID_OPTIONS | 选项的类型或取值不合法, 正则表达式无法编译, apply 的参数不是 plan 返回的方案, 方案的条目被增删, 预设不存在, preview 的名称不合法或使用了 `metadata`, 预设文档无法识别, 或 deleteHistory / clearHistory 的参数不合法 |
 | INVALID_PATHS | `paths` 为空, 路径不存在, 为根目录或为符号链接 |
-| LIMIT_EXCEEDED | 超出条目, 文件夹, 名称数量, 层数, 文本长度或随机值长度上限, 或正则表达式匹配超时 |
+| LIMIT_EXCEEDED | 超出条目, 文件夹, 名称数量, 层数, 文本长度, 随机值长度或预设文档长度上限, 或正则表达式匹配超时 |
 | PLAN_REJECTED | 方案含非法名称, 或 `onConflict` 为 `'fail'` 时存在冲突 |
 | PLAN_STALE | 方案已执行过, 不属于当前脚本, 或已不在最近 16 个方案之中 |
 | IO_FAILED | 无法列出文件夹或无法写入撤销日志 |

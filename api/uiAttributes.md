@@ -87,7 +87,7 @@ Drawable 属性可使用:
 
 - ID 可写为 `name`, `@id/name` 或 `@+id/name`.
 - 字符串属性可写为普通文本或 `@string/name`.
-- `style` 可写为 `name` 或 `@style/name`, 仅查找 AutoJs6 应用资源.
+- `style` 可写为 `name` 或 `@style/name`: 先查找工程 `res/values` 中的样式 (参阅 [工程资源](ui#工程资源)), 再查找 AutoJs6 应用资源; `@android:style/name` 为系统样式.
 - `videoPath` 支持本地文件或 `@raw/name`.
 - 动画资源可写为 `@anim/name` 或 `@android:anim/name`, 可用名称见下文"动画资源".
 
@@ -182,6 +182,9 @@ AutoJs6 内置的可用 `@anim/` 名称 (共 131 个, 除单独注明外在 Andr
 | `layout_above` (`layoutAbove`) | ID |
 | `layout_toLeftOf` (`layoutToLeftOf`) | ID |
 | `layout_toRightOf` (`layoutToRightOf`) | ID |
+| `layout_toStartOf` (`layoutToStartOf`) | ID |
+| `layout_toEndOf` (`layoutToEndOf`) | ID |
+| `layout_alignBaseline` (`layoutAlignBaseline`) | ID |
 | `layout_alignBottom` (`layoutAlignBottom`) | ID |
 | `layout_alignTop` (`layoutAlignTop`) | ID |
 | `layout_alignLeft` (`layoutAlignLeft`) | ID |
@@ -252,14 +255,14 @@ AutoJs6 内置的可用 `@anim/` 名称 (共 131 个, 除单独注明外在 Andr
 | --- | --- |
 | `isScrollbarFadingEnabled` (`scrollbarFadingEnabled`, `fadeScrollbars`, `enableFadeScrollbars`) | boolean |
 | `fadingEdgeLength` | 尺寸 |
-| `requiresFadingEdge` | `horizontal`, `vertical`, 可用 `|` 组合 |
+| `requiresFadingEdge` | `horizontal`, `vertical`, `none`, 可用 `|` 组合; 未列出的方向关闭 |
 | `scrollX`, `scrollY` | 尺寸 |
 | `scrollIndicators` | `bottom`, `end`, `left`, `none`, `right`, `start`, `top` |
 | `scrollbarDefaultDelayBeforeFade` | 整数, ms |
 | `scrollbarFadeDuration` | 整数, ms |
 | `scrollbarSize` | 尺寸 |
 | `scrollbarStyle` | `insideInset`, `insideOverlay`, `outsideInset`, `outsideOverlay` |
-| `scrollbars` | `horizontal`, `vertical`, 可用 `|` 组合 |
+| `scrollbars` | `horizontal`, `vertical`, `none`, 可用 `|` 组合; 未列出的方向关闭 |
 
 ### 文本方向与无障碍
 

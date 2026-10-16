@@ -127,7 +127,7 @@ ui.layout(xml);
 
 `ui.useAndroidLayout(true)` 可强制保留原 XML, `ui.useAndroidLayout(false)` 可强制执行 AutoJs6 简写转换.
 
-这里的 "保留原 XML" 只表示跳过 `XmlConverter` 的标签及属性改写. 布局仍由 AutoJs6 `DynamicLayoutInflater` 创建, 不会改用 Android 平台 `LayoutInflater`, 也不会自动支持完整的 Android XML 属性集.
+这里的 "保留原 XML" 只表示跳过 `XmlConverter` 的标签及属性改写. 布局仍由 AutoJs6 `DynamicLayoutInflater` 创建, 不会改用 Android 平台 `LayoutInflater`. 原生 XML 中的属性先由 AutoJs6 的属性处理器处理, 其余属性按 Android SDK 与 AndroidX / Material 的属性元数据以视图的公开方法或父容器的布局参数设置; 无法设置或未知的属性被跳过并在控制台警告一次. 各类支持的属性参阅 [Android XML 属性](uiAndroidAttributes).
 
 ```js
 ui.useAndroidLayout(true);
@@ -140,6 +140,42 @@ let view = ui.inflate(
     'android:text="Hello"/>',
 );
 ```
+
+### 工程资源
+
+布局中的 `@string/name`, `@dimen/name`, `@color/name`, `@drawable/name`, `@layout/name` 与 `@style/name` 等引用先在工程的 `res` 目录中查找, 找不到时再查找 AutoJs6 应用资源. `@android:type/name` 引用系统资源.
+
+`res` 目录的位置:
+
+- [ui.layoutFile](#m-layoutfile) 从布局文件所在目录开始逐级向上查找 `res` 目录.
+- [ui.layout](#m-layout) 与 [ui.inflate](#m-inflate) 使用工作目录下的 `res` 目录.
+
+支持的资源:
+
+- `res/values`: `string`, `color`, `dimen`, `integer`, `bool`, `fraction` 等单值资源, `string-array` / `integer-array` / `array` 数组, `<item type="...">`, 以及 `style` (支持 `parent` 与点号名称的隐式继承).
+- `res/layout`: [ui.layoutFile](#m-layoutfile) 与 `<include layout="@layout/name"/>` (可用 `<merge>` 根元素, 嵌套深度上限为 32).
+- `res/drawable` 与 `res/mipmap`: `png`, `jpg`, `jpeg`, `webp`, `gif` 图片, 经 aapt 编译的 `.9.png`, 以及根元素为 `shape`, `selector`, `layer-list`, `level-list`, `transition`, `inset`, `clip`, `scale`, `rotate`, `ripple`, `animation-list`, `bitmap`, `nine-patch`, `color` 或 `vector` 的 XML.
+- `res/color`: 颜色状态列表 XML.
+
+`vector` 矢量图支持 `group` (旋转, 缩放, 平移), `path` (填充与描边的颜色, 透明度, 线宽, 线帽, 线连接, `fillType`, `trimPath*`), `clip-path`, 根元素的 `tint`, `tintMode`, `alpha` 与 `autoMirrored`, 以及 `<aapt:attr>` 内联的线性, 径向与扫描渐变, 按平台 VectorDrawable 的方式绘制. `animated-vector` 不受支持.
+
+资源目录可带限定符, 如 `values-night`, `values-zh-rCN`, `layout-land`, `drawable-xxhdpi`. 支持的限定符:
+
+- 语言与地区: `zh`, `zh-rCN`, `b+zh+Hant+TW`.
+- 布局方向: `ldrtl`, `ldltr`.
+- 最小宽度与可用宽高: `sw600dp`, `w720dp`, `h480dp`.
+- 屏幕方向: `port`, `land`.
+- 夜间模式: `night`, `notnight`.
+- 屏幕密度: `ldpi`, `mdpi`, `tvdpi`, `hdpi`, `xhdpi`, `xxhdpi`, `xxxhdpi`, `nodpi`, `anydpi`, `<N>dpi`.
+- 平台版本: `v26` 等.
+
+每个资源按 Android 的规则在当前配置下选取: 先排除与配置冲突的目录, 再按语言, 布局方向, 最小宽度, 宽度, 高度, 屏幕方向, 夜间模式, 屏幕密度, 平台版本的优先级逐项选择最匹配的目录. 屏幕密度不排除目录, 取最接近的密度 (优先缩小). 含其他限定符 (如 `large`, `mcc310`) 的目录被忽略. 每次渲染布局时按当时的配置重新选取.
+
+样式与主题:
+
+- 元素的 `style` 引用工程样式时, 样式中的属性先于元素自身的属性应用, 因此元素属性优先. 样式的父样式为系统或应用样式时, 父样式在创建视图时生效.
+- `android:theme` 引用工程样式时, `?attr/name` 引用在该主题中解析, 主题中的视图属性作为该元素及其子孙元素的默认属性, 优先级低于样式与元素属性.
+- 样式与主题中视图不接受的属性被静默忽略.
 
 ### 动态属性表达式
 

@@ -469,7 +469,7 @@
 <div class="signature"><ul>
 <li>ID 可写为 <code>name</code>, <code>@id/name</code> 或 <code>@+id/name</code>.</li>
 <li>字符串属性可写为普通文本或 <code>@string/name</code>.</li>
-<li><code>style</code> 可写为 <code>name</code> 或 <code>@style/name</code>, 仅查找 AutoJs6 应用资源.</li>
+<li><code>style</code> 可写为 <code>name</code> 或 <code>@style/name</code>: 先查找工程 <code>res/values</code> 中的样式 (参阅 <a href="ui.html#ui_2">工程资源</a>), 再查找 AutoJs6 应用资源; <code>@android:style/name</code> 为系统样式.</li>
 <li><code>videoPath</code> 支持本地文件或 <code>@raw/name</code>.</li>
 <li>动画资源可写为 <code>@anim/name</code> 或 <code>@android:anim/name</code>, 可用名称见下文&quot;动画资源&quot;.</li>
 </ul>
@@ -766,6 +766,18 @@
 <td>ID</td>
 </tr>
 <tr>
+<td><code>layout_toStartOf</code> (<code>layoutToStartOf</code>)</td>
+<td>ID</td>
+</tr>
+<tr>
+<td><code>layout_toEndOf</code> (<code>layoutToEndOf</code>)</td>
+<td>ID</td>
+</tr>
+<tr>
+<td><code>layout_alignBaseline</code> (<code>layoutAlignBaseline</code>)</td>
+<td>ID</td>
+</tr>
+<tr>
 <td><code>layout_alignBottom</code> (<code>layoutAlignBottom</code>)</td>
 <td>ID</td>
 </tr>
@@ -995,8 +1007,8 @@
 </tr>
 <tr>
 <td><code>requiresFadingEdge</code></td>
-<td><code>horizontal</code>, <code>vertical</code>, 可用 `</td>
-<td>` 组合</td>
+<td><code>horizontal</code>, <code>vertical</code>, <code>none</code>, 可用 `</td>
+<td>` 组合; 未列出的方向关闭</td>
 </tr>
 <tr>
 <td><code>scrollX</code>, <code>scrollY</code></td>
@@ -1024,8 +1036,8 @@
 </tr>
 <tr>
 <td><code>scrollbars</code></td>
-<td><code>horizontal</code>, <code>vertical</code>, 可用 `</td>
-<td>` 组合</td>
+<td><code>horizontal</code>, <code>vertical</code>, <code>none</code>, 可用 `</td>
+<td>` 组合; 未列出的方向关闭</td>
 </tr>
 </tbody>
 </table>
@@ -2547,7 +2559,7 @@
 <li><code>isUsingSpansToEstimateScrollbarDimensions</code> (<code>usingSpansToEstimateScrollbarDimensions</code>) - boolean.</li>
 <li><code>orientation</code> - <code>vertical</code> 或 <code>horizontal</code>.</li>
 </ul>
-<p>列表项目模板, 数据源和事件参阅 <a href="ui.html#ui_3">列表与网格</a>.</p>
+<p>列表项目模板, 数据源和事件参阅 <a href="ui.html#ui_4">列表与网格</a>.</p>
 <h2>创建阶段专用属性<span><a class="mark" href="#uiattributes_23" id="uiattributes_23">#</a></span></h2>
 <p>以下属性在视图构造时读取. 它们不是普通可重复应用属性, <code>view.attr(name, value)</code> 不应作为修改方式.</p>
 <table>

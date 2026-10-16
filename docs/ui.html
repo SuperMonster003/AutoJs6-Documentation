@@ -293,16 +293,17 @@
 <li><span class="stability_undefined"><a href="#ui_xml">布局 XML</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui">内置标签</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_1">布局转换模式</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_2">动态属性表达式</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_2">工程资源</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_3">动态属性表达式</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_id">视图 ID 与访问</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_3">列表与网格</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_4">分页, 标签栏和抽屉</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_4">列表与网格</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_5">分页, 标签栏和抽屉</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_canvas">Canvas 视图</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_webview">WebView 视图</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_5">控制台视图</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_6">控制台视图</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_6">控件扩展方法</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_7">控件扩展方法</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_compose">Compose 容器</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_nativeview">NativeView 包装</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
@@ -317,7 +318,7 @@
 <li><span class="stability_undefined"><a href="#ui_nativeview_1">NativeView 事件</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_7">自定义控件</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_8">自定义控件</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_m_globalthis_isuithread">[m] globalThis.isUiThread</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_globalthis_isuithread">globalThis.isUiThread()</a></span></li>
 </ul>
@@ -765,7 +766,7 @@ ui.layout(xml);
 <li>其他 XML 先经过 AutoJs6 简写标签及属性转换.</li>
 </ul>
 <p><code>ui.useAndroidLayout(true)</code> 可强制保留原 XML, <code>ui.useAndroidLayout(false)</code> 可强制执行 AutoJs6 简写转换.</p>
-<p>这里的 &quot;保留原 XML&quot; 只表示跳过 <code>XmlConverter</code> 的标签及属性改写. 布局仍由 AutoJs6 <code>DynamicLayoutInflater</code> 创建, 不会改用 Android 平台 <code>LayoutInflater</code>, 也不会自动支持完整的 Android XML 属性集.</p>
+<p>这里的 &quot;保留原 XML&quot; 只表示跳过 <code>XmlConverter</code> 的标签及属性改写. 布局仍由 AutoJs6 <code>DynamicLayoutInflater</code> 创建, 不会改用 Android 平台 <code>LayoutInflater</code>. 原生 XML 中的属性先由 AutoJs6 的属性处理器处理, 其余属性按 Android SDK 与 AndroidX / Material 的属性元数据以视图的公开方法或父容器的布局参数设置; 无法设置或未知的属性被跳过并在控制台警告一次. 各类支持的属性参阅 <a href="uiAndroidAttributes.html">Android XML 属性</a>.</p>
 <pre><code class="lang-js">ui.useAndroidLayout(true);
 
 let view = ui.inflate(
@@ -776,7 +777,39 @@ let view = ui.inflate(
     &#39;android:text=&quot;Hello&quot;/&gt;&#39;,
 );
 </code></pre>
-<h3>动态属性表达式<span><a class="mark" href="#ui_2" id="ui_2">#</a></span></h3>
+<h3>工程资源<span><a class="mark" href="#ui_2" id="ui_2">#</a></span></h3>
+<p>布局中的 <code>@string/name</code>, <code>@dimen/name</code>, <code>@color/name</code>, <code>@drawable/name</code>, <code>@layout/name</code> 与 <code>@style/name</code> 等引用先在工程的 <code>res</code> 目录中查找, 找不到时再查找 AutoJs6 应用资源. <code>@android:type/name</code> 引用系统资源.</p>
+<p><code>res</code> 目录的位置:</p>
+<ul>
+<li><a href="#ui_m_layoutfile">ui.layoutFile</a> 从布局文件所在目录开始逐级向上查找 <code>res</code> 目录.</li>
+<li><a href="#ui_m_layout">ui.layout</a> 与 <a href="#ui_m_inflate">ui.inflate</a> 使用工作目录下的 <code>res</code> 目录.</li>
+</ul>
+<p>支持的资源:</p>
+<ul>
+<li><code>res/values</code>: <code>string</code>, <code>color</code>, <code>dimen</code>, <code>integer</code>, <code>bool</code>, <code>fraction</code> 等单值资源, <code>string-array</code> / <code>integer-array</code> / <code>array</code> 数组, <code>&lt;item type=&quot;...&quot;&gt;</code>, 以及 <code>style</code> (支持 <code>parent</code> 与点号名称的隐式继承).</li>
+<li><code>res/layout</code>: <a href="#ui_m_layoutfile">ui.layoutFile</a> 与 <code>&lt;include layout=&quot;@layout/name&quot;/&gt;</code> (可用 <code>&lt;merge&gt;</code> 根元素, 嵌套深度上限为 32).</li>
+<li><code>res/drawable</code> 与 <code>res/mipmap</code>: <code>png</code>, <code>jpg</code>, <code>jpeg</code>, <code>webp</code>, <code>gif</code> 图片, 经 aapt 编译的 <code>.9.png</code>, 以及根元素为 <code>shape</code>, <code>selector</code>, <code>layer-list</code>, <code>level-list</code>, <code>transition</code>, <code>inset</code>, <code>clip</code>, <code>scale</code>, <code>rotate</code>, <code>ripple</code>, <code>animation-list</code>, <code>bitmap</code>, <code>nine-patch</code>, <code>color</code> 或 <code>vector</code> 的 XML.</li>
+<li><code>res/color</code>: 颜色状态列表 XML.</li>
+</ul>
+<p><code>vector</code> 矢量图支持 <code>group</code> (旋转, 缩放, 平移), <code>path</code> (填充与描边的颜色, 透明度, 线宽, 线帽, 线连接, <code>fillType</code>, <code>trimPath*</code>), <code>clip-path</code>, 根元素的 <code>tint</code>, <code>tintMode</code>, <code>alpha</code> 与 <code>autoMirrored</code>, 以及 <code>&lt;aapt:attr&gt;</code> 内联的线性, 径向与扫描渐变, 按平台 VectorDrawable 的方式绘制. <code>animated-vector</code> 不受支持.</p>
+<p>资源目录可带限定符, 如 <code>values-night</code>, <code>values-zh-rCN</code>, <code>layout-land</code>, <code>drawable-xxhdpi</code>. 支持的限定符:</p>
+<ul>
+<li>语言与地区: <code>zh</code>, <code>zh-rCN</code>, <code>b+zh+Hant+TW</code>.</li>
+<li>布局方向: <code>ldrtl</code>, <code>ldltr</code>.</li>
+<li>最小宽度与可用宽高: <code>sw600dp</code>, <code>w720dp</code>, <code>h480dp</code>.</li>
+<li>屏幕方向: <code>port</code>, <code>land</code>.</li>
+<li>夜间模式: <code>night</code>, <code>notnight</code>.</li>
+<li>屏幕密度: <code>ldpi</code>, <code>mdpi</code>, <code>tvdpi</code>, <code>hdpi</code>, <code>xhdpi</code>, <code>xxhdpi</code>, <code>xxxhdpi</code>, <code>nodpi</code>, <code>anydpi</code>, <code>&lt;N&gt;dpi</code>.</li>
+<li>平台版本: <code>v26</code> 等.</li>
+</ul>
+<p>每个资源按 Android 的规则在当前配置下选取: 先排除与配置冲突的目录, 再按语言, 布局方向, 最小宽度, 宽度, 高度, 屏幕方向, 夜间模式, 屏幕密度, 平台版本的优先级逐项选择最匹配的目录. 屏幕密度不排除目录, 取最接近的密度 (优先缩小). 含其他限定符 (如 <code>large</code>, <code>mcc310</code>) 的目录被忽略. 每次渲染布局时按当时的配置重新选取.</p>
+<p>样式与主题:</p>
+<ul>
+<li>元素的 <code>style</code> 引用工程样式时, 样式中的属性先于元素自身的属性应用, 因此元素属性优先. 样式的父样式为系统或应用样式时, 父样式在创建视图时生效.</li>
+<li><code>android:theme</code> 引用工程样式时, <code>?attr/name</code> 引用在该主题中解析, 主题中的视图属性作为该元素及其子孙元素的默认属性, 优先级低于样式与元素属性.</li>
+<li>样式与主题中视图不接受的属性被静默忽略.</li>
+</ul>
+<h3>动态属性表达式<span><a class="mark" href="#ui_3" id="ui_3">#</a></span></h3>
 <p>属性字符串中的 <code>{{ expression }}</code> 会在应用属性时执行. 普通布局的求值上下文默认为脚本全局作用域. 一个属性可包含多个表达式.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -810,7 +843,7 @@ ui.panel.message.attr(&#39;textColor&#39;, &#39;#ff5722&#39;);
 </code></pre>
 <p>包装后的任意父视图也支持以 <code>parent.&lt;id&gt;</code> 递归查找后代视图.</p>
 <p>若名称与 <code>ui</code> 已有成员冲突, 应使用 <code>ui.findById(id)</code>. 给 <code>ui.someName</code> 赋值会保存自定义属性并遮蔽同名 ID 查询; 赋值为 <code>null</code> 或 <code>undefined</code> 会移除遮蔽值.</p>
-<h3>列表与网格<span><a class="mark" href="#ui_3" id="ui_3">#</a></span></h3>
+<h3>列表与网格<span><a class="mark" href="#ui_4" id="ui_4">#</a></span></h3>
 <p><code>&lt;list&gt;</code> 和 <code>&lt;grid&gt;</code> 的第一个元素子节点是项目模板, 不是普通子视图. 数据源必须是 Rhino JavaScript 数组. <code>setDataSource(array)</code> 设置数据源后, 模板中的动态表达式以当前项目对象为求值上下文.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -845,7 +878,7 @@ ui.people.on(&#39;item_bind&#39;, function (itemView, holder) {
 <p>AutoJs6 使用 <code>Array.observe</code> 监听数组本身的 <code>splice</code> 和索引更新, 并通知 RecyclerView. 修改 <code>people[0].name</code> 这类嵌套对象属性不会触发数组更新; 可替换整个数组元素, 或重新设置数据源.</p>
 <p><code>item_bind</code> 在 ViewHolder 创建时触发一次, 此时项目可能尚未写入 holder. <code>holder.item</code> 和 <code>holder.position</code> 是动态 getter, 应在之后发生的点击等回调中读取, 如上例所示.</p>
 <p>列表事件参阅 <a href="#ui_nativeview_1">NativeView 事件</a>. <code>&lt;grid&gt;</code> 另外支持 <code>spanCount</code> 和布局方向等属性.</p>
-<h3>分页, 标签栏和抽屉<span><a class="mark" href="#ui_4" id="ui_4">#</a></span></h3>
+<h3>分页, 标签栏和抽屉<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h3>
 <p><code>&lt;viewpager&gt;</code> 的直接子视图会成为页面. <code>titles</code> 属性提供以分隔符拆分的页面标题. Material <code>TabLayout</code> 的原生方法可将标签栏与分页视图关联:</p>
 <pre><code class="lang-js">ui.layout(
     &lt;vertical&gt;
@@ -879,7 +912,7 @@ ui.board.on(&#39;draw&#39;, function (canvas) {
 <li><code>webview.jsBridge</code> - 页面 JavaScript 与脚本之间的消息桥.</li>
 </ul>
 <p><code>jsBridge</code> 提供 <code>send(event, ...args)</code>, <code>handle(channel, handler)</code>, <code>invoke(channel, ...args)</code> 和 <code>eval(code)</code>. <code>invoke</code> 和 <code>eval</code> 返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>. WebView 同时保留 Android <code>WebView</code> 的原生方法.</p>
-<h3>控制台视图<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h3>
+<h3>控制台视图<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <p><code>&lt;console&gt;</code> 显示当前脚本自身的控制台, 内容与 <code>console.log</code> 等方法的输出一致 (脚本的输出同时会转发到全局控制台); <code>&lt;globalconsole&gt;</code> 显示所有脚本共用的全局控制台 (即应用 &quot;日志&quot; 页面显示的内容), 与 <code>&lt;console global=&quot;true&quot;&gt;</code> 或裸属性写法 <code>&lt;console global&gt;</code> 等价. 两者默认不显示标题栏, 不显示时间前缀, 并按日志等级着色.</p>
 <pre><code class="lang-js">&quot;ui&quot;;
@@ -895,7 +928,7 @@ console.log(&quot;hello&quot;);
 </code></pre>
 <p>视图属性与 <a href="console.html">console</a> 模块的 <code>setXxx</code> 方法一一对应, 如 <code>titleBackgroundColor</code> 对应 <a href="console.html#console_m_settitlebackgroundcolor">console.setTitleBackgroundColor</a>, <code>timeVisible</code> 对应 <a href="console.html#console_m_settimevisible">console.setTimeVisible</a>. 设置 <code>title</code> 后显示标题栏, 其右侧的 &quot;更多&quot; 按钮可显示或隐藏输入栏, 清空或复制日志以及打开设置对话框. 完整属性列表参阅 <a href="uiAttributes.html#uiattributes_consoleview">UI 布局属性</a>.</p>
 <p>脚本调用 <a href="console.html#console_m_rawinput">console.rawInput</a> 或 <a href="console.html#console_m_input">console.input</a> 等待输入时, 视图底部会自动显示输入栏, 提交后自动隐藏; <code>inputVisible=&quot;true&quot;</code> 可使其常驻显示.</p>
-<h2>控件扩展方法<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h2>
+<h2>控件扩展方法<span><a class="mark" href="#ui_7" id="ui_7">#</a></span></h2>
 <p>内置标签返回的对象可调用对应 Android 类的原生方法. 下表列出 AutoJs6 控件类在 Android 父类之外新增的公开方法.</p>
 <table>
 <thead>
@@ -1142,7 +1175,7 @@ ui.message.attr(&#39;visibility&#39;, &#39;gone&#39;);
 </tbody>
 </table>
 <p>为 <code>touch</code>, <code>long_click</code>, <code>key</code> 或 <code>item_long_click</code> 的 <code>event.consumed</code> 赋值为 <code>true</code>, 会使对应 Android 监听器返回已消费.</p>
-<h2>自定义控件<span><a class="mark" href="#ui_7" id="ui_7">#</a></span></h2>
+<h2>自定义控件<span><a class="mark" href="#ui_8" id="ui_8">#</a></span></h2>
 <p>自定义控件构造函数继承 <code>ui.Widget</code>, <code>render()</code> 返回根布局, 再通过 <code>ui.registerWidget(name, constructor)</code> 注册为 XML 标签.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 

@@ -1243,6 +1243,8 @@ activity.getWindow().getDecorView().getRootView().getHeight();
 <li><code>p4c0&gt;1&gt;1&gt;0s0</code> - 组合使用</li>
 </ul>
 <p><a href="uiObjectType.html#uiobjecttype_m_compass">控件罗盘 (UiObject.compass)</a> 是 <a href="uiObjectType.html#uiobjecttype_m_detect">控件探测 (UiObject.detect)</a> 的衍生方法, 因此类型命名采用了 <code>DetectCompass</code>.</p>
+<p>某一步没有到达任何控件时 (如 <code>c5</code> 超出子控件数量, <code>k2</code> 在 2 级之内没有可点击控件), 罗盘结果为 null. 选择器设置了 <a href="uiSelectorType.html#uiselectortype_m_prefer">prefer(&#39;visible&#39;)</a> 时, <code>k</code> 跳过对用户不可见的可点击控件.</p>
+<p>无法解析的罗盘参数 (如 <code>x2</code>) 将抛出异常. 在 <a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 与 <a href="uiObjectType.html#uiobjecttype_m_detect">detect</a> 中, 罗盘参数在筛选控件之前即完成检查 (<strong><code>6.8.0</code></strong>). 罗盘每一步到达的控件可用 <a href="automator.html#automator_m_explain">auto.explain</a> 查看.</p>
 <h2>DetectResult<span><a class="mark" href="#datatypes_detectresult" id="datatypes_detectresult">#</a></span></h2>
 <p><a href="uiObjectType.html#uiobjecttype_m_detect">控件探测 (UiObject.detect)</a> 的结果参数类型, 又称 <code>探测结果</code>, 此过程也称为 <code>结果筛选</code>.</p>
 <ul>
@@ -1251,6 +1253,7 @@ activity.getWindow().getDecorView().getRootView().getHeight();
 <li><code>. / pt / point</code> - <a href="uiObjectType.html#uiobjecttype_m_point">点</a></li>
 <li><code>UiObjectInvokable</code> - <a href="#datatypes_uiobjectinvokable">控件可调用类型</a></li>
 </ul>
+<p>探测结果只针对单个控件, 不支持 <a href="#datatypes_pickupresult">PickupResult</a> 中的集合与数组形式 (如 <code>&#39;{}&#39;</code>, <code>&#39;[]&#39;</code>, <code>&#39;contents&#39;</code>), 使用时将抛出异常.</p>
 <pre><code class="lang-js">/* 控件. */
 detect(w, &#39;#&#39;);
 detect(w, &#39;w&#39;); /* 同上. */
@@ -1339,15 +1342,17 @@ pickup(contentMatch(/he.+/).clickable(true).boundsInside(0.2, 0.05, -1, -1));
 <ul>
 <li><code># / w / widget</code> - <a href="uiObjectType.html">控件 (UiObject)</a></li>
 <li><code>{} / #{} / {#} / w{} / {w} / wc / collection / list</code> -&gt; <a href="uiObjectCollectionType.html">控件集合 (UiObjectCollection)</a></li>
-<li><code>[] / #[] / [#] / w[] / [w] / ws / widgets</code> -&gt; <a href="uiObjectType.html">控件 (UiObject)</a> 数组</li>
+<li><code>[] / ## / #[] / [#] / w[] / [w] / ws / widgets</code> -&gt; <a href="uiObjectType.html">控件 (UiObject)</a> 数组</li>
 <li><code>$ / txt / content</code> - <a href="uiObjectType.html#uiobjecttype_m_content">文本内容 (UiObject#content)</a></li>
-<li><code>$[] / [$] / txt[] / [txt] / content[] / [content] / contents</code> -&gt; <a href="uiObjectType.html#uiobjecttype_m_content">文本内容 (UiObject#content)</a> 数组</li>
+<li><code>$$ / $[] / [$] / txt[] / [txt] / content[] / [content] / contents</code> -&gt; <a href="uiObjectType.html#uiobjecttype_m_content">文本内容 (UiObject#content)</a> 数组</li>
 <li><code>. / pt / point</code> - <a href="uiObjectType.html#uiobjecttype_m_point">点 (UiObject#point)</a></li>
-<li><code>.[] / [.] / point[] / [point] / pt[] / [pt] / points / pts</code> -&gt; <a href="uiObjectType.html#uiobjecttype_m_point">点 (UiObject#point)</a> 数组</li>
+<li><code>.. / .[] / [.] / point[] / [point] / pt[] / [pt] / points / pts</code> -&gt; <a href="uiObjectType.html#uiobjecttype_m_point">点 (UiObject#point)</a> 数组</li>
 <li><code>@ / selector / sel</code> -&gt; <a href="uiSelectorType.html">选择器 (UiSelector)</a></li>
 <li><code>? / exists</code> -&gt; <a href="uiSelectorType.html#uiselectortype_m_exists">存在判断 (UiSelector#exists)</a></li>
 <li><code>UiObjectInvokable</code> - <a href="#datatypes_uiobjectinvokable">控件可调用类型</a></li>
 </ul>
+<p>数组形式的结果参数 <code>[]</code> (空数组) 同样表示控件数组; 单元素数组的首项不是方法名称时, <code>[&#39;#&#39;]</code>, <code>[&#39;$&#39;]</code>, <code>[&#39;.&#39;]</code> 分别表示控件, 文本内容与点的数组.</p>
+<p>单个结果 (控件, 文本内容, 点, 控件可调用类型) 取自 <a href="uiSelectorType.html#uiselectortype_m_findonce">findOnce()</a>, 返回前先刷新命中的控件 (<strong><code>6.8.0</code></strong>, 参阅 <a href="uiSelectorType.html#uiselectortype_m_findonce">命中刷新</a>), 并受 <a href="uiSelectorType.html#uiselectortype_m_prefer">prefer</a> 影响; 集合与数组结果取自 <a href="uiSelectorType.html#uiselectortype_m_find">find()</a>.</p>
 <pre><code class="lang-js">/* 控件. */
 pickup(sel, &#39;#&#39;);
 pickup(sel, &#39;w&#39;); /* 同上. */
@@ -1382,16 +1387,57 @@ pickup(sel, [ &#39;setText&#39;, &#39;hello&#39; ]); /* i.e. sel.findOnce().setT
 <p>与 <a href="#datatypes_detectresult">DetectResult (探测结果)</a> 相比, <code>拾取结果</code> 的种类更加丰富.</p>
 <h2>UiObjectInvokable<span><a class="mark" href="#datatypes_uiobjectinvokable" id="datatypes_uiobjectinvokable">#</a></span></h2>
 <p>控件可调用类型, 用于使用参数形式实现方法调用, 又称 <code>参化调用</code>.</p>
-<p>支持所有 <a href="uiObjectType.html">UiObject</a> 的实例方法, 如果方法需要传递参数, 需要将参数连同方法名称放入数组后再传递.</p>
+<p>可调用的方法为下文 &quot;可调用方法&quot; 列出的控件方法. 如果方法需要传递参数, 需要将参数连同方法名称放入数组后再传递.</p>
 <pre><code class="lang-js">/* 无参方法. */
 detect(w, &#39;click&#39;); /* i.e. w.click() */
 detect(w, &#39;imeEnter&#39;); /* i.e. w.imeEnter() */
+detect(w, &#39;hintText&#39;); /* i.e. w.getHintText() */
 
 /* 含参方法. */
 detect(w, [ &#39;child&#39;, 0 ]); /* i.e. w.child(0) */
 detect(w, [ &#39;setText&#39;, &#39;hello&#39; ]); /* i.e. w.setText(&#39;hello&#39;) */
 detect(w, [ &#39;setSelection&#39;, 2, 3 ]); /* i.e. w.setSelection(2, 3) */
+detect(w, [ &#39;sibling&#39;, 1 ]); /* i.e. w.sibling(1) */
 </code></pre>
+<p>调用规则 (<strong><code>6.8.0</code></strong>):</p>
+<ul>
+<li>名称先匹配同名方法, 再匹配 <code>get</code> 加首字母大写的方法, 如 <code>&#39;hintText&#39;</code> 调用 <code>getHintText()</code>.</li>
+<li>同名方法有多个重载时, 选择首个能接受所给参数的重载. 数字参数按方法声明转换为整数或浮点数, 整数参数为 <code>NaN</code> 时将抛出异常.</li>
+<li>只能调用下文列出的方法. <code>AccessibilityNodeInfoCompat</code> 的 setter 与带参数的方法 (如 <code>setChecked</code>, <code>getChild</code>, <code>findAccessibilityNodeInfosByText</code>) 不可调用, 获取子控件请使用 <code>child</code>. 未知名称将抛出 RangeError, 消息中列出至多 5 个相近的名称.</li>
+<li>在 <a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 与 <a href="uiObjectType.html#uiobjecttype_m_detect">detect</a> 中, 方法名称与参数在筛选控件之前即完成检查. <a href="automator.html#automator_m_explain">auto.explain</a> 可查看结果参数解析到的方法与参数转换, 且不调用该方法.</li>
+</ul>
+<p>可调用方法:</p>
+<!-- node-method-registry:begin -->
+<p>控件自有方法 (<a href="uiObjectType.html">UiObject</a> 与 <a href="uiObjectActionsType.html">控件行为</a>, 139 个名称; 带参数的重载列出参数类型):</p>
+<ul>
+<li><code>accessibilityFocus</code> / <code>accessibilityFocused</code> / <code>actionNames</code></li>
+<li><code>bottom</code> / <code>bounds</code> / <code>boundsBottom</code> / <code>boundsCenterX</code> / <code>boundsCenterY</code> / <code>boundsExactCenterX</code> / <code>boundsExactCenterY</code> / <code>boundsHeight</code> / <code>boundsInParent</code> / <code>boundsInScreen</code> / <code>boundsLeft</code> / <code>boundsRight</code> / <code>boundsTop</code> / <code>boundsWidth</code> / <code>brother(number)</code></li>
+<li><code>center</code> / <code>centerX</code> / <code>centerY</code> / <code>checkable</code> / <code>checked</code> / <code>child(number)</code> / <code>childCount</code> / <code>children</code> / <code>className</code> / <code>clearAccessibilityFocus</code> / <code>clearFocus</code> / <code>clearSelection</code> / <code>click</code> / <code>clickable</code> / <code>clickBounds</code> / <code>clickBounds(number)</code> / <code>clickBounds(number, number)</code> / <code>collapse</code> / <code>column</code> / <code>columnCount</code> / <code>columnSpan</code> / <code>compass(string)</code> / <code>content</code> / <code>contentInvalid</code> / <code>contextClick</code> / <code>contextClickable</code> / <code>copy</code> / <code>cut</code></li>
+<li><code>depth</code> / <code>desc</code> / <code>dismiss</code> / <code>dismissable</code> / <code>dragCancel</code> / <code>dragDrop</code> / <code>dragStart</code> / <code>drawingOrder</code> / <code>dumpSubtree</code> / <code>dumpSubtree(any)</code></li>
+<li><code>editable</code> / <code>enabled</code> / <code>exactCenterX</code> / <code>exactCenterY</code> / <code>expand</code></li>
+<li><code>find</code> / <code>find(UiSelector)</code> / <code>findOne(UiSelector)</code> / <code>fingerprint</code> / <code>firstChild</code> / <code>firstSibling</code> / <code>focus</code> / <code>focusable</code> / <code>focused</code> / <code>fullId</code></li>
+<li><code>hasAction(...any)</code> / <code>hasChildren</code> / <code>height</code> / <code>hideTooltip</code></li>
+<li><code>id</code> / <code>idEntry</code> / <code>idHex</code> / <code>imeEnter</code> / <code>indexInParent</code> / <code>isShifted</code> / <code>isShifted(number)</code> / <code>isSimilar(any)</code> / <code>isSingleton</code> / <code>isStale</code></li>
+<li><code>lastChild</code> / <code>lastSibling</code> / <code>left</code> / <code>longClick</code> / <code>longClickable</code></li>
+<li><code>moveWindow(number, number)</code> / <code>multiLine</code></li>
+<li><code>nextAtMovementGranularity(number, boolean)</code> / <code>nextHtmlElement(string)</code> / <code>nextSibling</code></li>
+<li><code>offset(number)</code></li>
+<li><code>packageName</code> / <code>pageDown</code> / <code>pageLeft</code> / <code>pageRight</code> / <code>pageUp</code> / <code>parent</code> / <code>parent(number)</code> / <code>password</code> / <code>paste</code> / <code>performAction(number, ...ActionArgument)</code> / <code>point</code> / <code>pressAndHold</code> / <code>previousAtMovementGranularity(number, boolean)</code> / <code>previousHtmlElement(string)</code> / <code>previousSibling</code></li>
+<li><code>right</code> / <code>row</code> / <code>rowCount</code> / <code>rowSpan</code></li>
+<li><code>scrollable</code> / <code>scrollBackward</code> / <code>scrollDown</code> / <code>scrollForward</code> / <code>scrollLeft</code> / <code>scrollRight</code> / <code>scrollTo(number, number)</code> / <code>scrollUp</code> / <code>select</code> / <code>selected</code> / <code>setProgress(number)</code> / <code>setSelection(number, number)</code> / <code>setText(string)</code> / <code>show</code> / <code>showTextSuggestions</code> / <code>showTooltip</code> / <code>sibling(number)</code> / <code>siblingCount</code> / <code>siblings</code> / <code>simpleId</code> / <code>size</code> / <code>snapshot</code> / <code>summary</code></li>
+<li><code>text</code> / <code>toJSON</code> / <code>toJSON(any)</code> / <code>top</code></li>
+<li><code>visibleToUser</code></li>
+<li><code>waitForStable</code> / <code>waitForStable(number)</code> / <code>waitForStable(number, number)</code> / <code>waitForStable(number, number, number)</code> / <code>waitUntilGone</code> / <code>waitUntilGone(number)</code> / <code>waitUntilGone(number, number)</code> / <code>width</code></li>
+</ul>
+<p><a href="https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat">AccessibilityNodeInfoCompat</a> 的无参只读方法 (67 个名称; <code>getXyz</code> 也可写作 <code>xyz</code>, 与上一组同名时调用上一组的方法):</p>
+<ul>
+<li><code>canOpenPopup</code></li>
+<li><code>getActionList</code> / <code>getActions</code> / <code>getAvailableExtraData</code> / <code>getChildCount</code> / <code>getClassName</code> / <code>getCollectionInfo</code> / <code>getCollectionItemInfo</code> / <code>getContainerTitle</code> / <code>getContentDescription</code> / <code>getDrawingOrder</code> / <code>getError</code> / <code>getExtraRenderingInfo</code> (API 30+) / <code>getExtras</code> / <code>getHintText</code> / <code>getInfo</code> / <code>getInputType</code> / <code>getLabeledBy</code> / <code>getLabelFor</code> / <code>getLiveRegion</code> / <code>getMaxTextLength</code> / <code>getMinDurationBetweenContentChangesMillis</code> / <code>getMovementGranularities</code> / <code>getPackageName</code> / <code>getPaneTitle</code> / <code>getParent</code> / <code>getRangeInfo</code> / <code>getRoleDescription</code> / <code>getStateDescription</code> / <code>getText</code> / <code>getTextSelectionEnd</code> / <code>getTextSelectionStart</code> / <code>getTooltipText</code> / <code>getTouchDelegateInfo</code> / <code>getTraversalAfter</code> / <code>getTraversalBefore</code> / <code>getUniqueId</code> / <code>getViewIdResourceName</code> / <code>getWindow</code> / <code>getWindowId</code></li>
+<li><code>hasRequestInitialAccessibilityFocus</code></li>
+<li><code>isAccessibilityDataSensitive</code> / <code>isAccessibilityFocused</code> / <code>isCheckable</code> / <code>isChecked</code> / <code>isClickable</code> / <code>isContentInvalid</code> / <code>isContextClickable</code> / <code>isDismissable</code> / <code>isEditable</code> / <code>isEnabled</code> / <code>isFieldRequired</code> / <code>isFocusable</code> / <code>isFocused</code> / <code>isGranularScrollingSupported</code> / <code>isHeading</code> / <code>isImportantForAccessibility</code> / <code>isLongClickable</code> / <code>isMultiLine</code> / <code>isPassword</code> / <code>isScreenReaderFocusable</code> / <code>isScrollable</code> / <code>isSelected</code> / <code>isShowingHintText</code> / <code>isTextEntryKey</code> / <code>isTextSelectable</code> / <code>isVisibleToUser</code></li>
+</ul>
+<!-- node-method-registry:end -->
+<p>上述列表由 AutoJs6 的节点方法注册表生成. <code>getExtraRenderingInfo</code> 在 Android 11 (API 30) 以下不可用.</p>
 <h2>RootMode<span><a class="mark" href="#datatypes_rootmode" id="datatypes_rootmode">#</a></span></h2>
 <p>Root 模式, 枚举类型, 已全局化.</p>
 <table>

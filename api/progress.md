@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-29 选择器 (UiSelector) 增补: normalize (文本规范化的五个选项与作用规则) 与 prefer (多候选偏好的六个键与比较规则) 两个配置器; findOnce / findOne / untilFindOne 与 pickup 单个结果的命中刷新, exists / find / findOnce(index) 不刷新; findOne(timeout) 的事件辅助轮询与精确 id 快路径; pickup / detect 在筛选之前检查全部参数, 结果参数只能调用节点方法注册表中的方法. 数据类型页的 UiObjectInvokable 列出可调用方法 (由宿主 tools/selector/registry_export.py 从注册表生成, 206 个名称), PickupResult 补齐 `##` / `$$` / `..` 与数组形式; 自动化页补充 auto.setFlags 的 `!` 前缀与默认标志, 标志 noFastPath / noRefreshOnHit, auto.clearFlags, auto.explain 的罗盘与结果参数及新字段, auto.stats 的 queries.refinds 与 fastPath. 依据为 AutoJs6 源码 (选择器路线图 P2 / P3, 宿主提交至 8bcb9969f) 与 JVM 测试. AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.
+
 2026-10-25 运行时支持表试点: [图像](image), [文件](files) 与 [流程](flow) 三页顶部新增 "运行时支持" 表, 列出 Rhino, Node.js 主线程, Node.js Worker 与 Bun 的入口, 各状态的 API 数, Bun 所需授权, 以及入口, 状态或授权与同列多数不同的差异项. 表格由新生成器 `generator/runtime-support.js` 根据 AutoJs6 运行时覆盖矩阵 (宿主 api-coverage 路线图 P0.5, 2026-10-25 本地矩阵) 生成, 不手改; 其余模块页在 P2.5 统一插入. 矩阵记录的是已声明的入口, 不代表这些入口已在公开发布的插件版本中提供.
 
 2026-10-24 内存 (Memory) 增补: snapshot 的 bridgeSessions (Node.js, Bun, QuickJS, Lua 与 Python 五个插件引擎已结束但未被回收的桥接会话数), collect 同时等待桥接会话被回收, retained 元素的 engine (`rhino` / `node`). 依据为 AutoJs6 源码 (内存路线图第二期 P4.4, 宿主提交 446d2ff42) 与 JVM 测试 MemoryModuleTest / MemoryDiagnosticsCoreTest.

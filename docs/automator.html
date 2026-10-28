@@ -492,6 +492,10 @@
 <li><span class="stability_undefined"><a href="#automator_setflags_flags">setFlags(flags)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#automator_m_clearflags">[m] clearFlags</a></span><ul>
+<li><span class="stability_undefined"><a href="#automator_clearflags_flags">clearFlags(flags)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#automator_auto_service">auto.service</a></span></li>
 <li><span class="stability_undefined"><a href="#automator_p_services">[p] services</a></span></li>
 <li><span class="stability_undefined"><a href="#automator_auto_windows">auto.windows</a></span></li>
@@ -518,7 +522,7 @@
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#automator_m_explain">[m] explain</a></span><ul>
-<li><span class="stability_undefined"><a href="#automator_explain_selector_root">explain(selector, root?)</a></span></li>
+<li><span class="stability_undefined"><a href="#automator_explain_selector_root_compass_result">explain(selector, root?, compass?, result?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#automator_m_dump">[m] dump</a></span><ul>
@@ -1404,19 +1408,33 @@ auto.registerEvent(&#39;view_scrolled&#39;, e =&gt; console.log(&#39;滚动结�
 <h3>setFlags(flags)<span><a class="mark" href="#automator_setflags_flags" id="automator_setflags_flags">#</a></span></h3>
 <p><strong><code>A11Y?</code></strong></p>
 <ul>
-<li><strong>flags</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 一个或多个标志名</li>
+<li><strong>flags</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 一个或多个标志名, 名称前加 <code>!</code> 表示清除该标志 (<strong><code>6.8.0</code></strong>)</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>设置 automator 的特性标志. 每次调用以给出的标志集合替换之前的设置, 未知的标志名抛出异常.</p>
+<p>设置 automator 的特性标志. 每次调用以 &quot;默认标志加上给出的标志, 再去掉以 <code>!</code> 开头的标志&quot; 替换之前的设置; 未知的标志名, 或同一标志既设置又清除 (如 <code>[ &#39;noFastPath&#39;, &#39;!noFastPath&#39; ]</code>) 时抛出异常. 默认标志为 <code>eventAssistedPolling</code> (<strong><code>6.8.0</code></strong>), 因此 <code>setFlags</code> 不会因未给出它而关闭事件辅助轮询, 需要关闭时给出 <code>&#39;!eventAssistedPolling&#39;</code>.</p>
 <ul>
 <li><code>findOnUiThread</code> - 选择器搜索在主线程进行</li>
 <li><code>useUsageStats</code> - 以 &quot;使用情况统计&quot; 服务的结果确定当前应用包名 (需要授予 &quot;查看使用情况统计&quot; 权限). 如果 <a href="global.html#global_m_currentpackage">currentPackage()</a> 的结果不准确, 可尝试此标志</li>
 <li><code>useShell</code> - 以 shell 命令获取当前应用的包名与活动名称 (需要 root 权限)</li>
 <li><code>appWindowsFallback</code> (<strong><code>6.8.0</code></strong>) - 系统暂未提供活动窗口根节点时 (如服务刚绑定后; API 26 上可能持续到下一次窗口变化), 以窗口列表中应用窗口的根节点代替 (焦点窗口优先, 其次活动窗口). 默认关闭, 此时查询返回空结果</li>
-<li><code>eventAssistedPolling</code> (<strong><code>6.8.0</code></strong>) - 重复的选择器查询 (如 <a href="uiSelectorType.html#uiselectortype_m_findone">findOne(timeout)</a>, <a href="global.html#global_m_wait">wait</a>), 节点等待 (<a href="uiObjectType.html#uiobjecttype_m_waituntilgone">waitUntilGone</a> 等) 与 <a href="flow.html">Flow</a> 等待在两次尝试之间休眠到无障碍事件到达为止, 而非固定间隔. 通常能更早发现目标并减少无效查询. 默认关闭</li>
+<li><code>eventAssistedPolling</code> (<strong><code>6.8.0</code></strong>) - 重复的选择器查询 (如 <a href="uiSelectorType.html#uiselectortype_m_findone">findOne(timeout)</a>, <a href="global.html#global_m_wait">wait</a>), 节点等待 (<a href="uiObjectType.html#uiobjecttype_m_waituntilgone">waitUntilGone</a> 等) 与 <a href="flow.html">Flow</a> 等待在两次尝试之间休眠到界面变化的无障碍事件到达为止, 而非固定间隔: 相邻两次尝试至少间隔 50 毫秒, 界面静止时至多 200 毫秒检查一次. 通常能更早发现目标, 并在界面静止时明显降低 CPU 占用. 默认开启; 关闭后恢复固定 50 毫秒间隔的轮询</li>
+<li><code>noFastPath</code> (<strong><code>6.8.0</code></strong>) - 关闭轮询查询的框架快路径. 默认 (未设置此标志) 时, 选择器含精确 id 条件的轮询查询 (<a href="uiSelectorType.html#uiselectortype_m_findone">findOne(timeout)</a>, <a href="uiSelectorType.html#uiselectortype_m_untilfindone">untilFindOne</a>, <a href="uiSelectorType.html#uiselectortype_m_untilfind">untilFind</a>, <a href="uiSelectorType.html#uiselectortype_m_waitfor">waitFor</a> 等) 中间的尝试先经系统按 id 查找判断控件是否已出现, 不必每次遍历整个控件树; 首次与最后一次尝试, 以及至少每秒一次的校验仍完整遍历, 某个应用的界面上出现查找为空而遍历找到控件的情况后, 该脚本对这个应用不再使用快路径. 在按 id 查找比遍历更耗时的界面上 (如 AutoJs6 自身的悬浮窗), 同一查询的其余尝试自动改为遍历. 返回的控件与完整遍历相同. 次数统计见 <a href="#automator_p_stats">auto.stats</a> 的 <code>fastPath</code></li>
+<li><code>noRefreshOnHit</code> (<strong><code>6.8.0</code></strong>) - 关闭单个结果的命中刷新. 默认 (未设置此标志) 时, <a href="uiSelectorType.html#uiselectortype_m_findonce">findOnce()</a>, <a href="uiSelectorType.html#uiselectortype_m_findone">findOne(timeout)</a>, <a href="uiSelectorType.html#uiselectortype_m_untilfindone">untilFindOne()</a> 与 <a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 的单个控件结果在返回前刷新命中的控件, 控件已离开窗口时重新筛选: 有时限的查询最多 2 次, 仍失败按未找到处理; 无时限的查询持续筛选, 直到得到可以刷新的控件. 刷新失败后立即重新筛选, 不等待界面事件. <a href="uiSelectorType.html#uiselectortype_m_find">find()</a>, <a href="uiSelectorType.html#uiselectortype_findonce_index">findOnce(index)</a> 与 <a href="uiSelectorType.html#uiselectortype_m_exists">exists()</a> 不刷新. 重新筛选的次数见 <a href="#automator_p_stats">auto.stats</a> 的 <code>queries.refinds</code></li>
 </ul>
-<pre><code class="lang-js">auto.setFlags([ &#39;findOnUiThread&#39;, &#39;useShell&#39; ]);
-auto.setFlags(&#39;eventAssistedPolling&#39;);
+<pre><code class="lang-js">auto.setFlags([ &#39;findOnUiThread&#39;, &#39;useShell&#39; ]); /* 事件辅助轮询仍为开启. */
+auto.setFlags(&#39;noFastPath&#39;); /* 关闭快路径, 其余标志恢复为默认. */
+auto.setFlags([ &#39;!eventAssistedPolling&#39;, &#39;noRefreshOnHit&#39; ]); /* 恢复 6.8.0 之前的轮询与单个结果. */
+</code></pre>
+<h2>[m] clearFlags<span><a class="mark" href="#automator_m_clearflags" id="automator_m_clearflags">#</a></span></h2>
+<h3>clearFlags(flags)<span><a class="mark" href="#automator_clearflags_flags" id="automator_clearflags_flags">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>A11Y?</code></strong></p>
+<ul>
+<li><strong>flags</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> } - 一个或多个标志名</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+<p>清除给出的标志, 其余标志保持不变. 标志名同 <a href="#automator_m_setflags">setFlags</a> (不带 <code>!</code> 前缀), 未知的标志名抛出异常.</p>
+<pre><code class="lang-js">auto.clearFlags(&#39;eventAssistedPolling&#39;); /* 恢复固定间隔轮询, 其他标志不变. */
+auto.clearFlags([ &#39;noFastPath&#39;, &#39;noRefreshOnHit&#39; ]);
 </code></pre>
 <h2>auto.service<span><a class="mark" href="#automator_auto_service" id="automator_auto_service">#</a></span></h2>
 <p><strong>[v4.1.0 新增]</strong></p>
@@ -1551,11 +1569,13 @@ if (imeRoot) {
 <pre><code class="lang-js">auto.wait(&#39;登录&#39;, 5e3).click();
 </code></pre>
 <h2>[m] explain<span><a class="mark" href="#automator_m_explain" id="automator_m_explain">#</a></span></h2>
-<h3>explain(selector, root?)<span><a class="mark" href="#automator_explain_selector_root" id="automator_explain_selector_root">#</a></span></h3>
+<h3>explain(selector, root?, compass?, result?)<span><a class="mark" href="#automator_explain_selector_root_compass_result" id="automator_explain_selector_root_compass_result">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
 <ul>
 <li><strong>selector</strong> { <span class="type"><a href="uiSelectorType.html">UiSelector</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_pickupselector">PickupSelector</a></span> } - 待解释的选择器</li>
 <li><strong>[ root ]</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> } - 遍历的根节点, 默认为各窗口根节点</li>
+<li><strong>[ compass ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_detectcompass">DetectCompass</a></span> } - 罗盘参数</li>
+<li><strong>[ result ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_pickupresult">PickupResult</a></span> } - 结果参数</li>
 <li><ins><strong>returns</strong></ins> {{<ul>
 <li>selector: <a href="dataTypes.html#datatypes_string">string</a></li>
 <li>roots: <a href="dataTypes.html#datatypes_number">number</a></li>
@@ -1568,12 +1588,35 @@ if (imeRoot) {
 <li>steps: { <span class="type">index: <a href="dataTypes.html#datatypes_number">number</a>, filter: <a href="dataTypes.html#datatypes_string">string</a>, matched: <a href="dataTypes.html#datatypes_number">number</a>, cumulative: <a href="dataTypes.html#datatypes_number">number</a></span> }[]</li>
 <li>matches: <a href="uiObjectType.html">UiObject</a>[]</li>
 <li>nearMisses: <a href="uiObjectType.html">UiObject</a>[]</li>
+<li>target: <a href="uiObjectType.html">UiObject</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>targetIndex: <a href="dataTypes.html#datatypes_number">number</a></li>
+<li>preference: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>compass: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>compassError: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>trail: { <span class="type">step: <a href="dataTypes.html#datatypes_string">string</a>, node: <a href="uiObjectType.html">UiObject</a> \</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }[]</li>
+<li>reached: <a href="uiObjectType.html">UiObject</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>result: { <span class="type">given: <a href="dataTypes.html#datatypes_string">string</a>, kind: <a href="dataTypes.html#datatypes_string">string</a>, detail: <a href="dataTypes.html#datatypes_string">string</a></span> } | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>fastPath: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>fastPathEnabled: <a href="dataTypes.html#datatypes_boolean">boolean</a></li>
+<li>refreshOnHit: <a href="dataTypes.html#datatypes_boolean">boolean</a></li>
+<li>refreshes: <a href="dataTypes.html#datatypes_boolean">boolean</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
+<li>normalize: <a href="dataTypes.html#datatypes_string">string</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
 <li>text: <a href="dataTypes.html#datatypes_string">string</a></li>
 </ul>
 </li>
 <li>}} - 解释结果</li>
 </ul>
 <p>解释一个选择器为何匹配或不匹配: 遍历根节点之下的全部节点 (<code>nodes</code> 为节点数, <code>roots</code> 为根节点数, 超出预算时 <code>truncated</code> 为 <code>true</code>), 对选择器的每个过滤器分别统计单独匹配数 (<code>matched</code>) 与逐步叠加后的匹配数 (<code>cumulative</code>), 找出首个把候选集合清空的过滤器 (<code>failingIndex</code> 从 0 计, <code>-1</code> 表示没有; <code>failingFilter</code> 为其文本), 并给出前若干个匹配节点 (<code>matches</code>) 与 &quot;差一点&quot; 的节点 (<code>nearMisses</code>: 通过失败步骤之前全部过滤器的节点).</p>
+<p><code>selector</code> 之后的参数按 <a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 的方式区分: 第二个参数是 <a href="uiObjectType.html">UiObject</a> 时为根节点 (给出四个参数时, 第二个参数须为 UiObject 或空值); 其后只给出一个参数时, 符合罗盘写法即为罗盘参数, 否则为结果参数. 罗盘或结果参数有误时不抛出异常, 而是写进报告.</p>
+<p>除逐个过滤器的计数外, 结果还说明单个结果 (即 <code>findOnce()</code> 与 <code>pickup</code> 的单个控件) 经历的过程 (<strong><code>6.8.0</code></strong>):</p>
+<ul>
+<li><code>target</code> - 单个结果取的控件; <code>targetIndex</code> 为它在按找到顺序排列的匹配中的索引 (从 0 计, 没有时为 <code>-1</code>); <code>preference</code> 为生效的 <a href="uiSelectorType.html#uiselectortype_m_prefer">prefer</a> 设置, 设置后单个结果为按偏好排序后的最优控件</li>
+<li><code>compass</code> / <code>compassError</code> - 给出的罗盘参数与其无法解析的原因; <code>trail</code> 为从 <code>target</code> 起罗盘每一步 (<code>step</code>, 罗盘写法) 到达的控件 (<code>node</code>), 直到首个没有到达控件的一步; <code>reached</code> 为罗盘的终点控件 (没有罗盘时即 <code>target</code>)</li>
+<li><code>result</code> - 结果参数的解析: <code>given</code> 为给出的结果参数 (未给出时为缺省的 <code>&quot;widget&quot;</code>), <code>kind</code> 为 <code>symbol</code> (结果类型符号), <code>arrayForm</code> (数组形式), <code>method</code> (调用的控件方法), <code>empty</code>, <code>nothing</code> 或 <code>refused</code> (被拒绝), <code>detail</code> 为说明, 如对应的方法签名与参数转换. 只解析, 不调用该方法; 未给出结果参数时 <code>result</code> 为 null</li>
+<li><code>fastPath</code> - 选择器的快路径键 (精确 id 条件), 没有时为 null; <code>fastPathEnabled</code> 为快路径是否开启 (未设置 <a href="#automator_m_setflags">noFastPath</a>)</li>
+<li><code>refreshOnHit</code> - 命中刷新是否开启 (未设置 <a href="#automator_m_setflags">noRefreshOnHit</a>); <code>refreshes</code> 为 <code>target</code> 此刻能否刷新 (<code>false</code> 表示它已离开窗口, 单结果查询将重新筛选), 没有 <code>target</code> 或命中刷新关闭时为 null</li>
+<li><code>normalize</code> - 生效的 <a href="uiSelectorType.html#uiselectortype_m_normalize">normalize</a> 设置, 没有时为 null</li>
+</ul>
 <p><code>text</code> (也是结果的 <code>toString()</code>) 为文本报告, 适合直接输出到控制台.</p>
 <pre><code class="lang-js">let r = auto.explain(text(&#39;登录&#39;).clickable().depth(12));
 console.log(r.found, r.failingFilter); /* false clickable() */
@@ -1589,7 +1632,15 @@ near misses (pass step 1, fail step 2):
 
 /* 字符串或对象选择器同样可用. */
 console.log(auto.explain({ text: &#39;登录&#39;, clickable: true }).text);
+
+/* 单个结果, 罗盘与结果参数. */
+let e = auto.explain(text(&#39;登录&#39;), &#39;p2c0&#39;, [ &#39;setText&#39;, &#39;hi&#39; ]);
+console.log(e.trail.map(hop =&gt; hop.step + &#39; -&gt; &#39; + (hop.node ? hop.node.className() : &#39;null&#39;)));
+console.log(e.result.kind); /* method */
 </code></pre>
+<blockquote>
+<p>参阅: 示例代码 &gt; 无障碍服务 &gt; 选择器诊断与节点树导出.</p>
+</blockquote>
 <h2>[m] dump<span><a class="mark" href="#automator_m_dump" id="automator_m_dump">#</a></span></h2>
 <h3>dump(options?)<span><a class="mark" href="#automator_dump_options" id="automator_dump_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>
@@ -1630,7 +1681,8 @@ console.log(auto.dump({ root: id(&#39;list&#39;).findOnce(), maxDepth: 3, proper
 <li>now: <a href="dataTypes.html#datatypes_number">number</a></li>
 <li>elapsed: <a href="dataTypes.html#datatypes_number">number</a></li>
 <li>searches: { <span class="type">count: <a href="dataTypes.html#datatypes_number">number</a>, totalMillis: <a href="dataTypes.html#datatypes_number">number</a>, averageMillis: <a href="dataTypes.html#datatypes_number">number</a>, maxMillis: <a href="dataTypes.html#datatypes_number">number</a></span> }</li>
-<li>queries: { <span class="type">count: <a href="dataTypes.html#datatypes_number">number</a>, found: <a href="dataTypes.html#datatypes_number">number</a>, missed: <a href="dataTypes.html#datatypes_number">number</a>, attempts: <a href="dataTypes.html#datatypes_number">number</a>, totalMillis: <a href="dataTypes.html#datatypes_number">number</a>, averageMillis: <a href="dataTypes.html#datatypes_number">number</a>, maxMillis: <a href="dataTypes.html#datatypes_number">number</a></span> }</li>
+<li>queries: { <span class="type">count: <a href="dataTypes.html#datatypes_number">number</a>, found: <a href="dataTypes.html#datatypes_number">number</a>, missed: <a href="dataTypes.html#datatypes_number">number</a>, attempts: <a href="dataTypes.html#datatypes_number">number</a>, refinds: <a href="dataTypes.html#datatypes_number">number</a>, totalMillis: <a href="dataTypes.html#datatypes_number">number</a>, averageMillis: <a href="dataTypes.html#datatypes_number">number</a>, maxMillis: <a href="dataTypes.html#datatypes_number">number</a></span> }</li>
+<li>fastPath: { <span class="type">hits: <a href="dataTypes.html#datatypes_number">number</a>, misses: <a href="dataTypes.html#datatypes_number">number</a>, fallbacks: <a href="dataTypes.html#datatypes_number">number</a>, mismatches: <a href="dataTypes.html#datatypes_number">number</a>, walks: <a href="dataTypes.html#datatypes_number">number</a></span> }</li>
 <li>selectors: { <span class="type">selector: <a href="dataTypes.html#datatypes_string">string</a>, searches: <a href="dataTypes.html#datatypes_object">Object</a>, queries: <a href="dataTypes.html#datatypes_object">Object</a>, found: <a href="dataTypes.html#datatypes_number">number</a></span> }[]</li>
 <li>slowest: <a href="dataTypes.html#datatypes_object">Object</a> | <a href="dataTypes.html#datatypes_null">null</a></li>
 <li>steps: { <span class="type">name: <a href="dataTypes.html#datatypes_string">string</a>, runs: <a href="dataTypes.html#datatypes_object">Object</a>, rejected: <a href="dataTypes.html#datatypes_number">number</a></span> }[]</li>
@@ -1643,7 +1695,8 @@ console.log(auto.dump({ root: id(&#39;list&#39;).findOnce(), maxDepth: 3, proper
 <p>当前脚本的选择器与 Flow 统计快照 (每次读取生成新对象):</p>
 <ul>
 <li><code>searches</code> - 单次搜索 (一次控件树遍历) 的次数与耗时统计</li>
-<li><code>queries</code> - 查询 (一次 <code>findOne(timeout)</code> / <code>wait</code> 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计</li>
+<li><code>queries</code> - 查询 (一次 <code>findOne(timeout)</code> / <code>wait</code> 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计; <code>refinds</code> 为单个结果因命中的控件已离开窗口而重新筛选的次数 (<strong><code>6.8.0</code></strong>, 参阅 <a href="#automator_m_setflags">noRefreshOnHit</a>)</li>
+<li><code>fastPath</code> - 轮询查询的框架快路径 (<strong><code>6.8.0</code></strong>, 参阅 <a href="#automator_m_setflags">noFastPath</a>) 的尝试次数: <code>hits</code> 由按 id 查找得到的唯一候选直接作答, <code>misses</code> 由查找为空判定未找到, <code>fallbacks</code> 有 id 条件但仍完整遍历 (多个候选, 首次与最后一次尝试, 校验), <code>mismatches</code> 查找为空而完整遍历找到了控件 (应为 0), <code>walks</code> 不查找而直接遍历 (每个校验周期一次的测量遍历, 以及查找比遍历更耗时而改为遍历的尝试). 文本报告在有计数时多一行 <code>fast path: ...</code></li>
 <li><code>selectors</code> - 按最大搜索耗时降序的选择器列表, <code>slowest</code> 为其首项</li>
 <li><code>steps</code> - Flow 步骤按名称的运行次数 (<code>runs</code>, 含耗时统计) 与拒绝次数</li>
 <li><code>text</code> (也是 <code>toString()</code>) - 文本报告; <code>reset()</code> 清零统计</li>
@@ -1653,7 +1706,8 @@ console.log(auto.stats.text);
 /*
 a11y stats since 10:21:05, elapsed 32.4 s
 searches: 128, total 1840 ms, average 14.4 ms, max 96 ms
-queries: 12 (found 11, missed 1, attempts 57), total 1602 ms, average 133.5 ms, max 512 ms
+queries: 12 (found 11, missed 1, attempts 57, refinds 1), total 1602 ms, average 133.5 ms, max 512 ms
+fast path: hits 3, misses 30, fallbacks 14, mismatches 0, walks 6
 slowest selectors (by max search time):
   1. text(&quot;登录&quot;).clickable()  searches 40, total 820 ms, average 20.5 ms, max 96 ms; queries 3, found 3
 flow steps (by total time):

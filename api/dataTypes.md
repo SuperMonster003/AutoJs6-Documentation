@@ -909,6 +909,10 @@ activity.getWindow().getDecorView().getRootView().getHeight();
 
 [控件罗盘 (UiObject.compass)](uiObjectType#m-compass) 是 [控件探测 (UiObject.detect)](uiObjectType#m-detect) 的衍生方法, 因此类型命名采用了 `DetectCompass`.
 
+某一步没有到达任何控件时 (如 `c5` 超出子控件数量, `k2` 在 2 级之内没有可点击控件), 罗盘结果为 null. 选择器设置了 [prefer('visible')](uiSelectorType#m-prefer) 时, `k` 跳过对用户不可见的可点击控件.
+
+无法解析的罗盘参数 (如 `x2`) 将抛出异常. 在 [pickup](uiSelectorType#m-pickup) 与 [detect](uiObjectType#m-detect) 中, 罗盘参数在筛选控件之前即完成检查 (**`6.8.0`**). 罗盘每一步到达的控件可用 [auto.explain](automator#m-explain) 查看.
+
 ## DetectResult
 
 [控件探测 (UiObject.detect)](uiObjectType#m-detect) 的结果参数类型, 又称 `探测结果`, 此过程也称为 `结果筛选`.
@@ -917,6 +921,8 @@ activity.getWindow().getDecorView().getRootView().getHeight();
 - `$ / txt / content` - [文本内容](uiObjectType#m-content)
 - `. / pt / point` - [点](uiObjectType#m-point)
 - `UiObjectInvokable` - [控件可调用类型](#uiobjectinvokable)
+
+探测结果只针对单个控件, 不支持 [PickupResult](#pickupresult) 中的集合与数组形式 (如 `'{}'`, `'[]'`, `'contents'`), 使用时将抛出异常.
 
 ```js
 /* 控件. */
@@ -1041,14 +1047,18 @@ pickup(contentMatch(/he.+/).clickable(true).boundsInside(0.2, 0.05, -1, -1));
 
 - `# / w / widget` - [控件 (UiObject)](uiObjectType)
 - `{} / #{} / {#} / w{} / {w} / wc / collection / list` -> [控件集合 (UiObjectCollection)](uiObjectCollectionType)
-- `[] / #[] / [#] / w[] / [w] / ws / widgets` -> [控件 (UiObject)](uiObjectType) 数组
+- `[] / ## / #[] / [#] / w[] / [w] / ws / widgets` -> [控件 (UiObject)](uiObjectType) 数组
 - `$ / txt / content` - [文本内容 (UiObject#content)](uiObjectType#m-content)
-- `$[] / [$] / txt[] / [txt] / content[] / [content] / contents` -> [文本内容 (UiObject#content)](uiObjectType#m-content) 数组
+- `$$ / $[] / [$] / txt[] / [txt] / content[] / [content] / contents` -> [文本内容 (UiObject#content)](uiObjectType#m-content) 数组
 - `. / pt / point` - [点 (UiObject#point)](uiObjectType#m-point)
-- `.[] / [.] / point[] / [point] / pt[] / [pt] / points / pts` -> [点 (UiObject#point)](uiObjectType#m-point) 数组
+- `.. / .[] / [.] / point[] / [point] / pt[] / [pt] / points / pts` -> [点 (UiObject#point)](uiObjectType#m-point) 数组
 - `@ / selector / sel` -> [选择器 (UiSelector)](uiSelectorType)
 - `? / exists` -> [存在判断 (UiSelector#exists)](uiSelectorType#m-exists)
 - `UiObjectInvokable` - [控件可调用类型](#uiobjectinvokable)
+
+数组形式的结果参数 `[]` (空数组) 同样表示控件数组; 单元素数组的首项不是方法名称时, `['#']`, `['$']`, `['.']` 分别表示控件, 文本内容与点的数组.
+
+单个结果 (控件, 文本内容, 点, 控件可调用类型) 取自 [findOnce()](uiSelectorType#findonce), 返回前先刷新命中的控件 (**`6.8.0`**, 参阅 [命中刷新](uiSelectorType#findonce)), 并受 [prefer](uiSelectorType#m-prefer) 影响; 集合与数组结果取自 [find()](uiSelectorType#m-find).
 
 ```js
 /* 控件. */
@@ -1089,18 +1099,63 @@ pickup(sel, [ 'setText', 'hello' ]); /* i.e. sel.findOnce().setText('hello') */
 
 控件可调用类型, 用于使用参数形式实现方法调用, 又称 `参化调用`.
 
-支持所有 [UiObject](uiObjectType) 的实例方法, 如果方法需要传递参数, 需要将参数连同方法名称放入数组后再传递.
+可调用的方法为下文 "可调用方法" 列出的控件方法. 如果方法需要传递参数, 需要将参数连同方法名称放入数组后再传递.
 
 ```js
 /* 无参方法. */
 detect(w, 'click'); /* i.e. w.click() */
 detect(w, 'imeEnter'); /* i.e. w.imeEnter() */
+detect(w, 'hintText'); /* i.e. w.getHintText() */
 
 /* 含参方法. */
 detect(w, [ 'child', 0 ]); /* i.e. w.child(0) */
 detect(w, [ 'setText', 'hello' ]); /* i.e. w.setText('hello') */
 detect(w, [ 'setSelection', 2, 3 ]); /* i.e. w.setSelection(2, 3) */
+detect(w, [ 'sibling', 1 ]); /* i.e. w.sibling(1) */
 ```
+
+调用规则 (**`6.8.0`**):
+
+- 名称先匹配同名方法, 再匹配 `get` 加首字母大写的方法, 如 `'hintText'` 调用 `getHintText()`.
+- 同名方法有多个重载时, 选择首个能接受所给参数的重载. 数字参数按方法声明转换为整数或浮点数, 整数参数为 `NaN` 时将抛出异常.
+- 只能调用下文列出的方法. `AccessibilityNodeInfoCompat` 的 setter 与带参数的方法 (如 `setChecked`, `getChild`, `findAccessibilityNodeInfosByText`) 不可调用, 获取子控件请使用 `child`. 未知名称将抛出 RangeError, 消息中列出至多 5 个相近的名称.
+- 在 [pickup](uiSelectorType#m-pickup) 与 [detect](uiObjectType#m-detect) 中, 方法名称与参数在筛选控件之前即完成检查. [auto.explain](automator#m-explain) 可查看结果参数解析到的方法与参数转换, 且不调用该方法.
+
+可调用方法:
+
+<!-- node-method-registry:begin -->
+
+控件自有方法 ([UiObject](uiObjectType) 与 [控件行为](uiObjectActionsType), 139 个名称; 带参数的重载列出参数类型):
+
+- `accessibilityFocus` / `accessibilityFocused` / `actionNames`
+- `bottom` / `bounds` / `boundsBottom` / `boundsCenterX` / `boundsCenterY` / `boundsExactCenterX` / `boundsExactCenterY` / `boundsHeight` / `boundsInParent` / `boundsInScreen` / `boundsLeft` / `boundsRight` / `boundsTop` / `boundsWidth` / `brother(number)`
+- `center` / `centerX` / `centerY` / `checkable` / `checked` / `child(number)` / `childCount` / `children` / `className` / `clearAccessibilityFocus` / `clearFocus` / `clearSelection` / `click` / `clickable` / `clickBounds` / `clickBounds(number)` / `clickBounds(number, number)` / `collapse` / `column` / `columnCount` / `columnSpan` / `compass(string)` / `content` / `contentInvalid` / `contextClick` / `contextClickable` / `copy` / `cut`
+- `depth` / `desc` / `dismiss` / `dismissable` / `dragCancel` / `dragDrop` / `dragStart` / `drawingOrder` / `dumpSubtree` / `dumpSubtree(any)`
+- `editable` / `enabled` / `exactCenterX` / `exactCenterY` / `expand`
+- `find` / `find(UiSelector)` / `findOne(UiSelector)` / `fingerprint` / `firstChild` / `firstSibling` / `focus` / `focusable` / `focused` / `fullId`
+- `hasAction(...any)` / `hasChildren` / `height` / `hideTooltip`
+- `id` / `idEntry` / `idHex` / `imeEnter` / `indexInParent` / `isShifted` / `isShifted(number)` / `isSimilar(any)` / `isSingleton` / `isStale`
+- `lastChild` / `lastSibling` / `left` / `longClick` / `longClickable`
+- `moveWindow(number, number)` / `multiLine`
+- `nextAtMovementGranularity(number, boolean)` / `nextHtmlElement(string)` / `nextSibling`
+- `offset(number)`
+- `packageName` / `pageDown` / `pageLeft` / `pageRight` / `pageUp` / `parent` / `parent(number)` / `password` / `paste` / `performAction(number, ...ActionArgument)` / `point` / `pressAndHold` / `previousAtMovementGranularity(number, boolean)` / `previousHtmlElement(string)` / `previousSibling`
+- `right` / `row` / `rowCount` / `rowSpan`
+- `scrollable` / `scrollBackward` / `scrollDown` / `scrollForward` / `scrollLeft` / `scrollRight` / `scrollTo(number, number)` / `scrollUp` / `select` / `selected` / `setProgress(number)` / `setSelection(number, number)` / `setText(string)` / `show` / `showTextSuggestions` / `showTooltip` / `sibling(number)` / `siblingCount` / `siblings` / `simpleId` / `size` / `snapshot` / `summary`
+- `text` / `toJSON` / `toJSON(any)` / `top`
+- `visibleToUser`
+- `waitForStable` / `waitForStable(number)` / `waitForStable(number, number)` / `waitForStable(number, number, number)` / `waitUntilGone` / `waitUntilGone(number)` / `waitUntilGone(number, number)` / `width`
+
+[AccessibilityNodeInfoCompat](https://developer.android.com/reference/androidx/core/view/accessibility/AccessibilityNodeInfoCompat) 的无参只读方法 (67 个名称; `getXyz` 也可写作 `xyz`, 与上一组同名时调用上一组的方法):
+
+- `canOpenPopup`
+- `getActionList` / `getActions` / `getAvailableExtraData` / `getChildCount` / `getClassName` / `getCollectionInfo` / `getCollectionItemInfo` / `getContainerTitle` / `getContentDescription` / `getDrawingOrder` / `getError` / `getExtraRenderingInfo` (API 30+) / `getExtras` / `getHintText` / `getInfo` / `getInputType` / `getLabeledBy` / `getLabelFor` / `getLiveRegion` / `getMaxTextLength` / `getMinDurationBetweenContentChangesMillis` / `getMovementGranularities` / `getPackageName` / `getPaneTitle` / `getParent` / `getRangeInfo` / `getRoleDescription` / `getStateDescription` / `getText` / `getTextSelectionEnd` / `getTextSelectionStart` / `getTooltipText` / `getTouchDelegateInfo` / `getTraversalAfter` / `getTraversalBefore` / `getUniqueId` / `getViewIdResourceName` / `getWindow` / `getWindowId`
+- `hasRequestInitialAccessibilityFocus`
+- `isAccessibilityDataSensitive` / `isAccessibilityFocused` / `isCheckable` / `isChecked` / `isClickable` / `isContentInvalid` / `isContextClickable` / `isDismissable` / `isEditable` / `isEnabled` / `isFieldRequired` / `isFocusable` / `isFocused` / `isGranularScrollingSupported` / `isHeading` / `isImportantForAccessibility` / `isLongClickable` / `isMultiLine` / `isPassword` / `isScreenReaderFocusable` / `isScrollable` / `isSelected` / `isShowingHintText` / `isTextEntryKey` / `isTextSelectable` / `isVisibleToUser`
+
+<!-- node-method-registry:end -->
+
+上述列表由 AutoJs6 的节点方法注册表生成. `getExtraRenderingInfo` 在 Android 11 (API 30) 以下不可用.
 
 ## RootMode
 

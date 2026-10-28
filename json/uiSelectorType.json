@@ -2777,6 +2777,78 @@
           "displayName": "[m#] algorithm"
         },
         {
+          "textRaw": "[m#] normalize",
+          "name": "[m#]_normalize",
+          "methods": [
+            {
+              "textRaw": "normalize()",
+              "type": "method",
+              "name": "normalize",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/3</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> }</li>\n</ul>\n<p>选择器的文本规范化配置器, 开启全部规范化选项, 相当于 <code>normalize(true)</code>.</p>\n<ul>\n<li>配置器说明: 匹配字符串条件之前, 按选项统一控件属性值与条件参数的格式, 用于应对首尾空白, 大小写, 全角字符等差异</li>\n<li>关联控件属性: [ 无 ]</li>\n</ul>\n<pre><code class=\"lang-js\">/* 控件文本为 &quot; OK &quot; (首尾含空格) 时. */\ntext(&#39;OK&#39;).exists(); // false\ntext(&#39;OK&#39;).normalize().exists(); // true\ntext(&#39;ok&#39;).normalize().exists(); // true\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": []
+                }
+              ]
+            },
+            {
+              "textRaw": "normalize(enabled)",
+              "type": "method",
+              "name": "normalize",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/3</code></strong></p>\n<ul>\n<li><strong>enabled</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否开启全部规范化选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> }</li>\n</ul>\n<p><code>true</code> 开启全部规范化选项, <code>false</code> 关闭规范化 (同时覆盖写在它之前的 <code>normalize</code>).</p>\n<pre><code class=\"lang-js\">text(&#39;ok&#39;).normalize().normalize(false).exists(); /* 不再规范化, 与 text(&#39;ok&#39;).exists() 相同. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "normalize(options)",
+              "type": "method",
+              "name": "normalize",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 3/3</code></strong></p>\n<ul>\n<li><strong>options</strong> {{<ul>\n<li>trim?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>caseInsensitive?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>fullWidth?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>whitespace?: <a href=\"dataTypes#boolean\">boolean</a></li>\n<li>nfkc?: <a href=\"dataTypes#boolean\">boolean</a></li>\n</ul>\n</li>\n<li>}} - 规范化选项, 未给出的选项为 <code>false</code></li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> }</li>\n</ul>\n<p>只开启指定的规范化选项:</p>\n<ul>\n<li><code>trim</code> - 去除首尾空白 (含不换行空格 U+00A0)</li>\n<li><code>caseInsensitive</code> - 忽略大小写</li>\n<li><code>fullWidth</code> - 全角字母, 数字与标点 (U+FF01-U+FF5E) 及全角空格 (U+3000) 转为对应的半角字符</li>\n<li><code>whitespace</code> - 连续的空白字符 (含 U+00A0) 合并为一个空格, 并移除零宽字符 (U+200B, U+200C, U+200D, U+2060, U+FEFF)</li>\n<li><code>nfkc</code> - 按 Unicode 规范化形式 NFKC 转换兼容字符 (如合字 U+FB01 转为 <code>fi</code>)</li>\n</ul>\n<p>选项按 <code>nfkc</code>, <code>fullWidth</code>, <code>whitespace</code>, <code>trim</code>, <code>caseInsensitive</code> 的顺序依次施加. 未知的选项名或非布尔类型的选项值将抛出异常.</p>\n<pre><code class=\"lang-js\">text(&#39;ok&#39;).normalize({ caseInsensitive: true }).exists(); /* 可匹配 &quot;OK&quot; 与 &quot;Ok&quot;. */\ntextContains(&#39;下一步&#39;).normalize({ whitespace: true, trim: true }).findOnce(); /* 可匹配 &quot;  下一步 \\n&quot; 等. */\n</code></pre>\n<p><code>normalize</code> 的作用规则:</p>\n<ul>\n<li>作用于同一选择器的全部字符串条件, 与写在条件之前或之后无关; 多次调用时, 最后一次生效.</li>\n<li>文本类条件 ([ text / desc / content ] 及其 StartsWith / EndsWith / Contains / Match / Matches 系列) 采用全部开启的选项; 名称类条件 ([ id / idHex / className / packageName ] 系列) 只采用 <code>trim</code> 与 <code>caseInsensitive</code>.</li>\n<li>字面条件 (相等, 前缀, 后缀, 包含) 同时规范化控件属性值与条件参数.</li>\n<li>正则条件 (<a href=\"#xxxmatch\">xxxMatch</a> / <a href=\"#xxxmatches\">xxxMatches</a> 及正则表达式参数) 只规范化控件属性值, 正则表达式本身不改写; 开启 <code>caseInsensitive</code> 时, 正则表达式以忽略大小写 (含非 ASCII 字母) 的方式匹配.</li>\n<li>名称类条件开启了 <code>trim</code> 或 <code>caseInsensitive</code> 时, 精确 id 条件不再使用 <a href=\"automator#m-setflags\">框架快路径</a>.</li>\n<li>选择器的 <code>toString()</code> 输出 <code>normalize()</code>, <code>normalize(false)</code> 或开启的选项, 如 <code>text(&quot;OK&quot;).normalize({trim: true, caseInsensitive: true})</code>.</li>\n</ul>\n<p><a href=\"#m-select\">字符串选择器</a> 写作 <code>normalize</code> (开启全部选项) 或 <code>!normalize</code> (关闭).</p>\n<p><a href=\"#m-pickup\">拾取选择器</a> 示例:</p>\n<pre><code class=\"lang-js\">pickup(text(&#39;OK&#39;).normalize(), &#39;@&#39;);\npickup({ text: &#39;OK&#39;, normalize: true }, &#39;@&#39;);\npickup({ text: &#39;OK&#39;, normalize: { trim: true, caseInsensitive: true } }, &#39;@&#39;);\npickup(select(&#39;text=OK normalize&#39;), &#39;@&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] normalize"
+        },
+        {
+          "textRaw": "[m#] prefer",
+          "name": "[m#]_prefer",
+          "methods": [
+            {
+              "textRaw": "prefer(...keys)",
+              "type": "method",
+              "name": "prefer",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong></p>\n<ul>\n<li><strong>keys</strong> { <a href=\"documentation#可变参数\">...</a>(<code>&#39;visible&#39;</code> | <code>&#39;clickable&#39;</code> | <code>&#39;enabled&#39;</code> | <code>&#39;center&#39;</code> | <code>&#39;area&#39;</code> | <code>&#39;top&#39;</code>)<a href=\"documentation#可变参数\">[]</a> } - 偏好键, 至少一个</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiSelectorType\">UiSelector</a> }</li>\n</ul>\n<p>选择器的多候选偏好配置器: 多个控件都符合条件时, 单个结果按偏好取最优的控件, 而非首个找到的控件.</p>\n<ul>\n<li>配置器说明: 按给出的偏好键依次比较候选控件</li>\n<li>关联控件属性: [ <a href=\"uiObjectType#m-visibletouser\">visibleToUser</a> / <a href=\"uiObjectType#m-clickable\">clickable</a> / enabled / bounds ]</li>\n</ul>\n<p>偏好键:</p>\n<ul>\n<li><code>visible</code> - 对用户可见的控件优先</li>\n<li><code>clickable</code> - 可点击的控件优先</li>\n<li><code>enabled</code> - 已启用的控件优先</li>\n<li><code>center</code> - 中心点距屏幕中心较近的控件优先</li>\n<li><code>area</code> - 面积较大的控件优先</li>\n<li><code>top</code> - 上边界较靠上的控件优先</li>\n</ul>\n<p>比较规则:</p>\n<ul>\n<li>按给出的顺序逐个比较: 先比较第一个键, 相同时再比较下一个键; 全部相同时, 取先找到的控件 (即 <code>find()</code> 结果中靠前的控件).</li>\n<li>只影响单个结果: <a href=\"#findonce\">findOnce()</a>, <a href=\"#m-findone\">findOne(timeout)</a>, <a href=\"#m-untilfindone\">untilFindOne()</a> 与 <a href=\"#m-pickup\">pickup</a> 的单个控件结果 (含罗盘的起点). <a href=\"#m-find\">find</a>, <a href=\"#findonceindex\">findOnce(index)</a>, <a href=\"#m-untilfind\">untilFind</a>, <a href=\"#m-exists\">exists</a> 不受影响.</li>\n<li>设置偏好后, 单结果查询会收集全部符合条件的控件再比较, 不再止于首个控件, 耗时接近 <code>find()</code>.</li>\n<li>偏好键含 <code>visible</code> 时, <a href=\"uiObjectType#m-compass\">罗盘</a> 的 <code>k</code> (向上寻找可点击控件) 跳过对用户不可见的可点击控件.</li>\n<li>多次调用时, 最后一次生效. 未给出偏好键或偏好键未知时将抛出异常.</li>\n<li>选择器的 <code>toString()</code> 输出如 <code>text(&quot;确定&quot;).prefer(&quot;visible&quot;, &quot;clickable&quot;)</code>.</li>\n</ul>\n<p><a href=\"#m-select\">字符串选择器</a> 写作 <code>prefer=visible</code>, 只能给出一个偏好键; 需要多个偏好键时使用链式或对象选择器.</p>\n<pre><code class=\"lang-js\">/* 两个文本为 &quot;确定&quot; 的控件, 优先取对用户可见的, 其次取可点击的. */\ntext(&#39;确定&#39;).prefer(&#39;visible&#39;, &#39;clickable&#39;).findOne(3e3);\n\n/* 取面积最大的列表. */\nclassName(&#39;ListView&#39;).prefer(&#39;area&#39;).findOnce();\n</code></pre>\n<p><a href=\"#m-pickup\">拾取选择器</a> 示例:</p>\n<pre><code class=\"lang-js\">pickup(text(&#39;确定&#39;).prefer(&#39;visible&#39;), &#39;k2&#39;, &#39;click&#39;);\npickup({ text: &#39;确定&#39;, prefer: &#39;visible&#39; }, &#39;k2&#39;, &#39;click&#39;);\npickup({ text: &#39;确定&#39;, prefer: [ &#39;visible&#39;, &#39;center&#39; ] });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "...keys"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] prefer"
+        },
+        {
           "textRaw": "[m#] action",
           "name": "[m#]_action",
           "methods": [
@@ -3612,7 +3684,7 @@
               "textRaw": "findOnce()",
               "type": "method",
               "name": "findOnce",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件筛选控件.<br>\n筛选结果为单个控件, 不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOnce();\n</code></pre>\n<p>上述示例中, <code>w</code> 表示符合筛选条件的首个控件 (可能为 null).</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件筛选控件.<br>\n筛选结果为单个控件, 不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOnce();\n</code></pre>\n<p>上述示例中, <code>w</code> 表示符合筛选条件的首个控件 (可能为 null).</p>\n<p>命中刷新 (<strong><code>6.8.0</code></strong>): 返回前先刷新 (<code>refresh()</code>) 命中的控件; 控件已离开窗口 (如所在的对话框刚刚关闭) 时重新筛选, 最多 2 次, 仍失败则返回 null, 不再返回已失效的控件. 设置了 <a href=\"#m-prefer\">prefer</a> 时, 取的是按偏好排序后的最优控件. 使用 <code>auto.setFlags([&#39;noRefreshOnHit&#39;])</code> 可关闭命中刷新 (参阅 <a href=\"automator#m-setflags\">auto.setFlags</a>).</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -3623,7 +3695,7 @@
               "textRaw": "findOnce(index)",
               "type": "method",
               "name": "findOnce",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 控件索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件筛选控件.<br>\n筛选结果为索引参数指定的单个控件, 不存在时返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wA = sel.findOnce();\nlet wB = sel.findOnce(0);\nlet wC = sel.findOnce(4);\n</code></pre>\n<p>上述示例中, <code>wB</code> 与 <code>wA</code> 等价, 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null).<br>\n<code>wC</code> 表示第 5 个符合筛选条件的控件 (可能为 null).</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>index</strong> { <a href=\"dataTypes#number\">number</a> } - 控件索引</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件筛选控件.<br>\n筛选结果为索引参数指定的单个控件, 不存在时返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wA = sel.findOnce();\nlet wB = sel.findOnce(0);\nlet wC = sel.findOnce(4);\n</code></pre>\n<p>上述示例中, <code>wB</code> 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null), 与 <code>wA</code> 的区别是 <code>findOnce(index)</code> 返回筛选所见的控件, 不做命中刷新, 也不受 <a href=\"#m-prefer\">prefer</a> 影响.<br>\n<code>wC</code> 表示第 5 个符合筛选条件的控件 (可能为 null).</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -3646,7 +3718,7 @@
               "textRaw": "exists()",
               "type": "method",
               "name": "exists",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>根据选择器条件判断是否存在满足筛选条件的控件.</p>\n<p>相当于 <code>UiSelector#findOnce() !== null</code>.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>根据选择器条件判断是否存在满足筛选条件的控件.</p>\n<p>相当于 <code>UiSelector#findOnce(0) !== null</code>: 返回筛选所见的结果, 不做 <a href=\"#findonce\">命中刷新</a>. 刚离开窗口的控件, 在无障碍服务的节点缓存更新之前仍视为存在.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -3665,7 +3737,7 @@
               "textRaw": "find()",
               "type": "method",
               "name": "find",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>根据选择器条件筛选全部符合筛选条件的控件.<br>\n筛选结果为 <a href=\"uiObjectCollectionType\">控件集合</a>, 不存在任何符合筛选条件的控件时, 返回空集合.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ √ ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wc = sel.find();\nwc.forEach(w =&gt; console.log(w.centerY()));\n</code></pre>\n<p>上述示例中, <code>wc</code> 表示符合筛选条件的控件集合.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectCollectionType\">UiObjectCollection</a> }</li>\n</ul>\n<p>根据选择器条件筛选全部符合筛选条件的控件.<br>\n筛选结果为 <a href=\"uiObjectCollectionType\">控件集合</a>, 不存在任何符合筛选条件的控件时, 返回空集合.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ × ]</li>\n<li>集合结果 - [ √ ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet wc = sel.find();\nwc.forEach(w =&gt; console.log(w.centerY()));\n</code></pre>\n<p>上述示例中, <code>wc</code> 表示符合筛选条件的控件集合.</p>\n<p><code>find()</code> 返回筛选所见的全部控件, 不做 <a href=\"#findonce\">命中刷新</a>, 也不受 <a href=\"#m-prefer\">prefer</a> 影响.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -3727,7 +3799,7 @@
               "textRaw": "findOne(timeout)",
               "type": "method",
               "name": "findOne",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.<br>\n筛选结果为单个控件, 指定时限内不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOne(3e3); /* 3000 毫秒, 即 3 秒. */\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.</p>\n<blockquote>\n<p>注: <code>timeout</code> 为 0 或负数时不限时, 与 <a href=\"#m-untilfindone\">untilFindOne</a> 相同, 可能导致脚本 <strong>永久阻塞</strong>.<br>\n轮询间隔为 50 毫秒; 启用 <a href=\"automator#m-setflags\">eventAssistedPolling</a> 标志后, 两次尝试之间改为由无障碍事件唤醒.<br>\n不阻塞的异步形式见 <a href=\"flow#m-wait\">waitAsync</a> / <a href=\"flow\">流程 (Flow)</a>.</p>\n</blockquote>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件或筛选超时.<br>\n筛选结果为单个控件, 指定时限内不存在任何符合筛选条件的控件时, 返回 null.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.findOne(3e3); /* 3000 毫秒, 即 3 秒. */\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.</p>\n<blockquote>\n<p>注: <code>timeout</code> 为 0 或负数时不限时, 与 <a href=\"#m-untilfindone\">untilFindOne</a> 相同, 可能导致脚本 <strong>永久阻塞</strong>.<br>\n不阻塞的异步形式见 <a href=\"flow#m-wait\">waitAsync</a> / <a href=\"flow\">流程 (Flow)</a>.</p>\n</blockquote>\n<p>筛选过程 (<strong><code>6.8.0</code></strong>):</p>\n<ul>\n<li>两次尝试之间默认由界面变化的无障碍事件唤醒, 相邻两次尝试至少间隔 50 毫秒, 界面静止时至多 200 毫秒检查一次. <code>auto.setFlags([&#39;!eventAssistedPolling&#39;])</code> 或 <code>auto.clearFlags(&#39;eventAssistedPolling&#39;)</code> 恢复固定 50 毫秒间隔的轮询 (参阅 <a href=\"automator#m-setflags\">eventAssistedPolling</a>).</li>\n<li>选择器含精确 id 条件时, 中间的尝试先经系统按 id 查找判断控件是否已出现, 不必每次遍历整个控件树; 首次与最后一次尝试, 以及至少每秒一次的校验仍完整遍历, 结果与完整遍历相同. 在按 id 查找比遍历更耗时的界面上自动改为遍历. <code>auto.setFlags([&#39;noFastPath&#39;])</code> 可关闭 (参阅 <a href=\"automator#m-setflags\">noFastPath</a>).</li>\n<li>命中后先刷新控件, 控件已离开窗口时在剩余时限内继续筛选 (参阅 <a href=\"#findonce\">findOnce()</a> 的命中刷新).</li>\n</ul>\n",
               "signatures": [
                 {
                   "params": [
@@ -3761,7 +3833,7 @@
               "textRaw": "untilFindOne()",
               "type": "method",
               "name": "untilFindOne",
-              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>\n意味着此方法可能导致脚本 <strong>永久阻塞</strong>.<br>\n筛选结果为单个控件.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<p>此方法相当于 <code>UiSelector#findOne(-1)</code>.</p>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.untilFindOne();\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示符合筛选条件的首个控件.<br>\n第三行 <code>console.log(w.centerY());</code> 可能永远无法执行, 除非 <code>sel.untilFindOne()</code> 筛选成功解除阻塞.</p>\n",
+              "desc": "<p><strong><code>Global</code></strong> <strong><code>A11Y</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"uiObjectType\">UiObject</a> }</li>\n</ul>\n<p>根据选择器条件持续筛选控件, 直到出现符合筛选条件的控件.<br>\n意味着此方法可能导致脚本 <strong>永久阻塞</strong>.<br>\n筛选结果为单个控件.</p>\n<p>特性:</p>\n<ul>\n<li>阻塞筛选 - [ √ ]</li>\n<li>集合结果 - [ × ]</li>\n</ul>\n<p>此方法相当于 <code>UiSelector#findOne(-1)</code>.</p>\n<p>命中后先刷新控件 (<strong><code>6.8.0</code></strong>), 控件已离开窗口时继续筛选, 直到得到一个可以刷新的控件 (参阅 <a href=\"#findonetimeout\">findOne(timeout)</a> 的筛选过程).</p>\n<pre><code class=\"lang-js\">let sel = text(&#39;hello&#39;).boundsCenterY(0.3);\nlet w = sel.untilFindOne();\nconsole.log(w.centerY());\n</code></pre>\n<p>上述示例中, <code>w</code> 表示符合筛选条件的首个控件.<br>\n第三行 <code>console.log(w.centerY());</code> 可能永远无法执行, 除非 <code>sel.untilFindOne()</code> 筛选成功解除阻塞.</p>\n",
               "signatures": [
                 {
                   "params": []
@@ -4769,7 +4841,7 @@
         {
           "textRaw": "[m] pickup",
           "name": "[m]_pickup",
-          "desc": "<p>拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.<br>\n支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.</p>\n<p>部分特性:</p>\n<ul>\n<li><code>pickup</code> 已全局化, 支持全局使用.</li>\n<li><code>pickup</code> 支持 <a href=\"uiObjectType\">UiObject</a> 类型参数, 但只是将其作为根节点进行控件筛选, 而不能对其进行罗盘导航及结果筛选等操作.</li>\n<li><code>pickup</code> 的内部实现引用了 <a href=\"uiObjectType#m-detect\">detect</a> 方法.</li>\n</ul>\n",
+          "desc": "<p>拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.<br>\n支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.</p>\n<p>部分特性:</p>\n<ul>\n<li><code>pickup</code> 已全局化, 支持全局使用.</li>\n<li><code>pickup</code> 支持 <a href=\"uiObjectType\">UiObject</a> 类型参数, 但只是将其作为根节点进行控件筛选, 而不能对其进行罗盘导航及结果筛选等操作.</li>\n<li><code>pickup</code> 筛选出控件之后的罗盘定位, 结果筛选与回调处理, 与 <a href=\"uiObjectType#m-detect\">detect</a> 相同.</li>\n<li>参数检查 (<strong><code>6.8.0</code></strong>): 选择器, 罗盘, 结果与回调参数在筛选控件之前全部检查完毕, 错误消息指明函数名与参数名. <a href=\"dataTypes#pickupresult\">结果参数</a> 只能调用 <a href=\"dataTypes#uiobjectinvokable\">可调用方法</a> 列出的控件方法, 未知名称抛出 RangeError 并列出至多 5 个相近名称.</li>\n<li>单个控件的结果 (缺省结果, 文本内容, 点, 参化调用等) 取自 <a href=\"#findonce\">findOnce()</a>: 返回前先刷新命中的控件, 控件已离开窗口时重新筛选 (<strong><code>6.8.0</code></strong>, 参阅 <a href=\"#findonce\">命中刷新</a>); 设置了 <a href=\"#m-prefer\">prefer</a> 时取按偏好排序后的最优控件. 集合与数组结果取自 <a href=\"#m-find\">find()</a>.</li>\n<li>选择器的筛选过程, 罗盘每一步到达的控件与结果参数解析到的方法, 可用 <a href=\"automator#m-explain\">auto.explain</a> 查看.</li>\n</ul>\n",
           "methods": [
             {
               "textRaw": "pickup()",

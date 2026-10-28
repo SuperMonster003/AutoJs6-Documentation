@@ -3929,6 +3929,137 @@ pickup(algorithm('BFS'), '@');
 pickup({ algorithm: 'BFS' }, '@');
 ```
 
+## [m#] normalize
+
+### normalize()
+
+**`6.8.0`** **`Global`** **`Overload 1/3`**
+
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+选择器的文本规范化配置器, 开启全部规范化选项, 相当于 `normalize(true)`.
+
+- 配置器说明: 匹配字符串条件之前, 按选项统一控件属性值与条件参数的格式, 用于应对首尾空白, 大小写, 全角字符等差异
+- 关联控件属性: [ 无 ]
+
+```js
+/* 控件文本为 " OK " (首尾含空格) 时. */
+text('OK').exists(); // false
+text('OK').normalize().exists(); // true
+text('ok').normalize().exists(); // true
+```
+
+### normalize(enabled)
+
+**`6.8.0`** **`Global`** **`Overload 2/3`**
+
+- **enabled** { [boolean](dataTypes#boolean) } - 是否开启全部规范化选项
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+`true` 开启全部规范化选项, `false` 关闭规范化 (同时覆盖写在它之前的 `normalize`).
+
+```js
+text('ok').normalize().normalize(false).exists(); /* 不再规范化, 与 text('ok').exists() 相同. */
+```
+
+### normalize(options)
+
+**`6.8.0`** **`Global`** **`Overload 3/3`**
+
+- **options** {{
+    - trim?: [boolean](dataTypes#boolean)
+    - caseInsensitive?: [boolean](dataTypes#boolean)
+    - fullWidth?: [boolean](dataTypes#boolean)
+    - whitespace?: [boolean](dataTypes#boolean)
+    - nfkc?: [boolean](dataTypes#boolean)
+- }} - 规范化选项, 未给出的选项为 `false`
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+只开启指定的规范化选项:
+
+- `trim` - 去除首尾空白 (含不换行空格 U+00A0)
+- `caseInsensitive` - 忽略大小写
+- `fullWidth` - 全角字母, 数字与标点 (U+FF01-U+FF5E) 及全角空格 (U+3000) 转为对应的半角字符
+- `whitespace` - 连续的空白字符 (含 U+00A0) 合并为一个空格, 并移除零宽字符 (U+200B, U+200C, U+200D, U+2060, U+FEFF)
+- `nfkc` - 按 Unicode 规范化形式 NFKC 转换兼容字符 (如合字 U+FB01 转为 `fi`)
+
+选项按 `nfkc`, `fullWidth`, `whitespace`, `trim`, `caseInsensitive` 的顺序依次施加. 未知的选项名或非布尔类型的选项值将抛出异常.
+
+```js
+text('ok').normalize({ caseInsensitive: true }).exists(); /* 可匹配 "OK" 与 "Ok". */
+textContains('下一步').normalize({ whitespace: true, trim: true }).findOnce(); /* 可匹配 "  下一步 \n" 等. */
+```
+
+`normalize` 的作用规则:
+
+- 作用于同一选择器的全部字符串条件, 与写在条件之前或之后无关; 多次调用时, 最后一次生效.
+- 文本类条件 ([ text / desc / content ] 及其 StartsWith / EndsWith / Contains / Match / Matches 系列) 采用全部开启的选项; 名称类条件 ([ id / idHex / className / packageName ] 系列) 只采用 `trim` 与 `caseInsensitive`.
+- 字面条件 (相等, 前缀, 后缀, 包含) 同时规范化控件属性值与条件参数.
+- 正则条件 ([xxxMatch](#xxxmatch) / [xxxMatches](#xxxmatches) 及正则表达式参数) 只规范化控件属性值, 正则表达式本身不改写; 开启 `caseInsensitive` 时, 正则表达式以忽略大小写 (含非 ASCII 字母) 的方式匹配.
+- 名称类条件开启了 `trim` 或 `caseInsensitive` 时, 精确 id 条件不再使用 [框架快路径](automator#m-setflags).
+- 选择器的 `toString()` 输出 `normalize()`, `normalize(false)` 或开启的选项, 如 `text("OK").normalize({trim: true, caseInsensitive: true})`.
+
+[字符串选择器](#m-select) 写作 `normalize` (开启全部选项) 或 `!normalize` (关闭).
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(text('OK').normalize(), '@');
+pickup({ text: 'OK', normalize: true }, '@');
+pickup({ text: 'OK', normalize: { trim: true, caseInsensitive: true } }, '@');
+pickup(select('text=OK normalize'), '@');
+```
+
+## [m#] prefer
+
+### prefer(...keys)
+
+**`6.8.0`** **`Global`**
+
+- **keys** { [...](documentation#可变参数)(`'visible'` | `'clickable'` | `'enabled'` | `'center'` | `'area'` | `'top'`)[[]](documentation#可变参数) } - 偏好键, 至少一个
+- <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
+
+选择器的多候选偏好配置器: 多个控件都符合条件时, 单个结果按偏好取最优的控件, 而非首个找到的控件.
+
+- 配置器说明: 按给出的偏好键依次比较候选控件
+- 关联控件属性: [ [visibleToUser](uiObjectType#m-visibletouser) / [clickable](uiObjectType#m-clickable) / enabled / bounds ]
+
+偏好键:
+
+- `visible` - 对用户可见的控件优先
+- `clickable` - 可点击的控件优先
+- `enabled` - 已启用的控件优先
+- `center` - 中心点距屏幕中心较近的控件优先
+- `area` - 面积较大的控件优先
+- `top` - 上边界较靠上的控件优先
+
+比较规则:
+
+- 按给出的顺序逐个比较: 先比较第一个键, 相同时再比较下一个键; 全部相同时, 取先找到的控件 (即 `find()` 结果中靠前的控件).
+- 只影响单个结果: [findOnce()](#findonce), [findOne(timeout)](#m-findone), [untilFindOne()](#m-untilfindone) 与 [pickup](#m-pickup) 的单个控件结果 (含罗盘的起点). [find](#m-find), [findOnce(index)](#findonceindex), [untilFind](#m-untilfind), [exists](#m-exists) 不受影响.
+- 设置偏好后, 单结果查询会收集全部符合条件的控件再比较, 不再止于首个控件, 耗时接近 `find()`.
+- 偏好键含 `visible` 时, [罗盘](uiObjectType#m-compass) 的 `k` (向上寻找可点击控件) 跳过对用户不可见的可点击控件.
+- 多次调用时, 最后一次生效. 未给出偏好键或偏好键未知时将抛出异常.
+- 选择器的 `toString()` 输出如 `text("确定").prefer("visible", "clickable")`.
+
+[字符串选择器](#m-select) 写作 `prefer=visible`, 只能给出一个偏好键; 需要多个偏好键时使用链式或对象选择器.
+
+```js
+/* 两个文本为 "确定" 的控件, 优先取对用户可见的, 其次取可点击的. */
+text('确定').prefer('visible', 'clickable').findOne(3e3);
+
+/* 取面积最大的列表. */
+className('ListView').prefer('area').findOnce();
+```
+
+[拾取选择器](#m-pickup) 示例:
+
+```js
+pickup(text('确定').prefer('visible'), 'k2', 'click');
+pickup({ text: '确定', prefer: 'visible' }, 'k2', 'click');
+pickup({ text: '确定', prefer: [ 'visible', 'center' ] });
+```
+
 ## [m#] action
 
 ### action(...actions)
@@ -5105,6 +5236,8 @@ let w = sel.findOnce();
 
 上述示例中, `w` 表示符合筛选条件的首个控件 (可能为 null).
 
+命中刷新 (**`6.8.0`**): 返回前先刷新 (`refresh()`) 命中的控件; 控件已离开窗口 (如所在的对话框刚刚关闭) 时重新筛选, 最多 2 次, 仍失败则返回 null, 不再返回已失效的控件. 设置了 [prefer](#m-prefer) 时, 取的是按偏好排序后的最优控件. 使用 `auto.setFlags(['noRefreshOnHit'])` 可关闭命中刷新 (参阅 [auto.setFlags](automator#m-setflags)).
+
 ### findOnce(index)
 
 **`Global`** **`Overload 2/2`** **`A11Y`**
@@ -5127,7 +5260,7 @@ let wB = sel.findOnce(0);
 let wC = sel.findOnce(4);
 ```
 
-上述示例中, `wB` 与 `wA` 等价, 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null).<br>
+上述示例中, `wB` 表示符合筛选条件的首个 (第 1 个) 控件 (可能为 null), 与 `wA` 的区别是 `findOnce(index)` 返回筛选所见的控件, 不做命中刷新, 也不受 [prefer](#m-prefer) 影响.<br>
 `wC` 表示第 5 个符合筛选条件的控件 (可能为 null).
 
 ## [m#] exists
@@ -5140,7 +5273,7 @@ let wC = sel.findOnce(4);
 
 根据选择器条件判断是否存在满足筛选条件的控件.
 
-相当于 `UiSelector#findOnce() !== null`.
+相当于 `UiSelector#findOnce(0) !== null`: 返回筛选所见的结果, 不做 [命中刷新](#findonce). 刚离开窗口的控件, 在无障碍服务的节点缓存更新之前仍视为存在.
 
 ## [m#] find
 
@@ -5165,6 +5298,8 @@ wc.forEach(w => console.log(w.centerY()));
 ```
 
 上述示例中, `wc` 表示符合筛选条件的控件集合.
+
+`find()` 返回筛选所见的全部控件, 不做 [命中刷新](#findonce), 也不受 [prefer](#m-prefer) 影响.
 
 ### find(max)
 
@@ -5262,8 +5397,13 @@ console.log(w.centerY());
 上述示例中, `w` 表示 3 秒内符合筛选条件的首个控件, 超时则为 null.
 
 > 注: `timeout` 为 0 或负数时不限时, 与 [untilFindOne](#m-untilfindone) 相同, 可能导致脚本 **永久阻塞**.<br>
-> 轮询间隔为 50 毫秒; 启用 [eventAssistedPolling](automator#m-setflags) 标志后, 两次尝试之间改为由无障碍事件唤醒.<br>
 > 不阻塞的异步形式见 [waitAsync](flow#m-wait) / [流程 (Flow)](flow).
+
+筛选过程 (**`6.8.0`**):
+
+- 两次尝试之间默认由界面变化的无障碍事件唤醒, 相邻两次尝试至少间隔 50 毫秒, 界面静止时至多 200 毫秒检查一次. `auto.setFlags(['!eventAssistedPolling'])` 或 `auto.clearFlags('eventAssistedPolling')` 恢复固定 50 毫秒间隔的轮询 (参阅 [eventAssistedPolling](automator#m-setflags)).
+- 选择器含精确 id 条件时, 中间的尝试先经系统按 id 查找判断控件是否已出现, 不必每次遍历整个控件树; 首次与最后一次尝试, 以及至少每秒一次的校验仍完整遍历, 结果与完整遍历相同. 在按 id 查找比遍历更耗时的界面上自动改为遍历. `auto.setFlags(['noFastPath'])` 可关闭 (参阅 [noFastPath](automator#m-setflags)).
+- 命中后先刷新控件, 控件已离开窗口时在剩余时限内继续筛选 (参阅 [findOnce()](#findonce) 的命中刷新).
 
 ### findOne()
 
@@ -5310,6 +5450,8 @@ console.log(w.centerY());
 - 集合结果 - [ × ]
 
 此方法相当于 `UiSelector#findOne(-1)`.
+
+命中后先刷新控件 (**`6.8.0`**), 控件已离开窗口时继续筛选, 直到得到一个可以刷新的控件 (参阅 [findOne(timeout)](#findonetimeout) 的筛选过程).
 
 ```js
 let sel = text('hello').boundsCenterY(0.3);
@@ -6048,7 +6190,10 @@ console.log(selA); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
 
 - `pickup` 已全局化, 支持全局使用.
 - `pickup` 支持 [UiObject](uiObjectType) 类型参数, 但只是将其作为根节点进行控件筛选, 而不能对其进行罗盘导航及结果筛选等操作.
-- `pickup` 的内部实现引用了 [detect](uiObjectType#m-detect) 方法.
+- `pickup` 筛选出控件之后的罗盘定位, 结果筛选与回调处理, 与 [detect](uiObjectType#m-detect) 相同.
+- 参数检查 (**`6.8.0`**): 选择器, 罗盘, 结果与回调参数在筛选控件之前全部检查完毕, 错误消息指明函数名与参数名. [结果参数](dataTypes#pickupresult) 只能调用 [可调用方法](dataTypes#uiobjectinvokable) 列出的控件方法, 未知名称抛出 RangeError 并列出至多 5 个相近名称.
+- 单个控件的结果 (缺省结果, 文本内容, 点, 参化调用等) 取自 [findOnce()](#findonce): 返回前先刷新命中的控件, 控件已离开窗口时重新筛选 (**`6.8.0`**, 参阅 [命中刷新](#findonce)); 设置了 [prefer](#m-prefer) 时取按偏好排序后的最优控件. 集合与数组结果取自 [find()](#m-find).
+- 选择器的筛选过程, 罗盘每一步到达的控件与结果参数解析到的方法, 可用 [auto.explain](automator#m-explain) 查看.
 
 ### pickup()
 

@@ -2507,7 +2507,9 @@ UiObject.ensureCompass('world'); /* 抛出异常. */
 - `detect` 已全局化, 支持全局使用.
 - `detect` 的首个参数固定为 [UiObject](uiObjectType) 类型.
 - [compass](#m-compass) 是 `detect` 的衍生方法.
-- [pickup](uiSelectorType#m-pickup) 的内部实现引用了 `detect` 方法.
+- [pickup](uiSelectorType#m-pickup) 与 `detect` 使用同一套参数检查, 罗盘定位, 结果筛选与回调处理: `pickup` 先筛选出控件, 其余过程与 `detect` 相同.
+- 参数检查 (**`6.8.0`**): 罗盘, 结果与回调参数在探测之前全部检查完毕, 错误消息指明函数名与参数名. [结果参数](dataTypes#detectresult) 只能调用 [可调用方法](dataTypes#uiobjectinvokable) 列出的控件方法, 未知名称抛出 RangeError 并列出至多 5 个相近名称; 集合与数组形式的结果参数 (如 `'{}'`, `'[]'`) 不适用于单个控件, 将抛出异常.
+- 罗盘每一步到达的控件与结果参数解析到的方法, 可用 [auto.explain](automator#m-explain) 查看.
 
 ### detect(w, compass)
 

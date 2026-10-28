@@ -1007,20 +1007,39 @@ auto.registerEvent('view_scrolled', e => console.log('滚动结束'), { debounce
 
 **`A11Y?`**
 
-- **flags** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 一个或多个标志名
+- **flags** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 一个或多个标志名, 名称前加 `!` 表示清除该标志 (**`6.8.0`**)
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-设置 automator 的特性标志. 每次调用以给出的标志集合替换之前的设置, 未知的标志名抛出异常.
+设置 automator 的特性标志. 每次调用以 "默认标志加上给出的标志, 再去掉以 `!` 开头的标志" 替换之前的设置; 未知的标志名, 或同一标志既设置又清除 (如 `[ 'noFastPath', '!noFastPath' ]`) 时抛出异常. 默认标志为 `eventAssistedPolling` (**`6.8.0`**), 因此 `setFlags` 不会因未给出它而关闭事件辅助轮询, 需要关闭时给出 `'!eventAssistedPolling'`.
 
 - `findOnUiThread` - 选择器搜索在主线程进行
 - `useUsageStats` - 以 "使用情况统计" 服务的结果确定当前应用包名 (需要授予 "查看使用情况统计" 权限). 如果 [currentPackage()](global#m-currentpackage) 的结果不准确, 可尝试此标志
 - `useShell` - 以 shell 命令获取当前应用的包名与活动名称 (需要 root 权限)
 - `appWindowsFallback` (**`6.8.0`**) - 系统暂未提供活动窗口根节点时 (如服务刚绑定后; API 26 上可能持续到下一次窗口变化), 以窗口列表中应用窗口的根节点代替 (焦点窗口优先, 其次活动窗口). 默认关闭, 此时查询返回空结果
-- `eventAssistedPolling` (**`6.8.0`**) - 重复的选择器查询 (如 [findOne(timeout)](uiSelectorType#m-findone), [wait](global#m-wait)), 节点等待 ([waitUntilGone](uiObjectType#m-waituntilgone) 等) 与 [Flow](flow) 等待在两次尝试之间休眠到无障碍事件到达为止, 而非固定间隔. 通常能更早发现目标并减少无效查询. 默认关闭
+- `eventAssistedPolling` (**`6.8.0`**) - 重复的选择器查询 (如 [findOne(timeout)](uiSelectorType#m-findone), [wait](global#m-wait)), 节点等待 ([waitUntilGone](uiObjectType#m-waituntilgone) 等) 与 [Flow](flow) 等待在两次尝试之间休眠到界面变化的无障碍事件到达为止, 而非固定间隔: 相邻两次尝试至少间隔 50 毫秒, 界面静止时至多 200 毫秒检查一次. 通常能更早发现目标, 并在界面静止时明显降低 CPU 占用. 默认开启; 关闭后恢复固定 50 毫秒间隔的轮询
+- `noFastPath` (**`6.8.0`**) - 关闭轮询查询的框架快路径. 默认 (未设置此标志) 时, 选择器含精确 id 条件的轮询查询 ([findOne(timeout)](uiSelectorType#m-findone), [untilFindOne](uiSelectorType#m-untilfindone), [untilFind](uiSelectorType#m-untilfind), [waitFor](uiSelectorType#m-waitfor) 等) 中间的尝试先经系统按 id 查找判断控件是否已出现, 不必每次遍历整个控件树; 首次与最后一次尝试, 以及至少每秒一次的校验仍完整遍历, 某个应用的界面上出现查找为空而遍历找到控件的情况后, 该脚本对这个应用不再使用快路径. 在按 id 查找比遍历更耗时的界面上 (如 AutoJs6 自身的悬浮窗), 同一查询的其余尝试自动改为遍历. 返回的控件与完整遍历相同. 次数统计见 [auto.stats](#p-stats) 的 `fastPath`
+- `noRefreshOnHit` (**`6.8.0`**) - 关闭单个结果的命中刷新. 默认 (未设置此标志) 时, [findOnce()](uiSelectorType#findonce), [findOne(timeout)](uiSelectorType#m-findone), [untilFindOne()](uiSelectorType#m-untilfindone) 与 [pickup](uiSelectorType#m-pickup) 的单个控件结果在返回前刷新命中的控件, 控件已离开窗口时重新筛选: 有时限的查询最多 2 次, 仍失败按未找到处理; 无时限的查询持续筛选, 直到得到可以刷新的控件. 刷新失败后立即重新筛选, 不等待界面事件. [find()](uiSelectorType#m-find), [findOnce(index)](uiSelectorType#findonceindex) 与 [exists()](uiSelectorType#m-exists) 不刷新. 重新筛选的次数见 [auto.stats](#p-stats) 的 `queries.refinds`
 
 ```js
-auto.setFlags([ 'findOnUiThread', 'useShell' ]);
-auto.setFlags('eventAssistedPolling');
+auto.setFlags([ 'findOnUiThread', 'useShell' ]); /* 事件辅助轮询仍为开启. */
+auto.setFlags('noFastPath'); /* 关闭快路径, 其余标志恢复为默认. */
+auto.setFlags([ '!eventAssistedPolling', 'noRefreshOnHit' ]); /* 恢复 6.8.0 之前的轮询与单个结果. */
+```
+
+## [m] clearFlags
+
+### clearFlags(flags)
+
+**`6.8.0`** **`A11Y?`**
+
+- **flags** { [string](dataTypes#string) \| [string](dataTypes#string)[] } - 一个或多个标志名
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+清除给出的标志, 其余标志保持不变. 标志名同 [setFlags](#m-setflags) (不带 `!` 前缀), 未知的标志名抛出异常.
+
+```js
+auto.clearFlags('eventAssistedPolling'); /* 恢复固定间隔轮询, 其他标志不变. */
+auto.clearFlags([ 'noFastPath', 'noRefreshOnHit' ]);
 ```
 
 ## auto.service
@@ -1200,12 +1219,14 @@ auto.wait('登录', 5e3).click();
 
 ## [m] explain
 
-### explain(selector, root?)
+### explain(selector, root?, compass?, result?)
 
 **`6.8.0`** **`A11Y`**
 
 - **selector** { [UiSelector](uiSelectorType) \| [PickupSelector](dataTypes#pickupselector) } - 待解释的选择器
 - **[ root ]** { [UiObject](uiObjectType) } - 遍历的根节点, 默认为各窗口根节点
+- **[ compass ]** { [DetectCompass](dataTypes#detectcompass) } - 罗盘参数
+- **[ result ]** { [PickupResult](dataTypes#pickupresult) } - 结果参数
 - <ins>**returns**</ins> {{
     - selector: [string](dataTypes#string)
     - roots: [number](dataTypes#number)
@@ -1218,10 +1239,34 @@ auto.wait('登录', 5e3).click();
     - steps: { index: [number](dataTypes#number), filter: [string](dataTypes#string), matched: [number](dataTypes#number), cumulative: [number](dataTypes#number) }[]
     - matches: [UiObject](uiObjectType)[]
     - nearMisses: [UiObject](uiObjectType)[]
+    - target: [UiObject](uiObjectType) \| [null](dataTypes#null)
+    - targetIndex: [number](dataTypes#number)
+    - preference: [string](dataTypes#string) \| [null](dataTypes#null)
+    - compass: [string](dataTypes#string) \| [null](dataTypes#null)
+    - compassError: [string](dataTypes#string) \| [null](dataTypes#null)
+    - trail: { step: [string](dataTypes#string), node: [UiObject](uiObjectType) \| [null](dataTypes#null) }[]
+    - reached: [UiObject](uiObjectType) \| [null](dataTypes#null)
+    - result: { given: [string](dataTypes#string), kind: [string](dataTypes#string), detail: [string](dataTypes#string) } \| [null](dataTypes#null)
+    - fastPath: [string](dataTypes#string) \| [null](dataTypes#null)
+    - fastPathEnabled: [boolean](dataTypes#boolean)
+    - refreshOnHit: [boolean](dataTypes#boolean)
+    - refreshes: [boolean](dataTypes#boolean) \| [null](dataTypes#null)
+    - normalize: [string](dataTypes#string) \| [null](dataTypes#null)
     - text: [string](dataTypes#string)
 - }} - 解释结果
 
 解释一个选择器为何匹配或不匹配: 遍历根节点之下的全部节点 (`nodes` 为节点数, `roots` 为根节点数, 超出预算时 `truncated` 为 `true`), 对选择器的每个过滤器分别统计单独匹配数 (`matched`) 与逐步叠加后的匹配数 (`cumulative`), 找出首个把候选集合清空的过滤器 (`failingIndex` 从 0 计, `-1` 表示没有; `failingFilter` 为其文本), 并给出前若干个匹配节点 (`matches`) 与 "差一点" 的节点 (`nearMisses`: 通过失败步骤之前全部过滤器的节点).
+
+`selector` 之后的参数按 [pickup](uiSelectorType#m-pickup) 的方式区分: 第二个参数是 [UiObject](uiObjectType) 时为根节点 (给出四个参数时, 第二个参数须为 UiObject 或空值); 其后只给出一个参数时, 符合罗盘写法即为罗盘参数, 否则为结果参数. 罗盘或结果参数有误时不抛出异常, 而是写进报告.
+
+除逐个过滤器的计数外, 结果还说明单个结果 (即 `findOnce()` 与 `pickup` 的单个控件) 经历的过程 (**`6.8.0`**):
+
+- `target` - 单个结果取的控件; `targetIndex` 为它在按找到顺序排列的匹配中的索引 (从 0 计, 没有时为 `-1`); `preference` 为生效的 [prefer](uiSelectorType#m-prefer) 设置, 设置后单个结果为按偏好排序后的最优控件
+- `compass` / `compassError` - 给出的罗盘参数与其无法解析的原因; `trail` 为从 `target` 起罗盘每一步 (`step`, 罗盘写法) 到达的控件 (`node`), 直到首个没有到达控件的一步; `reached` 为罗盘的终点控件 (没有罗盘时即 `target`)
+- `result` - 结果参数的解析: `given` 为给出的结果参数 (未给出时为缺省的 `"widget"`), `kind` 为 `symbol` (结果类型符号), `arrayForm` (数组形式), `method` (调用的控件方法), `empty`, `nothing` 或 `refused` (被拒绝), `detail` 为说明, 如对应的方法签名与参数转换. 只解析, 不调用该方法; 未给出结果参数时 `result` 为 null
+- `fastPath` - 选择器的快路径键 (精确 id 条件), 没有时为 null; `fastPathEnabled` 为快路径是否开启 (未设置 [noFastPath](#m-setflags))
+- `refreshOnHit` - 命中刷新是否开启 (未设置 [noRefreshOnHit](#m-setflags)); `refreshes` 为 `target` 此刻能否刷新 (`false` 表示它已离开窗口, 单结果查询将重新筛选), 没有 `target` 或命中刷新关闭时为 null
+- `normalize` - 生效的 [normalize](uiSelectorType#m-normalize) 设置, 没有时为 null
 
 `text` (也是结果的 `toString()`) 为文本报告, 适合直接输出到控制台.
 
@@ -1240,7 +1285,14 @@ near misses (pass step 1, fail step 2):
 
 /* 字符串或对象选择器同样可用. */
 console.log(auto.explain({ text: '登录', clickable: true }).text);
+
+/* 单个结果, 罗盘与结果参数. */
+let e = auto.explain(text('登录'), 'p2c0', [ 'setText', 'hi' ]);
+console.log(e.trail.map(hop => hop.step + ' -> ' + (hop.node ? hop.node.className() : 'null')));
+console.log(e.result.kind); /* method */
 ```
+
+> 参阅: 示例代码 > 无障碍服务 > 选择器诊断与节点树导出.
 
 ## [m] dump
 
@@ -1284,7 +1336,8 @@ console.log(auto.dump({ root: id('list').findOnce(), maxDepth: 3, properties: [ 
     - now: [number](dataTypes#number)
     - elapsed: [number](dataTypes#number)
     - searches: { count: [number](dataTypes#number), totalMillis: [number](dataTypes#number), averageMillis: [number](dataTypes#number), maxMillis: [number](dataTypes#number) }
-    - queries: { count: [number](dataTypes#number), found: [number](dataTypes#number), missed: [number](dataTypes#number), attempts: [number](dataTypes#number), totalMillis: [number](dataTypes#number), averageMillis: [number](dataTypes#number), maxMillis: [number](dataTypes#number) }
+    - queries: { count: [number](dataTypes#number), found: [number](dataTypes#number), missed: [number](dataTypes#number), attempts: [number](dataTypes#number), refinds: [number](dataTypes#number), totalMillis: [number](dataTypes#number), averageMillis: [number](dataTypes#number), maxMillis: [number](dataTypes#number) }
+    - fastPath: { hits: [number](dataTypes#number), misses: [number](dataTypes#number), fallbacks: [number](dataTypes#number), mismatches: [number](dataTypes#number), walks: [number](dataTypes#number) }
     - selectors: { selector: [string](dataTypes#string), searches: [Object](dataTypes#object), queries: [Object](dataTypes#object), found: [number](dataTypes#number) }[]
     - slowest: [Object](dataTypes#object) \| [null](dataTypes#null)
     - steps: { name: [string](dataTypes#string), runs: [Object](dataTypes#object), rejected: [number](dataTypes#number) }[]
@@ -1295,7 +1348,8 @@ console.log(auto.dump({ root: id('list').findOnce(), maxDepth: 3, properties: [ 
 当前脚本的选择器与 Flow 统计快照 (每次读取生成新对象):
 
 - `searches` - 单次搜索 (一次控件树遍历) 的次数与耗时统计
-- `queries` - 查询 (一次 `findOne(timeout)` / `wait` 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计
+- `queries` - 查询 (一次 `findOne(timeout)` / `wait` 等可能包含多次搜索的调用) 的次数, 命中与未命中数, 总尝试次数与耗时统计; `refinds` 为单个结果因命中的控件已离开窗口而重新筛选的次数 (**`6.8.0`**, 参阅 [noRefreshOnHit](#m-setflags))
+- `fastPath` - 轮询查询的框架快路径 (**`6.8.0`**, 参阅 [noFastPath](#m-setflags)) 的尝试次数: `hits` 由按 id 查找得到的唯一候选直接作答, `misses` 由查找为空判定未找到, `fallbacks` 有 id 条件但仍完整遍历 (多个候选, 首次与最后一次尝试, 校验), `mismatches` 查找为空而完整遍历找到了控件 (应为 0), `walks` 不查找而直接遍历 (每个校验周期一次的测量遍历, 以及查找比遍历更耗时而改为遍历的尝试). 文本报告在有计数时多一行 `fast path: ...`
 - `selectors` - 按最大搜索耗时降序的选择器列表, `slowest` 为其首项
 - `steps` - Flow 步骤按名称的运行次数 (`runs`, 含耗时统计) 与拒绝次数
 - `text` (也是 `toString()`) - 文本报告; `reset()` 清零统计
@@ -1306,7 +1360,8 @@ console.log(auto.stats.text);
 /*
 a11y stats since 10:21:05, elapsed 32.4 s
 searches: 128, total 1840 ms, average 14.4 ms, max 96 ms
-queries: 12 (found 11, missed 1, attempts 57), total 1602 ms, average 133.5 ms, max 512 ms
+queries: 12 (found 11, missed 1, attempts 57, refinds 1), total 1602 ms, average 133.5 ms, max 512 ms
+fast path: hits 3, misses 30, fallbacks 14, mismatches 0, walks 6
 slowest selectors (by max search time):
   1. text("登录").clickable()  searches 40, total 820 ms, average 20.5 ms, max 96 ms; queries 3, found 3
 flow steps (by total time):

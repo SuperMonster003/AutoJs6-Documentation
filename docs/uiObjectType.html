@@ -2755,7 +2755,9 @@ UiObject.ensureCompass(&#39;world&#39;); /* 抛出异常. */
 <li><code>detect</code> 已全局化, 支持全局使用.</li>
 <li><code>detect</code> 的首个参数固定为 <a href="uiObjectType.html">UiObject</a> 类型.</li>
 <li><a href="#uiobjecttype_m_compass">compass</a> 是 <code>detect</code> 的衍生方法.</li>
-<li><a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 的内部实现引用了 <code>detect</code> 方法.</li>
+<li><a href="uiSelectorType.html#uiselectortype_m_pickup">pickup</a> 与 <code>detect</code> 使用同一套参数检查, 罗盘定位, 结果筛选与回调处理: <code>pickup</code> 先筛选出控件, 其余过程与 <code>detect</code> 相同.</li>
+<li>参数检查 (<strong><code>6.8.0</code></strong>): 罗盘, 结果与回调参数在探测之前全部检查完毕, 错误消息指明函数名与参数名. <a href="dataTypes.html#datatypes_detectresult">结果参数</a> 只能调用 <a href="dataTypes.html#datatypes_uiobjectinvokable">可调用方法</a> 列出的控件方法, 未知名称抛出 RangeError 并列出至多 5 个相近名称; 集合与数组形式的结果参数 (如 <code>&#39;{}&#39;</code>, <code>&#39;[]&#39;</code>) 不适用于单个控件, 将抛出异常.</li>
+<li>罗盘每一步到达的控件与结果参数解析到的方法, 可用 <a href="automator.html#automator_m_explain">auto.explain</a> 查看.</li>
 </ul>
 <h3>detect(w, compass)<span><a class="mark" href="#uiobjecttype_detect_w_compass" id="uiobjecttype_detect_w_compass">#</a></span></h3>
 <p><strong><code>6.2.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/7</code></strong> <strong><code>A11Y</code></strong></p>

@@ -2832,7 +2832,7 @@
         {
           "textRaw": "[m] detect",
           "name": "[m]_detect",
-          "desc": "<p>控件探测.</p>\n<p>探测相当于对控件进行一系列组合操作 (罗盘定位, 结果筛选, 参化调用, 回调处理).</p>\n<p>部分特性:</p>\n<ul>\n<li><code>detect</code> 已全局化, 支持全局使用.</li>\n<li><code>detect</code> 的首个参数固定为 <a href=\"uiObjectType\">UiObject</a> 类型.</li>\n<li><a href=\"#m-compass\">compass</a> 是 <code>detect</code> 的衍生方法.</li>\n<li><a href=\"uiSelectorType#m-pickup\">pickup</a> 的内部实现引用了 <code>detect</code> 方法.</li>\n</ul>\n",
+          "desc": "<p>控件探测.</p>\n<p>探测相当于对控件进行一系列组合操作 (罗盘定位, 结果筛选, 参化调用, 回调处理).</p>\n<p>部分特性:</p>\n<ul>\n<li><code>detect</code> 已全局化, 支持全局使用.</li>\n<li><code>detect</code> 的首个参数固定为 <a href=\"uiObjectType\">UiObject</a> 类型.</li>\n<li><a href=\"#m-compass\">compass</a> 是 <code>detect</code> 的衍生方法.</li>\n<li><a href=\"uiSelectorType#m-pickup\">pickup</a> 与 <code>detect</code> 使用同一套参数检查, 罗盘定位, 结果筛选与回调处理: <code>pickup</code> 先筛选出控件, 其余过程与 <code>detect</code> 相同.</li>\n<li>参数检查 (<strong><code>6.8.0</code></strong>): 罗盘, 结果与回调参数在探测之前全部检查完毕, 错误消息指明函数名与参数名. <a href=\"dataTypes#detectresult\">结果参数</a> 只能调用 <a href=\"dataTypes#uiobjectinvokable\">可调用方法</a> 列出的控件方法, 未知名称抛出 RangeError 并列出至多 5 个相近名称; 集合与数组形式的结果参数 (如 <code>&#39;{}&#39;</code>, <code>&#39;[]&#39;</code>) 不适用于单个控件, 将抛出异常.</li>\n<li>罗盘每一步到达的控件与结果参数解析到的方法, 可用 <a href=\"automator#m-explain\">auto.explain</a> 查看.</li>\n</ul>\n",
           "methods": [
             {
               "textRaw": "detect(w, compass)",

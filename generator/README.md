@@ -140,7 +140,12 @@ AutoJs6-Plugin-Offline-Docs/version.properties:
 `begin` 后面是一个或多个模块根名, 与宿主文档门禁按模块查找页面的规则相同:
 显式导出取其所在模块的第一段 (`files.batchRename.apply` -> `files`),
 全局对象上的成员取其所属模块 (`captureScreen` -> `images`), 其余为 `global`.
-返回对象的成员 (`ImageWrapper#getWidth` 一类) 不在模块页的表中.
+以 Java 对象为原型的模块 (如 `files`) 的原型成员 (`files.isFile` 一类) 与显式导出一样计入该模块.
+
+返回对象的成员 (`ImageWrapper#getWidth` 一类) 归入对象的第一个文档页 (宿主
+`tools/api-coverage/returned-objects.json` 的 `documentation`). 对象有独立类型页时,
+该页的标记块写对象名加 `#` (`<!-- runtime-support:begin ImageWrapper# -->`), 表格与模块页相同;
+第一页是模块页时, 该页标记块内另起 "返回对象" 小表, 每个对象一行, 各列给出成员的状态计数.
 
 ```powershell
 # 按矩阵改写全部标记块.

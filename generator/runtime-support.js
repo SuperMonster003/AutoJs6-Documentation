@@ -15,7 +15,13 @@
 // belongs to the root of its placement module, or of its owner module for a member of
 // the global object (`captureScreen` -> images), "global" for the rest. This is the
 // same root the host documentation gate (tools/api-coverage/check.py) searches pages by.
-// Members of returned objects (`<Object>#<member>` rows) are not shown (roadmap Q20).
+// Members of a module's Java prototype (`files.isFile`, roadmap Q18) count as its exports.
+//
+// Members of returned objects (`<Object>#<member>` rows, roadmap Q20) belong to the
+// object's first documentation page (the row's `page`). A type page names the object
+// with a trailing "#" (`<!-- runtime-support:begin ImageWrapper# -->`) and shows its
+// members like a module; a module page lists the objects documented on it in a
+// "返回对象" table, one line each.
 //
 // Usage:
 //   node generator/runtime-support.js                  rewrite every block
@@ -31,7 +37,7 @@ const fs = require('fs');
 const path = require('path');
 
 const SCHEMA = 'autojs6-runtime-matrix-v1';
-const BEGIN = /^<!-- runtime-support:begin((?: [\w$.]+)*) -->$/;
+const BEGIN = /^<!-- runtime-support:begin((?: [\w$.]+#?)*) -->$/;
 const END = '<!-- runtime-support:end -->';
 const MARKER = /<!-- runtime-support:/;
 const SOURCE_NOTE = /^<!-- 本段由 generator\/runtime-support\.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 (\S+) -->$/;
@@ -63,7 +69,29 @@ function rowRoot(row) {
 }
 
 function exportRows(matrix) {
-    return matrix.rows.filter(row => row.kind === 'export');
+    return matrix.rows.filter(row => row.kind === 'export' || row.kind === 'prototype-member');
+}
+
+function objectRows(matrix) {
+    return matrix.rows.filter(row => row.kind === 'returned-member');
+}
+
+// Rows a block shows: the exports of its module roots and the members of its `<Object>#` roots.
+function blockRows(matrix, roots) {
+    const objects = roots.filter(root => root.endsWith('#'));
+    return exportRows(matrix).filter(row => roots.includes(rowRoot(row)))
+        .concat(objectRows(matrix).filter(row => objects.includes(row.object + '#')));
+}
+
+// Returned objects documented on a module page and not shown by a root of its own: [[object, rows]].
+function pageObjects(matrix, roots, page) {
+    const objects = new Map();
+    if (!page || !roots.some(root => !root.endsWith('#'))) return [];
+    objectRows(matrix).filter(row => row.page === page && !roots.includes(row.object + '#')).forEach(row => {
+        if (!objects.has(row.object)) objects.set(row.object, []);
+        objects.get(row.object).push(row);
+    });
+    return [...objects].sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0));
 }
 
 function code(text) {
@@ -164,10 +192,22 @@ function countsText(rows, column, defaults) {
 
 function rhinoEntry(rows) {
     const modules = counted(rows.filter(row => row.module).map(row => row.module)).map(([name]) => name).sort();
-    const globals = rows.filter(row => !row.module).length;
-    const parts = modules.map(code);
+    const objects = counted(rows.filter(row => row.object).map(row => row.object)).map(([name]) => name).sort();
+    const globals = rows.filter(row => !row.module && !row.object).length;
+    const parts = modules.map(code).concat(objects.map(name => `${code(name)} 对象`));
     if (globals) parts.push(`全局 ${globals} 项`);
     return parts.join(', ');
+}
+
+// One line per object: like the 状态 row of the upper table, so a column of Java object members
+// that are all "不适用 (需要 Java 对象)" reads as one cell (roadmap Q20 / Q21).
+function objectLines(objects) {
+    return objects.map(([object, rows]) => {
+        const defaults = {};
+        COLUMNS.forEach(column => { defaults[column] = columnDefault(rows, column); });
+        const cells = ['rhino'].concat(COLUMNS).map(column => countsText(rows, column, defaults));
+        return `| ${code(object)} (${rows.length} 项) | ${cells.join(' | ')} |`;
+    });
 }
 
 function runtimeEntry(rows, column) {
@@ -210,8 +250,8 @@ function differenceLines(rows, defaults) {
     });
 }
 
-function renderBlock(matrix, roots) {
-    const rows = exportRows(matrix).filter(row => roots.includes(rowRoot(row)));
+function renderBlock(matrix, roots, page) {
+    const rows = blockRows(matrix, roots);
     const kind = (matrix.dataSource && matrix.dataSource.kind) || 'kotlin';
     const defaults = {};
     COLUMNS.forEach(column => { defaults[column] = columnDefault(rows, column); });
@@ -235,8 +275,15 @@ function renderBlock(matrix, roots) {
     } else {
         out.push('各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.', '');
     }
+    const objects = pageObjects(matrix, roots, page);
+    if (objects.length) {
+        out.push(`返回对象 (${objects.length} 个): 本页说明的对象的成员状态, 每个对象一行.`);
+        out.push('', '| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |', '| --- | --- | --- | --- | --- |');
+        out.push(...objectLines(objects), '');
+    }
     out.push('Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).', '', END);
-    return { text: out.join('\n'), rows: rows.length, differences: lines.length };
+    const objectRowCount = objects.reduce((sum, [, members]) => sum + members.length, 0);
+    return { text: out.join('\n'), rows: rows.length, differences: lines.length, objects: objects.length, objectRows: objectRowCount };
 }
 
 // Marker blocks of a page: [{ start, end, roots, lines }] by line index, or a problem.
@@ -279,8 +326,8 @@ function insertBlock(text, roots) {
     return lines.join('\n');
 }
 
-// Returns { text, status: 'current' | 'stale' | 'skipped' | 'none', ... } for one page.
-function updatePage(text, matrix, knownRoots) {
+// Returns { text, status: 'current' | 'stale' | 'skipped' | 'none', ... } for one page (`page`: its name, as `image`).
+function updatePage(text, matrix, knownRoots, page) {
     const lf = text.replace(/\r\n/g, '\n');
     const lines = lf.split('\n');
     const found = findBlocks(lines);
@@ -289,10 +336,10 @@ function updatePage(text, matrix, knownRoots) {
     const block = found.blocks[0];
     const unknown = block.roots.filter(root => !knownRoots.has(root));
     if (unknown.length) return { status: 'problem', problem: `unknown module root: ${unknown.join(', ')}`, roots: block.roots };
-    const rendered = renderBlock(matrix, block.roots);
+    const rendered = renderBlock(matrix, block.roots, page);
     const actual = lines.slice(block.start, block.end + 1).join('\n');
     const updated = lines.slice(0, block.start).concat(rendered.text.split('\n'), lines.slice(block.end + 1)).join('\n');
-    const result = { roots: block.roots, rows: rendered.rows, differences: rendered.differences, text: updated, line: block.start + 1 };
+    const result = { roots: block.roots, rows: rendered.rows, differences: rendered.differences, objectRows: rendered.objectRows, text: updated, line: block.start + 1 };
     if (actual === rendered.text) return Object.assign(result, { status: 'current' });
     const note = lines[block.start + 1] && lines[block.start + 1].match(SOURCE_NOTE);
     const kind = (matrix.dataSource && matrix.dataSource.kind) || 'kotlin';
@@ -343,7 +390,8 @@ function run(args) {
     const matrixPath = path.resolve(args.matrix || path.join(args.host || defaultHost(generatorDir), 'build', 'reports', 'api-coverage', 'runtime-matrix.json'));
     const matrix = readJson(matrixPath);
     if (matrix.schema !== SCHEMA) throw new Error(`${matrixPath}: schema ${matrix.schema}, expected ${SCHEMA}`);
-    const knownRoots = new Set(exportRows(matrix).map(rowRoot));
+    const moduleRoots = new Set(exportRows(matrix).map(rowRoot));
+    const knownRoots = new Set([...moduleRoots, ...objectRows(matrix).map(row => row.object + '#')]);
     const summary = { matrix: matrixPath, dataSource: (matrix.dataSource && matrix.dataSource.kind) || 'kotlin', mode: args.check ? 'check' : 'write', pages: [], problems: [], uncovered: [] };
     const covered = new Set();
     const inserts = new Map(args.insert.map(item => [item.page, item.roots]));
@@ -357,10 +405,10 @@ function run(args) {
         const found = findBlocks(text.replace(/\r\n/g, '\n').split('\n'));
         const inserted = inserts.has(page) && found.blocks && !found.blocks.length;
         if (inserted) text = insertBlock(text.replace(/\r\n/g, '\n'), inserts.get(page));
-        const result = updatePage(text, matrix, knownRoots);
+        const result = updatePage(text, matrix, knownRoots, page);
         if (result.status === 'none') return;
         (result.roots || []).forEach(root => covered.add(root));
-        const entry = { page: `api/${name}`, status: result.status, roots: result.roots, rows: result.rows, differences: result.differences, line: result.line };
+        const entry = { page: `api/${name}`, status: result.status, roots: result.roots, rows: result.rows, differences: result.differences, objectRows: result.objectRows, line: result.line };
         if (result.status === 'problem') {
             summary.problems.push(`api/${name}: ${result.problem}`);
         } else if (!args.check && result.status !== 'current') {
@@ -371,7 +419,7 @@ function run(args) {
         }
         summary.pages.push(entry);
     });
-    summary.uncovered = [...knownRoots].filter(root => !covered.has(root)).sort();
+    summary.uncovered = [...moduleRoots].filter(root => !covered.has(root)).sort();
     if (args.requireAll && summary.uncovered.length) {
         summary.problems.push(`module roots without a runtime-support block: ${summary.uncovered.join(', ')}`);
     }

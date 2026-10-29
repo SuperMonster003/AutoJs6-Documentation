@@ -308,6 +308,15 @@
 <li><span class="stability_undefined"><a href="#composenodetype_p_parent">[p#] parent</a></span></li>
 <li><span class="stability_undefined"><a href="#composenodetype_p_children">[p#] children</a></span></li>
 <li><span class="stability_undefined"><a href="#composenodetype">组件属性</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_1">快捷属性访问器</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_w">[p#] w</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_h">[p#] h</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_padding">[p#] padding</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_bg">[p#] bg</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_weight">[p#] weight</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_alpha">[p#] alpha</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_testtag">[p#] testTag</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_p_contentdescription">[p#] contentDescription</a></span></li>
 <li><span class="stability_undefined"><a href="#composenodetype_m_set">[m#] set</a></span><ul>
 <li><span class="stability_undefined"><a href="#composenodetype_node_set_props">node.set(props)</a></span></li>
 </ul>
@@ -316,7 +325,7 @@
 <li><span class="stability_undefined"><a href="#composenodetype_node_get_name">node.get(name)</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#composenodetype_1">子节点输入</a></span></li>
+<li><span class="stability_undefined"><a href="#composenodetype_2">子节点输入</a></span></li>
 <li><span class="stability_undefined"><a href="#composenodetype_m_append">[m#] append</a></span><ul>
 <li><span class="stability_undefined"><a href="#composenodetype_node_append_child">node.append(child)</a></span></li>
 </ul>
@@ -378,6 +387,38 @@
 
         <div id="apicontent">
             <h1>Compose 节点 (ComposeNode)<span><a class="mark" href="#composenodetype_compose_composenode" id="composenodetype_compose_composenode">#</a></span></h1>
+<!-- runtime-support:begin ComposeNode# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>ComposeNode</code> 对象</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 8 项</td>
+<td>待补 8 项</td>
+<td>待补 8 项</td>
+<td>待补 8 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p>ComposeNode 是 <a href="compose.html#compose_5">组件工厂</a> 或 <a href="compose.html#compose_m_createelement">compose.createElement</a> 返回的脚本句柄, 不能直接用 <code>new</code> 创建. 节点可以先创建和组装, 再交给 <code>compose.mount</code>, <code>compose.attach</code>, <code>compose.floaty</code> 或 <code>compose.dialog</code> 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.</p>
 <p>所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 <a href="compose.html#compose_m_post">compose.post</a> 或所属会话的 <code>post</code>. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.</p>
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeNode</p>
@@ -424,6 +465,53 @@ console.log(title.get(&#39;text&#39;));
 <p><code>Image.src</code> 读取为底层 Android Bitmap 引用, 不返回最初的文件路径或新建 ImageWrapper. 调用方图片的有效期应覆盖所有原生使用, 参阅 <a href="composeComponents.html#composecomponents_composeimageinput">组件图像输入</a> 与 <a href="composeSessionType.html#composesessiontype_m_close">关闭清理边界</a>.</p>
 <p>F2 <a href="composeComponents.html#composecomponents_androidview">AndroidView</a> 的 <code>view</code> 读取为准备后的实际 Android View, 即使创建时传入的是工厂也不返回该函数. 可用 <code>node.set({view: anotherView})</code> 或直接赋值更新, 输入仍须符合 <a href="composeComponents.html#composecomponents_composeviewinput">ComposeViewInput</a>. 节点句柄与被借用的 View 是不同对象; 不将 ComposeNode 传给 <code>ui.setContentView</code>, <code>addView</code> 或 AndroidView 的 <code>view</code> 属性.</p>
 <p>事件属性, <code>ref</code> 和具名插槽通过创建选项或 <code>set</code> 设置; 它们没有普通属性访问器. 例如使用 <code>node.set({onClick: fn})</code> 或 <code>node.on(&#39;click&#39;, fn)</code>, 不使用 <code>node.onClick = fn</code>.</p>
+<h2>快捷属性访问器<span><a class="mark" href="#composenodetype_1" id="composenodetype_1">#</a></span></h2>
+<p>所有节点都有下列 8 个 <a href="composeModifierType.html#composemodifiertype_1">快捷属性</a> 访问器, 读写方式与组件属性相同 (也可作为创建选项或 <code>set</code> 的字段). 读取返回归一化的值, 未设置时为 <code>undefined</code>; 写入时按固定顺序展开为修饰操作, 在显式 <code>modifier</code> 链之前执行.</p>
+<pre><code class="lang-js">let box = compose.Box({w: 120, h: 48});
+box.bg = &#39;#E8DEF8&#39;;
+box.padding = [8, 4];
+console.log(box.w); /* 120 */
+</code></pre>
+<h2>[p#] w<span><a class="mark" href="#composenodetype_p_w" id="composenodetype_p_w">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>宽度, 等价于修饰操作 <code>width(value)</code>; 写入接受 <a href="composeComponents.html#composecomponents_composedpinput">ComposeDpInput</a> (非负).</p>
+<h2>[p#] h<span><a class="mark" href="#composenodetype_p_h" id="composenodetype_p_h">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>高度, 等价于 <code>height(value)</code>; 写入接受 <a href="composeComponents.html#composecomponents_composedpinput">ComposeDpInput</a> (非负).</p>
+<h2>[p#] padding<span><a class="mark" href="#composenodetype_p_padding" id="composenodetype_p_padding">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_number">number</a><a href="dataTypes.html#datatypes_array">[]</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>留白, 等价于 <code>padding(...)</code>; 写入接受一个 dp 值, 或长度为 1 / 2 / 4 的 dp 数组.</p>
+<h2>[p#] bg<span><a class="mark" href="#composenodetype_p_bg" id="composenodetype_p_bg">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>背景色 (读取为 ARGB 整数), 等价于 <code>background(color)</code>; 写入接受 <a href="composeComponents.html#composecomponents_composecolorinput">ComposeColorInput</a>, 不接受 null.</p>
+<h2>[p#] weight<span><a class="mark" href="#composenodetype_p_weight" id="composenodetype_p_weight">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>Column / Row 中的权重, 等价于 <code>weight(value)</code>, 仍需 Column / Row 父作用域; 写入接受大于 0 的有限数.</p>
+<h2>[p#] alpha<span><a class="mark" href="#composenodetype_p_alpha" id="composenodetype_p_alpha">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>不透明度, 等价于 <code>alpha(value)</code>; 写入接受 0 到 1 的数.</p>
+<h2>[p#] testTag<span><a class="mark" href="#composenodetype_p_testtag" id="composenodetype_p_testtag">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>测试标签, 等价于 <code>testTag(value)</code>; 写入接受 <a href="dataTypes.html#datatypes_string">string</a>.</p>
+<h2>[p#] contentDescription<span><a class="mark" href="#composenodetype_p_contentdescription" id="composenodetype_p_contentdescription">#</a></span></h2>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+</div><p>无障碍描述, 等价于 <code>semantics(value)</code>; 写入接受 <a href="dataTypes.html#datatypes_string">string</a> 或 <a href="dataTypes.html#datatypes_null">null</a>.</p>
 <h2>[m#] set<span><a class="mark" href="#composenodetype_m_set" id="composenodetype_m_set">#</a></span></h2>
 <h3>node.set(props)<span><a class="mark" href="#composenodetype_node_set_props" id="composenodetype_node_set_props">#</a></span></h3>
 <div class="signature"><ul>
@@ -441,7 +529,7 @@ console.log(title.get(&#39;text&#39;));
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 归一化属性值或 <code>undefined</code>.</li>
 </ul>
 </div><p>与同名业务属性访问器一致. <code>type</code>, <code>key</code>, <code>nodeId</code>, <code>parent</code>, <code>children</code> 应通过直接属性读取; <code>get</code> 不用于读取事件函数, 插槽或 ref. 不支持的名称报 <code>UNKNOWN_PROP</code>.</p>
-<h2>子节点输入<span><a class="mark" href="#composenodetype_1" id="composenodetype_1">#</a></span></h2>
+<h2>子节点输入<span><a class="mark" href="#composenodetype_2" id="composenodetype_2">#</a></span></h2>
 <p>树方法接受一个节点, 一个字符串或以上内容的嵌套数组. 字符串自动成为 <code>Text</code> 节点; <code>null</code>, <code>undefined</code> 和 <code>false</code> 被忽略. 数字和 <code>true</code> 不会自动成为文字, 应显式使用 <code>String(value)</code>.</p>
 <p>是否允许子节点及其数量由父组件决定. 例如 <code>Text</code> 不接受子节点, 因此创建文本应使用 <code>compose.Text({text: &#39;Hello&#39;})</code>, 不能用 <code>compose.Text(&#39;Hello&#39;)</code> 替代.</p>
 <p>同一个节点不能在一棵树中同时出现两次. 同一会话内移动节点会从原父节点或插槽移除它; 循环引用, 重复句柄或跨会话移动会被拒绝.</p>

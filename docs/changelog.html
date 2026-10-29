@@ -327,6 +327,8 @@
             <h1>文档更新日志 (Changelog)<span><a class="mark" href="#changelog_changelog" id="changelog_changelog">#</a></span></h1>
 <h2>v6.8.0<span><a class="mark" href="#changelog_v6_8_0" id="changelog_v6_8_0">#</a></span></h2>
 <div class="signature"><ul>
+<li><p><code>更新</code> <a href="ocr.html">光学字符识别 (OCR)</a> 的识别结果 <a href="dataTypes.html#datatypes_ocrresult">OcrResult</a>: 补充 text 属性 (与 label 相同) 与 compareTo 方法 (按阅读顺序比较两个结果, 可用于排序), confidence 的类型改为 number (0 到 1); <a href="composeNodeType.html#composenodetype_1">Compose 节点 (ComposeNode)</a> 增加 &quot;快捷属性访问器&quot; 一节, 说明 w / h / padding / bg / weight / alpha / testTag / contentDescription 八个可读写的属性; <a href="compose.html">3-Block Compose (Compose)</a>, <a href="composeModifierType.html">ComposeModifier</a>, <a href="composeNodeType.html">ComposeNode</a>, <a href="ocr.html">OCR</a> 与 <a href="barcode.html">条码 (Barcode)</a> 页的运行时支持表加入 55 个组件函数, 20 个修饰符, 8 个快捷属性以及 OcrResult 与 WrappedBarcode 的成员</p>
+</li>
 <li><p><code>更新</code> <a href="runtimeApis.html#runtimeapis">运行时 API (Runtime APIs)</a> 的执行方式: Node.js 脚本与项目默认不限执行时长 (与 Rhino 脚本相同), project.json 的 node.timeoutMs 作为执行总预算 (从插件收到请求时计时, 含排队与工作区准备, 耗尽时报告 ERR_AUTOJS6_SCRIPT_TIMEOUT), 运行期间的输出逐段转发到控制台; WebView 等待一节同步改写</p>
 </li>
 <li><p><code>新增</code> <a href="runtimeApis.html#runtimeapis_41">运行时 API (Runtime APIs)</a> 的 &quot;运行时自有接口&quot; 一节: 按组列出 Node.js, Bun 与 QuickJS 运行时插件自带, 不对应宿主模块的入口 (Node.js 12 组 113 条: 宿主桥与宿主消息, 生命周期检查点, 能力快照, npm 与 package_manager, 本地插件, rhino 与 autojs6:compat, media_store, Worker 池 WorkerPool; Bun 客户端 12 条; QuickJS 的 console, print 与 scriptArgs), 每条写明签名, 用途, 所属运行时与最低插件版本; 另说明各运行时读取脚本参数的方式 (QuickJS 的 scriptArgs 只含脚本文件名, Node.js 与 Bun 用 process.argv, Rhino 用 engines.myEngine().execArgv)</p>

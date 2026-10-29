@@ -418,9 +418,14 @@
 <li><span class="stability_undefined"><a href="#datatypes_ocrmodename">OcrModeName</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_ocrmode">OcrMode</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_ocrresult">OcrResult</a></span><ul>
+<li><span class="stability_undefined"><a href="#datatypes_p_text">[p] text</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_p_label">[p] label</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_p_confidence">[p] confidence</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_p_bounds">[p] bounds</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_m_compareto">[m] compareTo</a></span><ul>
+<li><span class="stability_undefined"><a href="#datatypes_compareto_other">compareTo(other)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#datatypes_m_tostring">[m] toString</a></span><ul>
 <li><span class="stability_undefined"><a href="#datatypes_tostring">toString()</a></span></li>
 </ul>
@@ -2041,16 +2046,25 @@ app.sendBroadcast(&#39;hierarchy&#39;); /* 同上. */
 </ul>
 <p>自动选择是默认行为. <code>&quot;auto&quot;</code> 表示选择方式, 不会作为 <code>ocr.mode</code> 的读取结果返回.</p>
 <h2>OcrResult<span><a class="mark" href="#datatypes_ocrresult" id="datatypes_ocrresult">#</a></span></h2>
-<p>OcrResult 是一个代表 OCR 识别结果的接口.</p>
+<p>OcrResult 是一个代表 OCR 识别结果的接口. <a href="ocr.html#ocr_m_detect">ocr.detect</a> 以及 <code>ocr.mlkit</code> / <code>ocr.paddle</code> / <code>ocr.rapid</code> 的 <code>detect</code> 返回由它组成的数组.</p>
 <hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">OcrResult</p>
 
 <hr>
+<h3>[p] text<span><a class="mark" href="#datatypes_p_text" id="datatypes_p_text">#</a></span></h3>
+<div class="signature"><ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>OCR 识别得到的文本.</p>
+<pre><code class="lang-js">images.requestScreenCapture();
+let img = images.captureScreen();
+ocr.detect(img).map(o =&gt; o.text); /* 全部识别文本. */
+</code></pre>
 <h3>[p] label<span><a class="mark" href="#datatypes_p_label" id="datatypes_p_label">#</a></span></h3>
 <div class="signature"><ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
 </ul>
-</div><p>OCR 识别结果的文本标签, 通常可用于最终的文字识别结果.</p>
+</div><p>OCR 识别结果的文本标签, 与 <a href="#datatypes_p_text">text</a> 相同, 通常可用于最终的文字识别结果.</p>
 <pre><code class="lang-js">images.requestScreenCapture();
 let img = images.captureScreen();
 let results = ocr.detect(img);
@@ -2058,9 +2072,9 @@ results.map(o =&gt; o.label); /* 将识别结果全部映射为文本标签. */
 </code></pre>
 <h3>[p] confidence<span><a class="mark" href="#datatypes_p_confidence" id="datatypes_p_confidence">#</a></span></h3>
 <div class="signature"><ul>
-<li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
 </ul>
-</div><p>OCR 识别结果的置信度, 置信度越高, 意味着识别结果可能越准确.</p>
+</div><p>OCR 识别结果的置信度, 范围 0 到 1, 置信度越高, 意味着识别结果可能越准确.</p>
 <pre><code class="lang-js">images.requestScreenCapture();
 let img = images.captureScreen();
 let results = ocr.detect(img);
@@ -2079,6 +2093,16 @@ if (!isNullish(clickToStart)) {
     /* 点击 OCR 识别结果的位置矩形. */
     click(clickToStart.bounds);
 }
+</code></pre>
+<h3>[m] compareTo<span><a class="mark" href="#datatypes_m_compareto" id="datatypes_m_compareto">#</a></span></h3>
+<h4>compareTo(other)<span><a class="mark" href="#datatypes_compareto_other" id="datatypes_compareto_other">#</a></span></h4>
+<div class="signature"><ul>
+<li><strong>other</strong> { <span class="type"><a href="#datatypes_ocrresult">OcrResult</a></span> } - 另一个识别结果</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 负数表示本结果在前, 正数表示在后, 0 表示位置相同</li>
+</ul>
+</div><p>按阅读顺序比较两个识别结果: 两个结果的垂直中心相差小于较高者高度的一半时视为同一行, 按左边界从左到右排列; 否则按下边界从上到下排列.</p>
+<pre><code class="lang-js">let results = ocr.detect(img);
+results.sort((a, b) =&gt; a.compareTo(b)); /* 按阅读顺序排列. */
 </code></pre>
 <h3>[m] toString<span><a class="mark" href="#datatypes_m_tostring" id="datatypes_m_tostring">#</a></span></h3>
 <h4>toString()<span><a class="mark" href="#datatypes_tostring" id="datatypes_tostring">#</a></span></h4>

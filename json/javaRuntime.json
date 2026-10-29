@@ -1,0 +1,498 @@
+{
+  "source": "..\\api\\javaRuntime.md",
+  "miscs": [
+    {
+      "textRaw": "Java 运行时 (Java Runtime)",
+      "name": "Java 运行时 (Java Runtime)",
+      "type": "misc",
+      "desc": "<p>Java 运行时是一个独立安装的 AutoJs6 插件 (<a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Java-Runtime\">AutoJs6-Plugin-Java-Runtime</a>). 它用内置的 ECJ 编译器与 D8 把 <code>.java</code> 源码编译为 DEX, 在插件的一次性 worker 进程中执行, 编译器与脚本都不进入 AutoJs6 进程. 本页列出脚本可用的 JVM Entry API 4: 包 <code>org.autojs.plugin.jvmsource.api</code> 中的 7 个类型与 17 个方法, 依据插件 0.8.4-m9 (最低 AutoJs6 构建 5281).</p>\n<p>本页的 API 属于 Java 语言, 不在 AutoJs6 的运行时覆盖矩阵 (Rhino, Node.js 与 Bun) 中, 因此页面顶部没有运行时支持表. 条目的名称与参数个数由 AutoJs6 仓库的静态门禁 <code>tools/api-coverage/language_runtimes.py</code> 与插件冻结的接口包 (<code>protocol/jvm-source-api.aar</code>) 逐项比对. Kotlin 运行时使用同一套接口的子集, 见 <a href=\"kotlinRuntime\">Kotlin 运行时</a>.</p>\n<hr>\n",
+      "miscs": [
+        {
+          "textRaw": "使用方式",
+          "name": "使用方式",
+          "desc": "<ul>\n<li>启用: JVM 源码运行目前是 AutoJs6 的实验性功能, 需在 AutoJs6 中开启该实验开关, 并为 Java 语言选择本插件作为编译组件; 未开启或未选择时, 运行以错误码 <code>JVM_SOURCE_EXPERIMENT_DISABLED</code> 或 <code>JVM_SOURCE_PROVIDER_NOT_SELECTED</code> 结束.</li>\n<li>入口: 在编辑器中新建 <code>.java</code> 文件并运行. 入口类须为 public 的非抽象类, 实现 AutoJsJvmEntry 并具有 public 无参构造器, 简名默认为 <code>Main</code>; 编译结果中只能有一个实现 AutoJsJvmEntry 的具体类.</li>\n<li>语言级别: Java 8 (ECJ <code>-source 8 -target 8</code>), Android 平台接口以 API 24 为准. Lambda 不属于可运行的范围, 请使用匿名类.</li>\n<li>能力: JvmScriptContext 的每项宿主调用都受本次会话协商的能力约束 (控制台输出, 应用启动, 休眠, toast, 剪贴板读与写各自独立); 调用未授予的能力会终止本次执行, 不会静默降级.</li>\n<li>返回值: run 的返回值按 JSON 编码后交给宿主, 支持 <code>null</code>, <code>Boolean</code>, 整数与有限小数, <code>CharSequence</code> / <code>Character</code>, 键为 <code>String</code> 的 <code>Map</code>, <code>Iterable</code> 与数组 (元素递归遵守同一规则), 编码后最多 64 KiB, 嵌套最多 64 层.</li>\n<li>时限: 会话默认 30 秒, 最长 120 秒, 包括编译, DEX 转换与执行; 同一时间只运行一个会话.</li>\n</ul>\n<pre><code class=\"lang-java\">import org.autojs.plugin.jvmsource.api.AutoJsJvmEntry;\nimport org.autojs.plugin.jvmsource.api.JvmScriptContext;\n\npublic final class Main implements AutoJsJvmEntry {\n    @Override\n    public Object run(JvmScriptContext context) throws Exception {\n        context.console().log(&quot;Java worker started&quot;);\n        context.toast(&quot;Hello from Java&quot;);\n        context.sleep(250L);\n        context.throwIfCancellationRequested();\n        return 42;\n    }\n}\n</code></pre>\n<p>除 AutoJsJvmEntry.run 外, 本页示例都是 <code>run(JvmScriptContext context)</code> 方法体中的片段.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "使用方式"
+        },
+        {
+          "textRaw": "类型",
+          "name": "类型",
+          "desc": "<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>种类</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>AutoJsJvmEntry</code></td>\n<td>接口</td>\n<td>入口类实现的接口</td>\n</tr>\n<tr>\n<td><code>JvmScriptContext</code></td>\n<td>接口</td>\n<td>run 收到的上下文, 是唯一受支持的宿主桥</td>\n</tr>\n<tr>\n<td><code>JvmAppApi</code></td>\n<td>接口</td>\n<td>应用启动</td>\n</tr>\n<tr>\n<td><code>JvmClipboardApi</code></td>\n<td>接口</td>\n<td>宿主剪贴板</td>\n</tr>\n<tr>\n<td><code>JvmConsoleApi</code></td>\n<td>接口</td>\n<td>控制台输出</td>\n</tr>\n<tr>\n<td><code>JvmCancellation</code></td>\n<td>接口</td>\n<td>只读的取消状态</td>\n</tr>\n<tr>\n<td><code>JvmCancellationException</code></td>\n<td>类, 继承 <code>Exception</code></td>\n<td>会话被取消时抛出</td>\n</tr>\n</tbody>\n</table>\n<hr>\n",
+          "type": "misc",
+          "displayName": "类型"
+        },
+        {
+          "textRaw": "AutoJsJvmEntry",
+          "name": "autojsjvmentry",
+          "methods": [
+            {
+              "textRaw": "AutoJsJvmEntry.run(context)",
+              "type": "method",
+              "name": "run",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**context** { `JvmScriptContext` } - 本次执行的上下文 ",
+                      "name": "**context**",
+                      "type": " `JvmScriptContext` ",
+                      "desc": "本次执行的上下文"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Object` } - 交给宿主的结果, 可以为 `null` ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Object` ",
+                      "desc": "交给宿主的结果, 可以为 `null`"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "context"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>入口方法. 声明为 <code>public Object run(JvmScriptContext context) throws Exception</code>, 可以省略 <code>throws Exception</code>, 也可以使用协变返回类型.</p>\n<pre><code class=\"lang-java\">public final class Main implements AutoJsJvmEntry {\n    @Override\n    public Object run(JvmScriptContext context) {\n        Map&lt;String, Object&gt; result = new LinkedHashMap&lt;&gt;();\n        result.put(&quot;ok&quot;, true);\n        result.put(&quot;items&quot;, Arrays.asList(1, 2, 3));\n        return result;\n    }\n}\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "AutoJsJvmEntry"
+        },
+        {
+          "textRaw": "JvmScriptContext",
+          "name": "jvmscriptcontext",
+          "methods": [
+            {
+              "textRaw": "JvmScriptContext.app()",
+              "type": "method",
+              "name": "app",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmAppApi` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmAppApi` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回应用启动视图. 调用其方法需要应用启动能力.</p>\n<pre><code class=\"lang-java\">boolean launched = context.app().launch(&quot;org.autojs.autojs6&quot;);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.args()",
+              "type": "method",
+              "name": "args",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Map<String, Object>` } - 深层不可变的参数快照, 没有参数时为空 Map ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Map<String, Object>` ",
+                      "desc": "深层不可变的参数快照, 没有参数时为空 Map"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回宿主在执行开始前冻结的脚本参数. 整数在 <code>long</code> 范围内为 <code>Long</code>, 更大的为 <code>BigInteger</code>, 小数为 <code>BigDecimal</code>, 对象与数组为不可修改的 <code>Map</code> / <code>List</code>. 不需要能力, 也不产生宿主调用.</p>\n<pre><code class=\"lang-java\">Object user = context.args().get(&quot;user&quot;);\ncontext.console().log(&quot;user = &quot; + user);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.clipboard()",
+              "type": "method",
+              "name": "clipboard",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmClipboardApi` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmClipboardApi` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回剪贴板视图. 读与写分别需要剪贴板读取与剪贴板写入能力; Android 10 及以上调用时 AutoJs6 须有处于前台的界面.</p>\n<pre><code class=\"lang-java\">String text = context.clipboard().getText();\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.console()",
+              "type": "method",
+              "name": "console",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmConsoleApi` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmConsoleApi` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回控制台视图. 调用其方法需要控制台输出能力.</p>\n<pre><code class=\"lang-java\">context.console().log(&quot;hello&quot;);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.cancellation()",
+              "type": "method",
+              "name": "cancellation",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmCancellation` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmCancellation` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回只读的取消状态视图, 只能观察, 不能发起取消.</p>\n<pre><code class=\"lang-java\">JvmCancellation cancellation = context.cancellation();\nwhile (!cancellation.isCancellationRequested()) {\n    context.sleep(100L);\n}\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**millis** { `long` } - 毫秒数, 不能为负 ",
+                      "name": "**millis**",
+                      "type": " `long` ",
+                      "desc": "毫秒数, 不能为负"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可被取消的休眠. 需要休眠能力; 会话被取消时中断休眠并抛出 JvmCancellationException. 休眠仍计入会话时限.</p>\n<pre><code class=\"lang-java\">context.sleep(500L);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.toast(message)",
+              "type": "method",
+              "name": "toast",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 消息, 最多 8 KiB (UTF-8) ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "消息, 最多 8 KiB (UTF-8)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求宿主显示一条 toast. 需要 toast 能力; 宿主拒绝时脚本失败.</p>\n<pre><code class=\"lang-java\">context.toast(&quot;done&quot;);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.isCancellationRequested()",
+              "type": "method",
+              "name": "isCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `boolean` } - 是否已收到取消 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `boolean` ",
+                      "desc": "是否已收到取消"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>便利方法, 等价于 <code>cancellation().isCancellationRequested()</code> (自 Entry API 2 起提供的默认方法).</p>\n<pre><code class=\"lang-java\">if (context.isCancellationRequested()) {\n    return null;\n}\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.throwIfCancellationRequested()",
+              "type": "method",
+              "name": "throwIfCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>便利方法, 等价于 <code>cancellation().throwIfCancellationRequested()</code> (自 Entry API 2 起提供的默认方法). 建议在长循环的每个工作单元之间调用.</p>\n<pre><code class=\"lang-java\">for (int i = 0; i &lt; 1000; i++) {\n    context.throwIfCancellationRequested();\n    work(i);\n}\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmScriptContext"
+        },
+        {
+          "textRaw": "JvmAppApi",
+          "name": "jvmappapi",
+          "methods": [
+            {
+              "textRaw": "JvmAppApi.launch(packageName)",
+              "type": "method",
+              "name": "launch",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**packageName** { `String` } - 包名, 至少两个以点分隔的合法段, 如 `com.example.app` ",
+                      "name": "**packageName**",
+                      "type": " `String` ",
+                      "desc": "包名, 至少两个以点分隔的合法段, 如 `com.example.app`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `boolean` } - 宿主给出的启动结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `boolean` ",
+                      "desc": "宿主给出的启动结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求宿主启动一个已安装的应用. 宿主拒绝, 响应异常或 10 秒内无响应时脚本失败.</p>\n<pre><code class=\"lang-java\">boolean launched = context.app().launch(&quot;com.android.settings&quot;);\ncontext.console().log(&quot;launched = &quot; + launched);\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmAppApi"
+        },
+        {
+          "textRaw": "JvmClipboardApi",
+          "name": "jvmclipboardapi",
+          "methods": [
+            {
+              "textRaw": "JvmClipboardApi.getText()",
+              "type": "method",
+              "name": "getText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `String` } - 剪贴板文本, 没有文本时为空字符串 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `String` ",
+                      "desc": "剪贴板文本, 没有文本时为空字符串"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>读取宿主剪贴板的纯文本. 需要剪贴板读取能力.</p>\n<pre><code class=\"lang-java\">context.console().log(context.clipboard().getText());\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmClipboardApi.setText(text)",
+              "type": "method",
+              "name": "setText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { `String` } - 文本, 可以为空字符串, 最多 16 KiB (UTF-8) ",
+                      "name": "**text**",
+                      "type": " `String` ",
+                      "desc": "文本, 可以为空字符串, 最多 16 KiB (UTF-8)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>用给定纯文本替换宿主剪贴板的内容. 需要剪贴板写入能力.</p>\n<pre><code class=\"lang-java\">context.clipboard().setText(&quot;copied from Java&quot;);\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmClipboardApi"
+        },
+        {
+          "textRaw": "JvmConsoleApi",
+          "name": "jvmconsoleapi",
+          "methods": [
+            {
+              "textRaw": "JvmConsoleApi.log(message)",
+              "type": "method",
+              "name": "log",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 一行文本 ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "一行文本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>以 UTF-8 向标准输出写入一行. 标准输出最多 1 MiB, <code>System.out</code> 共用这一上限; 写入前检查取消.</p>\n<pre><code class=\"lang-java\">context.console().log(&quot;step 1&quot;);\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmConsoleApi.error(message)",
+              "type": "method",
+              "name": "error",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 一行文本 ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "一行文本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>以 UTF-8 向标准错误写入一行. 标准错误最多 1 MiB, <code>System.err</code> 共用这一上限; 写入前检查取消.</p>\n<pre><code class=\"lang-java\">context.console().error(&quot;failed&quot;);\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmConsoleApi"
+        },
+        {
+          "textRaw": "JvmCancellation",
+          "name": "jvmcancellation",
+          "methods": [
+            {
+              "textRaw": "JvmCancellation.isCancellationRequested()",
+              "type": "method",
+              "name": "isCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `boolean` } - 是否已收到取消 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `boolean` ",
+                      "desc": "是否已收到取消"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>非阻塞地查询会话是否已被取消 (用户停止, 超时, 宿主关闭会话等).</p>\n<pre><code class=\"lang-java\">if (context.cancellation().isCancellationRequested()) {\n    return &quot;cancelled&quot;;\n}\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmCancellation.throwIfCancellationRequested()",
+              "type": "method",
+              "name": "throwIfCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `void` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `void` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>会话已被取消时抛出 JvmCancellationException. 不要捕获它后继续运行: 取消只有有限的宽限期, 不配合的 worker 最终会被直接终止.</p>\n<pre><code class=\"lang-java\">context.cancellation().throwIfCancellationRequested();\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmCancellation"
+        },
+        {
+          "textRaw": "相关链接",
+          "name": "相关链接",
+          "desc": "<ul>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Java-Runtime\">AutoJs6-Plugin-Java-Runtime</a>: 插件仓库, <code>docs/context-api.zh-CN.md</code> 列出全部上限, 错误码与返回值规则.</li>\n<li><a href=\"kotlinRuntime\">Kotlin 运行时</a>: 使用同一套接口 (Entry API 2) 的 Kotlin 插件.</li>\n</ul>\n",
+          "type": "misc",
+          "displayName": "相关链接"
+        }
+      ]
+    }
+  ]
+}

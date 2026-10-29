@@ -1,0 +1,933 @@
+{
+  "source": "..\\api\\pythonRuntime.md",
+  "properties": [
+    {
+      "textRaw": "autojs6.app",
+      "name": "app",
+      "desc": "<p>应用信息与启动操作.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.app.snapshot()",
+          "name": "autojs6.app.snapshot()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>packageName</code>, <code>versionName</code>, <code>versionCode</code> 与 <code>debuggable</code> 的副本</li>\n</ul>\n<p>返回宿主在执行开始时冻结的 AutoJs6 应用信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\ninfo = app.snapshot()\nprint(info[&quot;packageName&quot;], info[&quot;versionCode&quot;])\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.app.snapshot()"
+        },
+        {
+          "textRaw": "autojs6.app.launch(package_name)",
+          "name": "autojs6.app.launch(package_name)",
+          "desc": "<ul>\n<li><strong>package_name</strong> { <code>str</code> } - Android 应用包名, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否启动了应用</li>\n</ul>\n<p>按包名启动一个已安装的应用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\nprint(app.launch(&quot;com.android.settings&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.app.launch(package_name)"
+        },
+        {
+          "textRaw": "autojs6.app.launch_app(name)",
+          "name": "autojs6.app.launch_app(name)",
+          "desc": "<ul>\n<li><strong>name</strong> { <code>str</code> } - 应用在桌面上显示的名称, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否启动了应用</li>\n</ul>\n<p>按应用名称启动一个已安装的应用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\nprint(app.launch_app(&quot;Settings&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.app.launch_app(name)"
+        },
+        {
+          "textRaw": "autojs6.app.open_url(url)",
+          "name": "autojs6.app.open_url(url)",
+          "desc": "<ul>\n<li><strong>url</strong> { <code>str</code> } - HTTP 或 HTTPS 地址, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否打开了地址</li>\n</ul>\n<p>经宿主用系统默认方式打开一个 HTTP 或 HTTPS 地址.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\napp.open_url(&quot;https://docs.autojs6.com&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.app.open_url(url)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.artifacts",
+      "name": "artifacts",
+      "desc": "<p>本次执行的输出文件 (artifact). 输出文件随执行结果交给宿主, 每次执行最多 16 个, 单个最大 4 MiB, 合计最大 8 MiB.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.artifacts.path(relative_path)",
+          "name": "autojs6.artifacts.path(relative_path)",
+          "desc": "<ul>\n<li><strong>relative_path</strong> { <code>str</code> } - 规范化的逻辑相对路径, 最多 1024 字节 (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 插件私有目录中可写入的文件路径</li>\n</ul>\n<p>登记一个输出文件并返回其实际路径; 路径不安全或未规范化时抛出 ArtifactPathError, 超过数量或大小上限时抛出 ArtifactLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import artifacts\n\nwith open(artifacts.path(&quot;report/summary.txt&quot;), &quot;w&quot;, encoding=&quot;utf-8&quot;) as file:\n    file.write(&quot;ok\\n&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.artifacts.path(relative_path)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.automator",
+      "name": "automator",
+      "desc": "<p>经宿主无障碍服务执行的坐标与全局动作. 宿主无障碍服务不可用时抛出 CapabilityUnavailableError, 不会打开设置页.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.automator.MAX_COORDINATE</code></td>\n<td><code>1000000</code></td>\n<td>坐标上限 (坐标为 0 到该值的整数)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.MAX_DURATION_MILLIS</code></td>\n<td><code>4000</code></td>\n<td>press 与 swipe 持续时间上限 (毫秒)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.DEFAULT_PRESS_DURATION_MILLIS</code></td>\n<td><code>100</code></td>\n<td>press 的默认持续时间 (毫秒)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.DEFAULT_SWIPE_DURATION_MILLIS</code></td>\n<td><code>300</code></td>\n<td>swipe 的默认持续时间 (毫秒)</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.automator.click(x, y)",
+          "name": "autojs6.automator.click(x,_y)",
+          "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>点击一个屏幕坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.click(540, 1200)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.click(x, y)"
+        },
+        {
+          "textRaw": "autojs6.automator.long_click(x, y)",
+          "name": "autojs6.automator.long_click(x,_y)",
+          "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>长按一个屏幕坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.long_click(540, 1200)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.long_click(x, y)"
+        },
+        {
+          "textRaw": "autojs6.automator.press(x, y, duration_ms=DEFAULT_PRESS_DURATION_MILLIS)",
+          "name": "autojs6.automator.press(x,_y,_duration_ms=default_press_duration_millis)",
+          "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><strong>[ duration_ms = 100 ]</strong> { <code>int</code> } - 按住时长, 1 到 4000 毫秒</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>按住一个屏幕坐标指定时长.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.press(540, 1200, 800)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.press(x, y, duration_ms=DEFAULT_PRESS_DURATION_MILLIS)"
+        },
+        {
+          "textRaw": "autojs6.automator.swipe(x1, y1, x2, y2, duration_ms=DEFAULT_SWIPE_DURATION_MILLIS)",
+          "name": "autojs6.automator.swipe(x1,_y1,_x2,_y2,_duration_ms=default_swipe_duration_millis)",
+          "desc": "<ul>\n<li><strong>x1</strong> { <code>int</code> } - 起点横坐标</li>\n<li><strong>y1</strong> { <code>int</code> } - 起点纵坐标</li>\n<li><strong>x2</strong> { <code>int</code> } - 终点横坐标</li>\n<li><strong>y2</strong> { <code>int</code> } - 终点纵坐标</li>\n<li><strong>[ duration_ms = 300 ]</strong> { <code>int</code> } - 滑动时长, 1 到 4000 毫秒</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>从一个坐标滑动到另一个坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.swipe(540, 1600, 540, 400, duration_ms=500)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.swipe(x1, y1, x2, y2, duration_ms=DEFAULT_SWIPE_DURATION_MILLIS)"
+        },
+        {
+          "textRaw": "autojs6.automator.back()",
+          "name": "autojs6.automator.back()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>执行 Android 全局 &quot;返回&quot; 动作.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.back()\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.back()"
+        },
+        {
+          "textRaw": "autojs6.automator.home()",
+          "name": "autojs6.automator.home()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>执行 Android 全局 &quot;主屏幕&quot; 动作.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.home()\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.automator.home()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.clip",
+      "name": "clip",
+      "desc": "<p>宿主剪贴板.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.clip.get()",
+          "name": "autojs6.clip.get()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 剪贴板文本, 没有文本时为空字符串</li>\n</ul>\n<p>读取宿主剪贴板的文本.</p>\n<pre><code class=\"lang-python\">from autojs6 import clip\n\nprint(clip.get())\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.clip.get()"
+        },
+        {
+          "textRaw": "autojs6.clip.set(text)",
+          "name": "autojs6.clip.set(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 文本, 最多 32 KiB (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>用给定文本替换宿主剪贴板的内容.</p>\n<pre><code class=\"lang-python\">from autojs6 import clip\n\nclip.set(&quot;copied from Python&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.clip.set(text)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.console",
+      "name": "console",
+      "desc": "<p>直接写入 AutoJs6 控制台并带有级别的输出. 普通的 <code>print</code> 与标准错误输出同样会回到 AutoJs6 控制台.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.console.log(text)",
+          "name": "autojs6.console.log(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以调试级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.log(&quot;step 1&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.console.log(text)"
+        },
+        {
+          "textRaw": "autojs6.console.warn(text)",
+          "name": "autojs6.console.warn(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以警告级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.warn(&quot;retrying&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.console.warn(text)"
+        },
+        {
+          "textRaw": "autojs6.console.error(text)",
+          "name": "autojs6.console.error(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以错误级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.error(&quot;failed&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.console.error(text)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.device",
+      "name": "device",
+      "desc": "<p>设备信息.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.device.snapshot()",
+          "name": "autojs6.device.snapshot()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>sdkInt</code>, <code>release</code>, <code>manufacturer</code>, <code>brand</code>, <code>model</code> 与 <code>supportedAbis</code> 的副本</li>\n</ul>\n<p>返回宿主在执行开始时冻结的设备信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import device\n\ninfo = device.snapshot()\nprint(info[&quot;brand&quot;], info[&quot;model&quot;], info[&quot;sdkInt&quot;])\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.device.snapshot()"
+        },
+        {
+          "textRaw": "autojs6.device.info()",
+          "name": "autojs6.device.info()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>battery</code> (<code>percent</code>, <code>charging</code>), <code>screen</code> (<code>on</code>, <code>brightness</code>) 与 <code>volume</code> (<code>music</code>, <code>notification</code>, <code>alarm</code>, 各含 <code>current</code> 与 <code>max</code>)</li>\n</ul>\n<p>经宿主读取当前的电量, 屏幕亮度与音量, 不含设备标识.</p>\n<pre><code class=\"lang-python\">from autojs6 import device\n\nstate = device.info()\nprint(state[&quot;battery&quot;][&quot;percent&quot;], state[&quot;volume&quot;][&quot;music&quot;][&quot;current&quot;])\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.device.info()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.dialogs",
+      "name": "dialogs",
+      "desc": "<p>由宿主显示的前台对话框. 调用时 AutoJs6 须有处于前台的界面; 否则不会弹出界面, 而是以 HostCapabilityError 失败 (错误码 <code>INTERACTIVE_NOT_ALLOWED</code>). 单次用户响应最多等待 5 分钟.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.dialogs.DEFAULT_TITLE</code></td>\n<td><code>&quot;AutoJs6 Python&quot;</code></td>\n<td>默认标题</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TITLE_BYTES</code></td>\n<td><code>256</code></td>\n<td>标题上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TEXT_BYTES</code></td>\n<td><code>4096</code></td>\n<td>正文上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_PROMPT_REPLY_BYTES</code></td>\n<td><code>32768</code></td>\n<td>prompt 默认值与回复的上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_ITEMS</code></td>\n<td><code>64</code></td>\n<td>select 的选项数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_ITEM_BYTES</code></td>\n<td><code>1024</code></td>\n<td>select 单个选项的上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TOTAL_ITEM_BYTES</code></td>\n<td><code>32768</code></td>\n<td>select 全部选项合计的上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.dialogs.alert(text, *, title=DEFAULT_TITLE)",
+          "name": "autojs6.dialogs.alert(text,_*,_title=default_title)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 正文</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>显示提示对话框, 阻塞到用户确认或关闭.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\ndialogs.alert(&quot;Backup finished&quot;, title=&quot;Backup&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.dialogs.alert(text, *, title=DEFAULT_TITLE)"
+        },
+        {
+          "textRaw": "autojs6.dialogs.confirm(text, *, title=DEFAULT_TITLE)",
+          "name": "autojs6.dialogs.confirm(text,_*,_title=default_title)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 正文</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 只有用户确认时为 <code>True</code></li>\n</ul>\n<p>显示确认对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nif dialogs.confirm(&quot;Delete the cache?&quot;):\n    print(&quot;confirmed&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.dialogs.confirm(text, *, title=DEFAULT_TITLE)"
+        },
+        {
+          "textRaw": "autojs6.dialogs.prompt(text, *, default=\"\", title=DEFAULT_TITLE)",
+          "name": "autojs6.dialogs.prompt(text,_*,_default=\"\",_title=default_title)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 提示文本</li>\n<li><strong>[ default = &quot;&quot; ]</strong> { <code>str</code> } - 输入框的初始内容 (仅限关键字参数)</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> | <code>None</code> } - 输入的文本, 取消时为 <code>None</code></li>\n</ul>\n<p>显示输入对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nname = dialogs.prompt(&quot;Your name&quot;, default=&quot;guest&quot;)\nprint(name)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.dialogs.prompt(text, *, default=\"\", title=DEFAULT_TITLE)"
+        },
+        {
+          "textRaw": "autojs6.dialogs.select(items, *, title=DEFAULT_TITLE)",
+          "name": "autojs6.dialogs.select(items,_*,_title=default_title)",
+          "desc": "<ul>\n<li><strong>items</strong> { <code>Sequence[str]</code> } - 选项, 最多 64 项</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>int</code> | <code>None</code> } - 所选项的索引 (从 0 开始), 取消时为 <code>None</code></li>\n</ul>\n<p>显示单选列表对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nindex = dialogs.select([&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;], title=&quot;Color&quot;)\nprint(index)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.dialogs.select(items, *, title=DEFAULT_TITLE)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.engines",
+      "name": "engines",
+      "desc": "<p>当前 Python 引擎的信息与受限的子脚本启动.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.engines.INFO_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-engine-info-v1&quot;</code></td>\n<td>current 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.engines.LAUNCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-engine-launch-v1&quot;</code></td>\n<td>run 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_SCRIPT_LAUNCHES</code></td>\n<td><code>16</code></td>\n<td>每次执行成功启动子脚本的次数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_ENGINE_NAME_BYTES</code></td>\n<td><code>256</code></td>\n<td>返回的引擎名上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_SOURCE_NAME_BYTES</code></td>\n<td><code>1024</code></td>\n<td>返回的脚本名上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.engines.current()",
+          "name": "autojs6.engines.current()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>id</code>, <code>engineName</code> (固定为 <code>&quot;python&quot;</code>), <code>sourceName</code>, <code>entryPoint</code>, <code>project</code> 与 <code>startedAtMillis</code></li>\n</ul>\n<p>返回当前 Python 引擎的信息, 不含绝对路径.</p>\n<pre><code class=\"lang-python\">from autojs6 import engines\n\nprint(engines.current()[&quot;sourceName&quot;])\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.engines.current()"
+        },
+        {
+          "textRaw": "autojs6.engines.run(path)",
+          "name": "autojs6.engines.run(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 子脚本相对于本次执行目录的路径</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>id</code>, <code>engineName</code>, <code>sourceName</code> 与 <code>path</code></li>\n</ul>\n<p>异步启动一个非 Python 的宿主脚本 (如 <code>.js</code>) 并立即返回其信息. 启动 <code>.py</code> 文件以 HostCapabilityError 失败 (错误码 <code>NESTED_PYTHON_NOT_ALLOWED</code>), 超过 16 次成功启动时错误码为 <code>ENGINE_LAUNCH_LIMIT_EXCEEDED</code>.</p>\n<pre><code class=\"lang-python\">from autojs6 import engines\n\nchild = engines.run(&quot;tasks/sync.js&quot;)\nprint(child[&quot;id&quot;], child[&quot;engineName&quot;])\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.engines.run(path)"
+        },
+        {
+          "textRaw": "autojs6.engines.stop_self()",
+          "name": "autojs6.engines.stop_self()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>NoReturn</code> } - 不会正常返回</li>\n</ul>\n<p>请求宿主强制停止本引擎; 停止通过重启插件进程完成, 脚本无法捕获.</p>\n<pre><code class=\"lang-python\">from autojs6 import console, engines\n\nconsole.log(&quot;stopping&quot;)\nengines.stop_self()\nprint(&quot;never printed&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.engines.stop_self()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.execution",
+      "name": "execution",
+      "desc": "<p>本次执行的信息.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.execution.snapshot()",
+          "name": "autojs6.execution.snapshot()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>id</code> (UUID 字符串), <code>entryPoint</code> 与 <code>project</code> 的副本</li>\n</ul>\n<p>返回宿主创建本次执行时冻结的执行信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import execution\n\ninfo = execution.snapshot()\nprint(info[&quot;id&quot;], info[&quot;project&quot;])\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.execution.snapshot()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.files",
+      "name": "files",
+      "desc": "<p>实时读写当前脚本所在目录 (宿主侧执行根目录) 中的文件. 路径为相对路径, 不能越出该目录.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.files.MAX_PATH_BYTES</code></td>\n<td><code>4096</code></td>\n<td>相对路径上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.files.MAX_TEXT_BYTES</code></td>\n<td><code>32768</code></td>\n<td>单次读写的文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.files.MAX_LIST_ENTRIES</code></td>\n<td><code>128</code></td>\n<td>list 返回的名称数上限</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.files.read_text(path, *, encoding=\"utf-8\")",
+          "name": "autojs6.files.read_text(path,_*,_encoding=\"utf-8\")",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 文件内容</li>\n</ul>\n<p>读取一个 UTF-8 文本文件.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.read_text(&quot;config.txt&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.files.read_text(path, *, encoding=\"utf-8\")"
+        },
+        {
+          "textRaw": "autojs6.files.write_text(path, text, *, encoding=\"utf-8\")",
+          "name": "autojs6.files.write_text(path,_text,_*,_encoding=\"utf-8\")",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><strong>text</strong> { <code>str</code> } - 文件内容</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>覆盖写入一个文件; 不会创建不存在的上级目录.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nfiles.write_text(&quot;last-run.txt&quot;, &quot;ok&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.files.write_text(path, text, *, encoding=\"utf-8\")"
+        },
+        {
+          "textRaw": "autojs6.files.exists(path)",
+          "name": "autojs6.files.exists(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否存在</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.exists(&quot;config.txt&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.files.exists(path)"
+        },
+        {
+          "textRaw": "autojs6.files.is_file(path)",
+          "name": "autojs6.files.is_file(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否为普通文件</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.is_file(&quot;config.txt&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.files.is_file(path)"
+        },
+        {
+          "textRaw": "autojs6.files.is_dir(path)",
+          "name": "autojs6.files.is_dir(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否为目录</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.is_dir(&quot;data&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.files.is_dir(path)"
+        },
+        {
+          "textRaw": "autojs6.files.list(path=\".\")",
+          "name": "autojs6.files.list(path=\".\")",
+          "desc": "<ul>\n<li><strong>[ path = &quot;.&quot; ]</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径, 默认为执行根目录</li>\n<li><ins><strong>returns</strong></ins> { <code>list[str]</code> } - 排序后的直接子项名称, 最多 128 个</li>\n</ul>\n<p>列出一个目录的直接子项.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nfor name in files.list(&quot;data&quot;):\n    print(name)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.files.list(path=\".\")"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.images",
+      "name": "images",
+      "desc": "<p>截图, 找色与找图. 截图需要宿主的无障碍服务, 每次执行最多保留 1 张截图与 1 个模板.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.images.IMAGE_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-screen-image-v1&quot;</code></td>\n<td>截图传输的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.CHUNK_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-screen-image-chunk-v1&quot;</code></td>\n<td>截图分块传输的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.COLOR_MATCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-color-match-v1&quot;</code></td>\n<td>找色结果的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.TEMPLATE_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-template-v1&quot;</code></td>\n<td>模板上传的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.TEMPLATE_CHUNK_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-template-chunk-v1&quot;</code></td>\n<td>模板分块上传的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.IMAGE_MATCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-match-v1&quot;</code></td>\n<td>找图结果的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_IMAGE_BYTES</code></td>\n<td><code>4194304</code></td>\n<td>截图编码后的上限 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_CHUNK_BYTES</code></td>\n<td><code>32768</code></td>\n<td>截图分块的大小 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_CHUNKS</code></td>\n<td><code>128</code></td>\n<td>截图分块数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_BYTES</code></td>\n<td><code>1048576</code></td>\n<td>模板图片上限 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_CHUNK_BYTES</code></td>\n<td><code>24576</code></td>\n<td>模板分块的大小 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_CHUNKS</code></td>\n<td><code>43</code></td>\n<td>模板分块数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_DIMENSION</code></td>\n<td><code>2048</code></td>\n<td>模板单边像素上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_PIXELS</code></td>\n<td><code>1048576</code></td>\n<td>模板像素总数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_DIMENSION</code></td>\n<td><code>8192</code></td>\n<td>截图单边像素上限, 也是 region 的坐标范围</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_PIXELS</code></td>\n<td><code>16777216</code></td>\n<td>截图像素总数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MIN_QUALITY</code></td>\n<td><code>1</code></td>\n<td>quality 下限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_QUALITY</code></td>\n<td><code>100</code></td>\n<td>quality 上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_COLOR</code></td>\n<td><code>16777215</code></td>\n<td>颜色整数上限 (<code>0xFFFFFF</code>)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_COLOR_THRESHOLD</code></td>\n<td><code>255</code></td>\n<td>逐通道阈值上限</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.images.capture_screen(*, format=\"png\", quality=100, path=None)",
+          "name": "autojs6.images.capture_screen(*,_format=\"png\",_quality=100,_path=none)",
+          "desc": "<ul>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <code>str</code> } - <code>&quot;png&quot;</code> 或 <code>&quot;jpeg&quot;</code> (仅限关键字参数)</li>\n<li><strong>[ quality = 100 ]</strong> { <code>int</code> } - 编码质量, 1 到 100 (仅限关键字参数)</li>\n<li><strong>[ path = None ]</strong> { <code>str</code> | <code>None</code> } - 输出文件的逻辑路径 (仅限关键字参数), 规则同 autojs6.artifacts.path</li>\n<li><ins><strong>returns</strong></ins> { <code>bytes</code> | <code>str</code> } - 未给出 path 时为图像字节, 否则为写入的文件路径</li>\n</ul>\n<p>截取当前屏幕.</p>\n<pre><code class=\"lang-python\">from autojs6 import images\n\ndata = images.capture_screen(format=&quot;jpeg&quot;, quality=80)\nprint(len(data))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.images.capture_screen(*, format=\"png\", quality=100, path=None)"
+        },
+        {
+          "textRaw": "autojs6.images.find_color(color, *, region=None, threshold=0)",
+          "name": "autojs6.images.find_color(color,_*,_region=none,_threshold=0)",
+          "desc": "<ul>\n<li><strong>color</strong> { <code>int</code> | <code>str</code> } - <code>0xRRGGBB</code> 整数或 <code>&quot;#RRGGBB&quot;</code> 文本</li>\n<li><strong>[ region = None ]</strong> { <code>tuple[int, int, int, int]</code> | <code>list[int]</code> | <code>None</code> } - 搜索区域 (x, y, 宽, 高), 默认为整个屏幕 (仅限关键字参数)</li>\n<li><strong>[ threshold = 0 ]</strong> { <code>int</code> } - 逐通道阈值, 0 到 255 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[int, int]</code> | <code>None</code> } - 第一个匹配点的坐标, 未找到时为 <code>None</code></li>\n</ul>\n<p>在一张最新截图中按行优先找色, 只返回坐标, 不传输图像.</p>\n<pre><code class=\"lang-python\">from autojs6 import images\n\npoint = images.find_color(&quot;#FF5722&quot;, region=(0, 0, 1080, 600), threshold=8)\nprint(point)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.images.find_color(color, *, region=None, threshold=0)"
+        },
+        {
+          "textRaw": "autojs6.images.find_image(template, *, region=None, threshold=0)",
+          "name": "autojs6.images.find_image(template,_*,_region=none,_threshold=0)",
+          "desc": "<ul>\n<li><strong>template</strong> { <code>bytes</code> | <code>bytearray</code> | <code>memoryview</code> } - PNG 或 JPEG 模板图片</li>\n<li><strong>[ region = None ]</strong> { <code>tuple[int, int, int, int]</code> | <code>list[int]</code> | <code>None</code> } - 搜索区域 (x, y, 宽, 高), 默认为整个屏幕 (仅限关键字参数)</li>\n<li><strong>[ threshold = 0 ]</strong> { <code>int</code> } - 逐通道阈值, 0 到 255 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[int, int]</code> | <code>None</code> } - 第一个匹配位置的左上角坐标, 未找到时为 <code>None</code></li>\n</ul>\n<p>在一张最新截图中按行优先找图; 只有完全不透明的模板像素参与比较.</p>\n<pre><code class=\"lang-python\">from autojs6 import images, project\n\npoint = images.find_image(project.read_bytes(&quot;assets/button.png&quot;))\nprint(point)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.images.find_image(template, *, region=None, threshold=0)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.ocr",
+      "name": "ocr",
+      "desc": "<p>使用宿主当前配置的 OCR 引擎识别文字.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.ocr.MAX_LINES</code></td>\n<td><code>256</code></td>\n<td>返回的行数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.ocr.MAX_LINE_BYTES</code></td>\n<td><code>4096</code></td>\n<td>单行文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.ocr.MAX_TOTAL_TEXT_BYTES</code></td>\n<td><code>49152</code></td>\n<td>全部文本合计上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.ocr.recognize(image)",
+          "name": "autojs6.ocr.recognize(image)",
+          "desc": "<ul>\n<li><strong>image</strong> { <code>bytes</code> | <code>bytearray</code> | <code>memoryview</code> } - PNG 或 JPEG 图片, 上限同 images 的模板 (1 MiB, 单边 2048 像素)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[str, ...]</code> } - 逐行识别的文本</li>\n</ul>\n<p>识别一张图片中的文字; 宿主没有可用的 OCR 引擎时抛出 CapabilityUnavailableError, 引擎识别失败时以 HostCapabilityError 失败 (错误码 <code>OCR_FAILED</code>).</p>\n<pre><code class=\"lang-python\">from autojs6 import images, ocr\n\nlines = ocr.recognize(images.capture_screen(format=&quot;jpeg&quot;, quality=90))\nprint(&quot;\\n&quot;.join(lines))\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.ocr.recognize(image)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.project",
+      "name": "project",
+      "desc": "<p>只读访问项目执行时冻结的项目文件快照. 只能在以项目方式运行时使用, 否则抛出 CapabilityUnavailableError.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.project.MAX_READ_BYTES</code></td>\n<td><code>1048576</code></td>\n<td>单次读取上限 (字节)</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.project.read_bytes(path)",
+          "name": "autojs6.project.read_bytes(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bytes</code> } - 文件内容, 最多 1 MiB</li>\n</ul>\n<p>读取项目中的一个普通文件; 路径不安全时抛出 ProjectPathError, 超过上限时抛出 ProjectReadLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nicon = project.read_bytes(&quot;assets/icon.png&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.project.read_bytes(path)"
+        },
+        {
+          "textRaw": "autojs6.project.read_text(path, *, encoding=\"utf-8\")",
+          "name": "autojs6.project.read_text(path,_*,_encoding=\"utf-8\")",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 文件内容</li>\n</ul>\n<p>以严格 UTF-8 解码读取项目中的一个文件, 上限同 read_bytes.</p>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nprint(project.read_text(&quot;README.md&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.project.read_text(path, *, encoding=\"utf-8\")"
+        },
+        {
+          "textRaw": "autojs6.project.exists(path)",
+          "name": "autojs6.project.exists(path)",
+          "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径是否为项目中的普通文件</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nprint(project.exists(&quot;data/input.json&quot;))\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.project.exists(path)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.result",
+      "name": "result",
+      "desc": "<p>本次执行的结构化结果. 结果与标准输出分开传给宿主, 宿主不会从标准输出推断结果.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.result.set(value)",
+          "name": "autojs6.result.set(value)",
+          "desc": "<ul>\n<li><strong>value</strong> { <code>Any</code> } - 可严格编码为有限 JSON 的值, 编码后最多 64 KiB</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>设置本次执行唯一的结构化结果; 再次设置抛出 ResultAlreadySetError, 无法编码时抛出 ResultSerializationError, 超过上限时抛出 ResultLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import result\n\nresult.set({&quot;ok&quot;: True, &quot;items&quot;: [1, 2, 3]})\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.result.set(value)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs6.selector",
+      "name": "selector",
+      "desc": "<p>经宿主无障碍服务读取控件树并操作控件. 节点为字典, 含 <code>id</code>, <code>parentId</code>, <code>depth</code>, <code>childCount</code>, 文本字段 (<code>text</code>, <code>description</code>, <code>resourceId</code>, <code>className</code>, <code>packageName</code>), <code>bounds</code> (<code>left</code>, <code>top</code>, <code>right</code>, <code>bottom</code>), 状态字段 (<code>clickable</code>, <code>editable</code>, <code>enabled</code>, <code>focused</code>, <code>selected</code>, <code>checkable</code>, <code>checked</code>, <code>scrollable</code>, <code>password</code>, <code>visibleToUser</code>) 与 <code>truncatedFields</code>. 扫描不完整时以错误码 <code>SELECTOR_SCAN_LIMIT_EXCEEDED</code> 失败, 节点引用过期时以 <code>STALE_NODE</code> 失败.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.selector.SNAPSHOT_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-ui-tree-v1&quot;</code></td>\n<td>snapshot 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_SNAPSHOT_NODES</code></td>\n<td><code>64</code></td>\n<td>snapshot 的默认节点数</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_SNAPSHOT_NODES</code></td>\n<td><code>128</code></td>\n<td>snapshot 的节点数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_SNAPSHOT_DEPTH</code></td>\n<td><code>16</code></td>\n<td>snapshot 的默认深度</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_FIND_NODES</code></td>\n<td><code>512</code></td>\n<td>find 的默认扫描节点数</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_FIND_NODES</code></td>\n<td><code>1024</code></td>\n<td>find 的扫描节点数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_DEPTH</code></td>\n<td><code>32</code></td>\n<td>深度上限, 也是 find 的默认深度</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_QUERY_TEXT_BYTES</code></td>\n<td><code>1024</code></td>\n<td>find 查询文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_SET_TEXT_BYTES</code></td>\n<td><code>4096</code></td>\n<td>set_text 文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_NODE_TEXT_CODE_POINTS</code></td>\n<td><code>256</code></td>\n<td>节点文本字段的长度上限 (Unicode 码位), 超出部分截断并记入 <code>truncatedFields</code></td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_RETAINED_NODES</code></td>\n<td><code>128</code></td>\n<td>每次执行保留的节点引用上限</td>\n</tr>\n</tbody>\n</table>\n",
+      "modules": [
+        {
+          "textRaw": "autojs6.selector.snapshot(max_nodes=DEFAULT_SNAPSHOT_NODES, max_depth=DEFAULT_SNAPSHOT_DEPTH)",
+          "name": "autojs6.selector.snapshot(max_nodes=default_snapshot_nodes,_max_depth=default_snapshot_depth)",
+          "desc": "<ul>\n<li><strong>[ max_nodes = 64 ]</strong> { <code>int</code> } - 节点数, 1 到 128</li>\n<li><strong>[ max_depth = 16 ]</strong> { <code>int</code> } - 深度, 0 到 32</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>generation</code>, <code>truncated</code> 与 <code>nodes</code> (节点列表)</li>\n</ul>\n<p>按广度优先返回当前活动窗口控件树的有界快照.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\ntree = selector.snapshot(max_nodes=32)\nfor node in tree[&quot;nodes&quot;]:\n    print(node[&quot;depth&quot;], node[&quot;className&quot;], node[&quot;text&quot;])\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.selector.snapshot(max_nodes=DEFAULT_SNAPSHOT_NODES, max_depth=DEFAULT_SNAPSHOT_DEPTH)"
+        },
+        {
+          "textRaw": "autojs6.selector.find(*, text=None, text_contains=None, description=None, description_contains=None, resource_id=None, class_name=None, clickable=None, editable=None, enabled=None, scrollable=None, max_nodes=DEFAULT_FIND_NODES, max_depth=MAX_DEPTH)",
+          "name": "autojs6.selector.find(*,_text=none,_text_contains=none,_description=none,_description_contains=none,_resource_id=none,_class_name=none,_clickable=none,_editable=none,_enabled=none,_scrollable=none,_max_nodes=default_find_nodes,_max_depth=max_depth)",
+          "desc": "<ul>\n<li><strong>[ text = None ]</strong> { <code>str</code> | <code>None</code> } - 文本等于</li>\n<li><strong>[ text_contains = None ]</strong> { <code>str</code> | <code>None</code> } - 文本包含</li>\n<li><strong>[ description = None ]</strong> { <code>str</code> | <code>None</code> } - 内容描述等于</li>\n<li><strong>[ description_contains = None ]</strong> { <code>str</code> | <code>None</code> } - 内容描述包含</li>\n<li><strong>[ resource_id = None ]</strong> { <code>str</code> | <code>None</code> } - 资源 ID 等于</li>\n<li><strong>[ class_name = None ]</strong> { <code>str</code> | <code>None</code> } - 类名等于</li>\n<li><strong>[ clickable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可点击</li>\n<li><strong>[ editable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可编辑</li>\n<li><strong>[ enabled = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否启用</li>\n<li><strong>[ scrollable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可滚动</li>\n<li><strong>[ max_nodes = 512 ]</strong> { <code>int</code> } - 扫描节点数, 1 到 1024</li>\n<li><strong>[ max_depth = 32 ]</strong> { <code>int</code> } - 扫描深度, 0 到 32</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> | <code>None</code> } - 第一个满足全部条件的节点, 未找到时为 <code>None</code></li>\n</ul>\n<p>按广度优先查找控件. 参数都只能以关键字给出, 至少给出一个条件.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nnode = selector.find(text=&quot;OK&quot;, clickable=True)\nif node is not None:\n    selector.click(node)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.selector.find(*, text=None, text_contains=None, description=None, description_contains=None, resource_id=None, class_name=None, clickable=None, editable=None, enabled=None, scrollable=None, max_nodes=DEFAULT_FIND_NODES, max_depth=MAX_DEPTH)"
+        },
+        {
+          "textRaw": "autojs6.selector.click(node)",
+          "name": "autojs6.selector.click(node)",
+          "desc": "<ul>\n<li><strong>node</strong> { <code>str</code> | <code>dict[str, object]</code> } - 本次执行中 snapshot 或 find 返回的节点, 或其 <code>id</code></li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 点击动作的结果</li>\n</ul>\n<p>点击一个已保留的节点.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nnode = selector.find(text_contains=&quot;Settings&quot;)\nprint(node and selector.click(node))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs6.selector.click(node)"
+        },
+        {
+          "textRaw": "autojs6.selector.set_text(node, text)",
+          "name": "autojs6.selector.set_text(node,_text)",
+          "desc": "<ul>\n<li><strong>node</strong> { <code>str</code> | <code>dict[str, object]</code> } - 本次执行中 snapshot 或 find 返回的节点, 或其 <code>id</code></li>\n<li><strong>text</strong> { <code>str</code> } - 文本, 最多 4 KiB (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 系统设置文本动作的结果</li>\n</ul>\n<p>为一个已保留的可编辑节点设置文本.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nfield = selector.find(editable=True)\nif field is not None:\n    selector.set_text(field, &quot;hello&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs6.selector.set_text(node, text)"
+        }
+      ]
+    }
+  ],
+  "miscs": [
+    {
+      "textRaw": "Python 运行时 (Python Runtime)",
+      "name": "Python 运行时 (Python Runtime)",
+      "type": "misc",
+      "desc": "<p>Python 运行时是一个独立安装的 AutoJs6 插件 (<a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Python-Runtime\">AutoJs6-Plugin-Python-Runtime</a>). 安装并启用后, AutoJs6 把本地 <code>.py</code> 文件交给插件, 在插件自己的进程中用 CPython 3.13 执行. 本页列出插件提供给 Python 脚本的 <code>autojs6</code> 包: 46 个函数, 54 个常量与 10 个异常类, 依据插件 0.5.5 (配对 AutoJs6 6.8.0, 最低构建 5275).</p>\n<p>本页的 API 属于 Python 语言, 不在 AutoJs6 的运行时覆盖矩阵 (Rhino, Node.js 与 Bun) 中, 因此页面顶部没有运行时支持表. 条目的名称, 参数与默认值由 AutoJs6 仓库的静态门禁 <code>tools/api-coverage/language_runtimes.py</code> 与插件源码 (包及各子模块的 <code>__all__</code>) 逐项比对.</p>\n<hr>\n",
+      "miscs": [
+        {
+          "textRaw": "使用方式",
+          "name": "使用方式",
+          "desc": "<ul>\n<li>运行: 在 AutoJs6 中运行 <code>.py</code> 文件, 或使用 <a href=\"engines#m-execscriptfile\">engines.execScriptFile</a> 启动. 插件未安装或被禁用时, 启动以失败结束, 不会回退到 JavaScript 引擎.</li>\n<li>导入: <code>import autojs6</code> 或 <code>from autojs6 import app, toast</code>. 包只在由插件执行的脚本中可用.</li>\n<li>宿主调用: 除三个快照函数 (app.snapshot, device.snapshot, execution.snapshot) 外, 函数都经插件与宿主之间的能力代理 (capability broker) 调用 AutoJs6, 按本次执行获得的授权与配额检查, 每次执行最多 1024 次宿主调用; 执行结束后全部授权失效.</li>\n<li>错误: 本次执行未获得某项能力时抛出 CapabilityUnavailableError, 宿主以稳定错误码拒绝时抛出 HostCapabilityError, 参数超出上限时抛出 <code>ValueError</code> 或 <code>TypeError</code>. 各项上限见对应模块的常量表.</li>\n</ul>\n<pre><code class=\"lang-python\">import autojs6\nfrom autojs6 import app, console\n\nconsole.log(&quot;AutoJs6 &quot; + app.snapshot()[&quot;versionName&quot;])\nautojs6.toast(&quot;hello&quot;)\n</code></pre>\n<hr>\n",
+          "type": "misc",
+          "displayName": "使用方式"
+        },
+        {
+          "textRaw": "异常类",
+          "name": "异常类",
+          "desc": "<table>\n<thead>\n<tr>\n<th>异常类</th>\n<th>基类</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.AutoJs6Error</code></td>\n<td><code>RuntimeError</code></td>\n<td>本包全部异常的基类</td>\n</tr>\n<tr>\n<td><code>autojs6.CapabilityUnavailableError</code></td>\n<td>AutoJs6Error</td>\n<td>宿主未向本次执行授予所需能力, 或能力当前不可用 (如无障碍服务未开启, 没有可用的 OCR 引擎, 非项目执行读取项目文件)</td>\n</tr>\n<tr>\n<td><code>autojs6.HostCapabilityError</code></td>\n<td>AutoJs6Error</td>\n<td>宿主能力调用以稳定错误码失败; <code>code</code> 属性为错误码, 如 <code>PERMISSION_DENIED</code>, <code>STALE_NODE</code>, <code>OCR_FAILED</code></td>\n</tr>\n<tr>\n<td><code>autojs6.ProjectPathError</code></td>\n<td>AutoJs6Error, <code>ValueError</code></td>\n<td>项目相对路径不安全, 或不是项目中的普通文件</td>\n</tr>\n<tr>\n<td><code>autojs6.ProjectReadLimitError</code></td>\n<td>AutoJs6Error</td>\n<td>项目文件超过单次读取上限 (1 MiB)</td>\n</tr>\n<tr>\n<td><code>autojs6.ResultAlreadySetError</code></td>\n<td>AutoJs6Error</td>\n<td>本次执行的结构化结果已经设置过</td>\n</tr>\n<tr>\n<td><code>autojs6.ResultSerializationError</code></td>\n<td>AutoJs6Error, <code>TypeError</code></td>\n<td>值无法表示为严格的有限 JSON</td>\n</tr>\n<tr>\n<td><code>autojs6.ResultLimitError</code></td>\n<td>AutoJs6Error</td>\n<td>编码后的结构化结果超过本次执行的字节上限</td>\n</tr>\n<tr>\n<td><code>autojs6.ArtifactPathError</code></td>\n<td>AutoJs6Error, <code>ValueError</code></td>\n<td>输出文件 (artifact) 路径不安全或未规范化</td>\n</tr>\n<tr>\n<td><code>autojs6.ArtifactLimitError</code></td>\n<td>AutoJs6Error</td>\n<td>输出文件的数量或大小超过本次执行的上限</td>\n</tr>\n</tbody>\n</table>\n<pre><code class=\"lang-python\">from autojs6 import automator, CapabilityUnavailableError\n\ntry:\n    automator.back()\nexcept CapabilityUnavailableError as error:\n    print(&quot;accessibility is not available:&quot;, error)\n</code></pre>\n<hr>\n",
+          "type": "misc",
+          "displayName": "异常类"
+        },
+        {
+          "textRaw": "autojs6",
+          "name": "autojs6",
+          "desc": "<p>包的顶层函数.</p>\n",
+          "methods": [
+            {
+              "textRaw": "autojs6.toast(text)",
+              "type": "method",
+              "name": "toast",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { `str` } - 消息文本 ",
+                      "name": "**text**",
+                      "type": " `str` ",
+                      "desc": "消息文本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `None` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `None` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>经宿主显示一条短时 toast.</p>\n<pre><code class=\"lang-python\">import autojs6\n\nautojs6.toast(&quot;done&quot;)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "autojs6.notice(text)",
+              "type": "method",
+              "name": "notice",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { `str` } - 通知文本, 不能为空, 最多 4 KiB (UTF-8) ",
+                      "name": "**text**",
+                      "type": " `str` ",
+                      "desc": "通知文本, 不能为空, 最多 4 KiB (UTF-8)"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `None` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `None` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>经宿主在 <code>autojs6-python</code> 通知渠道发出一条标记了本次执行的通知; 缺少通知权限或渠道被关闭时以 HostCapabilityError 失败 (错误码 <code>PERMISSION_DENIED</code>), 不会打开权限设置.</p>\n<pre><code class=\"lang-python\">import autojs6\n\nautojs6.notice(&quot;backup finished&quot;)\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "autojs6"
+        },
+        {
+          "textRaw": "相关链接",
+          "name": "相关链接",
+          "desc": "<ul>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Python-Runtime\">AutoJs6-Plugin-Python-Runtime</a>: 插件仓库, README 的 &quot;运行限制&quot; 一节列出全部上限, <code>docs/python/</code> 是各项宿主能力的协议说明.</li>\n<li><a href=\"engines\">引擎 (Engines)</a>: AutoJs6 脚本中启动 <code>.py</code> 文件.</li>\n</ul>\n",
+          "type": "misc",
+          "displayName": "相关链接"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "autojs6.app",
+          "name": "app",
+          "desc": "<p>应用信息与启动操作.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.app.snapshot()",
+              "name": "autojs6.app.snapshot()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>packageName</code>, <code>versionName</code>, <code>versionCode</code> 与 <code>debuggable</code> 的副本</li>\n</ul>\n<p>返回宿主在执行开始时冻结的 AutoJs6 应用信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\ninfo = app.snapshot()\nprint(info[&quot;packageName&quot;], info[&quot;versionCode&quot;])\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.app.snapshot()"
+            },
+            {
+              "textRaw": "autojs6.app.launch(package_name)",
+              "name": "autojs6.app.launch(package_name)",
+              "desc": "<ul>\n<li><strong>package_name</strong> { <code>str</code> } - Android 应用包名, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否启动了应用</li>\n</ul>\n<p>按包名启动一个已安装的应用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\nprint(app.launch(&quot;com.android.settings&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.app.launch(package_name)"
+            },
+            {
+              "textRaw": "autojs6.app.launch_app(name)",
+              "name": "autojs6.app.launch_app(name)",
+              "desc": "<ul>\n<li><strong>name</strong> { <code>str</code> } - 应用在桌面上显示的名称, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否启动了应用</li>\n</ul>\n<p>按应用名称启动一个已安装的应用.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\nprint(app.launch_app(&quot;Settings&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.app.launch_app(name)"
+            },
+            {
+              "textRaw": "autojs6.app.open_url(url)",
+              "name": "autojs6.app.open_url(url)",
+              "desc": "<ul>\n<li><strong>url</strong> { <code>str</code> } - HTTP 或 HTTPS 地址, 不能为空</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主是否打开了地址</li>\n</ul>\n<p>经宿主用系统默认方式打开一个 HTTP 或 HTTPS 地址.</p>\n<pre><code class=\"lang-python\">from autojs6 import app\n\napp.open_url(&quot;https://docs.autojs6.com&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.app.open_url(url)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.artifacts",
+          "name": "artifacts",
+          "desc": "<p>本次执行的输出文件 (artifact). 输出文件随执行结果交给宿主, 每次执行最多 16 个, 单个最大 4 MiB, 合计最大 8 MiB.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.artifacts.path(relative_path)",
+              "name": "autojs6.artifacts.path(relative_path)",
+              "desc": "<ul>\n<li><strong>relative_path</strong> { <code>str</code> } - 规范化的逻辑相对路径, 最多 1024 字节 (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 插件私有目录中可写入的文件路径</li>\n</ul>\n<p>登记一个输出文件并返回其实际路径; 路径不安全或未规范化时抛出 ArtifactPathError, 超过数量或大小上限时抛出 ArtifactLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import artifacts\n\nwith open(artifacts.path(&quot;report/summary.txt&quot;), &quot;w&quot;, encoding=&quot;utf-8&quot;) as file:\n    file.write(&quot;ok\\n&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.artifacts.path(relative_path)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.automator",
+          "name": "automator",
+          "desc": "<p>经宿主无障碍服务执行的坐标与全局动作. 宿主无障碍服务不可用时抛出 CapabilityUnavailableError, 不会打开设置页.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.automator.MAX_COORDINATE</code></td>\n<td><code>1000000</code></td>\n<td>坐标上限 (坐标为 0 到该值的整数)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.MAX_DURATION_MILLIS</code></td>\n<td><code>4000</code></td>\n<td>press 与 swipe 持续时间上限 (毫秒)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.DEFAULT_PRESS_DURATION_MILLIS</code></td>\n<td><code>100</code></td>\n<td>press 的默认持续时间 (毫秒)</td>\n</tr>\n<tr>\n<td><code>autojs6.automator.DEFAULT_SWIPE_DURATION_MILLIS</code></td>\n<td><code>300</code></td>\n<td>swipe 的默认持续时间 (毫秒)</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.automator.click(x, y)",
+              "name": "autojs6.automator.click(x,_y)",
+              "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>点击一个屏幕坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.click(540, 1200)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.click(x, y)"
+            },
+            {
+              "textRaw": "autojs6.automator.long_click(x, y)",
+              "name": "autojs6.automator.long_click(x,_y)",
+              "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>长按一个屏幕坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.long_click(540, 1200)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.long_click(x, y)"
+            },
+            {
+              "textRaw": "autojs6.automator.press(x, y, duration_ms=DEFAULT_PRESS_DURATION_MILLIS)",
+              "name": "autojs6.automator.press(x,_y,_duration_ms=default_press_duration_millis)",
+              "desc": "<ul>\n<li><strong>x</strong> { <code>int</code> } - 横坐标</li>\n<li><strong>y</strong> { <code>int</code> } - 纵坐标</li>\n<li><strong>[ duration_ms = 100 ]</strong> { <code>int</code> } - 按住时长, 1 到 4000 毫秒</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>按住一个屏幕坐标指定时长.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.press(540, 1200, 800)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.press(x, y, duration_ms=DEFAULT_PRESS_DURATION_MILLIS)"
+            },
+            {
+              "textRaw": "autojs6.automator.swipe(x1, y1, x2, y2, duration_ms=DEFAULT_SWIPE_DURATION_MILLIS)",
+              "name": "autojs6.automator.swipe(x1,_y1,_x2,_y2,_duration_ms=default_swipe_duration_millis)",
+              "desc": "<ul>\n<li><strong>x1</strong> { <code>int</code> } - 起点横坐标</li>\n<li><strong>y1</strong> { <code>int</code> } - 起点纵坐标</li>\n<li><strong>x2</strong> { <code>int</code> } - 终点横坐标</li>\n<li><strong>y2</strong> { <code>int</code> } - 终点纵坐标</li>\n<li><strong>[ duration_ms = 300 ]</strong> { <code>int</code> } - 滑动时长, 1 到 4000 毫秒</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>从一个坐标滑动到另一个坐标.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.swipe(540, 1600, 540, 400, duration_ms=500)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.swipe(x1, y1, x2, y2, duration_ms=DEFAULT_SWIPE_DURATION_MILLIS)"
+            },
+            {
+              "textRaw": "autojs6.automator.back()",
+              "name": "autojs6.automator.back()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>执行 Android 全局 &quot;返回&quot; 动作.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.back()\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.back()"
+            },
+            {
+              "textRaw": "autojs6.automator.home()",
+              "name": "autojs6.automator.home()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 宿主与系统报告的动作结果</li>\n</ul>\n<p>执行 Android 全局 &quot;主屏幕&quot; 动作.</p>\n<pre><code class=\"lang-python\">from autojs6 import automator\n\nautomator.home()\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.automator.home()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.clip",
+          "name": "clip",
+          "desc": "<p>宿主剪贴板.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.clip.get()",
+              "name": "autojs6.clip.get()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 剪贴板文本, 没有文本时为空字符串</li>\n</ul>\n<p>读取宿主剪贴板的文本.</p>\n<pre><code class=\"lang-python\">from autojs6 import clip\n\nprint(clip.get())\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.clip.get()"
+            },
+            {
+              "textRaw": "autojs6.clip.set(text)",
+              "name": "autojs6.clip.set(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 文本, 最多 32 KiB (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>用给定文本替换宿主剪贴板的内容.</p>\n<pre><code class=\"lang-python\">from autojs6 import clip\n\nclip.set(&quot;copied from Python&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.clip.set(text)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.console",
+          "name": "console",
+          "desc": "<p>直接写入 AutoJs6 控制台并带有级别的输出. 普通的 <code>print</code> 与标准错误输出同样会回到 AutoJs6 控制台.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.console.log(text)",
+              "name": "autojs6.console.log(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以调试级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.log(&quot;step 1&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.console.log(text)"
+            },
+            {
+              "textRaw": "autojs6.console.warn(text)",
+              "name": "autojs6.console.warn(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以警告级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.warn(&quot;retrying&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.console.warn(text)"
+            },
+            {
+              "textRaw": "autojs6.console.error(text)",
+              "name": "autojs6.console.error(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>以错误级别写入一行.</p>\n<pre><code class=\"lang-python\">from autojs6 import console\n\nconsole.error(&quot;failed&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.console.error(text)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.device",
+          "name": "device",
+          "desc": "<p>设备信息.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.device.snapshot()",
+              "name": "autojs6.device.snapshot()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>sdkInt</code>, <code>release</code>, <code>manufacturer</code>, <code>brand</code>, <code>model</code> 与 <code>supportedAbis</code> 的副本</li>\n</ul>\n<p>返回宿主在执行开始时冻结的设备信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import device\n\ninfo = device.snapshot()\nprint(info[&quot;brand&quot;], info[&quot;model&quot;], info[&quot;sdkInt&quot;])\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.device.snapshot()"
+            },
+            {
+              "textRaw": "autojs6.device.info()",
+              "name": "autojs6.device.info()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>battery</code> (<code>percent</code>, <code>charging</code>), <code>screen</code> (<code>on</code>, <code>brightness</code>) 与 <code>volume</code> (<code>music</code>, <code>notification</code>, <code>alarm</code>, 各含 <code>current</code> 与 <code>max</code>)</li>\n</ul>\n<p>经宿主读取当前的电量, 屏幕亮度与音量, 不含设备标识.</p>\n<pre><code class=\"lang-python\">from autojs6 import device\n\nstate = device.info()\nprint(state[&quot;battery&quot;][&quot;percent&quot;], state[&quot;volume&quot;][&quot;music&quot;][&quot;current&quot;])\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.device.info()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.dialogs",
+          "name": "dialogs",
+          "desc": "<p>由宿主显示的前台对话框. 调用时 AutoJs6 须有处于前台的界面; 否则不会弹出界面, 而是以 HostCapabilityError 失败 (错误码 <code>INTERACTIVE_NOT_ALLOWED</code>). 单次用户响应最多等待 5 分钟.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.dialogs.DEFAULT_TITLE</code></td>\n<td><code>&quot;AutoJs6 Python&quot;</code></td>\n<td>默认标题</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TITLE_BYTES</code></td>\n<td><code>256</code></td>\n<td>标题上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TEXT_BYTES</code></td>\n<td><code>4096</code></td>\n<td>正文上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_PROMPT_REPLY_BYTES</code></td>\n<td><code>32768</code></td>\n<td>prompt 默认值与回复的上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_ITEMS</code></td>\n<td><code>64</code></td>\n<td>select 的选项数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_ITEM_BYTES</code></td>\n<td><code>1024</code></td>\n<td>select 单个选项的上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.dialogs.MAX_TOTAL_ITEM_BYTES</code></td>\n<td><code>32768</code></td>\n<td>select 全部选项合计的上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.dialogs.alert(text, *, title=DEFAULT_TITLE)",
+              "name": "autojs6.dialogs.alert(text,_*,_title=default_title)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 正文</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>显示提示对话框, 阻塞到用户确认或关闭.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\ndialogs.alert(&quot;Backup finished&quot;, title=&quot;Backup&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.dialogs.alert(text, *, title=DEFAULT_TITLE)"
+            },
+            {
+              "textRaw": "autojs6.dialogs.confirm(text, *, title=DEFAULT_TITLE)",
+              "name": "autojs6.dialogs.confirm(text,_*,_title=default_title)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 正文</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 只有用户确认时为 <code>True</code></li>\n</ul>\n<p>显示确认对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nif dialogs.confirm(&quot;Delete the cache?&quot;):\n    print(&quot;confirmed&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.dialogs.confirm(text, *, title=DEFAULT_TITLE)"
+            },
+            {
+              "textRaw": "autojs6.dialogs.prompt(text, *, default=\"\", title=DEFAULT_TITLE)",
+              "name": "autojs6.dialogs.prompt(text,_*,_default=\"\",_title=default_title)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>str</code> } - 提示文本</li>\n<li><strong>[ default = &quot;&quot; ]</strong> { <code>str</code> } - 输入框的初始内容 (仅限关键字参数)</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> | <code>None</code> } - 输入的文本, 取消时为 <code>None</code></li>\n</ul>\n<p>显示输入对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nname = dialogs.prompt(&quot;Your name&quot;, default=&quot;guest&quot;)\nprint(name)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.dialogs.prompt(text, *, default=\"\", title=DEFAULT_TITLE)"
+            },
+            {
+              "textRaw": "autojs6.dialogs.select(items, *, title=DEFAULT_TITLE)",
+              "name": "autojs6.dialogs.select(items,_*,_title=default_title)",
+              "desc": "<ul>\n<li><strong>items</strong> { <code>Sequence[str]</code> } - 选项, 最多 64 项</li>\n<li><strong>[ title = &quot;AutoJs6 Python&quot; ]</strong> { <code>str</code> } - 标题 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>int</code> | <code>None</code> } - 所选项的索引 (从 0 开始), 取消时为 <code>None</code></li>\n</ul>\n<p>显示单选列表对话框.</p>\n<pre><code class=\"lang-python\">from autojs6 import dialogs\n\nindex = dialogs.select([&quot;red&quot;, &quot;green&quot;, &quot;blue&quot;], title=&quot;Color&quot;)\nprint(index)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.dialogs.select(items, *, title=DEFAULT_TITLE)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.engines",
+          "name": "engines",
+          "desc": "<p>当前 Python 引擎的信息与受限的子脚本启动.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.engines.INFO_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-engine-info-v1&quot;</code></td>\n<td>current 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.engines.LAUNCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-engine-launch-v1&quot;</code></td>\n<td>run 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_SCRIPT_LAUNCHES</code></td>\n<td><code>16</code></td>\n<td>每次执行成功启动子脚本的次数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_ENGINE_NAME_BYTES</code></td>\n<td><code>256</code></td>\n<td>返回的引擎名上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.engines.MAX_SOURCE_NAME_BYTES</code></td>\n<td><code>1024</code></td>\n<td>返回的脚本名上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.engines.current()",
+              "name": "autojs6.engines.current()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>id</code>, <code>engineName</code> (固定为 <code>&quot;python&quot;</code>), <code>sourceName</code>, <code>entryPoint</code>, <code>project</code> 与 <code>startedAtMillis</code></li>\n</ul>\n<p>返回当前 Python 引擎的信息, 不含绝对路径.</p>\n<pre><code class=\"lang-python\">from autojs6 import engines\n\nprint(engines.current()[&quot;sourceName&quot;])\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.engines.current()"
+            },
+            {
+              "textRaw": "autojs6.engines.run(path)",
+              "name": "autojs6.engines.run(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 子脚本相对于本次执行目录的路径</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>id</code>, <code>engineName</code>, <code>sourceName</code> 与 <code>path</code></li>\n</ul>\n<p>异步启动一个非 Python 的宿主脚本 (如 <code>.js</code>) 并立即返回其信息. 启动 <code>.py</code> 文件以 HostCapabilityError 失败 (错误码 <code>NESTED_PYTHON_NOT_ALLOWED</code>), 超过 16 次成功启动时错误码为 <code>ENGINE_LAUNCH_LIMIT_EXCEEDED</code>.</p>\n<pre><code class=\"lang-python\">from autojs6 import engines\n\nchild = engines.run(&quot;tasks/sync.js&quot;)\nprint(child[&quot;id&quot;], child[&quot;engineName&quot;])\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.engines.run(path)"
+            },
+            {
+              "textRaw": "autojs6.engines.stop_self()",
+              "name": "autojs6.engines.stop_self()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>NoReturn</code> } - 不会正常返回</li>\n</ul>\n<p>请求宿主强制停止本引擎; 停止通过重启插件进程完成, 脚本无法捕获.</p>\n<pre><code class=\"lang-python\">from autojs6 import console, engines\n\nconsole.log(&quot;stopping&quot;)\nengines.stop_self()\nprint(&quot;never printed&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.engines.stop_self()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.execution",
+          "name": "execution",
+          "desc": "<p>本次执行的信息.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.execution.snapshot()",
+              "name": "autojs6.execution.snapshot()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>id</code> (UUID 字符串), <code>entryPoint</code> 与 <code>project</code> 的副本</li>\n</ul>\n<p>返回宿主创建本次执行时冻结的执行信息, 不产生宿主调用.</p>\n<pre><code class=\"lang-python\">from autojs6 import execution\n\ninfo = execution.snapshot()\nprint(info[&quot;id&quot;], info[&quot;project&quot;])\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.execution.snapshot()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.files",
+          "name": "files",
+          "desc": "<p>实时读写当前脚本所在目录 (宿主侧执行根目录) 中的文件. 路径为相对路径, 不能越出该目录.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.files.MAX_PATH_BYTES</code></td>\n<td><code>4096</code></td>\n<td>相对路径上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.files.MAX_TEXT_BYTES</code></td>\n<td><code>32768</code></td>\n<td>单次读写的文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.files.MAX_LIST_ENTRIES</code></td>\n<td><code>128</code></td>\n<td>list 返回的名称数上限</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.files.read_text(path, *, encoding=\"utf-8\")",
+              "name": "autojs6.files.read_text(path,_*,_encoding=\"utf-8\")",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 文件内容</li>\n</ul>\n<p>读取一个 UTF-8 文本文件.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.read_text(&quot;config.txt&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.files.read_text(path, *, encoding=\"utf-8\")"
+            },
+            {
+              "textRaw": "autojs6.files.write_text(path, text, *, encoding=\"utf-8\")",
+              "name": "autojs6.files.write_text(path,_text,_*,_encoding=\"utf-8\")",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><strong>text</strong> { <code>str</code> } - 文件内容</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>覆盖写入一个文件; 不会创建不存在的上级目录.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nfiles.write_text(&quot;last-run.txt&quot;, &quot;ok&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.files.write_text(path, text, *, encoding=\"utf-8\")"
+            },
+            {
+              "textRaw": "autojs6.files.exists(path)",
+              "name": "autojs6.files.exists(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否存在</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.exists(&quot;config.txt&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.files.exists(path)"
+            },
+            {
+              "textRaw": "autojs6.files.is_file(path)",
+              "name": "autojs6.files.is_file(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否为普通文件</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.is_file(&quot;config.txt&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.files.is_file(path)"
+            },
+            {
+              "textRaw": "autojs6.files.is_dir(path)",
+              "name": "autojs6.files.is_dir(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径当前是否为目录</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nprint(files.is_dir(&quot;data&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.files.is_dir(path)"
+            },
+            {
+              "textRaw": "autojs6.files.list(path=\".\")",
+              "name": "autojs6.files.list(path=\".\")",
+              "desc": "<ul>\n<li><strong>[ path = &quot;.&quot; ]</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 相对路径, 默认为执行根目录</li>\n<li><ins><strong>returns</strong></ins> { <code>list[str]</code> } - 排序后的直接子项名称, 最多 128 个</li>\n</ul>\n<p>列出一个目录的直接子项.</p>\n<pre><code class=\"lang-python\">from autojs6 import files\n\nfor name in files.list(&quot;data&quot;):\n    print(name)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.files.list(path=\".\")"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.images",
+          "name": "images",
+          "desc": "<p>截图, 找色与找图. 截图需要宿主的无障碍服务, 每次执行最多保留 1 张截图与 1 个模板.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.images.IMAGE_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-screen-image-v1&quot;</code></td>\n<td>截图传输的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.CHUNK_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-screen-image-chunk-v1&quot;</code></td>\n<td>截图分块传输的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.COLOR_MATCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-color-match-v1&quot;</code></td>\n<td>找色结果的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.TEMPLATE_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-template-v1&quot;</code></td>\n<td>模板上传的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.TEMPLATE_CHUNK_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-template-chunk-v1&quot;</code></td>\n<td>模板分块上传的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.IMAGE_MATCH_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-image-match-v1&quot;</code></td>\n<td>找图结果的 schema 标识</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_IMAGE_BYTES</code></td>\n<td><code>4194304</code></td>\n<td>截图编码后的上限 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_CHUNK_BYTES</code></td>\n<td><code>32768</code></td>\n<td>截图分块的大小 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_CHUNKS</code></td>\n<td><code>128</code></td>\n<td>截图分块数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_BYTES</code></td>\n<td><code>1048576</code></td>\n<td>模板图片上限 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_CHUNK_BYTES</code></td>\n<td><code>24576</code></td>\n<td>模板分块的大小 (字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_CHUNKS</code></td>\n<td><code>43</code></td>\n<td>模板分块数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_DIMENSION</code></td>\n<td><code>2048</code></td>\n<td>模板单边像素上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_TEMPLATE_PIXELS</code></td>\n<td><code>1048576</code></td>\n<td>模板像素总数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_DIMENSION</code></td>\n<td><code>8192</code></td>\n<td>截图单边像素上限, 也是 region 的坐标范围</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_PIXELS</code></td>\n<td><code>16777216</code></td>\n<td>截图像素总数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MIN_QUALITY</code></td>\n<td><code>1</code></td>\n<td>quality 下限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_QUALITY</code></td>\n<td><code>100</code></td>\n<td>quality 上限</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_COLOR</code></td>\n<td><code>16777215</code></td>\n<td>颜色整数上限 (<code>0xFFFFFF</code>)</td>\n</tr>\n<tr>\n<td><code>autojs6.images.MAX_COLOR_THRESHOLD</code></td>\n<td><code>255</code></td>\n<td>逐通道阈值上限</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.images.capture_screen(*, format=\"png\", quality=100, path=None)",
+              "name": "autojs6.images.capture_screen(*,_format=\"png\",_quality=100,_path=none)",
+              "desc": "<ul>\n<li><strong>[ format = &quot;png&quot; ]</strong> { <code>str</code> } - <code>&quot;png&quot;</code> 或 <code>&quot;jpeg&quot;</code> (仅限关键字参数)</li>\n<li><strong>[ quality = 100 ]</strong> { <code>int</code> } - 编码质量, 1 到 100 (仅限关键字参数)</li>\n<li><strong>[ path = None ]</strong> { <code>str</code> | <code>None</code> } - 输出文件的逻辑路径 (仅限关键字参数), 规则同 autojs6.artifacts.path</li>\n<li><ins><strong>returns</strong></ins> { <code>bytes</code> | <code>str</code> } - 未给出 path 时为图像字节, 否则为写入的文件路径</li>\n</ul>\n<p>截取当前屏幕.</p>\n<pre><code class=\"lang-python\">from autojs6 import images\n\ndata = images.capture_screen(format=&quot;jpeg&quot;, quality=80)\nprint(len(data))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.images.capture_screen(*, format=\"png\", quality=100, path=None)"
+            },
+            {
+              "textRaw": "autojs6.images.find_color(color, *, region=None, threshold=0)",
+              "name": "autojs6.images.find_color(color,_*,_region=none,_threshold=0)",
+              "desc": "<ul>\n<li><strong>color</strong> { <code>int</code> | <code>str</code> } - <code>0xRRGGBB</code> 整数或 <code>&quot;#RRGGBB&quot;</code> 文本</li>\n<li><strong>[ region = None ]</strong> { <code>tuple[int, int, int, int]</code> | <code>list[int]</code> | <code>None</code> } - 搜索区域 (x, y, 宽, 高), 默认为整个屏幕 (仅限关键字参数)</li>\n<li><strong>[ threshold = 0 ]</strong> { <code>int</code> } - 逐通道阈值, 0 到 255 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[int, int]</code> | <code>None</code> } - 第一个匹配点的坐标, 未找到时为 <code>None</code></li>\n</ul>\n<p>在一张最新截图中按行优先找色, 只返回坐标, 不传输图像.</p>\n<pre><code class=\"lang-python\">from autojs6 import images\n\npoint = images.find_color(&quot;#FF5722&quot;, region=(0, 0, 1080, 600), threshold=8)\nprint(point)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.images.find_color(color, *, region=None, threshold=0)"
+            },
+            {
+              "textRaw": "autojs6.images.find_image(template, *, region=None, threshold=0)",
+              "name": "autojs6.images.find_image(template,_*,_region=none,_threshold=0)",
+              "desc": "<ul>\n<li><strong>template</strong> { <code>bytes</code> | <code>bytearray</code> | <code>memoryview</code> } - PNG 或 JPEG 模板图片</li>\n<li><strong>[ region = None ]</strong> { <code>tuple[int, int, int, int]</code> | <code>list[int]</code> | <code>None</code> } - 搜索区域 (x, y, 宽, 高), 默认为整个屏幕 (仅限关键字参数)</li>\n<li><strong>[ threshold = 0 ]</strong> { <code>int</code> } - 逐通道阈值, 0 到 255 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[int, int]</code> | <code>None</code> } - 第一个匹配位置的左上角坐标, 未找到时为 <code>None</code></li>\n</ul>\n<p>在一张最新截图中按行优先找图; 只有完全不透明的模板像素参与比较.</p>\n<pre><code class=\"lang-python\">from autojs6 import images, project\n\npoint = images.find_image(project.read_bytes(&quot;assets/button.png&quot;))\nprint(point)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.images.find_image(template, *, region=None, threshold=0)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.ocr",
+          "name": "ocr",
+          "desc": "<p>使用宿主当前配置的 OCR 引擎识别文字.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.ocr.MAX_LINES</code></td>\n<td><code>256</code></td>\n<td>返回的行数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.ocr.MAX_LINE_BYTES</code></td>\n<td><code>4096</code></td>\n<td>单行文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.ocr.MAX_TOTAL_TEXT_BYTES</code></td>\n<td><code>49152</code></td>\n<td>全部文本合计上限 (UTF-8 字节)</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.ocr.recognize(image)",
+              "name": "autojs6.ocr.recognize(image)",
+              "desc": "<ul>\n<li><strong>image</strong> { <code>bytes</code> | <code>bytearray</code> | <code>memoryview</code> } - PNG 或 JPEG 图片, 上限同 images 的模板 (1 MiB, 单边 2048 像素)</li>\n<li><ins><strong>returns</strong></ins> { <code>tuple[str, ...]</code> } - 逐行识别的文本</li>\n</ul>\n<p>识别一张图片中的文字; 宿主没有可用的 OCR 引擎时抛出 CapabilityUnavailableError, 引擎识别失败时以 HostCapabilityError 失败 (错误码 <code>OCR_FAILED</code>).</p>\n<pre><code class=\"lang-python\">from autojs6 import images, ocr\n\nlines = ocr.recognize(images.capture_screen(format=&quot;jpeg&quot;, quality=90))\nprint(&quot;\\n&quot;.join(lines))\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.ocr.recognize(image)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.project",
+          "name": "project",
+          "desc": "<p>只读访问项目执行时冻结的项目文件快照. 只能在以项目方式运行时使用, 否则抛出 CapabilityUnavailableError.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.project.MAX_READ_BYTES</code></td>\n<td><code>1048576</code></td>\n<td>单次读取上限 (字节)</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.project.read_bytes(path)",
+              "name": "autojs6.project.read_bytes(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bytes</code> } - 文件内容, 最多 1 MiB</li>\n</ul>\n<p>读取项目中的一个普通文件; 路径不安全时抛出 ProjectPathError, 超过上限时抛出 ProjectReadLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nicon = project.read_bytes(&quot;assets/icon.png&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.project.read_bytes(path)"
+            },
+            {
+              "textRaw": "autojs6.project.read_text(path, *, encoding=\"utf-8\")",
+              "name": "autojs6.project.read_text(path,_*,_encoding=\"utf-8\")",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><strong>[ encoding = &quot;utf-8&quot; ]</strong> { <code>str</code> } - 只接受 UTF-8 (仅限关键字参数)</li>\n<li><ins><strong>returns</strong></ins> { <code>str</code> } - 文件内容</li>\n</ul>\n<p>以严格 UTF-8 解码读取项目中的一个文件, 上限同 read_bytes.</p>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nprint(project.read_text(&quot;README.md&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.project.read_text(path, *, encoding=\"utf-8\")"
+            },
+            {
+              "textRaw": "autojs6.project.exists(path)",
+              "name": "autojs6.project.exists(path)",
+              "desc": "<ul>\n<li><strong>path</strong> { <code>str</code> | <code>os.PathLike[str]</code> } - 项目内的相对路径</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 路径是否为项目中的普通文件</li>\n</ul>\n<pre><code class=\"lang-python\">from autojs6 import project\n\nprint(project.exists(&quot;data/input.json&quot;))\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.project.exists(path)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.result",
+          "name": "result",
+          "desc": "<p>本次执行的结构化结果. 结果与标准输出分开传给宿主, 宿主不会从标准输出推断结果.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.result.set(value)",
+              "name": "autojs6.result.set(value)",
+              "desc": "<ul>\n<li><strong>value</strong> { <code>Any</code> } - 可严格编码为有限 JSON 的值, 编码后最多 64 KiB</li>\n<li><ins><strong>returns</strong></ins> { <code>None</code> }</li>\n</ul>\n<p>设置本次执行唯一的结构化结果; 再次设置抛出 ResultAlreadySetError, 无法编码时抛出 ResultSerializationError, 超过上限时抛出 ResultLimitError.</p>\n<pre><code class=\"lang-python\">from autojs6 import result\n\nresult.set({&quot;ok&quot;: True, &quot;items&quot;: [1, 2, 3]})\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.result.set(value)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs6.selector",
+          "name": "selector",
+          "desc": "<p>经宿主无障碍服务读取控件树并操作控件. 节点为字典, 含 <code>id</code>, <code>parentId</code>, <code>depth</code>, <code>childCount</code>, 文本字段 (<code>text</code>, <code>description</code>, <code>resourceId</code>, <code>className</code>, <code>packageName</code>), <code>bounds</code> (<code>left</code>, <code>top</code>, <code>right</code>, <code>bottom</code>), 状态字段 (<code>clickable</code>, <code>editable</code>, <code>enabled</code>, <code>focused</code>, <code>selected</code>, <code>checkable</code>, <code>checked</code>, <code>scrollable</code>, <code>password</code>, <code>visibleToUser</code>) 与 <code>truncatedFields</code>. 扫描不完整时以错误码 <code>SELECTOR_SCAN_LIMIT_EXCEEDED</code> 失败, 节点引用过期时以 <code>STALE_NODE</code> 失败.</p>\n<table>\n<thead>\n<tr>\n<th>常量</th>\n<th>值</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>autojs6.selector.SNAPSHOT_SCHEMA</code></td>\n<td><code>&quot;autojs6-python-ui-tree-v1&quot;</code></td>\n<td>snapshot 返回值的 <code>schema</code></td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_SNAPSHOT_NODES</code></td>\n<td><code>64</code></td>\n<td>snapshot 的默认节点数</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_SNAPSHOT_NODES</code></td>\n<td><code>128</code></td>\n<td>snapshot 的节点数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_SNAPSHOT_DEPTH</code></td>\n<td><code>16</code></td>\n<td>snapshot 的默认深度</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.DEFAULT_FIND_NODES</code></td>\n<td><code>512</code></td>\n<td>find 的默认扫描节点数</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_FIND_NODES</code></td>\n<td><code>1024</code></td>\n<td>find 的扫描节点数上限</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_DEPTH</code></td>\n<td><code>32</code></td>\n<td>深度上限, 也是 find 的默认深度</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_QUERY_TEXT_BYTES</code></td>\n<td><code>1024</code></td>\n<td>find 查询文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_SET_TEXT_BYTES</code></td>\n<td><code>4096</code></td>\n<td>set_text 文本上限 (UTF-8 字节)</td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_NODE_TEXT_CODE_POINTS</code></td>\n<td><code>256</code></td>\n<td>节点文本字段的长度上限 (Unicode 码位), 超出部分截断并记入 <code>truncatedFields</code></td>\n</tr>\n<tr>\n<td><code>autojs6.selector.MAX_RETAINED_NODES</code></td>\n<td><code>128</code></td>\n<td>每次执行保留的节点引用上限</td>\n</tr>\n</tbody>\n</table>\n",
+          "modules": [
+            {
+              "textRaw": "autojs6.selector.snapshot(max_nodes=DEFAULT_SNAPSHOT_NODES, max_depth=DEFAULT_SNAPSHOT_DEPTH)",
+              "name": "autojs6.selector.snapshot(max_nodes=default_snapshot_nodes,_max_depth=default_snapshot_depth)",
+              "desc": "<ul>\n<li><strong>[ max_nodes = 64 ]</strong> { <code>int</code> } - 节点数, 1 到 128</li>\n<li><strong>[ max_depth = 16 ]</strong> { <code>int</code> } - 深度, 0 到 32</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> } - 含 <code>schema</code>, <code>generation</code>, <code>truncated</code> 与 <code>nodes</code> (节点列表)</li>\n</ul>\n<p>按广度优先返回当前活动窗口控件树的有界快照.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\ntree = selector.snapshot(max_nodes=32)\nfor node in tree[&quot;nodes&quot;]:\n    print(node[&quot;depth&quot;], node[&quot;className&quot;], node[&quot;text&quot;])\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.selector.snapshot(max_nodes=DEFAULT_SNAPSHOT_NODES, max_depth=DEFAULT_SNAPSHOT_DEPTH)"
+            },
+            {
+              "textRaw": "autojs6.selector.find(*, text=None, text_contains=None, description=None, description_contains=None, resource_id=None, class_name=None, clickable=None, editable=None, enabled=None, scrollable=None, max_nodes=DEFAULT_FIND_NODES, max_depth=MAX_DEPTH)",
+              "name": "autojs6.selector.find(*,_text=none,_text_contains=none,_description=none,_description_contains=none,_resource_id=none,_class_name=none,_clickable=none,_editable=none,_enabled=none,_scrollable=none,_max_nodes=default_find_nodes,_max_depth=max_depth)",
+              "desc": "<ul>\n<li><strong>[ text = None ]</strong> { <code>str</code> | <code>None</code> } - 文本等于</li>\n<li><strong>[ text_contains = None ]</strong> { <code>str</code> | <code>None</code> } - 文本包含</li>\n<li><strong>[ description = None ]</strong> { <code>str</code> | <code>None</code> } - 内容描述等于</li>\n<li><strong>[ description_contains = None ]</strong> { <code>str</code> | <code>None</code> } - 内容描述包含</li>\n<li><strong>[ resource_id = None ]</strong> { <code>str</code> | <code>None</code> } - 资源 ID 等于</li>\n<li><strong>[ class_name = None ]</strong> { <code>str</code> | <code>None</code> } - 类名等于</li>\n<li><strong>[ clickable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可点击</li>\n<li><strong>[ editable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可编辑</li>\n<li><strong>[ enabled = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否启用</li>\n<li><strong>[ scrollable = None ]</strong> { <code>bool</code> | <code>None</code> } - 是否可滚动</li>\n<li><strong>[ max_nodes = 512 ]</strong> { <code>int</code> } - 扫描节点数, 1 到 1024</li>\n<li><strong>[ max_depth = 32 ]</strong> { <code>int</code> } - 扫描深度, 0 到 32</li>\n<li><ins><strong>returns</strong></ins> { <code>dict[str, object]</code> | <code>None</code> } - 第一个满足全部条件的节点, 未找到时为 <code>None</code></li>\n</ul>\n<p>按广度优先查找控件. 参数都只能以关键字给出, 至少给出一个条件.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nnode = selector.find(text=&quot;OK&quot;, clickable=True)\nif node is not None:\n    selector.click(node)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.selector.find(*, text=None, text_contains=None, description=None, description_contains=None, resource_id=None, class_name=None, clickable=None, editable=None, enabled=None, scrollable=None, max_nodes=DEFAULT_FIND_NODES, max_depth=MAX_DEPTH)"
+            },
+            {
+              "textRaw": "autojs6.selector.click(node)",
+              "name": "autojs6.selector.click(node)",
+              "desc": "<ul>\n<li><strong>node</strong> { <code>str</code> | <code>dict[str, object]</code> } - 本次执行中 snapshot 或 find 返回的节点, 或其 <code>id</code></li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 点击动作的结果</li>\n</ul>\n<p>点击一个已保留的节点.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nnode = selector.find(text_contains=&quot;Settings&quot;)\nprint(node and selector.click(node))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs6.selector.click(node)"
+            },
+            {
+              "textRaw": "autojs6.selector.set_text(node, text)",
+              "name": "autojs6.selector.set_text(node,_text)",
+              "desc": "<ul>\n<li><strong>node</strong> { <code>str</code> | <code>dict[str, object]</code> } - 本次执行中 snapshot 或 find 返回的节点, 或其 <code>id</code></li>\n<li><strong>text</strong> { <code>str</code> } - 文本, 最多 4 KiB (UTF-8)</li>\n<li><ins><strong>returns</strong></ins> { <code>bool</code> } - 系统设置文本动作的结果</li>\n</ul>\n<p>为一个已保留的可编辑节点设置文本.</p>\n<pre><code class=\"lang-python\">from autojs6 import selector\n\nfield = selector.find(editable=True)\nif field is not None:\n    selector.set_text(field, &quot;hello&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs6.selector.set_text(node, text)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

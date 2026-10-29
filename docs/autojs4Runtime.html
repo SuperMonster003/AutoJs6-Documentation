@@ -69,8 +69,11 @@
 <li><a class="nav-image" href="image.html">Images - 图像</a></li>
 <li><a class="nav-installer" href="installer.html">Installer - 安装器</a></li>
 <li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
+<li><a class="nav-javaRuntime" href="javaRuntime.html">Java Runtime - Java 运行时</a></li>
 <li><a class="nav-jsox" href="jsox.html">Jsox - JavaScript 对象扩展</a></li>
 <li><a class="nav-keys" href="keys.html">Keys - 按键</a></li>
+<li><a class="nav-kotlinRuntime" href="kotlinRuntime.html">Kotlin Runtime - Kotlin 运行时</a></li>
+<li><a class="nav-luaRuntime" href="luaRuntime.html">Lua Runtime - Lua 运行时</a></li>
 <li><a class="nav-mail" href="mail.html">Mail - 邮件</a></li>
 <li><a class="nav-media" href="media.html">Media - 多媒体</a></li>
 <li><a class="nav-mediainfo" href="mediainfo.html">MediaInfo - 媒体信息</a></li>
@@ -86,6 +89,7 @@
 <li><a class="nav-pinyin4j" href="pinyin4j.html">Pinyin4j</a></li>
 <li><a class="nav-plugins" href="plugins.html">Plugins - 插件</a></li>
 <li><a class="nav-powerManager" href="powerManager.html">PowerManager - 电源管理</a></li>
+<li><a class="nav-pythonRuntime" href="pythonRuntime.html">Python Runtime - Python 运行时</a></li>
 <li><a class="nav-qrcode" href="qrcode.html">QR Code - 二维码</a></li>
 <li><a class="nav-recorder" href="recorder.html">Recorder - 记录器</a></li>
 <li><a class="nav-sensors" href="sensors.html">Sensors - 传感器</a></li>
@@ -305,6 +309,7 @@
 <li><span class="stability_undefined"><a href="#autojs4runtime_4">对照模式</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_5">限制</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_com_stardust">com.stardust 兼容类</a></span></li>
+<li><span class="stability_undefined"><a href="#autojs4runtime_api">上游 API 与差异指引</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_6">差异反馈</a></span></li>
 <li><span class="stability_undefined"><a href="#autojs4runtime_7">相关链接</a></span></li>
 </ul>
@@ -408,6 +413,14 @@ toast(&quot;hello&quot;);
 <li>映射只作用于脚本中的类名解析 (<code>Packages</code>, 顶层 <code>com</code>, <code>importClass</code>, <code>importPackage</code>); <code>java.lang.Class.forName(&quot;com.stardust...&quot;)</code> 这类按 JVM 类名的查找不受影响, 会抛出 ClassNotFoundException.</li>
 </ul>
 <p>完整清单与每个部分映射类缺少的成员见 AutoJs6 仓库的 <code>docs/dev/stardust-compat-inventory.md</code>. 这是 AutoJs6 宿主的行为, 与是否安装本插件无关; 用 AutoJs4 引擎运行时, 脚本看到的仍是 AutoJs4 自己的 <code>com.stardust</code> 类.</p>
+<hr>
+<h2>上游 API 与差异指引<span><a class="mark" href="#autojs4runtime_api" id="autojs4runtime_api">#</a></span></h2>
+<p>用 AutoJs4 引擎运行的脚本看到的是 Auto.js 4 的原样 API: <code>init.js</code> 与 <code>modules/__*__.js</code> 定义的约 180 个顶层名称 (如 <code>app</code>, <code>images</code>, <code>ui</code>, <code>auto</code> 等模块, 以及 <code>click</code>, <code>sleep</code> 等全局函数). 这些上游名称不在本文档站的覆盖范围内: 本站的模块页, 代码补全与运行时支持表都以 AutoJs6 为准, 不逐条列出上游 API, 也不标注某个名称在 AutoJs4 中是否存在.</p>
+<ul>
+<li>查阅上游 API 的签名与说明: <a href="https://github.com/SuperMonster003/AutoJs4-Documentation">AutoJs4-Documentation</a> (Auto.js 4.1.0 文档的克隆).</li>
+<li>对照同名 API 在两边的行为: 先在本站查阅对应模块页 (如 <a href="image.html">图像</a>, <a href="automator.html">自动化</a>), 再用 <a href="#autojs4runtime_4">对照模式</a> 在同一设备上比较两次运行的输出.</li>
+<li>AutoJs6 新增的模块与成员 (如 <a href="ocr.html">OCR</a>, <a href="barcode.html">条码</a>, <a href="flow.html">流程</a>) 在 AutoJs4 中不存在, 用 AutoJs4 运行时这类调用通常以 ReferenceError 或 &quot;不是函数&quot; 一类的错误结束; 这属于预期的差异, 不需要反馈.</li>
+</ul>
 <hr>
 <h2>差异反馈<span><a class="mark" href="#autojs4runtime_6" id="autojs4runtime_6">#</a></span></h2>
 <p>发现 &quot;AutoJs4 正常而 AutoJs6 异常&quot; 的差异时, 请先排除下列已知的 &quot;特定情况&quot;, 再向 <a href="http://issues.autojs6.com">AutoJs6 的 issue 跟踪器</a> 反馈:</p>

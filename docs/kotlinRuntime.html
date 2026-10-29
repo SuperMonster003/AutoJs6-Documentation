@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Kotlin 运行时 (Kotlin Runtime) | AutoJs6 文档 - 6.8.0</title>
+    <link rel="stylesheet" href="assets/fonts.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/sh.css">
+    <link rel="stylesheet" href="plugins/docsify-copy-code@2-styles.css">
+    <link rel="stylesheet" href="plugins/zoom-image-styles.css">
+    <link rel="canonical" href="https://nodejs.org/api/kotlinRuntime.html">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport" content="user-scalable=no">
+</head>
+<body class="alt apidoc" id="api-section-kotlinRuntime">
+<div id="content" class="clearfix">
+    <div id="column2" class="interior">
+        <div id="intro" class="interior">
+            <a href="/" title="返回首页">
+                AutoJs6
+            </a>
+        </div>
+        <ul>
+<li><a class="nav-overview" href="overview.html">Overview - 综述</a></li>
+<li><a class="nav-documentation" href="documentation.html">About - 关于文档</a></li>
+<li><a class="nav-progress" href="progress.html">Progress - 文档部署进度</a></li>
+<li><a class="nav-changelog" href="changelog.html">Changelog - 文档更新日志</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-manual" href="manual.html">Manual - AutoJs6 使用手册</a></li>
+<li><a class="nav-runtimeApis" href="runtimeApis.html">Runtime APIs - 运行时 API</a></li>
+<li><a class="nav-qa" href="qa.html">Q &amp; A - 疑难解答</a></li>
+<li><a class="nav-suspicious" href="suspicious.html">Suspicious - 存疑内容</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-ai" href="ai.html">AI - 人工智能</a></li>
+<li><a class="nav-app" href="app.html">App - 通用应用</a></li>
+<li><a class="nav-autojs4Runtime" href="autojs4Runtime.html">AutoJs4 Runtime - AutoJs4 运行时</a></li>
+<li><a class="nav-autojs" href="autojs.html">AutoJs6 - 本体应用</a></li>
+<li><a class="nav-automator" href="automator.html">Automator - 自动化</a></li>
+<li><a class="nav-barcode" href="barcode.html">Barcode - 条码</a></li>
+<li><a class="nav-base64" href="base64.html">Base64</a></li>
+<li><a class="nav-bundledLibraries" href="bundledLibraries.html">Bundled Libraries - 脚本库</a></li>
+<li><a class="nav-canvas" href="canvas.html">Canvas - 画布</a></li>
+<li><a class="nav-color" href="color.html">Color - 颜色</a></li>
+<li><a class="nav-compose" href="compose.html">3-Block Compose</a></li>
+<li><a class="nav-composeDesigner" href="composeDesigner.html">3-Block Compose Designer - 设计器</a></li>
+<li><a class="nav-console" href="console.html">Console - 控制台</a></li>
+<li><a class="nav-continuation" href="continuation.html">Continuation - 续体</a></li>
+<li><a class="nav-cvt" href="cvt.html">Converter - 单位转换</a></li>
+<li><a class="nav-crypto" href="crypto.html">Crypto - 密文</a></li>
+<li><a class="nav-device" href="device.html">Device - 设备</a></li>
+<li><a class="nav-dialogs" href="dialogs.html">Dialogs - 对话框</a></li>
+<li><a class="nav-e4x" href="e4x.html">E4X</a></li>
+<li><a class="nav-engines" href="engines.html">Engines - 引擎</a></li>
+<li><a class="nav-epub" href="epub.html">EPUB - 电子书</a></li>
+<li><a class="nav-events" href="events.html">Events - 事件监听</a></li>
+<li><a class="nav-files" href="files.html">Files - 文件</a></li>
+<li><a class="nav-floaty" href="floaty.html">Floaty - 悬浮窗</a></li>
+<li><a class="nav-flow" href="flow.html">Flow - 流程</a></li>
+<li><a class="nav-fmt" href="fmt.html">Formatter - 格式化</a></li>
+<li><a class="nav-gallery" href="gallery.html">Gallery - 相册</a></li>
+<li><a class="nav-global" href="global.html">Global - 全局对象</a></li>
+<li><a class="nav-http" href="http.html">HTTP</a></li>
+<li><a class="nav-image" href="image.html">Images - 图像</a></li>
+<li><a class="nav-installer" href="installer.html">Installer - 安装器</a></li>
+<li><a class="nav-i18n" href="i18n.html">Internationalization - 国际化</a></li>
+<li><a class="nav-javaRuntime" href="javaRuntime.html">Java Runtime - Java 运行时</a></li>
+<li><a class="nav-jsox" href="jsox.html">Jsox - JavaScript 对象扩展</a></li>
+<li><a class="nav-keys" href="keys.html">Keys - 按键</a></li>
+<li><a class="nav-kotlinRuntime active" href="kotlinRuntime.html">Kotlin Runtime - Kotlin 运行时</a></li>
+<li><a class="nav-luaRuntime" href="luaRuntime.html">Lua Runtime - Lua 运行时</a></li>
+<li><a class="nav-mail" href="mail.html">Mail - 邮件</a></li>
+<li><a class="nav-media" href="media.html">Media - 多媒体</a></li>
+<li><a class="nav-mediainfo" href="mediainfo.html">MediaInfo - 媒体信息</a></li>
+<li><a class="nav-memory" href="memory.html">Memory - 内存</a></li>
+<li><a class="nav-mime" href="mime.html">MIME - 媒体类型</a></li>
+<li><a class="nav-modules" href="modules.html">Module - 模块</a></li>
+<li><a class="nav-nanoid" href="nanoid.html">Nano ID - 随机 ID</a></li>
+<li><a class="nav-notice" href="notice.html">Notice - 消息通知</a></li>
+<li><a class="nav-ocr" href="ocr.html">OCR - 光学字符识别</a></li>
+<li><a class="nav-opencc" href="opencc.html">OpenCC - 中文转换</a></li>
+<li><a class="nav-pangu" href="pangu.html">Pangu - 文本间距</a></li>
+<li><a class="nav-pinyin" href="pinyin.html">Pinyin - 拼音</a></li>
+<li><a class="nav-pinyin4j" href="pinyin4j.html">Pinyin4j</a></li>
+<li><a class="nav-plugins" href="plugins.html">Plugins - 插件</a></li>
+<li><a class="nav-powerManager" href="powerManager.html">PowerManager - 电源管理</a></li>
+<li><a class="nav-pythonRuntime" href="pythonRuntime.html">Python Runtime - Python 运行时</a></li>
+<li><a class="nav-qrcode" href="qrcode.html">QR Code - 二维码</a></li>
+<li><a class="nav-recorder" href="recorder.html">Recorder - 记录器</a></li>
+<li><a class="nav-sensors" href="sensors.html">Sensors - 传感器</a></li>
+<li><a class="nav-settings" href="settings.html">Settings - 应用设置</a></li>
+<li><a class="nav-shell" href="shell.html">Shell</a></li>
+<li><a class="nav-shizuku" href="shizuku.html">Shizuku</a></li>
+<li><a class="nav-speech" href="speech.html">Speech - 语音</a></li>
+<li><a class="nav-sqlite" href="sqlite.html">SQLite - 数据库</a></li>
+<li><a class="nav-s13n" href="s13n.html">Standardization - 标准化</a></li>
+<li><a class="nav-storages" href="storages.html">Storages - 存储</a></li>
+<li><a class="nav-sysprops" href="sysprops.html">Sysprops - 系统属性</a></li>
+<li><a class="nav-tasks" href="tasks.html">Tasks - 任务</a></li>
+<li><a class="nav-terminal" href="terminal.html">Terminal - 终端</a></li>
+<li><a class="nav-threads" href="threads.html">Threads - 线程</a></li>
+<li><a class="nav-timers" href="timers.html">Timers - 定时器</a></li>
+<li><a class="nav-toast" href="toast.html">Toast - 消息浮动框</a></li>
+<li><a class="nav-tts" href="tts.html">TTS - 文本转语音</a></li>
+<li><a class="nav-ui" href="ui.html">UI - 用户界面</a></li>
+<li><a class="nav-uiAttributes" href="uiAttributes.html">UI Attributes - UI 布局属性</a></li>
+<li><a class="nav-util" href="util.html">Util - 工具</a></li>
+<li><a class="nav-web" href="web.html">Web - 万维网</a></li>
+<li><a class="nav-workManager" href="workManager.html">WorkManager - 计划任务兼容接口</a></li>
+<li><a class="nav-yolo" href="yolo.html">YOLO - 目标检测</a></li>
+<li><a class="nav-zip" href="zip.html">Zip - 压缩文件</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-uiSelectorType" href="uiSelectorType.html">UiSelector - 选择器</a></li>
+<li><a class="nav-uiObjectType" href="uiObjectType.html">UiObject - 控件节点</a></li>
+<li><a class="nav-uiObjectCollectionType" href="uiObjectCollectionType.html">UiObjectCollection - 控件集合</a></li>
+<li><a class="nav-uiObjectActionsType" href="uiObjectActionsType.html">UiObjectActions - 控件节点行为</a></li>
+<li><a class="nav-composeNodeType" href="composeNodeType.html">ComposeNode - Compose 节点</a></li>
+<li><a class="nav-composeStateType" href="composeStateType.html">ComposeState - Compose 状态</a></li>
+<li><a class="nav-composeModifierType" href="composeModifierType.html">ComposeModifier - Compose 修饰链</a></li>
+<li><a class="nav-composeThemeType" href="composeThemeType.html">ComposeTheme - Compose 主题</a></li>
+<li><a class="nav-composeSessionType" href="composeSessionType.html">ComposeSession - Compose 会话</a></li>
+<li><a class="nav-composeFloatyWindowType" href="composeFloatyWindowType.html">ComposeFloatyWindow - Compose 悬浮窗</a></li>
+<li><a class="nav-composeComponents" href="composeComponents.html">Compose 组件目录</a></li>
+<li><a class="nav-epubBookType" href="epubBookType.html">EpubBook - 电子书对象</a></li>
+<li><a class="nav-epubReaderSessionType" href="epubReaderSessionType.html">EpubReaderSession - 阅读器会话</a></li>
+<li><a class="nav-flowType" href="flowType.html">Flow - 流程对象</a></li>
+<li><a class="nav-flowErrorType" href="flowErrorType.html">FlowError - 流程错误</a></li>
+<li><a class="nav-galleryViewSessionType" href="galleryViewSessionType.html">GalleryViewSession - 查看器会话</a></li>
+<li><a class="nav-mailClientType" href="mailClientType.html">MailClient - 邮件客户端</a></li>
+<li><a class="nav-mailMessageType" href="mailMessageType.html">MailMessage - 邮件消息</a></li>
+<li><a class="nav-speechSessionType" href="speechSessionType.html">SpeechSession - 听写会话</a></li>
+<li><a class="nav-speechWakeSessionType" href="speechWakeSessionType.html">SpeechWakeSession - 唤醒会话</a></li>
+<li><a class="nav-webSocketType" href="webSocketType.html">WebSocket</a></li>
+<li><a class="nav-eventEmitterType" href="eventEmitterType.html">EventEmitter - 事件发射器</a></li>
+<li><a class="nav-imageWrapperType" href="imageWrapperType.html">ImageWrapper - 包装图像类</a></li>
+<li><a class="nav-appType" href="appType.html">App - 应用枚举类</a></li>
+<li><a class="nav-colorType" href="colorType.html">Color - 颜色类</a></li>
+<li><a class="nav-versionType" href="versionType.html">Version - 版本工具类</a></li>
+<li><a class="nav-polyfill" href="polyfill.html">Polyfill - 代码填泥</a></li>
+<li><a class="nav-arrayx" href="arrayx.html">Arrayx - Array 扩展</a></li>
+<li><a class="nav-numberx" href="numberx.html">Numberx - Number 扩展</a></li>
+<li><a class="nav-mathx" href="mathx.html">Mathx - Math 扩展</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-exceptions" href="exceptions.html">Exceptions - 异常</a></li>
+<li><a class="nav-intentType" href="intentType.html">Intent - 意图</a></li>
+<li><a class="nav-runtime" href="runtime.html">Runtime - 运行时</a></li>
+<li><a class="nav-context" href="context.html">Context - 上下文</a></li>
+<li><a class="nav-activity" href="activity.html">Activity - 活动</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-scriptingJava" href="scriptingJava.html">Scripting Java - 脚本化 Java</a></li>
+<li><a class="nav-apiLevel" href="apiLevel.html">Android API Level - 安卓 API 级别</a></li>
+<li><a class="nav-colorTable" href="colorTable.html">Color Table - 颜色列表</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-glossaries" href="glossaries.html">Glossaries - 术语</a></li>
+<li><a class="nav-httpHeaderGlossary" href="httpHeaderGlossary.html">HttpHeader - HTTP 标头</a></li>
+<li><a class="nav-httpRequestMethodsGlossary" href="httpRequestMethodsGlossary.html">HttpRequestMethods - HTTP 请求方法</a></li>
+<li><a class="nav-mimeTypeGlossary" href="mimeTypeGlossary.html">MimeType - MIME 类型</a></li>
+<li><a class="nav-notificationChannelGlossary" href="notificationChannelGlossary.html">NotificationChannel - 通知渠道</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-dataTypes" href="dataTypes.html">Data Types - 数据类型</a></li>
+<li><a class="nav-omniTypes" href="omniTypes.html">Omnipotent Types - 全能类型</a></li>
+<li><a class="nav-storageType" href="storageType.html">Storage - 存储类</a></li>
+<li><a class="nav-androidBundleType" href="androidBundleType.html">AndroidBundle</a></li>
+<li><a class="nav-androidRectType" href="androidRectType.html">AndroidRect</a></li>
+<li><a class="nav-cryptoCipherOptionsType" href="cryptoCipherOptionsType.html">CryptoCipherOptions</a></li>
+<li><a class="nav-cryptoKeyType" href="cryptoKeyType.html">CryptoKey</a></li>
+<li><a class="nav-cryptoKeyPairType" href="cryptoKeyPairType.html">CryptoKeyPair</a></li>
+<li><a class="nav-consoleBuildOptionsType" href="consoleBuildOptionsType.html">ConsoleBuildOptions</a></li>
+<li><a class="nav-epubLocatorType" href="epubLocatorType.html">EpubLocator</a></li>
+<li><a class="nav-httpRequestBuilderOptionsType" href="httpRequestBuilderOptionsType.html">HttpRequestBuilderOptions</a></li>
+<li><a class="nav-httpRequestHeadersType" href="httpRequestHeadersType.html">HttpRequestHeaders</a></li>
+<li><a class="nav-httpResponseBodyType" href="httpResponseBodyType.html">HttpResponseBody</a></li>
+<li><a class="nav-httpResponseHeadersType" href="httpResponseHeadersType.html">HttpResponseHeaders</a></li>
+<li><a class="nav-httpResponseType" href="httpResponseType.html">HttpResponse</a></li>
+<li><a class="nav-injectableWebClientType" href="injectableWebClientType.html">InjectableWebClient</a></li>
+<li><a class="nav-injectableWebViewType" href="injectableWebViewType.html">InjectableWebView</a></li>
+<li><a class="nav-mailAccountOptionsType" href="mailAccountOptionsType.html">MailAccountOptions</a></li>
+<li><a class="nav-mailSearchQueryType" href="mailSearchQueryType.html">MailSearchQuery</a></li>
+<li><a class="nav-noticeOptionsType" href="noticeOptionsType.html">NoticeOptions</a></li>
+<li><a class="nav-noticeChannelOptionsType" href="noticeChannelOptionsType.html">NoticeChannelOptions</a></li>
+<li><a class="nav-noticePresetConfigurationType" href="noticePresetConfigurationType.html">NoticePresetConfiguration</a></li>
+<li><a class="nav-noticeBuilderType" href="noticeBuilderType.html">NoticeBuilder</a></li>
+<li><a class="nav-okhttp3HttpUrlType" href="okhttp3HttpUrlType.html">Okhttp3HttpUrl</a></li>
+<li><a class="nav-ocrOptionsType" href="ocrOptionsType.html">OcrOptions</a></li>
+<li><a class="nav-okhttp3RequestType" href="okhttp3RequestType.html">Okhttp3Request</a></li>
+<li><a class="nav-opencvPointType" href="opencvPointType.html">OpenCVPoint</a></li>
+<li><a class="nav-opencvRectType" href="opencvRectType.html">OpenCVRect</a></li>
+<li><a class="nav-opencvSizeType" href="opencvSizeType.html">OpenCVSize</a></li>
+<li><a class="nav-openCCConversionType" href="openCCConversionType.html">OpenCCConversion</a></li>
+<li><a class="nav-speechModelInfoType" href="speechModelInfoType.html">SpeechModelInfo</a></li>
+<li><a class="nav-speechRecognitionResultType" href="speechRecognitionResultType.html">SpeechRecognitionResult</a></li>
+</ul>
+<div class="line"></div>
+
+<ul>
+<li><a class="nav-http-project-autojs6-com" href="http://project.autojs6.com">GitHub - 应用项目地址</a></li>
+<li><p><a class="nav-http-docs-project-autojs6-com" href="http://docs-project.autojs6.com">GitHub - 文档项目地址</a></p>
+</li>
+<li><p><a class="nav-terminalSessionType" href="terminalSessionType.html">TerminalSession - 终端会话</a></p>
+</li>
+<li><a class="nav-terminalOpenOptionsType" href="terminalOpenOptionsType.html">TerminalOpenOptions - 终端选项</a></li>
+<li><a class="nav-terminalErrorType" href="terminalErrorType.html">TerminalError - 终端错误</a></li>
+<li><a class="nav-shellProcessType" href="shellProcessType.html">ShellProcess - Shell 进程</a></li>
+</ul>
+
+    </div>
+
+    <div id="column1" data-id="kotlinRuntime" class="interior">
+        <header>
+            <h1>AutoJs6 文档 - 6.8.0</h1>
+            <div id="gtoc">
+                <p class="index">
+                    <a href="index.html" name="toc">索引</a>
+                    <span class="offline-search-entry"> |
+                        <button type="button"
+                                class="offline-search-toggle"
+                                aria-controls="offline-search-panel"
+                                aria-expanded="false"
+                                data-offline-search-toggle>搜索文档</button>
+                    </span>
+                </p>
+            </div>
+            <hr>
+        </header>
+
+        <section id="offline-search-panel"
+                 class="offline-search"
+                 aria-labelledby="offline-search-title"
+                 data-offline-search
+                 data-index-src="assets/offline-search-index.js"
+                 data-state="idle"
+                 hidden>
+            <div class="offline-search-heading">
+                <h2 id="offline-search-title">搜索文档</h2>
+                <button type="button"
+                        class="offline-search-icon-button offline-search-close"
+                        aria-label="关闭搜索文档"
+                        data-offline-search-close>
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false">
+                        <path d="M6 6L18 18M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="offline-search-control">
+                <input id="offline-search-input"
+                       type="search"
+                       role="combobox"
+                       inputmode="search"
+                       autocomplete="off"
+                       spellcheck="false"
+                       placeholder="搜索文档内容"
+                       aria-labelledby="offline-search-title"
+                       aria-controls="offline-search-results"
+                       aria-autocomplete="list"
+                       aria-expanded="false"
+                       data-offline-search-input>
+                <button type="button"
+                        class="offline-search-icon-button offline-search-clear"
+                        aria-label="清除搜索内容"
+                        data-offline-search-clear
+                        hidden>
+                    <svg viewBox="0 0 24 24"
+                         aria-hidden="true"
+                         focusable="false">
+                        <path d="M6 6L18 18M18 6L6 18"></path>
+                    </svg>
+                </button>
+            </div>
+            <p class="offline-search-status"
+               aria-live="polite"
+               data-offline-search-status>输入关键词搜索全部离线文档</p>
+            <div id="offline-search-results"
+                 class="offline-search-results"
+                 role="listbox"
+                 hidden
+                 data-offline-search-results></div>
+        </section>
+
+        <div id="toc">
+            <h2>目录</h2>
+<ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_kotlin_kotlin_runtime">Kotlin 运行时 (Kotlin Runtime)</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime">使用方式</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_1">类型</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_autojsjvmentry">AutoJsJvmEntry</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_autojsjvmentry_run_context">AutoJsJvmEntry.run(context)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext">JvmScriptContext</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_app">JvmScriptContext.app()</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_console">JvmScriptContext.console()</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_cancellation">JvmScriptContext.cancellation()</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_sleep_millis">JvmScriptContext.sleep(millis)</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_toast_message">JvmScriptContext.toast(message)</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_iscancellationrequested">JvmScriptContext.isCancellationRequested()</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmscriptcontext_throwifcancellationrequested">JvmScriptContext.throwIfCancellationRequested()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmappapi">JvmAppApi</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmappapi_launch_packagename">JvmAppApi.launch(packageName)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmconsoleapi">JvmConsoleApi</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmconsoleapi_log_message">JvmConsoleApi.log(message)</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmconsoleapi_error_message">JvmConsoleApi.error(message)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmcancellation">JvmCancellation</a></span><ul>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmcancellation_iscancellationrequested">JvmCancellation.isCancellationRequested()</a></span></li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_jvmcancellation_throwifcancellationrequested">JvmCancellation.throwIfCancellationRequested()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#kotlinruntime_2">相关链接</a></span></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+
+        <div id="apicontent">
+            <h1>Kotlin 运行时 (Kotlin Runtime)<span><a class="mark" href="#kotlinruntime_kotlin_kotlin_runtime" id="kotlinruntime_kotlin_kotlin_runtime">#</a></span></h1>
+<!-- type=misc -->
+<p>Kotlin 运行时是一个独立安装的 AutoJs6 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Kotlin-Runtime">AutoJs6-Plugin-Kotlin-Runtime</a>). 它用内置的 Kotlin/JVM 2.3.21 编译器 (K2) 与 D8 把单个 <code>.kt</code> 源文件编译为 DEX, 在插件的一次性 worker 进程中执行, 编译器与脚本都不进入 AutoJs6 进程. 本页列出脚本可用的 JVM Entry API 2: 包 <code>org.autojs.plugin.jvmsource.api</code> 中的 6 个类型与 13 个方法, 依据插件 0.7.3-m10 (最低 AutoJs6 构建 5276).</p>
+<p>本页的 API 属于 Kotlin 语言, 不在 AutoJs6 的运行时覆盖矩阵 (Rhino, Node.js 与 Bun) 中, 因此页面顶部没有运行时支持表. 条目的名称与参数个数由 AutoJs6 仓库的静态门禁 <code>tools/api-coverage/language_runtimes.py</code> 与插件冻结的接口包 (<code>protocol/jvm-source-api.aar</code>) 逐项比对. 这套接口与 <a href="javaRuntime.html">Java 运行时</a> 同源; Java 运行时的 Entry API 4 另有 args 与 clipboard, Kotlin 运行时没有.</p>
+<hr>
+<h2>使用方式<span><a class="mark" href="#kotlinruntime" id="kotlinruntime">#</a></span></h2>
+<div class="signature"><ul>
+<li>启用: JVM 源码运行目前是 AutoJs6 的实验性功能, 需在 AutoJs6 中开启该实验开关, 并为 Kotlin 语言选择本插件作为编译组件; 未开启或未选择时, 运行以错误码 <code>JVM_SOURCE_EXPERIMENT_DISABLED</code> 或 <code>JVM_SOURCE_PROVIDER_NOT_SELECTED</code> 结束.</li>
+<li>入口: 在编辑器中新建 <code>.kt</code> 文件并运行. 宿主把源码统一命名为 <code>Main.kt</code>, 入口类的简名固定为 <code>Main</code>, 须实现 AutoJsJvmEntry; 可以带普通 ASCII 包名与 import 语句.</li>
+<li>范围: 只支持单个源文件, 最大 4 MiB; 字节码目标为 JVM 1.8; 可用 Kotlin 标准库与 kotlinx-coroutines-core-jvm 1.11.0 (Dispatchers.Default / IO / Unconfined), 不解析 Maven 或其他第三方依赖.</li>
+<li>能力: JvmScriptContext 的宿主调用 (控制台输出, 应用启动, 休眠, toast) 都受本次会话协商的能力约束; 调用未授予的能力会终止本次执行.</li>
+<li>生命周期: 每次执行在全新的 worker 进程中进行, 结束即回收; 协程等后台任务不会在 run 返回后继续存活, 不要使用 GlobalScope. 在 AutoJs6 中停止脚本会立即中断休眠与协程.</li>
+</ul>
+</div><pre><code class="lang-kotlin">import org.autojs.plugin.jvmsource.api.AutoJsJvmEntry
+import org.autojs.plugin.jvmsource.api.JvmScriptContext
+
+class Main : AutoJsJvmEntry {
+    override fun run(context: JvmScriptContext): Any {
+        context.console().log(&quot;Hello from Kotlin&quot;)
+        context.toast(&quot;AutoJs6 Kotlin Runtime&quot;)
+        context.sleep(500L)
+        return context.app().launch(&quot;org.autojs.autojs6&quot;)
+    }
+}
+</code></pre>
+<p>除 AutoJsJvmEntry.run 外, 本页示例都是 <code>run(context: JvmScriptContext)</code> 函数体中的片段.</p>
+<hr>
+<h2>类型<span><a class="mark" href="#kotlinruntime_1" id="kotlinruntime_1">#</a></span></h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>种类</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AutoJsJvmEntry</code></td>
+<td>接口</td>
+<td>入口类实现的接口</td>
+</tr>
+<tr>
+<td><code>JvmScriptContext</code></td>
+<td>接口</td>
+<td>run 收到的上下文, 是唯一受支持的宿主桥</td>
+</tr>
+<tr>
+<td><code>JvmAppApi</code></td>
+<td>接口</td>
+<td>应用启动</td>
+</tr>
+<tr>
+<td><code>JvmConsoleApi</code></td>
+<td>接口</td>
+<td>控制台输出</td>
+</tr>
+<tr>
+<td><code>JvmCancellation</code></td>
+<td>接口</td>
+<td>只读的取消状态</td>
+</tr>
+<tr>
+<td><code>JvmCancellationException</code></td>
+<td>类, 继承 <code>Exception</code></td>
+<td>会话被取消时抛出</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>AutoJsJvmEntry<span><a class="mark" href="#kotlinruntime_autojsjvmentry" id="kotlinruntime_autojsjvmentry">#</a></span></h2>
+<h3>AutoJsJvmEntry.run(context)<span><a class="mark" href="#kotlinruntime_autojsjvmentry_run_context" id="kotlinruntime_autojsjvmentry_run_context">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>context</strong> { <code>JvmScriptContext</code> } - 本次执行的上下文</li>
+<li><ins><strong>returns</strong></ins> { <code>Any?</code> } - 交给宿主的结果</li>
+</ul>
+</div><p>入口函数, 声明为 <code>override fun run(context: JvmScriptContext): Any?</code> (返回类型可以收窄为 <code>Any</code>).</p>
+<pre><code class="lang-kotlin">class Main : AutoJsJvmEntry {
+    override fun run(context: JvmScriptContext): Any {
+        val started = System.currentTimeMillis()
+        context.sleep(100L)
+        return System.currentTimeMillis() - started
+    }
+}
+</code></pre>
+<hr>
+<h2>JvmScriptContext<span><a class="mark" href="#kotlinruntime_jvmscriptcontext" id="kotlinruntime_jvmscriptcontext">#</a></span></h2>
+<h3>JvmScriptContext.app()<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_app" id="kotlinruntime_jvmscriptcontext_app">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>JvmAppApi</code> }</li>
+</ul>
+</div><p>返回应用启动视图. 调用其方法需要应用启动能力.</p>
+<pre><code class="lang-kotlin">val launched = context.app().launch(&quot;org.autojs.autojs6&quot;)
+</code></pre>
+<h3>JvmScriptContext.console()<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_console" id="kotlinruntime_jvmscriptcontext_console">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>JvmConsoleApi</code> }</li>
+</ul>
+</div><p>返回控制台视图. 调用其方法需要控制台输出能力.</p>
+<pre><code class="lang-kotlin">context.console().log(&quot;hello&quot;)
+</code></pre>
+<h3>JvmScriptContext.cancellation()<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_cancellation" id="kotlinruntime_jvmscriptcontext_cancellation">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>JvmCancellation</code> }</li>
+</ul>
+</div><p>返回只读的取消状态视图, 只能观察, 不能发起取消.</p>
+<pre><code class="lang-kotlin">val cancellation = context.cancellation()
+while (!cancellation.isCancellationRequested()) {
+    context.sleep(100L)
+}
+</code></pre>
+<h3>JvmScriptContext.sleep(millis)<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_sleep_millis" id="kotlinruntime_jvmscriptcontext_sleep_millis">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>millis</strong> { <code>Long</code> } - 毫秒数, 不能为负</li>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>可被取消的休眠. 需要休眠能力; 在 AutoJs6 中停止脚本时中断休眠并抛出 JvmCancellationException.</p>
+<pre><code class="lang-kotlin">context.sleep(500L)
+</code></pre>
+<h3>JvmScriptContext.toast(message)<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_toast_message" id="kotlinruntime_jvmscriptcontext_toast_message">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>message</strong> { <code>String</code> } - 消息</li>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>请求宿主显示一条 toast. 需要 toast 能力; 宿主拒绝时脚本失败.</p>
+<pre><code class="lang-kotlin">context.toast(&quot;done&quot;)
+</code></pre>
+<h3>JvmScriptContext.isCancellationRequested()<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_iscancellationrequested" id="kotlinruntime_jvmscriptcontext_iscancellationrequested">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>Boolean</code> } - 是否已收到取消</li>
+</ul>
+</div><p>便利方法, 等价于 <code>cancellation().isCancellationRequested()</code>.</p>
+<pre><code class="lang-kotlin">if (context.isCancellationRequested()) return &quot;cancelled&quot;
+</code></pre>
+<h3>JvmScriptContext.throwIfCancellationRequested()<span><a class="mark" href="#kotlinruntime_jvmscriptcontext_throwifcancellationrequested" id="kotlinruntime_jvmscriptcontext_throwifcancellationrequested">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>便利方法, 等价于 <code>cancellation().throwIfCancellationRequested()</code>. 建议在长循环的每个工作单元之间调用.</p>
+<pre><code class="lang-kotlin">repeat(1000) { index -&gt;
+    context.throwIfCancellationRequested()
+    work(index)
+}
+</code></pre>
+<hr>
+<h2>JvmAppApi<span><a class="mark" href="#kotlinruntime_jvmappapi" id="kotlinruntime_jvmappapi">#</a></span></h2>
+<h3>JvmAppApi.launch(packageName)<span><a class="mark" href="#kotlinruntime_jvmappapi_launch_packagename" id="kotlinruntime_jvmappapi_launch_packagename">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>packageName</strong> { <code>String</code> } - 包名, 如 <code>com.example.app</code></li>
+<li><ins><strong>returns</strong></ins> { <code>Boolean</code> } - 宿主给出的启动结果</li>
+</ul>
+</div><p>请求宿主启动一个已安装的应用. 宿主拒绝或响应异常时脚本失败.</p>
+<pre><code class="lang-kotlin">val launched = context.app().launch(&quot;com.android.settings&quot;)
+context.console().log(&quot;launched = $launched&quot;)
+</code></pre>
+<hr>
+<h2>JvmConsoleApi<span><a class="mark" href="#kotlinruntime_jvmconsoleapi" id="kotlinruntime_jvmconsoleapi">#</a></span></h2>
+<h3>JvmConsoleApi.log(message)<span><a class="mark" href="#kotlinruntime_jvmconsoleapi_log_message" id="kotlinruntime_jvmconsoleapi_log_message">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>message</strong> { <code>String</code> } - 一行文本</li>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>向标准输出写入一行, 在脚本运行期间逐行实时回传到 AutoJs6 控制台.</p>
+<pre><code class="lang-kotlin">context.console().log(&quot;step 1&quot;)
+</code></pre>
+<h3>JvmConsoleApi.error(message)<span><a class="mark" href="#kotlinruntime_jvmconsoleapi_error_message" id="kotlinruntime_jvmconsoleapi_error_message">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>message</strong> { <code>String</code> } - 一行文本</li>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>向标准错误写入一行, 在脚本运行期间逐行实时回传到 AutoJs6 控制台.</p>
+<pre><code class="lang-kotlin">context.console().error(&quot;failed&quot;)
+</code></pre>
+<hr>
+<h2>JvmCancellation<span><a class="mark" href="#kotlinruntime_jvmcancellation" id="kotlinruntime_jvmcancellation">#</a></span></h2>
+<h3>JvmCancellation.isCancellationRequested()<span><a class="mark" href="#kotlinruntime_jvmcancellation_iscancellationrequested" id="kotlinruntime_jvmcancellation_iscancellationrequested">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>Boolean</code> } - 是否已收到取消</li>
+</ul>
+</div><p>非阻塞地查询会话是否已被取消.</p>
+<pre><code class="lang-kotlin">if (context.cancellation().isCancellationRequested()) return &quot;cancelled&quot;
+</code></pre>
+<h3>JvmCancellation.throwIfCancellationRequested()<span><a class="mark" href="#kotlinruntime_jvmcancellation_throwifcancellationrequested" id="kotlinruntime_jvmcancellation_throwifcancellationrequested">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <code>Unit</code> }</li>
+</ul>
+</div><p>会话已被取消时抛出 JvmCancellationException. 不要捕获它后继续运行.</p>
+<pre><code class="lang-kotlin">context.cancellation().throwIfCancellationRequested()
+</code></pre>
+<hr>
+<h2>相关链接<span><a class="mark" href="#kotlinruntime_2" id="kotlinruntime_2">#</a></span></h2>
+<div class="signature"><ul>
+<li><a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Kotlin-Runtime">AutoJs6-Plugin-Kotlin-Runtime</a>: 插件仓库, README 列出能力边界与脚本运行库, <code>samples/</code> 含能力, 取消与协程示例.</li>
+<li><a href="javaRuntime.html">Java 运行时</a>: 同一套接口的 Java 插件 (Entry API 4).</li>
+</ul>
+</div>
+        </div>
+    </div>
+</div>
+
+<script src="assets/sh_javascript.js"></script>
+<script src="assets/sh_java.js"></script>
+<script src="assets/sh_main.js"></script>
+<script src="assets/offline-search.js"></script>
+
+<script src="plugins/docsify-copy-code@2.js"></script>
+<script src="plugins/zoom-image.js"></script>
+
+<script>
+    highlight(void 0, void 0, 'pre');
+    highlight(void 0, void 0, 'tt');
+</script>
+
+<!-- __TRACKING__ -->
+
+</body>
+</html>

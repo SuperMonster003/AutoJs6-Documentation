@@ -1,0 +1,398 @@
+{
+  "source": "..\\api\\kotlinRuntime.md",
+  "miscs": [
+    {
+      "textRaw": "Kotlin 运行时 (Kotlin Runtime)",
+      "name": "Kotlin 运行时 (Kotlin Runtime)",
+      "type": "misc",
+      "desc": "<p>Kotlin 运行时是一个独立安装的 AutoJs6 插件 (<a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Kotlin-Runtime\">AutoJs6-Plugin-Kotlin-Runtime</a>). 它用内置的 Kotlin/JVM 2.3.21 编译器 (K2) 与 D8 把单个 <code>.kt</code> 源文件编译为 DEX, 在插件的一次性 worker 进程中执行, 编译器与脚本都不进入 AutoJs6 进程. 本页列出脚本可用的 JVM Entry API 2: 包 <code>org.autojs.plugin.jvmsource.api</code> 中的 6 个类型与 13 个方法, 依据插件 0.7.3-m10 (最低 AutoJs6 构建 5276).</p>\n<p>本页的 API 属于 Kotlin 语言, 不在 AutoJs6 的运行时覆盖矩阵 (Rhino, Node.js 与 Bun) 中, 因此页面顶部没有运行时支持表. 条目的名称与参数个数由 AutoJs6 仓库的静态门禁 <code>tools/api-coverage/language_runtimes.py</code> 与插件冻结的接口包 (<code>protocol/jvm-source-api.aar</code>) 逐项比对. 这套接口与 <a href=\"javaRuntime\">Java 运行时</a> 同源; Java 运行时的 Entry API 4 另有 args 与 clipboard, Kotlin 运行时没有.</p>\n<hr>\n",
+      "miscs": [
+        {
+          "textRaw": "使用方式",
+          "name": "使用方式",
+          "desc": "<ul>\n<li>启用: JVM 源码运行目前是 AutoJs6 的实验性功能, 需在 AutoJs6 中开启该实验开关, 并为 Kotlin 语言选择本插件作为编译组件; 未开启或未选择时, 运行以错误码 <code>JVM_SOURCE_EXPERIMENT_DISABLED</code> 或 <code>JVM_SOURCE_PROVIDER_NOT_SELECTED</code> 结束.</li>\n<li>入口: 在编辑器中新建 <code>.kt</code> 文件并运行. 宿主把源码统一命名为 <code>Main.kt</code>, 入口类的简名固定为 <code>Main</code>, 须实现 AutoJsJvmEntry; 可以带普通 ASCII 包名与 import 语句.</li>\n<li>范围: 只支持单个源文件, 最大 4 MiB; 字节码目标为 JVM 1.8; 可用 Kotlin 标准库与 kotlinx-coroutines-core-jvm 1.11.0 (Dispatchers.Default / IO / Unconfined), 不解析 Maven 或其他第三方依赖.</li>\n<li>能力: JvmScriptContext 的宿主调用 (控制台输出, 应用启动, 休眠, toast) 都受本次会话协商的能力约束; 调用未授予的能力会终止本次执行.</li>\n<li>生命周期: 每次执行在全新的 worker 进程中进行, 结束即回收; 协程等后台任务不会在 run 返回后继续存活, 不要使用 GlobalScope. 在 AutoJs6 中停止脚本会立即中断休眠与协程.</li>\n</ul>\n<pre><code class=\"lang-kotlin\">import org.autojs.plugin.jvmsource.api.AutoJsJvmEntry\nimport org.autojs.plugin.jvmsource.api.JvmScriptContext\n\nclass Main : AutoJsJvmEntry {\n    override fun run(context: JvmScriptContext): Any {\n        context.console().log(&quot;Hello from Kotlin&quot;)\n        context.toast(&quot;AutoJs6 Kotlin Runtime&quot;)\n        context.sleep(500L)\n        return context.app().launch(&quot;org.autojs.autojs6&quot;)\n    }\n}\n</code></pre>\n<p>除 AutoJsJvmEntry.run 外, 本页示例都是 <code>run(context: JvmScriptContext)</code> 函数体中的片段.</p>\n<hr>\n",
+          "type": "misc",
+          "displayName": "使用方式"
+        },
+        {
+          "textRaw": "类型",
+          "name": "类型",
+          "desc": "<table>\n<thead>\n<tr>\n<th>类型</th>\n<th>种类</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>AutoJsJvmEntry</code></td>\n<td>接口</td>\n<td>入口类实现的接口</td>\n</tr>\n<tr>\n<td><code>JvmScriptContext</code></td>\n<td>接口</td>\n<td>run 收到的上下文, 是唯一受支持的宿主桥</td>\n</tr>\n<tr>\n<td><code>JvmAppApi</code></td>\n<td>接口</td>\n<td>应用启动</td>\n</tr>\n<tr>\n<td><code>JvmConsoleApi</code></td>\n<td>接口</td>\n<td>控制台输出</td>\n</tr>\n<tr>\n<td><code>JvmCancellation</code></td>\n<td>接口</td>\n<td>只读的取消状态</td>\n</tr>\n<tr>\n<td><code>JvmCancellationException</code></td>\n<td>类, 继承 <code>Exception</code></td>\n<td>会话被取消时抛出</td>\n</tr>\n</tbody>\n</table>\n<hr>\n",
+          "type": "misc",
+          "displayName": "类型"
+        },
+        {
+          "textRaw": "AutoJsJvmEntry",
+          "name": "autojsjvmentry",
+          "methods": [
+            {
+              "textRaw": "AutoJsJvmEntry.run(context)",
+              "type": "method",
+              "name": "run",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**context** { `JvmScriptContext` } - 本次执行的上下文 ",
+                      "name": "**context**",
+                      "type": " `JvmScriptContext` ",
+                      "desc": "本次执行的上下文"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Any?` } - 交给宿主的结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Any?` ",
+                      "desc": "交给宿主的结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "context"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>入口函数, 声明为 <code>override fun run(context: JvmScriptContext): Any?</code> (返回类型可以收窄为 <code>Any</code>).</p>\n<pre><code class=\"lang-kotlin\">class Main : AutoJsJvmEntry {\n    override fun run(context: JvmScriptContext): Any {\n        val started = System.currentTimeMillis()\n        context.sleep(100L)\n        return System.currentTimeMillis() - started\n    }\n}\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "AutoJsJvmEntry"
+        },
+        {
+          "textRaw": "JvmScriptContext",
+          "name": "jvmscriptcontext",
+          "methods": [
+            {
+              "textRaw": "JvmScriptContext.app()",
+              "type": "method",
+              "name": "app",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmAppApi` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmAppApi` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回应用启动视图. 调用其方法需要应用启动能力.</p>\n<pre><code class=\"lang-kotlin\">val launched = context.app().launch(&quot;org.autojs.autojs6&quot;)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.console()",
+              "type": "method",
+              "name": "console",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmConsoleApi` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmConsoleApi` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回控制台视图. 调用其方法需要控制台输出能力.</p>\n<pre><code class=\"lang-kotlin\">context.console().log(&quot;hello&quot;)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.cancellation()",
+              "type": "method",
+              "name": "cancellation",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `JvmCancellation` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `JvmCancellation` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回只读的取消状态视图, 只能观察, 不能发起取消.</p>\n<pre><code class=\"lang-kotlin\">val cancellation = context.cancellation()\nwhile (!cancellation.isCancellationRequested()) {\n    context.sleep(100L)\n}\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.sleep(millis)",
+              "type": "method",
+              "name": "sleep",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**millis** { `Long` } - 毫秒数, 不能为负 ",
+                      "name": "**millis**",
+                      "type": " `Long` ",
+                      "desc": "毫秒数, 不能为负"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>可被取消的休眠. 需要休眠能力; 在 AutoJs6 中停止脚本时中断休眠并抛出 JvmCancellationException.</p>\n<pre><code class=\"lang-kotlin\">context.sleep(500L)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.toast(message)",
+              "type": "method",
+              "name": "toast",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 消息 ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "消息"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求宿主显示一条 toast. 需要 toast 能力; 宿主拒绝时脚本失败.</p>\n<pre><code class=\"lang-kotlin\">context.toast(&quot;done&quot;)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.isCancellationRequested()",
+              "type": "method",
+              "name": "isCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Boolean` } - 是否已收到取消 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Boolean` ",
+                      "desc": "是否已收到取消"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>便利方法, 等价于 <code>cancellation().isCancellationRequested()</code>.</p>\n<pre><code class=\"lang-kotlin\">if (context.isCancellationRequested()) return &quot;cancelled&quot;\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmScriptContext.throwIfCancellationRequested()",
+              "type": "method",
+              "name": "throwIfCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>便利方法, 等价于 <code>cancellation().throwIfCancellationRequested()</code>. 建议在长循环的每个工作单元之间调用.</p>\n<pre><code class=\"lang-kotlin\">repeat(1000) { index -&gt;\n    context.throwIfCancellationRequested()\n    work(index)\n}\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmScriptContext"
+        },
+        {
+          "textRaw": "JvmAppApi",
+          "name": "jvmappapi",
+          "methods": [
+            {
+              "textRaw": "JvmAppApi.launch(packageName)",
+              "type": "method",
+              "name": "launch",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**packageName** { `String` } - 包名, 如 `com.example.app` ",
+                      "name": "**packageName**",
+                      "type": " `String` ",
+                      "desc": "包名, 如 `com.example.app`"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Boolean` } - 宿主给出的启动结果 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Boolean` ",
+                      "desc": "宿主给出的启动结果"
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "packageName"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>请求宿主启动一个已安装的应用. 宿主拒绝或响应异常时脚本失败.</p>\n<pre><code class=\"lang-kotlin\">val launched = context.app().launch(&quot;com.android.settings&quot;)\ncontext.console().log(&quot;launched = $launched&quot;)\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmAppApi"
+        },
+        {
+          "textRaw": "JvmConsoleApi",
+          "name": "jvmconsoleapi",
+          "methods": [
+            {
+              "textRaw": "JvmConsoleApi.log(message)",
+              "type": "method",
+              "name": "log",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 一行文本 ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "一行文本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向标准输出写入一行, 在脚本运行期间逐行实时回传到 AutoJs6 控制台.</p>\n<pre><code class=\"lang-kotlin\">context.console().log(&quot;step 1&quot;)\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmConsoleApi.error(message)",
+              "type": "method",
+              "name": "error",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**message** { `String` } - 一行文本 ",
+                      "name": "**message**",
+                      "type": " `String` ",
+                      "desc": "一行文本"
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "message"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向标准错误写入一行, 在脚本运行期间逐行实时回传到 AutoJs6 控制台.</p>\n<pre><code class=\"lang-kotlin\">context.console().error(&quot;failed&quot;)\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmConsoleApi"
+        },
+        {
+          "textRaw": "JvmCancellation",
+          "name": "jvmcancellation",
+          "methods": [
+            {
+              "textRaw": "JvmCancellation.isCancellationRequested()",
+              "type": "method",
+              "name": "isCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Boolean` } - 是否已收到取消 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Boolean` ",
+                      "desc": "是否已收到取消"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>非阻塞地查询会话是否已被取消.</p>\n<pre><code class=\"lang-kotlin\">if (context.cancellation().isCancellationRequested()) return &quot;cancelled&quot;\n</code></pre>\n"
+            },
+            {
+              "textRaw": "JvmCancellation.throwIfCancellationRequested()",
+              "type": "method",
+              "name": "throwIfCancellationRequested",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `Unit` } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `Unit` "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>会话已被取消时抛出 JvmCancellationException. 不要捕获它后继续运行.</p>\n<pre><code class=\"lang-kotlin\">context.cancellation().throwIfCancellationRequested()\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "JvmCancellation"
+        },
+        {
+          "textRaw": "相关链接",
+          "name": "相关链接",
+          "desc": "<ul>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Kotlin-Runtime\">AutoJs6-Plugin-Kotlin-Runtime</a>: 插件仓库, README 列出能力边界与脚本运行库, <code>samples/</code> 含能力, 取消与协程示例.</li>\n<li><a href=\"javaRuntime\">Java 运行时</a>: 同一套接口的 Java 插件 (Entry API 4).</li>\n</ul>\n",
+          "type": "misc",
+          "displayName": "相关链接"
+        }
+      ]
+    }
+  ]
+}

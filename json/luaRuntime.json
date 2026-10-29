@@ -1,0 +1,260 @@
+{
+  "source": "..\\api\\luaRuntime.md",
+  "properties": [
+    {
+      "textRaw": "autojs.console",
+      "name": "console",
+      "desc": "<p>写入 AutoJs6 控制台. 每个函数只接受一个非空字符串, 最多 32 KiB.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs.console.log(text)",
+          "name": "autojs.console.log(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准输出.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.log(&quot;step 1&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.console.log(text)"
+        },
+        {
+          "textRaw": "autojs.console.info(text)",
+          "name": "autojs.console.info(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准输出, 与 log 相同.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.info(&quot;ready&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.console.info(text)"
+        },
+        {
+          "textRaw": "autojs.console.warn(text)",
+          "name": "autojs.console.warn(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准错误, 与全局 <code>warn</code> 的输出保持次序.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.warn(&quot;retrying&quot;)\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.console.warn(text)"
+        },
+        {
+          "textRaw": "autojs.console.error(text)",
+          "name": "autojs.console.error(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准错误.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.error(&quot;failed&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs.console.error(text)"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs.device",
+      "name": "device",
+      "modules": [
+        {
+          "textRaw": "autojs.device.info()",
+          "name": "autojs.device.info()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>table</code> } - 含 <code>brand</code>, <code>manufacturer</code>, <code>model</code>, <code>device</code>, <code>product</code> 与 <code>sdkInt</code></li>\n</ul>\n<p>经宿主读取设备信息.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal info = autojs.device.info()\nautojs.console.log(info.brand .. &quot; &quot; .. info.model .. &quot; (API &quot; .. info.sdkInt .. &quot;)&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs.device.info()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs.storage",
+      "name": "storage",
+      "desc": "<p>由宿主持久保存的键值存储, 按脚本划分. 只对有稳定文件身份的脚本 (如已保存的 <code>.lua</code> 文件) 提供. 键是 1 到 64 字节的 ASCII 标识符; 每个脚本最多 256 个键, 合计 2 MiB; 每次执行最多 64 次操作, 其中最多 32 次修改.</p>\n",
+      "modules": [
+        {
+          "textRaw": "autojs.storage.get(key)",
+          "name": "autojs.storage.get(key)",
+          "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><ins><strong>returns</strong></ins> { <code>any</code> } - 保存的值, 键不存在时为 <code>nil</code></li>\n</ul>\n<p>读取一个键的值.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal count = autojs.storage.get(&quot;run_count&quot;) or 0\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.storage.get(key)"
+        },
+        {
+          "textRaw": "autojs.storage.put(key, value)",
+          "name": "autojs.storage.put(key,_value)",
+          "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><strong>value</strong> { <code>any</code> } - 非 <code>nil</code> 的值: 布尔, 整数, 有限小数, UTF-8 字符串, 以及由它们组成的连续数组或字符串键的表; 规范化后最多 252 KiB</li>\n<li><ins><strong>returns</strong></ins> { <code>boolean</code> } - 宿主同步提交后为 <code>true</code></li>\n</ul>\n<p>原子地写入或替换一个键的值. <code>put(key, nil)</code> 不表示删除, 会报错; 删除使用 remove.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.storage.put(&quot;settings&quot;, { theme = &quot;dark&quot;, retries = 3 })\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.storage.put(key, value)"
+        },
+        {
+          "textRaw": "autojs.storage.remove(key)",
+          "name": "autojs.storage.remove(key)",
+          "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><ins><strong>returns</strong></ins> { <code>boolean</code> } - 键原先是否存在</li>\n</ul>\n<p>原子地删除一个键.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nprint(autojs.storage.remove(&quot;settings&quot;))\n</code></pre>\n",
+          "type": "module",
+          "displayName": "autojs.storage.remove(key)"
+        },
+        {
+          "textRaw": "autojs.storage.clear()",
+          "name": "autojs.storage.clear()",
+          "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>integer</code> } - 删除的键数</li>\n</ul>\n<p>原子地删除当前脚本的全部键.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nprint(autojs.storage.clear())\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs.storage.clear()"
+        }
+      ]
+    },
+    {
+      "textRaw": "autojs.ui",
+      "name": "ui",
+      "modules": [
+        {
+          "textRaw": "autojs.ui.toast(text)",
+          "name": "autojs.ui.toast(text)",
+          "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 1 到 1024 字节的严格 UTF-8 文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>经宿主显示一条 toast. 每次执行最多 4 次, 只派发一次, 不重试.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.ui.toast(&quot;done&quot;)\n</code></pre>\n<hr>\n",
+          "type": "module",
+          "displayName": "autojs.ui.toast(text)"
+        }
+      ]
+    }
+  ],
+  "miscs": [
+    {
+      "textRaw": "Lua 运行时 (Lua Runtime)",
+      "name": "Lua 运行时 (Lua Runtime)",
+      "type": "misc",
+      "desc": "<p>Lua 运行时是一个独立安装的 AutoJs6 插件 (<a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Lua-Runtime\">AutoJs6-Plugin-Lua-Runtime</a>). 在 AutoJs6 编辑器中运行 <code>.lua</code> 文件时, 源码交给插件, 在插件专用的 <code>:lua_runtime</code> 进程中由 PUC Lua 5.4.8 执行. 本页列出插件提供给 Lua 脚本的 <code>autojs</code> 模块: 11 个函数与 1 个只读值, 依据插件 0.1.3-rc.2 (最低 AutoJs6 构建 5276).</p>\n<p>本页的 API 属于 Lua 语言, 不在 AutoJs6 的运行时覆盖矩阵 (Rhino, Node.js 与 Bun) 中, 因此页面顶部没有运行时支持表. 条目的名称由 AutoJs6 仓库的静态门禁 <code>tools/api-coverage/language_runtimes.py</code> 与插件源码 (原生函数 <code>install_autojs_module</code> 建立的模块表) 逐项比对.</p>\n<hr>\n",
+      "miscs": [
+        {
+          "textRaw": "使用方式",
+          "name": "使用方式",
+          "desc": "<ul>\n<li>导入: <code>local autojs = require(&quot;autojs&quot;)</code>. 脚本可使用经过审查的 Lua 标准库子集, 不能访问文件系统, 进程, 环境变量或动态原生模块.</li>\n<li>全局函数: <code>print(...)</code> 与 <code>warn(text)</code> 改为写入 AutoJs6 控制台 (分别对应标准输出与标准错误); <code>math.randomseed</code> 只接受一个或两个显式整数种子.</li>\n<li>模块: 入口为 <code>job.lua</code> 时, <code>require(&quot;helper&quot;)</code> 加载同级目录 <code>job.modules/</code> 中的 <code>helper.lua</code> (UTF-8 文本, 最多 64 KiB; 模块名为最长 64 个字符的 ASCII 标识符, 不接受路径与点号).</li>\n<li>结果: 脚本的返回值作为标量结果交给宿主.</li>\n<li>能力: device, storage 与 ui 的调用需要宿主为本次执行授予对应能力; 未授予时执行以 <code>HOST_CAPABILITY</code> 结束, 没有本地回退或重试.</li>\n</ul>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.log(&quot;hello from Lua&quot;)\nlocal device = autojs.device.info()\nautojs.console.info(&quot;running on: &quot; .. device.manufacturer .. &quot; &quot; .. device.model)\n\nlocal runCount = (autojs.storage.get(&quot;run_count&quot;) or 0) + 1\nautojs.storage.put(&quot;run_count&quot;, runCount)\nautojs.ui.toast((&quot;Lua run #%d complete&quot;):format(runCount))\nreturn runCount\n</code></pre>\n<hr>\n",
+          "type": "misc",
+          "displayName": "使用方式"
+        },
+        {
+          "textRaw": "autojs",
+          "name": "autojs",
+          "methods": [
+            {
+              "textRaw": "autojs.now()",
+              "type": "method",
+              "name": "now",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { `integer` } - Unix 纪元毫秒数 ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " `integer` ",
+                      "desc": "Unix 纪元毫秒数"
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>返回当前时间.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal started = autojs.now()\n-- Work here.\nautojs.console.log((&quot;took %d ms&quot;):format(autojs.now() - started))\n</code></pre>\n"
+            }
+          ],
+          "properties": [
+            {
+              "textRaw": "`arguments` { `table` } ",
+              "type": " `table` ",
+              "name": "arguments",
+              "desc": "<p>本次执行参数的只读快照.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal name = autojs.arguments.name or &quot;guest&quot;\nautojs.console.log(&quot;hello, &quot; .. name)\n</code></pre>\n<hr>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "autojs"
+        },
+        {
+          "textRaw": "相关链接",
+          "name": "相关链接",
+          "desc": "<ul>\n<li><a href=\"https://github.com/SuperMonster003/AutoJs6-Plugin-Lua-Runtime\">AutoJs6-Plugin-Lua-Runtime</a>: 插件仓库, README 列出运行限制与可用的标准库, <code>docs/storage-kv-v1.md</code> 说明 storage 的值模型.</li>\n</ul>\n",
+          "type": "misc",
+          "displayName": "相关链接"
+        }
+      ],
+      "properties": [
+        {
+          "textRaw": "autojs.console",
+          "name": "console",
+          "desc": "<p>写入 AutoJs6 控制台. 每个函数只接受一个非空字符串, 最多 32 KiB.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs.console.log(text)",
+              "name": "autojs.console.log(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准输出.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.log(&quot;step 1&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.console.log(text)"
+            },
+            {
+              "textRaw": "autojs.console.info(text)",
+              "name": "autojs.console.info(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准输出, 与 log 相同.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.info(&quot;ready&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.console.info(text)"
+            },
+            {
+              "textRaw": "autojs.console.warn(text)",
+              "name": "autojs.console.warn(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准错误, 与全局 <code>warn</code> 的输出保持次序.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.warn(&quot;retrying&quot;)\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.console.warn(text)"
+            },
+            {
+              "textRaw": "autojs.console.error(text)",
+              "name": "autojs.console.error(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 一行文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>写入标准错误.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.console.error(&quot;failed&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs.console.error(text)"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs.device",
+          "name": "device",
+          "modules": [
+            {
+              "textRaw": "autojs.device.info()",
+              "name": "autojs.device.info()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>table</code> } - 含 <code>brand</code>, <code>manufacturer</code>, <code>model</code>, <code>device</code>, <code>product</code> 与 <code>sdkInt</code></li>\n</ul>\n<p>经宿主读取设备信息.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal info = autojs.device.info()\nautojs.console.log(info.brand .. &quot; &quot; .. info.model .. &quot; (API &quot; .. info.sdkInt .. &quot;)&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs.device.info()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs.storage",
+          "name": "storage",
+          "desc": "<p>由宿主持久保存的键值存储, 按脚本划分. 只对有稳定文件身份的脚本 (如已保存的 <code>.lua</code> 文件) 提供. 键是 1 到 64 字节的 ASCII 标识符; 每个脚本最多 256 个键, 合计 2 MiB; 每次执行最多 64 次操作, 其中最多 32 次修改.</p>\n",
+          "modules": [
+            {
+              "textRaw": "autojs.storage.get(key)",
+              "name": "autojs.storage.get(key)",
+              "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><ins><strong>returns</strong></ins> { <code>any</code> } - 保存的值, 键不存在时为 <code>nil</code></li>\n</ul>\n<p>读取一个键的值.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nlocal count = autojs.storage.get(&quot;run_count&quot;) or 0\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.storage.get(key)"
+            },
+            {
+              "textRaw": "autojs.storage.put(key, value)",
+              "name": "autojs.storage.put(key,_value)",
+              "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><strong>value</strong> { <code>any</code> } - 非 <code>nil</code> 的值: 布尔, 整数, 有限小数, UTF-8 字符串, 以及由它们组成的连续数组或字符串键的表; 规范化后最多 252 KiB</li>\n<li><ins><strong>returns</strong></ins> { <code>boolean</code> } - 宿主同步提交后为 <code>true</code></li>\n</ul>\n<p>原子地写入或替换一个键的值. <code>put(key, nil)</code> 不表示删除, 会报错; 删除使用 remove.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.storage.put(&quot;settings&quot;, { theme = &quot;dark&quot;, retries = 3 })\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.storage.put(key, value)"
+            },
+            {
+              "textRaw": "autojs.storage.remove(key)",
+              "name": "autojs.storage.remove(key)",
+              "desc": "<ul>\n<li><strong>key</strong> { <code>string</code> } - 键</li>\n<li><ins><strong>returns</strong></ins> { <code>boolean</code> } - 键原先是否存在</li>\n</ul>\n<p>原子地删除一个键.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nprint(autojs.storage.remove(&quot;settings&quot;))\n</code></pre>\n",
+              "type": "module",
+              "displayName": "autojs.storage.remove(key)"
+            },
+            {
+              "textRaw": "autojs.storage.clear()",
+              "name": "autojs.storage.clear()",
+              "desc": "<ul>\n<li><ins><strong>returns</strong></ins> { <code>integer</code> } - 删除的键数</li>\n</ul>\n<p>原子地删除当前脚本的全部键.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nprint(autojs.storage.clear())\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs.storage.clear()"
+            }
+          ]
+        },
+        {
+          "textRaw": "autojs.ui",
+          "name": "ui",
+          "modules": [
+            {
+              "textRaw": "autojs.ui.toast(text)",
+              "name": "autojs.ui.toast(text)",
+              "desc": "<ul>\n<li><strong>text</strong> { <code>string</code> } - 1 到 1024 字节的严格 UTF-8 文本</li>\n<li><ins><strong>returns</strong></ins> { <code>nil</code> }</li>\n</ul>\n<p>经宿主显示一条 toast. 每次执行最多 4 次, 只派发一次, 不重试.</p>\n<pre><code class=\"lang-lua\">local autojs = require(&quot;autojs&quot;)\n\nautojs.ui.toast(&quot;done&quot;)\n</code></pre>\n<hr>\n",
+              "type": "module",
+              "displayName": "autojs.ui.toast(text)"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

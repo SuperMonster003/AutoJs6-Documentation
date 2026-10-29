@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [颜色 (Color)](color), [Color (颜色类)](colorType), [文件 (Files)](files), [压缩文件 (Zip)](zip), [存储 (Storages)](storages), [Storage (存储类)](storageType), [电子书对象 (EpubBook)](epubBookType), [MIME](mime), [记录器 (Recorder)](recorder) 与 [全局对象 (Global)](global) 页运行时支持表的 Bun 列: Bun 现在提供 colors / Color, files (含原型成员与全局 open), zip, mime, recorder, storages (含 names / all 与 Storage#size) 与 EpubBook#toString, 以及全局 dayjs / pangu / cheerio / i18n; files 的宿主操作需授权 files.control, zip 与 Zip 以及 colors.toColorStateList / setPaintColor / extract 需授权 java.interop; colors.theme, gallery 与 files.batchRename 待补
+
 - `更新` [通用应用 (App)](app), [Shell](shell), [Shizuku](shizuku) 与 [ShellProcess](shellProcessType) 页的运行时支持表: Node.js 主线程与 Worker 现在提供 app 的成员 (含双开辅助函数, getInstalledPackages / getApkInfo / getAppByAlias 与 sendLocalBroadcastSync), shell 与 shizuku 的成员, 19 个全局按键与手势函数 (Home / KeyCode / Tap 等) 以及 ShellProcess 的成员; Bun 的对应成员需授权 app.control / shell.control / shell.root / shell.shizuku; app.autojs 待补
 
 - `新增` [语音 (Speech)](speech) 的离线分析 speech.diarize (说话人分离: 谁在何时说话, 可按已注册的声纹认人), speech.detectLanguage (语种识别) 与 speech.tag (音频标签) 及其 Async 形态, 以及说话人识别 speech.speaker (注册, 验证, 辨认, 列出与删除声纹); 模型目录补上 3-Macaw Speech 1.3.0 的说话人, 分割, 语种识别与音频标签模型, [SpeechModelInfo](speechModelInfoType) 的模型类别增加 speaker, segment, langid 与 tagger

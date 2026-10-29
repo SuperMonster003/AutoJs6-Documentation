@@ -6,14 +6,10 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `EpubBook` 对象 | `autojs6:epub` | `autojs6:epub` | `host.epub` |
-| 状态 | 已支持 14 项 | 已支持 14 项 | 已支持 14 项 | 需授权 13 项, 待补 1 项 |
-| 授权 | - | - | - | `epub.control` 13 项 |
+| 状态 | 已支持 14 项 | 已支持 14 项 | 已支持 14 项 | 需授权 14 项 |
+| 授权 | - | - | - | `epub.control` 14 项 |
 
-差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
-
-| API | Node.js 主线程 | Node.js Worker | Bun |
-| --- | --- | --- | --- |
-| `EpubBook#toString` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

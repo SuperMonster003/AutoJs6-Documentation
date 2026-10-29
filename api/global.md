@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.species`, `host.coordinates`, `host.global`, `host.clipboard` |
-| 状态 | 已支持 98 项 | 已支持 14 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 29 项 | 已支持 10 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 33 项 | 已支持 (本地实现) 46 项, 需授权 12 项, 不适用 5 项, 待补 35 项 |
+| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.species`, `host.global`, `host.coordinates`, `host.clipboard` |
+| 状态 | 已支持 98 项 | 已支持 14 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 29 项 | 已支持 10 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 33 项 | 已支持 (本地实现) 50 项, 需授权 12 项, 不适用 5 项, 待补 31 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `clipboard.control` 2 项 |
 
 差异项 (56 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -21,17 +21,17 @@
 | `cXy` | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cXy` |
 | `cY` | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cY` |
 | `cYx` | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cYx` |
-| `cheerio` | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="pending">待补</span> |
+| `cheerio` | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.cheerio` |
 | `currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `currentPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `dayjs` | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="pending">待补</span> |
+| `dayjs` | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.dayjs` |
 | `exit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
 | `getScaleBaseX` | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseX` |
 | `getScaleBaseY` | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseY` |
 | `getScaleBases` | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBases` |
-| `i18n` | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="pending">待补</span> |
+| `i18n` | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.i18n` |
 | `isAutoJs6` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isBigInt` |
 | `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isEmptyObject` |
@@ -47,7 +47,7 @@
 | `isStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `notStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `pangu` | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="pending">待补</span> |
+| `pangu` | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.pangu` |
 | `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.random` |
 | `requiresApi` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `requiresAutojsVersion` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |

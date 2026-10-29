@@ -6,15 +6,10 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `storages` | `storages` | `storages` | `host.storages` |
-| 状态 | 已支持 5 项 | 已支持 5 项 | 已支持 5 项 | 需授权 3 项, 待补 2 项 |
-| 授权 | - | - | - | `storage.control` 3 项 |
+| 状态 | 已支持 5 项 | 已支持 5 项 | 已支持 5 项 | 需授权 5 项 |
+| 授权 | - | - | - | `storage.control` 5 项 |
 
-差异项 (2 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
-
-| API | Node.js 主线程 | Node.js Worker | Bun |
-| --- | --- | --- | --- |
-| `storages.all` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `storages.names` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

@@ -6,28 +6,15 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `colors`, `colors.theme` | `autojs6:colors` | `autojs6:colors` | `host.colors` |
-| 状态 | 已支持 91 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 62 项, 待补 29 项 |
+| 状态 | 已支持 91 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 79 项, 需授权 3 项, 待补 9 项 |
+| 授权 | - | - | - | `java.interop` 3 项 |
 
-差异项 (29 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (12 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `colors.android` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.blend` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.contrast` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.css` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.derive` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.distance` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.ensureContrast` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.extract` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.harmony` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.invert` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.material` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.nightVariant` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.oklab` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.oklch` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.parseColor` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.simulate` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `colors.extract` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
+| `colors.setPaintColor` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
 | `colors.theme.activate` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `colors.theme.current` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `colors.theme.deactivate` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -37,10 +24,7 @@
 | `colors.theme.reset` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `colors.theme.set` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `colors.theme.state` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.toOklab` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.toOklch` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.tones` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `colors.web` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `colors.toColorStateList` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

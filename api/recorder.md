@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `recorder` | `autojs6:recorder` | `autojs6:recorder` | - |
-| 状态 | 已支持 7 项 | 已支持 7 项 | 已支持 7 项 | 待补 7 项 |
+| 入口 | `recorder` | `autojs6:recorder` | `autojs6:recorder` | `host.recorder` |
+| 状态 | 已支持 7 项 | 已支持 7 项 | 已支持 7 项 | 已支持 (本地实现) 7 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

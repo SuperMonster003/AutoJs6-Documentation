@@ -29,7 +29,8 @@
 //   node generator/runtime-support.js --insert image:images
 //                                                      add a block after the H1 title
 //   options: --matrix <runtime-matrix.json> | --host <AutoJs6 checkout>, --api <dir>,
-//            --json (machine summary on stdout), --require-all (fail on roots without a block)
+//            --json (machine summary on stdout), --require-all (fail on module roots without a
+//            block and on returned objects no block shows)
 //
 // Comments in the block never contain "=": json.js reads `<!-- key=value -->` as page metadata.
 
@@ -392,8 +393,10 @@ function run(args) {
     if (matrix.schema !== SCHEMA) throw new Error(`${matrixPath}: schema ${matrix.schema}, expected ${SCHEMA}`);
     const moduleRoots = new Set(exportRows(matrix).map(rowRoot));
     const knownRoots = new Set([...moduleRoots, ...objectRows(matrix).map(row => row.object + '#')]);
-    const summary = { matrix: matrixPath, dataSource: (matrix.dataSource && matrix.dataSource.kind) || 'kotlin', mode: args.check ? 'check' : 'write', pages: [], problems: [], uncovered: [] };
+    const summary = { matrix: matrixPath, dataSource: (matrix.dataSource && matrix.dataSource.kind) || 'kotlin', mode: args.check ? 'check' : 'write', pages: [], problems: [], uncovered: [], uncoveredObjects: [] };
     const covered = new Set();
+    // Pages whose block names a module root: their "返回对象" table shows the objects documented first on them.
+    const modulePages = new Set();
     const inserts = new Map(args.insert.map(item => [item.page, item.roots]));
     inserts.forEach((_, page) => {
         if (!fs.existsSync(path.join(api, page + '.md'))) summary.problems.push(`api/${page}.md: no such page for --insert`);
@@ -408,6 +411,7 @@ function run(args) {
         const result = updatePage(text, matrix, knownRoots, page);
         if (result.status === 'none') return;
         (result.roots || []).forEach(root => covered.add(root));
+        if ((result.roots || []).some(root => !root.endsWith('#'))) modulePages.add(page);
         const entry = { page: `api/${name}`, status: result.status, roots: result.roots, rows: result.rows, differences: result.differences, objectRows: result.objectRows, line: result.line };
         if (result.status === 'problem') {
             summary.problems.push(`api/${name}: ${result.problem}`);
@@ -420,8 +424,13 @@ function run(args) {
         summary.pages.push(entry);
     });
     summary.uncovered = [...moduleRoots].filter(root => !covered.has(root)).sort();
+    const objectPages = new Map(objectRows(matrix).map(row => [row.object + '#', row.page]));
+    summary.uncoveredObjects = [...objectPages].filter(([root, page]) => !covered.has(root) && !modulePages.has(page)).map(([root]) => root).sort();
     if (args.requireAll && summary.uncovered.length) {
         summary.problems.push(`module roots without a runtime-support block: ${summary.uncovered.join(', ')}`);
+    }
+    if (args.requireAll && summary.uncoveredObjects.length) {
+        summary.problems.push(`returned objects shown by no runtime-support block (a root of their own, or the module block of their page): ${summary.uncoveredObjects.join(', ')}`);
     }
     return summary;
 }
@@ -441,7 +450,7 @@ function main() {
     } else {
         summary.pages.forEach(page => console.log(`${page.page}: ${page.status} (${(page.roots || []).join(' ')}, rows ${page.rows}, differences ${page.differences})`));
         summary.problems.forEach(problem => console.error(`runtime-support: ${problem}`));
-        console.log(`runtime-support ${summary.mode}: pages=${summary.pages.length}, problems=${summary.problems.length}, uncovered roots=${summary.uncovered.length}`);
+        console.log(`runtime-support ${summary.mode}: pages=${summary.pages.length}, problems=${summary.problems.length}, uncovered roots=${summary.uncovered.length}, uncovered objects=${summary.uncoveredObjects.length}`);
     }
     return summary.problems.length ? 1 : 0;
 }

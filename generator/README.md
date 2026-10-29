@@ -164,9 +164,11 @@ node generator/test-runtime-support.js
 矩阵默认取 `local-config.json` 中 `autoJs6Project` 下的
 `build/reports/api-coverage/runtime-matrix.json`, 没有配置时取兄弟目录
 `../AutoJs6`; `--matrix <file>` 或 `--host <AutoJs6 目录>` 可另行指定.
-`--json` 输出机读摘要, `--require-all` 把没有标记块的模块根计为失败.
+`--json` 输出机读摘要, `--require-all` 把没有标记块的模块根, 以及没有任何标记块展示的
+返回对象 (所在页既没有 `<对象>#` 根, 也没有模块根的标记块) 计为失败.
 宿主 `python tools/api-coverage/check.py --docs-support` 调用本脚本的
-`--check` 校验文档与矩阵一致.
+`--check --require-all` 校验文档与矩阵一致, 且每个模块根与返回对象都有表 (宿主 api-coverage
+路线图 P2.5 起; 新增模块或返回对象时, 用 `--insert <页面>:<根>` 在其第一个文档页插入标记块).
 
 表格分两部分: 上方按 Rhino, Node.js 主线程, Node.js Worker 与 Bun 四列给出
 入口, 各状态的 API 数与 Bun 所需授权; 下方 "差异项" 列出入口, 状态或授权与同列

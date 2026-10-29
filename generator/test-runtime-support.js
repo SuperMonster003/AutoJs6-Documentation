@@ -187,6 +187,7 @@ test('command: --insert writes, --check passes, edits and --require-all fail', (
         assert.deepStrictEqual(written.problems, []);
         assert.deepStrictEqual(runtimeSupport.run(Object.assign({}, base, { check: true })).problems, []);
         assert.deepStrictEqual(runtimeSupport.run(Object.assign({}, base, { check: true })).uncovered, ['legacy', 'other']);
+        assert.deepStrictEqual(runtimeSupport.run(Object.assign({}, base, { check: true })).uncoveredObjects, [], 'Thing is in the demo page table');
         assert.strictEqual(runtimeSupport.run(Object.assign({}, base, { check: true, requireAll: true })).problems.length, 1);
         const file = path.join(api, 'demo.md');
         fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace('待补 1 项', '待补 2 项'));
@@ -194,6 +195,17 @@ test('command: --insert writes, --check passes, edits and --require-all fail', (
         assert.strictEqual(runtimeSupport.run(base).pages[0].status, 'written');
         assert.deepStrictEqual(runtimeSupport.run(Object.assign({}, base, { check: true })).problems, []);
         assert.strictEqual(fs.readFileSync(path.join(api, 'plain.md'), 'utf8'), '# Plain\n');
+        // An object documented first on a type page needs a root of its own there.
+        const data = matrix();
+        data.rows.push(row('Card#flip', null, 'flip', [pending, pending, pending], { kind: 'returned-member', ownerModule: null, object: 'Card', page: 'cardType' }));
+        fs.writeFileSync(matrixPath, JSON.stringify(data));
+        fs.writeFileSync(path.join(api, 'cardType.md'), '# Card\n');
+        runtimeSupport.run(base);
+        const missing = runtimeSupport.run(Object.assign({}, base, { check: true, requireAll: true }));
+        assert.deepStrictEqual(missing.uncoveredObjects, ['Card#']);
+        assert.ok(missing.problems.some(problem => problem.startsWith('returned objects shown by no runtime-support block') && problem.endsWith(': Card#')), missing.problems.join('\n'));
+        runtimeSupport.run(Object.assign({}, base, { insert: [{ page: 'cardType', roots: ['Card#'] }] }));
+        assert.deepStrictEqual(runtimeSupport.run(Object.assign({}, base, { check: true })).uncoveredObjects, []);
     } finally {
         fs.rmSync(root, { recursive: true, force: true });
     }

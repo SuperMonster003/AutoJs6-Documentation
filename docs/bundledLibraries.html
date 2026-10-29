@@ -453,7 +453,7 @@ console.log(path.isAbsolute(&#39;/sdcard/Scripts&#39;)); // true
 <h2>插件不可用时<span><a class="mark" href="#bundledlibraries_3" id="bundledlibraries_3">#</a></span></h2>
 <p>插件未安装, 未授权, 在插件中心被停用, 与当前 AutoJs6 不兼容, 或某个库被关闭时, <code>require</code> 该库的模块名会抛出 <code>Error</code>; 读取对应的全局对象 (包括 <code>typeof axios</code>) 同样抛出该错误, 之后每次读取都会重新尝试. 错误对象的属性:</p>
 <ul>
-<li><code>message</code> - 说明需要安装插件, 或到哪里开启, 例如 <code>Cannot find module &#39;lodash&#39;: it is provided by the official plugin &quot;Bundled Libraries&quot;, which is not installed. Install the plugin in AutoJs6 &gt; Plugin center.</code> (文本随 AutoJs6 的语言变化).</li>
+<li><code>message</code> - 说明需要安装插件, 或到哪里开启, 例如 <code>Cannot find module &#39;dayjs&#39;: it is provided by the official plugin &quot;Bundled Libraries&quot;, which is not installed. Install the plugin in AutoJs6 &gt; Plugin center.</code> (文本随 AutoJs6 的语言变化; <code>lodash</code> 与 Node.js 兼容模块在消息中的模块名带 <code>.js</code>, 如 <code>&#39;lodash.js&#39;</code>).</li>
 <li><code>code</code> - 固定为 <code>MODULE_NOT_FOUND</code>, 与找不到普通模块时相同.</li>
 <li><code>library</code> - 库名, 如 <code>lodash</code>, <code>i18n</code> (模块名为 <code>banana-i18n</code> 时同样为 <code>i18n</code>).</li>
 <li><code>reason</code> - 原因, 取值见下表.</li>
@@ -507,7 +507,13 @@ try {
 <p>插件状态的变化不会中断正在运行的脚本, 只影响之后的 <code>require</code> 与全局对象读取. AutoJs6 的其他内置模块与脚本自己的模块文件不受影响.</p>
 <hr>
 <h2>打包的应用<span><a class="mark" href="#bundledlibraries_4" id="bundledlibraries_4">#</a></span></h2>
-<p>用 AutoJs6 打包的应用暂不包含这些库: 插件只为 AutoJs6 本身提供库文件, 打包时不会把它们复制进生成的应用. 在没有安装本插件的设备上运行打包的应用时, <code>require</code> 这些模块名或读取对应的全局对象, 同样会抛出上文所述的 <code>Error</code> (<code>reason</code> 为 <code>not-installed</code>). 由打包功能把脚本用到的库从已安装的插件复制进应用, 计划在之后的版本中提供.</p>
+<p>用 AutoJs6 打包应用时, 打包功能扫描项目中的脚本, 把用到的库从本设备已安装的插件复制进生成的应用. 这样打包的应用在没有安装本插件的设备上也能使用这些库.</p>
+<ul>
+<li>扫描查找 <code>require</code> 与 <code>import</code> 中写成字符串的模块名 (如 <code>require(&#39;dayjs&#39;)</code>, <code>import _ from &#39;lodash&#39;</code>), 以及全局对象名 <code>axios</code>, <code>cheerio</code>, <code>dayjs</code>, <code>i18n</code> 与 <code>pangu</code>. 复制的库所依赖的库 (如 <code>fs</code> 依赖的 <code>buffer</code> 与 <code>path</code>) 一并带上.</li>
+<li>模块名在运行时才确定 (如 <code>require(name)</code>) 时扫描无法发现. 此时在打包页面的 &quot;支持库&quot; 中勾选 &quot;Bundled Libraries&quot;, 打包时会带上插件中的全部库 (应用增大约 210 KB). 加密的脚本与超过 4 MB 的文件不扫描, 它们用到的库同样需要勾选此项.</li>
+<li>本设备的插件未安装, 被停用, 未授权, 与当前 AutoJs6 不兼容, 或某个库已关闭时, 对应的库无法复制. 打包照常完成, 打包成功的对话框列出已打包的库, 以及未打包的库与处理办法, 处理后重新打包即可.</li>
+</ul>
+<p>打包的应用运行时先使用自带的库. 某个库没有带上时, 如果所在设备安装了本插件, 则从插件读取; 否则 <code>require</code> 该模块名或读取对应的全局对象会抛出上文所述的 <code>Error</code>, <code>message</code> 提示用 AutoJs6 重新打包 (模块为动态加载时勾选 &quot;Bundled Libraries&quot;) 或在该设备安装本插件, 例如 <code>Cannot find module &#39;dayjs&#39;: this app was packaged without the library &quot;dayjs&quot;. Package the app again with AutoJs6 (select &quot;Bundled Libraries&quot; in &quot;Libraries&quot; if the module is loaded dynamically), or install the plugin &quot;Bundled Libraries&quot; on this device.</code></p>
 <hr>
 <h2>相关链接<span><a class="mark" href="#bundledlibraries_5" id="bundledlibraries_5">#</a></span></h2>
 <div class="signature"><ul>

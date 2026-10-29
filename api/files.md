@@ -5,15 +5,15 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `files`, `files.batchRename`, 全局 1 项 | `files` | - | `host.files` |
-| 状态 | 已支持 52 项 | 已支持 (本地实现) 15 项, 待补 37 项 | 待补 52 项 | 需授权 15 项, 待补 37 项 |
+| 入口 | `files`, `files.batchRename`, 全局 1 项 | `files` | `files` | `host.files` |
+| 状态 | 已支持 52 项 | 已支持 (本地实现) 35 项, 待补 17 项 | 已支持 (本地实现) 35 项, 待补 17 项 | 需授权 15 项, 待补 37 项 |
 | 授权 | - | - | - | `files.control` 15 项 |
 
 差异项 (36 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `files.appendBytes` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `files.appendBytes` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
 | `files.batchRename.BatchRenameError` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `files.batchRename.apply` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `files.batchRename.applyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -31,24 +31,24 @@
 | `files.batchRename.previewAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `files.batchRename.undo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `files.batchRename.undoAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.create` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.createIfNotExists` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.createWithDirs` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.cwd` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.formatSizeWithUnit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.getHumanReadableSize` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.getNameWithoutExtension` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.getSimplifiedPath` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.isEmptyDir` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.open`, `open` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.readAssets` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.readBytes` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.removeDir` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.rename` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.renameWithoutExtension` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.sdcardPath` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.toFile` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `files.writeBytes` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `files.create` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.createIfNotExists` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.createWithDirs` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.cwd` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.formatSizeWithUnit` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.getHumanReadableSize` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.getNameWithoutExtension` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.getSimplifiedPath` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.isEmptyDir` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.open`, `open` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.readAssets` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.readBytes` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.removeDir` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.rename` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.renameWithoutExtension` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.sdcardPath` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.toFile` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `files.writeBytes` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
 
 返回对象 (2 个): 本页说明的对象的成员状态, 每个对象一行.
 

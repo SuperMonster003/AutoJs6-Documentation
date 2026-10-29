@@ -6,13 +6,17 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `speech`, `speech.models`, `speech.speaker` | `autojs6:speech`, `$autojs.speech` | `autojs6:speech`, `$autojs.speech` | `host.speech` |
-| 状态 | 已支持 27 项 | 已支持 19 项, 待补 8 项 | 已支持 19 项, 待补 8 项 | 需授权 19 项, 待补 8 项 |
+| 状态 | 已支持 33 项 | 已支持 19 项, 待补 14 项 | 已支持 19 项, 待补 14 项 | 需授权 19 项, 待补 14 项 |
 | 授权 | - | - | - | `speech.control` 19 项 |
 
-差异项 (16 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (22 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
+| `speech.detectLanguage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.detectLanguageAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.diarize` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.diarizeAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `speech.models.getDefault` | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.getDefault` |
 | `speech.models.importFile` | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.importFile` |
 | `speech.models.install` | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.install` |
@@ -29,6 +33,8 @@
 | `speech.speaker.remove` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `speech.speaker.verify` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `speech.speaker.verifyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.tag` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.tagAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

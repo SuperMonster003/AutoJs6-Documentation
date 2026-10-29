@@ -6,7 +6,7 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `util`, `util.inspect`, `util.java`, `util.morseCode`, `util.version`, `util.versionCodes` | `autojs6:util` | `autojs6:util` | `host.util` |
-| 状态 | 已支持 70 项 | 已支持 (本地实现) 64 项, 不适用 1 项, 待补 5 项 | 已支持 (本地实现) 64 项, 不适用 1 项, 待补 5 项 | 已支持 (本地实现) 57 项, 需授权 7 项, 不适用 1 项, 待补 5 项 |
+| 状态 | 已支持 70 项 | 已支持 (本地实现) 64 项, 不适用 3 项, 待补 3 项 | 已支持 (本地实现) 64 项, 不适用 3 项, 待补 3 项 | 已支持 (本地实现) 57 项, 需授权 7 项, 不适用 3 项, 待补 3 项 |
 | 授权 | - | - | - | `java.interop` 7 项 |
 
 差异项 (22 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -27,8 +27,8 @@
 | `util.morseCode.getCode` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getCode` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getCode` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.morseCode.getCode` |
 | `util.morseCode.getPattern` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getPattern` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getPattern` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.morseCode.getPattern` |
 | `util.morseCode.vibrate` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.vibrate` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.vibrate` (`autojs6:util`) | <span title="capability-gated">需授权</span> `java.interop`: `host.util.morseCode.vibrate` |
-| `util.toRegularAndApply` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `util.toRegularAndCall` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.toRegularAndApply` | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) |
+| `util.toRegularAndCall` | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) | <span title="not-portable: obsoleted">不适用</span> (宿主已废弃) |
 | `util.unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
 | `util.version.sdkInt` | <span title="local-shim">已支持 (本地实现)</span>: `version.sdkInt` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `version.sdkInt` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.version.sdkInt` |
 | `util.versionCodes.search` | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.search` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.search` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.versionCodes.search` |

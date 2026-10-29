@@ -346,20 +346,38 @@
 <tr>
 <td>入口</td>
 <td><code>memory</code></td>
-<td>-</td>
-<td>-</td>
+<td><code>autojs6:memory</code></td>
+<td><code>autojs6:memory</code></td>
 <td>-</td>
 </tr>
 <tr>
 <td>状态</td>
 <td>已支持 5 项</td>
-<td>待补 5 项</td>
-<td>待补 5 项</td>
+<td>已支持 4 项, 不适用 1 项</td>
+<td>已支持 4 项, 不适用 1 项</td>
 <td>待补 5 项</td>
 </tr>
 </tbody>
 </table>
-<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>memory.watch</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+</tbody>
+</table>
 <p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
 <!-- runtime-support:end -->
 <p>memory 模块用于在脚本中读取 AutoJs6 进程自身的内存诊断数据, 包括 Java 堆与原生堆用量, 存活的脚本引擎, 已结束但尚未被回收的脚本运行时与插件引擎桥接会话, 未释放的图像与脚本线程等, 以便检查脚本反复运行后内存是否持续增长.</p>

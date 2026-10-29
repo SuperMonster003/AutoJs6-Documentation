@@ -1356,11 +1356,11 @@ try {
 
 ## [m] trace
 
-### trace(message, level?)
+### trace(message?, level?)
 
 **`6.3.0`**
 
-- **message** { [string](dataTypes#string) } - 追踪消息
+- **[ message ]** { [string](dataTypes#string) } - 追踪消息
 - **[ level = "debug" ]** { `'verbose'` | `'debug'` | `'info'` | `'warn'` | `'error'` | [number](dataTypes#number) } - 消息输出等级
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 

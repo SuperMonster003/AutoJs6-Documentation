@@ -667,7 +667,7 @@ flow.clickBoundsWhenStable(id('start'), { timeout: 5e3, stableFor: 300 });
 
 ## [m] clickWhenStableAfter
 
-### clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+### clickWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)
 
 **`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
 
@@ -675,7 +675,7 @@ flow.clickBoundsWhenStable(id('start'), { timeout: 5e3, stableFor: 300 });
 
 **`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
 
-- **[ delayMin ]** { [number](dataTypes#number) } - 点击前延时下限 (毫秒)
+- **delayMin** { [number](dataTypes#number) } - 点击前延时下限 (毫秒)
 - **[ delayMax ]** { [number](dataTypes#number) } - 点击前延时上限 (毫秒)
 - <ins>**returns**</ins> { [Flow](flowType) }
 
@@ -692,7 +692,7 @@ clickWhenStableAfter('同意', { delay: 500 }); /* 固定延时 500 毫秒. */
 
 ## [m] clickBoundsWhenStableAfter
 
-### clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+### clickBoundsWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)
 
 **`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
 
@@ -700,7 +700,7 @@ clickWhenStableAfter('同意', { delay: 500 }); /* 固定延时 500 毫秒. */
 
 **`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
 
-- **[ delayMin ]** { [number](dataTypes#number) } - 点击前延时下限 (毫秒)
+- **delayMin** { [number](dataTypes#number) } - 点击前延时下限 (毫秒)
 - **[ delayMax ]** { [number](dataTypes#number) } - 点击前延时上限 (毫秒)
 - <ins>**returns**</ins> { [Flow](flowType) }
 

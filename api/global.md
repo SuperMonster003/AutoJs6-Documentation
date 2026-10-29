@@ -1156,7 +1156,7 @@ waitForHidden(className('ProgressBar'), 30e3).then(() => console.log('加载完�
 
 ## [m] clickWhenStableAfter
 
-### clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+### clickWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)
 
 **`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
 
@@ -1175,7 +1175,7 @@ clickWhenStableAfter('同意', { delay: [ 300, 800 ] }); /* 同上, 超时与间
 
 ## [m] clickBoundsWhenStableAfter
 
-### clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)
+### clickBoundsWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)
 
 **`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
 

@@ -458,6 +458,22 @@
 </li>
 <li><span class="stability_undefined"><a href="#runtimeapis_ai">AI 生成与持久会话</a></span></li>
 <li><span class="stability_undefined"><a href="#runtimeapis_agent">Agent 任务控制</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_41">运行时自有接口</a></span><ul>
+<li><span class="stability_undefined"><a href="#runtimeapis_scriptargs">脚本参数与 scriptArgs</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_node_js_runtime">Node.js Runtime</a></span><ul>
+<li><span class="stability_undefined"><a href="#runtimeapis_42">宿主桥与宿主消息</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_43">生命周期与能力快照</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_npm_package_manager">npm 与 package_manager</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_plugins">本地插件 (plugins)</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_rhino_rhino_autojs6_compat">Rhino 迁移 (rhino, autojs6:compat)</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_mediastore_media_store">MediaStore (media_store)</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_worker_worker_threads">Worker 池 (worker_threads)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#runtimeapis_bun_runtime">Bun Runtime</a></span></li>
+<li><span class="stability_undefined"><a href="#runtimeapis_quickjs_runtime">QuickJS Runtime</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -4210,6 +4226,1181 @@ console.log(result); // 完成.
 <h2>Agent 任务控制<span><a class="mark" href="#runtimeapis_agent" id="runtimeapis_agent">#</a></span></h2>
 <p>Node.js 主线程及 CommonJS/ESM/嵌套 Worker 使用 ai.agent, Bun 使用 host.ai.agent. 九个根方法 run/create/get/list/catalog/presets/status/result/context 和 AgentRun 的 on/once/off/respond/confirm/cancel/join 均有对应封装. run/get 返回 Promise 句柄; respond/confirm/cancel/join 异步完成, join 超时不取消任务. 事件和 JSON 结果保留类型与 Unicode, 注册脚本的上下文和结果槽可由其 Node Worker 访问. 任务循环和设备执行沿用 3-Stove Agent 与原宿主实现.</p>
 <p>Node 的 ai.agent 与 Bun 默认关闭的 agent.control 为独立授权. 生成应用还需在已安装的 AutoJs6 build 5850 或以上明确授权, 通过该宿主使用 Agent 的模型, 登记脚本和设备能力. 应用只能查询或控制自己的委托任务, 授权按安装身份保存并可在插件中心设置撤销. Worker 退出只取消其创建的非 detached 任务, get 的观察句柄不取得取消所有权. 详见 <a href="ai.html#ai_agent">Agent 任务与注册脚本</a>.</p>
+<h2>运行时自有接口<span><a class="mark" href="#runtimeapis_41" id="runtimeapis_41">#</a></span></h2>
+<p>本节列出 Node.js, Bun 与 QuickJS 运行时插件自带, 且没有对应宿主模块的入口: 宿主桥, 生命周期, 包管理, 本地插件, Rhino 迁移, MediaStore 与 Worker 池等. 它们不属于宿主脚本 API, 不计入运行时覆盖矩阵; 宿主模块在 Node.js / Bun 中的形态见各模块页的运行时支持表.</p>
+<p>&quot;最低版本&quot; 是首个含该入口的插件版本. 完整类型见 Node.js 插件的 <code>docs/nodejs/types/autojs6-node</code>, Bun 插件的 <code>host-client.d.mts</code>, 以及 <code>AutoJs6-TypeScript-Declarations</code> 的 <code>declarations/autojs6-node</code> 与 <code>declarations/autojs6-bun</code>; QuickJS 没有类型声明.</p>
+<h3>脚本参数与 scriptArgs<span><a class="mark" href="#runtimeapis_scriptargs" id="runtimeapis_scriptargs">#</a></span></h3>
+<p><code>scriptArgs</code> 只在 QuickJS 中存在. 各运行时读取当前脚本与参数的方式不同:</p>
+<table>
+<thead>
+<tr>
+<th>运行时</th>
+<th>入口</th>
+<th>取值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rhino</td>
+<td><code>engines.myEngine().execArgv</code></td>
+<td><code>engines.execScript</code> 等方法传入的 <code>arguments</code> 对象</td>
+<td>见 <a href="engines.html">引擎</a></td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td><code>process.argv</code></td>
+<td><code>[process.execPath, 入口文件的真实路径]</code></td>
+<td>没有 <code>scriptArgs</code>; 宿主不追加用户参数; <code>engines.myEngine()</code> 返回的引擎快照不含 execArgv</td>
+</tr>
+<tr>
+<td>Bun</td>
+<td><code>process.argv</code> / <code>Bun.argv</code></td>
+<td><code>[bun 可执行文件, 入口文件在执行工作区中的路径]</code></td>
+<td>没有 <code>scriptArgs</code>; 宿主不追加用户参数</td>
+</tr>
+<tr>
+<td>QuickJS</td>
+<td><code>scriptArgs</code></td>
+<td>只有一个元素的数组 <code>[脚本文件名]</code></td>
+<td>文件名不含目录, 如 <code>demo.quickjs.js</code>; 来源不是文件时为 <code>script.quickjs.js</code>; 没有用户参数, 也没有 <code>process</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-js">&quot;quickjs&quot;;
+
+console.log(scriptArgs.length); // 1
+console.log(scriptArgs[0]); // 例如 demo.quickjs.js
+</code></pre>
+<h3>Node.js Runtime<span><a class="mark" href="#runtimeapis_node_js_runtime" id="runtimeapis_node_js_runtime">#</a></span></h3>
+<p>共 12 组 113 条. 除 <code>autojs6:bridge</code> 外, 本节入口只在主线程 (根脚本) 中提供; Worker 中的宿主调用经 <code>autojs6:bridge</code> 转发. 模块用 <code>require(名称)</code> 或同名 ESM 导入取得, <code>$autojs</code> 为主线程全局对象.</p>
+<h4>宿主桥与宿主消息<span><a class="mark" href="#runtimeapis_42" id="runtimeapis_42">#</a></span></h4>
+<p><code>autojs6:bridge</code> 2 条, <code>autojs6:host</code> 11 条. <code>autojs6:host</code> 是每次执行独立的事件发射器, 只有 <code>message</code> 一个事件.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>bridge.callAutoJs</code></td>
+<td><code>callAutoJs(moduleName, methodName, args?, options?): Promise&lt;T&gt;</code></td>
+<td>按模块名与方法名直接调用宿主 broker; 参数与结果经结构化克隆, 权限, 超时与取消沿用本次执行</td>
+<td>Node.js 主线程与 Worker</td>
+<td>1.0.0 (Worker 1.6.0)</td>
+</tr>
+<tr>
+<td><code>bridge.permissions</code></td>
+<td><code>permissions(): BridgePermissionsReport</code></td>
+<td>返回本次执行的权限声明快照</td>
+<td>Node.js 主线程与 Worker</td>
+<td>1.0.0 (Worker 1.6.0)</td>
+</tr>
+<tr>
+<td><code>host.on</code></td>
+<td><code>on(&#39;message&#39;, listener): this</code></td>
+<td>接收宿主发来的 JSON 消息</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.once</code></td>
+<td><code>once(&#39;message&#39;, listener): this</code></td>
+<td>只接收下一条消息</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.addListener</code></td>
+<td><code>addListener(&#39;message&#39;, listener): this</code></td>
+<td>同 <code>on</code></td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.prependListener</code></td>
+<td><code>prependListener(&#39;message&#39;, listener): this</code></td>
+<td>把监听器加到最前</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.prependOnceListener</code></td>
+<td><code>prependOnceListener(&#39;message&#39;, listener): this</code></td>
+<td>把一次性监听器加到最前</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.off</code></td>
+<td><code>off(&#39;message&#39;, listener): this</code></td>
+<td>移除监听器</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.removeListener</code></td>
+<td><code>removeListener(&#39;message&#39;, listener): this</code></td>
+<td>同 <code>off</code></td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.removeAllListeners</code></td>
+<td><code>removeAllListeners(event?): this</code></td>
+<td>移除全部监听器</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.listenerCount</code></td>
+<td><code>listenerCount(&#39;message&#39;): number</code></td>
+<td>返回当前监听器数量</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.ref</code></td>
+<td><code>ref(): this</code></td>
+<td>有监听器时保持脚本运行 (默认)</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+<tr>
+<td><code>host.unref</code></td>
+<td><code>unref(): this</code></td>
+<td>监听器不再阻止脚本结束</td>
+<td>Node.js 主线程</td>
+<td>1.3.0</td>
+</tr>
+</tbody>
+</table>
+<h4>生命周期与能力快照<span><a class="mark" href="#runtimeapis_43" id="runtimeapis_43">#</a></span></h4>
+<p><code>autojs6:lifecycle</code> 7 条, <code>autojs6:profile</code> 1 条, <code>$autojs</code> 自有成员 3 条. 检查点只用于脚本主动保存和读取 JSON 进度, 插件不会自动重启脚本.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lifecycle.policy</code></td>
+<td><code>policy: Policy</code></td>
+<td>只读策略: 是否启用检查点, 字节上限, 执行模式与启动面; <code>automaticRestart</code> 恒为 false</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.checkpoint</code></td>
+<td><code>checkpoint(value, options?): Promise&lt;CheckpointRecord&gt;</code></td>
+<td>把 JSON 值保存为本项目的检查点, <code>options.reason</code> 记录原因</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.readCheckpoint</code></td>
+<td><code>readCheckpoint(options?): Promise&lt;CheckpointRecord&gt;</code></td>
+<td>读取本项目的检查点, 没有时为 null</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.clearCheckpoint</code></td>
+<td><code>clearCheckpoint(options?): Promise&lt;{deleted, projectKey}&gt;</code></td>
+<td>删除本项目的检查点</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.onCheckpoint</code></td>
+<td><code>onCheckpoint(handler): Unsubscribe</code></td>
+<td>每次保存成功后以 <code>(reason, record)</code> 调用 handler; 返回取消订阅函数</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.onRestore</code></td>
+<td><code>onRestore(handler, options?): Promise&lt;CheckpointRecord&gt;</code></td>
+<td>有检查点时以 <code>(checkpoint, record)</code> 调用 handler 并返回记录, 没有时为 null</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>lifecycle.onStop</code></td>
+<td><code>onStop(handler): Unsubscribe</code></td>
+<td>宿主请求停止时按注册顺序以 <code>(reason)</code> 调用 handler</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>autojs6:profile</code></td>
+<td><code>require(&#39;autojs6:profile&#39;): object</code></td>
+<td>本次执行的运行时能力快照: Node.js 版本, CJS / ESM, 网络, Worker, Java 互操作, Inspector, 原生扩展, 内建模块清单, 特性开关, 错误码, 编译缓存, 桥接权限与限额等</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>$autojs.schema</code></td>
+<td><code>schema: &#39;autojs6-node-autojs-global-v1&#39;</code></td>
+<td><code>$autojs</code> 的结构版本</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>$autojs.profile</code></td>
+<td><code>profile: object</code></td>
+<td>与 <code>autojs6:profile</code> 相同的能力快照</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>$autojs.androidContext</code></td>
+<td><code>androidContext: object</code></td>
+<td>Android Context 的描述对象, <code>available</code> 恒为 false: Node.js 不持有真实 Context, Java 调用改用 <code>java</code> 模块</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h4>npm 与 package_manager<span><a class="mark" href="#runtimeapis_npm_package_manager" id="runtimeapis_npm_package_manager">#</a></span></h4>
+<p><code>package_manager</code> 14 条, <code>npm</code> 21 条. <code>npm</code> 是 <code>package_manager</code> 的别名门面, 另有命令行入口. <code>install</code> / <code>update</code> / <code>remove</code> 收到字符串或数组形式的包规格时, 在工作区调用随包 npm (遵循 npm 与项目 <code>.npmrc</code>, 失败时保留 npm 输出与退出码); 收到对象请求时操作宿主本地包库, 保留其权限与完整性要求. 命令行选项为 <code>cwd</code>, <code>registry</code>, <code>ignoreScripts</code>, <code>offline</code>, <code>env</code>, <code>npmArgs</code>, <code>signal</code> 与 <code>timeoutMs</code>.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>package_manager.status</code></td>
+<td><code>status(): DiagnosticStatus</code></td>
+<td>包管理器诊断状态: npm 命令行, 宿主本地库与来源策略</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.policy</code></td>
+<td><code>policy(): DiagnosticPolicy</code></td>
+<td>策略快照: 允许与拒绝的来源, 可用操作, 修改授权要求</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.sourcePolicy</code></td>
+<td><code>sourcePolicy(): SourcePolicy</code></td>
+<td>包来源策略</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.planInstall</code></td>
+<td><code>planInstall(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>生成宿主本地库的安装计划, 不改动文件</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.planUpdate</code></td>
+<td><code>planUpdate(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>生成更新计划</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.planRemove</code></td>
+<td><code>planRemove(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>生成删除计划</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.planRegistryInstall</code></td>
+<td><code>planRegistryInstall(request): Promise&lt;RemotePackagePlan&gt;</code></td>
+<td>解析 registry 包的版本, 完整性与下载地址, 只出计划</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.planTarballInstall</code></td>
+<td><code>planTarballInstall(request): Promise&lt;RemotePackagePlan&gt;</code></td>
+<td>解析 tarball 来源, 只出计划</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.install</code></td>
+<td><code>install(spec?, options?): Promise&lt;NpmCliResult&gt;</code> / <code>install(request): Promise&lt;OperationResult&gt;</code></td>
+<td>包规格: 运行 <code>npm install</code>; 对象请求: 写入宿主本地库 (需 <code>package_manager.mutate</code>)</td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>package_manager.update</code></td>
+<td><code>update(spec?, options?): Promise&lt;NpmCliResult&gt;</code> / <code>update(request): Promise&lt;OperationResult&gt;</code></td>
+<td>包规格: 运行 <code>npm update</code>; 对象请求: 更新宿主本地库</td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>package_manager.remove</code></td>
+<td><code>remove(spec?, options?): Promise&lt;NpmCliResult&gt;</code> / <code>remove(request): Promise&lt;OperationResult&gt;</code></td>
+<td>包规格: 运行 <code>npm uninstall</code>; 对象请求: 从宿主本地库删除</td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>package_manager.list</code></td>
+<td><code>list(options?): Promise&lt;PackageRecord[]&gt;</code></td>
+<td>列出宿主本地库中的包</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.verify</code></td>
+<td><code>verify(request): Promise&lt;OperationResult&gt;</code></td>
+<td>校验包的完整性</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>package_manager.prune</code></td>
+<td><code>prune(options?): Promise&lt;OperationResult&gt;</code></td>
+<td>清理多余的包</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.status</code></td>
+<td><code>status(): NpmFacadeStatus</code></td>
+<td>npm 门面状态, 内含 <code>package_manager</code> 的诊断状态</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.policy</code></td>
+<td><code>policy(): NpmFacadePolicy</code></td>
+<td>npm 门面策略, 内含 <code>package_manager</code> 的策略</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.sourcePolicy</code></td>
+<td><code>sourcePolicy(): SourcePolicy</code></td>
+<td>同 <code>package_manager.sourcePolicy</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.packageManager</code></td>
+<td><code>packageManager(): PackageManagerModule</code></td>
+<td>返回 <code>package_manager</code> 模块</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.planInstall</code></td>
+<td><code>planInstall(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>同 <code>package_manager.planInstall</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.planUpdate</code></td>
+<td><code>planUpdate(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>同 <code>package_manager.planUpdate</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.planRemove</code></td>
+<td><code>planRemove(request): Promise&lt;PackagePlan&gt;</code></td>
+<td>同 <code>package_manager.planRemove</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.planRegistryInstall</code></td>
+<td><code>planRegistryInstall(request): Promise&lt;RemotePackagePlan&gt;</code></td>
+<td>同 <code>package_manager.planRegistryInstall</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.planTarballInstall</code></td>
+<td><code>planTarballInstall(request): Promise&lt;RemotePackagePlan&gt;</code></td>
+<td>同 <code>package_manager.planTarballInstall</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.install</code></td>
+<td><code>install(spec?, options?)</code> / <code>install(request)</code></td>
+<td>同 <code>package_manager.install</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>npm.update</code></td>
+<td><code>update(spec?, options?)</code> / <code>update(request)</code></td>
+<td>同 <code>package_manager.update</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>npm.remove</code></td>
+<td><code>remove(spec?, options?)</code> / <code>remove(request)</code></td>
+<td>同 <code>package_manager.remove</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0 (包规格 1.6.0)</td>
+</tr>
+<tr>
+<td><code>npm.list</code></td>
+<td><code>list(options?): Promise&lt;PackageRecord[]&gt;</code></td>
+<td>同 <code>package_manager.list</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.verify</code></td>
+<td><code>verify(request): Promise&lt;OperationResult&gt;</code></td>
+<td>同 <code>package_manager.verify</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.prune</code></td>
+<td><code>prune(options?): Promise&lt;OperationResult&gt;</code></td>
+<td>同 <code>package_manager.prune</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>npm.cli</code></td>
+<td><code>cli(args, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>以任意参数运行随包 npm, 输出流式回传</td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+<tr>
+<td><code>npm.exec</code></td>
+<td><code>exec(args?, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>运行 <code>npm exec -- args</code></td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+<tr>
+<td><code>npm.runScript</code></td>
+<td><code>runScript(name, args?, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>运行 <code>npm run name -- args</code></td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+<tr>
+<td><code>npm.installFromRegistry</code></td>
+<td><code>installFromRegistry(spec, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>从 registry 安装, 同 <code>install(spec, options)</code></td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+<tr>
+<td><code>npm.publish</code></td>
+<td><code>publish(spec?, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>运行 <code>npm publish</code></td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+<tr>
+<td><code>npm.pack</code></td>
+<td><code>pack(spec?, options?): Promise&lt;NpmCliResult&gt;</code></td>
+<td>运行 <code>npm pack</code></td>
+<td>Node.js 主线程</td>
+<td>1.6.0</td>
+</tr>
+</tbody>
+</table>
+<p><code>npm.cli</code> / <code>exec</code> / <code>runScript</code> / <code>installFromRegistry</code> / <code>publish</code> / <code>pack</code> 在 1.6.0 之前的版本中只会拒绝调用.</p>
+<h4>本地插件 (plugins)<span><a class="mark" href="#runtimeapis_plugins" id="runtimeapis_plugins">#</a></span></h4>
+<p><code>plugins</code> 19 条, 管理工作区 <code>plugins</code> 目录中的本地 JS 插件, 与 Rhino 的 <a href="plugins.html">插件 (Plugins)</a> 模块无关.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plugins.install</code></td>
+<td><code>install(id, options?): PluginStatus</code></td>
+<td>安装本地插件, 可指定来源, 是否启用与初始配置</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.enable</code></td>
+<td><code>enable(id): PluginStatus</code></td>
+<td>启用插件</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.disable</code></td>
+<td><code>disable(id): PluginStatus</code></td>
+<td>停用插件</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.isEnabled</code></td>
+<td><code>isEnabled(id): boolean</code></td>
+<td>插件是否已启用</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.configure</code></td>
+<td><code>configure(id, config): object</code></td>
+<td>写入插件配置, 返回新配置</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.config</code></td>
+<td><code>config(id): object</code></td>
+<td>读取插件配置</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.version</code></td>
+<td><code>version(id): string</code></td>
+<td>插件版本</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.dependencies</code></td>
+<td><code>dependencies(id): string[]</code></td>
+<td>插件声明的依赖</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.exports</code></td>
+<td><code>exports(id): Record&lt;string, string&gt;</code></td>
+<td>插件声明的导出表</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.capabilities</code></td>
+<td><code>capabilities(id): string[]</code></td>
+<td>插件声明的能力</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.status</code></td>
+<td><code>status(id): PluginStatus</code></td>
+<td>插件状态: 清单, 启用与加载状态, 生命周期阶段, 计数, 资源与配置</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.start</code></td>
+<td><code>start(id, options?): PluginStatus</code></td>
+<td>启动插件, 以生命周期上下文调用其 start</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.stop</code></td>
+<td><code>stop(id, options?): PluginStatus</code></td>
+<td>停止插件并释放它登记的资源</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.reload</code></td>
+<td><code>reload(id, options): PluginStatus</code></td>
+<td>重新加载插件, <code>options.debug</code> 须为 true</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.unload</code></td>
+<td><code>unload(id): boolean</code></td>
+<td>卸载已加载的插件</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.list</code></td>
+<td><code>list(): PluginStatus[]</code></td>
+<td>列出全部本地插件</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.manifest</code></td>
+<td><code>manifest(id): PluginManifest</code></td>
+<td>读取插件清单</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.resolve</code></td>
+<td><code>resolve(id, exportName?): string</code></td>
+<td>解析插件入口或指定导出的文件路径</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>plugins.load</code></td>
+<td><code>load(id, exportName?): T</code></td>
+<td>加载插件入口或指定导出</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<p><code>install</code>, <code>disable</code>, <code>start</code>, <code>stop</code>, <code>reload</code> 与 <code>unload</code> 在插件的生命周期函数是异步函数时返回 Promise.</p>
+<h4>Rhino 迁移 (rhino, autojs6:compat)<span><a class="mark" href="#runtimeapis_rhino_rhino_autojs6_compat" id="runtimeapis_rhino_rhino_autojs6_compat">#</a></span></h4>
+<p><code>rhino</code> 13 条, <code>autojs6:compat</code> 的控制成员 10 条. 两者都不会自动安装 Rhino 全局对象; <code>autojs6:compat</code> 的其余成员是宿主 API 的再导出, 见各模块页.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>rhino.name</code></td>
+<td><code>name: &#39;rhino&#39;</code></td>
+<td>模块名</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.version</code></td>
+<td><code>version: 1</code></td>
+<td>接口版本</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.schema</code></td>
+<td><code>schema: string</code></td>
+<td>状态结构版本</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.mode</code></td>
+<td><code>mode: &#39;disabled&#39;</code></td>
+<td>Rhino 全局兼容层不自动启用</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.enabled</code></td>
+<td><code>enabled: false</code></td>
+<td>恒为 false</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.errorCodes</code></td>
+<td><code>errorCodes: ErrorCodes</code></td>
+<td>本模块的错误码表 (<code>ERR_AUTOJS6_RHINO_*</code>)</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.isEnabled</code></td>
+<td><code>isEnabled(): false</code></td>
+<td>同 <code>enabled</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.status</code></td>
+<td><code>status(): Status</code></td>
+<td>兼容层状态快照</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.run</code></td>
+<td><code>run(request): Promise&lt;RunResult&gt;</code></td>
+<td>在宿主 Rhino 中执行源码 (<code>source</code>) 或文件 (<code>path</code>), 只回传 JSON 结果, 控制台摘要与耗时; 请求须带 <code>explicit: true</code> 与 <code>timeoutMs</code>, 需要 <code>rhino</code> 能力</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.install</code></td>
+<td><code>install(options): InstallResult</code></td>
+<td>显式 (<code>explicit: true</code>) 安装 <code>Packages</code> / <code>java</code> / <code>android</code> 代理, 按宿主 Java 白名单执行; <code>globals</code> 为 true 时装到全局</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.importClass</code></td>
+<td><code>importClass(...): never</code></td>
+<td>不支持, 总是抛出 <code>ERR_AUTOJS6_RHINO_IMPORT_UNSUPPORTED</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.importPackage</code></td>
+<td><code>importPackage(...): never</code></td>
+<td>不支持, 总是抛出 <code>ERR_AUTOJS6_RHINO_IMPORT_UNSUPPORTED</code></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>rhino.JavaAdapter</code></td>
+<td><code>JavaAdapter(...): never</code></td>
+<td>不支持, 总是抛出 <code>ERR_AUTOJS6_RHINO_JAVA_ADAPTER_UNSUPPORTED</code>; Java 回调见 <a href="#runtimeapis_java">Java 回调, 子类与代码加载</a></td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.name</code></td>
+<td><code>name: &#39;autojs6:compat&#39;</code></td>
+<td>模块名</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.version</code></td>
+<td><code>version: 1</code></td>
+<td>接口版本</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.mode</code></td>
+<td><code>mode: &#39;explicit-opt-in&#39;</code></td>
+<td>只在显式 <code>install</code> 后安装全局名</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.errorCodes</code></td>
+<td><code>errorCodes: ErrorCodes</code></td>
+<td>错误码表 (<code>ERR_AUTOJS6_RHINO_COMPAT_INVALID_OPTION</code> / <code>UNSUPPORTED</code> / <code>BLOCKED_BY_DESIGN</code>)</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.status</code></td>
+<td><code>status(): Status</code></td>
+<td>加载器状态: 是否已安装, 可安装的全局名与模块名</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.install</code></td>
+<td><code>install(options?): InstallResult</code></td>
+<td><code>globals</code> (或 <code>global</code>) 为 true 时把 Rhino 风格全局名装到 globalThis, 已有同名全局时跳过并给出警告, <code>overwrite</code> 为 true 时覆盖</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.unsupported</code></td>
+<td><code>unsupported(apiName?, reason?): RhinoCompatError</code></td>
+<td>构造 &quot;未实现&quot; 错误, 不抛出</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.blockedByDesign</code></td>
+<td><code>blockedByDesign(apiName?, reason?): RhinoCompatError</code></td>
+<td>构造 &quot;按设计禁止&quot; 错误, 不抛出</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.assertSupported</code></td>
+<td><code>assertSupported(apiName?): never</code></td>
+<td>总是抛出 &quot;未实现&quot; 错误, 用于标记尚未移植的调用点</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>compat.selector</code></td>
+<td><code>selector: SelectorDslModule</code></td>
+<td>Rhino 风格选择器入口: <code>text</code> / <code>desc</code> / <code>id</code> 等返回可链式的句柄, <code>findOne</code> / <code>click</code> 等返回 Promise</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<h4>MediaStore (media_store)<span><a class="mark" href="#runtimeapis_mediastore_media_store" id="runtimeapis_mediastore_media_store">#</a></span></h4>
+<p><code>media_store</code> 8 条 (另有 <code>scanFile</code>, 与宿主 <a href="media.html">多媒体 (Media)</a> 的 scanFile 对应, 不计入). 读需要 <code>media</code> 与 <code>media.library</code> 能力, 写入, 改名与删除另需 <code>media.library.mutate</code>; Android 10 起只能修改 AutoJs6 自己创建的记录.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>media_store.capabilities</code></td>
+<td><code>capabilities(options?): Promise&lt;Capabilities&gt;</code></td>
+<td>系统版本, 分区存储, 可用集合与列, 读权限状态与查询 / 修改策略</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.query</code></td>
+<td><code>query(collection, options?): Promise&lt;QueryResult&gt;</code></td>
+<td>按结构化 JSON 条件查询 <code>audio</code> / <code>images</code> / <code>video</code> (Android 10 起另有 <code>downloads</code>), 支持排序, 分页与列选择</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.get</code></td>
+<td><code>get(collection, id, options?): Promise&lt;Item&gt;</code></td>
+<td>按 id 读取一条记录, 不存在时为 null</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.insert</code></td>
+<td><code>insert(collection, options): Promise&lt;Item&gt;</code></td>
+<td>把宿主可读的文件复制为新的媒体记录</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.update</code></td>
+<td><code>update(collection, id, values, options?): Promise&lt;Item&gt;</code></td>
+<td>修改文件名或目录</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.delete</code></td>
+<td><code>delete(collection, id, options?): Promise&lt;DeleteResult&gt;</code></td>
+<td>删除记录</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.remove</code></td>
+<td><code>remove(collection, id, options?): Promise&lt;DeleteResult&gt;</code></td>
+<td>同 <code>delete</code></td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+<tr>
+<td><code>media_store.exportFile</code></td>
+<td><code>exportFile(collection, id, destination, options?): Promise&lt;ExportResult&gt;</code></td>
+<td>把记录的内容复制到宿主可写的文件路径</td>
+<td>Node.js 主线程</td>
+<td>1.5.5</td>
+</tr>
+</tbody>
+</table>
+<h4>Worker 池 (worker_threads)<span><a class="mark" href="#runtimeapis_worker_worker_threads" id="runtimeapis_worker_worker_threads">#</a></span></h4>
+<p><code>worker_threads</code> 在主线程返回 Node.js 原生模块对象, 另加 4 条 AutoJs6 扩展. Worker 内的 <code>worker_threads</code> 是原生模块, 没有这些扩展.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>worker_threads.WorkerPool</code></td>
+<td><code>new WorkerPool(filename, options?)</code></td>
+<td>复用 Worker 的任务池, 见下文</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>worker_threads.policy</code></td>
+<td><code>policy: WorkerThreadsPolicy</code></td>
+<td>Worker 策略快照: 可用内建模块, Worker 内的文件 / 网络 / 宿主桥方式, WorkerPool 默认值与 resourceLimits 默认值</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>worker_threads.nativeAvailable</code></td>
+<td><code>nativeAvailable: boolean</code></td>
+<td>原生 Worker 是否可用</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>worker_threads.diagnostics</code></td>
+<td><code>diagnostics(): WorkerThreadsDiagnostics</code></td>
+<td>Worker, MessagePort 与 WorkerPool 的计数诊断</td>
+<td>Node.js 主线程</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<p><code>new WorkerPool(filename, options?)</code> 也可以不带 <code>new</code> 调用. 选项:</p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>minWorkers</code></td>
+<td>0</td>
+<td>创建时预先启动的 Worker 数</td>
+</tr>
+<tr>
+<td><code>maxWorkers</code></td>
+<td>CPU 并行度</td>
+<td>同时运行的 Worker 上限</td>
+</tr>
+<tr>
+<td><code>idleTimeoutMs</code></td>
+<td>1000</td>
+<td>空闲 Worker 的回收时间, 0 - 60000</td>
+</tr>
+<tr>
+<td><code>taskTimeoutMs</code></td>
+<td>0 (不限)</td>
+<td>任务的默认期限</td>
+</tr>
+<tr>
+<td><code>queueLimit</code></td>
+<td>不限</td>
+<td>排队任务上限, 超出时 <code>run</code> 抛出 <code>ERR_AUTOJS6_WORKER_POOL_QUEUE_FULL</code></td>
+</tr>
+<tr>
+<td><code>workerData</code> / <code>resourceLimits</code></td>
+<td>无</td>
+<td>传给每个 Worker 的同名选项</td>
+</tr>
+</tbody>
+</table>
+<p>实例方法:</p>
+<ul>
+<li><code>run(value, options?)</code>: 把 <code>value</code> 交给空闲 Worker, 返回 Promise. <code>options.transferList</code> 随消息转移, <code>options.timeoutMs</code> 覆盖默认期限 (超时拒绝为 <code>ERR_AUTOJS6_WORKER_POOL_TASK_TIMEOUT</code> 并终止该 Worker). 返回的 Promise 带 <code>cancel()</code>: 排队任务直接移除, 运行中任务终止其 Worker, 两者都以 <code>ERR_AUTOJS6_WORKER_POOL_TASK_CANCELLED</code> 拒绝; 任务已结束时返回 false.</li>
+<li><code>diagnostics()</code>: 返回 <code>closed</code>, Worker 数 (全部 / 空闲 / 忙碌), 排队数, 已创建 Worker 数与完成 / 取消 / 超时的任务数.</li>
+<li><code>close()</code> / <code>shutdown()</code>: 拒绝排队任务 (<code>ERR_AUTOJS6_WORKER_POOL_CLOSED</code>) 并终止全部 Worker, 返回 Promise. 之后调用 <code>run</code> 抛出同一错误码.</li>
+</ul>
+<p>池中的 Worker 脚本从 <code>parentPort</code> 接收 <code>{ __autojs6PoolTaskId, value }</code>, 处理后回复带同一 <code>__autojs6PoolTaskId</code> 的 <code>{ value }</code> 或 <code>{ error }</code>; 回复 <code>error</code> 时任务以 <code>ERR_AUTOJS6_WORKER_POOL_TASK_FAILED</code> 拒绝.</p>
+<pre><code class="lang-js">&quot;nodejs&quot;;
+
+const { WorkerPool } = require(&#39;worker_threads&#39;);
+const pool = new WorkerPool(__dirname + &#39;/square.cjs&#39;, { maxWorkers: 2 });
+
+Promise.all([ 1, 2, 3 ].map(n =&gt; pool.run(n)))
+    .then(results =&gt; console.log(results)) // [ 1, 4, 9 ]
+    .finally(() =&gt; pool.close());
+</code></pre>
+<pre><code class="lang-js">/* square.cjs */
+const { parentPort } = require(&#39;worker_threads&#39;);
+
+parentPort.on(&#39;message&#39;, ({ __autojs6PoolTaskId, value }) =&gt; {
+    parentPort.postMessage({ __autojs6PoolTaskId, value: value * value });
+});
+</code></pre>
+<h3>Bun Runtime<span><a class="mark" href="#runtimeapis_bun_runtime" id="runtimeapis_bun_runtime">#</a></span></h3>
+<p>共 12 条: 客户端模块的 5 个导出, <code>HostClient</code> 的 6 个非宿主成员, 以及 1 个环境变量. 用法见 <a href="#runtimeapis_bun_2">Bun 客户端</a>.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AUTOJS6_HOST_CLIENT_MODULE</code></td>
+<td><code>process.env.AUTOJS6_HOST_CLIENT_MODULE: string</code></td>
+<td>本次执行的客户端模块文件路径, 只在提供宿主桥时设置; 用 <code>await import(...)</code> 加载</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>createHostClient</code></td>
+<td><code>createHostClient(options?): Promise&lt;HostClient&gt;</code></td>
+<td>连接本次执行的宿主桥并协商能力</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>SDK_VERSION</code></td>
+<td><code>SDK_VERSION: 1</code></td>
+<td>客户端 SDK 版本</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HOST_API_METHODS</code></td>
+<td><code>HOST_API_METHODS: Record&lt;string, string[]&gt;</code></td>
+<td>各能力可调用的宿主方法名</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostCallError</code></td>
+<td><code>class HostCallError extends Error</code></td>
+<td>宿主调用失败时的错误类, 含 <code>code</code> / <code>capability</code> / <code>status</code>; 未授权为 <code>NOT_GRANTED</code>, 桥不可达为 <code>HOST_UNAVAILABLE</code></td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>OPENCC_CONVERSION_TYPES</code></td>
+<td><code>OPENCC_CONVERSION_TYPES: readonly string[]</code></td>
+<td><code>host.opencc</code> 支持的 32 个转换类型名</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#sdkVersion</code></td>
+<td><code>sdkVersion: 1</code></td>
+<td>客户端 SDK 版本</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#bridgeVersion</code></td>
+<td><code>bridgeVersion: 1</code></td>
+<td>宿主桥协议版本</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#capabilities</code></td>
+<td><code>capabilities: readonly string[]</code></td>
+<td>本次执行协商到的能力名</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#limits</code></td>
+<td><code>limits: object</code></td>
+<td>宿主公布的上限: <code>maxRequestBytes</code>, <code>maxResultBytes</code>, <code>maxCallsPerExecution</code>, <code>maxConcurrentCalls</code>, <code>callTimeoutMillis</code></td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#hasCapability</code></td>
+<td><code>hasCapability(capability): boolean</code></td>
+<td>是否协商到某个能力</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+<tr>
+<td><code>HostClient#call</code></td>
+<td><code>call(capability, payload?): Promise&lt;object&gt;</code></td>
+<td>以能力名与 JSON 载荷直接调用宿主, 仍受相同的授权与方法校验</td>
+<td>Bun</td>
+<td>0.2.6</td>
+</tr>
+</tbody>
+</table>
+<h3>QuickJS Runtime<span><a class="mark" href="#runtimeapis_quickjs_runtime" id="runtimeapis_quickjs_runtime">#</a></span></h3>
+<p>共 7 条. QuickJS 插件只提供输出与入参, 不提供宿主 API, Java, 文件系统, 网络, <code>std</code> / <code>os</code> 模块与定时器. 标准输出与标准错误合计最多 4 MiB.</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>签名</th>
+<th>说明</th>
+<th>运行时</th>
+<th>最低版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>console.log</code></td>
+<td><code>console.log(...values): void</code></td>
+<td>把各参数转为字符串, 以空格连接后写入标准输出</td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>console.info</code></td>
+<td><code>console.info(...values): void</code></td>
+<td>同 <code>console.log</code></td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>console.debug</code></td>
+<td><code>console.debug(...values): void</code></td>
+<td>同 <code>console.log</code></td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>console.warn</code></td>
+<td><code>console.warn(...values): void</code></td>
+<td>同 <code>console.log</code>, 写入标准错误</td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>console.error</code></td>
+<td><code>console.error(...values): void</code></td>
+<td>同 <code>console.warn</code></td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>print</code></td>
+<td><code>print(...values): void</code></td>
+<td>同 <code>console.log</code></td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+<tr>
+<td><code>scriptArgs</code></td>
+<td><code>scriptArgs: string[]</code></td>
+<td><code>[脚本文件名]</code>, 见 <a href="#runtimeapis_scriptargs">脚本参数与 scriptArgs</a></td>
+<td>QuickJS</td>
+<td>1.0.0</td>
+</tr>
+</tbody>
+</table>
+<p><code>console</code> 只有以上五个方法, 没有 <code>table</code>, <code>time</code>, <code>assert</code> 等.</p>
 
         </div>
     </div>

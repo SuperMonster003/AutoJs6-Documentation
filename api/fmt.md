@@ -1,5 +1,19 @@
 # 格式化 (Formatter)
 
+<!-- runtime-support:begin fmt -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `fmt.bytes` | `fmt` | `fmt` | `host.fmt` |
+| 状态 | 已支持 6 项 | 已支持 (本地实现) 6 项 | 已支持 (本地实现) 6 项 | 已支持 (本地实现) 6 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `fmt` 模块用于将数据格式化为字符串.
 
 当前模块提供字节数据格式化. `fmt` 与 `$fmt` 引用同一个对象.

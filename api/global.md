@@ -1,5 +1,67 @@
 # 全局对象 (Global)
 
+<!-- runtime-support:begin global -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | 全局 58 项 | `autojs6:screen_metrics`, `autojs6:global`, `autojs6:compat` (经 compat) | `autojs6:screen_metrics`, `autojs6:global` | `host.coordinates`, `host.clipboard` |
+| 状态 | 已支持 58 项 | 已支持 14 项, 已支持 (本地实现) 8 项, 不适用 3 项, 待补 33 项 | 已支持 10 项, 已支持 (本地实现) 7 项, 不适用 3 项, 待补 38 项 | 需授权 12 项, 不适用 3 项, 待补 43 项 |
+| 授权 | - | - | - | `screen.metrics` 10 项, `clipboard.control` 2 项 |
+
+差异项 (44 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `HEIGHT` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `TODO` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `WIDTH` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `axios` | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `cheerio` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `currentPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `dayjs` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `exit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
+| `i18n` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isAutoJs6` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isInteger` | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
+| `isObjectSpecies` | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isPrimitive` | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isReference` | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isRunning` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isShuttingDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `notStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `pangu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="pending">待补</span> |
+| `requiresApi` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `requiresAutojsVersion` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `setClip` | <span title="bridged">已支持</span>, 经 compat: `setClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.setText` |
+| `setScreenMetrics` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `stop` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toString` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `toastError`, `toasterror` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toastInfo`, `toastinfo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toastLog` | <span title="bridged">已支持</span>, 经 compat: `toastLog` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toastVerbose`, `toastverbose` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toastWarn`, `toastwarn` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `toastlog` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
+| `wait` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `waitForActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `waitForPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 在 JavaScript 中, [几乎一切都是对象](https://stackoverflow.com/questions/9108925/how-is-almost-everything-in-javascript-an-object/).<br>
 此处的全局 "对象" 包括 [ 变量 / 方法 / 构造器 ] 等.<br>
 全局对象随处可用, 包括 ECMA 标准内置对象 (如 [ Number / RegExp / String ] 等).

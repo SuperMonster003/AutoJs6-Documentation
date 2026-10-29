@@ -1,5 +1,44 @@
 # 工具 (Util)
 
+<!-- runtime-support:begin util -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `util`, `util.inspect`, `util.java`, `util.morseCode`, `util.version`, `util.versionCodes` | `autojs6:util` | `autojs6:util` | `host.util` |
+| 状态 | 已支持 70 项 | 已支持 (本地实现) 64 项, 不适用 1 项, 待补 5 项 | 已支持 (本地实现) 64 项, 不适用 1 项, 待补 5 项 | 已支持 (本地实现) 64 项, 不适用 1 项, 待补 5 项 |
+
+差异项 (22 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `util.class` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.className` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.getClassName` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.inspect.colors` | <span title="local-shim">已支持 (本地实现)</span>: `inspect.colors` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `inspect.colors` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.inspect.colors` |
+| `util.inspect.styles` | <span title="local-shim">已支持 (本地实现)</span>: `inspect.styles` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `inspect.styles` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.inspect.styles` |
+| `util.java.array` | <span title="local-shim">已支持 (本地实现)</span>: `java.array` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.array` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.array` |
+| `util.java.instanceOf` | <span title="local-shim">已支持 (本地实现)</span>: `java.instanceOf` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.instanceOf` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.instanceOf` |
+| `util.java.instanceof` | <span title="local-shim">已支持 (本地实现)</span>: `java.instanceof` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.instanceof` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.instanceof` |
+| `util.java.mapToObject` | <span title="local-shim">已支持 (本地实现)</span>: `java.mapToObject` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.mapToObject` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.mapToObject` |
+| `util.java.objectToMap` | <span title="local-shim">已支持 (本地实现)</span>: `java.objectToMap` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.objectToMap` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.objectToMap` |
+| `util.java.toJsArray` | <span title="local-shim">已支持 (本地实现)</span>: `java.toJsArray` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.toJsArray` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.java.toJsArray` |
+| `util.morseCode.getCode` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getCode` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getCode` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.morseCode.getCode` |
+| `util.morseCode.getPattern` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getPattern` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.getPattern` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.morseCode.getPattern` |
+| `util.morseCode.vibrate` | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.vibrate` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `morseCode.vibrate` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.morseCode.vibrate` |
+| `util.toRegularAndApply` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.toRegularAndCall` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
+| `util.version.sdkInt` | <span title="local-shim">已支持 (本地实现)</span>: `version.sdkInt` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `version.sdkInt` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.version.sdkInt` |
+| `util.versionCodes.search` | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.search` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.search` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.versionCodes.search` |
+| `util.versionCodes.searchAll` | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.searchAll` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.searchAll` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.versionCodes.searchAll` |
+| `util.versionCodes.summary` | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.summary` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.summary` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.versionCodes.summary` |
+| `util.versionCodes.toString` | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.toString` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `versionCodes.toString` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.versionCodes.toString` |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 util 模块提供类型判断, 参数检查, 字符串处理, 单位换算, Java 互操作, Android 版本信息, 对象格式化和摩尔斯电码工具.
 
 `util` 与 `$util` 指向同一个模块对象. 此模块由 AutoJs6 直接注入, 无需通过 Node.js 的 `require('util')` 加载.

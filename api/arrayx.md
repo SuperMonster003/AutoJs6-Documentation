@@ -1,5 +1,19 @@
 # Arrayx (Array 扩展)
 
+<!-- runtime-support:begin Arrayx -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `Arrayx` | `jsox.arrayx` | `jsox.arrayx` | - |
+| 状态 | 已支持 15 项 | 已支持 (本地实现) 15 项 | 已支持 (本地实现) 15 项 | 待补 15 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 Arrayx 用于扩展 JavaScript 标准内置对象 Array 的功能 (参阅 [内置对象扩展](glossaries#内置对象扩展)).
 
 Arrayx 全局可用:

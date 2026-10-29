@@ -195,12 +195,7 @@ flow.wait('登录', 5e3).then(w => {
 flow.wait('登录', 5e3, w => console.log(w.bounds()), e => console.warn(e.message));
 ```
 
-全局函数 `waitAsync` 及 `wait.async` 与本方法相同:
-
-```js
-waitAsync('登录', 5e3).click();
-wait.async('登录', 5e3).click(); /* 同上. */
-```
+全局函数 `waitAsync` 及 `wait.async` 与本方法相同, 见本节的别名条目.
 
 ### wait(cond, options, onOk?, onErr?)
 
@@ -216,6 +211,40 @@ wait.async('登录', 5e3).click(); /* 同上. */
 
 ```js
 flow.wait('登录', { timeout: 5e3, root: id('login_panel').findOnce() }).click();
+```
+
+### waitAsync(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitAsync(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[flow.wait](#m-wait) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.waitAsync`.
+
+```js
+waitAsync('登录', 5e3).click();
+flow.waitAsync('登录', { timeout: 5e3 }).click(); /* 同上. */
+```
+
+### wait.async(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y?`**
+
+### wait.async(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+挂在同步全局函数 [wait](global#m-wait) 上的 [flow.wait](#m-wait) (只读, 不可枚举), 参数, 返回值与行为相同. 便于把已有的 `wait(...)` 调用改为不阻塞的形式.
+
+```js
+wait.async('登录', 5e3).click(); /* 同 waitAsync('登录', 5e3).click(). */
+wait.async(() => device.isScreenOn(), { timeout: 30e3 }).then(() => console.log('屏幕已点亮'));
 ```
 
 ## [m] waitUntil
@@ -405,6 +434,23 @@ waitForVisible('继续', 8e3).click();
 flow.waitForHidden(className('ProgressBar'), 30e3).then(() => images.captureScreen('/sdcard/done.png'));
 ```
 
+### waitForGone(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y?`**
+
+### waitForGone(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y?`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForHidden](#m-waitforhidden) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.waitForGone`.
+
+```js
+waitForGone('加载中', 30e3).then(() => console.log('加载完成'));
+flow.waitForGone('加载中', { timeout: 30e3, stableFor: 500 }); /* 消失并保持 500 毫秒. */
+```
+
 ## [m] waitForActivity
 
 ### waitForActivity(activityName, timeout?, interval?, onOk?, onErr?)
@@ -471,6 +517,23 @@ clickWait('登录', 5e3); /* 同上. */
 flow.wait('登录', 5e3).click(); /* 同上. */
 ```
 
+### clickWait(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickWait(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitThenClick](#m-waitthenclick) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.clickWait`.
+
+```js
+clickWait('同意', 3e3).then(() => console.log('已同意'), e => console.warn(e.code));
+flow.clickWait('同意', { timeout: 3e3, interval: 100 });
+```
+
 ## [m] waitThenClickBounds
 
 ### waitThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)
@@ -494,6 +557,23 @@ flow.wait('登录', 5e3).clickBounds(); /* 同上. */
 ```
 
 直接使用控件边界中心执行手势, 不调用控件自身的 `click()` 方法. 等待参数与 [flow.wait](flow#m-wait) 相同, 稳定性参数见 [flow.waitForStable](flow#m-waitforstable). 需要坐标偏移时可使用 `waitAsync(cond, ...).clickBounds(offsetX, offsetY)`.
+
+### clickBoundsWait(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickBoundsWait(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitThenClickBounds](#m-waitthenclickbounds) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.clickBoundsWait`.
+
+```js
+clickBoundsWait('开始', 5e3).then(() => console.log('已点按'));
+flow.clickBoundsWait(desc('播放'), { timeout: 5e3 });
+```
 
 ## [m] waitThenLongClick
 
@@ -529,6 +609,23 @@ flow.wait('登录', 5e3).clickBounds(); /* 同上. */
 clickWhenStable('下一步', { timeout: 8e3, stableFor: 300 });
 ```
 
+### clickWhenStable(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickWhenStable(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForStableThenClick](#m-waitforstablethenclick) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.clickWhenStable`.
+
+```js
+clickWhenStable('确定', 5e3).then(() => console.log('已点击'));
+flow.clickWhenStable('确定', { timeout: 5e3, stableFor: 300, compare: 'bounds' });
+```
+
 ## [m] waitForStableThenClickBounds
 
 ### waitForStableThenClickBounds(cond, timeout?, interval?, onOk?, onErr?)
@@ -550,6 +647,23 @@ clickBoundsWhenStable('下一步', { timeout: 8e3, stableFor: 300 });
 ```
 
 直接使用控件边界中心执行手势, 不调用控件自身的 `click()` 方法. 等待参数与 [flow.wait](flow#m-wait) 相同, 稳定性参数见 [flow.waitForStable](flow#m-waitforstable). 需要坐标偏移时可使用 `waitAsync(cond, ...).clickBounds(offsetX, offsetY)`.
+
+### clickBoundsWhenStable(cond, timeout?, interval?, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 1/2`** **`A11Y`**
+
+### clickBoundsWhenStable(cond, options, onOk?, onErr?)
+
+**`6.8.0`** **`Global`** **`Overload 2/2`** **`A11Y`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForStableThenClickBounds](#m-waitforstablethenclickbounds) 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 `flow.clickBoundsWhenStable`.
+
+```js
+clickBoundsWhenStable('开始', 5e3).then(() => console.log('已点按'));
+flow.clickBoundsWhenStable(id('start'), { timeout: 5e3, stableFor: 300 });
+```
 
 ## [m] clickWhenStableAfter
 
@@ -628,6 +742,23 @@ clickBoundsWhenStableAfter('同意', { delay: 500 }); /* 固定延时 500 毫秒
 flow.sleep(1e3).then(() => console.log('1 秒后'));
 flow.sleep(500, 1500).back(); /* 随机 500 ~ 1500 毫秒后按返回键. */
 flow.sleep(1e3, '±200').home(); /* 800 ~ 1200 毫秒后回到桌面. */
+```
+
+### delay(millis)
+
+**`6.8.0`** **`Overload 1/2`**
+
+### delay(millisMin, millisMax)
+
+**`6.8.0`** **`Overload 2/2`**
+
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[flow.sleep](#m-sleep) 的别名, 参数, 返回值与行为相同.
+
+```js
+flow.delay(2e3).then(() => console.log('2 秒后'));
+flow.delay(300, 600).back();
 ```
 
 ## [m] run
@@ -876,29 +1007,13 @@ flow.wait('登录', 3e3).click();
 
 **`6.8.0`** **`A11Y`**
 
-[工具集](automator#工具集-toolkit) 的每个函数 (除 `retry` 外) 都有 Flow 起点形式, 参数与同步形式相同, 结果为链上的值:
-
-- flow.smartClick(target, options?)
-- flow.smartClickBounds(target, options?)
-- flow.clickIfExists(target, options?)
-- flow.clickBoundsIfExists(target, options?)
-- flow.clickAny(targets, options?)
-- flow.clickBoundsAny(targets, options?)
-- flow.findAny(targets, options?)
-- flow.scrollUntil(target, options?)
-- flow.typeInto(target, text, options?)
-- flow.dismissPopups(targets, options?)
-- flow.collectList(container, item, options?)
-- flow.launchAndWait(app, options?)
-- flow.backUntil(cond, options?)
-- flow.backToApp(app, options?)
-- flow.toggle(target, checked, options?)
+[工具集](automator#工具集-toolkit) 的每个函数 (除 `retry` 外) 都有 Flow 起点形式 (见下方各条目), 参数与同步形式相同, 结果为链上的值.
 
 与同步形式的区别:
 
 - 起点形式的 `timeout` 默认取 [flow.defaults](#m-defaults) 的超时 (同步形式默认只查找一次).
 - 工具在工作线程上运行, 失败以 [FlowError](flowErrorType) 拒绝而非抛出.
-- 可以追加尾随回调 `onOk` / `onErr`.
+- 可以追加尾随回调 `onOk` / `onErr`, 相当于在起点之后追加 [then(onOk, onErr)](flowType#m-then).
 - `dismissPopups` 的 `watch` 选项仅同步形式可用.
 
 ```js
@@ -908,19 +1023,451 @@ flow.launchAndWait('Settings')
     .then(r => console.log(r.method));
 ```
 
+## [m] smartClick
+
+### smartClick(target, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClick](automator#m-smartclick) 的选项
+- **[ onOk ]** { [(value: any) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为点击结果对象
+
+[smartClick](automator#m-smartclick) 的 Flow 起点形式: 可点击时点击目标, 否则上溯到可点击的祖先, 最后回退到手势.
+
+```js
+flow.smartClick('关于手机', { verify: '型号' }).then(r => console.log(r.method, r.verified));
+```
+
+## [m] smartClickBounds
+
+### smartClickBounds(target, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClickBounds](automator#m-smartclickbounds) 的选项
+- **[ onOk ]** { [(value: any) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为点击结果对象 (`method` 固定为 `'gesture'`)
+
+[smartClickBounds](automator#m-smartclickbounds) 的 Flow 起点形式: 在目标边界中心执行点按手势.
+
+```js
+flow.smartClickBounds(id('banner'), { offset: [ -10, 6 ] }).then(r => console.log(r.target.bounds()));
+```
+
+## [m] clickIfExists
+
+### clickIfExists(target, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClick](automator#m-smartclick) 的选项
+- **[ onOk ]** { [(value: boolean) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 目标存在且已点击时链上的值为 `true`, 不存在为 `false`
+
+### clickIfExists(target, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[clickIfExists](automator#m-clickifexists) 的 Flow 起点形式: 目标缺席时以 `false` fulfill 而不拒绝.
+
+```js
+flow.clickIfExists('跳过广告', 2e3).then(clicked => console.log(clicked ? '已跳过' : '没有广告'));
+```
+
+## [m] clickBoundsIfExists
+
+### clickBoundsIfExists(target, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [smartClickBounds](automator#m-smartclickbounds) 的选项
+- **[ onOk ]** { [(value: boolean) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 目标存在且已点按时链上的值为 `true`, 不存在为 `false`
+
+### clickBoundsIfExists(target, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 点击目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[clickBoundsIfExists](automator#m-clickboundsifexists) 的 Flow 起点形式: 目标存在时在控件中心坐标点按, 缺席时以 `false` fulfill.
+
+```js
+flow.clickBoundsIfExists('关闭', 1500).then(clicked => console.log(clicked));
+```
+
+## [m] clickAny
+
+### clickAny(targets, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [clickAny](automator#m-clickany) 的选项
+- **[ onOk ]** { [(value: Object) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为被点击的候选对象, 都不存在时为 `null`
+
+### clickAny(targets, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[clickAny](automator#m-clickany) 的 Flow 起点形式: 点击最先出现的候选目标.
+
+```js
+flow.clickAny([ '允许', '始终允许', '仅在使用中允许' ], 3e3).then(hit => console.log(hit && hit.index));
+```
+
+## [m] clickBoundsAny
+
+### clickBoundsAny(targets, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [clickBoundsAny](automator#m-clickboundsany) 的选项
+- **[ onOk ]** { [(value: Object) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为被点按的候选对象, 都不存在时为 `null`
+
+### clickBoundsAny(targets, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[clickBoundsAny](automator#m-clickboundsany) 的 Flow 起点形式: 在最先出现的候选目标中心坐标点按.
+
+```js
+flow.clickBoundsAny([ '跳过', '关闭' ], 3e3).then(hit => console.log(hit ? hit.index : '无'));
+```
+
+## [m] findAny
+
+### findAny(targets, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [findAny](automator#m-findany) 的选项
+- **[ onOk ]** { [(value: Object) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为找到的候选对象, 都不存在时为 `null`
+
+### findAny(targets, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[findAny](automator#m-findany) 的 Flow 起点形式: 只查找, 不点击.
+
+```js
+flow.findAny([ '登录', '退出登录' ], 5e3).then(hit => console.log(hit ? hit.index : '都不存在'));
+```
+
+## [m] scrollUntil
+
+### scrollUntil(target, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 滚动查找的目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [scrollUntil](automator#m-scrolluntil) 的选项
+- **[ onOk ]** { [(value: UiObject) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为找到的 [UiObject](uiObjectType)
+
+[scrollUntil](automator#m-scrolluntil) 的 Flow 起点形式: 滚动列表直到目标出现.
+
+```js
+flow.scrollUntil('开发者选项').smartClick();
+```
+
+## [m] typeInto
+
+### typeInto(target, text, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) | [number](dataTypes#number) | [null](dataTypes#null) } - 输入框: 选择器 / 节点 / 函数; 数字为第 n 个可编辑节点 (从 0 计); `null` 为当前焦点所在的可编辑节点
+- **text** { [string](dataTypes#string) } - 待输入的文本
+- **[ options ]** { [Object](dataTypes#object) } - 同 [typeInto](automator#m-typeinto) 的选项
+- **[ onOk ]** { [(value: UiObject) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为输入框节点
+
+[typeInto](automator#m-typeinto) 的 Flow 起点形式.
+
+```js
+flow.typeInto(className('EditText'), 'hello', { submit: true }).then(w => console.log(w.text()));
+```
+
+## [m] dismissPopups
+
+### dismissPopups(targets, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 弹窗关闭按钮等候选目标
+- **[ options ]** { [Object](dataTypes#object) } - 同 [dismissPopups](automator#m-dismisspopups) 的选项, 不支持 `watch`
+- **[ onOk ]** { [(value: any) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为被点击的候选对象 (或其数组), 没有弹窗时为 `null`
+
+### dismissPopups(targets, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **targets** { [Target](automator#目标参数-target) | [Target](automator#目标参数-target)[] } - 候选目标
+- **timeout** { [number](dataTypes#number) } - 查找超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[dismissPopups](automator#m-dismisspopups) 的 Flow 起点形式.
+
+```js
+flow.dismissPopups([ '我知道了', '暂不更新', '关闭' ], 2e3).wait('首页');
+```
+
+## [m] collectList
+
+### collectList(container, item, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **container** { [Target](automator#目标参数-target) | [null](dataTypes#null) } - 列表容器, `null` 表示自动探测
+- **item** { [Target](automator#目标参数-target) } - 条目选择条件
+- **[ options ]** { [Object](dataTypes#object) } - 同 [collectList](automator#m-collectlist) 的选项
+- **[ onOk ]** { [(value: any[]) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为采集到的条目数组
+
+[collectList](automator#m-collectlist) 的 Flow 起点形式.
+
+```js
+flow.collectList(null, id('title')).then(items => console.log(items.length));
+```
+
+## [m] launchAndWait
+
+### launchAndWait(app, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **app** { [string](dataTypes#string) } - 应用名称或包名
+- **[ options ]** { [Object](dataTypes#object) } - 同 [launchAndWait](automator#m-launchandwait) 的选项
+- **[ onOk ]** { [(value: Object) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为启动结果对象
+
+### launchAndWait(app, timeout, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **app** { [string](dataTypes#string) } - 应用名称或包名
+- **timeout** { [number](dataTypes#number) } - 等待超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[launchAndWait](automator#m-launchandwait) 的 Flow 起点形式: 启动应用并等待其到达前台.
+
+```js
+flow.launchAndWait('com.android.settings', 8e3).then(r => console.log(r.packageName));
+```
+
+## [m] backUntil
+
+### backUntil(cond, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **cond** { [Target](automator#目标参数-target) } - 停止条件
+- **[ options ]** { [Object](dataTypes#object) } - 同 [backUntil](automator#m-backuntil) 的选项
+- **[ onOk ]** { [(value: any) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为条件成立时的值
+
+### backUntil(cond, maxTimes, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **cond** { [Target](automator#目标参数-target) } - 停止条件
+- **maxTimes** { [number](dataTypes#number) } - 最多按返回键的次数
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[backUntil](automator#m-backuntil) 的 Flow 起点形式: 反复按返回键直到条件成立.
+
+```js
+flow.backUntil('首页', 5).then(w => console.log('已回到首页'));
+```
+
+## [m] backToApp
+
+### backToApp(app, options?, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **app** { [string](dataTypes#string) } - 应用名称或包名
+- **[ options ]** { [Object](dataTypes#object) } - 同 [backToApp](automator#m-backtoapp) 的选项
+- **[ onOk ]** { [(value: string) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为到达前台的包名
+
+### backToApp(app, maxTimes, onOk?, onErr?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **app** { [string](dataTypes#string) } - 应用名称或包名
+- **maxTimes** { [number](dataTypes#number) } - 最多按返回键的次数
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[backToApp](automator#m-backtoapp) 的 Flow 起点形式: 按返回键直到指定应用回到前台.
+
+```js
+flow.backToApp('com.android.settings', 6).then(pkg => console.log(pkg));
+```
+
+## [m] toggle
+
+### toggle(target, checked, options?, onOk?, onErr?)
+
+**`6.8.0`** **`A11Y`**
+
+- **target** { [Target](automator#目标参数-target) } - 开关控件或其标签
+- **checked** { [boolean](dataTypes#boolean) } - 期望的选中状态
+- **[ options ]** { [Object](dataTypes#object) } - 同 [toggle](automator#m-toggle) 的选项
+- **[ onOk ]** { [(value: Object) => any](dataTypes#function) } - 成功时的回调
+- **[ onErr ]** { [(error: FlowError) => any](dataTypes#function) } - 失败时的回调
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为切换结果对象
+
+[toggle](automator#m-toggle) 的 Flow 起点形式: 把开关切换到 `checked` 指定的状态, 已是该状态时不点击.
+
+```js
+flow.toggle('蓝牙', true).then(r => console.log(r.changed));
+```
+
 ## 事件等待起点
 
 **`6.8.0`** **`A11Y`**
 
-[事件驱动等待](automator#事件驱动等待) 的四个函数都有 Flow 起点形式, 参数与同步形式相同:
-
-- flow.waitForIdle(options?)
-- flow.waitForEvent(type?, filter?, timeout?)
-- flow.waitForToast(text?, timeout?)
-- flow.waitForNotification(filter?, timeout?)
-
-结果 (空闲报告, 事件, Toast 或通知对象) 为链上的值.
+[事件驱动等待](automator#事件驱动等待) 的四个函数都有 Flow 起点形式 (见下方各条目), 参数与同步形式相同, 结果 (空闲报告, 事件, Toast 或通知对象) 为链上的值. 起点形式不接受尾随回调, 可改用 [then](flowType#m-then).
 
 ```js
 flow.waitForToast('已保存', 10e3).then(toast => console.log(toast.text));
+```
+
+## [m] waitForIdle
+
+### waitForIdle(quietFor?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **[ quietFor = `500` ]** { [number](dataTypes#number) } - 判定为安静所需的无事件时长 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为空闲报告 `{ quietFor, elapsed, events }`
+
+### waitForIdle(options)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **options** { [Object](dataTypes#object) } - 同 [waitForIdle](automator#m-waitforidle) 的选项 (`quietFor`, `timeout`, `eventTypes`)
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForIdle](automator#m-waitforidle) 的 Flow 起点形式: 等待界面不再变化.
+
+```js
+flow.waitForIdle({ quietFor: 800, timeout: 10e3 }).then(idle => console.log(idle.elapsed, idle.events));
+```
+
+## [m] waitForEvent
+
+### waitForEvent(type?, filter?, timeout?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **[ type ]** { [string](dataTypes#string) | [string](dataTypes#string)[] | [null](dataTypes#null) } - 事件类型名, 省略时为任意类型
+- **[ filter ]** { [Function](dataTypes#function) | [Object](dataTypes#object) | [null](dataTypes#null) } - 事件过滤, 同 [waitForEvent](automator#m-waitforevent)
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为事件包装对象
+
+### waitForEvent(type, timeout, filter?)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **type** { [string](dataTypes#string) | [string](dataTypes#string)[] | [null](dataTypes#null) } - 事件类型名
+- **timeout** { [number](dataTypes#number) } - 超时 (毫秒)
+- **[ filter ]** { [Function](dataTypes#function) | [Object](dataTypes#object) | [null](dataTypes#null) } - 事件过滤
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForEvent](automator#m-waitforevent) 的 Flow 起点形式: 等待首个符合条件的无障碍事件. `filter` 与 `timeout` 的顺序可以互换.
+
+```js
+flow.waitForEvent('view_clicked', { packageName: 'com.android.settings' }, 10e3).then(e => console.log(e.className));
+```
+
+## [m] waitForToast
+
+### waitForToast(text?, timeout?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **[ text ]** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) | [Function](dataTypes#function) | [Object](dataTypes#object) | [null](dataTypes#null) } - Toast 过滤, 同 [waitForToast](automator#m-waitfortoast)
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为 Toast 对象 `{ packageName, text }`
+
+### waitForToast(timeout)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **timeout** { [number](dataTypes#number) } - 超时 (毫秒), 等待任意 Toast
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForToast](automator#m-waitfortoast) 的 Flow 起点形式. 观察者忽略 AutoJs6 自身显示的 Toast.
+
+```js
+flow.waitForToast(/成功/, 5e3).then(toast => console.log(toast.packageName, toast.text));
+```
+
+## [m] waitForNotification
+
+### waitForNotification(filter?, timeout?)
+
+**`6.8.0`** **`Overload 1/2`** **`A11Y`**
+
+- **[ filter ]** { [string](dataTypes#string) | [RegExp](dataTypes#regexp) | [Function](dataTypes#function) | [Object](dataTypes#object) | [null](dataTypes#null) } - 通知过滤, 同 [waitForNotification](automator#m-waitfornotification)
+- **[ timeout ]** { [number](dataTypes#number) } - 超时 (毫秒)
+- <ins>**returns**</ins> { [Flow](flowType) } - 链上的值为 [Notification](events#notification) 对象
+
+### waitForNotification(timeout)
+
+**`6.8.0`** **`Overload 2/2`** **`A11Y`**
+
+- **timeout** { [number](dataTypes#number) } - 超时 (毫秒), 等待任意通知
+- <ins>**returns**</ins> { [Flow](flowType) }
+
+[waitForNotification](automator#m-waitfornotification) 的 Flow 起点形式.
+
+```js
+flow.waitForNotification({ title: /验证码/ }, 60e3).then(n => console.log(n.text));
 ```

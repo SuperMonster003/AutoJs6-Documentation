@@ -4042,7 +4042,7 @@ pickup(select('text=OK normalize'), '@');
 - 多次调用时, 最后一次生效. 未给出偏好键或偏好键未知时将抛出异常.
 - 选择器的 `toString()` 输出如 `text("确定").prefer("visible", "clickable")`.
 
-[字符串选择器](#m-select) 写作 `prefer=visible`, 只能给出一个偏好键; 需要多个偏好键时使用链式或对象选择器.
+[字符串选择器](#m-select) 写作 `prefer=visible`, 多个偏好键以逗号分隔 (不加空格与引号), 如 `prefer=visible,center`.
 
 ```js
 /* 两个文本为 "确定" 的控件, 优先取对用户可见的, 其次取可点击的. */
@@ -5928,17 +5928,18 @@ pickup({
 
 语法为以空白分隔的若干条件:
 
-- `key=value` - 属性等于 `value`, 如 `text=登录`, `id=btn_ok`, `depth=3`, `minDepth=3`, `checked=true`. 值含空格或特殊字符时用引号包裹 (`"..."` 或 `'...'`, 支持 `\"`, `\\`, `\n`, `\t` 转义); 多参数的键以逗号分隔值, 如 `bounds=0,0,100,200`
+- `key=value` - 属性等于 `value`, 如 `text=登录`, `id=btn_ok`, `depth=3`, `minDepth=3`, `checked=true`. 值含空格或特殊字符时用引号包裹 (`"..."` 或 `'...'`, 支持 `\"`, `\\`, `\n`, `\t` 转义); 多参数的键以逗号分隔值 (不加引号), 如 `bounds=0,0,100,200`, `prefer=visible,center`, `action=CLICK,SET_TEXT`
 - `key~=regex` 或 `key=/regex/flags` - 字符串属性的正则匹配 (对应 `keyMatch`), 如 `text~=^登.录$`, `desc=/close/i`
 - `key` / `!key` - 布尔属性为 `true` / `false`, 如 `clickable`, `!enabled`
 
-`key` 为选择器的筛选器名称 (如 `text`, `desc`, `id`, `className`, `clickable`, `depth` 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 `Invalid selector string at 8 in "text=登录 clikable": unknown key "clikable"; did you mean clickable?`.
+`key` 为选择器的筛选器名称 (如 `text`, `desc`, `id`, `className`, `clickable`, `depth` 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 `Invalid selector string at 8 in "text=登录 clikable": unknown property "clikable"; did you mean clickable?`.
 
 ```js
 select('text=登录 clickable').findOne(5e3);
 select('className=android.widget.EditText !password').findOnce();
 select('id=/item_\\d+/ depth=8').find();
 select('desc="Open menu"').exists();
+select('text=确定 prefer=visible,center').findOnce();
 
 /* 追加到已有选择器. */
 className('Button').select('text=确定 enabled').findOnce();

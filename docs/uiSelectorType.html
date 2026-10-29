@@ -4121,7 +4121,7 @@ pickup(select(&#39;text=OK normalize&#39;), &#39;@&#39;);
 <li>多次调用时, 最后一次生效. 未给出偏好键或偏好键未知时将抛出异常.</li>
 <li>选择器的 <code>toString()</code> 输出如 <code>text(&quot;确定&quot;).prefer(&quot;visible&quot;, &quot;clickable&quot;)</code>.</li>
 </ul>
-<p><a href="#uiselectortype_m_select">字符串选择器</a> 写作 <code>prefer=visible</code>, 只能给出一个偏好键; 需要多个偏好键时使用链式或对象选择器.</p>
+<p><a href="#uiselectortype_m_select">字符串选择器</a> 写作 <code>prefer=visible</code>, 多个偏好键以逗号分隔 (不加空格与引号), 如 <code>prefer=visible,center</code>.</p>
 <pre><code class="lang-js">/* 两个文本为 &quot;确定&quot; 的控件, 优先取对用户可见的, 其次取可点击的. */
 text(&#39;确定&#39;).prefer(&#39;visible&#39;, &#39;clickable&#39;).findOne(3e3);
 
@@ -5481,15 +5481,16 @@ pickup({
 <p>字符串选择器语法: 解析 <code>syntax</code> 中的条件并追加到当前选择器, 返回选择器自身 (可继续链式调用 <code>findOne</code> 等). 全局形式 <code>select(&#39;...&#39;)</code> 以空选择器开始.</p>
 <p>语法为以空白分隔的若干条件:</p>
 <ul>
-<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>minDepth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\&quot;</code>, <code>\\</code>, <code>\n</code>, <code>\t</code> 转义); 多参数的键以逗号分隔值, 如 <code>bounds=0,0,100,200</code></li>
+<li><code>key=value</code> - 属性等于 <code>value</code>, 如 <code>text=登录</code>, <code>id=btn_ok</code>, <code>depth=3</code>, <code>minDepth=3</code>, <code>checked=true</code>. 值含空格或特殊字符时用引号包裹 (<code>&quot;...&quot;</code> 或 <code>&#39;...&#39;</code>, 支持 <code>\&quot;</code>, <code>\\</code>, <code>\n</code>, <code>\t</code> 转义); 多参数的键以逗号分隔值 (不加引号), 如 <code>bounds=0,0,100,200</code>, <code>prefer=visible,center</code>, <code>action=CLICK,SET_TEXT</code></li>
 <li><code>key~=regex</code> 或 <code>key=/regex/flags</code> - 字符串属性的正则匹配 (对应 <code>keyMatch</code>), 如 <code>text~=^登.录$</code>, <code>desc=/close/i</code></li>
 <li><code>key</code> / <code>!key</code> - 布尔属性为 <code>true</code> / <code>false</code>, 如 <code>clickable</code>, <code>!enabled</code></li>
 </ul>
-<p><code>key</code> 为选择器的筛选器名称 (如 <code>text</code>, <code>desc</code>, <code>id</code>, <code>className</code>, <code>clickable</code>, <code>depth</code> 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 <code>Invalid selector string at 8 in &quot;text=登录 clikable&quot;: unknown key &quot;clikable&quot;; did you mean clickable?</code>.</p>
+<p><code>key</code> 为选择器的筛选器名称 (如 <code>text</code>, <code>desc</code>, <code>id</code>, <code>className</code>, <code>clickable</code>, <code>depth</code> 等). 语法错误时抛出异常, 消息包含出错位置与候选键名, 如 <code>Invalid selector string at 8 in &quot;text=登录 clikable&quot;: unknown property &quot;clikable&quot;; did you mean clickable?</code>.</p>
 <pre><code class="lang-js">select(&#39;text=登录 clickable&#39;).findOne(5e3);
 select(&#39;className=android.widget.EditText !password&#39;).findOnce();
 select(&#39;id=/item_\\d+/ depth=8&#39;).find();
 select(&#39;desc=&quot;Open menu&quot;&#39;).exists();
+select(&#39;text=确定 prefer=visible,center&#39;).findOnce();
 
 /* 追加到已有选择器. */
 className(&#39;Button&#39;).select(&#39;text=确定 enabled&#39;).findOnce();

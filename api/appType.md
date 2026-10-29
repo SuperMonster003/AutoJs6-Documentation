@@ -210,11 +210,11 @@ App.FIREFOX.uninstall();
 console.log(App.FIREFOX.launch());
 ```
 
-## [m#] openSettings
+## [m#] launchSettings
 
 跳转至枚举实例应用的应用详情页面.
 
-### openSettings()
+### launchSettings()
 
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
 
@@ -222,7 +222,7 @@ console.log(App.FIREFOX.launch());
 
 ```js
 /* e.g. true */
-console.log(App.FIREFOX.openSettings());
+console.log(App.FIREFOX.launchSettings());
 ```
 
 ## [m#] toString

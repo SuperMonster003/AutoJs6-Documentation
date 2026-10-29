@@ -1222,7 +1222,7 @@ colors.argb([ 0.25, 1, 0.5, '3.53%' ]); /* 同上. */
 
 ### rgba(colorHex)
 
-**`[6.2.0]`** **`Overload 1/3`**
+**`[6.2.0]`** **`Overload 1/4`**
 
 - **colorHex** { [string](dataTypes#string) } - 颜色代码
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
@@ -1250,7 +1250,7 @@ colors.argb('#11335577'); /* A (alpha) 分量为 0x11. */
 
 ### rgba(red, green, blue, alpha)
 
-**`6.2.0`** **`Overload 2/3`**
+**`6.2.0`** **`Overload 2/4`**
 
 - **red** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - R (red)
 - **green** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - G (green)
@@ -1269,7 +1269,7 @@ colors.rgba(1, 0.5, '3.53%', 0.25); /* 同上. */
 
 ### rgba(components)
 
-**`6.2.0`** **`Overload 3/3`**
+**`6.2.0`** **`Overload 3/4`**
 
 - **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
@@ -1280,6 +1280,23 @@ colors.rgba(1, 0.5, '3.53%', 0.25); /* 同上. */
 colors.rgba([ 255, 128, 9, 64 ]);
 colors.rgba([ 0xFF, 0x80, 0x09, 0x40 ]); /* 同上. */
 colors.rgba([ 1, 0.5, '3.53%', 0.25 ]); /* 同上. */
+```
+
+### rgba(components, alpha)
+
+**`6.2.0`** **`Overload 4/4`**
+
+- **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组 (R, G, B 三个分量)
+- **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+通过 R (red), G (green), B (blue) 三个分量组成的 [颜色分量数组](dataTypes#colorcomponents) 与单独给出的 A (alpha) 分量获取 [颜色整数 (ColorInt)](dataTypes#colorint). 数组须恰好包含 3 个分量.
+
+```js
+colors.rgba([ 255, 128, 9 ], 64);
+colors.rgba([ 0xFF, 0x80, 0x09 ], 0x40); /* 同上. */
+colors.rgba([ 1, 0.5, '3.53%' ], 0.25); /* 同上. */
+colors.rgba([ 255, 128, 9, 64 ]); /* 同上. */
 ```
 
 ## [m] hsv
@@ -1322,7 +1339,7 @@ colors.hsv([ '25%', '80%', '64%' ]); /* 同上. */
 
 ### hsva(hue, saturation, value, alpha)
 
-**`6.2.0`** **`Overload 1/2`**
+**`6.2.0`** **`Overload 1/3`**
 
 - **hue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - H (hue)
 - **saturation** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - S (saturation)
@@ -1341,7 +1358,7 @@ colors.hsva('25%', '80%', '64%', '25%'); /* 同上. */
 
 ### hsva(components)
 
-**`6.2.0`** **`Overload 2/2`**
+**`6.2.0`** **`Overload 2/3`**
 
 - **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
@@ -1353,6 +1370,23 @@ colors.hsva([ 90, 80, 64, 64 ]);
 colors.hsva([ 90, 0.8, 0.64, 0.25 ]); /* 同上. */
 colors.hsva([ 0.25, 0.8, 0.64, 0.25 ]); /* 同上. */
 colors.hsva([ '25%', '80%', '64%', '25%' ]); /* 同上. */
+```
+
+### hsva(components, alpha)
+
+**`6.2.0`** **`Overload 3/3`**
+
+- **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组 (H, S, V 三个分量)
+- **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+通过 H (hue), S (saturation), V (value) 三个分量组成的 [颜色分量数组](dataTypes#colorcomponents) 与单独给出的 A (alpha) 分量获取 [颜色整数 (ColorInt)](dataTypes#colorint). 数组须恰好包含 3 个分量.
+
+```js
+colors.hsva([ 90, 80, 64 ], 64);
+colors.hsva([ 90, 0.8, 0.64 ], 0.25); /* 同上. */
+colors.hsva([ 0.25, 0.8, 0.64 ], 0.25); /* 同上. */
+colors.hsva([ '25%', '80%', '64%' ], '25%'); /* 同上. */
 ```
 
 ## [m] hsl
@@ -1395,7 +1429,7 @@ colors.hsl([ '25%', '80%', '64%' ]); /* 同上. */
 
 ### hsla(hue, saturation, lightness, alpha)
 
-**`6.2.0`** **`Overload 1/2`**
+**`6.2.0`** **`Overload 1/3`**
 
 - **hue** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - H (hue)
 - **saturation** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - S (saturation)
@@ -1414,7 +1448,7 @@ colors.hsla('25%', '80%', '64%', '25%'); /* 同上. */
 
 ### hsla(components)
 
-**`6.2.0`** **`Overload 2/2`**
+**`6.2.0`** **`Overload 2/3`**
 
 - **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组
 - <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
@@ -1426,6 +1460,23 @@ colors.hsla([ 90, 80, 64, 64 ]);
 colors.hsla([ 90, 0.8, 0.64, 0.25 ]); /* 同上. */
 colors.hsla([ 0.25, 0.8, 0.64, 0.25 ]); /* 同上. */
 colors.hsla([ '25%', '80%', '64%', '25%' ]); /* 同上. */
+```
+
+### hsla(components, alpha)
+
+**`6.2.0`** **`Overload 3/3`**
+
+- **components** { [ColorComponents](dataTypes#colorcomponents)[[]](dataTypes#array) } - 颜色分量数组 (H, S, L 三个分量)
+- **alpha** { [ColorComponent](dataTypes#colorcomponent) } - 颜色分量 - A (alpha)
+- <ins>**returns**</ins> { [ColorInt](dataTypes#colorint) }
+
+通过 H (hue), S (saturation), L (lightness) 三个分量组成的 [颜色分量数组](dataTypes#colorcomponents) 与单独给出的 A (alpha) 分量获取 [颜色整数 (ColorInt)](dataTypes#colorint). 数组须恰好包含 3 个分量.
+
+```js
+colors.hsla([ 90, 80, 64 ], 64);
+colors.hsla([ 90, 0.8, 0.64 ], 0.25); /* 同上. */
+colors.hsla([ 0.25, 0.8, 0.64 ], 0.25); /* 同上. */
+colors.hsla([ '25%', '80%', '64%' ], '25%'); /* 同上. */
 ```
 
 ## [m] oklab

@@ -128,6 +128,21 @@ task
     });
 ```
 
+### speakTask(text, options?)
+
+**`6.8.0`** **`Async`** **`Overload [1-2]/2`**
+
+- **text** { [string](dataTypes#string) } - 待朗读文本
+- **[ options = `{}` ]** { [TtsOptions](#ttsoptions) } - 朗读选项
+- <ins>**returns**</ins> { [TtsUtterance](#ttsutterance) } - 可监听的朗读任务
+
+[utterance](#m-utterance) 的别名, 参数, 返回值与行为相同.
+
+```js
+let task = tts.speakTask('Alias of utterance');
+task.result.then((result) => console.log(result.duration));
+```
+
 ## [m] enqueueUtterance
 
 ### enqueueUtterance(text, options?)
@@ -141,6 +156,27 @@ task
 创建可监听的朗读任务, 并强制追加到当前队列.
 
 `enqueueUtterance` 也可写作 `enqueueTask`.
+
+```js
+tts.speak('First');
+let task = tts.enqueueUtterance('Second');
+task.on('done', () => console.log('second done'));
+```
+
+### enqueueTask(text, options?)
+
+**`6.8.0`** **`Async`** **`Overload [1-2]/2`**
+
+- **text** { [string](dataTypes#string) } - 待朗读文本
+- **[ options = `{}` ]** { [TtsOptions](#ttsoptions) } - 朗读选项
+- <ins>**returns**</ins> { [TtsUtterance](#ttsutterance) } - 可监听的朗读任务
+
+[enqueueUtterance](#m-enqueueutterance) 的别名, 参数, 返回值与行为相同.
+
+```js
+tts.speak('First');
+tts.enqueueTask('Second').on('done', () => console.log('second done'));
+```
 
 ## [m] synthesize
 
@@ -167,6 +203,23 @@ tts.synthesize('Saved speech', './speech.wav').then((result) => {
 });
 ```
 
+### synthesizeToFile(text, path, options?)
+
+**`6.8.0`** **`Async`** **`Overload [1-2]/2`**
+
+- **text** { [string](dataTypes#string) } - 待合成文本
+- **path** { [string](dataTypes#string) } - 输出文件路径
+- **[ options = `{}` ]** { [TtsFileOptions](#ttsfileoptions) } - 合成选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [TtsResult](#ttsresult)
+
+[synthesize](#m-synthesize) 的别名, 参数, 返回值与行为相同.
+
+```js
+tts.synthesizeToFile('Saved speech', './speech.wav', { overwrite: true }).then((result) => {
+    console.log(result.path);
+});
+```
+
 ## [m] synthesis
 
 ### synthesis(text, path, options?)
@@ -181,6 +234,42 @@ tts.synthesize('Saved speech', './speech.wav').then((result) => {
 创建可监听事件和主动停止的文件合成任务.
 
 `synthesis` 也可写作 `synthesizeTask` 或 `synthesisTask`.
+
+```js
+let task = tts.synthesis('Saved speech', './speech.wav');
+task.on('done', (result) => console.log(result.path));
+```
+
+### synthesizeTask(text, path, options?)
+
+**`6.8.0`** **`Async`** **`Overload [1-2]/2`**
+
+- **text** { [string](dataTypes#string) } - 待合成文本
+- **path** { [string](dataTypes#string) } - 输出文件路径
+- **[ options = `{}` ]** { [TtsFileOptions](#ttsfileoptions) } - 合成选项
+- <ins>**returns**</ins> { [TtsUtterance](#ttsutterance) } - 可监听的文件合成任务
+
+[synthesis](#m-synthesis) 的别名, 参数, 返回值与行为相同.
+
+```js
+tts.synthesizeTask('Saved speech', './speech.wav').result.then((result) => console.log(result.path));
+```
+
+### synthesisTask(text, path, options?)
+
+**`6.8.0`** **`Async`** **`Overload [1-2]/2`**
+
+- **text** { [string](dataTypes#string) } - 待合成文本
+- **path** { [string](dataTypes#string) } - 输出文件路径
+- **[ options = `{}` ]** { [TtsFileOptions](#ttsfileoptions) } - 合成选项
+- <ins>**returns**</ins> { [TtsUtterance](#ttsutterance) } - 可监听的文件合成任务
+
+[synthesis](#m-synthesis) 的别名, 参数, 返回值与行为相同.
+
+```js
+let task = tts.synthesisTask('Saved speech', './speech.wav');
+setTimeout(() => task.stop(), 200);
+```
 
 ## [m] silence
 
@@ -300,6 +389,25 @@ engines 查询直接读取系统引擎目录, 不初始化默认引擎. 默认�
 
 停止命令会异步交给文本转语音调度线程. 返回值是调用时的任务数量.
 
+```js
+tts.speak('A long sentence that will be interrupted');
+setTimeout(() => console.log(tts.stop()), 500);
+```
+
+### stopAll()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 接受停止请求时尚未结束的任务数
+
+[stop](#m-stop) 的别名, 返回值与行为相同.
+
+```js
+tts.speak('First');
+tts.enqueue('Second');
+console.log(tts.stopAll()); /* 如 2. */
+```
+
 ## [m] reset
 
 ### reset()
@@ -355,6 +463,23 @@ engines 查询直接读取系统引擎目录, 不初始化默认引擎. 默认�
 返回当前运行时的文本转语音默认选项.
 
 `defaults` 也可写作 `config`.
+
+```js
+console.log(tts.defaults().rate);
+```
+
+### config()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [TtsDefaults](#ttsdefaults) } - 当前默认选项
+
+[defaults](#m-defaults) 的别名, 返回值与行为相同.
+
+```js
+let current = tts.config();
+console.log(current.locale, current.pitch);
+```
 
 ## [m] configure
 

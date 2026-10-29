@@ -387,6 +387,25 @@ toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块�
 
 显示消息浮动框, 并将 `text` 传给 `console.verbose`. `toastverbose` 是此方法的全小写别名.
 
+```js
+toastVerbose('开始同步');
+```
+
+### toastverbose(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[toastVerbose](#m-toastverbose) 的全小写别名, 参数与行为相同.
+
+```js
+toastverbose('开始同步', 'long');
+```
+
 ## [m] toastLog
 
 ### toastLog(text?, isLong?, isForcible?)
@@ -404,6 +423,25 @@ toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块�
 
 虽然消息浮动框由异步队列显示, 但控制台输出同步执行.
 
+```js
+toastLog('任务完成');
+```
+
+### toastlog(text?, isLong?, isForcible?)
+
+**`Global`**
+
+- **[ text ]** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[toastLog](#m-toastlog) 的全小写别名, 参数与行为相同.
+
+```js
+toastlog('任务完成', 'short', true);
+```
+
 ## [m] toastInfo
 
 ### toastInfo(text, isLong?, isForcible?)
@@ -416,6 +454,25 @@ toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块�
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 显示消息浮动框, 并将 `text` 传给 `console.info`. `toastinfo` 是此方法的全小写别名.
+
+```js
+toastInfo('已连接');
+```
+
+### toastinfo(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[toastInfo](#m-toastinfo) 的全小写别名, 参数与行为相同.
+
+```js
+toastinfo('已连接', 'l');
+```
 
 ## [m] toastWarn
 
@@ -430,6 +487,25 @@ toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块�
 
 显示消息浮动框, 并将 `text` 传给 `console.warn`. `toastwarn` 是此方法的全小写别名.
 
+```js
+toastWarn('电量低于 20%');
+```
+
+### toastwarn(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[toastWarn](#m-toastwarn) 的全小写别名, 参数与行为相同.
+
+```js
+toastwarn('电量低于 20%', true);
+```
+
 ## [m] toastError
 
 ### toastError(text, isLong?, isForcible?)
@@ -442,6 +518,25 @@ toast 模块的全局化对象, 参阅 [消息浮动框 (Toast)](toast) 模块�
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
 显示消息浮动框, 并将 `text` 传给 `console.error`. `toasterror` 是此方法的全小写别名.
+
+```js
+toastError('网络请求失败');
+```
+
+### toasterror(text, isLong?, isForcible?)
+
+**`Global`**
+
+- **text** { [any](dataTypes#any) } - 消息内容
+- **[ isLong = false ]** { `'long'` | `'l'` | `'short'` | `'s'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否以较长时间显示
+- **[ isForcible = false ]** { `'forcible'` | `'f'` | [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否强制覆盖显示
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+[toastError](#m-toasterror) 的全小写别名, 参数与行为相同.
+
+```js
+toasterror('网络请求失败', 'long', 'forcible');
+```
 
 ## [m+] notice
 

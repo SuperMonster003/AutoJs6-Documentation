@@ -193,6 +193,25 @@ UiObjectCollection 代表 [控件节点 (UiObject)](uiObjectType) 的对象集�
 
 触发耳机按键全局操作. 此方法也是 `automator.headsethook()` 的驼峰命名别名.
 
+```js
+/* 正在播放媒体时, 耳机按键通常用于暂停或继续播放. */
+console.log(automator.headsetHook());
+```
+
+## automator.headsethook()
+
+**`6.8.0`** **`A11Y`**
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 系统是否接受耳机按键全局操作
+
+`automator.headsetHook()` 的全小写原名, 返回值与行为相同.
+
+```js
+if (!automator.headsethook()) {
+    console.warn('系统未接受耳机按键操作');
+}
+```
+
 ## automator.switchToInputMethod(packageName)
 
 **`6.8.0`** **`API>=30!`** **`A11Y`**

@@ -78,6 +78,39 @@ console.log(Mathx.randomFloat([ -1, 1 ]));
 
 启用 Math 内置扩展后也可调用 `Math.randomFloat`. `Mathx.random` 是此方法的别名. 旧名称 `Mathx.randFloat` 仍可用, 但已弃用.
 
+### random(...range)
+
+**`xObject`**
+
+- **...range** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 随机范围
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 范围内随机浮点数
+
+[randomFloat](#m-randomfloat) 的别名, 参数与行为相同. 启用 Math 内置扩展后 `Math.random` 被替换为此方法; 无参数调用时仍与原 `Math.random()` 一样返回 `[0, 1)` 区间的随机数.
+
+```js
+console.log(Mathx.random()); /* 0 到 1 之间. */
+console.log(Mathx.random(5, 10)); /* 5 到 10 之间. */
+```
+
+## [m] randFloat
+
+**`DEPRECATED`**
+
+此方法是 [randomFloat](#m-randomfloat) 的旧名称.
+
+### randFloat(...range)
+
+**`xObject`**
+
+- **...range** { [...](documentation#可变参数)([number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array))[[]](documentation#可变参数) } - 随机范围
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 范围内随机浮点数
+
+参数与行为同 [randomFloat](#m-randomfloat). 新代码请使用 `randomFloat`.
+
+```js
+console.log(Mathx.randFloat(1, 2)); /* 与 Mathx.randomFloat(1, 2) 相同. */
+```
+
 ## [m] randInt
 
 randInt 用于返回一个指定范围内的随机整数.

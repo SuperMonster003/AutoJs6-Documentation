@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | 全局 58 项 | `autojs6:screen_metrics`, `autojs6:global`, `autojs6:compat` (经 compat) | `autojs6:screen_metrics`, `autojs6:global` | `host.coordinates`, `host.clipboard` |
-| 状态 | 已支持 58 项 | 已支持 14 项, 已支持 (本地实现) 8 项, 不适用 3 项, 待补 33 项 | 已支持 10 项, 已支持 (本地实现) 7 项, 不适用 3 项, 待补 38 项 | 需授权 12 项, 不适用 3 项, 待补 43 项 |
+| 入口 | 全局 58 项 | `autojs6:screen_metrics`, `autojs6:global`, `autojs6:compat` (经 compat) | `autojs6:screen_metrics`, `autojs6:global` | `host.coordinates`, `host.global`, `host.clipboard` |
+| 状态 | 已支持 58 项 | 已支持 14 项, 已支持 (本地实现) 8 项, 不适用 3 项, 待补 33 项 | 已支持 10 项, 已支持 (本地实现) 7 项, 不适用 3 项, 待补 38 项 | 已支持 (本地实现) 7 项, 需授权 12 项, 不适用 3 项, 待补 36 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `clipboard.control` 2 项 |
 
 差异项 (44 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -26,20 +26,20 @@
 | `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
 | `i18n` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isAutoJs6` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="pending">待补</span> |
-| `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="pending">待补</span> |
-| `isInteger` | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isBigInt` |
+| `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isEmptyObject` |
+| `isInteger` | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isInteger` |
 | `isJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
-| `isObjectSpecies` | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="pending">待补</span> |
-| `isPrimitive` | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="pending">待补</span> |
-| `isReference` | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="pending">待补</span> |
+| `isObjectSpecies` | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isObjectSpecies` |
+| `isPrimitive` | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isPrimitive` |
+| `isReference` | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isReference` |
 | `isRunning` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isShuttingDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `notStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `pangu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="pending">待补</span> |
+| `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.random` |
 | `requiresApi` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `requiresAutojsVersion` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `setClip` | <span title="bridged">已支持</span>, 经 compat: `setClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.setText` |

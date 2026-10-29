@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `Numberx` | `jsox.numberx` | `jsox.numberx` | - |
-| 状态 | 已支持 14 项 | 已支持 (本地实现) 14 项 | 已支持 (本地实现) 14 项 | 待补 14 项 |
+| 入口 | `Numberx` | `jsox.numberx` | `jsox.numberx` | `host.jsox` |
+| 状态 | 已支持 14 项 | 已支持 (本地实现) 14 项 | 已支持 (本地实现) 14 项 | 已支持 (本地实现) 14 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

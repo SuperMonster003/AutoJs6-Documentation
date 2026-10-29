@@ -1,5 +1,20 @@
 # 拼音 (Pinyin)
 
+<!-- runtime-support:begin pinyin -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `pinyin` | `autojs6:pinyin` | `autojs6:pinyin` | `host.pinyin` |
+| 状态 | 已支持 16 项 | 已支持 16 项 | 已支持 16 项 | 需授权 16 项 |
+| 授权 | - | - | - | `text.pinyin` 16 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 pinyin 模块用于将汉字转换为拼音, 并支持声调格式, 姓氏模式, 地名模式, 分词, 多音字和单次调用自定义词典等选项.
 
 此模块自 AutoJs6 6.6.1 起提供. `pinyin` 与 `$pinyin` 指向同一个可调用模块对象.

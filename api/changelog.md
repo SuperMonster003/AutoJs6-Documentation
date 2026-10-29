@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [拼音 (Pinyin)](pinyin) 页顶部新增运行时支持表; [工具 (Util)](util), [全局对象 (Global)](global), [标准化 (Standardization)](s13n), [单位转换 (Converter)](cvt), [格式化 (Formatter)](fmt), [JavaScript 对象扩展 (Jsox)](jsox), [Mathx](mathx), [Arrayx](arrayx) 与 [Numberx](numberx) 页的运行时支持表补上 Bun 列: Bun 客户端的 host.util, host.species, host.global, host.s13n, host.cvt / host.fmt, host.jsox (mathx / arrayx / numberx) 与 host.pinyin 的 STYLE_* / MODE_* 常量
+
 - `更新` [工具 (Util)](util), [全局对象 (Global)](global), [标准化 (Standardization)](s13n), [单位转换 (Converter)](cvt), [格式化 (Formatter)](fmt), [JavaScript 对象扩展 (Jsox)](jsox), [Mathx](mathx), [Arrayx](arrayx) 与 [Numberx](numberx) 页顶部新增运行时支持表, 列出 Node.js 主线程与 Worker 中 autojs6:util, species, autojs6:global, s13n, cvt / fmt, jsox 等入口的支持情况
 
 - `更新` 为返回对象与模块原型补上成员说明: [对话框 (Dialogs)](dialogs) 中 Dialog 的其余方法 (标题与视图, 按钮, 列表, 进度, 复选框, 状态, android.app.Dialog 方法分组列出); [任务 (Tasks)](tasks) 中 TimedTask 与 IntentTask 的属性及读写方法; [引擎 (Engines)](engines) 中 ScriptExecution 的 isFinished 与 Agent 运行信息, ScriptEngine 的 getTag, setTag, getUncaughtException 与 getBackingSourcePath; 控件节点的 summary, isSimilar 与已弃用的 brother, 控件集合的 contains, iterator 与 isSimilar, 选择器的 toStringReadable; [AutoJs6](autojs) 的 themeColor 实例成员; [Color](colorType) 的 argb, rgb, rgba, hsv, hsva, hsl, hsla 简写与 toStringReadable; [悬浮窗 (Floaty)](floaty) 的 findView, requestFocus 与 disableFocus; [图像 (Image)](image) 中 Mat 的 release, isReleased 与 convertTo, MatchingResult#findMax; Flow 的 4 个事件等待步骤; 文本文件对象的 getPath; ZIP 对象的 toStringReadable; 控制台构建器的 exitOnCloseTimeout 与 contentTextColors; 以及 crypto.fromHex, events.removeToastObserver, events.removeNotificationObserver, util.class, util.getClassName 与 util.className

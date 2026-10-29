@@ -1,5 +1,24 @@
 # 3-Block Compose (Compose)
 
+<!-- runtime-support:begin compose -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `compose`, 全局 1 项 | `autojs6:compose` | `autojs6:compose` | `host.compose` |
+| 状态 | 已支持 17 项 | 已支持 15 项, 待补 2 项 | 已支持 15 项, 待补 2 项 | 需授权 15 项, 待补 2 项 |
+| 授权 | - | - | - | `ui.compose` 15 项 |
+
+差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `compose.ComposeError`, `ComposeError` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `compose` 与 `$compose` 是同一个可调用模块, 通过 3-Block Compose 插件创建脚本界面. 脚本描述节点, 状态与事件, 插件负责 Jetpack Compose 渲染. 本参考对应 1.2.0 本地开发预览及配套 AutoJs6 宿主, 尚无官方发行版.
 
 运行需要 Android 7.0 / API 24 或以上, 包含 Compose 模块的配套 Rhino 运行时, 以及已安装, 已启用且通过信任与兼容性检查的 3-Block Compose 插件. 普通 JavaScript 工厂 API 的最低宿主构建要求仍为 AutoJs6 6.8.0 / 5316, 同时须满足实际插件契约和共享依赖检查. [TSX 接入](#tsx-接入) 需要 5319 或以上的配套宿主及 TypeScript Engine 0.6.4.

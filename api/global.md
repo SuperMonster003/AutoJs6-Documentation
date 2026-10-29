@@ -1,15 +1,15 @@
 # 全局对象 (Global)
 
-<!-- runtime-support:begin global -->
+<!-- runtime-support:begin global species -->
 <!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | 全局 58 项 | `autojs6:screen_metrics`, `autojs6:global`, `autojs6:compat` (经 compat) | `autojs6:screen_metrics`, `autojs6:global` | `host.coordinates`, `host.global`, `host.clipboard` |
-| 状态 | 已支持 58 项 | 已支持 14 项, 已支持 (本地实现) 8 项, 不适用 3 项, 待补 33 项 | 已支持 10 项, 已支持 (本地实现) 7 项, 不适用 3 项, 待补 38 项 | 已支持 (本地实现) 7 项, 需授权 12 项, 不适用 3 项, 待补 36 项 |
+| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:screen_metrics`, `autojs6:global`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:screen_metrics`, `autojs6:global`, `$autojs.species` | `host.species`, `host.coordinates`, `host.global`, `host.clipboard` |
+| 状态 | 已支持 98 项 | 已支持 14 项, 已支持 (本地实现) 46 项, 不适用 5 项, 待补 33 项 | 已支持 10 项, 已支持 (本地实现) 45 项, 不适用 5 项, 待补 38 项 | 已支持 (本地实现) 45 项, 需授权 12 项, 不适用 5 项, 待补 36 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `clipboard.control` 2 项 |
 
-差异项 (44 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (56 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
@@ -17,6 +17,10 @@
 | `TODO` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `WIDTH` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `axios` | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `cX` | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cX` |
+| `cXy` | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cXy` |
+| `cY` | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cY` |
+| `cYx` | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cYx` |
 | `cheerio` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -24,12 +28,17 @@
 | `dayjs` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `exit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
+| `getScaleBaseX` | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseX` |
+| `getScaleBaseY` | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseY` |
+| `getScaleBases` | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBases` |
 | `i18n` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isAutoJs6` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isBigInt` |
 | `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isEmptyObject` |
 | `isInteger` | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isInteger` |
+| `isJavaClass` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
 | `isJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
+| `isJavaPackage` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
 | `isObjectSpecies` | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isObjectSpecies` |
 | `isPrimitive` | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isPrimitive` |
 | `isReference` | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isReference` |
@@ -43,6 +52,9 @@
 | `requiresApi` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `requiresAutojsVersion` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `setClip` | <span title="bridged">已支持</span>, 经 compat: `setClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.setText` |
+| `setScaleBaseX` | <span title="bridged">已支持</span>: `setScaleBaseX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBaseX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBaseX` |
+| `setScaleBaseY` | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBaseY` |
+| `setScaleBases` | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBases` |
 | `setScreenMetrics` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `stop` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |

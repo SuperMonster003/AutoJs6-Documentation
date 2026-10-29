@@ -1,5 +1,19 @@
 # 消息浮动框 (Toast)
 
+<!-- runtime-support:begin toast -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `toast` | - | - | - |
+| 状态 | 已支持 1 项 | 待补 1 项 | 待补 1 项 | 待补 1 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 toast 模块用于 [消息浮动框](https://developer.android.com/guide/topics/ui/notifiers/toasts?hl=zh-cn) 的 [ 显示 / 消除 / 定制 ] 等.
 
 部分操作系统的 toast 消息可能无法按队列依次显示, 新的 toast 消息直接覆盖之前的 toast 消息.

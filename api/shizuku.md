@@ -1,5 +1,35 @@
 # Shizuku
 
+<!-- runtime-support:begin shizuku -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `shizuku` | `autojs6:shizuku` | `autojs6:shizuku` | `host.shizuku` |
+| 状态 | 已支持 13 项 | 已支持 1 项, 待补 12 项 | 已支持 1 项, 待补 12 项 | 需授权 1 项, 待补 12 项 |
+| 授权 | - | - | - | `shell.shizuku` 1 项 |
+
+差异项 (12 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `shizuku.currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.currentPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.execCommand` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.getCommand` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.hasPermission` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.hasService` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.isInstalled` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.isOperational` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.isRunning` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.kill` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `shizuku.state` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 通过 [Shizuku](https://shizuku.rikka.app/introduction/) 可以获得 ADB 特权并使用系统 API.
 
 使用 Shizuku 需满足以下全部条件:

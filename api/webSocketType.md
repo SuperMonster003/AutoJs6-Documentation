@@ -1,5 +1,19 @@
 # WebSocket
 
+<!-- runtime-support:begin WebSocket# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `WebSocket` 对象 | - | - | - |
+| 状态 | 已支持 24 项 | 不适用 24 项 (需要 Java 对象) | 不适用 24 项 (需要 Java 对象) | 不适用 24 项 (需要 Java 对象) |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ---
 
 <aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2023-10-30">

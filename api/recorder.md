@@ -1,5 +1,19 @@
 # 记录器 (Recorder)
 
+<!-- runtime-support:begin recorder -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `recorder` | - | - | - |
+| 状态 | 已支持 7 项 | 待补 7 项 | 待补 7 项 | 待补 7 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `recorder` 模块用于保存时间戳, 计算时间差, 以及测量同步函数的运行时间.
 
 `recorder` 与 `$recorder` 引用同一个可调用模块对象.

@@ -1,5 +1,26 @@
 # 文本转语音 (TTS)
 
+<!-- runtime-support:begin tts -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `tts` | `autojs6:tts`, `$autojs.tts` | `autojs6:tts`, `$autojs.tts` | `host.tts` |
+| 状态 | 已支持 35 项 | 已支持 35 项 | 已支持 35 项 | 需授权 35 项 |
+| 授权 | - | - | - | `tts.control` 35 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `TtsUtterance` (23 项) | 已支持 23 项 | 不适用 23 项 (需要 Java 对象) | 不适用 23 项 (需要 Java 对象) | 不适用 23 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 tts 模块用于通过 Android 文本转语音引擎播放文本, 插入静音, 合成音频文件, 查询引擎和语音, 以及监听单次任务的执行事件.
 
 Node.js, Bun 与 Node.js Worker 的显式异步接口参阅 [Runtime APIs - 文字转语音](runtimeApis#nodejs--bun--worker-的文字转语音). 本页的全局调用方式及同步任务句柄针对 Rhino.

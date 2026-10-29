@@ -1,5 +1,19 @@
 # 控件节点 (UiObject)
 
+<!-- runtime-support:begin UiObject# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `UiObject` 对象 | - | - | - |
+| 状态 | 已支持 141 项 | 不适用 141 项 (需要 Java 对象) | 不适用 141 项 (需要 Java 对象) | 不适用 141 项 (需要 Java 对象) |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 UiObject 通常被称为 [ 控件 / 节点 / 控件节点 ], 可看做是一个通过安卓无障碍服务包装的 [AccessibilityNodeInfo](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo) 对象, 代表一个当前活动窗口中的节点, 通过此节点可收集控件信息或执行控件行为, 进而实现一系列自动化操作.
 
 应用界面通常由控件构成, 如 [ImageView](https://developer.android.com/reference/android/widget/ImageView) 构成图像控件, [TextView](https://developer.android.com/reference/android/widget/TextView) 构成文本控件. 通过不同的布局可决定不同控件的位置, 如 [LinearLayout (线性布局)](https://developer.android.com/reference/android/widget/LinearLayout) 按水平或垂直方式排布及显示控件, [AbsListView (列表布局)](https://developer.android.com/reference/android/widget/AbsListView) 按列表方式排布及显示控件.

@@ -1,5 +1,26 @@
 # 悬浮窗 (Floaty)
 
+<!-- runtime-support:begin floaty -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `floaty` | - | - | - |
+| 状态 | 已支持 8 项 | 待补 8 项 | 待补 8 项 | 待补 8 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (2 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `FloatyWindow` (12 项) | 已支持 12 项 | 不适用 12 项 (需要 Java 对象) | 不适用 12 项 (需要 Java 对象) | 不适用 12 项 (需要 Java 对象) |
+| `RawWindow` (12 项) | 已支持 12 项 | 不适用 12 项 (需要 Java 对象) | 不适用 12 项 (需要 Java 对象) | 不适用 12 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ---
 
 <aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2022-10-22">

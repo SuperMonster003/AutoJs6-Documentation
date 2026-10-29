@@ -1,5 +1,19 @@
 # 万维网 (Web)
 
+<!-- runtime-support:begin web -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `web`, 全局 3 项 | - | - | - |
+| 状态 | 已支持 7 项 | 待补 7 项 | 待补 7 项 | 待补 7 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 在应用里显示网页内容, 而不是打开独立的浏览器, 此时可使用 WebView 类, 以实现在 [activity](activity) 中显示网页内容.
 
 web 模块主要用于 [WebView](https://developer.android.com/reference/android/webkit/WebView) 网页的 [ [注入 (Inject)](glossaries#注入) / 构建客户端 ] 等.

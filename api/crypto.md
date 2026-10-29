@@ -1,5 +1,19 @@
 # 密文 (Crypto)
 
+<!-- runtime-support:begin crypto -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `crypto` | - | - | - |
+| 状态 | 已支持 8 项 | 不适用 8 项 (运行时自带等价功能), 等价写法: `node:crypto KeyObject / generateKeyPair, WebCrypto (globalThis.crypto.subtle)` | 不适用 8 项 (运行时自带等价功能), 等价写法: `node:crypto KeyObject / generateKeyPair, WebCrypto (globalThis.crypto.subtle)` | 不适用 8 项 (运行时自带等价功能), 等价写法: `node:crypto KeyObject / generateKeyPair, WebCrypto (globalThis.crypto.subtle)` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 crypto 模块提供 [ 对称加密 (如 AES) / 非对称加密 (如 RSA) / 消息摘要 (如 MD5, SHA) ] 等支持.
 
 > 注: 本章节参考自 [Auto.js Pro 文档](https://pro.autojs.org/docs/zh/v8/crypto.html).

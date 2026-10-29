@@ -1,5 +1,34 @@
 # 光学字符识别 (OCR)
 
+<!-- runtime-support:begin ocr -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ocr`, `ocr.mlkit`, `ocr.paddle`, `ocr.rapid` | `autojs6:compat` (经 compat), `ocr` | - | - |
+| 状态 | 已支持 12 项 | 已支持 6 项, 待补 6 项 | 待补 12 项 | 待补 12 项 |
+
+差异项 (12 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `ocr.detect` | <span title="bridged">已支持</span>, 经 compat: `ocr.detect` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.mlkit.detect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.mlkit.recognizeText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.mode` | <span title="bridged">已支持</span>, 经 compat: `ocr.mode` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.paddle.detect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.paddle.recognizeText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.rapid.detect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.rapid.recognizeText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.recognizeText` | <span title="bridged">已支持</span>: `recognizeText` (`ocr`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.summary` | <span title="bridged">已支持</span>, 经 compat: `ocr.summary` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.tap` | <span title="bridged">已支持</span>, 经 compat: `ocr.tap` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ocr.toString` | <span title="bridged">已支持</span>, 经 compat: `ocr.toString` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ocr 模块用于识别图像中的文本.
 
 AutoJs6 支持 ML Kit, Paddle 和 Rapid OCR 引擎.

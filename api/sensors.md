@@ -1,5 +1,43 @@
 # 传感器 (Sensors)
 
+<!-- runtime-support:begin sensors -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `sensors` | `autojs6:sensors` | `autojs6:sensors` | `host.sensors` |
+| 状态 | 已支持 21 项 | 已支持 1 项, 待补 20 项 | 已支持 1 项, 待补 20 项 | 需授权 1 项, 待补 20 项 |
+| 授权 | - | - | - | `sensors.control` 1 项 |
+
+差异项 (20 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `sensors.addListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.delay` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.emit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.emitSticky` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.eventNames` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.getMaxListeners` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.getSensor` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.getTimer` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.ignoresUnsupportedSensor` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.listenerCount` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.listeners` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.on` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.prependListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.prependOnceListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.register` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.removeAllListeners` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.removeListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.setMaxListeners` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.unregister` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sensors.unregisterAll` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `sensors` 模块用于查询和监听 Android 设备的硬件及软件传感器. `sensors` 与 `$sensors` 指向同一个对象.
 
 脚本只能读取系统分发的传感器数据, 不能模拟或伪造传感器事件. 每次成功注册都会创建一个 [SensorEventEmitter](#c-sensoreventemitter). 未注销的监听器会使脚本保持运行. 脚本运行时被回收时, AutoJs6 会自动注销当前模块中的全部传感器监听器.

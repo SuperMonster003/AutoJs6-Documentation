@@ -1,5 +1,26 @@
 # 人工智能 (AI)
 
+<!-- runtime-support:begin ai -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ai` | `autojs6:ai` | `autojs6:ai` | `host.ai` |
+| 状态 | 已支持 6 项 | 已支持 6 项 | 已支持 6 项 | 需授权 6 项 |
+| 授权 | - | - | - | `ai.control` 6 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `AiSession` (11 项) | 已支持 11 项 | 已支持 11 项 | 已支持 11 项 | 需授权 11 项 |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ai 模块通过 AI Provider 插件目标发起文本生成, 对话, 流式请求和持久会话. 官方 3-Stone AI 插件在同一目录中公开本地模型与用户配置的在线服务, 并负责目标配置, 在线凭据和实际推理. AutoJs6 宿主只负责可信插件发现, 协议协商, 精确目标路由, Binder 生命周期和错误规范化.
 
 `ai` 与 `$ai` 指向同一个可调用模块对象. 省略 `plugin` 和 `target` 时, 所有生成方法均选择官方 3-Stone AI 插件声明的默认目标. 不会根据目标失败情况自动选择其他本地或在线目标.

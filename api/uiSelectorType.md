@@ -1,5 +1,25 @@
 # 选择器 (UiSelector)
 
+<!-- runtime-support:begin selector -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | 全局 4 项 | - | - | - |
+| 状态 | 已支持 4 项 | 待补 4 项 | 待补 4 项 | 待补 4 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `UiSelector` (186 项) | 已支持 186 项 | 不适用 186 项 (需要 Java 对象) | 不适用 186 项 (需要 Java 对象) | 不适用 186 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 UiSelector (选择器), 亦可看作是 [控件节点](uiObjectType) 的条件筛选器, 用于通过附加不同的条件, 筛选出一个或一组活动窗口中的 `控件节点`, 并做进一步处理, 如 [ 执行 [控件行为](uiObjectActionsType) (点击, 长按, 设置文本等) / 判断位置 / 获取文本内容 / 获取控件特定状态 / 在 [控件层级](glossaries#控件层级) 中进行 [罗盘](uiObjectType#m-compass) 导航 ] 等.
 
 ```js

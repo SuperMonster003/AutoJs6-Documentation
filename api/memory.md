@@ -1,5 +1,19 @@
 # 内存 (Memory)
 
+<!-- runtime-support:begin memory -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `memory` | - | - | - |
+| 状态 | 已支持 5 项 | 待补 5 项 | 待补 5 项 | 待补 5 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 memory 模块用于在脚本中读取 AutoJs6 进程自身的内存诊断数据, 包括 Java 堆与原生堆用量, 存活的脚本引擎, 已结束但尚未被回收的脚本运行时与插件引擎桥接会话, 未释放的图像与脚本线程等, 以便检查脚本反复运行后内存是否持续增长.
 
 数据来源与 AutoJs6 "设置 > 关于 > 开发者选项 > 内存诊断" 页面相同. 此模块只读取诊断数据, 不提供释放其他脚本资源的能力.

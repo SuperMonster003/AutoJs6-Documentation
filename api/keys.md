@@ -1,5 +1,19 @@
 # 按键 (Keys)
 
+<!-- runtime-support:begin keys -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `keys` | `autojs6:compat` (经 compat) | - | - |
+| 状态 | 已支持 12 项 | 已支持 12 项 | 待补 12 项 | 待补 12 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 本章包含按键代码属性, 无障碍全局动作和 Shell 按键指令.
 
 - `keys` 与 `$keys` 指向同一个按键代码对象.

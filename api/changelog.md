@@ -2,6 +2,12 @@
 
 ## v6.8.0
 
+- `更新` 其余有脚本 API 的模块页与对象类型页顶部新增运行时支持表 (连同此前的 13 页共 83 页, 覆盖全部 69 个模块与 43 种返回对象), 列出 Rhino, Node.js 主线程, Node.js Worker 与 Bun 中各 API 的入口, 状态与授权; 模块页的表下列出本页说明的返回对象, 对象有独立类型页时 (如 [控件节点 (UiObject)](uiObjectType), [应用枚举类 (App)](appType)) 表格放在类型页; [全局对象 (Global)](global) 页的表并入 species
+
+- `修复` [应用枚举类 (App)](appType) 的实例方法 openSettings 改为实际提供的 launchSettings (AutoJs6 中不存在 openSettings)
+
+- `新增` [颜色 (Color)](color) 的 colors.rgba / hsva / hsla 补充 (components, alpha) 重载: 三个分量组成的数组与单独给出的 alpha 分量
+
 - `更新` [拼音 (Pinyin)](pinyin) 页顶部新增运行时支持表; [工具 (Util)](util), [全局对象 (Global)](global), [标准化 (Standardization)](s13n), [单位转换 (Converter)](cvt), [格式化 (Formatter)](fmt), [JavaScript 对象扩展 (Jsox)](jsox), [Mathx](mathx), [Arrayx](arrayx) 与 [Numberx](numberx) 页的运行时支持表补上 Bun 列: Bun 客户端的 host.util, host.species, host.global, host.s13n, host.cvt / host.fmt, host.jsox (mathx / arrayx / numberx) 与 host.pinyin 的 STYLE_* / MODE_* 常量
 
 - `更新` [工具 (Util)](util), [全局对象 (Global)](global), [标准化 (Standardization)](s13n), [单位转换 (Converter)](cvt), [格式化 (Formatter)](fmt), [JavaScript 对象扩展 (Jsox)](jsox), [Mathx](mathx), [Arrayx](arrayx) 与 [Numberx](numberx) 页顶部新增运行时支持表, 列出 Node.js 主线程与 Worker 中 autojs6:util, species, autojs6:global, s13n, cvt / fmt, jsox 等入口的支持情况

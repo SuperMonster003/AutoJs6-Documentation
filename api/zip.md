@@ -1,5 +1,25 @@
 # 压缩文件 (Zip)
 
+<!-- runtime-support:begin zip -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `zip` | - | - | - |
+| 状态 | 已支持 5 项 | 待补 5 项 | 待补 5 项 | 待补 5 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `Zip` (21 项) | 已支持 21 项 | 待补 21 项 | 待补 21 项 | 待补 21 项 |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 zip 模块用于创建, 打开, 修改和解压 ZIP 文件.
 
 此模块自 AutoJs6 6.7.0 起提供, 底层使用 Zip4j. `zip` 与 `$zip` 指向同一个可调用模块对象.

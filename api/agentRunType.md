@@ -1,5 +1,20 @@
 # AgentRun - Agent 任务句柄
 
+<!-- runtime-support:begin AgentRun# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `AgentRun` 对象 | `autojs6:ai` | `autojs6:ai` | `host.ai` |
+| 状态 | 已支持 14 项 | 已支持 14 项 | 已支持 14 项 | 需授权 14 项 |
+| 授权 | - | - | - | `agent.control` 14 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 由 [ai.agent.run](ai#aiagentrungoal-options) 或 [ai.agent.get](ai#aiagentgetid) 返回的宿主侧 Rhino 对象. 句柄的方法和事件属于创建它的脚本线程, 不应跨脚本线程传递使用.
 
 Node.js/Bun/Worker 提供对应的异步句柄: run/get 先返回 Promise, respond/confirm/cancel/join 也返回 Promise. 属性与事件载荷沿用本页定义, state 为最近收到的事件快照, 不提供 Rhino 原型或同步阻塞等待. 详见 [跨运行时 Agent 接口](ai#agent-任务与注册脚本).

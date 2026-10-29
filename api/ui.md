@@ -1,5 +1,60 @@
 # 用户界面 (UI)
 
+<!-- runtime-support:begin ui -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ui`, 全局 2 项 | `autojs6:ui` | `autojs6:ui` | `host.ui` |
+| 状态 | 已支持 42 项 | 已支持 3 项, 不适用 6 项, 待补 33 项 | 已支持 3 项, 不适用 6 项, 待补 33 项 | 需授权 3 项, 不适用 6 项, 待补 33 项 |
+| 授权 | - | - | - | `ui.layout` 3 项 |
+
+差异项 (37 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `ui.__autojs6Tsx`, `__autojs6Tsx` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `ui.__autojs6TsxFragment`, `__autojs6TsxFragment` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `ui.R` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.Widget` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.__inflate__` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `ui.__widgets__` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `ui.backgroundColor` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.bindingContext` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.emitter` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.findById` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.findByStringId` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.finish` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.getNavigationBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.getStatusBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.getVisibleNavigationBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.getVisibleStatusBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.keepScreenOn` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.layout` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.layoutFile` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.layoutInflater` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.navigationBarColor` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.navigationBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.navigationBarIconLight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.navigationBarIconLightBy` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.post` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.registerWidget` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.root` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.run` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.setContentView` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.statusBarColor` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.statusBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.statusBarIconLight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.statusBarIconLightBy` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.useAndroidLayout` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.visibleNavigationBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ui.visibleStatusBarHeight` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 Android 视图. 普通 JavaScript 的布局采用声明式 XML, 由 Rhino 按 [E4X](e4x) XML 处理, 不是浏览器 DOM 或 React 组件树. 配套 TypeScript Engine 的 `.tsx` 入口也可编译小写 XML UI 标签; Compose 标签的版本条件与独立挂载边界见 [Compose TSX 接入](compose#tsx-接入).
 
 `ui` 模块提供布局渲染, 视图查询, UI 线程调度, 自定义控件和系统栏控制等功能. `$ui` 是 `ui` 的等效别名.

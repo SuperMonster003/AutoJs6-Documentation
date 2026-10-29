@@ -1,5 +1,20 @@
 # Pinyin4j
 
+<!-- runtime-support:begin pinyin4j -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `pinyin4j` | `autojs6:pinyin4j` | `autojs6:pinyin4j` | `host.pinyin4j` |
+| 状态 | 已支持 3 项 | 已支持 3 项 | 已支持 3 项 | 需授权 3 项 |
+| 授权 | - | - | - | `text.pinyin4j` 3 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 pinyin4j 模块用于将中文转换为拼音字符串, 查询逐 Unicode 码点的全部读音, 并控制分隔符, 大小写, 声调和 `v` 字符格式.
 
 此模块自 AutoJs6 6.6.1 起提供. `pinyin4j` 与 `$pinyin4j` 指向同一个可调用模块对象.

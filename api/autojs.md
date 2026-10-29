@@ -1,5 +1,25 @@
 # AutoJs6 本体应用
 
+<!-- runtime-support:begin autojs -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `autojs`, `autojs.version`, 全局 1 项 | - | - | - |
+| 状态 | 已支持 29 项 | 待补 29 项 | 待补 29 项 | 待补 29 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `ThemeColor` (10 项) | 已支持 10 项 | 不适用 10 项 (需要 Java 对象) | 不适用 10 项 (需要 Java 对象) | 不适用 10 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 autojs 全局对象主要包含与 AutoJs6 应用本身相关的属性及方法, 如获取 AutoJs6 的 [ Root 状态 / 语言标签 / 权限状态 ] 等.
 
 ---

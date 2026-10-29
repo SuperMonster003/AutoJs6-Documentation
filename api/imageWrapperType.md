@@ -1,5 +1,19 @@
 # 包装图像类 (ImageWrapper)
 
+<!-- runtime-support:begin ImageWrapper# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImageWrapper` 对象 | - | - | - |
+| 状态 | 已支持 15 项 | 不适用 15 项 (需要 Java 对象) | 不适用 15 项 (需要 Java 对象) | 不适用 15 项 (需要 Java 对象) |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `ImageWrapper` 是 AutoJs6 图像数据的包装类. [`images`](image), [`ocr`](ocr) 和 [`canvas`](canvas) 等模块使用它传递位图, OpenCV 矩阵或屏幕捕获数据.
 
 通常应通过 `images.read()`, `images.captureScreen()` 或其他模块方法取得实例. `ImageWrapper` 的公开构造方法和 `ofBitmap()` 等工厂方法需要内部 `ScriptRuntime`, 不属于普通脚本的便捷构造接口.

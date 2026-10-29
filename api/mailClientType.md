@@ -1,5 +1,20 @@
 # 邮件客户端 (MailClient)
 
+<!-- runtime-support:begin MailClient# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `MailClient` 对象 | `autojs6:mail` | `autojs6:mail` | `host.mail` |
+| 状态 | 已支持 53 项 | 已支持 53 项 | 已支持 53 项 | 需授权 53 项 |
+| 授权 | - | - | - | `mail.control` 53 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 MailClient 是 [mail.connect](mail#m-connect) 返回的会话对象, 持有一个账户到收信服务器 (IMAP 或 POP3) 与 SMTP 服务器的连接, 并提供收发, 搜索, 整理和监听邮件的方法.
 
 每个网络方法都有同步形态与 `Async` 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; `Async` 形态返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 回调在脚本线程执行. 失败时抛出 (或拒绝为) [MailError](mail#c-mailerror). 客户端关闭后所有方法失败于 `SESSION_CLOSED`.

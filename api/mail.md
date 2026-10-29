@@ -1,5 +1,20 @@
 # 邮件 (Mail)
 
+<!-- runtime-support:begin mail -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `mail` | `autojs6:mail`, `$autojs.mail` | `autojs6:mail`, `$autojs.mail` | `host.mail` |
+| 状态 | 已支持 56 项 | 已支持 56 项 | 已支持 56 项 | 需授权 56 项 |
+| 授权 | - | - | - | `mail.control` 56 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `mail` 模块用于在脚本中通过 IMAP, POP3 和 SMTP 协议收发, 搜索, 整理和监听邮件.
 
 从 AutoJs6 6.8.0 起, 邮件功能由外置 3-Stamp Mail 插件 (AutoJs6-Plugin-Three-Stamp-Mail) 提供. 调用前需在插件中心安装, 启用并授权与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用, 未授权, 版本不兼容, 服务绑定失败或插件进程退出时, 方法会抛出 (或以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE` 的 [MailError](#c-mailerror).

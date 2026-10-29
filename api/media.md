@@ -1,5 +1,19 @@
 # 多媒体 (Media)
 
+<!-- runtime-support:begin media -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `media` | `autojs6:compat` (经 compat) | - | - |
+| 状态 | 已支持 9 项 | 已支持 9 项 | 待补 9 项 | 待补 9 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ---
 
 `media` 提供音频文件播放和媒体库扫描能力. 从 6.8.0 起, 本地音频文件由应用的 Media3 音乐前台服务播放. 脚本运行时回收时会断开媒体扫描连接, 并释放自己仍持有的音乐播放.

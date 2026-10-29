@@ -1,5 +1,25 @@
 # 线程 (Threads)
 
+<!-- runtime-support:begin threads -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `threads`, 全局 1 项 | - | - | - |
+| 状态 | 已支持 9 项 | 待补 9 项 | 待补 9 项 | 待补 9 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `VolatileDispose` (3 项) | 已支持 3 项 | 待补 3 项 | 待补 3 项 | 待补 3 项 |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `threads` 模块在同一个 Rhino 脚本运行环境中创建和管理 Java 线程.
 由不同线程执行的函数共享脚本作用域和 Java 对象, 但普通读写, 复合运算以及
 JavaScript 容器并不会因此自动成为线程安全操作.

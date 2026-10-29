@@ -1,5 +1,19 @@
 # 终端 (Terminal)
 
+<!-- runtime-support:begin terminal -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `terminal` | - | - | - |
+| 状态 | 已支持 20 项 | 待补 20 项 | 待补 20 项 | 待补 20 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `terminal` 模块通过独立的 3-Shell Terminal 插件创建, 显示和驱动交互式系统终端. 全局对象 `terminal` 与 `$terminal` 指向同一对象. 本模块自 AutoJs6 6.8.0 提供, 完整脚本 API 需要包含终端模块的构建 (5315 或更新).
 
 先在插件中心安装并启用 [3-Shell Terminal](https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Shell-Terminal). 插件未安装, 被禁用, 未授权或连接失败时, 会话操作抛出 [TerminalError](terminalErrorType), 错误代码为 `PLUGIN_UNAVAILABLE`; 契约不兼容时为 `PLUGIN_INCOMPATIBLE`. 可用 [isAvailable](#m-isavailable) 预先探测.

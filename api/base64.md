@@ -1,5 +1,19 @@
 # Base64
 
+<!-- runtime-support:begin base64 -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `base64` | `base64` | - | - |
+| 状态 | 已支持 2 项 | 已支持 (本地实现) 2 项 | 不适用 2 项 (运行时自带等价功能), 等价写法: `Buffer.from(text).toString("base64") / Buffer.from(data, "base64"), atob / btoa` | 不适用 2 项 (运行时自带等价功能), 等价写法: `Buffer.from(text).toString("base64") / Buffer.from(data, "base64"), atob / btoa` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 Base64 是一种编码方式, 同时可作为一种数据的存储格式, 并非严格意义上的加密与解密.
 
 base64 模块主要用于对数据进行 Base64 编码及解码.

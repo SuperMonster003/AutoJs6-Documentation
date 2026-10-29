@@ -1,5 +1,19 @@
 # 相册 (Gallery)
 
+<!-- runtime-support:begin gallery -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `gallery` | - | - | - |
+| 状态 | 已支持 11 项 | 待补 11 项 | 待补 11 项 | 待补 11 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `gallery` 模块用于在脚本中使用 3-Maple Image 插件的选图界面, 查看器, 编辑器与转换器: 让用户选择图片并取得图片的文件信息, 打开查看器浏览指定图片, 让用户编辑一张图片并保存结果, 以及不显示界面地转换图片的格式与尺寸.
 
 从 AutoJs6 6.8.0 起, 本模块由外置 3-Maple Image 插件 (AutoJs6-Plugin-Three-Maple-Image) 3.4.0 及以上版本提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE`, `PLUGIN_DISABLED` 或 `PLUGIN_INCOMPATIBLE` 的 [GalleryError](#c-galleryerror), 其消息以插件中心的本地化提示开头. [gallery.isAvailable](#m-isavailable) 可预先探测.

@@ -1,5 +1,38 @@
 # 通用应用 (App)
 
+<!-- runtime-support:begin app -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `app`, 全局 28 项 | `app` | - | `host.app` |
+| 状态 | 已支持 71 项 | 已支持 40 项, 待补 31 项 | 待补 71 项 | 需授权 40 项, 待补 31 项 |
+| 授权 | - | - | - | `app.control` 40 项 |
+
+差异项 (15 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `app.autojs` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.getApkInfo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.getAppByAlias` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.getInstalledPackages` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.isDualInstalled`, `isDualInstalled` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.kill`, `kill` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.killDual`, `killDual` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.launchDual`, `launchDual` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.launchDualApp`, `launchDualApp` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.launchDualAppDetailsSettings`, `app.launchDualSettings`, `app.openDualAppSetting`, `app.openDualAppSettings`, `launchDualAppDetailsSettings`, `launchDualSettings`, `openDualAppSetting`, `openDualAppSettings` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.launchDualPackage`, `launchDualPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.openDualUrl` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.sendLocalBroadcastSync`, `sendLocalBroadcastSync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.startDualActivity`, `startDualActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `app.uninstallDual`, `uninstallDual` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ---
 
 <aside class="doc-status doc-status--incomplete" data-marked-by="SuperMonster003" data-marked-on="2022-10-22">

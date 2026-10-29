@@ -1,5 +1,24 @@
 # 电子书对象 (EpubBook)
 
+<!-- runtime-support:begin EpubBook# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `EpubBook` 对象 | `autojs6:epub` | `autojs6:epub` | `host.epub` |
+| 状态 | 已支持 14 项 | 已支持 13 项, 待补 1 项 | 已支持 13 项, 待补 1 项 | 需授权 13 项, 待补 1 项 |
+| 授权 | - | - | - | `epub.control` 13 项 |
+
+差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `EpubBook#toString` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 EpubBook 是 [epub.open](epub#m-open) 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出, 全文搜索以及阅读器为这本书保存的高亮与笔记.
 
 每个方法都有同步形态与 `Async` 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; `Async` 形态返回 [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise), 回调在脚本线程执行. 失败时抛出 (或拒绝为) [EpubError](epub#c-epuberror). 书籍关闭后 (包括插件在 5 分钟无调用后自动关闭) 所有方法失败于 `SESSION_CLOSED`.

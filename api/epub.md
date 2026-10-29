@@ -1,5 +1,20 @@
 # 电子书 (EPUB)
 
+<!-- runtime-support:begin epub -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `epub` | `autojs6:epub`, `$autojs.epub` | `autojs6:epub`, `$autojs.epub` | `host.epub` |
+| 状态 | 已支持 21 项 | 已支持 21 项 | 已支持 21 项 | 需授权 21 项 |
+| 授权 | - | - | - | `epub.control` 21 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `epub` 模块用于在脚本中读取 EPUB 电子书的元数据, 目录, 正文与封面, 导出书内资源, 进行全文搜索, 读取阅读器中的高亮与笔记, 以及打开阅读器并接收阅读事件.
 
 从 AutoJs6 6.8.0 起, EPUB 功能由外置 3-Folio EPUB 插件 (AutoJs6-Plugin-Three-Folio-EPUB, 原 Readium EPUB Reader) 提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE`, `PLUGIN_DISABLED` 或 `PLUGIN_INCOMPATIBLE` 的 [EpubError](#c-epuberror), 其消息以插件中心的本地化提示开头. [epub.isAvailable](#m-isavailable) 可预先探测.

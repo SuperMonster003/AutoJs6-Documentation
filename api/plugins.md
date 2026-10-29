@@ -1,5 +1,30 @@
 # 插件 (Plugins)
 
+<!-- runtime-support:begin plugins -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `plugins`, `plugins.tools` | `plugins` | - | - |
+| 状态 | 已支持 8 项 | 已支持 (本地实现) 1 项, 待补 7 项 | 不适用 1 项, 待补 7 项 | 不适用 1 项, 待补 7 项 |
+
+差异项 (8 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `plugins.extend` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.extendAll` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.extendAllBut` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.load` | <span title="local-shim">已支持 (本地实现)</span> | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
+| `plugins.tools.call` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.tools.callAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.tools.list` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `plugins.tools.providers` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 在 AutoJs6 中, 插件分为 [ 应用插件 / 项目插件 / 内置扩展插件 ].
 
 plugins 模块主要用于插件及扩展模块的加载并使其功能生效. [plugins.tools](#插件工具) 用于调用 AutoJs6 插件自描述的工具.

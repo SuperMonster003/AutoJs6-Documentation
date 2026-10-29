@@ -1,5 +1,26 @@
 # SQLite
 
+<!-- runtime-support:begin sqlite -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `sqlite` | `autojs6:sqlite` | `autojs6:sqlite` | `host.sqlite` |
+| 状态 | 已支持 1 项 | 已支持 1 项 | 已支持 1 项 | 需授权 1 项 |
+| 授权 | - | - | - | `database.control` 1 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `Database` (51 项) | 已支持 51 项 | 不适用 51 项 (需要 Java 对象) | 不适用 51 项 (需要 Java 对象) | 不适用 51 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `sqlite` 模块用于在脚本中以较低门槛操作 SQLite 数据库文件, 支持常见的建表 / 增删改查 / 原生 SQL 查询, 以及事务封装与游标结果的便捷转换.
 
 ---

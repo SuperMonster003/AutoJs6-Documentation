@@ -1,5 +1,24 @@
 # Storage (存储类)
 
+<!-- runtime-support:begin Storage# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `Storage` 对象 | `storages` | - | `host.storages` |
+| 状态 | 已支持 12 项 | 已支持 11 项, 待补 1 项 | 待补 12 项 | 需授权 11 项, 待补 1 项 |
+| 授权 | - | - | - | `storage.control` 11 项 |
+
+差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `Storage#size` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 存储类 Storage 是一个虚拟类, 实例通常由 [storages](storages) 全局模块产生:
 
 ```js

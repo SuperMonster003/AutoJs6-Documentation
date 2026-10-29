@@ -1,5 +1,19 @@
 # 阅读器会话 (EpubReaderSession)
 
+<!-- runtime-support:begin EpubReaderSession# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `EpubReaderSession` 对象 | - | - | - |
+| 状态 | 已支持 34 项 | 不适用 34 项 (需要 Java 对象) | 不适用 34 项 (需要 Java 对象) | 不适用 34 项 (需要 Java 对象) |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 EpubReaderSession 是 [epub.read](epub#m-read) 返回的阅读器会话对象, 是 [EventEmitter](eventEmitterType) 的实例, 连接脚本与 Readium EPUB Reader 插件中正在显示这本书的阅读器: 阅读器的打开, 翻页, 跳转, 书签与高亮变化以事件形式在脚本线程到达, 脚本可以跳转, 翻页, 设置阅读偏好, 读取书签并结束会话.
 
 会话打开期间脚本保持运行 (与 [MailWatch](mailClientType#mailwatch) 相同), 不需要也不应使用 `sleep` 循环等待; `close` 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未关闭的会话自动结束, 阅读器保留为普通阅读, 不触发事件. 每个插件进程只有一个阅读器会话, 新的 `read` 会替换之前的会话.

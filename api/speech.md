@@ -1,5 +1,39 @@
 # 语音 (Speech)
 
+<!-- runtime-support:begin speech -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `speech`, `speech.models`, `speech.speaker` | `autojs6:speech`, `$autojs.speech` | `autojs6:speech`, `$autojs.speech` | `host.speech` |
+| 状态 | 已支持 27 项 | 已支持 19 项, 待补 8 项 | 已支持 19 项, 待补 8 项 | 需授权 19 项, 待补 8 项 |
+| 授权 | - | - | - | `speech.control` 19 项 |
+
+差异项 (16 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `speech.models.getDefault` | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.getDefault` |
+| `speech.models.importFile` | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.importFile` |
+| `speech.models.install` | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.install` |
+| `speech.models.installAsync` | <span title="bridged">已支持</span>: `models.installAsync` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.installAsync` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.installAsync` |
+| `speech.models.list` | <span title="bridged">已支持</span>: `models.list` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.list` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.list` |
+| `speech.models.refreshCatalog` | <span title="bridged">已支持</span>: `models.refreshCatalog` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.refreshCatalog` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.refreshCatalog` |
+| `speech.models.remove` | <span title="bridged">已支持</span>: `models.remove` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.remove` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.remove` |
+| `speech.models.setDefault` | <span title="bridged">已支持</span>: `models.setDefault` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.setDefault` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.setDefault` |
+| `speech.speaker.enroll` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.enrollAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.identify` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.identifyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.list` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.remove` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.verify` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.verifyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `speech` 模块用于在脚本中使用 3-Macaw Speech 插件的离线语音能力: 麦克风听写, 音频文件或 PCM 数据识别, 语音活动检测, 唤醒词检测, 神经网络语音合成, 以及插件模型的下载与管理. 全部识别与合成都在设备上完成, 音频不会上传.
 
 从 AutoJs6 6.8.0 起, 本模块由外置 3-Macaw Speech 插件 (AutoJs6-Plugin-Three-Macaw-Speech) 1.0.0 及以上版本提供, 宿主不保留任何识别或合成实现. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失时方法抛出 (或以 Promise 拒绝) `code` 为 `PLUGIN_UNAVAILABLE` 的 [SpeechError](#c-speecherror), 其消息为插件中心的本地化缺插件提示; 插件被禁用或未授权时为 `PLUGIN_DISABLED`; 插件版本或契约不兼容, 或插件未声明所需功能时为 `PLUGIN_INCOMPATIBLE`. [speech.isAvailable](#m-isavailable) 可预先探测.

@@ -1,5 +1,19 @@
 # 画布 (Canvas)
 
+<!-- runtime-support:begin Canvas# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `Canvas` 对象 | - | - | - |
+| 状态 | 已支持 54 项 | 不适用 54 项 (需要 Java 对象) | 不适用 54 项 (需要 Java 对象) | 不适用 54 项 (需要 Java 对象) |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `Canvas` 是 AutoJs6 提供的全局构造函数. 它创建一个对
 [`android.graphics.Canvas`](https://developer.android.com/reference/android/graphics/Canvas)
 进行委托的画布对象, 可用于修改图片, 生成新图片, 或处理 UI 模式中 `<canvas>`

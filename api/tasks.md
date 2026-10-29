@@ -1,5 +1,27 @@
 # 任务 (Tasks)
 
+<!-- runtime-support:begin tasks -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `tasks` | `autojs6:tasks` | `autojs6:tasks` | `host.tasks` |
+| 状态 | 已支持 20 项 | 已支持 20 项 | 已支持 20 项 | 需授权 20 项 |
+| 授权 | - | - | - | `tasks.control` 20 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (2 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `IntentTask` (19 项) | 已支持 19 项 | 不适用 19 项 (需要 Java 对象) | 不适用 19 项 (需要 Java 对象) | 不适用 19 项 (需要 Java 对象) |
+| `TimedTask` (40 项) | 已支持 40 项 | 不适用 40 项 (需要 Java 对象) | 不适用 40 项 (需要 Java 对象) | 不适用 40 项 (需要 Java 对象) |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `tasks` 模块用于创建, 查询, 更新和删除持久化定时任务与广播触发任务. 定时任务由 AutoJs6 的任务调度后端执行, 不同于仅在当前脚本进程内生效的 [timers](timers) 定时器.
 
 ---

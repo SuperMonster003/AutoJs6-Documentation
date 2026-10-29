@@ -1,5 +1,20 @@
 # OpenCC
 
+<!-- runtime-support:begin opencc -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `opencc` | `autojs6:opencc` | `autojs6:opencc` | `host.opencc` |
+| 状态 | 已支持 33 项 | 已支持 33 项 | 已支持 33 项 | 需授权 33 项 |
+| 授权 | - | - | - | `text.opencc` 33 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 OpenCC, 全称 "Open Chinese Convert", 译为 "开放中文转换".
 
 opencc 模块是一个中文简繁转换模块, 支持词汇级别的转换, 异体字转换和地区习惯用词转换 (中国大陆 / 台湾 / 香港 / 日本新字体).

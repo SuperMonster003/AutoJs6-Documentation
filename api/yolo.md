@@ -1,5 +1,25 @@
 # 目标检测 (YOLO)
 
+<!-- runtime-support:begin yolo -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `yolo` | - | - | - |
+| 状态 | 已支持 1 项 | 待补 1 项 | 待补 1 项 | 待补 1 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `YoloDetector` (2 项) | 已支持 2 项 | 待补 2 项 | 待补 2 项 | 待补 2 项 |
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `yolo` 模块通过独立的 YOLO Provider 插件加载 NCNN 模型并执行目标检测.
 
 `yolo` 与 `$yolo` 指向同一个模块对象. 当前接口属于 AutoJs6 6.8.0 Preview, 仅支持显式指定 Provider 组件的 CPU 检测. 主机不会自动选择其他 Provider, 也不会在失败时回退到 OCR 或其他检测实现.

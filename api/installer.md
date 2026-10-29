@@ -1,5 +1,19 @@
 # 安装器 (Installer)
 
+<!-- runtime-support:begin installer -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `installer` | - | - | - |
+| 状态 | 已支持 16 项 | 待补 16 项 | 待补 16 项 | 待补 16 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 `installer` 模块用于安装, 更新, 卸载和检查 Android 应用, 并查询授权方式, 设备用户和默认安装器. 全局对象别名为 `$installer`.
 
 从 AutoJs6 6.8.0 起, 此模块由外置 3-Setup Installer 插件提供. 使用前需在插件中心安装, 启用并授权兼容插件. [isAvailable](#m-isavailable) 和 [status](#p-status) 可用于探测插件; 插件缺失或不可用时, 实际操作抛出或以 Promise 拒绝 `code` 为 `PLUGIN_UNAVAILABLE` 的 [InstallerError](#c-installererror). 脚本 API 不会自动改走系统安装器.

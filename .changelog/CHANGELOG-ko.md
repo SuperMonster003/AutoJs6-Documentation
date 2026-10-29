@@ -15,7 +15,7 @@
 
 # v6.8.0
 
-- `추가` [Bundled Libraries](https://docs.autojs6.com/#/bundledLibraries), axios, cheerio, dayjs, i18n, pangu, lodash와 Node.js 호환 모듈을 AutoJs6 설치 패키지 대신 Bundled Libraries 플러그인이 제공한다는 점, 플러그인 설치와 라이브러리별 스위치, 플러그인을 사용할 수 없을 때 require와 전역 객체가 던지는 오류 설명, AutoJs6로 패키징한 앱에는 아직 이 라이브러리가 포함되지 않는다는 점 명시; 모듈, 전역 객체, 국제화, Pangu 페이지도 갱신
+- `추가` [Bundled Libraries](https://docs.autojs6.com/#/bundledLibraries), axios, cheerio, dayjs, i18n, pangu, lodash와 Node.js 호환 모듈을 AutoJs6 설치 패키지 대신 Bundled Libraries 플러그인이 제공한다는 점, 플러그인 설치와 라이브러리별 스위치, 플러그인을 사용할 수 없을 때 require와 전역 객체가 던지는 오류, AutoJs6로 패키징한 앱에 스크립트가 사용하는 라이브러리를 포함하는 방법 설명; 모듈, 전역 객체, 국제화, Pangu 페이지도 갱신
 - `업데이트` [Speech](https://docs.autojs6.com/#/speech)에 3-Macaw Speech 1.2.0과 1.3.0에서 카탈로그에 추가된 모델 (프랑스어, 러시아어, 한국어, 스페인어, 8개 언어 인식, Kokoro v1.0 다국어 음성, 아랍어와 한국어 음성 등)을 싣고, 오프라인 인식 유형 offline-transducer와 Kokoro v1.0의 화자 구분을 설명
 - `업데이트` [Speech](https://docs.autojs6.com/#/speech)의 punctuation 옵션 설명 보완: 문장 부호를 출력하는 모델 (SenseVoice)은 그대로 유지하고, 스트리밍 모델 결과에는 3-Macaw Speech에 설치한 문장 부호 모델로 문장 부호를 붙이며 (1.2.0 이상, 중국어와 영어), false는 모든 문장 부호를 제거
 - `추가` API 문서: Node.js/Bun/Worker의 ai.agent 작업 제어와 이벤트, 등록된 스크립트의 컨텍스트와 결과, 패키징된 앱의 명시적 승인

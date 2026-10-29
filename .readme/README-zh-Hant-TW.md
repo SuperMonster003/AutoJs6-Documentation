@@ -71,7 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
-- `新增` [指令碼庫 (Bundled Libraries)](https://docs.autojs6.com/#/bundledLibraries), 說明 axios, cheerio, dayjs, i18n, pangu, lodash 與 Node.js 相容模組改由 Bundled Libraries 外掛提供 (不再隨 AutoJs6 安裝套件提供), 外掛的安裝與逐庫開關, 以及外掛不可用時 require 與全域物件拋出的錯誤, 並註明用 AutoJs6 打包的應用程式暫不包含這些庫; 模組, 全域物件, 國際化與文字間距頁同步更新
+- `新增` [指令碼庫 (Bundled Libraries)](https://docs.autojs6.com/#/bundledLibraries), 說明 axios, cheerio, dayjs, i18n, pangu, lodash 與 Node.js 相容模組改由 Bundled Libraries 外掛提供 (不再隨 AutoJs6 安裝套件提供), 外掛的安裝與逐庫開關, 外掛不可用時 require 與全域物件拋出的錯誤, 以及用 AutoJs6 打包應用程式時如何帶上指令碼用到的庫; 模組, 全域物件, 國際化與文字間距頁同步更新
 - `更新` [語音 (Speech)](https://docs.autojs6.com/#/speech) 的模型目錄補上 3-Macaw Speech 1.2.0 與 1.3.0 新增的模型 (法語, 俄語, 韓語, 西班牙語與八語辨識, Kokoro v1.0 多語言及阿拉伯語, 韓語等合成聲音), 並說明離線辨識類型 offline-transducer 與 Kokoro v1.0 的說話人劃分
 - `更新` [語音 (Speech)](https://docs.autojs6.com/#/speech) 的 punctuation 選項補全說明: 模型自帶標點 (SenseVoice) 時保留, 串流模型的結果由 3-Macaw Speech 中已安裝的標點模型補上標點 (1.2.0 起, 中文與英文), 設為 false 去掉所有標點
 - `新增` API 文件: Node.js/Bun/Worker 的 ai.agent 任務控制與事件, 註冊指令碼上下文和結果回傳, 以及封裝應用程式的獨立授權

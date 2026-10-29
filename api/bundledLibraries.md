@@ -69,7 +69,7 @@ console.log(path.isAbsolute('/sdcard/Scripts')); // true
 
 插件未安装, 未授权, 在插件中心被停用, 与当前 AutoJs6 不兼容, 或某个库被关闭时, `require` 该库的模块名会抛出 `Error`; 读取对应的全局对象 (包括 `typeof axios`) 同样抛出该错误, 之后每次读取都会重新尝试. 错误对象的属性:
 
-- `message` - 说明需要安装插件, 或到哪里开启, 例如 `Cannot find module 'lodash': it is provided by the official plugin "Bundled Libraries", which is not installed. Install the plugin in AutoJs6 > Plugin center.` (文本随 AutoJs6 的语言变化).
+- `message` - 说明需要安装插件, 或到哪里开启, 例如 `Cannot find module 'dayjs': it is provided by the official plugin "Bundled Libraries", which is not installed. Install the plugin in AutoJs6 > Plugin center.` (文本随 AutoJs6 的语言变化; `lodash` 与 Node.js 兼容模块在消息中的模块名带 `.js`, 如 `'lodash.js'`).
 - `code` - 固定为 `MODULE_NOT_FOUND`, 与找不到普通模块时相同.
 - `library` - 库名, 如 `lodash`, `i18n` (模块名为 `banana-i18n` 时同样为 `i18n`).
 - `reason` - 原因, 取值见下表.
@@ -100,7 +100,13 @@ try {
 
 ## 打包的应用
 
-用 AutoJs6 打包的应用暂不包含这些库: 插件只为 AutoJs6 本身提供库文件, 打包时不会把它们复制进生成的应用. 在没有安装本插件的设备上运行打包的应用时, `require` 这些模块名或读取对应的全局对象, 同样会抛出上文所述的 `Error` (`reason` 为 `not-installed`). 由打包功能把脚本用到的库从已安装的插件复制进应用, 计划在之后的版本中提供.
+用 AutoJs6 打包应用时, 打包功能扫描项目中的脚本, 把用到的库从本设备已安装的插件复制进生成的应用. 这样打包的应用在没有安装本插件的设备上也能使用这些库.
+
+- 扫描查找 `require` 与 `import` 中写成字符串的模块名 (如 `require('dayjs')`, `import _ from 'lodash'`), 以及全局对象名 `axios`, `cheerio`, `dayjs`, `i18n` 与 `pangu`. 复制的库所依赖的库 (如 `fs` 依赖的 `buffer` 与 `path`) 一并带上.
+- 模块名在运行时才确定 (如 `require(name)`) 时扫描无法发现. 此时在打包页面的 "支持库" 中勾选 "Bundled Libraries", 打包时会带上插件中的全部库 (应用增大约 210 KB). 加密的脚本与超过 4 MB 的文件不扫描, 它们用到的库同样需要勾选此项.
+- 本设备的插件未安装, 被停用, 未授权, 与当前 AutoJs6 不兼容, 或某个库已关闭时, 对应的库无法复制. 打包照常完成, 打包成功的对话框列出已打包的库, 以及未打包的库与处理办法, 处理后重新打包即可.
+
+打包的应用运行时先使用自带的库. 某个库没有带上时, 如果所在设备安装了本插件, 则从插件读取; 否则 `require` 该模块名或读取对应的全局对象会抛出上文所述的 `Error`, `message` 提示用 AutoJs6 重新打包 (模块为动态加载时勾选 "Bundled Libraries") 或在该设备安装本插件, 例如 `Cannot find module 'dayjs': this app was packaged without the library "dayjs". Package the app again with AutoJs6 (select "Bundled Libraries" in "Libraries" if the module is loaded dynamically), or install the plugin "Bundled Libraries" on this device.`
 
 ---
 

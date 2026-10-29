@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-30 imgui 纳入运行时覆盖矩阵 (宿主 api-coverage 路线图 P5.2f-1): 新增 [ImGui](imgui) 页, 目前只有一句说明与按宿主运行时覆盖矩阵 (宿主 150b4dbce) 生成的运行时支持表 (Rhino 已支持 464 项, Node.js 与 Bun 待补), 成员文档等 ImGui 插件的 API 稳定后补充, 届时再加入侧栏与目录; [工具](util) 页的表把 util.class / className / getClassName 改标为不适用 (需要 Java 对象).
+
 2026-10-30 插件契约导出与识别结果对象 (宿主 api-coverage 路线图 P5.2c): 宿主运行时覆盖矩阵 (宿主 e50f26694) 新增 110 行: 3-Block Compose 组件目录中的 55 个组件函数 compose.<组件名>, compose.modifier() 修饰链的 20 个修饰符 (ComposeModifier) 与节点的 8 个快捷属性访问器 (ComposeNode), 名称由宿主 plugin-api/compose-ui-api 的组件目录静态读取; 以及 ocr.detect 系列返回的 OcrResult (5 个成员) 与 barcode / qrcode 的 detect 系列返回的 WrappedBarcode (22 个成员). [OcrResult](dataTypes#ocrresult) 补 text 与 compareTo 并把 confidence 标为 number, [ComposeNode](composeNodeType#快捷属性访问器) 补八个快捷属性的标题; [ComposeModifier](composeModifierType) 与 [ComposeNode](composeNodeType) 两页新增运行时支持表, [Compose](compose), [OCR](ocr) 与 [条码](barcode) 页的表按矩阵重新生成. Node.js 与 Bun 的节点没有快捷属性访问器 (只在 props 中接受这些名称), 这 8 项在两个运行时记为待补. TS 声明 (6c93f5d) 补 Ocr.Result 与 Barcode.Result 的成员, Ace 捆绑副本与补全索引同步 (Ace cd6f5f6). AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.
 
 2026-10-30 Node.js 执行时限 (宿主 api-coverage Q119 / Q126): [运行时 API](runtimeApis#执行方式) 写明 Node.js 脚本与项目默认不限执行时长, node.timeoutMs 预算的计时范围与超时错误码, 以及输出逐段转发; WebView 等待一节改为只对设置了预算的项目提示留足时间.

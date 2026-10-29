@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [工具 (Util)](util) 页的运行时支持表: util.class, util.className 与 util.getClassName 读取 Rhino 所包装 Java 对象的类, Node.js 与 Bun 中的值不是 Java 对象, 三者改标为不适用 (需要 Java 对象), 等价写法为对 java 模块句柄调用 getClass
+
 - `更新` [光学字符识别 (OCR)](ocr) 的识别结果 [OcrResult](dataTypes#ocrresult): 补充 text 属性 (与 label 相同) 与 compareTo 方法 (按阅读顺序比较两个结果, 可用于排序), confidence 的类型改为 number (0 到 1); [Compose 节点 (ComposeNode)](composeNodeType#快捷属性访问器) 增加 "快捷属性访问器" 一节, 说明 w / h / padding / bg / weight / alpha / testTag / contentDescription 八个可读写的属性; [3-Block Compose (Compose)](compose), [ComposeModifier](composeModifierType), [ComposeNode](composeNodeType), [OCR](ocr) 与 [条码 (Barcode)](barcode) 页的运行时支持表加入 55 个组件函数, 20 个修饰符, 8 个快捷属性以及 OcrResult 与 WrappedBarcode 的成员
 
 - `更新` [运行时 API (Runtime APIs)](runtimeApis#执行方式) 的执行方式: Node.js 脚本与项目默认不限执行时长 (与 Rhino 脚本相同), project.json 的 node.timeoutMs 作为执行总预算 (从插件收到请求时计时, 含排队与工作区准备, 耗尽时报告 ERR_AUTOJS6_SCRIPT_TIMEOUT), 运行期间的输出逐段转发到控制台; WebView 等待一节同步改写

@@ -6,16 +6,16 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `util`, `util.inspect`, `util.java`, `util.morseCode`, `util.version`, `util.versionCodes` | `autojs6:util` | `autojs6:util` | `host.util` |
-| 状态 | 已支持 70 项 | 已支持 (本地实现) 64 项, 不适用 3 项, 待补 3 项 | 已支持 (本地实现) 64 项, 不适用 3 项, 待补 3 项 | 已支持 (本地实现) 57 项, 需授权 7 项, 不适用 3 项, 待补 3 项 |
+| 状态 | 已支持 70 项 | 已支持 (本地实现) 64 项, 不适用 6 项 | 已支持 (本地实现) 64 项, 不适用 6 项 | 已支持 (本地实现) 57 项, 需授权 7 项, 不适用 6 项 |
 | 授权 | - | - | - | `java.interop` 7 项 |
 
 差异项 (22 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `util.class` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `util.className` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `util.getClassName` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `util.class` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` |
+| `util.className` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` |
+| `util.getClassName` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.callInstance(handle, "getClass"))` |
 | `util.inspect.colors` | <span title="local-shim">已支持 (本地实现)</span>: `inspect.colors` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `inspect.colors` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.inspect.colors` |
 | `util.inspect.styles` | <span title="local-shim">已支持 (本地实现)</span>: `inspect.styles` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `inspect.styles` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `host.util.inspect.styles` |
 | `util.java.array` | <span title="local-shim">已支持 (本地实现)</span>: `java.array` (`autojs6:util`) | <span title="local-shim">已支持 (本地实现)</span>: `java.array` (`autojs6:util`) | <span title="capability-gated">需授权</span> `java.interop`: `host.util.java.array` |

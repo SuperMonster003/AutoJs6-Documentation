@@ -6,41 +6,22 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `shell`, 全局 19 项 | `autojs6:shell` | `autojs6:shell` | `host.shell` |
-| 状态 | 已支持 30 项 | 已支持 2 项, 待补 28 项 | 已支持 2 项, 待补 28 项 | 需授权 2 项, 待补 28 项 |
-| 授权 | - | - | - | `shell.control` 2 项 |
+| 状态 | 已支持 30 项 | 已支持 30 项 | 已支持 30 项 | 需授权 30 项 |
+| 授权 | - | - | - | `shell.root` 21 项, `shell.control` 9 项 |
 
-差异项 (28 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (9 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `Back` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Camera` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Down` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Home` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Input` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `KeyCode` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Left` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Menu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `OK` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Power` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Right` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Screencap` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `SetScreenMetrics` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Swipe` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Tap` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Text` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `Up` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `VolumeDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `VolumeUp` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.currentPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.execCommand` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.fromIntent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.getCommand` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.isRootAvailable` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.kill` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `shell.setDefaultOptions` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `SetScreenMetrics` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.checkAccess` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.execCommand` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.fromIntent` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.getCommand` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.isRootAvailable` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.kill` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.setDefaultOptions` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
+| `shell.spawn` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `shell.control` |
 
 返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
 

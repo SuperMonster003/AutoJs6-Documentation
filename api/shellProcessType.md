@@ -6,23 +6,10 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `ShellProcess` 对象 | `autojs6:shell` | `autojs6:shell` | `host.shell` |
-| 状态 | 已支持 25 项 | 已支持 15 项, 待补 10 项 | 已支持 15 项, 待补 10 项 | 需授权 15 项, 待补 10 项 |
-| 授权 | - | - | - | `shell.control` 15 项 |
+| 状态 | 已支持 25 项 | 已支持 25 项 | 已支持 25 项 | 需授权 25 项 |
+| 授权 | - | - | - | `shell.control` 25 项 |
 
-差异项 (10 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
-
-| API | Node.js 主线程 | Node.js Worker | Bun |
-| --- | --- | --- | --- |
-| `ShellProcess#addListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#getErrorStream` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#getInputStream` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#getOutputStream` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#isAlive` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#listenerCount` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#prependListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#prependOnceListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#removeListener` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `ShellProcess#toString` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

@@ -523,6 +523,7 @@
 </tbody>
 </table>
 <p>独立脚本可以在首条字符串语句中使用 <code>&quot;nodejs&quot;;</code> 或 <code>&quot;bun&quot;;</code>. Node 也支持 <code>node</code> 标记. Node 的 <code>.node.js</code>, <code>.cjs</code>, <code>.mjs</code>, <code>.mts</code>, <code>.cts</code> 后缀和 Bun 的 <code>.bun.js</code>, <code>.bun.ts</code>, <code>.bun.tsx</code> 后缀用于选择对应环境. 普通 <code>.ts</code> / <code>.tsx</code> 默认仍按 Rhino 的 TypeScript 路径处理; 项目的 <code>type</code> / <code>projectType</code> 为 <code>node</code> 时可选择 Node. 当前 <code>type: &#39;bun&#39;</code> 元数据本身不选择 Bun 引擎, 应使用 Bun 标记或后缀. 标记不能与固定引擎后缀冲突. 作为 Bun 入口的相对依赖导入的 <code>.mjs</code> 文件由 Bun 解释, 将该文件单独运行则按其后缀选择 Node.</p>
+<p>Node.js 脚本与项目默认不限执行时长, 与 Rhino 脚本相同, 可随时停止. 项目可在 project.json 的 node 配置中设置 <code>timeoutMs</code> (毫秒) 作为执行总预算: 从 Node.js Runtime 插件收到请求时开始计时, 包含排队与工作区准备, 耗尽后脚本停止并报告 <code>ERR_AUTOJS6_SCRIPT_TIMEOUT</code>; 未设置或为 0 时不限. TypeScript 项目设置的预算不少于 30000 毫秒. 运行期间的输出 (console.log 及 process.stdout / process.stderr) 逐段转发到 AutoJs6 控制台, 不等脚本结束.</p>
 <h2>Node.js 拼音<span><a class="mark" href="#runtimeapis_node_js" id="runtimeapis_node_js">#</a></span></h2>
 <p><strong><code>Async</code></strong></p>
 <pre><code class="lang-js">&quot;nodejs&quot;;
@@ -2786,7 +2787,7 @@ console.log(value.answer);
 <p>Node.js/Bun 项目 APK 使用已安装的外部 Runtime 插件和 3-Block Compose 插件, 自己的应用版本号可以从 1 开始. runtimeVersionCode 表示内置宿主运行库版本, applicationVersionCode 表示应用声明版本. APK Builder 需要匹配的 Runtime Kit (本批为 6.8.0+5567).</p>
 <p>Node 项目通过 node.permissions 声明 ui. Bun 项目使用 projectType=bun 或 bun 入口标记, 并在 project.json 明确声明 bun.hostCapabilities, 例如:</p>
 <p>WebView 网络加载和下载还需要打包项目的 Android INTERNET 权限. 在项目的 permissions 数组中保留 android.permission.INTERNET; Runtime 插件自身的联网权限不能替代打包应用的权限. HTTPS/明文流量仍遵循应用的 Android 网络安全配置.</p>
-<p>Node.js/Bun 项目的执行总预算与 WebView 回调超时相互独立. 需要等待用户选择文件或操作界面时, 在 node 配置中显式设置足够的 timeoutMs, 例如 <code>&quot;node&quot;: {&quot;permissions&quot;: [&quot;ui&quot;], &quot;timeoutMs&quot;: 120000}</code>. 默认项目预算可能先于 WebView 的等待期限耗尽; evaluateJavascript 的 timeoutMs 不会延长整个项目的执行预算.</p>
+<p>Node.js/Bun 项目的执行总预算与 WebView 回调超时相互独立. Node.js 项目未设置 timeoutMs 时不限执行时长; 设置了 node.timeoutMs 的 Node.js 项目与 Bun 项目 (bun.timeoutMs 默认 60000 毫秒) 需要等待用户选择文件或操作界面时, 应留出足够的预算, 例如 <code>&quot;node&quot;: {&quot;permissions&quot;: [&quot;ui&quot;], &quot;timeoutMs&quot;: 120000}</code>. evaluateJavascript 的 timeoutMs 不会延长整个项目的执行预算.</p>
 <pre><code class="lang-json">{
   &quot;projectType&quot;: &quot;bun&quot;,
   &quot;main&quot;: &quot;main.bun.js&quot;,

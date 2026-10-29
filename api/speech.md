@@ -411,6 +411,132 @@ speech.models.install('kws.zipformer.zh-en.2025-12-20', {
 
 从 AutoJs6-Shared-Assets 下载带签名的模型目录并校验签名, 只接受版本更高的目录. 等待上限为 2 分钟. 下载失败时为 `IO_FAILED`, 签名不符时为 `MODEL_CHECKSUM_MISMATCH`. 没有异步形态.
 
+## [p+] speaker
+
+**`6.8.0`**
+
+`speech.speaker` 管理说话人的声纹: 用录音注册说话人, 判断一段录音是否出自某位说话人 (验证), 以及在全部已注册的说话人中找出最像的一位 (辨认). 需要插件声明 `speaker` 功能 (3-Macaw Speech 1.3.0 及以上, 契约版本 `2`), 并已安装一个说话人模型; 较早的插件以 `PLUGIN_INCOMPATIBLE` 拒绝每个调用, 没有说话人模型时为 `MODEL_MISSING`.
+
+- 声纹只保存在插件的私有存储中, 在插件首页也可以查看与删除. 任何结果都不含声纹向量, 脚本只得到名字, 样本数与分数. 插件最多保存 50 位说话人, 注册第 51 个名字时失败于 `LIMIT_EXCEEDED`.
+- 录音的格式要求与 [speech.recognize](#m-recognize) 的文件路径相同; 每段不超过 60 秒 (`LIMIT_EXCEEDED`), 其中的有效语音不足 1 秒时失败于 `AUDIO_TOO_SHORT`. 每段 2 - 10 秒为宜.
+- 说话人名字去掉首尾空白后为 1 - 64 个字符 (超出为 `LIMIT_EXCEEDED`), 不能为空或含控制字符 (包括换行, `INVALID_OPTIONS`), 按原样比较.
+- `score` 为录音与声纹的余弦相似度, 保留四位小数, 不低于阈值即视为匹配. `threshold` 取 0 - 1; 省略时使用插件按说话人模型给出的默认值 (3-Macaw Speech 1.3.0 的默认说话人模型为 `0.5`).
+- 同步形态阻塞当前脚本线程, 不能在 UI 线程调用; `Async` 形态返回 Promise, 错误以 [SpeechError](#c-speecherror) 拒绝, 回调在脚本线程执行.
+
+参阅示例代码 "3-Macaw Speech > 说话人识别".
+
+## [m] speaker.enroll
+
+### speech.speaker.enroll(name, files, options?)
+
+**`6.8.0`** **`Non-UI`**
+
+- **name** { [string](dataTypes#string) } - 说话人名字
+- **files** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 录音文件路径, 或 1 - 10 个路径的数组
+- **[ options ]** {{ replace?: [boolean](dataTypes#boolean); model?: [string](dataTypes#string) }} - 注册选项
+- <ins>**returns**</ins> {{ name: [string](dataTypes#string); samples: [number](dataTypes#number); durationMillis: [number](dataTypes#number); modelId: [string](dataTypes#string) }} - 说话人名字, 累计样本数, 本次用到的语音时长 (毫秒), 以及声纹所用的说话人模型
+
+用录音注册说话人, 多段录音的声纹取平均. 名字已注册时, 新样本并入原有的声纹; `replace: true` 先丢弃原有的样本. `model` 指定说话人模型, 省略时使用默认的说话人模型; 已注册的名字只能并入同一模型的样本, 换用其他模型时须同时给出 `replace: true`, 否则失败于 `INVALID_OPTIONS`. 文件数超过 10 个时失败于 `LIMIT_EXCEEDED`.
+
+```js
+let enrolled = speech.speaker.enroll('小明', ['./own-1.wav', './own-2.wav'], { replace: true });
+console.log(enrolled.name, enrolled.samples, enrolled.durationMillis);
+```
+
+## [m] speaker.enrollAsync
+
+### speech.speaker.enrollAsync(name, files, options?)
+
+**`6.8.0`** **`Async`**
+
+- **name** { [string](dataTypes#string) } - 说话人名字
+- **files** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 录音文件路径, 或 1 - 10 个路径的数组
+- **[ options ]** {{ replace?: [boolean](dataTypes#boolean); model?: [string](dataTypes#string) }} - 注册选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值与 [speech.speaker.enroll](#m-speakerenroll) 的返回值相同
+
+[speech.speaker.enroll](#m-speakerenroll) 的异步形态, 参数与结果相同, 可在 UI 线程使用.
+
+## [m] speaker.verify
+
+### speech.speaker.verify(name, file, options?)
+
+**`6.8.0`** **`Non-UI`**
+
+- **name** { [string](dataTypes#string) } - 已注册的说话人名字
+- **file** { [string](dataTypes#string) } - 待验证的录音文件路径
+- **[ options ]** {{ threshold?: [number](dataTypes#number) }} - 验证选项
+- <ins>**returns**</ins> {{ name: [string](dataTypes#string); score: [number](dataTypes#number); matched: [boolean](dataTypes#boolean); threshold: [number](dataTypes#number) }} - 说话人名字, 相似度分数, 是否匹配, 以及实际使用的阈值
+
+判断录音是否出自该说话人. 名字未注册时失败于 `SPEAKER_NOT_FOUND`.
+
+```js
+let r = speech.speaker.verify('小明', './test.wav', { threshold: 0.55 });
+console.log(r.matched ? '是本人' : '不是本人', r.score);
+```
+
+## [m] speaker.verifyAsync
+
+### speech.speaker.verifyAsync(name, file, options?)
+
+**`6.8.0`** **`Async`**
+
+- **name** { [string](dataTypes#string) } - 已注册的说话人名字
+- **file** { [string](dataTypes#string) } - 待验证的录音文件路径
+- **[ options ]** {{ threshold?: [number](dataTypes#number) }} - 验证选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值与 [speech.speaker.verify](#m-speakerverify) 的返回值相同
+
+[speech.speaker.verify](#m-speakerverify) 的异步形态, 参数与结果相同, 可在 UI 线程使用.
+
+## [m] speaker.identify
+
+### speech.speaker.identify(file, options?)
+
+**`6.8.0`** **`Non-UI`**
+
+- **file** { [string](dataTypes#string) } - 待辨认的录音文件路径
+- **[ options ]** {{ threshold?: [number](dataTypes#number); topK?: [number](dataTypes#number) }} - 辨认选项, `topK` 为 1 - 10 的整数, 默认为 `3`
+- <ins>**returns**</ins> {{ name: [string](dataTypes#string) | [null](dataTypes#null); score: [number](dataTypes#number); matched: [boolean](dataTypes#boolean); threshold: [number](dataTypes#number); candidates: {{ name: [string](dataTypes#string); score: [number](dataTypes#number) }}[] }} - 辨认结果
+
+在用当前说话人模型注册的全部说话人中找出与录音最像的一位. `candidates` 按分数从高到低列出至多 `topK` 位说话人; 最高分不低于阈值时 `name` 为该说话人且 `matched` 为 `true`, 否则 `name` 为 `null`.
+
+```js
+let who = speech.speaker.identify('./test.wav', { topK: 3 });
+console.log(who.name === null ? '不是已注册的人' : who.name, JSON.stringify(who.candidates));
+```
+
+## [m] speaker.identifyAsync
+
+### speech.speaker.identifyAsync(file, options?)
+
+**`6.8.0`** **`Async`**
+
+- **file** { [string](dataTypes#string) } - 待辨认的录音文件路径
+- **[ options ]** {{ threshold?: [number](dataTypes#number); topK?: [number](dataTypes#number) }} - 辨认选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值与 [speech.speaker.identify](#m-speakeridentify) 的返回值相同
+
+[speech.speaker.identify](#m-speakeridentify) 的异步形态, 参数与结果相同, 可在 UI 线程使用.
+
+## [m] speaker.list
+
+### speech.speaker.list()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> {{ name: [string](dataTypes#string); samples: [number](dataTypes#number); updatedAt: [number](dataTypes#number); modelId: [string](dataTypes#string) }}[] - 按名字排序的已注册说话人, `updatedAt` 为最后一次注册的时间戳 (毫秒)
+
+列出全部已注册的说话人, 包括在插件首页注册的. 没有异步形态.
+
+## [m] speaker.remove
+
+### speech.speaker.remove(name)
+
+**`6.8.0`**
+
+- **name** { [string](dataTypes#string) } - 说话人名字
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否实际删除了声纹
+
+删除该说话人的声纹. 名字未注册时返回 `false`. 没有异步形态.
+
 ## [C] SpeechError
 
 ### new speech.SpeechError(message?, code?)
@@ -541,8 +667,8 @@ try {
 
 [speech.capabilities](#m-capabilities) 的返回值.
 
-- **contractVersion** { [number](dataTypes#number) } - 语音插件契约版本, 当前为 `1`
-- **features** { [string](dataTypes#string)[[]](dataTypes#array) } - 插件实现的功能, 取自 `asr` (文件识别与外部 PCM 会话), `asrStreaming` (麦克风听写与 `thenListen`), `vad` (语音活动检测), `kws` (唤醒词), `tts` (合成到文件), `ttsSystemEngine` (系统 TTS 引擎), `models` (模型管理), `audioDecode` (WAV 以外的音频文件, 3-Macaw Speech 1.2.0 起)
+- **contractVersion** { [number](dataTypes#number) } - 语音插件契约版本, 3-Macaw Speech 1.2.0 及更早为 `1`, 1.3.0 起为 `2`
+- **features** { [string](dataTypes#string)[[]](dataTypes#array) } - 插件实现的功能, 取自 `asr` (文件识别与外部 PCM 会话), `asrStreaming` (麦克风听写与 `thenListen`), `vad` (语音活动检测), `kws` (唤醒词), `tts` (合成到文件), `ttsSystemEngine` (系统 TTS 引擎), `models` (模型管理), `audioDecode` (WAV 以外的音频文件, 3-Macaw Speech 1.2.0 起), `speaker` ([说话人识别](#p-speaker), 3-Macaw Speech 1.3.0 起)
 - **catalogVersion** { [number](dataTypes#number) } - 插件当前的模型目录版本
 - **engineName** { [string](dataTypes#string) | [null](dataTypes#null) } - 语音运行时名称, 如 `'sherpa-onnx'`
 - **engineVersion** { [string](dataTypes#string) | [null](dataTypes#null) } - 语音运行时版本
@@ -594,6 +720,8 @@ try {
 | `ENGINE_FAILED` | 识别或合成引擎失败 |
 | `IO_FAILED` | 文件读写失败或下载出错 |
 | `TIMEOUT` | 插件未在时限内应答 |
+| `SPEAKER_NOT_FOUND` | 说话人名字未注册 (契约版本 `2`) |
+| `AUDIO_TOO_SHORT` | 说话人录音中的有效语音不足 1 秒 (契约版本 `2`) |
 | `INTERNAL` | 其他内部错误 |
 
 ## 限制

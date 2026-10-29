@@ -293,6 +293,13 @@
           "displayName": "[p+] models"
         },
         {
+          "textRaw": "[p+] speaker",
+          "name": "[p+]_speaker",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<p><code>speech.speaker</code> 管理说话人的声纹: 用录音注册说话人, 判断一段录音是否出自某位说话人 (验证), 以及在全部已注册的说话人中找出最像的一位 (辨认). 需要插件声明 <code>speaker</code> 功能 (3-Macaw Speech 1.3.0 及以上, 契约版本 <code>2</code>), 并已安装一个说话人模型; 较早的插件以 <code>PLUGIN_INCOMPATIBLE</code> 拒绝每个调用, 没有说话人模型时为 <code>MODEL_MISSING</code>.</p>\n<ul>\n<li>声纹只保存在插件的私有存储中, 在插件首页也可以查看与删除. 任何结果都不含声纹向量, 脚本只得到名字, 样本数与分数. 插件最多保存 50 位说话人, 注册第 51 个名字时失败于 <code>LIMIT_EXCEEDED</code>.</li>\n<li>录音的格式要求与 <a href=\"#m-recognize\">speech.recognize</a> 的文件路径相同; 每段不超过 60 秒 (<code>LIMIT_EXCEEDED</code>), 其中的有效语音不足 1 秒时失败于 <code>AUDIO_TOO_SHORT</code>. 每段 2 - 10 秒为宜.</li>\n<li>说话人名字去掉首尾空白后为 1 - 64 个字符 (超出为 <code>LIMIT_EXCEEDED</code>), 不能为空或含控制字符 (包括换行, <code>INVALID_OPTIONS</code>), 按原样比较.</li>\n<li><code>score</code> 为录音与声纹的余弦相似度, 保留四位小数, 不低于阈值即视为匹配. <code>threshold</code> 取 0 - 1; 省略时使用插件按说话人模型给出的默认值 (3-Macaw Speech 1.3.0 的默认说话人模型为 <code>0.5</code>).</li>\n<li>同步形态阻塞当前脚本线程, 不能在 UI 线程调用; <code>Async</code> 形态返回 Promise, 错误以 <a href=\"#c-speecherror\">SpeechError</a> 拒绝, 回调在脚本线程执行.</li>\n</ul>\n<p>参阅示例代码 &quot;3-Macaw Speech &gt; 说话人识别&quot;.</p>\n",
+          "type": "module",
+          "displayName": "[p+] speaker"
+        },
+        {
           "textRaw": "[C] SpeechError",
           "name": "[c]_speecherror",
           "methods": [
@@ -403,7 +410,7 @@
             {
               "textRaw": "SpeechCapabilities",
               "name": "speechcapabilities",
-              "desc": "<p><a href=\"#m-capabilities\">speech.capabilities</a> 的返回值.</p>\n<ul>\n<li><strong>contractVersion</strong> { <a href=\"dataTypes#number\">number</a> } - 语音插件契约版本, 当前为 <code>1</code></li>\n<li><strong>features</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 插件实现的功能, 取自 <code>asr</code> (文件识别与外部 PCM 会话), <code>asrStreaming</code> (麦克风听写与 <code>thenListen</code>), <code>vad</code> (语音活动检测), <code>kws</code> (唤醒词), <code>tts</code> (合成到文件), <code>ttsSystemEngine</code> (系统 TTS 引擎), <code>models</code> (模型管理), <code>audioDecode</code> (WAV 以外的音频文件, 3-Macaw Speech 1.2.0 起)</li>\n<li><strong>catalogVersion</strong> { <a href=\"dataTypes#number\">number</a> } - 插件当前的模型目录版本</li>\n<li><strong>engineName</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 语音运行时名称, 如 <code>&#39;sherpa-onnx&#39;</code></li>\n<li><strong>engineVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 语音运行时版本</li>\n<li><strong>ttsEnginePackage</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 系统 TTS 引擎所在的包名</li>\n<li><strong>microphoneGranted</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 插件当前是否持有麦克风权限, 实时查询失败时为 <code>null</code></li>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 插件包名</li>\n<li><strong>versionName</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件版本名称</li>\n<li><strong>versionCode</strong> { <a href=\"dataTypes#number\">number</a> } - 插件版本号</li>\n</ul>\n<p>应根据 <code>features</code> 的实际内容判断能力, 不要假定所有功能都存在.</p>\n",
+              "desc": "<p><a href=\"#m-capabilities\">speech.capabilities</a> 的返回值.</p>\n<ul>\n<li><strong>contractVersion</strong> { <a href=\"dataTypes#number\">number</a> } - 语音插件契约版本, 3-Macaw Speech 1.2.0 及更早为 <code>1</code>, 1.3.0 起为 <code>2</code></li>\n<li><strong>features</strong> { <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 插件实现的功能, 取自 <code>asr</code> (文件识别与外部 PCM 会话), <code>asrStreaming</code> (麦克风听写与 <code>thenListen</code>), <code>vad</code> (语音活动检测), <code>kws</code> (唤醒词), <code>tts</code> (合成到文件), <code>ttsSystemEngine</code> (系统 TTS 引擎), <code>models</code> (模型管理), <code>audioDecode</code> (WAV 以外的音频文件, 3-Macaw Speech 1.2.0 起), <code>speaker</code> (<a href=\"#p-speaker\">说话人识别</a>, 3-Macaw Speech 1.3.0 起)</li>\n<li><strong>catalogVersion</strong> { <a href=\"dataTypes#number\">number</a> } - 插件当前的模型目录版本</li>\n<li><strong>engineName</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 语音运行时名称, 如 <code>&#39;sherpa-onnx&#39;</code></li>\n<li><strong>engineVersion</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 语音运行时版本</li>\n<li><strong>ttsEnginePackage</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 系统 TTS 引擎所在的包名</li>\n<li><strong>microphoneGranted</strong> { <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#null\">null</a> } - 插件当前是否持有麦克风权限, 实时查询失败时为 <code>null</code></li>\n<li><strong>packageName</strong> { <a href=\"dataTypes#string\">string</a> } - 插件包名</li>\n<li><strong>versionName</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> } - 插件版本名称</li>\n<li><strong>versionCode</strong> { <a href=\"dataTypes#number\">number</a> } - 插件版本号</li>\n</ul>\n<p>应根据 <code>features</code> 的实际内容判断能力, 不要假定所有功能都存在.</p>\n",
               "type": "module",
               "displayName": "SpeechCapabilities"
             },
@@ -428,7 +435,7 @@
         {
           "textRaw": "错误代码",
           "name": "错误代码",
-          "desc": "<table>\n<thead>\n<tr>\n<th>代码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>PLUGIN_UNAVAILABLE</code></td>\n<td>未安装 3-Macaw Speech, 或插件不应答</td>\n</tr>\n<tr>\n<td><code>PLUGIN_DISABLED</code></td>\n<td>插件已在插件中心停用或未授权</td>\n</tr>\n<tr>\n<td><code>PLUGIN_INCOMPATIBLE</code></td>\n<td>插件版本或契约版本不兼容, 或插件未声明该调用所需的功能</td>\n</tr>\n<tr>\n<td><code>PERMISSION_DENIED</code></td>\n<td>插件没有麦克风权限 (打开会话时抛出); 作为会话的 <code>warning</code> 时表示收到的是静音或麦克风前台服务被拒绝, 会话继续</td>\n</tr>\n<tr>\n<td><code>MODEL_MISSING</code></td>\n<td>指定的模型未安装或不存在, 或该类没有已安装模型</td>\n</tr>\n<tr>\n<td><code>MODEL_DOWNLOAD_FAILED</code></td>\n<td>模型下载失败 (镜像与上游均失败)</td>\n</tr>\n<tr>\n<td><code>MODEL_CHECKSUM_MISMATCH</code></td>\n<td>下载或导入的文件校验失败, 或目录签名不符</td>\n</tr>\n<tr>\n<td><code>MODEL_LICENSE_NOT_ACCEPTED</code></td>\n<td>模型须先接受许可</td>\n</tr>\n<tr>\n<td><code>INVALID_OPTIONS</code></td>\n<td>参数, 选项或模型类别不正确, 或同步形态在 UI 线程调用</td>\n</tr>\n<tr>\n<td><code>UNSUPPORTED_FORMAT</code></td>\n<td>音频格式不受支持 (插件只读 WAV, 文件没有音轨, 设备缺少解码器或文件损坏), 或归档格式不受支持</td>\n</tr>\n<tr>\n<td><code>LIMIT_EXCEEDED</code></td>\n<td>超过契约上限; 也用于脚本未及时消费会话事件</td>\n</tr>\n<tr>\n<td><code>SESSION_BUSY</code></td>\n<td>麦克风正被另一个会话占用, 外部 PCM 会话已达上限, 或模型正被使用而无法删除</td>\n</tr>\n<tr>\n<td><code>SESSION_CLOSED</code></td>\n<td>会话已结束, 插件进程退出, 或脚本正在退出</td>\n</tr>\n<tr>\n<td><code>SESSION_CANCELLED</code></td>\n<td>操作被取消</td>\n</tr>\n<tr>\n<td><code>ENGINE_FAILED</code></td>\n<td>识别或合成引擎失败</td>\n</tr>\n<tr>\n<td><code>IO_FAILED</code></td>\n<td>文件读写失败或下载出错</td>\n</tr>\n<tr>\n<td><code>TIMEOUT</code></td>\n<td>插件未在时限内应答</td>\n</tr>\n<tr>\n<td><code>INTERNAL</code></td>\n<td>其他内部错误</td>\n</tr>\n</tbody>\n</table>\n",
+          "desc": "<table>\n<thead>\n<tr>\n<th>代码</th>\n<th>含义</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>PLUGIN_UNAVAILABLE</code></td>\n<td>未安装 3-Macaw Speech, 或插件不应答</td>\n</tr>\n<tr>\n<td><code>PLUGIN_DISABLED</code></td>\n<td>插件已在插件中心停用或未授权</td>\n</tr>\n<tr>\n<td><code>PLUGIN_INCOMPATIBLE</code></td>\n<td>插件版本或契约版本不兼容, 或插件未声明该调用所需的功能</td>\n</tr>\n<tr>\n<td><code>PERMISSION_DENIED</code></td>\n<td>插件没有麦克风权限 (打开会话时抛出); 作为会话的 <code>warning</code> 时表示收到的是静音或麦克风前台服务被拒绝, 会话继续</td>\n</tr>\n<tr>\n<td><code>MODEL_MISSING</code></td>\n<td>指定的模型未安装或不存在, 或该类没有已安装模型</td>\n</tr>\n<tr>\n<td><code>MODEL_DOWNLOAD_FAILED</code></td>\n<td>模型下载失败 (镜像与上游均失败)</td>\n</tr>\n<tr>\n<td><code>MODEL_CHECKSUM_MISMATCH</code></td>\n<td>下载或导入的文件校验失败, 或目录签名不符</td>\n</tr>\n<tr>\n<td><code>MODEL_LICENSE_NOT_ACCEPTED</code></td>\n<td>模型须先接受许可</td>\n</tr>\n<tr>\n<td><code>INVALID_OPTIONS</code></td>\n<td>参数, 选项或模型类别不正确, 或同步形态在 UI 线程调用</td>\n</tr>\n<tr>\n<td><code>UNSUPPORTED_FORMAT</code></td>\n<td>音频格式不受支持 (插件只读 WAV, 文件没有音轨, 设备缺少解码器或文件损坏), 或归档格式不受支持</td>\n</tr>\n<tr>\n<td><code>LIMIT_EXCEEDED</code></td>\n<td>超过契约上限; 也用于脚本未及时消费会话事件</td>\n</tr>\n<tr>\n<td><code>SESSION_BUSY</code></td>\n<td>麦克风正被另一个会话占用, 外部 PCM 会话已达上限, 或模型正被使用而无法删除</td>\n</tr>\n<tr>\n<td><code>SESSION_CLOSED</code></td>\n<td>会话已结束, 插件进程退出, 或脚本正在退出</td>\n</tr>\n<tr>\n<td><code>SESSION_CANCELLED</code></td>\n<td>操作被取消</td>\n</tr>\n<tr>\n<td><code>ENGINE_FAILED</code></td>\n<td>识别或合成引擎失败</td>\n</tr>\n<tr>\n<td><code>IO_FAILED</code></td>\n<td>文件读写失败或下载出错</td>\n</tr>\n<tr>\n<td><code>TIMEOUT</code></td>\n<td>插件未在时限内应答</td>\n</tr>\n<tr>\n<td><code>SPEAKER_NOT_FOUND</code></td>\n<td>说话人名字未注册 (契约版本 <code>2</code>)</td>\n</tr>\n<tr>\n<td><code>AUDIO_TOO_SHORT</code></td>\n<td>说话人录音中的有效语音不足 1 秒 (契约版本 <code>2</code>)</td>\n</tr>\n<tr>\n<td><code>INTERNAL</code></td>\n<td>其他内部错误</td>\n</tr>\n</tbody>\n</table>\n",
           "type": "module",
           "displayName": "错误代码"
         },
@@ -622,6 +629,110 @@
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> {{ version: <a href=\"dataTypes#number\">number</a>; updated: <a href=\"dataTypes#boolean\">boolean</a> }} - 当前目录版本, 以及本次是否更新了目录</li>\n</ul>\n<p>从 AutoJs6-Shared-Assets 下载带签名的模型目录并校验签名, 只接受版本更高的目录. 等待上限为 2 分钟. 下载失败时为 <code>IO_FAILED</code>, 签名不符时为 <code>MODEL_CHECKSUM_MISMATCH</code>. 没有异步形态.</p>\n",
               "type": "module",
               "displayName": "speech.models.refreshCatalog()"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.enroll",
+          "name": "enroll",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.enroll(name, files, options?)",
+              "name": "speech.speaker.enroll(name,_files,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 说话人名字</li>\n<li><strong>files</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 录音文件路径, 或 1 - 10 个路径的数组</li>\n<li><strong>[ options ]</strong> {{ replace?: <a href=\"dataTypes#boolean\">boolean</a>; model?: <a href=\"dataTypes#string\">string</a> }} - 注册选项</li>\n<li><ins><strong>returns</strong></ins> {{ name: <a href=\"dataTypes#string\">string</a>; samples: <a href=\"dataTypes#number\">number</a>; durationMillis: <a href=\"dataTypes#number\">number</a>; modelId: <a href=\"dataTypes#string\">string</a> }} - 说话人名字, 累计样本数, 本次用到的语音时长 (毫秒), 以及声纹所用的说话人模型</li>\n</ul>\n<p>用录音注册说话人, 多段录音的声纹取平均. 名字已注册时, 新样本并入原有的声纹; <code>replace: true</code> 先丢弃原有的样本. <code>model</code> 指定说话人模型, 省略时使用默认的说话人模型; 已注册的名字只能并入同一模型的样本, 换用其他模型时须同时给出 <code>replace: true</code>, 否则失败于 <code>INVALID_OPTIONS</code>. 文件数超过 10 个时失败于 <code>LIMIT_EXCEEDED</code>.</p>\n<pre><code class=\"lang-js\">let enrolled = speech.speaker.enroll(&#39;小明&#39;, [&#39;./own-1.wav&#39;, &#39;./own-2.wav&#39;], { replace: true });\nconsole.log(enrolled.name, enrolled.samples, enrolled.durationMillis);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "speech.speaker.enroll(name, files, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.enrollAsync",
+          "name": "enrollAsync",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.enrollAsync(name, files, options?)",
+              "name": "speech.speaker.enrollasync(name,_files,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 说话人名字</li>\n<li><strong>files</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a><a href=\"dataTypes#array\">[]</a> } - 录音文件路径, 或 1 - 10 个路径的数组</li>\n<li><strong>[ options ]</strong> {{ replace?: <a href=\"dataTypes#boolean\">boolean</a>; model?: <a href=\"dataTypes#string\">string</a> }} - 注册选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值与 <a href=\"#m-speakerenroll\">speech.speaker.enroll</a> 的返回值相同</li>\n</ul>\n<p><a href=\"#m-speakerenroll\">speech.speaker.enroll</a> 的异步形态, 参数与结果相同, 可在 UI 线程使用.</p>\n",
+              "type": "module",
+              "displayName": "speech.speaker.enrollAsync(name, files, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.verify",
+          "name": "verify",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.verify(name, file, options?)",
+              "name": "speech.speaker.verify(name,_file,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 已注册的说话人名字</li>\n<li><strong>file</strong> { <a href=\"dataTypes#string\">string</a> } - 待验证的录音文件路径</li>\n<li><strong>[ options ]</strong> {{ threshold?: <a href=\"dataTypes#number\">number</a> }} - 验证选项</li>\n<li><ins><strong>returns</strong></ins> {{ name: <a href=\"dataTypes#string\">string</a>; score: <a href=\"dataTypes#number\">number</a>; matched: <a href=\"dataTypes#boolean\">boolean</a>; threshold: <a href=\"dataTypes#number\">number</a> }} - 说话人名字, 相似度分数, 是否匹配, 以及实际使用的阈值</li>\n</ul>\n<p>判断录音是否出自该说话人. 名字未注册时失败于 <code>SPEAKER_NOT_FOUND</code>.</p>\n<pre><code class=\"lang-js\">let r = speech.speaker.verify(&#39;小明&#39;, &#39;./test.wav&#39;, { threshold: 0.55 });\nconsole.log(r.matched ? &#39;是本人&#39; : &#39;不是本人&#39;, r.score);\n</code></pre>\n",
+              "type": "module",
+              "displayName": "speech.speaker.verify(name, file, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.verifyAsync",
+          "name": "verifyAsync",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.verifyAsync(name, file, options?)",
+              "name": "speech.speaker.verifyasync(name,_file,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 已注册的说话人名字</li>\n<li><strong>file</strong> { <a href=\"dataTypes#string\">string</a> } - 待验证的录音文件路径</li>\n<li><strong>[ options ]</strong> {{ threshold?: <a href=\"dataTypes#number\">number</a> }} - 验证选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值与 <a href=\"#m-speakerverify\">speech.speaker.verify</a> 的返回值相同</li>\n</ul>\n<p><a href=\"#m-speakerverify\">speech.speaker.verify</a> 的异步形态, 参数与结果相同, 可在 UI 线程使用.</p>\n",
+              "type": "module",
+              "displayName": "speech.speaker.verifyAsync(name, file, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.identify",
+          "name": "identify",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.identify(file, options?)",
+              "name": "speech.speaker.identify(file,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Non-UI</code></strong></p>\n<ul>\n<li><strong>file</strong> { <a href=\"dataTypes#string\">string</a> } - 待辨认的录音文件路径</li>\n<li><strong>[ options ]</strong> {{ threshold?: <a href=\"dataTypes#number\">number</a>; topK?: <a href=\"dataTypes#number\">number</a> }} - 辨认选项, <code>topK</code> 为 1 - 10 的整数, 默认为 <code>3</code></li>\n<li><ins><strong>returns</strong></ins> {{ name: <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a>; score: <a href=\"dataTypes#number\">number</a>; matched: <a href=\"dataTypes#boolean\">boolean</a>; threshold: <a href=\"dataTypes#number\">number</a>; candidates: {{ name: <a href=\"dataTypes#string\">string</a>; score: <a href=\"dataTypes#number\">number</a> }}[] }} - 辨认结果</li>\n</ul>\n<p>在用当前说话人模型注册的全部说话人中找出与录音最像的一位. <code>candidates</code> 按分数从高到低列出至多 <code>topK</code> 位说话人; 最高分不低于阈值时 <code>name</code> 为该说话人且 <code>matched</code> 为 <code>true</code>, 否则 <code>name</code> 为 <code>null</code>.</p>\n<pre><code class=\"lang-js\">let who = speech.speaker.identify(&#39;./test.wav&#39;, { topK: 3 });\nconsole.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON.stringify(who.candidates));\n</code></pre>\n",
+              "type": "module",
+              "displayName": "speech.speaker.identify(file, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.identifyAsync",
+          "name": "identifyAsync",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.identifyAsync(file, options?)",
+              "name": "speech.speaker.identifyasync(file,_options?)",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>\n<ul>\n<li><strong>file</strong> { <a href=\"dataTypes#string\">string</a> } - 待辨认的录音文件路径</li>\n<li><strong>[ options ]</strong> {{ threshold?: <a href=\"dataTypes#number\">number</a>; topK?: <a href=\"dataTypes#number\">number</a> }} - 辨认选项</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise\">Promise</a> } - 兑现值与 <a href=\"#m-speakeridentify\">speech.speaker.identify</a> 的返回值相同</li>\n</ul>\n<p><a href=\"#m-speakeridentify\">speech.speaker.identify</a> 的异步形态, 参数与结果相同, 可在 UI 线程使用.</p>\n",
+              "type": "module",
+              "displayName": "speech.speaker.identifyAsync(file, options?)"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.list",
+          "name": "list",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.list()",
+              "name": "speech.speaker.list()",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> {{ name: <a href=\"dataTypes#string\">string</a>; samples: <a href=\"dataTypes#number\">number</a>; updatedAt: <a href=\"dataTypes#number\">number</a>; modelId: <a href=\"dataTypes#string\">string</a> }}[] - 按名字排序的已注册说话人, <code>updatedAt</code> 为最后一次注册的时间戳 (毫秒)</li>\n</ul>\n<p>列出全部已注册的说话人, 包括在插件首页注册的. 没有异步形态.</p>\n",
+              "type": "module",
+              "displayName": "speech.speaker.list()"
+            }
+          ]
+        },
+        {
+          "textRaw": "[m] speaker.remove",
+          "name": "remove",
+          "modules": [
+            {
+              "textRaw": "speech.speaker.remove(name)",
+              "name": "speech.speaker.remove(name)",
+              "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li><strong>name</strong> { <a href=\"dataTypes#string\">string</a> } - 说话人名字</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"dataTypes#boolean\">boolean</a> } - 是否实际删除了声纹</li>\n</ul>\n<p>删除该说话人的声纹. 名字未注册时返回 <code>false</code>. 没有异步形态.</p>\n",
+              "type": "module",
+              "displayName": "speech.speaker.remove(name)"
             }
           ]
         }

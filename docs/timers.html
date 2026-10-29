@@ -379,6 +379,147 @@
 
         <div id="apicontent">
             <h1>定时器 (Timers)<span><a class="mark" href="#timers_timers" id="timers_timers">#</a></span></h1>
+<!-- runtime-support:begin timers -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>timers</code>, 全局 8 项</td>
+<td><code>autojs6:tasks</code></td>
+<td><code>autojs6:tasks</code></td>
+<td><code>host.tasks</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 26 项</td>
+<td>已支持 10 项, 不适用 12 项, 待补 4 项</td>
+<td>已支持 10 项, 不适用 12 项, 待补 4 项</td>
+<td>需授权 10 项, 不适用 6 项, 待补 10 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>tasks.control</code> 10 项</td>
+</tr>
+</tbody>
+</table>
+<p>差异项 (15 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>clearImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>clearInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>clearTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>timers.keepAlive</code>, <code>keepAlive</code></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>loop</code></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>setImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>setInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>setTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>global setTimeout / setInterval / setImmediate and their clear functions</code></td>
+</tr>
+<tr>
+<td><code>timers.clearImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearImmediate</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.clearInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearInterval</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.clearTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.clearTimeout</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.setImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setImmediate</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setImmediate</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.setInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setInterval</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setInterval</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.setIntervalExt</code></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+</tr>
+<tr>
+<td><code>timers.setTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setTimeout</code></td>
+<td><span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: <code>node:timers.setTimeout</code></td>
+<td><span title="pending">待补</span></td>
+</tr>
+</tbody>
+</table>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p><code>timers</code> 模块提供当前脚本进程内的事件循环定时器, 并提供一组与 <a href="workManager.html">workManager</a> 兼容的持久化任务入口.</p>
 <p>脚本内定时器是单线程的. 当前脚本长时间阻塞时, 回调只能在事件循环恢复后执行.</p>
 <hr>

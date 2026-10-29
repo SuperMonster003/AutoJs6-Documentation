@@ -328,6 +328,45 @@
 
         <div id="apicontent">
             <h1>AgentRun - Agent 任务句柄<span><a class="mark" href="#agentruntype_agentrun_agent" id="agentruntype_agentrun_agent">#</a></span></h1>
+<!-- runtime-support:begin AgentRun# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>AgentRun</code> 对象</td>
+<td><code>autojs6:ai</code></td>
+<td><code>autojs6:ai</code></td>
+<td><code>host.ai</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 14 项</td>
+<td>已支持 14 项</td>
+<td>已支持 14 项</td>
+<td>需授权 14 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>agent.control</code> 14 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p>由 <a href="ai.html#ai_ai_agent_run_goal_options">ai.agent.run</a> 或 <a href="ai.html#ai_ai_agent_get_id">ai.agent.get</a> 返回的宿主侧 Rhino 对象. 句柄的方法和事件属于创建它的脚本线程, 不应跨脚本线程传递使用.</p>
 <p>Node.js/Bun/Worker 提供对应的异步句柄: run/get 先返回 Promise, respond/confirm/cancel/join 也返回 Promise. 属性与事件载荷沿用本页定义, state 为最近收到的事件快照, 不提供 Rhino 原型或同步阻塞等待. 详见 <a href="ai.html#ai_agent">跨运行时 Agent 接口</a>.</p>
 <h2>只读属性<span><a class="mark" href="#agentruntype" id="agentruntype">#</a></span></h2>

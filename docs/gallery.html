@@ -361,6 +361,38 @@
 
         <div id="apicontent">
             <h1>相册 (Gallery)<span><a class="mark" href="#gallery_gallery" id="gallery_gallery">#</a></span></h1>
+<!-- runtime-support:begin gallery -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>gallery</code></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 11 项</td>
+<td>待补 11 项</td>
+<td>待补 11 项</td>
+<td>待补 11 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p><code>gallery</code> 模块用于在脚本中使用 3-Maple Image 插件的选图界面, 查看器, 编辑器与转换器: 让用户选择图片并取得图片的文件信息, 打开查看器浏览指定图片, 让用户编辑一张图片并保存结果, 以及不显示界面地转换图片的格式与尺寸.</p>
 <p>从 AutoJs6 6.8.0 起, 本模块由外置 3-Maple Image 插件 (AutoJs6-Plugin-Three-Maple-Image) 3.4.0 及以上版本提供. 调用前需在插件中心安装并启用与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用或版本不兼容时, 方法会抛出 (或以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code>, <code>PLUGIN_DISABLED</code> 或 <code>PLUGIN_INCOMPATIBLE</code> 的 <a href="#gallery_c_galleryerror">GalleryError</a>, 其消息以插件中心的本地化提示开头. <a href="#gallery_m_isavailable">gallery.isAvailable</a> 可预先探测.</p>
 <p>图片以文件路径指定, 相对路径按脚本工作目录解析 (与 <a href="files.html#files_m_path">files.path</a> 相同), 不接受 <code>content://</code> 等 URI. 源文件由 AutoJs6 以只读方式打开后交给插件, 输出文件由 AutoJs6 写入: 先写入目标文件夹中的隐藏暂存文件, 回读确认是插件报告的图片后再改名为最终文件, 失败, 取消或超时时删除暂存文件. 插件不会得到任何路径, 因此脚本不能借助插件读写自身无权访问的文件; 选图结果也只保留脚本可读的图片.</p>

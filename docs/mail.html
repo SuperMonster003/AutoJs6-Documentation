@@ -485,6 +485,45 @@
 
         <div id="apicontent">
             <h1>邮件 (Mail)<span><a class="mark" href="#mail_mail" id="mail_mail">#</a></span></h1>
+<!-- runtime-support:begin mail -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>mail</code></td>
+<td><code>autojs6:mail</code>, <code>$autojs.mail</code></td>
+<td><code>autojs6:mail</code>, <code>$autojs.mail</code></td>
+<td><code>host.mail</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 56 项</td>
+<td>已支持 56 项</td>
+<td>已支持 56 项</td>
+<td>需授权 56 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>mail.control</code> 56 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p><code>mail</code> 模块用于在脚本中通过 IMAP, POP3 和 SMTP 协议收发, 搜索, 整理和监听邮件.</p>
 <p>从 AutoJs6 6.8.0 起, 邮件功能由外置 3-Stamp Mail 插件 (AutoJs6-Plugin-Three-Stamp-Mail) 提供. 调用前需在插件中心安装, 启用并授权与当前 AutoJs6 兼容的插件. 插件缺失, 被禁用, 未授权, 版本不兼容, 服务绑定失败或插件进程退出时, 方法会抛出 (或以 Promise 拒绝) <code>code</code> 为 <code>PLUGIN_UNAVAILABLE</code> 的 <a href="#mail_c_mailerror">MailError</a>.</p>
 <p>网络操作均由 <a href="mailClientType.html">MailClient</a> 实例完成. <a href="#mail_m_connect">mail.connect</a> 建立客户端后, 可直接调用其方法, 也可通过 <a href="#mail_m_setdefault">mail.setDefault</a> 指定默认客户端, 再以 <code>mail.fetch()</code> 这类 <a href="#mail_forwarded_methods">转发方法</a> 省略客户端引用.</p>

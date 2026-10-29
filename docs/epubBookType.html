@@ -353,6 +353,63 @@
 
         <div id="apicontent">
             <h1>电子书对象 (EpubBook)<span><a class="mark" href="#epubbooktype_epubbook" id="epubbooktype_epubbook">#</a></span></h1>
+<!-- runtime-support:begin EpubBook# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>EpubBook</code> 对象</td>
+<td><code>autojs6:epub</code></td>
+<td><code>autojs6:epub</code></td>
+<td><code>host.epub</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 14 项</td>
+<td>已支持 13 项, 待补 1 项</td>
+<td>已支持 13 项, 待补 1 项</td>
+<td>需授权 13 项, 待补 1 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>epub.control</code> 13 项</td>
+</tr>
+</tbody>
+</table>
+<p>差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>EpubBook#toString</code></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+<td><span title="pending">待补</span></td>
+</tr>
+</tbody>
+</table>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p>EpubBook 是 <a href="epub.html#epub_m_open">epub.open</a> 返回的书籍对象, 对应插件进程中一本已打开的 EPUB, 提供元数据, 目录, 阅读顺序, 正文提取, 封面与资源导出, 全文搜索以及阅读器为这本书保存的高亮与笔记.</p>
 <p>每个方法都有同步形态与 <code>Async</code> 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; <code>Async</code> 形态返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 回调在脚本线程执行. 失败时抛出 (或拒绝为) <a href="epub.html#epub_c_epuberror">EpubError</a>. 书籍关闭后 (包括插件在 5 分钟无调用后自动关闭) 所有方法失败于 <code>SESSION_CLOSED</code>.</p>
 <p><code>metadata</code>, <code>toc</code>, <code>readingOrder</code> 与 <code>positions</code> 是只读属性, 首次访问时从插件读取并缓存. 书内资源以出版物相对 href 标识 (如 <code>OEBPS/chapter2.xhtml</code>), 目录, 阅读顺序, 搜索结果与 <a href="epubLocatorType.html">EpubLocator</a> 中的 <code>href</code> 是同一套字符串, 可以互相传递.</p>

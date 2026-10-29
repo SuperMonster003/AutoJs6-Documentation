@@ -409,6 +409,66 @@
 
         <div id="apicontent">
             <h1>人工智能 (AI)<span><a class="mark" href="#ai_ai" id="ai_ai">#</a></span></h1>
+<!-- runtime-support:begin ai -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>ai</code></td>
+<td><code>autojs6:ai</code></td>
+<td><code>autojs6:ai</code></td>
+<td><code>host.ai</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 6 项</td>
+<td>已支持 6 项</td>
+<td>已支持 6 项</td>
+<td>需授权 6 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>ai.control</code> 6 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.</p>
+<table>
+<thead>
+<tr>
+<th>返回对象</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>AiSession</code> (11 项)</td>
+<td>已支持 11 项</td>
+<td>已支持 11 项</td>
+<td>已支持 11 项</td>
+<td>需授权 11 项</td>
+</tr>
+</tbody>
+</table>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p>ai 模块通过 AI Provider 插件目标发起文本生成, 对话, 流式请求和持久会话. 官方 3-Stone AI 插件在同一目录中公开本地模型与用户配置的在线服务, 并负责目标配置, 在线凭据和实际推理. AutoJs6 宿主只负责可信插件发现, 协议协商, 精确目标路由, Binder 生命周期和错误规范化.</p>
 <p><code>ai</code> 与 <code>$ai</code> 指向同一个可调用模块对象. 省略 <code>plugin</code> 和 <code>target</code> 时, 所有生成方法均选择官方 3-Stone AI 插件声明的默认目标. 不会根据目标失败情况自动选择其他本地或在线目标.</p>
 <p>可在 AutoJs6 开发者选项中打开 &quot;AI 服务设置&quot;. 已安装并启用可信插件时会直接打开 3-Stone AI 设置; 其他状态会显示安装, Android 应用启用, 插件中心启用或更新指引. 设置入口是无参数且受插件权限保护的契约, 不传输目标配置或凭据.</p>

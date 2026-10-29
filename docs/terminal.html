@@ -387,6 +387,38 @@
 
         <div id="apicontent">
             <h1>终端 (Terminal)<span><a class="mark" href="#terminal_terminal" id="terminal_terminal">#</a></span></h1>
+<!-- runtime-support:begin terminal -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>terminal</code></td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 20 项</td>
+<td>待补 20 项</td>
+<td>待补 20 项</td>
+<td>待补 20 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p><code>terminal</code> 模块通过独立的 3-Shell Terminal 插件创建, 显示和驱动交互式系统终端. 全局对象 <code>terminal</code> 与 <code>$terminal</code> 指向同一对象. 本模块自 AutoJs6 6.8.0 提供, 完整脚本 API 需要包含终端模块的构建 (5315 或更新).</p>
 <p>先在插件中心安装并启用 <a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Shell-Terminal">3-Shell Terminal</a>. 插件未安装, 被禁用, 未授权或连接失败时, 会话操作抛出 <a href="terminalErrorType.html">TerminalError</a>, 错误代码为 <code>PLUGIN_UNAVAILABLE</code>; 契约不兼容时为 <code>PLUGIN_INCOMPATIBLE</code>. 可用 <a href="#terminal_m_isavailable">isAvailable</a> 预先探测.</p>
 <p>会话在插件进程中以插件自己的 UID 和权限运行. 它不继承宿主的存储授权, 不提供 root 或 Shizuku 权限. 与返回命令执行结果的 <a href="shell.html">shell()</a> 不同, <code>terminal.exec()</code> 返回可显示, 输入和监听的 <a href="terminalSessionType.html">TerminalSession</a>. 需要一次性执行命令并读取结果时可使用 <code>shell()</code>; 需要持续交互或可见会话时使用 <code>terminal</code>.</p>

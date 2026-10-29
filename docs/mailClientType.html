@@ -452,6 +452,45 @@
 
         <div id="apicontent">
             <h1>邮件客户端 (MailClient)<span><a class="mark" href="#mailclienttype_mailclient" id="mailclienttype_mailclient">#</a></span></h1>
+<!-- runtime-support:begin MailClient# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+<table>
+<thead>
+<tr>
+<th>运行时支持</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入口</td>
+<td><code>MailClient</code> 对象</td>
+<td><code>autojs6:mail</code></td>
+<td><code>autojs6:mail</code></td>
+<td><code>host.mail</code></td>
+</tr>
+<tr>
+<td>状态</td>
+<td>已支持 53 项</td>
+<td>已支持 53 项</td>
+<td>已支持 53 项</td>
+<td>需授权 53 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>mail.control</code> 53 项</td>
+</tr>
+</tbody>
+</table>
+<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
+<!-- runtime-support:end -->
 <p>MailClient 是 <a href="mail.html#mail_m_connect">mail.connect</a> 返回的会话对象, 持有一个账户到收信服务器 (IMAP 或 POP3) 与 SMTP 服务器的连接, 并提供收发, 搜索, 整理和监听邮件的方法.</p>
 <p>每个网络方法都有同步形态与 <code>Async</code> 形态, 参数与结果完全一致. 同步形态阻塞当前脚本线程, 停止脚本会取消调用; <code>Async</code> 形态返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>, 回调在脚本线程执行. 失败时抛出 (或拒绝为) <a href="mail.html#mail_c_mailerror">MailError</a>. 客户端关闭后所有方法失败于 <code>SESSION_CLOSED</code>.</p>
 <p>收信协议为 POP3 时, 只有 <code>INBOX</code> 一个文件夹, 且不支持标记, 移动, 复制, 追加, 清除与文件夹管理, 这些方法失败于 <code>UNSUPPORTED_OPERATION</code>. 下表中的 &quot;协议&quot; 列标明各方法可用的收信协议.</p>

@@ -326,6 +326,9 @@
 <li><span class="stability_undefined"><a href="#floaty_window_getheight">window.getHeight()</a></span></li>
 <li><span class="stability_undefined"><a href="#floaty_window_close">window.close()</a></span></li>
 <li><span class="stability_undefined"><a href="#floaty_window_exitonclose">window.exitOnClose()</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_findview_id">window.findView(id)</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_requestfocus">window.requestFocus()</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_disablefocus">window.disableFocus()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#floaty_floatyrawwindow">FloatyRawWindow</a></span><ul>
@@ -338,6 +341,9 @@
 <li><span class="stability_undefined"><a href="#floaty_window_getheight_1">window.getHeight()</a></span></li>
 <li><span class="stability_undefined"><a href="#floaty_window_close_1">window.close()</a></span></li>
 <li><span class="stability_undefined"><a href="#floaty_window_exitonclose_1">window.exitOnClose()</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_findview_id_1">window.findView(id)</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_requestfocus_1">window.requestFocus()</a></span></li>
+<li><span class="stability_undefined"><a href="#floaty_window_disablefocus_1">window.disableFocus()</a></span></li>
 </ul>
 </li>
 </ul>
@@ -464,6 +470,20 @@ setTimeout(() =&gt; {
 <p>被关闭后的悬浮窗不能再显示.</p>
 <h2>window.exitOnClose()<span><a class="mark" href="#floaty_window_exitonclose" id="floaty_window_exitonclose">#</a></span></h2>
 <p>使悬浮窗被关闭时自动结束脚本运行.</p>
+<h2>window.findView(id)<span><a class="mark" href="#floaty_window_findview_id" id="floaty_window_findview_id">#</a></span></h2>
+<div class="signature"><ul>
+<li><strong>id</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 控件 ID</li>
+<li><ins><strong>returns</strong></ins> { <span class="type">android.view.View</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+</div><p>在悬浮窗界面中按 ID 查找控件, 与 <code>window.{id}</code> 相同.</p>
+<h2>window.requestFocus()<span><a class="mark" href="#floaty_window_requestfocus" id="floaty_window_requestfocus">#</a></span></h2>
+<p>使悬浮窗获得焦点, 以便其中的输入框接收键盘输入.</p>
+<h2>window.disableFocus()<span><a class="mark" href="#floaty_window_disablefocus" id="floaty_window_disablefocus">#</a></span></h2>
+<p>取消悬浮窗的焦点, 返回键等按键事件重新交给下层应用.</p>
+<pre><code class="lang-js">let w = floaty.window(&lt;frame&gt;&lt;input id=&quot;input&quot;/&gt;&lt;/frame&gt;);
+w.requestFocus();
+setTimeout(() =&gt; w.disableFocus(), 5000);
+</code></pre>
 <h1>FloatyRawWindow<span><a class="mark" href="#floaty_floatyrawwindow" id="floaty_floatyrawwindow">#</a></span></h1>
 <p>原始悬浮窗对象, 可通过 <code>window.{id}</code> 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 <code>window.aaa</code> 即可获取到该控件, 类似于 ui.</p>
 <h2>window.setTouchable(touchable)<span><a class="mark" href="#floaty_window_settouchable_touchable" id="floaty_window_settouchable_touchable">#</a></span></h2>
@@ -521,6 +541,20 @@ setTimeout(()=&gt;{
 <p>被关闭后的悬浮窗不能再显示.</p>
 <h2>window.exitOnClose()<span><a class="mark" href="#floaty_window_exitonclose_1" id="floaty_window_exitonclose_1">#</a></span></h2>
 <p>使悬浮窗被关闭时自动结束脚本运行.</p>
+<h2>window.findView(id)<span><a class="mark" href="#floaty_window_findview_id_1" id="floaty_window_findview_id_1">#</a></span></h2>
+<div class="signature"><ul>
+<li><strong>id</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } 控件 ID</li>
+<li><ins><strong>returns</strong></ins> { <span class="type">android.view.View</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+</div><p>在悬浮窗界面中按 ID 查找控件, 与 <code>window.{id}</code> 相同.</p>
+<h2>window.requestFocus()<span><a class="mark" href="#floaty_window_requestfocus_1" id="floaty_window_requestfocus_1">#</a></span></h2>
+<p>使悬浮窗获得焦点, 以便其中的输入框接收键盘输入.</p>
+<h2>window.disableFocus()<span><a class="mark" href="#floaty_window_disablefocus_1" id="floaty_window_disablefocus_1">#</a></span></h2>
+<p>取消悬浮窗的焦点, 返回键等按键事件重新交给下层应用.</p>
+<pre><code class="lang-js">let w = floaty.rawWindow(&lt;frame&gt;&lt;input id=&quot;input&quot;/&gt;&lt;/frame&gt;);
+w.requestFocus();
+setTimeout(() =&gt; w.disableFocus(), 5000);
+</code></pre>
 
         </div>
     </div>

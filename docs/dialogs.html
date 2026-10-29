@@ -361,6 +361,16 @@
 <li><span class="stability_undefined"><a href="#dialogs_dialog_getprogress">dialog.getProgress()</a></span></li>
 <li><span class="stability_undefined"><a href="#dialogs_dialog_getmaxprogress">dialog.getMaxProgress()</a></span></li>
 <li><span class="stability_undefined"><a href="#dialogs_dialog_getactionbutton_action">dialog.getActionButton(action)</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs">其他成员</a></span><ul>
+<li><span class="stability_undefined"><a href="#dialogs_1">标题, 内容与视图</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_2">按钮</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_3">列表</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_4">进度</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_5">复选框与提示</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_6">状态</a></span></li>
+<li><span class="stability_undefined"><a href="#dialogs_android_app_dialog">android.app.Dialog 方法</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -892,7 +902,353 @@ setTimeout(()=&gt;{
 </ul>
 </li>
 </ul>
-</div>
+</div><h2>其他成员<span><a class="mark" href="#dialogs" id="dialogs">#</a></span></h2>
+<p>对话框对象还提供以下方法. 修改界面的方法 (如 <code>setTitle</code>, <code>setContent</code>, <code>setProgress</code>, <code>setActionButton</code>) 可在任意线程调用, 非 UI 线程会转到 UI 线程执行; 其余方法直接转发给底层的 MaterialDialog 或 <code>android.app.Dialog</code>, 涉及视图的操作应在 UI 线程调用.</p>
+<pre><code class="lang-js">let d = dialogs.build({ title: &#39;下载&#39;, progress: { max: 100 } }).show();
+d.setProgress(30);
+d.setContent(&#39;已完成 30%&#39;);
+log(d.getCurrentProgress()); // 30
+log(d.isShowing()); // true
+</code></pre>
+<h3>标题, 内容与视图<span><a class="mark" href="#dialogs_1" id="dialogs_1">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setTitle(title)</code></td>
+<td>设置标题</td>
+</tr>
+<tr>
+<td><code>setContent(content)</code></td>
+<td>设置正文内容</td>
+</tr>
+<tr>
+<td><code>setIcon(icon)</code></td>
+<td>设置图标 (资源 ID 或 Drawable)</td>
+</tr>
+<tr>
+<td><code>setIconAttribute(attrId)</code></td>
+<td>按主题属性设置图标</td>
+</tr>
+<tr>
+<td><code>setTypeface(target, typeface)</code></td>
+<td>设置某个 TextView 的字体</td>
+</tr>
+<tr>
+<td><code>getTitleView()</code></td>
+<td>返回标题 TextView</td>
+</tr>
+<tr>
+<td><code>getContentView()</code></td>
+<td>返回正文 TextView</td>
+</tr>
+<tr>
+<td><code>getIconView()</code></td>
+<td>返回图标 ImageView</td>
+</tr>
+<tr>
+<td><code>getCustomView()</code></td>
+<td>返回 <code>customView</code> 选项设置的自定义视图</td>
+</tr>
+<tr>
+<td><code>getView()</code></td>
+<td>返回对话框的根视图</td>
+</tr>
+<tr>
+<td><code>getInputEditText()</code></td>
+<td>返回输入框 EditText, 没有输入框时为 <code>null</code></td>
+</tr>
+<tr>
+<td><code>getRecyclerView()</code></td>
+<td>返回列表的 RecyclerView</td>
+</tr>
+<tr>
+<td><code>findViewById(id)</code></td>
+<td>在对话框视图中按 ID 查找视图</td>
+</tr>
+</tbody>
+</table>
+<h3>按钮<span><a class="mark" href="#dialogs_2" id="dialogs_2">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setActionButton(action, text)</code></td>
+<td>设置 <code>positive</code>, <code>negative</code> 或 <code>neutral</code> 按钮的文字</td>
+</tr>
+<tr>
+<td><code>hasActionButtons()</code></td>
+<td>是否有任一动作按钮</td>
+</tr>
+<tr>
+<td><code>numberOfActionButtons()</code></td>
+<td>动作按钮的数量</td>
+</tr>
+</tbody>
+</table>
+<h3>列表<span><a class="mark" href="#dialogs_3" id="dialogs_3">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getItems()</code></td>
+<td>返回列表项</td>
+</tr>
+<tr>
+<td><code>setItems(...items)</code></td>
+<td>替换列表项</td>
+</tr>
+<tr>
+<td><code>notifyItemInserted(index)</code></td>
+<td>通知列表在 <code>index</code> 处插入了一项</td>
+</tr>
+<tr>
+<td><code>notifyItemChanged(index)</code></td>
+<td>通知列表第 <code>index</code> 项已改变</td>
+</tr>
+<tr>
+<td><code>notifyItemsChanged()</code></td>
+<td>通知列表全部项已改变</td>
+</tr>
+<tr>
+<td><code>getSelectedIndex()</code></td>
+<td>单选列表的选中索引</td>
+</tr>
+<tr>
+<td><code>setSelectedIndex(index)</code></td>
+<td>设置单选列表的选中索引</td>
+</tr>
+<tr>
+<td><code>getSelectedIndices()</code></td>
+<td>多选列表的选中索引数组</td>
+</tr>
+<tr>
+<td><code>setSelectedIndices(indices)</code></td>
+<td>设置多选列表的选中索引</td>
+</tr>
+<tr>
+<td><code>selectAllIndices(sendCallback?)</code></td>
+<td>多选列表全选; <code>sendCallback</code> 为 <code>true</code> 时触发选择回调</td>
+</tr>
+<tr>
+<td><code>clearSelectedIndices(sendCallback?)</code></td>
+<td>清除多选列表的选择; <code>sendCallback</code> 同上</td>
+</tr>
+</tbody>
+</table>
+<h3>进度<span><a class="mark" href="#dialogs_4" id="dialogs_4">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getCurrentProgress()</code></td>
+<td>当前进度, 与 <code>getProgress()</code> 相同</td>
+</tr>
+<tr>
+<td><code>setProgress(progress)</code></td>
+<td>设置当前进度</td>
+</tr>
+<tr>
+<td><code>incrementProgress(by)</code></td>
+<td>进度增加 <code>by</code></td>
+</tr>
+<tr>
+<td><code>setMaxProgress(max)</code></td>
+<td>设置最大进度</td>
+</tr>
+<tr>
+<td><code>isIndeterminateProgress()</code></td>
+<td>是否为不确定进度条</td>
+</tr>
+<tr>
+<td><code>getProgressBar()</code></td>
+<td>返回 ProgressBar</td>
+</tr>
+<tr>
+<td><code>setProgressNumberFormat(format)</code></td>
+<td>设置进度数字的格式, 如 <code>&#39;%1d/%2d&#39;</code></td>
+</tr>
+<tr>
+<td><code>setProgressPercentFormat(format)</code></td>
+<td>设置百分比格式 (java.text.NumberFormat)</td>
+</tr>
+</tbody>
+</table>
+<h3>复选框与提示<span><a class="mark" href="#dialogs_5" id="dialogs_5">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isPromptCheckBoxChecked()</code></td>
+<td><code>checkBoxPrompt</code> 复选框是否选中</td>
+</tr>
+<tr>
+<td><code>setPromptCheckBoxChecked(checked)</code></td>
+<td>设置复选框的选中状态</td>
+</tr>
+<tr>
+<td><code>showSnack(text, isLong?)</code> / <code>showSnack(text, duration)</code></td>
+<td>在对话框底部显示 Snackbar</td>
+</tr>
+</tbody>
+</table>
+<h3>状态<span><a class="mark" href="#dialogs_6" id="dialogs_6">#</a></span></h3>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isShowing()</code></td>
+<td>是否正在显示</td>
+</tr>
+<tr>
+<td><code>isCancelled()</code></td>
+<td>是否已被取消</td>
+</tr>
+<tr>
+<td><code>hide()</code></td>
+<td>隐藏对话框, 之后可再次 <code>show()</code></td>
+</tr>
+<tr>
+<td><code>create()</code></td>
+<td>创建对话框但不显示</td>
+</tr>
+<tr>
+<td><code>setCancelable(flag)</code></td>
+<td>是否允许返回键取消</td>
+</tr>
+<tr>
+<td><code>setCanceledOnTouchOutside(cancel)</code></td>
+<td>是否允许点击外部取消</td>
+</tr>
+<tr>
+<td><code>getTag()</code></td>
+<td>返回 MaterialDialog 的 tag, 未设置时为 <code>null</code></td>
+</tr>
+<tr>
+<td><code>getBuilder()</code></td>
+<td>返回底层的 MaterialDialog.Builder</td>
+</tr>
+</tbody>
+</table>
+<h3>android.app.Dialog 方法<span><a class="mark" href="#dialogs_android_app_dialog" id="dialogs_android_app_dialog">#</a></span></h3>
+<p>以下方法与 <code>android.app.Dialog</code> 的同名方法相同 (参阅 <a href="https://developer.android.com/reference/android/app/Dialog">Android 文档</a>). 设置监听器时, 使用 <code>on(&#39;show&#39;)</code>, <code>on(&#39;cancel&#39;)</code>, <code>on(&#39;dismiss&#39;)</code> 等事件更为方便.</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getWindow()</code></td>
+<td>返回对话框的 Window, 可用于调整窗口类型或布局参数</td>
+</tr>
+<tr>
+<td><code>getContext()</code></td>
+<td>返回对话框的 Context</td>
+</tr>
+<tr>
+<td><code>getOwnerActivity()</code> / <code>setOwnerActivity(activity)</code></td>
+<td>所属 Activity</td>
+</tr>
+<tr>
+<td><code>getActionBar()</code></td>
+<td>返回 ActionBar, 通常为 <code>null</code></td>
+</tr>
+<tr>
+<td><code>getCurrentFocus()</code></td>
+<td>当前获得焦点的视图</td>
+</tr>
+<tr>
+<td><code>getLayoutInflater()</code></td>
+<td>返回 LayoutInflater</td>
+</tr>
+<tr>
+<td><code>setContentView(view)</code></td>
+<td>替换整个内容视图 (已弃用, 会覆盖 MaterialDialog 的布局)</td>
+</tr>
+<tr>
+<td><code>addContentView(view, params)</code></td>
+<td>追加内容视图</td>
+</tr>
+<tr>
+<td><code>requestWindowFeature(featureId)</code></td>
+<td>请求窗口特性</td>
+</tr>
+<tr>
+<td><code>setFeatureDrawable(featureId, drawable)</code> / <code>setFeatureDrawableResource(featureId, resId)</code> / <code>setFeatureDrawableUri(featureId, uri)</code> / <code>setFeatureDrawableAlpha(featureId, alpha)</code></td>
+<td>设置窗口特性的图标</td>
+</tr>
+<tr>
+<td><code>takeKeyEvents(get)</code></td>
+<td>是否接收按键事件</td>
+</tr>
+<tr>
+<td><code>setVolumeControlStream(streamType)</code> / <code>getVolumeControlStream()</code></td>
+<td>音量键控制的音频流</td>
+</tr>
+<tr>
+<td><code>getSearchEvent()</code></td>
+<td>最近一次搜索请求的 SearchEvent</td>
+</tr>
+<tr>
+<td><code>openOptionsMenu()</code> / <code>closeOptionsMenu()</code> / <code>invalidateOptionsMenu()</code></td>
+<td>选项菜单</td>
+</tr>
+<tr>
+<td><code>registerForContextMenu(view)</code> / <code>unregisterForContextMenu(view)</code> / <code>openContextMenu(view)</code></td>
+<td>上下文菜单</td>
+</tr>
+<tr>
+<td><code>setOnShowListener(listener)</code></td>
+<td>显示监听器</td>
+</tr>
+<tr>
+<td><code>setOnCancelListener(listener)</code> / <code>setCancelMessage(msg)</code></td>
+<td>取消监听器或消息</td>
+</tr>
+<tr>
+<td><code>setOnDismissListener(listener)</code> / <code>setDismissMessage(msg)</code></td>
+<td>关闭监听器或消息; 与 <code>dismiss</code> 事件可以同时使用</td>
+</tr>
+<tr>
+<td><code>setOnKeyListener(listener)</code></td>
+<td>按键监听器</td>
+</tr>
+</tbody>
+</table>
+
         </div>
     </div>
 </div>

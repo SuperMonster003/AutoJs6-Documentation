@@ -562,6 +562,18 @@
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_setprogress_progress">setProgress(progress)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_contains">[m#] contains</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_contains_o">contains(o)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_iterator">[m#] iterator</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_iterator">iterator()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_issimilar">[m#] isSimilar</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjectcollectiontype_issimilar_other">isSimilar(other)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_m_of">[m] of</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjectcollectiontype_of_list">of(list)</a></span></li>
 </ul>
@@ -1252,6 +1264,34 @@ results.forEach((ok, i) =&gt; ok || console.log(`第 ${i} 个点击失败`));
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否行为已全部执行且执行过程中无异常</li>
 </ul>
 <p>控件集合执行 <a href="uiObjectActionsType.html#uiobjectactionstype_m_setprogress">[ 设置进度值 ] 行为</a>.</p>
+<h2>[m#] contains<span><a class="mark" href="#uiobjectcollectiontype_m_contains" id="uiobjectcollectiontype_m_contains">#</a></span></h2>
+<h3>contains(o)<span><a class="mark" href="#uiobjectcollectiontype_contains_o" id="uiobjectcollectiontype_contains_o">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>o</strong> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+</div><p>集合是否包含控件 <code>o</code>.</p>
+<pre><code class="lang-js">let list = className(&#39;TextView&#39;).find();
+console.log(list.contains(list.get(0))); // true
+</code></pre>
+<h2>[m#] iterator<span><a class="mark" href="#uiobjectcollectiontype_m_iterator" id="uiobjectcollectiontype_m_iterator">#</a></span></h2>
+<h3>iterator()<span><a class="mark" href="#uiobjectcollectiontype_iterator" id="uiobjectcollectiontype_iterator">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type">java.util.Iterator&lt;<a href="uiObjectType.html">UiObject</a>&gt;</span> }</li>
+</ul>
+</div><p>返回遍历集合中控件的 Java 迭代器.</p>
+<pre><code class="lang-js">let it = className(&#39;TextView&#39;).find().iterator();
+while (it.hasNext()) {
+    console.log(it.next().text());
+}
+</code></pre>
+<h2>[m#] isSimilar<span><a class="mark" href="#uiobjectcollectiontype_m_issimilar" id="uiobjectcollectiontype_m_issimilar">#</a></span></h2>
+<h3>isSimilar(other)<span><a class="mark" href="#uiobjectcollectiontype_issimilar_other" id="uiobjectcollectiontype_issimilar_other">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>other</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 另一个控件集合</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+</div><p>两个集合的控件哈希值相同时返回 <code>true</code>, 适合比较两次查找的结果.</p>
 <h2>[m] of<span><a class="mark" href="#uiobjectcollectiontype_m_of" id="uiobjectcollectiontype_m_of">#</a></span></h2>
 <h3>of(list)<span><a class="mark" href="#uiobjectcollectiontype_of_list" id="uiobjectcollectiontype_of_list">#</a></span></h3>
 <div class="signature"><ul>

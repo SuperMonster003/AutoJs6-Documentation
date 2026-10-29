@@ -463,6 +463,7 @@
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_bottommost">[m#] MatchingResult#bottommost()</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_best">[m#] MatchingResult#best()</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_worst">[m#] MatchingResult#worst()</a></span></li>
+<li><span class="stability_undefined"><a href="#image_m_matchingresult_findmax_comparator">[m#] MatchingResult#findMax(comparator)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_sortby_direction">[m#] MatchingResult#sortBy(direction)</a></span></li>
 <li><span class="stability_undefined"><a href="#image_m_matchingresult_sortby_comparefn">[m#] MatchingResult#sortBy(compareFn)</a></span></li>
 </ul>
@@ -612,6 +613,69 @@
 </tr>
 </tbody>
 </table>
+<p>返回对象 (7 个): 本页说明的对象的成员状态, 每个对象一行.</p>
+<table>
+<thead>
+<tr>
+<th>返回对象</th>
+<th>Rhino</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ImageFeatures</code> (10 项)</td>
+<td>已支持 10 项</td>
+<td>不适用 10 项 (需要 Java 对象)</td>
+<td>不适用 10 项 (需要 Java 对象)</td>
+<td>不适用 10 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>Mat</code> (3 项)</td>
+<td>已支持 3 项</td>
+<td>不适用 3 项 (需要 Java 对象)</td>
+<td>不适用 3 项 (需要 Java 对象)</td>
+<td>不适用 3 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>MatchingResult</code> (16 项)</td>
+<td>已支持 16 项</td>
+<td>不适用 16 项 (需要 Java 对象)</td>
+<td>不适用 16 项 (需要 Java 对象)</td>
+<td>不适用 16 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>ObjectFrame</code> (15 项)</td>
+<td>已支持 15 项</td>
+<td>不适用 15 项 (需要 Java 对象)</td>
+<td>不适用 15 项 (需要 Java 对象)</td>
+<td>不适用 15 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>PngQuantizationFileResult</code> (5 项)</td>
+<td>已支持 5 项</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>PngQuantizationResult</code> (5 项)</td>
+<td>已支持 5 项</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+</tr>
+<tr>
+<td><code>ScreenCaptureOptions</code> (5 项)</td>
+<td>已支持 5 项</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+<td>不适用 5 项 (需要 Java 对象)</td>
+</tr>
+</tbody>
+</table>
 <p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
 <!-- runtime-support:end -->
 <p><code>images</code> 模块提供图像读取, 编解码, 截图, 图像处理, 找色, 找图, 特征匹配和相似度计算等功能.</p>
@@ -661,6 +725,34 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://docs.opencv.org/4.x/javadoc/org/opencv/core/Mat.html">Mat</a></span> } - OpenCV 矩阵</li>
 </ul>
 <p>使用 OpenCV 读取本地图片. 读取失败时可能返回空矩阵, 可使用 <code>Mat#empty()</code> 检查.</p>
+<p>返回的矩阵是 AutoJs6 的 <code>org.autojs.autojs.core.opencv.Mat</code>, 继承 OpenCV <code>Mat</code> 的全部方法, 另有以下成员:</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>release()</code></td>
+<td>释放原生内存; 重复调用无影响</td>
+</tr>
+<tr>
+<td><code>isReleased()</code></td>
+<td>是否已释放</td>
+</tr>
+<tr>
+<td><code>convertTo(type, isRelease?)</code></td>
+<td>转换为 <code>type</code> 类型 (如 <code>CvType.CV_8UC3</code>) 的新矩阵, 8UC4 与 8UC3 之间会同时转换颜色通道; <code>isRelease</code> 为 <code>true</code> 时转换后释放原矩阵</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-js">let mat = images.imread(&#39;./1.png&#39;);
+let bgr = mat.convertTo(org.opencv.core.CvType.CV_8UC3, true);
+console.log(mat.isReleased()); // true
+bgr.release();
+</code></pre>
 <h3>[m] images.load(src)<span><a class="mark" href="#image_m_images_load_src" id="image_m_images_load_src">#</a></span></h3>
 <div class="signature"><ul>
 <li><strong>src</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 图片 URL</li>
@@ -1895,6 +1987,12 @@ console.log(upperHalf.size);
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_templatematch">TemplateMatch</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
 </ul>
 <p>从 AutoJs6 6.8.0 起, 上述方向和相似度选择方法会按完整浮点值正确比较.</p>
+<h4>[m#] MatchingResult#findMax(comparator)<span><a class="mark" href="#image_m_matchingresult_findmax_comparator" id="image_m_matchingresult_findmax_comparator">#</a></span></h4>
+<div class="signature"><ul>
+<li><strong>comparator</strong> { <span class="type">java.util.Comparator&lt;<a href="#image_templatematch">TemplateMatch</a>&gt;</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - Java 比较器</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#image_templatematch">TemplateMatch</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 按比较器排在最前的匹配; 没有匹配或比较器为 <code>null</code> 时为 <code>null</code></li>
+</ul>
+</div><p><code>leftmost()</code>, <code>best()</code> 等方法的底层实现. 脚本中通常使用 <code>sortBy</code> 或上述方法.</p>
 <h4>[m#] MatchingResult#sortBy(direction)<span><a class="mark" href="#image_m_matchingresult_sortby_direction" id="image_m_matchingresult_sortby_direction">#</a></span></h4>
 <p><strong><code>Overload 1/2</code></strong></p>
 <ul>

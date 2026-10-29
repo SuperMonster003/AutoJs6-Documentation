@@ -382,6 +382,15 @@
 <li><span class="stability_undefined"><a href="#util_util_unwrapjavaobject_o">util.unwrapJavaObject(o)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#util_m_class">[m] class</a></span><ul>
+<li><span class="stability_undefined"><a href="#util_util_class_o">util.class(o)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#util_m_getclassname">[m] getClassName</a></span><ul>
+<li><span class="stability_undefined"><a href="#util_util_getclassname_o">util.getClassName(o)</a></span></li>
+<li><span class="stability_undefined"><a href="#util_util_classname_o">util.className(o)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#util_m_extend">[m] extend</a></span><ul>
 <li><span class="stability_undefined"><a href="#util_util_extend_derived_base">util.extend(derived, base)</a></span></li>
 </ul>
@@ -756,6 +765,27 @@
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 解包或规范化后的值</li>
 </ul>
 </div><p>递归解包 Rhino <code>Wrapper</code> 对象. 字符串, 数字和布尔值会规范化为对应的 JavaScript 值, Kotlin <code>Unit</code> 会转换为 <code>undefined</code>.</p>
+<h2>[m] class<span><a class="mark" href="#util_m_class" id="util_m_class">#</a></span></h2>
+<h3>util.class(o)<span><a class="mark" href="#util_util_class_o" id="util_util_class_o">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>o</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 非空值或 Java 类</li>
+<li><ins><strong>returns</strong></ins> { <span class="type">java.lang.Class</span> } - Java 类</li>
+</ul>
+</div><p>返回 <code>o</code> 的 Java 类; <code>o</code> 本身是 <code>java.lang.Class</code> 时原样返回. <code>o</code> 为 <code>null</code> 或 <code>undefined</code> 时抛出异常.</p>
+<pre><code class="lang-js">console.log(util.class(new java.util.ArrayList())); // class java.util.ArrayList
+</code></pre>
+<h2>[m] getClassName<span><a class="mark" href="#util_m_getclassname" id="util_m_getclassname">#</a></span></h2>
+<h3>util.getClassName(o)<span><a class="mark" href="#util_util_getclassname_o" id="util_util_getclassname_o">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>o</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 非空值或 Java 类</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - Java 类名</li>
+</ul>
+</div><p>返回 <code>o</code> 的 Java 类名, 即 <code>util.class(o).getName()</code>. JavaScript 值按 Rhino 的包装类计算, 如 JavaScript 对象为 <code>org.mozilla.javascript.NativeObject</code>.</p>
+<pre><code class="lang-js">console.log(util.getClassName(new java.util.ArrayList())); // java.util.ArrayList
+console.log(util.getClassName(java.lang.String)); // java.lang.String
+</code></pre>
+<h3>util.className(o)<span><a class="mark" href="#util_util_classname_o" id="util_util_classname_o">#</a></span></h3>
+<p><code>util.getClassName(o)</code> 的别名.</p>
 <h2>[m] extend<span><a class="mark" href="#util_m_extend" id="util_m_extend">#</a></span></h2>
 <h3>util.extend(derived, base)<span><a class="mark" href="#util_util_extend_derived_base" id="util_util_extend_derived_base">#</a></span></h3>
 <div class="signature"><ul>

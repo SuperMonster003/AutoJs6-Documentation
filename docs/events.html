@@ -317,6 +317,8 @@
 <li><span class="stability_undefined"><a href="#events_exit">事件: &#39;exit&#39;</a></span></li>
 <li><span class="stability_undefined"><a href="#events_events_observenotification">events.observeNotification()</a></span></li>
 <li><span class="stability_undefined"><a href="#events_events_observetoast">events.observeToast()</a></span></li>
+<li><span class="stability_undefined"><a href="#events_events_removetoastobserver">events.removeToastObserver()</a></span></li>
+<li><span class="stability_undefined"><a href="#events_events_removenotificationobserver">events.removeNotificationObserver()</a></span></li>
 <li><span class="stability_undefined"><a href="#events_toast">事件: &#39;toast&#39;</a></span></li>
 <li><span class="stability_undefined"><a href="#events_notification">事件: &#39;notification&#39;</a></span></li>
 </ul>
@@ -555,6 +557,16 @@ events.onNotification(function(notification){
 </code></pre><h2>events.observeToast()<span><a class="mark" href="#events_events_observetoast" id="events_events_observetoast">#</a></span></h2>
 <p>开启 Toast 监听.</p>
 <p>Toast 监听依赖于无障碍服务, 因此此函数会确保无障碍服务运行.</p>
+<h2>events.removeToastObserver()<span><a class="mark" href="#events_events_removetoastobserver" id="events_events_removetoastobserver">#</a></span></h2>
+<p>停止 Toast 监听. 同时没有通知监听时, 脚本不再因事件监听而保持运行.</p>
+<h2>events.removeNotificationObserver()<span><a class="mark" href="#events_events_removenotificationobserver" id="events_events_removenotificationobserver">#</a></span></h2>
+<p>停止通知监听, 与 <code>events.observeNotification()</code> 相对. 同时没有 Toast 监听时, 脚本不再因事件监听而保持运行.</p>
+<pre><code class="lang-js">events.observeToast();
+events.on(&#39;toast&#39;, (toast) =&gt; {
+    log(toast.getText());
+    events.removeToastObserver(); /* 只处理第一条 Toast. */
+});
+</code></pre>
 <h2>事件: &#39;toast&#39;<span><a class="mark" href="#events_toast" id="events_toast">#</a></span></h2>
 <div class="signature"><ul>
 <li><strong>toast</strong> { <span class="type"><a href="dataTypes.html#datatypes_object">Object</a></span> }<ul>

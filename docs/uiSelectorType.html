@@ -781,8 +781,8 @@
 <li><span class="stability_undefined"><a href="#uiselectortype_editable_b">editable(b?)</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#uiselectortype_m_contentvalid">[m#] contentValid</a></span><ul>
-<li><span class="stability_undefined"><a href="#uiselectortype_contentvalid_b">contentValid(b?)</a></span></li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_contentinvalid">[m#] contentInvalid</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_contentinvalid_b">contentInvalid(b?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_contextclickable">[m#] contextClickable</a></span><ul>
@@ -1082,6 +1082,10 @@
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_append">[m#] append</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiselectortype_append_selector">append(selector)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiselectortype_m_tostringreadable">[m#] toStringReadable</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiselectortype_tostringreadable">toStringReadable()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#uiselectortype_m_pickup">[m] pickup</a></span><ul>
@@ -4529,30 +4533,30 @@ pickup({ editable: null }, &#39;@&#39;); /* 不推荐. */
 pickup(editable(true), &#39;@&#39;);
 pickup({ editable: true }, &#39;@&#39;);
 </code></pre>
-<h2>[m#] contentValid<span><a class="mark" href="#uiselectortype_m_contentvalid" id="uiselectortype_m_contentvalid">#</a></span></h2>
-<h3>contentValid(b?)<span><a class="mark" href="#uiselectortype_contentvalid_b" id="uiselectortype_contentvalid_b">#</a></span></h3>
+<h2>[m#] contentInvalid<span><a class="mark" href="#uiselectortype_m_contentinvalid" id="uiselectortype_m_contentinvalid">#</a></span></h2>
+<h3>contentInvalid(b?)<span><a class="mark" href="#uiselectortype_contentinvalid_b" id="uiselectortype_contentinvalid_b">#</a></span></h3>
 <p><strong><code>Overload [1-2]/2</code></strong> <strong><code>Global</code></strong></p>
 <ul>
 <li><strong>[ b = true ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiSelectorType.html">UiSelector</a></span> }</li>
 </ul>
-<p>控件内容有效状态选择器.</p>
+<p>控件内容无效状态选择器.</p>
 <ul>
-<li>筛选条件说明: 控件的内容有效的状态与指定参数相符</li>
-<li>关联控件属性: isContentValid</li>
+<li>筛选条件说明: 控件的内容无效 (如输入框内容未通过校验) 的状态与指定参数相符</li>
+<li>关联控件属性: isContentInvalid</li>
 </ul>
 <p>例如对于以下控件:</p>
-<pre><code class="lang-js">/* 表示控件是内容有效的. */
-w.isContentValid(); // true
+<pre><code class="lang-js">/* 表示控件的内容被标记为无效. */
+w.isContentInvalid(); // true
 </code></pre>
-<p><code>contentValid()</code> 及 <code>contentValid(true)</code> 均可匹配控件 <code>w</code>.</p>
+<p><code>contentInvalid()</code> 及 <code>contentInvalid(true)</code> 均可匹配控件 <code>w</code>.</p>
 <p><a href="#uiselectortype_m_pickup">拾取选择器</a> 示例:</p>
-<pre><code class="lang-js">pickup(contentValid(), &#39;@&#39;);
-pickup({ contentValid: [] }, &#39;@&#39;);
-pickup({ contentValid: null }, &#39;@&#39;); /* 不推荐. */
+<pre><code class="lang-js">pickup(contentInvalid(), &#39;@&#39;);
+pickup({ contentInvalid: [] }, &#39;@&#39;);
+pickup({ contentInvalid: null }, &#39;@&#39;); /* 不推荐. */
 
-pickup(contentValid(true), &#39;@&#39;);
-pickup({ contentValid: true }, &#39;@&#39;);
+pickup(contentInvalid(true), &#39;@&#39;);
+pickup({ contentInvalid: true }, &#39;@&#39;);
 </code></pre>
 <h2>[m#] contextClickable<span><a class="mark" href="#uiselectortype_m_contextclickable" id="uiselectortype_m_contextclickable">#</a></span></h2>
 <h3>contextClickable(b?)<span><a class="mark" href="#uiselectortype_contextclickable_b" id="uiselectortype_contextclickable_b">#</a></span></h3>
@@ -5667,6 +5671,14 @@ console.log(selA); // text(&quot;A&quot;).minTop(0.5).desc(&quot;B&quot;).maxHei
 <blockquote>
 <p>参阅: <a href="#uiselectortype_m_plus">plus</a> 方法小节.</p>
 </blockquote>
+<h2>[m#] toStringReadable<span><a class="mark" href="#uiselectortype_m_tostringreadable" id="uiselectortype_m_tostringreadable">#</a></span></h2>
+<h3>toStringReadable()<span><a class="mark" href="#uiselectortype_tostringreadable" id="uiselectortype_tostringreadable">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+</div><p>返回选择器的可读文本, 形如 <code>[UiSelector: ...]</code>, 列出已添加的筛选条件. <code>console.log</code> 打印选择器时使用此文本.</p>
+<pre><code class="lang-js">console.log(text(&#39;OK&#39;).clickable().toStringReadable());
+</code></pre>
 <h2>[m] pickup<span><a class="mark" href="#uiselectortype_m_pickup" id="uiselectortype_m_pickup">#</a></span></h2>
 <p>拾取选择器, 简称拾取器, 是高度封装的混合形式选择器, 用于在筛选控件及处理结果过程中实现快捷操作.<br>
 支持 [ 选择器多形式混合 / 控件罗盘 / 结果筛选 / 参化调用 ] 等.</p>

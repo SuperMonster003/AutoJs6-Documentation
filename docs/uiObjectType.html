@@ -836,6 +836,18 @@
 <li><span class="stability_undefined"><a href="#uiobjecttype_tojson_key">toJSON(key?)</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_summary">[m#] summary</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_summary">summary()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_issimilar">[m#] isSimilar</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_issimilar_other">isSimilar(other)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#uiobjecttype_m_brother">[m#] brother</a></span><ul>
+<li><span class="stability_undefined"><a href="#uiobjecttype_brother_i">brother(i)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#uiobjecttype_m_dumpsubtree">[m#] dumpSubtree</a></span><ul>
 <li><span class="stability_undefined"><a href="#uiobjecttype_dumpsubtree_options">dumpSubtree(options?)</a></span></li>
 </ul>
@@ -2538,6 +2550,35 @@ console.log(w.toJSON().bounds);
 <blockquote>
 <p>参阅: 含子控件的导出见 <a href="#uiobjecttype_m_dumpsubtree">dumpSubtree</a>.</p>
 </blockquote>
+<h2>[m#] summary<span><a class="mark" href="#uiobjecttype_m_summary" id="uiobjecttype_m_summary">#</a></span></h2>
+<h3>summary()<span><a class="mark" href="#uiobjecttype_summary" id="uiobjecttype_summary">#</a></span></h3>
+<p><strong><code>A11Y</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
+</ul>
+<p>返回控件属性的多行 <code>{ name=value ... }</code> 列表: 字符串加引号, 列表逐项展开, 边界写作 <code>Rect(l, t - r, b)</code>, 中心写作 <code>{x, y}</code>. 适合打印调试.</p>
+<pre><code class="lang-js">console.log(text(&#39;登录&#39;).findOnce().summary());
+</code></pre>
+<h2>[m#] isSimilar<span><a class="mark" href="#uiobjecttype_m_issimilar" id="uiobjecttype_m_issimilar">#</a></span></h2>
+<h3>isSimilar(other)<span><a class="mark" href="#uiobjecttype_issimilar_other" id="uiobjecttype_issimilar_other">#</a></span></h3>
+<p><strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>other</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 另一个控件</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+<p>判断两个控件是否 &quot;相似&quot;: 对应同一平台节点, 所列属性全部相等, 且首末兄弟控件与子控件的字符串形式相等. 适合比较两次查找得到的控件对象.</p>
+<pre><code class="lang-js">let a = id(&#39;title&#39;).findOnce();
+let b = id(&#39;title&#39;).findOnce();
+console.log(a.isSimilar(b)); // true
+</code></pre>
+<h2>[m#] brother<span><a class="mark" href="#uiobjecttype_m_brother" id="uiobjecttype_m_brother">#</a></span></h2>
+<h3>brother(i)<span><a class="mark" href="#uiobjecttype_brother_i" id="uiobjecttype_brother_i">#</a></span></h3>
+<p><strong><code>DEPRECATED</code></strong> <strong><code>A11Y</code></strong></p>
+<ul>
+<li><strong>i</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 索引偏移量</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="uiObjectType.html">UiObject</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+<p>已弃用, 等同于 <a href="#uiobjecttype_m_offset">offset(i)</a>.</p>
 <h2>[m#] dumpSubtree<span><a class="mark" href="#uiobjecttype_m_dumpsubtree" id="uiobjecttype_m_dumpsubtree">#</a></span></h2>
 <h3>dumpSubtree(options?)<span><a class="mark" href="#uiobjecttype_dumpsubtree_options" id="uiobjecttype_dumpsubtree_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>

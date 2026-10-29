@@ -326,6 +326,10 @@
 </li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#crypto_m_fromhex">[m] fromHex</a></span><ul>
+<li><span class="stability_undefined"><a href="#crypto_fromhex_hex">fromHex(hex)</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#crypto_m_generatekeypair">[m] generateKeyPair</a></span><ul>
 <li><span class="stability_undefined"><a href="#crypto_generatekeypair_algorithm">generateKeyPair(algorithm)</a></span></li>
 <li><span class="stability_undefined"><a href="#crypto_generatekeypair_algorithm_length">generateKeyPair(algorithm, length)</a></span></li>
@@ -551,6 +555,17 @@ let dc = crypto.decrypt(ec, key.privateKey, &#39;RSA/ECB/OAEPwithSHA-224andMGF1P
 /* 解密还原为 message 变量的值, 即 &#39;hello&#39;. */
 console.log(dc); // hello
 console.log(dc === message); // true
+</code></pre>
+<h2>[m] fromHex<span><a class="mark" href="#crypto_m_fromhex" id="crypto_m_fromhex">#</a></span></h2>
+<h3>fromHex(hex)<span><a class="mark" href="#crypto_fromhex_hex" id="crypto_fromhex_hex">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>hex</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 十六进制字符串, 长度须为偶数</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_javaarray">JavaArray</a>&lt;<a href="dataTypes.html#datatypes_number">number</a>&gt;</span> } - Java 字节数组</li>
+</ul>
+</div><p>把十六进制字符串转换为 Java 字节数组, 与 <code>crypto.toHex(bytes)</code> 互逆. 长度为奇数或含非十六进制字符时抛出异常.</p>
+<pre><code class="lang-js">let bytes = crypto.fromHex(&#39;48656c6c6f&#39;);
+console.log(java.lang.String(bytes)); // Hello
+console.log(crypto.toHex(bytes)); // 48656c6c6f
 </code></pre>
 <h2>[m] generateKeyPair<span><a class="mark" href="#crypto_m_generatekeypair" id="crypto_m_generatekeypair">#</a></span></h2>
 <h3>generateKeyPair(algorithm)<span><a class="mark" href="#crypto_generatekeypair_algorithm" id="crypto_generatekeypair_algorithm">#</a></span></h3>

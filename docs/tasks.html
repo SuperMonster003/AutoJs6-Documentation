@@ -650,16 +650,186 @@ console.log(task.id);
 </div><p>将星期编号数组转换为位标志. 仅编号 <code>0</code> 至 <code>6</code> 参与计算.</p>
 <hr>
 <h2>TimedTask<span><a class="mark" href="#tasks_timedtask" id="tasks_timedtask">#</a></span></h2>
-<p>由定时任务创建和查询方法返回的 Java 对象. 常用属性包括:</p>
-<ul>
-<li><code>id</code>, <code>millis</code>, <code>scriptPath</code>, <code>timeFlag</code>.</li>
-<li><code>delay</code>, <code>interval</code>, <code>loopTimes</code>.</li>
-<li><code>repeatMode</code>, <code>endMode</code>, <code>endValue</code>, <code>finishedTimes</code>.</li>
-<li><code>dayOfMonth</code>, <code>monthOfYear</code>, <code>scheduled</code>.</li>
-</ul>
-<p>常用方法包括 <code>getNextTime()</code>, <code>isDisposable()</code>, <code>isDaily()</code>, <code>isWeekly()</code>, <code>isMonthly()</code>, <code>isYearly()</code> 和 <code>isCountdown()</code>.</p>
+<p>由定时任务创建和查询方法返回的 Java 对象. 属性可直接读写 (如 <code>task.loopTimes</code>), 也可调用对应的读取 / 设置方法; 修改后须调用 <a href="#tasks_m_updatetask">tasks.updateTask</a> 保存并重新调度.</p>
+<pre><code class="lang-js">let task = tasks.getTimedTask(1);
+if (task !== null) {
+    log(task.getScriptPath(), task.getNextTime());
+    task.setLoopTimes(3);
+    tasks.updateTask(task);
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>读取 / 设置方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>getId()</code> / <code>setId(id)</code></td>
+<td>任务 ID, 保存后由数据库分配</td>
+</tr>
+<tr>
+<td><code>scriptPath</code></td>
+<td><code>getScriptPath()</code> / <code>setScriptPath(path)</code></td>
+<td>要执行的脚本路径</td>
+</tr>
+<tr>
+<td><code>millis</code></td>
+<td><code>getMillis()</code> / <code>setMillis(millis)</code></td>
+<td>一次性任务的执行时刻, 或周期任务一天内的执行时间 (毫秒)</td>
+</tr>
+<tr>
+<td><code>timeFlag</code></td>
+<td><code>getTimeFlag()</code> / <code>setTimeFlag(flag)</code></td>
+<td>星期位标志, 参阅 <a href="#tasks_m_timeflagtodays">tasks.timeFlagToDays</a></td>
+</tr>
+<tr>
+<td><code>delay</code></td>
+<td><code>getDelay()</code> / <code>setDelay(delay)</code></td>
+<td>执行延时 (毫秒)</td>
+</tr>
+<tr>
+<td><code>interval</code></td>
+<td><code>getInterval()</code> / <code>setInterval(interval)</code></td>
+<td>循环执行的间隔 (毫秒)</td>
+</tr>
+<tr>
+<td><code>loopTimes</code></td>
+<td><code>getLoopTimes()</code> / <code>setLoopTimes(times)</code></td>
+<td>循环执行次数</td>
+</tr>
+<tr>
+<td><code>repeatMode</code></td>
+<td><code>getRepeatMode()</code> / <code>setRepeatMode(mode)</code></td>
+<td>重复模式: <code>0</code> 一次性, <code>1</code> 每日, <code>2</code> 每周, <code>3</code> 每月, <code>4</code> 每年, <code>5</code> 倒计时</td>
+</tr>
+<tr>
+<td><code>endMode</code></td>
+<td><code>getEndMode()</code> / <code>setEndMode(mode)</code></td>
+<td>结束条件: <code>0</code> 永久重复, <code>1</code> 重复至日期, <code>2</code> 重复指定次数 (参阅上文 &quot;重复结束条件&quot;)</td>
+</tr>
+<tr>
+<td><code>endValue</code></td>
+<td><code>getEndValue()</code> / <code>setEndValue(value)</code></td>
+<td>结束条件的值 (时间戳或次数)</td>
+</tr>
+<tr>
+<td><code>finishedTimes</code></td>
+<td><code>getFinishedTimes()</code> / <code>setFinishedTimes(times)</code></td>
+<td>已执行次数</td>
+</tr>
+<tr>
+<td><code>dayOfMonth</code></td>
+<td><code>getDayOfMonth()</code> / <code>setDayOfMonth(day)</code></td>
+<td>每月或每年任务的日期</td>
+</tr>
+<tr>
+<td><code>monthOfYear</code></td>
+<td><code>getMonthOfYear()</code> / <code>setMonthOfYear(month)</code></td>
+<td>每年任务的月份</td>
+</tr>
+<tr>
+<td><code>scheduled</code></td>
+<td><code>isScheduled()</code> / <code>setScheduled(scheduled)</code></td>
+<td>是否已交给调度后端; <code>updateTask</code> 会先清除它</td>
+</tr>
+<tr>
+<td><code>projectRoot</code></td>
+<td><code>getProjectRoot()</code> / <code>setProjectRoot(root)</code></td>
+<td>创建任务时记录的项目根目录, 执行时随启动 Intent 传给脚本</td>
+</tr>
+<tr>
+<td><code>sourceKind</code></td>
+<td><code>getSourceKind()</code> / <code>setSourceKind(kind)</code></td>
+<td>创建任务时记录的脚本来源类型</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getNextTime()</code></td>
+<td>下一次执行的时间戳</td>
+</tr>
+<tr>
+<td><code>hasDayOfWeek(context, dayOfWeek)</code></td>
+<td><code>timeFlag</code> 是否包含该星期 (<code>1</code> 至 <code>7</code> 依次为周一至周日)</td>
+</tr>
+<tr>
+<td><code>isDisposable()</code> / <code>isDaily()</code> / <code>isWeekly()</code> / <code>isMonthly()</code> / <code>isYearly()</code> / <code>isCountdown()</code></td>
+<td>按重复模式判断任务类型</td>
+</tr>
+</tbody>
+</table>
 <h2>IntentTask<span><a class="mark" href="#tasks_intenttask" id="tasks_intenttask">#</a></span></h2>
-<p>由广播任务创建和查询方法返回的 Java 对象. 常用属性包括 <code>id</code>, <code>scriptPath</code>, <code>action</code>, <code>category</code>, <code>dataType</code> 和 <code>local</code>.</p>
+<p>由广播任务创建和查询方法返回的 Java 对象. 属性与读取 / 设置方法的用法同 <a href="#tasks_timedtask">TimedTask</a>.</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>读取 / 设置方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>getId()</code> / <code>setId(id)</code></td>
+<td>任务 ID</td>
+</tr>
+<tr>
+<td><code>scriptPath</code></td>
+<td><code>getScriptPath()</code> / <code>setScriptPath(path)</code></td>
+<td>收到广播时执行的脚本路径</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td><code>getAction()</code> / <code>setAction(action)</code></td>
+<td>广播的 action</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td><code>getCategory()</code> / <code>setCategory(category)</code></td>
+<td>广播的 category</td>
+</tr>
+<tr>
+<td><code>dataType</code></td>
+<td><code>getDataType()</code> / <code>setDataType(type)</code></td>
+<td>广播的数据 MIME 类型</td>
+</tr>
+<tr>
+<td><code>extras</code></td>
+<td><code>getExtras()</code> / <code>setExtras(extras)</code></td>
+<td>附加数据字符串</td>
+</tr>
+<tr>
+<td><code>local</code></td>
+<td><code>isLocal()</code> / <code>setLocal(local)</code></td>
+<td>为 <code>true</code> 时只响应 AutoJs6 应用内事件 (如应用启动), 不注册系统广播</td>
+</tr>
+<tr>
+<td><code>projectRoot</code></td>
+<td><code>getProjectRoot()</code> / <code>setProjectRoot(root)</code></td>
+<td>创建任务时记录的项目根目录</td>
+</tr>
+<tr>
+<td><code>sourceKind</code></td>
+<td><code>getSourceKind()</code> / <code>setSourceKind(kind)</code></td>
+<td>创建任务时记录的脚本来源类型</td>
+</tr>
+</tbody>
+</table>
+<p><code>getIntentFilter()</code> 返回按 <code>action</code>, <code>category</code> 和 <code>dataType</code> 构造的 <code>android.content.IntentFilter</code>.</p>
 
         </div>
     </div>

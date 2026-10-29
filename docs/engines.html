@@ -362,6 +362,34 @@
 <li><span class="stability_undefined"><a href="#engines_getid">getId()</a></span></li>
 </ul>
 </li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_isfinished">[m#] ScriptExecution#isFinished</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_isfinished">isFinished()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_getagentcontext">[m#] ScriptExecution#getAgentContext</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getagentcontext">getAgentContext()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_getagentrunid">[m#] ScriptExecution#getAgentRunId</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getagentrunid">getAgentRunId()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_getagentparametersjson">[m#] ScriptExecution#getAgentParametersJson</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getagentparametersjson">getAgentParametersJson()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_getagentpresetname">[m#] ScriptExecution#getAgentPresetName</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getagentpresetname">getAgentPresetName()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_getagentresult">[m#] ScriptExecution#getAgentResult</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getagentresult">getAgentResult()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptexecution_setagentresult">[m#] ScriptExecution#setAgentResult</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_setagentresult_json">setAgentResult(json)</a></span></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#engines_scriptengine">ScriptEngine</a></span><ul>
@@ -411,6 +439,22 @@
 </li>
 <li><span class="stability_undefined"><a href="#engines_m_scriptengine_emit">[m#] ScriptEngine#emit</a></span><ul>
 <li><span class="stability_undefined"><a href="#engines_emit_eventname_args">emit(eventName, ...args)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptengine_gettag">[m#] ScriptEngine#getTag</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_gettag_key">getTag(key)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptengine_settag">[m#] ScriptEngine#setTag</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_settag_key_value">setTag(key, value)</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptengine_getuncaughtexception">[m#] ScriptEngine#getUncaughtException</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getuncaughtexception">getUncaughtException()</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#engines_m_scriptengine_getbackingsourcepath">[m#] ScriptEngine#getBackingSourcePath</a></span><ul>
+<li><span class="stability_undefined"><a href="#engines_getbackingsourcepath">getBackingSourcePath()</a></span></li>
 </ul>
 </li>
 </ul>
@@ -602,7 +646,53 @@ console.log(execution.getId());
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 执行 ID</li>
 </ul>
-</div><hr>
+</div><h2>[m#] ScriptExecution#isFinished<span><a class="mark" href="#engines_m_scriptexecution_isfinished" id="engines_m_scriptexecution_isfinished">#</a></span></h2>
+<h3>isFinished()<span><a class="mark" href="#engines_isfinished" id="engines_isfinished">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
+</ul>
+</div><p>执行已报告结果后即为 <code>true</code>, 即使引擎仍在销毁过程中. UI 脚本的执行会保持注册, 直到其 Activity 被销毁.</p>
+<pre><code class="lang-js">let execution = engines.execScript(&#39;quick&#39;, &#39;log(1)&#39;);
+setTimeout(() =&gt; log(execution.isFinished()), 500); // 通常为 true
+</code></pre>
+<h2>[m#] ScriptExecution#getAgentContext<span><a class="mark" href="#engines_m_scriptexecution_getagentcontext" id="engines_m_scriptexecution_getagentcontext">#</a></span></h2>
+<h3>getAgentContext()<span><a class="mark" href="#engines_getagentcontext" id="engines_getagentcontext">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type">org.autojs.autojs.execution.AgentScriptExecutionState</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+</div><p>由 <a href="ai.html">ai.agent</a> 启动的执行返回其 Agent 运行状态, 普通执行返回 <code>null</code>. 以下几个方法是该状态的快捷读取.</p>
+<h2>[m#] ScriptExecution#getAgentRunId<span><a class="mark" href="#engines_m_scriptexecution_getagentrunid" id="engines_m_scriptexecution_getagentrunid">#</a></span></h2>
+<h3>getAgentRunId()<span><a class="mark" href="#engines_getagentrunid" id="engines_getagentrunid">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - Agent 运行 ID, 普通执行为 <code>null</code></li>
+</ul>
+</div><h2>[m#] ScriptExecution#getAgentParametersJson<span><a class="mark" href="#engines_m_scriptexecution_getagentparametersjson" id="engines_m_scriptexecution_getagentparametersjson">#</a></span></h2>
+<h3>getAgentParametersJson()<span><a class="mark" href="#engines_getagentparametersjson" id="engines_getagentparametersjson">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - Agent 运行参数的 JSON 字符串</li>
+</ul>
+</div><h2>[m#] ScriptExecution#getAgentPresetName<span><a class="mark" href="#engines_m_scriptexecution_getagentpresetname" id="engines_m_scriptexecution_getagentpresetname">#</a></span></h2>
+<h3>getAgentPresetName()<span><a class="mark" href="#engines_getagentpresetname" id="engines_getagentpresetname">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - Agent 预设名称</li>
+</ul>
+</div><h2>[m#] ScriptExecution#getAgentResult<span><a class="mark" href="#engines_m_scriptexecution_getagentresult" id="engines_m_scriptexecution_getagentresult">#</a></span></h2>
+<h3>getAgentResult()<span><a class="mark" href="#engines_getagentresult" id="engines_getagentresult">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> } - 已报告的结果 JSON</li>
+</ul>
+</div><h2>[m#] ScriptExecution#setAgentResult<span><a class="mark" href="#engines_m_scriptexecution_setagentresult" id="engines_m_scriptexecution_setagentresult">#</a></span></h2>
+<h3>setAgentResult(json)<span><a class="mark" href="#engines_setagentresult_json" id="engines_setagentresult_json">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>json</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 结果 JSON, 最多 64 KiB</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否已保存</li>
+</ul>
+</div><p>保存 Agent 运行结果. 不是有效 JSON, 超过 64 KiB 或执行不是 Agent 运行时返回 <code>false</code>.</p>
+<pre><code class="lang-js">let execution = engines.execScript(&#39;agent-step&#39;, &#39;log(1)&#39;);
+log(execution.getAgentRunId()); // null (普通执行)
+log(execution.setAgentResult(&#39;{&quot;ok&quot;:true}&#39;)); // false
+</code></pre>
+<hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">ScriptEngine</p>
 
 <hr>
@@ -681,6 +771,39 @@ console.log(execution.getId());
     setInterval(() =&gt; {}, 1000);
 `);
 setTimeout(() =&gt; execution.getEngine().emit(&#39;message&#39;, &#39;hello&#39;), 100);
+</code></pre>
+<h2>[m#] ScriptEngine#getTag<span><a class="mark" href="#engines_m_scriptengine_gettag" id="engines_m_scriptengine_gettag">#</a></span></h2>
+<h3>getTag(key)<span><a class="mark" href="#engines_gettag_key" id="engines_gettag_key">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>key</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 标签名</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 标签值, 未设置时为 <code>null</code></li>
+</ul>
+</div><p>读取引擎上的标签. 宿主使用的标签包括 <code>source</code> (脚本源), <code>execute_path</code> (工作目录) 和 <code>env_path</code>.</p>
+<h2>[m#] ScriptEngine#setTag<span><a class="mark" href="#engines_m_scriptengine_settag" id="engines_m_scriptengine_settag">#</a></span></h2>
+<h3>setTag(key, value)<span><a class="mark" href="#engines_settag_key_value" id="engines_settag_key_value">#</a></span></h3>
+<div class="signature"><ul>
+<li><strong>key</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 标签名</li>
+<li><strong>value</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 标签值, <code>null</code> 表示删除</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
+</ul>
+</div><p>在引擎上保存标签, 可用于在同一引擎的不同线程之间共享数据.</p>
+<pre><code class="lang-js">let engine = engines.myEngine();
+engine.setTag(&#39;stage&#39;, &#39;login&#39;);
+log(engine.getTag(&#39;stage&#39;)); // login
+</code></pre>
+<h2>[m#] ScriptEngine#getUncaughtException<span><a class="mark" href="#engines_m_scriptengine_getuncaughtexception" id="engines_m_scriptengine_getuncaughtexception">#</a></span></h2>
+<h3>getUncaughtException()<span><a class="mark" href="#engines_getuncaughtexception" id="engines_getuncaughtexception">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type">java.lang.Throwable</span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+</div><p>引擎记录的未捕获异常, 没有时为 <code>null</code>. 脚本因异常结束后, 可经 <a href="#engines_m_execscript">execScript</a> 返回的执行对象的 <code>getEngine()</code> 读取.</p>
+<h2>[m#] ScriptEngine#getBackingSourcePath<span><a class="mark" href="#engines_m_scriptengine_getbackingsourcepath" id="engines_m_scriptengine_getbackingsourcepath">#</a></span></h2>
+<h3>getBackingSourcePath()<span><a class="mark" href="#engines_getbackingsourcepath" id="engines_getbackingsourcepath">#</a></span></h3>
+<div class="signature"><ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> | <span class="type"><a href="dataTypes.html#datatypes_null">null</a></span> }</li>
+</ul>
+</div><p>脚本源是文件时返回该文件的绝对路径, 其他来源 (如字符串脚本) 返回 <code>null</code>.</p>
+<pre><code class="lang-js">log(engines.myEngine().getBackingSourcePath());
 </code></pre>
 <hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">ExecutionConfig</p>

@@ -275,6 +275,21 @@ console.log(dc); // hello
 console.log(dc === message); // true
 ```
 
+## [m] fromHex
+
+### fromHex(hex)
+
+- **hex** { [string](dataTypes#string) } - 十六进制字符串, 长度须为偶数
+- <ins>**returns**</ins> { [JavaArray](dataTypes#javaarray)<[number](dataTypes#number)> } - Java 字节数组
+
+把十六进制字符串转换为 Java 字节数组, 与 `crypto.toHex(bytes)` 互逆. 长度为奇数或含非十六进制字符时抛出异常.
+
+```js
+let bytes = crypto.fromHex('48656c6c6f');
+console.log(java.lang.String(bytes)); // Hello
+console.log(crypto.toHex(bytes)); // 48656c6c6f
+```
+
 ## [m] generateKeyPair
 
 ### generateKeyPair(algorithm)

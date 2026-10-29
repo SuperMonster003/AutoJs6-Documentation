@@ -168,6 +168,27 @@ setTimeout(() => {
 
 使悬浮窗被关闭时自动结束脚本运行.
 
+## window.findView(id)
+
+- **id** { [string](dataTypes#string) } 控件 ID
+- <ins>**returns**</ins> { android.view.View | [null](dataTypes#null) }
+
+在悬浮窗界面中按 ID 查找控件, 与 `window.{id}` 相同.
+
+## window.requestFocus()
+
+使悬浮窗获得焦点, 以便其中的输入框接收键盘输入.
+
+## window.disableFocus()
+
+取消悬浮窗的焦点, 返回键等按键事件重新交给下层应用.
+
+```js
+let w = floaty.window(<frame><input id="input"/></frame>);
+w.requestFocus();
+setTimeout(() => w.disableFocus(), 5000);
+```
+
 # FloatyRawWindow
 
 原始悬浮窗对象, 可通过 `window.{id}` 获取悬浮窗界面上的元素. 例如, 悬浮窗 window 上一个控件的 id 为 aaa, 那么 `window.aaa` 即可获取到该控件, 类似于 ui.
@@ -250,3 +271,24 @@ setTimeout(()=>{
 ## window.exitOnClose()
 
 使悬浮窗被关闭时自动结束脚本运行.
+
+## window.findView(id)
+
+- **id** { [string](dataTypes#string) } 控件 ID
+- <ins>**returns**</ins> { android.view.View | [null](dataTypes#null) }
+
+在悬浮窗界面中按 ID 查找控件, 与 `window.{id}` 相同.
+
+## window.requestFocus()
+
+使悬浮窗获得焦点, 以便其中的输入框接收键盘输入.
+
+## window.disableFocus()
+
+取消悬浮窗的焦点, 返回键等按键事件重新交给下层应用.
+
+```js
+let w = floaty.rawWindow(<frame><input id="input"/></frame>);
+w.requestFocus();
+setTimeout(() => w.disableFocus(), 5000);
+```

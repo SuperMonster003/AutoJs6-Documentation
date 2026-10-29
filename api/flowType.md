@@ -243,6 +243,13 @@ flow.wait(className('EditText'))
 
 [事件驱动等待](automator#事件驱动等待) 的四个函数可作为链式步骤: `waitForIdle` 透传链上的值, 其余以到达的事件, Toast 或通知为新值.
 
+| 步骤 | 新值 | 参数 |
+| --- | --- | --- |
+| `waitForIdle(quietFor?)` | 链上原值 | 同 [flow.waitForIdle](flow#m-waitforidle) |
+| `waitForEvent(type?, filter?, timeout?)` | 无障碍事件 | 同 [flow.waitForEvent](flow#m-waitforevent) |
+| `waitForToast(text?, timeout?)` | Toast | 同 [flow.waitForToast](flow#m-waitfortoast) |
+| `waitForNotification(filter?, timeout?)` | [Notification](events#notification) | 同 [flow.waitForNotification](flow#m-waitfornotification) |
+
 ```js
 flow.wait('提交').click()
     .waitForIdle(800)

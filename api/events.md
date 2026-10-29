@@ -283,6 +283,22 @@ events.onNotification(function(notification){
 
 Toast 监听依赖于无障碍服务, 因此此函数会确保无障碍服务运行.
 
+## events.removeToastObserver()
+
+停止 Toast 监听. 同时没有通知监听时, 脚本不再因事件监听而保持运行.
+
+## events.removeNotificationObserver()
+
+停止通知监听, 与 `events.observeNotification()` 相对. 同时没有 Toast 监听时, 脚本不再因事件监听而保持运行.
+
+```js
+events.observeToast();
+events.on('toast', (toast) => {
+    log(toast.getText());
+    events.removeToastObserver(); /* 只处理第一条 Toast. */
+});
+```
+
 ## 事件: 'toast'
 
 - **toast** { [Object](dataTypes#object) }

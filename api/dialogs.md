@@ -641,3 +641,117 @@ dialogs.build({
     * `positive`
     * `negative`
     * `neutral`
+
+## 其他成员
+
+对话框对象还提供以下方法. 修改界面的方法 (如 `setTitle`, `setContent`, `setProgress`, `setActionButton`) 可在任意线程调用, 非 UI 线程会转到 UI 线程执行; 其余方法直接转发给底层的 MaterialDialog 或 `android.app.Dialog`, 涉及视图的操作应在 UI 线程调用.
+
+```js
+let d = dialogs.build({ title: '下载', progress: { max: 100 } }).show();
+d.setProgress(30);
+d.setContent('已完成 30%');
+log(d.getCurrentProgress()); // 30
+log(d.isShowing()); // true
+```
+
+### 标题, 内容与视图
+
+| 方法 | 说明 |
+| --- | --- |
+| `setTitle(title)` | 设置标题 |
+| `setContent(content)` | 设置正文内容 |
+| `setIcon(icon)` | 设置图标 (资源 ID 或 Drawable) |
+| `setIconAttribute(attrId)` | 按主题属性设置图标 |
+| `setTypeface(target, typeface)` | 设置某个 TextView 的字体 |
+| `getTitleView()` | 返回标题 TextView |
+| `getContentView()` | 返回正文 TextView |
+| `getIconView()` | 返回图标 ImageView |
+| `getCustomView()` | 返回 `customView` 选项设置的自定义视图 |
+| `getView()` | 返回对话框的根视图 |
+| `getInputEditText()` | 返回输入框 EditText, 没有输入框时为 `null` |
+| `getRecyclerView()` | 返回列表的 RecyclerView |
+| `findViewById(id)` | 在对话框视图中按 ID 查找视图 |
+
+### 按钮
+
+| 方法 | 说明 |
+| --- | --- |
+| `setActionButton(action, text)` | 设置 `positive`, `negative` 或 `neutral` 按钮的文字 |
+| `hasActionButtons()` | 是否有任一动作按钮 |
+| `numberOfActionButtons()` | 动作按钮的数量 |
+
+### 列表
+
+| 方法 | 说明 |
+| --- | --- |
+| `getItems()` | 返回列表项 |
+| `setItems(...items)` | 替换列表项 |
+| `notifyItemInserted(index)` | 通知列表在 `index` 处插入了一项 |
+| `notifyItemChanged(index)` | 通知列表第 `index` 项已改变 |
+| `notifyItemsChanged()` | 通知列表全部项已改变 |
+| `getSelectedIndex()` | 单选列表的选中索引 |
+| `setSelectedIndex(index)` | 设置单选列表的选中索引 |
+| `getSelectedIndices()` | 多选列表的选中索引数组 |
+| `setSelectedIndices(indices)` | 设置多选列表的选中索引 |
+| `selectAllIndices(sendCallback?)` | 多选列表全选; `sendCallback` 为 `true` 时触发选择回调 |
+| `clearSelectedIndices(sendCallback?)` | 清除多选列表的选择; `sendCallback` 同上 |
+
+### 进度
+
+| 方法 | 说明 |
+| --- | --- |
+| `getCurrentProgress()` | 当前进度, 与 `getProgress()` 相同 |
+| `setProgress(progress)` | 设置当前进度 |
+| `incrementProgress(by)` | 进度增加 `by` |
+| `setMaxProgress(max)` | 设置最大进度 |
+| `isIndeterminateProgress()` | 是否为不确定进度条 |
+| `getProgressBar()` | 返回 ProgressBar |
+| `setProgressNumberFormat(format)` | 设置进度数字的格式, 如 `'%1d/%2d'` |
+| `setProgressPercentFormat(format)` | 设置百分比格式 (java.text.NumberFormat) |
+
+### 复选框与提示
+
+| 方法 | 说明 |
+| --- | --- |
+| `isPromptCheckBoxChecked()` | `checkBoxPrompt` 复选框是否选中 |
+| `setPromptCheckBoxChecked(checked)` | 设置复选框的选中状态 |
+| `showSnack(text, isLong?)` / `showSnack(text, duration)` | 在对话框底部显示 Snackbar |
+
+### 状态
+
+| 方法 | 说明 |
+| --- | --- |
+| `isShowing()` | 是否正在显示 |
+| `isCancelled()` | 是否已被取消 |
+| `hide()` | 隐藏对话框, 之后可再次 `show()` |
+| `create()` | 创建对话框但不显示 |
+| `setCancelable(flag)` | 是否允许返回键取消 |
+| `setCanceledOnTouchOutside(cancel)` | 是否允许点击外部取消 |
+| `getTag()` | 返回 MaterialDialog 的 tag, 未设置时为 `null` |
+| `getBuilder()` | 返回底层的 MaterialDialog.Builder |
+
+### android.app.Dialog 方法
+
+以下方法与 `android.app.Dialog` 的同名方法相同 (参阅 [Android 文档](https://developer.android.com/reference/android/app/Dialog)). 设置监听器时, 使用 `on('show')`, `on('cancel')`, `on('dismiss')` 等事件更为方便.
+
+| 方法 | 说明 |
+| --- | --- |
+| `getWindow()` | 返回对话框的 Window, 可用于调整窗口类型或布局参数 |
+| `getContext()` | 返回对话框的 Context |
+| `getOwnerActivity()` / `setOwnerActivity(activity)` | 所属 Activity |
+| `getActionBar()` | 返回 ActionBar, 通常为 `null` |
+| `getCurrentFocus()` | 当前获得焦点的视图 |
+| `getLayoutInflater()` | 返回 LayoutInflater |
+| `setContentView(view)` | 替换整个内容视图 (已弃用, 会覆盖 MaterialDialog 的布局) |
+| `addContentView(view, params)` | 追加内容视图 |
+| `requestWindowFeature(featureId)` | 请求窗口特性 |
+| `setFeatureDrawable(featureId, drawable)` / `setFeatureDrawableResource(featureId, resId)` / `setFeatureDrawableUri(featureId, uri)` / `setFeatureDrawableAlpha(featureId, alpha)` | 设置窗口特性的图标 |
+| `takeKeyEvents(get)` | 是否接收按键事件 |
+| `setVolumeControlStream(streamType)` / `getVolumeControlStream()` | 音量键控制的音频流 |
+| `getSearchEvent()` | 最近一次搜索请求的 SearchEvent |
+| `openOptionsMenu()` / `closeOptionsMenu()` / `invalidateOptionsMenu()` | 选项菜单 |
+| `registerForContextMenu(view)` / `unregisterForContextMenu(view)` / `openContextMenu(view)` | 上下文菜单 |
+| `setOnShowListener(listener)` | 显示监听器 |
+| `setOnCancelListener(listener)` / `setCancelMessage(msg)` | 取消监听器或消息 |
+| `setOnDismissListener(listener)` / `setDismissMessage(msg)` | 关闭监听器或消息; 与 `dismiss` 事件可以同时使用 |
+| `setOnKeyListener(listener)` | 按键监听器 |

@@ -4601,38 +4601,38 @@ pickup(editable(true), '@');
 pickup({ editable: true }, '@');
 ```
 
-## [m#] contentValid
+## [m#] contentInvalid
 
-### contentValid(b?)
+### contentInvalid(b?)
 
 **`Overload [1-2]/2`** **`Global`**
 
 - **[ b = true ]** { [boolean](dataTypes#boolean) }
 - <ins>**returns**</ins> { [UiSelector](uiSelectorType) }
 
-控件内容有效状态选择器.
+控件内容无效状态选择器.
 
-- 筛选条件说明: 控件的内容有效的状态与指定参数相符
-- 关联控件属性: isContentValid
+- 筛选条件说明: 控件的内容无效 (如输入框内容未通过校验) 的状态与指定参数相符
+- 关联控件属性: isContentInvalid
 
 例如对于以下控件:
 
 ```js
-/* 表示控件是内容有效的. */
-w.isContentValid(); // true
+/* 表示控件的内容被标记为无效. */
+w.isContentInvalid(); // true
 ```
 
-`contentValid()` 及 `contentValid(true)` 均可匹配控件 `w`.
+`contentInvalid()` 及 `contentInvalid(true)` 均可匹配控件 `w`.
 
 [拾取选择器](#m-pickup) 示例:
 
 ```js
-pickup(contentValid(), '@');
-pickup({ contentValid: [] }, '@');
-pickup({ contentValid: null }, '@'); /* 不推荐. */
+pickup(contentInvalid(), '@');
+pickup({ contentInvalid: [] }, '@');
+pickup({ contentInvalid: null }, '@'); /* 不推荐. */
 
-pickup(contentValid(true), '@');
-pickup({ contentValid: true }, '@');
+pickup(contentInvalid(true), '@');
+pickup({ contentInvalid: true }, '@');
 ```
 
 ## [m#] contextClickable
@@ -6181,6 +6181,18 @@ console.log(selA); // text("A").minTop(0.5).desc("B").maxHeight(0.5)
 ```
 
 > 参阅: [plus](#m-plus) 方法小节.
+
+## [m#] toStringReadable
+
+### toStringReadable()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+返回选择器的可读文本, 形如 `[UiSelector: ...]`, 列出已添加的筛选条件. `console.log` 打印选择器时使用此文本.
+
+```js
+console.log(text('OK').clickable().toStringReadable());
+```
 
 ## [m] pickup
 

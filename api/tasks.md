@@ -305,15 +305,56 @@ tasks.addCountdownTask({
 
 ## TimedTask
 
-由定时任务创建和查询方法返回的 Java 对象. 常用属性包括:
+由定时任务创建和查询方法返回的 Java 对象. 属性可直接读写 (如 `task.loopTimes`), 也可调用对应的读取 / 设置方法; 修改后须调用 [tasks.updateTask](#m-updatetask) 保存并重新调度.
 
-- `id`, `millis`, `scriptPath`, `timeFlag`.
-- `delay`, `interval`, `loopTimes`.
-- `repeatMode`, `endMode`, `endValue`, `finishedTimes`.
-- `dayOfMonth`, `monthOfYear`, `scheduled`.
+```js
+let task = tasks.getTimedTask(1);
+if (task !== null) {
+    log(task.getScriptPath(), task.getNextTime());
+    task.setLoopTimes(3);
+    tasks.updateTask(task);
+}
+```
 
-常用方法包括 `getNextTime()`, `isDisposable()`, `isDaily()`, `isWeekly()`, `isMonthly()`, `isYearly()` 和 `isCountdown()`.
+| 属性 | 读取 / 设置方法 | 说明 |
+| --- | --- | --- |
+| `id` | `getId()` / `setId(id)` | 任务 ID, 保存后由数据库分配 |
+| `scriptPath` | `getScriptPath()` / `setScriptPath(path)` | 要执行的脚本路径 |
+| `millis` | `getMillis()` / `setMillis(millis)` | 一次性任务的执行时刻, 或周期任务一天内的执行时间 (毫秒) |
+| `timeFlag` | `getTimeFlag()` / `setTimeFlag(flag)` | 星期位标志, 参阅 [tasks.timeFlagToDays](#m-timeflagtodays) |
+| `delay` | `getDelay()` / `setDelay(delay)` | 执行延时 (毫秒) |
+| `interval` | `getInterval()` / `setInterval(interval)` | 循环执行的间隔 (毫秒) |
+| `loopTimes` | `getLoopTimes()` / `setLoopTimes(times)` | 循环执行次数 |
+| `repeatMode` | `getRepeatMode()` / `setRepeatMode(mode)` | 重复模式: `0` 一次性, `1` 每日, `2` 每周, `3` 每月, `4` 每年, `5` 倒计时 |
+| `endMode` | `getEndMode()` / `setEndMode(mode)` | 结束条件: `0` 永久重复, `1` 重复至日期, `2` 重复指定次数 (参阅上文 "重复结束条件") |
+| `endValue` | `getEndValue()` / `setEndValue(value)` | 结束条件的值 (时间戳或次数) |
+| `finishedTimes` | `getFinishedTimes()` / `setFinishedTimes(times)` | 已执行次数 |
+| `dayOfMonth` | `getDayOfMonth()` / `setDayOfMonth(day)` | 每月或每年任务的日期 |
+| `monthOfYear` | `getMonthOfYear()` / `setMonthOfYear(month)` | 每年任务的月份 |
+| `scheduled` | `isScheduled()` / `setScheduled(scheduled)` | 是否已交给调度后端; `updateTask` 会先清除它 |
+| `projectRoot` | `getProjectRoot()` / `setProjectRoot(root)` | 创建任务时记录的项目根目录, 执行时随启动 Intent 传给脚本 |
+| `sourceKind` | `getSourceKind()` / `setSourceKind(kind)` | 创建任务时记录的脚本来源类型 |
+
+| 方法 | 说明 |
+| --- | --- |
+| `getNextTime()` | 下一次执行的时间戳 |
+| `hasDayOfWeek(context, dayOfWeek)` | `timeFlag` 是否包含该星期 (`1` 至 `7` 依次为周一至周日) |
+| `isDisposable()` / `isDaily()` / `isWeekly()` / `isMonthly()` / `isYearly()` / `isCountdown()` | 按重复模式判断任务类型 |
 
 ## IntentTask
 
-由广播任务创建和查询方法返回的 Java 对象. 常用属性包括 `id`, `scriptPath`, `action`, `category`, `dataType` 和 `local`.
+由广播任务创建和查询方法返回的 Java 对象. 属性与读取 / 设置方法的用法同 [TimedTask](#timedtask).
+
+| 属性 | 读取 / 设置方法 | 说明 |
+| --- | --- | --- |
+| `id` | `getId()` / `setId(id)` | 任务 ID |
+| `scriptPath` | `getScriptPath()` / `setScriptPath(path)` | 收到广播时执行的脚本路径 |
+| `action` | `getAction()` / `setAction(action)` | 广播的 action |
+| `category` | `getCategory()` / `setCategory(category)` | 广播的 category |
+| `dataType` | `getDataType()` / `setDataType(type)` | 广播的数据 MIME 类型 |
+| `extras` | `getExtras()` / `setExtras(extras)` | 附加数据字符串 |
+| `local` | `isLocal()` / `setLocal(local)` | 为 `true` 时只响应 AutoJs6 应用内事件 (如应用启动), 不注册系统广播 |
+| `projectRoot` | `getProjectRoot()` / `setProjectRoot(root)` | 创建任务时记录的项目根目录 |
+| `sourceKind` | `getSourceKind()` / `setSourceKind(kind)` | 创建任务时记录的脚本来源类型 |
+
+`getIntentFilter()` 返回按 `action`, `category` 和 `dataType` 构造的 `android.content.IntentFilter`.

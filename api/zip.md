@@ -400,6 +400,14 @@ console.log(header.crc);
 
 返回包含操作名称, ZIP 路径和选项的对象描述.
 
+## [m#] ZipFileHandle#toStringReadable
+
+### ZipFileHandle#toStringReadable()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 与 `toString()` 相同
+
+`console.log` 打印 ZIP 对象时使用此文本.
+
 ---
 
 ## ZipOpenOptions

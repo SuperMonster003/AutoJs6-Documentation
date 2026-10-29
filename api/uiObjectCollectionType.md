@@ -933,6 +933,44 @@ className('EditText').find().setTextEach('');
 
 控件集合执行 [[ 设置进度值 ] 行为](uiObjectActionsType#m-setprogress).
 
+## [m#] contains
+
+### contains(o)
+
+- **o** { [UiObject](uiObjectType) | [null](dataTypes#null) }
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+集合是否包含控件 `o`.
+
+```js
+let list = className('TextView').find();
+console.log(list.contains(list.get(0))); // true
+```
+
+## [m#] iterator
+
+### iterator()
+
+- <ins>**returns**</ins> { java.util.Iterator<[UiObject](uiObjectType)> }
+
+返回遍历集合中控件的 Java 迭代器.
+
+```js
+let it = className('TextView').find().iterator();
+while (it.hasNext()) {
+    console.log(it.next().text());
+}
+```
+
+## [m#] isSimilar
+
+### isSimilar(other)
+
+- **other** { [any](dataTypes#any) } - 另一个控件集合
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+两个集合的控件哈希值相同时返回 `true`, 适合比较两次查找的结果.
+
 ## [m] of
 
 ### of(list)

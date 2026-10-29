@@ -1466,6 +1466,28 @@ let [ h, s, l, a ] = Color('#BF663399').toHsla();
 console.log(`H: ${h}, S: ${s}, L: ${l}, A: ${a}`);
 ```
 
+## [m#] argb / rgb / rgba / hsv / hsva / hsl / hsla
+
+### argb() / rgb() / rgba() / hsv() / hsva() / hsl() / hsla()
+
+- <ins>**returns**</ins> { [ColorComponents](dataTypes#colorcomponents) } - 颜色分量数组
+
+[toArgb](#m-toargb), [toRgb](#m-torgb), [toRgba](#m-torgba), [toHsv](#m-tohsv), [toHsva](#m-tohsva), [toHsl](#m-tohsl) 和 [toHsla](#m-tohsla) 的简写, 返回值相同.
+
+```js
+let c = Color('#BF663399');
+console.log(c.hsla()); /* 同 c.toHsla(). */
+console.log(c.argb()); /* 同 c.toArgb(). */
+```
+
+## [m#] toStringReadable
+
+### toStringReadable()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+返回颜色的可读文本. `console.log` 打印颜色实例时使用此文本.
+
 ## [m#] isSimilar
 
 ### isSimilar(other, threshold?, algorithm?)

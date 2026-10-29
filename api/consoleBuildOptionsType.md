@@ -70,6 +70,8 @@ console.build({ exitOnClose: false }).show();
 
 `exitOnClose` 设置为 `true` 时, 相当于 `exitOnClose(5e3)`, 即脚本结束时浮动窗口在 `5` 秒钟后自动关闭.
 
+`console.build()` 返回的构建器上, 只读属性 `exitOnCloseTimeout` 记录生效的超时时间 (毫秒).
+
 ## [p?] touchable
 
 - [ `true` ] { [boolean](dataTypes#boolean) } - 是否响应点击事件
@@ -318,6 +320,8 @@ console.build({
     console[fName].call(console, `content text color test for console.${fName}`);
 });
 ```
+
+`console.build()` 返回的构建器上, 只读属性 `contentTextColors` 记录生效的各等级文本颜色 (颜色值数组, 未设置时为 `null`).
 
 ## [p?] contentBackgroundColor
 

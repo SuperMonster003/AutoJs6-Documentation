@@ -92,6 +92,21 @@ Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 AP
 
 使用 OpenCV 读取本地图片. 读取失败时可能返回空矩阵, 可使用 `Mat#empty()` 检查.
 
+返回的矩阵是 AutoJs6 的 `org.autojs.autojs.core.opencv.Mat`, 继承 OpenCV `Mat` 的全部方法, 另有以下成员:
+
+| 方法 | 说明 |
+| --- | --- |
+| `release()` | 释放原生内存; 重复调用无影响 |
+| `isReleased()` | 是否已释放 |
+| `convertTo(type, isRelease?)` | 转换为 `type` 类型 (如 `CvType.CV_8UC3`) 的新矩阵, 8UC4 与 8UC3 之间会同时转换颜色通道; `isRelease` 为 `true` 时转换后释放原矩阵 |
+
+```js
+let mat = images.imread('./1.png');
+let bgr = mat.convertTo(org.opencv.core.CvType.CV_8UC3, true);
+console.log(mat.isReleased()); // true
+bgr.release();
+```
+
 ### [m] images.load(src)
 
 - **src** { [string](dataTypes#string) } - 图片 URL
@@ -1547,6 +1562,13 @@ console.log(upperHalf.size);
 - <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) }
 
 从 AutoJs6 6.8.0 起, 上述方向和相似度选择方法会按完整浮点值正确比较.
+
+#### [m#] MatchingResult#findMax(comparator)
+
+- **comparator** { java.util.Comparator<[TemplateMatch](#templatematch)> | [null](dataTypes#null) } - Java 比较器
+- <ins>**returns**</ins> { [TemplateMatch](#templatematch) | [null](dataTypes#null) } - 按比较器排在最前的匹配; 没有匹配或比较器为 `null` 时为 `null`
+
+`leftmost()`, `best()` 等方法的底层实现. 脚本中通常使用 `sortBy` 或上述方法.
 
 #### [m#] MatchingResult#sortBy(direction)
 

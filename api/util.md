@@ -177,6 +177,37 @@ AutoJs6 工具模块对象.
 
 递归解包 Rhino `Wrapper` 对象. 字符串, 数字和布尔值会规范化为对应的 JavaScript 值, Kotlin `Unit` 会转换为 `undefined`.
 
+## [m] class
+
+### util.class(o)
+
+- **o** { [any](dataTypes#any) } - 非空值或 Java 类
+- <ins>**returns**</ins> { java.lang.Class } - Java 类
+
+返回 `o` 的 Java 类; `o` 本身是 `java.lang.Class` 时原样返回. `o` 为 `null` 或 `undefined` 时抛出异常.
+
+```js
+console.log(util.class(new java.util.ArrayList())); // class java.util.ArrayList
+```
+
+## [m] getClassName
+
+### util.getClassName(o)
+
+- **o** { [any](dataTypes#any) } - 非空值或 Java 类
+- <ins>**returns**</ins> { [string](dataTypes#string) } - Java 类名
+
+返回 `o` 的 Java 类名, 即 `util.class(o).getName()`. JavaScript 值按 Rhino 的包装类计算, 如 JavaScript 对象为 `org.mozilla.javascript.NativeObject`.
+
+```js
+console.log(util.getClassName(new java.util.ArrayList())); // java.util.ArrayList
+console.log(util.getClassName(java.lang.String)); // java.lang.String
+```
+
+### util.className(o)
+
+`util.getClassName(o)` 的别名.
+
 ## [m] extend
 
 ### util.extend(derived, base)

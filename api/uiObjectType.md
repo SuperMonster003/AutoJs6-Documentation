@@ -2215,6 +2215,48 @@ console.log(w.toJSON().bounds);
 
 > 参阅: 含子控件的导出见 [dumpSubtree](#m-dumpsubtree).
 
+## [m#] summary
+
+### summary()
+
+**`A11Y`**
+
+- <ins>**returns**</ins> { [string](dataTypes#string) }
+
+返回控件属性的多行 `{ name=value ... }` 列表: 字符串加引号, 列表逐项展开, 边界写作 `Rect(l, t - r, b)`, 中心写作 `{x, y}`. 适合打印调试.
+
+```js
+console.log(text('登录').findOnce().summary());
+```
+
+## [m#] isSimilar
+
+### isSimilar(other)
+
+**`A11Y`**
+
+- **other** { [any](dataTypes#any) } - 另一个控件
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+判断两个控件是否 "相似": 对应同一平台节点, 所列属性全部相等, 且首末兄弟控件与子控件的字符串形式相等. 适合比较两次查找得到的控件对象.
+
+```js
+let a = id('title').findOnce();
+let b = id('title').findOnce();
+console.log(a.isSimilar(b)); // true
+```
+
+## [m#] brother
+
+### brother(i)
+
+**`DEPRECATED`** **`A11Y`**
+
+- **i** { [number](dataTypes#number) } - 索引偏移量
+- <ins>**returns**</ins> { [UiObject](uiObjectType) | [null](dataTypes#null) }
+
+已弃用, 等同于 [offset(i)](#m-offset).
+
 ## [m#] dumpSubtree
 
 ### dumpSubtree(options?)

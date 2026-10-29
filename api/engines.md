@@ -210,6 +210,66 @@ engines.on('start', (engine) => {
 
 - <ins>**returns**</ins> { [number](dataTypes#number) } - 执行 ID
 
+## [m#] ScriptExecution#isFinished
+
+### isFinished()
+
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) }
+
+执行已报告结果后即为 `true`, 即使引擎仍在销毁过程中. UI 脚本的执行会保持注册, 直到其 Activity 被销毁.
+
+```js
+let execution = engines.execScript('quick', 'log(1)');
+setTimeout(() => log(execution.isFinished()), 500); // 通常为 true
+```
+
+## [m#] ScriptExecution#getAgentContext
+
+### getAgentContext()
+
+- <ins>**returns**</ins> { org.autojs.autojs.execution.AgentScriptExecutionState | [null](dataTypes#null) }
+
+由 [ai.agent](ai) 启动的执行返回其 Agent 运行状态, 普通执行返回 `null`. 以下几个方法是该状态的快捷读取.
+
+## [m#] ScriptExecution#getAgentRunId
+
+### getAgentRunId()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Agent 运行 ID, 普通执行为 `null`
+
+## [m#] ScriptExecution#getAgentParametersJson
+
+### getAgentParametersJson()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Agent 运行参数的 JSON 字符串
+
+## [m#] ScriptExecution#getAgentPresetName
+
+### getAgentPresetName()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - Agent 预设名称
+
+## [m#] ScriptExecution#getAgentResult
+
+### getAgentResult()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) } - 已报告的结果 JSON
+
+## [m#] ScriptExecution#setAgentResult
+
+### setAgentResult(json)
+
+- **json** { [string](dataTypes#string) } - 结果 JSON, 最多 64 KiB
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 是否已保存
+
+保存 Agent 运行结果. 不是有效 JSON, 超过 64 KiB 或执行不是 Agent 运行时返回 `false`.
+
+```js
+let execution = engines.execScript('agent-step', 'log(1)');
+log(execution.getAgentRunId()); // null (普通执行)
+log(execution.setAgentResult('{"ok":true}')); // false
+```
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">ScriptEngine</p>
@@ -311,6 +371,51 @@ let execution = engines.execScript('receiver', `
     setInterval(() => {}, 1000);
 `);
 setTimeout(() => execution.getEngine().emit('message', 'hello'), 100);
+```
+
+## [m#] ScriptEngine#getTag
+
+### getTag(key)
+
+- **key** { [string](dataTypes#string) } - 标签名
+- <ins>**returns**</ins> { [any](dataTypes#any) } - 标签值, 未设置时为 `null`
+
+读取引擎上的标签. 宿主使用的标签包括 `source` (脚本源), `execute_path` (工作目录) 和 `env_path`.
+
+## [m#] ScriptEngine#setTag
+
+### setTag(key, value)
+
+- **key** { [string](dataTypes#string) } - 标签名
+- **value** { [any](dataTypes#any) } - 标签值, `null` 表示删除
+- <ins>**returns**</ins> { [void](dataTypes#void) }
+
+在引擎上保存标签, 可用于在同一引擎的不同线程之间共享数据.
+
+```js
+let engine = engines.myEngine();
+engine.setTag('stage', 'login');
+log(engine.getTag('stage')); // login
+```
+
+## [m#] ScriptEngine#getUncaughtException
+
+### getUncaughtException()
+
+- <ins>**returns**</ins> { java.lang.Throwable | [null](dataTypes#null) }
+
+引擎记录的未捕获异常, 没有时为 `null`. 脚本因异常结束后, 可经 [execScript](#m-execscript) 返回的执行对象的 `getEngine()` 读取.
+
+## [m#] ScriptEngine#getBackingSourcePath
+
+### getBackingSourcePath()
+
+- <ins>**returns**</ins> { [string](dataTypes#string) | [null](dataTypes#null) }
+
+脚本源是文件时返回该文件的绝对路径, 其他来源 (如字符串脚本) 返回 `null`.
+
+```js
+log(engines.myEngine().getBackingSourcePath());
 ```
 
 ---

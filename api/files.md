@@ -776,6 +776,10 @@ log(jsFiles);
 
 读取剩余的所有行, 并返回它们按顺序组成的字符串数组.
 
+## ReadableTextFile.getPath()
+
+返回该文件的路径.
+
 ## close()
 
 关闭该文件.
@@ -803,6 +807,10 @@ log(jsFiles);
 - **lines** { [Array](dataTypes#array) } 字符串数组
 
 把很多行写入到文件中....
+
+## PWritableTextFile.getPath()
+
+返回该文件的路径.
 
 ## PWritableTextFile.flush()
 

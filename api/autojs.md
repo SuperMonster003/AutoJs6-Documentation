@@ -311,6 +311,19 @@ AutoJs6 应用名称.
 autojs.themeColor.getColorPrimary(); /* 获取 AutoJs6 主题色的主色色值. */
 ```
 
+主题颜色实例 (ThemeColor) 的成员:
+
+| 成员 | 说明 |
+| --- | --- |
+| `colorPrimary` / `getColorPrimary()` | 主色色值 |
+| `colorPrimaryDark` / `getColorPrimaryDark()` | 深色主色色值 |
+| `colorAccent` / `getColorAccent()` | 强调色色值 |
+| `colorPrimary(color)` / `colorPrimaryDark(color)` / `colorAccent(color)` | 修改实例中的对应颜色并返回实例本身, 不会写入设置 |
+| `isLuminanceLight(backgroundColorMatters?)` | AutoJs6 当前主题是否为浅色; `backgroundColorMatters` 默认为 `true` |
+| `isLuminanceDark(backgroundColorMatters?)` | 与 `isLuminanceLight` 相反 |
+| `readFrom()` | 从 AutoJs6 的外观设置重新读取三种颜色, 返回实例本身 |
+| `saveIn()` | 把三种颜色写入 AutoJs6 的外观设置, 会改变应用的主题色 |
+
 ## [p+] version
 
 ### [p] name

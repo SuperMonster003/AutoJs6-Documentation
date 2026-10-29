@@ -197,35 +197,35 @@ typeof global.sleep; // "function"
 
 ## [p+] axios
 
-**`Global`** **`Getter`**
+**`Global`** **`Getter`** **`[6.8.0]`**
 
 - { [Function](dataTypes#function) | [Object](dataTypes#object) }
 
-返回运行时内置的 Axios 模块对象.
+返回 Axios 模块对象, 与 `require('axios')` 为同一对象. 自 6.8.0 起由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 插件不可用时读取会抛出说明如何安装或开启的错误.
 
 ## [p+] cheerio
 
-**`Global`** **`Getter`**
+**`Global`** **`Getter`** **`[6.8.0]`**
 
 - { [Function](dataTypes#function) | [Object](dataTypes#object) }
 
-返回运行时内置的 Cheerio 模块对象.
+返回 Cheerio 模块对象, 与 `require('cheerio')` 为同一对象. 自 6.8.0 起由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 插件不可用时读取会抛出说明如何安装或开启的错误.
 
 ## [p+] dayjs
 
-**`Global`** **`Getter`**
+**`Global`** **`Getter`** **`[6.8.0]`**
 
 - { [Function](dataTypes#function) | [Object](dataTypes#object) }
 
-返回运行时内置的 Day.js 模块对象.
+返回 Day.js 模块对象, 与 `require('dayjs')` 为同一对象. 自 6.8.0 起由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 插件不可用时读取会抛出说明如何安装或开启的错误.
 
 ## [p+] i18n
 
-**`Global`** **`Getter`**
+**`Global`** **`Getter`** **`[6.8.0]`**
 
 - { [Object](dataTypes#object) }
 
-返回运行时内置的国际化模块对象.
+返回 [国际化](i18n) 模块对象, 与 `require('i18n')` 为同一对象. 自 6.8.0 起由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 插件不可用时读取会抛出说明如何安装或开启的错误.
 
 ## [p+] pangu
 
@@ -233,7 +233,7 @@ typeof global.sleep; // "function"
 
 - { [Object](dataTypes#object) }
 
-返回内置的 [文本间距](pangu) 模块对象. 首次访问时加载, 同一脚本运行时内复用此对象.
+返回 [文本间距](pangu) 模块对象, 由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供. 首次访问时加载, 同一脚本运行时内复用此对象; 插件不可用时读取会抛出说明如何安装或开启的错误.
 
 ## [m] toString
 

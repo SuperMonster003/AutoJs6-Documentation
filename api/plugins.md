@@ -56,6 +56,7 @@ exp.test('hello');
 | [AI - 人工智能](ai) | 3-Stone AI (文本生成与会话), 3-Stove Agent (`ai.agent`) |
 | [Barcode - 条码](barcode), [QR Code - 二维码](qrcode) | ML Kit Barcode |
 | [3-Block Compose](compose) | 3-Block Compose |
+| `require` 加载的 axios, cheerio, dayjs, i18n, pangu, lodash 与 Node.js 兼容模块, 见 [Bundled Libraries - 脚本库](bundledLibraries) | Bundled Libraries |
 | [EPUB - 电子书](epub) | Readium EPUB Reader |
 | [Files - 文件](files#m-batchrename) 的 files.batchRename | Batch Rename |
 | [Gallery - 相册](gallery) | 3-Maple Image |
@@ -67,6 +68,8 @@ exp.test('hello');
 | [Speech - 语音](speech) | 3-Macaw Speech |
 | [Terminal - 终端](terminal) | 3-Shell Terminal |
 | [YOLO - 目标检测](yolo) | YOLO Provider 插件 |
+
+Bundled Libraries 插件不可用时, `require` 上述名称或读取 axios 等全局对象抛出代码为 `MODULE_NOT_FOUND` 的错误, 错误消息说明如何安装或开启.
 
 [AutoJs4 Runtime](autojs4Runtime) 插件不提供脚本模块, 它为文件管理器增加 "使用 AutoJs4 运行" 入口.
 

@@ -214,7 +214,7 @@ function (exports, require, module, __filename,__dirname) {
 
 ## 内置模块
 
-模块加载器显式识别以下 Node.js 兼容名称:
+模块加载器显式识别以下 Node.js 兼容名称, 先于本地文件解析:
 
 - `buffer`
 - `events`
@@ -225,4 +225,6 @@ function (exports, require, module, __filename,__dirname) {
 - `path`
 - `process`
 
-AutoJs6 还可通过相同解析机制加载 APK 资源中的其他模块, 例如 `axios`, `banana-i18n`, `cheerio`, `continuation`, `dayjs`, `i18n`, `jvm-npm`, `promise` 和 `result-adapter`. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.
+自 AutoJs6 6.8.0 起, 上述模块以及 `axios`, `banana-i18n`, `cheerio`, `dayjs`, `i18n` 和 `pangu` 由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 不再随 AutoJs6 安装包提供; 其中 `axios` 等不在上表的名称在本地文件与 `node_modules` 都未命中后才由插件提供. 插件未安装, 未启用或对应的库被关闭时, `require` 这些名称抛出代码为 `MODULE_NOT_FOUND` 的错误, 错误消息说明如何安装或开启, 详见 [脚本库 (Bundled Libraries)](bundledLibraries).
+
+AutoJs6 还可通过相同解析机制加载 APK 资源中的少量其他模块, 例如 `continuation` 和 `result-adapter`. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.

@@ -14,9 +14,11 @@
 
 自 AutoJs6 6.6.0 起, 主要脚本 API 的实现位于
 [`runtime/api/augment`](http://project.autojs6.com/tree/master/app/src/main/java/org/autojs/autojs/runtime/api/augment).
-可复用的 JavaScript 模块仍位于
+脚本运行时使用的少量 JavaScript 模块仍位于
 [`assets/modules`](http://project.autojs6.com/tree/master/app/src/main/assets/modules),
-例如 CommonJS 加载器, `i18n`, `events` 和若干 Node.js 兼容模块.
+例如 `continuation` 和 `result-adapter`.
+自 AutoJs6 6.8.0 起, `axios`, `i18n`, `events` 等脚本库与 Node.js 兼容模块改由
+[脚本库 (Bundled Libraries)](bundledLibraries) 插件提供, 源代码见插件仓库.
 
 APK 中的 `assets/modules` 只包含后一类 JavaScript 文件, 因此不能再通过解压该目录查看全部内置 API 的实现.
 

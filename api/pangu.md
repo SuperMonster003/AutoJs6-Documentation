@@ -1,8 +1,8 @@
 # 文本间距 (Pangu)
 
-`pangu` 是 AutoJs6 内置的文本排版对象, 用于处理中文等 CJK 文本与英文, 数字和符号混排时的空格.
+`pangu` 是 AutoJs6 提供的文本排版对象, 用于处理中文等 CJK 文本与英文, 数字和符号混排时的空格.
 
-自 AutoJs6 `6.8.0` 起可在 JavaScript (Rhino) 脚本中直接使用, 无需安装插件或调用 `require`:
+自 AutoJs6 `6.8.0` 起由 [脚本库 (Bundled Libraries)](bundledLibraries) 插件提供. 安装并启用该插件后, 可在 JavaScript (Rhino) 脚本中直接使用, 无需调用 `require`:
 
 ```js
 let text = pangu.spaceText('使用AutoJs6处理文本');
@@ -10,11 +10,13 @@ console.log(text); // 使用 AutoJs6 处理文本.
 console.log(pangu.hasProperSpacing(text)); // true
 ```
 
-内置版本为 [pangu.js 10.1.0](https://github.com/vinta/pangu.js/tree/v10.1.0), 采用 MIT 许可证.
+插件收录的版本为 [pangu.js 10.1.0](https://github.com/vinta/pangu.js/tree/v10.1.0), 采用 MIT 许可证.
 
 AutoJs6 提供上游的纯文本 API. 浏览器 DOM 方法 (如 `spacePage`, `spaceNode`, `autoSpacePage`) 和 Node.js 文件方法 (如 `spaceFile`, `spaceFileSync`) 不属于此对象. 读取文件后可将其文本传给 `spaceText`.
 
 本对象只注册为全局名称 `pangu`, 没有 `$pangu` 别名. 也可通过 `require('pangu')` 获取同一个模块对象.
+
+插件未安装, 未启用或 pangu 库被关闭时, 读取 `pangu` 或调用 `require('pangu')` 会抛出说明如何安装或开启的错误, 详见 [脚本库 (Bundled Libraries)](bundledLibraries).
 
 ---
 

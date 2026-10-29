@@ -19,6 +19,7 @@
 * [Automator - 自动化](automator)
 * [Barcode - 条码](barcode)
 * [Base64](base64)
+- [Bundled Libraries - 脚本库](bundledLibraries)
 * [Canvas - 画布](canvas)
 * [Color - 颜色](color)
 - [3-Block Compose](compose)

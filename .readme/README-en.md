@@ -71,6 +71,7 @@ Documentation may change at any time, and some descriptions may differ from actu
 
 ### v6.8.0
 
+- `Feature` [Bundled Libraries](https://docs.autojs6.com/#/bundledLibraries), explaining that axios, cheerio, dayjs, i18n, pangu, lodash and the Node.js compatible modules are now provided by the Bundled Libraries plugin instead of the AutoJs6 package, how to install the plugin and switch individual libraries, and the error thrown by require and the global objects when the plugin is unavailable; the Modules, Global, Internationalization and Pangu pages are updated accordingly
 - `Update` [Speech](https://docs.autojs6.com/#/speech) lists the models that 3-Macaw Speech 1.2.0 and 1.3.0 add to the catalog (French, Russian, Korean, Spanish and eight-language recognition; the Kokoro v1.0 multilingual, Arabic and Korean voices, among others) and describes the offline-transducer recognition type and the speakers of Kokoro v1.0
 - `Update` [Speech](https://docs.autojs6.com/#/speech) completes the punctuation option: the punctuation of models that emit their own (SenseVoice) is kept, results of streaming models get punctuation from a punctuation model installed in 3-Macaw Speech (1.2.0 or newer, Chinese and English), and false removes all punctuation
 - `Feature` API documentation: ai.agent task controls, events and registered-script context/results for Node.js, Bun and Workers, with explicit authorization for packaged applications

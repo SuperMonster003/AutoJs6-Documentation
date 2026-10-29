@@ -234,7 +234,7 @@
         {
           "textRaw": "内置模块",
           "name": "内置模块",
-          "desc": "<p>模块加载器显式识别以下 Node.js 兼容名称:</p>\n<ul>\n<li><code>buffer</code></li>\n<li><code>events</code></li>\n<li><code>fs</code></li>\n<li><code>lodash</code></li>\n<li><code>nodejs</code></li>\n<li><code>os</code></li>\n<li><code>path</code></li>\n<li><code>process</code></li>\n</ul>\n<p>AutoJs6 还可通过相同解析机制加载 APK 资源中的其他模块, 例如 <code>axios</code>, <code>banana-i18n</code>, <code>cheerio</code>, <code>continuation</code>, <code>dayjs</code>, <code>i18n</code>, <code>jvm-npm</code>, <code>promise</code> 和 <code>result-adapter</code>. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.</p>\n",
+          "desc": "<p>模块加载器显式识别以下 Node.js 兼容名称, 先于本地文件解析:</p>\n<ul>\n<li><code>buffer</code></li>\n<li><code>events</code></li>\n<li><code>fs</code></li>\n<li><code>lodash</code></li>\n<li><code>nodejs</code></li>\n<li><code>os</code></li>\n<li><code>path</code></li>\n<li><code>process</code></li>\n</ul>\n<p>自 AutoJs6 6.8.0 起, 上述模块以及 <code>axios</code>, <code>banana-i18n</code>, <code>cheerio</code>, <code>dayjs</code>, <code>i18n</code> 和 <code>pangu</code> 由 <a href=\"bundledLibraries\">脚本库 (Bundled Libraries)</a> 插件提供, 不再随 AutoJs6 安装包提供; 其中 <code>axios</code> 等不在上表的名称在本地文件与 <code>node_modules</code> 都未命中后才由插件提供. 插件未安装, 未启用或对应的库被关闭时, <code>require</code> 这些名称抛出代码为 <code>MODULE_NOT_FOUND</code> 的错误, 错误消息说明如何安装或开启, 详见 <a href=\"bundledLibraries\">脚本库 (Bundled Libraries)</a>.</p>\n<p>AutoJs6 还可通过相同解析机制加载 APK 资源中的少量其他模块, 例如 <code>continuation</code> 和 <code>result-adapter</code>. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.</p>\n",
           "type": "module",
           "displayName": "内置模块"
         }

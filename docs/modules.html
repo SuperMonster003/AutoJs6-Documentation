@@ -44,6 +44,7 @@
 <li><a class="nav-automator" href="automator.html">Automator - 自动化</a></li>
 <li><a class="nav-barcode" href="barcode.html">Barcode - 条码</a></li>
 <li><a class="nav-base64" href="base64.html">Base64</a></li>
+<li><a class="nav-bundledLibraries" href="bundledLibraries.html">Bundled Libraries - 脚本库</a></li>
 <li><a class="nav-canvas" href="canvas.html">Canvas - 画布</a></li>
 <li><a class="nav-color" href="color.html">Color - 颜色</a></li>
 <li><a class="nav-compose" href="compose.html">3-Block Compose</a></li>
@@ -504,7 +505,7 @@ exports = { answer: 7 }; // 不会替换 module.exports.
 </ul>
 <p>文件以 <code>#!</code> 开头时, 加载器会先把该行开头改为 JavaScript 注释再执行.</p>
 <h2>内置模块<span><a class="mark" href="#modules_3" id="modules_3">#</a></span></h2>
-<p>模块加载器显式识别以下 Node.js 兼容名称:</p>
+<p>模块加载器显式识别以下 Node.js 兼容名称, 先于本地文件解析:</p>
 <ul>
 <li><code>buffer</code></li>
 <li><code>events</code></li>
@@ -515,7 +516,8 @@ exports = { answer: 7 }; // 不会替换 module.exports.
 <li><code>path</code></li>
 <li><code>process</code></li>
 </ul>
-<p>AutoJs6 还可通过相同解析机制加载 APK 资源中的其他模块, 例如 <code>axios</code>, <code>banana-i18n</code>, <code>cheerio</code>, <code>continuation</code>, <code>dayjs</code>, <code>i18n</code>, <code>jvm-npm</code>, <code>promise</code> 和 <code>result-adapter</code>. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.</p>
+<p>自 AutoJs6 6.8.0 起, 上述模块以及 <code>axios</code>, <code>banana-i18n</code>, <code>cheerio</code>, <code>dayjs</code>, <code>i18n</code> 和 <code>pangu</code> 由 <a href="bundledLibraries.html">脚本库 (Bundled Libraries)</a> 插件提供, 不再随 AutoJs6 安装包提供; 其中 <code>axios</code> 等不在上表的名称在本地文件与 <code>node_modules</code> 都未命中后才由插件提供. 插件未安装, 未启用或对应的库被关闭时, <code>require</code> 这些名称抛出代码为 <code>MODULE_NOT_FOUND</code> 的错误, 错误消息说明如何安装或开启, 详见 <a href="bundledLibraries.html">脚本库 (Bundled Libraries)</a>.</p>
+<p>AutoJs6 还可通过相同解析机制加载 APK 资源中的少量其他模块, 例如 <code>continuation</code> 和 <code>result-adapter</code>. 可用资源随 AutoJs6 版本变化, 脚本不应根据未列入稳定 API 的内部文件名推断长期兼容性.</p>
 
         </div>
     </div>

@@ -337,7 +337,7 @@
 <ul>
 <li>{{<ul>
 <li>id: <a href="dataTypes.html#datatypes_string">string</a>;</li>
-<li>kind: <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code>;</li>
+<li>kind: <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code> | <code>&#39;speaker&#39;</code> | <code>&#39;segment&#39;</code> | <code>&#39;langid&#39;</code> | <code>&#39;tagger&#39;</code>;</li>
 <li>modelType: <a href="dataTypes.html#datatypes_string">string</a>;</li>
 <li>name: <a href="dataTypes.html#datatypes_string">string</a>;</li>
 <li>languages: <a href="dataTypes.html#datatypes_string">string</a>[];</li>
@@ -364,15 +364,15 @@
 <h2>[p] kind<span><a class="mark" href="#speechmodelinfotype_p_kind" id="speechmodelinfotype_p_kind">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
-<li>{ <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code> }</li>
+<li>{ <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code> | <code>&#39;speaker&#39;</code> | <code>&#39;segment&#39;</code> | <code>&#39;langid&#39;</code> | <code>&#39;tagger&#39;</code> }</li>
 </ul>
-<p>模型类别: 语音识别, 语音合成, 唤醒词检测, 语音活动检测.</p>
+<p>模型类别: 语音识别, 语音合成, 唤醒词检测, 语音活动检测, 以及 3-Macaw Speech 1.3.0 起的说话人声纹 (<code>speaker</code>), 说话人分割 (<code>segment</code>), 语种识别 (<code>langid</code>) 与音频标签 (<code>tagger</code>). 各类模型的用途见 <a href="speech.html#speech_1">模型目录与许可</a>.</p>
 <h2>[p] modelType<span><a class="mark" href="#speechmodelinfotype_p_modeltype" id="speechmodelinfotype_p_modeltype">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> }</li>
 </ul>
-<p>模型的结构类型, 决定插件如何加载它. 目录中的取值为 <code>&#39;online-transducer&#39;</code> (流式识别), <code>&#39;sense-voice&#39;</code> 与 <code>&#39;offline-transducer&#39;</code> (离线识别, 后者自 3-Macaw Speech 1.3.0 起), <code>&#39;kws-transducer&#39;</code> (唤醒词), <code>&#39;vits&#39;</code>, <code>&#39;matcha&#39;</code>, <code>&#39;kokoro&#39;</code> (合成) 与 <code>&#39;silero&#39;</code> (内置语音活动检测).</p>
+<p>模型的结构类型, 决定插件如何加载它. 目录中的取值为 <code>&#39;online-transducer&#39;</code> (流式识别), <code>&#39;sense-voice&#39;</code> 与 <code>&#39;offline-transducer&#39;</code> (离线识别, 后者自 3-Macaw Speech 1.3.0 起), <code>&#39;kws-transducer&#39;</code> (唤醒词), <code>&#39;vits&#39;</code>, <code>&#39;matcha&#39;</code>, <code>&#39;kokoro&#39;</code> (合成), <code>&#39;silero&#39;</code> (内置语音活动检测), 以及 3-Macaw Speech 1.3.0 起的 <code>&#39;speaker-embedding&#39;</code> (说话人声纹), <code>&#39;pyannote-segmentation&#39;</code> (说话人分割), <code>&#39;whisper-langid&#39;</code> (语种识别) 与 <code>&#39;ced&#39;</code> (音频标签).</p>
 <h2>[p] name<span><a class="mark" href="#speechmodelinfotype_p_name" id="speechmodelinfotype_p_name">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>
@@ -384,7 +384,7 @@
 <ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_string">string</a>[]</span> }</li>
 </ul>
-<p>模型支持的语言标签, 如 <code>[&#39;zh&#39;, &#39;en&#39;]</code>; 语音活动检测模型为空数组.</p>
+<p>模型支持的语言标签, 如 <code>[&#39;zh&#39;, &#39;en&#39;]</code>; 语音活动检测模型为空数组. 不对应某种语言的模型使用 ISO 639 的特殊代码: 语种识别模型为 <code>[&#39;mul&#39;]</code> (多种语言), 说话人分割与音频标签模型为 <code>[&#39;zxx&#39;]</code> (无语言内容).</p>
 <h2>[p] sizeBytes<span><a class="mark" href="#speechmodelinfotype_p_sizebytes" id="speechmodelinfotype_p_sizebytes">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>

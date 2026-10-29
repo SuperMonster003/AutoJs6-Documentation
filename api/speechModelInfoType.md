@@ -21,7 +21,7 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
 
 - {{
     - id: [string](dataTypes#string);
-    - kind: `'asr'` | `'tts'` | `'kws'` | `'vad'`;
+    - kind: `'asr'` | `'tts'` | `'kws'` | `'vad'` | `'speaker'` | `'segment'` | `'langid'` | `'tagger'`;
     - modelType: [string](dataTypes#string);
     - name: [string](dataTypes#string);
     - languages: [string](dataTypes#string)[];
@@ -49,9 +49,9 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
 
 **`6.8.0`**
 
-- { `'asr'` | `'tts'` | `'kws'` | `'vad'` }
+- { `'asr'` | `'tts'` | `'kws'` | `'vad'` | `'speaker'` | `'segment'` | `'langid'` | `'tagger'` }
 
-模型类别: 语音识别, 语音合成, 唤醒词检测, 语音活动检测.
+模型类别: 语音识别, 语音合成, 唤醒词检测, 语音活动检测, 以及 3-Macaw Speech 1.3.0 起的说话人声纹 (`speaker`), 说话人分割 (`segment`), 语种识别 (`langid`) 与音频标签 (`tagger`). 各类模型的用途见 [模型目录与许可](speech#模型目录与许可).
 
 ## [p] modelType
 
@@ -59,7 +59,7 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
 
 - { [string](dataTypes#string) }
 
-模型的结构类型, 决定插件如何加载它. 目录中的取值为 `'online-transducer'` (流式识别), `'sense-voice'` 与 `'offline-transducer'` (离线识别, 后者自 3-Macaw Speech 1.3.0 起), `'kws-transducer'` (唤醒词), `'vits'`, `'matcha'`, `'kokoro'` (合成) 与 `'silero'` (内置语音活动检测).
+模型的结构类型, 决定插件如何加载它. 目录中的取值为 `'online-transducer'` (流式识别), `'sense-voice'` 与 `'offline-transducer'` (离线识别, 后者自 3-Macaw Speech 1.3.0 起), `'kws-transducer'` (唤醒词), `'vits'`, `'matcha'`, `'kokoro'` (合成), `'silero'` (内置语音活动检测), 以及 3-Macaw Speech 1.3.0 起的 `'speaker-embedding'` (说话人声纹), `'pyannote-segmentation'` (说话人分割), `'whisper-langid'` (语种识别) 与 `'ced'` (音频标签).
 
 ## [p] name
 
@@ -75,7 +75,7 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
 
 - { [string](dataTypes#string)[] }
 
-模型支持的语言标签, 如 `['zh', 'en']`; 语音活动检测模型为空数组.
+模型支持的语言标签, 如 `['zh', 'en']`; 语音活动检测模型为空数组. 不对应某种语言的模型使用 ISO 639 的特殊代码: 语种识别模型为 `['mul']` (多种语言), 说话人分割与音频标签模型为 `['zxx']` (无语言内容).
 
 ## [p] sizeBytes
 

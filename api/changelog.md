@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `新增` [语音 (Speech)](speech) 的离线分析 speech.diarize (说话人分离: 谁在何时说话, 可按已注册的声纹认人), speech.detectLanguage (语种识别) 与 speech.tag (音频标签) 及其 Async 形态, 以及说话人识别 speech.speaker (注册, 验证, 辨认, 列出与删除声纹); 模型目录补上 3-Macaw Speech 1.3.0 的说话人, 分割, 语种识别与音频标签模型, [SpeechModelInfo](speechModelInfoType) 的模型类别增加 speaker, segment, langid 与 tagger
+
 - `更新` [颜色 (Color)](color), [Color (颜色类)](colorType), [文件 (Files)](files), [压缩文件 (Zip)](zip), [存储 (Storages)](storages), [Storage (存储类)](storageType), [媒体信息 (MediaInfo)](mediainfo), [电子书对象 (EpubBook)](epubBookType), [MIME](mime), [记录器 (Recorder)](recorder), [全局对象 (Global)](global) 与 [工具 (Util)](util) 页的运行时支持表: Node.js 主线程与 Worker 现在提供 colors / Color, files (含全局 open), zip, mime, recorder, storages (含 names / all 与 Storage#size) 与 mediainfo, 以及全局 dayjs / pangu / cheerio / i18n 与 Worker 中的 axios; util.toRegularAndCall / toRegularAndApply 标为 "宿主已废弃"
 
 - `新增` [脚本库 (Bundled Libraries)](bundledLibraries), 说明 axios, cheerio, dayjs, i18n, pangu, lodash 与 Node.js 兼容模块改由 Bundled Libraries 插件提供 (不再随 AutoJs6 安装包提供), 插件的安装与逐库开关, 以及插件不可用时 require 与全局对象抛出的错误, 并注明用 AutoJs6 打包的应用暂不包含这些库; 模块, 全局对象, 国际化与文本间距页同步更新

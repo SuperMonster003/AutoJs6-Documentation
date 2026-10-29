@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [运行时 API (Runtime APIs)](runtimeApis#执行方式) 的执行方式: Node.js 脚本与项目默认不限执行时长 (与 Rhino 脚本相同), project.json 的 node.timeoutMs 作为执行总预算 (从插件收到请求时计时, 含排队与工作区准备, 耗尽时报告 ERR_AUTOJS6_SCRIPT_TIMEOUT), 运行期间的输出逐段转发到控制台; WebView 等待一节同步改写
+
 - `新增` [运行时 API (Runtime APIs)](runtimeApis#运行时自有接口) 的 "运行时自有接口" 一节: 按组列出 Node.js, Bun 与 QuickJS 运行时插件自带, 不对应宿主模块的入口 (Node.js 12 组 113 条: 宿主桥与宿主消息, 生命周期检查点, 能力快照, npm 与 package_manager, 本地插件, rhino 与 autojs6:compat, media_store, Worker 池 WorkerPool; Bun 客户端 12 条; QuickJS 的 console, print 与 scriptArgs), 每条写明签名, 用途, 所属运行时与最低插件版本; 另说明各运行时读取脚本参数的方式 (QuickJS 的 scriptArgs 只含脚本文件名, Node.js 与 Bun 用 process.argv, Rhino 用 engines.myEngine().execArgv)
 
 - `新增` [Python 运行时 (Python Runtime)](pythonRuntime), [Java 运行时 (Java Runtime)](javaRuntime), [Kotlin 运行时 (Kotlin Runtime)](kotlinRuntime) 与 [Lua 运行时 (Lua Runtime)](luaRuntime), 说明这四个语言运行时插件提供给脚本的 API: Python 的 autojs6 包 (46 个函数, 54 个常量与 10 个异常类), Java 与 Kotlin 共用的 JVM Entry API (Java 为 7 个类型 17 个方法, Kotlin 为不含 args 与 clipboard 的 6 个类型 13 个方法) 以及 Lua 的 autojs 模块 (11 个函数与只读的 arguments), 每项有签名, 说明与对应语言的示例; [AutoJs4 运行时 (AutoJs4 Runtime)](autojs4Runtime) 增加 "上游 API 与差异指引" 小节, [插件 (Plugins)](plugins) 页指向这四页

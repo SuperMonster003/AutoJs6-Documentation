@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-30 Node.js 执行时限 (宿主 api-coverage Q119 / Q126): [运行时 API](runtimeApis#执行方式) 写明 Node.js 脚本与项目默认不限执行时长, node.timeoutMs 预算的计时范围与超时错误码, 以及输出逐段转发; WebView 等待一节改为只对设置了预算的项目提示留足时间.
+
 2026-10-29 运行时自有接口 (宿主 api-coverage 路线图 P5.2b): [运行时 API](runtimeApis#运行时自有接口) 新增一节, 按组表格列出 Node.js 插件 12 组 113 条, Bun 插件 12 条与 QuickJS 插件 7 条没有对应宿主模块的入口, 写明签名, 说明, 运行时与最低插件版本 (按各插件版本最后一个提交的声明与源码判定). 这些入口不进运行时覆盖矩阵, 由宿主 PLUGIN-APIS.md 的附表跟踪. Node.js 的 worker_threads (含 WorkerPool, policy, nativeAvailable 与 diagnostics) 补上类型声明 (Node 插件 9e6e1a32, TS 声明 baf2100) 并同步到 Ace 捆绑副本; QuickJS 不设类型声明与 Ace 补全组.
 
 2026-10-29 语言运行时 API (宿主 api-coverage 路线图 P5.2d): 新增 [Python 运行时](pythonRuntime), [Java 运行时](javaRuntime), [Kotlin 运行时](kotlinRuntime) 与 [Lua 运行时](luaRuntime) 四页, 覆盖 Python Runtime 0.5.5 的 autojs6 包 (46 个函数, 54 个常量, 10 个异常类), Java Runtime 0.8.4-m9 的 JVM Entry API 4 (7 个类型, 17 个方法), Kotlin Runtime 0.7.3-m10 的 Entry API 2 (6 个类型, 13 个方法) 与 Lua Runtime 0.1.3-rc.2 的 autojs 模块 (11 个函数与只读的 arguments). 这些 API 不进运行时覆盖矩阵, 页面没有运行时支持表; 宿主新增静态门禁 `tools/api-coverage/language_runtimes.py`, 把四页的标题与表格同插件源码 (Python 各模块的 `__all__`, 插件冻结的 jvm-source-api.aar, Lua 的 install_autojs_module) 逐项比对, Python 还比对参数名与默认值, JVM 比对参数个数. [AutoJs4 运行时](autojs4Runtime) 补充 "上游 API 与差异指引": 上游约 180 个名称不在本站覆盖范围内, 改为指向 AutoJs4-Documentation 与对照模式. 依据为各插件源码与 README, 插件仓库未改动. AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.

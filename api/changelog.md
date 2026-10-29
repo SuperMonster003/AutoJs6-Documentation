@@ -2,6 +2,12 @@
 
 ## v6.8.0
 
+- `更新` 为返回对象与模块原型补上成员说明: [对话框 (Dialogs)](dialogs) 中 Dialog 的其余方法 (标题与视图, 按钮, 列表, 进度, 复选框, 状态, android.app.Dialog 方法分组列出); [任务 (Tasks)](tasks) 中 TimedTask 与 IntentTask 的属性及读写方法; [引擎 (Engines)](engines) 中 ScriptExecution 的 isFinished 与 Agent 运行信息, ScriptEngine 的 getTag, setTag, getUncaughtException 与 getBackingSourcePath; 控件节点的 summary, isSimilar 与已弃用的 brother, 控件集合的 contains, iterator 与 isSimilar, 选择器的 toStringReadable; [AutoJs6](autojs) 的 themeColor 实例成员; [Color](colorType) 的 argb, rgb, rgba, hsv, hsva, hsl, hsla 简写与 toStringReadable; [悬浮窗 (Floaty)](floaty) 的 findView, requestFocus 与 disableFocus; [图像 (Image)](image) 中 Mat 的 release, isReleased 与 convertTo, MatchingResult#findMax; Flow 的 4 个事件等待步骤; 文本文件对象的 getPath; ZIP 对象的 toStringReadable; 控制台构建器的 exitOnCloseTimeout 与 contentTextColors; 以及 crypto.fromHex, events.removeToastObserver, events.removeNotificationObserver, util.class, util.getClassName 与 util.className
+
+- `修复` [选择器 (UiSelector)](uiSelectorType) 中不存在的 contentValid 条目改为实际提供的 contentInvalid (控件内容无效状态选择器)
+
+- `更新` [图像 (Image)](image) 与 [文件 (Files)](files) 页的运行时支持表计入以 Java 对象为原型的模块成员 (如 files.isFile), 并在表下列出本页说明的返回对象 (如 Mat, MatchingResult), 每个对象一行
+
 - `更新` 为此前只在表格或正文中顺带提到的 API 补上独立条目 (标题, 签名, 参数与示例): [邮件 (Mail)](mail) 中经默认客户端调用的 48 个方法 (如 mail.fetch 与 mail.fetchAsync), [流程 (Flow)](flow) 的 15 个工具集起点与 4 个事件等待起点 (如 flow.smartClick, flow.waitForToast), 以及别名 waitAsync, wait.async, clickWait, clickBoundsWait, clickWhenStable, clickBoundsWhenStable, waitForGone, flow.delay; [文本转语音 (TTS)](tts) 的 speakTask, enqueueTask, synthesizeToFile, synthesizeTask, synthesisTask, stopAll 与 config; [全局对象 (Global)](global) 的全小写 toastverbose, toastlog, toastinfo, toastwarn 与 toasterror; [Mathx](mathx) 的 random 与已弃用的 randFloat; [自动化 (Automator)](automator) 的 automator.headsethook
 
 - `更新` [语音 (Speech)](speech) 的模型目录补上 3-Macaw Speech 1.2.0 与 1.3.0 新增的模型 (法语, 俄语, 韩语, 西班牙语与八语识别, Kokoro v1.0 多语言及阿拉伯语, 韩语等合成声音), 并说明离线识别类型 offline-transducer 与 Kokoro v1.0 的说话人划分

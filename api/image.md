@@ -26,6 +26,18 @@
 | `images.saveImage` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `image.files` |
 | `images.stopScreenCapture` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `screen.capture` |
 
+返回对象 (7 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `ImageFeatures` (10 项) | 已支持 10 项 | 不适用 10 项 (需要 Java 对象) | 不适用 10 项 (需要 Java 对象) | 不适用 10 项 (需要 Java 对象) |
+| `Mat` (3 项) | 已支持 3 项 | 不适用 3 项 (需要 Java 对象) | 不适用 3 项 (需要 Java 对象) | 不适用 3 项 (需要 Java 对象) |
+| `MatchingResult` (16 项) | 已支持 16 项 | 不适用 16 项 (需要 Java 对象) | 不适用 16 项 (需要 Java 对象) | 不适用 16 项 (需要 Java 对象) |
+| `ObjectFrame` (15 项) | 已支持 15 项 | 不适用 15 项 (需要 Java 对象) | 不适用 15 项 (需要 Java 对象) | 不适用 15 项 (需要 Java 对象) |
+| `PngQuantizationFileResult` (5 项) | 已支持 5 项 | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) |
+| `PngQuantizationResult` (5 项) | 已支持 5 项 | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) |
+| `ScreenCaptureOptions` (5 项) | 已支持 5 项 | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) |
+
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 
 <!-- runtime-support:end -->

@@ -6,14 +6,14 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `dialogs`, 全局 4 项 | `autojs6:dialogs` | `autojs6:dialogs` | `host.dialogs` |
-| 状态 | 已支持 13 项 | 已支持 12 项, 待补 1 项 | 已支持 12 项, 待补 1 项 | 需授权 12 项, 待补 1 项 |
+| 状态 | 已支持 13 项 | 已支持 13 项 | 已支持 13 项 | 需授权 12 项, 待补 1 项 |
 | 授权 | - | - | - | `dialogs.control` 12 项 |
 
 差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `dialogs.build` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `dialogs.build` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
 
 返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
 

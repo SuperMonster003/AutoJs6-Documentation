@@ -5,10 +5,20 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `autojs`, `autojs.version`, 全局 1 项 | - | - | - |
-| 状态 | 已支持 29 项 | 待补 29 项 | 待补 29 项 | 待补 29 项 |
+| 入口 | `autojs`, `autojs.version`, 全局 1 项 | `autojs6:autojs` | `autojs6:autojs` | - |
+| 状态 | 已支持 29 项 | 已支持 29 项 | 已支持 29 项 | 待补 29 项 |
 
-各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+差异项 (7 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `autojs.version.code` | <span title="bridged">已支持</span>: `version.code` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.code` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.date` | <span title="bridged">已支持</span>: `version.date` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.date` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.isAtLeast` | <span title="bridged">已支持</span>: `version.isAtLeast` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.isAtLeast` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.isEqual` | <span title="bridged">已支持</span>: `version.isEqual` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.isEqual` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.isHigherThan` | <span title="bridged">已支持</span>: `version.isHigherThan` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.isHigherThan` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.isLowerThan` | <span title="bridged">已支持</span>: `version.isLowerThan` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.isLowerThan` (`autojs6:autojs`) | <span title="pending">待补</span> |
+| `autojs.version.name` | <span title="bridged">已支持</span>: `version.name` (`autojs6:autojs`) | <span title="bridged">已支持</span>: `version.name` (`autojs6:autojs`) | <span title="pending">待补</span> |
 
 返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
 

@@ -5,34 +5,34 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.species`, `host.global`, `host.coordinates`, `host.clipboard` |
-| 状态 | 已支持 98 项 | 已支持 14 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 29 项 | 已支持 10 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 33 项 | 已支持 (本地实现) 50 项, 需授权 12 项, 不适用 5 项, 待补 31 项 |
+| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.species`, `host.global`, `host.coordinates`, `host.clipboard` |
+| 状态 | 已支持 98 项 | 已支持 31 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 12 项 | 已支持 29 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 14 项 | 已支持 (本地实现) 50 项, 需授权 12 项, 不适用 5 项, 待补 31 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `clipboard.control` 2 项 |
 
 差异项 (56 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `HEIGHT` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `HEIGHT` | <span title="bridged">已支持</span>: `HEIGHT` (`autojs6:system`) | <span title="bridged">已支持</span>: `HEIGHT` (`autojs6:system`) | <span title="pending">待补</span> |
 | `TODO` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `WIDTH` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `WIDTH` | <span title="bridged">已支持</span>: `WIDTH` (`autojs6:system`) | <span title="bridged">已支持</span>: `WIDTH` (`autojs6:system`) | <span title="pending">待补</span> |
 | `axios` | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.axios` |
 | `cX` | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cX` |
 | `cXy` | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cXy` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cXy` |
 | `cY` | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cY` |
 | `cYx` | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cYx` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cYx` |
 | `cheerio` | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `cheerio` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.cheerio` |
-| `currentActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `currentComponent` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `currentPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `currentActivity` | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:system`) | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:system`) | <span title="pending">待补</span> |
+| `currentComponent` | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:system`) | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:system`) | <span title="pending">待补</span> |
+| `currentPackage` | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:system`) | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:system`) | <span title="pending">待补</span> |
 | `dayjs` | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `dayjs` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.dayjs` |
-| `exit` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
+| `exit` | <span title="bridged">已支持</span>: `exit` (`autojs6:system`) | <span title="bridged">已支持</span>: `exit` (`autojs6:system`) | <span title="pending">待补</span> |
+| `getClip` | <span title="bridged">已支持</span>, 经 compat: `getClip` (`autojs6:compat`) | <span title="bridged">已支持</span>: `getClip` (`autojs6:system`) | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.getText` |
 | `getScaleBaseX` | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseX` |
 | `getScaleBaseY` | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBaseY` |
 | `getScaleBases` | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `getScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.getScaleBases` |
 | `i18n` | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `i18n` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.i18n` |
-| `isAutoJs6` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isAutoJs6` | <span title="bridged">已支持</span>: `isAutoJs6` (`autojs6:system`) | <span title="bridged">已支持</span>: `isAutoJs6` (`autojs6:system`) | <span title="pending">待补</span> |
 | `isBigInt` | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isBigInt` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isBigInt` |
 | `isEmptyObject` | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isEmptyObject` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isEmptyObject` |
 | `isInteger` | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isInteger` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isInteger` |
@@ -42,22 +42,22 @@
 | `isObjectSpecies` | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isObjectSpecies` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isObjectSpecies` |
 | `isPrimitive` | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isPrimitive` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isPrimitive` |
 | `isReference` | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `isReference` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isReference` |
-| `isRunning` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `isShuttingDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `isStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `isRunning` | <span title="bridged">已支持</span>: `isRunning` (`autojs6:system`) | <span title="bridged">已支持</span>: `isRunning` (`autojs6:system`) | <span title="pending">待补</span> |
+| `isShuttingDown` | <span title="bridged">已支持</span>: `isShuttingDown` (`autojs6:system`) | <span title="bridged">已支持</span>: `isShuttingDown` (`autojs6:system`) | <span title="pending">待补</span> |
+| `isStopped` | <span title="bridged">已支持</span>: `isStopped` (`autojs6:system`) | <span title="bridged">已支持</span>: `isStopped` (`autojs6:system`) | <span title="pending">待补</span> |
 | `isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `notStopped` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `notStopped` | <span title="bridged">已支持</span>: `notStopped` (`autojs6:system`) | <span title="bridged">已支持</span>: `notStopped` (`autojs6:system`) | <span title="pending">待补</span> |
 | `pangu` | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.pangu` |
 | `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.random` |
-| `requiresApi` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `requiresAutojsVersion` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `setClip` | <span title="bridged">已支持</span>, 经 compat: `setClip` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.setText` |
+| `requiresApi` | <span title="bridged">已支持</span>: `requiresApi` (`autojs6:system`) | <span title="bridged">已支持</span>: `requiresApi` (`autojs6:system`) | <span title="pending">待补</span> |
+| `requiresAutojsVersion` | <span title="bridged">已支持</span>: `requiresAutojsVersion` (`autojs6:system`) | <span title="bridged">已支持</span>: `requiresAutojsVersion` (`autojs6:system`) | <span title="pending">待补</span> |
+| `setClip` | <span title="bridged">已支持</span>, 经 compat: `setClip` (`autojs6:compat`) | <span title="bridged">已支持</span>: `setClip` (`autojs6:system`) | <span title="capability-gated">需授权</span> `clipboard.control`, 经 clipboard: `host.clipboard.setText` |
 | `setScaleBaseX` | <span title="bridged">已支持</span>: `setScaleBaseX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBaseX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBaseX` |
 | `setScaleBaseY` | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBaseY` |
 | `setScaleBases` | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBases` |
-| `setScreenMetrics` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `setScreenMetrics` | <span title="bridged">已支持</span>: `setScreenMetrics` (`autojs6:system`) | <span title="bridged">已支持</span>: `setScreenMetrics` (`autojs6:system`) | <span title="pending">待补</span> |
 | `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `stop` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `stop` | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="pending">待补</span> |
 | `toString` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
 | `toastError`, `toasterror` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `toastInfo`, `toastinfo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -67,8 +67,8 @@
 | `toastlog` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
 | `wait` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `waitForActivity` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `waitForPackage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `waitForActivity` | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="pending">待补</span> |
+| `waitForPackage` | <span title="bridged">已支持</span>: `waitForPackage` (`autojs6:system`) | <span title="bridged">已支持</span>: `waitForPackage` (`autojs6:system`) | <span title="pending">待补</span> |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

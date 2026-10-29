@@ -5,16 +5,10 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `engines` | `engines` | - | - |
-| 状态 | 已支持 8 项 | 已支持 5 项, 待补 3 项 | 待补 8 项 | 待补 8 项 |
+| 入口 | `engines` | `engines` | `engines` | - |
+| 状态 | 已支持 8 项 | 已支持 8 项 | 已支持 8 项 | 待补 8 项 |
 
-差异项 (3 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
-
-| API | Node.js 主线程 | Node.js Worker | Bun |
-| --- | --- | --- | --- |
-| `engines.execAutoFile` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `engines.getEngines` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `engines.stopAllAndToast` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
 返回对象 (2 个): 本页说明的对象的成员状态, 每个对象一行.
 

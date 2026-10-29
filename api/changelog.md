@@ -2,7 +2,7 @@
 
 ## v6.8.0
 
-- `新增` [脚本库 (Bundled Libraries)](bundledLibraries), 说明 axios, cheerio, dayjs, i18n, pangu, lodash 与 Node.js 兼容模块改由 Bundled Libraries 插件提供 (不再随 AutoJs6 安装包提供), 插件的安装与逐库开关, 以及插件不可用时 require 与全局对象抛出的错误; 模块, 全局对象, 国际化与文本间距页同步更新
+- `新增` [脚本库 (Bundled Libraries)](bundledLibraries), 说明 axios, cheerio, dayjs, i18n, pangu, lodash 与 Node.js 兼容模块改由 Bundled Libraries 插件提供 (不再随 AutoJs6 安装包提供), 插件的安装与逐库开关, 以及插件不可用时 require 与全局对象抛出的错误, 并注明用 AutoJs6 打包的应用暂不包含这些库; 模块, 全局对象, 国际化与文本间距页同步更新
 
 - `更新` 其余有脚本 API 的模块页与对象类型页顶部新增运行时支持表 (连同此前的 13 页共 83 页, 覆盖全部 69 个模块与 43 种返回对象), 列出 Rhino, Node.js 主线程, Node.js Worker 与 Bun 中各 API 的入口, 状态与授权; 模块页的表下列出本页说明的返回对象, 对象有独立类型页时 (如 [控件节点 (UiObject)](uiObjectType), [应用枚举类 (App)](appType)) 表格放在类型页; [全局对象 (Global)](global) 页的表并入 species
 

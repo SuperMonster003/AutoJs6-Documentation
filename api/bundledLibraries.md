@@ -98,6 +98,12 @@ try {
 
 ---
 
+## 打包的应用
+
+用 AutoJs6 打包的应用暂不包含这些库: 插件只为 AutoJs6 本身提供库文件, 打包时不会把它们复制进生成的应用. 在打包的应用中 `require` 这些模块名或读取对应的全局对象, 同样会抛出上文所述的 `Error` (`reason` 为 `not-installed`). 由打包功能把脚本用到的库从已安装的插件复制进应用, 计划在之后的版本中提供.
+
+---
+
 ## 相关链接
 
 - [AutoJs6-Plugin-Bundled-Libraries](https://github.com/SuperMonster003/AutoJs6-Plugin-Bundled-Libraries): 插件仓库, 含 README 与发行历史.

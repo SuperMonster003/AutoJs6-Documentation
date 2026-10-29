@@ -250,6 +250,638 @@ console.log(unread.length, unread.fallback); // 命中数与检索方式 (server
 mail.markRead(unread);
 ```
 
+以下各条目的参数, 结果与错误同对应的 [MailClient](mailClientType) 方法, 只列出签名与要点. 示例中的 `'work'` 是插件设置页保存的账户别名.
+
+## [m] test
+
+### mail.test()
+
+**`6.8.0`**
+
+- <ins>**returns**</ins> { [MailSessionTestResult](mailClientType#mailsessiontestresult) } - 各端点的连通性报告
+
+### mail.testAsync()
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailSessionTestResult](mailClientType#mailsessiontestresult)
+
+以默认客户端调用 [client.test](mailClientType#m-test), 探测收信端点与 SMTP 端点. 单个端点失败记录在报告中, 不抛出.
+
+```js
+mail.setDefault('work');
+let report = mail.test();
+console.log(report.ok, report.elapsedMs);
+mail.testAsync().then(r => console.log(r.smtp.ok));
+```
+
+## [m] send
+
+### mail.send(message, options?)
+
+**`6.8.0`**
+
+- **message** { [MailSendMessage](mailMessageType#mailsendmessage) } - 待发送的邮件
+- **[ options ]** { [Object](dataTypes#object) } - 发送选项, 支持 `saveToSent`
+- <ins>**returns**</ins> { [MailSendResult](mailClientType#mailsendresult) } - 发送结果
+
+### mail.sendAsync(message, options?)
+
+**`6.8.0`** **`Async`**
+
+- **message** { [MailSendMessage](mailMessageType#mailsendmessage) } - 待发送的邮件
+- **[ options ]** { [Object](dataTypes#object) } - 发送选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailSendResult](mailClientType#mailsendresult)
+
+以默认客户端调用 [client.send](mailClientType#m-send) 经 SMTP 发送邮件.
+
+```js
+mail.setDefault('work');
+let result = mail.send({ to: 'you@example.com', subject: '提醒', text: '会议改到 15:00' });
+console.log(result.messageId, result.accepted.length);
+mail.sendAsync({ to: 'you@example.com', subject: '提醒', text: '已改期' }).then(r => console.log(r.messageId));
+```
+
+## [m] folders
+
+### mail.folders(options?)
+
+**`6.8.0`**
+
+- **[ options ]** { [Object](dataTypes#object) } - 列表选项, 支持 `subscribedOnly` 与 `status`
+- <ins>**returns**</ins> { [MailFolder](mailClientType#mailfolder)[[]](dataTypes#array) } - 文件夹树
+
+### mail.foldersAsync(options?)
+
+**`6.8.0`** **`Async`**
+
+- **[ options ]** { [Object](dataTypes#object) } - 列表选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailFolder](mailClientType#mailfolder)[[]](dataTypes#array)
+
+以默认客户端调用 [client.folders](mailClientType#m-folders) 列出文件夹树. POP3 只返回 `INBOX`.
+
+```js
+mail.setDefault('work');
+mail.folders().forEach(f => console.log(f.path, f.specialUse || ''));
+mail.foldersAsync({ status: true }).then(list => list.forEach(f => console.log(f.path, f.unseen)));
+```
+
+## [m] folder
+
+### mail.folder(path)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [Object](dataTypes#object) } - [文件夹对象](mailClientType#文件夹对象-folder-object)
+
+以默认客户端调用 [client.folder](mailClientType#m-folder), 返回绑定到 `path` 的轻量对象, 不访问网络. 此方法没有 `Async` 形态.
+
+```js
+mail.setDefault('work');
+let archive = mail.folder('Archive');
+console.log(archive.status().messages);
+```
+
+## [m] folderStatus
+
+### mail.folderStatus(path)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [MailFolderStatus](mailClientType#mailfolderstatus) } - 文件夹状态
+
+### mail.folderStatusAsync(path)
+
+**`6.8.0`** **`Async`**
+
+- **path** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailFolderStatus](mailClientType#mailfolderstatus)
+
+以默认客户端调用 [client.folderStatus](mailClientType#m-folderstatus) 读取邮件数, 未读数, 下一个 UID 与 UIDVALIDITY. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+let status = mail.folderStatus('INBOX');
+console.log(status.messages, status.unseen);
+mail.folderStatusAsync('INBOX').then(s => console.log(s.uidNext));
+```
+
+## [m] createFolder
+
+### mail.createFolder(path)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 新文件夹路径, 父级需已存在
+- <ins>**returns**</ins> { [MailFolder](mailClientType#mailfolder) } - 新建的文件夹
+
+### mail.createFolderAsync(path)
+
+**`6.8.0`** **`Async`**
+
+- **path** { [string](dataTypes#string) } - 新文件夹路径
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailFolder](mailClientType#mailfolder)
+
+以默认客户端调用 [client.createFolder](mailClientType#m-createfolder) 创建并订阅文件夹. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+console.log(mail.createFolder('Reports').path);
+mail.createFolderAsync('Reports/2026').then(f => console.log(f.path));
+```
+
+## [m] deleteFolder
+
+### mail.deleteFolder(path)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 恒为 `true`
+
+### mail.deleteFolderAsync(path)
+
+**`6.8.0`** **`Async`**
+
+- **path** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 `true`
+
+以默认客户端调用 [client.deleteFolder](mailClientType#m-deletefolder) 删除文件夹及其中的邮件. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+mail.deleteFolder('Reports/2025');
+mail.deleteFolderAsync('Reports/2024').then(() => console.log('已删除'));
+```
+
+## [m] renameFolder
+
+### mail.renameFolder(path, newPath)
+
+**`6.8.0`**
+
+- **path** { [string](dataTypes#string) } - 现有文件夹路径
+- **newPath** { [string](dataTypes#string) } - 新路径
+- <ins>**returns**</ins> { [MailFolder](mailClientType#mailfolder) } - 改名后的文件夹
+
+### mail.renameFolderAsync(path, newPath)
+
+**`6.8.0`** **`Async`**
+
+- **path** { [string](dataTypes#string) } - 现有文件夹路径
+- **newPath** { [string](dataTypes#string) } - 新路径
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailFolder](mailClientType#mailfolder)
+
+以默认客户端调用 [client.renameFolder](mailClientType#m-renamefolder) 重命名或移动文件夹. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+console.log(mail.renameFolder('Reports', 'Archive/Reports').path);
+mail.renameFolderAsync('Drafts-old', 'Archive/Drafts').then(f => console.log(f.path));
+```
+
+## [m] fetch
+
+### mail.fetch(options?)
+
+**`6.8.0`**
+
+- **[ options ]** { [Object](dataTypes#object) } - 列表选项, 支持 `folder`, `limit`, `before`, `after`, `order` 与 `unseenOnly`
+- <ins>**returns**</ins> { [MailMessage](mailMessageType)[[]](dataTypes#array) } - 邮件摘要列表
+
+### mail.fetchAsync(options?)
+
+**`6.8.0`** **`Async`**
+
+- **[ options ]** { [Object](dataTypes#object) } - 列表选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailMessage](mailMessageType)[[]](dataTypes#array)
+
+以默认客户端调用 [client.fetch](mailClientType#m-fetch) 列出邮件摘要 (不含正文).
+
+```js
+mail.setDefault('work');
+mail.fetch({ limit: 5 }).forEach(m => console.log(m.uid, m.subject));
+mail.fetchAsync({ unseenOnly: true, limit: 3 }).then(list => console.log(list.length));
+```
+
+## [m] search
+
+### mail.search(query, options?)
+
+**`6.8.0`**
+
+- **query** { [MailSearchQuery](mailSearchQueryType) } - 查询条件
+- **[ options ]** { [Object](dataTypes#object) } - 搜索选项, 支持 `folder`, `limit`, `before` 与 `fallback`
+- <ins>**returns**</ins> { [MailMessage](mailMessageType)[[]](dataTypes#array) } - 命中的邮件摘要, 附带不可枚举的 `fallback` 属性
+
+### mail.searchAsync(query, options?)
+
+**`6.8.0`** **`Async`**
+
+- **query** { [MailSearchQuery](mailSearchQueryType) } - 查询条件
+- **[ options ]** { [Object](dataTypes#object) } - 搜索选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailMessage](mailMessageType)[[]](dataTypes#array)
+
+以默认客户端调用 [client.search](mailClientType#m-search) 按条件搜索邮件.
+
+```js
+mail.setDefault('work');
+let hits = mail.search({ subject: '发票', since: '2026-09-01' }, { limit: 20 });
+console.log(hits.length, hits.fallback);
+mail.searchAsync({ seen: false }).then(list => console.log(list.length));
+```
+
+## [m] get
+
+### mail.get(uid, options?)
+
+**`6.8.0`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 读取选项, 支持 `folder`, `peek` 与 `includeRaw`
+- <ins>**returns**</ins> { [MailMessage](mailMessageType) } - 含正文, 头与附件列表的完整邮件
+
+### mail.getAsync(uid, options?)
+
+**`6.8.0`** **`Async`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 读取选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailMessage](mailMessageType)
+
+以默认客户端调用 [client.get](mailClientType#m-get) 读取一封邮件的正文, 头与附件列表.
+
+```js
+mail.setDefault('work');
+let latest = mail.fetch({ limit: 1 })[0];
+console.log(mail.get(latest).text);
+mail.getAsync(latest.uid, { peek: false }).then(m => console.log(m.subject));
+```
+
+## [m] fetchBody
+
+### mail.fetchBody(uid, options?)
+
+**`6.8.0`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 读取选项, 同 [mail.get](#m-get)
+- <ins>**returns**</ins> { [MailMessage](mailMessageType) } - 完整邮件
+
+### mail.fetchBodyAsync(uid, options?)
+
+**`6.8.0`** **`Async`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 读取选项
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为 [MailMessage](mailMessageType)
+
+[mail.get](#m-get) / `mail.getAsync` 的别名, 参数与结果完全相同.
+
+```js
+mail.setDefault('work');
+let latest = mail.fetch({ limit: 1 })[0];
+console.log(mail.fetchBody(latest).text);
+mail.fetchBodyAsync(latest).then(m => console.log(m.html));
+```
+
+## [m] download
+
+### mail.download(attachment, target?, options?)
+
+**`6.8.0`**
+
+- **attachment** { [MailAttachment](mailMessageType#mailattachment) | [Object](dataTypes#object) } - 附件对象, 或 `{ uid, partId, folder?, fileName? }`
+- **[ target = `files.cwd()` ]** { [string](dataTypes#string) } - 目标目录或文件路径
+- **[ options ]** { [Object](dataTypes#object) } - 下载选项, 支持 `folder` 与 `overwrite`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 落盘文件的绝对路径
+
+### mail.downloadAsync(attachment, target?, options?)
+
+**`6.8.0`** **`Async`**
+
+- **attachment** { [MailAttachment](mailMessageType#mailattachment) | [Object](dataTypes#object) } - 附件对象或 `{ uid, partId }`
+- **[ target = `files.cwd()` ]** { [string](dataTypes#string) } - 目标目录或文件路径
+- **[ options ]** { [Object](dataTypes#object) } - 下载选项, 另支持 `onProgress` 进度回调
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为落盘文件的绝对路径
+
+以默认客户端调用 [client.download](mailClientType#m-download) 将附件流式写入文件.
+
+```js
+mail.setDefault('work');
+let message = mail.get(mail.fetch({ limit: 1 })[0]);
+message.attachments.forEach(a => console.log(mail.download(a, '/sdcard/Download/')));
+mail.downloadAsync({ uid: message.uid, partId: '2' }, '/sdcard/Download/').then(path => console.log(path));
+```
+
+## [m] raw
+
+### mail.raw(uid, target?, options?)
+
+**`6.8.0`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ target = `files.cwd()` ]** { [string](dataTypes#string) } - 目标目录或文件路径, 目录时文件名为 `<uid>.eml`
+- **[ options ]** { [Object](dataTypes#object) } - 下载选项, 支持 `folder` 与 `overwrite`
+- <ins>**returns**</ins> { [string](dataTypes#string) } - 落盘文件的绝对路径
+
+### mail.rawAsync(uid, target?, options?)
+
+**`6.8.0`** **`Async`**
+
+- **uid** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) } - [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ target = `files.cwd()` ]** { [string](dataTypes#string) } - 目标目录或文件路径
+- **[ options ]** { [Object](dataTypes#object) } - 下载选项, 另支持 `onProgress` 进度回调
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为落盘文件的绝对路径
+
+以默认客户端调用 [client.raw](mailClientType#m-raw) 将整封邮件的原始 MIME 内容写入 `.eml` 文件.
+
+```js
+mail.setDefault('work');
+let latest = mail.fetch({ limit: 1 })[0];
+console.log(mail.raw(latest, '/sdcard/Download/'));
+mail.rawAsync(latest.uid, '/sdcard/Download/latest.eml', { overwrite: true }).then(path => console.log(path));
+```
+
+## [m] setFlags
+
+### mail.setFlags(uids, flags, mode?, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **flags** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 标记名, 系统标记或自定义关键字
+- **[ mode = `'add'` ]** { `'add'` | `'remove'` | `'set'` } - 添加, 移除或整体替换
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.setFlagsAsync(uids, flags, mode?, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+以默认客户端调用 [client.setFlags](mailClientType#m-setflags) 修改邮件标记. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+let uids = mail.fetch({ limit: 2 }).map(m => m.uid);
+mail.setFlags(uids, ['seen', 'Project-X']);
+mail.setFlagsAsync(uids, 'Project-X', 'remove').then(changed => console.log(changed));
+```
+
+## [m] markRead
+
+### mail.markRead(uids, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.markReadAsync(uids, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+相当于 `mail.setFlags(uids, 'seen', 'add', options)`.
+
+```js
+mail.setDefault('work');
+let unread = mail.fetch({ unseenOnly: true, limit: 10 });
+mail.markRead(unread);
+mail.markReadAsync(unread[0]).then(changed => console.log(changed));
+```
+
+## [m] markUnread
+
+### mail.markUnread(uids, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.markUnreadAsync(uids, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+相当于 `mail.setFlags(uids, 'seen', 'remove', options)`.
+
+```js
+mail.setDefault('work');
+let latest = mail.fetch({ limit: 1 })[0];
+mail.markUnread(latest);
+mail.markUnreadAsync(latest.uid, { folder: 'INBOX' }).then(changed => console.log(changed));
+```
+
+## [m] flag
+
+### mail.flag(uids, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.flagAsync(uids, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+相当于 `mail.setFlags(uids, 'flagged', 'add', options)`, 即加星标.
+
+```js
+mail.setDefault('work');
+let hits = mail.search({ from: 'boss@example.com' });
+mail.flag(hits);
+mail.flagAsync(hits[0]).then(changed => console.log(changed));
+```
+
+## [m] unflag
+
+### mail.unflag(uids, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.unflagAsync(uids, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+相当于 `mail.setFlags(uids, 'flagged', 'remove', options)`.
+
+```js
+mail.setDefault('work');
+let starred = mail.search({ flagged: true });
+mail.unflag(starred);
+mail.unflagAsync(starred, { folder: 'INBOX' }).then(changed => console.log(changed.length));
+```
+
+## [m] move
+
+### mail.move(uids, folder, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **folder** { [string](dataTypes#string) } - 目标文件夹路径
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `from` (来源文件夹, 默认 `'INBOX'`)
+- <ins>**returns**</ins> { [Array](dataTypes#array) | [boolean](dataTypes#boolean) } - 服务器支持 UIDPLUS 时为新 UID 数组, 否则为 `true`
+
+### mail.moveAsync(uids, folder, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值同上
+
+以默认客户端调用 [client.move](mailClientType#m-move) 移动邮件. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+console.log(mail.move(mail.search({ from: 'newsletter@example.com' }), 'Newsletters'));
+mail.moveAsync(mail.search({ subject: '账单' }), 'Bills').then(r => console.log(r));
+```
+
+## [m] copy
+
+### mail.copy(uids, folder, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **folder** { [string](dataTypes#string) } - 目标文件夹路径
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `from`
+- <ins>**returns**</ins> { [Array](dataTypes#array) | [boolean](dataTypes#boolean) } - 同 [mail.move](#m-move)
+
+### mail.copyAsync(uids, folder, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值同上
+
+以默认客户端调用 [client.copy](mailClientType#m-copy), 参数与返回值同 [mail.move](#m-move), 但保留来源邮件. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+let latest = mail.fetch({ limit: 1 })[0];
+console.log(mail.copy(latest, 'Archive'));
+mail.copyAsync(latest, 'Backup').then(r => console.log(r));
+```
+
+## [m] delete
+
+### mail.delete(uids, options?)
+
+**`6.8.0`**
+
+- **uids** { [number](dataTypes#number) | [string](dataTypes#string) | [MailMessage](mailMessageType) | [Array](dataTypes#array) } - 一个或多个 [UID 参数](mailMessageType#uid-参数-uid-argument)
+- **[ options ]** { [Object](dataTypes#object) } - 选项, 支持 `folder` 与 `expunge`
+- <ins>**returns**</ins> { [Array](dataTypes#array) } - 受影响的 UID 数组
+
+### mail.deleteAsync(uids, options?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为受影响的 UID 数组
+
+以默认客户端调用 [client.delete](mailClientType#m-delete). IMAP 上添加 `deleted` 标记 (`expunge` 为 `true` 时立即清除), POP3 上的删除不可撤销.
+
+```js
+mail.setDefault('work');
+mail.delete(mail.search({ subject: '退订确认' }), { expunge: true });
+mail.deleteAsync(mail.search({ from: 'spam@example.com' })).then(uids => console.log(uids.length));
+```
+
+## [m] expunge
+
+### mail.expunge(folder?)
+
+**`6.8.0`**
+
+- **[ folder = `'INBOX'` ]** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 清除的邮件数
+
+### mail.expungeAsync(folder?)
+
+**`6.8.0`** **`Async`**
+
+- **[ folder = `'INBOX'` ]** { [string](dataTypes#string) } - 文件夹路径
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为清除的邮件数
+
+以默认客户端调用 [client.expunge](mailClientType#m-expunge) 永久删除带 `deleted` 标记的邮件. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+console.log(mail.expunge());
+mail.expungeAsync('Trash').then(n => console.log(n));
+```
+
+## [m] append
+
+### mail.append(folder, message, flags?)
+
+**`6.8.0`**
+
+- **folder** { [string](dataTypes#string) } - 目标文件夹路径
+- **message** { [MailSendMessage](mailMessageType#mailsendmessage) } - 邮件内容, 字段与发送相同
+- **[ flags ]** { [string](dataTypes#string) | [string](dataTypes#string)[[]](dataTypes#array) } - 初始标记, 如 `['seen']` 或 `['draft']`
+- <ins>**returns**</ins> { [number](dataTypes#number) | [null](dataTypes#null) } - 服务器报告 APPENDUID 时为新邮件的 UID, 否则为 `null`
+
+### mail.appendAsync(folder, message, flags?)
+
+**`6.8.0`** **`Async`**
+
+- <ins>**returns**</ins> { [Promise](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise) } - 兑现值为新 UID 或 `null`
+
+以默认客户端调用 [client.append](mailClientType#m-append), 不经 SMTP 直接把邮件写入文件夹. 仅 IMAP.
+
+```js
+mail.setDefault('work');
+console.log(mail.append('Drafts', { to: 'you@example.com', subject: '草稿', text: '稍后补充' }, ['draft']));
+mail.appendAsync('Archive', { subject: '备忘', text: '已归档' }, 'seen').then(uid => console.log(uid));
+```
+
+## [m] watch
+
+### mail.watch(folder?, options?)
+
+**`6.8.0`** **`Overload 1/2`**
+
+- **[ folder = `'INBOX'` ]** { [string](dataTypes#string) } - 监听的文件夹路径
+- **[ options ]** { [Object](dataTypes#object) } - 监听选项, 支持 `mode`, `pollIntervalMs`, `fetchBody` 与 `reconnect`
+- <ins>**returns**</ins> { [MailWatch](mailClientType#mailwatch) } - 监听对象
+
+### mail.watch(options)
+
+**`6.8.0`** **`Overload 2/2`**
+
+- **options** { [Object](dataTypes#object) } - 监听选项, 可含 `folder`
+- <ins>**returns**</ins> { [MailWatch](mailClientType#mailwatch) } - 监听对象
+
+以默认客户端调用 [client.watch](mailClientType#m-watch) 开始监听新邮件, 立即返回, 事件在脚本线程上派发. 此方法没有 `Async` 形态.
+
+```js
+mail.setDefault('work');
+let watch = mail.watch({ folder: 'INBOX', fetchBody: true });
+watch.on('message', m => console.log(m.subject));
+setTimeout(() => watch.stop(), 5 * 60 * 1000);
+```
+
 ## [C] MailError
 
 ### new mail.MailError(message, code?, details?, retryable?)

@@ -42,7 +42,7 @@
               "textRaw": "wait(cond, timeout?, interval?, onOk?, onErr?)",
               "type": "method",
               "name": "wait",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"#条件-cond\">Cond</a> } - 等待条件</li>\n<li><strong>[ timeout = <code>10000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), <code>Infinity</code> 表示不限时</li>\n<li><strong>[ interval = <code>200</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 检测间隔 (毫秒)</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 条件满足时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 新建的 Flow 对象</li>\n</ul>\n<p>创建一个等待 <code>cond</code> 的 Flow, 立即返回, 不阻塞当前线程.</p>\n<p>条件满足时 Flow 以匹配结果 (选择器条件为 <a href=\"uiObjectType\">UiObject</a>, 函数条件为返回值) fulfill; 超时则以 <a href=\"flowErrorType\">FlowError</a> (<code>code</code> 为 <code>TIMEOUT</code>) 拒绝.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).then(w =&gt; {\n    console.log(w.bounds());\n}, e =&gt; {\n    console.warn(e.message); /* 如 Timed out after 5003 ms and 25 attempt(s) in step &quot;wait&quot; waiting for content(&quot;登录&quot;). */\n});\n\n/* 尾随回调等价于 then(onOk, onErr). */\nflow.wait(&#39;登录&#39;, 5e3, w =&gt; console.log(w.bounds()), e =&gt; console.warn(e.message));\n</code></pre>\n<p>全局函数 <code>waitAsync</code> 及 <code>wait.async</code> 与本方法相同:</p>\n<pre><code class=\"lang-js\">waitAsync(&#39;登录&#39;, 5e3).click();\nwait.async(&#39;登录&#39;, 5e3).click(); /* 同上. */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"#条件-cond\">Cond</a> } - 等待条件</li>\n<li><strong>[ timeout = <code>10000</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), <code>Infinity</code> 表示不限时</li>\n<li><strong>[ interval = <code>200</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 检测间隔 (毫秒)</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 条件满足时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 新建的 Flow 对象</li>\n</ul>\n<p>创建一个等待 <code>cond</code> 的 Flow, 立即返回, 不阻塞当前线程.</p>\n<p>条件满足时 Flow 以匹配结果 (选择器条件为 <a href=\"uiObjectType\">UiObject</a>, 函数条件为返回值) fulfill; 超时则以 <a href=\"flowErrorType\">FlowError</a> (<code>code</code> 为 <code>TIMEOUT</code>) 拒绝.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, 5e3).then(w =&gt; {\n    console.log(w.bounds());\n}, e =&gt; {\n    console.warn(e.message); /* 如 Timed out after 5003 ms and 25 attempt(s) in step &quot;wait&quot; waiting for content(&quot;登录&quot;). */\n});\n\n/* 尾随回调等价于 then(onOk, onErr). */\nflow.wait(&#39;登录&#39;, 5e3, w =&gt; console.log(w.bounds()), e =&gt; console.warn(e.message));\n</code></pre>\n<p>全局函数 <code>waitAsync</code> 及 <code>wait.async</code> 与本方法相同, 见本节的别名条目.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -70,6 +70,108 @@
               "type": "method",
               "name": "wait",
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"#条件-cond\">Cond</a> } - 等待条件</li>\n<li><strong>options</strong> { <a href=\"#等待选项-waitoptions\">WaitOptions</a> } - 等待选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 条件满足时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>以选项对象形式创建等待.</p>\n<pre><code class=\"lang-js\">flow.wait(&#39;登录&#39;, { timeout: 5e3, root: id(&#39;login_panel&#39;).findOnce() }).click();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitAsync(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitAsync(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitAsync",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-wait\">flow.wait</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.waitAsync</code>.</p>\n<pre><code class=\"lang-js\">waitAsync(&#39;登录&#39;, 5e3).click();\nflow.waitAsync(&#39;登录&#39;, { timeout: 5e3 }).click(); /* 同上. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait.async(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "async",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "wait.async(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "async",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>挂在同步全局函数 <a href=\"global#m-wait\">wait</a> 上的 <a href=\"#m-wait\">flow.wait</a> (只读, 不可枚举), 参数, 返回值与行为相同. 便于把已有的 <code>wait(...)</code> 调用改为不阻塞的形式.</p>\n<pre><code class=\"lang-js\">wait.async(&#39;登录&#39;, 5e3).click(); /* 同 waitAsync(&#39;登录&#39;, 5e3).click(). */\nwait.async(() =&gt; device.isScreenOn(), { timeout: 30e3 }).then(() =&gt; console.log(&#39;屏幕已点亮&#39;));\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -441,6 +543,57 @@
                   ]
                 }
               ]
+            },
+            {
+              "textRaw": "waitForGone(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForGone",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y?</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForGone(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "waitForGone",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y?</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-waitforhidden\">waitForHidden</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.waitForGone</code>.</p>\n<pre><code class=\"lang-js\">waitForGone(&#39;加载中&#39;, 30e3).then(() =&gt; console.log(&#39;加载完成&#39;));\nflow.waitForGone(&#39;加载中&#39;, { timeout: 30e3, stableFor: 500 }); /* 消失并保持 500 毫秒. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "type": "module",
@@ -618,6 +771,57 @@
                   ]
                 }
               ]
+            },
+            {
+              "textRaw": "clickWait(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickWait(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-waitthenclick\">waitThenClick</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.clickWait</code>.</p>\n<pre><code class=\"lang-js\">clickWait(&#39;同意&#39;, 3e3).then(() =&gt; console.log(&#39;已同意&#39;), e =&gt; console.warn(e.code));\nflow.clickWait(&#39;同意&#39;, { timeout: 3e3, interval: 100 });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "type": "module",
@@ -659,6 +863,57 @@
               "type": "method",
               "name": "waitThenClickBounds",
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标出现后在控件中心坐标点按, 相当于 <code>flow.wait(cond, ...).clickBounds()</code>.</p>\n<p><code>clickBoundsWait</code> 是本方法的别名.</p>\n<pre><code class=\"lang-js\">waitThenClickBounds(&#39;登录&#39;, 5e3);\nclickBoundsWait(&#39;登录&#39;, 5e3); /* 同上. */\nflow.wait(&#39;登录&#39;, 5e3).clickBounds(); /* 同上. */\n</code></pre>\n<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href=\"flow#m-wait\">flow.wait</a> 相同, 稳定性参数见 <a href=\"flow#m-waitforstable\">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsWait(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsWait(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-waitthenclickbounds\">waitThenClickBounds</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.clickBoundsWait</code>.</p>\n<pre><code class=\"lang-js\">clickBoundsWait(&#39;开始&#39;, 5e3).then(() =&gt; console.log(&#39;已点按&#39;));\nflow.clickBoundsWait(desc(&#39;播放&#39;), { timeout: 5e3 });\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -795,6 +1050,57 @@
                   ]
                 }
               ]
+            },
+            {
+              "textRaw": "clickWhenStable(cond, timeout?, interval?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWhenStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout?"
+                    },
+                    {
+                      "name": "interval?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickWhenStable(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWhenStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-waitforstablethenclick\">waitForStableThenClick</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.clickWhenStable</code>.</p>\n<pre><code class=\"lang-js\">clickWhenStable(&#39;确定&#39;, 5e3).then(() =&gt; console.log(&#39;已点击&#39;));\nflow.clickWhenStable(&#39;确定&#39;, { timeout: 5e3, stableFor: 300, compare: &#39;bounds&#39; });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
             }
           ],
           "type": "module",
@@ -854,19 +1160,11 @@
                   ]
                 }
               ]
-            }
-          ],
-          "type": "module",
-          "displayName": "[m] waitForStableThenClickBounds"
-        },
-        {
-          "textRaw": "[m] clickWhenStableAfter",
-          "name": "[m]_clickwhenstableafter",
-          "methods": [
+            },
             {
-              "textRaw": "clickWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)",
+              "textRaw": "clickBoundsWhenStable(cond, timeout?, interval?, onOk?, onErr?)",
               "type": "method",
-              "name": "clickWhenStableAfter",
+              "name": "clickBoundsWhenStable",
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
               "signatures": [
                 {
@@ -881,7 +1179,66 @@
                       "name": "interval?"
                     },
                     {
-                      "name": "delayMin?"
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsWhenStable(cond, options, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsWhenStable",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-waitforstablethenclickbounds\">waitForStableThenClickBounds</a> 的别名, 参数, 返回值与行为相同. 可作为全局函数调用, 也可写作 <code>flow.clickBoundsWhenStable</code>.</p>\n<pre><code class=\"lang-js\">clickBoundsWhenStable(&#39;开始&#39;, 5e3).then(() =&gt; console.log(&#39;已点按&#39;));\nflow.clickBoundsWhenStable(id(&#39;start&#39;), { timeout: 5e3, stableFor: 300 });\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForStableThenClickBounds"
+        },
+        {
+          "textRaw": "[m] clickWhenStableAfter",
+          "name": "[m]_clickwhenstableafter",
+          "methods": [
+            {
+              "textRaw": "clickWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickWhenStableAfter",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "interval"
+                    },
+                    {
+                      "name": "delayMin"
                     },
                     {
                       "name": "delayMax?"
@@ -900,7 +1257,7 @@
               "textRaw": "clickWhenStableAfter(cond, options, onOk?, onErr?)",
               "type": "method",
               "name": "clickWhenStableAfter",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ delayMin ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时下限 (毫秒)</li>\n<li><strong>[ delayMax ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定, 再随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒 (只给 <code>delayMin</code> 时为固定延时), 然后点击.<br>\n相当于 <code>flow.waitForStable(cond, ...).sleep(delayMin, delayMax).click()</code>.</p>\n<p>选项对象形式以 <code>delay</code> 键给出延时, 缺少延时时抛出异常.</p>\n<pre><code class=\"lang-js\">clickWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */\nclickWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */\nclickWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */\n</code></pre>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>delayMin</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时下限 (毫秒)</li>\n<li><strong>[ delayMax ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定, 再随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒 (只给 <code>delayMin</code> 时为固定延时), 然后点击.<br>\n相当于 <code>flow.waitForStable(cond, ...).sleep(delayMin, delayMax).click()</code>.</p>\n<p>选项对象形式以 <code>delay</code> 键给出延时, 缺少延时时抛出异常.</p>\n<pre><code class=\"lang-js\">clickWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */\nclickWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */\nclickWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -929,7 +1286,7 @@
           "name": "[m]_clickboundswhenstableafter",
           "methods": [
             {
-              "textRaw": "clickBoundsWhenStableAfter(cond, timeout?, interval?, delayMin?, delayMax?, onOk?, onErr?)",
+              "textRaw": "clickBoundsWhenStableAfter(cond, timeout, interval, delayMin, delayMax?, onOk?, onErr?)",
               "type": "method",
               "name": "clickBoundsWhenStableAfter",
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n",
@@ -940,13 +1297,13 @@
                       "name": "cond"
                     },
                     {
-                      "name": "timeout?"
+                      "name": "timeout"
                     },
                     {
-                      "name": "interval?"
+                      "name": "interval"
                     },
                     {
-                      "name": "delayMin?"
+                      "name": "delayMin"
                     },
                     {
                       "name": "delayMax?"
@@ -965,7 +1322,7 @@
               "textRaw": "clickBoundsWhenStableAfter(cond, options, onOk?, onErr?)",
               "type": "method",
               "name": "clickBoundsWhenStableAfter",
-              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ delayMin ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时下限 (毫秒)</li>\n<li><strong>[ delayMax ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定, 再随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒 (只给 <code>delayMin</code> 时为固定延时), 然后在控件中心坐标点按.<br>\n相当于 <code>flow.waitForStable(cond, ...).sleep(delayMin, delayMax).clickBounds()</code>.</p>\n<p>选项对象形式以 <code>delay</code> 键给出延时, 缺少延时时抛出异常.</p>\n<pre><code class=\"lang-js\">clickBoundsWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */\nclickBoundsWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */\nclickBoundsWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */\n</code></pre>\n<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href=\"flow#m-wait\">flow.wait</a> 相同, 稳定性参数见 <a href=\"flow#m-waitforstable\">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>\n",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Global</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>delayMin</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时下限 (毫秒)</li>\n<li><strong>[ delayMax ]</strong> { <a href=\"dataTypes#number\">number</a> } - 点击前延时上限 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>等待目标稳定, 再随机延时 <code>delayMin</code> 至 <code>delayMax</code> 毫秒 (只给 <code>delayMin</code> 时为固定延时), 然后在控件中心坐标点按.<br>\n相当于 <code>flow.waitForStable(cond, ...).sleep(delayMin, delayMax).clickBounds()</code>.</p>\n<p>选项对象形式以 <code>delay</code> 键给出延时, 缺少延时时抛出异常.</p>\n<pre><code class=\"lang-js\">clickBoundsWhenStableAfter(&#39;同意&#39;, 5e3, 200, 300, 800); /* 5 秒超时, 200 毫秒间隔, 延时 300 ~ 800 毫秒. */\nclickBoundsWhenStableAfter(&#39;同意&#39;, { timeout: 5e3, delay: [ 300, 800 ] }); /* 同上. */\nclickBoundsWhenStableAfter(&#39;同意&#39;, { delay: 500 }); /* 固定延时 500 毫秒. */\n</code></pre>\n<p>直接使用控件边界中心执行手势, 不调用控件自身的 <code>click()</code> 方法. 等待参数与 <a href=\"flow#m-wait\">flow.wait</a> 相同, 稳定性参数见 <a href=\"flow#m-waitforstable\">flow.waitForStable</a>. 需要坐标偏移时可使用 <code>waitAsync(cond, ...).clickBounds(offsetX, offsetY)</code>.</p>\n",
               "signatures": [
                 {
                   "params": [
@@ -1013,6 +1370,39 @@
               "type": "method",
               "name": "sleep",
               "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>millisMin</strong> { <a href=\"dataTypes#number\">number</a> } - 休眠时长下限 (毫秒)</li>\n<li><strong>millisMax</strong> { <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#string\">string</a> } - 休眠时长上限 (毫秒) 或 <code>&#39;±delta&#39;</code> 增量字符串</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p>以一次休眠起链, 参数形式同全局 <a href=\"global#m-sleep\">sleep</a>. 休眠结束后 Flow 以 <code>undefined</code> fulfill.</p>\n<p><code>delay</code> 是本方法的别名.</p>\n<pre><code class=\"lang-js\">flow.sleep(1e3).then(() =&gt; console.log(&#39;1 秒后&#39;));\nflow.sleep(500, 1500).back(); /* 随机 500 ~ 1500 毫秒后按返回键. */\nflow.sleep(1e3, &#39;±200&#39;).home(); /* 800 ~ 1200 毫秒后回到桌面. */\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millisMin"
+                    },
+                    {
+                      "name": "millisMax"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "delay(millis)",
+              "type": "method",
+              "name": "delay",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong></p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "millis"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "delay(millisMin, millisMax)",
+              "type": "method",
+              "name": "delay",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"#m-sleep\">flow.sleep</a> 的别名, 参数, 返回值与行为相同.</p>\n<pre><code class=\"lang-js\">flow.delay(2e3).then(() =&gt; console.log(&#39;2 秒后&#39;));\nflow.delay(300, 600).back();\n</code></pre>\n",
               "signatures": [
                 {
                   "params": [
@@ -1306,16 +1696,891 @@
         {
           "textRaw": "工具集起点",
           "name": "工具集起点",
-          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#工具集-toolkit\">工具集</a> 的每个函数 (除 <code>retry</code> 外) 都有 Flow 起点形式, 参数与同步形式相同, 结果为链上的值:</p>\n<ul>\n<li>flow.smartClick(target, options?)</li>\n<li>flow.smartClickBounds(target, options?)</li>\n<li>flow.clickIfExists(target, options?)</li>\n<li>flow.clickBoundsIfExists(target, options?)</li>\n<li>flow.clickAny(targets, options?)</li>\n<li>flow.clickBoundsAny(targets, options?)</li>\n<li>flow.findAny(targets, options?)</li>\n<li>flow.scrollUntil(target, options?)</li>\n<li>flow.typeInto(target, text, options?)</li>\n<li>flow.dismissPopups(targets, options?)</li>\n<li>flow.collectList(container, item, options?)</li>\n<li>flow.launchAndWait(app, options?)</li>\n<li>flow.backUntil(cond, options?)</li>\n<li>flow.backToApp(app, options?)</li>\n<li>flow.toggle(target, checked, options?)</li>\n</ul>\n<p>与同步形式的区别:</p>\n<ul>\n<li>起点形式的 <code>timeout</code> 默认取 <a href=\"#m-defaults\">flow.defaults</a> 的超时 (同步形式默认只查找一次).</li>\n<li>工具在工作线程上运行, 失败以 <a href=\"flowErrorType\">FlowError</a> 拒绝而非抛出.</li>\n<li>可以追加尾随回调 <code>onOk</code> / <code>onErr</code>.</li>\n<li><code>dismissPopups</code> 的 <code>watch</code> 选项仅同步形式可用.</li>\n</ul>\n<pre><code class=\"lang-js\">flow.launchAndWait(&#39;Settings&#39;)\n    .scrollUntil(&#39;关于手机&#39;)\n    .smartClick()\n    .then(r =&gt; console.log(r.method));\n</code></pre>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#工具集-toolkit\">工具集</a> 的每个函数 (除 <code>retry</code> 外) 都有 Flow 起点形式 (见下方各条目), 参数与同步形式相同, 结果为链上的值.</p>\n<p>与同步形式的区别:</p>\n<ul>\n<li>起点形式的 <code>timeout</code> 默认取 <a href=\"#m-defaults\">flow.defaults</a> 的超时 (同步形式默认只查找一次).</li>\n<li>工具在工作线程上运行, 失败以 <a href=\"flowErrorType\">FlowError</a> 拒绝而非抛出.</li>\n<li>可以追加尾随回调 <code>onOk</code> / <code>onErr</code>, 相当于在起点之后追加 <a href=\"flowType#m-then\">then(onOk, onErr)</a>.</li>\n<li><code>dismissPopups</code> 的 <code>watch</code> 选项仅同步形式可用.</li>\n</ul>\n<pre><code class=\"lang-js\">flow.launchAndWait(&#39;Settings&#39;)\n    .scrollUntil(&#39;关于手机&#39;)\n    .smartClick()\n    .then(r =&gt; console.log(r.method));\n</code></pre>\n",
           "type": "module",
           "displayName": "工具集起点"
         },
         {
+          "textRaw": "[m] smartClick",
+          "name": "[m]_smartclick",
+          "methods": [
+            {
+              "textRaw": "smartClick(target, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "smartClick",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-smartclick\">smartClick</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为点击结果对象</li>\n</ul>\n<p><a href=\"automator#m-smartclick\">smartClick</a> 的 Flow 起点形式: 可点击时点击目标, 否则上溯到可点击的祖先, 最后回退到手势.</p>\n<pre><code class=\"lang-js\">flow.smartClick(&#39;关于手机&#39;, { verify: &#39;型号&#39; }).then(r =&gt; console.log(r.method, r.verified));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] smartClick"
+        },
+        {
+          "textRaw": "[m] smartClickBounds",
+          "name": "[m]_smartclickbounds",
+          "methods": [
+            {
+              "textRaw": "smartClickBounds(target, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "smartClickBounds",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-smartclickbounds\">smartClickBounds</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为点击结果对象 (<code>method</code> 固定为 <code>&#39;gesture&#39;</code>)</li>\n</ul>\n<p><a href=\"automator#m-smartclickbounds\">smartClickBounds</a> 的 Flow 起点形式: 在目标边界中心执行点按手势.</p>\n<pre><code class=\"lang-js\">flow.smartClickBounds(id(&#39;banner&#39;), { offset: [ -10, 6 ] }).then(r =&gt; console.log(r.target.bounds()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] smartClickBounds"
+        },
+        {
+          "textRaw": "[m] clickIfExists",
+          "name": "[m]_clickifexists",
+          "methods": [
+            {
+              "textRaw": "clickIfExists(target, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-smartclick\">smartClick</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: boolean) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 目标存在且已点击时链上的值为 <code>true</code>, 不存在为 <code>false</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickIfExists(target, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-clickifexists\">clickIfExists</a> 的 Flow 起点形式: 目标缺席时以 <code>false</code> fulfill 而不拒绝.</p>\n<pre><code class=\"lang-js\">flow.clickIfExists(&#39;跳过广告&#39;, 2e3).then(clicked =&gt; console.log(clicked ? &#39;已跳过&#39; : &#39;没有广告&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickIfExists"
+        },
+        {
+          "textRaw": "[m] clickBoundsIfExists",
+          "name": "[m]_clickboundsifexists",
+          "methods": [
+            {
+              "textRaw": "clickBoundsIfExists(target, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-smartclickbounds\">smartClickBounds</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: boolean) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 目标存在且已点按时链上的值为 <code>true</code>, 不存在为 <code>false</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsIfExists(target, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsIfExists",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 点击目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-clickboundsifexists\">clickBoundsIfExists</a> 的 Flow 起点形式: 目标存在时在控件中心坐标点按, 缺席时以 <code>false</code> fulfill.</p>\n<pre><code class=\"lang-js\">flow.clickBoundsIfExists(&#39;关闭&#39;, 1500).then(clicked =&gt; console.log(clicked));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickBoundsIfExists"
+        },
+        {
+          "textRaw": "[m] clickAny",
+          "name": "[m]_clickany",
+          "methods": [
+            {
+              "textRaw": "clickAny(targets, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-clickany\">clickAny</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: Object) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为被点击的候选对象, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickAny(targets, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-clickany\">clickAny</a> 的 Flow 起点形式: 点击最先出现的候选目标.</p>\n<pre><code class=\"lang-js\">flow.clickAny([ &#39;允许&#39;, &#39;始终允许&#39;, &#39;仅在使用中允许&#39; ], 3e3).then(hit =&gt; console.log(hit &amp;&amp; hit.index));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickAny"
+        },
+        {
+          "textRaw": "[m] clickBoundsAny",
+          "name": "[m]_clickboundsany",
+          "methods": [
+            {
+              "textRaw": "clickBoundsAny(targets, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-clickboundsany\">clickBoundsAny</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: Object) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为被点按的候选对象, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "clickBoundsAny(targets, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "clickBoundsAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-clickboundsany\">clickBoundsAny</a> 的 Flow 起点形式: 在最先出现的候选目标中心坐标点按.</p>\n<pre><code class=\"lang-js\">flow.clickBoundsAny([ &#39;跳过&#39;, &#39;关闭&#39; ], 3e3).then(hit =&gt; console.log(hit ? hit.index : &#39;无&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] clickBoundsAny"
+        },
+        {
+          "textRaw": "[m] findAny",
+          "name": "[m]_findany",
+          "methods": [
+            {
+              "textRaw": "findAny(targets, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "findAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-findany\">findAny</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: Object) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为找到的候选对象, 都不存在时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "findAny(targets, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "findAny",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-findany\">findAny</a> 的 Flow 起点形式: 只查找, 不点击.</p>\n<pre><code class=\"lang-js\">flow.findAny([ &#39;登录&#39;, &#39;退出登录&#39; ], 5e3).then(hit =&gt; console.log(hit ? hit.index : &#39;都不存在&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] findAny"
+        },
+        {
+          "textRaw": "[m] scrollUntil",
+          "name": "[m]_scrolluntil",
+          "methods": [
+            {
+              "textRaw": "scrollUntil(target, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "scrollUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 滚动查找的目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-scrolluntil\">scrollUntil</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: UiObject) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为找到的 <a href=\"uiObjectType\">UiObject</a></li>\n</ul>\n<p><a href=\"automator#m-scrolluntil\">scrollUntil</a> 的 Flow 起点形式: 滚动列表直到目标出现.</p>\n<pre><code class=\"lang-js\">flow.scrollUntil(&#39;开发者选项&#39;).smartClick();\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] scrollUntil"
+        },
+        {
+          "textRaw": "[m] typeInto",
+          "name": "[m]_typeinto",
+          "methods": [
+            {
+              "textRaw": "typeInto(target, text, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "typeInto",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#null\">null</a> } - 输入框: 选择器 / 节点 / 函数; 数字为第 n 个可编辑节点 (从 0 计); <code>null</code> 为当前焦点所在的可编辑节点</li>\n<li><strong>text</strong> { <a href=\"dataTypes#string\">string</a> } - 待输入的文本</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-typeinto\">typeInto</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: UiObject) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为输入框节点</li>\n</ul>\n<p><a href=\"automator#m-typeinto\">typeInto</a> 的 Flow 起点形式.</p>\n<pre><code class=\"lang-js\">flow.typeInto(className(&#39;EditText&#39;), &#39;hello&#39;, { submit: true }).then(w =&gt; console.log(w.text()));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] typeInto"
+        },
+        {
+          "textRaw": "[m] dismissPopups",
+          "name": "[m]_dismisspopups",
+          "methods": [
+            {
+              "textRaw": "dismissPopups(targets, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "dismissPopups",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 弹窗关闭按钮等候选目标</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-dismisspopups\">dismissPopups</a> 的选项, 不支持 <code>watch</code></li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为被点击的候选对象 (或其数组), 没有弹窗时为 <code>null</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "dismissPopups(targets, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "dismissPopups",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>targets</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"automator#目标参数-target\">Target</a>[] } - 候选目标</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 查找超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-dismisspopups\">dismissPopups</a> 的 Flow 起点形式.</p>\n<pre><code class=\"lang-js\">flow.dismissPopups([ &#39;我知道了&#39;, &#39;暂不更新&#39;, &#39;关闭&#39; ], 2e3).wait(&#39;首页&#39;);\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "targets"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] dismissPopups"
+        },
+        {
+          "textRaw": "[m] collectList",
+          "name": "[m]_collectlist",
+          "methods": [
+            {
+              "textRaw": "collectList(container, item, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "collectList",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>container</strong> { <a href=\"automator#目标参数-target\">Target</a> | <a href=\"dataTypes#null\">null</a> } - 列表容器, <code>null</code> 表示自动探测</li>\n<li><strong>item</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 条目选择条件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-collectlist\">collectList</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any[]) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为采集到的条目数组</li>\n</ul>\n<p><a href=\"automator#m-collectlist\">collectList</a> 的 Flow 起点形式.</p>\n<pre><code class=\"lang-js\">flow.collectList(null, id(&#39;title&#39;)).then(items =&gt; console.log(items.length));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "container"
+                    },
+                    {
+                      "name": "item"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] collectList"
+        },
+        {
+          "textRaw": "[m] launchAndWait",
+          "name": "[m]_launchandwait",
+          "methods": [
+            {
+              "textRaw": "launchAndWait(app, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "launchAndWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"dataTypes#string\">string</a> } - 应用名称或包名</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-launchandwait\">launchAndWait</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: Object) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为启动结果对象</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "launchAndWait(app, timeout, onOk?, onErr?)",
+              "type": "method",
+              "name": "launchAndWait",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"dataTypes#string\">string</a> } - 应用名称或包名</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 等待超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-launchandwait\">launchAndWait</a> 的 Flow 起点形式: 启动应用并等待其到达前台.</p>\n<pre><code class=\"lang-js\">flow.launchAndWait(&#39;com.android.settings&#39;, 8e3).then(r =&gt; console.log(r.packageName));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] launchAndWait"
+        },
+        {
+          "textRaw": "[m] backUntil",
+          "name": "[m]_backuntil",
+          "methods": [
+            {
+              "textRaw": "backUntil(cond, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "backUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 停止条件</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-backuntil\">backUntil</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: any) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为条件成立时的值</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "backUntil(cond, maxTimes, onOk?, onErr?)",
+              "type": "method",
+              "name": "backUntil",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>cond</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 停止条件</li>\n<li><strong>maxTimes</strong> { <a href=\"dataTypes#number\">number</a> } - 最多按返回键的次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-backuntil\">backUntil</a> 的 Flow 起点形式: 反复按返回键直到条件成立.</p>\n<pre><code class=\"lang-js\">flow.backUntil(&#39;首页&#39;, 5).then(w =&gt; console.log(&#39;已回到首页&#39;));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "cond"
+                    },
+                    {
+                      "name": "maxTimes"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] backUntil"
+        },
+        {
+          "textRaw": "[m] backToApp",
+          "name": "[m]_backtoapp",
+          "methods": [
+            {
+              "textRaw": "backToApp(app, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "backToApp",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"dataTypes#string\">string</a> } - 应用名称或包名</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-backtoapp\">backToApp</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: string) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为到达前台的包名</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "backToApp(app, maxTimes, onOk?, onErr?)",
+              "type": "method",
+              "name": "backToApp",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>app</strong> { <a href=\"dataTypes#string\">string</a> } - 应用名称或包名</li>\n<li><strong>maxTimes</strong> { <a href=\"dataTypes#number\">number</a> } - 最多按返回键的次数</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-backtoapp\">backToApp</a> 的 Flow 起点形式: 按返回键直到指定应用回到前台.</p>\n<pre><code class=\"lang-js\">flow.backToApp(&#39;com.android.settings&#39;, 6).then(pkg =&gt; console.log(pkg));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "app"
+                    },
+                    {
+                      "name": "maxTimes"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] backToApp"
+        },
+        {
+          "textRaw": "[m] toggle",
+          "name": "[m]_toggle",
+          "methods": [
+            {
+              "textRaw": "toggle(target, checked, options?, onOk?, onErr?)",
+              "type": "method",
+              "name": "toggle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>target</strong> { <a href=\"automator#目标参数-target\">Target</a> } - 开关控件或其标签</li>\n<li><strong>checked</strong> { <a href=\"dataTypes#boolean\">boolean</a> } - 期望的选中状态</li>\n<li><strong>[ options ]</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-toggle\">toggle</a> 的选项</li>\n<li><strong>[ onOk ]</strong> { <a href=\"dataTypes#function\">(value: Object) =&gt; any</a> } - 成功时的回调</li>\n<li><strong>[ onErr ]</strong> { <a href=\"dataTypes#function\">(error: FlowError) =&gt; any</a> } - 失败时的回调</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为切换结果对象</li>\n</ul>\n<p><a href=\"automator#m-toggle\">toggle</a> 的 Flow 起点形式: 把开关切换到 <code>checked</code> 指定的状态, 已是该状态时不点击.</p>\n<pre><code class=\"lang-js\">flow.toggle(&#39;蓝牙&#39;, true).then(r =&gt; console.log(r.changed));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "target"
+                    },
+                    {
+                      "name": "checked"
+                    },
+                    {
+                      "name": "options?"
+                    },
+                    {
+                      "name": "onOk?"
+                    },
+                    {
+                      "name": "onErr?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] toggle"
+        },
+        {
           "textRaw": "事件等待起点",
           "name": "事件等待起点",
-          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#事件驱动等待\">事件驱动等待</a> 的四个函数都有 Flow 起点形式, 参数与同步形式相同:</p>\n<ul>\n<li>flow.waitForIdle(options?)</li>\n<li>flow.waitForEvent(type?, filter?, timeout?)</li>\n<li>flow.waitForToast(text?, timeout?)</li>\n<li>flow.waitForNotification(filter?, timeout?)</li>\n</ul>\n<p>结果 (空闲报告, 事件, Toast 或通知对象) 为链上的值.</p>\n<pre><code class=\"lang-js\">flow.waitForToast(&#39;已保存&#39;, 10e3).then(toast =&gt; console.log(toast.text));\n</code></pre>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>A11Y</code></strong></p>\n<p><a href=\"automator#事件驱动等待\">事件驱动等待</a> 的四个函数都有 Flow 起点形式 (见下方各条目), 参数与同步形式相同, 结果 (空闲报告, 事件, Toast 或通知对象) 为链上的值. 起点形式不接受尾随回调, 可改用 <a href=\"flowType#m-then\">then</a>.</p>\n<pre><code class=\"lang-js\">flow.waitForToast(&#39;已保存&#39;, 10e3).then(toast =&gt; console.log(toast.text));\n</code></pre>\n",
           "type": "module",
           "displayName": "事件等待起点"
+        },
+        {
+          "textRaw": "[m] waitForIdle",
+          "name": "[m]_waitforidle",
+          "methods": [
+            {
+              "textRaw": "waitForIdle(quietFor?)",
+              "type": "method",
+              "name": "waitForIdle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ quietFor = <code>500</code> ]</strong> { <a href=\"dataTypes#number\">number</a> } - 判定为安静所需的无事件时长 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为空闲报告 <code>{ quietFor, elapsed, events }</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "quietFor?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForIdle(options)",
+              "type": "method",
+              "name": "waitForIdle",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>options</strong> { <a href=\"dataTypes#object\">Object</a> } - 同 <a href=\"automator#m-waitforidle\">waitForIdle</a> 的选项 (<code>quietFor</code>, <code>timeout</code>, <code>eventTypes</code>)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-waitforidle\">waitForIdle</a> 的 Flow 起点形式: 等待界面不再变化.</p>\n<pre><code class=\"lang-js\">flow.waitForIdle({ quietFor: 800, timeout: 10e3 }).then(idle =&gt; console.log(idle.elapsed, idle.events));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "options"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForIdle"
+        },
+        {
+          "textRaw": "[m] waitForEvent",
+          "name": "[m]_waitforevent",
+          "methods": [
+            {
+              "textRaw": "waitForEvent(type?, filter?, timeout?)",
+              "type": "method",
+              "name": "waitForEvent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ type ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] | <a href=\"dataTypes#null\">null</a> } - 事件类型名, 省略时为任意类型</li>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#function\">Function</a> | <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 事件过滤, 同 <a href=\"automator#m-waitforevent\">waitForEvent</a></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为事件包装对象</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "type?"
+                    },
+                    {
+                      "name": "filter?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForEvent(type, timeout, filter?)",
+              "type": "method",
+              "name": "waitForEvent",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>type</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#string\">string</a>[] | <a href=\"dataTypes#null\">null</a> } - 事件类型名</li>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#function\">Function</a> | <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 事件过滤</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-waitforevent\">waitForEvent</a> 的 Flow 起点形式: 等待首个符合条件的无障碍事件. <code>filter</code> 与 <code>timeout</code> 的顺序可以互换.</p>\n<pre><code class=\"lang-js\">flow.waitForEvent(&#39;view_clicked&#39;, { packageName: &#39;com.android.settings&#39; }, 10e3).then(e =&gt; console.log(e.className));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "type"
+                    },
+                    {
+                      "name": "timeout"
+                    },
+                    {
+                      "name": "filter?"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForEvent"
+        },
+        {
+          "textRaw": "[m] waitForToast",
+          "name": "[m]_waitfortoast",
+          "methods": [
+            {
+              "textRaw": "waitForToast(text?, timeout?)",
+              "type": "method",
+              "name": "waitForToast",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ text ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#function\">Function</a> | <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - Toast 过滤, 同 <a href=\"automator#m-waitfortoast\">waitForToast</a></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为 Toast 对象 <code>{ packageName, text }</code></li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForToast(timeout)",
+              "type": "method",
+              "name": "waitForToast",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), 等待任意 Toast</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-waitfortoast\">waitForToast</a> 的 Flow 起点形式. 观察者忽略 AutoJs6 自身显示的 Toast.</p>\n<pre><code class=\"lang-js\">flow.waitForToast(/成功/, 5e3).then(toast =&gt; console.log(toast.packageName, toast.text));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForToast"
+        },
+        {
+          "textRaw": "[m] waitForNotification",
+          "name": "[m]_waitfornotification",
+          "methods": [
+            {
+              "textRaw": "waitForNotification(filter?, timeout?)",
+              "type": "method",
+              "name": "waitForNotification",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 1/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>[ filter ]</strong> { <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#regexp\">RegExp</a> | <a href=\"dataTypes#function\">Function</a> | <a href=\"dataTypes#object\">Object</a> | <a href=\"dataTypes#null\">null</a> } - 通知过滤, 同 <a href=\"automator#m-waitfornotification\">waitForNotification</a></li>\n<li><strong>[ timeout ]</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒)</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> } - 链上的值为 <a href=\"events#notification\">Notification</a> 对象</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "filter?"
+                    },
+                    {
+                      "name": "timeout?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "waitForNotification(timeout)",
+              "type": "method",
+              "name": "waitForNotification",
+              "desc": "<p><strong><code>6.8.0</code></strong> <strong><code>Overload 2/2</code></strong> <strong><code>A11Y</code></strong></p>\n<ul>\n<li><strong>timeout</strong> { <a href=\"dataTypes#number\">number</a> } - 超时 (毫秒), 等待任意通知</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"flowType\">Flow</a> }</li>\n</ul>\n<p><a href=\"automator#m-waitfornotification\">waitForNotification</a> 的 Flow 起点形式.</p>\n<pre><code class=\"lang-js\">flow.waitForNotification({ title: /验证码/ }, 60e3).then(n =&gt; console.log(n.text));\n</code></pre>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "timeout"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m] waitForNotification"
         }
       ],
       "type": "module",

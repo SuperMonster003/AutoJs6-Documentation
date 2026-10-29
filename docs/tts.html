@@ -315,18 +315,23 @@
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_utterance">[m] utterance</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_utterance_text_options">utterance(text, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_speaktask_text_options">speakTask(text, options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_enqueueutterance">[m] enqueueUtterance</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_enqueueutterance_text_options">enqueueUtterance(text, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_enqueuetask_text_options">enqueueTask(text, options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_synthesize">[m] synthesize</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_synthesize_text_path_options">synthesize(text, path, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_synthesizetofile_text_path_options">synthesizeToFile(text, path, options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_synthesis">[m] synthesis</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_synthesis_text_path_options">synthesis(text, path, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_synthesizetask_text_path_options">synthesizeTask(text, path, options?)</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_synthesistask_text_path_options">synthesisTask(text, path, options?)</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_silence">[m] silence</a></span><ul>
@@ -363,6 +368,7 @@
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_stop">[m] stop</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_stop">stop()</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_stopall">stopAll()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_reset">[m] reset</a></span><ul>
@@ -383,6 +389,7 @@
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_defaults">[m] defaults</a></span><ul>
 <li><span class="stability_undefined"><a href="#tts_defaults">defaults()</a></span></li>
+<li><span class="stability_undefined"><a href="#tts_config">config()</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#tts_m_configure">[m] configure</a></span><ul>
@@ -546,6 +553,17 @@ task
         console.log(result.duration);
     });
 </code></pre>
+<h3>speakTask(text, options?)<span><a class="mark" href="#tts_speaktask_text_options" id="tts_speaktask_text_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待朗读文本</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#tts_ttsoptions">TtsOptions</a></span> } - 朗读选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#tts_ttsutterance">TtsUtterance</a></span> } - 可监听的朗读任务</li>
+</ul>
+<p><a href="#tts_m_utterance">utterance</a> 的别名, 参数, 返回值与行为相同.</p>
+<pre><code class="lang-js">let task = tts.speakTask(&#39;Alias of utterance&#39;);
+task.result.then((result) =&gt; console.log(result.duration));
+</code></pre>
 <h2>[m] enqueueUtterance<span><a class="mark" href="#tts_m_enqueueutterance" id="tts_m_enqueueutterance">#</a></span></h2>
 <h3>enqueueUtterance(text, options?)<span><a class="mark" href="#tts_enqueueutterance_text_options" id="tts_enqueueutterance_text_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -556,6 +574,21 @@ task
 </ul>
 <p>创建可监听的朗读任务, 并强制追加到当前队列.</p>
 <p><code>enqueueUtterance</code> 也可写作 <code>enqueueTask</code>.</p>
+<pre><code class="lang-js">tts.speak(&#39;First&#39;);
+let task = tts.enqueueUtterance(&#39;Second&#39;);
+task.on(&#39;done&#39;, () =&gt; console.log(&#39;second done&#39;));
+</code></pre>
+<h3>enqueueTask(text, options?)<span><a class="mark" href="#tts_enqueuetask_text_options" id="tts_enqueuetask_text_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待朗读文本</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#tts_ttsoptions">TtsOptions</a></span> } - 朗读选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#tts_ttsutterance">TtsUtterance</a></span> } - 可监听的朗读任务</li>
+</ul>
+<p><a href="#tts_m_enqueueutterance">enqueueUtterance</a> 的别名, 参数, 返回值与行为相同.</p>
+<pre><code class="lang-js">tts.speak(&#39;First&#39;);
+tts.enqueueTask(&#39;Second&#39;).on(&#39;done&#39;, () =&gt; console.log(&#39;second done&#39;));
+</code></pre>
 <h2>[m] synthesize<span><a class="mark" href="#tts_m_synthesize" id="tts_m_synthesize">#</a></span></h2>
 <h3>synthesize(text, path, options?)<span><a class="mark" href="#tts_synthesize_text_path_options" id="tts_synthesize_text_path_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -573,6 +606,19 @@ task
     console.log(result.path);
 });
 </code></pre>
+<h3>synthesizeToFile(text, path, options?)<span><a class="mark" href="#tts_synthesizetofile_text_path_options" id="tts_synthesizetofile_text_path_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待合成文本</li>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 输出文件路径</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#tts_ttsfileoptions">TtsFileOptions</a></span> } - 合成选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a></span> } - 兑现值为 <a href="#tts_ttsresult">TtsResult</a></li>
+</ul>
+<p><a href="#tts_m_synthesize">synthesize</a> 的别名, 参数, 返回值与行为相同.</p>
+<pre><code class="lang-js">tts.synthesizeToFile(&#39;Saved speech&#39;, &#39;./speech.wav&#39;, { overwrite: true }).then((result) =&gt; {
+    console.log(result.path);
+});
+</code></pre>
 <h2>[m] synthesis<span><a class="mark" href="#tts_m_synthesis" id="tts_m_synthesis">#</a></span></h2>
 <h3>synthesis(text, path, options?)<span><a class="mark" href="#tts_synthesis_text_path_options" id="tts_synthesis_text_path_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -584,6 +630,32 @@ task
 </ul>
 <p>创建可监听事件和主动停止的文件合成任务.</p>
 <p><code>synthesis</code> 也可写作 <code>synthesizeTask</code> 或 <code>synthesisTask</code>.</p>
+<pre><code class="lang-js">let task = tts.synthesis(&#39;Saved speech&#39;, &#39;./speech.wav&#39;);
+task.on(&#39;done&#39;, (result) =&gt; console.log(result.path));
+</code></pre>
+<h3>synthesizeTask(text, path, options?)<span><a class="mark" href="#tts_synthesizetask_text_path_options" id="tts_synthesizetask_text_path_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待合成文本</li>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 输出文件路径</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#tts_ttsfileoptions">TtsFileOptions</a></span> } - 合成选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#tts_ttsutterance">TtsUtterance</a></span> } - 可监听的文件合成任务</li>
+</ul>
+<p><a href="#tts_m_synthesis">synthesis</a> 的别名, 参数, 返回值与行为相同.</p>
+<pre><code class="lang-js">tts.synthesizeTask(&#39;Saved speech&#39;, &#39;./speech.wav&#39;).result.then((result) =&gt; console.log(result.path));
+</code></pre>
+<h3>synthesisTask(text, path, options?)<span><a class="mark" href="#tts_synthesistask_text_path_options" id="tts_synthesistask_text_path_options">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
+<ul>
+<li><strong>text</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 待合成文本</li>
+<li><strong>path</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 输出文件路径</li>
+<li><strong>[ options = <code>{}</code> ]</strong> { <span class="type"><a href="#tts_ttsfileoptions">TtsFileOptions</a></span> } - 合成选项</li>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#tts_ttsutterance">TtsUtterance</a></span> } - 可监听的文件合成任务</li>
+</ul>
+<p><a href="#tts_m_synthesis">synthesis</a> 的别名, 参数, 返回值与行为相同.</p>
+<pre><code class="lang-js">let task = tts.synthesisTask(&#39;Saved speech&#39;, &#39;./speech.wav&#39;);
+setTimeout(() =&gt; task.stop(), 200);
+</code></pre>
 <h2>[m] silence<span><a class="mark" href="#tts_m_silence" id="tts_m_silence">#</a></span></h2>
 <h3>silence(duration, options?)<span><a class="mark" href="#tts_silence_duration_options" id="tts_silence_duration_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong> <strong><code>Overload [1-2]/2</code></strong></p>
@@ -668,6 +740,19 @@ task
 <p>请求停止当前运行时的全部文本转语音任务.</p>
 <p><code>stop</code> 也可写作 <code>stopAll</code>.</p>
 <p>停止命令会异步交给文本转语音调度线程. 返回值是调用时的任务数量.</p>
+<pre><code class="lang-js">tts.speak(&#39;A long sentence that will be interrupted&#39;);
+setTimeout(() =&gt; console.log(tts.stop()), 500);
+</code></pre>
+<h3>stopAll()<span><a class="mark" href="#tts_stopall" id="tts_stopall">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 接受停止请求时尚未结束的任务数</li>
+</ul>
+<p><a href="#tts_m_stop">stop</a> 的别名, 返回值与行为相同.</p>
+<pre><code class="lang-js">tts.speak(&#39;First&#39;);
+tts.enqueue(&#39;Second&#39;);
+console.log(tts.stopAll()); /* 如 2. */
+</code></pre>
 <h2>[m] reset<span><a class="mark" href="#tts_m_reset" id="tts_m_reset">#</a></span></h2>
 <h3>reset()<span><a class="mark" href="#tts_reset" id="tts_reset">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
@@ -706,6 +791,17 @@ task
 </ul>
 <p>返回当前运行时的文本转语音默认选项.</p>
 <p><code>defaults</code> 也可写作 <code>config</code>.</p>
+<pre><code class="lang-js">console.log(tts.defaults().rate);
+</code></pre>
+<h3>config()<span><a class="mark" href="#tts_config" id="tts_config">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li><ins><strong>returns</strong></ins> { <span class="type"><a href="#tts_defaults">TtsDefaults</a></span> } - 当前默认选项</li>
+</ul>
+<p><a href="#tts_m_defaults">defaults</a> 的别名, 返回值与行为相同.</p>
+<pre><code class="lang-js">let current = tts.config();
+console.log(current.locale, current.pitch);
+</code></pre>
 <h2>[m] configure<span><a class="mark" href="#tts_m_configure" id="tts_m_configure">#</a></span></h2>
 <h3>configure(options)<span><a class="mark" href="#tts_configure_options" id="tts_configure_options">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>

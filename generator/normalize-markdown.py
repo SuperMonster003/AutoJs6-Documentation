@@ -801,7 +801,8 @@ def validate(text: str, path: Path) -> None:
 
     # `callAutoJs` is the public Node bridge method name, not a product name;
     # `AutoJs4` is the baseline project (SuperMonster003/AutoJs4) embedded by the AutoJs4 Runtime plugin.
-    if re.search(r"(?<!call)AutoJs(?!6|4|Pro|-Docs)", text):
+    # `AutoJsJvmEntry` is the entry interface of the Java and Kotlin Runtime plugins (JVM Entry API).
+    if re.search(r"(?<!call)AutoJs(?!6|4|Pro|-Docs|JvmEntry)", text):
         raise ValueError(f"Legacy bare AutoJs product name in {relative}")
     if re.search(
         r"""packageName\s*:\s*["']org\.autojs\.autojs["']""",

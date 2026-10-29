@@ -99,6 +99,16 @@ Auto.js 4 的 Java 类位于 `com.stardust` 包 (如 `com.stardust.pio.PFiles`, 
 
 ---
 
+## 上游 API 与差异指引
+
+用 AutoJs4 引擎运行的脚本看到的是 Auto.js 4 的原样 API: `init.js` 与 `modules/__*__.js` 定义的约 180 个顶层名称 (如 `app`, `images`, `ui`, `auto` 等模块, 以及 `click`, `sleep` 等全局函数). 这些上游名称不在本文档站的覆盖范围内: 本站的模块页, 代码补全与运行时支持表都以 AutoJs6 为准, 不逐条列出上游 API, 也不标注某个名称在 AutoJs4 中是否存在.
+
+- 查阅上游 API 的签名与说明: [AutoJs4-Documentation](https://github.com/SuperMonster003/AutoJs4-Documentation) (Auto.js 4.1.0 文档的克隆).
+- 对照同名 API 在两边的行为: 先在本站查阅对应模块页 (如 [图像](image), [自动化](automator)), 再用 [对照模式](#对照模式) 在同一设备上比较两次运行的输出.
+- AutoJs6 新增的模块与成员 (如 [OCR](ocr), [条码](barcode), [流程](flow)) 在 AutoJs4 中不存在, 用 AutoJs4 运行时这类调用通常以 ReferenceError 或 "不是函数" 一类的错误结束; 这属于预期的差异, 不需要反馈.
+
+---
+
 ## 差异反馈
 
 发现 "AutoJs4 正常而 AutoJs6 异常" 的差异时, 请先排除下列已知的 "特定情况", 再向 [AutoJs6 的 issue 跟踪器](http://issues.autojs6.com) 反馈:

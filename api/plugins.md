@@ -73,6 +73,8 @@ Bundled Libraries 插件不可用时, `require` 上述名称或读取 axios 等�
 
 [AutoJs4 Runtime](autojs4Runtime) 插件不提供脚本模块, 它为文件管理器增加 "使用 AutoJs4 运行" 入口.
 
+语言运行时插件让 AutoJs6 运行其他语言的脚本文件, 它们给脚本的 API 见各自页面: [Python 运行时](pythonRuntime) (`.py`, `autojs6` 包), [Java 运行时](javaRuntime) (`.java`) 与 [Kotlin 运行时](kotlinRuntime) (`.kt`, JVM Entry API), [Lua 运行时](luaRuntime) (`.lua`, `autojs` 模块).
+
 ## 项目插件
 
 项目插件是依附于项目的一组 JavaScript 模块, 它们位于项目根目录的 `plugins` 文件夹中, 由 AutoJs6 通过 [plugins.load](#m-load) 方法加载并使用.

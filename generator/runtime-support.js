@@ -63,6 +63,7 @@ const REASON_WORDS = {
     'runtime-builtin': '运行时内置模块限制',
     'rhino-only': '仅限 Rhino 引擎',
     'ui-thread': '需要 Rhino UI 线程',
+    'obsoleted': '宿主已废弃',
 };
 
 function rowRoot(row) {

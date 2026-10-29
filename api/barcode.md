@@ -10,6 +10,12 @@
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `WrappedBarcode` (22 项) | 已支持 22 项 | 不适用 22 项 (需要 Java 对象) | 不适用 22 项 (需要 Java 对象) | 不适用 22 项 (需要 Java 对象) |
+
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 
 <!-- runtime-support:end -->

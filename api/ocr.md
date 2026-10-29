@@ -25,6 +25,12 @@
 | `ocr.tap` | <span title="bridged">已支持</span>, 经 compat: `ocr.tap` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `ocr.toString` | <span title="bridged">已支持</span>, 经 compat: `ocr.toString` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
 
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `OcrResult` (5 项) | 已支持 5 项 | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) |
+
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 
 <!-- runtime-support:end -->

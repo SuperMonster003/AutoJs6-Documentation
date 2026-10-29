@@ -1,5 +1,19 @@
 # Compose 节点 (ComposeNode)
 
+<!-- runtime-support:begin ComposeNode# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ComposeNode` 对象 | - | - | - |
+| 状态 | 已支持 8 项 | 待补 8 项 | 待补 8 项 | 待补 8 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ComposeNode 是 [组件工厂](compose#组件工厂) 或 [compose.createElement](compose#m-createelement) 返回的脚本句柄, 不能直接用 `new` 创建. 节点可以先创建和组装, 再交给 `compose.mount`, `compose.attach`, `compose.floaty` 或 `compose.dialog` 挂载. 它不是 Android View, 不具有 View 的任意方法或 XML 属性.
 
 所有业务属性读取, 修改, 树操作和命令应在所属脚本线程调用. 工作线程使用 [compose.post](compose#m-post) 或所属会话的 `post`. 节点不能跨脚本引擎传递; 第一次挂载后保留会话归属, 即使从树中移除也不能转交另一个会话.
@@ -66,6 +80,65 @@ console.log(title.get('text'));
 F2 [AndroidView](composeComponents#androidview) 的 `view` 读取为准备后的实际 Android View, 即使创建时传入的是工厂也不返回该函数. 可用 `node.set({view: anotherView})` 或直接赋值更新, 输入仍须符合 [ComposeViewInput](composeComponents#composeviewinput). 节点句柄与被借用的 View 是不同对象; 不将 ComposeNode 传给 `ui.setContentView`, `addView` 或 AndroidView 的 `view` 属性.
 
 事件属性, `ref` 和具名插槽通过创建选项或 `set` 设置; 它们没有普通属性访问器. 例如使用 `node.set({onClick: fn})` 或 `node.on('click', fn)`, 不使用 `node.onClick = fn`.
+
+## 快捷属性访问器
+
+所有节点都有下列 8 个 [快捷属性](composeModifierType#快捷属性) 访问器, 读写方式与组件属性相同 (也可作为创建选项或 `set` 的字段). 读取返回归一化的值, 未设置时为 `undefined`; 写入时按固定顺序展开为修饰操作, 在显式 `modifier` 链之前执行.
+
+```js
+let box = compose.Box({w: 120, h: 48});
+box.bg = '#E8DEF8';
+box.padding = [8, 4];
+console.log(box.w); /* 120 */
+```
+
+## [p#] w
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+宽度, 等价于修饰操作 `width(value)`; 写入接受 [ComposeDpInput](composeComponents#composedpinput) (非负).
+
+## [p#] h
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+高度, 等价于 `height(value)`; 写入接受 [ComposeDpInput](composeComponents#composedpinput) (非负).
+
+## [p#] padding
+
+- { [number](dataTypes#number) | [number](dataTypes#number)[[]](dataTypes#array) | [undefined](dataTypes#undefined) }
+
+留白, 等价于 `padding(...)`; 写入接受一个 dp 值, 或长度为 1 / 2 / 4 的 dp 数组.
+
+## [p#] bg
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+背景色 (读取为 ARGB 整数), 等价于 `background(color)`; 写入接受 [ComposeColorInput](composeComponents#composecolorinput), 不接受 null.
+
+## [p#] weight
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+Column / Row 中的权重, 等价于 `weight(value)`, 仍需 Column / Row 父作用域; 写入接受大于 0 的有限数.
+
+## [p#] alpha
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+不透明度, 等价于 `alpha(value)`; 写入接受 0 到 1 的数.
+
+## [p#] testTag
+
+- { [string](dataTypes#string) | [undefined](dataTypes#undefined) }
+
+测试标签, 等价于 `testTag(value)`; 写入接受 [string](dataTypes#string).
+
+## [p#] contentDescription
+
+- { [string](dataTypes#string) | [null](dataTypes#null) | [undefined](dataTypes#undefined) }
+
+无障碍描述, 等价于 `semantics(value)`; 写入接受 [string](dataTypes#string) 或 [null](dataTypes#null).
 
 ## [m#] set
 

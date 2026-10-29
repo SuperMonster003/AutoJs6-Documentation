@@ -1,5 +1,20 @@
 # ComposeModifier - Compose 修饰链
 
+<!-- runtime-support:begin ComposeModifier# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ComposeModifier` 对象 | `autojs6:compose` | `autojs6:compose` | `host.compose` |
+| 状态 | 已支持 20 项 | 已支持 20 项 | 已支持 20 项 | 需授权 20 项 |
+| 授权 | - | - | - | `ui.compose` 20 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ComposeModifier 由 [compose.modifier](compose#m-modifier) 创建, 用于描述节点的尺寸, 留白, 绘制, 交互和无障碍信息. 它不是 Android View, 也不是 Kotlin Modifier 对象. 当前 20 个方法均返回一条新的修饰链, 原链不会改变.
 
 本页适用于配套 AutoJs6 6.8.0 本地构建与已安装, 启用的 3-Block Compose 插件. 组件目录见 [Compose 组件](composeComponents).

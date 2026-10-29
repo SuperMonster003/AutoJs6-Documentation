@@ -1725,7 +1725,7 @@ app.sendBroadcast('hierarchy'); /* 同上. */
 
 ## OcrResult
 
-OcrResult 是一个代表 OCR 识别结果的接口.
+OcrResult 是一个代表 OCR 识别结果的接口. [ocr.detect](ocr#m-detect) 以及 `ocr.mlkit` / `ocr.paddle` / `ocr.rapid` 的 `detect` 返回由它组成的数组.
 
 ---
 
@@ -1733,11 +1733,23 @@ OcrResult 是一个代表 OCR 识别结果的接口.
 
 ---
 
+### [p] text
+
+- { [string](dataTypes#string) }
+
+OCR 识别得到的文本.
+
+```js
+images.requestScreenCapture();
+let img = images.captureScreen();
+ocr.detect(img).map(o => o.text); /* 全部识别文本. */
+```
+
 ### [p] label
 
 - { [string](dataTypes#string) }
 
-OCR 识别结果的文本标签, 通常可用于最终的文字识别结果.
+OCR 识别结果的文本标签, 与 [text](#p-text) 相同, 通常可用于最终的文字识别结果.
 
 ```js
 images.requestScreenCapture();
@@ -1748,9 +1760,9 @@ results.map(o => o.label); /* 将识别结果全部映射为文本标签. */
 
 ### [p] confidence
 
-- { [string](dataTypes#string) }
+- { [number](dataTypes#number) }
 
-OCR 识别结果的置信度, 置信度越高, 意味着识别结果可能越准确.
+OCR 识别结果的置信度, 范围 0 到 1, 置信度越高, 意味着识别结果可能越准确.
 
 ```js
 images.requestScreenCapture();
@@ -1774,6 +1786,20 @@ if (!isNullish(clickToStart)) {
     /* 点击 OCR 识别结果的位置矩形. */
     click(clickToStart.bounds);
 }
+```
+
+### [m] compareTo
+
+#### compareTo(other)
+
+- **other** { [OcrResult](#ocrresult) } - 另一个识别结果
+- <ins>**returns**</ins> { [number](dataTypes#number) } - 负数表示本结果在前, 正数表示在后, 0 表示位置相同
+
+按阅读顺序比较两个识别结果: 两个结果的垂直中心相差小于较高者高度的一半时视为同一行, 按左边界从左到右排列; 否则按下边界从上到下排列.
+
+```js
+let results = ocr.detect(img);
+results.sort((a, b) => a.compareTo(b)); /* 按阅读顺序排列. */
 ```
 
 ### [m] toString

@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-30 插件契约导出与识别结果对象 (宿主 api-coverage 路线图 P5.2c): 宿主运行时覆盖矩阵 (宿主 e50f26694) 新增 110 行: 3-Block Compose 组件目录中的 55 个组件函数 compose.<组件名>, compose.modifier() 修饰链的 20 个修饰符 (ComposeModifier) 与节点的 8 个快捷属性访问器 (ComposeNode), 名称由宿主 plugin-api/compose-ui-api 的组件目录静态读取; 以及 ocr.detect 系列返回的 OcrResult (5 个成员) 与 barcode / qrcode 的 detect 系列返回的 WrappedBarcode (22 个成员). [OcrResult](dataTypes#ocrresult) 补 text 与 compareTo 并把 confidence 标为 number, [ComposeNode](composeNodeType#快捷属性访问器) 补八个快捷属性的标题; [ComposeModifier](composeModifierType) 与 [ComposeNode](composeNodeType) 两页新增运行时支持表, [Compose](compose), [OCR](ocr) 与 [条码](barcode) 页的表按矩阵重新生成. Node.js 与 Bun 的节点没有快捷属性访问器 (只在 props 中接受这些名称), 这 8 项在两个运行时记为待补. TS 声明 (6c93f5d) 补 Ocr.Result 与 Barcode.Result 的成员, Ace 捆绑副本与补全索引同步 (Ace cd6f5f6). AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.
+
 2026-10-30 Node.js 执行时限 (宿主 api-coverage Q119 / Q126): [运行时 API](runtimeApis#执行方式) 写明 Node.js 脚本与项目默认不限执行时长, node.timeoutMs 预算的计时范围与超时错误码, 以及输出逐段转发; WebView 等待一节改为只对设置了预算的项目提示留足时间.
 
 2026-10-29 运行时自有接口 (宿主 api-coverage 路线图 P5.2b): [运行时 API](runtimeApis#运行时自有接口) 新增一节, 按组表格列出 Node.js 插件 12 组 113 条, Bun 插件 12 条与 QuickJS 插件 7 条没有对应宿主模块的入口, 写明签名, 说明, 运行时与最低插件版本 (按各插件版本最后一个提交的声明与源码判定). 这些入口不进运行时覆盖矩阵, 由宿主 PLUGIN-APIS.md 的附表跟踪. Node.js 的 worker_threads (含 WorkerPool, policy, nativeAvailable 与 diagnostics) 补上类型声明 (Node 插件 9e6e1a32, TS 声明 baf2100) 并同步到 Ace 捆绑副本; QuickJS 不设类型声明与 Ace 补全组.

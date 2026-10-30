@@ -1,5 +1,19 @@
 # Compose 状态 (ComposeState)
 
+<!-- runtime-support:begin ComposeState# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ComposeState` 对象 | `autojs6:compose` | `autojs6:compose` | - |
+| 状态 | 已支持 1 项 | 已支持 1 项 | 已支持 1 项 | 待补 1 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ComposeState 由 [compose.state](compose#m-state) 创建, 在所属脚本线程保存一个值, 并记录渲染函数对该值的读取. 它不是 Android View, 也不是可跨脚本引擎共享的状态容器.
 
 <p style="font: bold 2em sans-serif; color: #FF7043">ComposeState&lt;T&gt;</p>

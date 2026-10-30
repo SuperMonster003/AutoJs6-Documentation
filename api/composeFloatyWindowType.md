@@ -1,5 +1,19 @@
 # Compose 悬浮窗 (ComposeFloatyWindow)
 
+<!-- runtime-support:begin ComposeFloatyWindow# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ComposeFloatyWindow` 对象 | `autojs6:compose` | `autojs6:compose` | - |
+| 状态 | 已支持 18 项 | 已支持 18 项 | 已支持 18 项 | 待补 18 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ComposeFloatyWindow 由 [compose.floaty](compose#m-floaty) 创建, 同时拥有一个原生悬浮窗和一个 [ComposeSession](composeSessionType). UI 与非 UI 脚本均可使用, 需要当前应用已获悬浮窗权限. 不能直接用 `new` 创建.
 
 窗口操作使用物理像素, 与 Compose 节点的 dp 布局尺寸不同. 创建返回后原生窗口仍可能正在附加, 位置和尺寸变更会交给 Android 主线程处理.

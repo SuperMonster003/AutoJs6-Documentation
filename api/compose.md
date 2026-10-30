@@ -6,14 +6,21 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `compose`, 全局 1 项 | `autojs6:compose` | `autojs6:compose` | `host.compose` |
-| 状态 | 已支持 72 项 | 已支持 70 项, 待补 2 项 | 已支持 70 项, 待补 2 项 | 需授权 70 项, 待补 2 项 |
+| 状态 | 已支持 72 项 | 已支持 72 项 | 已支持 72 项 | 需授权 70 项, 待补 2 项 |
 | 授权 | - | - | - | `ui.compose` 70 项 |
 
-差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (2 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `compose.ComposeError`, `ComposeError` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `ComposeError` | <span title="bridged">已支持</span>, 经 compose | <span title="bridged">已支持</span>, 经 compose | <span title="pending">待补</span> |
+| `compose.ComposeError` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
+
+返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
+
+| 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| `ComposeRef` (1 项) | 已支持 1 项 | 已支持 1 项 | 已支持 1 项 | 待补 1 项 |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

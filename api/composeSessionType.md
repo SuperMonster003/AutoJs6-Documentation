@@ -1,5 +1,19 @@
 # Compose 会话 (ComposeSession)
 
+<!-- runtime-support:begin ComposeSession# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ComposeSession` 对象 | `autojs6:compose` | `autojs6:compose` | - |
+| 状态 | 已支持 7 项 | 已支持 7 项 | 已支持 7 项 | 待补 7 项 |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ComposeSession 表示同一脚本拥有的一棵已挂载节点树及其渲染生命周期. 由 [compose.mount](compose#m-mount), [compose.attach](compose#m-attach), [compose.dialog](compose#m-dialog) 返回, 或经 [ComposeFloatyWindow.session](composeFloatyWindowType#p-session) 取得. 不能直接用 `new` 创建.
 
 UI 挂载, XML 容器挂载, Compose 悬浮窗和独立对话框共享单脚本引擎最多 8 个活动会话的限制. 同一 XML 容器重新成功 attach 时替换它的旧会话, 不关闭其他容器的会话. 新的 dialog 会话不替换其他会话. 会话不是 Android Activity 或 View; 修改组件使用 [ComposeNode](composeNodeType), 浮动窗口操作使用 [ComposeFloatyWindow](composeFloatyWindowType).

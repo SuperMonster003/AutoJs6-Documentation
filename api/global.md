@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.global`, `host.species`, `host.coordinates`, `host.clipboard` |
-| 状态 | 已支持 98 项 | 已支持 32 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 11 项 | 已支持 31 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 12 项 | 已支持 (本地实现) 65 项, 需授权 27 项, 不适用 5 项, 待补 1 项 |
+| 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `toast`, `autojs6:compat` (经 compat), `ui`, `$autojs.species` | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `toast`, `ui`, `$autojs.species` | `host.global`, `host.species`, `host.coordinates`, `host.clipboard` |
+| 状态 | 已支持 98 项 | 已支持 42 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 1 项 | 已支持 42 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 1 项 | 已支持 (本地实现) 65 项, 需授权 27 项, 不适用 5 项, 待补 1 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `ui.toast` 10 项, `accessibility.control` 5 项, `clipboard.control` 2 项 |
 
 差异项 (60 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -45,7 +45,7 @@
 | `isRunning` | <span title="bridged">已支持</span>: `isRunning` (`autojs6:system`) | <span title="bridged">已支持</span>: `isRunning` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isRunning` |
 | `isShuttingDown` | <span title="bridged">已支持</span>: `isShuttingDown` (`autojs6:system`) | <span title="bridged">已支持</span>: `isShuttingDown` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isShuttingDown` |
 | `isStopped` | <span title="bridged">已支持</span>: `isStopped` (`autojs6:system`) | <span title="bridged">已支持</span>: `isStopped` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isStopped` |
-| `isUiThread` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isUiThread` |
+| `isUiThread` | <span title="bridged">已支持</span>, 经 ui: `isUiThread` (`ui`) | <span title="bridged">已支持</span>, 经 ui: `isUiThread` (`ui`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.isUiThread` |
 | `notStopped` | <span title="bridged">已支持</span>: `notStopped` (`autojs6:system`) | <span title="bridged">已支持</span>: `notStopped` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.notStopped` |
 | `pangu` | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `pangu` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.pangu` |
 | `random` | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `random` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.random` |
@@ -59,16 +59,16 @@
 | `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="bridged">已支持</span>: `sleep` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.sleep` |
 | `stop` | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.stop` |
 | `toString` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
-| `toastError` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastError` |
-| `toastInfo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastInfo` |
-| `toastLog` | <span title="bridged">已支持</span>, 经 compat: `toastLog` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastLog` |
-| `toastVerbose` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastVerbose` |
-| `toastWarn` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastWarn` |
-| `toasterror` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toasterror` |
-| `toastinfo` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastinfo` |
-| `toastlog` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastlog` |
-| `toastverbose` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastverbose` |
-| `toastwarn` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastwarn` |
+| `toastError` | <span title="bridged">已支持</span>, 经 toast: `toastError` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastError` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastError` |
+| `toastInfo` | <span title="bridged">已支持</span>, 经 toast: `toastInfo` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastInfo` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastInfo` |
+| `toastLog` | <span title="bridged">已支持</span>, 经 toast: `toastLog` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastLog` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastLog` |
+| `toastVerbose` | <span title="bridged">已支持</span>, 经 toast: `toastVerbose` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastVerbose` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastVerbose` |
+| `toastWarn` | <span title="bridged">已支持</span>, 经 toast: `toastWarn` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastWarn` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastWarn` |
+| `toasterror` | <span title="bridged">已支持</span>, 经 toast: `toastError` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastError` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toasterror` |
+| `toastinfo` | <span title="bridged">已支持</span>, 经 toast: `toastInfo` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastInfo` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastinfo` |
+| `toastlog` | <span title="bridged">已支持</span>, 经 toast: `toastLog` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastLog` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastlog` |
+| `toastverbose` | <span title="bridged">已支持</span>, 经 toast: `toastVerbose` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastVerbose` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastverbose` |
+| `toastwarn` | <span title="bridged">已支持</span>, 经 toast: `toastWarn` (`toast`) | <span title="bridged">已支持</span>, 经 toast: `toastWarn` (`toast`) | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastwarn` |
 | `unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
 | `wait` | <span title="bridged">已支持</span>: `wait` (`autojs6:system`) | <span title="bridged">已支持</span>: `wait` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.wait` |
 | `waitForActivity` | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.global.waitForActivity` |

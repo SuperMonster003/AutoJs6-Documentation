@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `terminal` | `autojs6:terminal` | `autojs6:terminal` | - |
-| 状态 | 已支持 20 项 | 已支持 20 项 | 已支持 20 项 | 待补 20 项 |
+| 入口 | `terminal` | `autojs6:terminal` | `autojs6:terminal` | `host.terminal` |
+| 状态 | 已支持 20 项 | 已支持 20 项 | 已支持 20 项 | 需授权 20 项 |
+| 授权 | - | - | - | `terminal.control` 20 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

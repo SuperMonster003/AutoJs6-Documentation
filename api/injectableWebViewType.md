@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `InjectableWebView` 对象 | `autojs6:web` | `autojs6:web` | - |
-| 状态 | 已支持 1 项 | 已支持 1 项 | 已支持 1 项 | 不适用 1 项 (需要 Java 对象) |
+| 入口 | `InjectableWebView` 对象 | `autojs6:web` | `autojs6:web` | `host.ui` |
+| 状态 | 已支持 1 项 | 已支持 1 项 | 已支持 1 项 | 需授权 1 项 |
+| 授权 | - | - | - | `ui.layout` 1 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

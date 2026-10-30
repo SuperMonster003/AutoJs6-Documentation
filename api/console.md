@@ -6,20 +6,16 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `console`, 全局 9 项 | `autojs6:console` | `autojs6:console` | `host.console` |
-| 状态 | 已支持 65 项 | 已支持 65 项 | 已支持 65 项 | 需授权 64 项, 待补 1 项 |
-| 授权 | - | - | - | `console.control` 64 项 |
+| 状态 | 已支持 65 项 | 已支持 65 项 | 已支持 65 项 | 需授权 65 项 |
+| 授权 | - | - | - | `console.control` 65 项 |
 
-差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
-
-| API | Node.js 主线程 | Node.js Worker | Bun |
-| --- | --- | --- | --- |
-| `console.build` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
 返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
 
 | 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| `ConsoleConfigurator` (52 项) | 已支持 52 项 | 已支持 52 项 | 已支持 52 项 | 不适用 52 项 (需要 Java 对象) |
+| `ConsoleConfigurator` (52 项) | 已支持 52 项 | 已支持 52 项 | 已支持 52 项 | 需授权 52 项 |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

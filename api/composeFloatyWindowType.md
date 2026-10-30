@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `ComposeFloatyWindow` 对象 | `autojs6:compose` | `autojs6:compose` | - |
-| 状态 | 已支持 18 项 | 已支持 18 项 | 已支持 18 项 | 待补 18 项 |
+| 入口 | `ComposeFloatyWindow` 对象 | `autojs6:compose` | `autojs6:compose` | `host.compose` |
+| 状态 | 已支持 18 项 | 已支持 18 项 | 已支持 18 项 | 需授权 18 项 |
+| 授权 | - | - | - | `ui.compose` 18 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

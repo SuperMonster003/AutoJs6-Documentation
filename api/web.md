@@ -5,10 +5,17 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `web`, 全局 3 项 | `autojs6:web` | `autojs6:web` | - |
-| 状态 | 已支持 7 项 | 已支持 7 项 | 已支持 7 项 | 待补 7 项 |
+| 入口 | `web`, 全局 3 项 | `autojs6:web` | `autojs6:web` | `host.web` |
+| 状态 | 已支持 7 项 | 已支持 7 项 | 已支持 7 项 | 已支持 (本地实现) 3 项, 需授权 4 项 |
+| 授权 | - | - | - | `ui.layout` 4 项 |
 
-各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+差异项 (3 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `newWebSocket` | <span title="bridged">已支持</span>, 经 web | <span title="bridged">已支持</span>, 经 web | <span title="local-shim">已支持 (本地实现)</span> |
+| `web.ByteString` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="local-shim">已支持 (本地实现)</span> |
+| `web.newWebSocket` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="local-shim">已支持 (本地实现)</span> |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

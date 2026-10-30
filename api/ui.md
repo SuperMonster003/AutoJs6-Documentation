@@ -6,50 +6,18 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `ui`, 全局 2 项 | `autojs6:ui` | `autojs6:ui` | `host.ui` |
-| 状态 | 已支持 42 项 | 已支持 35 项, 不适用 7 项 | 已支持 35 项, 不适用 7 项 | 需授权 3 项, 不适用 7 项, 待补 32 项 |
-| 授权 | - | - | - | `ui.layout` 3 项 |
+| 状态 | 已支持 42 项 | 已支持 35 项, 不适用 7 项 | 已支持 35 项, 不适用 7 项 | 需授权 35 项, 不适用 7 项 |
+| 授权 | - | - | - | `ui.layout` 35 项 |
 
-差异项 (37 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (5 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
 | `ui.__autojs6Tsx`, `__autojs6Tsx` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
 | `ui.__autojs6TsxFragment`, `__autojs6TsxFragment` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
-| `ui.R` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.Widget` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
 | `ui.__inflate__` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
 | `ui.__widgets__` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
-| `ui.backgroundColor` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.bindingContext` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.emitter` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.findById` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.findByStringId` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.finish` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.getNavigationBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.getStatusBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.getVisibleNavigationBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.getVisibleStatusBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.isUiThread` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.keepScreenOn` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.layout` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.layoutFile` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
 | `ui.layoutInflater` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `ui.inflate / ui.createView` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `ui.inflate / ui.createView` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `ui.inflate / ui.createView` |
-| `ui.navigationBarColor` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.navigationBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.navigationBarIconLight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.navigationBarIconLightBy` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.post` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.registerWidget` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.root` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.run` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.setContentView` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.statusBarColor` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.statusBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.statusBarIconLight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.statusBarIconLightBy` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.useAndroidLayout` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.visibleNavigationBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `ui.visibleStatusBarHeight` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

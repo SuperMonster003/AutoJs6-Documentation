@@ -136,6 +136,45 @@ let answer = plugins.tools.call('opencc_convert', { text: '汉字', config: 's2t
 console.log(answer.result);
 ```
 
+### 官方插件工具表
+
+下表列出官方插件提供的工具. 插件会随版本增减工具, 设备上实际可用的工具以 [plugins.tools.list](#m-toolslist) 的返回为准; 参数的取值范围, 长度上限与英文说明见返回对象的 `inputSchema`, 结果字段的类型见 `outputSchema`.
+
+- 最低插件版本: 首个提供该工具的插件版本.
+- 参数: 名称 (类型, 必填或默认值). 未标 "必填" 的参数可以省略, 标有默认值的参数省略时由 AutoJs6 填入该值. "图片", "文件" 与 "目录" 参数的写法见上文.
+- 输出: 调用结果中 `result` 的字段 (`[]` 表示数组), 以及工具可产生的文件或目录输出; 输出路径用 [plugins.tools.call](#m-toolscall) 的 `outputs` 选项指定.
+- 部分工具还需要模型或权限, 例如 YOLO 模型目录, 3-Macaw Speech 的语音模型与麦克风权限; 缺少时调用抛出含原因的异常.
+
+| 工具 | 说明 | 提供插件 | 最低插件版本 | 参数 | 输出 |
+| --- | --- | --- | --- | --- | --- |
+| `opencc_convert` | 简体, 繁体, 港台标准与日文新字体之间转换汉字字形 (OpenCC), 不翻译 | 3-Hanzi CC | 2.1.0 | `text` (string, 必填); `config` (string, 默认 `"s2t"`) | `{ text, config }` |
+| `yolo_detect` | 用 YOLO11 NCNN 模型在图片或屏幕中检测目标, 结果按置信度从高到低 | AutoJs6 YOLO NCNN | 0.2.0 | `image` (图片, 必填); `model` (目录, 必填); `confidence` (number, 默认 `0.25`); `iouThreshold` (number, 默认 `0.45`); `maxDetections` (integer, 默认 `100`); `labels` (string[]) | `{ image, count, detections[], model, inferenceMs }` |
+| `imagequant_quantize` | 把图片量化为至多 256 色的调色板 PNG (libimagequant) | Image Quantization | 1.1.0 | `image` (图片, 必填); `quality` (integer, 省略时为 100); `minQuality` (integer); `maxQuality` (integer); `maxColors` (integer, 默认 `256`); `speed` (integer, 默认 `8`); `ditheringLevel` (number, 默认 `0.0`); `posterizeBits` (integer, 默认 `0`); `preserveAlpha` (boolean, 默认 `true`) | `{ width, height, bytes, quality, quantizationError, peakWorkingMemoryBytes }`; 文件输出 `png` (PNG) |
+| `archive_list` | 分页列出压缩包的条目 | 3-Stack Archive | 3.1.0 | `archive` (文件, 必填); `directory` (string); `offset` (integer, 默认 `0`); `limit` (integer, 默认 `200`); `password` (string) | `{ format, total, offset, truncated, totalUncompressedBytes, entries[] }` |
+| `archive_read` | 不解压读取压缩包内一个文件的文本 (UTF-8, 至多 64 KiB) | 3-Stack Archive | 3.1.0 | `archive` (文件, 必填); `path` (string, 必填); `maxBytes` (integer, 默认 `65536`); `password` (string) | `{ path, size, bytesRead, truncated, binary, text }` |
+| `archive_extract` | 把压缩包的全部或指定条目解压到目录 | 3-Stack Archive | 3.1.0 | `archive` (文件, 必填); `paths` (string[]); `password` (string) | `{ format, filesExtracted, directoriesCreated, bytesWritten, kept, keptPaths[], skipped }`; 目录输出 `files` |
+| `speech_listen` | 用麦克风听写一句话并离线识别 | 3-Macaw Speech | 1.2.0 | `language` (string); `silenceMillis` (integer, 默认 `1200`); `noSpeechSeconds` (integer, 默认 `8`); `maxSeconds` (integer, 默认 `30`); `hotwords` (string[]); `prompt` (string) | `{ text, language, modelId, durationMillis, endReason, warnings[] }` |
+| `speech_speak` | 朗读文本 (插件引擎或系统默认 TTS 引擎) | 3-Macaw Speech | 1.2.0 | `text` (string, 必填); `language` (string); `voice` (string); `speed` (number, 默认 `1.0`); `wait` (boolean, 默认 `true`) | `{ engine, enginePackage, language, voice, completed, durationMillis, warnings[] }` |
+| `speech_transcribe` | 离线转写音频文件, 带时间分段 | 3-Macaw Speech | 1.2.0 | `file` (文件, 必填); `language` (string); `model` (string) | `{ text, segments[], language, modelId, durationMillis, warnings[] }` |
+| `speech_synthesize` | 把文本离线合成为 WAV 或 M4A 音频文件 | 3-Macaw Speech | 1.2.0 | `text` (string, 必填); `language` (string); `voice` (string); `speed` (number, 默认 `1.0`); `format` (string, `"wav"` 或 `"m4a"`, 默认 `"wav"`) | `{ format, mimeType, modelId, voice, sampleRate, durationMillis, bytes, warnings[] }`; 文件输出 `audio` (WAV 或 M4A) |
+| `speech_speaker_verify` | 核对音频中的说话人是否为指定的已登记说话人 | 3-Macaw Speech | 1.3.0 | `file` (文件, 必填); `name` (string, 必填); `threshold` (number) | `{ name, score, matched, threshold, modelId, warnings[] }` |
+| `speech_speaker_identify` | 在已登记的说话人中找出与音频最接近的候选 | 3-Macaw Speech | 1.3.0 | `file` (文件, 必填); `threshold` (number); `topK` (integer, 默认 `3`) | `{ name, score, matched, threshold, modelId, candidates[], warnings[] }` |
+| `speech_diarize` | 说话人分离: 把音频按说话人切分为轮次 | 3-Macaw Speech | 1.3.0 | `file` (文件, 必填); `speakers` (integer, 默认 `0`); `threshold` (number); `identify` (boolean, 默认 `false`) | `{ segments[], speakers, durationMillis, modelId, speakerModelId, names[], warnings[] }` |
+| `speech_detect_language` | 识别音频中所说的语种 (Whisper, 99 种语言) | 3-Macaw Speech | 1.3.0 | `file` (文件, 必填); `windows` (integer, 默认 `3`) | `{ language, candidates[], segments[], durationMillis, modelId, warnings[] }` |
+| `speech_tag` | 识别音频中的声音类别 (AudioSet 527 类) | 3-Macaw Speech | 1.3.0 | `file` (文件, 必填); `topK` (integer, 默认 `5`) | `{ labels[], durationMillis, modelId, warnings[] }` |
+
+```js
+/* 把繁体字形转为简体. */
+let answer = plugins.tools.call('opencc_convert', { text: '漢字轉換', config: 't2s' });
+console.log(answer.result.text); // 汉字转换
+
+/* 把压缩包解压到 out/demo 文件夹, 文件夹中已有的文件保留不动. */
+let extracted = plugins.tools.call('archive_extract', { archive: 'demo.zip' }, {
+    outputs: { files: 'out/demo' },
+});
+console.log(extracted.result.filesExtracted, extracted.result.kept);
+```
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">plugins</p>
@@ -309,8 +348,8 @@ plugins.tools.list().forEach(t => console.log(t.name, t.risk));
 
 ```js
 /* 调用工具并把产生的图片写入工作目录. */
-let answer = plugins.tools.call('imagequant_quantize', { image: 'photo.png', colors: 16 }, {
-    outputs: { image: 'out/photo-16.png' },
+let answer = plugins.tools.call('imagequant_quantize', { image: 'photo.png', maxColors: 16 }, {
+    outputs: { png: 'out/photo-16.png' },
 });
 console.log(answer.outputs[0].path);
 ```

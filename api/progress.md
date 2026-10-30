@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-30 Node.js 与 Bun 的 OCR 结果带 extras (PP-OCRv3 路线图 Q26): [OcrResult](dataTypes#ocrresult), [OcrOptions](ocrOptionsType) (useOpenCL, mergeLine) 与 [光学字符识别 (OCR)](ocr).
+
 2026-10-30 PP-OCRv3 ONNX Runtime 插件 (路线图 P5.1): [光学字符识别 (OCR)](ocr), [OcrOptions](ocrOptionsType) (variant, profile, useSlim, useCls, useOpenCL, mergeLine) 与 [OcrResult](dataTypes#ocrresult) 的 extras 属性.
 
 2026-10-30 Bun UI 族运行时支持表 (宿主 api-coverage 路线图 P4.3): [用户界面 (UI)](ui), [控制台 (Console)](console), [悬浮窗 (Floaty)](floaty), [万维网 (Web)](web), [终端 (Terminal)](terminal), [3-Block Compose (Compose)](compose), [Compose 节点 (ComposeNode)](composeNodeType), [Compose 会话 (ComposeSession)](composeSessionType), [Compose 悬浮窗 (ComposeFloatyWindow)](composeFloatyWindowType), [Compose 状态 (ComposeState)](composeStateType), [WebSocket](webSocketType), [InjectableWebView](injectableWebViewType) 与 [InjectableWebClient](injectableWebClientType) 页的表按宿主运行时覆盖矩阵 (宿主 cc3a55f97) 重新生成. Bun 插件 (802beee / fba1cb3) 的 host 客户端载入与 Node.js 相同的界面门面; 宿主 (5bdb4d56a) 新增授权 terminal.control, floaty.control, floaty.raw, floaty.touch 及其路由, 以及控制台输入 console.rawInput.

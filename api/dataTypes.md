@@ -1816,6 +1816,14 @@ let results = ocr.paddle.detect(img);
 results.forEach(o => console.log(o.text, o.extras.quad));
 ```
 
+Node.js 与 Bun 的 OCR 结果同样带有 `extras`, 转换规则相同, 对象及其嵌套内容不可修改. 其中无法用 JSON 表示的 `NaN` 与无穷大转换为 `null`. 这两个运行时没有 `mergeLine` 选项, 每个结果都保留自己的 `quad`.
+
+```js
+// Node.js 示例. Bun 使用 createHostClient() 返回对象的 ocr 属性.
+let results = await ocr.paddle.detect(img);
+results.forEach(o => console.log(o.text, o.extras.quad));
+```
+
 ### [m] compareTo
 
 #### compareTo(other)

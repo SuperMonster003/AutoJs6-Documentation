@@ -24,7 +24,7 @@
 
 | 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| `OcrResult` (6 项) | 已支持 6 项 | 不适用 6 项 (需要 Java 对象) | 不适用 6 项 (需要 Java 对象) | 不适用 6 项 (需要 Java 对象) |
+| `OcrResult` (6 项) | 已支持 6 项 | 已支持 4 项, 不适用 2 项 | 已支持 4 项, 不适用 2 项 | 需授权 4 项, 不适用 2 项 |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 
@@ -45,6 +45,8 @@ ocr.paddle(img, { variant: 'v3-paddle-lite' }); // 使用 Paddle Lite 版.
 ocr.paddle(img, { engineId: 'paddle-ocr-pp-ocrv3-ko' }); // 指定具体插件.
 ocr.paddle(img, { useSlim: true }); // 使用精简模型.
 ```
+
+Rhino, Node.js 与 Bun 的识别结果都可通过 [extras](dataTypes#p-extras) 读取引擎附带的信息, 如文本框四边形 `quad` 与实际使用的执行提供器 `executionProvider`.
 
 ---
 

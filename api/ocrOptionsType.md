@@ -250,6 +250,8 @@ let [result] = ocr.paddle.detect(img, { useOpenCL: true });
 console.log(result.extras.executionProvider); // "nnapi" 或 "cpu".
 ```
 
+Node.js 与 Bun 的 OCR 方法同样接受此选项.
+
 ---
 
 ### [p?] mergeLine
@@ -259,6 +261,8 @@ console.log(result.extras.executionProvider); // "nnapi" 或 "cpu".
 是否将同一文本行的识别结果合并.
 
 合并后的 [extras](dataTypes#p-extras) 只保留各片段取值相同的键.
+
+此选项仅在 Rhino 脚本中可用.
 
 当 [splitWords](#p-splitwords) 或 [useWordSegmentation](#p-usewordsegmentation) 为 `true` 时, 此选项强制按 `false` 处理.
 

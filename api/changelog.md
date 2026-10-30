@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [光学字符识别 (OCR)](ocr) 的 Node.js 与 Bun 识别结果: 带有 [extras](dataTypes#p-extras) 属性, 并接受 [useOpenCL](ocrOptionsType#p-useopencl) 选项.
+
 - `修复` [线程 (Threads)](threads) 的 [threads.pool](threads#m-pool): `maxPoolSize` 为 `0` (含默认值) 时不限制上限, `corePoolSize` 可取任意非负整数.
 
 - `新增` [光学字符识别 (OCR)](ocr) 的识别结果 [OcrResult](dataTypes#ocrresult): [extras](dataTypes#p-extras) 属性, 可读取引擎附带的 `executionProvider` 与 `quad` 等信息; [OcrOptions](ocrOptionsType) 新增 [useCls](ocrOptionsType#p-usecls) 选项

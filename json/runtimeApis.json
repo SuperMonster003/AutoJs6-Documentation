@@ -752,7 +752,7 @@
             {
               "textRaw": "方法和返回值",
               "name": "方法和返回值",
-              "desc": "<p>以下方法均返回 Promise; Rhino 的同步方法名在此保留, 调用时需要 await. recognizeAsync, synthesizeAsync 和 models.installAsync 也保留.</p>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>Promise 的结果</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>isAvailable(callOptions?)</td>\n<td>是否存在兼容且启用的插件; 未安装时为 false, 桥接授权错误仍会拒绝</td>\n</tr>\n<tr>\n<td>capabilities(callOptions?)</td>\n<td>插件版本, 功能, 目录版本, 引擎及 microphoneGranted</td>\n</tr>\n<tr>\n<td>recognize(source, options?, callOptions?) / recognizeAsync</td>\n<td>Recognition, 包含 text, segments, durationMillis, modelId 和 warnings</td>\n</tr>\n<tr>\n<td>detectVoice(source, options?, callOptions?)</td>\n<td>segments 和 durationMillis</td>\n</tr>\n<tr>\n<td>listen(options?, callOptions?)</td>\n<td>pending 状态的 Session</td>\n</tr>\n<tr>\n<td>wake(keywords, options?, callOptions?)</td>\n<td>pending 状态的 WakeSession</td>\n</tr>\n<tr>\n<td>synthesize(text, path, options?, callOptions?) / synthesizeAsync</td>\n<td>已发布 WAV 文件的路径, 大小, 采样率, 时长与模型信息</td>\n</tr>\n<tr>\n<td>speak(text, options?, callOptions?)</td>\n<td>使用插件系统 TTS 引擎完成朗读的结果</td>\n</tr>\n<tr>\n<td>models.list(filter?, callOptions?)</td>\n<td>ModelInfo 数组, 支持 kind/language/installed 过滤</td>\n</tr>\n<tr>\n<td>models.install(id, options?, callOptions?) / models.installAsync</td>\n<td>安装后的 ModelInfo</td>\n</tr>\n<tr>\n<td>models.importFile(path, options?, callOptions?)</td>\n<td>导入本地 tar.bz2/zip 模型后的 ModelInfo</td>\n</tr>\n<tr>\n<td>models.remove(id, callOptions?)</td>\n<td>是否删除; 被会话使用的模型拒绝删除</td>\n</tr>\n<tr>\n<td>models.setDefault(kind, id, callOptions?)</td>\n<td>该类别的新默认 ModelInfo</td>\n</tr>\n<tr>\n<td>models.getDefault(kind, callOptions?)</td>\n<td>默认 ModelInfo 或 null</td>\n</tr>\n<tr>\n<td>models.refreshCatalog(callOptions?)</td>\n<td>version 和 updated</td>\n</tr>\n<tr>\n<td>close()</td>\n<td>是否关闭了一个客户端</td>\n</tr>\n</tbody>\n</table>\n<p>选项字段, 模型许可和识别结果沿用 <a href=\"speech\">Speech</a> 的定义. 模型安装与导入的 onProgress(done, total) 在当前 Node/Bun/Worker 的 JS 线程执行, 不作为 JSON 函数传给宿主. 快速进度可合并为最新值, 不保证观察到每个内部下载块.</p>\n<p>callOptions 支持 signal 和 timeoutMs (整数, 1..2147483647). signal 取消操作; timeoutMs 是本次操作的整体等待期限. 默认不增加额外的运行时期限, 仍遵守 speech 插件的原有操作超时, 会话时长限制及脚本自身的运行超时. 取消安装时由插件回收任务, 已完成的模型变更不会回滚.</p>\n",
+              "desc": "<p>以下方法均返回 Promise; Rhino 的同步方法名在此保留, 调用时需要 await. recognizeAsync, synthesizeAsync 和 models.installAsync 也保留.</p>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>Promise 的结果</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>isAvailable(callOptions?)</td>\n<td>是否存在兼容且启用的插件; 未安装时为 false, 桥接授权错误仍会拒绝</td>\n</tr>\n<tr>\n<td>capabilities(callOptions?)</td>\n<td>插件版本, 功能, 目录版本, 引擎及 microphoneGranted</td>\n</tr>\n<tr>\n<td>recognize(source, options?, callOptions?) / recognizeAsync</td>\n<td>Recognition, 包含 text, segments, durationMillis, modelId 和 warnings</td>\n</tr>\n<tr>\n<td>detectVoice(source, options?, callOptions?)</td>\n<td>segments 和 durationMillis</td>\n</tr>\n<tr>\n<td>listen(options?, callOptions?)</td>\n<td>pending 状态的 Session</td>\n</tr>\n<tr>\n<td>wake(keywords, options?, callOptions?)</td>\n<td>pending 状态的 WakeSession</td>\n</tr>\n<tr>\n<td>diarize(file, options?, callOptions?) / diarizeAsync</td>\n<td>说话人分离结果 (segments, speakers, durationMillis, modelId, 以及 identify 时的 names)</td>\n</tr>\n<tr>\n<td>detectLanguage(file, options?, callOptions?) / detectLanguageAsync</td>\n<td>语种识别结果 (language, candidates, segments, durationMillis, modelId)</td>\n</tr>\n<tr>\n<td>tag(file, options?, callOptions?) / tagAsync</td>\n<td>音频标签结果 (labels 及 timeline 时的 windows)</td>\n</tr>\n<tr>\n<td>speaker.enroll(name, files, options?, callOptions?) / speaker.enrollAsync</td>\n<td>录入声纹后的 name, samples, durationMillis, modelId</td>\n</tr>\n<tr>\n<td>speaker.verify(name, file, options?, callOptions?) / speaker.verifyAsync</td>\n<td>是否为该说话人的 score, matched, threshold</td>\n</tr>\n<tr>\n<td>speaker.identify(file, options?, callOptions?) / speaker.identifyAsync</td>\n<td>最相近的说话人及 candidates</td>\n</tr>\n<tr>\n<td>speaker.list(callOptions?)</td>\n<td>已录入的说话人数组</td>\n</tr>\n<tr>\n<td>speaker.remove(name, callOptions?)</td>\n<td>是否删除</td>\n</tr>\n<tr>\n<td>synthesize(text, path, options?, callOptions?) / synthesizeAsync</td>\n<td>已发布 WAV 文件的路径, 大小, 采样率, 时长与模型信息</td>\n</tr>\n<tr>\n<td>speak(text, options?, callOptions?)</td>\n<td>使用插件系统 TTS 引擎完成朗读的结果</td>\n</tr>\n<tr>\n<td>models.list(filter?, callOptions?)</td>\n<td>ModelInfo 数组, 支持 kind/language/installed 过滤</td>\n</tr>\n<tr>\n<td>models.install(id, options?, callOptions?) / models.installAsync</td>\n<td>安装后的 ModelInfo</td>\n</tr>\n<tr>\n<td>models.importFile(path, options?, callOptions?)</td>\n<td>导入本地 tar.bz2/zip 模型后的 ModelInfo</td>\n</tr>\n<tr>\n<td>models.remove(id, callOptions?)</td>\n<td>是否删除; 被会话使用的模型拒绝删除</td>\n</tr>\n<tr>\n<td>models.setDefault(kind, id, callOptions?)</td>\n<td>该类别的新默认 ModelInfo</td>\n</tr>\n<tr>\n<td>models.getDefault(kind, callOptions?)</td>\n<td>默认 ModelInfo 或 null</td>\n</tr>\n<tr>\n<td>models.refreshCatalog(callOptions?)</td>\n<td>version 和 updated</td>\n</tr>\n<tr>\n<td>close()</td>\n<td>是否关闭了一个客户端</td>\n</tr>\n</tbody>\n</table>\n<p>选项字段, 模型许可和识别结果沿用 <a href=\"speech\">Speech</a> 的定义. 模型安装与导入的 onProgress(done, total) 在当前 Node/Bun/Worker 的 JS 线程执行, 不作为 JSON 函数传给宿主. 快速进度可合并为最新值, 不保证观察到每个内部下载块.</p>\n<p>callOptions 支持 signal 和 timeoutMs (整数, 1..2147483647). signal 取消操作; timeoutMs 是本次操作的整体等待期限. 默认不增加额外的运行时期限, 仍遵守 speech 插件的原有操作超时, 会话时长限制及脚本自身的运行超时. 取消安装时由插件回收任务, 已完成的模型变更不会回滚.</p>\n",
               "type": "module",
               "displayName": "方法和返回值"
             },
@@ -810,6 +810,41 @@
           ],
           "type": "misc",
           "displayName": "Node.js / Bun / Worker 的 EPUB"
+        },
+        {
+          "textRaw": "Node.js / Bun / Worker 的主题色, 相册与批量重命名",
+          "name": "node.js_/_bun_/_worker_的主题色,_相册与批量重命名",
+          "desc": "<p>Node 主线程, CommonJS / ESM / 嵌套 Worker 与 Bun 提供 Rhino 的 <a href=\"color#p-theme\">colors.theme</a>, <a href=\"gallery\">gallery</a> 与 <a href=\"files#m-batchrename\">files.batchRename</a>. 参数规则, 错误类型与错误码同 Rhino; 全部成员返回 Promise, 因此 Rhino 的同步形态在这里需要 <code>await</code>.</p>\n",
+          "modules": [
+            {
+              "textRaw": "授权和入口",
+              "name": "授权和入口",
+              "desc": "<table>\n<thead>\n<tr>\n<th>接口</th>\n<th>Node 能力</th>\n<th>Bun 授权</th>\n<th>需要</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>colors.theme</td>\n<td>theme</td>\n<td>theme.control</td>\n<td>无</td>\n</tr>\n<tr>\n<td>gallery</td>\n<td>gallery</td>\n<td>gallery.control</td>\n<td>3-Maple Image 3.4.0 或以上</td>\n</tr>\n<tr>\n<td>files.batchRename</td>\n<td>batch_rename</td>\n<td>batchrename.control</td>\n<td>Batch Rename 1.0.0 或以上 (拼音, 元数据与预设需要 1.1.0)</td>\n</tr>\n</tbody>\n</table>\n<p>三个 Bun 授权各自独立, 默认关闭, 在插件中心的 Bun 运行时设置页开启, 打包应用在 bunConfig.hostCapabilities 中声明; Node 项目在 nodeConfig.permissions 中声明. 未授权时调用被拒绝: Bun 的错误码为 <code>NOT_GRANTED</code>, 并带有 capability; gallery 与 files.batchRename 的拒绝也是 GalleryError / BatchRenameError.</p>\n<p>3-Maple Image 与 Batch Rename 只接受与 AutoJs6 相同签名的调用方, 没有 3-Macaw Speech 那样的打包入口, 所以独立签名的打包应用即使声明了这两项授权, 也无法调用这两个插件 (Rhino 打包应用相同).</p>\n",
+              "type": "module",
+              "displayName": "授权和入口"
+            },
+            {
+              "textRaw": "gallery",
+              "name": "gallery",
+              "desc": "<p>Node 使用 <code>require(&#39;autojs6:gallery&#39;)</code> 或 <code>require(&#39;gallery&#39;)</code>, 显式兼容对象提供 <code>$autojs.gallery</code>; Bun 使用 <code>host.gallery</code>. pick, edit, convert, isAvailable 及其 Async 形态的最后一个参数是可选的 callOptions (<code>signal</code>, <code>timeoutMs</code>), 不提供时没有期限, 选择器与编辑器一直等待用户.</p>\n<p>view(paths, options?, callOptions?) 在插件接受查看器后返回 GalleryViewSession, viewAsync 在查看器显示后才返回. 会话是 EventEmitter, 事件为 open, page, error 和终结的 close; <code>await</code> 之后才添加的监听器也能收到已发生的事件. 执行保持到 close 事件; 脚本结束时查看器留给用户, 等待中的选择器与编辑器随之结束. <code>session.close(options?)</code> 返回 Promise, 其余属性同 Rhino. callOptions.signal 也结束活动的查看器, 这时 close 的 reason 为 <code>cancelled</code>.</p>\n",
+              "type": "module",
+              "displayName": "gallery"
+            }
+          ],
+          "properties": [
+            {
+              "textRaw": "colors.theme",
+              "name": "theme",
+              "desc": "<p>get(), set(color, options?), reset(), libraries(), activate(libraryId, options?), deactivate(), next(), state(name), current(). set 与 reset 相当于在主题色页面上选择颜色, 500 ms 内的修改合并为一条 &quot;脚本: 名称&quot; 记录. 主题色在宿主进程内, 所以 Node 主线程, Worker 与 Bun 读写的是同一个主题色.</p>\n"
+            },
+            {
+              "textRaw": "files.batchRename",
+              "name": "batchRename",
+              "desc": "<p>可调用的 files.batchRename(paths, options, callOptions?) 与 plan, preview, apply, undo, history, presets, importPresets, deleteHistory, clearHistory, isAvailable, BatchRenameError, 以及 plan, preview, apply, undo, presets, importPresets 的 Async 形态. 方案属于本次执行, Worker 可以执行主线程的方案. onProgress 在调用方的 JS 线程运行; 抛出错误不会中断批次, 批次完成并记入日志后调用才以该错误拒绝. 脚本来不及处理时进度事件会被丢弃, 批次不受影响.</p>\n<pre><code class=\"lang-js\">&quot;nodejs&quot;;\nlet gallery = require(&#39;autojs6:gallery&#39;);\nlet { batchRename } = require(&#39;files&#39;);\nlet images = await gallery.pick({ multiple: true, maxCount: 3 });\nif (images) {\n    let plan = await batchRename.plan(images.map(image =&gt; image.path), { search: &#39;IMG_&#39;, replace: &#39;Photo_&#39; });\n    if (!plan.rejected) console.log((await batchRename.apply(plan)).counts.renamed);\n}\n</code></pre>\n"
+            }
+          ],
+          "type": "misc",
+          "displayName": "Node.js / Bun / Worker 的主题色, 相册与批量重命名"
         },
         {
           "textRaw": "Node.js / Bun / Worker 的 Mail",

@@ -5,19 +5,20 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `ocr`, `ocr.mlkit`, `ocr.paddle`, `ocr.rapid` | `ocr` | `ocr` | - |
-| 状态 | 已支持 12 项 | 已支持 12 项 | 已支持 12 项 | 待补 12 项 |
+| 入口 | `ocr`, `ocr.mlkit`, `ocr.paddle`, `ocr.rapid` | `ocr` | `ocr` | `host.ocr` |
+| 状态 | 已支持 12 项 | 已支持 12 项 | 已支持 12 项 | 需授权 12 项 |
+| 授权 | - | - | - | `ocr.control` 12 项 |
 
 差异项 (6 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `ocr.mlkit.detect` | <span title="bridged">已支持</span>: `mlkit.detect` (`ocr`) | <span title="bridged">已支持</span>: `mlkit.detect` (`ocr`) | <span title="pending">待补</span> |
-| `ocr.mlkit.recognizeText` | <span title="bridged">已支持</span>: `mlkit.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `mlkit.recognizeText` (`ocr`) | <span title="pending">待补</span> |
-| `ocr.paddle.detect` | <span title="bridged">已支持</span>: `paddle.detect` (`ocr`) | <span title="bridged">已支持</span>: `paddle.detect` (`ocr`) | <span title="pending">待补</span> |
-| `ocr.paddle.recognizeText` | <span title="bridged">已支持</span>: `paddle.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `paddle.recognizeText` (`ocr`) | <span title="pending">待补</span> |
-| `ocr.rapid.detect` | <span title="bridged">已支持</span>: `rapid.detect` (`ocr`) | <span title="bridged">已支持</span>: `rapid.detect` (`ocr`) | <span title="pending">待补</span> |
-| `ocr.rapid.recognizeText` | <span title="bridged">已支持</span>: `rapid.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `rapid.recognizeText` (`ocr`) | <span title="pending">待补</span> |
+| `ocr.mlkit.detect` | <span title="bridged">已支持</span>: `mlkit.detect` (`ocr`) | <span title="bridged">已支持</span>: `mlkit.detect` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.mlkit.detect` |
+| `ocr.mlkit.recognizeText` | <span title="bridged">已支持</span>: `mlkit.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `mlkit.recognizeText` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.mlkit.recognizeText` |
+| `ocr.paddle.detect` | <span title="bridged">已支持</span>: `paddle.detect` (`ocr`) | <span title="bridged">已支持</span>: `paddle.detect` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.paddle.detect` |
+| `ocr.paddle.recognizeText` | <span title="bridged">已支持</span>: `paddle.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `paddle.recognizeText` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.paddle.recognizeText` |
+| `ocr.rapid.detect` | <span title="bridged">已支持</span>: `rapid.detect` (`ocr`) | <span title="bridged">已支持</span>: `rapid.detect` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.rapid.detect` |
+| `ocr.rapid.recognizeText` | <span title="bridged">已支持</span>: `rapid.recognizeText` (`ocr`) | <span title="bridged">已支持</span>: `rapid.recognizeText` (`ocr`) | <span title="capability-gated">需授权</span> `ocr.control`: `host.ocr.rapid.recognizeText` |
 
 返回对象 (1 个): 本页说明的对象的成员状态, 每个对象一行.
 

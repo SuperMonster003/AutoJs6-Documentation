@@ -5,105 +5,71 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `auto`, `automator`, 全局 39 项 | `autojs6:automator`, `autojs6:auto`, `autojs6:flow`, `$autojs.flow` | `autojs6:automator`, `autojs6:auto`, `autojs6:flow`, `$autojs.flow` | `host.flow`, `host.accessibility` |
-| 状态 | 已支持 131 项 | 已支持 131 项 | 已支持 131 项 | 需授权 52 项, 待补 79 项 |
-| 授权 | - | - | - | `flow.control` 38 项, `accessibility.control` 14 项 |
+| 入口 | `auto`, `automator`, 全局 39 项 | `autojs6:automator`, `autojs6:auto`, `autojs6:flow`, `$autojs.flow` | `autojs6:automator`, `autojs6:auto`, `autojs6:flow`, `$autojs.flow` | `host.automator`, `host.auto`, `host.flow` |
+| 状态 | 已支持 131 项 | 已支持 131 项 | 已支持 131 项 | 需授权 131 项 |
+| 授权 | - | - | - | `accessibility.control` 93 项, `flow.control` 38 项 |
 
-差异项 (91 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (57 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `auto.clearCache` | <span title="bridged">已支持</span>: `clearCache` (`autojs6:auto`) | <span title="bridged">已支持</span>: `clearCache` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.clearFlags` | <span title="bridged">已支持</span>: `clearFlags` (`autojs6:auto`) | <span title="bridged">已支持</span>: `clearFlags` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.currentActivity` | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.currentComponent` | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.currentPackage` | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.disable` | <span title="bridged">已支持</span>: `disable` (`autojs6:auto`) | <span title="bridged">已支持</span>: `disable` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.dump` | <span title="bridged">已支持</span>: `dump` (`autojs6:auto`) | <span title="bridged">已支持</span>: `dump` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.enable` | <span title="bridged">已支持</span>: `enable` (`autojs6:auto`) | <span title="bridged">已支持</span>: `enable` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.exists` | <span title="bridged">已支持</span>: `exists` (`autojs6:auto`) | <span title="bridged">已支持</span>: `exists` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.explain` | <span title="bridged">已支持</span>: `explain` (`autojs6:auto`) | <span title="bridged">已支持</span>: `explain` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.findWindowRoots` | <span title="bridged">已支持</span>: `findWindowRoots` (`autojs6:auto`) | <span title="bridged">已支持</span>: `findWindowRoots` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.findWindows` | <span title="bridged">已支持</span>: `findWindows` (`autojs6:auto`) | <span title="bridged">已支持</span>: `findWindows` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.getWindowRoot` | <span title="bridged">已支持</span>: `getWindowRoot` (`autojs6:auto`) | <span title="bridged">已支持</span>: `getWindowRoot` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.hasInstance` | <span title="bridged">已支持</span>: `hasInstance` (`autojs6:auto`) | <span title="bridged">已支持</span>: `hasInstance` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.hasService` | <span title="bridged">已支持</span>: `hasService` (`autojs6:auto`) | <span title="bridged">已支持</span>: `hasService` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.isOperational` | <span title="bridged">已支持</span>: `isOperational` (`autojs6:auto`) | <span title="bridged">已支持</span>: `isOperational` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.isRunning` | <span title="bridged">已支持</span>: `isRunning` (`autojs6:auto`) | <span title="bridged">已支持</span>: `isRunning` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.launchSettings` | <span title="bridged">已支持</span>: `launchSettings` (`autojs6:auto`) | <span title="bridged">已支持</span>: `launchSettings` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.registerEvent` | <span title="bridged">已支持</span>: `registerEvent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `registerEvent` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.registerEvents` | <span title="bridged">已支持</span>: `registerEvents` (`autojs6:auto`) | <span title="bridged">已支持</span>: `registerEvents` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.removeEvent` | <span title="bridged">已支持</span>: `removeEvent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `removeEvent` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.removeEvents` | <span title="bridged">已支持</span>: `removeEvents` (`autojs6:auto`) | <span title="bridged">已支持</span>: `removeEvents` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.root` | <span title="bridged">已支持</span>: `root` (`autojs6:auto`) | <span title="bridged">已支持</span>: `root` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.rootInActiveWindow` | <span title="bridged">已支持</span>: `rootInActiveWindow` (`autojs6:auto`) | <span title="bridged">已支持</span>: `rootInActiveWindow` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.service` | <span title="bridged">已支持</span>: `service` (`autojs6:auto`) | <span title="bridged">已支持</span>: `service` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.services` | <span title="bridged">已支持</span>: `services` (`autojs6:auto`) | <span title="bridged">已支持</span>: `services` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.setFlags` | <span title="bridged">已支持</span>: `setFlags` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setFlags` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.setMode` | <span title="bridged">已支持</span>: `setMode` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setMode` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.setWindowFilter` | <span title="bridged">已支持</span>: `setWindowFilter` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setWindowFilter` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.start` | <span title="bridged">已支持</span>: `start` (`autojs6:auto`) | <span title="bridged">已支持</span>: `start` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.state` | <span title="bridged">已支持</span>: `state` (`autojs6:auto`) | <span title="bridged">已支持</span>: `state` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.stateListener` | <span title="bridged">已支持</span>: `stateListener` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stateListener` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.stats` | <span title="bridged">已支持</span>: `stats` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stats` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.stop` | <span title="bridged">已支持</span>: `stop` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stop` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.wait` | <span title="bridged">已支持</span>: `wait` (`autojs6:auto`) | <span title="bridged">已支持</span>: `wait` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.waitFor` | <span title="bridged">已支持</span>: `waitFor` (`autojs6:auto`) | <span title="bridged">已支持</span>: `waitFor` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.windowRoots` | <span title="bridged">已支持</span>: `windowRoots` (`autojs6:auto`) | <span title="bridged">已支持</span>: `windowRoots` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `auto.windows` | <span title="bridged">已支持</span>: `windows` (`autojs6:auto`) | <span title="bridged">已支持</span>: `windows` (`autojs6:auto`) | <span title="pending">待补</span> |
-| `automator.accessibilityAllApps` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.accessibilityButton` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.accessibilityButtonChooser` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.accessibilityShortcut` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.back`, `back` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.back` |
-| `automator.backToApp`, `backToApp` | <span title="bridged">已支持</span>, 经 flow: `backToApp` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `backToApp` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.backUntil`, `backUntil` | <span title="bridged">已支持</span>, 经 flow: `backUntil` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `backUntil` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.captureScreen` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.click`, `click` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.click` |
-| `automator.clickAny`, `clickAny` | <span title="bridged">已支持</span>, 经 flow: `clickAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.clickBoundsAny`, `clickBoundsAny` | <span title="bridged">已支持</span>, 经 flow: `clickBoundsAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickBoundsAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.clickBoundsIfExists`, `clickBoundsIfExists` | <span title="bridged">已支持</span>, 经 flow: `clickBoundsIfExists` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickBoundsIfExists` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.clickIfExists`, `clickIfExists` | <span title="bridged">已支持</span>, 经 flow: `clickIfExists` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickIfExists` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.collectList`, `collectList` | <span title="bridged">已支持</span>, 经 flow: `collectList` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `collectList` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.dismissNotificationShade` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.dismissPopups`, `dismissPopups` | <span title="bridged">已支持</span>, 经 flow: `dismissPopups` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `dismissPopups` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.ensureService` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.findAny`, `findAny` | <span title="bridged">已支持</span>, 经 flow: `findAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `findAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.gesture`, `gesture` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.gesture` |
-| `automator.gestureAsync`, `gestureAsync` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.gestures`, `gestures` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.gesturesAsync`, `gesturesAsync` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.headsetHook`, `automator.headsethook` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.home`, `home` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.home` |
-| `automator.input`, `input` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.isServiceRunning` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.launchAndWait`, `launchAndWait` | <span title="bridged">已支持</span>, 经 flow: `launchAndWait` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `launchAndWait` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.lockScreen` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.longClick`, `longClick` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.longClick` |
-| `automator.notifications`, `notifications` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.powerDialog`, `powerDialog` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.press`, `press` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.quickSettings`, `quickSettings` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.recents`, `recents` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.retry`, `retry` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.scrollDown`, `scrollDown` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.scrollUntil`, `scrollUntil` | <span title="bridged">已支持</span>, 经 flow: `scrollUntil` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `scrollUntil` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.scrollUp`, `scrollUp` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.setText`, `setText` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.setText` |
-| `automator.smartClick`, `smartClick` | <span title="bridged">已支持</span>, 经 flow: `smartClick` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `smartClick` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.smartClickBounds`, `smartClickBounds` | <span title="bridged">已支持</span>, 经 flow: `smartClickBounds` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `smartClickBounds` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.splitScreen`, `splitScreen` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.swipe`, `swipe` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `accessibility.control`: `host.accessibility.swipe` |
-| `automator.switchToInputMethod` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.switchToInputMethodWithId` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.takeScreenshot` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.toggle`, `toggle` | <span title="bridged">已支持</span>, 经 flow: `toggle` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `toggle` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.typeInto`, `typeInto` | <span title="bridged">已支持</span>, 经 flow: `typeInto` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `typeInto` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.waitForEvent`, `waitForEvent` | <span title="bridged">已支持</span>, 经 flow: `waitForEvent` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForEvent` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.waitForIdle`, `waitForIdle` | <span title="bridged">已支持</span>, 经 flow: `waitForIdle` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForIdle` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.waitForNotification`, `waitForNotification` | <span title="bridged">已支持</span>, 经 flow: `waitForNotification` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForNotification` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
-| `automator.waitForService` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `automator.waitForToast`, `waitForToast` | <span title="bridged">已支持</span>, 经 flow: `waitForToast` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForToast` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow |
+| `auto.clearCache` | <span title="bridged">已支持</span>: `clearCache` (`autojs6:auto`) | <span title="bridged">已支持</span>: `clearCache` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.clearCache` |
+| `auto.clearFlags` | <span title="bridged">已支持</span>: `clearFlags` (`autojs6:auto`) | <span title="bridged">已支持</span>: `clearFlags` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.clearFlags` |
+| `auto.currentActivity` | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentActivity` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.currentActivity` |
+| `auto.currentComponent` | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentComponent` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.currentComponent` |
+| `auto.currentPackage` | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:auto`) | <span title="bridged">已支持</span>: `currentPackage` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.currentPackage` |
+| `auto.disable` | <span title="bridged">已支持</span>: `disable` (`autojs6:auto`) | <span title="bridged">已支持</span>: `disable` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.disable` |
+| `auto.dump` | <span title="bridged">已支持</span>: `dump` (`autojs6:auto`) | <span title="bridged">已支持</span>: `dump` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.dump` |
+| `auto.enable` | <span title="bridged">已支持</span>: `enable` (`autojs6:auto`) | <span title="bridged">已支持</span>: `enable` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.enable` |
+| `auto.exists` | <span title="bridged">已支持</span>: `exists` (`autojs6:auto`) | <span title="bridged">已支持</span>: `exists` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.exists` |
+| `auto.explain` | <span title="bridged">已支持</span>: `explain` (`autojs6:auto`) | <span title="bridged">已支持</span>: `explain` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.explain` |
+| `auto.findWindowRoots` | <span title="bridged">已支持</span>: `findWindowRoots` (`autojs6:auto`) | <span title="bridged">已支持</span>: `findWindowRoots` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.findWindowRoots` |
+| `auto.findWindows` | <span title="bridged">已支持</span>: `findWindows` (`autojs6:auto`) | <span title="bridged">已支持</span>: `findWindows` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.findWindows` |
+| `auto.getWindowRoot` | <span title="bridged">已支持</span>: `getWindowRoot` (`autojs6:auto`) | <span title="bridged">已支持</span>: `getWindowRoot` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.getWindowRoot` |
+| `auto.hasInstance` | <span title="bridged">已支持</span>: `hasInstance` (`autojs6:auto`) | <span title="bridged">已支持</span>: `hasInstance` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.hasInstance` |
+| `auto.hasService` | <span title="bridged">已支持</span>: `hasService` (`autojs6:auto`) | <span title="bridged">已支持</span>: `hasService` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.hasService` |
+| `auto.isOperational` | <span title="bridged">已支持</span>: `isOperational` (`autojs6:auto`) | <span title="bridged">已支持</span>: `isOperational` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.isOperational` |
+| `auto.isRunning` | <span title="bridged">已支持</span>: `isRunning` (`autojs6:auto`) | <span title="bridged">已支持</span>: `isRunning` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.isRunning` |
+| `auto.launchSettings` | <span title="bridged">已支持</span>: `launchSettings` (`autojs6:auto`) | <span title="bridged">已支持</span>: `launchSettings` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.launchSettings` |
+| `auto.registerEvent` | <span title="bridged">已支持</span>: `registerEvent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `registerEvent` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.registerEvent` |
+| `auto.registerEvents` | <span title="bridged">已支持</span>: `registerEvents` (`autojs6:auto`) | <span title="bridged">已支持</span>: `registerEvents` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.registerEvents` |
+| `auto.removeEvent` | <span title="bridged">已支持</span>: `removeEvent` (`autojs6:auto`) | <span title="bridged">已支持</span>: `removeEvent` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.removeEvent` |
+| `auto.removeEvents` | <span title="bridged">已支持</span>: `removeEvents` (`autojs6:auto`) | <span title="bridged">已支持</span>: `removeEvents` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.removeEvents` |
+| `auto.root` | <span title="bridged">已支持</span>: `root` (`autojs6:auto`) | <span title="bridged">已支持</span>: `root` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.root` |
+| `auto.rootInActiveWindow` | <span title="bridged">已支持</span>: `rootInActiveWindow` (`autojs6:auto`) | <span title="bridged">已支持</span>: `rootInActiveWindow` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.rootInActiveWindow` |
+| `auto.service` | <span title="bridged">已支持</span>: `service` (`autojs6:auto`) | <span title="bridged">已支持</span>: `service` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.service` |
+| `auto.services` | <span title="bridged">已支持</span>: `services` (`autojs6:auto`) | <span title="bridged">已支持</span>: `services` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.services` |
+| `auto.setFlags` | <span title="bridged">已支持</span>: `setFlags` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setFlags` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.setFlags` |
+| `auto.setMode` | <span title="bridged">已支持</span>: `setMode` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setMode` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.setMode` |
+| `auto.setWindowFilter` | <span title="bridged">已支持</span>: `setWindowFilter` (`autojs6:auto`) | <span title="bridged">已支持</span>: `setWindowFilter` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.setWindowFilter` |
+| `auto.start` | <span title="bridged">已支持</span>: `start` (`autojs6:auto`) | <span title="bridged">已支持</span>: `start` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.start` |
+| `auto.state` | <span title="bridged">已支持</span>: `state` (`autojs6:auto`) | <span title="bridged">已支持</span>: `state` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.state` |
+| `auto.stateListener` | <span title="bridged">已支持</span>: `stateListener` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stateListener` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.stateListener` |
+| `auto.stats` | <span title="bridged">已支持</span>: `stats` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stats` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.stats` |
+| `auto.stop` | <span title="bridged">已支持</span>: `stop` (`autojs6:auto`) | <span title="bridged">已支持</span>: `stop` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.stop` |
+| `auto.wait` | <span title="bridged">已支持</span>: `wait` (`autojs6:auto`) | <span title="bridged">已支持</span>: `wait` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.wait` |
+| `auto.waitFor` | <span title="bridged">已支持</span>: `waitFor` (`autojs6:auto`) | <span title="bridged">已支持</span>: `waitFor` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.waitFor` |
+| `auto.windowRoots` | <span title="bridged">已支持</span>: `windowRoots` (`autojs6:auto`) | <span title="bridged">已支持</span>: `windowRoots` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.windowRoots` |
+| `auto.windows` | <span title="bridged">已支持</span>: `windows` (`autojs6:auto`) | <span title="bridged">已支持</span>: `windows` (`autojs6:auto`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.auto.windows` |
+| `automator.backToApp`, `backToApp` | <span title="bridged">已支持</span>, 经 flow: `backToApp` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `backToApp` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.backToApp` |
+| `automator.backUntil`, `backUntil` | <span title="bridged">已支持</span>, 经 flow: `backUntil` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `backUntil` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.backUntil` |
+| `automator.clickAny`, `clickAny` | <span title="bridged">已支持</span>, 经 flow: `clickAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.clickAny` |
+| `automator.clickBoundsAny`, `clickBoundsAny` | <span title="bridged">已支持</span>, 经 flow: `clickBoundsAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickBoundsAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.clickBoundsAny` |
+| `automator.clickBoundsIfExists`, `clickBoundsIfExists` | <span title="bridged">已支持</span>, 经 flow: `clickBoundsIfExists` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickBoundsIfExists` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.clickBoundsIfExists` |
+| `automator.clickIfExists`, `clickIfExists` | <span title="bridged">已支持</span>, 经 flow: `clickIfExists` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `clickIfExists` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.clickIfExists` |
+| `automator.collectList`, `collectList` | <span title="bridged">已支持</span>, 经 flow: `collectList` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `collectList` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.collectList` |
+| `automator.dismissPopups`, `dismissPopups` | <span title="bridged">已支持</span>, 经 flow: `dismissPopups` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `dismissPopups` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.dismissPopups` |
+| `automator.findAny`, `findAny` | <span title="bridged">已支持</span>, 经 flow: `findAny` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `findAny` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.findAny` |
+| `automator.launchAndWait`, `launchAndWait` | <span title="bridged">已支持</span>, 经 flow: `launchAndWait` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `launchAndWait` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.launchAndWait` |
+| `automator.scrollUntil`, `scrollUntil` | <span title="bridged">已支持</span>, 经 flow: `scrollUntil` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `scrollUntil` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.scrollUntil` |
+| `automator.smartClick`, `smartClick` | <span title="bridged">已支持</span>, 经 flow: `smartClick` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `smartClick` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.smartClick` |
+| `automator.smartClickBounds`, `smartClickBounds` | <span title="bridged">已支持</span>, 经 flow: `smartClickBounds` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `smartClickBounds` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.smartClickBounds` |
+| `automator.toggle`, `toggle` | <span title="bridged">已支持</span>, 经 flow: `toggle` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `toggle` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.toggle` |
+| `automator.typeInto`, `typeInto` | <span title="bridged">已支持</span>, 经 flow: `typeInto` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `typeInto` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.typeInto` |
+| `automator.waitForEvent`, `waitForEvent` | <span title="bridged">已支持</span>, 经 flow: `waitForEvent` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForEvent` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.waitForEvent` |
+| `automator.waitForIdle`, `waitForIdle` | <span title="bridged">已支持</span>, 经 flow: `waitForIdle` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForIdle` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.waitForIdle` |
+| `automator.waitForNotification`, `waitForNotification` | <span title="bridged">已支持</span>, 经 flow: `waitForNotification` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForNotification` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.waitForNotification` |
+| `automator.waitForToast`, `waitForToast` | <span title="bridged">已支持</span>, 经 flow: `waitForToast` (`autojs6:flow`) | <span title="bridged">已支持</span>, 经 flow: `waitForToast` (`autojs6:flow`) | <span title="capability-gated">需授权</span> `flow.control`, 经 flow: `host.flow.waitForToast` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

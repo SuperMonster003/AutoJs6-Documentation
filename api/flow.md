@@ -5,15 +5,15 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `flow`, 全局 16 项 | `autojs6:flow`, `autojs6:system`, `$autojs.flow` | `autojs6:flow`, `autojs6:system`, `$autojs.flow` | `host.flow` |
-| 状态 | 已支持 71 项 | 已支持 71 项 | 已支持 71 项 | 需授权 70 项, 待补 1 项 |
+| 入口 | `flow`, 全局 16 项 | `autojs6:flow`, `autojs6:system`, `$autojs.flow` | `autojs6:flow`, `autojs6:system`, `$autojs.flow` | `host.flow`, `host.global` |
+| 状态 | 已支持 71 项 | 已支持 71 项 | 已支持 71 项 | 已支持 (本地实现) 1 项, 需授权 70 项 |
 | 授权 | - | - | - | `flow.control` 70 项 |
 
 差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `wait.async` | <span title="bridged">已支持</span>, 经 system: `wait.async` (`autojs6:system`) | <span title="bridged">已支持</span>, 经 system: `wait.async` (`autojs6:system`) | <span title="pending">待补</span> |
+| `wait.async` | <span title="bridged">已支持</span>, 经 system: `wait.async` (`autojs6:system`) | <span title="bridged">已支持</span>, 经 system: `wait.async` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>, 经 global: `host.global.wait.async` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

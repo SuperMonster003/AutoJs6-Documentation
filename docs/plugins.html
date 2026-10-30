@@ -308,7 +308,10 @@
 </li>
 <li><span class="stability_undefined"><a href="#plugins_2">项目插件</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_3">内置扩展插件</a></span></li>
-<li><span class="stability_undefined"><a href="#plugins_4">插件工具</a></span></li>
+<li><span class="stability_undefined"><a href="#plugins_4">插件工具</a></span><ul>
+<li><span class="stability_undefined"><a href="#plugins_5">官方插件工具表</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#plugins_m_load">[m] load</a></span><ul>
 <li><span class="stability_undefined"><a href="#plugins_load_apppluginpackagename">load(appPluginPackageName)</a></span></li>
 <li><span class="stability_undefined"><a href="#plugins_load_projectpluginname">load(projectPluginName)</a></span></li>
@@ -591,6 +594,158 @@ tools.forEach(t =&gt; console.log(t.name, &#39;-&#39;, t.description));
 let answer = plugins.tools.call(&#39;opencc_convert&#39;, { text: &#39;汉字&#39;, config: &#39;s2t&#39; });
 console.log(answer.result);
 </code></pre>
+<h3>官方插件工具表<span><a class="mark" href="#plugins_5" id="plugins_5">#</a></span></h3>
+<p>下表列出官方插件提供的工具. 插件会随版本增减工具, 设备上实际可用的工具以 <a href="#plugins_m_tools_list">plugins.tools.list</a> 的返回为准; 参数的取值范围, 长度上限与英文说明见返回对象的 <code>inputSchema</code>, 结果字段的类型见 <code>outputSchema</code>.</p>
+<ul>
+<li>最低插件版本: 首个提供该工具的插件版本.</li>
+<li>参数: 名称 (类型, 必填或默认值). 未标 &quot;必填&quot; 的参数可以省略, 标有默认值的参数省略时由 AutoJs6 填入该值. &quot;图片&quot;, &quot;文件&quot; 与 &quot;目录&quot; 参数的写法见上文.</li>
+<li>输出: 调用结果中 <code>result</code> 的字段 (<code>[]</code> 表示数组), 以及工具可产生的文件或目录输出; 输出路径用 <a href="#plugins_m_tools_call">plugins.tools.call</a> 的 <code>outputs</code> 选项指定.</li>
+<li>部分工具还需要模型或权限, 例如 YOLO 模型目录, 3-Macaw Speech 的语音模型与麦克风权限; 缺少时调用抛出含原因的异常.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+<th>提供插件</th>
+<th>最低插件版本</th>
+<th>参数</th>
+<th>输出</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>opencc_convert</code></td>
+<td>简体, 繁体, 港台标准与日文新字体之间转换汉字字形 (OpenCC), 不翻译</td>
+<td>3-Hanzi CC</td>
+<td>2.1.0</td>
+<td><code>text</code> (string, 必填); <code>config</code> (string, 默认 <code>&quot;s2t&quot;</code>)</td>
+<td><code>{ text, config }</code></td>
+</tr>
+<tr>
+<td><code>yolo_detect</code></td>
+<td>用 YOLO11 NCNN 模型在图片或屏幕中检测目标, 结果按置信度从高到低</td>
+<td>AutoJs6 YOLO NCNN</td>
+<td>0.2.0</td>
+<td><code>image</code> (图片, 必填); <code>model</code> (目录, 必填); <code>confidence</code> (number, 默认 <code>0.25</code>); <code>iouThreshold</code> (number, 默认 <code>0.45</code>); <code>maxDetections</code> (integer, 默认 <code>100</code>); <code>labels</code> (string[])</td>
+<td><code>{ image, count, detections[], model, inferenceMs }</code></td>
+</tr>
+<tr>
+<td><code>imagequant_quantize</code></td>
+<td>把图片量化为至多 256 色的调色板 PNG (libimagequant)</td>
+<td>Image Quantization</td>
+<td>1.1.0</td>
+<td><code>image</code> (图片, 必填); <code>quality</code> (integer, 省略时为 100); <code>minQuality</code> (integer); <code>maxQuality</code> (integer); <code>maxColors</code> (integer, 默认 <code>256</code>); <code>speed</code> (integer, 默认 <code>8</code>); <code>ditheringLevel</code> (number, 默认 <code>0.0</code>); <code>posterizeBits</code> (integer, 默认 <code>0</code>); <code>preserveAlpha</code> (boolean, 默认 <code>true</code>)</td>
+<td><code>{ width, height, bytes, quality, quantizationError, peakWorkingMemoryBytes }</code>; 文件输出 <code>png</code> (PNG)</td>
+</tr>
+<tr>
+<td><code>archive_list</code></td>
+<td>分页列出压缩包的条目</td>
+<td>3-Stack Archive</td>
+<td>3.1.0</td>
+<td><code>archive</code> (文件, 必填); <code>directory</code> (string); <code>offset</code> (integer, 默认 <code>0</code>); <code>limit</code> (integer, 默认 <code>200</code>); <code>password</code> (string)</td>
+<td><code>{ format, total, offset, truncated, totalUncompressedBytes, entries[] }</code></td>
+</tr>
+<tr>
+<td><code>archive_read</code></td>
+<td>不解压读取压缩包内一个文件的文本 (UTF-8, 至多 64 KiB)</td>
+<td>3-Stack Archive</td>
+<td>3.1.0</td>
+<td><code>archive</code> (文件, 必填); <code>path</code> (string, 必填); <code>maxBytes</code> (integer, 默认 <code>65536</code>); <code>password</code> (string)</td>
+<td><code>{ path, size, bytesRead, truncated, binary, text }</code></td>
+</tr>
+<tr>
+<td><code>archive_extract</code></td>
+<td>把压缩包的全部或指定条目解压到目录</td>
+<td>3-Stack Archive</td>
+<td>3.1.0</td>
+<td><code>archive</code> (文件, 必填); <code>paths</code> (string[]); <code>password</code> (string)</td>
+<td><code>{ format, filesExtracted, directoriesCreated, bytesWritten, kept, keptPaths[], skipped }</code>; 目录输出 <code>files</code></td>
+</tr>
+<tr>
+<td><code>speech_listen</code></td>
+<td>用麦克风听写一句话并离线识别</td>
+<td>3-Macaw Speech</td>
+<td>1.2.0</td>
+<td><code>language</code> (string); <code>silenceMillis</code> (integer, 默认 <code>1200</code>); <code>noSpeechSeconds</code> (integer, 默认 <code>8</code>); <code>maxSeconds</code> (integer, 默认 <code>30</code>); <code>hotwords</code> (string[]); <code>prompt</code> (string)</td>
+<td><code>{ text, language, modelId, durationMillis, endReason, warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_speak</code></td>
+<td>朗读文本 (插件引擎或系统默认 TTS 引擎)</td>
+<td>3-Macaw Speech</td>
+<td>1.2.0</td>
+<td><code>text</code> (string, 必填); <code>language</code> (string); <code>voice</code> (string); <code>speed</code> (number, 默认 <code>1.0</code>); <code>wait</code> (boolean, 默认 <code>true</code>)</td>
+<td><code>{ engine, enginePackage, language, voice, completed, durationMillis, warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_transcribe</code></td>
+<td>离线转写音频文件, 带时间分段</td>
+<td>3-Macaw Speech</td>
+<td>1.2.0</td>
+<td><code>file</code> (文件, 必填); <code>language</code> (string); <code>model</code> (string)</td>
+<td><code>{ text, segments[], language, modelId, durationMillis, warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_synthesize</code></td>
+<td>把文本离线合成为 WAV 或 M4A 音频文件</td>
+<td>3-Macaw Speech</td>
+<td>1.2.0</td>
+<td><code>text</code> (string, 必填); <code>language</code> (string); <code>voice</code> (string); <code>speed</code> (number, 默认 <code>1.0</code>); <code>format</code> (string, <code>&quot;wav&quot;</code> 或 <code>&quot;m4a&quot;</code>, 默认 <code>&quot;wav&quot;</code>)</td>
+<td><code>{ format, mimeType, modelId, voice, sampleRate, durationMillis, bytes, warnings[] }</code>; 文件输出 <code>audio</code> (WAV 或 M4A)</td>
+</tr>
+<tr>
+<td><code>speech_speaker_verify</code></td>
+<td>核对音频中的说话人是否为指定的已登记说话人</td>
+<td>3-Macaw Speech</td>
+<td>1.3.0</td>
+<td><code>file</code> (文件, 必填); <code>name</code> (string, 必填); <code>threshold</code> (number)</td>
+<td><code>{ name, score, matched, threshold, modelId, warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_speaker_identify</code></td>
+<td>在已登记的说话人中找出与音频最接近的候选</td>
+<td>3-Macaw Speech</td>
+<td>1.3.0</td>
+<td><code>file</code> (文件, 必填); <code>threshold</code> (number); <code>topK</code> (integer, 默认 <code>3</code>)</td>
+<td><code>{ name, score, matched, threshold, modelId, candidates[], warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_diarize</code></td>
+<td>说话人分离: 把音频按说话人切分为轮次</td>
+<td>3-Macaw Speech</td>
+<td>1.3.0</td>
+<td><code>file</code> (文件, 必填); <code>speakers</code> (integer, 默认 <code>0</code>); <code>threshold</code> (number); <code>identify</code> (boolean, 默认 <code>false</code>)</td>
+<td><code>{ segments[], speakers, durationMillis, modelId, speakerModelId, names[], warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_detect_language</code></td>
+<td>识别音频中所说的语种 (Whisper, 99 种语言)</td>
+<td>3-Macaw Speech</td>
+<td>1.3.0</td>
+<td><code>file</code> (文件, 必填); <code>windows</code> (integer, 默认 <code>3</code>)</td>
+<td><code>{ language, candidates[], segments[], durationMillis, modelId, warnings[] }</code></td>
+</tr>
+<tr>
+<td><code>speech_tag</code></td>
+<td>识别音频中的声音类别 (AudioSet 527 类)</td>
+<td>3-Macaw Speech</td>
+<td>1.3.0</td>
+<td><code>file</code> (文件, 必填); <code>topK</code> (integer, 默认 <code>5</code>)</td>
+<td><code>{ labels[], durationMillis, modelId, warnings[] }</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="lang-js">/* 把繁体字形转为简体. */
+let answer = plugins.tools.call(&#39;opencc_convert&#39;, { text: &#39;漢字轉換&#39;, config: &#39;t2s&#39; });
+console.log(answer.result.text); // 汉字转换
+
+/* 把压缩包解压到 out/demo 文件夹, 文件夹中已有的文件保留不动. */
+let extracted = plugins.tools.call(&#39;archive_extract&#39;, { archive: &#39;demo.zip&#39; }, {
+    outputs: { files: &#39;out/demo&#39; },
+});
+console.log(extracted.result.filesExtracted, extracted.result.kept);
+</code></pre>
 <hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">plugins</p>
 
@@ -719,8 +874,8 @@ plugins.extendAll();
 </ul>
 <p>参数不符合格式, 工具不存在, 插件报告错误或超过时限时抛出异常, 异常消息包含原因. 同步形态阻塞当前脚本线程直至完成, 停止脚本会取消调用.</p>
 <pre><code class="lang-js">/* 调用工具并把产生的图片写入工作目录. */
-let answer = plugins.tools.call(&#39;imagequant_quantize&#39;, { image: &#39;photo.png&#39;, colors: 16 }, {
-    outputs: { image: &#39;out/photo-16.png&#39; },
+let answer = plugins.tools.call(&#39;imagequant_quantize&#39;, { image: &#39;photo.png&#39;, maxColors: 16 }, {
+    outputs: { png: &#39;out/photo-16.png&#39; },
 });
 console.log(answer.outputs[0].path);
 </code></pre>

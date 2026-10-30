@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `powerManager` | `autojs6:power_manager` | `autojs6:power_manager` | - |
-| 状态 | 已支持 2 项 | 已支持 2 项 | 已支持 2 项 | 待补 2 项 |
+| 入口 | `powerManager` | `autojs6:power_manager` | `autojs6:power_manager` | `host.powerManager` |
+| 状态 | 已支持 2 项 | 已支持 2 项 | 已支持 2 项 | 需授权 2 项 |
+| 授权 | - | - | - | `device.control` 2 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

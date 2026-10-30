@@ -5,14 +5,15 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `memory` | `autojs6:memory` | `autojs6:memory` | - |
-| 状态 | 已支持 5 项 | 已支持 4 项, 不适用 1 项 | 已支持 4 项, 不适用 1 项 | 待补 5 项 |
+| 入口 | `memory` | `autojs6:memory` | `autojs6:memory` | `host.memory` |
+| 状态 | 已支持 5 项 | 已支持 4 项, 不适用 1 项 | 已支持 4 项, 不适用 1 项 | 需授权 4 项, 不适用 1 项 |
+| 授权 | - | - | - | `memory.control` 4 项 |
 
 差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `memory.watch` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics` | <span title="pending">待补</span> |
+| `memory.watch` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics; in Bun bun:jsc heapStats / generateHeapSnapshot` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics; in Bun bun:jsc heapStats / generateHeapSnapshot` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `FinalizationRegistry (a callback once the object is collected), node:v8 writeHeapSnapshot / getHeapStatistics; in Bun bun:jsc heapStats / generateHeapSnapshot` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

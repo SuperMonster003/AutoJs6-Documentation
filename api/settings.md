@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `settings` | `autojs6:settings` | `autojs6:settings` | - |
-| 状态 | 已支持 4 项 | 已支持 4 项 | 已支持 4 项 | 待补 4 项 |
+| 入口 | `settings` | `autojs6:settings` | `autojs6:settings` | `host.settings` |
+| 状态 | 已支持 4 项 | 已支持 4 项 | 已支持 4 项 | 需授权 4 项 |
+| 授权 | - | - | - | `settings.control` 4 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

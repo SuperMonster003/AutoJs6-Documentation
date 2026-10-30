@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `installer` | `autojs6:installer` | `autojs6:installer` | - |
-| 状态 | 已支持 16 项 | 已支持 16 项 | 已支持 16 项 | 待补 16 项 |
+| 入口 | `installer` | `autojs6:installer` | `autojs6:installer` | `host.installer` |
+| 状态 | 已支持 16 项 | 已支持 16 项 | 已支持 16 项 | 需授权 16 项 |
+| 授权 | - | - | - | `installer.control` 16 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

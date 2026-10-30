@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `engines` | `engines` | `engines` | - |
-| 状态 | 已支持 8 项 | 已支持 8 项 | 已支持 8 项 | 待补 8 项 |
+| 入口 | `engines` | `engines` | `engines` | `host.engines` |
+| 状态 | 已支持 8 项 | 已支持 8 项 | 已支持 8 项 | 需授权 8 项 |
+| 授权 | - | - | - | `engines.control` 8 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

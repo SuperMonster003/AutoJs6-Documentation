@@ -5,21 +5,22 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `plugins`, `plugins.tools` | `plugins` | `plugins` | - |
-| 状态 | 已支持 8 项 | 已支持 (本地实现) 8 项 | 已支持 (本地实现) 7 项, 不适用 1 项 | 不适用 1 项, 待补 7 项 |
+| 入口 | `plugins`, `plugins.tools` | `plugins` | `plugins` | `host.plugins` |
+| 状态 | 已支持 8 项 | 已支持 (本地实现) 8 项 | 已支持 (本地实现) 7 项, 不适用 1 项 | 已支持 (本地实现) 3 项, 需授权 4 项, 不适用 1 项 |
+| 授权 | - | - | - | `plugintools.control` 4 项 |
 
 差异项 (8 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `plugins.extend` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `plugins.extendAll` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
-| `plugins.extendAllBut` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="pending">待补</span> |
+| `plugins.extend` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> |
+| `plugins.extendAll` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> |
+| `plugins.extendAllBut` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> |
 | `plugins.load` | <span title="local-shim">已支持 (本地实现)</span> | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
-| `plugins.tools.call` | <span title="local-shim">已支持 (本地实现)</span>: `tools.call` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.call` (`plugins`) | <span title="pending">待补</span> |
-| `plugins.tools.callAsync` | <span title="local-shim">已支持 (本地实现)</span>: `tools.callAsync` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.callAsync` (`plugins`) | <span title="pending">待补</span> |
-| `plugins.tools.list` | <span title="local-shim">已支持 (本地实现)</span>: `tools.list` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.list` (`plugins`) | <span title="pending">待补</span> |
-| `plugins.tools.providers` | <span title="local-shim">已支持 (本地实现)</span>: `tools.providers` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.providers` (`plugins`) | <span title="pending">待补</span> |
+| `plugins.tools.call` | <span title="local-shim">已支持 (本地实现)</span>: `tools.call` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.call` (`plugins`) | <span title="capability-gated">需授权</span> `plugintools.control`: `host.plugins.tools.call` |
+| `plugins.tools.callAsync` | <span title="local-shim">已支持 (本地实现)</span>: `tools.callAsync` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.callAsync` (`plugins`) | <span title="capability-gated">需授权</span> `plugintools.control`: `host.plugins.tools.callAsync` |
+| `plugins.tools.list` | <span title="local-shim">已支持 (本地实现)</span>: `tools.list` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.list` (`plugins`) | <span title="capability-gated">需授权</span> `plugintools.control`: `host.plugins.tools.list` |
+| `plugins.tools.providers` | <span title="local-shim">已支持 (本地实现)</span>: `tools.providers` (`plugins`) | <span title="local-shim">已支持 (本地实现)</span>: `tools.providers` (`plugins`) | <span title="capability-gated">需授权</span> `plugintools.control`: `host.plugins.tools.providers` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

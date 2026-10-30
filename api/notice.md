@@ -6,25 +6,23 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `notice`, `notice.channel` | `autojs6:notifications` | `autojs6:notifications` | `host.notifications` |
-| 状态 | 已支持 13 项 | 已支持 13 项 | 已支持 13 项 | 需授权 1 项, 待补 12 项 |
-| 授权 | - | - | - | `notifications.post` 1 项 |
+| 状态 | 已支持 13 项 | 已支持 13 项 | 已支持 13 项 | 需授权 13 项 |
+| 授权 | - | - | - | `notifications.post` 9 项, `java.interop` 2 项, `notifications.settings` 2 项 |
 
-差异项 (12 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (10 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `notice.builder` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `notice.channel.contains` | <span title="bridged">已支持</span>: `channel.contains` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.contains` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.channel.create` | <span title="bridged">已支持</span>: `channel.create` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.create` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.channel.createIfNeeded` | <span title="bridged">已支持</span>: `channel.createIfNeeded` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.createIfNeeded` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.channel.get` | <span title="bridged">已支持</span>: `channel.get` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.get` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.channel.getAll` | <span title="bridged">已支持</span>: `channel.getAll` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.getAll` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.channel.remove` | <span title="bridged">已支持</span>: `channel.remove` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.remove` (`autojs6:notifications`) | <span title="pending">待补</span> |
-| `notice.config` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `notice.ensureEnabled` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `notice.getBuilder` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `notice.isEnabled` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
-| `notice.launchSettings` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="pending">待补</span> |
+| `notice.builder` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `java.interop` |
+| `notice.channel.contains` | <span title="bridged">已支持</span>: `channel.contains` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.contains` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.contains` |
+| `notice.channel.create` | <span title="bridged">已支持</span>: `channel.create` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.create` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.create` |
+| `notice.channel.createIfNeeded` | <span title="bridged">已支持</span>: `channel.createIfNeeded` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.createIfNeeded` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.createIfNeeded` |
+| `notice.channel.get` | <span title="bridged">已支持</span>: `channel.get` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.get` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.get` |
+| `notice.channel.getAll` | <span title="bridged">已支持</span>: `channel.getAll` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.getAll` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.getAll` |
+| `notice.channel.remove` | <span title="bridged">已支持</span>: `channel.remove` (`autojs6:notifications`) | <span title="bridged">已支持</span>: `channel.remove` (`autojs6:notifications`) | <span title="capability-gated">需授权</span> `notifications.post`: `host.notifications.channel.remove` |
+| `notice.ensureEnabled` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `notifications.settings` |
+| `notice.getBuilder` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `java.interop` |
+| `notice.launchSettings` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `notifications.settings` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

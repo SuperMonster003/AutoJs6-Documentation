@@ -102,10 +102,8 @@ if (worker !== undefined) {
 而不会为了接近 `maxPoolSize` 而继续创建工作线程. 默认配置会按需创建一个工作线程
 并顺序消费队列.
 
-当前参数校验要求 `corePoolSize <= maxPoolSize` 时仍使用选项中的原始
-`maxPoolSize`. 因此显式或默认使用 `maxPoolSize: 0` 时,
-`corePoolSize` 也必须为 `0`. 若需要多个核心工作线程, 应同时指定不小于它的正数
-`maxPoolSize`.
+`maxPoolSize` 为 `0` (含默认值) 时不限制上限, `corePoolSize` 可取任意非负整数.
+指定正数 `maxPoolSize` 时, `corePoolSize` 不得大于它, 否则抛出异常.
 
 ```js
 let pool = threads.pool({

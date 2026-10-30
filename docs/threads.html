@@ -569,10 +569,8 @@ if (worker !== undefined) {
 <p>当前实现使用无界 <code>LinkedBlockingQueue</code>. 因此核心线程忙碌后, 新任务通常进入队列,
 而不会为了接近 <code>maxPoolSize</code> 而继续创建工作线程. 默认配置会按需创建一个工作线程
 并顺序消费队列.</p>
-<p>当前参数校验要求 <code>corePoolSize &lt;= maxPoolSize</code> 时仍使用选项中的原始
-<code>maxPoolSize</code>. 因此显式或默认使用 <code>maxPoolSize: 0</code> 时,
-<code>corePoolSize</code> 也必须为 <code>0</code>. 若需要多个核心工作线程, 应同时指定不小于它的正数
-<code>maxPoolSize</code>.</p>
+<p><code>maxPoolSize</code> 为 <code>0</code> (含默认值) 时不限制上限, <code>corePoolSize</code> 可取任意非负整数.
+指定正数 <code>maxPoolSize</code> 时, <code>corePoolSize</code> 不得大于它, 否则抛出异常.</p>
 <pre><code class="lang-js">let pool = threads.pool({
     corePoolSize: 2,
     maxPoolSize: 2,

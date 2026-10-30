@@ -409,7 +409,9 @@ speech.diarizeAsync('./meeting.wav', { identify: true }).then((result) => {
 - **[ options ]** { [SpeechDetectLanguageOptions](#speechdetectlanguageoptions) } - 语种识别选项
 - <ins>**returns**</ins> { [SpeechLanguageDetection](#speechlanguagedetection) } - 语种识别结果
 
-语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 `windows` 个窗口 (默认 3 个) 逐个识别语种, 得票最多的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 `'zh'`, `'en'`, `'ja'`. `segments` 给出每个窗口的结果: 每个窗口只判一种语言, 同一窗口 (至多 30 秒语音) 里说了几种语言时只得到其中一种; 语言在更长的语音中切换时, 可从 `segments` 看出变化.
+语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 `windows` 个窗口 (默认 3 个) 逐句判断语种, 语音不足 1.25 秒的短句并入相邻的句子. 说话时长最长的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 `'zh'`, `'en'`, `'ja'`. `segments` 给出每句的结果, 一段录音里说了几种语言时可以逐句看出来; 一句话中途换语言时只得到其中一种.
+
+3-Macaw Speech 1.3.0 不按句判断: 每个窗口只判一种语言, `segments` 为每个窗口的结果, 结果取窗口数最多的语种, 同一窗口里说了几种语言时只得到其中一种.
 
 需要插件声明 `languageId` 功能, 并已安装语种识别模型 (`langid`). 文件中没有语音时失败于 `AUDIO_TOO_SHORT`. 其他规则见 [离线分析](#离线分析).
 
@@ -842,7 +844,7 @@ try {
 [speech.detectLanguage](#m-detectlanguage) 与 [speech.detectLanguageAsync](#m-detectlanguageasync) 的选项.
 
 - **[ model ]** { [string](dataTypes#string) } - 语种识别模型 ID (`langid` 类), 默认为默认语种识别模型
-- **[ windows = `3` ]** { [number](dataTypes#number) } - 参与投票的语音窗口数, `1..60` 的整数; 每个窗口至多 30 秒语音, 60 个窗口可覆盖 30 分钟
+- **[ windows = `3` ]** { [number](dataTypes#number) } - 判断的语音窗口数, `1..60` 的整数; 每个窗口至多 30 秒语音, 60 个窗口可覆盖 30 分钟
 - **[ onProgress ]** { [Function](dataTypes#function) } - 进度回调, 单位为音频毫秒
 
 ### SpeechTagOptions
@@ -906,9 +908,9 @@ try {
 
 [speech.detectLanguage](#m-detectlanguage) 与 [speech.detectLanguageAsync](#m-detectlanguageasync) 的结果.
 
-- **language** { [string](dataTypes#string) } - 得票最多的语种, 平票时取先出现的
-- **candidates** {{ language: [string](dataTypes#string); score: [number](dataTypes#number) }}[] - 得到选票的全部语种, 按票数从多到少排列; `score` 为得票窗口的占比 (`0..1`)
-- **segments** {{ startMillis: [number](dataTypes#number); endMillis: [number](dataTypes#number); language: [string](dataTypes#string) }}[] - 每个投票窗口的时间与语种
+- **language** { [string](dataTypes#string) } - 说话时长最长的语种, 平票时取先出现的
+- **candidates** {{ language: [string](dataTypes#string); score: [number](dataTypes#number) }}[] - 听到的全部语种, 按时长从多到少排列; `score` 为该语种占说话时长的比例 (`0..1`)
+- **segments** {{ startMillis: [number](dataTypes#number); endMillis: [number](dataTypes#number); language: [string](dataTypes#string) }}[] - 每句的时间与语种; 并入短句的句子其时间包含句间的静音. 3-Macaw Speech 1.3.0 为每个窗口一项
 - **durationMillis** { [number](dataTypes#number) } - 音频时长, 单位为毫秒
 - **modelId** { [string](dataTypes#string) } - 实际使用的模型
 

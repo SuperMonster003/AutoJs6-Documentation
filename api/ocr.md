@@ -36,6 +36,16 @@ AutoJs6 支持 ML Kit, Paddle 和 Rapid OCR 引擎.
 
 从 AutoJs6 6.8.0 起, 普通应用中的 OCR 引擎由外部 OCR 插件提供. 调用前需在插件中心安装, 启用并授权兼容插件; 无可用引擎时识别方法会抛出插件加载异常. `engine`, `variant` 和 `profile` 选项可用于选择插件实现.
 
+Paddle OCR 的 PP-OCRv3 插件基于 ONNX Runtime, 支持 `arm64-v8a`, `armeabi-v7a`, `x86_64`, `x86` 四种 ABI, 分为中文, 英文, 繁体中文, 日语, 韩语五个语种包, 用 [profile](ocrOptionsType#p-profile) 选项选择. 原有的 Paddle Lite 实现拆分为独立插件, 用 `variant: "v3-paddle-lite"` 选择 (参阅 [variant](ocrOptionsType#p-variant)).
+
+```js
+ocr.paddle(img); // 默认使用 ONNX Runtime 中文档.
+ocr.paddle(img, { profile: 'ja' }); // 使用日语语种包, 需已安装.
+ocr.paddle(img, { variant: 'v3-paddle-lite' }); // 使用 Paddle Lite 版.
+ocr.paddle(img, { engineId: 'paddle-ocr-pp-ocrv3-ko' }); // 指定具体插件.
+ocr.paddle(img, { useSlim: true }); // 使用精简模型.
+```
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">ocr</p>
@@ -600,6 +610,6 @@ ocr.rapid.detect(image);
 
 直接调用 `ocr(...)`, `ocr.recognizeText(...)` 或 `ocr.detect(...)` 时使用当前工作模式. 使用 `ocr.mlkit`, `ocr.paddle` 或 `ocr.rapid` 时固定选择对应引擎, 更适合需要明确引擎的脚本.
 
-自动模式下, `ocr(...)`, `ocr.recognizeText(...)` 和 `ocr.detect(...)` 每次调用都会重新选择插件, 并让 `engine`, `engineId`, `variant` 选项参与筛选. 因此单次调用可以选择不同于 `ocr.mode` 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.
+自动模式下, `ocr(...)`, `ocr.recognizeText(...)` 和 `ocr.detect(...)` 每次调用都会重新选择插件, 并让 `engine`, `engineId`, `variant`, `profile` 选项参与筛选. 因此单次调用可以选择不同于 `ocr.mode` 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.
 
 显式的 `options.mode` 仅作用于本次调用. 省略该属性时沿用脚本的选择方式; 显式设置 `auto`, 空字符串或 nullish 值时, 即使脚本处于固定模式, 本次调用也会自动选择. 引擎专用入口 `ocr.mlkit(...)`, `ocr.paddle(...)` 和 `ocr.rapid(...)` 的工作模式优先于 `options.mode`.

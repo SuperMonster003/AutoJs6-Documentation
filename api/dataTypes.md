@@ -1788,6 +1788,34 @@ if (!isNullish(clickToStart)) {
 }
 ```
 
+### [p] extras
+
+**`6.8.0`** **`READONLY`**
+
+- { [object](dataTypes#object) }
+
+OCR 引擎为此结果附带的额外信息, 引擎未提供时为空对象. 可用的键取决于引擎和插件, 如 PP-OCRv3 的 ONNX Runtime 版提供:
+
+| 键 | 类型 | 说明 |
+|---|---|---|
+| `quad` | [number](dataTypes#number)[[]](dataTypes#array) | 文本框四边形的顶点坐标 `[x1, y1, x2, y2, ...]`, 指定识别区域时与 [bounds](#p-bounds) 一样已换算到完整图像 |
+| `executionProvider` | [string](dataTypes#string) | 实际使用的执行提供器, `"cpu"` 或 `"nnapi"` |
+
+插件返回的值按以下规则转换:
+
+- 布尔值和字符串保持不变, 字符转换为字符串.
+- 数字转换为 [number](dataTypes#number), 超过 2 的 53 次方的长整数会损失精度.
+- 数组和集合转换为 [Array](dataTypes#array), 嵌套的 Bundle 和字符串键的 Map 递归转换为对象.
+- `null` 保持不变.
+- 其他类型的键或数组元素被丢弃, 并在日志中记录.
+
+使用 [mergeLine](ocrOptionsType#p-mergeline) 合并同一行的结果时, 只保留各片段取值相同的键, 因此由多个片段合并的结果没有 `quad`.
+
+```js
+let results = ocr.paddle.detect(img);
+results.forEach(o => console.log(o.text, o.extras.quad));
+```
+
 ### [m] compareTo
 
 #### compareTo(other)

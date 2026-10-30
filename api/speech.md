@@ -409,7 +409,7 @@ speech.diarizeAsync('./meeting.wav', { identify: true }).then((result) => {
 - **[ options ]** { [SpeechDetectLanguageOptions](#speechdetectlanguageoptions) } - 语种识别选项
 - <ins>**returns**</ins> { [SpeechLanguageDetection](#speechlanguagedetection) } - 语种识别结果
 
-语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 `windows` 个窗口 (默认 3 个) 逐个识别语种, 得票最多的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 `'zh'`, `'en'`, `'ja'`. `segments` 给出每个窗口的结果, 可用于含多种语言的文件.
+语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 `windows` 个窗口 (默认 3 个) 逐个识别语种, 得票最多的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 `'zh'`, `'en'`, `'ja'`. `segments` 给出每个窗口的结果: 每个窗口只判一种语言, 同一窗口 (至多 30 秒语音) 里说了几种语言时只得到其中一种; 语言在更长的语音中切换时, 可从 `segments` 看出变化.
 
 需要插件声明 `languageId` 功能, 并已安装语种识别模型 (`langid`). 文件中没有语音时失败于 `AUDIO_TOO_SHORT`. 其他规则见 [离线分析](#离线分析).
 

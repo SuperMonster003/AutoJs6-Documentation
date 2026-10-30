@@ -2,6 +2,8 @@
 
 OcrOptions 是一个代表 OCR 识别选项的接口.
 
+Node.js 与 Bun 的 OCR 方法接受相同的选项, 含义与默认值与 Rhino 一致. 宿主选定插件后按其引擎解析选项, 因此 Paddle OCR 选项不作用于其他引擎, 这一点也与 Rhino 相同.
+
 ---
 
 <p style="font: bold 2em sans-serif; color: #FF7043">OcrOptions</p>
@@ -250,8 +252,6 @@ let [result] = ocr.paddle.detect(img, { useOpenCL: true });
 console.log(result.extras.executionProvider); // "nnapi" 或 "cpu".
 ```
 
-Node.js 与 Bun 的 OCR 方法同样接受此选项.
-
 ---
 
 ### [p?] mergeLine
@@ -262,7 +262,7 @@ Node.js 与 Bun 的 OCR 方法同样接受此选项.
 
 合并后的 [extras](dataTypes#p-extras) 只保留各片段取值相同的键.
 
-此选项仅在 Rhino 脚本中可用.
+此选项只作用于返回 [OcrResult](dataTypes#ocrresult) 的方法, 如 [ocr.detect](ocr#m-detect). [recognizeText](ocr#m-recognizetext) 不合并.
 
 当 [splitWords](#p-splitwords) 或 [useWordSegmentation](#p-usewordsegmentation) 为 `true` 时, 此选项强制按 `false` 处理.
 

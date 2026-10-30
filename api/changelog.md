@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [OcrOptions](ocrOptionsType): Node.js 与 Bun 的 OCR 方法接受与 Rhino 相同的选项, 含义与默认值一致, 包括 [mergeLine](ocrOptionsType#p-mergeline).
+
 - `更新` [光学字符识别 (OCR)](ocr) 的 Node.js 与 Bun 识别结果: 带有 [extras](dataTypes#p-extras) 属性, 并接受 [useOpenCL](ocrOptionsType#p-useopencl) 选项.
 
 - `修复` [线程 (Threads)](threads) 的 [threads.pool](threads#m-pool): `maxPoolSize` 为 `0` (含默认值) 时不限制上限, `corePoolSize` 可取任意非负整数.

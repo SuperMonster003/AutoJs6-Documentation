@@ -4,7 +4,7 @@
     {
       "textRaw": "OcrOptions",
       "name": "ocroptions",
-      "desc": "<p>OcrOptions 是一个代表 OCR 识别选项的接口.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">OcrOptions</p>\n\n<hr>\n",
+      "desc": "<p>OcrOptions 是一个代表 OCR 识别选项的接口.</p>\n<p>Node.js 与 Bun 的 OCR 方法接受相同的选项, 含义与默认值与 Rhino 一致. 宿主选定插件后按其引擎解析选项, 因此 Paddle OCR 选项不作用于其他引擎, 这一点也与 Rhino 相同.</p>\n<hr>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">OcrOptions</p>\n\n<hr>\n",
       "modules": [
         {
           "textRaw": "[p?] region",
@@ -148,14 +148,14 @@
         {
           "textRaw": "[p?] useOpenCL",
           "name": "[p?]_useopencl",
-          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用 OpenCL.</p>\n<p>PP-OCRv3 的 ONNX Runtime 版没有 OpenCL 后端, 此选项映射为 NNAPI 执行提供器; Android API 低于 27 或 NNAPI 不可用时回退到 CPU. 实际使用的执行提供器可通过识别结果的 <a href=\"dataTypes#p-extras\">extras</a> 读取:</p>\n<pre><code class=\"lang-js\">let [result] = ocr.paddle.detect(img, { useOpenCL: true });\nconsole.log(result.extras.executionProvider); // &quot;nnapi&quot; 或 &quot;cpu&quot;.\n</code></pre>\n<p>Node.js 与 Bun 的 OCR 方法同样接受此选项.</p>\n<hr>\n",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用 OpenCL.</p>\n<p>PP-OCRv3 的 ONNX Runtime 版没有 OpenCL 后端, 此选项映射为 NNAPI 执行提供器; Android API 低于 27 或 NNAPI 不可用时回退到 CPU. 实际使用的执行提供器可通过识别结果的 <a href=\"dataTypes#p-extras\">extras</a> 读取:</p>\n<pre><code class=\"lang-js\">let [result] = ocr.paddle.detect(img, { useOpenCL: true });\nconsole.log(result.extras.executionProvider); // &quot;nnapi&quot; 或 &quot;cpu&quot;.\n</code></pre>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] useOpenCL"
         },
         {
           "textRaw": "[p?] mergeLine",
           "name": "[p?]_mergeline",
-          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将同一文本行的识别结果合并.</p>\n<p>合并后的 <a href=\"dataTypes#p-extras\">extras</a> 只保留各片段取值相同的键.</p>\n<p>此选项仅在 Rhino 脚本中可用.</p>\n<p>当 <a href=\"#p-splitwords\">splitWords</a> 或 <a href=\"#p-usewordsegmentation\">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>\n<hr>\n",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将同一文本行的识别结果合并.</p>\n<p>合并后的 <a href=\"dataTypes#p-extras\">extras</a> 只保留各片段取值相同的键.</p>\n<p>此选项只作用于返回 <a href=\"dataTypes#ocrresult\">OcrResult</a> 的方法, 如 <a href=\"ocr#m-detect\">ocr.detect</a>. <a href=\"ocr#m-recognizetext\">recognizeText</a> 不合并.</p>\n<p>当 <a href=\"#p-splitwords\">splitWords</a> 或 <a href=\"#p-usewordsegmentation\">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] mergeLine"
         },

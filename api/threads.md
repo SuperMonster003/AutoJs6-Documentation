@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `threads`, 全局 1 项 | - | - | - |
-| 状态 | 已支持 9 项 | 待补 9 项 | 待补 9 项 | 待补 9 项 |
+| 入口 | `threads`, 全局 1 项 | `autojs6:threads` | `autojs6:threads` | - |
+| 状态 | 已支持 9 项 | 已支持 (本地实现) 9 项 | 已支持 (本地实现) 9 项 | 待补 9 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 
@@ -14,7 +14,7 @@
 
 | 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| `VolatileDispose` (3 项) | 已支持 3 项 | 待补 3 项 | 待补 3 项 | 待补 3 项 |
+| `VolatileDispose` (3 项) | 已支持 3 项 | 已支持 (本地实现) 3 项 | 已支持 (本地实现) 3 项 | 待补 3 项 |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

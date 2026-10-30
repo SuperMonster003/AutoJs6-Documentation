@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `qrcode` | `autojs6:compat` (经 compat) | - | - |
-| 状态 | 已支持 4 项 | 已支持 4 项 | 待补 4 项 | 待补 4 项 |
+| 入口 | `qrcode` | `autojs6:qrcode` | `autojs6:qrcode` | - |
+| 状态 | 已支持 4 项 | 已支持 4 项 | 已支持 4 项 | 待补 4 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

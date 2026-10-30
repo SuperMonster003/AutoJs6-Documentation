@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `keys` | `autojs6:compat` (经 compat) | - | `host.keys` |
-| 状态 | 已支持 12 项 | 已支持 12 项 | 待补 12 项 | 已支持 (本地实现) 12 项 |
+| 入口 | `keys` | `autojs6:keys` | `autojs6:keys` | `host.keys` |
+| 状态 | 已支持 12 项 | 已支持 12 项 | 已支持 12 项 | 已支持 (本地实现) 12 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

@@ -6,7 +6,7 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `autojs6:compat` (经 compat), `$autojs.species` | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `$autojs.species` | `host.global`, `host.species`, `host.coordinates`, `host.clipboard` |
-| 状态 | 已支持 98 项 | 已支持 31 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 12 项 | 已支持 29 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 14 项 | 已支持 (本地实现) 63 项, 需授权 27 项, 不适用 5 项, 待补 3 项 |
+| 状态 | 已支持 98 项 | 已支持 32 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 11 项 | 已支持 31 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 12 项 | 已支持 (本地实现) 63 项, 需授权 27 项, 不适用 5 项, 待补 3 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `ui.toast` 10 项, `accessibility.control` 5 项, `clipboard.control` 2 项 |
 
 差异项 (60 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -56,7 +56,7 @@
 | `setScaleBaseY` | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBaseY` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBaseY` |
 | `setScaleBases` | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `setScaleBases` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.setScaleBases` |
 | `setScreenMetrics` | <span title="bridged">已支持</span>: `setScreenMetrics` (`autojs6:system`) | <span title="bridged">已支持</span>: `setScreenMetrics` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.setScreenMetrics` |
-| `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `sleep` | <span title="bridged">已支持</span>, 经 compat: `sleep` (`autojs6:compat`) | <span title="bridged">已支持</span>: `sleep` (`autojs6:system`) | <span title="pending">待补</span> |
 | `stop` | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="bridged">已支持</span>: `stop` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.stop` |
 | `toString` | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) | <span title="not-portable: rhino-only">不适用</span> (仅限 Rhino 引擎) |
 | `toastError` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastError` |
@@ -70,7 +70,7 @@
 | `toastverbose` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastverbose` |
 | `toastwarn` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="capability-gated">需授权</span> `ui.toast`: `host.global.toastwarn` |
 | `unwrapJavaObject` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` | <span title="not-portable: java-prototype">不适用</span> (需要 Java 对象), 等价写法: `java module handles (java.create / java.callInstance / java.callStatic)` |
-| `wait` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `wait` | <span title="bridged">已支持</span>: `wait` (`autojs6:system`) | <span title="bridged">已支持</span>: `wait` (`autojs6:system`) | <span title="pending">待补</span> |
 | `waitForActivity` | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="bridged">已支持</span>: `waitForActivity` (`autojs6:system`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.global.waitForActivity` |
 | `waitForPackage` | <span title="bridged">已支持</span>: `waitForPackage` (`autojs6:system`) | <span title="bridged">已支持</span>: `waitForPackage` (`autojs6:system`) | <span title="capability-gated">需授权</span> `accessibility.control`: `host.global.waitForPackage` |
 

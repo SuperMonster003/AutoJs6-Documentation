@@ -5,8 +5,8 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `timers`, 全局 8 项 | `autojs6:tasks` | `autojs6:tasks` | `host.tasks` |
-| 状态 | 已支持 26 项 | 已支持 10 项, 不适用 12 项, 待补 4 项 | 已支持 10 项, 不适用 12 项, 待补 4 项 | 需授权 10 项, 不适用 6 项, 待补 10 项 |
+| 入口 | `timers`, 全局 8 项 | `autojs6:tasks`, `autojs6:timers` | `autojs6:tasks`, `autojs6:timers` | `host.tasks` |
+| 状态 | 已支持 26 项 | 已支持 10 项, 已支持 (本地实现) 4 项, 不适用 12 项 | 已支持 10 项, 已支持 (本地实现) 4 项, 不适用 12 项 | 需授权 10 项, 不适用 6 项, 待补 10 项 |
 | 授权 | - | - | - | `tasks.control` 10 项 |
 
 差异项 (15 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -16,8 +16,8 @@
 | `clearImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
 | `clearInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
 | `clearTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
-| `timers.keepAlive`, `keepAlive` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `loop` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `timers.keepAlive`, `keepAlive` | <span title="local-shim">已支持 (本地实现)</span>: `keepAlive` (`autojs6:timers`) | <span title="local-shim">已支持 (本地实现)</span>: `keepAlive` (`autojs6:timers`) | <span title="pending">待补</span> |
+| `loop` | <span title="local-shim">已支持 (本地实现)</span>: `loop` (`autojs6:timers`) | <span title="local-shim">已支持 (本地实现)</span>: `loop` (`autojs6:timers`) | <span title="pending">待补</span> |
 | `setImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
 | `setInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
 | `setTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `global setTimeout / setInterval / setImmediate and their clear functions` |
@@ -26,7 +26,7 @@
 | `timers.clearTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.clearTimeout` | <span title="pending">待补</span> |
 | `timers.setImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setImmediate` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setImmediate` | <span title="pending">待补</span> |
 | `timers.setInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setInterval` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setInterval` | <span title="pending">待补</span> |
-| `timers.setIntervalExt` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `timers.setIntervalExt` | <span title="local-shim">已支持 (本地实现)</span>: `setIntervalExt` (`autojs6:timers`) | <span title="local-shim">已支持 (本地实现)</span>: `setIntervalExt` (`autojs6:timers`) | <span title="pending">待补</span> |
 | `timers.setTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setTimeout` | <span title="not-portable: runtime-native">不适用</span> (运行时自带等价功能), 等价写法: `node:timers.setTimeout` | <span title="pending">待补</span> |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).

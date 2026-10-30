@@ -343,18 +343,55 @@
 <td><code>web</code>, 全局 3 项</td>
 <td><code>autojs6:web</code></td>
 <td><code>autojs6:web</code></td>
-<td>-</td>
+<td><code>host.web</code></td>
 </tr>
 <tr>
 <td>状态</td>
 <td>已支持 7 项</td>
 <td>已支持 7 项</td>
 <td>已支持 7 项</td>
-<td>待补 7 项</td>
+<td>已支持 (本地实现) 3 项, 需授权 4 项</td>
+</tr>
+<tr>
+<td>授权</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+<td><code>ui.layout</code> 4 项</td>
 </tr>
 </tbody>
 </table>
-<p>各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.</p>
+<p>差异项 (3 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.</p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>Node.js 主线程</th>
+<th>Node.js Worker</th>
+<th>Bun</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>newWebSocket</code></td>
+<td><span title="bridged">已支持</span>, 经 web</td>
+<td><span title="bridged">已支持</span>, 经 web</td>
+<td><span title="local-shim">已支持 (本地实现)</span></td>
+</tr>
+<tr>
+<td><code>web.ByteString</code></td>
+<td><span title="bridged">已支持</span></td>
+<td><span title="bridged">已支持</span></td>
+<td><span title="local-shim">已支持 (本地实现)</span></td>
+</tr>
+<tr>
+<td><code>web.newWebSocket</code></td>
+<td><span title="bridged">已支持</span></td>
+<td><span title="bridged">已支持</span></td>
+<td><span title="local-shim">已支持 (本地实现)</span></td>
+</tr>
+</tbody>
+</table>
 <p>Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 <a href="runtimeApis.html#runtimeapis">运行时 API</a>.</p>
 <!-- runtime-support:end -->
 <p>在应用里显示网页内容, 而不是打开独立的浏览器, 此时可使用 WebView 类, 以实现在 <a href="activity.html">activity</a> 中显示网页内容.</p>

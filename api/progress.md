@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-31 Node.js 与 Bun 桥接调用的相对路径 (api-coverage Q120 (b)): [运行时 API](runtimeApis#相对路径).
+
 2026-10-30 Node.js 与 Bun 的 colors.theme, gallery, files.batchRename 与 speech 的声纹和音频分析接口 (api-coverage P3.5 / P4.5): [运行时 API](runtimeApis).
 
 2026-10-30 Node.js 与 Bun 的 OCR 选项与 Rhino 一致 (PP-OCRv3 路线图 Q28): [OcrOptions](ocrOptionsType) 与 [OcrResult](dataTypes#ocrresult).

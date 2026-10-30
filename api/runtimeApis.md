@@ -20,6 +20,12 @@ AutoJs6 的 Rhino, Node.js Runtime 和 Bun Runtime 使用独立的执行环境. 
 
 Node.js 脚本与项目默认不限执行时长, 与 Rhino 脚本相同, 可随时停止. 项目可在 project.json 的 node 配置中设置 `timeoutMs` (毫秒) 作为执行总预算: 从 Node.js Runtime 插件收到请求时开始计时, 包含排队与工作区准备, 耗尽后脚本停止并报告 `ERR_AUTOJS6_SCRIPT_TIMEOUT`; 未设置或为 0 时不限. TypeScript 项目设置的预算不少于 30000 毫秒. 运行期间的输出 (console.log 及 process.stdout / process.stderr) 逐段转发到 AutoJs6 控制台, 不等脚本结束.
 
+### 相对路径
+
+Node.js 与 Bun 的 `process.cwd()` 是运行时插件私有目录里的项目副本, 宿主进程无法读写. 由宿主打开文件的调用 (zip, files.open, files.toFile) 因此按脚本的源目录解析相对路径, 与 Rhino 相同; Node.js 可经 `engines.myEngine().hostCwd` 读取这个目录. 写进 `process.cwd()` 的文件不能直接交给这些调用, 要先放到共享存储 (例如以 `files.sdcardPath` 开头的路径).
+
+Node.js 的其他 files 方法在插件进程内执行, 相对路径按 `process.cwd()` 解析.
+
 ## Node.js 拼音
 
 **`Async`**

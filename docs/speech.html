@@ -1203,7 +1203,7 @@ result.segments.forEach(s =&gt; console.log(s.speaker, s.startMillis, s.endMilli
 <li><strong>[ options ]</strong> { <span class="type"><a href="#speech_speechdetectlanguageoptions">SpeechDetectLanguageOptions</a></span> } - 语种识别选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#speech_speechlanguagedetection">SpeechLanguageDetection</a></span> } - 语种识别结果</li>
 </ul>
-<p>语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 <code>windows</code> 个窗口 (默认 3 个) 逐个识别语种, 得票最多的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 <code>&#39;zh&#39;</code>, <code>&#39;en&#39;</code>, <code>&#39;ja&#39;</code>. <code>segments</code> 给出每个窗口的结果, 可用于含多种语言的文件.</p>
+<p>语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 <code>windows</code> 个窗口 (默认 3 个) 逐个识别语种, 得票最多的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 <code>&#39;zh&#39;</code>, <code>&#39;en&#39;</code>, <code>&#39;ja&#39;</code>. <code>segments</code> 给出每个窗口的结果: 每个窗口只判一种语言, 同一窗口 (至多 30 秒语音) 里说了几种语言时只得到其中一种; 语言在更长的语音中切换时, 可从 <code>segments</code> 看出变化.</p>
 <p>需要插件声明 <code>languageId</code> 功能, 并已安装语种识别模型 (<code>langid</code>). 文件中没有语音时失败于 <code>AUDIO_TOO_SHORT</code>. 其他规则见 <a href="#speech_4">离线分析</a>.</p>
 <pre><code class="lang-js">let r = speech.detectLanguage(&#39;./voice.mp3&#39;, { windows: 5 });
 console.log(r.language, JSON.stringify(r.candidates));

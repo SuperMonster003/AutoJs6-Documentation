@@ -7,7 +7,7 @@
 | --- | --- | --- | --- | --- |
 | 入口 | 全局 4 项 | `autojs6:selector` | `autojs6:selector` | `host.selector` |
 | 状态 | 已支持 4 项 | 已支持 4 项 | 已支持 4 项 | 需授权 4 项 |
-| 授权 | - | - | - | `flow.control` 4 项 |
+| 授权 | - | - | - | `accessibility.control` 4 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

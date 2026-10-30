@@ -819,7 +819,7 @@ try {
 [speech.models.importFile](#m-modelsimportfile) 的选项. 与目录条目一致的归档只需 `acceptLicense` 与 `onProgress`.
 
 - **[ id ]** { [string](dataTypes#string) } - 目录模型 ID (要求归档包含该模型), 或导入模型的新 ID
-- **[ kind ]** { `'asr'` | `'tts'` | `'kws'` | `'vad'` } - 导入模型的类别
+- **[ kind ]** { `'asr'` | `'kws'` | `'tts'` } - 导入模型的类别, 以 "用户导入" 身份登记时只能是这三类, 其他值失败于 `INVALID_OPTIONS`. `vad`, `speaker`, `segment`, `langid` 与 `tagger` 类只有目录模型: 经 [speech.models.install](#m-modelsinstall) 下载, 或导入与目录条目一致的归档
 - **[ modelType ]** { [string](dataTypes#string) } - 导入模型的类型, 如 `'online-transducer'`, `'sense-voice'`, `'offline-transducer'`, `'kws-transducer'`, `'vits'`, `'matcha'`, `'kokoro'`
 - **[ name ]** { [string](dataTypes#string) } - 显示名称, 最多 128 个字符
 - **[ languages ]** { [string](dataTypes#string)[[]](dataTypes#array) } - 支持的语言, 1 - 32 个语言标签

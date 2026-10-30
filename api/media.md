@@ -5,10 +5,15 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `media` | `autojs6:compat` (经 compat) | - | - |
-| 状态 | 已支持 9 项 | 已支持 9 项 | 待补 9 项 | 待补 9 项 |
+| 入口 | `media` | `autojs6:media` | `autojs6:media` | `host.media` |
+| 状态 | 已支持 9 项 | 已支持 9 项 | 已支持 9 项 | 需授权 9 项 |
+| 授权 | - | - | - | `media.control` 8 项, `media.library` 1 项 |
 
-各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+差异项 (1 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+
+| API | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- |
+| `media.scanFile` | <span title="bridged">已支持</span> | <span title="bridged">已支持</span> | <span title="capability-gated">需授权</span> `media.library` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

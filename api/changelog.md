@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [设备 (Device)](device), [传感器 (Sensors)](sensors) 与 [多媒体 (Media)](media) 页的运行时支持表: Node.js 主线程与 Worker 现在提供 device 的全部成员 (Build 字段与 buildDisplay / baseOS / securityPatch / codename, pageSize, getMarketName, manufacturers / brands / roms 的判断, digest, isManufacturer, keepAwake 与可省略时长的 keepScreenOn / keepScreenDim, vibrate 的时长数组与摩尔斯电码重载, cancelVibration, wakeUpIfNeeded, 屏幕 / 电源 / 网络查询, 以及 rotation / orientation / imei / serial), sensors 的 Rhino 事件发射器形态 (register / unregister / unregisterAll / getSensor, sensors.delay 四档, ignoresUnsupportedSensor 与 Rhino 的 12 个传感器名称), 以及 media 的 playMusic / pauseMusic / resumeMusic / stopMusic / musicSeekTo / isMusicPlaying / getMusicDuration / getMusicCurrentPosition / scanFile (模块 autojs6:media); getIMEI / getSerial / getAndroidId / getMacAddress / getSharedDeviceId 与 imei / serial 需要新能力 device.identifiers (不随 device 隐含)
+
 - `新增` [插件 (Plugins)](plugins#官方插件工具表) 的 "官方插件工具表": 列出 3-Hanzi CC, AutoJs6 YOLO NCNN, Image Quantization, 3-Stack Archive 与 3-Macaw Speech 提供的 15 个插件工具 (opencc_convert, yolo_detect, imagequant_quantize, archive_list / archive_read / archive_extract, 以及 speech_listen, speech_speak, speech_transcribe, speech_synthesize, speech_speaker_verify, speech_speaker_identify, speech_diarize, speech_detect_language 与 speech_tag), 每个工具写明用途, 提供插件, 最低插件版本, 参数 (类型, 是否必填与默认值), 结果字段与文件或目录输出
 
 - `修复` [插件 (Plugins)](plugins#m-toolscall) 中 plugins.tools.call 的 imagequant_quantize 示例: 参数名 colors 改为实际的 maxColors, 输出名 image 改为实际的 png (原示例会被参数校验拒绝)

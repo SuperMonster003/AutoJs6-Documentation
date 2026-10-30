@@ -455,11 +455,11 @@
 </thead>
 <tbody>
 <tr>
-<td><code>OcrResult</code> (5 项)</td>
-<td>已支持 5 项</td>
-<td>不适用 5 项 (需要 Java 对象)</td>
-<td>不适用 5 项 (需要 Java 对象)</td>
-<td>不适用 5 项 (需要 Java 对象)</td>
+<td><code>OcrResult</code> (6 项)</td>
+<td>已支持 6 项</td>
+<td>不适用 6 项 (需要 Java 对象)</td>
+<td>不适用 6 项 (需要 Java 对象)</td>
+<td>不适用 6 项 (需要 Java 对象)</td>
 </tr>
 </tbody>
 </table>
@@ -468,6 +468,13 @@
 <p>ocr 模块用于识别图像中的文本.</p>
 <p>AutoJs6 支持 ML Kit, Paddle 和 Rapid OCR 引擎.</p>
 <p>从 AutoJs6 6.8.0 起, 普通应用中的 OCR 引擎由外部 OCR 插件提供. 调用前需在插件中心安装, 启用并授权兼容插件; 无可用引擎时识别方法会抛出插件加载异常. <code>engine</code>, <code>variant</code> 和 <code>profile</code> 选项可用于选择插件实现.</p>
+<p>Paddle OCR 的 PP-OCRv3 插件基于 ONNX Runtime, 支持 <code>arm64-v8a</code>, <code>armeabi-v7a</code>, <code>x86_64</code>, <code>x86</code> 四种 ABI, 分为中文, 英文, 繁体中文, 日语, 韩语五个语种包, 用 <a href="ocrOptionsType.html#ocroptionstype_p_profile">profile</a> 选项选择. 原有的 Paddle Lite 实现拆分为独立插件, 用 <code>variant: &quot;v3-paddle-lite&quot;</code> 选择 (参阅 <a href="ocrOptionsType.html#ocroptionstype_p_variant">variant</a>).</p>
+<pre><code class="lang-js">ocr.paddle(img); // 默认使用 ONNX Runtime 中文档.
+ocr.paddle(img, { profile: &#39;ja&#39; }); // 使用日语语种包, 需已安装.
+ocr.paddle(img, { variant: &#39;v3-paddle-lite&#39; }); // 使用 Paddle Lite 版.
+ocr.paddle(img, { engineId: &#39;paddle-ocr-pp-ocrv3-ko&#39; }); // 指定具体插件.
+ocr.paddle(img, { useSlim: true }); // 使用精简模型.
+</code></pre>
 <hr>
 <p style="font: bold 2em sans-serif; color: #FF7043">ocr</p>
 
@@ -865,7 +872,7 @@ ocr.paddle.recognizeText(image);
 ocr.rapid.detect(image);
 </code></pre>
 <p>直接调用 <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 或 <code>ocr.detect(...)</code> 时使用当前工作模式. 使用 <code>ocr.mlkit</code>, <code>ocr.paddle</code> 或 <code>ocr.rapid</code> 时固定选择对应引擎, 更适合需要明确引擎的脚本.</p>
-<p>自动模式下, <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 和 <code>ocr.detect(...)</code> 每次调用都会重新选择插件, 并让 <code>engine</code>, <code>engineId</code>, <code>variant</code> 选项参与筛选. 因此单次调用可以选择不同于 <code>ocr.mode</code> 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.</p>
+<p>自动模式下, <code>ocr(...)</code>, <code>ocr.recognizeText(...)</code> 和 <code>ocr.detect(...)</code> 每次调用都会重新选择插件, 并让 <code>engine</code>, <code>engineId</code>, <code>variant</code>, <code>profile</code> 选项参与筛选. 因此单次调用可以选择不同于 <code>ocr.mode</code> 当前读值的引擎, 但不会改变脚本的选择方式. 选定的插件会用于本次调用, 已开始的识别不会因后续开关变化而主动迁移; 下一次调用会使用新的插件状态.</p>
 <p>显式的 <code>options.mode</code> 仅作用于本次调用. 省略该属性时沿用脚本的选择方式; 显式设置 <code>auto</code>, 空字符串或 nullish 值时, 即使脚本处于固定模式, 本次调用也会自动选择. 引擎专用入口 <code>ocr.mlkit(...)</code>, <code>ocr.paddle(...)</code> 和 <code>ocr.rapid(...)</code> 的工作模式优先于 <code>options.mode</code>.</p>
 
         </div>

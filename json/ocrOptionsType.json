@@ -53,14 +53,14 @@
         {
           "textRaw": "[p?] variant",
           "name": "[p?]_variant",
-          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 引擎变体.</p>\n<p>Rapid OCR 模式会将 <code>v3</code> 和 <code>v6</code> 分别规范化为 <code>pp-ocrv3</code> 和 <code>pp-ocrv6</code>.</p>\n<hr>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 引擎变体.</p>\n<p>Paddle OCR 的 PP-OCRv3 有两个变体: <code>&quot;v3&quot;</code> 为 ONNX Runtime 版插件, <code>&quot;v3-paddle-lite&quot;</code> 为 Paddle Lite 版插件.</p>\n<p>未指定 <code>engineId</code>, <code>variant</code> 和 <a href=\"#p-profile\">profile</a> 且插件中心未设置优先级时, 选择版本号最高的 Paddle OCR 插件; 版本号相同时优先选择声明为移动端默认的插件 (PP-OCRv3 为 ONNX Runtime 中文档), 仍然相同时按包名排序.</p>\n<pre><code class=\"lang-js\">ocr.paddle(img, { variant: &#39;v3-paddle-lite&#39; }); // 使用 Paddle Lite 版.\n</code></pre>\n<p>Rapid OCR 模式会将 <code>v3</code> 和 <code>v6</code> 分别规范化为 <code>pp-ocrv3</code> 和 <code>pp-ocrv6</code>.</p>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] variant"
         },
         {
           "textRaw": "[p?] profile",
           "name": "[p?]_profile",
-          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 插件配置档案. 空字符串不会传递给插件.</p>\n<hr>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>指定 OCR 插件配置档案. 空字符串不会传递给插件.</p>\n<p>此选项参与插件匹配: 只选择声明了相同配置档案的插件, 未声明配置档案的插件不匹配. 没有匹配的插件时, 调用会报告插件不可用.</p>\n<p>PP-OCRv3 的配置档案对应语种包: <code>&quot;zh&quot;</code>, <code>&quot;en&quot;</code>, <code>&quot;zh-hant&quot;</code>, <code>&quot;ja&quot;</code>, <code>&quot;ko&quot;</code>, 使用前需安装对应的语种包插件. Paddle OCR 的其他版本也可使用此选项, 如 PP-OCRv4 的 <code>&quot;mobile&quot;</code>, <code>&quot;server&quot;</code>, <code>&quot;mobile-en&quot;</code>.</p>\n<pre><code class=\"lang-js\">ocr.paddle(img, { profile: &#39;ja&#39; }); // 使用 PP-OCRv3 日语语种包.\nocr.detect(img, { engine: &#39;paddle&#39;, profile: &#39;en&#39; }); // 通用入口走同一条路径.\n</code></pre>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] profile"
         },
@@ -134,21 +134,28 @@
         {
           "textRaw": "[p?] useSlim",
           "name": "[p?]_useslim",
-          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否使用精简模型.</p>\n<hr>\n",
+          "desc": "<ul>\n<li>[ <code>true</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否使用精简模型.</p>\n<p>PP-OCRv3 的 ONNX Runtime 版使用 int8 量化模型作为精简模型, Paddle Lite 版使用官方 slim 模型.</p>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] useSlim"
         },
         {
+          "textRaw": "[p?] useCls",
+          "name": "[p?]_usecls",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否在识别前运行文字方向分类.</p>\n<p>开启后可纠正倒置 (旋转 180 度) 的文字, 耗时增加约 5-10%. 仅支持方向分类的插件使用此选项; 未设置时不传递给插件, 由插件保持自身的默认行为. PP-OCRv3 的 ONNX Runtime 版缺省不运行分类.</p>\n<hr>\n",
+          "type": "module",
+          "displayName": "[p?] useCls"
+        },
+        {
           "textRaw": "[p?] useOpenCL",
           "name": "[p?]_useopencl",
-          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用 OpenCL.</p>\n<hr>\n",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否启用 OpenCL.</p>\n<p>PP-OCRv3 的 ONNX Runtime 版没有 OpenCL 后端, 此选项映射为 NNAPI 执行提供器; Android API 低于 27 或 NNAPI 不可用时回退到 CPU. 实际使用的执行提供器可通过识别结果的 <a href=\"dataTypes#p-extras\">extras</a> 读取:</p>\n<pre><code class=\"lang-js\">let [result] = ocr.paddle.detect(img, { useOpenCL: true });\nconsole.log(result.extras.executionProvider); // &quot;nnapi&quot; 或 &quot;cpu&quot;.\n</code></pre>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] useOpenCL"
         },
         {
           "textRaw": "[p?] mergeLine",
           "name": "[p?]_mergeline",
-          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将同一文本行的识别结果合并.</p>\n<p>当 <a href=\"#p-splitwords\">splitWords</a> 或 <a href=\"#p-usewordsegmentation\">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>\n<hr>\n",
+          "desc": "<ul>\n<li>[ <code>false</code> ] { <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否将同一文本行的识别结果合并.</p>\n<p>合并后的 <a href=\"dataTypes#p-extras\">extras</a> 只保留各片段取值相同的键.</p>\n<p>当 <a href=\"#p-splitwords\">splitWords</a> 或 <a href=\"#p-usewordsegmentation\">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>\n<hr>\n",
           "type": "module",
           "displayName": "[p?] mergeLine"
         },

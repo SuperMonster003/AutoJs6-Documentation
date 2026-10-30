@@ -24,7 +24,7 @@
 
 | 返回对象 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| `OcrResult` (5 项) | 已支持 5 项 | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) | 不适用 5 项 (需要 Java 对象) |
+| `OcrResult` (6 项) | 已支持 6 项 | 不适用 6 项 (需要 Java 对象) | 不适用 6 项 (需要 Java 对象) | 不适用 6 项 (需要 Java 对象) |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

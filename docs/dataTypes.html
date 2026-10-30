@@ -422,6 +422,7 @@
 <li><span class="stability_undefined"><a href="#datatypes_p_label">[p] label</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_p_confidence">[p] confidence</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_p_bounds">[p] bounds</a></span></li>
+<li><span class="stability_undefined"><a href="#datatypes_p_extras">[p] extras</a></span></li>
 <li><span class="stability_undefined"><a href="#datatypes_m_compareto">[m] compareTo</a></span><ul>
 <li><span class="stability_undefined"><a href="#datatypes_compareto_other">compareTo(other)</a></span></li>
 </ul>
@@ -2093,6 +2094,45 @@ if (!isNullish(clickToStart)) {
     /* 点击 OCR 识别结果的位置矩形. */
     click(clickToStart.bounds);
 }
+</code></pre>
+<h3>[p] extras<span><a class="mark" href="#datatypes_p_extras" id="datatypes_p_extras">#</a></span></h3>
+<p><strong><code>6.8.0</code></strong> <strong><code>READONLY</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_object">object</a></span> }</li>
+</ul>
+<p>OCR 引擎为此结果附带的额外信息, 引擎未提供时为空对象. 可用的键取决于引擎和插件, 如 PP-OCRv3 的 ONNX Runtime 版提供:</p>
+<table>
+<thead>
+<tr>
+<th>键</th>
+<th>类型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>quad</code></td>
+<td><a href="dataTypes.html#datatypes_number">number</a><a href="dataTypes.html#datatypes_array">[]</a></td>
+<td>文本框四边形的顶点坐标 <code>[x1, y1, x2, y2, ...]</code>, 指定识别区域时与 <a href="#datatypes_p_bounds">bounds</a> 一样已换算到完整图像</td>
+</tr>
+<tr>
+<td><code>executionProvider</code></td>
+<td><a href="dataTypes.html#datatypes_string">string</a></td>
+<td>实际使用的执行提供器, <code>&quot;cpu&quot;</code> 或 <code>&quot;nnapi&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>插件返回的值按以下规则转换:</p>
+<ul>
+<li>布尔值和字符串保持不变, 字符转换为字符串.</li>
+<li>数字转换为 <a href="dataTypes.html#datatypes_number">number</a>, 超过 2 的 53 次方的长整数会损失精度.</li>
+<li>数组和集合转换为 <a href="dataTypes.html#datatypes_array">Array</a>, 嵌套的 Bundle 和字符串键的 Map 递归转换为对象.</li>
+<li><code>null</code> 保持不变.</li>
+<li>其他类型的键或数组元素被丢弃, 并在日志中记录.</li>
+</ul>
+<p>使用 <a href="ocrOptionsType.html#ocroptionstype_p_mergeline">mergeLine</a> 合并同一行的结果时, 只保留各片段取值相同的键, 因此由多个片段合并的结果没有 <code>quad</code>.</p>
+<pre><code class="lang-js">let results = ocr.paddle.detect(img);
+results.forEach(o =&gt; console.log(o.text, o.extras.quad));
 </code></pre>
 <h3>[m] compareTo<span><a class="mark" href="#datatypes_m_compareto" id="datatypes_m_compareto">#</a></span></h3>
 <h4>compareTo(other)<span><a class="mark" href="#datatypes_compareto_other" id="datatypes_compareto_other">#</a></span></h4>

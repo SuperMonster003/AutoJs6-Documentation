@@ -6,7 +6,7 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `species`, 全局 61 项 | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `toast`, `autojs6:compat` (经 compat), `ui`, `$autojs.species` | `autojs6:species`, `autojs6:system`, `autojs6:global`, `autojs6:screen_metrics`, `toast`, `ui`, `$autojs.species` | `host.global`, `host.species`, `host.coordinates`, `host.clipboard` |
-| 状态 | 已支持 98 项 | 已支持 42 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 1 项 | 已支持 42 项, 已支持 (本地实现) 50 项, 不适用 5 项, 待补 1 项 | 已支持 (本地实现) 65 项, 需授权 27 项, 不适用 5 项, 待补 1 项 |
+| 状态 | 已支持 98 项 | 已支持 42 项, 已支持 (本地实现) 51 项, 不适用 5 项 | 已支持 42 项, 已支持 (本地实现) 51 项, 不适用 5 项 | 已支持 (本地实现) 66 项, 需授权 27 项, 不适用 5 项 |
 | 授权 | - | - | - | `screen.metrics` 10 项, `ui.toast` 10 项, `accessibility.control` 5 项, `clipboard.control` 2 项 |
 
 差异项 (60 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
@@ -14,7 +14,7 @@
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
 | `HEIGHT` | <span title="bridged">已支持</span>: `HEIGHT` (`autojs6:system`) | <span title="bridged">已支持</span>: `HEIGHT` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.HEIGHT` |
-| `TODO` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `TODO` | <span title="local-shim">已支持 (本地实现)</span>: `TODO` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `TODO` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.TODO` |
 | `WIDTH` | <span title="bridged">已支持</span>: `WIDTH` (`autojs6:system`) | <span title="bridged">已支持</span>: `WIDTH` (`autojs6:system`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.WIDTH` |
 | `axios` | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `axios` (`autojs6:global`) | <span title="local-shim">已支持 (本地实现)</span>: `host.global.axios` |
 | `cX` | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="bridged">已支持</span>: `cX` (`autojs6:screen_metrics`) | <span title="capability-gated">需授权</span> `screen.metrics`: `host.coordinates.cX` |

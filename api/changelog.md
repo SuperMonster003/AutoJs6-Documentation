@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `新增` [运行时 API](runtimeApis#node-js-bun-worker-的主题色-相册与批量重命名): Node.js 与 Bun 的 colors.theme, gallery 与 files.batchRename, 均返回 Promise, 能力与授权各自独立. Node.js 与 Bun 的 speech 增加 diarize, detectLanguage, tag 与 speech.speaker
+
 - `更新` [OcrOptions](ocrOptionsType): Node.js 与 Bun 的 OCR 方法接受与 Rhino 相同的选项, 含义与默认值一致, 包括 [mergeLine](ocrOptionsType#p-mergeline).
 
 - `更新` [光学字符识别 (OCR)](ocr) 的 Node.js 与 Bun 识别结果: 带有 [extras](dataTypes#p-extras) 属性, 并接受 [useOpenCL](ocrOptionsType#p-useopencl) 选项.

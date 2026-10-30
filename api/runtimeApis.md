@@ -2007,6 +2007,14 @@ Bun 通过 AUTOJS6_HOST_CLIENT_MODULE 加载 SDK 并 createHostClient, 再使用
 | detectVoice(source, options?, callOptions?) | segments 和 durationMillis |
 | listen(options?, callOptions?) | pending 状态的 Session |
 | wake(keywords, options?, callOptions?) | pending 状态的 WakeSession |
+| diarize(file, options?, callOptions?) / diarizeAsync | 说话人分离结果 (segments, speakers, durationMillis, modelId, 以及 identify 时的 names) |
+| detectLanguage(file, options?, callOptions?) / detectLanguageAsync | 语种识别结果 (language, candidates, segments, durationMillis, modelId) |
+| tag(file, options?, callOptions?) / tagAsync | 音频标签结果 (labels 及 timeline 时的 windows) |
+| speaker.enroll(name, files, options?, callOptions?) / speaker.enrollAsync | 录入声纹后的 name, samples, durationMillis, modelId |
+| speaker.verify(name, file, options?, callOptions?) / speaker.verifyAsync | 是否为该说话人的 score, matched, threshold |
+| speaker.identify(file, options?, callOptions?) / speaker.identifyAsync | 最相近的说话人及 candidates |
+| speaker.list(callOptions?) | 已录入的说话人数组 |
+| speaker.remove(name, callOptions?) | 是否删除 |
 | synthesize(text, path, options?, callOptions?) / synthesizeAsync | 已发布 WAV 文件的路径, 大小, 采样率, 时长与模型信息 |
 | speak(text, options?, callOptions?) | 使用插件系统 TTS 引擎完成朗读的结果 |
 | models.list(filter?, callOptions?) | ModelInfo 数组, 支持 kind/language/installed 过滤 |
@@ -2182,6 +2190,47 @@ epub.EpubError 可以直接调用或带 new 创建. name 为 EpubError, code 保
 
 Bun 的 epub.control 采用短请求等待和分片结果, 不计入普通能力的单次执行 1024 次调用额度. 单次 RPC 期限, 请求/响应大小和四个并发请求限制保留. 宿主待投递的阅读器事件达到 1024 条时以 LIMIT_EXCEEDED 和 close(overflow) 结束会话. 这些运行时封装不改变 Bun 原生二进制或 Android/ABI 兼容范围.
 
+
+## Node.js / Bun / Worker 的主题色, 相册与批量重命名
+
+Node 主线程, CommonJS / ESM / 嵌套 Worker 与 Bun 提供 Rhino 的 [colors.theme](color#p-theme), [gallery](gallery) 与 [files.batchRename](files#m-batchrename). 参数规则, 错误类型与错误码同 Rhino; 全部成员返回 Promise, 因此 Rhino 的同步形态在这里需要 `await`.
+
+### 授权和入口
+
+| 接口 | Node 能力 | Bun 授权 | 需要 |
+| --- | --- | --- | --- |
+| colors.theme | theme | theme.control | 无 |
+| gallery | gallery | gallery.control | 3-Maple Image 3.4.0 或以上 |
+| files.batchRename | batch_rename | batchrename.control | Batch Rename 1.0.0 或以上 (拼音, 元数据与预设需要 1.1.0) |
+
+三个 Bun 授权各自独立, 默认关闭, 在插件中心的 Bun 运行时设置页开启, 打包应用在 bunConfig.hostCapabilities 中声明; Node 项目在 nodeConfig.permissions 中声明. 未授权时调用被拒绝: Bun 的错误码为 `NOT_GRANTED`, 并带有 capability; gallery 与 files.batchRename 的拒绝也是 GalleryError / BatchRenameError.
+
+3-Maple Image 与 Batch Rename 只接受与 AutoJs6 相同签名的调用方, 没有 3-Macaw Speech 那样的打包入口, 所以独立签名的打包应用即使声明了这两项授权, 也无法调用这两个插件 (Rhino 打包应用相同).
+
+### colors.theme
+
+get(), set(color, options?), reset(), libraries(), activate(libraryId, options?), deactivate(), next(), state(name), current(). set 与 reset 相当于在主题色页面上选择颜色, 500 ms 内的修改合并为一条 "脚本: 名称" 记录. 主题色在宿主进程内, 所以 Node 主线程, Worker 与 Bun 读写的是同一个主题色.
+
+### gallery
+
+Node 使用 `require('autojs6:gallery')` 或 `require('gallery')`, 显式兼容对象提供 `$autojs.gallery`; Bun 使用 `host.gallery`. pick, edit, convert, isAvailable 及其 Async 形态的最后一个参数是可选的 callOptions (`signal`, `timeoutMs`), 不提供时没有期限, 选择器与编辑器一直等待用户.
+
+view(paths, options?, callOptions?) 在插件接受查看器后返回 GalleryViewSession, viewAsync 在查看器显示后才返回. 会话是 EventEmitter, 事件为 open, page, error 和终结的 close; `await` 之后才添加的监听器也能收到已发生的事件. 执行保持到 close 事件; 脚本结束时查看器留给用户, 等待中的选择器与编辑器随之结束. `session.close(options?)` 返回 Promise, 其余属性同 Rhino. callOptions.signal 也结束活动的查看器, 这时 close 的 reason 为 `cancelled`.
+
+### files.batchRename
+
+可调用的 files.batchRename(paths, options, callOptions?) 与 plan, preview, apply, undo, history, presets, importPresets, deleteHistory, clearHistory, isAvailable, BatchRenameError, 以及 plan, preview, apply, undo, presets, importPresets 的 Async 形态. 方案属于本次执行, Worker 可以执行主线程的方案. onProgress 在调用方的 JS 线程运行; 抛出错误不会中断批次, 批次完成并记入日志后调用才以该错误拒绝. 脚本来不及处理时进度事件会被丢弃, 批次不受影响.
+
+```js
+"nodejs";
+let gallery = require('autojs6:gallery');
+let { batchRename } = require('files');
+let images = await gallery.pick({ multiple: true, maxCount: 3 });
+if (images) {
+    let plan = await batchRename.plan(images.map(image => image.path), { search: 'IMG_', replace: 'Photo_' });
+    if (!plan.rejected) console.log((await batchRename.apply(plan)).counts.renamed);
+}
+```
 
 ## Node.js / Bun / Worker 的 Mail
 

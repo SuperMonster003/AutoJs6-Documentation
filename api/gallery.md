@@ -5,8 +5,9 @@
 
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
-| 入口 | `gallery` | - | - | - |
-| 状态 | 已支持 11 项 | 待补 11 项 | 待补 11 项 | 待补 11 项 |
+| 入口 | `gallery` | `autojs6:gallery`, `$autojs.gallery` | `autojs6:gallery`, `$autojs.gallery` | `host.gallery` |
+| 状态 | 已支持 11 项 | 已支持 11 项 | 已支持 11 项 | 需授权 11 项 |
+| 授权 | - | - | - | `gallery.control` 11 项 |
 
 各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
 

@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-10-30 Node.js 与 Bun 的 colors.theme, gallery, files.batchRename 与 speech 的声纹和音频分析接口 (api-coverage P3.5 / P4.5): [运行时 API](runtimeApis).
+
 2026-10-30 Node.js 与 Bun 的 OCR 选项与 Rhino 一致 (PP-OCRv3 路线图 Q28): [OcrOptions](ocrOptionsType) 与 [OcrResult](dataTypes#ocrresult).
 
 2026-10-30 Node.js 与 Bun 的 OCR 结果带 extras (PP-OCRv3 路线图 Q26): [OcrResult](dataTypes#ocrresult), [OcrOptions](ocrOptionsType) (useOpenCL, mergeLine) 与 [光学字符识别 (OCR)](ocr).

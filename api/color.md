@@ -6,8 +6,8 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `colors`, `colors.theme` | `autojs6:colors` | `autojs6:colors` | `host.colors` |
-| 状态 | 已支持 91 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 82 项, 待补 9 项 | 已支持 (本地实现) 79 项, 需授权 3 项, 待补 9 项 |
-| 授权 | - | - | - | `java.interop` 3 项 |
+| 状态 | 已支持 91 项 | 已支持 9 项, 已支持 (本地实现) 82 项 | 已支持 9 项, 已支持 (本地实现) 82 项 | 已支持 (本地实现) 79 项, 需授权 12 项 |
+| 授权 | - | - | - | `theme.control` 9 项, `java.interop` 3 项 |
 
 差异项 (12 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
@@ -15,15 +15,15 @@
 | --- | --- | --- | --- |
 | `colors.extract` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
 | `colors.setPaintColor` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
-| `colors.theme.activate` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.current` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.deactivate` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.get` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.libraries` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.next` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.reset` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.set` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `colors.theme.state` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `colors.theme.activate` | <span title="bridged">已支持</span>: `theme.activate` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.activate` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.activate` |
+| `colors.theme.current` | <span title="bridged">已支持</span>: `theme.current` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.current` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.current` |
+| `colors.theme.deactivate` | <span title="bridged">已支持</span>: `theme.deactivate` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.deactivate` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.deactivate` |
+| `colors.theme.get` | <span title="bridged">已支持</span>: `theme.get` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.get` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.get` |
+| `colors.theme.libraries` | <span title="bridged">已支持</span>: `theme.libraries` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.libraries` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.libraries` |
+| `colors.theme.next` | <span title="bridged">已支持</span>: `theme.next` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.next` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.next` |
+| `colors.theme.reset` | <span title="bridged">已支持</span>: `theme.reset` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.reset` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.reset` |
+| `colors.theme.set` | <span title="bridged">已支持</span>: `theme.set` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.set` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.set` |
+| `colors.theme.state` | <span title="bridged">已支持</span>: `theme.state` (`autojs6:colors`) | <span title="bridged">已支持</span>: `theme.state` (`autojs6:colors`) | <span title="capability-gated">需授权</span> `theme.control`: `host.colors.theme.state` |
 | `colors.toColorStateList` | <span title="local-shim">已支持 (本地实现)</span> | <span title="local-shim">已支持 (本地实现)</span> | <span title="capability-gated">需授权</span> `java.interop` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).

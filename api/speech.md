@@ -6,17 +6,13 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `speech`, `speech.models`, `speech.speaker` | `autojs6:speech`, `$autojs.speech` | `autojs6:speech`, `$autojs.speech` | `host.speech` |
-| 状态 | 已支持 33 项 | 已支持 19 项, 待补 14 项 | 已支持 19 项, 待补 14 项 | 需授权 19 项, 待补 14 项 |
-| 授权 | - | - | - | `speech.control` 19 项 |
+| 状态 | 已支持 33 项 | 已支持 33 项 | 已支持 33 项 | 需授权 33 项 |
+| 授权 | - | - | - | `speech.control` 33 项 |
 
-差异项 (22 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (16 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
-| `speech.detectLanguage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.detectLanguageAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.diarize` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.diarizeAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `speech.models.getDefault` | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.getDefault` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.getDefault` |
 | `speech.models.importFile` | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.importFile` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.importFile` |
 | `speech.models.install` | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.install` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.install` |
@@ -25,16 +21,14 @@
 | `speech.models.refreshCatalog` | <span title="bridged">已支持</span>: `models.refreshCatalog` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.refreshCatalog` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.refreshCatalog` |
 | `speech.models.remove` | <span title="bridged">已支持</span>: `models.remove` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.remove` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.remove` |
 | `speech.models.setDefault` | <span title="bridged">已支持</span>: `models.setDefault` (`autojs6:speech`) | <span title="bridged">已支持</span>: `models.setDefault` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.models.setDefault` |
-| `speech.speaker.enroll` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.enrollAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.identify` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.identifyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.list` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.remove` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.verify` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.speaker.verifyAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.tag` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
-| `speech.tagAsync` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `speech.speaker.enroll` | <span title="bridged">已支持</span>: `speaker.enroll` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.enroll` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.enroll` |
+| `speech.speaker.enrollAsync` | <span title="bridged">已支持</span>: `speaker.enrollAsync` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.enrollAsync` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.enrollAsync` |
+| `speech.speaker.identify` | <span title="bridged">已支持</span>: `speaker.identify` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.identify` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.identify` |
+| `speech.speaker.identifyAsync` | <span title="bridged">已支持</span>: `speaker.identifyAsync` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.identifyAsync` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.identifyAsync` |
+| `speech.speaker.list` | <span title="bridged">已支持</span>: `speaker.list` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.list` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.list` |
+| `speech.speaker.remove` | <span title="bridged">已支持</span>: `speaker.remove` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.remove` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.remove` |
+| `speech.speaker.verify` | <span title="bridged">已支持</span>: `speaker.verify` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.verify` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.verify` |
+| `speech.speaker.verifyAsync` | <span title="bridged">已支持</span>: `speaker.verifyAsync` (`autojs6:speech`) | <span title="bridged">已支持</span>: `speaker.verifyAsync` (`autojs6:speech`) | <span title="capability-gated">需授权</span> `speech.control`: `host.speech.speaker.verifyAsync` |
 
 Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
 

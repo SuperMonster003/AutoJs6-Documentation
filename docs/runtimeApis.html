@@ -3886,7 +3886,7 @@ console.log(node.text, node.bounds);
 <h3>运行条件与覆盖范围<span><a class="mark" href="#runtimeapis_37" id="runtimeapis_37">#</a></span></h3>
 <p>纯回调, Promise 组合与计时不调用宿主, 无须无障碍授权. 选择器与前台组件等待需要配套宿主的 Flow 查询接口, Node 的 accessibility 能力, 或 Bun 默认关闭的 accessibility.control 授权, 以及调用应用内已绑定的 Android 无障碍服务. 打包应用使用自己的服务与包身份; 在 Android 设置中授权后才能执行界面查询.</p>
 <p>Flow 立即返回可被 await/Promise.resolve 接纳的对象. 回调在导入它的 JavaScript 线程执行, 支持异步回调; 纯本地链不创建宿主线程; 原生工具在宿主工作线程执行, workers 记录待定原生操作数. 每个 Worker 有独立的 defaults, pending 和 cancelAll. 主线程停止执行或 Worker 退出时, 所属计时器和未完成查询随运行时结束.</p>
-<p>本批覆盖 52 个已注册根方法名称, Flow 构造器, 核心链, 高级工具和四种事件等待. Rhino 同步 sync/await, 全局 <code>$flow</code>/waitAsync 注入与 Java UiObject 原型仍不在 portable 契约内. 使用 JavaScript 的 <code>await value</code> 或 <code>value.toPromise()</code> 读取结果. 本节限制优先于 <a href="flow.html">Rhino Flow</a> 页面中的线程, 选择器和动作说明.</p>
+<p>本批覆盖 52 个已注册根方法名称, Flow 构造器, 核心链, 高级工具和四种事件等待. 全局 <code>$flow</code>/waitAsync 注入与 Java UiObject 原型仍不在 portable 契约内. 使用 JavaScript 的 <code>await value</code>, <code>value.toPromise()</code>, <code>value.await()</code> 或 <code>value.sync(timeout?)</code> 读取结果. 本节限制优先于 <a href="flow.html">Rhino Flow</a> 页面中的线程, 选择器和动作说明.</p>
 <h3>根方法与 Flow 对象<span><a class="mark" href="#runtimeapis_flow_1" id="runtimeapis_flow_1">#</a></span></h3>
 <table>
 <thead>
@@ -4197,7 +4197,7 @@ console.log((await event).packageName);
 <p>Bun 工具与事件等待使用独立且默认关闭的 flow.control. 宿主仍按操作检查 accessibility.control, accessibility.gesture, app.control, clipboard.control, events.observe, events.toast, events.notification 等既有授权. flow.control 本身不授予这些能力. 打包应用须在项目配置中声明所需能力, 并启用自己的 Android 无障碍服务; 授权不继承宿主或其他安装包.</p>
 <p>Bun 的界面事件长轮询为控制与回调调用保留执行机会, 总并发调用上限仍为 4. flow.control 的短轮询不计入 Bun 普通桥每次执行 1024 次累计调用预算; 仍保留请求/结果大小, 并发和单次期限限制. 旧的 accessibility.control 选择器轮询继续消耗普通预算. Node 的无障碍查询沿用每秒 20 次的上限; 连续查询应控制间隔, 这同样适用于带 scope 的查询. 工具结果使用 UTF-8 分片传递, 函数参数和回调答复仍受单次请求大小限制. 每个 facade 最多同时有 64 个原生操作, 宿主执行实例最多 128 个原生工具线程; 每个客户端排队结果限制为 64 MiB, 单个操作最多保留 100000 个私有节点. 此项未改变 Bun 原生载荷或 Android/ABI 兼容矩阵.</p>
 <p>workers 现在表示当前 facade 尚未结算的原生工具/事件操作数, 纯本地链不增加它. cancelAll 取消当前待定 Flow 并向宿主传播取消. <code>await flow.dispose()</code> 取消待定工作, 关闭本 facade 的宿主客户端; 此后该 facade 的原生工具调用会拒绝. Node 主线程, 每个 Worker 与 Bun 各自拥有客户端; 延迟返回的创建结果也会在运行结束后关闭. Android 已经接受的点击/输入/启动无法通过取消撤销.</p>
-<p>Rhino 同步终结方法 sync/await, 全局 <code>$flow</code> 注入与任意 Java UiObject 方法仍不在此契约内. 下列 within/scope 和手势是 Flow 实例方法, 不增加已注册根方法名称的数量. 52 个根方法名称覆盖不代表完整 Rhino 对象与调度器等价.</p>
+<p>Flow 对象的 await() 与 sync(timeout?) 与 Rhino 同名, 但不阻塞脚本线程: 两者都返回 Promise, 要写成 <code>await value.sync()</code>. sync 超过 timeout (毫秒) 时以 <code>TIMEOUT</code> 的 <a href="flowErrorType.html">FlowError</a> 拒绝, 其 step 与 reason 都是 <code>sync</code>, 链继续运行. 全局 <code>$flow</code> 注入与任意 Java UiObject 方法仍不在此契约内. 下列 within/scope 和手势是 Flow 实例方法, 不增加已注册根方法名称的数量. 52 个根方法名称覆盖不代表完整 Rhino 对象与调度器等价.</p>
 <h3>within 与 scope<span><a class="mark" href="#runtimeapis_within_scope" id="runtimeapis_within_scope">#</a></span></h3>
 <p>Node.js Runtime 1.30.0 与 Bun Runtime 0.19.0 增加 Flow 实例的范围设置, 需要配套宿主. <code>flow.of().within(...)</code> 和 <code>flow.of().scope(...)</code> 用于从空值开始; 根模块不额外导出 within/scope.</p>
 <h4>within(cond, options?, onOk?, onError?)<span><a class="mark" href="#runtimeapis_within_cond_options_onok_onerror" id="runtimeapis_within_cond_options_onok_onerror">#</a></span></h4>

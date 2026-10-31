@@ -6,9 +6,9 @@
 | 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- | --- |
 | 入口 | `imgui` | - | - | - |
-| 状态 | 已支持 573 项 | 不适用 1 项, 待补 572 项 | 不适用 1 项, 待补 572 项 | 不适用 1 项, 待补 572 项 |
+| 状态 | 已支持 584 项 | 不适用 1 项, 待补 583 项 | 不适用 1 项, 待补 583 项 | 不适用 1 项, 待补 583 项 |
 
-差异项 (573 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
+差异项 (584 项): 下表列出入口, 状态或授权与同列多数 API 不同的 API, 未列出的 API 与同列多数一致.
 
 | API | Node.js 主线程 | Node.js Worker | Bun |
 | --- | --- | --- | --- |
@@ -32,6 +32,7 @@
 | `imgui.BeginListBox` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.BeginMenu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.BeginMenuBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.BeginMultiSelect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.BeginPopup` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.BeginPopupContextItem` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.BeginPopupContextWindow` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -93,6 +94,7 @@
 | `imgui.EndListBox` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.EndMenu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.EndMenuBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.EndMultiSelect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.EndPopup` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.EndTabBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.EndTabItem` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -154,6 +156,7 @@
 | `imgui.IsItemEdited` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.IsItemFocused` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.IsItemHovered` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.IsItemToggledSelection` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.IsItemVisible` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.IsKeyChordPressed` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.IsKeyDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -184,6 +187,7 @@
 | `imgui.Mod` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.MouseButton` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.MultiChoice` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.MultiSelectFlags` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.NewLine` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.OpenPopup` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.PlotHistogram` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -210,6 +214,7 @@
 | `imgui.SameLine` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.Selectable` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SelectableFlags` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.SelectionStorage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.Separator` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SeparatorText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetClipboardText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -219,6 +224,7 @@
 | `imgui.SetItemTooltip` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetKeyboardFocusHere` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetMoreTouch` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.SetNextItemSelectionUserData` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetNextItemShortcut` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetNextItemWidth` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.SetNextWindowBgAlpha` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -323,6 +329,7 @@
 | `imgui.beginListBox` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.beginMenu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.beginMenuBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.beginMultiSelect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.beginPopup` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.beginPopupContextItem` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.beginPopupContextWindow` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -377,6 +384,7 @@
 | `imgui.endListBox` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.endMenu` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.endMenuBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.endMultiSelect` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.endPopup` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.endTabBar` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.endTabItem` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -437,6 +445,7 @@
 | `imgui.isItemEdited` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.isItemFocused` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.isItemHovered` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.isItemToggledSelection` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.isItemVisible` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.isKeyChordPressed` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.isKeyDown` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -486,6 +495,7 @@
 | `imgui.runExample` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.sameLine` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.selectable` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.selectionStorage` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.sendKey` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.separator` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.separatorText` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
@@ -496,6 +506,7 @@
 | `imgui.setItemTooltip` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.setKeyboardFocusHere` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.setMoreTouch` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
+| `imgui.setNextItemSelectionUserData` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.setNextItemShortcut` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.setNextItemWidth` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |
 | `imgui.setNextWindowBgAlpha` | <span title="pending">待补</span> | <span title="pending">待补</span> | <span title="pending">待补</span> |

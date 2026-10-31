@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-01 Rhino 的 class 语法与继承 Java 类 (rhino-class P7.4): [类语法](classSyntax).
+
 2026-11-01 Node.js 与 Bun 的 Flow 对象增加 await 与 sync, 均返回 Promise (api-coverage Q202): [Flow](flowType) 与 [运行时 API](runtimeApis#根方法与-flow-对象).
 
 2026-10-31 PP-OCRv3 的 7 个新语种包与阿拉伯语的阅读顺序 (路线图 Q60 / Q62): [OcrOptions](ocrOptionsType) (profile, mergeLine).
@@ -359,6 +361,7 @@
 | [Context - 上下文](context) | √ |
 | [Activity - 活动](activity) | √ |
 | [Scripting Java - 脚本化 Java](scriptingJava) | √ |
+| [Class Syntax - 类语法](classSyntax) | √ |
 | [Android API Level - 安卓 API 级别](apiLevel) | √ |
 | [Color Table - 颜色列表](colorTable) | √ |
 | [Glossaries - 术语](glossaries) | &gt; 80% |

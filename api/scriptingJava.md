@@ -205,6 +205,8 @@ new android.view.View.OnAttachStateChangeListener({
 
 ## JavaAdapter 构造器
 
+> 注: 需要定义可复用的类, 字段或私有名时, 可以使用 `class X extends JavaClass` 写法, 参阅 [类语法](classSyntax#继承-java-类).
+
 ### 实现 Java 接口
 
 ```js

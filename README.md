@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `新增` [类语法 (Class Syntax)](https://docs.autojs6.com/#/classSyntax): Rhino 引擎的 class 语法范围, 内建类型的子类化, 继承 Java 类与接口的写法和限制, 与 JavaAdapter 的关系, 以及严格模式下 Proxy 的 set trap 要返回 true.
 - `更新` [Flow](https://docs.autojs6.com/#/flowType) 与 [运行时 API (Runtime APIs)](https://docs.autojs6.com/#/runtimeApis?id=根方法与-flow-对象): Node.js, Worker 与 Bun 的 Flow 对象增加 await() 与 sync(timeout), 两者都返回 Promise, 不阻塞脚本线程, 写作 `await chain.sync()`; 超过 timeout 时以 TIMEOUT 错误拒绝, 流程继续运行, 与 Rhino 相同
 - `更新` [OcrOptions](https://docs.autojs6.com/#/ocrOptionsType) 的 [profile](https://docs.autojs6.com/#/ocrOptionsType?id=p-profile) 与 [mergeLine](https://docs.autojs6.com/#/ocrOptionsType?id=p-mergeline): 补充 PP-OCRv3 的 7 个新语种包, 说明阿拉伯语的阅读顺序与天城文等文字的识别局限.
 - `修复` [运行时 API](https://docs.autojs6.com/#/runtimeApis?id=相对路径): Node.js 与 Bun 的 zip, files.open 与 files.toFile 的相对路径按脚本的源目录解析, 与 Rhino 相同, 不再指向宿主无法读写的插件私有目录. Node.js 的 engines.myEngine() 增加 hostCwd 属性.

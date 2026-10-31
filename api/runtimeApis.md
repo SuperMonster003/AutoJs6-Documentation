@@ -2362,7 +2362,7 @@ console.log(node.text, node.bounds);
 
 Flow 立即返回可被 await/Promise.resolve 接纳的对象. 回调在导入它的 JavaScript 线程执行, 支持异步回调; 纯本地链不创建宿主线程; 原生工具在宿主工作线程执行, workers 记录待定原生操作数. 每个 Worker 有独立的 defaults, pending 和 cancelAll. 主线程停止执行或 Worker 退出时, 所属计时器和未完成查询随运行时结束.
 
-本批覆盖 52 个已注册根方法名称, Flow 构造器, 核心链, 高级工具和四种事件等待. Rhino 同步 sync/await, 全局 `$flow`/waitAsync 注入与 Java UiObject 原型仍不在 portable 契约内. 使用 JavaScript 的 `await value` 或 `value.toPromise()` 读取结果. 本节限制优先于 [Rhino Flow](flow) 页面中的线程, 选择器和动作说明.
+本批覆盖 52 个已注册根方法名称, Flow 构造器, 核心链, 高级工具和四种事件等待. 全局 `$flow`/waitAsync 注入与 Java UiObject 原型仍不在 portable 契约内. 使用 JavaScript 的 `await value`, `value.toPromise()`, `value.await()` 或 `value.sync(timeout?)` 读取结果. 本节限制优先于 [Rhino Flow](flow) 页面中的线程, 选择器和动作说明.
 
 ### 根方法与 Flow 对象
 
@@ -2513,7 +2513,7 @@ Bun 的界面事件长轮询为控制与回调调用保留执行机会, 总并�
 
 workers 现在表示当前 facade 尚未结算的原生工具/事件操作数, 纯本地链不增加它. cancelAll 取消当前待定 Flow 并向宿主传播取消. `await flow.dispose()` 取消待定工作, 关闭本 facade 的宿主客户端; 此后该 facade 的原生工具调用会拒绝. Node 主线程, 每个 Worker 与 Bun 各自拥有客户端; 延迟返回的创建结果也会在运行结束后关闭. Android 已经接受的点击/输入/启动无法通过取消撤销.
 
-Rhino 同步终结方法 sync/await, 全局 `$flow` 注入与任意 Java UiObject 方法仍不在此契约内. 下列 within/scope 和手势是 Flow 实例方法, 不增加已注册根方法名称的数量. 52 个根方法名称覆盖不代表完整 Rhino 对象与调度器等价.
+Flow 对象的 await() 与 sync(timeout?) 与 Rhino 同名, 但不阻塞脚本线程: 两者都返回 Promise, 要写成 `await value.sync()`. sync 超过 timeout (毫秒) 时以 `TIMEOUT` 的 [FlowError](flowErrorType) 拒绝, 其 step 与 reason 都是 `sync`, 链继续运行. 全局 `$flow` 注入与任意 Java UiObject 方法仍不在此契约内. 下列 within/scope 和手势是 Flow 实例方法, 不增加已注册根方法名称的数量. 52 个根方法名称覆盖不代表完整 Rhino 对象与调度器等价.
 
 
 ### within 与 scope

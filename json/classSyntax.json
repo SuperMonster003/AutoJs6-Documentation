@@ -1,0 +1,86 @@
+{
+  "source": "..\\api\\classSyntax.md",
+  "modules": [
+    {
+      "textRaw": "类语法",
+      "name": "类语法",
+      "desc": "<p>AutoJs6 的 Rhino 引擎支持 ECMAScript 的 <code>class</code> 语法, 包括字段, 静态块, 私有名, 内建类型的子类化, 并可继承 Java 类与接口.</p>\n<blockquote>\n<p>注: 本章内容需要 AutoJs6 6.8.0 及以上版本 (Rhino 引擎). Node.js, Bun 等其他运行时使用各自引擎的 <code>class</code> 实现, 不适用本章的 Java 类继承.</p>\n</blockquote>\n",
+      "modules": [
+        {
+          "textRaw": "语法支持范围",
+          "name": "语法支持范围",
+          "desc": "<pre><code class=\"lang-js\">class Shape {\n    static count = 0; /* 静态字段. */\n    name = &#39;shape&#39;; /* 实例字段. */\n    #secret = 1; /* 私有字段. */\n\n    static { Shape.ready = true; } /* 静态块. */\n\n    constructor(name) {\n        this.name = name;\n        Shape.count++;\n        console.log(new.target.name); /* 实际构造的类名. */\n    }\n\n    get label() { return `shape ${this.name}`; } /* 访问器. */\n    set label(value) { this.name = value; }\n\n    describe() { return this.name; } /* 方法. */\n    static create(name) { return new this(name); } /* 静态方法. */\n\n    #hide() { return this.#secret; } /* 私有方法. */\n    static isShape(o) { return #secret in o; } /* 私有名的 in 判断. */\n}\n\nclass Circle extends Shape {\n    constructor(radius) {\n        super(&#39;circle&#39;); /* 调用父类构造器. */\n        this.radius = radius;\n    }\n    describe() { return `${super.describe()}: ${this.radius}`; } /* 调用父类方法. */\n}\n\nCircle.create(2) instanceof Shape; // true\n</code></pre>\n<table>\n<thead>\n<tr>\n<th>语法</th>\n<th>支持情况</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>class</code> 声明与表达式, <code>extends</code>, <code>super</code>, <code>new.target</code></td>\n<td>支持</td>\n</tr>\n<tr>\n<td>实例与静态的字段, 方法, 访问器, 计算属性名</td>\n<td>支持</td>\n</tr>\n<tr>\n<td>静态块 <code>static { }</code></td>\n<td>支持</td>\n</tr>\n<tr>\n<td>私有字段, 私有方法, 私有访问器, <code>#x in o</code></td>\n<td>支持</td>\n</tr>\n<tr>\n<td>生成器方法 <code>*gen() { }</code></td>\n<td>支持</td>\n</tr>\n<tr>\n<td><code>async</code> 方法与 <code>async</code> 生成器方法</td>\n<td>不支持, 解析时报错</td>\n</tr>\n<tr>\n<td>装饰器 (decorators)</td>\n<td>不支持</td>\n</tr>\n</tbody>\n</table>\n<ul>\n<li><code>class</code> 体内的代码始终是严格模式, 不加 <code>new</code> 调用类时报 TypeError.</li>\n<li><code>typeof</code> 的结果是 <code>function</code>, <code>String(Foo)</code> 返回类定义的源码片段.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "语法支持范围"
+        },
+        {
+          "textRaw": "内建类型的子类化",
+          "name": "内建类型的子类化",
+          "desc": "<p><code>extends</code> 可以继承内建构造器, <code>new</code> 按实际的类创建对象, 内建方法返回子类实例.</p>\n<pre><code class=\"lang-js\">class AppError extends Error {\n    constructor(message, code) {\n        super(message);\n        this.name = &#39;AppError&#39;;\n        this.code = code;\n    }\n}\n\nclass Stack extends Array {\n    peek() { return this[this.length - 1]; }\n}\n\nclass Counter extends Map {\n    bump(key) { return this.set(key, (this.get(key) ?? 0) + 1); }\n}\n\nlet stack = new Stack();\nstack.push(1, 2);\nstack.map(x =&gt; x * 2) instanceof Stack; // true\n\nnew Counter().bump(&#39;a&#39;).bump(&#39;a&#39;).get(&#39;a&#39;); // 2\nnew AppError(&#39;boom&#39;, 7) instanceof Error; // true\n</code></pre>\n<p>支持的内建构造器包括 <code>Object</code>, <code>Function</code>, <code>Array</code>, <code>Error</code> 及其子类型, <code>Boolean</code>, <code>Number</code>, <code>String</code>, <code>Date</code>, <code>RegExp</code>, <code>Map</code>, <code>Set</code>, <code>WeakMap</code>, <code>WeakSet</code>, <code>Promise</code>, <code>ArrayBuffer</code>, <code>DataView</code> 及各 TypedArray.</p>\n",
+          "type": "module",
+          "displayName": "内建类型的子类化"
+        },
+        {
+          "textRaw": "继承 Java 类",
+          "name": "继承_java_类",
+          "desc": "<p><code>extends</code> 的目标可以是 Java 类或接口. 类中与 Java 方法同名的函数覆盖该方法, <code>super(...)</code> 调用 Java 构造器, <code>super.m()</code> 调用 Java 父类的实现.</p>\n<pre><code class=\"lang-js\">class Worker extends java.lang.Thread {\n    count = 0;\n    constructor(name) {\n        super(name); /* 调用 Thread(String). */\n    }\n    run() {\n        this.count++;\n        console.log(`${this.getName()} runs`);\n    }\n}\n\nlet worker = new Worker(&#39;w1&#39;);\nworker.start();\nworker.join();\nworker.count; // 1\nworker instanceof Worker; // true\nworker instanceof java.lang.Thread; // true\n</code></pre>\n",
+          "modules": [
+            {
+              "textRaw": "实现接口",
+              "name": "实现接口",
+              "desc": "<p>继承单个接口时直接写接口名. 同时实现多个接口时写 <code>extends JavaAdapter(Base, I1, I2)</code>, 第一个实参是类时作为父类, 其余实参是接口.</p>\n<pre><code class=\"lang-js\">class Task extends java.lang.Runnable {\n    run() { console.log(&#39;run&#39;); }\n}\nnew java.lang.Thread(new Task()).start();\n\nclass Item extends JavaAdapter(java.lang.Object, java.lang.Runnable, java.lang.Comparable) {\n    value = 0;\n    run() { this.value++; }\n    compareTo(other) { return this.value - other.value; }\n}\n</code></pre>\n",
+              "type": "module",
+              "displayName": "实现接口"
+            },
+            {
+              "textRaw": "回调与线程",
+              "name": "回调与线程",
+              "desc": "<p>类的实例可以直接传给 Java API, Java 拿到的是适配器对象, 回到脚本时还原为同一个实例, 字段与私有名都在.</p>\n<pre><code class=\"lang-js\">class Inbox extends android.os.Handler {\n    handleMessage(message) {\n        console.log(`what: ${message.what}`);\n    }\n}\nnew Inbox(android.os.Looper.getMainLooper()).sendEmptyMessage(7);\n</code></pre>\n<p>Java 线程调用被覆盖的方法时运行在该线程上, 与 <code>new JavaAdapter</code> 的回调相同. 这类线程不属于脚本线程, 需要由脚本负责结束, 一般情况下优先使用 <a href=\"threads\">线程 (Threads)</a> 模块.</p>\n",
+              "type": "module",
+              "displayName": "回调与线程"
+            },
+            {
+              "textRaw": "继承 View 类",
+              "name": "继承_view_类",
+              "desc": "<p>继承 View 类的实例除了 Java 成员, 还带有控件对象的扩展方法 (如 <code>attr</code>, <code>on</code>, <code>click</code>) 与按 id 取子控件的能力. 这些方法以实例为 <code>this</code>, 返回控件自身时得到的仍是该实例, 可以继续链式调用.</p>\n<pre><code class=\"lang-js\">&quot;ui&quot;;\n\nclass Badge extends android.widget.TextView {\n    onDraw(canvas) {\n        super.onDraw(canvas);\n        /* 自定义绘制. */\n    }\n}\n\nui.layout(\n    &lt;vertical id=&quot;holder&quot;/&gt;\n);\n\nlet badge = new Badge(activity);\nui.holder.addView(badge);\n\nbadge.attr(&#39;text&#39;, &#39;hello&#39;);\nbadge.on(&#39;click&#39;, view =&gt; console.log(view === badge)); // true\n</code></pre>\n<p>成员的查找顺序是 类中定义的成员 &gt; Java 成员 &gt; 控件扩展. 因此与 Java 方法同名的扩展不生效, 例如 <code>class P extends android.graphics.Paint</code> 的实例上 <code>setColor</code> 是 Java 方法, 不接受颜色字符串.</p>\n",
+              "type": "module",
+              "displayName": "继承 View 类"
+            },
+            {
+              "textRaw": "继承加载的类",
+              "name": "继承加载的类",
+              "desc": "<p>继承 <code>runtime.loadDex</code> 或 <code>runtime.loadJar</code> 加载的类时, 先加载再定义类. Android 7 / 7.1 (API 24 / 25) 的 <code>runtime.loadJar</code> 由 legacy dx 转换, 不接受 Java 8 (类文件版本 52) 及以上编译的类.</p>\n<pre><code class=\"lang-js\">runtime.loadJar(&#39;./library.jar&#39;);\n\nclass Local extends Packages.com.example.Base {\n    greet() { return `${super.greet()}!`; }\n}\n</code></pre>\n",
+              "type": "module",
+              "displayName": "继承加载的类"
+            },
+            {
+              "textRaw": "限制",
+              "name": "限制",
+              "desc": "<ul>\n<li>不能继承 final 类, 非 public 类, 基本类型或数组, 类定义时报 TypeError. 不能覆盖 final 方法, 首次构造时报 TypeError.</li>\n<li>未实现的抽象方法在被调用时报 TypeError, 定义类和构造时都不检查.</li>\n<li><code>super()</code> 之前不能读 <code>this</code>, Java 对象由 <code>super()</code> 创建. Java 构造器运行期间调用被覆盖的方法时, 实例字段尚未初始化, 控件扩展也不可用.</li>\n<li>Java 只看到构造时已存在的覆盖. 之后加到原型或实例上的新方法名只对脚本可见, 已覆盖的方法名每次调用都重新查找.</li>\n<li>给可写的 Java 字段和有 setter 的 bean 属性赋值时写到 Java 对象, 其他名字成为实例的自有属性, 只对脚本可见.</li>\n<li>覆盖控件扩展方法时不能用 <code>super.attr(...)</code> 调用它, 写 <code>super.attr.call(this, ...)</code>.</li>\n<li><code>Object.keys</code>, <code>for...in</code> 与 <code>JSON.stringify</code> 只看到实例字段, 不含 Java 成员.</li>\n<li>每次脚本运行中, 每种 &quot;父类, 接口与覆盖的方法名&quot; 的组合首次构造时生成一个适配器类并转换为 dex, 同一次运行内之后的构造不再转换, 耗时与 <code>new JavaAdapter</code> 相同 (手机上暖机后约 100 ms).</li>\n</ul>\n",
+              "type": "module",
+              "displayName": "限制"
+            }
+          ],
+          "type": "module",
+          "displayName": "继承 Java 类"
+        },
+        {
+          "textRaw": "与 JavaAdapter 的关系",
+          "name": "与_javaadapter_的关系",
+          "desc": "<p><a href=\"scriptingJava#JavaAdapter-构造器\">JavaAdapter 构造器</a> 的写法不变, 两种写法生成同样的适配器类, 可以按需选用.</p>\n<table>\n<thead>\n<tr>\n<th>对比项</th>\n<th><code>class X extends JavaClass</code></th>\n<th><code>new JavaAdapter(JavaClass, {...}, args)</code></th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>结果</td>\n<td>类, 可多次 <code>new</code>, 可再被继承</td>\n<td>单个适配器对象</td>\n</tr>\n<tr>\n<td>调用父类方法</td>\n<td><code>super.m()</code></td>\n<td><code>this.super$m()</code></td>\n</tr>\n<tr>\n<td>字段与私有名</td>\n<td>支持</td>\n<td>不支持</td>\n</tr>\n<tr>\n<td><code>instanceof</code> 脚本类</td>\n<td>支持</td>\n<td>不适用</td>\n</tr>\n<tr>\n<td>构造器实参</td>\n<td><code>super(args)</code></td>\n<td><code>JavaAdapter</code> 末尾的实参</td>\n</tr>\n<tr>\n<td>多个接口</td>\n<td><code>extends JavaAdapter(Base, I1, I2)</code></td>\n<td><code>new JavaAdapter(Base, I1, I2, {...})</code></td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "与 JavaAdapter 的关系"
+        },
+        {
+          "textRaw": "严格模式下的行为",
+          "name": "严格模式下的行为",
+          "desc": "<p><code>class</code> 体内是严格模式, 下列写法在 <code>class</code> 体内与其他严格模式代码中报 TypeError, 而不是静默失败.</p>\n<ul>\n<li>Proxy 的 <code>set</code> trap 要返回 <code>true</code>. 返回 <code>false</code> (包括没有写 <code>return</code> 时的 <code>undefined</code>) 时, 严格模式下的赋值报 TypeError.</li>\n</ul>\n<pre><code class=\"lang-js\">class Store {\n    data = new Proxy({}, {\n        set(target, key, value) {\n            target[key] = value;\n            return true; /* 严格模式下必须返回 true. */\n        },\n    });\n    put(key, value) {\n        this.data[key] = value;\n    }\n}\n</code></pre>\n<ul>\n<li>给只读属性或 <code>set: undefined</code> 的访问器赋值时报 TypeError.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "严格模式下的行为"
+        }
+      ],
+      "type": "module",
+      "displayName": "类语法"
+    }
+  ]
+}

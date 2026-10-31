@@ -130,7 +130,9 @@ Rapid OCR 模式会将 `v3` 和 `v6` 分别规范化为 `pp-ocrv3` 和 `pp-ocrv6
 
 此选项参与插件匹配: 只选择声明了相同配置档案的插件, 未声明配置档案的插件不匹配. 没有匹配的插件时, 调用会报告插件不可用.
 
-PP-OCRv3 的配置档案对应语种包: `"zh"`, `"en"`, `"zh-hant"`, `"ja"`, `"ko"`, 使用前需安装对应的语种包插件. Paddle OCR 的其他版本也可使用此选项, 如 PP-OCRv4 的 `"mobile"`, `"server"`, `"mobile-en"`.
+PP-OCRv3 的配置档案对应语种包: `"zh"`, `"en"`, `"zh-hant"`, `"ja"`, `"ko"`, `"latin"`, `"arabic"`, `"cyrillic"`, `"devanagari"`, `"te"`, `"ka"`, `"ta"`, 使用前需安装对应的语种包插件. Paddle OCR 的其他版本也可使用此选项, 如 PP-OCRv4 的 `"mobile"`, `"server"`, `"mobile-en"`.
+
+`"arabic"` 的结果按从右到左的阅读顺序返回, 打包应用的内置引擎与 [mergeLine](#p-mergeline) 同样如此. `"devanagari"`, `"te"`, `"ka"`, `"ta"` 的模型对连字和写在辅音前面的元音符号识别较弱, 这类文字可能读错或漏读.
 
 ```js
 ocr.paddle(img, { profile: 'ja' }); // 使用 PP-OCRv3 日语语种包.
@@ -258,7 +260,7 @@ console.log(result.extras.executionProvider); // "nnapi" 或 "cpu".
 
 - [ `false` ] { [boolean](dataTypes#boolean) }
 
-是否将同一文本行的识别结果合并.
+是否将同一文本行的识别结果合并. 片段按阅读顺序拼接, 从右到左的文字 (如 [profile](#p-profile) 为 `"arabic"`) 从最右边的片段开始.
 
 合并后的 [extras](dataTypes#p-extras) 只保留各片段取值相同的键.
 

@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [OcrOptions](ocrOptionsType) 的 [profile](ocrOptionsType#p-profile) 与 [mergeLine](ocrOptionsType#p-mergeline): 补充 PP-OCRv3 的 7 个新语种包, 说明阿拉伯语的阅读顺序与天城文等文字的识别局限.
+
 - `修复` [运行时 API](runtimeApis#相对路径): Node.js 与 Bun 的 zip, files.open 与 files.toFile 的相对路径按脚本的源目录解析, 与 Rhino 相同, 不再指向宿主无法读写的插件私有目录. Node.js 的 engines.myEngine() 增加 hostCwd 属性.
 
 - `新增` [运行时 API](runtimeApis#node-js-bun-worker-的主题色-相册与批量重命名): Node.js 与 Bun 的 colors.theme, gallery 与 files.batchRename, 均返回 Promise, 能力与授权各自独立. Node.js 与 Bun 的 speech 增加 diarize, detectLanguage, tag 与 speech.speaker

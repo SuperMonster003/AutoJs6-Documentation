@@ -436,7 +436,8 @@ ocr(&#39;test.png&#39;, { region: bounds });
 </ul>
 <p>指定 OCR 插件配置档案. 空字符串不会传递给插件.</p>
 <p>此选项参与插件匹配: 只选择声明了相同配置档案的插件, 未声明配置档案的插件不匹配. 没有匹配的插件时, 调用会报告插件不可用.</p>
-<p>PP-OCRv3 的配置档案对应语种包: <code>&quot;zh&quot;</code>, <code>&quot;en&quot;</code>, <code>&quot;zh-hant&quot;</code>, <code>&quot;ja&quot;</code>, <code>&quot;ko&quot;</code>, 使用前需安装对应的语种包插件. Paddle OCR 的其他版本也可使用此选项, 如 PP-OCRv4 的 <code>&quot;mobile&quot;</code>, <code>&quot;server&quot;</code>, <code>&quot;mobile-en&quot;</code>.</p>
+<p>PP-OCRv3 的配置档案对应语种包: <code>&quot;zh&quot;</code>, <code>&quot;en&quot;</code>, <code>&quot;zh-hant&quot;</code>, <code>&quot;ja&quot;</code>, <code>&quot;ko&quot;</code>, <code>&quot;latin&quot;</code>, <code>&quot;arabic&quot;</code>, <code>&quot;cyrillic&quot;</code>, <code>&quot;devanagari&quot;</code>, <code>&quot;te&quot;</code>, <code>&quot;ka&quot;</code>, <code>&quot;ta&quot;</code>, 使用前需安装对应的语种包插件. Paddle OCR 的其他版本也可使用此选项, 如 PP-OCRv4 的 <code>&quot;mobile&quot;</code>, <code>&quot;server&quot;</code>, <code>&quot;mobile-en&quot;</code>.</p>
+<p><code>&quot;arabic&quot;</code> 的结果按从右到左的阅读顺序返回, 打包应用的内置引擎与 <a href="#ocroptionstype_p_mergeline">mergeLine</a> 同样如此. <code>&quot;devanagari&quot;</code>, <code>&quot;te&quot;</code>, <code>&quot;ka&quot;</code>, <code>&quot;ta&quot;</code> 的模型对连字和写在辅音前面的元音符号识别较弱, 这类文字可能读错或漏读.</p>
 <pre><code class="lang-js">ocr.paddle(img, { profile: &#39;ja&#39; }); // 使用 PP-OCRv3 日语语种包.
 ocr.detect(img, { engine: &#39;paddle&#39;, profile: &#39;en&#39; }); // 通用入口走同一条路径.
 </code></pre>
@@ -523,7 +524,7 @@ console.log(result.extras.executionProvider); // &quot;nnapi&quot; 或 &quot;cpu
 <div class="signature"><ul>
 <li>[ <code>false</code> ] { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> }</li>
 </ul>
-</div><p>是否将同一文本行的识别结果合并.</p>
+</div><p>是否将同一文本行的识别结果合并. 片段按阅读顺序拼接, 从右到左的文字 (如 <a href="#ocroptionstype_p_profile">profile</a> 为 <code>&quot;arabic&quot;</code>) 从最右边的片段开始.</p>
 <p>合并后的 <a href="dataTypes.html#datatypes_p_extras">extras</a> 只保留各片段取值相同的键.</p>
 <p>此选项只作用于返回 <a href="dataTypes.html#datatypes_ocrresult">OcrResult</a> 的方法, 如 <a href="ocr.html#ocr_m_detect">ocr.detect</a>. <a href="ocr.html#ocr_m_recognizetext">recognizeText</a> 不合并.</p>
 <p>当 <a href="#ocroptionstype_p_splitwords">splitWords</a> 或 <a href="#ocroptionstype_p_usewordsegmentation">useWordSegmentation</a> 为 <code>true</code> 时, 此选项强制按 <code>false</code> 处理.</p>

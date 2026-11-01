@@ -170,7 +170,7 @@ badge.on('click', view => console.log(view === badge)); // true
 
 ### 继承加载的类
 
-继承 `runtime.loadDex` 或 `runtime.loadJar` 加载的类时, 先加载再定义类. Android 7 / 7.1 (API 24 / 25) 的 `runtime.loadJar` 由 legacy dx 转换, 不接受 Java 8 (类文件版本 52) 及以上编译的类.
+继承 `runtime.loadDex` 或 `runtime.loadJar` 加载的类时, 先加载再定义类. 自 AutoJs6 6.8.0 起, Android 7 / 7.1 (API 24 / 25) 的 `runtime.loadJar` 也由 D8 转换, 可以加载 Java 8 (类文件版本 52) 及以上编译的类.
 
 ```js
 runtime.loadJar('./library.jar');

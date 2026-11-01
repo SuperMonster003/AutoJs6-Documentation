@@ -38,6 +38,8 @@ Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 AP
 
 定时器回调 (`setTimeout` / `setInterval` / `setImmediate`) 与关联了线程的 EventEmitter 的监听器 (经定时器派发), 其他线程 (如 `threads.start`) 中的代码, 以及由脚本代码同步触发的监听器中不能挂起, 调用 [await](#m-await) 将抛出异常; 这些位置可改用 `promise.then(...)`.
 
+`promise.await()`, `continuation.await(promise)` 与 Flow 的 `await()` 遇到拒绝时同样在调用处抛出拒绝原因, 可用 `try` / `catch` 捕获, 未捕获时脚本以该错误结束.
+
 ```js
 'ui';
 
@@ -90,7 +92,7 @@ ui.emitter.on('back_pressed', function (e) {
 
 - <ins>**returns**</ins> { [any](dataTypes#any) } - 恢复续体时提供的结果
 
-挂起当前执行并等待 [resume](#m-resume) 或 [resumeError](#m-resumeerror) 恢复.
+挂起当前执行并等待 [resume](#m-resume) 或 [resumeError](#m-resumeerror) 恢复. 以 [resumeError](#m-resumeerror) 恢复时在此调用处抛出错误.
 
 ### [m] resume
 
@@ -108,4 +110,4 @@ ui.emitter.on('back_pressed', function (e) {
 - **error** { [any](dataTypes#any) } - 非 `null` 且非 `undefined` 的失败结果
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-以失败结果恢复续体. [await](#m-await) 将按 Rhino 续体错误语义处理 **error**.
+以失败结果恢复续体. **error** 在 [await](#m-await) 的调用处抛出, 可用 `try` / `catch` 捕获, 未捕获时脚本以该错误结束.

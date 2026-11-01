@@ -773,7 +773,7 @@ Android API 33 及以上系统中, 只有 [isCharging()](#ischarging) 为 `true`
 - **flags** { [number](dataTypes#number) } - Android `PowerManager` 唤醒锁级别及标志
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-使用指定标志创建并无限期持有唤醒锁, 直到调用 [cancelKeepingAwake()](#cancelkeepingawake) 或以不同标志再次获取唤醒锁.
+使用指定标志创建并无限期持有唤醒锁, 直到调用 [cancelKeepingAwake()](#cancelkeepingawake), 以不同标志再次获取唤醒锁或脚本结束 (脚本结束时在 `exit` 事件处理器之后释放).
 
 ### keepAwake(flags, timeout)
 
@@ -794,7 +794,7 @@ Android API 33 及以上系统中, 只有 [isCharging()](#ischarging) 为 `true`
 - **[ timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-使用 `SCREEN_BRIGHT_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP` 保持屏幕点亮. 省略 `timeout` 时持续持有, 直到主动取消.
+使用 `SCREEN_BRIGHT_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP` 保持屏幕点亮. 省略 `timeout` 时持续持有, 直到主动取消或脚本结束.
 
 此方法不会阻止用户通过电源键等操作关闭屏幕.
 
@@ -805,7 +805,7 @@ Android API 33 及以上系统中, 只有 [isCharging()](#ischarging) 为 `true`
 - **[ timeout ]** { [number](dataTypes#number) } - 保持时间, 单位为毫秒
 - <ins>**returns**</ins> { [void](dataTypes#void) }
 
-使用 `SCREEN_DIM_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP` 保持设备唤醒, 同时允许屏幕变暗. 省略 `timeout` 时持续持有, 直到主动取消.
+使用 `SCREEN_DIM_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP` 保持设备唤醒, 同时允许屏幕变暗. 省略 `timeout` 时持续持有, 直到主动取消或脚本结束.
 
 ## [m] cancelKeepingAwake
 

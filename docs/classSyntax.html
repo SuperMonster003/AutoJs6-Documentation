@@ -495,7 +495,7 @@ badge.on(&#39;click&#39;, view =&gt; console.log(view === badge)); // true
 </code></pre>
 <p>成员的查找顺序是 类中定义的成员 &gt; Java 成员 &gt; 控件扩展. 因此与 Java 方法同名的扩展不生效, 例如 <code>class P extends android.graphics.Paint</code> 的实例上 <code>setColor</code> 是 Java 方法, 不接受颜色字符串.</p>
 <h3>继承加载的类<span><a class="mark" href="#classsyntax_5" id="classsyntax_5">#</a></span></h3>
-<p>继承 <code>runtime.loadDex</code> 或 <code>runtime.loadJar</code> 加载的类时, 先加载再定义类. Android 7 / 7.1 (API 24 / 25) 的 <code>runtime.loadJar</code> 由 legacy dx 转换, 不接受 Java 8 (类文件版本 52) 及以上编译的类.</p>
+<p>继承 <code>runtime.loadDex</code> 或 <code>runtime.loadJar</code> 加载的类时, 先加载再定义类. 自 AutoJs6 6.8.0 起, Android 7 / 7.1 (API 24 / 25) 的 <code>runtime.loadJar</code> 也由 D8 转换, 可以加载 Java 8 (类文件版本 52) 及以上编译的类.</p>
 <pre><code class="lang-js">runtime.loadJar(&#39;./library.jar&#39;);
 
 class Local extends Packages.com.example.Base {

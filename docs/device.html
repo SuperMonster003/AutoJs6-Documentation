@@ -1521,7 +1521,7 @@ try {
 <li><strong>flags</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - Android <code>PowerManager</code> 唤醒锁级别及标志</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-<p>使用指定标志创建并无限期持有唤醒锁, 直到调用 <a href="#device_m_cancelkeepingawake">cancelKeepingAwake()</a> 或以不同标志再次获取唤醒锁.</p>
+<p>使用指定标志创建并无限期持有唤醒锁, 直到调用 <a href="#device_m_cancelkeepingawake">cancelKeepingAwake()</a>, 以不同标志再次获取唤醒锁或脚本结束 (脚本结束时在 <code>exit</code> 事件处理器之后释放).</p>
 <h3>keepAwake(flags, timeout)<span><a class="mark" href="#device_keepawake_flags_timeout" id="device_keepawake_flags_timeout">#</a></span></h3>
 <p><strong><code>Overload 2/2</code></strong></p>
 <ul>
@@ -1537,7 +1537,7 @@ try {
 <li><strong>[ timeout ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 保持时间, 单位为毫秒</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>使用 <code>SCREEN_BRIGHT_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持屏幕点亮. 省略 <code>timeout</code> 时持续持有, 直到主动取消.</p>
+</div><p>使用 <code>SCREEN_BRIGHT_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持屏幕点亮. 省略 <code>timeout</code> 时持续持有, 直到主动取消或脚本结束.</p>
 <p>此方法不会阻止用户通过电源键等操作关闭屏幕.</p>
 <h2>[m] keepScreenDim<span><a class="mark" href="#device_m_keepscreendim" id="device_m_keepscreendim">#</a></span></h2>
 <h3>keepScreenDim(timeout?)<span><a class="mark" href="#device_keepscreendim_timeout" id="device_keepscreendim_timeout">#</a></span></h3>
@@ -1545,7 +1545,7 @@ try {
 <li><strong>[ timeout ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> } - 保持时间, 单位为毫秒</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>使用 <code>SCREEN_DIM_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持设备唤醒, 同时允许屏幕变暗. 省略 <code>timeout</code> 时持续持有, 直到主动取消.</p>
+</div><p>使用 <code>SCREEN_DIM_WAKE_LOCK | ACQUIRE_CAUSES_WAKEUP</code> 保持设备唤醒, 同时允许屏幕变暗. 省略 <code>timeout</code> 时持续持有, 直到主动取消或脚本结束.</p>
 <h2>[m] cancelKeepingAwake<span><a class="mark" href="#device_m_cancelkeepingawake" id="device_m_cancelkeepingawake">#</a></span></h2>
 <h3>cancelKeepingAwake()<span><a class="mark" href="#device_cancelkeepingawake" id="device_cancelkeepingawake">#</a></span></h3>
 <div class="signature"><ul>

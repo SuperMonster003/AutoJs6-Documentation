@@ -14,7 +14,7 @@ AutoJs6 的 Rhino, Node.js Runtime 和 Bun Runtime 使用独立的执行环境. 
 | Node.js 主线程 | `require('pinyin')`, `require('screen_metrics')` 等公开模块, 或对应 ESM 导入 | 宿主调用通常返回 Promise; 不自动注入 Rhino 全局 |
 | Node.js Worker | `opencc` / `autojs6:opencc`, `image` / `images`, `pinyin`, `pinyin4j`, `console`, `screen_metrics`, `media_projection`, `screen_recorder`, `recorder`, `java` 及其 `autojs6:` 入口; 其他能力可经 `autojs6:bridge` 转发 | 支持 CJS, ESM 和嵌套 Worker; 异步操作复用父线程封装, 仍受本次执行授权约束 |
 | 原生终端 `node` / `npm` | 原生 Node.js 入口 | 不加载 AutoJs6 脚本执行器的模块与兼容全局 |
-| Bun | 从 `process.env.AUTOJS6_HOST_CLIENT_MODULE` 导入客户端, 再调用 `createHostClient()` | 显式客户端, 异步调用, 按当前执行协商能力 |
+| Bun | 从 `process.env.AUTOJS6_HOST_CLIENT_MODULE` 导入客户端, 再调用 `createHostClient()` | 显式客户端, 异步调用, 按当前执行协商能力; 需要 Android 13 (API 33) 或更高版本 |
 
 独立脚本可以在首条字符串语句中使用 `"nodejs";` 或 `"bun";`. Node 也支持 `node` 标记. Node 的 `.node.js`, `.cjs`, `.mjs`, `.mts`, `.cts` 后缀和 Bun 的 `.bun.js`, `.bun.ts`, `.bun.tsx` 后缀用于选择对应环境. 普通 `.ts` / `.tsx` 默认仍按 Rhino 的 TypeScript 路径处理; 项目的 `type` / `projectType` 为 `node` 时可选择 Node. 当前 `type: 'bun'` 元数据本身不选择 Bun 引擎, 应使用 Bun 标记或后缀. 标记不能与固定引擎后缀冲突. 作为 Bun 入口的相对依赖导入的 `.mjs` 文件由 Bun 解释, 将该文件单独运行则按其后缀选择 Node.
 
@@ -24,7 +24,7 @@ Node.js 脚本与项目默认不限执行时长, 与 Rhino 脚本相同, 可随�
 
 Node.js 与 Bun 的 `process.cwd()` 是运行时插件私有目录里的项目副本, 宿主进程无法读写. 由宿主打开文件的调用 (zip, files.open, files.toFile) 因此按脚本的源目录解析相对路径, 与 Rhino 相同; Node.js 可经 `engines.myEngine().hostCwd` 读取这个目录. 写进 `process.cwd()` 的文件不能直接交给这些调用, 要先放到共享存储 (例如以 `files.sdcardPath` 开头的路径).
 
-Node.js 的其他 files 方法在插件进程内执行, 相对路径按 `process.cwd()` 解析.
+Node.js 的其他 files 方法在插件进程内执行, 相对路径按 `process.cwd()` 解析. 插件进程读写共享存储 (如 `/sdcard`) 要在系统设置里给运行时插件授权: Android 10 及更早是 "存储" 权限, Android 11 起是 "所有文件访问权限", 未授权时写入报 EACCES.
 
 ## Node.js 拼音
 

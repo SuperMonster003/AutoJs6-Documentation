@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-01 Node.js 与 Bun 中的 imgui (api-coverage Q213 (b)): [ImGui](imgui#在-node-js-bun-中使用), 运行时支持表记为仅限 Rhino 引擎, Node.js 与 Bun 经 engines.execScript 启动 Rhino 脚本打开窗口.
+
 2026-11-01 Rhino 的 class 语法与继承 Java 类 (rhino-class P7.4): [类语法](classSyntax).
 
 2026-11-01 Node.js 与 Bun 的 Flow 对象增加 await 与 sync, 均返回 Promise (api-coverage Q202): [Flow](flowType) 与 [运行时 API](runtimeApis#根方法与-flow-对象).

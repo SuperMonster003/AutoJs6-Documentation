@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [ImGui](imgui): 运行时支持表标明 Node.js 与 Bun 不提供 imgui 模块, 新增 [在 Node.js / Bun 中使用](imgui#在-node-js-bun-中使用): 用 engines.execScript 启动 Rhino 脚本打开窗口, 用 events.broadcast 通信
+
 - `新增` [类语法 (Class Syntax)](classSyntax): Rhino 引擎的 class 语法范围, 内建类型的子类化, 继承 Java 类与接口的写法和限制, 与 JavaAdapter 的关系, 以及严格模式下 Proxy 的 set trap 要返回 true.
 
 - `更新` [Flow](flowType) 与 [运行时 API (Runtime APIs)](runtimeApis#根方法与-flow-对象): Node.js, Worker 与 Bun 的 Flow 对象增加 await() 与 sync(timeout), 两者都返回 Promise, 不阻塞脚本线程, 写作 `await chain.sync()`; 超过 timeout 时以 TIMEOUT 错误拒绝, 流程继续运行, 与 Rhino 相同

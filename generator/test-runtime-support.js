@@ -101,6 +101,21 @@ test('prototype members count as exports of their module', () => {
     assert.ok(block.text.includes('| 状态 | 已支持 2 项 | 待补 2 项 | 待补 2 项 | 待补 2 项 |'));
 });
 
+test('an internal export does not keep a column from reading as one cell', () => {
+    const excluded = { status: 'not-portable', reason: 'rhino-only', equivalent: 'engines.execScript', rule: 'demo-rule' };
+    const internal = { status: 'not-portable', reason: 'rhino-only', rule: 'internal-exports' };
+    const data = matrix();
+    data.rows = [
+        row('solo.__id', 'solo', '__id', [internal, internal, internal]),
+        row('solo.begin', 'solo', 'begin', [excluded, excluded, excluded]),
+        row('solo.end', 'solo', 'end', [excluded, excluded, excluded]),
+    ];
+    const block = runtimeSupport.renderBlock(data, ['solo'], 'solo');
+    assert.strictEqual(block.rows, 3);
+    assert.strictEqual(block.differences, 0, block.text);
+    assert.ok(block.text.includes('不适用 3 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript`'), block.text);
+});
+
 test('returned objects: their own block on a type page, one line each on the module page', () => {
     const java = { status: 'not-portable', reason: 'java-prototype', rule: 'java-prototype-objects' };
     const data = matrix();

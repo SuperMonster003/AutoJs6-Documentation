@@ -134,6 +134,11 @@ function cellKey(column, cell) {
     return JSON.stringify([cell.status, entryOf(column, cell), cell.capability || null, isCompat(cell)]);
 }
 
+// An internal export (rule internal-exports, roadmap Q13) is no script API, so it does not keep a column from reading as one cell.
+function isInternal(cell) {
+    return cell.rule === 'internal-exports';
+}
+
 function counted(values) {
     const counts = new Map();
     values.forEach(value => counts.set(value, (counts.get(value) || 0) + 1));
@@ -151,7 +156,7 @@ function signature(row, column) {
 function columnDefault(rows, column) {
     const keys = rows.map(row => row[column]).filter(cell => SUPPORTED.includes(cell.status)).map(cell => cellKey(column, cell));
     const key = keys.length ? counted(keys)[0][0] : null;
-    return { key, entry: key && JSON.parse(key)[1], uniform: new Set(rows.map(row => signature(row, column))).size === 1 };
+    return { key, entry: key && JSON.parse(key)[1], uniform: new Set(rows.filter(row => !isInternal(row[column])).map(row => signature(row, column))).size <= 1 };
 }
 
 function differs(row, column, defaults) {
@@ -187,7 +192,7 @@ function countsText(rows, column, defaults) {
         .filter(Boolean)
         .map(([status, count]) => `${status === 'native' ? '已支持' : STATUS_WORDS[status]} ${count} 项`)
         .join(', ');
-    const first = rows.length && column !== 'rhino' ? rows[0][column] : null;
+    const first = rows.length && column !== 'rhino' ? (rows.find(row => !isInternal(row[column])) || rows[0])[column] : null;
     const excluded = first && defaults[column].uniform && (first.status === 'not-portable' || first.status === 'denied');
     return excluded ? `${text} ${exclusionText(first)}` : text;
 }

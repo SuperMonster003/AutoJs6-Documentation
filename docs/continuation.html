@@ -397,6 +397,7 @@
 <li>在脚本线程上派发, 且派发时没有脚本代码正在执行的事件监听器, 即注册到未关联线程的 EventEmitter 上的监听器. UI 模式下由主线程派发的 Activity 事件 (<code>ui.emitter</code>, 如 <code>back_pressed</code>), 控件事件 (如 <code>click</code>) 与对话框事件均属此类. 监听器挂起后, 同一事件的其他监听器照常执行, 挂起的监听器在恢复后继续; 挂起前对事件对象的修改 (如 <code>e.consumed = true</code>) 即时生效.</li>
 </ul>
 <p>定时器回调 (<code>setTimeout</code> / <code>setInterval</code> / <code>setImmediate</code>) 与关联了线程的 EventEmitter 的监听器 (经定时器派发), 其他线程 (如 <code>threads.start</code>) 中的代码, 以及由脚本代码同步触发的监听器中不能挂起, 调用 <a href="#continuation_m_await">await</a> 将抛出异常; 这些位置可改用 <code>promise.then(...)</code>.</p>
+<p><code>promise.await()</code>, <code>continuation.await(promise)</code> 与 Flow 的 <code>await()</code> 遇到拒绝时同样在调用处抛出拒绝原因, 可用 <code>try</code> / <code>catch</code> 捕获, 未捕获时脚本以该错误结束.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
 ui.layout(&lt;frame&gt;&lt;text text=&quot;协程&quot; /&gt;&lt;/frame&gt;);
@@ -435,7 +436,7 @@ ui.emitter.on(&#39;back_pressed&#39;, function (e) {
 <div class="signature"><ul>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 恢复续体时提供的结果</li>
 </ul>
-</div><p>挂起当前执行并等待 <a href="#continuation_m_resume">resume</a> 或 <a href="#continuation_m_resumeerror">resumeError</a> 恢复.</p>
+</div><p>挂起当前执行并等待 <a href="#continuation_m_resume">resume</a> 或 <a href="#continuation_m_resumeerror">resumeError</a> 恢复. 以 <a href="#continuation_m_resumeerror">resumeError</a> 恢复时在此调用处抛出错误.</p>
 <h3>[m] resume<span><a class="mark" href="#continuation_m_resume" id="continuation_m_resume">#</a></span></h3>
 <h4>resume(result?)<span><a class="mark" href="#continuation_resume_result" id="continuation_resume_result">#</a></span></h4>
 <div class="signature"><ul>
@@ -449,7 +450,7 @@ ui.emitter.on(&#39;back_pressed&#39;, function (e) {
 <li><strong>error</strong> { <span class="type"><a href="dataTypes.html#datatypes_any">any</a></span> } - 非 <code>null</code> 且非 <code>undefined</code> 的失败结果</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_void">void</a></span> }</li>
 </ul>
-</div><p>以失败结果恢复续体. <a href="#continuation_m_await">await</a> 将按 Rhino 续体错误语义处理 <strong>error</strong>.</p>
+</div><p>以失败结果恢复续体. <strong>error</strong> 在 <a href="#continuation_m_await">await</a> 的调用处抛出, 可用 <code>try</code> / <code>catch</code> 捕获, 未捕获时脚本以该错误结束.</p>
 
         </div>
     </div>

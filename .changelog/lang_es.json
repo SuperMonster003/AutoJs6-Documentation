@@ -9,8 +9,188 @@
     "v6.8.0": {
       "entries": [
         {
+          "category": "update",
+          "text": "[ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): aclarar las diferencias de versión: el plugin 1.18.0 y anteriores solo pasan el objeto del evento al listener; desde 1.18.1 pasan `(event, session)`, igual que on"
+        },
+        {
+          "category": "update",
+          "text": "[events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): los scripts principales Node.js / Bun y los scripts Rhino pueden intercambiar directamente objetos y matrices; documentar las reglas para funciones, `undefined` y referencias circulares, y abreviar la celda Valores de difusión de la página [ImGui](https://docs.autojs6.com/#/imgui)"
+        },
+        {
+          "category": "update",
+          "text": "[TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): en Node.js / Bun, iniciar la espera antes de escribir evita perder la salida que se devuelve en eco muy rápidamente"
+        },
+        {
+          "category": "update",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=相对路径): cuando se deniega a un proceso de plugin el acceso al almacenamiento compartido, AutoJs6 muestra un aviso único que permite abrir los ajustes del sistema; documentar los permisos de Bun.file y node:fs en Bun"
+        },
+        {
+          "category": "feature",
+          "text": "Referencia completa de [ImGui](https://docs.autojs6.com/#/imgui): inicio rápido, sesiones y modos de ventana, momento de las llamadas, unidades, hilos, errores y límites, todos los grupos de funciones y constantes, tabla de alias PascalCase y páginas de objetos [ImguiSession](https://docs.autojs6.com/#/imguiSessionType), [ImguiDrawList](https://docs.autojs6.com/#/imguiDrawListType), [ImguiFloatingButton](https://docs.autojs6.com/#/imguiFloatingButtonType), [ImguiComponent](https://docs.autojs6.com/#/imguiComponentType), [ImguiDataTable](https://docs.autojs6.com/#/imguiDataTableType), [ImguiLogWindow](https://docs.autojs6.com/#/imguiLogWindowType), [ImguiToast](https://docs.autojs6.com/#/imguiToastType), [ImguiStatsOverlay](https://docs.autojs6.com/#/imguiStatsOverlayType), [ImguiDialog](https://docs.autojs6.com/#/imguiDialogType), [ImguiDialogPromise](https://docs.autojs6.com/#/imguiDialogPromiseType), [ImguiTexture](https://docs.autojs6.com/#/imguiTextureType), [ImguiSelectionStorage](https://docs.autojs6.com/#/imguiSelectionStorageType) y [ImguiMultiSelectIO](https://docs.autojs6.com/#/imguiMultiSelectIOType); el contenido corresponde al plugin ImGui 1.18.0 y las páginas se añaden a la barra lateral y al índice"
+        },
+        {
+          "category": "feature",
+          "text": "Instrucciones de actualización de modelos de [Speech](https://docs.autojs6.com/#/speech?id=模型更新); [SpeechModelInfo](https://docs.autojs6.com/#/speechModelInfoType) incorpora [updateAvailable](https://docs.autojs6.com/#/speechModelInfoType?id=p-updateavailable) y [latestVersionCode](https://docs.autojs6.com/#/speechModelInfoType?id=p-latestversioncode) (3-Macaw Speech 1.4.0 o posterior)"
+        },
+        {
+          "category": "update",
+          "text": "[ImGui](https://docs.autojs6.com/#/imgui): la tabla de compatibilidad indica que Node.js y Bun no proporcionan el módulo imgui; se añade [Using Node.js / Bun](https://docs.autojs6.com/#/imgui?id=在-node-js-bun-中使用), usando engines.execScript para iniciar un script Rhino que abra una ventana y events.broadcast para comunicarse"
+        },
+        {
+          "category": "feature",
+          "text": "[Class Syntax](https://docs.autojs6.com/#/classSyntax): sintaxis class admitida por Rhino, subclases de tipos integrados, sintaxis y límites al extender clases e interfaces Java, relación con JavaAdapter y requisito de devolver true en la trampa set de Proxy en modo estricto."
+        },
+        {
+          "category": "update",
+          "text": "[Flow](https://docs.autojs6.com/#/flowType) y [Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=根方法与-flow-对象): los objetos Flow en Node.js, Workers y Bun incorporan await() y sync(timeout); ambos devuelven Promise sin bloquear el hilo del script, con la forma `await chain.sync()`; superar timeout rechaza con TIMEOUT mientras el flujo continúa, igual que en Rhino"
+        },
+        {
+          "category": "update",
+          "text": "En [OcrOptions](https://docs.autojs6.com/#/ocrOptionsType), [profile](https://docs.autojs6.com/#/ocrOptionsType?id=p-profile) y [mergeLine](https://docs.autojs6.com/#/ocrOptionsType?id=p-mergeline): añadir los siete paquetes de idiomas nuevos de PP-OCRv3 y explicar el orden de lectura árabe y las limitaciones de reconocimiento del devanagari y otras escrituras."
+        },
+        {
+          "category": "fix",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=相对路径): las rutas relativas de zip, files.open y files.toFile en Node.js y Bun se resuelven desde el directorio fuente del script, como en Rhino, y no desde un directorio privado del plugin inaccesible al anfitrión. engines.myEngine() de Node.js incorpora hostCwd."
+        },
+        {
+          "category": "feature",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=node-js-bun-worker-的主题色-相册与批量重命名): colors.theme, gallery y files.batchRename en Node.js y Bun devuelven Promise, con capacidades y permisos independientes. speech en Node.js y Bun incorpora diarize, detectLanguage, tag y speech.speaker"
+        },
+        {
+          "category": "update",
+          "text": "[OcrOptions](https://docs.autojs6.com/#/ocrOptionsType): los métodos OCR de Node.js y Bun aceptan las mismas opciones, significados y valores predeterminados que Rhino, incluida [mergeLine](https://docs.autojs6.com/#/ocrOptionsType?id=p-mergeline)."
+        },
+        {
+          "category": "update",
+          "text": "Los resultados de reconocimiento de Node.js y Bun de [OCR](https://docs.autojs6.com/#/ocr) incluyen la propiedad [extras](https://docs.autojs6.com/#/dataTypes?id=p-extras) y aceptan la opción [useOpenCL](https://docs.autojs6.com/#/ocrOptionsType?id=p-useopencl)."
+        },
+        {
+          "category": "fix",
+          "text": "En [Threads](https://docs.autojs6.com/#/threads), [threads.pool](https://docs.autojs6.com/#/threads?id=m-pool): `maxPoolSize` de `0` (incluido el valor predeterminado) no impone límite superior, y `corePoolSize` acepta cualquier entero no negativo."
+        },
+        {
+          "category": "feature",
+          "text": "En [OCR](https://docs.autojs6.com/#/ocr), resultado [OcrResult](https://docs.autojs6.com/#/dataTypes?id=ocrresult): la propiedad [extras](https://docs.autojs6.com/#/dataTypes?id=p-extras) permite leer información proporcionada por el motor, como `executionProvider` y `quad`; [OcrOptions](https://docs.autojs6.com/#/ocrOptionsType) incorpora la opción [useCls](https://docs.autojs6.com/#/ocrOptionsType?id=p-usecls)"
+        },
+        {
+          "category": "update",
+          "text": "En [OcrOptions](https://docs.autojs6.com/#/ocrOptionsType), [variant](https://docs.autojs6.com/#/ocrOptionsType?id=p-variant), [profile](https://docs.autojs6.com/#/ocrOptionsType?id=p-profile), [useSlim](https://docs.autojs6.com/#/ocrOptionsType?id=p-useslim) y [useOpenCL](https://docs.autojs6.com/#/ocrOptionsType?id=p-useopencl): PP-OCRv3 cambia a ONNX Runtime; la edición Paddle Lite se elige con `variant: \"v3-paddle-lite\"`, y `profile` participa en la selección del plugin"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [UI](https://docs.autojs6.com/#/ui), [Console](https://docs.autojs6.com/#/console), [Floaty](https://docs.autojs6.com/#/floaty), [Web](https://docs.autojs6.com/#/web), [Terminal](https://docs.autojs6.com/#/terminal), [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [ComposeSession](https://docs.autojs6.com/#/composeSessionType), [ComposeFloatyWindow](https://docs.autojs6.com/#/composeFloatyWindowType), [ComposeState](https://docs.autojs6.com/#/composeStateType), [WebSocket](https://docs.autojs6.com/#/webSocketType), [InjectableWebView](https://docs.autojs6.com/#/injectableWebViewType) y [InjectableWebClient](https://docs.autojs6.com/#/injectableWebClientType): el cliente anfitrión de Bun comparte ahora el código de interfaz de Node.js y ofrece ventanas de contenido y miembros de ventana ui (permiso ui.layout), ventanas flotantes host.floaty (nuevo permiso floaty.control, más floaty.raw para ventanas sin procesar y floaty.touch para dejar pasar los toques), WebSocket de host.web (conexión propia de Bun, sin permiso) y WebView inyectable (ui.layout), sesiones host.terminal (nuevo permiso terminal.control, no implícito con shell), rawInput / input y configurador build de host.console (console.control), ComposeError y miembros de nodo de compose (ui.compose); los permisos nuevos están desactivados por defecto y se activan por separado en los ajustes de Bun del centro de plugins"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [UI](https://docs.autojs6.com/#/ui), [Console](https://docs.autojs6.com/#/console), [Toast](https://docs.autojs6.com/#/toast), [Floaty](https://docs.autojs6.com/#/floaty), [Web](https://docs.autojs6.com/#/web), [Terminal](https://docs.autojs6.com/#/terminal), [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [ComposeSession](https://docs.autojs6.com/#/composeSessionType), [ComposeFloatyWindow](https://docs.autojs6.com/#/composeFloatyWindowType), [ComposeState](https://docs.autojs6.com/#/composeStateType), [WebSocket](https://docs.autojs6.com/#/webSocketType), [InjectableWebView](https://docs.autojs6.com/#/injectableWebViewType), [InjectableWebClient](https://docs.autojs6.com/#/injectableWebClientType) y [Global](https://docs.autojs6.com/#/global): el hilo principal Node.js y los Workers ofrecen ventanas de contenido ui (layout / layoutFile / setContentView / finish, id XML utilizables directamente, eventos Atrás y de ciclo de vida, controles personalizados registerWidget, enlaces con dobles llaves, colores y alturas de las barras de estado/navegación y otros miembros de ventana), ventanas floaty (window / rawWindow, posición, tamaño, foco y cierre), WebSocket de web (newWebSocket con los mismos eventos que Rhino) y WebView inyectable, sesiones terminal y ejecución visible (nueva capacidad terminal, no implícita con shell), rawInput / input de console (Promise) y configurador build, dismissAll de toast y avisos con registro como toastLog, ComposeError de compose y type / parent / children y propiedades abreviadas w / h / bg de nodos; estas funciones globales (isUiThread, toastLog y otras, newWebSocket y otras, ComposeError) están disponibles en el hilo principal y en Workers. ui.layoutInflater es un objeto Java de Rhino marcado no portable; usar ui.inflate / ui.createView"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [Automator](https://docs.autojs6.com/#/automator), [Events](https://docs.autojs6.com/#/events), [Threads](https://docs.autojs6.com/#/threads), [Continuation](https://docs.autojs6.com/#/continuation), [Timers](https://docs.autojs6.com/#/timers), [OCR](https://docs.autojs6.com/#/ocr), [YOLO](https://docs.autojs6.com/#/yolo), [QR Code](https://docs.autojs6.com/#/qrcode), [Barcode](https://docs.autojs6.com/#/barcode), [UiSelector](https://docs.autojs6.com/#/uiSelectorType), [Flow](https://docs.autojs6.com/#/flow) y [Global](https://docs.autojs6.com/#/global): Bun ofrece mediante su cliente anfitrión host.automator y host.auto (permiso accessibility.control, misma implementación que Node.js; los gestos requieren además accessibility.gesture, iniciar/detener el servicio, modos, indicadores y vaciar la caché requieren accessibility.service, automator.captureScreen requiere screen.capture, auto.dump / auto.explain usan accessibility.control), los miembros Rhino de events (emisores locales con events.observe, observación de nombres de tecla/notificaciones/Toast con events.key / events.notification / events.toast, observación táctil con events.touch, interceptación de teclas con events.key.intercept), host.threads / host.continuation (implementaciones locales con VolatileDispose), keepAlive / loop / setIntervalExt de host.timers (locales; seis métodos, incluido timers.setTimeout, usan temporizadores Bun, las tareas programadas están en host.tasks), modos y motores fijos de host.ocr, host.barcode / host.qrcode, host.yolo y YoloDetector, pickup / detect / existsOne / existsAll de host.selector (accessibility.control), sleep / wait (wait.async) y acciones globales automator de host.global (instaladas en globalThis por host.global.install(), sin sustituir nombres existentes); nuevos permisos Bun desactivados por defecto: accessibility.service, events.touch, events.key.intercept (no implícitos con sus permisos padre), ocr.control, barcode.control (compartido con qrcode) y yolo.control"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [Automator](https://docs.autojs6.com/#/automator), [Events](https://docs.autojs6.com/#/events), [Threads](https://docs.autojs6.com/#/threads), [Continuation](https://docs.autojs6.com/#/continuation), [Timers](https://docs.autojs6.com/#/timers), [Keys](https://docs.autojs6.com/#/keys), [OCR](https://docs.autojs6.com/#/ocr), [YOLO](https://docs.autojs6.com/#/yolo), [QR Code](https://docs.autojs6.com/#/qrcode), [Barcode](https://docs.autojs6.com/#/barcode), [UiSelector](https://docs.autojs6.com/#/uiSelectorType), [Flow](https://docs.autojs6.com/#/flow) y [Global](https://docs.autojs6.com/#/global): el hilo principal Node.js y los Workers ofrecen acciones automator y globales (click / longClick / press / swipe / gesture* aceptan argumentos Rhino, con coordenadas escaladas por setScreenMetrics), gestión del servicio auto, modos/indicadores/filtro de ventanas, consultas de ventanas y eventos de accesibilidad (el tiempo agotado de auto.waitFor termina toda la ejecución, como Rhino), miembros Rhino de events (eventos persistentes, nombres e interceptación de teclas, toques y difusión entre scripts), threads (tareas asíncronas en el hilo actual, atomic / lock transferibles a Workers, VolatileDispose, sync), continuation, keepAlive / setIntervalExt de timers, yolo.load y YoloDetector, modos y motores fijos de ocr, códigos de tecla keys, qrcode, pickup / detect / existsOne / existsAll de selector y funciones globales sleep / wait (wait.async); las nuevas capacidades accessibility.service, events.key.intercept y events.touch no están implícitas en sus capacidades padre"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [Device](https://docs.autojs6.com/#/device), [Sensors](https://docs.autojs6.com/#/sensors) y [Media](https://docs.autojs6.com/#/media): el hilo principal Node.js y los Workers ofrecen todos los miembros device (campos Build y buildDisplay / baseOS / securityPatch / codename, pageSize, getMarketName, comprobaciones manufacturers / brands / roms, digest, isManufacturer, keepAwake y keepScreenOn / keepScreenDim con duración opcional, sobrecargas de vibrate con matrices de duración y código Morse, cancelVibration, wakeUpIfNeeded, consultas de pantalla/energía/red y rotation / orientation / imei / serial), emisores sensors al estilo Rhino (register / unregister / unregisterAll / getSensor, cuatro niveles sensors.delay, ignoresUnsupportedSensor y los 12 nombres de sensores Rhino) y playMusic / pauseMusic / resumeMusic / stopMusic / musicSeekTo / isMusicPlaying / getMusicDuration / getMusicCurrentPosition / scanFile de media (módulo autojs6:media); getIMEI / getSerial / getAndroidId / getMacAddress / getSharedDeviceId e imei / serial requieren la nueva capacidad device.identifiers, no implícita con device"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [Device](https://docs.autojs6.com/#/device), [Sensors](https://docs.autojs6.com/#/sensors) y [Media](https://docs.autojs6.com/#/media): Bun ofrece mediante su cliente anfitrión todos los miembros device (campos Build, width / height, density, pageSize, digest, getMarketName, isManufacturer y comprobaciones manufacturers / brands / roms desde la instantánea de inicio con device.info; consultas de pantalla/energía/red, keepAwake / keepScreenDim, sobrecargas de vibrate con matrices de duración y código Morse, cancelVibration, wakeUpIfNeeded y rotation / orientation con device.control), emisores sensors al estilo Rhino (register / unregister / unregisterAll / getSensor, cuatro niveles sensors.delay) y el nuevo host.media (ocho miembros de reproducción, incluido playMusic, más scanFile, y sesiones play / pause / resume / stop / seekTo / getPlaybackStatus); nuevos permisos Bun desactivados por defecto: device.identifiers (getIMEI / getSerial / getAndroidId / getMacAddress / getSharedDeviceId e imei / serial), media.control (reproducción) y media.library (scanFile)"
+        },
+        {
+          "category": "feature",
+          "text": "La tabla de herramientas oficiales de [Plugins](https://docs.autojs6.com/#/plugins?id=官方插件工具表) enumera las 15 herramientas de 3-Hanzi CC, AutoJs6 YOLO NCNN, Image Quantization, 3-Stack Archive y 3-Macaw Speech (opencc_convert, yolo_detect, imagequant_quantize, archive_list / archive_read / archive_extract, speech_listen, speech_speak, speech_transcribe, speech_synthesize, speech_speaker_verify, speech_speaker_identify, speech_diarize, speech_detect_language y speech_tag); cada una indica propósito, plugin proveedor y versión mínima, parámetros (tipos, obligatoriedad y valores predeterminados), campos de resultado y archivos o directorios de salida"
+        },
+        {
+          "category": "fix",
+          "text": "Ejemplo imagequant_quantize de plugins.tools.call en [Plugins](https://docs.autojs6.com/#/plugins?id=m-toolscall): sustituir colors por el parámetro real maxColors e image por la salida real png (el ejemplo original era rechazado por la validación de parámetros)"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [AutoJs6](https://docs.autojs6.com/#/autojs), [Installer](https://docs.autojs6.com/#/installer), [Memory](https://docs.autojs6.com/#/memory), [Settings](https://docs.autojs6.com/#/settings), [SysProps](https://docs.autojs6.com/#/sysprops), [Power Manager](https://docs.autojs6.com/#/powerManager), [Notice](https://docs.autojs6.com/#/notice), [Work Manager](https://docs.autojs6.com/#/workManager), [Engines](https://docs.autojs6.com/#/engines), [Plugins](https://docs.autojs6.com/#/plugins), [Dialogs](https://docs.autojs6.com/#/dialogs), [Global](https://docs.autojs6.com/#/global) y [App](https://docs.autojs6.com/#/app): Bun ofrece mediante su cliente anfitrión autojs (con autojs.version y R), installer, memory, settings, sysprops, powerManager, isEnabled / ensureEnabled / launchSettings / config / builder / getBuilder de notice y notice.channel, workManager (host.tasks), engines (visión del anfitrión, myEngine representa la ejecución actual), plugins.extend / extendAll / extendAllBut y plugins.tools, dialogs.build, app.autojs, así como currentPackage / currentActivity / currentComponent, waitForActivity / waitForPackage, exit / stop, isStopped y otras, requiresApi / requiresAutojsVersion, setScreenMetrics, WIDTH / HEIGHT e isAutoJs6 de host.global; activar en el centro de plugins los permisos correspondientes, desactivados por defecto: autojs.control / autojs.manage, settings.control / settings.write, sysprops.control, memory.control / memory.dump, installer.control / installer.mutate, engines.control / engines.exec, plugintools.control (también enumera e invoca herramientas de plugins autorizados por el usuario, como Rhino); notice usa notifications.post / notifications.settings, powerManager usa device.control / device.power. memory.watch no es aplicable en Bun (equivalentes: heapStats / generateHeapSnapshot de bun:jsc); autojs.getRootMode devuelve el mismo RootMode que Rhino, notice.channel usa el nombre del archivo de script si se omite id; las funciones del sistema y R también son globales tras host.global.install() (invocado por separado en cada hilo); exit / stop en un Worker terminan toda la ejecución y exit(error) la hace fallar con ese error"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [AutoJs6](https://docs.autojs6.com/#/autojs), [Installer](https://docs.autojs6.com/#/installer), [Memory](https://docs.autojs6.com/#/memory), [Settings](https://docs.autojs6.com/#/settings), [SysProps](https://docs.autojs6.com/#/sysprops), [Power Manager](https://docs.autojs6.com/#/powerManager), [Notice](https://docs.autojs6.com/#/notice), [Work Manager](https://docs.autojs6.com/#/workManager), [Engines](https://docs.autojs6.com/#/engines), [Plugins](https://docs.autojs6.com/#/plugins), [Dialogs](https://docs.autojs6.com/#/dialogs), [Global](https://docs.autojs6.com/#/global) y [App](https://docs.autojs6.com/#/app): el hilo principal Node.js y los Workers ofrecen autojs (con autojs.version y R), installer, memory, settings, sysprops y powerManager (módulos autojs6:autojs / autojs6:installer / autojs6:memory / autojs6:settings / autojs6:sysprops / autojs6:power_manager), isEnabled / ensureEnabled / launchSettings / config / builder / getBuilder de notice y notice.channel, workManager (módulo tasks), todos los miembros engines (all / stopAll desde la visión del anfitrión, más execAutoFile / stopAllAndToast / getEngines), plugins.extend / extendAll / extendAllBut y plugins.tools, dialogs.build, app.autojs, las funciones globales currentPackage / currentActivity / currentComponent, waitForActivity / waitForPackage, exit / stop, isStopped y otras, requiresApi / requiresAutojsVersion, setScreenMetrics, WIDTH / HEIGHT e isAutoJs6 (módulo autojs6:system, también globales como Rhino); las capacidades se declaran por módulo (autojs, settings, sysprops, memory, installer, con declaración separada de escrituras .control / .write / .dump / .mutate); memory.watch no es aplicable en Node.js (equivalente: FinalizationRegistry)"
+        },
+        {
+          "category": "update",
+          "text": "Tabla de compatibilidad de [Util](https://docs.autojs6.com/#/util): util.class, util.className y util.getClassName leen la clase de objetos Java envueltos por Rhino; los valores Node.js y Bun no son objetos Java, por lo que los tres se marcan como no aplicables (requieren un objeto Java); el equivalente es getClass sobre un identificador del módulo java"
+        },
+        {
+          "category": "update",
+          "text": "En [OCR](https://docs.autojs6.com/#/ocr), resultado [OcrResult](https://docs.autojs6.com/#/dataTypes?id=ocrresult): añadir text (igual a label) y compareTo (compara dos resultados según el orden de lectura para ordenarlos), y cambiar confidence a number (0 a 1); [ComposeNode](https://docs.autojs6.com/#/composeNodeType?id=快捷属性访问器) incorpora una sección de accesores abreviados para las ocho propiedades de lectura/escritura w / h / padding / bg / weight / alpha / testTag / contentDescription; las tablas de [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeModifier](https://docs.autojs6.com/#/composeModifierType), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [OCR](https://docs.autojs6.com/#/ocr) y [Barcode](https://docs.autojs6.com/#/barcode) añaden 55 funciones de componentes, 20 modificadores, ocho propiedades abreviadas y los miembros de OcrResult y WrappedBarcode"
+        },
+        {
+          "category": "update",
+          "text": "Modos de ejecución de [Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=执行方式): los scripts y proyectos Node.js no tienen límite temporal por defecto (como Rhino); node.timeoutMs de project.json define el presupuesto total (desde la recepción por el plugin, incluida la cola y preparación del espacio de trabajo, con ERR_AUTOJS6_SCRIPT_TIMEOUT al agotarse), y la salida se transmite por bloques a la consola durante la ejecución; se actualiza la sección de espera WebView"
+        },
+        {
+          "category": "feature",
+          "text": "Interfaces propias de los entornos en [Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=运行时自有接口): entradas de los plugins Node.js, Bun y QuickJS que no corresponden a módulos del anfitrión, agrupadas (113 entradas en 12 grupos Node.js: puente y mensajes del anfitrión, puntos de control del ciclo de vida, instantáneas de capacidades, npm y package_manager, plugins nativos, rhino y autojs6:compat, media_store y grupo WorkerPool; 12 entradas del cliente Bun; console, print y scriptArgs de QuickJS), cada una con firma, propósito, entorno y versión mínima del plugin; también se explica el acceso a argumentos (scriptArgs de QuickJS solo contiene el nombre del archivo, Node.js y Bun usan process.argv, Rhino usa engines.myEngine().execArgv)"
+        },
+        {
+          "category": "feature",
+          "text": "[Python Runtime](https://docs.autojs6.com/#/pythonRuntime), [Java Runtime](https://docs.autojs6.com/#/javaRuntime), [Kotlin Runtime](https://docs.autojs6.com/#/kotlinRuntime) y [Lua Runtime](https://docs.autojs6.com/#/luaRuntime) describen las API que estos cuatro plugins de lenguaje ofrecen a los scripts: paquete autojs6 de Python (46 funciones, 54 constantes y 10 clases de excepción), JVM Entry API compartida por Java y Kotlin (siete tipos y 17 métodos para Java, seis tipos y 13 métodos sin args ni clipboard para Kotlin), módulo autojs de Lua (11 funciones y arguments de solo lectura); cada entrada incluye firma, descripción y ejemplo en su lenguaje; [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) añade una guía de API originales y diferencias, y [Plugins](https://docs.autojs6.com/#/plugins) enlaza estas cuatro páginas"
+        },
+        {
+          "category": "update",
+          "text": "Columnas Bun de las tablas de [Color](https://docs.autojs6.com/#/color), [Color](https://docs.autojs6.com/#/colorType), [Files](https://docs.autojs6.com/#/files), [Zip](https://docs.autojs6.com/#/zip), [Storages](https://docs.autojs6.com/#/storages), [Storage](https://docs.autojs6.com/#/storageType), [EpubBook](https://docs.autojs6.com/#/epubBookType), [MIME](https://docs.autojs6.com/#/mime), [Recorder](https://docs.autojs6.com/#/recorder) y [Global](https://docs.autojs6.com/#/global): Bun ofrece colors / Color, files (con miembros del prototipo y open global), zip, mime, recorder, storages (con names / all y Storage#size), EpubBook#toString y las globales dayjs / pangu / cheerio / i18n; las operaciones del anfitrión de files requieren files.control, mientras zip, Zip y colors.toColorStateList / setPaintColor / extract requieren java.interop"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [App](https://docs.autojs6.com/#/app), [Shell](https://docs.autojs6.com/#/shell), [Shizuku](https://docs.autojs6.com/#/shizuku) y [ShellProcess](https://docs.autojs6.com/#/shellProcessType): el hilo principal Node.js y los Workers ofrecen miembros app (incluidas funciones auxiliares de aplicaciones duplicadas, getInstalledPackages / getApkInfo / getAppByAlias y sendLocalBroadcastSync), miembros shell y shizuku, 19 funciones globales de teclas y gestos (Home / KeyCode / Tap y otras) y miembros ShellProcess; sus equivalentes Bun requieren app.control / shell.control / shell.root / shell.shizuku"
+        },
+        {
+          "category": "feature",
+          "text": "Análisis sin conexión de [Speech](https://docs.autojs6.com/#/speech): speech.diarize (quién habla y cuándo, con identificación opcional mediante huellas de voz registradas), speech.detectLanguage (identificación de idioma), speech.tag (etiquetas de audio) y sus formas Async, además de speech.speaker (registrar, verificar, identificar, enumerar y eliminar huellas); el catálogo añade modelos de hablantes, segmentación, idiomas y etiquetas de audio de 3-Macaw Speech 1.3.0, y [SpeechModelInfo](https://docs.autojs6.com/#/speechModelInfoType) incorpora las categorías speaker, segment, langid y tagger"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad en [Color](https://docs.autojs6.com/#/color), [Color](https://docs.autojs6.com/#/colorType), [Files](https://docs.autojs6.com/#/files), [Zip](https://docs.autojs6.com/#/zip), [Storages](https://docs.autojs6.com/#/storages), [Storage](https://docs.autojs6.com/#/storageType), [MediaInfo](https://docs.autojs6.com/#/mediainfo), [EpubBook](https://docs.autojs6.com/#/epubBookType), [MIME](https://docs.autojs6.com/#/mime), [Recorder](https://docs.autojs6.com/#/recorder), [Global](https://docs.autojs6.com/#/global) y [Util](https://docs.autojs6.com/#/util): el hilo principal Node.js y los Workers ofrecen colors / Color, files (con open global), zip, mime, recorder, storages (con names / all y Storage#size), mediainfo, globales dayjs / pangu / cheerio / i18n y axios en Workers; util.toRegularAndCall / toRegularAndApply se marcan como obsoletos en el anfitrión"
+        },
+        {
           "category": "feature",
           "text": "[Bundled Libraries](https://docs.autojs6.com/#/bundledLibraries), que explica que axios, cheerio, dayjs, i18n, pangu, lodash y los módulos compatibles con Node.js ahora los proporciona el complemento Bundled Libraries en lugar del paquete de AutoJs6, cómo instalar el complemento y activar o desactivar cada biblioteca, el error que lanzan require y los objetos globales cuando el complemento no está disponible, y cómo las aplicaciones empaquetadas con AutoJs6 incluyen las bibliotecas que usan sus scripts; las páginas de módulos, objeto global, internacionalización y Pangu se actualizan en consecuencia"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad al principio de las demás páginas de módulos y tipos de objetos con API de script (83 páginas incluidas las 13 anteriores, cubriendo los 69 módulos y 43 tipos devueltos), con entradas, estado y permisos de cada API en Rhino, hilo principal Node.js, sus Workers y Bun; los objetos devueltos descritos en cada página figuran debajo de la tabla, mientras los que tienen página de tipo propia (como [UiObject](https://docs.autojs6.com/#/uiObjectType) y [App](https://docs.autojs6.com/#/appType)) llevan allí su tabla; la tabla de [Global](https://docs.autojs6.com/#/global) incorpora species"
+        },
+        {
+          "category": "fix",
+          "text": "Sustituir el método de instancia inexistente openSettings de [App](https://docs.autojs6.com/#/appType) por launchSettings, realmente disponible (AutoJs6 no tiene openSettings)"
+        },
+        {
+          "category": "feature",
+          "text": "Añadir la sobrecarga (components, alpha) de colors.rgba / hsva / hsla en [Color](https://docs.autojs6.com/#/color): matriz de tres componentes y componente alpha separada"
+        },
+        {
+          "category": "update",
+          "text": "Tabla de compatibilidad al principio de [Pinyin](https://docs.autojs6.com/#/pinyin); añadir columnas Bun en [Util](https://docs.autojs6.com/#/util), [Global](https://docs.autojs6.com/#/global), [Standardization](https://docs.autojs6.com/#/s13n), [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [Mathx](https://docs.autojs6.com/#/mathx), [Arrayx](https://docs.autojs6.com/#/arrayx) y [Numberx](https://docs.autojs6.com/#/numberx): host.util, host.species, host.global, host.s13n, host.cvt / host.fmt, host.jsox (mathx / arrayx / numberx) y constantes STYLE_* / MODE_* de host.pinyin del cliente Bun"
+        },
+        {
+          "category": "update",
+          "text": "Tablas de compatibilidad al principio de [Util](https://docs.autojs6.com/#/util), [Global](https://docs.autojs6.com/#/global), [Standardization](https://docs.autojs6.com/#/s13n), [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [Mathx](https://docs.autojs6.com/#/mathx), [Arrayx](https://docs.autojs6.com/#/arrayx) y [Numberx](https://docs.autojs6.com/#/numberx), enumerando el soporte de autojs6:util, species, autojs6:global, s13n, cvt / fmt, jsox y otras entradas en el hilo principal Node.js y Workers"
+        },
+        {
+          "category": "update",
+          "text": "Completar descripciones de miembros de objetos devueltos y prototipos de módulos: demás métodos Dialog de [Dialogs](https://docs.autojs6.com/#/dialogs) (agrupados en títulos/vistas, botones, listas, progreso, casillas, estado y métodos android.app.Dialog); propiedades y accesores TimedTask e IntentTask de [Tasks](https://docs.autojs6.com/#/tasks); isFinished e información Agent de ScriptExecution, getTag, setTag, getUncaughtException y getBackingSourcePath de ScriptEngine en [Engines](https://docs.autojs6.com/#/engines); summary, isSimilar y brother obsoleto de nodos UI, contains, iterator e isSimilar de colecciones, toStringReadable de selectores; miembros de instancia themeColor de [AutoJs6](https://docs.autojs6.com/#/autojs); abreviaturas argb, rgb, rgba, hsv, hsva, hsl, hsla y toStringReadable de [Color](https://docs.autojs6.com/#/colorType); findView, requestFocus y disableFocus de [Floaty](https://docs.autojs6.com/#/floaty); release, isReleased y convertTo de Mat y MatchingResult#findMax en [Image](https://docs.autojs6.com/#/image); cuatro pasos de espera de eventos Flow; getPath de archivos de texto; toStringReadable de ZIP; exitOnCloseTimeout y contentTextColors del constructor de consola; crypto.fromHex, events.removeToastObserver, events.removeNotificationObserver, util.class, util.getClassName y util.className"
+        },
+        {
+          "category": "fix",
+          "text": "Sustituir la entrada inexistente contentValid de [UiSelector](https://docs.autojs6.com/#/uiSelectorType) por contentInvalid, realmente disponible (selector de contenido no válido de controles)"
+        },
+        {
+          "category": "update",
+          "text": "Las tablas de [Image](https://docs.autojs6.com/#/image) y [Files](https://docs.autojs6.com/#/files) incluyen miembros de módulos con objetos Java como prototipo (como files.isFile), y enumeran debajo los objetos devueltos descritos en cada página (como Mat y MatchingResult), uno por fila"
+        },
+        {
+          "category": "update",
+          "text": "Añadir entradas independientes (título, firma, parámetros y ejemplos) para API antes mencionadas solo en tablas o texto: 48 métodos del cliente predeterminado de [Mail](https://docs.autojs6.com/#/mail) (como mail.fetch y mail.fetchAsync); 15 puntos de inicio de herramientas y cuatro de espera de eventos de [Flow](https://docs.autojs6.com/#/flow) (como flow.smartClick y flow.waitForToast), más waitAsync, wait.async, clickWait, clickBoundsWait, clickWhenStable, clickBoundsWhenStable, waitForGone y flow.delay; speakTask, enqueueTask, synthesizeToFile, synthesizeTask, synthesisTask, stopAll y config de [TTS](https://docs.autojs6.com/#/tts); toastverbose, toastlog, toastinfo, toastwarn y toasterror en minúsculas de [Global](https://docs.autojs6.com/#/global); random y randFloat obsoleto de [Mathx](https://docs.autojs6.com/#/mathx); automator.headsethook de [Automator](https://docs.autojs6.com/#/automator)"
         },
         {
           "category": "update",

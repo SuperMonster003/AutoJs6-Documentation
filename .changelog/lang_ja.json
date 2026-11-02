@@ -9,8 +9,188 @@
     "v6.8.0": {
       "entries": [
         {
+          "category": "update",
+          "text": "[ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): バージョンの違いを明記. プラグイン 1.18.0 以前はイベントオブジェクトのみをリスナーに渡し, 1.18.1 以降は on と同じく `(event, session)` を渡す"
+        },
+        {
+          "category": "update",
+          "text": "[events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): Node.js / Bun のメインスクリプトと Rhino スクリプト間でオブジェクトと配列を直接渡せること, 関数, `undefined`, 循環参照の規則を明記. [ImGui](https://docs.autojs6.com/#/imgui) ページのブロードキャスト値の欄も短縮"
+        },
+        {
+          "category": "update",
+          "text": "[TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): Node.js / Bun で書き込みより先に待機を開始すると, 即座にエコーされる出力も取り逃さない"
+        },
+        {
+          "category": "update",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=相对路径): プラグインプロセスによる共有ストレージの読み書きが拒否された場合, AutoJs6 が一度案内しシステム設定を開けること, Bun の Bun.file と node:fs の権限要件を記載"
+        },
+        {
+          "category": "feature",
+          "text": "[ImGui](https://docs.autojs6.com/#/imgui) の完全なリファレンス: クイックスタート, セッションとウィンドウモード, 呼び出しタイミング, 単位, スレッド, エラーと制限, 全関数と定数グループ, PascalCase 別名表, および [ImguiSession](https://docs.autojs6.com/#/imguiSessionType), [ImguiDrawList](https://docs.autojs6.com/#/imguiDrawListType), [ImguiFloatingButton](https://docs.autojs6.com/#/imguiFloatingButtonType), [ImguiComponent](https://docs.autojs6.com/#/imguiComponentType), [ImguiDataTable](https://docs.autojs6.com/#/imguiDataTableType), [ImguiLogWindow](https://docs.autojs6.com/#/imguiLogWindowType), [ImguiToast](https://docs.autojs6.com/#/imguiToastType), [ImguiStatsOverlay](https://docs.autojs6.com/#/imguiStatsOverlayType), [ImguiDialog](https://docs.autojs6.com/#/imguiDialogType), [ImguiDialogPromise](https://docs.autojs6.com/#/imguiDialogPromiseType), [ImguiTexture](https://docs.autojs6.com/#/imguiTextureType), [ImguiSelectionStorage](https://docs.autojs6.com/#/imguiSelectionStorageType), [ImguiMultiSelectIO](https://docs.autojs6.com/#/imguiMultiSelectIOType) のオブジェクトページ. ImGui プラグイン 1.18.0 に対応し, サイドバーと目次にも追加"
+        },
+        {
+          "category": "feature",
+          "text": "[Speech](https://docs.autojs6.com/#/speech?id=模型更新) のモデル更新の説明と, [SpeechModelInfo](https://docs.autojs6.com/#/speechModelInfoType) の [updateAvailable](https://docs.autojs6.com/#/speechModelInfoType?id=p-updateavailable), [latestVersionCode](https://docs.autojs6.com/#/speechModelInfoType?id=p-latestversioncode) (3-Macaw Speech 1.4.0 以降)"
+        },
+        {
+          "category": "update",
+          "text": "[ImGui](https://docs.autojs6.com/#/imgui): ランタイム対応表に Node.js と Bun は imgui モジュールを提供しないことを明記. [Using Node.js / Bun](https://docs.autojs6.com/#/imgui?id=在-node-js-bun-中使用) を追加し, engines.execScript で Rhino スクリプトを起動してウィンドウを開き, events.broadcast で通信する方法を説明"
+        },
+        {
+          "category": "feature",
+          "text": "[Class Syntax](https://docs.autojs6.com/#/classSyntax): Rhino エンジンの class 構文の範囲, 組み込み型のサブクラス化, Java クラスとインターフェースの継承構文と制限, JavaAdapter との関係, 厳格モードで Proxy の set trap が true を返す必要があることを説明."
+        },
+        {
+          "category": "update",
+          "text": "[Flow](https://docs.autojs6.com/#/flowType) と [Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=根方法与-flow-对象): Node.js, Worker, Bun の Flow オブジェクトに await() と sync(timeout) を追加. どちらも Promise を返してスクリプトスレッドをブロックせず, `await chain.sync()` と記述. timeout を超えると TIMEOUT で拒否するが, Rhino と同じくフローは継続"
+        },
+        {
+          "category": "update",
+          "text": "[OcrOptions](https://docs.autojs6.com/#/ocrOptionsType) の [profile](https://docs.autojs6.com/#/ocrOptionsType?id=p-profile) と [mergeLine](https://docs.autojs6.com/#/ocrOptionsType?id=p-mergeline): PP-OCRv3 の新しい 7 言語パッケージ, アラビア語の読み順, デーヴァナーガリーなどの文字の認識上の制限を補足."
+        },
+        {
+          "category": "fix",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=相对路径): Node.js と Bun の zip, files.open, files.toFile の相対パスを Rhino と同様にスクリプトのソースディレクトリ基準で解決し, ホストが読み書きできないプラグイン専用ディレクトリを参照しない. Node.js の engines.myEngine() に hostCwd を追加."
+        },
+        {
+          "category": "feature",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=node-js-bun-worker-的主题色-相册与批量重命名): Node.js と Bun の colors.theme, gallery, files.batchRename は Promise を返し, 能力と権限はそれぞれ独立. speech に diarize, detectLanguage, tag, speech.speaker を追加"
+        },
+        {
+          "category": "update",
+          "text": "[OcrOptions](https://docs.autojs6.com/#/ocrOptionsType): Node.js と Bun の OCR メソッドは [mergeLine](https://docs.autojs6.com/#/ocrOptionsType?id=p-mergeline) を含め Rhino と同じオプション, 意味, 既定値を使用."
+        },
+        {
+          "category": "update",
+          "text": "[OCR](https://docs.autojs6.com/#/ocr) の Node.js と Bun の認識結果に [extras](https://docs.autojs6.com/#/dataTypes?id=p-extras) プロパティを追加し, [useOpenCL](https://docs.autojs6.com/#/ocrOptionsType?id=p-useopencl) オプションに対応."
+        },
+        {
+          "category": "fix",
+          "text": "[Threads](https://docs.autojs6.com/#/threads) の [threads.pool](https://docs.autojs6.com/#/threads?id=m-pool): `maxPoolSize` が `0` (既定値を含む) の場合は上限なし. `corePoolSize` は任意の非負整数を指定可能."
+        },
+        {
+          "category": "feature",
+          "text": "[OCR](https://docs.autojs6.com/#/ocr) の認識結果 [OcrResult](https://docs.autojs6.com/#/dataTypes?id=ocrresult): [extras](https://docs.autojs6.com/#/dataTypes?id=p-extras) プロパティからエンジンの `executionProvider`, `quad` などを取得可能. [OcrOptions](https://docs.autojs6.com/#/ocrOptionsType) に [useCls](https://docs.autojs6.com/#/ocrOptionsType?id=p-usecls) オプションを追加"
+        },
+        {
+          "category": "update",
+          "text": "[OcrOptions](https://docs.autojs6.com/#/ocrOptionsType) の [variant](https://docs.autojs6.com/#/ocrOptionsType?id=p-variant), [profile](https://docs.autojs6.com/#/ocrOptionsType?id=p-profile), [useSlim](https://docs.autojs6.com/#/ocrOptionsType?id=p-useslim), [useOpenCL](https://docs.autojs6.com/#/ocrOptionsType?id=p-useopencl): PP-OCRv3 を ONNX Runtime に変更. Paddle Lite 版は `variant: \"v3-paddle-lite\"` で選択し, `profile` はプラグイン照合に使用"
+        },
+        {
+          "category": "update",
+          "text": "[UI](https://docs.autojs6.com/#/ui), [Console](https://docs.autojs6.com/#/console), [Floaty](https://docs.autojs6.com/#/floaty), [Web](https://docs.autojs6.com/#/web), [Terminal](https://docs.autojs6.com/#/terminal), [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [ComposeSession](https://docs.autojs6.com/#/composeSessionType), [ComposeFloatyWindow](https://docs.autojs6.com/#/composeFloatyWindowType), [ComposeState](https://docs.autojs6.com/#/composeStateType), [WebSocket](https://docs.autojs6.com/#/webSocketType), [InjectableWebView](https://docs.autojs6.com/#/injectableWebViewType), [InjectableWebClient](https://docs.autojs6.com/#/injectableWebClientType) のランタイム対応表: Bun のホストクライアントは Node.js と UI コードを共有し, ui のコンテンツウィンドウとメンバー (権限 ui.layout), host.floaty のフローティングウィンドウ (新権限 floaty.control, raw ウィンドウは追加で floaty.raw, タッチ透過は floaty.touch), host.web の WebSocket (Bun の接続を使用, 権限不要) と注入可能な WebView (ui.layout), host.terminal セッション (新権限 terminal.control, shell からは付与されない), host.console の rawInput / input と build 設定器 (console.control), compose の ComposeError とノードメンバー (ui.compose) を提供. 新権限は既定で無効で, プラグインセンターの Bun 設定で個別に有効化"
+        },
+        {
+          "category": "update",
+          "text": "[UI](https://docs.autojs6.com/#/ui), [Console](https://docs.autojs6.com/#/console), [Toast](https://docs.autojs6.com/#/toast), [Floaty](https://docs.autojs6.com/#/floaty), [Web](https://docs.autojs6.com/#/web), [Terminal](https://docs.autojs6.com/#/terminal), [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [ComposeSession](https://docs.autojs6.com/#/composeSessionType), [ComposeFloatyWindow](https://docs.autojs6.com/#/composeFloatyWindowType), [ComposeState](https://docs.autojs6.com/#/composeStateType), [WebSocket](https://docs.autojs6.com/#/webSocketType), [InjectableWebView](https://docs.autojs6.com/#/injectableWebViewType), [InjectableWebClient](https://docs.autojs6.com/#/injectableWebClientType), [Global](https://docs.autojs6.com/#/global) のランタイム対応表: Node.js のメインスレッドと Worker は ui のコンテンツウィンドウ (layout / layoutFile / setContentView / finish, XML id の直接利用, 戻るキーとライフサイクルイベント, registerWidget による独自コントロール, 二重波括弧バインディング, ステータスバー/ナビゲーションバーの色と高さなど), floaty ウィンドウ (window / rawWindow, 位置, サイズ, フォーカス, 閉じる操作), web の WebSocket (newWebSocket, Rhino と同じイベント) と注入可能な WebView, terminal セッションと可視実行 (新能力 terminal が必要, shell には含まれない), console の rawInput / input (Promise) と build 設定器, toast の dismissAll と toastLog などのログ付き通知, compose の ComposeError とノードの type / parent / children, w / h / bg などの短縮プロパティを提供. グローバル関数 (isUiThread, toastLog など, newWebSocket など, ComposeError) は両スレッドで利用可能. ui.layoutInflater は Rhino の Java オブジェクトで移植不可とし, ui.inflate / ui.createView を案内"
+        },
+        {
+          "category": "update",
+          "text": "[Automator](https://docs.autojs6.com/#/automator), [Events](https://docs.autojs6.com/#/events), [Threads](https://docs.autojs6.com/#/threads), [Continuation](https://docs.autojs6.com/#/continuation), [Timers](https://docs.autojs6.com/#/timers), [OCR](https://docs.autojs6.com/#/ocr), [YOLO](https://docs.autojs6.com/#/yolo), [QR Code](https://docs.autojs6.com/#/qrcode), [Barcode](https://docs.autojs6.com/#/barcode), [UiSelector](https://docs.autojs6.com/#/uiSelectorType), [Flow](https://docs.autojs6.com/#/flow), [Global](https://docs.autojs6.com/#/global) のランタイム対応表: Bun はホストクライアント経由で host.automator と host.auto (権限 accessibility.control, Node.js と実装を共有; ジェスチャーは追加で accessibility.gesture, サービス起動/停止, モード, フラグ, キャッシュ消去は accessibility.service, automator.captureScreen は screen.capture, auto.dump / auto.explain は accessibility.control), events の Rhino メンバー (ローカルエミッターは events.observe, キー名/通知/Toast の監視は events.key / events.notification / events.toast, タッチ監視は events.touch, キー遮断は events.key.intercept), host.threads / host.continuation (VolatileDispose を含むローカル実装), host.timers の keepAlive / loop / setIntervalExt (ローカル実装; timers.setTimeout など 6 個は Bun のタイマーを使用, 定期タスクは host.tasks), host.ocr のモードと固定エンジン, host.barcode / host.qrcode, host.yolo と YoloDetector, host.selector の pickup / detect / existsOne / existsAll (accessibility.control), host.global の sleep / wait (wait.async) と automator グローバル動作 (host.global.install() で globalThis に登録, 既存の同名変数は上書きしない) を提供. 既定で無効の新権限は accessibility.service, events.touch, events.key.intercept (親権限から暗黙に付与されない), ocr.control, barcode.control (qrcode 共用), yolo.control"
+        },
+        {
+          "category": "update",
+          "text": "[Automator](https://docs.autojs6.com/#/automator), [Events](https://docs.autojs6.com/#/events), [Threads](https://docs.autojs6.com/#/threads), [Continuation](https://docs.autojs6.com/#/continuation), [Timers](https://docs.autojs6.com/#/timers), [Keys](https://docs.autojs6.com/#/keys), [OCR](https://docs.autojs6.com/#/ocr), [YOLO](https://docs.autojs6.com/#/yolo), [QR Code](https://docs.autojs6.com/#/qrcode), [Barcode](https://docs.autojs6.com/#/barcode), [UiSelector](https://docs.autojs6.com/#/uiSelectorType), [Flow](https://docs.autojs6.com/#/flow), [Global](https://docs.autojs6.com/#/global) のランタイム対応表: Node.js のメインスレッドと Worker は automator の動作とグローバル動作 (click / longClick / press / swipe / gesture* は Rhino の引数形式に対応, setScreenMetrics で座標を拡縮), auto のサービス管理, モード/フラグ/ウィンドウ絞り込み, ウィンドウ照会とアクセシビリティイベント (auto.waitFor のタイムアウトは Rhino と同じく実行全体を終了), events の Rhino メンバー (保持イベント, キー名と遮断, タッチ, スクリプト間ブロードキャスト), threads (現在スレッドの非同期タスク, Worker に渡せる atomic / lock, VolatileDispose, sync), continuation, timers の keepAlive / setIntervalExt, yolo.load と YoloDetector, ocr のモードと固定エンジン, keys のキーコード, qrcode, selector の pickup / detect / existsOne / existsAll, グローバル sleep / wait (wait.async) を提供. 新能力 accessibility.service, events.key.intercept, events.touch は親能力に含まれない"
+        },
+        {
+          "category": "update",
+          "text": "[Device](https://docs.autojs6.com/#/device), [Sensors](https://docs.autojs6.com/#/sensors), [Media](https://docs.autojs6.com/#/media) のランタイム対応表: Node.js のメインスレッドと Worker は device の全メンバー (Build フィールドと buildDisplay / baseOS / securityPatch / codename, pageSize, getMarketName, manufacturers / brands / roms の判定, digest, isManufacturer, keepAwake と時間省略可能な keepScreenOn / keepScreenDim, vibrate の時間配列/モールス信号オーバーロード, cancelVibration, wakeUpIfNeeded, 画面/電源/ネットワーク照会, rotation / orientation / imei / serial), Rhino 形式の sensors エミッター (register / unregister / unregisterAll / getSensor, sensors.delay の 4 段階, ignoresUnsupportedSensor と Rhino の 12 センサー名), media の playMusic / pauseMusic / resumeMusic / stopMusic / musicSeekTo / isMusicPlaying / getMusicDuration / getMusicCurrentPosition / scanFile (autojs6:media モジュール) を提供. getIMEI / getSerial / getAndroidId / getMacAddress / getSharedDeviceId と imei / serial は新能力 device.identifiers が必要で, device には含まれない"
+        },
+        {
+          "category": "update",
+          "text": "[Device](https://docs.autojs6.com/#/device), [Sensors](https://docs.autojs6.com/#/sensors), [Media](https://docs.autojs6.com/#/media) のランタイム対応表: Bun はホストクライアント経由で device の全メンバー (Build フィールド, width / height, density, pageSize, digest, getMarketName, isManufacturer と manufacturers / brands / roms の判定は起動スナップショットから権限 device.info で提供; 画面/電源/ネットワーク照会, keepAwake / keepScreenDim, vibrate の時間配列/モールス信号オーバーロード, cancelVibration, wakeUpIfNeeded, rotation / orientation は device.control), Rhino 形式の sensors エミッター (register / unregister / unregisterAll / getSensor, sensors.delay の 4 段階), 新しい host.media (playMusic など 8 再生メンバーと scanFile, 再生セッションの play / pause / resume / stop / seekTo / getPlaybackStatus) を提供. 既定で無効の新権限は device.identifiers (getIMEI / getSerial / getAndroidId / getMacAddress / getSharedDeviceId と imei / serial), media.control (再生), media.library (scanFile)"
+        },
+        {
+          "category": "feature",
+          "text": "[Plugins](https://docs.autojs6.com/#/plugins?id=官方插件工具表) の公式プラグインツール表: 3-Hanzi CC, AutoJs6 YOLO NCNN, Image Quantization, 3-Stack Archive, 3-Macaw Speech が提供する 15 ツール (opencc_convert, yolo_detect, imagequant_quantize, archive_list / archive_read / archive_extract, speech_listen, speech_speak, speech_transcribe, speech_synthesize, speech_speaker_verify, speech_speaker_identify, speech_diarize, speech_detect_language, speech_tag) を掲載. 各用途, 提供プラグイン, 最低バージョン, 引数 (型, 必須かどうか, 既定値), 結果フィールド, ファイル/ディレクトリ出力を明記"
+        },
+        {
+          "category": "fix",
+          "text": "[Plugins](https://docs.autojs6.com/#/plugins?id=m-toolscall) の plugins.tools.call の imagequant_quantize 例: 引数 colors を実際の maxColors に, 出力 image を実際の png に変更 (元の例は引数検証で拒否される)"
+        },
+        {
+          "category": "update",
+          "text": "[AutoJs6](https://docs.autojs6.com/#/autojs), [Installer](https://docs.autojs6.com/#/installer), [Memory](https://docs.autojs6.com/#/memory), [Settings](https://docs.autojs6.com/#/settings), [SysProps](https://docs.autojs6.com/#/sysprops), [Power Manager](https://docs.autojs6.com/#/powerManager), [Notice](https://docs.autojs6.com/#/notice), [Work Manager](https://docs.autojs6.com/#/workManager), [Engines](https://docs.autojs6.com/#/engines), [Plugins](https://docs.autojs6.com/#/plugins), [Dialogs](https://docs.autojs6.com/#/dialogs), [Global](https://docs.autojs6.com/#/global), [App](https://docs.autojs6.com/#/app) のランタイム対応表: Bun はホストクライアント経由で autojs (autojs.version と R を含む), installer, memory, settings, sysprops, powerManager, notice の isEnabled / ensureEnabled / launchSettings / config / builder / getBuilder と notice.channel, workManager (host.tasks に対応), engines (ホスト視点, myEngine は現在の実行), plugins.extend / extendAll / extendAllBut と plugins.tools, dialogs.build, app.autojs, host.global の currentPackage / currentActivity / currentComponent, waitForActivity / waitForPackage, exit / stop, isStopped など, requiresApi / requiresAutojsVersion, setScreenMetrics, WIDTH / HEIGHT, isAutoJs6 を提供. プラグインセンターで既定無効の対応権限を有効化: autojs.control / autojs.manage, settings.control / settings.write, sysprops.control, memory.control / memory.dump, installer.control / installer.mutate, engines.control / engines.exec, plugintools.control (Rhino 同様, ユーザーが許可したプラグインのツールも列挙/実行); notice は notifications.post / notifications.settings, powerManager は device.control / device.power を使用. memory.watch は Bun では非該当 (bun:jsc の heapStats / generateHeapSnapshot が相当); autojs.getRootMode は Rhino と同じ RootMode を返し, notice.channel の id 省略時はスクリプトファイル名を使用. host.global.install() 後はシステム関数と R もグローバルになる (各スレッドで個別に呼ぶ). Worker の exit / stop は実行全体を終了し, exit(error) はそのエラーで実行を失敗させる"
+        },
+        {
+          "category": "update",
+          "text": "[AutoJs6](https://docs.autojs6.com/#/autojs), [Installer](https://docs.autojs6.com/#/installer), [Memory](https://docs.autojs6.com/#/memory), [Settings](https://docs.autojs6.com/#/settings), [SysProps](https://docs.autojs6.com/#/sysprops), [Power Manager](https://docs.autojs6.com/#/powerManager), [Notice](https://docs.autojs6.com/#/notice), [Work Manager](https://docs.autojs6.com/#/workManager), [Engines](https://docs.autojs6.com/#/engines), [Plugins](https://docs.autojs6.com/#/plugins), [Dialogs](https://docs.autojs6.com/#/dialogs), [Global](https://docs.autojs6.com/#/global), [App](https://docs.autojs6.com/#/app) のランタイム対応表: Node.js のメインスレッドと Worker は autojs (autojs.version と R を含む), installer, memory, settings, sysprops, powerManager (autojs6:autojs / autojs6:installer / autojs6:memory / autojs6:settings / autojs6:sysprops / autojs6:power_manager), notice の isEnabled / ensureEnabled / launchSettings / config / builder / getBuilder と notice.channel, workManager (tasks に対応), engines の全メンバー (all / stopAll はホスト視点, execAutoFile / stopAllAndToast / getEngines を追加), plugins.extend / extendAll / extendAllBut と plugins.tools, dialogs.build, app.autojs, グローバル currentPackage / currentActivity / currentComponent, waitForActivity / waitForPackage, exit / stop, isStopped など, requiresApi / requiresAutojsVersion, setScreenMetrics, WIDTH / HEIGHT, isAutoJs6 (autojs6:system, Rhino と同じくグローバルにも存在) を提供. 能力はモジュール単位で宣言 (autojs, settings, sysprops, memory, installer, .control / .write / .dump / .mutate の書き込み操作は別途宣言). memory.watch は Node.js では非該当 (FinalizationRegistry が相当)"
+        },
+        {
+          "category": "update",
+          "text": "[Util](https://docs.autojs6.com/#/util) のランタイム対応表: util.class, util.className, util.getClassName は Rhino がラップした Java オブジェクトのクラスを読む. Node.js と Bun の値は Java オブジェクトではないため, 3 つとも非該当 (Java オブジェクトが必要) とし, java モジュールのハンドルに対する getClass を代替として案内"
+        },
+        {
+          "category": "update",
+          "text": "[OCR](https://docs.autojs6.com/#/ocr) の認識結果 [OcrResult](https://docs.autojs6.com/#/dataTypes?id=ocrresult): text (label と同じ) と compareTo (2 結果を読み順で比較しソートに使用可能) を追加し, confidence を number (0 から 1) に変更. [ComposeNode](https://docs.autojs6.com/#/composeNodeType?id=快捷属性访问器) に短縮プロパティアクセサーの節を追加し, 読み書き可能な w / h / padding / bg / weight / alpha / testTag / contentDescription の 8 個を説明. [3-Block Compose (Compose)](https://docs.autojs6.com/#/compose), [ComposeModifier](https://docs.autojs6.com/#/composeModifierType), [ComposeNode](https://docs.autojs6.com/#/composeNodeType), [OCR](https://docs.autojs6.com/#/ocr), [Barcode](https://docs.autojs6.com/#/barcode) の表に 55 コンポーネント関数, 20 修飾子, 8 短縮プロパティ, OcrResult と WrappedBarcode のメンバーを追加"
+        },
+        {
+          "category": "update",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=执行方式) の実行方式: Node.js のスクリプトとプロジェクトは既定で時間制限なし (Rhino 同様). project.json の node.timeoutMs は総実行予算 (プラグイン受信から計時, 待ち行列とワークスペース準備を含み, 超過時は ERR_AUTOJS6_SCRIPT_TIMEOUT), 実行中の出力を順次コンソールへ転送. WebView の待機節も更新"
+        },
+        {
+          "category": "feature",
+          "text": "[Runtime APIs](https://docs.autojs6.com/#/runtimeApis?id=运行时自有接口) のランタイム固有インターフェース節: ホストモジュールに対応しない Node.js, Bun, QuickJS プラグイン固有の入口をグループ別に掲載 (Node.js は 12 グループ 113 項目: ホストブリッジとメッセージ, ライフサイクルチェックポイント, 能力スナップショット, npm と package_manager, ネイティブプラグイン, rhino と autojs6:compat, media_store, Worker プール WorkerPool; Bun クライアントは 12 項目; QuickJS は console, print, scriptArgs). 各署名, 用途, ランタイム, 最低プラグインバージョンを明記. 引数取得方法も説明 (QuickJS の scriptArgs はファイル名のみ, Node.js と Bun は process.argv, Rhino は engines.myEngine().execArgv)"
+        },
+        {
+          "category": "feature",
+          "text": "[Python Runtime](https://docs.autojs6.com/#/pythonRuntime), [Java Runtime](https://docs.autojs6.com/#/javaRuntime), [Kotlin Runtime](https://docs.autojs6.com/#/kotlinRuntime), [Lua Runtime](https://docs.autojs6.com/#/luaRuntime): 4 言語のランタイムプラグインが提供する API を説明. Python の autojs6 パッケージ (46 関数, 54 定数, 10 例外クラス), Java/Kotlin 共通 JVM Entry API (Java は 7 型 17 メソッド, Kotlin は args と clipboard を除く 6 型 13 メソッド), Lua の autojs モジュール (11 関数と読み取り専用 arguments). 各署名, 説明, 該当言語の例を掲載. [AutoJs4 Runtime](https://docs.autojs6.com/#/autojs4Runtime) に上流 API と差異の案内節を追加し, [Plugins](https://docs.autojs6.com/#/plugins) から 4 ページへリンク"
+        },
+        {
+          "category": "update",
+          "text": "[Color](https://docs.autojs6.com/#/color), [Color](https://docs.autojs6.com/#/colorType), [Files](https://docs.autojs6.com/#/files), [Zip](https://docs.autojs6.com/#/zip), [Storages](https://docs.autojs6.com/#/storages), [Storage](https://docs.autojs6.com/#/storageType), [EpubBook](https://docs.autojs6.com/#/epubBookType), [MIME](https://docs.autojs6.com/#/mime), [Recorder](https://docs.autojs6.com/#/recorder), [Global](https://docs.autojs6.com/#/global) のランタイム対応表の Bun 列: colors / Color, files (プロトタイプメンバーとグローバル open), zip, mime, recorder, storages (names / all, Storage#size), EpubBook#toString, グローバル dayjs / pangu / cheerio / i18n を提供. files のホスト操作は files.control, zip と Zip および colors.toColorStateList / setPaintColor / extract は java.interop が必要"
+        },
+        {
+          "category": "update",
+          "text": "[App](https://docs.autojs6.com/#/app), [Shell](https://docs.autojs6.com/#/shell), [Shizuku](https://docs.autojs6.com/#/shizuku), [ShellProcess](https://docs.autojs6.com/#/shellProcessType) のランタイム対応表: Node.js のメインスレッドと Worker は app メンバー (複製アプリの補助関数, getInstalledPackages / getApkInfo / getAppByAlias, sendLocalBroadcastSync), shell と shizuku メンバー, 19 個のグローバルキー/ジェスチャー関数 (Home / KeyCode / Tap など), ShellProcess メンバーを提供. Bun の対応メンバーは app.control / shell.control / shell.root / shell.shizuku が必要"
+        },
+        {
+          "category": "feature",
+          "text": "[Speech](https://docs.autojs6.com/#/speech) のオフライン解析 speech.diarize (誰がいつ話したかを分離し, 登録済み声紋で人物の識別も可能), speech.detectLanguage (言語識別), speech.tag (音声タグ) と Async 版, 話者認識 speech.speaker (声紋の登録, 検証, 識別, 一覧, 削除). モデル一覧に 3-Macaw Speech 1.3.0 の話者, 分割, 言語識別, 音声タグモデルを追加し, [SpeechModelInfo](https://docs.autojs6.com/#/speechModelInfoType) のモデル種別に speaker, segment, langid, tagger を追加"
+        },
+        {
+          "category": "update",
+          "text": "[Color](https://docs.autojs6.com/#/color), [Color](https://docs.autojs6.com/#/colorType), [Files](https://docs.autojs6.com/#/files), [Zip](https://docs.autojs6.com/#/zip), [Storages](https://docs.autojs6.com/#/storages), [Storage](https://docs.autojs6.com/#/storageType), [MediaInfo](https://docs.autojs6.com/#/mediainfo), [EpubBook](https://docs.autojs6.com/#/epubBookType), [MIME](https://docs.autojs6.com/#/mime), [Recorder](https://docs.autojs6.com/#/recorder), [Global](https://docs.autojs6.com/#/global), [Util](https://docs.autojs6.com/#/util) のランタイム対応表: Node.js のメインスレッドと Worker は colors / Color, files (グローバル open), zip, mime, recorder, storages (names / all, Storage#size), mediainfo, グローバル dayjs / pangu / cheerio / i18n と Worker の axios を提供. util.toRegularAndCall / toRegularAndApply をホストで非推奨と記載"
+        },
+        {
           "category": "feature",
           "text": "[Bundled Libraries](https://docs.autojs6.com/#/bundledLibraries), axios, cheerio, dayjs, i18n, pangu, lodash と Node.js 互換モジュールが AutoJs6 本体ではなく Bundled Libraries プラグインから提供されること, プラグインのインストールとライブラリごとのスイッチ, プラグインが使えない場合に require とグローバルオブジェクトが投げるエラー, AutoJs6 でパッケージ化したアプリにスクリプトが使うライブラリを含める仕組みを説明; モジュール, グローバル, 国際化, Pangu のページも更新"
+        },
+        {
+          "category": "update",
+          "text": "スクリプト API を持つ残りのモジュール/オブジェクト型ページ先頭にランタイム対応表を追加 (従来の 13 ページと合わせて 83 ページ, 全 69 モジュールと 43 戻り値型を網羅). Rhino, Node.js メインスレッド, Node.js Worker, Bun の API 入口, 状態, 権限を記載. モジュール表の下にそのページの戻り値オブジェクトを列挙し, 独立型ページを持つもの ([UiObject](https://docs.autojs6.com/#/uiObjectType), [App](https://docs.autojs6.com/#/appType) など) は型ページに表を配置. [Global](https://docs.autojs6.com/#/global) の表に species を統合"
+        },
+        {
+          "category": "fix",
+          "text": "[App](https://docs.autojs6.com/#/appType) の存在しないインスタンスメソッド openSettings を実際の launchSettings に変更 (AutoJs6 に openSettings は存在しない)"
+        },
+        {
+          "category": "feature",
+          "text": "[Color](https://docs.autojs6.com/#/color) の colors.rgba / hsva / hsla に (components, alpha) オーバーロードを追加: 3 成分の配列と別指定の alpha 成分"
+        },
+        {
+          "category": "update",
+          "text": "[Pinyin](https://docs.autojs6.com/#/pinyin) の先頭にランタイム対応表を追加. [Util](https://docs.autojs6.com/#/util), [Global](https://docs.autojs6.com/#/global), [Standardization](https://docs.autojs6.com/#/s13n), [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [Mathx](https://docs.autojs6.com/#/mathx), [Arrayx](https://docs.autojs6.com/#/arrayx), [Numberx](https://docs.autojs6.com/#/numberx) の表に Bun 列を追加: Bun クライアントの host.util, host.species, host.global, host.s13n, host.cvt / host.fmt, host.jsox (mathx / arrayx / numberx), host.pinyin の STYLE_* / MODE_* 定数"
+        },
+        {
+          "category": "update",
+          "text": "[Util](https://docs.autojs6.com/#/util), [Global](https://docs.autojs6.com/#/global), [Standardization](https://docs.autojs6.com/#/s13n), [Converter](https://docs.autojs6.com/#/cvt), [Formatter](https://docs.autojs6.com/#/fmt), [Jsox](https://docs.autojs6.com/#/jsox), [Mathx](https://docs.autojs6.com/#/mathx), [Arrayx](https://docs.autojs6.com/#/arrayx), [Numberx](https://docs.autojs6.com/#/numberx) の先頭にランタイム対応表を追加し, Node.js メインスレッドと Worker の autojs6:util, species, autojs6:global, s13n, cvt / fmt, jsox などの対応状況を記載"
+        },
+        {
+          "category": "update",
+          "text": "戻り値オブジェクトとモジュールプロトタイプのメンバー説明を補完: [Dialogs](https://docs.autojs6.com/#/dialogs) の Dialog の残りのメソッド (タイトル/ビュー, ボタン, リスト, 進捗, チェックボックス, 状態, android.app.Dialog メソッドを分類); [Tasks](https://docs.autojs6.com/#/tasks) の TimedTask/IntentTask のプロパティと読み書きメソッド; [Engines](https://docs.autojs6.com/#/engines) の ScriptExecution の isFinished と Agent 実行情報, ScriptEngine の getTag, setTag, getUncaughtException, getBackingSourcePath; UI ノードの summary, isSimilar, 非推奨 brother, コレクションの contains, iterator, isSimilar, セレクターの toStringReadable; [AutoJs6](https://docs.autojs6.com/#/autojs) の themeColor インスタンスメンバー; [Color](https://docs.autojs6.com/#/colorType) の argb, rgb, rgba, hsv, hsva, hsl, hsla 短縮形と toStringReadable; [Floaty](https://docs.autojs6.com/#/floaty) の findView, requestFocus, disableFocus; [Image](https://docs.autojs6.com/#/image) の Mat の release, isReleased, convertTo と MatchingResult#findMax; Flow の 4 イベント待機ステップ; テキストファイルの getPath; ZIP の toStringReadable; コンソールビルダーの exitOnCloseTimeout と contentTextColors; crypto.fromHex, events.removeToastObserver, events.removeNotificationObserver, util.class, util.getClassName, util.className"
+        },
+        {
+          "category": "fix",
+          "text": "[UiSelector](https://docs.autojs6.com/#/uiSelectorType) の存在しない contentValid を実際の contentInvalid (コントロール内容の無効状態セレクター) に変更"
+        },
+        {
+          "category": "update",
+          "text": "[Image](https://docs.autojs6.com/#/image) と [Files](https://docs.autojs6.com/#/files) のランタイム対応表に Java オブジェクトをプロトタイプとするモジュールメンバー (files.isFile など) を追加. 表の下にそのページで説明する戻り値オブジェクト (Mat, MatchingResult など) を 1 行ずつ列挙"
+        },
+        {
+          "category": "update",
+          "text": "表や本文でのみ言及されていた API に独立項目 (見出し, 署名, 引数, 例) を追加: [Mail](https://docs.autojs6.com/#/mail) の既定クライアント経由の 48 メソッド (mail.fetch, mail.fetchAsync など); [Flow](https://docs.autojs6.com/#/flow) の 15 ツール開始点と 4 イベント待機開始点 (flow.smartClick, flow.waitForToast など), 別名 waitAsync, wait.async, clickWait, clickBoundsWait, clickWhenStable, clickBoundsWhenStable, waitForGone, flow.delay; [TTS](https://docs.autojs6.com/#/tts) の speakTask, enqueueTask, synthesizeToFile, synthesizeTask, synthesisTask, stopAll, config; [Global](https://docs.autojs6.com/#/global) の小文字名 toastverbose, toastlog, toastinfo, toastwarn, toasterror; [Mathx](https://docs.autojs6.com/#/mathx) の random と非推奨 randFloat; [Automator](https://docs.autojs6.com/#/automator) の automator.headsethook"
         },
         {
           "category": "update",

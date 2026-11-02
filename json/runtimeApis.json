@@ -18,6 +18,13 @@
               "desc": "<p>Node.js 与 Bun 的 <code>process.cwd()</code> 是运行时插件私有目录里的项目副本, 宿主进程无法读写. 由宿主打开文件的调用 (zip, files.open, files.toFile) 因此按脚本的源目录解析相对路径, 与 Rhino 相同; Node.js 可经 <code>engines.myEngine().hostCwd</code> 读取这个目录. 写进 <code>process.cwd()</code> 的文件不能直接交给这些调用, 要先放到共享存储 (例如以 <code>files.sdcardPath</code> 开头的路径).</p>\n<p>Node.js 的其他 files 方法在插件进程内执行, 相对路径按 <code>process.cwd()</code> 解析. 插件进程读写共享存储 (如 <code>/sdcard</code>) 要在系统设置里给运行时插件授权: Android 10 及更早是 &quot;存储&quot; 权限, Android 11 起是 &quot;所有文件访问权限&quot;, 未授权时报 EACCES 或 EPERM (Android 11 起在共享存储根目录新建文件是 EPERM, <code>Download</code>, <code>Documents</code> 等公共目录里自己创建的文件不需要授权). 首次失败时 AutoJs6 提示一次, 可从提示跳转到系统设置中该插件的页面, 每次执行最多提示一次, 错误本身不变. 提示来自脚本的错误输出, 所以脚本捕获了 <code>node:fs</code> 的错误又没有输出时不提示.</p>\n<p>Bun 的 <code>Bun.file</code> 与 <code>node:fs</code> 同样在插件进程内执行, 授权和提示规则相同; host.files 在宿主进程内执行, 不需要给插件授权.</p>\n",
               "type": "module",
               "displayName": "相对路径"
+            },
+            {
+              "textRaw": "宿主在后台",
+              "name": "宿主在后台",
+              "desc": "<p>Android 14 起, 系统约 10 s 后冻结 cached 状态的进程. 宿主进程被结束后只由脚本启动 (例如经 Intent 运行脚本), 没有自己的界面, 也没有绑定中的无障碍服务或通知监听服务时, 若未开启前台服务, 就处于这种状态: 脚本约 12 s 后停住. Rhino 与 Node.js 脚本在宿主回到前台后继续运行; Bun 脚本的宿主会被系统结束, 脚本随之结束. 这类脚本要长时间运行时, 在应用界面打开前台服务开关.</p>\n<p>ColorOS 上, 宿主进程崩溃或被系统结束后无障碍服务不会自动恢复绑定, 要在系统设置里重新打开; Android 原生系统在十几秒内自动恢复.</p>\n",
+              "type": "module",
+              "displayName": "宿主在后台"
             }
           ],
           "type": "misc",

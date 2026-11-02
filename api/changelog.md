@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `新增` [ImGui](imgui) 的完整参考: 快速开始, 会话与窗口模式, 调用时机, 单位, 线程, 错误与限制, 全部函数与常量组, PascalCase 别名表, 以及 [ImguiSession](imguiSessionType), [ImguiDrawList](imguiDrawListType), [ImguiFloatingButton](imguiFloatingButtonType), [ImguiComponent](imguiComponentType), [ImguiDataTable](imguiDataTableType), [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDialog](imguiDialogType), [ImguiDialogPromise](imguiDialogPromiseType), [ImguiTexture](imguiTextureType), [ImguiSelectionStorage](imguiSelectionStorageType) 与 [ImguiMultiSelectIO](imguiMultiSelectIOType) 对象页, 内容对应 ImGui 插件 1.18.0, 页面已加入侧栏与目录
+
 - `新增` [语音 (Speech)](speech#模型更新) 的模型更新说明, [SpeechModelInfo](speechModelInfoType) 增加 [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode) (3-Macaw Speech 1.4.0 及以上)
 
 - `更新` [ImGui](imgui): 运行时支持表标明 Node.js 与 Bun 不提供 imgui 模块, 新增 [在 Node.js / Bun 中使用](imgui#在-node-js-bun-中使用): 用 engines.execScript 启动 Rhino 脚本打开窗口, 用 events.broadcast 通信

@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-02 imgui 模块参考 (api-coverage P5.2f-2 卡 B): [ImGui](imgui) 页补齐快速开始, 会话与窗口模式, 调用时机, 单位, 线程, 错误, 限制, 全部函数与常量组, PascalCase 别名表, 新增 [ImguiSession](imguiSessionType), [ImguiDrawList](imguiDrawListType), [ImguiFloatingButton](imguiFloatingButtonType), [ImguiComponent](imguiComponentType), [ImguiDataTable](imguiDataTableType), [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDialog](imguiDialogType), [ImguiDialogPromise](imguiDialogPromiseType), [ImguiTexture](imguiTextureType), [ImguiSelectionStorage](imguiSelectionStorageType) 与 [ImguiMultiSelectIO](imguiMultiSelectIOType) 对象页, 并加入侧栏与目录. 内容对应 ImGui 插件 1.18.0. 页面的代码块都是完整脚本, 已在 Xiaomi 23046RP50C (Android 15) 上逐个运行 (宿主 tools/api-coverage/device_imgui_docs.py). AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.
+
 2026-11-02 语音 (Speech) 增补: 模型更新 (3-Macaw Speech 1.4.0): [模型更新](speech#模型更新), [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode).
 
 2026-11-01 Node.js 与 Bun 中的 imgui (api-coverage Q213 (b)): [ImGui](imgui#在-node-js-bun-中使用), 运行时支持表记为仅限 Rhino 引擎, Node.js 与 Bun 经 engines.execScript 启动 Rhino 脚本打开窗口.
@@ -284,6 +286,7 @@
 | [Gallery - 相册](gallery) | √ |
 | [Global - 全局对象](global) | √ |
 | [HTTP](http) | √ |
+| [ImGui](imgui) | √ |
 | [Images - 图像](image) | √ |
 | [Installer - 安装器](installer) | √ |
 | [Internationalization - 国际化](i18n) | √ |
@@ -340,6 +343,19 @@
 | [ComposeSession - Compose 会话](composeSessionType) | √ |
 | [ComposeFloatyWindow - Compose 悬浮窗](composeFloatyWindowType) | √ |
 | [Compose 组件目录](composeComponents) | √ |
+| [ImguiSession - ImGui 会话](imguiSessionType) | √ |
+| [ImguiDrawList - ImGui 绘制列表](imguiDrawListType) | √ |
+| [ImguiFloatingButton - ImGui 悬浮按钮](imguiFloatingButtonType) | √ |
+| [ImguiComponent - ImGui 高层组件](imguiComponentType) | √ |
+| [ImguiDataTable - ImGui 数据表格](imguiDataTableType) | √ |
+| [ImguiLogWindow - ImGui 日志窗口](imguiLogWindowType) | √ |
+| [ImguiToast - ImGui 短消息](imguiToastType) | √ |
+| [ImguiStatsOverlay - ImGui 帧率覆盖层](imguiStatsOverlayType) | √ |
+| [ImguiDialog - ImGui 对话框](imguiDialogType) | √ |
+| [ImguiDialogPromise - ImGui 对话框 Promise](imguiDialogPromiseType) | √ |
+| [ImguiTexture - ImGui 纹理](imguiTextureType) | √ |
+| [ImguiSelectionStorage - ImGui 选择存储](imguiSelectionStorageType) | √ |
+| [ImguiMultiSelectIO - ImGui 多选结果](imguiMultiSelectIOType) | √ |
 | [EpubBook - 电子书对象](epubBookType) | √ |
 | [EpubReaderSession - 阅读器会话](epubReaderSessionType) | √ |
 | [Flow - 流程对象](flowType) | √ |

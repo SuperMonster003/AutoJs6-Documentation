@@ -2269,6 +2269,58 @@ let cipherB = Cipher.getInstance("DES/CBC/PKCS5Padding");
 
 参阅 [compose](compose) 的引用对象和 ref 方法.
 
+## ImguiSession
+
+参阅 [ImguiSession - ImGui 会话](imguiSessionType) 类型章节.
+
+## ImguiDrawList
+
+参阅 [ImguiDrawList - ImGui 绘制列表](imguiDrawListType) 类型章节.
+
+## ImguiFloatingButton
+
+参阅 [ImguiFloatingButton - ImGui 悬浮按钮](imguiFloatingButtonType) 类型章节.
+
+## ImguiComponent
+
+参阅 [ImguiComponent - ImGui 高层组件](imguiComponentType) 类型章节.
+
+## ImguiDataTable
+
+参阅 [ImguiDataTable - ImGui 数据表格](imguiDataTableType) 类型章节.
+
+## ImguiLogWindow
+
+参阅 [ImguiLogWindow - ImGui 日志窗口](imguiLogWindowType) 类型章节.
+
+## ImguiToast
+
+参阅 [ImguiToast - ImGui 短消息](imguiToastType) 类型章节.
+
+## ImguiStatsOverlay
+
+参阅 [ImguiStatsOverlay - ImGui 帧率覆盖层](imguiStatsOverlayType) 类型章节.
+
+## ImguiDialog
+
+参阅 [ImguiDialog - ImGui 对话框](imguiDialogType) 类型章节.
+
+## ImguiDialogPromise
+
+参阅 [ImguiDialogPromise - ImGui 对话框 Promise](imguiDialogPromiseType) 类型章节.
+
+## ImguiTexture
+
+参阅 [ImguiTexture - ImGui 纹理](imguiTextureType) 类型章节.
+
+## ImguiSelectionStorage
+
+参阅 [ImguiSelectionStorage - ImGui 选择存储](imguiSelectionStorageType) 类型章节.
+
+## ImguiMultiSelectIO
+
+参阅 [ImguiMultiSelectIO - ImGui 多选结果](imguiMultiSelectIOType) 类型章节.
+
 ## ComposeError
 
 参阅 [compose](compose) 的类型化错误与错误码.

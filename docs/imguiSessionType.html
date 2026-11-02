@@ -527,13 +527,13 @@
 session.on(&#39;moved&#39;, function (event) {
     console.log(&#39;移动到 &#39; + event.x + &#39;, &#39; + event.y + &#39; (&#39; + event.source + &#39;)&#39;);
 });
-session.once(&#39;closed&#39;, function (event, closedSession) {
-    console.log(&#39;关闭: &#39; + closedSession.closeReason);
+session.once(&#39;closed&#39;, function (event) {
+    console.log(&#39;关闭: &#39; + event.reason);
 });
 session.setPosition(24, 120);
 </code></pre>
 <h2>事件<span><a class="mark" href="#imguisessiontype" id="imguisessiontype">#</a></span></h2>
-<p>用 <a href="#imguisessiontype_m_on">on</a>, <a href="#imguisessiontype_m_once">once</a>, <a href="#imguisessiontype_m_off">off</a> 管理监听器, 也可以用 <code>createWindow</code> 的 <code>events</code> 与 <code>onXxx</code> 选项. 监听器在脚本线程上依次运行, 参数为事件对象和会话, 不要阻塞. 事件对象都有 <code>type</code> (事件名), <code>session</code> (会话) 和 <code>timestamp</code> (触发时的 <code>Date.now()</code>), 下表是各事件另有的字段. 载荷中的位置和尺寸单位是 dp.</p>
+<p>用 <a href="#imguisessiontype_m_on">on</a>, <a href="#imguisessiontype_m_once">once</a>, <a href="#imguisessiontype_m_off">off</a> 管理监听器, 也可以用 <code>createWindow</code> 的 <code>events</code> 与 <code>onXxx</code> 选项. 监听器在脚本线程上依次运行, 参数为事件对象和会话 (<a href="#imguisessiontype_m_once">once</a> 的监听器只收到事件对象), 不要阻塞. 事件对象都有 <code>type</code> (事件名), <code>session</code> (会话) 和 <code>timestamp</code> (触发时的 <code>Date.now()</code>), 下表是各事件另有的字段. 载荷中的位置和尺寸单位是 dp.</p>
 <table>
 <thead>
 <tr>
@@ -1382,7 +1382,7 @@ session.setPosition(24, 120);
 <li><strong>listener</strong> { <span class="type"><a href="imguiSessionType.html#imguisessiontype">SessionEventListener</a></span> } - 监听器, 在脚本线程上运行.</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="imguiSessionType.html">ImguiSession</a></span> }</li>
 </ul>
-</div><p>添加只运行一次的监听器.</p>
+</div><p>添加只运行一次的监听器. 监听器只收到事件对象, 会话用 <code>event.session</code> 取.</p>
 <h2>[m#] off<span><a class="mark" href="#imguisessiontype_m_off" id="imguisessiontype_m_off">#</a></span></h2>
 <h3>session.off(eventName, listener?)<span><a class="mark" href="#imguisessiontype_session_off_eventname_listener" id="imguisessiontype_session_off_eventname_listener">#</a></span></h3>
 <div class="signature"><ul>

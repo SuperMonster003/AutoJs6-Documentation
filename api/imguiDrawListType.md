@@ -344,7 +344,7 @@ imgui.createWindow(function (ui) {
 
 ### drawList.addImage(texture, minimum, maximum, options?)
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - **minimum** { [Point](imgui#point) } - 左上角, 单位 px.
 - **maximum** { [Point](imgui#point) } - 右下角, 单位 px.
 - **[ options ]** { [DrawImageOptions](imguiDrawListType#drawimageoptions) } - 选项, 参阅 [DrawImageOptions](#drawimageoptions).
@@ -356,7 +356,7 @@ imgui.createWindow(function (ui) {
 
 ### drawList.addImageQuad(texture, first, second, third, fourth, options?)
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - **first** { [Point](imgui#point) } - 第一个点, 单位 px.
 - **second** { [Point](imgui#point) } - 第二个点, 单位 px.
 - **third** { [Point](imgui#point) } - 第三个点, 单位 px.
@@ -370,7 +370,7 @@ imgui.createWindow(function (ui) {
 
 ### drawList.addImageRounded(texture, minimum, maximum, rounding, options?)
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - **minimum** { [Point](imgui#point) } - 左上角, 单位 px.
 - **maximum** { [Point](imgui#point) } - 右下角, 单位 px.
 - **rounding** { [number](dataTypes#number) } - 圆角半径, 单位 px.

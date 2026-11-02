@@ -2756,7 +2756,7 @@ imgui.createWindow(function (ui) {
 
 **`帧内`**
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - **[ width ]** { [number](dataTypes#number) | [ImageOptions](imguiTextureType#imageoptions) } - 宽度, 单位 px, 默认为纹理宽度. 也可以直接传选项对象.
 - **[ height ]** { [number](dataTypes#number) } - 高度, 单位 px, 默认为纹理高度.
 - **[ options ]** { [ImageOptions](imguiTextureType#imageoptions) } - 选项, 参阅 [ImageOptions](imguiTextureType#imageoptions).
@@ -2771,7 +2771,7 @@ imgui.createWindow(function (ui) {
 **`帧内`**
 
 - **id** { [string](dataTypes#string) } - ID 字符串, 在当前窗口内唯一.
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - **[ width ]** { [number](dataTypes#number) | [ImageOptions](imguiTextureType#imageoptions) } - 宽度, 单位 px, 默认为纹理宽度. 也可以直接传选项对象.
 - **[ height ]** { [number](dataTypes#number) } - 高度, 单位 px, 默认为纹理高度.
 - **[ options ]** { [ImageOptions](imguiTextureType#imageoptions) } - 选项, 参阅 [ImageOptions](imguiTextureType#imageoptions).
@@ -3111,7 +3111,7 @@ imgui.createWindow(function (ui) {
 
 **`脚本线程`**
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 已经释放过时为 `false`.
 
 释放纹理.

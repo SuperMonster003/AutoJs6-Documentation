@@ -58,7 +58,7 @@ table.updateRow(2, { progress: 100 });
 | `title` | [string](dataTypes#string) | 窗口标题, 默认为 ID. |
 | `open` | [boolean](dataTypes#boolean) | 窗口初始是否打开, 默认 `true`. |
 | `multiSelect` | [boolean](dataTypes#boolean) | 点按另一行时保留选择, 默认 `false`. |
-| `tableFlags` | [number](dataTypes#number) | [TableFlags](imgui#p-tableflags), 代替默认的 `Resizable &#124; RowBg &#124; Borders &#124; ScrollY`. |
+| `tableFlags` | [number](dataTypes#number) | [TableFlags](imgui#p-tableflags), 代替默认的 `Resizable \| RowBg \| Borders \| ScrollY`. |
 | `sortable` | [boolean](dataTypes#boolean) | 加上 `TableFlags.Sortable`: 点列标题按这一列排序, 排序是稳定的. `tableFlags` 中的 `SortMulti`, `SortTristate` 与列 `flags` 中的 `DefaultSort`, `NoSort`, `PreferSortDescending` 有效. 新增或修改的行在下一帧重新排序, `onRowsChanged` 收到动作 `sort`. |
 | `rowKey` | [string](dataTypes#string) 或 [Function](dataTypes#function) | 识别行, 用于 `updateRow` 等的目标: 字段名或函数, 默认 `row.id`. |
 | `tableHeight` | [number](dataTypes#number) | 表格高度, `0` 填满窗口 (默认). |

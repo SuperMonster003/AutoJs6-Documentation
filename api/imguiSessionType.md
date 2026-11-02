@@ -528,7 +528,7 @@ Surface 是否可以绘制.
 
 ### session.destroyTexture(texture)
 
-- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](#m-createtexture) 创建的纹理.
+- **texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理.
 - <ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 已经释放过时为 `false`.
 
 释放纹理.

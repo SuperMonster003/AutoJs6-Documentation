@@ -40,6 +40,8 @@ Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 AP
 
 `promise.await()`, `continuation.await(promise)` 与 Flow 的 `await()` 遇到拒绝时同样在调用处抛出拒绝原因, 可用 `try` / `catch` 捕获, 未捕获时脚本以该错误结束.
 
+async 函数内与 Promise 回调内不能挂起, 改用 `await` 关键字或 `then`, 两种写法如何配合见 [async/await 与 continuation](asyncAwait).
+
 ```js
 'ui';
 

@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-03 Rhino 的 async/await, Promise 统一到内建实现 (rhino-class P9.7): [async/await 与 continuation](asyncAwait).
+
 2026-11-02 imgui 模块参考 (api-coverage P5.2f-2 卡 B): [ImGui](imgui) 页补齐快速开始, 会话与窗口模式, 调用时机, 单位, 线程, 错误, 限制, 全部函数与常量组, PascalCase 别名表, 新增 [ImguiSession](imguiSessionType), [ImguiDrawList](imguiDrawListType), [ImguiFloatingButton](imguiFloatingButtonType), [ImguiComponent](imguiComponentType), [ImguiDataTable](imguiDataTableType), [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDialog](imguiDialogType), [ImguiDialogPromise](imguiDialogPromiseType), [ImguiTexture](imguiTextureType), [ImguiSelectionStorage](imguiSelectionStorageType) 与 [ImguiMultiSelectIO](imguiMultiSelectIOType) 对象页, 并加入侧栏与目录. 内容对应 ImGui 插件 1.18.0. 页面的代码块都是完整脚本, 已在 Xiaomi 23046RP50C (Android 15) 上逐个运行 (宿主 tools/api-coverage/device_imgui_docs.py). AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.
 
 2026-11-02 语音 (Speech) 增补: 模型更新 (3-Macaw Speech 1.4.0): [模型更新](speech#模型更新), [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode).
@@ -382,6 +384,7 @@
 | [Activity - 活动](activity) | √ |
 | [Scripting Java - 脚本化 Java](scriptingJava) | √ |
 | [Class Syntax - 类语法](classSyntax) | √ |
+| [Async/Await - async/await 与 continuation](asyncAwait) | √ |
 | [Android API Level - 安卓 API 级别](apiLevel) | √ |
 | [Color Table - 颜色列表](colorTable) | √ |
 | [Glossaries - 术语](glossaries) | &gt; 80% |

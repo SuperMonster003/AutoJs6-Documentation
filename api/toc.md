@@ -152,6 +152,7 @@
 
 * [Scripting Java - 脚本化 Java](scriptingJava)
 * [Class Syntax - 类语法](classSyntax)
+* [Async/Await - async/await 与 continuation](asyncAwait)
 * [Android API Level - 安卓 API 级别](apiLevel)
 * [Color Table - 颜色列表](colorTable)
 

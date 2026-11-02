@@ -1,0 +1,70 @@
+{
+  "source": "..\\api\\asyncAwait.md",
+  "modules": [
+    {
+      "textRaw": "async/await 与 continuation",
+      "name": "async/await_与_continuation",
+      "desc": "<p>AutoJs6 的 Rhino 引擎支持 ECMAScript 的 async 函数, async 生成器与 <code>for await</code>, 全局 <code>Promise</code> 是 Rhino 内建的标准实现. 本章说明支持范围, 回调的运行时机, 以及 async/await 与 <a href=\"continuation\">续体 (Continuation)</a> 如何配合.</p>\n<blockquote>\n<p>注: 本章内容需要 AutoJs6 6.8.0 及以上版本 (Rhino 引擎). Node.js, Bun 等其他运行时使用各自引擎的实现, 不适用本章的线程, 控制台提示与 <code>continuation</code> 说明.</p>\n</blockquote>\n",
+      "modules": [
+        {
+          "textRaw": "语法支持范围",
+          "name": "语法支持范围",
+          "desc": "<pre><code class=\"lang-js\">async function codeOf(url) {\n    let response = await http.getAsync(url);\n    return response.statusCode;\n}\n\nconst double = async (value) =&gt; (await value) * 2; /* async 箭头函数. */\n\nclass Store {\n    async load() { return await double(21); } /* async 方法. */\n    static async create() { return new Store(); } /* 静态 async 方法. */\n    async *items() { yield 1; yield 2; } /* async 生成器方法. */\n}\n\nasync function* countdown(from) { /* async 生成器. */\n    while (from &gt; 0) {\n        yield from--;\n    }\n}\n\nasync function main() {\n    for await (let value of countdown(3)) {\n        console.log(value); /* 3, 2, 1. */\n    }\n    for await (let value of [Promise.resolve(&#39;a&#39;), &#39;b&#39;]) {\n        console.log(value); /* a, b. */\n    }\n    try {\n        await Promise.reject(new Error(&#39;失败&#39;));\n    } catch (e) {\n        console.log(e.message); /* 失败. */\n    }\n}\n\nmain();\n</code></pre>\n<ul>\n<li>async 函数总是返回 Promise. 函数内抛出的错误使这个 Promise 拒绝.</li>\n<li><code>await</code> 只在 async 函数体内是关键字. 脚本顶层不能写 <code>await</code>, 顶层等待见 <a href=\"#与-continuation-的关系\">与 continuation 的关系</a>.</li>\n<li><code>for await</code> 可以遍历有 <code>Symbol.asyncIterator</code> 方法的对象, 也可以遍历元素为 Promise 的普通可迭代对象.</li>\n<li><code>await</code> 不是 Promise 的值时直接得到这个值. Java 的 <code>Future</code> 不是 Promise, <code>await future</code> 得到 <code>Future</code> 对象本身, 不会等待.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "语法支持范围"
+        },
+        {
+          "textRaw": "Promise",
+          "name": "promise",
+          "desc": "<p>全局 <code>Promise</code> 提供标准的 <code>then</code> / <code>catch</code> / <code>finally</code> 与 <code>Promise.resolve</code> / <code>reject</code> / <code>all</code> / <code>allSettled</code> / <code>race</code> / <code>any</code> / <code>withResolvers</code> / <code>try</code>. <code>http.getAsync</code> 等宿主方法返回的也是这种 Promise, 可以 <code>await</code>, <code>instanceof Promise</code> 为 <code>true</code>.</p>\n<p>AutoJs6 另外保留两个方法:</p>\n<table>\n<thead>\n<tr>\n<th>方法</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>promise.await()</code></td>\n<td>挂起当前协程, 落定后恢复. 只能在协程可以挂起的位置调用, 见 <a href=\"continuation\">续体 (Continuation)</a></td>\n</tr>\n<tr>\n<td><code>promise.wait()</code></td>\n<td>阻塞当前线程直到落定, 返回结果或在调用处抛出拒绝原因. 不需要 <code>continuation</code> 特性. 等待期间当前线程继续运行微任务与到期的定时器回调</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "Promise"
+        },
+        {
+          "textRaw": "回调的运行时机",
+          "name": "回调的运行时机",
+          "desc": "<p>Promise 的回调与 <code>await</code> 之后的代码是微任务: 当前代码运行完, 调用栈清空之后立即运行, 排在下一个定时器回调之前.</p>\n<pre><code class=\"lang-js\">setTimeout(() =&gt; console.log(&#39;timeout&#39;), 0);\nPromise.resolve().then(() =&gt; console.log(&#39;then&#39;));\n(async () =&gt; {\n    await null;\n    console.log(&#39;await&#39;);\n})();\nconsole.log(&#39;sync&#39;);\n\n/* 依次打印 sync, then, await, timeout. */\n</code></pre>\n<blockquote>\n<p>注: 6.8.0 之前 Promise 的回调经 <code>setImmediate</code> 排队, 与定时器回调交错运行. 依赖旧顺序的脚本 (例如用 <code>setTimeout(fn, 0)</code> 抢在 <code>then</code> 之前) 需要调整.</p>\n</blockquote>\n",
+          "type": "module",
+          "displayName": "回调的运行时机"
+        },
+        {
+          "textRaw": "与 continuation 的关系",
+          "name": "与_continuation_的关系",
+          "desc": "<p>两种写法并存, 按等待发生的位置选用: 脚本顶层同步等待用 <code>continuation</code>, 函数内用 async/await.</p>\n<table>\n<thead>\n<tr>\n<th>位置</th>\n<th>写法</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>脚本顶层</td>\n<td><code>continuation.await(promise)</code> 或 <code>promise.await()</code>, 需要 <code>continuation</code> 特性</td>\n</tr>\n<tr>\n<td>函数内</td>\n<td>写成 async 函数, 用 <code>await</code></td>\n</tr>\n<tr>\n<td>Promise 回调内</td>\n<td>写成 async 函数, 或继续用 <code>then</code></td>\n</tr>\n</tbody>\n</table>\n<p>两者可以配合. <code>continuation.await</code> 能等待 async 函数返回的 Promise, async 函数内可以 <code>await</code> 宿主方法返回的 Promise:</p>\n<pre><code class=\"lang-js\">/* project.json 的 useFeatures 含有 continuation. */\n\nasync function codeOf(url) {\n    let response = await http.getAsync(url);\n    return response.statusCode;\n}\n\nlet code = continuation.await(codeOf(&#39;https://www.example.com/&#39;));\nconsole.log(code);\n</code></pre>\n<p>async 函数内不能挂起协程. 在 async 函数内调用 <code>continuation.await</code>, <code>promise.await()</code>, <code>continuation.delay</code> 等会报 TypeError, 错误信息为 &quot;协程无法在此处挂起. async 函数内请使用 await 关键字, Promise 回调内请使用 then()&quot;. 这个错误可以用 <code>try</code> / <code>catch</code> 捕获, 没有捕获时按 <a href=\"#未捕获的拒绝\">未捕获的拒绝</a> 处理, 不会使脚本挂起.</p>\n<pre><code class=\"lang-js\">async function wrong(promise) {\n    continuation.await(promise); /* TypeError. */\n}\n\nasync function right(promise) {\n    await promise;\n}\n</code></pre>\n",
+          "type": "module",
+          "displayName": "与 continuation 的关系"
+        },
+        {
+          "textRaw": "线程",
+          "name": "线程",
+          "desc": "<ul>\n<li>async 函数在调用它的线程上开始, <code>await</code> 之后回到同一个线程, 包括 <code>threads.start</code> 创建的线程与 ui 模式的 UI 线程.</li>\n<li><code>then</code> 回调运行在落定 Promise 的线程上. 落定 Promise 的线程不能运行回调时 (普通 Java 线程, 线程池与系统回调的线程), 回调转到脚本主线程运行.</li>\n<li><code>http.getAsync</code> 等宿主方法的 Promise 在 UI 线程落定, <code>then</code> 回调因此运行在 UI 线程, 可以直接操作控件.</li>\n<li>未落定的 Promise 不让线程继续运行. async 函数所在的线程结束后, <code>await</code> 之后的代码在落定 Promise 的线程上运行, 这个函数不再回到原来的线程. 要留在 <code>threads.start</code> 的线程上时, 用定时器让线程保持运行.</li>\n</ul>\n",
+          "type": "module",
+          "displayName": "未捕获的拒绝"
+        },
+        {
+          "textRaw": "未捕获的拒绝",
+          "name": "未捕获的拒绝",
+          "desc": "<p>Promise 拒绝后, 到本轮回调运行完仍没有处理函数时, 控制台输出一条 error, 内容为 &quot;未捕获的 Promise 拒绝: &quot; 加上拒绝原因与调用栈, 脚本继续运行.</p>\n<pre><code class=\"lang-js\">function boom() {\n    throw new RangeError(&#39;失败&#39;);\n}\n\nPromise.resolve().then(boom); /* 控制台输出一次 error. */\nsetTimeout(() =&gt; console.log(&#39;脚本继续运行&#39;), 100);\n</code></pre>\n<p>同一轮内用 <code>catch</code> 或 <code>await</code> 接住的拒绝不会输出.</p>\n",
+          "type": "module",
+          "displayName": "未捕获的拒绝"
+        },
+        {
+          "textRaw": "脚本何时结束",
+          "name": "脚本何时结束",
+          "desc": "<p>脚本在没有待运行的定时器, 事件监听与宿主异步任务时结束. 未落定的 Promise 不让脚本继续运行, 这与 Node.js 相同. <code>http.getAsync</code> 这样的宿主方法运行期间脚本不会结束, 等待 <code>new Promise</code> 时要有定时器或事件监听在运行.</p>\n<p>脚本这样结束时, 如果还有 async 函数在等待, 控制台输出一条 warn, 内容是等待中的函数个数与第一个的位置. 调用 <code>exit()</code> 或手动停止脚本时不输出.</p>\n<pre><code class=\"lang-js\">async function waiting() {\n    await new Promise(() =&gt; {}); /* 这个 Promise 不会落定. */\n}\n\nwaiting();\n\n/* 脚本已结束, 仍有 1 个 async 函数在等待 Promise, 第一个位于 /sdcard/脚本/main.js:2. 未落定的 Promise 不会让脚本继续运行 */\n</code></pre>\n",
+          "type": "module",
+          "displayName": "脚本何时结束"
+        },
+        {
+          "textRaw": "版本要求",
+          "name": "版本要求",
+          "desc": "<p>async 函数, async 生成器与 <code>for await</code> 需要 AutoJs6 6.8.0 及以上版本的 Rhino 引擎, 较低版本解析脚本时报 SyntaxError. TypeScript 项目在 Rhino 上按 ES2018 输出, async 函数原样保留, 同样需要 6.8.0.</p>\n",
+          "type": "module",
+          "displayName": "版本要求"
+        }
+      ],
+      "type": "module",
+      "displayName": "async/await 与 continuation"
+    }
+  ]
+}

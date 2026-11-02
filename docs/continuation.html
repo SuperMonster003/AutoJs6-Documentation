@@ -177,6 +177,7 @@
 <ul>
 <li><a class="nav-scriptingJava" href="scriptingJava.html">Scripting Java - 脚本化 Java</a></li>
 <li><a class="nav-classSyntax" href="classSyntax.html">Class Syntax - 类语法</a></li>
+<li><a class="nav-asyncAwait" href="asyncAwait.html">Async/Await - async/await 与 continuation</a></li>
 <li><a class="nav-apiLevel" href="apiLevel.html">Android API Level - 安卓 API 级别</a></li>
 <li><a class="nav-colorTable" href="colorTable.html">Color Table - 颜色列表</a></li>
 </ul>
@@ -412,6 +413,7 @@
 </ul>
 <p>定时器回调 (<code>setTimeout</code> / <code>setInterval</code> / <code>setImmediate</code>) 与关联了线程的 EventEmitter 的监听器 (经定时器派发), 其他线程 (如 <code>threads.start</code>) 中的代码, 以及由脚本代码同步触发的监听器中不能挂起, 调用 <a href="#continuation_m_await">await</a> 将抛出异常; 这些位置可改用 <code>promise.then(...)</code>.</p>
 <p><code>promise.await()</code>, <code>continuation.await(promise)</code> 与 Flow 的 <code>await()</code> 遇到拒绝时同样在调用处抛出拒绝原因, 可用 <code>try</code> / <code>catch</code> 捕获, 未捕获时脚本以该错误结束.</p>
+<p>async 函数内与 Promise 回调内不能挂起, 改用 <code>await</code> 关键字或 <code>then</code>, 两种写法如何配合见 <a href="asyncAwait.html">async/await 与 continuation</a>.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
 ui.layout(&lt;frame&gt;&lt;text text=&quot;协程&quot; /&gt;&lt;/frame&gt;);

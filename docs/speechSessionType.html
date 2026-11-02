@@ -350,7 +350,7 @@
         <div id="apicontent">
             <h1>听写会话 (SpeechSession)<span><a class="mark" href="#speechsessiontype_speechsession" id="speechsessiontype_speechsession">#</a></span></h1>
 <p>SpeechSession 是 <a href="speech.html#speech_m_listen">speech.listen</a> 返回的听写会话对象, 也是 <a href="speechWakeSessionType.html">SpeechWakeSession</a> 的 <code>wake</code> 事件中 <code>listen</code> 字段携带的听写轮次. 它是 <a href="eventEmitterType.html">EventEmitter</a> 的实例, 连接脚本与 3-Macaw Speech 插件中正在运行的识别: 识别结果与状态变化以事件形式在打开会话的脚本线程到达, 脚本可以提前结束会话, 或为外部 PCM 会话输入音频.</p>
-<p>会话打开期间脚本保持运行, 不需要也不应使用 <code>sleep</code> 循环等待; <code>end</code> 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未结束的会话被静默取消 (不触发事件), 插件随即释放麦克风. 插件同一时刻只有一个麦克风会话, 见 <a href="speech.html#speech_2">麦克风会话与后台收音</a>.</p>
+<p>会话打开期间脚本保持运行, 不需要也不应使用 <code>sleep</code> 循环等待; <code>end</code> 是唯一的终结事件, 之后不再有事件, 脚本没有其它工作时随即结束. 脚本退出时未结束的会话被静默取消 (不触发事件), 插件随即释放麦克风. 插件同一时刻只有一个麦克风会话, 见 <a href="speech.html#speech_3">麦克风会话与后台收音</a>.</p>
 <p><code>on</code> / <code>once</code> 返回自身以便链式调用.</p>
 <pre><code class="lang-js">let session = speech.listen({ maxDurationMillis: 20000 });
 session.on(&#39;ready&#39;, e =&gt; console.log(&#39;模型:&#39;, e.modelId))
@@ -530,7 +530,7 @@ session.on(&#39;end&#39;, () =&gt; console.log(session.result()));
 </table>
 <ul>
 <li><code>final</code> 的 <code>language</code> 为识别出的语种 (SenseVoice), <code>tags</code> 可能含 <code>emotion</code> 与 <code>event</code> (SenseVoice 的情感与声音事件标签).</li>
-<li><code>warning</code> 的常见代码: <code>PERMISSION_DENIED</code> (收到的是静音, 或麦克风前台服务被拒绝, 见 <a href="speech.html#speech_2">麦克风会话与后台收音</a>), <code>INVALID_OPTIONS</code> (模型不支持热词, 或不认识语言提示).</li>
+<li><code>warning</code> 的常见代码: <code>PERMISSION_DENIED</code> (收到的是静音, 或麦克风前台服务被拒绝, 见 <a href="speech.html#speech_3">麦克风会话与后台收音</a>), <code>INVALID_OPTIONS</code> (模型不支持热词, 或不认识语言提示).</li>
 <li><code>end</code> 的原因: <code>&#39;stopped&#39;</code> (调用 <code>stop</code>), <code>&#39;timeout&#39;</code> (达到 <code>timeoutMillis</code>), <code>&#39;maxDuration&#39;</code> (达到 <code>maxDurationMillis</code>), <code>&#39;cancelled&#39;</code> (调用 <code>cancel</code>), <code>&#39;error&#39;</code> (插件侧失败或插件进程退出, 此时先触发 <code>code</code> 为 <code>SESSION_CLOSED</code> 等的 <code>error</code>), <code>&#39;overflow&#39;</code> (脚本积压的事件超过 512 条或 8 MiB, 先触发 <code>code</code> 为 <code>LIMIT_EXCEEDED</code> 的 <code>error</code>, 积压的事件被丢弃, 插件会话随之取消).</li>
 <li>唤醒会话结束时, 仍在进行的听写轮次先以相同原因触发自己的 <code>end</code>.</li>
 </ul>

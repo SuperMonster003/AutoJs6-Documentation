@@ -123,6 +123,23 @@ if (speech.capabilities().microphoneGranted === false) {
 
 插件源码采用 MPL-2.0 许可. 插件内的语音运行时 sherpa-onnx (Apache-2.0) 静态链接了 eSpeak NG 等 GPL-3.0-or-later 组件, 因此插件 APK 整体按 GPL-3.0-or-later 传播. 第三方组件与许可全文见插件的 "关于" 页面.
 
+## 模型更新
+
+3-Macaw Speech 1.4.0 起, 模型对象带 [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode). 目录不会自动刷新: 调用 [speech.models.refreshCatalog](#m-modelsrefreshcatalog) 或在插件首页刷新后, 已安装的模型有更高版本时 `updateAvailable` 为 `true`, 首页的模型卡片也标出 "可更新".
+
+调用 [speech.models.install](#m-modelsinstall) 或在首页点击更新, 模型更新到目录的最新版本:
+
+- 新版下载到独立目录, 校验通过后才切换. 下载失败, 校验失败或取消时旧版不受影响.
+- 新版本的许可与首次安装一样处理, 接受记录按版本保存, 见 [模型目录与许可](#模型目录与许可).
+- 模型正在使用时也能更新: 运行中的会话, 常驻唤醒与系统语音合成引擎用内存中的旧版做完, 之后开始的任务使用新版, 旧版文件在最后一个使用者结束后删除.
+
+```js
+speech.models.refreshCatalog();
+speech.models.list({ installed: true })
+    .filter(m => m.updateAvailable)
+    .forEach(m => speech.models.install(m.id));
+```
+
 ## 麦克风会话与后台收音
 
 麦克风由插件在其自身进程中采集, 音频不经过 AutoJs6. AutoJs6 绑定插件时传递自身的前台能力, 插件在麦克风会话 ([speech.listen](#m-listen) 与 [speech.wake](#m-wake)) 期间还会启动带录音通知的麦克风前台服务, 会话结束即停止. 因此:
@@ -491,7 +508,7 @@ speech.models.list({ kind: 'asr' }).forEach(m => {
 - **[ options ]** { [SpeechInstallOptions](#speechinstalloptions) } - 安装选项
 - <ins>**returns**</ins> { [SpeechModelInfo](speechModelInfoType) } - 安装后的模型对象
 
-下载并安装目录中的模型, 阻塞当前脚本线程直至完成. 下载不设超时. `onProgress(done, total)` 以字节报告进度, 在脚本线程上执行, `total` 未知时为 `0`; 回调抛出的第一个错误在安装结束后抛出.
+下载并安装目录中的模型, 阻塞当前脚本线程直至完成. 下载不设超时. `onProgress(done, total)` 以字节报告进度, 在脚本线程上执行, `total` 未知时为 `0`; 回调抛出的第一个错误在安装结束后抛出. 模型已安装较旧的版本时, 调用把它更新到目录的最新版本, 失败时旧版不变, 见 [模型更新](#模型更新).
 
 仅限非商业用途或未声明许可的模型需要 `acceptLicense: true`, 见 [模型目录与许可](#模型目录与许可). 失败时的错误代码: `MODEL_MISSING` (目录中没有该 ID), `MODEL_LICENSE_NOT_ACCEPTED`, `MODEL_DOWNLOAD_FAILED`, `MODEL_CHECKSUM_MISMATCH`, `IO_FAILED` (例如空间不足), `SESSION_CANCELLED` (脚本停止或插件界面取消).
 

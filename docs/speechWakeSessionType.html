@@ -337,7 +337,7 @@
         <div id="apicontent">
             <h1>唤醒会话 (SpeechWakeSession)<span><a class="mark" href="#speechwakesessiontype_speechwakesession" id="speechwakesessiontype_speechwakesession">#</a></span></h1>
 <p>SpeechWakeSession 是 <a href="speech.html#speech_m_wake">speech.wake</a> 返回的唤醒词会话对象, 是 <a href="eventEmitterType.html">EventEmitter</a> 的实例: 3-Macaw Speech 插件从麦克风持续检测关键词, 每次命中以 <code>wake</code> 事件在打开会话的脚本线程到达. 设置 <code>thenListen</code> 后, 每次命中自动转入一轮听写, 该轮的 <a href="speechSessionType.html">SpeechSession</a> 由 <code>wake</code> 事件的 <code>listen</code> 字段交给脚本, 该轮结束后恢复关键词检测.</p>
-<p>会话打开期间脚本保持运行, 直至 <code>end</code> 事件; <code>end</code> 是唯一的终结事件, 各听写轮次的 <code>end</code> 只是普通事件. 脚本退出时未结束的会话被静默取消, 插件随即释放麦克风. 唤醒会话占用插件唯一的麦克风; 插件自己的听写入口 (数字助理, 系统语音输入, 系统识别服务, 试听试说) 收音期间, 唤醒会话保持打开但静默, 见 <a href="speech.html#speech_3">唤醒会话的临时接管</a>.</p>
+<p>会话打开期间脚本保持运行, 直至 <code>end</code> 事件; <code>end</code> 是唯一的终结事件, 各听写轮次的 <code>end</code> 只是普通事件. 脚本退出时未结束的会话被静默取消, 插件随即释放麦克风. 唤醒会话占用插件唯一的麦克风; 插件自己的听写入口 (数字助理, 系统语音输入, 系统识别服务, 试听试说) 收音期间, 唤醒会话保持打开但静默, 见 <a href="speech.html#speech_4">唤醒会话的临时接管</a>.</p>
 <p><code>on</code> / <code>once</code> 返回自身以便链式调用.</p>
 <pre><code class="lang-js">let wake = speech.wake([&#39;小六小六&#39;, &#39;hey macaw&#39;], { thenListen: true });
 wake.on(&#39;wake&#39;, e =&gt; {

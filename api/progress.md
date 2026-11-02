@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-02 语音 (Speech) 增补: 模型更新 (3-Macaw Speech 1.4.0): [模型更新](speech#模型更新), [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode).
+
 2026-11-01 Node.js 与 Bun 中的 imgui (api-coverage Q213 (b)): [ImGui](imgui#在-node-js-bun-中使用), 运行时支持表记为仅限 Rhino 引擎, Node.js 与 Bun 经 engines.execScript 启动 Rhino 脚本打开窗口.
 
 2026-11-01 Rhino 的 class 语法与继承 Java 类 (rhino-class P7.4): [类语法](classSyntax).

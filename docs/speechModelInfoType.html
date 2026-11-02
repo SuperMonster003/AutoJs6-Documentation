@@ -315,6 +315,8 @@
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_isdefault">[p] isDefault</a></span></li>
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_recommended">[p] recommended</a></span></li>
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_version">[p] version</a></span></li>
+<li><span class="stability_undefined"><a href="#speechmodelinfotype_p_updateavailable">[p] updateAvailable</a></span></li>
+<li><span class="stability_undefined"><a href="#speechmodelinfotype_p_latestversioncode">[p] latestVersionCode</a></span></li>
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_license">[p] license</a></span></li>
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_speakers">[p] speakers</a></span></li>
 <li><span class="stability_undefined"><a href="#speechmodelinfotype_p_samplerate">[p] sampleRate</a></span></li>
@@ -352,6 +354,8 @@
 <li>isDefault: <a href="dataTypes.html#datatypes_boolean">boolean</a>;</li>
 <li>recommended: <a href="dataTypes.html#datatypes_boolean">boolean</a>;</li>
 <li>version: <a href="dataTypes.html#datatypes_number">number</a>;</li>
+<li>updateAvailable?: <a href="dataTypes.html#datatypes_boolean">boolean</a>;</li>
+<li>latestVersionCode?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>license: { <span class="type">{ spdx: <a href="dataTypes.html#datatypes_string">string</a>; commercialUse: <a href="dataTypes.html#datatypes_boolean">boolean</a>; noticeUrl?: <a href="dataTypes.html#datatypes_string">string</a></span> }};</li>
 <li>speakers?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
 <li>sampleRate?: <a href="dataTypes.html#datatypes_number">number</a>;</li>
@@ -425,7 +429,20 @@
 <ul>
 <li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> }</li>
 </ul>
-<p>模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本.</p>
+<p>模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本; 更新时旧版文件保留到使用它的任务结束.</p>
+<h2>[p] updateAvailable<span><a class="mark" href="#speechmodelinfotype_p_updateavailable" id="speechmodelinfotype_p_updateavailable">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+<p>已安装的模型在当前目录中有更高版本时为 <code>true</code>, 其他情况为 <code>false</code>. 用户导入且与目录不一致的模型, 以及文件被破坏的模型始终为 <code>false</code>. 判断以当前目录为准, 目录由 <a href="speech.html#speech_m_models_refreshcatalog">speech.models.refreshCatalog</a> 刷新, 不会自动联网. 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.</p>
+<p>调用 <a href="speech.html#speech_m_models_install">speech.models.install</a> 即可更新, 见 <a href="speech.html#speech_2">模型更新</a>.</p>
+<h2>[p] latestVersionCode<span><a class="mark" href="#speechmodelinfotype_p_latestversioncode" id="speechmodelinfotype_p_latestversioncode">#</a></span></h2>
+<p><strong><code>6.8.0</code></strong></p>
+<ul>
+<li>{ <span class="type"><a href="dataTypes.html#datatypes_number">number</a></span> | <span class="type"><a href="dataTypes.html#datatypes_undefined">undefined</a></span> }</li>
+</ul>
+<p>当前目录提供的最新版本号; 目录没有可安装版本时等于 <a href="#speechmodelinfotype_p_version">version</a>. 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.</p>
 <h2>[p] license<span><a class="mark" href="#speechmodelinfotype_p_license" id="speechmodelinfotype_p_license">#</a></span></h2>
 <p><strong><code>6.8.0</code></strong></p>
 <ul>

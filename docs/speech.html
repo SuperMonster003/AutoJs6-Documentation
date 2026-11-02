@@ -305,11 +305,12 @@
 <li><span class="stability_undefined"><a href="#speech_speech">语音 (Speech)</a></span><ul>
 <li><span class="stability_undefined"><a href="#speech">准备工作</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_1">模型目录与许可</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_2">麦克风会话与后台收音</a></span><ul>
-<li><span class="stability_undefined"><a href="#speech_3">唤醒会话的临时接管</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_2">模型更新</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_3">麦克风会话与后台收音</a></span><ul>
+<li><span class="stability_undefined"><a href="#speech_4">唤醒会话的临时接管</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#speech_4">离线分析</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_5">离线分析</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_m_isavailable">[m] isAvailable</a></span><ul>
 <li><span class="stability_undefined"><a href="#speech_speech_isavailable">speech.isAvailable()</a></span></li>
 </ul>
@@ -460,7 +461,7 @@
 <li><span class="stability_undefined"><a href="#speech_speechtagoptions">SpeechTagOptions</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#speech_5">返回对象</a></span><ul>
+<li><span class="stability_undefined"><a href="#speech_6">返回对象</a></span><ul>
 <li><span class="stability_undefined"><a href="#speech_speechcapabilities">SpeechCapabilities</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_speechvoicesegments">SpeechVoiceSegments</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_speechsynthesisresult">SpeechSynthesisResult</a></span></li>
@@ -469,21 +470,21 @@
 <li><span class="stability_undefined"><a href="#speech_speechtagging">SpeechTagging</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#speech_6">错误代码</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_7">限制</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_8">插件的系统入口</a></span><ul>
+<li><span class="stability_undefined"><a href="#speech_7">错误代码</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_8">限制</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_9">插件的系统入口</a></span><ul>
 <li><span class="stability_undefined"><a href="#speech_tts">系统 TTS 引擎</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_9">系统语音输入</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_10">数字助理</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_11">语音指令入口</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_12">系统识别服务</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_10">系统语音输入</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_11">数字助理</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_12">语音指令入口</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_13">系统识别服务</a></span></li>
 </ul>
 </li>
 <li><span class="stability_undefined"><a href="#speech_examples">示例 (Examples)</a></span><ul>
-<li><span class="stability_undefined"><a href="#speech_13">听写到文件</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_14">听写到文件</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_3_stove_agent">唤醒词后交给 3-Stove Agent</a></span></li>
 <li><span class="stability_undefined"><a href="#speech_pcm">识别脚本生成的 PCM</a></span></li>
-<li><span class="stability_undefined"><a href="#speech_14">处理缺少模型或权限</a></span></li>
+<li><span class="stability_undefined"><a href="#speech_15">处理缺少模型或权限</a></span></li>
 </ul>
 </li>
 </ul>
@@ -953,12 +954,25 @@ session.on(&#39;end&#39;, e =&gt; console.log(e.reason, session.result()));
 <li>流式模型 (<code>online-transducer</code>) 逐字给出部分结果; 离线模型 (<code>sense-voice</code>, <code>offline-transducer</code>) 由语音活动检测切段后逐段识别, 部分结果按段给出. 两类模型在会话上触发同样的事件.</li>
 <li>热词 (<code>hotwords</code>) 只对带 <code>bpe.vocab</code> 的流式模型生效 (目录中为 <code>asr.zipformer-streaming.zh-en.2023-02-20.int8</code>), 其他模型收到热词时忽略并给出警告.</li>
 <li><code>asr.nemo-transducer.es.2026-05-03.int8</code> 只识别西班牙语, 结果自带标点与大小写. <code>asr.zipformer-streaming.ar-en-id-ja-ru-th-vi-zh.2025-02-10.int8</code> 自行判断语种, 不能指定语言, 句首偶尔被识别成其他语言, 结果不带标点; 其权重为 Apache-2.0, 但训练数据未公开, 因此可商用一栏为 &quot;未知&quot;.</li>
-<li>说话人, 分割, 语种识别与音频标签模型只供 <a href="#speech_p_speaker">speech.speaker</a>, <a href="#speech_m_diarize">speech.diarize</a>, <a href="#speech_m_detectlanguage">speech.detectLanguage</a> 与 <a href="#speech_m_tag">speech.tag</a> 使用, 见 <a href="#speech_4">离线分析</a>. 说话人分离同时使用一个分割模型和一个说话人模型. <code>segment.pyannote.3-0</code> 的权重为 MIT 许可, 但训练数据中的 MSDWild 仅限研究用途, 因此可商用一栏为 &quot;否&quot;; Whisper 的权重为 MIT 许可, 训练数据未公开, 因此为 &quot;未知&quot;. 音频标签只有英文标签.</li>
+<li>说话人, 分割, 语种识别与音频标签模型只供 <a href="#speech_p_speaker">speech.speaker</a>, <a href="#speech_m_diarize">speech.diarize</a>, <a href="#speech_m_detectlanguage">speech.detectLanguage</a> 与 <a href="#speech_m_tag">speech.tag</a> 使用, 见 <a href="#speech_5">离线分析</a>. 说话人分离同时使用一个分割模型和一个说话人模型. <code>segment.pyannote.3-0</code> 的权重为 MIT 许可, 但训练数据中的 MSDWild 仅限研究用途, 因此可商用一栏为 &quot;否&quot;; Whisper 的权重为 MIT 许可, 训练数据未公开, 因此为 &quot;未知&quot;. 音频标签只有英文标签.</li>
 <li><code>tts.kokoro.multi-lang.v1_1</code> 的 0 - 2 号说话人为英文, 3 号及以后为中文, 默认说话人为 3 号. <code>tts.kokoro.multi-lang.v1_0.int8</code> 的说话人按语言划分: 0 - 19 号美式英语, 20 - 27 号英式英语, 28, 29 与 53 号西班牙语, 30 号法语, 31 - 34 号印地语, 35, 36 号意大利语, 42 - 44 号巴西葡萄牙语, 45 - 52 号中文 (也能读英文); 37 - 41 号为日语说话人, 不开放, 指定它们时调用失败于 <code>INVALID_OPTIONS</code>; 默认说话人为 3 号. 其他模型的默认说话人为 0 号.</li>
 </ul>
 <p>每个模型对象的 <code>license</code> 给出许可表达式 (<code>spdx</code>) 与是否可商用 (<code>commercialUse</code>). 仅限非商业用途或未声明许可的模型 (目录中可商用一栏为 &quot;否&quot; 或 &quot;未知&quot; 的条目, 其 <code>commercialUse</code> 为 <code>false</code>) 须先接受许可才能安装: 脚本以 <code>acceptLicense: true</code> 调用 <a href="#speech_m_models_install">speech.models.install</a> 或 <a href="#speech_m_models_importfile">speech.models.importFile</a>, 或者用户在插件界面的许可提示中确认. 接受记录按模型版本与许可表达式保存在插件中, 之后再次安装同一版本无需重复接受; 否则调用失败于 <code>MODEL_LICENSE_NOT_ACCEPTED</code>. <code>acceptLicense</code> 只表示接受许可条款, 不改变模型许可本身, 使用者需自行遵守.</p>
 <p>插件源码采用 MPL-2.0 许可. 插件内的语音运行时 sherpa-onnx (Apache-2.0) 静态链接了 eSpeak NG 等 GPL-3.0-or-later 组件, 因此插件 APK 整体按 GPL-3.0-or-later 传播. 第三方组件与许可全文见插件的 &quot;关于&quot; 页面.</p>
-<h2>麦克风会话与后台收音<span><a class="mark" href="#speech_2" id="speech_2">#</a></span></h2>
+<h2>模型更新<span><a class="mark" href="#speech_2" id="speech_2">#</a></span></h2>
+<p>3-Macaw Speech 1.4.0 起, 模型对象带 <a href="speechModelInfoType.html#speechmodelinfotype_p_updateavailable">updateAvailable</a> 与 <a href="speechModelInfoType.html#speechmodelinfotype_p_latestversioncode">latestVersionCode</a>. 目录不会自动刷新: 调用 <a href="#speech_m_models_refreshcatalog">speech.models.refreshCatalog</a> 或在插件首页刷新后, 已安装的模型有更高版本时 <code>updateAvailable</code> 为 <code>true</code>, 首页的模型卡片也标出 &quot;可更新&quot;.</p>
+<p>调用 <a href="#speech_m_models_install">speech.models.install</a> 或在首页点击更新, 模型更新到目录的最新版本:</p>
+<ul>
+<li>新版下载到独立目录, 校验通过后才切换. 下载失败, 校验失败或取消时旧版不受影响.</li>
+<li>新版本的许可与首次安装一样处理, 接受记录按版本保存, 见 <a href="#speech_1">模型目录与许可</a>.</li>
+<li>模型正在使用时也能更新: 运行中的会话, 常驻唤醒与系统语音合成引擎用内存中的旧版做完, 之后开始的任务使用新版, 旧版文件在最后一个使用者结束后删除.</li>
+</ul>
+<pre><code class="lang-js">speech.models.refreshCatalog();
+speech.models.list({ installed: true })
+    .filter(m =&gt; m.updateAvailable)
+    .forEach(m =&gt; speech.models.install(m.id));
+</code></pre>
+<h2>麦克风会话与后台收音<span><a class="mark" href="#speech_3" id="speech_3">#</a></span></h2>
 <p>麦克风由插件在其自身进程中采集, 音频不经过 AutoJs6. AutoJs6 绑定插件时传递自身的前台能力, 插件在麦克风会话 (<a href="#speech_m_listen">speech.listen</a> 与 <a href="#speech_m_wake">speech.wake</a>) 期间还会启动带录音通知的麦克风前台服务, 会话结束即停止. 因此:</p>
 <ul>
 <li>在 AutoJs6 界面可见时 (或 AutoJs6 的无障碍服务已绑定时) 打开的会话, 之后 AutoJs6 退到后台或熄屏也能继续收音.</li>
@@ -967,15 +981,15 @@ session.on(&#39;end&#39;, e =&gt; console.log(e.reason, session.result()));
 </ul>
 <p>插件只有一个麦克风. 整个插件同一时刻只运行一个麦克风会话 (听写或唤醒), 不论它由哪个脚本, 哪个应用 (例如 3-Stone AI 或 3-Stove Agent 的常驻监听) 或插件自己的界面打开; 第二个麦克风会话立即失败于 <code>SESSION_BUSY</code>, 不会排队等待. 以 <code>source: &#39;external&#39;</code> 打开的 PCM 会话与文件识别不占用麦克风, 外部 PCM 会话每个调用方应用最多同时 4 个.</p>
 <p>脚本退出时, 仍打开的会话被静默取消 (不再触发事件), 插件随即停止录音并释放麦克风.</p>
-<h3>唤醒会话的临时接管<span><a class="mark" href="#speech_3" id="speech_3">#</a></span></h3>
-<p>插件自己的听写入口, 即 <a href="#speech_10">数字助理</a>, <a href="#speech_9">系统语音输入</a> 弹层, <a href="#speech_12">系统识别服务</a> 与插件界面的 &quot;试听试说&quot; 页, 开始收音时若麦克风正被唤醒会话占用 (脚本的 <a href="#speech_m_wake">speech.wake</a>, 或其他应用经插件打开的唤醒会话), 会临时接管麦克风:</p>
+<h3>唤醒会话的临时接管<span><a class="mark" href="#speech_4" id="speech_4">#</a></span></h3>
+<p>插件自己的听写入口, 即 <a href="#speech_11">数字助理</a>, <a href="#speech_10">系统语音输入</a> 弹层, <a href="#speech_13">系统识别服务</a> 与插件界面的 &quot;试听试说&quot; 页, 开始收音时若麦克风正被唤醒会话占用 (脚本的 <a href="#speech_m_wake">speech.wake</a>, 或其他应用经插件打开的唤醒会话), 会临时接管麦克风:</p>
 <ul>
 <li>唤醒会话保持打开但静默: 接管期间不报告 <code>wake</code> 命中 (避免说话内容误触唤醒词), 不结束, 也不触发其他事件; 接管方结束后自动恢复检测.</li>
 <li>接管对脚本透明, 唤醒会话的状态与属性不变.</li>
 <li>唤醒命中后已按 <code>thenListen</code> 转入听写的轮次, 以及 <a href="#speech_m_listen">speech.listen</a> 的听写会话, 不会被接管; 此时这些入口显示 &quot;麦克风正被占用&quot; 的说明.</li>
 <li>接管期间打开新的麦克风会话同样失败于 <code>SESSION_BUSY</code>.</li>
 </ul>
-<h2>离线分析<span><a class="mark" href="#speech_4" id="speech_4">#</a></span></h2>
+<h2>离线分析<span><a class="mark" href="#speech_5" id="speech_5">#</a></span></h2>
 <p><a href="#speech_m_diarize">speech.diarize</a> (说话人分离), <a href="#speech_m_detectlanguage">speech.detectLanguage</a> (语种识别) 与 <a href="#speech_m_tag">speech.tag</a> (音频标签) 分析一个完整的音频文件, 一次调用得到结果, 不做流式处理. 它们需要插件分别声明 <code>diarization</code>, <code>languageId</code> 与 <code>audioTagging</code> 功能 (3-Macaw Speech 1.3.0 及以上, 契约版本 <code>2</code>); 较早的插件以 <code>PLUGIN_INCOMPATIBLE</code> 拒绝调用. 所需模型未安装时失败于 <code>MODEL_MISSING</code>, 可在插件首页或通过 <a href="#speech_m_models_install">speech.models.install</a> 下载, 见 <a href="#speech_1">模型目录与许可</a>.</p>
 <ul>
 <li>只接受音频文件路径, 不接受 PCM 数据. 文件的格式要求与上限同 <a href="#speech_m_recognize">speech.recognize</a> 的文件路径: WAV 以外的格式需要 <code>audioDecode</code> 功能, 文件不超过 200 MiB 且时长不超过 30 分钟.</li>
@@ -1074,7 +1088,7 @@ console.log(`${segments.length} 段语音, 共 ${durationMillis} ms`);
 </ul>
 <p>打开一个唤醒词会话, 从插件的麦克风持续检测关键词, 每次命中触发 <code>wake</code> 事件. 需要插件声明 <code>kws</code> 功能; 使用 <code>thenListen</code> 时还需要 <code>asrStreaming</code> 功能. 唤醒会话占用插件唯一的麦克风, 与 <a href="#speech_m_listen">listen</a> 的打开失败情形相同.</p>
 <p>关键词直接写原文, 无需训练模型: 1 - 50 个, 不能重复, 每个不超过 128 个字符. 中文按常用读音转换为拼音 (声母与带调韵母), 英文单词按模型自带的音素词典转换; 空白与标点分隔单词. 数字, 词典中没有的英文单词与无法转换的字符以 <code>INVALID_OPTIONS</code> 拒绝. 由空格分隔的模型 token 原样使用, 可借此为多音字指定读音, 例如 <code>&#39;x iǎo l iù&#39;</code>.</p>
-<p>设置 <code>thenListen</code> 后, 每次命中自动转入一轮听写: <code>wake</code> 事件的 <code>listen</code> 字段是该轮的 <a href="speechSessionType.html">SpeechSession</a>, 在 <code>wake</code> 监听器中为它注册事件; 该轮结束后恢复关键词检测. 唤醒会话被插件自己的听写入口临时接管时保持静默, 见 <a href="#speech_3">唤醒会话的临时接管</a>.</p>
+<p>设置 <code>thenListen</code> 后, 每次命中自动转入一轮听写: <code>wake</code> 事件的 <code>listen</code> 字段是该轮的 <a href="speechSessionType.html">SpeechSession</a>, 在 <code>wake</code> 监听器中为它注册事件; 该轮结束后恢复关键词检测. 唤醒会话被插件自己的听写入口临时接管时保持静默, 见 <a href="#speech_4">唤醒会话的临时接管</a>.</p>
 <pre><code class="lang-js">let wake = speech.wake([&#39;小六小六&#39;, { keyword: &#39;hey macaw&#39;, threshold: 0.3 }], {
     thenListen: { silenceEndMillis: 1200 },
 });
@@ -1138,7 +1152,7 @@ speech.speak(&#39;你好&#39;, { model: &#39;tts.vits.icefall.zh-aishell3&#39;, 
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#speech_speechdiarization">SpeechDiarization</a></span> } - 说话人分离结果</li>
 </ul>
 <p>说话人分离: 找出音频中 &quot;谁在什么时候说话&quot;. 结果按时间顺序列出每段说话的开始与结束时间及说话人编号; 说话人从 <code>0</code> 起按首次出现的顺序编号, 只区分不同的声音, 不表示身份. <code>identify: true</code> 时另用 <a href="#speech_p_speaker">speech.speaker</a> 注册的声纹为每位说话人取名.</p>
-<p>需要插件声明 <code>diarization</code> 功能, 并已安装一个分割模型 (<code>segment</code>) 与一个说话人模型 (<code>speaker</code>), 缺少任一时失败于 <code>MODEL_MISSING</code>. 说话段超过 10000 段时失败于 <code>LIMIT_EXCEEDED</code>. 文件, 进度与等待时限等规则见 <a href="#speech_4">离线分析</a>.</p>
+<p>需要插件声明 <code>diarization</code> 功能, 并已安装一个分割模型 (<code>segment</code>) 与一个说话人模型 (<code>speaker</code>), 缺少任一时失败于 <code>MODEL_MISSING</code>. 说话段超过 10000 段时失败于 <code>LIMIT_EXCEEDED</code>. 文件, 进度与等待时限等规则见 <a href="#speech_5">离线分析</a>.</p>
 <p>已知人数时传入 <code>speakers</code> 结果更准; 省略或为 <code>0</code> 时由插件按 <code>threshold</code> 自动计数.</p>
 <pre><code class="lang-js">let result = speech.diarize(&#39;./meeting.wav&#39;, {
     speakers: 2,
@@ -1170,7 +1184,7 @@ result.segments.forEach(s =&gt; console.log(s.speaker, s.startMillis, s.endMilli
 </ul>
 <p>语种识别: 判断音频中说的是哪种语言. 插件先用语音活动检测取出语音, 切成每段至多 30 秒的窗口, 对前 <code>windows</code> 个窗口 (默认 3 个) 逐句判断语种, 语音不足 1.25 秒的短句并入相邻的句子. 说话时长最长的语种为结果, 平票时取先出现的. 语言代码为 Whisper 的语言代码, 如 <code>&#39;zh&#39;</code>, <code>&#39;en&#39;</code>, <code>&#39;ja&#39;</code>. <code>segments</code> 给出每句的结果, 一段录音里说了几种语言时可以逐句看出来; 一句话中途换语言时只得到其中一种.</p>
 <p>3-Macaw Speech 1.3.0 不按句判断: 每个窗口只判一种语言, <code>segments</code> 为每个窗口的结果, 结果取窗口数最多的语种, 同一窗口里说了几种语言时只得到其中一种.</p>
-<p>需要插件声明 <code>languageId</code> 功能, 并已安装语种识别模型 (<code>langid</code>). 文件中没有语音时失败于 <code>AUDIO_TOO_SHORT</code>. 其他规则见 <a href="#speech_4">离线分析</a>.</p>
+<p>需要插件声明 <code>languageId</code> 功能, 并已安装语种识别模型 (<code>langid</code>). 文件中没有语音时失败于 <code>AUDIO_TOO_SHORT</code>. 其他规则见 <a href="#speech_5">离线分析</a>.</p>
 <pre><code class="lang-js">let r = speech.detectLanguage(&#39;./voice.mp3&#39;, { windows: 5 });
 console.log(r.language, JSON.stringify(r.candidates));
 </code></pre>
@@ -1192,7 +1206,7 @@ console.log(r.language, JSON.stringify(r.candidates));
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="#speech_speechtagging">SpeechTagging</a></span> } - 音频标签结果</li>
 </ul>
 <p>音频标签: 识别音频中的声音类别, 如人声, 音乐, 动物, 车辆与警报. 插件按 10 秒的窗口打分, 使用 AudioSet 的 527 个英文标签; 每个标签取其得分最高的窗口, 按分数从高到低返回前 <code>topK</code> 个 (默认 5 个). <code>timeline: true</code> 时另返回每个窗口的前 <code>topK</code> 个标签.</p>
-<p>需要插件声明 <code>audioTagging</code> 功能, 并已安装音频标签模型 (<code>tagger</code>). 其他规则见 <a href="#speech_4">离线分析</a>.</p>
+<p>需要插件声明 <code>audioTagging</code> 功能, 并已安装音频标签模型 (<code>tagger</code>). 其他规则见 <a href="#speech_5">离线分析</a>.</p>
 <pre><code class="lang-js">let r = speech.tag(&#39;./street.wav&#39;, { topK: 3, timeline: true });
 r.labels.forEach(l =&gt; console.log(l.label, l.score, l.startMillis));
 r.timeline.forEach(w =&gt; console.log(w.startMillis, w.labels.map(l =&gt; l.label).join(&#39;, &#39;)));
@@ -1229,7 +1243,7 @@ r.timeline.forEach(w =&gt; console.log(w.startMillis, w.labels.map(l =&gt; l.lab
 <li><strong>[ options ]</strong> { <span class="type"><a href="#speech_speechinstalloptions">SpeechInstallOptions</a></span> } - 安装选项</li>
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="speechModelInfoType.html">SpeechModelInfo</a></span> } - 安装后的模型对象</li>
 </ul>
-<p>下载并安装目录中的模型, 阻塞当前脚本线程直至完成. 下载不设超时. <code>onProgress(done, total)</code> 以字节报告进度, 在脚本线程上执行, <code>total</code> 未知时为 <code>0</code>; 回调抛出的第一个错误在安装结束后抛出.</p>
+<p>下载并安装目录中的模型, 阻塞当前脚本线程直至完成. 下载不设超时. <code>onProgress(done, total)</code> 以字节报告进度, 在脚本线程上执行, <code>total</code> 未知时为 <code>0</code>; 回调抛出的第一个错误在安装结束后抛出. 模型已安装较旧的版本时, 调用把它更新到目录的最新版本, 失败时旧版不变, 见 <a href="#speech_2">模型更新</a>.</p>
 <p>仅限非商业用途或未声明许可的模型需要 <code>acceptLicense: true</code>, 见 <a href="#speech_1">模型目录与许可</a>. 失败时的错误代码: <code>MODEL_MISSING</code> (目录中没有该 ID), <code>MODEL_LICENSE_NOT_ACCEPTED</code>, <code>MODEL_DOWNLOAD_FAILED</code>, <code>MODEL_CHECKSUM_MISMATCH</code>, <code>IO_FAILED</code> (例如空间不足), <code>SESSION_CANCELLED</code> (脚本停止或插件界面取消).</p>
 <pre><code class="lang-js">speech.models.install(&#39;kws.zipformer.zh-en.2025-12-20&#39;, {
     onProgress: (done, total) =&gt; console.log(done, &#39;/&#39;, total),
@@ -1515,7 +1529,7 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 <li><strong>[ timeline = <code>false</code> ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_boolean">boolean</a></span> } - 是否另返回每个 10 秒窗口的标签</li>
 <li><strong>[ onProgress ]</strong> { <span class="type"><a href="dataTypes.html#datatypes_function">Function</a></span> } - 进度回调, 单位为音频毫秒</li>
 </ul>
-<h2>返回对象<span><a class="mark" href="#speech_5" id="speech_5">#</a></span></h2>
+<h2>返回对象<span><a class="mark" href="#speech_6" id="speech_6">#</a></span></h2>
 <h3>SpeechCapabilities<span><a class="mark" href="#speech_speechcapabilities" id="speech_speechcapabilities">#</a></span></h3>
 <p><a href="#speech_m_capabilities">speech.capabilities</a> 的返回值.</p>
 <ul>
@@ -1574,7 +1588,7 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 <li><strong>modelId</strong> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 实际使用的模型</li>
 <li><strong>timeline</strong> { <span class="type">{ startMillis: <a href="dataTypes.html#datatypes_number">number</a>; endMillis: <a href="dataTypes.html#datatypes_number">number</a>; labels: {{ label: <a href="dataTypes.html#datatypes_string">string</a>; mid: <a href="dataTypes.html#datatypes_string">string</a>; score: <a href="dataTypes.html#datatypes_number">number</a></span> }}[] }}[] | <a href="dataTypes.html#datatypes_undefined">undefined</a> - 只在 <code>timeline: true</code> 时存在, 每个 10 秒窗口一项, 含该窗口得分最高的前 <code>topK</code> 个标签</li>
 </ul>
-<h2>错误代码<span><a class="mark" href="#speech_6" id="speech_6">#</a></span></h2>
+<h2>错误代码<span><a class="mark" href="#speech_7" id="speech_7">#</a></span></h2>
 <table>
 <thead>
 <tr>
@@ -1665,7 +1679,7 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 </tr>
 </tbody>
 </table>
-<h2>限制<span><a class="mark" href="#speech_7" id="speech_7">#</a></span></h2>
+<h2>限制<span><a class="mark" href="#speech_8" id="speech_8">#</a></span></h2>
 <table>
 <thead>
 <tr>
@@ -1736,11 +1750,11 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 </tr>
 </tbody>
 </table>
-<h2>插件的系统入口<span><a class="mark" href="#speech_8" id="speech_8">#</a></span></h2>
-<p>以下入口由 3-Macaw Speech 提供给 Android 系统与其他应用, 不是脚本 API, 在此一并说明以便脚本作者与集成方了解它们与脚本会话的关系. 它们与脚本共用插件唯一的麦克风: 脚本的听写会话占用麦克风时, 这些入口显示 &quot;麦克风正被占用&quot; 的说明; 它们收音时, 脚本打开麦克风会话失败于 <code>SESSION_BUSY</code>; 唤醒会话则被临时接管 (见 <a href="#speech_3">唤醒会话的临时接管</a>).</p>
+<h2>插件的系统入口<span><a class="mark" href="#speech_9" id="speech_9">#</a></span></h2>
+<p>以下入口由 3-Macaw Speech 提供给 Android 系统与其他应用, 不是脚本 API, 在此一并说明以便脚本作者与集成方了解它们与脚本会话的关系. 它们与脚本共用插件唯一的麦克风: 脚本的听写会话占用麦克风时, 这些入口显示 &quot;麦克风正被占用&quot; 的说明; 它们收音时, 脚本打开麦克风会话失败于 <code>SESSION_BUSY</code>; 唤醒会话则被临时接管 (见 <a href="#speech_4">唤醒会话的临时接管</a>).</p>
 <h3>系统 TTS 引擎<span><a class="mark" href="#speech_tts" id="speech_tts">#</a></span></h3>
 <p>插件把已安装的合成模型注册为 Android 系统 TTS 引擎, 可在系统的文字转语音设置中选为首选引擎, 也可以由 AutoJs6 的 <a href="tts.html">tts</a> 模块及其他应用指定使用. 语音名称与选择规则见 <a href="tts.html#tts_3_macaw_speech">使用 3-Macaw Speech 引擎</a>.</p>
-<h3>系统语音输入<span><a class="mark" href="#speech_9" id="speech_9">#</a></span></h3>
+<h3>系统语音输入<span><a class="mark" href="#speech_10" id="speech_10">#</a></span></h3>
 <p>插件导出一个应答 <code>android.speech.action.RECOGNIZE_SPEECH</code> 的界面, 其他应用 (例如 3-Stove Agent 的麦克风按钮) 发出语音输入请求时, 在底部弹层中说一句话, 识别出的文字直接交回该应用. 该入口不受插件权限保护, 任何应用都可以调用; 它只返回识别出的文字, 不返回音频, 不修改模型或设置, 也不启动下载.</p>
 <ul>
 <li>第一句话结束 (静音端点, 或点按 &quot;停止&quot;) 即返回 <code>RESULT_OK</code>, <code>RecognizerIntent.EXTRA_RESULTS</code> 中恰好 1 条文字, 不返回置信度.</li>
@@ -1750,16 +1764,16 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 <li>返回码: 用户取消为 <code>RESULT_CANCELED</code>; 没有语音或结果为空为 <code>RESULT_NO_MATCH</code>; 麦克风权限被拒绝, 麦克风被占用或录音失败为 <code>RESULT_AUDIO_ERROR</code>; 没有识别模型, 模型加载或引擎失败为 <code>RESULT_SERVER_ERROR</code>.</li>
 <li>插件设置 &quot;识别&quot; 组中的 &quot;作为系统语音输入&quot; 开关可停用该入口. 设备上还有其他语音输入应用时, Android 会让用户选择.</li>
 </ul>
-<h3>数字助理<span><a class="mark" href="#speech_10" id="speech_10">#</a></span></h3>
+<h3>数字助理<span><a class="mark" href="#speech_11" id="speech_11">#</a></span></h3>
 <p>用户可以把 3-Macaw Speech 选为默认数字助理应用: 打开插件设置, 点按 &quot;识别&quot; 组中的 &quot;数字助理&quot; (该行同时显示插件当前是否为默认助理), 在系统打开的设置页中选择 3-Macaw Speech (各系统的页面名称略有不同). 插件不能代替用户做此选择.</p>
 <ul>
-<li>之后长按电源键或 Home 键, 或使用助理手势, 即打开底部弹层听写; 部分厂商的电源键或手势可能只能唤起自家助理. 听写的结束, 模型选择与引导规则与 <a href="#speech_9">系统语音输入</a> 相同.</li>
-<li>听写结束后弹层显示可编辑的识别文字, 以及每个接收语音指令的应用 (见 <a href="#speech_11">语音指令入口</a>) 的按钮, &quot;复制文本&quot;, &quot;重说&quot; 与 &quot;关闭&quot;. 只有用户点按某个应用按钮时才发送, 没有默认目标, 也不根据说话内容自动选择. 没有任何接收应用时, 助理仍可用于听写并复制.</li>
+<li>之后长按电源键或 Home 键, 或使用助理手势, 即打开底部弹层听写; 部分厂商的电源键或手势可能只能唤起自家助理. 听写的结束, 模型选择与引导规则与 <a href="#speech_10">系统语音输入</a> 相同.</li>
+<li>听写结束后弹层显示可编辑的识别文字, 以及每个接收语音指令的应用 (见 <a href="#speech_12">语音指令入口</a>) 的按钮, &quot;复制文本&quot;, &quot;重说&quot; 与 &quot;关闭&quot;. 只有用户点按某个应用按钮时才发送, 没有默认目标, 也不根据说话内容自动选择. 没有任何接收应用时, 助理仍可用于听写并复制.</li>
 <li>不读取屏幕内容: 系统不会把当前应用的界面结构或截图交给插件, 除识别文字外不向目标附带任何内容.</li>
 <li>平时不在后台收音: 只在弹层显示时录音, 没有常驻通知与常亮的麦克风指示灯. 插件不保存识别历史.</li>
 <li>锁屏时可以开始听写; 点按应用按钮或 &quot;复制文本&quot; 时先请求解锁, 解锁成功后才发送或复制, 取消解锁则留在弹层.</li>
 </ul>
-<h3>语音指令入口<span><a class="mark" href="#speech_11" id="speech_11">#</a></span></h3>
+<h3>语音指令入口<span><a class="mark" href="#speech_12" id="speech_12">#</a></span></h3>
 <p>希望接收数字助理识别文字的应用, 导出一个应答 <code>org.autojs.plugin.action.VOICE_COMMAND</code> 的 Activity:</p>
 <pre><code class="lang-xml">&lt;activity
     android:name=&quot;.VoiceCommandActivity&quot;
@@ -1779,18 +1793,18 @@ console.log(who.name === null ? &#39;不是已注册的人&#39; : who.name, JSON
 <pre><code class="lang-kotlin">val text = intent.getStringExtra(Intent.EXTRA_TEXT)?.trim().orEmpty()
 val language = intent.getStringExtra(&quot;org.autojs.plugin.extra.VOICE_LANGUAGE&quot;)
 </code></pre>
-<h3>系统识别服务<span><a class="mark" href="#speech_12" id="speech_12">#</a></span></h3>
+<h3>系统识别服务<span><a class="mark" href="#speech_13" id="speech_13">#</a></span></h3>
 <p>插件还提供系统语音识别服务 (<code>android.speech.RecognitionService</code>), 组件名为 <code>io.github.supermonster003.autojs6.plugin.three.macaw.speech/.recognition.MacawRecognitionService</code>. 其他应用可以在 <code>SpeechRecognizer.createSpeechRecognizer(context, component)</code> 中直接指定它.</p>
 <p>不指定组件的 <code>SpeechRecognizer</code> 使用系统设置的默认识别服务, 它是否随数字助理切换取决于 Android 版本: Android 11 及以下把 3-Macaw Speech 选为数字助理时, 一般会一并设为默认识别服务; Android 12 起需要在系统的语音输入设置中另行选择 (部分手机没有这项设置).</p>
 <ul>
 <li>支持 <code>startListening</code>, <code>stopListening</code> 与 <code>cancel</code>. 回调顺序为 <code>onReadyForSpeech</code>, <code>onBeginningOfSpeech</code>, 调用方要求时的部分结果, <code>onEndOfSpeech</code>, 然后恰好一次 <code>onResults</code> (1 条结果) 或 <code>onError</code>; 取消后不再回调. <code>onRmsChanged</code> 按语音活动状态近似.</li>
-<li>语言与热词的处理同 <a href="#speech_9">系统语音输入</a>.</li>
+<li>语言与热词的处理同 <a href="#speech_10">系统语音输入</a>.</li>
 <li>错误码: 调用方或插件没有麦克风权限为 <code>ERROR_INSUFFICIENT_PERMISSIONS</code>, 麦克风被听写占用为 <code>ERROR_RECOGNIZER_BUSY</code>, 录音失败为 <code>ERROR_AUDIO</code>, Intent 中的选项无效或调用方自带音频 (<code>EXTRA_AUDIO_SOURCE</code>) 为 <code>ERROR_CLIENT</code>, 没有模型及其他失败为 <code>ERROR_SERVER</code>, 超时前没有语音为 <code>ERROR_SPEECH_TIMEOUT</code>, 其他没有文字的结束为 <code>ERROR_NO_MATCH</code>.</li>
 <li>调用方自身须持有麦克风权限; Android 12 及以上录音归属于调用方.</li>
 <li>&quot;作为系统语音输入&quot; 开关不影响识别服务.</li>
 </ul>
 <h2>示例 (Examples)<span><a class="mark" href="#speech_examples" id="speech_examples">#</a></span></h2>
-<h3>听写到文件<span><a class="mark" href="#speech_13" id="speech_13">#</a></span></h3>
+<h3>听写到文件<span><a class="mark" href="#speech_14" id="speech_14">#</a></span></h3>
 <pre><code class="lang-js">let session = speech.listen({ silenceEndMillis: 1500, maxDurationMillis: 60000 });
 session.on(&#39;final&#39;, e =&gt; files.append(&#39;./dictation.txt&#39;, e.text + &#39;\n&#39;));
 session.on(&#39;error&#39;, e =&gt; console.error(e.code, e.message));
@@ -1815,7 +1829,7 @@ session.on(&#39;ready&#39;, () =&gt; {
 session.on(&#39;final&#39;, e =&gt; console.log(e.text));
 session.on(&#39;end&#39;, e =&gt; console.log(e.reason, session.result()));
 </code></pre>
-<h3>处理缺少模型或权限<span><a class="mark" href="#speech_14" id="speech_14">#</a></span></h3>
+<h3>处理缺少模型或权限<span><a class="mark" href="#speech_15" id="speech_15">#</a></span></h3>
 <pre><code class="lang-js">try {
     let session = speech.listen();
     session.on(&#39;end&#39;, e =&gt; console.log(session.result()));

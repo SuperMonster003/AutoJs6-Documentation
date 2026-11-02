@@ -31,6 +31,8 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
     - isDefault: [boolean](dataTypes#boolean);
     - recommended: [boolean](dataTypes#boolean);
     - version: [number](dataTypes#number);
+    - updateAvailable?: [boolean](dataTypes#boolean);
+    - latestVersionCode?: [number](dataTypes#number);
     - license: {{ spdx: [string](dataTypes#string); commercialUse: [boolean](dataTypes#boolean); noticeUrl?: [string](dataTypes#string) }};
     - speakers?: [number](dataTypes#number);
     - sampleRate?: [number](dataTypes#number);
@@ -123,7 +125,25 @@ speech.models.list({ kind: 'tts' }).forEach((m) => {
 
 - { [number](dataTypes#number) }
 
-模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本.
+模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本; 更新时旧版文件保留到使用它的任务结束.
+
+## [p] updateAvailable
+
+**`6.8.0`**
+
+- { [boolean](dataTypes#boolean) | [undefined](dataTypes#undefined) }
+
+已安装的模型在当前目录中有更高版本时为 `true`, 其他情况为 `false`. 用户导入且与目录不一致的模型, 以及文件被破坏的模型始终为 `false`. 判断以当前目录为准, 目录由 [speech.models.refreshCatalog](speech#m-modelsrefreshcatalog) 刷新, 不会自动联网. 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.
+
+调用 [speech.models.install](speech#m-modelsinstall) 即可更新, 见 [模型更新](speech#模型更新).
+
+## [p] latestVersionCode
+
+**`6.8.0`**
+
+- { [number](dataTypes#number) | [undefined](dataTypes#undefined) }
+
+当前目录提供的最新版本号; 目录没有可安装版本时等于 [version](#p-version). 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.
 
 ## [p] license
 

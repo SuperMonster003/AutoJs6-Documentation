@@ -9,7 +9,7 @@
         {
           "textRaw": "[@] SpeechModelInfo",
           "name": "[@]_speechmodelinfo",
-          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>id: <a href=\"dataTypes#string\">string</a>;</li>\n<li>kind: <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code> | <code>&#39;speaker&#39;</code> | <code>&#39;segment&#39;</code> | <code>&#39;langid&#39;</code> | <code>&#39;tagger&#39;</code>;</li>\n<li>modelType: <a href=\"dataTypes#string\">string</a>;</li>\n<li>name: <a href=\"dataTypes#string\">string</a>;</li>\n<li>languages: <a href=\"dataTypes#string\">string</a>[];</li>\n<li>sizeBytes: <a href=\"dataTypes#number\">number</a>;</li>\n<li>installedBytes?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>installed: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isDefault: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>recommended: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>version: <a href=\"dataTypes#number\">number</a>;</li>\n<li>license: {{ spdx: <a href=\"dataTypes#string\">string</a>; commercialUse: <a href=\"dataTypes#boolean\">boolean</a>; noticeUrl?: <a href=\"dataTypes#string\">string</a> }};</li>\n<li>speakers?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>sampleRate?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>source: <code>&#39;catalog&#39;</code> | <code>&#39;imported&#39;</code>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{{<ul>\n<li>id: <a href=\"dataTypes#string\">string</a>;</li>\n<li>kind: <code>&#39;asr&#39;</code> | <code>&#39;tts&#39;</code> | <code>&#39;kws&#39;</code> | <code>&#39;vad&#39;</code> | <code>&#39;speaker&#39;</code> | <code>&#39;segment&#39;</code> | <code>&#39;langid&#39;</code> | <code>&#39;tagger&#39;</code>;</li>\n<li>modelType: <a href=\"dataTypes#string\">string</a>;</li>\n<li>name: <a href=\"dataTypes#string\">string</a>;</li>\n<li>languages: <a href=\"dataTypes#string\">string</a>[];</li>\n<li>sizeBytes: <a href=\"dataTypes#number\">number</a>;</li>\n<li>installedBytes?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>installed: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>isDefault: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>recommended: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>version: <a href=\"dataTypes#number\">number</a>;</li>\n<li>updateAvailable?: <a href=\"dataTypes#boolean\">boolean</a>;</li>\n<li>latestVersionCode?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>license: {{ spdx: <a href=\"dataTypes#string\">string</a>; commercialUse: <a href=\"dataTypes#boolean\">boolean</a>; noticeUrl?: <a href=\"dataTypes#string\">string</a> }};</li>\n<li>speakers?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>sampleRate?: <a href=\"dataTypes#number\">number</a>;</li>\n<li>source: <code>&#39;catalog&#39;</code> | <code>&#39;imported&#39;</code>;</li>\n</ul>\n</li>\n<li>}}</li>\n</ul>\n",
           "type": "module",
           "displayName": "[@] SpeechModelInfo"
         },
@@ -86,9 +86,23 @@
         {
           "textRaw": "[p] version",
           "name": "[p]_version",
-          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本.</p>\n",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>模型版本号. 已安装时为已安装的版本, 否则为可安装的最新版本. 每个模型只保留一个已安装版本; 更新时旧版文件保留到使用它的任务结束.</p>\n",
           "type": "module",
           "displayName": "[p] version"
+        },
+        {
+          "textRaw": "[p] updateAvailable",
+          "name": "[p]_updateavailable",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> | <a href=\"dataTypes#undefined\">undefined</a> }</li>\n</ul>\n<p>已安装的模型在当前目录中有更高版本时为 <code>true</code>, 其他情况为 <code>false</code>. 用户导入且与目录不一致的模型, 以及文件被破坏的模型始终为 <code>false</code>. 判断以当前目录为准, 目录由 <a href=\"speech#m-modelsrefreshcatalog\">speech.models.refreshCatalog</a> 刷新, 不会自动联网. 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.</p>\n<p>调用 <a href=\"speech#m-modelsinstall\">speech.models.install</a> 即可更新, 见 <a href=\"speech#模型更新\">模型更新</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p] updateAvailable"
+        },
+        {
+          "textRaw": "[p] latestVersionCode",
+          "name": "[p]_latestversioncode",
+          "desc": "<p><strong><code>6.8.0</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> | <a href=\"dataTypes#undefined\">undefined</a> }</li>\n</ul>\n<p>当前目录提供的最新版本号; 目录没有可安装版本时等于 <a href=\"#p-version\">version</a>. 字段自 3-Macaw Speech 1.4.0 起存在, 较早的插件不返回.</p>\n",
+          "type": "module",
+          "displayName": "[p] latestVersionCode"
         },
         {
           "textRaw": "[p] license",

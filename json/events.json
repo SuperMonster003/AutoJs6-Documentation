@@ -666,7 +666,7 @@
                   ]
                 }
               ],
-              "desc": "<p>向当前进程的全部已注册脚本广播事件, 包括发送方自身.</p>\n<p>发送脚本:</p>\n<pre><code class=\"lang-js\">events.broadcast.emit(&#39;message&#39;, &#39;hello&#39;);\n</code></pre>\n<p>接收脚本:</p>\n<pre><code class=\"lang-js\">events.broadcast.on(&#39;message&#39;, function (text) {\n    console.log(text);\n});\n</code></pre>\n"
+              "desc": "<p>向当前进程的全部已注册脚本广播事件, 包括发送方自身.</p>\n<p>发送脚本:</p>\n<pre><code class=\"lang-js\">events.broadcast.emit(&#39;message&#39;, &#39;hello&#39;);\n</code></pre>\n<p>接收脚本:</p>\n<pre><code class=\"lang-js\">events.broadcast.on(&#39;message&#39;, function (text) {\n    console.log(text);\n});\n</code></pre>\n<p>Rhino 脚本之间传递的是同一个对象. Node.js / Bun 主脚本与 Rhino 脚本之间按 JSON 的规则传递, 接收方拿到自己的副本, 用法与原生对象相同:</p>\n<ul>\n<li>字符串, 数字, 布尔值, <code>null</code>, 对象和数组在两个方向上都保持结构.</li>\n<li>对象中的函数和 <code>undefined</code> 被省略, 数组中的函数和 <code>undefined</code> 变成 <code>null</code>, 直接作为参数的函数也是 <code>null</code>. <code>NaN</code> 和无穷大变成 <code>null</code>. 定义了 <code>toJSON</code> 的对象按其返回值传递.</li>\n<li>主脚本直接传 <code>undefined</code> 时 Rhino 收到 <code>null</code>. Rhino 脚本直接传 <code>undefined</code> 时监听器收到字符串 <code>undefined</code> (Rhino 调用 Java 方法时的转换, Rhino 监听器也一样), 需要表示空值时用 <code>null</code>.</li>\n<li>Rhino 脚本发送循环引用, 或 <code>toJSON</code> 抛出异常的对象时, 该参数到主脚本是 <code>null</code>, 其他参数不受影响, 发送方不会收到异常. 这与 <code>JSON.stringify</code> 不同: 发送方不知道有哪些脚本在监听, 不应因此中断.</li>\n<li>主脚本发送循环引用时, <code>emit</code> 返回的 Promise 以 <code>TypeError</code> 拒绝, 与 <code>JSON.stringify</code> 相同, 这次广播不会发出.</li>\n</ul>\n"
             }
           ],
           "type": "module",

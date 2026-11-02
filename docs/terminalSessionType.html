@@ -465,6 +465,7 @@ session.write([3]); // Ctrl+C.
 <li><ins><strong>returns</strong></ins> { <span class="type"><a href="dataTypes.html#datatypes_string">string</a></span> } - 第一个匹配的后续输出行或提示片段</li>
 </ul>
 <p>从调用时刻订阅新的输出, 不搜索之前的转录内容. 超时报 <code>TIMEOUT</code>, 在匹配前流已结束时报 <code>SESSION_CLOSED</code>; 每次等待都会释放自己的订阅. 正则表达式使用与宿主选择器相同的 Java 兼容转换, 不推进 JavaScript <code>lastIndex</code>.</p>
+<p>Node.js / Bun 中先发起 <code>waitFor</code> 再 <code>write</code> 时 (<code>const line = session.waitFor(pattern); await session.write(command); await line;</code>), 同一会话的 <code>write</code> 排在订阅生效之后, 回显很快的输出不会错过. 先 <code>write</code> 后 <code>waitFor</code> 时输出仍可能先于订阅到达.</p>
 <h3>session.waitForAsync(pattern, timeout?)<span><a class="mark" href="#terminalsessiontype_session_waitforasync_pattern_timeout" id="terminalsessiontype_session_waitforasync_pattern_timeout">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong> <strong><code>Async</code></strong></p>
 <ul>

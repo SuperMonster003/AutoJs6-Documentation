@@ -2106,7 +2106,7 @@ let { engines, events } = await createHostClient();
 </tr>
 <tr>
 <td>广播的值</td>
-<td>字符串, 数字, 布尔值和 <code>null</code> 在两个方向上都保持原样. 对象和数组不能直接传: Rhino 发出的对象到主脚本是 <code>[object Object]</code> 这样的字符串, 主脚本发出的对象在 Rhino 中是 Java Map, 用属性读不到值. 结构化数据在两端用 <code>JSON.stringify</code> 和 <code>JSON.parse</code> 转换</td>
+<td>字符串, 数字, 布尔值, <code>null</code>, 对象和数组在两个方向上都可以直接传, 到达后是接收方自己的值. 函数, <code>undefined</code> 和循环引用的规则见 <a href="events.html#events_m_emit">events.broadcast</a></td>
 </tr>
 <tr>
 <td>结束</td>

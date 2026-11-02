@@ -833,6 +833,14 @@ events.on(&quot;notification&quot;, function(n){
     console.log(text);
 });
 </code></pre>
+<p>Rhino 脚本之间传递的是同一个对象. Node.js / Bun 主脚本与 Rhino 脚本之间按 JSON 的规则传递, 接收方拿到自己的副本, 用法与原生对象相同:</p>
+<ul>
+<li>字符串, 数字, 布尔值, <code>null</code>, 对象和数组在两个方向上都保持结构.</li>
+<li>对象中的函数和 <code>undefined</code> 被省略, 数组中的函数和 <code>undefined</code> 变成 <code>null</code>, 直接作为参数的函数也是 <code>null</code>. <code>NaN</code> 和无穷大变成 <code>null</code>. 定义了 <code>toJSON</code> 的对象按其返回值传递.</li>
+<li>主脚本直接传 <code>undefined</code> 时 Rhino 收到 <code>null</code>. Rhino 脚本直接传 <code>undefined</code> 时监听器收到字符串 <code>undefined</code> (Rhino 调用 Java 方法时的转换, Rhino 监听器也一样), 需要表示空值时用 <code>null</code>.</li>
+<li>Rhino 脚本发送循环引用, 或 <code>toJSON</code> 抛出异常的对象时, 该参数到主脚本是 <code>null</code>, 其他参数不受影响, 发送方不会收到异常. 这与 <code>JSON.stringify</code> 不同: 发送方不知道有哪些脚本在监听, 不应因此中断.</li>
+<li>主脚本发送循环引用时, <code>emit</code> 返回的 Promise 以 <code>TypeError</code> 拒绝, 与 <code>JSON.stringify</code> 相同, 这次广播不会发出.</li>
+</ul>
 <h2>[m] unregister<span><a class="mark" href="#events_m_unregister" id="events_m_unregister">#</a></span></h2>
 <h3>unregister()<span><a class="mark" href="#events_unregister" id="events_unregister">#</a></span></h3>
 <div class="signature"><ul>

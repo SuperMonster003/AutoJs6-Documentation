@@ -1,0 +1,209 @@
+{
+  "source": "..\\api\\imguiSelectionStorageType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 选择存储 (ImguiSelectionStorage)",
+      "name": "imgui_选择存储_(imguiselectionstorage)",
+      "desc": "<p>ImguiSelectionStorage 保存一个列表选中的 ID, 内部是 JavaScript 的 <code>Set</code>, 对应 C++ 的 <code>ImGuiSelectionBasicStorage</code>. 由 <a href=\"imgui#m-selectionstorage\">imgui.selectionStorage</a> 创建, 不需要会话, 所以可以比窗口活得更久. 用法见 <a href=\"imgui#m-beginmultiselect\">beginMultiSelect</a>. 类型声明中的名称是 <code>ImGui.SelectionStorage</code>.</p>\n<p>范围按 ID 加 1 遍历, 所以 ID 要是显示顺序下连续的行索引. 排序或筛选之后要保留选择时, 先把索引换成自己的键; 删除行之后给 <code>endMultiSelect</code> 传 <code>true</code>, 忘记 Shift 的锚点. 范围选择按行占用一个 <code>Set</code> 条目, 在应用它的那一帧完成, 绘制可见行的开销与选中多少行无关.</p>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiSelectionStorage</p>\n\n",
+      "modules": [
+        {
+          "textRaw": "[p#] size",
+          "name": "[p#]_size",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>选中的 ID 个数.</p>\n",
+          "type": "module",
+          "displayName": "[p#] size"
+        },
+        {
+          "textRaw": "[m#] apply",
+          "name": "[m#]_apply",
+          "methods": [
+            {
+              "textRaw": "selection.apply(requests, itemsCount?)",
+              "type": "method",
+              "name": "apply",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**requests** { [ImguiMultiSelectIO](imguiMultiSelectIOType) | [SelectionRequest](imgui#selectionrequest)[] } - [ImguiMultiSelectIO](imguiMultiSelectIOType) 或 [SelectionRequest](imgui#selectionrequest) 的数组. ",
+                      "name": "**requests**",
+                      "type": " [ImguiMultiSelectIO](imguiMultiSelectIOType) | [SelectionRequest](imgui#selectionrequest)[] ",
+                      "desc": "[ImguiMultiSelectIO](imguiMultiSelectIOType) 或 [SelectionRequest](imgui#selectionrequest) 的数组."
+                    },
+                    {
+                      "textRaw": "**[ itemsCount ]** { [number](dataTypes#number) } - 总项数. ",
+                      "name": "**[",
+                      "desc": "itemsCount ]** { [number](dataTypes#number) } - 总项数."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiSelectionStorage](imguiSelectionStorageType) } - 选择本身. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiSelectionStorage](imguiSelectionStorageType) ",
+                      "desc": "选择本身."
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "requests"
+                    },
+                    {
+                      "name": "itemsCount?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>应用 <code>beginMultiSelect</code> 或 <code>endMultiSelect</code> 的结果, 或一个请求数组. 选中全部的 <code>setAll</code> 请求需要项数, 来自第一个参数或 <code>itemsCount</code>, 此时 ID 是 <code>0</code> 到 <code>itemsCount - 1</code>. 没有项数时抛出 RangeError.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] apply"
+        },
+        {
+          "textRaw": "[m#] has",
+          "name": "[m#]_has",
+          "methods": [
+            {
+              "textRaw": "selection.has(id)",
+              "type": "method",
+              "name": "has",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 项的 ID. ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "项的 ID."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>一个 ID 是否被选中.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] has"
+        },
+        {
+          "textRaw": "[m#] setItemSelected",
+          "name": "[m#]_setitemselected",
+          "methods": [
+            {
+              "textRaw": "selection.setItemSelected(id, selected)",
+              "type": "method",
+              "name": "setItemSelected",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**id** { [number](dataTypes#number) } - 项的 ID. ",
+                      "name": "**id**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "项的 ID."
+                    },
+                    {
+                      "textRaw": "**selected** { [boolean](dataTypes#boolean) } - 是否选中. ",
+                      "name": "**selected**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否选中."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiSelectionStorage](imguiSelectionStorageType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiSelectionStorage](imguiSelectionStorageType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "id"
+                    },
+                    {
+                      "name": "selected"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>由脚本选中或取消选中一个 ID.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setItemSelected"
+        },
+        {
+          "textRaw": "[m#] clear",
+          "name": "[m#]_clear",
+          "methods": [
+            {
+              "textRaw": "selection.clear()",
+              "type": "method",
+              "name": "clear",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiSelectionStorage](imguiSelectionStorageType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiSelectionStorage](imguiSelectionStorageType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>取消选中全部 ID.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clear"
+        },
+        {
+          "textRaw": "[m#] toArray",
+          "name": "[m#]_toarray",
+          "methods": [
+            {
+              "textRaw": "selection.toArray()",
+              "type": "method",
+              "name": "toArray",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [number](dataTypes#number)[] } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [number](dataTypes#number)[] "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>选中的 ID, 升序.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toArray"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 选择存储 (ImguiSelectionStorage)"
+    }
+  ]
+}

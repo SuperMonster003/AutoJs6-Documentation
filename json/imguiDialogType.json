@@ -1,0 +1,303 @@
+{
+  "source": "..\\api\\imguiDialogType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 对话框 (ImguiDialog)",
+      "name": "imgui_对话框_(imguidialog)",
+      "desc": "<p>ImguiDialog 是会话的模态对话框, 是 <a href=\"imgui#m-alert\">imgui.alert</a>, <a href=\"imgui#m-confirm\">confirm</a>, <a href=\"imgui#m-singlechoice\">singleChoice</a>, <a href=\"imgui#m-multichoice\">multiChoice</a> 返回的 <a href=\"imguiDialogPromiseType\">ImguiDialogPromise</a> 的 <code>controller</code>. 继承 <a href=\"imguiComponentType\">ImguiComponent</a>. 类型声明中的名称是 <code>ImGui.Dialog</code>.</p>\n<pre><code class=\"lang-js\">imgui.createWindow(function (ui) {\n    ui.withWindow(&#39;对话框&#39;, null, 0, function () {\n        if (ui.button(&#39;选择&#39;)) {\n            imgui.singleChoice(&#39;颜色&#39;, [&#39;红&#39;, &#39;绿&#39;, &#39;蓝&#39;], 0).then(function (index) {\n                console.log(&#39;选择了 &#39; + index);\n            });\n        }\n    });\n}, { width: 340, height: 300 });\n\nlet question = imgui.confirm(&#39;删除&#39;, &#39;确定删除吗?&#39;, { okLabel: &#39;删除&#39;, cancelLabel: &#39;保留&#39; });\nquestion.then(function (accepted) {\n    console.log(accepted ? &#39;已删除&#39; : &#39;已保留&#39;);\n});\nsetTimeout(function () {\n    question.cancel();\n}, 300);\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "DialogOptions",
+          "name": "dialogoptions",
+          "desc": "<p><code>alert</code> 与 <code>confirm</code> 的选项, 也是选择对话框选项的基础. 尺寸单位 dp, 回调在脚本线程上运行.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>visible</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>初始是否显示, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>id</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>弹窗 ID 的一部分, 默认自动生成.</td>\n</tr>\n<tr>\n<td><code>title</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>标题栏文字, <code>title</code> 参数优先.</td>\n</tr>\n<tr>\n<td><code>message</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>按钮上方的文字, <code>message</code> 参数优先.</td>\n</tr>\n<tr>\n<td><code>width</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>宽度, 默认 320.</td>\n</tr>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>追加的 <a href=\"imgui#p-windowflags\">WindowFlags</a>.</td>\n</tr>\n<tr>\n<td><code>okLabel</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>确定按钮的文字.</td>\n</tr>\n<tr>\n<td><code>cancelLabel</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>取消按钮的文字 (<code>confirm</code> 与选择对话框).</td>\n</tr>\n<tr>\n<td><code>onResult</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>Promise 解决之前以结果调用, <code>reason</code> 是 <code>accepted</code>, <code>cancelled</code> 或 <code>dismissed</code>.</td>\n</tr>\n<tr>\n<td><code>onClose</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>对话框关闭时调用.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "DialogOptions"
+        },
+        {
+          "textRaw": "SingleChoiceOptions",
+          "name": "singlechoiceoptions",
+          "desc": "<p><code>singleChoice</code> 的选项, 另外读取 <a href=\"#dialogoptions\">DialogOptions</a>.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>selected</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>初始选中的索引, <code>-1</code> 表示没有 (默认), <code>selected</code> 参数优先.</td>\n</tr>\n<tr>\n<td><code>autoAccept</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>点按一行时立即确定, 默认 <code>false</code>.</td>\n</tr>\n<tr>\n<td><code>onChoice</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>点按一行时调用, 参数为 <code>(index, item, dialog)</code>.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "SingleChoiceOptions"
+        },
+        {
+          "textRaw": "MultiChoiceOptions",
+          "name": "multichoiceoptions",
+          "desc": "<p><code>multiChoice</code> 的选项, 另外读取 <a href=\"#dialogoptions\">DialogOptions</a>.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>selected</code></td>\n<td><a href=\"dataTypes#number\">number</a>[] 或 <a href=\"dataTypes#boolean\">boolean</a>[]</td>\n<td>初始选中的索引, 或每项一个布尔值, <code>selected</code> 参数优先.</td>\n</tr>\n<tr>\n<td><code>onChoice</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>切换一行时调用, 参数为 <code>(index, checked, item, dialog)</code>.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiDialog</p>\n\n",
+          "type": "module",
+          "displayName": "MultiChoiceOptions"
+        },
+        {
+          "textRaw": "[p#] dialogType",
+          "name": "[p#]_dialogtype",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <code>&quot;alert&quot;</code> | <code>&quot;confirm&quot;</code> | <code>&quot;singleChoice&quot;</code> | <code>&quot;multiChoice&quot;</code> }</li>\n</ul>\n<p>打开它的函数.</p>\n",
+          "type": "module",
+          "displayName": "[p#] dialogType"
+        },
+        {
+          "textRaw": "[p#] title",
+          "name": "[p#]_title",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>标题栏文字.</p>\n",
+          "type": "module",
+          "displayName": "[p#] title"
+        },
+        {
+          "textRaw": "[p#] message",
+          "name": "[p#]_message",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>按钮上方的文字.</p>\n",
+          "type": "module",
+          "displayName": "[p#] message"
+        },
+        {
+          "textRaw": "[p#] open",
+          "name": "[p#]_open",
+          "desc": "<ul>\n<li>{ <a href=\"imgui#valueref\">ValueRef</a> }</li>\n</ul>\n<p>关闭按钮: 变为 <code>false</code> 时以取消值关闭对话框.</p>\n",
+          "type": "module",
+          "displayName": "[p#] open"
+        },
+        {
+          "textRaw": "[p#] promise",
+          "name": "[p#]_promise",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiDialogPromiseType\">ImguiDialogPromise</a> }</li>\n</ul>\n<p>结果的 Promise.</p>\n",
+          "type": "module",
+          "displayName": "[p#] promise"
+        },
+        {
+          "textRaw": "[p#] cancelValue",
+          "name": "[p#]_cancelvalue",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>取消或被关闭时的结果.</p>\n",
+          "type": "module",
+          "displayName": "[p#] cancelValue"
+        },
+        {
+          "textRaw": "[m#] cancel",
+          "name": "[m#]_cancel",
+          "methods": [
+            {
+              "textRaw": "dialog.cancel()",
+              "type": "method",
+              "name": "cancel",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>以取消值关闭, 在下一帧, 或在帧内立即关闭.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] cancel"
+        },
+        {
+          "textRaw": "[m#] accept",
+          "name": "[m#]_accept",
+          "methods": [
+            {
+              "textRaw": "dialog.accept()",
+              "type": "method",
+              "name": "accept",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>与确定按钮一样关闭.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] accept"
+        },
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件类型, 这里是 <code>dialog</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] id",
+          "name": "[p#]_id",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] id"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiSessionType\">ImguiSession</a> }</li>\n</ul>\n<p>组件所属的会话.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] options",
+          "name": "[p#]_options",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>创建时的选项.</p>\n",
+          "type": "module",
+          "displayName": "[p#] options"
+        },
+        {
+          "textRaw": "[p#] visible",
+          "name": "[p#]_visible",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否绘制, 参阅 <a href=\"imguiComponentType#p-visible\">ImguiComponent</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] visible"
+        },
+        {
+          "textRaw": "[p#] closed",
+          "name": "[p#]_closed",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否已关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closed"
+        },
+        {
+          "textRaw": "[p#] closeReason",
+          "name": "[p#]_closereason",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭原因, 打开期间为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closeReason"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "dialog.show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>重新开始绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] hide",
+          "name": "[m#]_hide",
+          "methods": [
+            {
+              "textRaw": "dialog.hide()",
+              "type": "method",
+              "name": "hide",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>停止绘制, 保留组件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hide"
+        },
+        {
+          "textRaw": "[m#] toggle",
+          "name": "[m#]_toggle",
+          "methods": [
+            {
+              "textRaw": "dialog.toggle()",
+              "type": "method",
+              "name": "toggle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>在 <code>show</code> 与 <code>hide</code> 之间切换.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toggle"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "dialog.close(reason?)",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因. ",
+                      "name": "**[",
+                      "desc": "reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDialog](imguiDialogType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDialog](imguiDialogType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把组件从会话移除.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 对话框 (ImguiDialog)"
+    }
+  ]
+}

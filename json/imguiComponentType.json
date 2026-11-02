@@ -1,0 +1,191 @@
+{
+  "source": "..\\api\\imguiComponentType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 高层组件 (ImguiComponent)",
+      "name": "imgui_高层组件_(imguicomponent)",
+      "desc": "<p>ImguiComponent 是高层组件的共同成员, 这些组件由会话托管, 在帧内绘制, 位于渲染回调之后. 具体的组件是 <a href=\"imguiLogWindowType\">ImguiLogWindow</a>, <a href=\"imguiToastType\">ImguiToast</a>, <a href=\"imguiStatsOverlayType\">ImguiStatsOverlay</a>, <a href=\"imguiDataTableType\">ImguiDataTable</a> 与 <a href=\"imguiDialogType\">ImguiDialog</a>. 类型声明中的名称是 <code>ImGui.Component</code>.</p>\n",
+      "modules": [
+        {
+          "textRaw": "ComponentOptions",
+          "name": "componentoptions",
+          "desc": "<p>每种组件都读取的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>visible</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>初始是否显示, 默认 <code>true</code>.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiComponent</p>\n\n",
+          "type": "module",
+          "displayName": "ComponentOptions"
+        },
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件类型: <code>logWindow</code>, <code>toast</code>, <code>dialog</code>, <code>statsOverlay</code> 或 <code>dataTable</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] id",
+          "name": "[p#]_id",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件 ID, 在同类组件中唯一.</p>\n",
+          "type": "module",
+          "displayName": "[p#] id"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiSessionType\">ImguiSession</a> }</li>\n</ul>\n<p>组件所属的会话.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] options",
+          "name": "[p#]_options",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>创建时的选项.</p>\n",
+          "type": "module",
+          "displayName": "[p#] options"
+        },
+        {
+          "textRaw": "[p#] visible",
+          "name": "[p#]_visible",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否绘制. 赋值等同 <a href=\"#m-show\">show</a> 与 <a href=\"#m-hide\">hide</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] visible"
+        },
+        {
+          "textRaw": "[p#] closed",
+          "name": "[p#]_closed",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否已关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closed"
+        },
+        {
+          "textRaw": "[p#] closeReason",
+          "name": "[p#]_closereason",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>传给 <a href=\"#m-close\">close</a> 的原因, 打开期间为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closeReason"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "component.show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiComponent](imguiComponentType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiComponent](imguiComponentType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>重新开始绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] hide",
+          "name": "[m#]_hide",
+          "methods": [
+            {
+              "textRaw": "component.hide()",
+              "type": "method",
+              "name": "hide",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiComponent](imguiComponentType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiComponent](imguiComponentType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>停止绘制, 保留组件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hide"
+        },
+        {
+          "textRaw": "[m#] toggle",
+          "name": "[m#]_toggle",
+          "methods": [
+            {
+              "textRaw": "component.toggle()",
+              "type": "method",
+              "name": "toggle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiComponent](imguiComponentType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiComponent](imguiComponentType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>在 <code>show</code> 与 <code>hide</code> 之间切换.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toggle"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "component.close(reason?)",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因. ",
+                      "name": "**[",
+                      "desc": "reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiComponent](imguiComponentType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiComponent](imguiComponentType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把组件从会话移除.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 高层组件 (ImguiComponent)"
+    }
+  ]
+}

@@ -1,0 +1,478 @@
+{
+  "source": "..\\api\\imguiFloatingButtonType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 悬浮按钮 (ImguiFloatingButton)",
+      "name": "imgui_悬浮按钮_(imguifloatingbutton)",
+      "desc": "<p>ImguiFloatingButton 是独立于 Surface 的 Android 悬浮按钮, 可以拖动, 由 <a href=\"imgui#m-addbuttonex\">imgui.addButtonEx</a> 或 <a href=\"imguiSessionType#m-addbuttonex\">session.addButtonEx</a> 返回, 随会话关闭. 特权层没有独立按钮. 字段只读, 用 setter 修改. 类型声明中的名称是 <code>ImGui.FloatingButton</code>.</p>\n<pre><code class=\"lang-js\">let clicks = 0;\n\nimgui.createWindow(function (ui) {\n    ui.withWindow(&#39;按钮&#39;, null, 0, function () {\n        ui.text(&#39;点按次数: &#39; + clicks);\n    });\n}, { width: 260, height: 160 });\n\nlet button = imgui.addButtonEx(&#39;+1&#39;, function () {\n    clicks += 1;\n}, { size: 48, x: 16, y: 200 });\nbutton.setAlpha(0.8);\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "FloatingButtonOptions",
+          "name": "floatingbuttonoptions",
+          "desc": "<p>悬浮按钮的选项. 尺寸和位置单位 dp, 超出范围抛出 RangeError.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>size</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>省略 <code>width</code> 或 <code>height</code> 时的宽高, 默认 56.</td>\n</tr>\n<tr>\n<td><code>width</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>宽度.</td>\n</tr>\n<tr>\n<td><code>height</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>高度.</td>\n</tr>\n<tr>\n<td><code>x</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>左边缘, 限制在屏幕内.</td>\n</tr>\n<tr>\n<td><code>y</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>上边缘, 限制在屏幕内.</td>\n</tr>\n<tr>\n<td><code>alpha</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>不透明度, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>backgroundColor</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>背景色.</td>\n</tr>\n<tr>\n<td><code>borderColor</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>边框颜色.</td>\n</tr>\n<tr>\n<td><code>borderWidth</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>边框宽度.</td>\n</tr>\n<tr>\n<td><code>rounding</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>圆角半径, 默认为短边的一半.</td>\n</tr>\n<tr>\n<td><code>textColor</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>文字颜色, 默认白色.</td>\n</tr>\n<tr>\n<td><code>textSize</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>文字大小, 单位 sp, 默认 16.</td>\n</tr>\n<tr>\n<td><code>elevation</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>阴影高度, 默认 8.</td>\n</tr>\n<tr>\n<td><code>draggable</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>用户能否拖动, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>touchable</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>是否接收触摸, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>moreTouch</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>让触摸同时到达下层应用, 默认跟随会话.</td>\n</tr>\n<tr>\n<td><code>visible</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>初始是否显示, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>hidden</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td><code>true</code> 时初始隐藏.</td>\n</tr>\n<tr>\n<td><code>secure</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>按钮的 <code>FLAG_SECURE</code>, 默认跟随会话.</td>\n</tr>\n<tr>\n<td><code>onClick</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>点按时在脚本线程上运行.</td>\n</tr>\n<tr>\n<td><code>onMoved</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>按钮移动后在脚本线程上运行. 事件有 <code>button</code>, <code>session</code>, <code>x</code>, <code>y</code> 与 <code>source</code> (<code>drag</code>, <code>api</code> 或 <code>configuration</code>).</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiFloatingButton</p>\n\n",
+          "type": "module",
+          "displayName": "FloatingButtonOptions"
+        },
+        {
+          "textRaw": "[p#] window",
+          "name": "[p#]_window",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>按钮的悬浮窗.</p>\n",
+          "type": "module",
+          "displayName": "[p#] window"
+        },
+        {
+          "textRaw": "[p#] view",
+          "name": "[p#]_view",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#any\">any</a> }</li>\n</ul>\n<p>按钮的 Android 视图.</p>\n",
+          "type": "module",
+          "displayName": "[p#] view"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiSessionType\">ImguiSession</a> }</li>\n</ul>\n<p>按钮所属的会话.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] text",
+          "name": "[p#]_text",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>按钮文字.</p>\n",
+          "type": "module",
+          "displayName": "[p#] text"
+        },
+        {
+          "textRaw": "[p#] x",
+          "name": "[p#]_x",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>左边缘, 单位 dp.</p>\n",
+          "type": "module",
+          "displayName": "[p#] x"
+        },
+        {
+          "textRaw": "[p#] y",
+          "name": "[p#]_y",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>上边缘, 单位 dp.</p>\n",
+          "type": "module",
+          "displayName": "[p#] y"
+        },
+        {
+          "textRaw": "[p#] width",
+          "name": "[p#]_width",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>宽度, 单位 dp.</p>\n",
+          "type": "module",
+          "displayName": "[p#] width"
+        },
+        {
+          "textRaw": "[p#] height",
+          "name": "[p#]_height",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>高度, 单位 dp.</p>\n",
+          "type": "module",
+          "displayName": "[p#] height"
+        },
+        {
+          "textRaw": "[p#] alpha",
+          "name": "[p#]_alpha",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>不透明度, <code>0..1</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] alpha"
+        },
+        {
+          "textRaw": "[p#] secure",
+          "name": "[p#]_secure",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><code>FLAG_SECURE</code> 是否开启.</p>\n",
+          "type": "module",
+          "displayName": "[p#] secure"
+        },
+        {
+          "textRaw": "[p#] moreTouch",
+          "name": "[p#]_moretouch",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>触摸是否同时到达下层应用.</p>\n",
+          "type": "module",
+          "displayName": "[p#] moreTouch"
+        },
+        {
+          "textRaw": "[p#] visible",
+          "name": "[p#]_visible",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否显示.</p>\n",
+          "type": "module",
+          "displayName": "[p#] visible"
+        },
+        {
+          "textRaw": "[p#] touchable",
+          "name": "[p#]_touchable",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否接收触摸.</p>\n",
+          "type": "module",
+          "displayName": "[p#] touchable"
+        },
+        {
+          "textRaw": "[p#] closed",
+          "name": "[p#]_closed",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p><a href=\"#m-close\">close</a> 是否已运行.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closed"
+        },
+        {
+          "textRaw": "[m#] setText",
+          "name": "[m#]_settext",
+          "methods": [
+            {
+              "textRaw": "button.setText(text)",
+              "type": "method",
+              "name": "setText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 新的文字. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新的文字."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>改变文字.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setText"
+        },
+        {
+          "textRaw": "[m#] setPosition",
+          "name": "[m#]_setposition",
+          "methods": [
+            {
+              "textRaw": "button.setPosition(x, y)",
+              "type": "method",
+              "name": "setPosition",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**x** { [number](dataTypes#number) | [null](dataTypes#null) } - 左边缘. ",
+                      "name": "**x**",
+                      "type": " [number](dataTypes#number) | [null](dataTypes#null) ",
+                      "desc": "左边缘."
+                    },
+                    {
+                      "textRaw": "**y** { [number](dataTypes#number) | [null](dataTypes#null) } - 上边缘. ",
+                      "name": "**y**",
+                      "type": " [number](dataTypes#number) | [null](dataTypes#null) ",
+                      "desc": "上边缘."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "x"
+                    },
+                    {
+                      "name": "y"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把按钮移到 <code>(x, y)</code>, 单位 dp, 限制在屏幕内. <code>null</code> 保持这个坐标.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setPosition"
+        },
+        {
+          "textRaw": "[m#] setAlpha",
+          "name": "[m#]_setalpha",
+          "methods": [
+            {
+              "textRaw": "button.setAlpha(alpha)",
+              "type": "method",
+              "name": "setAlpha",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**alpha** { [number](dataTypes#number) } - 不透明度, `0..1`. ",
+                      "name": "**alpha**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "不透明度, `0..1`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "alpha"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>设置不透明度.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setAlpha"
+        },
+        {
+          "textRaw": "[m#] setSecure",
+          "name": "[m#]_setsecure",
+          "methods": [
+            {
+              "textRaw": "button.setSecure(secure)",
+              "type": "method",
+              "name": "setSecure",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**secure** { [boolean](dataTypes#boolean) } - 是否开启 `FLAG_SECURE`. ",
+                      "name": "**secure**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否开启 `FLAG_SECURE`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "secure"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>开关 <code>FLAG_SECURE</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setSecure"
+        },
+        {
+          "textRaw": "[m#] setMoreTouch",
+          "name": "[m#]_setmoretouch",
+          "methods": [
+            {
+              "textRaw": "button.setMoreTouch(enabled)",
+              "type": "method",
+              "name": "setMoreTouch",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**enabled** { [boolean](dataTypes#boolean) } - 是否开启. ",
+                      "name": "**enabled**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否开启."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "enabled"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>让触摸同时到达下层应用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setMoreTouch"
+        },
+        {
+          "textRaw": "[m#] setTouchable",
+          "name": "[m#]_settouchable",
+          "methods": [
+            {
+              "textRaw": "button.setTouchable(touchable)",
+              "type": "method",
+              "name": "setTouchable",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**touchable** { [boolean](dataTypes#boolean) } - 是否接收. ",
+                      "name": "**touchable**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否接收."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "touchable"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>切换是否接收触摸.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setTouchable"
+        },
+        {
+          "textRaw": "[m#] setVisible",
+          "name": "[m#]_setvisible",
+          "methods": [
+            {
+              "textRaw": "button.setVisible(visible)",
+              "type": "method",
+              "name": "setVisible",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**visible** { [boolean](dataTypes#boolean) } - 是否显示. ",
+                      "name": "**visible**",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "是否显示."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "visible"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>显示或隐藏.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] setVisible"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "button.show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>显示按钮.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] hide",
+          "name": "[m#]_hide",
+          "methods": [
+            {
+              "textRaw": "button.hide()",
+              "type": "method",
+              "name": "hide",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiFloatingButton](imguiFloatingButtonType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiFloatingButton](imguiFloatingButtonType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>隐藏按钮.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hide"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "button.close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [void](dataTypes#void) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [void](dataTypes#void) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>移除按钮.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 悬浮按钮 (ImguiFloatingButton)"
+    }
+  ]
+}

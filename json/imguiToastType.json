@@ -1,0 +1,287 @@
+{
+  "source": "..\\api\\imguiToastType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 短消息 (ImguiToast)",
+      "name": "imgui_短消息_(imguitoast)",
+      "desc": "<p>ImguiToast 是窗口上方的短消息, 按等级着色, 到期自动消失, 由 <a href=\"imgui#m-toast\">imgui.toast</a> 或 <a href=\"imguiSessionType#m-toast\">session.toast</a> 返回. 继承 <a href=\"imguiComponentType\">ImguiComponent</a>. 类型声明中的名称是 <code>ImGui.Toast</code>. 它在 ImGui 窗口内绘制, 与 AutoJs6 的 <a href=\"toast\">toast</a> 模块无关.</p>\n",
+      "modules": [
+        {
+          "textRaw": "ToastOptions",
+          "name": "toastoptions",
+          "desc": "<p><a href=\"imgui#m-toast\">toast</a> 的选项. 尺寸单位 dp, 时长单位 ms, 回调在脚本线程上运行.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>visible</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>初始是否显示, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>id</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>使用已显示消息的 ID 时更新那条消息, 默认自动生成.</td>\n</tr>\n<tr>\n<td><code>duration</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>显示时长, 默认 2500, <code>0</code> 表示一直显示到关闭. <code>duration</code> 参数优先.</td>\n</tr>\n<tr>\n<td><code>level</code></td>\n<td><a href=\"imgui#p-loglevel\">LogLevel</a> 或 <a href=\"dataTypes#string\">string</a></td>\n<td>等级, 决定文字颜色, 默认 <code>info</code>.</td>\n</tr>\n<tr>\n<td><code>type</code></td>\n<td><a href=\"imgui#p-loglevel\">LogLevel</a> 或 <a href=\"dataTypes#string\">string</a></td>\n<td><code>level</code> 的别名.</td>\n</tr>\n<tr>\n<td><code>position</code></td>\n<td><a href=\"imgui#p-toastposition\">ToastPosition</a></td>\n<td>锚点, 默认 <code>top-right</code>.</td>\n</tr>\n<tr>\n<td><code>color</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>文字颜色, 代替等级的颜色.</td>\n</tr>\n<tr>\n<td><code>fadeDuration</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>淡出时长, 默认 250.</td>\n</tr>\n<tr>\n<td><code>margin</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>与锚点的距离, 默认 12.</td>\n</tr>\n<tr>\n<td><code>stackStep</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>堆叠的消息之间的距离, 默认 54.</td>\n</tr>\n<tr>\n<td><code>backgroundAlpha</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>背景不透明度, <code>0..1</code>, 默认 0.92.</td>\n</tr>\n<tr>\n<td><code>interactive</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>是否接收触摸, 默认 <code>false</code>.</td>\n</tr>\n<tr>\n<td><code>showLevel</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>文本开头是否显示等级, 默认 <code>false</code>.</td>\n</tr>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>追加的 <a href=\"imgui#p-windowflags\">WindowFlags</a>.</td>\n</tr>\n<tr>\n<td><code>onClose</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>关闭时调用, <code>reason</code> 是 <code>expired</code> 或传给 <code>close</code> 的原因.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiToast</p>\n\n",
+          "type": "module",
+          "displayName": "ToastOptions"
+        },
+        {
+          "textRaw": "[p#] text",
+          "name": "[p#]_text",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>显示的文字.</p>\n",
+          "type": "module",
+          "displayName": "[p#] text"
+        },
+        {
+          "textRaw": "[p#] level",
+          "name": "[p#]_level",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imgui#p-loglevel\">LogLevel</a> }</li>\n</ul>\n<p>等级.</p>\n",
+          "type": "module",
+          "displayName": "[p#] level"
+        },
+        {
+          "textRaw": "[p#] position",
+          "name": "[p#]_position",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imgui#p-toastposition\">ToastPosition</a> }</li>\n</ul>\n<p>锚点.</p>\n",
+          "type": "module",
+          "displayName": "[p#] position"
+        },
+        {
+          "textRaw": "[p#] createdAt",
+          "name": "[p#]_createdat",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>创建或最后更新时的 <code>Date.now()</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] createdAt"
+        },
+        {
+          "textRaw": "[p#] duration",
+          "name": "[p#]_duration",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>显示时长, 单位 ms, <code>0</code> 表示一直显示到关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] duration"
+        },
+        {
+          "textRaw": "[p#] expiresAt",
+          "name": "[p#]_expiresat",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>到期时刻的 <code>Date.now()</code> 值, 时长为 0 时是 <code>Infinity</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] expiresAt"
+        },
+        {
+          "textRaw": "[m#] update",
+          "name": "[m#]_update",
+          "methods": [
+            {
+              "textRaw": "toast.update(text, duration?, options?)",
+              "type": "method",
+              "name": "update",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 新的文字. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "新的文字."
+                    },
+                    {
+                      "textRaw": "**[ duration ]** { [number](dataTypes#number) } - 显示时长, 单位 ms. ",
+                      "name": "**[",
+                      "desc": "duration ]** { [number](dataTypes#number) } - 显示时长, 单位 ms."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [ToastOptions](imguiToastType#toastoptions) } - 选项. ",
+                      "name": "**[",
+                      "desc": "options ]** { [ToastOptions](imguiToastType#toastoptions) } - 选项."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiToast](imguiToastType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiToast](imguiToastType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "duration?"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>改变文字, 并重新显示完整的时长.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] update"
+        },
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件类型, 这里是 <code>toast</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] id",
+          "name": "[p#]_id",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] id"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiSessionType\">ImguiSession</a> }</li>\n</ul>\n<p>组件所属的会话.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] options",
+          "name": "[p#]_options",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>创建时的选项.</p>\n",
+          "type": "module",
+          "displayName": "[p#] options"
+        },
+        {
+          "textRaw": "[p#] visible",
+          "name": "[p#]_visible",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否绘制, 参阅 <a href=\"imguiComponentType#p-visible\">ImguiComponent</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] visible"
+        },
+        {
+          "textRaw": "[p#] closed",
+          "name": "[p#]_closed",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否已关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closed"
+        },
+        {
+          "textRaw": "[p#] closeReason",
+          "name": "[p#]_closereason",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭原因, 打开期间为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closeReason"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "toast.show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiToast](imguiToastType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiToast](imguiToastType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>重新开始绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] hide",
+          "name": "[m#]_hide",
+          "methods": [
+            {
+              "textRaw": "toast.hide()",
+              "type": "method",
+              "name": "hide",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiToast](imguiToastType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiToast](imguiToastType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>停止绘制, 保留组件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hide"
+        },
+        {
+          "textRaw": "[m#] toggle",
+          "name": "[m#]_toggle",
+          "methods": [
+            {
+              "textRaw": "toast.toggle()",
+              "type": "method",
+              "name": "toggle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiToast](imguiToastType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiToast](imguiToastType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>在 <code>show</code> 与 <code>hide</code> 之间切换.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toggle"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "toast.close(reason?)",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因. ",
+                      "name": "**[",
+                      "desc": "reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiToast](imguiToastType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiToast](imguiToastType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把组件从会话移除.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 短消息 (ImguiToast)"
+    }
+  ]
+}

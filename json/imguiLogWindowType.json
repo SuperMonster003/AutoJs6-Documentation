@@ -1,0 +1,619 @@
+{
+  "source": "..\\api\\imguiLogWindowType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 日志窗口 (ImguiLogWindow)",
+      "name": "imgui_日志窗口_(imguilogwindow)",
+      "desc": "<p>ImguiLogWindow 是显示日志行的窗口, 带等级着色, 清空, 导出和自动滚底, 由 <a href=\"imgui#m-logwindow\">imgui.logWindow</a> 或 <a href=\"imguiSessionType#m-logwindow\">session.logWindow</a> 返回. 继承 <a href=\"imguiComponentType\">ImguiComponent</a>. 类型声明中的名称是 <code>ImGui.LogWindow</code>. 内置示例 <code>log-hud</code> 演示它的用法.</p>\n<pre><code class=\"lang-js\">imgui.createWindow(function (ui) {\n    ui.withWindow(&#39;控制&#39;, null, 0, function () {\n        if (ui.button(&#39;清空日志&#39;)) {\n            imgui.logWindow(&#39;events&#39;).clear();\n        }\n    });\n}, { width: 400, height: 360 });\n\nlet log = imgui.logWindow(&#39;events&#39;, {\n    title: &#39;事件&#39;,\n    maxEntries: 200,\n    position: imgui.ToastPosition.BottomLeft,\n    onExport: function (text) {\n        console.log(text);\n    },\n});\nlog.info(&#39;启动&#39;);\nlog.warn(&#39;磁盘空间不足&#39;);\nlog.append(&#39;debug&#39;, &#39;详情&#39;);\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "LogEntry",
+          "name": "logentry",
+          "desc": "<p>日志窗口的一行.</p>\n<table>\n<thead>\n<tr>\n<th>字段</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>timestamp</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>添加时的 <code>Date.now()</code>.</td>\n</tr>\n<tr>\n<td><code>level</code></td>\n<td><a href=\"imgui#p-loglevel\">LogLevel</a></td>\n<td>等级.</td>\n</tr>\n<tr>\n<td><code>text</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>文本.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "LogEntry"
+        },
+        {
+          "textRaw": "LogWindowOptions",
+          "name": "logwindowoptions",
+          "desc": "<p><a href=\"imgui#m-logwindow\">logWindow</a> 的选项. 尺寸单位 dp, 回调在脚本线程上运行. 另外读取 <a href=\"imguiComponentType#componentoptions\">ComponentOptions</a>.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>title</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>窗口标题, 默认为 ID.</td>\n</tr>\n<tr>\n<td><code>open</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>窗口初始是否打开, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>autoScroll</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>是否滚动到新条目, 默认 <code>true</code>.</td>\n</tr>\n<tr>\n<td><code>maxEntries</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>保留的条目数, 至少 1, 默认 1000, 最旧的先移除.</td>\n</tr>\n<tr>\n<td><code>entries</code></td>\n<td>(<a href=\"dataTypes#any\">any</a> 或 <a href=\"dataTypes#object\">Object</a>)[]</td>\n<td>初始条目: 文本, 或 <code>{ level, text }</code>.</td>\n</tr>\n<tr>\n<td><code>position</code></td>\n<td><a href=\"imgui#p-toastposition\">ToastPosition</a></td>\n<td>首次位置的锚点. 省略时由 Dear ImGui 放置.</td>\n</tr>\n<tr>\n<td><code>margin</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>与锚点的距离, 单位 dp, 默认 12.</td>\n</tr>\n<tr>\n<td><code>width</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>首次宽度, 单位 dp, 默认 380.</td>\n</tr>\n<tr>\n<td><code>height</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>首次高度, 单位 dp, 默认 260.</td>\n</tr>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td><a href=\"imgui#p-windowflags\">WindowFlags</a> 的组合.</td>\n</tr>\n<tr>\n<td><code>clearLabel</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>清空按钮的文字.</td>\n</tr>\n<tr>\n<td><code>exportLabel</code></td>\n<td><a href=\"dataTypes#string\">string</a></td>\n<td>导出按钮的文字.</td>\n</tr>\n<tr>\n<td><code>onAppend</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>每个新条目之后调用.</td>\n</tr>\n<tr>\n<td><code>onClear</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>清空之后调用.</td>\n</tr>\n<tr>\n<td><code>onExport</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>由导出按钮和 <code>export()</code> 调用, 参数为 <code>exportText()</code> 的文本和条目的副本.</td>\n</tr>\n<tr>\n<td><code>onClose</code></td>\n<td><a href=\"dataTypes#function\">Function</a></td>\n<td>关闭时调用.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiLogWindow</p>\n\n",
+          "type": "module",
+          "displayName": "LogWindowOptions"
+        },
+        {
+          "textRaw": "[p#] entries",
+          "name": "[p#]_entries",
+          "desc": "<ul>\n<li>{ <a href=\"imguiLogWindowType#logentry\">LogEntry</a>[] }</li>\n</ul>\n<p>条目, 最旧的在前.</p>\n",
+          "type": "module",
+          "displayName": "[p#] entries"
+        },
+        {
+          "textRaw": "[p#] autoScroll",
+          "name": "[p#]_autoscroll",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>新条目是否滚动到可见.</p>\n",
+          "type": "module",
+          "displayName": "[p#] autoScroll"
+        },
+        {
+          "textRaw": "[p#] maxEntries",
+          "name": "[p#]_maxentries",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>保留的条目数, 从下一个条目起生效.</p>\n",
+          "type": "module",
+          "displayName": "[p#] maxEntries"
+        },
+        {
+          "textRaw": "[p#] open",
+          "name": "[p#]_open",
+          "desc": "<ul>\n<li>{ <a href=\"imgui#valueref\">ValueRef</a> }</li>\n</ul>\n<p>窗口的关闭按钮: 变为 <code>false</code> 时组件在下一帧关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] open"
+        },
+        {
+          "textRaw": "[m#] append",
+          "name": "[m#]_append",
+          "methods": [
+            {
+              "textRaw": "log.append(level, text)",
+              "type": "method",
+              "name": "append",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**level** { [LogLevel](imgui#p-loglevel) | [string](dataTypes#string) } - 等级. ",
+                      "name": "**level**",
+                      "type": " [LogLevel](imgui#p-loglevel) | [string](dataTypes#string) ",
+                      "desc": "等级."
+                    },
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "level"
+                    },
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加条目. 无法识别的等级算作 <code>log</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] append"
+        },
+        {
+          "textRaw": "[m#] appendLog",
+          "name": "[m#]_appendlog",
+          "methods": [
+            {
+              "textRaw": "log.appendLog(text, level?)",
+              "type": "method",
+              "name": "appendLog",
+              "desc": "<p><strong><code>Overload 1/2</code></strong></p>\n<ul>\n<li><strong>text</strong> { <a href=\"dataTypes#any\">any</a> } - 文本.</li>\n<li><strong>[ level ]</strong> { <a href=\"imgui#p-loglevel\">LogLevel</a> | <a href=\"dataTypes#string\">string</a> } - 等级.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imguiLogWindowType\">ImguiLogWindow</a> }</li>\n</ul>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "level?"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "textRaw": "log.appendLog(level, text)",
+              "type": "method",
+              "name": "appendLog",
+              "desc": "<p><strong><code>Overload 2/2</code></strong></p>\n<ul>\n<li><strong>level</strong> { <a href=\"imgui#p-loglevel\">LogLevel</a> | <a href=\"dataTypes#string\">string</a> } - 等级.</li>\n<li><strong>text</strong> { <a href=\"dataTypes#any\">any</a> } - 文本.</li>\n<li><ins><strong>returns</strong></ins> { <a href=\"imguiLogWindowType\">ImguiLogWindow</a> }</li>\n</ul>\n<p>添加条目, 等级可以放在第一个或第二个参数.</p>\n",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "name": "level"
+                    },
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] appendLog"
+        },
+        {
+          "textRaw": "[m#] log",
+          "name": "[m#]_log",
+          "methods": [
+            {
+              "textRaw": "log.log(text)",
+              "type": "method",
+              "name": "log",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加 <code>log</code> 等级的条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] log"
+        },
+        {
+          "textRaw": "[m#] debug",
+          "name": "[m#]_debug",
+          "methods": [
+            {
+              "textRaw": "log.debug(text)",
+              "type": "method",
+              "name": "debug",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加 <code>debug</code> 等级的条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] debug"
+        },
+        {
+          "textRaw": "[m#] info",
+          "name": "[m#]_info",
+          "methods": [
+            {
+              "textRaw": "log.info(text)",
+              "type": "method",
+              "name": "info",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加 <code>info</code> 等级的条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] info"
+        },
+        {
+          "textRaw": "[m#] warn",
+          "name": "[m#]_warn",
+          "methods": [
+            {
+              "textRaw": "log.warn(text)",
+              "type": "method",
+              "name": "warn",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加 <code>warn</code> 等级的条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] warn"
+        },
+        {
+          "textRaw": "[m#] error",
+          "name": "[m#]_error",
+          "methods": [
+            {
+              "textRaw": "log.error(text)",
+              "type": "method",
+              "name": "error",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "text"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>添加 <code>error</code> 等级的条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] error"
+        },
+        {
+          "textRaw": "[m#] clear",
+          "name": "[m#]_clear",
+          "methods": [
+            {
+              "textRaw": "log.clear()",
+              "type": "method",
+              "name": "clear",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>移除全部条目.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] clear"
+        },
+        {
+          "textRaw": "[m#] exportText",
+          "name": "[m#]_exporttext",
+          "methods": [
+            {
+              "textRaw": "log.exportText()",
+              "type": "method",
+              "name": "exportText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>把条目转为文本, 每行一个 <code>[时间] [等级] 文本</code>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] exportText"
+        },
+        {
+          "textRaw": "[m#] export",
+          "name": "[m#]_export",
+          "methods": [
+            {
+              "textRaw": "log.export()",
+              "type": "method",
+              "name": "export",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>与导出按钮相同: 调用 <code>onExport</code> 并返回文本.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] export"
+        },
+        {
+          "textRaw": "[m#] render",
+          "name": "[m#]_render",
+          "methods": [
+            {
+              "textRaw": "log.render()",
+              "type": "method",
+              "name": "render",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>在帧内立即绘制窗口, 在自动绘制之外再绘制一次.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] render"
+        },
+        {
+          "textRaw": "[p#] type",
+          "name": "[p#]_type",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件类型, 这里是 <code>logWindow</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] type"
+        },
+        {
+          "textRaw": "[p#] id",
+          "name": "[p#]_id",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> }</li>\n</ul>\n<p>组件 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] id"
+        },
+        {
+          "textRaw": "[p#] session",
+          "name": "[p#]_session",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"imguiSessionType\">ImguiSession</a> }</li>\n</ul>\n<p>组件所属的会话.</p>\n",
+          "type": "module",
+          "displayName": "[p#] session"
+        },
+        {
+          "textRaw": "[p#] options",
+          "name": "[p#]_options",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#object\">Object</a> }</li>\n</ul>\n<p>创建时的选项.</p>\n",
+          "type": "module",
+          "displayName": "[p#] options"
+        },
+        {
+          "textRaw": "[p#] visible",
+          "name": "[p#]_visible",
+          "desc": "<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否绘制, 参阅 <a href=\"imguiComponentType#p-visible\">ImguiComponent</a>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] visible"
+        },
+        {
+          "textRaw": "[p#] closed",
+          "name": "[p#]_closed",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#boolean\">boolean</a> }</li>\n</ul>\n<p>是否已关闭.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closed"
+        },
+        {
+          "textRaw": "[p#] closeReason",
+          "name": "[p#]_closereason",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#string\">string</a> | <a href=\"dataTypes#null\">null</a> }</li>\n</ul>\n<p>关闭原因, 打开期间为 <code>null</code>.</p>\n",
+          "type": "module",
+          "displayName": "[p#] closeReason"
+        },
+        {
+          "textRaw": "[m#] show",
+          "name": "[m#]_show",
+          "methods": [
+            {
+              "textRaw": "log.show()",
+              "type": "method",
+              "name": "show",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>重新开始绘制.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] show"
+        },
+        {
+          "textRaw": "[m#] hide",
+          "name": "[m#]_hide",
+          "methods": [
+            {
+              "textRaw": "log.hide()",
+              "type": "method",
+              "name": "hide",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>停止绘制, 保留组件.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] hide"
+        },
+        {
+          "textRaw": "[m#] toggle",
+          "name": "[m#]_toggle",
+          "methods": [
+            {
+              "textRaw": "log.toggle()",
+              "type": "method",
+              "name": "toggle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>在 <code>show</code> 与 <code>hide</code> 之间切换.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toggle"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "log.close(reason?)",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**[ reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因. ",
+                      "name": "**[",
+                      "desc": "reason ]** { [string](dataTypes#string) } - 写入 `closeReason` 的原因."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiLogWindow](imguiLogWindowType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiLogWindow](imguiLogWindowType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "reason?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把组件从会话移除.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 日志窗口 (ImguiLogWindow)"
+    }
+  ]
+}

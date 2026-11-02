@@ -1,0 +1,2292 @@
+{
+  "source": "..\\api\\imguiDrawListType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 绘制列表 (ImguiDrawList)",
+      "name": "imgui_绘制列表_(imguidrawlist)",
+      "desc": "<p>ImguiDrawList 在帧内自由绘制, 由 <a href=\"imgui#m-getwindowdrawlist\">getWindowDrawList</a>, <a href=\"imgui#m-getforegrounddrawlist\">getForegroundDrawList</a> 与 <a href=\"imgui#m-getbackgrounddrawlist\">getBackgroundDrawList</a> 返回, 只能在帧内使用. 坐标, 线宽和尺寸的单位是 px, 方法返回绘制列表本身, 可以链式调用. 类型声明中的名称是 <code>ImGui.DrawList</code>.</p>\n<p>每个绘制方法另有 PascalCase 别名, 例如 <code>drawList.AddLine</code> 与 <a href=\"#m-addline\">addLine</a> 相同.</p>\n<p>点的写法见 <a href=\"imgui#point\">Point</a>, 颜色的写法见 <a href=\"imgui#color\">Color</a>. 折线和多边形每次最多 4096 个点, 大的路径分成多次绘制.</p>\n<pre><code class=\"lang-js\">imgui.createWindow(function (ui) {\n    ui.withWindow(&#39;绘制&#39;, null, 0, function () {\n        let draw = ui.getWindowDrawList();\n        let origin = ui.getWindowPos();\n        let x = origin[0];\n        let y = origin[1];\n        draw.addRectFilled([x + 20, y + 60], [x + 180, y + 140], &#39;#335C8A&#39;, 8)\n            .addCircle([x + 100, y + 100], 30, &#39;#FFFFFF&#39;, 0, 2)\n            .addText([x + 30, y + 150], &#39;#FFC107&#39;, &#39;DrawList&#39;);\n        draw.pathClear()\n            .pathLineTo([x + 200, y + 60])\n            .pathLineTo([x + 260, y + 140])\n            .pathLineTo([x + 200, y + 140])\n            .pathStroke(&#39;#66BB6A&#39;, 2, ui.DrawFlags.Closed);\n    });\n}, { width: 320, height: 240 });\n</code></pre>\n",
+      "modules": [
+        {
+          "textRaw": "DrawTextOptions",
+          "name": "drawtextoptions",
+          "desc": "<p><a href=\"#m-addtext\">addText</a> 的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>font</code></td>\n<td><a href=\"dataTypes#number\">number</a> 或 <a href=\"dataTypes#string\">string</a></td>\n<td><a href=\"imgui#p-fonts\">Fonts</a> 的值, 或 <code>fonts</code> 选项里的字体名.</td>\n</tr>\n<tr>\n<td><code>size</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>字体大小, 单位 px, 默认为当前大小.</td>\n</tr>\n<tr>\n<td><code>wrapWidth</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>换行宽度, 单位 px, 默认不换行.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "DrawTextOptions"
+        },
+        {
+          "textRaw": "DrawPolylineOptions",
+          "name": "drawpolylineoptions",
+          "desc": "<p><a href=\"#m-addpolyline\">addPolyline</a> 的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>thickness</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>线宽, 默认 1.</td>\n</tr>\n<tr>\n<td><code>closed</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a> 或 <a href=\"dataTypes#number\">number</a></td>\n<td>是否连接最后一点和第一点.</td>\n</tr>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td><a href=\"imgui#p-drawflags\">DrawFlags</a> 的组合.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "DrawPolylineOptions"
+        },
+        {
+          "textRaw": "DrawImageOptions",
+          "name": "drawimageoptions",
+          "desc": "<p><a href=\"#m-addimage\">addImage</a> 的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>uv0</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>左上角的纹理坐标, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>uv1</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>右下角的纹理坐标, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>tint</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>与图像相乘的颜色.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "DrawImageOptions"
+        },
+        {
+          "textRaw": "DrawImageQuadOptions",
+          "name": "drawimagequadoptions",
+          "desc": "<p><a href=\"#m-addimagequad\">addImageQuad</a> 的选项, 依次是四个角的纹理坐标.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>uv1</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>第一个角的纹理坐标, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>uv2</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>第二个角的纹理坐标.</td>\n</tr>\n<tr>\n<td><code>uv3</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>第三个角的纹理坐标.</td>\n</tr>\n<tr>\n<td><code>uv4</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>第四个角的纹理坐标.</td>\n</tr>\n<tr>\n<td><code>tint</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>与图像相乘的颜色.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "DrawImageQuadOptions"
+        },
+        {
+          "textRaw": "DrawImageRoundedOptions",
+          "name": "drawimageroundedoptions",
+          "desc": "<p><a href=\"#m-addimagerounded\">addImageRounded</a> 的选项, 另外读取 <a href=\"#drawimageoptions\">DrawImageOptions</a>.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>哪些角是圆角: <code>DrawFlags.RoundCorners*</code>, 默认全部.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiDrawList</p>\n\n",
+          "type": "module",
+          "displayName": "DrawImageRoundedOptions"
+        },
+        {
+          "textRaw": "[p#] layer",
+          "name": "[p#]_layer",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p><a href=\"imgui#p-drawlistlayer\">DrawListLayer</a> 的值.</p>\n",
+          "type": "module",
+          "displayName": "[p#] layer"
+        },
+        {
+          "textRaw": "[m#] addLine",
+          "name": "[m#]_addline",
+          "methods": [
+            {
+              "textRaw": "drawList.addLine(first, second, color, thickness?)",
+              "type": "method",
+              "name": "addLine",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制线段.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addLine"
+        },
+        {
+          "textRaw": "[m#] addRect",
+          "name": "[m#]_addrect",
+          "methods": [
+            {
+              "textRaw": "drawList.addRect(minimum, maximum, color, rounding?, thickness?, flags?)",
+              "type": "method",
+              "name": "addRect",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px. ",
+                      "name": "**[",
+                      "desc": "rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "**[ flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合. ",
+                      "name": "**[",
+                      "desc": "flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "rounding?"
+                    },
+                    {
+                      "name": "thickness?"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制矩形边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addRect"
+        },
+        {
+          "textRaw": "[m#] addRectFilled",
+          "name": "[m#]_addrectfilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addRectFilled(minimum, maximum, color, rounding?, flags?)",
+              "type": "method",
+              "name": "addRectFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px. ",
+                      "name": "**[",
+                      "desc": "rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合. ",
+                      "name": "**[",
+                      "desc": "flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "rounding?"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充矩形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addRectFilled"
+        },
+        {
+          "textRaw": "[m#] addCircle",
+          "name": "[m#]_addcircle",
+          "methods": [
+            {
+              "textRaw": "drawList.addCircle(center, radius, color, segments?, thickness?)",
+              "type": "method",
+              "name": "addCircle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "segments?"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制圆形边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addCircle"
+        },
+        {
+          "textRaw": "[m#] addCircleFilled",
+          "name": "[m#]_addcirclefilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addCircleFilled(center, radius, color, segments?)",
+              "type": "method",
+              "name": "addCircleFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充圆.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addCircleFilled"
+        },
+        {
+          "textRaw": "[m#] addTriangle",
+          "name": "[m#]_addtriangle",
+          "methods": [
+            {
+              "textRaw": "drawList.addTriangle(first, second, third, color, thickness?)",
+              "type": "method",
+              "name": "addTriangle",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制三角形边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addTriangle"
+        },
+        {
+          "textRaw": "[m#] addTriangleFilled",
+          "name": "[m#]_addtrianglefilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addTriangleFilled(first, second, third, color)",
+              "type": "method",
+              "name": "addTriangleFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充三角形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addTriangleFilled"
+        },
+        {
+          "textRaw": "[m#] addText",
+          "name": "[m#]_addtext",
+          "methods": [
+            {
+              "textRaw": "drawList.addText(position, color, text, options?)",
+              "type": "method",
+              "name": "addText",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**position** { [Point](imgui#point) } - 位置, 单位 px. ",
+                      "name": "**position**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "位置, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**text** { [any](dataTypes#any) } - 文本, 用 `String()` 转换. ",
+                      "name": "**text**",
+                      "type": " [any](dataTypes#any) ",
+                      "desc": "文本, 用 `String()` 转换."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [DrawTextOptions](imguiDrawListType#drawtextoptions) } - 选项, 参阅 [DrawTextOptions](#drawtextoptions). ",
+                      "name": "**[",
+                      "desc": "options ]** { [DrawTextOptions](imguiDrawListType#drawtextoptions) } - 选项, 参阅 [DrawTextOptions](#drawtextoptions)."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "position"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "text"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在某个位置绘制文本, 不移动布局光标.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addText"
+        },
+        {
+          "textRaw": "[m#] addPolyline",
+          "name": "[m#]_addpolyline",
+          "methods": [
+            {
+              "textRaw": "drawList.addPolyline(points, color, thickness?, closed?)",
+              "type": "method",
+              "name": "addPolyline",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**points** { [Point](imgui#point)[] } - 点的数组. ",
+                      "name": "**points**",
+                      "type": " [Point](imgui#point)[] ",
+                      "desc": "点的数组."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) | [DrawPolylineOptions](imguiDrawListType#drawpolylineoptions) } - 线宽, 也可以传 [DrawPolylineOptions](#drawpolylineoptions). ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) | [DrawPolylineOptions](imguiDrawListType#drawpolylineoptions) } - 线宽, 也可以传 [DrawPolylineOptions](#drawpolylineoptions)."
+                    },
+                    {
+                      "textRaw": "**[ closed ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否连接最后一点和第一点. ",
+                      "name": "**[",
+                      "desc": "closed ]** { [boolean](dataTypes#boolean) | [number](dataTypes#number) } - 是否连接最后一点和第一点."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "points"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    },
+                    {
+                      "name": "closed?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制经过最多 4096 个点的折线.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addPolyline"
+        },
+        {
+          "textRaw": "[m#] addBezierCubic",
+          "name": "[m#]_addbeziercubic",
+          "methods": [
+            {
+              "textRaw": "drawList.addBezierCubic(first, second, third, fourth, color, thickness?, segments?)",
+              "type": "method",
+              "name": "addBezierCubic",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**fourth** { [Point](imgui#point) } - 第四个点, 单位 px. ",
+                      "name": "**fourth**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第四个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "fourth"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制三次贝塞尔曲线.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addBezierCubic"
+        },
+        {
+          "textRaw": "[m#] addBezierQuadratic",
+          "name": "[m#]_addbezierquadratic",
+          "methods": [
+            {
+              "textRaw": "drawList.addBezierQuadratic(first, second, third, color, thickness?, segments?)",
+              "type": "method",
+              "name": "addBezierQuadratic",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制二次贝塞尔曲线.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addBezierQuadratic"
+        },
+        {
+          "textRaw": "[m#] addQuad",
+          "name": "[m#]_addquad",
+          "methods": [
+            {
+              "textRaw": "drawList.addQuad(first, second, third, fourth, color, thickness?)",
+              "type": "method",
+              "name": "addQuad",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**fourth** { [Point](imgui#point) } - 第四个点, 单位 px. ",
+                      "name": "**fourth**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第四个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "fourth"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制四边形边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addQuad"
+        },
+        {
+          "textRaw": "[m#] addQuadFilled",
+          "name": "[m#]_addquadfilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addQuadFilled(first, second, third, fourth, color)",
+              "type": "method",
+              "name": "addQuadFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**fourth** { [Point](imgui#point) } - 第四个点, 单位 px. ",
+                      "name": "**fourth**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第四个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "fourth"
+                    },
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充四边形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addQuadFilled"
+        },
+        {
+          "textRaw": "[m#] addNgon",
+          "name": "[m#]_addngon",
+          "methods": [
+            {
+              "textRaw": "drawList.addNgon(center, radius, color, segments, thickness?)",
+              "type": "method",
+              "name": "addNgon",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**segments** { [number](dataTypes#number) } - 边数, `3..512`. ",
+                      "name": "**segments**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "边数, `3..512`."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "segments"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制正多边形边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addNgon"
+        },
+        {
+          "textRaw": "[m#] addNgonFilled",
+          "name": "[m#]_addngonfilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addNgonFilled(center, radius, color, segments)",
+              "type": "method",
+              "name": "addNgonFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**segments** { [number](dataTypes#number) } - 边数, `3..512`. ",
+                      "name": "**segments**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "边数, `3..512`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "segments"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充正多边形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addNgonFilled"
+        },
+        {
+          "textRaw": "[m#] addEllipse",
+          "name": "[m#]_addellipse",
+          "methods": [
+            {
+              "textRaw": "drawList.addEllipse(center, radius, color, rotation?, segments?, thickness?)",
+              "type": "method",
+              "name": "addEllipse",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [Point](imgui#point) } - 两个轴的半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "两个轴的半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ rotation ]** { [number](dataTypes#number) } - 旋转角度, 单位弧度. ",
+                      "name": "**[",
+                      "desc": "rotation ]** { [number](dataTypes#number) } - 旋转角度, 单位弧度."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "rotation?"
+                    },
+                    {
+                      "name": "segments?"
+                    },
+                    {
+                      "name": "thickness?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制椭圆边框.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addEllipse"
+        },
+        {
+          "textRaw": "[m#] addEllipseFilled",
+          "name": "[m#]_addellipsefilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addEllipseFilled(center, radius, color, rotation?, segments?)",
+              "type": "method",
+              "name": "addEllipseFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [Point](imgui#point) } - 两个轴的半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "两个轴的半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ rotation ]** { [number](dataTypes#number) } - 旋转角度, 单位弧度. ",
+                      "name": "**[",
+                      "desc": "rotation ]** { [number](dataTypes#number) } - 旋转角度, 单位弧度."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "rotation?"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充椭圆, 参阅 <a href=\"#m-addellipse\">addEllipse</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addEllipseFilled"
+        },
+        {
+          "textRaw": "[m#] addRectFilledMultiColor",
+          "name": "[m#]_addrectfilledmulticolor",
+          "methods": [
+            {
+              "textRaw": "drawList.addRectFilledMultiColor(minimum, maximum, colorUpperLeft, colorUpperRight, colorBottomRight, colorBottomLeft)",
+              "type": "method",
+              "name": "addRectFilledMultiColor",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**colorUpperLeft** { [Color](imgui#color) } - 左上角的颜色. ",
+                      "name": "**colorUpperLeft**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "左上角的颜色."
+                    },
+                    {
+                      "textRaw": "**colorUpperRight** { [Color](imgui#color) } - 右上角的颜色. ",
+                      "name": "**colorUpperRight**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "右上角的颜色."
+                    },
+                    {
+                      "textRaw": "**colorBottomRight** { [Color](imgui#color) } - 右下角的颜色. ",
+                      "name": "**colorBottomRight**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "右下角的颜色."
+                    },
+                    {
+                      "textRaw": "**colorBottomLeft** { [Color](imgui#color) } - 左下角的颜色. ",
+                      "name": "**colorBottomLeft**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "左下角的颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "colorUpperLeft"
+                    },
+                    {
+                      "name": "colorUpperRight"
+                    },
+                    {
+                      "name": "colorBottomRight"
+                    },
+                    {
+                      "name": "colorBottomLeft"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制四角各一种颜色的矩形, 颜色在角之间混合.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addRectFilledMultiColor"
+        },
+        {
+          "textRaw": "[m#] addConvexPolyFilled",
+          "name": "[m#]_addconvexpolyfilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addConvexPolyFilled(points, color)",
+              "type": "method",
+              "name": "addConvexPolyFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**points** { [Point](imgui#point)[] } - 3 到 4096 个点, 顺时针排列时有抗锯齿. ",
+                      "name": "**points**",
+                      "type": " [Point](imgui#point)[] ",
+                      "desc": "3 到 4096 个点, 顺时针排列时有抗锯齿."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "points"
+                    },
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充凸多边形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addConvexPolyFilled"
+        },
+        {
+          "textRaw": "[m#] addConcavePolyFilled",
+          "name": "[m#]_addconcavepolyfilled",
+          "methods": [
+            {
+              "textRaw": "drawList.addConcavePolyFilled(points, color)",
+              "type": "method",
+              "name": "addConcavePolyFilled",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**points** { [Point](imgui#point)[] } - 3 到 4096 个点. ",
+                      "name": "**points**",
+                      "type": " [Point](imgui#point)[] ",
+                      "desc": "3 到 4096 个点."
+                    },
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "points"
+                    },
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>绘制填充简单多边形, 比 <a href=\"#m-addconvexpolyfilled\">addConvexPolyFilled</a> 慢.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addConcavePolyFilled"
+        },
+        {
+          "textRaw": "[m#] addImage",
+          "name": "[m#]_addimage",
+          "methods": [
+            {
+              "textRaw": "drawList.addImage(texture, minimum, maximum, options?)",
+              "type": "method",
+              "name": "addImage",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理. ",
+                      "name": "**texture**",
+                      "type": " [ImguiTexture](imguiTextureType) ",
+                      "desc": "由 [createTexture](imgui#m-createtexture) 创建的纹理."
+                    },
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [DrawImageOptions](imguiDrawListType#drawimageoptions) } - 选项, 参阅 [DrawImageOptions](#drawimageoptions). ",
+                      "name": "**[",
+                      "desc": "options ]** { [DrawImageOptions](imguiDrawListType#drawimageoptions) } - 选项, 参阅 [DrawImageOptions](#drawimageoptions)."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "texture"
+                    },
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在矩形内绘制纹理.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addImage"
+        },
+        {
+          "textRaw": "[m#] addImageQuad",
+          "name": "[m#]_addimagequad",
+          "methods": [
+            {
+              "textRaw": "drawList.addImageQuad(texture, first, second, third, fourth, options?)",
+              "type": "method",
+              "name": "addImageQuad",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理. ",
+                      "name": "**texture**",
+                      "type": " [ImguiTexture](imguiTextureType) ",
+                      "desc": "由 [createTexture](imgui#m-createtexture) 创建的纹理."
+                    },
+                    {
+                      "textRaw": "**first** { [Point](imgui#point) } - 第一个点, 单位 px. ",
+                      "name": "**first**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第一个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**fourth** { [Point](imgui#point) } - 第四个点, 单位 px. ",
+                      "name": "**fourth**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第四个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [DrawImageQuadOptions](imguiDrawListType#drawimagequadoptions) } - 选项, 参阅 [DrawImageQuadOptions](#drawimagequadoptions). ",
+                      "name": "**[",
+                      "desc": "options ]** { [DrawImageQuadOptions](imguiDrawListType#drawimagequadoptions) } - 选项, 参阅 [DrawImageQuadOptions](#drawimagequadoptions)."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "texture"
+                    },
+                    {
+                      "name": "first"
+                    },
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "fourth"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在四边形内绘制纹理.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addImageQuad"
+        },
+        {
+          "textRaw": "[m#] addImageRounded",
+          "name": "[m#]_addimagerounded",
+          "methods": [
+            {
+              "textRaw": "drawList.addImageRounded(texture, minimum, maximum, rounding, options?)",
+              "type": "method",
+              "name": "addImageRounded",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**texture** { [ImguiTexture](imguiTextureType) } - 由 [createTexture](imgui#m-createtexture) 创建的纹理. ",
+                      "name": "**texture**",
+                      "type": " [ImguiTexture](imguiTextureType) ",
+                      "desc": "由 [createTexture](imgui#m-createtexture) 创建的纹理."
+                    },
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**rounding** { [number](dataTypes#number) } - 圆角半径, 单位 px. ",
+                      "name": "**rounding**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "圆角半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ options ]** { [DrawImageRoundedOptions](imguiDrawListType#drawimageroundedoptions) } - 选项, 参阅 [DrawImageRoundedOptions](#drawimageroundedoptions). ",
+                      "name": "**[",
+                      "desc": "options ]** { [DrawImageRoundedOptions](imguiDrawListType#drawimageroundedoptions) } - 选项, 参阅 [DrawImageRoundedOptions](#drawimageroundedoptions)."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "texture"
+                    },
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "rounding"
+                    },
+                    {
+                      "name": "options?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在圆角矩形内绘制纹理.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] addImageRounded"
+        },
+        {
+          "textRaw": "[m#] pathClear",
+          "name": "[m#]_pathclear",
+          "methods": [
+            {
+              "textRaw": "drawList.pathClear()",
+              "type": "method",
+              "name": "pathClear",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>开始新路径. 路径的用法: 添加点, 再用 <code>pathStroke</code>, <code>pathFillConvex</code> 或 <code>pathFillConcave</code> 结束, 这些方法会清空路径.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathClear"
+        },
+        {
+          "textRaw": "[m#] pathLineTo",
+          "name": "[m#]_pathlineto",
+          "methods": [
+            {
+              "textRaw": "drawList.pathLineTo(position)",
+              "type": "method",
+              "name": "pathLineTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**position** { [Point](imgui#point) } - 位置, 单位 px. ",
+                      "name": "**position**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "位置, 单位 px."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "position"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向路径添加一个点.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathLineTo"
+        },
+        {
+          "textRaw": "[m#] pathArcTo",
+          "name": "[m#]_patharcto",
+          "methods": [
+            {
+              "textRaw": "drawList.pathArcTo(center, radius, angleMin, angleMax, segments?)",
+              "type": "method",
+              "name": "pathArcTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**angleMin** { [number](dataTypes#number) } - 起始角度, 单位弧度. `0` 指向右, 角度顺时针增大. ",
+                      "name": "**angleMin**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起始角度, 单位弧度. `0` 指向右, 角度顺时针增大."
+                    },
+                    {
+                      "textRaw": "**angleMax** { [number](dataTypes#number) } - 终止角度, 单位弧度, 与起始角度相差不超过 16 圈. ",
+                      "name": "**angleMax**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终止角度, 单位弧度, 与起始角度相差不超过 16 圈."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0..512`, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "angleMin"
+                    },
+                    {
+                      "name": "angleMax"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向路径添加圆弧.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathArcTo"
+        },
+        {
+          "textRaw": "[m#] pathArcToFast",
+          "name": "[m#]_patharctofast",
+          "methods": [
+            {
+              "textRaw": "drawList.pathArcToFast(center, radius, minOf12, maxOf12)",
+              "type": "method",
+              "name": "pathArcToFast",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**center** { [Point](imgui#point) } - 中心, 单位 px. ",
+                      "name": "**center**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "中心, 单位 px."
+                    },
+                    {
+                      "textRaw": "**radius** { [number](dataTypes#number) } - 半径, 单位 px. ",
+                      "name": "**radius**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**minOf12** { [number](dataTypes#number) } - 起始刻度. ",
+                      "name": "**minOf12**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "起始刻度."
+                    },
+                    {
+                      "textRaw": "**maxOf12** { [number](dataTypes#number) } - 终止刻度, 从 `minOf12` 到 `minOf12 + 192`. ",
+                      "name": "**maxOf12**",
+                      "type": " [number](dataTypes#number) ",
+                      "desc": "终止刻度, 从 `minOf12` 到 `minOf12 + 192`."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "center"
+                    },
+                    {
+                      "name": "radius"
+                    },
+                    {
+                      "name": "minOf12"
+                    },
+                    {
+                      "name": "maxOf12"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>在时钟的 12 个刻度上添加圆弧, 比 <a href=\"#m-patharcto\">pathArcTo</a> 快. <code>0</code> 指向右, <code>3</code> 向下, <code>6</code> 向左, <code>9</code> 向上.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathArcToFast"
+        },
+        {
+          "textRaw": "[m#] pathBezierCubicCurveTo",
+          "name": "[m#]_pathbeziercubiccurveto",
+          "methods": [
+            {
+              "textRaw": "drawList.pathBezierCubicCurveTo(second, third, fourth, segments?)",
+              "type": "method",
+              "name": "pathBezierCubicCurveTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**fourth** { [Point](imgui#point) } - 第四个点, 单位 px. ",
+                      "name": "**fourth**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第四个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "fourth"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从最后一点添加三次贝塞尔曲线.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathBezierCubicCurveTo"
+        },
+        {
+          "textRaw": "[m#] pathBezierQuadraticCurveTo",
+          "name": "[m#]_pathbezierquadraticcurveto",
+          "methods": [
+            {
+              "textRaw": "drawList.pathBezierQuadraticCurveTo(second, third, segments?)",
+              "type": "method",
+              "name": "pathBezierQuadraticCurveTo",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**second** { [Point](imgui#point) } - 第二个点, 单位 px. ",
+                      "name": "**second**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第二个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**third** { [Point](imgui#point) } - 第三个点, 单位 px. ",
+                      "name": "**third**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "第三个点, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择. ",
+                      "name": "**[",
+                      "desc": "segments ]** { [number](dataTypes#number) } - 分段数, `0` 时按半径自动选择."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "second"
+                    },
+                    {
+                      "name": "third"
+                    },
+                    {
+                      "name": "segments?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>从最后一点添加二次贝塞尔曲线.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathBezierQuadraticCurveTo"
+        },
+        {
+          "textRaw": "[m#] pathRect",
+          "name": "[m#]_pathrect",
+          "methods": [
+            {
+              "textRaw": "drawList.pathRect(minimum, maximum, rounding?, flags?)",
+              "type": "method",
+              "name": "pathRect",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px. ",
+                      "name": "**[",
+                      "desc": "rounding ]** { [number](dataTypes#number) } - 圆角半径, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合. ",
+                      "name": "**[",
+                      "desc": "flags ]** { [number](dataTypes#number) } - [DrawFlags](imgui#p-drawflags) 的组合."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "rounding?"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>向路径添加矩形.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathRect"
+        },
+        {
+          "textRaw": "[m#] pathStroke",
+          "name": "[m#]_pathstroke",
+          "methods": [
+            {
+              "textRaw": "drawList.pathStroke(color, thickness?, flags?)",
+              "type": "method",
+              "name": "pathStroke",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "**[ thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1. ",
+                      "name": "**[",
+                      "desc": "thickness ]** { [number](dataTypes#number) } - 线宽, 单位 px, 默认 1."
+                    },
+                    {
+                      "textRaw": "**[ flags ]** { [number](dataTypes#number) } - `DrawFlags.Closed` 连接最后一点和第一点. ",
+                      "name": "**[",
+                      "desc": "flags ]** { [number](dataTypes#number) } - `DrawFlags.Closed` 连接最后一点和第一点."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    },
+                    {
+                      "name": "thickness?"
+                    },
+                    {
+                      "name": "flags?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>描边路径并清空它.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathStroke"
+        },
+        {
+          "textRaw": "[m#] pathFillConvex",
+          "name": "[m#]_pathfillconvex",
+          "methods": [
+            {
+              "textRaw": "drawList.pathFillConvex(color)",
+              "type": "method",
+              "name": "pathFillConvex",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把路径作为凸多边形填充并清空它.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathFillConvex"
+        },
+        {
+          "textRaw": "[m#] pathFillConcave",
+          "name": "[m#]_pathfillconcave",
+          "methods": [
+            {
+              "textRaw": "drawList.pathFillConcave(color)",
+              "type": "method",
+              "name": "pathFillConcave",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**color** { [Color](imgui#color) } - 颜色. ",
+                      "name": "**color**",
+                      "type": " [Color](imgui#color) ",
+                      "desc": "颜色."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "color"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>把路径作为简单多边形填充并清空它, 比 <a href=\"#m-pathfillconvex\">pathFillConvex</a> 慢.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pathFillConcave"
+        },
+        {
+          "textRaw": "[m#] pushClipRect",
+          "name": "[m#]_pushcliprect",
+          "methods": [
+            {
+              "textRaw": "drawList.pushClipRect(minimum, maximum, intersectWithCurrent?)",
+              "type": "method",
+              "name": "pushClipRect",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**minimum** { [Point](imgui#point) } - 左上角, 单位 px. ",
+                      "name": "**minimum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "左上角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**maximum** { [Point](imgui#point) } - 右下角, 单位 px. ",
+                      "name": "**maximum**",
+                      "type": " [Point](imgui#point) ",
+                      "desc": "右下角, 单位 px."
+                    },
+                    {
+                      "textRaw": "**[ intersectWithCurrent = false ]** { [boolean](dataTypes#boolean) } - 是否与当前裁剪矩形取交集. ",
+                      "name": "**[",
+                      "desc": "intersectWithCurrent = false ]** { [boolean](dataTypes#boolean) } - 是否与当前裁剪矩形取交集."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "minimum"
+                    },
+                    {
+                      "name": "maximum"
+                    },
+                    {
+                      "name": "intersectWithCurrent?"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>裁剪这个绘制列表的绘制, 直到同一帧的 <a href=\"#m-popcliprect\">popClipRect</a>. 不影响控件和命中测试, 要影响它们用 <a href=\"imgui#m-pushcliprect\">ui.pushClipRect</a>.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] pushClipRect"
+        },
+        {
+          "textRaw": "[m#] popClipRect",
+          "name": "[m#]_popcliprect",
+          "methods": [
+            {
+              "textRaw": "drawList.popClipRect()",
+              "type": "method",
+              "name": "popClipRect",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiDrawList](imguiDrawListType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiDrawList](imguiDrawListType) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>撤销 <a href=\"#m-pushcliprect\">pushClipRect</a>. 这一帧没有对应的调用时抛出 Error.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] popClipRect"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 绘制列表 (ImguiDrawList)"
+    },
+    {
+      "textRaw": "PascalCase 别名",
+      "name": "pascalcase_别名",
+      "desc": "<table>\n<thead>\n<tr>\n<th>别名</th>\n<th>目标</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>AddLine</td>\n<td><a href=\"#m-addline\">addLine</a></td>\n</tr>\n<tr>\n<td>AddRect</td>\n<td><a href=\"#m-addrect\">addRect</a></td>\n</tr>\n<tr>\n<td>AddRectFilled</td>\n<td><a href=\"#m-addrectfilled\">addRectFilled</a></td>\n</tr>\n<tr>\n<td>AddCircle</td>\n<td><a href=\"#m-addcircle\">addCircle</a></td>\n</tr>\n<tr>\n<td>AddCircleFilled</td>\n<td><a href=\"#m-addcirclefilled\">addCircleFilled</a></td>\n</tr>\n<tr>\n<td>AddTriangle</td>\n<td><a href=\"#m-addtriangle\">addTriangle</a></td>\n</tr>\n<tr>\n<td>AddTriangleFilled</td>\n<td><a href=\"#m-addtrianglefilled\">addTriangleFilled</a></td>\n</tr>\n<tr>\n<td>AddText</td>\n<td><a href=\"#m-addtext\">addText</a></td>\n</tr>\n<tr>\n<td>AddPolyline</td>\n<td><a href=\"#m-addpolyline\">addPolyline</a></td>\n</tr>\n<tr>\n<td>AddBezierCubic</td>\n<td><a href=\"#m-addbeziercubic\">addBezierCubic</a></td>\n</tr>\n<tr>\n<td>AddImage</td>\n<td><a href=\"#m-addimage\">addImage</a></td>\n</tr>\n<tr>\n<td>AddBezierQuadratic</td>\n<td><a href=\"#m-addbezierquadratic\">addBezierQuadratic</a></td>\n</tr>\n<tr>\n<td>AddQuad</td>\n<td><a href=\"#m-addquad\">addQuad</a></td>\n</tr>\n<tr>\n<td>AddQuadFilled</td>\n<td><a href=\"#m-addquadfilled\">addQuadFilled</a></td>\n</tr>\n<tr>\n<td>AddNgon</td>\n<td><a href=\"#m-addngon\">addNgon</a></td>\n</tr>\n<tr>\n<td>AddNgonFilled</td>\n<td><a href=\"#m-addngonfilled\">addNgonFilled</a></td>\n</tr>\n<tr>\n<td>AddEllipse</td>\n<td><a href=\"#m-addellipse\">addEllipse</a></td>\n</tr>\n<tr>\n<td>AddEllipseFilled</td>\n<td><a href=\"#m-addellipsefilled\">addEllipseFilled</a></td>\n</tr>\n<tr>\n<td>AddRectFilledMultiColor</td>\n<td><a href=\"#m-addrectfilledmulticolor\">addRectFilledMultiColor</a></td>\n</tr>\n<tr>\n<td>AddConvexPolyFilled</td>\n<td><a href=\"#m-addconvexpolyfilled\">addConvexPolyFilled</a></td>\n</tr>\n<tr>\n<td>AddConcavePolyFilled</td>\n<td><a href=\"#m-addconcavepolyfilled\">addConcavePolyFilled</a></td>\n</tr>\n<tr>\n<td>AddImageQuad</td>\n<td><a href=\"#m-addimagequad\">addImageQuad</a></td>\n</tr>\n<tr>\n<td>AddImageRounded</td>\n<td><a href=\"#m-addimagerounded\">addImageRounded</a></td>\n</tr>\n<tr>\n<td>PathClear</td>\n<td><a href=\"#m-pathclear\">pathClear</a></td>\n</tr>\n<tr>\n<td>PathLineTo</td>\n<td><a href=\"#m-pathlineto\">pathLineTo</a></td>\n</tr>\n<tr>\n<td>PathArcTo</td>\n<td><a href=\"#m-patharcto\">pathArcTo</a></td>\n</tr>\n<tr>\n<td>PathArcToFast</td>\n<td><a href=\"#m-patharctofast\">pathArcToFast</a></td>\n</tr>\n<tr>\n<td>PathBezierCubicCurveTo</td>\n<td><a href=\"#m-pathbeziercubiccurveto\">pathBezierCubicCurveTo</a></td>\n</tr>\n<tr>\n<td>PathBezierQuadraticCurveTo</td>\n<td><a href=\"#m-pathbezierquadraticcurveto\">pathBezierQuadraticCurveTo</a></td>\n</tr>\n<tr>\n<td>PathRect</td>\n<td><a href=\"#m-pathrect\">pathRect</a></td>\n</tr>\n<tr>\n<td>PathStroke</td>\n<td><a href=\"#m-pathstroke\">pathStroke</a></td>\n</tr>\n<tr>\n<td>PathFillConvex</td>\n<td><a href=\"#m-pathfillconvex\">pathFillConvex</a></td>\n</tr>\n<tr>\n<td>PathFillConcave</td>\n<td><a href=\"#m-pathfillconcave\">pathFillConcave</a></td>\n</tr>\n<tr>\n<td>PushClipRect</td>\n<td><a href=\"#m-pushcliprect\">pushClipRect</a></td>\n</tr>\n<tr>\n<td>PopClipRect</td>\n<td><a href=\"#m-popcliprect\">popClipRect</a></td>\n</tr>\n</tbody>\n</table>\n",
+      "type": "module",
+      "displayName": "PascalCase 别名"
+    }
+  ]
+}

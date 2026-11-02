@@ -1,0 +1,201 @@
+{
+  "source": "..\\api\\imguiTextureType.md",
+  "modules": [
+    {
+      "textRaw": "ImGui 纹理 (ImguiTexture)",
+      "name": "imgui_纹理_(imguitexture)",
+      "desc": "<p>ImguiTexture 是 GPU 中的图像, 由 <a href=\"imgui#m-createtexture\">imgui.createTexture</a> 或 <a href=\"imguiSessionType#m-createtexture\">session.createTexture</a> 返回, 由 <a href=\"imgui#m-image\">image</a>, <a href=\"imgui#m-imagebutton\">imageButton</a> 和 <a href=\"imguiDrawListType\">绘制列表</a> 使用. 会话关闭时自动释放. 类型声明中的名称是 <code>ImGui.Texture</code>. 内置示例 <code>texture-refresh</code> 演示更新纹理.</p>\n",
+      "modules": [
+        {
+          "textRaw": "TextureOptions",
+          "name": "textureoptions",
+          "desc": "<p><a href=\"imgui#m-createtexture\">createTexture</a> 的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>flags</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td><a href=\"imgui#p-textureflags\">TextureFlags</a> 的组合.</td>\n</tr>\n<tr>\n<td><code>nearest</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>等同 <code>TextureFlags.Nearest</code>.</td>\n</tr>\n<tr>\n<td><code>repeat</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>等同 <code>TextureFlags.Repeat</code>.</td>\n</tr>\n<tr>\n<td><code>mipmaps</code></td>\n<td><a href=\"dataTypes#boolean\">boolean</a></td>\n<td>等同 <code>TextureFlags.Mipmaps</code>.</td>\n</tr>\n</tbody>\n</table>\n",
+          "type": "module",
+          "displayName": "TextureOptions"
+        },
+        {
+          "textRaw": "ImageOptions",
+          "name": "imageoptions",
+          "desc": "<p><a href=\"imgui#m-image\">image</a> 与 <a href=\"imgui#m-imagebutton\">imageButton</a> 的选项.</p>\n<table>\n<thead>\n<tr>\n<th>选项</th>\n<th>类型</th>\n<th>说明</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td><code>width</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>宽度, 单位 px, 默认为纹理宽度.</td>\n</tr>\n<tr>\n<td><code>height</code></td>\n<td><a href=\"dataTypes#number\">number</a></td>\n<td>高度, 单位 px, 默认为纹理高度.</td>\n</tr>\n<tr>\n<td><code>uv0</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>左上角的纹理坐标, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>uv1</code></td>\n<td><a href=\"imgui#point\">Point</a></td>\n<td>右下角的纹理坐标, <code>0..1</code>.</td>\n</tr>\n<tr>\n<td><code>background</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>图像后面的颜色.</td>\n</tr>\n<tr>\n<td><code>bg</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td><code>background</code> 的别名.</td>\n</tr>\n<tr>\n<td><code>tint</code></td>\n<td><a href=\"imgui#color\">Color</a></td>\n<td>与图像相乘的颜色.</td>\n</tr>\n</tbody>\n</table>\n<p style=\"font: bold 2em sans-serif; color: #FF7043\">ImguiTexture</p>\n\n",
+          "type": "module",
+          "displayName": "ImageOptions"
+        },
+        {
+          "textRaw": "[p#] handle",
+          "name": "[p#]_handle",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>Dear ImGui 的纹理 ID.</p>\n",
+          "type": "module",
+          "displayName": "[p#] handle"
+        },
+        {
+          "textRaw": "[p#] width",
+          "name": "[p#]_width",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>宽度, 单位 px. <code>update</code> 加载其他尺寸的图像时改变.</p>\n",
+          "type": "module",
+          "displayName": "[p#] width"
+        },
+        {
+          "textRaw": "[p#] height",
+          "name": "[p#]_height",
+          "desc": "<p><strong><code>READONLY</code></strong></p>\n<ul>\n<li>{ <a href=\"dataTypes#number\">number</a> }</li>\n</ul>\n<p>高度, 单位 px. <code>update</code> 加载其他尺寸的图像时改变.</p>\n",
+          "type": "module",
+          "displayName": "[p#] height"
+        },
+        {
+          "textRaw": "[m#] update",
+          "name": "[m#]_update",
+          "methods": [
+            {
+              "textRaw": "texture.update(source)",
+              "type": "method",
+              "name": "update",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "**source** { [TextureSource](imgui#texturesource) } - 图像来源, 参阅 [TextureSource](imgui#texturesource). ",
+                      "name": "**source**",
+                      "type": " [TextureSource](imgui#texturesource) ",
+                      "desc": "图像来源, 参阅 [TextureSource](imgui#texturesource)."
+                    },
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [ImguiTexture](imguiTextureType) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [ImguiTexture](imguiTextureType) "
+                    }
+                  ]
+                },
+                {
+                  "params": [
+                    {
+                      "name": "source"
+                    }
+                  ]
+                }
+              ],
+              "desc": "<p>用新图像替换像素, 来源与 <code>createTexture</code> 相同. 尺寸相同时复用 GL 存储 (glTexSubImage2D), 不同时重新分配. 句柄不变.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] update"
+        },
+        {
+          "textRaw": "[m#] isDisposed",
+          "name": "[m#]_isdisposed",
+          "methods": [
+            {
+              "textRaw": "texture.isDisposed()",
+              "type": "method",
+              "name": "isDisposed",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p><code>dispose</code> 是否已运行, 或所属会话是否已关闭.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] isDisposed"
+        },
+        {
+          "textRaw": "[m#] dispose",
+          "name": "[m#]_dispose",
+          "methods": [
+            {
+              "textRaw": "texture.dispose()",
+              "type": "method",
+              "name": "dispose",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 已经释放过时为 `false`. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "已经释放过时为 `false`."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>释放 GL 纹理, 在脚本线程上随时可以调用.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] dispose"
+        },
+        {
+          "textRaw": "[m#] close",
+          "name": "[m#]_close",
+          "methods": [
+            {
+              "textRaw": "texture.close()",
+              "type": "method",
+              "name": "close",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [boolean](dataTypes#boolean) } - 已经释放过时为 `false`. ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [boolean](dataTypes#boolean) ",
+                      "desc": "已经释放过时为 `false`."
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>与 <a href=\"#m-dispose\">dispose</a> 相同.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] close"
+        },
+        {
+          "textRaw": "[m#] toString",
+          "name": "[m#]_tostring",
+          "methods": [
+            {
+              "textRaw": "texture.toString()",
+              "type": "method",
+              "name": "toString",
+              "signatures": [
+                {
+                  "params": [
+                    {
+                      "textRaw": "<ins>**returns**</ins> { [string](dataTypes#string) } ",
+                      "name": "<ins>**returns**</ins>",
+                      "type": " [string](dataTypes#string) "
+                    }
+                  ]
+                },
+                {
+                  "params": []
+                }
+              ],
+              "desc": "<p>用于日志的简短描述.</p>\n"
+            }
+          ],
+          "type": "module",
+          "displayName": "[m#] toString"
+        }
+      ],
+      "type": "module",
+      "displayName": "ImGui 纹理 (ImguiTexture)"
+    }
+  ]
+}

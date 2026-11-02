@@ -1,5 +1,19 @@
 # ImGui 高层组件 (ImguiComponent)
 
+<!-- runtime-support:begin ImguiComponent# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiComponent` 对象 | - | - | - |
+| 状态 | 已支持 11 项 | 不适用 11 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 11 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 11 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiComponent 是高层组件的共同成员, 这些组件由会话托管, 在帧内绘制, 位于渲染回调之后. 具体的组件是 [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDataTable](imguiDataTableType) 与 [ImguiDialog](imguiDialogType). 类型声明中的名称是 `ImGui.Component`.
 
 ## ComponentOptions

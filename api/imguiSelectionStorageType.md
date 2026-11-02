@@ -1,5 +1,19 @@
 # ImGui 选择存储 (ImguiSelectionStorage)
 
+<!-- runtime-support:begin ImguiSelectionStorage# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiSelectionStorage` 对象 | - | - | - |
+| 状态 | 已支持 6 项 | 不适用 6 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 6 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 6 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiSelectionStorage 保存一个列表选中的 ID, 内部是 JavaScript 的 `Set`, 对应 C++ 的 `ImGuiSelectionBasicStorage`. 由 [imgui.selectionStorage](imgui#m-selectionstorage) 创建, 不需要会话, 所以可以比窗口活得更久. 用法见 [beginMultiSelect](imgui#m-beginmultiselect). 类型声明中的名称是 `ImGui.SelectionStorage`.
 
 范围按 ID 加 1 遍历, 所以 ID 要是显示顺序下连续的行索引. 排序或筛选之后要保留选择时, 先把索引换成自己的键; 删除行之后给 `endMultiSelect` 传 `true`, 忘记 Shift 的锚点. 范围选择按行占用一个 `Set` 条目, 在应用它的那一帧完成, 绘制可见行的开销与选中多少行无关.

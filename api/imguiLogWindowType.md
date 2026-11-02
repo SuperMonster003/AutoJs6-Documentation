@@ -1,5 +1,19 @@
 # ImGui 日志窗口 (ImguiLogWindow)
 
+<!-- runtime-support:begin ImguiLogWindow# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiLogWindow` 对象 | - | - | - |
+| 状态 | 已支持 26 项 | 不适用 26 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 26 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 26 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiLogWindow 是显示日志行的窗口, 带等级着色, 清空, 导出和自动滚底, 由 [imgui.logWindow](imgui#m-logwindow) 或 [session.logWindow](imguiSessionType#m-logwindow) 返回. 继承 [ImguiComponent](imguiComponentType). 类型声明中的名称是 `ImGui.LogWindow`. 内置示例 `log-hud` 演示它的用法.
 
 ```js

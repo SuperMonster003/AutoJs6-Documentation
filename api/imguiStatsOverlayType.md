@@ -1,5 +1,19 @@
 # ImGui 帧率覆盖层 (ImguiStatsOverlay)
 
+<!-- runtime-support:begin ImguiStatsOverlay# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiStatsOverlay` 对象 | - | - | - |
+| 状态 | 已支持 17 项 | 不适用 17 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 17 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 17 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiStatsOverlay 显示帧率, 帧耗时和每帧工作耗时, 超过阈值时变色, 由 [imgui.statsOverlay](imgui#m-statsoverlay) 或 [session.statsOverlay](imguiSessionType#m-statsoverlay) 返回. 继承 [ImguiComponent](imguiComponentType). 类型声明中的名称是 `ImGui.StatsOverlay`.
 
 ## StatsOverlayOptions

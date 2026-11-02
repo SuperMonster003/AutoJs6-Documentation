@@ -1,5 +1,19 @@
 # ImGui 绘制列表 (ImguiDrawList)
 
+<!-- runtime-support:begin ImguiDrawList# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiDrawList` 对象 | - | - | - |
+| 状态 | 已支持 71 项 | 不适用 71 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 71 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 71 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiDrawList 在帧内自由绘制, 由 [getWindowDrawList](imgui#m-getwindowdrawlist), [getForegroundDrawList](imgui#m-getforegrounddrawlist) 与 [getBackgroundDrawList](imgui#m-getbackgrounddrawlist) 返回, 只能在帧内使用. 坐标, 线宽和尺寸的单位是 px, 方法返回绘制列表本身, 可以链式调用. 类型声明中的名称是 `ImGui.DrawList`.
 
 每个绘制方法另有 PascalCase 别名, 例如 `drawList.AddLine` 与 [addLine](#m-addline) 相同.

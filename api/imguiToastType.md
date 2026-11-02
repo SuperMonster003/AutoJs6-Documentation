@@ -1,5 +1,19 @@
 # ImGui 短消息 (ImguiToast)
 
+<!-- runtime-support:begin ImguiToast# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiToast` 对象 | - | - | - |
+| 状态 | 已支持 18 项 | 不适用 18 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 18 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 18 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiToast 是窗口上方的短消息, 按等级着色, 到期自动消失, 由 [imgui.toast](imgui#m-toast) 或 [session.toast](imguiSessionType#m-toast) 返回. 继承 [ImguiComponent](imguiComponentType). 类型声明中的名称是 `ImGui.Toast`. 它在 ImGui 窗口内绘制, 与 AutoJs6 的 [toast](toast) 模块无关.
 
 ## ToastOptions

@@ -1,5 +1,19 @@
 # ImGui 会话 (ImguiSession)
 
+<!-- runtime-support:begin ImguiSession# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiSession` 对象 | - | - | - |
+| 状态 | 已支持 70 项 | 不适用 70 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 70 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 70 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiSession 表示一个运行中的 ImGui 窗口, 由 [imgui.createWindow](imgui#m-createwindow), [launchFloaty](imgui#m-launchfloaty), [launch](imgui#m-launch), [launchPrivileged](imgui#m-launchprivileged) 与 [runExample](imgui#m-runexample) 返回, 也是渲染回调的第二个参数. 不能直接用 `new` 创建. 类型声明中的名称是 `ImGui.Session`.
 
 字段只读 (严格模式下写入抛出 TypeError), 用对应的 setter 修改. 位置和尺寸的单位是 dp, 乘以 [density](#p-density) 得到 px. 同一时间只有一个会话, 参阅 [会话, Surface 与根窗口](imgui#会话-surface-与根窗口).

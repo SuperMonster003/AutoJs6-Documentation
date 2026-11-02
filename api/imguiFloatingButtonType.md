@@ -1,5 +1,19 @@
 # ImGui 悬浮按钮 (ImguiFloatingButton)
 
+<!-- runtime-support:begin ImguiFloatingButton# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiFloatingButton` 对象 | - | - | - |
+| 状态 | 已支持 24 项 | 不适用 24 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 24 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 24 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiFloatingButton 是独立于 Surface 的 Android 悬浮按钮, 可以拖动, 由 [imgui.addButtonEx](imgui#m-addbuttonex) 或 [session.addButtonEx](imguiSessionType#m-addbuttonex) 返回, 随会话关闭. 特权层没有独立按钮. 字段只读, 用 setter 修改. 类型声明中的名称是 `ImGui.FloatingButton`.
 
 ```js

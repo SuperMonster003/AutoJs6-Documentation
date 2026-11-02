@@ -1,5 +1,19 @@
 # ImGui 多选结果 (ImguiMultiSelectIO)
 
+<!-- runtime-support:begin ImguiMultiSelectIO# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiMultiSelectIO` 对象 | - | - | - |
+| 状态 | 已支持 5 项 | 不适用 5 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 5 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 5 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiMultiSelectIO 是 [beginMultiSelect](imgui#m-beginmultiselect) 与 [endMultiSelect](imgui#m-endmultiselect) 返回的副本, 对应 C++ 的 `ImGuiMultiSelectIO`. 两个结果都要应用: `beginMultiSelect` 带来全选和清空, `endMultiSelect` 带来行上报的变化. 类型声明中的名称是 `ImGui.MultiSelectIO`.
 
 <p style="font: bold 2em sans-serif; color: #FF7043">ImguiMultiSelectIO</p>

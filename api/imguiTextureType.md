@@ -1,5 +1,19 @@
 # ImGui 纹理 (ImguiTexture)
 
+<!-- runtime-support:begin ImguiTexture# -->
+<!-- 本段由 generator/runtime-support.js 根据 AutoJs6 运行时覆盖矩阵生成, 不要手动修改; 数据源 ksp -->
+
+| 运行时支持 | Rhino | Node.js 主线程 | Node.js Worker | Bun |
+| --- | --- | --- | --- | --- |
+| 入口 | `ImguiTexture` 对象 | - | - | - |
+| 状态 | 已支持 8 项 | 不适用 8 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 8 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` | 不适用 8 项 (仅限 Rhino 引擎), 等价写法: `engines.execScript of a Rhino script that opens the window, events.broadcast between the scripts` |
+
+各 API 在同一运行时中的入口, 状态与授权一致, 没有差异项.
+
+Node.js 与 Bun 的导入方式, 异步返回值与授权检查见 [运行时 API](runtimeApis#执行方式).
+
+<!-- runtime-support:end -->
+
 ImguiTexture 是 GPU 中的图像, 由 [imgui.createTexture](imgui#m-createtexture) 或 [session.createTexture](imguiSessionType#m-createtexture) 返回, 由 [image](imgui#m-image), [imageButton](imgui#m-imagebutton) 和 [绘制列表](imguiDrawListType) 使用. 会话关闭时自动释放. 类型声明中的名称是 `ImGui.Texture`. 内置示例 `texture-refresh` 演示更新纹理.
 
 ## TextureOptions

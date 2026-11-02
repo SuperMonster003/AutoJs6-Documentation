@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [ImguiSession.once](imguiSessionType#m-once): 写明版本差异, 插件 1.18.0 及更早只把事件对象传给监听器, 1.18.1 起与 on 相同传 `(event, session)`
+
 - `更新` [events.broadcast](events#m-emit): Node.js / Bun 主脚本与 Rhino 脚本之间可以直接传对象和数组, 写明函数, `undefined` 和循环引用的规则; [ImGui](imgui) 页 "广播的值" 一格相应改短
 
 - `更新` [TerminalSession.waitFor](terminalSessionType#m-waitfor): Node.js / Bun 中先发起等待再写入时不会错过回显很快的输出

@@ -19,15 +19,15 @@ let session = imgui.createWindow(function (ui, current) {
 session.on('moved', function (event) {
     console.log('移动到 ' + event.x + ', ' + event.y + ' (' + event.source + ')');
 });
-session.once('closed', function (event, closedSession) {
-    console.log('关闭: ' + closedSession.closeReason);
+session.once('closed', function (event) {
+    console.log('关闭: ' + event.reason);
 });
 session.setPosition(24, 120);
 ```
 
 ## 事件
 
-用 [on](#m-on), [once](#m-once), [off](#m-off) 管理监听器, 也可以用 `createWindow` 的 `events` 与 `onXxx` 选项. 监听器在脚本线程上依次运行, 参数为事件对象和会话, 不要阻塞. 事件对象都有 `type` (事件名), `session` (会话) 和 `timestamp` (触发时的 `Date.now()`), 下表是各事件另有的字段. 载荷中的位置和尺寸单位是 dp.
+用 [on](#m-on), [once](#m-once), [off](#m-off) 管理监听器, 也可以用 `createWindow` 的 `events` 与 `onXxx` 选项. 监听器在脚本线程上依次运行, 参数为事件对象和会话 ([once](#m-once) 的监听器只收到事件对象), 不要阻塞. 事件对象都有 `type` (事件名), `session` (会话) 和 `timestamp` (触发时的 `Date.now()`), 下表是各事件另有的字段. 载荷中的位置和尺寸单位是 dp.
 
 | 事件 | 触发时机 | 载荷 |
 | --- | --- | --- |
@@ -559,7 +559,7 @@ Surface 是否可以绘制.
 - **listener** { [SessionEventListener](imguiSessionType#事件) } - 监听器, 在脚本线程上运行.
 - <ins>**returns**</ins> { [ImguiSession](imguiSessionType) }
 
-添加只运行一次的监听器.
+添加只运行一次的监听器. 监听器只收到事件对象, 会话用 `event.session` 取.
 
 ## [m#] off
 

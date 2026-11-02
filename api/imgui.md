@@ -287,7 +287,7 @@ let { engines, events } = await createHostClient();
 | 启动 | `execScript` 在 Rhino 脚本启动后即返回, 该脚本是独立的执行, 可在 `engines.all()` 中看到. `timeoutMs` 只限制启动调用, 不限制窗口的运行时长 |
 | 就绪 | `createWindow` 在窗口就绪后才返回, 此时 `ready` 事件已经触发过, 之后用 `session.on` 注册的监听器收不到它. 所以示例在注册完监听器后直接广播 `panel.ready` |
 | 传参 | `arguments` 的值只能是字符串, 数字, 布尔值或 `null`, 在 Rhino 脚本中用 `engines.myEngine().execArgv` 读取. 值为对象时调用被拒绝 |
-| 广播的值 | 字符串, 数字, 布尔值和 `null` 在两个方向上都保持原样. 对象和数组不能直接传: Rhino 发出的对象到主脚本是 `[object Object]` 这样的字符串, 主脚本发出的对象在 Rhino 中是 Java Map, 用属性读不到值. 结构化数据在两端用 `JSON.stringify` 和 `JSON.parse` 转换 |
+| 广播的值 | 字符串, 数字, 布尔值, `null`, 对象和数组在两个方向上都可以直接传, 到达后是接收方自己的值. 函数, `undefined` 和循环引用的规则见 [events.broadcast](events#m-emit) |
 | 结束 | 主脚本结束时窗口不会关闭, Rhino 脚本继续运行, 所以主脚本退出前要发送关闭广播. 窗口关闭后 Rhino 脚本自行结束. 广播监听器会让主脚本保持运行, 所以示例最后移除全部监听器 |
 | 多个窗口 | AutoJs6 进程只有一个渲染器, 其他脚本打开新窗口时会接管它, 当前窗口随之关闭. 需要多个窗口时, 在同一段 Rhino 脚本中创建多个根窗口 |
 

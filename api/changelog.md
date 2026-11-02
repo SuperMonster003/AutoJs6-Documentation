@@ -2,6 +2,12 @@
 
 ## v6.8.0
 
+- `更新` [events.broadcast](events#m-emit): Node.js / Bun 主脚本与 Rhino 脚本之间可以直接传对象和数组, 写明函数, `undefined` 和循环引用的规则; [ImGui](imgui) 页 "广播的值" 一格相应改短
+
+- `更新` [TerminalSession.waitFor](terminalSessionType#m-waitfor): Node.js / Bun 中先发起等待再写入时不会错过回显很快的输出
+
+- `更新` [运行时 API](runtimeApis#相对路径): 插件进程读写共享存储被拒绝时, AutoJs6 提示一次并可跳转到系统设置; Bun 的 Bun.file 与 node:fs 的授权要求
+
 - `新增` [ImGui](imgui) 的完整参考: 快速开始, 会话与窗口模式, 调用时机, 单位, 线程, 错误与限制, 全部函数与常量组, PascalCase 别名表, 以及 [ImguiSession](imguiSessionType), [ImguiDrawList](imguiDrawListType), [ImguiFloatingButton](imguiFloatingButtonType), [ImguiComponent](imguiComponentType), [ImguiDataTable](imguiDataTableType), [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDialog](imguiDialogType), [ImguiDialogPromise](imguiDialogPromiseType), [ImguiTexture](imguiTextureType), [ImguiSelectionStorage](imguiSelectionStorageType) 与 [ImguiMultiSelectIO](imguiMultiSelectIOType) 对象页, 内容对应 ImGui 插件 1.18.0, 页面已加入侧栏与目录
 
 - `新增` [语音 (Speech)](speech#模型更新) 的模型更新说明, [SpeechModelInfo](speechModelInfoType) 增加 [updateAvailable](speechModelInfoType#p-updateavailable) 与 [latestVersionCode](speechModelInfoType#p-latestversioncode) (3-Macaw Speech 1.4.0 及以上)

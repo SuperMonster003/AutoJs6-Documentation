@@ -24,7 +24,9 @@ Node.js 脚本与项目默认不限执行时长, 与 Rhino 脚本相同, 可随�
 
 Node.js 与 Bun 的 `process.cwd()` 是运行时插件私有目录里的项目副本, 宿主进程无法读写. 由宿主打开文件的调用 (zip, files.open, files.toFile) 因此按脚本的源目录解析相对路径, 与 Rhino 相同; Node.js 可经 `engines.myEngine().hostCwd` 读取这个目录. 写进 `process.cwd()` 的文件不能直接交给这些调用, 要先放到共享存储 (例如以 `files.sdcardPath` 开头的路径).
 
-Node.js 的其他 files 方法在插件进程内执行, 相对路径按 `process.cwd()` 解析. 插件进程读写共享存储 (如 `/sdcard`) 要在系统设置里给运行时插件授权: Android 10 及更早是 "存储" 权限, Android 11 起是 "所有文件访问权限", 未授权时写入报 EACCES.
+Node.js 的其他 files 方法在插件进程内执行, 相对路径按 `process.cwd()` 解析. 插件进程读写共享存储 (如 `/sdcard`) 要在系统设置里给运行时插件授权: Android 10 及更早是 "存储" 权限, Android 11 起是 "所有文件访问权限", 未授权时报 EACCES 或 EPERM (Android 11 起在共享存储根目录新建文件是 EPERM, `Download`, `Documents` 等公共目录里自己创建的文件不需要授权). 首次失败时 AutoJs6 提示一次, 可从提示跳转到系统设置中该插件的页面, 每次执行最多提示一次, 错误本身不变. 提示来自脚本的错误输出, 所以脚本捕获了 `node:fs` 的错误又没有输出时不提示.
+
+Bun 的 `Bun.file` 与 `node:fs` 同样在插件进程内执行, 授权和提示规则相同; host.files 在宿主进程内执行, 不需要给插件授权.
 
 ## Node.js 拼音
 

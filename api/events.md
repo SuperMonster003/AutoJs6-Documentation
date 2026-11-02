@@ -489,6 +489,14 @@ events.broadcast.on('message', function (text) {
 });
 ```
 
+Rhino 脚本之间传递的是同一个对象. Node.js / Bun 主脚本与 Rhino 脚本之间按 JSON 的规则传递, 接收方拿到自己的副本, 用法与原生对象相同:
+
+- 字符串, 数字, 布尔值, `null`, 对象和数组在两个方向上都保持结构.
+- 对象中的函数和 `undefined` 被省略, 数组中的函数和 `undefined` 变成 `null`, 直接作为参数的函数也是 `null`. `NaN` 和无穷大变成 `null`. 定义了 `toJSON` 的对象按其返回值传递.
+- 主脚本直接传 `undefined` 时 Rhino 收到 `null`. Rhino 脚本直接传 `undefined` 时监听器收到字符串 `undefined` (Rhino 调用 Java 方法时的转换, Rhino 监听器也一样), 需要表示空值时用 `null`.
+- Rhino 脚本发送循环引用, 或 `toJSON` 抛出异常的对象时, 该参数到主脚本是 `null`, 其他参数不受影响, 发送方不会收到异常. 这与 `JSON.stringify` 不同: 发送方不知道有哪些脚本在监听, 不应因此中断.
+- 主脚本发送循环引用时, `emit` 返回的 Promise 以 `TypeError` 拒绝, 与 `JSON.stringify` 相同, 这次广播不会发出.
+
 ## [m] unregister
 
 ### unregister()

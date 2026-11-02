@@ -99,6 +99,8 @@ session.write([3]); // Ctrl+C.
 
 从调用时刻订阅新的输出, 不搜索之前的转录内容. 超时报 `TIMEOUT`, 在匹配前流已结束时报 `SESSION_CLOSED`; 每次等待都会释放自己的订阅. 正则表达式使用与宿主选择器相同的 Java 兼容转换, 不推进 JavaScript `lastIndex`.
 
+Node.js / Bun 中先发起 `waitFor` 再 `write` 时 (`const line = session.waitFor(pattern); await session.write(command); await line;`), 同一会话的 `write` 排在订阅生效之后, 回显很快的输出不会错过. 先 `write` 后 `waitFor` 时输出仍可能先于订阅到达.
+
 ### session.waitForAsync(pattern, timeout?)
 
 **`6.8.0`** **`Async`**

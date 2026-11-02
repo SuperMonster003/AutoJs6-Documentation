@@ -5085,7 +5085,7 @@ Material 图标, 值是 `Icons` 字体里的字符. 用 [icon](#m-icon) 取得, 
 | 绘图 | 位置参数, `stride` 按字节 | 选项对象 [PlotOptions](#plotoptions), `stride` 按值 |
 | 重载 | 每个名称多个重载 | 每个名称一个函数, 例如 `PushID` 接受字符串或数字 |
 | 排序规格 | 指向表格内部的指针, 由调用者清除 `SpecsDirty` | 本帧的副本, 读取时清除 |
-| 组合键 | `ImGuiMod_Ctrl \| ImGuiKey_S` | `ui.Mod.Ctrl \| ui.Key.S`. 不是按键的值抛出 RangeError |
+| 组合键 | `ImGuiMod_Ctrl` 与 `ImGuiKey_S` 按位或 | `ui.Mod.Ctrl` 与 `ui.Key.S` 按位或. 不是按键的值抛出 RangeError |
 
 | 别名 | 目标 |
 | --- | --- |

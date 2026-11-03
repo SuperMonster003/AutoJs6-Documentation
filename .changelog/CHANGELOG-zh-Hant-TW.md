@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `新增` [async/await 與 continuation](https://docs.autojs6.com/#/asyncAwait): Rhino 引擎的 async 函式, async 產生器與 for await, 內建 Promise 的回呼時機, 與 continuation 的配合, 執行緒, 未捕捉的拒絕, 以及指令碼結束時的提示.
 - `更新` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): 寫明版本差異, 外掛 1.18.0 及更早只把事件物件傳給監聽器, 1.18.1 起與 on 相同傳 `(event, session)`
 - `更新` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): Node.js / Bun 主指令碼與 Rhino 指令碼之間可以直接傳物件和陣列, 寫明函式, `undefined` 和迴圈引用的規則; [ImGui](https://docs.autojs6.com/#/imgui) 頁 "廣播的值" 一格相應改短
 - `更新` [TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): Node.js / Bun 中先發起等待再寫入時不會錯過回顯很快的輸出

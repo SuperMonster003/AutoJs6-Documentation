@@ -71,6 +71,7 @@ Documentation may change at any time, and some descriptions may differ from actu
 
 ### v6.8.0
 
+- `Feature` [async/await and continuation](https://docs.autojs6.com/#/asyncAwait): async functions, async generators and for await in the Rhino engine, when the callbacks of the built-in Promise run, working with continuation, threads, unhandled rejections, and the notice when a script ends.
 - `Update` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): clarify version differences: plugin 1.18.0 and earlier pass only the event object to listeners; from 1.18.1, `(event, session)` is passed, as with on
 - `Update` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): objects and arrays can be passed directly between Node.js / Bun main scripts and Rhino scripts; document the rules for functions, `undefined` and circular references, and shorten the corresponding Broadcast values cell on the [ImGui](https://docs.autojs6.com/#/imgui) page
 - `Update` [TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): in Node.js / Bun, starting the wait before writing avoids missing output that is echoed very quickly

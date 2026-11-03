@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `Новое` [async/await и continuation](https://docs.autojs6.com/#/asyncAwait): async-функции, async-генераторы и for await в движке Rhino, момент вызова колбэков встроенного Promise, работа с continuation, потоки, необработанные отклонения и уведомление при завершении скрипта.
 - `Обновление` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): уточнены различия версий: плагин 1.18.0 и более ранние передают слушателям только объект события; начиная с 1.18.1 передается `(event, session)`, как в on
 - `Обновление` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): объекты и массивы можно передавать напрямую между основными скриптами Node.js / Bun и скриптами Rhino; описаны правила для функций, `undefined` и циклических ссылок; соответствующая ячейка значений широковещательной передачи на странице [ImGui](https://docs.autojs6.com/#/imgui) сокращена
 - `Обновление` [TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): в Node.js / Bun запуск ожидания до записи позволяет не пропустить очень быстрый вывод эха

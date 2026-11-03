@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `Fonctionnalité` [async/await et continuation](https://docs.autojs6.com/#/asyncAwait): fonctions async, générateurs async et for await du moteur Rhino, moment d'exécution des rappels de la Promise intégrée, utilisation avec continuation, threads, rejets non gérés et avertissement à la fin du script.
 - `Mise à jour` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): préciser les différences de version: le plugin 1.18.0 et antérieur ne transmet que l'objet événement aux écouteurs; à partir de 1.18.1, il transmet `(event, session)`, comme on
 - `Mise à jour` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): les scripts principaux Node.js / Bun et les scripts Rhino peuvent échanger directement des objets et tableaux; préciser les règles pour les fonctions, `undefined` et les références circulaires, et raccourcir la cellule Valeurs diffusées de la page [ImGui](https://docs.autojs6.com/#/imgui)
 - `Mise à jour` [TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): dans Node.js / Bun, commencer l'attente avant d'écrire permet de ne pas manquer une sortie renvoyée très rapidement en écho

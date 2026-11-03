@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `新機能` [async/await と continuation](https://docs.autojs6.com/#/asyncAwait): Rhino エンジンの async 関数, async ジェネレーターと for await, 組み込み Promise のコールバックが実行されるタイミング, continuation との連携, スレッド, 未処理の拒否, およびスクリプト終了時の通知.
 - `更新` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): バージョンの違いを明記. プラグイン 1.18.0 以前はイベントオブジェクトのみをリスナーに渡し, 1.18.1 以降は on と同じく `(event, session)` を渡す
 - `更新` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): Node.js / Bun のメインスクリプトと Rhino スクリプト間でオブジェクトと配列を直接渡せること, 関数, `undefined`, 循環参照の規則を明記. [ImGui](https://docs.autojs6.com/#/imgui) ページのブロードキャスト値の欄も短縮
 - `更新` [TerminalSession.waitFor](https://docs.autojs6.com/#/terminalSessionType?id=m-waitfor): Node.js / Bun で書き込みより先に待機を開始すると, 即座にエコーされる出力も取り逃さない

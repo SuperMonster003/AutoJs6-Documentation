@@ -459,7 +459,7 @@
 
         <div id="apicontent">
             <h1>Android XML 属性 (Android XML Attributes)<span><a class="mark" href="#uiandroidattributes_android_xml_android_xml_attributes" id="uiandroidattributes_android_xml_android_xml_attributes">#</a></span></h1>
-<p>本章介绍 AutoJs6 如何应用原生 Android XML 布局 (参阅 <a href="ui.html#ui_1">布局转换模式</a>) 中的属性, 并按类列出属性的支持情况. AutoJs6 简写布局的属性参阅 <a href="uiAttributes.html">UI 布局属性</a>.</p>
+<p>本章介绍 AutoJs6 如何应用原生 Android XML 布局 (参阅 <a href="ui.html#ui_2">布局转换模式</a>) 中的属性, 并按类列出属性的支持情况. AutoJs6 简写布局的属性参阅 <a href="uiAttributes.html">UI 布局属性</a>.</p>
 <p>AutoJs6 不使用 Android 平台的 <code>LayoutInflater</code>. 视图创建时不带 <code>AttributeSet</code>, 属性在视图创建后逐个设置, 因此只能在构造时读取的属性无法生效. 能通过公开 API 设置的属性都会设置, 无法设置的属性会明确告知.</p>
 <h2>应用顺序<span><a class="mark" href="#uiandroidattributes" id="uiandroidattributes">#</a></span></h2>
 <p>每个属性按以下顺序处理, 第一个接受该属性的方式生效:</p>
@@ -469,7 +469,7 @@
 <li>公开方法: 属性元数据 (Android SDK 与 AutoJs6 自带的 AndroidX / Material 库) 中该类或其父类声明的属性, 以视图的公开单参方法设置. 方法按命名规则查找 (如 <code>set&lt;Name&gt;</code>, <code>set&lt;Name&gt;TintList</code>, <code>setMinimum&lt;Name&gt;</code>, 比较时忽略大小写), 参数类型按属性格式选择 (颜色优先 <code>ColorStateList</code>, 引用优先 <code>Drawable</code>, 尺寸优先 <code>float</code>); 少数需要多个参数或特殊转换的属性 (如 <code>layerType</code>, <code>digits</code>, <code>textLocale</code>, Toolbar 的 <code>contentInsetStart</code>) 单独处理.</li>
 <li>布局参数: 父容器布局参数 (<code>LayoutParams</code>) 的公开字段或方法, 如 ConstraintLayout 的约束, CoordinatorLayout 的 <code>layout_behavior</code> 与 <code>layout_anchor</code>, AppBarLayout 的 <code>layout_scrollFlags</code>, GridLayout 的行与列.</li>
 </ul>
-<p>取值的转换与处理器一致: 尺寸, 颜色, 颜色状态列表, Drawable, ID, 字符串与数组可使用工程资源 (参阅 <a href="ui.html#ui_2">工程资源</a>), 枚举与标志使用属性元数据中的名称, 标志可用 <code>|</code> 组合.</p>
+<p>取值的转换与处理器一致: 尺寸, 颜色, 颜色状态列表, Drawable, ID, 字符串与数组可使用工程资源 (参阅 <a href="ui.html#ui_3">工程资源</a>), 枚举与标志使用属性元数据中的名称, 标志可用 <code>|</code> 组合.</p>
 <p>属性按书写顺序应用, 后写的覆盖先写的, 如 <code>padding</code> 之后的 <code>paddingHorizontal</code>. 例外: <code>ImageView</code> 的 <code>adjustViewBounds</code> 总是先于 <code>scaleType</code> 应用, 与平台一致.</p>
 <h2>不支持与未知的属性<span><a class="mark" href="#uiandroidattributes_1" id="uiandroidattributes_1">#</a></span></h2>
 <div class="signature"><ul>

@@ -353,7 +353,10 @@
 <li><span class="stability_undefined"><a href="#composedesigner_14">限制</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#composedesigner_autojs6">与 AutoJs6 的衔接</a></span></li>
+<li><span class="stability_undefined"><a href="#composedesigner_autojs6">与 AutoJs6 的衔接</a></span><ul>
+<li><span class="stability_undefined"><a href="#composedesigner_autojs6_1">AutoJs6 编辑器中的布局预览</a></span></li>
+</ul>
+</li>
 <li><span class="stability_undefined"><a href="#composedesigner_15">限制</a></span></li>
 </ul>
 </li>
@@ -364,7 +367,7 @@
         <div id="apicontent">
             <h1>3-Block Compose 设计器 (Compose 与 UI 工程)<span><a class="mark" href="#composedesigner_3_block_compose_compose_ui" id="composedesigner_3_block_compose_compose_ui">#</a></span></h1>
 <!-- type=misc -->
-<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 1.9.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.</p>
+<p>3-Block Compose 设计器是 <a href="compose.html">3-Block Compose</a> 插件 (<a href="https://github.com/SuperMonster003/AutoJs6-Plugin-Three-Block-Compose">AutoJs6-Plugin-Three-Block-Compose</a>) 自 1.2.0 起内置的可视化界面编辑器. 它在插件自己的进程中运行, 用插件的真实渲染器所见即所得地编辑 <code>compose</code> 脚本的界面树; 保存结果就是普通的 <code>.js</code> 脚本文件 (1.4.0 起也可以是 <code>.tsx</code> 文件), 可以交给 AutoJs6 运行, 也可以在 AutoJs6 编辑器中继续编写逻辑. 本页面自 3-Block Compose 1.2.0 起适用, 1.3.0 - 2.0.0 新增的能力在文中注明; 1.4.0 是插件的首个公开发行版.</p>
 <p>本页面不是脚本 API. 设计器没有新增任何全局对象或模块, 它读写的脚本与手写的 <code>compose</code> 脚本完全相同. 脚本 API 见 <a href="compose.html">3-Block Compose</a>, 组件, 属性, 插槽与事件见 <a href="composeComponents.html">ComposeComponents</a>.</p>
 <hr>
 <h2>用途<span><a class="mark" href="#composedesigner" id="composedesigner">#</a></span></h2>
@@ -390,7 +393,7 @@
 </tr>
 <tr>
 <td>AutoJs6 编辑器</td>
-<td>&quot;更多&quot; 菜单中的 &quot;在 3-Block Compose 设计器中打开&quot;. 需要包含该入口的 AutoJs6 6.8.0 构建 (宿主提交 db7e6a1734 之后); 已安装的插件低于 1.2.0 或未安装时不显示</td>
+<td>&quot;更多&quot; 菜单中的 &quot;在 3-Block Compose 设计器中打开&quot;, 以及编辑器布局预览面板上的同名按钮 (见下文 &quot;与 AutoJs6 的衔接&quot;). 需要 AutoJs6 6.8.0 及以上; 已安装的插件低于 1.2.0 或未安装时不显示</td>
 </tr>
 <tr>
 <td>文件管理器</td>
@@ -615,7 +618,7 @@
 </thead>
 <tbody>
 <tr>
-<td>AutoJs6 包含预览服务 (宿主提交 306a8f7834 之后的 6.8.0 构建), Android 11 (API 30) 或更高版本</td>
+<td>AutoJs6 6.8.0 及以上, Android 11 (API 30) 或更高版本</td>
 <td>画布嵌入 AutoJs6 绘制的真实视图, 编辑后约几十毫秒刷新</td>
 </tr>
 <tr>
@@ -623,7 +626,7 @@
 <td>AutoJs6 把布局画成位图传回, 画布显示快照</td>
 </tr>
 <tr>
-<td>未安装 AutoJs6, 或 AutoJs6 没有预览服务</td>
+<td>未安装 AutoJs6, 或 AutoJs6 低于 6.8.0 (没有预览服务)</td>
 <td>画布显示原因 (缺少 AutoJs6 或版本过旧), 工程仍可编辑, 大纲与属性抽屉照常</td>
 </tr>
 </tbody>
@@ -645,11 +648,11 @@
 </thead>
 <tbody>
 <tr>
-<td>AutoJs6 包含预览契约 v2 (宿主提交 4c332c2053 之后的 6.8.0 构建), Android 13 (API 33) 或更高版本</td>
+<td>AutoJs6 6.8.0 及以上, Android 13 (API 33) 或更高版本, 设计器 1.7.0 - 1.8.0</td>
 <td>显示 &quot;交互预览&quot; 开关; 打开后 AutoJs6 在画布中运行脚本, 开关上显示运行图标</td>
 </tr>
 <tr>
-<td>AutoJs6 包含预览契约 v4 (宿主提交 2d7944d10 之后的 6.8.0 构建), Android 13 或更高版本, 设计器 1.9.0</td>
+<td>AutoJs6 6.8.0 及以上, Android 13 或更高版本, 设计器 1.9.0 起</td>
 <td>同上, 另有画布内的对话框, &quot;返回键&quot; 按钮, 暂停与恢复, 窗口颜色与主线程占用上限, 见下文 &quot;交互预览的新能力 (1.9.0)&quot;</td>
 </tr>
 <tr>
@@ -657,7 +660,7 @@
 <td>同上, 但画布中的输入框收不到键盘输入 (提示 &quot;Android 15 之前预览不能接收键盘输入&quot;); Android 15 起输入法可用</td>
 </tr>
 <tr>
-<td>Android 7.0 - 12, 或 AutoJs6 只有预览契约 v1 (1.6.0 配套的构建)</td>
+<td>Android 7.0 - 12, 或 AutoJs6 低于 6.8.0 (以及 6.8.0 正式发布前只有预览契约 v1 的测试构建)</td>
 <td>不显示开关, 画布上方说明原因 (需要 Android 13 / 需要更新的 AutoJs6), 用 &quot;在 AutoJs6 中运行&quot; 试运行脚本</td>
 </tr>
 </tbody>
@@ -671,7 +674,7 @@
 <li>与 JavaScript (Compose) 工程的交互预览不同, UI 工程的脚本不在插件内的沙箱里运行, 而是真实地在 AutoJs6 中运行, 没有 API 范围与时间限制; 不要在预览中运行会产生不可逆副作用的脚本.</li>
 </ul>
 <h3>交互预览的新能力 (1.9.0)<span><a class="mark" href="#composedesigner_1_9_0" id="composedesigner_1_9_0">#</a></span></h3>
-<p>1.9.0 起, 已安装的 AutoJs6 包含预览契约 v4 (宿主提交 2d7944d10 之后的 6.8.0 构建, Android 13 或更高版本) 时, 交互预览更接近在 AutoJs6 中运行:</p>
+<p>1.9.0 起, 已安装的 AutoJs6 包含预览契约 v4 (AutoJs6 6.8.0 及以上, Android 13 或更高版本) 时, 交互预览更接近在 AutoJs6 中运行:</p>
 <ul>
 <li>对话框: <code>dialogs.*</code>, <code>dialogs.build(...)</code> 与全局的 <code>alert</code>, <code>confirm</code>, <code>prompt</code>, <code>rawInput</code> 弹出的对话框画在画布内, 可以直接点按; 不再以悬浮窗显示在设计器之上, 也不需要悬浮窗权限.</li>
 <li>返回键: 运行中画布上方显示 &quot;返回键&quot; 按钮. 按下时先交给打开的对话框 (与真实窗口一样处理, 例如关闭可取消的对话框), 没有对话框时交给脚本 <code>ui.emitter</code> 的 <code>back_pressed</code> 事件 (处理函数调用 <code>e.consume()</code> 或设置 <code>e.consumed = true</code> 即为已处理); 都没有处理时, 这次运行像页面被关闭一样结束, 画布上方与控制台显示结束原因.</li>
@@ -679,10 +682,10 @@
 <li>窗口颜色: <code>ui.statusBarColor</code> 与 <code>ui.navigationBarColor</code> 设置的颜色显示为画布顶部 24 dp 与底部 48 dp 的色条, 布局在两者之间; <code>ui.backgroundColor</code> 填充画布. <code>ui.finish</code>, <code>ui.keepScreenOn</code> 与状态栏 / 导航栏图标函数仍不生效, 控制台给出提示.</li>
 <li>主线程占用上限: 设置页 &quot;设计器&quot; 分组新增 &quot;主线程占用上限&quot; (1, 2, 3, 5, 10, 15, 30 或 60 秒, 默认 5 秒). 脚本持续占用 AutoJs6 的主线程超过该时长 (例如主线程上的 <code>while (true)</code>) 时, AutoJs6 停止这次运行, 画布上方与控制台显示 &quot;AutoJs6 停止了脚本: 它占用主线程超过 5 秒 (第 12 行)&quot; 这样的说明, 设计器不会被卡住. 只统计脚本自身的指令: 卡在一次原生调用中的脚本不会被打断, 定时器与其它线程不受影响.</li>
 </ul>
-<p>第一次打开开关时的确认说明随之改为 &quot;关闭开关或关闭编辑页时脚本停止; 设计器在后台时脚本会像应用一样收到 pause, 回到前台时收到 resume&quot;. 已安装的 AutoJs6 较旧 (预览契约 v2 / v3) 时这些都不出现, 交互预览保持 1.8.0 的做法: 设计器转到后台即停止脚本, 回来时从头重新运行, 设置页的上限被忽略. 问题标签页中的预览差异随之缩小, 见下节.</p>
+<p>第一次打开开关时的确认说明随之改为 &quot;关闭开关或关闭编辑页时脚本停止; 设计器在后台时脚本会像应用一样收到 pause, 回到前台时收到 resume&quot;. 已安装的 AutoJs6 是 6.8.0 正式发布前的测试构建 (预览契约 v2 / v3) 时这些都不出现, 交互预览保持 1.8.0 的做法: 设计器转到后台即停止脚本, 回来时从头重新运行, 设置页的上限被忽略. 问题标签页中的预览差异随之缩小, 见下节.</p>
 <h3>预览差异 (Preview Differences)<span><a class="mark" href="#composedesigner_preview_differences" id="composedesigner_preview_differences">#</a></span></h3>
 <p>1.8.0 起, UI 工程的 &quot;问题&quot; 标签页在校验问题与布局预览的问题之后列出 &quot;预览差异&quot;: 设计器解析脚本 (不运行) 时找出在预览中运行与在 AutoJs6 中运行行为不同的写法, 每条显示行号, 该行用到的写法与一句说明. 它们是信息级提示, 不计入菜单 &quot;校验结果&quot; 中的错误数, 也不影响保存与运行; 点按条目会在浏览器中打开本节. 布局预览不运行脚本, 说明描述的是交互预览运行脚本时的行为.</p>
-<p>1.9.0 起差异按已安装的 AutoJs6 的能力列出. 下表中间一列是较旧的 AutoJs6 (预览契约 v2 / v3) 上的行为; 右列是包含预览契约 v4 的 AutoJs6 (宿主提交 2d7944d10 之后的 6.8.0 构建, Android 13 或更高版本) 上的行为, 标为 &quot;不再列出&quot; 的写法在这样的 AutoJs6 上不出现在问题标签页中.</p>
+<p>1.9.0 起差异按已安装的 AutoJs6 的能力列出. 下表中间一列是较旧的 AutoJs6 (预览契约 v2 / v3, 只出现在 6.8.0 正式发布前的测试构建中) 上的行为; 右列是包含预览契约 v4 的 AutoJs6 (6.8.0 及以上, Android 13 或更高版本) 上的行为, 标为 &quot;不再列出&quot; 的写法在这样的 AutoJs6 上不出现在问题标签页中.</p>
 <table>
 <thead>
 <tr>
@@ -784,7 +787,7 @@
 </div><h4>外部文档<span><a class="mark" href="#composedesigner_12" id="composedesigner_12">#</a></span></h4>
 <p>从 AutoJs6 编辑器或文件管理器打开的脚本, 布局文件在脚本所在的文件夹中读写. 以文件路径 (<code>file://</code>) 打开时直接读写; 以内容 Uri 打开 (例如 AutoJs6 编辑器交来的脚本) 时, 第一次需要在系统文件夹选择器中选择脚本所在的文件夹 (问题标签页, 读不到布局时的报错页, 或布局文件菜单中的 &quot;选择脚本所在的文件夹以读写布局文件&quot;), 设计器核对其中有该脚本后保留读写授权, 之后按需在其中创建子文件夹与文件. 没有写入权限的文档另存为工程时, 布局文件一同存入新的文件夹工程.</p>
 <h4>预览中的工程文件<span><a class="mark" href="#composedesigner_13" id="composedesigner_13">#</a></span></h4>
-<p>布局预览与交互预览把工程文件交给 AutoJs6: 文件夹工程的全部文件, 外部文档旁的 <code>res/</code> 目录, 以及设计器中尚未保存的布局文件. 因此布局可以引用 <code>res/</code> 中的字符串, 颜色, 尺寸, 样式, 图片与 <code>&lt;include&gt;</code> 布局 (见 <a href="ui.html">用户界面</a> 的 &quot;工程资源&quot;), 交互预览中的 <code>ui.layoutFile</code> 与 <code>files.read</code> 按工程目录解析. 这需要预览契约 v3 (宿主提交 9df0a154b 之后的 6.8.0 构建); 更早的 AutoJs6 只收到 XML 文本, 问题标签页提示 res 资源与布局文件的预览可能与实际运行不同.</p>
+<p>布局预览与交互预览把工程文件交给 AutoJs6: 文件夹工程的全部文件, 外部文档旁的 <code>res/</code> 目录, 以及设计器中尚未保存的布局文件. 因此布局可以引用 <code>res/</code> 中的字符串, 颜色, 尺寸, 样式, 图片与 <code>&lt;include&gt;</code> 布局 (见 <a href="ui.html">用户界面</a> 的 &quot;工程资源&quot;), 交互预览中的 <code>ui.layoutFile</code> 与 <code>files.read</code> 按工程目录解析. 这需要预览契约 v3 (AutoJs6 6.8.0 及以上); 6.8.0 正式发布前只有更早契约的测试构建只收到 XML 文本, 问题标签页提示 res 资源与布局文件的预览可能与实际运行不同.</p>
 <h4>Android 原生 XML<span><a class="mark" href="#composedesigner_android_xml" id="composedesigner_android_xml">#</a></span></h4>
 <p>原生片段按 AutoJs6 实际处理的属性目录编辑与校验. 目录由宿主的属性表与设备覆盖快照生成 (见 <a href="uiAndroidAttributes.html">Android XML 属性</a>), 列出每个 View 类可设置与不能设置的 <code>android:</code> / <code>app:</code> 属性, 以及各父布局接受的布局参数:</p>
 <ul>
@@ -815,7 +818,7 @@ ui.layout(
 <li>运行与导出: &quot;在 AutoJs6 中运行&quot;, 导出与导入 AutoJs6 脚本目录都保持 <code>.tsx</code> 文件, AutoJs6 按文件名交给 TypeScript Engine 编译. 布局文件 (&quot;存为 XML 文件&quot;, &quot;新建 XML 文件&quot;) 只对 JavaScript 脚本提供.</li>
 </ul>
 <h4>在交互预览中运行 TSX<span><a class="mark" href="#composedesigner_tsx_1" id="composedesigner_tsx_1">#</a></span></h4>
-<p>已安装的 AutoJs6 包含预览契约 v5 (宿主提交 204a33ee5 之后的 6.8.0 构建) 并且装有 TypeScript Engine 0.7.0 或更高版本时, TSX 的 UI 工程也可以打开 &quot;交互预览&quot;: AutoJs6 先用 TypeScript Engine 编译脚本再运行, 编译期间画布上方显示 &quot;TypeScript Engine 正在编译 TSX 脚本&quot;.</p>
+<p>已安装的 AutoJs6 包含预览契约 v5 (AutoJs6 6.8.0 及以上) 并且装有 TypeScript Engine 0.7.0 或更高版本时, TSX 的 UI 工程也可以打开 &quot;交互预览&quot;: AutoJs6 先用 TypeScript Engine 编译脚本再运行, 编译期间画布上方显示 &quot;TypeScript Engine 正在编译 TSX 脚本&quot;.</p>
 <ul>
 <li>编译失败时画布上方显示第一个错误, 例如 &quot;TSX 脚本未通过编译 (第 7 行): ...&quot;, 点按可在控制台查看全部错误; 修改工程后重新编译.</li>
 <li>运行中出错时显示的行号是 TSX 文本中的行号.</li>
@@ -887,8 +890,20 @@ compose.attach(ui.panel, function () {
 </tr>
 </tbody>
 </table>
-<p>反向交接由 AutoJs6 编辑器发起: &quot;在 3-Block Compose 设计器中打开&quot; 先保存当前文件, 再以读写授权交给设计器; 设计器保存后回到 AutoJs6 编辑器, 编辑器按文件内容是否变化自动重新加载, 存在未保存修改时先询问. 该菜单项需要包含对应入口的 AutoJs6 6.8.0 构建 (宿主提交 db7e6a1734 之后); 其它去向只需要能运行 <code>compose</code> 脚本的 AutoJs6 (宿主提交 f12665ffde 之后); 带布局文件的 UI 工程的运行与导入 (1.8.0) 需要包含工程 zip 入口的 6.8.0 构建 (宿主提交 faf412ef7 之后), 更早的版本中这两个去向换成一行 &quot;需要更新版本的 AutoJs6&quot;. 交互预览的新能力 (1.9.0) 需要包含预览契约 v4 的 6.8.0 构建 (宿主提交 2d7944d10 之后), 在交互预览中运行 TSX 需要预览契约 v5 (宿主提交 204a33ee5 之后) 与 TypeScript Engine 0.7.0 或更高版本; 更早的构建上交互预览保持 1.8.0 的做法.</p>
+<p>反向交接由 AutoJs6 编辑器发起: 编辑器 &quot;更多&quot; 菜单中的 &quot;在 3-Block Compose 设计器中打开&quot; (或下文布局预览面板上的同名按钮) 先保存当前文件, 再以读写授权交给设计器; 设计器保存后回到 AutoJs6 编辑器, 编辑器按文件内容是否变化自动重新加载, 存在未保存修改时先询问. 已安装的插件低于 1.2.0 或未安装时不显示该入口.</p>
+<p>本页提到的 AutoJs6 能力都需要 AutoJs6 6.8.0 及以上: 上表的四个去向, 反向交接, UI 工程的布局预览与交互预览 (含 1.9.0 的新能力), 带布局文件的 UI 工程的运行与导入 (1.8.0), 以及下文的编辑器布局预览; 在交互预览中运行 TSX 另需 TypeScript Engine 0.7.0 或更高版本. 低于 6.8.0 的 AutoJs6 上, 带布局文件的 UI 工程的运行与导入换成一行 &quot;需要更新版本的 AutoJs6&quot;, UI 工程的画布说明原因. 6.8.0 正式发布前的测试构建只具备其中一部分能力, 设计器按其实际能力降级, 见上文各节.</p>
 <p>设计器本身不依赖 AutoJs6: 画布使用插件自带的渲染器, 与脚本在 AutoJs6 内运行时的渲染实现相同.</p>
+<h3>AutoJs6 编辑器中的布局预览<span><a class="mark" href="#composedesigner_autojs6_1" id="composedesigner_autojs6_1">#</a></span></h3>
+<p>AutoJs6 6.8.0 起, AutoJs6 编辑器自己也能预览 ui 模式脚本的布局, 不必打开设计器. 它与设计器的布局预览使用同一套 ui 模式布局器, 但只读取脚本, 不编辑布局:</p>
+<ul>
+<li>开关: 编辑以 <code>&quot;ui&quot;;</code> 开头的 <code>.js</code> 脚本时, 编辑器工具栏显示 &quot;预览&quot; 开关. 打开后编辑区一分为二: 竖屏时预览在下半区, 横屏时在右半区. 开关按文件记住, 再次打开同一文件时恢复. TSX 脚本, Node.js / Bun / QuickJS 脚本与以大文件模式打开的文件不显示该开关.</li>
+<li>布局: 预览显示源码中第一个 <code>ui.layout(...)</code> 调用的布局, 实参须为 XML 字面量, 或只被一个 XML 字面量初始化且没有重新赋值的变量. 布局按整个窗口的尺寸排布 (与脚本运行时自己的页面一致), 再等比缩小放进预览区并居中. 停止输入约 0.4 秒后刷新.</li>
+<li>定位: 点按预览中的控件, 编辑器光标跳到该元素开始标签所在的源码行, 控件显示高亮框.</li>
+<li>不运行脚本: 预览只解析源码, 不执行脚本的任何部分, 事件处理函数, 定时器与其它语句都不会运行 (预览区标注 &quot;仅布局, 不运行脚本&quot;). XML 中的 <code>{表达式}</code> 与 <code>{{ }}</code> 绑定只在安全作用域内求值: 只能使用字面量, 脚本中初始化为字面量的顶层声明, 少量无副作用的标准全局对象, 属性读取, 运算符, 条件与方法调用; 函数, 赋值, <code>new</code> 以及通往构造函数的属性在求值前即被拒绝, 调用 <code>files</code>, <code>shell</code> 等模块的表达式也不会执行. 不能求值的属性按原文显示, 原因列在预览下方.</li>
+<li>出错时: 语法错误与布局失败在预览下方给出行号, 预览保留上一次成功的布局并提示 &quot;当前显示的是上一次成功的布局&quot;.</li>
+<li>进入设计器: 已安装 3-Block Compose 1.2.0 或更高版本时, 预览面板上显示 &quot;在 3-Block Compose 设计器中打开&quot;, 与 &quot;更多&quot; 菜单中的同名入口相同.</li>
+</ul>
+<p>要编辑布局, 在画布上运行脚本, 或预览 <code>{{ }}</code> 以外的运行时数据, 使用设计器的 UI 工程 (见上文 &quot;UI (XML) 工程&quot;).</p>
 <hr>
 <h2>限制<span><a class="mark" href="#composedesigner_15" id="composedesigner_15">#</a></span></h2>
 <div class="signature"><ul>
@@ -898,7 +913,7 @@ compose.attach(ui.panel, function () {
 <li><code>AndroidView</code> 不能在设计器中绘制: 1.3.0 起显示为保留其尺寸修饰的浅色占位区域, 并在其中显示 <code>view</code> 表达式的源码; 不能从组件面板插入. <code>Snackbar</code> 是会话命令, 不在面板中.</li>
 <li>TSX 工程 (1.4.0) 与 TSX 的 UI 工程 (1.9.0) 需要 TypeScript Engine 0.7.0 或更高版本, 否则只能以只读源码查看与复制; 生成格式会把手写 TSX 的界面部分改写为统一格式 (见上文 &quot;TSX 工程&quot; 一节).</li>
 <li>以 <code>file://</code> 路径打开的文件受系统存储限制, 可能无法读取或写回; 建议通过 AutoJs6 编辑器或文件管理器以内容 Uri 打开.</li>
-<li>UI (XML) 工程 (1.6.0) 的画布由 AutoJs6 的预览服务绘制, 需要包含该服务的 AutoJs6 6.8.0 构建 (宿主提交 306a8f7834 之后); 其它限制见上文 &quot;UI (XML) 工程&quot; 一节.</li>
+<li>UI (XML) 工程 (1.6.0) 的画布由 AutoJs6 的预览服务绘制, 需要 AutoJs6 6.8.0 及以上; 其它限制见上文 &quot;UI (XML) 工程&quot; 一节.</li>
 </ul>
 </div>
         </div>

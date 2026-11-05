@@ -318,21 +318,24 @@
             <h2>目录</h2>
 <ul>
 <li><span class="stability_undefined"><a href="#ui_ui">用户界面 (UI)</a></span><ul>
-<li><span class="stability_undefined"><a href="#ui_ui_1">UI 模式</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_xml">布局 XML</a></span><ul>
-<li><span class="stability_undefined"><a href="#ui">内置标签</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_1">布局转换模式</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_2">工程资源</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_3">动态属性表达式</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_id">视图 ID 与访问</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_4">列表与网格</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_5">分页, 标签栏和抽屉</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_canvas">Canvas 视图</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_webview">WebView 视图</a></span></li>
-<li><span class="stability_undefined"><a href="#ui_6">控制台视图</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_ui_1">UI 模式</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui">在编辑器中预览布局</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_7">控件扩展方法</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_xml">布局 XML</a></span><ul>
+<li><span class="stability_undefined"><a href="#ui_1">内置标签</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_2">布局转换模式</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_3">工程资源</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_4">动态属性表达式</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_id">视图 ID 与访问</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_5">列表与网格</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_6">分页, 标签栏和抽屉</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_canvas">Canvas 视图</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_webview">WebView 视图</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_7">控制台视图</a></span></li>
+</ul>
+</li>
+<li><span class="stability_undefined"><a href="#ui_8">控件扩展方法</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_compose">Compose 容器</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_nativeview">NativeView 包装</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_attr_name">attr(name)</a></span></li>
@@ -347,7 +350,7 @@
 <li><span class="stability_undefined"><a href="#ui_nativeview_1">NativeView 事件</a></span></li>
 </ul>
 </li>
-<li><span class="stability_undefined"><a href="#ui_8">自定义控件</a></span></li>
+<li><span class="stability_undefined"><a href="#ui_9">自定义控件</a></span></li>
 <li><span class="stability_undefined"><a href="#ui_m_globalthis_isuithread">[m] globalThis.isUiThread</a></span><ul>
 <li><span class="stability_undefined"><a href="#ui_globalthis_isuithread">globalThis.isUiThread()</a></span></li>
 </ul>
@@ -568,7 +571,7 @@
 <p>UI 模式用于在独立的 <code>ScriptExecuteActivity</code> 中运行脚本并显示 Android 视图. 普通 JavaScript 的布局采用声明式 XML, 由 Rhino 按 <a href="e4x.html">E4X</a> XML 处理, 不是浏览器 DOM 或 React 组件树. 配套 TypeScript Engine 的 <code>.tsx</code> 入口也可编译小写 XML UI 标签; Compose 标签的版本条件与独立挂载边界见 <a href="compose.html#compose_tsx">Compose TSX 接入</a>.</p>
 <p><code>ui</code> 模块提供布局渲染, 视图查询, UI 线程调度, 自定义控件和系统栏控制等功能. <code>$ui</code> 是 <code>ui</code> 的等效别名.</p>
 <p>布局标签及属性的完整清单参阅 <a href="uiAttributes.html">UI 布局属性</a>.</p>
-<p>3-Block Compose 插件 1.6.0 起的可视化设计器可以打开 ui 模式脚本, 在画布上编辑 XML 布局并由 AutoJs6 绘制预览, 见 <a href="composeDesigner.html#composedesigner_ui_xml_1_6_0">3-Block Compose 设计器</a>.</p>
+<p>3-Block Compose 插件 1.6.0 起的可视化设计器可以打开 ui 模式脚本, 在画布上编辑 XML 布局并由 AutoJs6 绘制预览, 见 <a href="composeDesigner.html#composedesigner_ui_xml_1_6_0">3-Block Compose 设计器</a>; AutoJs6 6.8.0 起可以从编辑器 &quot;更多&quot; 菜单的 &quot;在 3-Block Compose 设计器中打开&quot; 直接进入, 见 <a href="composeDesigner.html#composedesigner_autojs6">与 AutoJs6 的衔接</a>. 不打开设计器时, 编辑器内的布局预览见下文 <a href="#ui">在编辑器中预览布局</a>.</p>
 <h2>UI 模式<span><a class="mark" href="#ui_ui_1" id="ui_ui_1">#</a></span></h2>
 <p>脚本的第一个有效语句使用字符串指令 <code>&#39;ui&#39;;</code> 可启用 UI 模式. 注释和空行可以位于指令之前. 指令必须位于其他有效语句之前.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
@@ -585,6 +588,16 @@ ui.ok.on(&#39;click&#39;, function () {
 });
 </code></pre>
 <p>UI 模式脚本的 JavaScript 主线程就是 Android UI 线程. 不应在该线程执行耗时计算, 阻塞 I/O 或 <code>sleep</code>. 可在线程中完成耗时任务, 再通过 <a href="#ui_m_post">ui.post</a> 或 <a href="#ui_m_run">ui.run</a> 更新视图.</p>
+<h3>在编辑器中预览布局<span><a class="mark" href="#ui" id="ui">#</a></span></h3>
+<p>AutoJs6 6.8.0 起, 编辑 UI 模式的 <code>.js</code> 脚本时, 编辑器工具栏显示 &quot;预览&quot; 开关, 打开后可以在编辑器内查看 <code>ui.layout</code> 的布局:</p>
+<ul>
+<li>竖屏时预览在编辑区下半区, 横屏时在右半区; 开关按文件记住.</li>
+<li>预览显示第一个 <code>ui.layout(...)</code> 调用的布局 (XML 字面量, 或只被一个 XML 字面量初始化且没有重新赋值的变量), 按整个窗口的尺寸排布后等比缩小, 停止输入约 0.4 秒后刷新.</li>
+<li>点按预览中的控件, 编辑器光标跳到对应元素的源码行.</li>
+<li>预览不运行脚本. <code>{表达式}</code> 与 <code>{{ }}</code> 绑定只在安全作用域内求值 (字面量, 脚本中初始化为字面量的顶层声明, 运算符与方法调用等), 不能求值的属性按原文显示并说明原因; 布局失败时给出行号并保留上一次成功的布局.</li>
+<li>已安装 3-Block Compose 1.2.0 或更高版本时, 预览面板与编辑器 &quot;更多&quot; 菜单提供 &quot;在 3-Block Compose 设计器中打开&quot;.</li>
+</ul>
+<p>TSX 脚本与 Node.js / Bun / QuickJS 脚本不显示该开关. 详细行为见 <a href="composeDesigner.html#composedesigner_autojs6_1">AutoJs6 编辑器中的布局预览</a>.</p>
 <h2>布局 XML<span><a class="mark" href="#ui_xml" id="ui_xml">#</a></span></h2>
 <p>布局必须有一个根元素. 属性值最终会转换为字符串并交给对应的视图属性处理器. 标签和属性名称区分大小写.</p>
 <pre><code class="lang-js">let xml = (
@@ -608,8 +621,8 @@ ui.layout(xml);
 <li><code>vertical</code>, <code>horizontal</code>, <code>frame</code> 等小写标签会转换为对应的 Android 视图类.</li>
 <li><code>text</code>, <code>button</code> 和 <code>input</code> 元素的直接文本内容会转换为 <code>text</code> 属性. 其他元素的直接文本内容不会成为视图内容.</li>
 </ul>
-<p>原生名称形式可使用 <code>android:layout_width=&quot;match_parent&quot;</code> 等属性. 详细差异参阅 <a href="#ui_1">布局转换模式</a>.</p>
-<h3>内置标签<span><a class="mark" href="#ui" id="ui">#</a></span></h3>
+<p>原生名称形式可使用 <code>android:layout_width=&quot;match_parent&quot;</code> 等属性. 详细差异参阅 <a href="#ui_2">布局转换模式</a>.</p>
+<h3>内置标签<span><a class="mark" href="#ui_1" id="ui_1">#</a></span></h3>
 <p>以下表格列出 AutoJs6 简写布局的全部内置标签. 同一行中的标签互为别名.</p>
 <table>
 <thead>
@@ -869,7 +882,7 @@ ui.layout(xml);
 </table>
 <p>也可将完整类名作为标签, 如 <code>&lt;android.widget.TextView&gt;</code>. 常用 AndroidX 和 Material 类还支持短类名, 如 <code>&lt;ConstraintLayout&gt;</code>, <code>&lt;RecyclerView&gt;</code>, <code>&lt;NavigationView&gt;</code> 和 <code>&lt;TextInputLayout&gt;</code>. 这些类仍由 AutoJs6 的动态布局器创建, 可用属性取决于 <a href="uiAttributes.html">UI 布局属性</a> 中与其最近父类匹配的属性处理器. 未列出的 Android XML 属性不会因此自动获得支持.</p>
 <p><code>menu</code>, <code>item</code>, <code>shape</code>, <code>paths</code>, <code>set</code>, <code>selector</code>, <code>merge</code> 和小写 <code>view</code> 之外的保留节点不能作为动态类名使用. 其中小写 <code>view</code> 由 AutoJs6 显式映射为 <code>android.view.View</code>.</p>
-<h3>布局转换模式<span><a class="mark" href="#ui_1" id="ui_1">#</a></span></h3>
+<h3>布局转换模式<span><a class="mark" href="#ui_2" id="ui_2">#</a></span></h3>
 <p>默认情况下, <code>ui.useAndroidLayout(null)</code> 使用自动模式:</p>
 <ul>
 <li>XML 包含命名空间声明, 或包含 <code>android:</code> 或 <code>app:</code> 属性时, 保留原 XML.</li>
@@ -887,7 +900,7 @@ let view = ui.inflate(
     &#39;android:text=&quot;Hello&quot;/&gt;&#39;,
 );
 </code></pre>
-<h3>工程资源<span><a class="mark" href="#ui_2" id="ui_2">#</a></span></h3>
+<h3>工程资源<span><a class="mark" href="#ui_3" id="ui_3">#</a></span></h3>
 <p>布局中的 <code>@string/name</code>, <code>@dimen/name</code>, <code>@color/name</code>, <code>@drawable/name</code>, <code>@layout/name</code> 与 <code>@style/name</code> 等引用先在工程的 <code>res</code> 目录中查找, 找不到时再查找 AutoJs6 应用资源. <code>@android:type/name</code> 引用系统资源.</p>
 <p><code>res</code> 目录的位置:</p>
 <ul>
@@ -919,7 +932,7 @@ let view = ui.inflate(
 <li><code>android:theme</code> 引用工程样式时, <code>?attr/name</code> 引用在该主题中解析, 主题中的视图属性作为该元素及其子孙元素的默认属性, 优先级低于样式与元素属性.</li>
 <li>样式与主题中视图不接受的属性被静默忽略.</li>
 </ul>
-<h3>动态属性表达式<span><a class="mark" href="#ui_3" id="ui_3">#</a></span></h3>
+<h3>动态属性表达式<span><a class="mark" href="#ui_4" id="ui_4">#</a></span></h3>
 <p>属性字符串中的 <code>{{ expression }}</code> 会在应用属性时执行. 普通布局的求值上下文默认为脚本全局作用域. 一个属性可包含多个表达式.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -953,7 +966,7 @@ ui.panel.message.attr(&#39;textColor&#39;, &#39;#ff5722&#39;);
 </code></pre>
 <p>包装后的任意父视图也支持以 <code>parent.&lt;id&gt;</code> 递归查找后代视图.</p>
 <p>若名称与 <code>ui</code> 已有成员冲突, 应使用 <code>ui.findById(id)</code>. 给 <code>ui.someName</code> 赋值会保存自定义属性并遮蔽同名 ID 查询; 赋值为 <code>null</code> 或 <code>undefined</code> 会移除遮蔽值.</p>
-<h3>列表与网格<span><a class="mark" href="#ui_4" id="ui_4">#</a></span></h3>
+<h3>列表与网格<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h3>
 <p><code>&lt;list&gt;</code> 和 <code>&lt;grid&gt;</code> 的第一个元素子节点是项目模板, 不是普通子视图. 数据源必须是 Rhino JavaScript 数组. <code>setDataSource(array)</code> 设置数据源后, 模板中的动态表达式以当前项目对象为求值上下文.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -988,7 +1001,7 @@ ui.people.on(&#39;item_bind&#39;, function (itemView, holder) {
 <p>AutoJs6 使用 <code>Array.observe</code> 监听数组本身的 <code>splice</code> 和索引更新, 并通知 RecyclerView. 修改 <code>people[0].name</code> 这类嵌套对象属性不会触发数组更新; 可替换整个数组元素, 或重新设置数据源.</p>
 <p><code>item_bind</code> 在 ViewHolder 创建时触发一次, 此时项目可能尚未写入 holder. <code>holder.item</code> 和 <code>holder.position</code> 是动态 getter, 应在之后发生的点击等回调中读取, 如上例所示.</p>
 <p>列表事件参阅 <a href="#ui_nativeview_1">NativeView 事件</a>. <code>&lt;grid&gt;</code> 另外支持 <code>spanCount</code> 和布局方向等属性.</p>
-<h3>分页, 标签栏和抽屉<span><a class="mark" href="#ui_5" id="ui_5">#</a></span></h3>
+<h3>分页, 标签栏和抽屉<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h3>
 <p><code>&lt;viewpager&gt;</code> 的直接子视图会成为页面. <code>titles</code> 属性提供以分隔符拆分的页面标题. Material <code>TabLayout</code> 的原生方法可将标签栏与分页视图关联:</p>
 <pre><code class="lang-js">ui.layout(
     &lt;vertical&gt;
@@ -1022,7 +1035,7 @@ ui.board.on(&#39;draw&#39;, function (canvas) {
 <li><code>webview.jsBridge</code> - 页面 JavaScript 与脚本之间的消息桥.</li>
 </ul>
 <p><code>jsBridge</code> 提供 <code>send(event, ...args)</code>, <code>handle(channel, handler)</code>, <code>invoke(channel, ...args)</code> 和 <code>eval(code)</code>. <code>invoke</code> 和 <code>eval</code> 返回 <a href="https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a>. WebView 同时保留 Android <code>WebView</code> 的原生方法.</p>
-<h3>控制台视图<span><a class="mark" href="#ui_6" id="ui_6">#</a></span></h3>
+<h3>控制台视图<span><a class="mark" href="#ui_7" id="ui_7">#</a></span></h3>
 <p><strong><code>6.8.0</code></strong></p>
 <p><code>&lt;console&gt;</code> 显示当前脚本自身的控制台, 内容与 <code>console.log</code> 等方法的输出一致 (脚本的输出同时会转发到全局控制台); <code>&lt;globalconsole&gt;</code> 显示所有脚本共用的全局控制台 (即应用 &quot;日志&quot; 页面显示的内容), 与 <code>&lt;console global=&quot;true&quot;&gt;</code> 或裸属性写法 <code>&lt;console global&gt;</code> 等价. 两者默认不显示标题栏, 不显示时间前缀, 并按日志等级着色.</p>
 <pre><code class="lang-js">&quot;ui&quot;;
@@ -1038,7 +1051,7 @@ console.log(&quot;hello&quot;);
 </code></pre>
 <p>视图属性与 <a href="console.html">console</a> 模块的 <code>setXxx</code> 方法一一对应, 如 <code>titleBackgroundColor</code> 对应 <a href="console.html#console_m_settitlebackgroundcolor">console.setTitleBackgroundColor</a>, <code>timeVisible</code> 对应 <a href="console.html#console_m_settimevisible">console.setTimeVisible</a>. 设置 <code>title</code> 后显示标题栏, 其右侧的 &quot;更多&quot; 按钮可显示或隐藏输入栏, 清空或复制日志以及打开设置对话框. 完整属性列表参阅 <a href="uiAttributes.html#uiattributes_consoleview">UI 布局属性</a>.</p>
 <p>脚本调用 <a href="console.html#console_m_rawinput">console.rawInput</a> 或 <a href="console.html#console_m_input">console.input</a> 等待输入时, 视图底部会自动显示输入栏, 提交后自动隐藏; <code>inputVisible=&quot;true&quot;</code> 可使其常驻显示.</p>
-<h2>控件扩展方法<span><a class="mark" href="#ui_7" id="ui_7">#</a></span></h2>
+<h2>控件扩展方法<span><a class="mark" href="#ui_8" id="ui_8">#</a></span></h2>
 <p>内置标签返回的对象可调用对应 Android 类的原生方法. 下表列出 AutoJs6 控件类在 Android 父类之外新增的公开方法.</p>
 <table>
 <thead>
@@ -1285,7 +1298,7 @@ ui.message.attr(&#39;visibility&#39;, &#39;gone&#39;);
 </tbody>
 </table>
 <p>为 <code>touch</code>, <code>long_click</code>, <code>key</code> 或 <code>item_long_click</code> 的 <code>event.consumed</code> 赋值为 <code>true</code>, 会使对应 Android 监听器返回已消费.</p>
-<h2>自定义控件<span><a class="mark" href="#ui_8" id="ui_8">#</a></span></h2>
+<h2>自定义控件<span><a class="mark" href="#ui_9" id="ui_9">#</a></span></h2>
 <p>自定义控件构造函数继承 <code>ui.Widget</code>, <code>render()</code> 返回根布局, 再通过 <code>ui.registerWidget(name, constructor)</code> 注册为 XML 标签.</p>
 <pre><code class="lang-js">&#39;ui&#39;;
 
@@ -1473,7 +1486,7 @@ ui.read.on(&#39;click&#39;, function () {
 <li><code>false</code> - 强制执行 AutoJs6 简写转换.</li>
 <li><code>null</code> - 根据命名空间和带前缀属性自动判断.</li>
 </ul>
-<p>该设置不会改用 Android 平台 <code>LayoutInflater</code>. 参阅 <a href="#ui_1">布局转换模式</a>.</p>
+<p>该设置不会改用 Android 平台 <code>LayoutInflater</code>. 参阅 <a href="#ui_2">布局转换模式</a>.</p>
 <h2>[m] layout<span><a class="mark" href="#ui_m_layout" id="ui_m_layout">#</a></span></h2>
 <h3>layout(xml)<span><a class="mark" href="#ui_layout_xml" id="ui_layout_xml">#</a></span></h3>
 <p><strong><code>UI</code></strong></p>

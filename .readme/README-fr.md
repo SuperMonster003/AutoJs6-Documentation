@@ -71,6 +71,7 @@ Les documents peuvent changer à tout moment et diverger du comportement réel. 
 
 ### v6.8.0
 
+- `Mise à jour` [Concepteur 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) et [UI](https://docs.autojs6.com/#/ui): pour 3-Block Compose 2.0.0, description de l'aperçu de la mise en page dans l'éditeur AutoJs6 (l'interrupteur d'aperçu de la barre d'outils, toucher un widget pour aller à sa ligne dans le code, liaisons évaluées uniquement dans une portée sûre) et de l'entrée "Ouvrir dans le concepteur 3-Block Compose"; la version d'AutoJs6 requise est désormais indiquée comme 6.8.0 ou ultérieure
 - `Fonctionnalité` [async/await et continuation](https://docs.autojs6.com/#/asyncAwait): fonctions async, générateurs async et for await du moteur Rhino, moment d'exécution des rappels de la Promise intégrée, utilisation avec continuation, threads, rejets non gérés et avertissement à la fin du script.
 - `Mise à jour` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): préciser les différences de version: le plugin 1.18.0 et antérieur ne transmet que l'objet événement aux écouteurs; à partir de 1.18.1, il transmet `(event, session)`, comme on
 - `Mise à jour` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): les scripts principaux Node.js / Bun et les scripts Rhino peuvent échanger directement des objets et tableaux; préciser les règles pour les fonctions, `undefined` et les références circulaires, et raccourcir la cellule Valeurs diffusées de la page [ImGui](https://docs.autojs6.com/#/imgui)

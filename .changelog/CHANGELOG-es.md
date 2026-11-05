@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `Actualización` [Diseñador de 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) y [UI](https://docs.autojs6.com/#/ui): para 3-Block Compose 2.0.0, se describe la vista previa del diseño dentro del editor de AutoJs6 (el interruptor "Vista previa" de la barra de herramientas, tocar un control para saltar a su línea en el código, enlaces evaluados solo en un ámbito seguro) y la entrada "Abrir en el diseñador de 3-Block Compose"; la versión de AutoJs6 necesaria se indica ahora como 6.8.0 o posterior
 - `Nuevo` [async/await y continuation](https://docs.autojs6.com/#/asyncAwait): funciones async, generadores async y for await del motor Rhino, cuándo se ejecutan las devoluciones de llamada de la Promise integrada, uso con continuation, hilos, rechazos no gestionados y el aviso al finalizar el script.
 - `Actualización` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): aclarar las diferencias de versión: el plugin 1.18.0 y anteriores solo pasan el objeto del evento al listener; desde 1.18.1 pasan `(event, session)`, igual que on
 - `Actualización` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): los scripts principales Node.js / Bun y los scripts Rhino pueden intercambiar directamente objetos y matrices; documentar las reglas para funciones, `undefined` y referencias circulares, y abreviar la celda Valores de difusión de la página [ImGui](https://docs.autojs6.com/#/imgui)

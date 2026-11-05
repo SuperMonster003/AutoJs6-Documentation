@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `تحديث` [مصمم 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) و [UI](https://docs.autojs6.com/#/ui): مع 3-Block Compose 2.0.0, شرح معاينة التخطيط داخل محرر AutoJs6 (مفتاح "معاينة" في شريط الأدوات, والنقر على عنصر للانتقال إلى سطره في الشيفرة, وتقييم الارتباطات في نطاق آمن فقط) وعنصر "فتح في مصمم 3-Block Compose"; وأصبح إصدار AutoJs6 المطلوب مكتوبا بصيغة 6.8.0 أو أحدث
 - `إضافة جديدة` [async/await و continuation](https://docs.autojs6.com/#/asyncAwait): دوال async ومولدات async و for await في محرك Rhino, وتوقيت تشغيل استدعاءات Promise المدمج, والعمل مع continuation, والخيوط, والرفض غير المعالج, والتنبيه عند انتهاء البرنامج النصي.
 - `تحديث` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): توضيح اختلاف الإصدارات: يمرر الملحق 1.18.0 وما قبله كائن الحدث فقط إلى المستمعين; ومن 1.18.1 يمرر `(event, session)` كما في on
 - `تحديث` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): يمكن تمرير الكائنات والمصفوفات مباشرة بين السكربت الرئيسي في Node.js / Bun وسكربتات Rhino; توثيق قواعد الدوال و`undefined` والمراجع الدائرية, واختصار خلية قيم البث المقابلة في صفحة [ImGui](https://docs.autojs6.com/#/imgui)

@@ -1,5 +1,7 @@
 # 文档部署进度 (Progress)
 
+2026-11-05 3-Block Compose 设计器与用户界面配合 3-Block Compose 2.0.0 (P11.11): [与 AutoJs6 的衔接](composeDesigner#与-autojs6-的衔接) 补充 AutoJs6 编辑器内的布局预览 ([AutoJs6 编辑器中的布局预览](composeDesigner#autojs6-编辑器中的布局预览), [在编辑器中预览布局](ui#在编辑器中预览布局)) 与 "在 3-Block Compose 设计器中打开" 入口; 设计器页中 "宿主提交 xxx 之后的 6.8.0 构建" 的表述 (公开历史中没有这些提交) 统一改为 "AutoJs6 6.8.0 及以上", 预览契约 v2 / v3 注明只出现在 6.8.0 正式发布前的测试构建中.
+
 2026-11-03 Rhino 的 async/await, Promise 统一到内建实现 (rhino-class P9.7): [async/await 与 continuation](asyncAwait).
 
 2026-11-02 imgui 模块参考 (api-coverage P5.2f-2 卡 B): [ImGui](imgui) 页补齐快速开始, 会话与窗口模式, 调用时机, 单位, 线程, 错误, 限制, 全部函数与常量组, PascalCase 别名表, 新增 [ImguiSession](imguiSessionType), [ImguiDrawList](imguiDrawListType), [ImguiFloatingButton](imguiFloatingButtonType), [ImguiComponent](imguiComponentType), [ImguiDataTable](imguiDataTableType), [ImguiLogWindow](imguiLogWindowType), [ImguiToast](imguiToastType), [ImguiStatsOverlay](imguiStatsOverlayType), [ImguiDialog](imguiDialogType), [ImguiDialogPromise](imguiDialogPromiseType), [ImguiTexture](imguiTextureType), [ImguiSelectionStorage](imguiSelectionStorageType) 与 [ImguiMultiSelectIO](imguiMultiSelectIOType) 对象页, 并加入侧栏与目录. 内容对应 ImGui 插件 1.18.0. 页面的代码块都是完整脚本, 已在 Xiaomi 23046RP50C (Android 15) 上逐个运行 (宿主 tools/api-coverage/device_imgui_docs.py). AutoJs6 6.8.0 尚未发布, 此条不表示官方发布.

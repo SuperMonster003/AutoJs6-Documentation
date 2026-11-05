@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `업데이트` [3-Block Compose 디자이너 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) 와 [UI](https://docs.autojs6.com/#/ui): 3-Block Compose 2.0.0 에 맞춰 AutoJs6 편집기 안의 레이아웃 미리보기 (도구 모음의 미리보기 스위치, 위젯을 탭하면 소스 줄로 이동, 바인딩은 안전한 범위에서만 평가) 와 "3-Block Compose 디자이너에서 열기" 진입점을 추가. 필요한 AutoJs6 버전은 6.8.0 이상으로 통일
 - `추가` [async/await와 continuation](https://docs.autojs6.com/#/asyncAwait): Rhino 엔진의 async 함수, async 제너레이터와 for await, 내장 Promise 콜백의 실행 시점, continuation과의 연동, 스레드, 처리되지 않은 거부, 스크립트 종료 시 알림.
 - `업데이트` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): 버전 차이를 명시. 플러그인 1.18.0 이하는 이벤트 객체만 리스너에 전달하고, 1.18.1부터 on과 동일하게 `(event, session)`을 전달
 - `업데이트` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): Node.js / Bun 메인 스크립트와 Rhino 스크립트 사이에서 객체와 배열을 직접 전달할 수 있으며 함수, `undefined`, 순환 참조의 규칙을 설명. [ImGui](https://docs.autojs6.com/#/imgui) 페이지의 브로드캐스트 값 항목도 간소화

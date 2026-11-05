@@ -71,6 +71,7 @@ generator\auto-generate-for-autojs6.bat
 
 ### v6.8.0
 
+- `Обновление` [Дизайнер 3-Block Compose (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) и [UI](https://docs.autojs6.com/#/ui): для 3-Block Compose 2.0.0 описан предпросмотр макета в редакторе AutoJs6 (переключатель "Предварительный просмотр" на панели инструментов, касание виджета переходит к его строке в коде, привязки вычисляются только в безопасной области) и пункт "Открыть в дизайнере 3-Block Compose"; требуемая версия AutoJs6 теперь указана как 6.8.0 или новее
 - `Новое` [async/await и continuation](https://docs.autojs6.com/#/asyncAwait): async-функции, async-генераторы и for await в движке Rhino, момент вызова колбэков встроенного Promise, работа с continuation, потоки, необработанные отклонения и уведомление при завершении скрипта.
 - `Обновление` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): уточнены различия версий: плагин 1.18.0 и более ранние передают слушателям только объект события; начиная с 1.18.1 передается `(event, session)`, как в on
 - `Обновление` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): объекты и массивы можно передавать напрямую между основными скриптами Node.js / Bun и скриптами Rhino; описаны правила для функций, `undefined` и циклических ссылок; соответствующая ячейка значений широковещательной передачи на странице [ImGui](https://docs.autojs6.com/#/imgui) сокращена

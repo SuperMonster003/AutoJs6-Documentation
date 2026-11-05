@@ -2,6 +2,8 @@
 
 ## v6.8.0
 
+- `更新` [3-Block Compose 设计器 (Compose Designer)](composeDesigner) 与 [用户界面 (UI)](ui): 配合 3-Block Compose 2.0.0, 补充 AutoJs6 编辑器内的布局预览 (工具栏 "预览" 开关, 点按控件跳到源码行, 绑定只在安全作用域内求值) 与 "在 3-Block Compose 设计器中打开" 入口; 所需的 AutoJs6 版本统一写作 6.8.0 及以上
+
 - `新增` [async/await 与 continuation](asyncAwait): Rhino 引擎的 async 函数, async 生成器与 for await, 内建 Promise 的回调时机, 与 continuation 的配合, 线程, 未捕获的拒绝, 以及脚本结束时的提示.
 
 - `更新` [ImguiSession.once](imguiSessionType#m-once): 写明版本差异, 插件 1.18.0 及更早只把事件对象传给监听器, 1.18.1 起与 on 相同传 `(event, session)`

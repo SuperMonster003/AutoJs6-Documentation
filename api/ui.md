@@ -29,7 +29,7 @@ UI 模式用于在独立的 `ScriptExecuteActivity` 中运行脚本并显示 And
 
 布局标签及属性的完整清单参阅 [UI 布局属性](uiAttributes).
 
-3-Block Compose 插件 1.6.0 起的可视化设计器可以打开 ui 模式脚本, 在画布上编辑 XML 布局并由 AutoJs6 绘制预览, 见 [3-Block Compose 设计器](composeDesigner#ui-xml-工程-160).
+3-Block Compose 插件 1.6.0 起的可视化设计器可以打开 ui 模式脚本, 在画布上编辑 XML 布局并由 AutoJs6 绘制预览, 见 [3-Block Compose 设计器](composeDesigner#ui-xml-工程-160); AutoJs6 6.8.0 起可以从编辑器 "更多" 菜单的 "在 3-Block Compose 设计器中打开" 直接进入, 见 [与 AutoJs6 的衔接](composeDesigner#与-autojs6-的衔接). 不打开设计器时, 编辑器内的布局预览见下文 [在编辑器中预览布局](#在编辑器中预览布局).
 
 ## UI 模式
 
@@ -51,6 +51,18 @@ ui.ok.on('click', function () {
 ```
 
 UI 模式脚本的 JavaScript 主线程就是 Android UI 线程. 不应在该线程执行耗时计算, 阻塞 I/O 或 `sleep`. 可在线程中完成耗时任务, 再通过 [ui.post](#m-post) 或 [ui.run](#m-run) 更新视图.
+
+### 在编辑器中预览布局
+
+AutoJs6 6.8.0 起, 编辑 UI 模式的 `.js` 脚本时, 编辑器工具栏显示 "预览" 开关, 打开后可以在编辑器内查看 `ui.layout` 的布局:
+
+- 竖屏时预览在编辑区下半区, 横屏时在右半区; 开关按文件记住.
+- 预览显示第一个 `ui.layout(...)` 调用的布局 (XML 字面量, 或只被一个 XML 字面量初始化且没有重新赋值的变量), 按整个窗口的尺寸排布后等比缩小, 停止输入约 0.4 秒后刷新.
+- 点按预览中的控件, 编辑器光标跳到对应元素的源码行.
+- 预览不运行脚本. `{表达式}` 与 `{{ }}` 绑定只在安全作用域内求值 (字面量, 脚本中初始化为字面量的顶层声明, 运算符与方法调用等), 不能求值的属性按原文显示并说明原因; 布局失败时给出行号并保留上一次成功的布局.
+- 已安装 3-Block Compose 1.2.0 或更高版本时, 预览面板与编辑器 "更多" 菜单提供 "在 3-Block Compose 设计器中打开".
+
+TSX 脚本与 Node.js / Bun / QuickJS 脚本不显示该开关. 详细行为见 [AutoJs6 编辑器中的布局预览](composeDesigner#autojs6-编辑器中的布局预览).
 
 ## 布局 XML
 

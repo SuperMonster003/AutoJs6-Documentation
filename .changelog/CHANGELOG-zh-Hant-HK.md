@@ -15,6 +15,7 @@
 
 # v6.8.0
 
+- `更新` [3-Block Compose 設計器 (Compose Designer)](https://docs.autojs6.com/#/composeDesigner) 與 [用户界面 (UI)](https://docs.autojs6.com/#/ui): 配合 3-Block Compose 2.0.0, 補充 AutoJs6 編輯器內的佈局預覽 (工具欄 "預覽" 開關, 點按控件跳到源碼行, 綁定只在安全作用域內求值) 與 "在 3-Block Compose 設計器中打開" 入口; 所需的 AutoJs6 版本統一寫作 6.8.0 及以上
 - `新增` [async/await 與 continuation](https://docs.autojs6.com/#/asyncAwait): Rhino 引擎的 async 函數, async 生成器與 for await, 內建 Promise 的回調時機, 與 continuation 的配合, 線程, 未捕獲的拒絕, 以及腳本結束時的提示.
 - `更新` [ImguiSession.once](https://docs.autojs6.com/#/imguiSessionType?id=m-once): 寫明版本差異, 插件 1.18.0 及更早只把事件對象傳給監聽器, 1.18.1 起與 on 相同傳 `(event, session)`
 - `更新` [events.broadcast](https://docs.autojs6.com/#/events?id=m-emit): Node.js / Bun 主腳本與 Rhino 腳本之間可以直接傳對象和數組, 寫明函數, `undefined` 和循環引用的規則; [ImGui](https://docs.autojs6.com/#/imgui) 頁 "廣播的值" 一格相應改短

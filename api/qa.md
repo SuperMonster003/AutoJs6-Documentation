@@ -217,10 +217,12 @@ AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 `files
 ```json
 {
   "launchConfig": {
-    "hideLogs": true
+    "logsVisible": false
   }
 }
 ```
+
+`logsVisible` 为 6.8.0 起使用的规范字段; 旧字段 `hideLogs` 仍可作为兼容别名, 取值相反 (`hideLogs: true` 等价于 `logsVisible: false`).
 
 例如:
 
@@ -232,7 +234,7 @@ AutoJs6 内置模块支持相对路径引用, 其他情况可能需借助 `files
   "packageName": "org.autojs.example.first",
   "main": "main.js",
   "launchConfig": {
-    "hideLogs": true
+    "logsVisible": false
   }
 }
 ```
